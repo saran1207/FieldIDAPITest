@@ -43,20 +43,24 @@ public class IsolationPointListPanel extends Panel {
             }
         };
 
-        WebMarkupContainer sortableAjaxWicket = new WebMarkupContainer("sortableList");
+        final WebMarkupContainer sortableAjaxWicket = new WebMarkupContainer("sortableList");
         SortableAjaxBehavior sortableAjaxBehavior = new SimpleSortableAjaxBehavior() {
 
             @Override public void onReceive(Component sortedComponent, int index, Component parentSortedComponent, AjaxRequestTarget ajaxRequestTarget) {}
 
             @Override public void onUpdate(Component sortedComponent, int index, AjaxRequestTarget target) {
                 reorderIsolationPoint(target, (IsolationPoint)sortedComponent.getDefaultModelObject(), index);
-                target.add(listView);
+                target.add(sortableAjaxWicket);
             }
 
             @Override public void onRemove(Component sortedComponent, AjaxRequestTarget ajaxRequestTarget) { }
         };
-        sortableAjaxBehavior.getSortableBehavior().setConnectWith(".connectedSortable");
+
+        sortableAjaxBehavior.setOpacity(0.5F);
+        sortableAjaxBehavior.setPlaceholder("sorting");
+
         sortableAjaxWicket.add(sortableAjaxBehavior);
+        sortableAjaxWicket.setOutputMarkupId(true);
         sortableAjaxWicket.add(listView);
         add(sortableAjaxWicket);
     }

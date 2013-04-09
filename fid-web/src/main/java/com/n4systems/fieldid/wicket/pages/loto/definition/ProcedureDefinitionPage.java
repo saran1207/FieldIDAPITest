@@ -147,8 +147,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
                     updateSection(target);
                 }
 
-                @Override
-                protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
+                @Override protected void doAdd(AjaxRequestTarget target, IsolationPointSourceType sourceType) {
                     super.doAdd(target, sourceType);
                 }
             }.setVisible(false));
@@ -191,7 +190,6 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
             }
             target.add(form,navigation);
         }
-
     }
 
     private void gotoProceduresPage() {
@@ -210,24 +208,27 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
             add(new ListView<ProcedureDefinitionSection>("sections", sections) {
                 @Override
                 protected void populateItem(final ListItem<ProcedureDefinitionSection> item) {
-                    // TODO DD : if (currentSection==this button), add(attributeAppender("class", "enabled");
+                    ProcedureDefinitionSection section = item.getModelObject();
                     Button button = new AjaxButton("section") {
                         @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                             currentSection = item.getModelObject();
                             sectionChanged(target);
                         }
-
                         @Override protected void onError(AjaxRequestTarget target, Form<?> form) { }
                     };
+                    if (section.equals(currentSection)) {
+                        button.add(new AttributeAppender("class", "active"));
+                    }
                     button.setMarkupId(item.getModelObject().name());
                     item.add(button);
                     if (!contentFinished && ProcedureDefinitionSection.Publish.equals(item.getModel().getObject())) {
                         button.setEnabled(false);
+                        button.add(new AttributeAppender("class", "disabled"));
                     }
                     item.add(new Label("label", Model.of(item.getModel().getObject().name())));
                 }
             });
-            }
+        }
 
     }
 

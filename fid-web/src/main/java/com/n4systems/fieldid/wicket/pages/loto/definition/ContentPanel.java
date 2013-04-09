@@ -60,7 +60,6 @@ public class ContentPanel extends Panel {
             }
 
             @Override protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint isolationPoint, int index) {
-                super.reorderIsolationPoint(target, isolationPoint, index);
                 List<IsolationPoint> isolationPoints = model.getObject().getIsolationPoints();
                 isolationPoints.remove(isolationPoint);
                 isolationPoints.add(index,isolationPoint);
