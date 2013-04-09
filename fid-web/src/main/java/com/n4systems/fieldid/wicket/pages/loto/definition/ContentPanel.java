@@ -18,11 +18,16 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
 import java.util.List;
+import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ContentPanel extends Panel {
 
     private @SpringBean ProcedureSearchService procedureSearchService;
     private @SpringBean DateService dateService;
+
+    private final Pattern numberPattern = Pattern.compile(".*(\\d+)");
 
     private List<EditableImage> images;
     private IsolationPointEditor editor;
@@ -106,6 +111,7 @@ public class ContentPanel extends Panel {
     private IsolationPoint createIsolationPoint(IsolationPointSourceType sourceType) {
         IsolationPoint isolationPoint = new IsolationPoint();
         isolationPoint.setIdentifier(getNextIdentifier(sourceType));
+        isolationPoint.setSourceType(sourceType);
         User user = FieldIDSession.get().getSessionUser().getSecurityFilter().getUser();
         isolationPoint.setCreatedBy(user);
         isolationPoint.setModifiedBy(user);
@@ -117,8 +123,25 @@ public class ContentPanel extends Panel {
     }
 
     private String getNextIdentifier(IsolationPointSourceType sourceType) {
-        // TODO : proper name generation!!!
-        return sourceType.name() + "-"+ index++;
+        TreeMap<Long, IsolationPoint> reservedSourceNumbers=new TreeMap<Long,IsolationPoint>();
+        for (IsolationPoint isolationPoint:getProcedureDefinition().getIsolationPoints()) {
+            if (isolationPoint.getSourceType().equals(sourceType)) {
+                Long number = parseNumber(isolationPoint.getIdentifier());
+                if (number!=null) {
+                    reservedSourceNumbers.put(number,isolationPoint);
+                }
+            }
+        }
+        Long next = reservedSourceNumbers.size()>0 ? reservedSourceNumbers.lastEntry().getKey()+1L : 1L;
+        return sourceType.name() + " -" +  next;
+    }
+
+    private Long parseNumber(String text) {
+        Matcher matcher = numberPattern.matcher(text);
+        if (matcher.matches() && matcher.groupCount()>=1) {
+            return Long.parseLong(matcher.group(1));
+        }
+        return null;
     }
 
 }

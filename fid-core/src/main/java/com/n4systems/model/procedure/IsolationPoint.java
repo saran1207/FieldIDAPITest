@@ -19,7 +19,7 @@ public class IsolationPoint extends EntityWithTenant {
 
     @Enumerated(EnumType.STRING)
     @Column(name="source")
-    private IsolationPointSourceType source = IsolationPointSourceType.getDefault();
+    private IsolationPointSourceType sourceType = IsolationPointSourceType.getDefault();
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="device_definition_id")
@@ -50,12 +50,12 @@ public class IsolationPoint extends EntityWithTenant {
         this.identifier = identifier;
     }
 
-    public IsolationPointSourceType getSource() {
-        return source;
+    public IsolationPointSourceType getSourceType() {
+        return sourceType;
     }
 
-    public void setSource(IsolationPointSourceType source) {
-        this.source = source;
+    public void setSourceType(IsolationPointSourceType source) {
+        this.sourceType = source;
     }
 
     public IsolationDeviceDescription getDeviceDefinition() {

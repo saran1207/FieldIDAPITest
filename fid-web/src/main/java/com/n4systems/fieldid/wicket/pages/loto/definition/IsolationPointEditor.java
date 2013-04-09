@@ -46,7 +46,7 @@ public class IsolationPointEditor extends Panel {
         add(form = new Form("form"));
 
         form.add(new TextField("identifier"));
-        form.add(new FidDropDownChoice<IsolationPointSourceType>("source", new PropertyModel(getDefaultModel(),"source"), Arrays.asList(IsolationPointSourceType.values()),new IChoiceRenderer<IsolationPointSourceType>() {
+        form.add(new FidDropDownChoice<IsolationPointSourceType>("source", new PropertyModel(getDefaultModel(),"sourceType"), Arrays.asList(IsolationPointSourceType.values()),new IChoiceRenderer<IsolationPointSourceType>() {
             @Override public Object getDisplayValue(IsolationPointSourceType type) {
                 return type.getIdentifier();
             }

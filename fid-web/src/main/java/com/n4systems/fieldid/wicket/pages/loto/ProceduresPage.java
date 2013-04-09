@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -40,8 +41,8 @@ public class ProceduresPage extends LotoPage {
 
         add(new AjaxLink("newProcedure") {
             @Override public void onClick(AjaxRequestTarget target) {
-                    doNewProcedureDef(NewMode.FROM_SCRATCH);
-                }
+                doNewProcedureDef(NewMode.FROM_SCRATCH);
+            }
         });
 
         add(new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
@@ -53,11 +54,12 @@ public class ProceduresPage extends LotoPage {
                 // TODO : convert dates into friendly format.
                 item.add(new Label("created", procedureDefinition.getCreated().toString()));
                 item.add(new Label("lastModified", procedureDefinition.getModified().toString()));
+                item.add(new Label("publishedState", procedureDefinition.getPublishedState().name()));
                 item.add(new Link("edit") {
                     @Override public void onClick() {
                         editProcedureDefinition(procedureDefinition);
                     }
-                });
+                }.setVisible(procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)));
             }
         });
     }
@@ -81,6 +83,8 @@ public class ProceduresPage extends LotoPage {
         ProcedureDefinition pd = new ProcedureDefinition();
         pd.setAsset(assetModel.getObject());
         pd.setTenant(assetModel.getObject().getTenant());
+        pd.setPublishedState(PublishedState.DRAFT);
+        // NOTE : revision number will be populated by service.  really, could just use ID for revision number AFAIK?
         return Model.of(pd);
     }
 

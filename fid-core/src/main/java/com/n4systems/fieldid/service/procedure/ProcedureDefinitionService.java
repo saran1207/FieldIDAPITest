@@ -2,9 +2,13 @@ package com.n4systems.fieldid.service.procedure;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
+import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
+import com.n4systems.util.persistence.MaxSelect;
 import com.n4systems.util.persistence.QueryBuilder;
+
+import java.util.List;
 
 public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
@@ -23,6 +27,28 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
 
         return query;
+    }
+
+    public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) {
+        if (procedureDefinition.getRevisionNumber()==null) {
+            procedureDefinition.setRevisionNumber(generateRevisionNumber(procedureDefinition.getAsset()));
+        }
+        saveIsolationPoints(procedureDefinition.getIsolationPoints());
+        persistenceService.saveOrUpdate(procedureDefinition);
+    }
+
+    private Long generateRevisionNumber(Asset asset) {
+        QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
+        query.addSimpleWhere("asset",asset);
+        query.setSelectArgument(new MaxSelect("revisionNumber"));
+        Long biggestRevision = persistenceService.find(query);
+        return biggestRevision==null ? 1 :  biggestRevision+1;
+    }
+
+    private void saveIsolationPoints(List<IsolationPoint> isolationPoints) {
+        for (IsolationPoint isolationPoint:isolationPoints) {
+            persistenceService.saveOrUpdate(isolationPoint);
+        }
     }
 
 }

@@ -7,13 +7,13 @@
 <wicket:extend>
     <div class="navHeader">
         <a wicket:id="versionsLink" class="mattButton"><wicket:message key="label.all_versions"/></a>
-        <a wicket:id="newProcedure" class="new-procedure mattButton"><wicket:message key="label.new"/></a>
+        <a wicket:id="newProcedure" class="new-procedure mattButton"><wicket:message key="label.new_draft"/></a>
     </div>
     <div class="content">
         <table class="list">
             <tbody>
                 <tr>
-                    <!--TODO : put into property files-->
+                    <!--TODO DD : put into property files-->
                     <th>Name</th>
                     <th>Created</th>
                     <th>Last Modified</th>
@@ -23,11 +23,12 @@
                     <td wicket:id="name"/>
                     <td wicket:id="created"/>
                     <td wicket:id="lastModified"/>
+                    <td wicket:id="publishedState"/>
                     <td>
                         <a wicket:id="edit"><wicket:message key="label.edit"/></a>
                     </td>
                 </tr>
-     </tbody>
+            </tbody>
         </table>
     </div>
 </wicket:extend>

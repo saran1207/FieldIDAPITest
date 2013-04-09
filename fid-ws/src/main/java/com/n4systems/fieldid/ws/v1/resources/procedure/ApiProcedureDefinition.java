@@ -10,7 +10,7 @@ public class ApiProcedureDefinition extends ApiReadonlyModel {
     private String assetId;
     private String procedureCode;
     private String electronicIdentifier;
-    private String revisionNumber;
+    private Long revisionNumber;
     private String warnings;
     private boolean completeIsolationPointInOrder;
     private String equipmentNumber;
@@ -40,11 +40,11 @@ public class ApiProcedureDefinition extends ApiReadonlyModel {
         this.electronicIdentifier = electronicIdentifier;
     }
 
-    public String getRevisionNumber() {
+    public Long getRevisionNumber() {
         return revisionNumber;
     }
 
-    public void setRevisionNumber(String revisionNumber) {
+    public void setRevisionNumber(Long revisionNumber) {
         this.revisionNumber = revisionNumber;
     }
 

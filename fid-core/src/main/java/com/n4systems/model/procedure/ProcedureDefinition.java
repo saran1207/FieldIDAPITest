@@ -25,7 +25,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
     private String electronicIdentifier;
 
     @Column(name="revision_number")
-    private String revisionNumber;
+    private Long revisionNumber;
 
     @Column(name="warnings")
     private String warnings;
@@ -72,14 +72,6 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     public void setElectronicIdentifier(String electronicIdentifier) {
         this.electronicIdentifier = electronicIdentifier;
-    }
-
-    public String getRevisionNumber() {
-        return revisionNumber;
-    }
-
-    public void setRevisionNumber(String revisionNumber) {
-        this.revisionNumber = revisionNumber;
     }
 
     public String getWarnings() {
@@ -166,5 +158,13 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     public void setPublishedState(PublishedState publishedState) {
         this.publishedState = publishedState;
+    }
+
+    public Long getRevisionNumber() {
+        return revisionNumber;
+    }
+
+    public void setRevisionNumber(Long revisionNumber) {
+        this.revisionNumber = revisionNumber;
     }
 }

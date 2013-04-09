@@ -72,7 +72,7 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
         to.setLocation(from.getLocation());
         to.setMethod(from.getMethod());
         to.setCheck(from.getCheck());
-        to.setSource(from.getSource());
+        to.setSourceType(from.getSourceType());
         to.setTenant(from.getTenant());
         to.setSourceText(from.getSourceText());
         to.setDeviceDefinition(from.getDeviceDefinition());

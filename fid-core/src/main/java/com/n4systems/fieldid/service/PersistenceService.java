@@ -10,8 +10,6 @@ import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.procedure.IsolationPoint;
-import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -248,18 +246,6 @@ public class PersistenceService extends FieldIdService {
         }
         return find(queryBuilder)==null;
 	}
-
-    // TODO DD: move this to new service class...put there to avoid conflicts.
-    public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) {
-        saveIsolationPoints(procedureDefinition.getIsolationPoints());
-        saveOrUpdate(procedureDefinition);
-    }
-
-    private void saveIsolationPoints(List<IsolationPoint> isolationPoints) {
-        for (IsolationPoint isolationPoint:isolationPoints) {
-            saveOrUpdate(isolationPoint);
-        }
-    }
 
 }
 

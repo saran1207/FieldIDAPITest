@@ -3,9 +3,11 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProceduresPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -29,7 +31,8 @@ import java.util.List;
 
 public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVisitor<FormComponent,Void> {
 
-    private @SpringBean PersistenceService procedureDefinitionService;
+    private @SpringBean ProcedureDefinitionService procedureDefinitionService;
+    private @SpringBean PersistenceService persistenceService;
 
     protected Label assetNameLabel;
     protected Label pageTileLabel;
@@ -60,11 +63,13 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
     }
 
     private IModel<ProcedureDefinition> createEntityModel(Long id) {
-        ProcedureDefinition procedureDefinition = procedureDefinitionService.find(ProcedureDefinition.class, id);
+        ProcedureDefinition procedureDefinition = persistenceService.find(ProcedureDefinition.class, id);
         return Model.of(procedureDefinition);
     }
 
     private void init(IModel<ProcedureDefinition> model) {
+        // this business requirement may change, but for now only edit DRAFT. even WAITING_FOR_AUTHORIZATION shouldn't be done.
+        Preconditions.checkState(model.getObject().getPublishedState().equals(PublishedState.DRAFT), "you are only allowed to edit DRAFT copies!");
         this.model = model;
         add(assetNameLabel = new Label("assetName", Model.of("Big Machine")));
         add(pageTileLabel = new Label("pageTitle",Model.of("Author Procedure")));
@@ -82,14 +87,13 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
     public void component(FormComponent formComponent, IVisit<Void> visit) {
         if (formComponent.getForm().equals(form)) {
             formComponent.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                @Override protected void onUpdate(AjaxRequestTarget target) {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
                     // TODO DD : this is hook to save draft mode when anything changes...for now it's just here so model is updated.
                     // makes the form very chatty but gives you lots of saving options.
                     // don't include components in nested forms.
                 }
             });
-        } else {
-            System.out.println("skip visiting " + formComponent.getId());
         }
     }
 

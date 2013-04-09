@@ -42,7 +42,7 @@ public class IsolationPointListPanel extends Panel {
     protected void populateIsolationPoint(ListItem<IsolationPoint> item) {
         final IsolationPoint isolationPoint = item.getModelObject();
         item.add(new Label("id", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getIdentifier())));
-        item.add(new Label("source", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getSource())));
+        item.add(new Label("source", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getSourceType())));
         item.add(new Label("device", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getDeviceDefinition().getAssetType().getName())));
         item.add(new Label("location", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getLocation())));
         item.add(new Label("method", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getMethod())));

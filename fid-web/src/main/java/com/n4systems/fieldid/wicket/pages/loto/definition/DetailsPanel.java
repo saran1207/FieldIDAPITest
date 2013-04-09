@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
-import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.components.text.LabelledAutoCompleteUser;
-import com.n4systems.fieldid.wicket.components.text.LabelledDropDown;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
@@ -10,19 +8,14 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.List;
-
 import static ch.lambdaj.Lambda.on;
 
 public class DetailsPanel extends Panel {
-
-    private TextField procedureCode;
 
 
     public DetailsPanel(String id, IModel<ProcedureDefinition> model) {
@@ -34,12 +27,6 @@ public class DetailsPanel extends Panel {
         add(new LabelledTextField<String>("procedureCode", "label.procedure_code", new PropertyModel<String>(model, "procedureCode")));
 
         add(new LabelledTextField<String>("identifier", "label.identifier", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier())));
-
-        add(new LabelledDropDown<String>("revision", "label.revision_number", ProxyModel.of(model, on(ProcedureDefinition.class).getRevisionNumber()) ) {
-            @Override protected List<String> getChoices() {
-                return Lists.newArrayList("1","2");
-            }
-        });
 
         add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())));
 
