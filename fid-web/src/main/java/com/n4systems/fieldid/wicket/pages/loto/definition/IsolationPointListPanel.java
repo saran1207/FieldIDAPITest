@@ -22,9 +22,11 @@ import static ch.lambdaj.Lambda.on;
 public class IsolationPointListPanel extends Panel {
 
     private @SpringBean PersistenceService persistenceService;
+    private final IModel<ProcedureDefinition> model;
 
     public IsolationPointListPanel(String id, IModel<ProcedureDefinition> model) {
         super(id, model);
+        this.model = model;
         setOutputMarkupPlaceholderTag(true);
 
         add(new AttributeAppender("class", "isolation-point-list"));
@@ -41,6 +43,12 @@ public class IsolationPointListPanel extends Panel {
 
     protected void populateIsolationPoint(ListItem<IsolationPoint> item) {
         final IsolationPoint isolationPoint = item.getModelObject();
+
+        item.add(new AjaxLink("delete") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                doDelete(target,isolationPoint);
+            }
+        });
         item.add(new Label("id", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getIdentifier())));
         item.add(new Label("source", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getSourceType())));
         item.add(new Label("device", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getDeviceDefinition().getAssetType().getName())));
@@ -48,22 +56,14 @@ public class IsolationPointListPanel extends Panel {
         item.add(new Label("method", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getMethod())));
         item.add(new Label("check", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getCheck())));
         // TODO DD : add images to row.
-//        item.add(new Label("image"), new ExternalS3Image("image",isolationPoint.getImage()));
         item.add(new WebMarkupContainer("image"));
 
-        // UI : suggestion, don't have edit next to delete button.
         item.add(new AjaxLink("edit") {
             @Override public void onClick(AjaxRequestTarget target) {
                 doEdit(target, isolationPoint);
             }
         });
-        item.add(new AjaxLink("delete") {
-            @Override public void onClick(AjaxRequestTarget target) {
-                doDelete(target,isolationPoint);
-            }
-        });
     }
-
 
     protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) { }
 
