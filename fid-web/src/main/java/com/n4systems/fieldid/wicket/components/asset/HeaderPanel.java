@@ -15,7 +15,7 @@ import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
-import com.n4systems.fieldid.wicket.pages.loto.ProceduresPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
@@ -157,7 +157,7 @@ public class HeaderPanel extends Panel {
         add(schedulePicker);
         add(procedurePicker);
 
-        add(new BookmarkablePageLink<ProceduresPage>("lotoProceduresLink", ProceduresPage.class, PageParametersBuilder.uniqueId(asset.getId()))
+        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("lotoProceduresLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(asset.getId()))
                 .setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures)));
     }
 

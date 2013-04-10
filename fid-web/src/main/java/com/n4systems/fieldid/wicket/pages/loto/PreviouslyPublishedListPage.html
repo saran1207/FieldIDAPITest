@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+    <div class="navHeader">
+        <a wicket:id="activeLink" class="mattButtonLeft"><wicket:message key="label.active"/></a>
+        <a wicket:id="previouslyPublishedListLink" class="mattButtonRight mattButtonPressed"><wicket:message key="label.previously_published"/></a>
+    </div>
+
+    <div class="content">
+        <table class="list">
+            <tbody>
+            <tr>
+                <th><wicket:message key="label.name"/></th>
+                <th><wicket:message key="label.revision_number"/></th>
+                <th><wicket:message key="label.developed_by"/></th>
+                <th><wicket:message key="label.approved_by"/></th>
+                <th><wicket:message key="label.created"/></th>
+                <th><wicket:message key="label.origin_date"/></th>
+                <th><wicket:message key="label.date_retired"/></th>
+            </tr>
+            <tr wicket:id="list">
+                <td wicket:id="name"/>
+                <td wicket:id="revisionNumber"/>
+                <td wicket:id="developedBy"/>
+                <td wicket:id="approvedBy"/>
+                <td wicket:id="created"/>
+                <td wicket:id="originDate"/>
+                <td wicket:id="retireDate"/>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</wicket:extend>
+
+</html>

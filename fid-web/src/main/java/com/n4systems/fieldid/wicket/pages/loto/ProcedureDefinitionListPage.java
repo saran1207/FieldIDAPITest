@@ -25,7 +25,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.Date;
 import java.util.List;
 
-public class ProceduresPage extends LotoPage {
+public class ProcedureDefinitionListPage extends LotoPage {
 
     private @SpringBean
     ProcedureDefinitionService procedureDefinitionService;
@@ -38,10 +38,11 @@ public class ProceduresPage extends LotoPage {
         public String getLabel() {return label;}
     }
 
-    public ProceduresPage(PageParameters params) {
+    public ProcedureDefinitionListPage(PageParameters params) {
         super(params);
 
-        add(new BookmarkablePageLink<VersionsPage>("versionsLink", VersionsPage.class, PageParametersBuilder.uniqueId(getAssetId())));
+        add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
+        add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
         add(new AjaxLink("newProcedure") {
             @Override public void onClick(AjaxRequestTarget target) {
@@ -58,7 +59,7 @@ public class ProceduresPage extends LotoPage {
                 item.add(new Label("revisionNumber", new PropertyModel<String>(procedureDefinition, "revisionNumber")));
                 item.add(new Label("developedBy", new PropertyModel<String>(procedureDefinition, "developedBy.displayName")));
                 item.add(new Label("created", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "created"), true, getCurrentUser().getTimeZone())));
-                item.add(new Label("lastModified", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "modified"), true, getCurrentUser().getTimeZone())));
+                item.add(new Label("approvedBy", new PropertyModel<String>(procedureDefinition, "approvedBy")));
                 item.add(new Label("publishedState", new PropertyModel<String>(procedureDefinition, "publishedState.label")));
                 item.add(new Link("edit") {
                     @Override public void onClick() {

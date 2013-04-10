@@ -15,9 +15,9 @@ import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.fieldid.wicket.pages.event.EditEventPage;
 import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
+import com.n4systems.fieldid.wicket.pages.loto.PreviouslyPublishedListPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureResultsPage;
-import com.n4systems.fieldid.wicket.pages.loto.ProceduresPage;
-import com.n4systems.fieldid.wicket.pages.loto.VersionsPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
@@ -140,8 +140,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("addPerson", AddPersonPage.class);
         mountPage("editPerson", EditPersonPage.class);
 
-        mountPage("procedures", ProceduresPage.class);
-        mountPage("versions", VersionsPage.class);
+        mountPage("procedureDefinitions", ProcedureDefinitionListPage.class);
+        mountPage("previouslyPublished", PreviouslyPublishedListPage.class);
 
         mountPage("procedureResults", ProcedureResultsPage.class);
 

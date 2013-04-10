@@ -6,7 +6,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.loto.ProceduresPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
@@ -61,7 +61,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
     }
 
     private IModel<ProcedureDefinition> createEntityModel() {
-        Preconditions.checkState(getPageParameters().get("id")!=null && getPageParameters().get("id").toString()!=null,"you must specify an id for a ProcedureDefinition.");
+        Preconditions.checkState(getPageParameters().get("id") != null && getPageParameters().get("id").toString() != null, "you must specify an id for a ProcedureDefinition.");
         return createEntityModel(getPageParameters().get("id").toLong());
     }
 
@@ -193,7 +193,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
     }
 
     private void gotoProceduresPage() {
-        setResponsePage(new ProceduresPage(new PageParameters().add("uniqueID", model.getObject().getAsset().getId())));
+        setResponsePage(new ProcedureDefinitionListPage(new PageParameters().add("uniqueID", model.getObject().getAsset().getId())));
     }
 
     private void doCancel(AjaxRequestTarget target) {

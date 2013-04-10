@@ -42,5 +42,4 @@ public abstract class LotoPage extends FieldIDFrontEndPage {
         this.assetId = assetId;
     }
 
-
 }

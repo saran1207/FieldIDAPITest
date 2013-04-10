@@ -8,6 +8,7 @@ import com.n4systems.model.user.User;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -57,6 +58,16 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     @OneToMany(mappedBy = "procedureDefinition")
     private List<ProcedureDefinitionImage> images = Lists.newArrayList();
+
+    @Column(name="origin_date")
+    private Date originDate;
+
+    @Column(name="retire_date")
+    private Date retireDate;
+
+    @ManyToOne
+    @JoinColumn(name = "approved_by_id")
+    private User approvedBy;
 
     public String getProcedureCode() {
         return procedureCode;
@@ -166,5 +177,29 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     public void setRevisionNumber(Long revisionNumber) {
         this.revisionNumber = revisionNumber;
+    }
+
+    public Date getOriginDate() {
+        return originDate;
+    }
+
+    public void setOriginDate(Date originDate) {
+        this.originDate = originDate;
+    }
+
+    public Date getRetireDate() {
+        return retireDate;
+    }
+
+    public void setRetireDate(Date retireDate) {
+        this.retireDate = retireDate;
+    }
+
+    public User getApprovedBy() {
+        return approvedBy;
+    }
+
+    public void setApprovedBy(User approvedBy) {
+        this.approvedBy = approvedBy;
     }
 }
