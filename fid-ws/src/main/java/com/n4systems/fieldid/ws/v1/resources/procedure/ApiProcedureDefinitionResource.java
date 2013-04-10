@@ -65,6 +65,7 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
             apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
             apiDescription.setAttributes(attrResource.convertInfoOptions(deviceDefinition.getAttributeValues()));
             apiDescription.setFreeformDescription(deviceDefinition.getFreeformDescription());
+            apiDescription.setSid(deviceDefinition.getId());
         }
         return apiDescription;
     }
