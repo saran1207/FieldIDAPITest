@@ -46,8 +46,9 @@ public class ProcedureDefinitionListPage extends LotoPage {
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
         WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+        ListView listView;
 
-        listContainer.add(new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
+        listContainer.add(listView = new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
 
             @Override
             protected void populateItem(ListItem<ProcedureDefinition> item) {
@@ -71,7 +72,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
             }
         });
 
-        listContainer.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject()));
+        listContainer.setVisible(!listView.getList().isEmpty());
         add(listContainer);
 
         WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
@@ -82,7 +83,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 doNewProcedureDef(NewMode.FROM_SCRATCH);
             }
         });
-        blankSlate.setVisible(!procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject()));
+        blankSlate.setVisible(listView.getList().isEmpty());
         add(blankSlate);
     }
 

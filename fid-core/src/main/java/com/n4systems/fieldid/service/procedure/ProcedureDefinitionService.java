@@ -53,20 +53,12 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
     }
 
-    public boolean hasActiveProcedures(Asset asset) {
-        return persistenceService.exists(getActiveProceduresForAssetQuery(asset));
-    }
-
     public List<ProcedureDefinition> getActiveProceduresForAsset(Asset asset) {
-        return persistenceService.findAll(getActiveProceduresForAssetQuery(asset));
-    }
-
-    private QueryBuilder<ProcedureDefinition> getActiveProceduresForAssetQuery(Asset asset) {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("asset", asset);
         query.addWhere(WhereParameter.Comparator.IN, "publishedState", "publishedState", Arrays.asList(PublishedState.ACTIVE_STATES));
 
-        return query;
+        return persistenceService.findAll(query);
     }
 
     public List<ProcedureDefinition> getPreviouslyPublishedProceduresForAsset(Asset asset) {

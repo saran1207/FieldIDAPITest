@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -29,7 +30,11 @@ public class PreviouslyPublishedListPage extends LotoPage{
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
-        add(new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
+
+        WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+        ListView listView;
+
+        listContainer.add(listView = new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
 
             @Override
             protected void populateItem(ListItem<ProcedureDefinition> item) {
@@ -43,6 +48,12 @@ public class PreviouslyPublishedListPage extends LotoPage{
                 item.add(new Label("retireDate", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "retireDate"), true, getCurrentUser().getTimeZone())));
             }
         });
+        listContainer.setVisible(!listView.getList().isEmpty());
+        add(listContainer);
+
+        WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
+        blankSlate.setVisible(listView.getList().isEmpty());
+        add(blankSlate);
     }
 
     @Override
