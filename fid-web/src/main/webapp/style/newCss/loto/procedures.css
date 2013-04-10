@@ -25,19 +25,19 @@
 
 .blankSlate img {
     display: table-caption;
-    margin: 50px auto 25px auto;
+    margin: 50px auto 25px;
 }
 
 .blankSlate p {
     font-size: 18px;
     color: #777777;
-    margin: 20px auto 40px auto;
-    width: 400px;
+    margin: 20px 0 40px;
+    text-align: center;
 }
 
 .blankSlate a {
     float:none;
-    margin: 0 auto 0 auto;
+    margin: 0 auto;
     width: 135px;
     display: block;
 }

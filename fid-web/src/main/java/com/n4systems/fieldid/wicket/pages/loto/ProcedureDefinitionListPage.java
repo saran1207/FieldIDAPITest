@@ -45,13 +45,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
-        add(new AjaxLink("newProcedure") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                doNewProcedureDef(NewMode.FROM_SCRATCH);
-            }
-        });
-
         WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
 
         listContainer.add(new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
