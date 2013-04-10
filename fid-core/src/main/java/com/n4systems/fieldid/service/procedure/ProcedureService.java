@@ -5,6 +5,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameterGroup;
 
@@ -25,6 +26,12 @@ public class ProcedureService extends FieldIdPersistenceService {
 
     public Long createSchedule(Procedure openProcedure) {
         return persistenceService.save(openProcedure);
+    }
+
+    public Procedure findByMobileId(String mobileId, boolean withArchived) {
+        QueryBuilder<Procedure> builder = createUserSecurityBuilder(Procedure.class, withArchived);
+        builder.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));
+        return persistenceService.find(builder);
     }
 
 }

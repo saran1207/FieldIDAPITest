@@ -1,7 +1,29 @@
 <wicket:extend>
 
-    <div wicket:id="lockResults">
+    <div class="procedureDetails">
 
+    </div>
+
+    <div class="locationContainer" wicket:id="locationDetailsPanel">
+
+        <wicket:message key="label.latitude"/> / <wicket:message key="label.longitude"/>: <span wicket:id="latitude"/> / <span wicket:id="longitude"/>
+
+        <div wicket:id="googleMap">
+        </div>
+
+    </div>
+
+    <div wicket:id="timelinesContainer">
+
+        <span class="timelinesLabel"><wicket:message key="label.timeline"/></span>
+
+        <div wicket:id="selectLockingOrUnlockingResults"></div>
+
+        <div wicket:id="lockResults">
+        </div>
+
+        <div wicket:id="unlockResults">
+        </div>
     </div>
 
 </wicket:extend>

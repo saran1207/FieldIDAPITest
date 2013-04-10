@@ -25,12 +25,6 @@ public class ProcedureCriteriaPanel extends AbstractCriteriaPanel<ProcedureCrite
     protected Panel createFiltersPanel(String filters, Model<ProcedureCriteria> model) {
         return new ProcedureFilterPanel("filters",model) {
             @Override
-            protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {
-                getReportingColumnsPanel().onEventTypeOrGroupUpdated(target, selectedEventType, availableEventTypes);
-                updateDisplay();
-            }
-
-            @Override
             protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
                 getReportingColumnsPanel().updateAssetTypeOrGroup(target, selectedAssetType, availableAssetTypes);
                 updateDisplay();

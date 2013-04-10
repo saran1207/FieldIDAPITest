@@ -39,15 +39,22 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     private User assignee;
 
     @ManyToOne
-    @JoinColumn(name = "performedby_id")
-    private User performedBy;
+    @JoinColumn(name = "lockedby_id")
+    private User lockedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "unlockedby_id")
+    private User unlockedBy;
 
     @ManyToOne
     @JoinColumn(name = "assigned_group_id")
     private UserGroup assignedGroup;
 
-    @Column(name="completed_date")
-    private Date completedDate;
+    @Column(name="lock_date")
+    private Date lockDate;
+
+    @Column(name="unlock_date")
+    private Date unlockDate;
 
     @Column(name="due_date")
     private Date dueDate;
@@ -65,7 +72,7 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     private List<IsolationPointResult> unlockResults;
 
     @Column(name="mobileguid")
-    private String mobileGuid;
+    private String mobileGUID;
 
     public List<IsolationPointResult> getLockResults() {
         return lockResults;
@@ -94,20 +101,20 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
         this.assignee = assignee;
     }
 
-    public User getPerformedBy() {
-        return performedBy;
+    public User getLockedBy() {
+        return lockedBy;
     }
 
-    public void setPerformedBy(User performedBy) {
-        this.performedBy = performedBy;
+    public void setLockedBy(User lockedBy) {
+        this.lockedBy = lockedBy;
     }
 
-    public Date getCompletedDate() {
-        return completedDate;
+    public Date getLockDate() {
+        return lockDate;
     }
 
-    public void setCompletedDate(Date completedDate) {
-        this.completedDate = completedDate;
+    public void setLockDate(Date lockDate) {
+        this.lockDate = lockDate;
     }
 
     public GpsLocation getGpsLocation() {
@@ -169,12 +176,12 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
         this.unlockResults = unlockResults;
     }
 
-    public String getMobileGuid() {
-        return mobileGuid;
+    public String getMobileGUID() {
+        return mobileGUID;
     }
 
-    public void setMobileGuid(String mobileGuid) {
-        this.mobileGuid = mobileGuid;
+    public void setMobileGUID(String mobileGUID) {
+        this.mobileGUID = mobileGUID;
     }
 
     @Transient
@@ -207,8 +214,34 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     }
 
     private void ensureMobileGuidIsSet() {
-        if (mobileGuid == null) {
-            mobileGuid = UUID.randomUUID().toString();
+        if (mobileGUID == null) {
+            mobileGUID = UUID.randomUUID().toString();
         }
+    }
+
+    @Transient
+    public boolean hasLockResults() {
+        return !getLockResults().isEmpty();
+    }
+
+    @Transient
+    public boolean hasUnlockResults() {
+        return !getUnlockResults().isEmpty();
+    }
+
+    public Date getUnlockDate() {
+        return unlockDate;
+    }
+
+    public void setUnlockDate(Date unlockDate) {
+        this.unlockDate = unlockDate;
+    }
+
+    public User getUnlockedBy() {
+        return unlockedBy;
+    }
+
+    public void setUnlockedBy(User unlockedBy) {
+        this.unlockedBy = unlockedBy;
     }
 }

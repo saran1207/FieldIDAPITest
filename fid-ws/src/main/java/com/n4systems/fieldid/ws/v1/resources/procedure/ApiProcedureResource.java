@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
@@ -8,6 +9,7 @@ import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.IsolationPointResult;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +24,9 @@ import java.util.List;
 @Path("procedure")
 public class ApiProcedureResource extends FieldIdPersistenceService {
 
+    @Autowired
+    private ProcedureService procedureService;
+
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
@@ -31,7 +36,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             throw new NullPointerException("ApiProcedureResult has null procedureId");
         }
 
-        Procedure procedure = persistenceService.findUsingTenantOnlySecurityWithArchived(Procedure.class, apiProcedure.getProcedureId());
+        Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 
         if (procedure.getWorkflowState() != ProcedureWorkflowState.OPEN && procedure.getWorkflowState() != ProcedureWorkflowState.CLOSED) {
             throw new IllegalStateException("Attempt to lock procedure that is not in OPEN state. Actual state: " + procedure.getWorkflowState());
@@ -39,6 +44,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
         List<IsolationPointResult> convertedResults = convert(apiProcedure.getIsolationPointResults());
         procedure.setLockResults(convertedResults);
+        procedure.setLockDate(convertedResults.get(convertedResults.size()-1).getCheckCheckTime());
         procedure.setWorkflowState(ProcedureWorkflowState.LOCKED);
         convertGpsLocation(apiProcedure, procedure);
 
@@ -54,7 +60,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             throw new NullPointerException("ApiProcedureResult has null procedureId");
         }
 
-        Procedure procedure = persistenceService.findUsingTenantOnlySecurityWithArchived(Procedure.class, apiProcedure.getProcedureId());
+        Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 
         if (procedure.getWorkflowState() != ProcedureWorkflowState.LOCKED) {
             throw new IllegalStateException("Attempt to unlock procedure that is not in LOCKED state. Actual state: " + procedure.getWorkflowState());
@@ -62,7 +68,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
         List<IsolationPointResult> convertedResults = convert(apiProcedure.getIsolationPointResults());
         procedure.setUnlockResults(convertedResults);
-        procedure.setCompletedDate(apiProcedure.getCompletedDate());
+        procedure.setUnlockDate(convertedResults.get(convertedResults.size()-1).getCheckCheckTime());
         procedure.setWorkflowState(ProcedureWorkflowState.UNLOCKED);
 
         persistenceService.update(procedure);
@@ -114,13 +120,13 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
     private ApiProcedure convert(Procedure procedure) {
         ApiProcedure convertedProcedure = new ApiProcedure();
-        convertedProcedure.setSid(procedure.getMobileGuid());
+        convertedProcedure.setSid(procedure.getMobileGUID());
         convertedProcedure.setAssetId(procedure.getAsset().getMobileGUID());
         convertedProcedure.setActive(procedure.isActive());
         convertedProcedure.setModified(procedure.getModified());
         convertedProcedure.setAssigneeUserGroupId(procedure.getAssignedGroup() == null ? null : procedure.getAssignedGroup().getId());
         convertedProcedure.setAssigneeUserId(procedure.getAssignee() == null ? null : procedure.getAssignee().getId());
-        convertedProcedure.setCompletedDate(procedure.getCompletedDate());
+        convertedProcedure.setCompletedDate(procedure.getLockDate());
         convertedProcedure.setDueDate(procedure.getDueDate());
         return convertedProcedure;
     }

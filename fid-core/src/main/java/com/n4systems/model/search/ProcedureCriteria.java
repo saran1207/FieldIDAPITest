@@ -24,7 +24,9 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
 
     private boolean unassignedOnly;
 
-    private DateRange dateRange = new DateRange(RangeType.CUSTOM);
+    private DateRange lockDateRange = new DateRange(RangeType.CUSTOM);
+
+    private DateRange unlockDateRange = new DateRange(RangeType.CUSTOM);
 
     private DateRange dueDateRange = new DateRange(RangeType.CUSTOM);
 
@@ -100,12 +102,12 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
         this.performedBy = performedBy;
     }
 
-	public void setDateRange(DateRange dateRange) {
-		this.dateRange = dateRange;
+	public void setUnlockDateRange(DateRange unlockDateRange) {
+		this.unlockDateRange = unlockDateRange;
 	}
 
-	public DateRange getDateRange() {
-		return dateRange;
+	public DateRange getUnlockDateRange() {
+		return unlockDateRange;
 	}
 
     public ProcedureWorkflowStateCriteria getWorkflowState() {
@@ -125,7 +127,7 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
     }
 
     public void clearDateRanges() {
-        this.dateRange = new DateRange(RangeType.CUSTOM);
+        this.unlockDateRange = new DateRange(RangeType.CUSTOM);
         this.dueDateRange = new DateRange(RangeType.CUSTOM);
     }
 
@@ -207,4 +209,11 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
         return getAssignedUserGroup();
     }
 
+    public DateRange getLockDateRange() {
+        return lockDateRange;
+    }
+
+    public void setLockDateRange(DateRange lockDateRange) {
+        this.lockDateRange = lockDateRange;
+    }
 }

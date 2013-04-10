@@ -21,7 +21,7 @@ public class IsolationDeviceDescription extends BaseEntity {
 
     @OneToMany
     @IndexColumn(name="orderIdx")
-    @JoinTable(name="isolation_device_descriptions_attribute_values", joinColumns = @JoinColumn(name = "isolation_device_description_id"), inverseJoinColumns = @JoinColumn(name = "attribute_value_id"))
+    @JoinTable(name="isolation_device_descriptions_attribute_values", joinColumns = @JoinColumn(name = "isolation_device_description_id"), inverseJoinColumns = @JoinColumn(name = "infooption_id"))
     private List<InfoOptionBean> attributeValues;
 
     public AssetType getAssetType() {

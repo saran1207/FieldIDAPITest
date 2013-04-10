@@ -1,30 +1,21 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.List;
 
 public class ApiProcedureResult {
 
-    private Date completedDate;
-    private Long procedureId;
+    private String procedureId;
+
     private List<ApiIsolationPointResult> isolationPointResults;
     private BigDecimal gpsLatitude;
     private BigDecimal gpsLongitude;
 
-    public Date getCompletedDate() {
-        return completedDate;
-    }
-
-    public void setCompletedDate(Date completedDate) {
-        this.completedDate = completedDate;
-    }
-
-    public Long getProcedureId() {
+    public String getProcedureId() {
         return procedureId;
     }
 
-    public void setProcedureId(Long procedureId) {
+    public void setProcedureId(String procedureId) {
         this.procedureId = procedureId;
     }
 

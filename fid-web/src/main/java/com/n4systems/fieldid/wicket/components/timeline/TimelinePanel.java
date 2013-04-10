@@ -22,7 +22,7 @@ public class TimelinePanel<T> extends Panel {
         super(id);
         this.items = items;
         this.timePointInfoProvider = timePointInfoProvider;
-        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
 
         timelineContainer = new WebMarkupContainer("timeline");
         timelineContainer.setOutputMarkupId(true);

@@ -15,7 +15,8 @@ public class ProcedureDateRangeCriteriaPanel extends Panel {
         super(id);
 
         add(new DateRangePicker("dueRangePicker", new FIDLabelModel("label.due_date"), ProxyModel.of(criteria, on(ProcedureCriteria.class).getDueDateRange())));
-        add(new DateRangePicker("completeRangePicker", new FIDLabelModel("label.completed_date"), ProxyModel.of(criteria, on(ProcedureCriteria.class).getDateRange())));
+        add(new DateRangePicker("lockRangePicker", new FIDLabelModel("label.lock_date"), ProxyModel.of(criteria, on(ProcedureCriteria.class).getLockDateRange())));
+        add(new DateRangePicker("unlockRangePicker", new FIDLabelModel("label.unlock_date"), ProxyModel.of(criteria, on(ProcedureCriteria.class).getUnlockDateRange())));
     }
 
 }

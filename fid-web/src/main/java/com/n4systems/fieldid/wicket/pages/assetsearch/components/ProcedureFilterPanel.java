@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
 import com.n4systems.model.search.ProcedureCriteria;
 import com.n4systems.model.search.ProcedureWorkflowStateCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,7 +26,7 @@ public class ProcedureFilterPanel extends Panel {
         workflowStateSelect.setNullValid(false);
         add(workflowStateSelect);
 
-        add( new CollapsiblePanel("dateDetailsCriteriaPanel", new StringResourceModel("label.identifiers",this,null)) {
+        add( new CollapsiblePanel("dateDetailsCriteriaPanel", new StringResourceModel("label.dates_and_times",this,null)) {
             @Override protected Panel createContainedPanel(String id) {
                 return new ProcedureDateRangeCriteriaPanel(id, model);
             }
@@ -59,8 +58,6 @@ public class ProcedureFilterPanel extends Panel {
         });
         
 	}
-
-    protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {}
 
     @Override
 	public void renderHead(IHeaderResponse response) {
