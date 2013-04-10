@@ -10,7 +10,7 @@
         <a wicket:id="previouslyPublishedListLink" class="mattButtonRight"><wicket:message key="label.previously_published"/></a>
         <a wicket:id="newProcedure" class="new-procedure mattButton"><wicket:message key="label.new"/></a>
     </div>
-    <div class="content">
+    <div wicket:id="listContainer" class="content">
         <table class="list">
             <tbody>
                 <tr>
@@ -36,6 +36,11 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+    <div wicket:id="blankSlate" class="blankSlate">
+        <img src="/fieldid/images/procedures-blank-slate-icon.png"/>
+        <p><label wicket:id="blankSlateMessage"/></p>
+        <a wicket:id="authorLink" class="mattButton"><wicket:message key="label.author_a_procedure"/></a>
     </div>
 </wicket:extend>
 

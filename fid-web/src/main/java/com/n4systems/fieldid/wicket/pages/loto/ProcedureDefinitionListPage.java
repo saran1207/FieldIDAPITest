@@ -10,6 +10,7 @@ import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -45,12 +46,15 @@ public class ProcedureDefinitionListPage extends LotoPage {
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
         add(new AjaxLink("newProcedure") {
-            @Override public void onClick(AjaxRequestTarget target) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
                 doNewProcedureDef(NewMode.FROM_SCRATCH);
             }
         });
 
-        add(new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
+        WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+
+        listContainer.add(new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
 
             @Override
             protected void populateItem(ListItem<ProcedureDefinition> item) {
@@ -73,6 +77,20 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 }.setVisible(!procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)));
             }
         });
+
+        listContainer.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject()));
+        add(listContainer);
+
+        WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
+        blankSlate.add(new Label("blankSlateMessage", new FIDLabelModel("message.no_published_procedures", assetModel.getObject().getType().getDisplayName())));
+        blankSlate.add(new AjaxLink("authorLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                doNewProcedureDef(NewMode.FROM_SCRATCH);
+            }
+        });
+        blankSlate.setVisible(!procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject()));
+        add(blankSlate);
     }
 
     private void editProcedureDefinition(ProcedureDefinition procedureDefinition) {
