@@ -103,7 +103,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
     private Asset findAsset(String guid) {
         QueryBuilder<Asset> assetFinder = createTenantSecurityBuilder(Asset.class, true);
-        assetFinder.addSimpleWhere("mobileGuid", guid);
+        assetFinder.addSimpleWhere("mobileGUID", guid);
         return persistenceService.find(assetFinder);
     }
 
