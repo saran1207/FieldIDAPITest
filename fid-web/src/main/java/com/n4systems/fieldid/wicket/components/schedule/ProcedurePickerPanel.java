@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
+import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.Procedure;
@@ -46,7 +47,7 @@ public class ProcedurePickerPanel extends Panel {
     @SpringBean
     private DateService dateService;
 
-    public ProcedurePickerPanel(String id, IModel<Procedure> scheduleModel) {
+    public ProcedurePickerPanel(String id, final IModel<Procedure> scheduleModel) {
         super(id);
         this.scheduleModel = scheduleModel;
         setOutputMarkupId(true);
@@ -54,6 +55,13 @@ public class ProcedurePickerPanel extends Panel {
         add(procedureForm = new ProcedureForm("procedureForm", scheduleModel));
 
         add(noActiveProcedureDefinitionMessage = new WebMarkupContainer("noActiveProcedureDefinitionMessage"));
+
+        noActiveProcedureDefinitionMessage.add(new AjaxLink("authorLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setResponsePage(new ProcedureDefinitionPage(scheduleModel.getObject().getAsset()));
+            }
+        });
         add(scheduledProcedureExistsMessage = new WebMarkupContainer("scheduledProcedureExistsMessage"));
 
         updateVisibility();
@@ -146,12 +154,12 @@ public class ProcedurePickerPanel extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/wicket_schedule_picker.css");
+        response.renderCSSReference("style/newCss/component/wicket_procedure_picker.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
     }
 
     public void setSaveButtonLabel(IModel<String> saveButtonLabel) {
         saveScheduleLabel.setDefaultModel(saveButtonLabel);
     }
-
 
 }

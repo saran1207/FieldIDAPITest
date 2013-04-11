@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
+import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
@@ -49,6 +50,18 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
     private ProcedureDefinitionSection currentSection = ProcedureDefinitionSection.Details;
     private ProcedureDefinitionForm form;
     private boolean contentFinished = false;
+
+    public ProcedureDefinitionPage(Asset asset) {
+        super(new PageParameters());
+
+        ProcedureDefinition pd = new ProcedureDefinition();
+        pd.setAsset(asset);
+        pd.setTenant(asset.getTenant());
+        pd.setPublishedState(PublishedState.DRAFT);
+        model = Model.of(pd);
+
+        init(model);
+    }
 
     public ProcedureDefinitionPage(IModel<ProcedureDefinition> model) {
         super(new PageParameters());

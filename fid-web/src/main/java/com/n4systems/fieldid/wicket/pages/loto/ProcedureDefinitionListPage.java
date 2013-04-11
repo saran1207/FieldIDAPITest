@@ -17,9 +17,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -61,12 +59,14 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 item.add(new Label("approvedBy", new PropertyModel<String>(procedureDefinition, "approvedBy")));
                 item.add(new Label("publishedState", new PropertyModel<String>(procedureDefinition, "publishedState.label")));
                 item.add(new Link("edit") {
-                    @Override public void onClick() {
+                    @Override
+                    public void onClick() {
                         editProcedureDefinition(procedureDefinition);
                     }
                 }.setVisible(procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)));
                 item.add(new Link("print") {
-                    @Override public void onClick() {
+                    @Override
+                    public void onClick() {
                         setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition));
                     }
                 }.setVisible(!procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)));
@@ -95,21 +95,12 @@ public class ProcedureDefinitionListPage extends LotoPage {
     private void doNewProcedureDef(NewMode mode) {
         switch (mode) {
             case FROM_SCRATCH:
-                setResponsePage(new ProcedureDefinitionPage(newProcedureDefinition()));
+                setResponsePage(new ProcedureDefinitionPage(assetModel.getObject()));
                 break;
             default:
                 // currently only one mode supported.
                 break;
         }
-    }
-
-    private IModel<ProcedureDefinition> newProcedureDefinition() {
-        ProcedureDefinition pd = new ProcedureDefinition();
-        pd.setAsset(assetModel.getObject());
-        pd.setTenant(assetModel.getObject().getTenant());
-        pd.setPublishedState(PublishedState.DRAFT);
-        // NOTE : revision number will be populated by service.  really, could just use ID for revision number AFAIK?
-        return Model.of(pd);
     }
 
     @Override
