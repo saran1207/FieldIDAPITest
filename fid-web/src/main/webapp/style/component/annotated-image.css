@@ -16,43 +16,35 @@
 	
 	position: absolute;
 }
-	.note:before {
-		/*content: ' ';*/
-		position: absolute;
-		/*width: 0;
-		height: 0;
-		border: 15px solid transparent;	*/
+	/* top left */
+	.note.arrow-left {
+		margin-left: 28px;
 	}
-		/* bottom left */
-		.note.bottom-left:before {
-			left: -15px;
-			bottom: 0;
-			border-right-color: #fff0a0;
-			border-width: 15px 20px 0 0;
-		}		
-		/* bottom right */
-		.note.bottom-right:before {
-			right: -15px;
-			bottom: 0;
-			border-left-color: #fff0a0;
-			border-width: 15px 0 0 20px;
-		}	
-		/* top left */
-		.note.arrow-left:before {
-			content: url('/fieldid/images/loto/arrow-left.png');
-			left: -28px;
-			top: 4px;
-			/*border-right-color: #fff0a0;
-			border-width: 0 20px 15px 0;*/
-		}
-		/* top right */
-		.note.arrow-right:before {
-			content: url('/fieldid/images/loto/arrow-right.png');
-			right: -28px;
-			top: 4px;
-			/*border-left-color: #fff0a0;
-			border-width: 0 0 15px 20px;*/
-		}
+	.note.arrow-left:before {
+		content: url('/fieldid/images/loto/arrow-left.png');
+		left: -28px;
+		top: 4px;
+		position: absolute;
+	}
+	/* top right */
+	.note.arrow-right {
+		margin-right: 28px;
+	}
+	.note.arrow-right:after {
+		content: url('/fieldid/images/loto/arrow-right.png');
+		right: -28px;
+		top: 4px;
+		position: absolute;
+	}
+/* temp - just for testing edge cases, to be deleted */
+.note.arrow-left {
+	top: 0;
+	left: 0;
+}
+.note.arrow-right {
+	bottom: 0;
+	right: 0;
+}
 
 
 /* INPUTS */
@@ -136,27 +128,6 @@
 	color: #fff;
 	background: #00a650;
 }
-
-
-
-/* positioning for notes - left & right values can't be less
-than 15px or the point will be cropped. */
-.note.arrow-left {
-	top: 0;
-	left: 28px;
-}
-.note.arrow-right {
-	bottom: 0;
-	right: 28px;
-}
-/*.note.bottom-left {
-	bottom: 0;
-	left: 15px;
-}
-.note.bottom-right {
-	bottom: 0;
-	right: 15px;
-}*/
 
 
 
