@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
+import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -66,7 +67,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 }.setVisible(procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)));
                 item.add(new Link("print") {
                     @Override public void onClick() {
-
+                        setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition));
                     }
                 }.setVisible(!procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)));
             }
