@@ -2,15 +2,18 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.ComponentWithExternalHtml;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.IMarkupFragment;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+@ComponentWithExternalHtml
 public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
     private @SpringBean PersistenceService persistenceService;
@@ -45,7 +48,6 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         add(new PrintImages("images",model));
         add(new PrintList("list",model));
         add(new PrintFooter("footer",model));
-
     }
 
     @Override
@@ -56,5 +58,8 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     }
 
 
-
+    @Override
+    public IMarkupFragment getMarkup() {
+        return super.getMarkup();
+    }
 }

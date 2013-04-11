@@ -1,4 +1,3 @@
-
 var fieldIdWidgets = (function() {
 
 	function imageList(el,options) {
@@ -21,19 +20,20 @@ var fieldIdWidgets = (function() {
 
 			//Set height of images to fit in the image list without cropping
 			il.find('ul li img').each(function(){
-				var imageHeight = $(this).height();
-				var imageWidth = $(this).width();
-				var imageContainerHeight = $(this).parent().parent().height();
-				var imageContainerWidth = $(this).parent().parent().width();
+				var $this = $(this);
+				var imageHeight = $this.height();
+				var imageWidth = $this.width();
+				var imageContainerHeight = $this.parent().parent().height();
+				var imageContainerWidth = $this.parent().parent().width();
 
 				if (imageHeight/imageWidth >= imageContainerHeight/imageContainerWidth) {
 					var newWidth = imageWidth * (imageContainerHeight/imageHeight);
-					$(this).parent().css('height', imageContainerHeight).css('width',newWidth);
-					$(this).parent().css('margin-left',(imageContainerWidth-newWidth)/2);
+					$this.parent().css('height', imageContainerHeight).css('width',newWidth);
+					$this.parent().css('margin-left',(imageContainerWidth-newWidth)/2);
 				} else {
 					var newHeight = imageHeight * (imageContainerWidth/imageWidth);
-					$(this).parent().css('margin-top',(imageContainerHeight-newHeight)/2);
-					$(this).parent().css('width', imageContainerWidth).css('height',newHeight);
+					$this.parent().css('margin-top',(imageContainerHeight-newHeight)/2);
+					$this.parent().css('width', imageContainerWidth).css('height',newHeight);
 				}
 			});
 

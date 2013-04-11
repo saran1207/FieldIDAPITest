@@ -33,7 +33,6 @@ public class ContentPanel extends Panel {
     private IsolationPointEditor editor;
     private IsolationPointListPanel list;
     private IsolationPoint newIsolationPoint = createIsolationPoint(IsolationPointSourceType.W);
-    private int index=1;
 
     public ContentPanel(String id, final IModel<ProcedureDefinition> model) {
         super(id, model);

@@ -19,6 +19,7 @@ import com.n4systems.fieldid.wicket.pages.loto.PreviouslyPublishedListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureResultsPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
+import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
@@ -59,6 +60,7 @@ import org.apache.wicket.request.resource.caching.QueryStringWithVersionResource
 import org.apache.wicket.request.resource.caching.version.MessageDigestResourceVersion;
 import org.apache.wicket.settings.IRequestLoggerSettings;
 import org.apache.wicket.spring.injection.annot.SpringComponentInjector;
+import org.apache.wicket.util.file.IResourceFinder;
 
 public class FieldIDWicketApp extends WebApplication {
 
@@ -141,6 +143,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("editPerson", EditPersonPage.class);
 
         mountPage("procedureDefinitions", ProcedureDefinitionListPage.class);
+        mountPage("procedureDefinitionPrint", ProcedureDefinitionPrintPage.class);
         mountPage("previouslyPublished", PreviouslyPublishedListPage.class);
 
         mountPage("procedureResults", ProcedureResultsPage.class);
@@ -173,6 +176,9 @@ public class FieldIDWicketApp extends WebApplication {
         getResourceSettings().setCachingStrategy(new QueryStringWithVersionResourceCachingStrategy(new MessageDigestResourceVersion()));
     }
 
+    private String getTemplateFolder() {
+        return "/var/fieldid/common/templates/wicket";
+    }
 
     @Override
     protected void validateInit() {
@@ -195,6 +201,12 @@ public class FieldIDWicketApp extends WebApplication {
     	ConverterLocator converterLocator = new ConverterLocator();
     	converterLocator.set(PlainDate.class, new PlainDateConverter());
     	return converterLocator;
+    }
+
+
+    @Override
+    protected IResourceFinder getResourceFinder() {
+        return new DynamicWebApplicationPath(getServletContext());
     }
 
 
