@@ -95,6 +95,8 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
                 orderClause.setAlwaysDropAlias(true);
 
                 searchBuilder.getOrderArguments().add(orderClause);
+            } else {
+                super.addSortTerms(criteriaModel, searchBuilder, sortColumn, sortDirection);
             }
 
             MultipleSelectClause multiSelect = new MultipleSelectClause();
