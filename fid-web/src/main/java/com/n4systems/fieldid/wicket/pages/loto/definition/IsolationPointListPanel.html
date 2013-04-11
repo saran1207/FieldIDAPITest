@@ -3,24 +3,31 @@
     <h3><wicket:message key="label.images"/></h3>
 
     <div wicket:id="images"/>
-
-    <!-- CHRISTINA : changed from table to ul/li 'cause i need a container around elements. ("sortableList" thingy) can prolly change to div/span etc... if need be. -->
-    <ul wicket:id="sortableList" class="isolation-point-table">
-        <li wicket:id="list">
-                <a wicket:id ="delete"><img src="/fieldid/images/delete.gif"/></a>
-                <img src="/fieldid/images/add-photo-slate.png" height="28" width="28"/>
-                <span wicket:id="id" class="identifier"/>
-                <span wicket:id="source" class="source"/>
-                <span wicket:id="device" class="device"/>
-                <span wicket:id="location" class="location"/>
-                <span wicket:id="method" class="method"/>
-                <span wicket:id="check" class="check"/>
-                <img wicket:id="image" class="image"/>
-                <span class="actions">
-                    <a wicket:id="edit"><wicket:message key="label.edit"/></a>
-                </span>
-                <span class="reorder"><img src="/fieldid/images/icon-reorder.gif"/></span>
+    
+    <ul class="isolation-point-table headings">
+        <li>
+            <span class="identifier">identifier</span>
+            <span class="source">source</span>
+            <span class="device">device</span>
+            <span class="location">location</span>
+            <span class="method">method</span>
+            <span class="check">check</span>
         </li>
     </ul>
-
+    <ul wicket:id="sortableList" class="isolation-point-table">
+        <li wicket:id="list">
+            <span class="delete"><a wicket:id ="delete"><img src="/fieldid/images/delete.gif"/></a></span>
+            <span wicket:id="id" class="identifier"/>
+            <span wicket:id="source" class="source"/>
+            <span wicket:id="device" class="device"/>
+            <span wicket:id="location" class="location"/>
+            <span wicket:id="method" class="method"/>
+            <span wicket:id="check" class="check"/>
+            <span class="thumbnail"><img src="/fieldid/images/add-photo-slate.png" height="28" width="28"/></span>
+            <span class="actions">
+                <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+            </span>
+            <span class="reorder"><img src="/fieldid/images/icon-reorder.gif"/></span>
+        </li>
+    </ul>
 </wicket:panel>
