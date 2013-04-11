@@ -24,7 +24,7 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
     public ProcedureDefinitionPrintPage(ProcedureDefinition procedureDefinition) {
         super(new PageParameters());
-        init(Model.of(procedureDefinition));
+        init(createEntityModel(procedureDefinition.getId()));
     }
 
     private IModel<ProcedureDefinition> createEntityModel() {
