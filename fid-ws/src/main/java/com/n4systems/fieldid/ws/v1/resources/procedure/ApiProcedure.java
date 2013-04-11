@@ -11,6 +11,7 @@ public class ApiProcedure extends ApiReadWriteModel {
     private Long assigneeUserId;
     private Long assigneeUserGroupId;
     private String assetId;
+    private String workflowState;
 
     public Date getDueDate() {
         return dueDate;
@@ -50,5 +51,13 @@ public class ApiProcedure extends ApiReadWriteModel {
 
     public void setAssetId(String assetId) {
         this.assetId = assetId;
+    }
+
+    public String getWorkflowState() {
+        return workflowState;
+    }
+
+    public void setWorkflowState(String workflowState) {
+        this.workflowState = workflowState;
     }
 }

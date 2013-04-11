@@ -21,6 +21,9 @@ public class DateTimeLabel extends Label {
 
     @Override
     public void onComponentTagBody(final MarkupStream markupStream, final ComponentTag openTag) {
+        if (model.getObject() == null) {
+            return;
+        }
         DateFormat df = new SimpleDateFormat(FieldIDSession.get().getSessionUser().getDateTimeFormat());
         String dateString = df.format(model.getObject());
         replaceComponentTagBody(markupStream, openTag, dateString);

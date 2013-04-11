@@ -23,7 +23,7 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
 
     @ManyToOne
     @JoinColumn(name = "type_id")
-    @Deprecated // Do we need this??
+    // This is set when we perform the lock.
     private ProcedureDefinition type;
 
     @ManyToOne
@@ -61,12 +61,12 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
 
     private GpsLocation gpsLocation;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @IndexColumn(name="orderIdx")
     @JoinTable(name="procedures_lock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
     private List<IsolationPointResult> lockResults;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @IndexColumn(name="orderIdx")
     @JoinTable(name="procedures_unlock_results", joinColumns = @JoinColumn(name = "procedure_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_result_id"))
     private List<IsolationPointResult> unlockResults;
@@ -82,12 +82,10 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
         this.lockResults = lockResults;
     }
 
-    @Deprecated
     public ProcedureDefinition getType() {
         return type;
     }
 
-    @Deprecated
     public void setType(ProcedureDefinition type) {
         this.type = type;
     }

@@ -1,23 +1,61 @@
 <wicket:extend>
 
-    <div class="procedureDetails">
-
+    <div class="header">
+        <h1>
+            <span class="greyText" wicket:id="assetTypeName"></span> /
+            <wicket:message key="label.lockout_tagout_procedure"/>
+            <span wicket:id="procedureCode"></span>
+        </h1>
     </div>
+
+    <div class="workflowState" wicket:id="workflowState"></div>
 
     <div class="locationContainer" wicket:id="locationDetailsPanel">
 
-        <wicket:message key="label.latitude"/> / <wicket:message key="label.longitude"/>: <span wicket:id="latitude"/> / <span wicket:id="longitude"/>
+        <div class="locationDescription">
+            <span class="label"><wicket:message key="label.latitude"/> / <wicket:message key="label.longitude"/>: </span>
+            <div wicket:id="latitude"/> / <div wicket:id="longitude"/>
+        </div>
 
-        <div wicket:id="googleMap">
+        <div wicket:id="googleMap" class="googleMap">
         </div>
 
     </div>
 
+    <div class="procedureDetails">
+        <div class="detailItem">
+            <div class="left"><wicket:message key="label.locked_scheduled_for" />:</div>
+            <div class="right" wicket:id="scheduledForLabel"></div>
+        </div>
+        <div class="detailItem">
+            <div class="left"><wicket:message key="label.locked_out_on" />:</div>
+            <div class="right" wicket:id="lockedOnLabel"></div>
+        </div>
+        <wicket:enclosure>
+            <div class="detailItem">
+                <div class="left"><wicket:message key="label.unlocked_on" />:</div>
+                <div class="right" wicket:id="unlockedOnLabel"></div>
+            </div>
+        </wicket:enclosure>
+        <div class="detailItem">
+            <div class="left"><wicket:message key="label.locked_by" />:</div>
+            <div class="right" wicket:id="lockedByLabel"></div>
+        </div>
+        <wicket:enclosure>
+            <div class="detailItem">
+                <div class="left"><wicket:message key="label.unlocked_by" />:</div>
+                <div class="right" wicket:id="unlockedByLabel"></div>
+            </div>
+        </wicket:enclosure>
+    </div>
+
     <div wicket:id="timelinesContainer">
 
-        <span class="timelinesLabel"><wicket:message key="label.timeline"/></span>
+        <div class="timelineHeader">
+            <div style="display:block;float:left;padding-top:6px;"><wicket:message key="label.timeline"/></div> <div wicket:id="selectLockingOrUnlockingResults"></div>
+        </div>
 
-        <div wicket:id="selectLockingOrUnlockingResults"></div>
+
 
         <div wicket:id="lockResults">
         </div>

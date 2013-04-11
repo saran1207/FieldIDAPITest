@@ -2,12 +2,15 @@ package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.DisplayNoneIfCondition;
+import com.n4systems.fieldid.wicket.components.DateTimeLabel;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.components.timeline.TimePointInfoProvider;
 import com.n4systems.fieldid.wicket.components.timeline.TimelinePanel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.ProcedureWorkflowState;
@@ -15,10 +18,12 @@ import com.n4systems.model.procedure.IsolationPointResult;
 import com.n4systems.model.procedure.Procedure;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -47,17 +52,41 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         timelinesContainer.add(lockResultsPanel = createTimelinePanel("lockResults", lockResults, ProcedureWorkflowState.LOCKED));
         timelinesContainer.add(unlockResultsPanel = createTimelinePanel("unlockResults", unlockResults, ProcedureWorkflowState.UNLOCKED));
 
+        add(new Label("assetTypeName", ProxyModel.of(procedureModel, on(Procedure.class).getAsset().getType().getName())));
+        add(new Label("procedureCode", ProxyModel.of(procedureModel, on(Procedure.class).getType().getProcedureCode())));
+
         add(createLocationDetailsPanel("locationDetailsPanel"));
+        add(createWorkflowStateLabel("workflowState"));
+
+        addProcedureDetails();
 
         add(timelinesContainer);
     }
 
+    private void addProcedureDetails() {
+        add(new DateTimeLabel("scheduledForLabel", new UserToUTCDateModel(ProxyModel.of(procedureModel, on(Procedure.class).getDueDate()))));
+        add(new DateTimeLabel("lockedOnLabel", new UserToUTCDateModel(ProxyModel.of(procedureModel, on(Procedure.class).getLockDate()))));
+        add(new DateTimeLabel("unlockedOnLabel", new UserToUTCDateModel(ProxyModel.of(procedureModel, on(Procedure.class).getUnlockDate()))).setVisible(procedureModel.getObject().getUnlockDate() != null));
+        add(new Label("lockedByLabel", ProxyModel.of(procedureModel, on(Procedure.class).getLockedBy().getFullName())));
+        add(new Label("unlockedByLabel", ProxyModel.of(procedureModel, on(Procedure.class).getUnlockedBy().getFullName())).setEscapeModelStrings(procedureModel.getObject().getUnlockedBy() != null));
+    }
+
+    private Component createWorkflowStateLabel(String id) {
+        Label workflowStateLabel;
+        if (procedureModel.getObject().getWorkflowState() == ProcedureWorkflowState.LOCKED) {
+            workflowStateLabel = new Label(id, new FIDLabelModel("label.locked_out"));
+        } else {
+            workflowStateLabel = new Label(id, new FIDLabelModel("label.unlocked"));
+        }
+        return workflowStateLabel.add(new AttributeAppender("class", Model.of(procedureModel.getObject().getWorkflowState().name()), " "));
+    }
+
     private WebMarkupContainer createLocationDetailsPanel(String id) {
-        WebMarkupContainer locationContainer = new WebMarkupContainer("locationDetailsPanel");
+        WebMarkupContainer locationContainer = new WebMarkupContainer(id);
 
         if (procedureModel.getObject().getGpsLocation() != null && procedureModel.getObject().getGpsLocation().isValid()) {
-            locationContainer.add(new Label("latitude", ProxyModel.of(procedureModel, on(Procedure.class).getGpsLocation().getLatitude())));
-            locationContainer.add(new Label("longitude", ProxyModel.of(procedureModel, on(Procedure.class).getGpsLocation().getLongitude())));
+            locationContainer.add(new FlatLabel("latitude", ProxyModel.of(procedureModel, on(Procedure.class).getGpsLocation().getLatitude())));
+            locationContainer.add(new FlatLabel("longitude", ProxyModel.of(procedureModel, on(Procedure.class).getGpsLocation().getLongitude())));
             locationContainer.add(new GoogleMap("googleMap", procedureModel.getObject().getGpsLocation().getLatitude().doubleValue(), procedureModel.getObject().getGpsLocation().getLongitude().doubleValue()));
         } else {
             locationContainer.setVisible(false);
@@ -83,10 +112,9 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         return new MattBar("selectLockingOrUnlockingResults") {
             {
                 addLink(new FIDLabelModel("label.locking"), ProcedureWorkflowState.LOCKED);
-                if (procedureModel.getObject().getWorkflowState() == ProcedureWorkflowState.UNLOCKED) {
-                    addLink(new FIDLabelModel("label.unlocking"), ProcedureWorkflowState.UNLOCKED);
-                }
+                addLink(new FIDLabelModel("label.unlocking"), ProcedureWorkflowState.UNLOCKED);
                 setCurrentState(ProcedureWorkflowState.LOCKED);
+                setVisible(procedureModel.getObject().getWorkflowState()==ProcedureWorkflowState.UNLOCKED);
             }
             @Override
             protected void onEnterState(AjaxRequestTarget target, Object state) {
@@ -129,5 +157,7 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/timeline/storyjs-embed.js");
+        response.renderCSSReference("style/pageStyles/procedureResults.css");
+        response.renderCSSReference("style/newCss/asset/header.css");
     }
 }

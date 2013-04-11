@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.wicket.components.proceduresearch.results;
 
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureResultsPage;
+import com.n4systems.model.ProcedureWorkflowState;
+import com.n4systems.model.procedure.Procedure;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -19,10 +22,16 @@ public class ProcedureActionsCell extends Panel {
         actionsLink.add(new ContextImage("dropwDownArrow", "images/dropdown_arrow.png"));
         add(actionsLink);
 
+        Procedure procedure = (Procedure) rowModel.getObject().getEntity();
+
         WebMarkupContainer actionsList = new WebMarkupContainer("actionsList");
         actionsList.setOutputMarkupId(true);
 
-        actionsList.add(new BookmarkablePageLink<Void>("viewLink", ProcedureResultsPage.class, PageParametersBuilder.id(rowModel.getObject().getId())));
+        BookmarkablePageLink<Void> viewLink = new BookmarkablePageLink<Void>("viewLink", ProcedureResultsPage.class, PageParametersBuilder.id(rowModel.getObject().getId()));
+        viewLink.setVisible(procedure.getWorkflowState() == ProcedureWorkflowState.UNLOCKED || procedure.getWorkflowState() == ProcedureWorkflowState.LOCKED);
+        actionsList.add(viewLink);
+
+        actionsList.add(new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(procedure.getAsset().getId())));
 
         add(actionsList);
     }

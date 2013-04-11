@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.GpsLocation;
@@ -24,8 +25,8 @@ import java.util.List;
 @Path("procedure")
 public class ApiProcedureResource extends FieldIdPersistenceService {
 
-    @Autowired
-    private ProcedureService procedureService;
+    @Autowired private ProcedureService procedureService;
+    @Autowired private ProcedureDefinitionService procedureDefinitionService;
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -44,8 +45,10 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
         List<IsolationPointResult> convertedResults = convert(apiProcedure.getIsolationPointResults());
         procedure.setLockResults(convertedResults);
-        procedure.setLockDate(convertedResults.get(convertedResults.size()-1).getCheckCheckTime());
+        procedure.setLockedBy(getCurrentUser());
+        procedure.setLockDate(convertedResults.get(convertedResults.size() - 1).getCheckCheckTime());
         procedure.setWorkflowState(ProcedureWorkflowState.LOCKED);
+        procedure.setType(procedureDefinitionService.getPublishedProcedureDefinition(procedure.getAsset()));
         convertGpsLocation(apiProcedure, procedure);
 
         persistenceService.update(procedure);
@@ -68,7 +71,8 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
         List<IsolationPointResult> convertedResults = convert(apiProcedure.getIsolationPointResults());
         procedure.setUnlockResults(convertedResults);
-        procedure.setUnlockDate(convertedResults.get(convertedResults.size()-1).getCheckCheckTime());
+        procedure.setUnlockedBy(getCurrentUser());
+        procedure.setUnlockDate(convertedResults.get(convertedResults.size() - 1).getCheckCheckTime());
         procedure.setWorkflowState(ProcedureWorkflowState.UNLOCKED);
 
         persistenceService.update(procedure);
@@ -128,6 +132,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         convertedProcedure.setAssigneeUserId(procedure.getAssignee() == null ? null : procedure.getAssignee().getId());
         convertedProcedure.setCompletedDate(procedure.getLockDate());
         convertedProcedure.setDueDate(procedure.getDueDate());
+        convertedProcedure.setWorkflowState(procedure.getWorkflowState().name());
         return convertedProcedure;
     }
 
