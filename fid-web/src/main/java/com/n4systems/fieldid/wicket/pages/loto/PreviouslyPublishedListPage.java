@@ -2,8 +2,9 @@ package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -26,6 +27,12 @@ public class PreviouslyPublishedListPage extends LotoPage{
 
     public PreviouslyPublishedListPage(PageParameters params) {
         super(params);
+
+        BookmarkablePageLink assetLink;
+        add(assetLink = new BookmarkablePageLink<AssetSummaryPage>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetId)));
+        Asset asset = assetModel.getObject();
+        String assetLabel = asset.getType().getDisplayName() + " / " + asset.getIdentifier();
+        assetLink.add(new Label("label", assetLabel));
 
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
@@ -54,11 +61,6 @@ public class PreviouslyPublishedListPage extends LotoPage{
         WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
         blankSlate.setVisible(listView.getList().isEmpty());
         add(blankSlate);
-    }
-
-    @Override
-    protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.procedures"));
     }
 
     class ProcedureDefinitionModel extends LoadableDetachableModel<List<ProcedureDefinition>> {
