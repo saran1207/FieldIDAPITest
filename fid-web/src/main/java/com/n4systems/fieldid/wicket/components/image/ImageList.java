@@ -64,10 +64,8 @@ public class ImageList<T extends S3Image> extends Panel {
     }
 
     class ImageListOptions implements Serializable {
-        String defaultDirection = "west";
         String yPosition = "middle";
         String xPosition ="left";
-        Boolean centerImage = false;
 
         ImageListOptions() {
         }
