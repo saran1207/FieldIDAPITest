@@ -39,21 +39,20 @@ public class MenuButton<T> extends Panel {
             }
         });
         add(new ListView<T>("items", items) {
-            @Override
-            protected void populateItem(ListItem<T> item) {
-                Component link = populateIcon("icon", item);
+            @Override protected void populateItem(ListItem<T> item) {
+                WebMarkupContainer link = populateLink("link", "label", item);
                 if (link==null) {
-                    item.add(new WebMarkupContainer("icon").setVisible(false));
-                } else {
-                    item.add(link);
+                    link = new WebMarkupContainer("link");
+                    link.setVisible(false);
                 }
 
-                Component label = populateLink("link", "label", item);
-                if (label==null) {
-                    item.add(new WebMarkupContainer("link").setVisible(false));
-                } else {
-                    item.add(label);
+                Component icon = populateIcon("icon", item);
+                if (icon==null) {
+                    icon = new WebMarkupContainer("icon").setVisible(false);
                 }
+                link.add(icon);
+
+                item.add(link);
             }
         });
     }
@@ -71,7 +70,7 @@ public class MenuButton<T> extends Panel {
         ((MarkupContainer)get(BUTTON_ID)).add(new Label("label", labelModel));
     }
 
-    protected Component populateLink(String linkId, String labelId, ListItem<T> item) { return null; }
+    protected WebMarkupContainer populateLink(String linkId, String labelId, ListItem<T> item) { return null; }
 
     protected Component populateIcon(String id, ListItem<T> item)  { return null; }
 

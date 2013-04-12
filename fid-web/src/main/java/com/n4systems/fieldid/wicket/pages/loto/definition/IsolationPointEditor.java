@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.search.ProcedureSearchService;
-import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.loto.DeviceLockPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -14,17 +13,15 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import java.util.Arrays;
 
 public class IsolationPointEditor extends Panel {
 
@@ -38,28 +35,18 @@ public class IsolationPointEditor extends Panel {
     public IsolationPointEditor(String id) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
         setOutputMarkupPlaceholderTag(true);
-
         add(new AttributeAppender("class","isolation-point-editor"));
+
+        add(new ContextImage("icon",getIconModel()));
 
         add(new Label("title", getTitleModel()));
 
         add(form = new Form("form"));
 
         form.add(new TextField("identifier"));
-        form.add(new FidDropDownChoice<IsolationPointSourceType>("source", new PropertyModel(getDefaultModel(),"sourceType"), Arrays.asList(IsolationPointSourceType.values()),new IChoiceRenderer<IsolationPointSourceType>() {
-            @Override public Object getDisplayValue(IsolationPointSourceType type) {
-                return type.getIdentifier();
-            }
-
-            @Override
-            public String getIdValue(IsolationPointSourceType type, int index) {
-                return type.name();
-            }
-        }));
         form.add(new TextField("sourceText", new PropertyModel(getDefaultModel(),"sourceText")));
         form.add(new AjaxLink<Void>("lock", new Model()) {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
+            @Override public void onClick(AjaxRequestTarget target) {
                 isolationLockPicker.setVisible(true);
                 this.setVisible(false);
                 target.add(isolationLockPicker,this);
@@ -67,19 +54,16 @@ public class IsolationPointEditor extends Panel {
         }.add(new Label("description", getLockDescriptionModel())));
 
         form.add(new AjaxLink<Void>("device", new Model()) {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
+            @Override public void onClick(AjaxRequestTarget target) {
                 isolationDevicePicker.setVisible(true);
                 this.setVisible(false);
                 target.add(isolationDevicePicker,this);
-
             }
         }.add(new Label("description", getDeviceDescriptionModel())));
 
         final IModel<IsolationDeviceDescription> deviceDescriptionModel = Model.of(new IsolationDeviceDescription());
         form.add(isolationDevicePicker = new DeviceLockPicker("devicePicker", deviceDescriptionModel, true) {
-            @Override
-            public void onPickerUpdated() {
+            @Override public void onPickerUpdated() {
                 getIsolationPointModel().getObject().setDeviceDefinition((IsolationDeviceDescription) getDefaultModelObject());
             }
         });
@@ -88,8 +72,7 @@ public class IsolationPointEditor extends Panel {
 
         final IModel<IsolationDeviceDescription> lockDescriptionModel = Model.of(new IsolationDeviceDescription());
         form.add(isolationLockPicker = new DeviceLockPicker("lockPicker", lockDescriptionModel, false) {
-            @Override
-            public void onPickerUpdated() {
+            @Override public void onPickerUpdated() {
                 getIsolationPointModel().getObject().setDeviceDefinition((IsolationDeviceDescription) getDefaultModelObject());
             }
         });
@@ -107,13 +90,12 @@ public class IsolationPointEditor extends Panel {
             }
             @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
                 System.out.println("hmmm....");
-                // TODO DD : not sure what to do here...
+                // TODO DD : not sure what to do here...have to add validation in last milestone.
             }
         });
 
         form.add(new AjaxLink("back") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
+            @Override public void onClick(AjaxRequestTarget target) {
                 doCancel(target);
                 closeEditor(target);
             }
@@ -171,6 +153,16 @@ public class IsolationPointEditor extends Panel {
                 } else {
                     return "Isolation Point : " + isolationPoint.getIdentifier();
                 }
+            }
+        };
+    }
+
+    private IModel<String> getIconModel() {
+        return new Model<String>() {
+            @Override public String getObject() {
+                IsolationPoint isolationPoint = (IsolationPoint) getDefaultModel().getObject();
+                ImageAnnotationType label = ImageAnnotationType.valueOf(isolationPoint.getSourceType().name());
+                return label.getFullIcon();
             }
         };
     }

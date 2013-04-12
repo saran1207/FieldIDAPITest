@@ -9,6 +9,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -36,11 +37,11 @@ public class AddIsolationPointButton extends MenuButton<IsolationPointSourceType
     }
 
     @Override
-    protected Component populateLink(String linkId, String labelId, ListItem<IsolationPointSourceType> item) {
+    protected WebMarkupContainer populateLink(String linkId, String labelId, ListItem<IsolationPointSourceType> item) {
         final IsolationPointSourceType type = item.getModelObject();
         ImageAnnotationType label = ImageAnnotationType.valueOf(type.name());
 
-        return new AjaxLink(linkId) {
+        return (WebMarkupContainer) new AjaxLink(linkId) {
             @Override public void onClick(AjaxRequestTarget target) {
                 doAdd(target,type);
             }
