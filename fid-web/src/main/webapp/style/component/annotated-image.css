@@ -6,13 +6,13 @@
 	position: relative;  
 }
 .note {
-	padding: 2px;
-	/*background-color: #fff0a0;*/
+	padding-left: 2px;
 	-webkit-border-radius: 5px;
 	border-radius: 5px;
 	-webkit-box-shadow: 2px 2px 10px -3px #888;
 	box-shadow: 2px 2px 10px -3px #888;
 	z-index: 10;
+	border: 2px solid;
 	
 	position: absolute;
 }
@@ -54,6 +54,8 @@
 	border: none;
 	height: 16px;
 	margin-left: 0px;
+	font-weight: bold;
+	padding: 0;
 }
 .note.readonly {
 	z-index: 2;
@@ -74,6 +76,7 @@
 	height: 20px;
 	width: 20px;
 	float:left;
+	margin-right: 2px;
 }
 /* energy source icons */
 /* Note: control-pane has no icon. */
@@ -100,31 +103,68 @@
 
 /* energy sources colors 
 -----------------------------------------------*/
-.control-panel { /*orange w/white bg*/
+.control-pane { /*orange w/white bg*/
 	color: #f78f1e;
 	background: #fff;
+	padding: 2px 2px 2px 6px;
 }
+	.control-pane input {
+		color: #f78f1e;
+	}
+	.control-pane .icon {
+		display: none;
+	}
+
 .electrical { /*red w/white bg*/
 	color: #ee1c25;
 	background: #fff;
 }
+	.electrical input {
+		color: #ee1c25;
+	}
+
 .gas { /*purple w/white bg*/
 	color: #a5439a;
 	background: #fff;
 }
+	.gas input {
+		color: #a5439a;
+	}
+
 .pneumatic { /*white w/blue bg*/
 	color: #fff;
 	background: #0055a5;
 }
-.note.steam { /*white w/lighter red bg*/
+	.pneumatic input {
+		color: #fff;
+	}
+
+.steam { /*white w/lighter red bg*/
 	color: #fff;
 	background: #ef3e36;
 }
+	.steam input {
+		color: #fff;
+	}
+
 .valve { /* almost black w/white bg*/
 	color: #231f20;
-	background: #FFF;
+	background: #fff;
 }
+	.valve input {
+		color: #231f20;
+	}
+
 .water { /*white w/green bg*/
 	color: #fff;
 	background: #00a650;
 }
+	.water input {
+		color: #fff;
+	}
+
+
+
+
+
+
