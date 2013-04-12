@@ -3,15 +3,16 @@ package com.n4systems.fieldid.ws.v1.resources.procedure;
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModel;
 
 import java.util.Date;
+import java.util.List;
 
 public class ApiProcedure extends ApiReadWriteModel {
 
     private Date dueDate;
-    private Date completedDate;
     private Long assigneeUserId;
     private Long assigneeUserGroupId;
     private String assetId;
     private String workflowState;
+    private List<ApiIsolationPointResult> lockResults;
 
     public Date getDueDate() {
         return dueDate;
@@ -19,14 +20,6 @@ public class ApiProcedure extends ApiReadWriteModel {
 
     public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
-    }
-
-    public Date getCompletedDate() {
-        return completedDate;
-    }
-
-    public void setCompletedDate(Date completedDate) {
-        this.completedDate = completedDate;
     }
 
     public Long getAssigneeUserId() {
@@ -59,5 +52,13 @@ public class ApiProcedure extends ApiReadWriteModel {
 
     public void setWorkflowState(String workflowState) {
         this.workflowState = workflowState;
+    }
+
+    public List<ApiIsolationPointResult> getLockResults() {
+        return lockResults;
+    }
+
+    public void setLockResults(List<ApiIsolationPointResult> lockResults) {
+        this.lockResults = lockResults;
     }
 }

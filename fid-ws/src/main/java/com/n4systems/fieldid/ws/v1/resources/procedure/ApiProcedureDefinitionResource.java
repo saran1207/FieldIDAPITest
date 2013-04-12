@@ -52,21 +52,24 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
             apiIsolationPoint.setDeviceDefinition(convertDefinition(isolationPoint.getDeviceDefinition()));
             apiIsolationPoint.setLockDefinition(convertDefinition(isolationPoint.getLockDefinition()));
             apiIsolationPoint.setSource(isolationPoint.getSourceType().name());
+            apiIsolationPoint.setSourceText(isolationPoint.getSourceText());
+            apiIsolationPoint.setIdentifier(isolationPoint.getIdentifier());
+            apiIsolationPoint.setElectronicIdentifier(isolationPoint.getElectronicIdentifier());
             apiIsolationPoints.add(apiIsolationPoint);
         }
         return apiIsolationPoints;
     }
 
     private ApiDeviceDescription convertDefinition(IsolationDeviceDescription deviceDefinition) {
+        if (deviceDefinition == null) {
+            return null;
+        }
         ApiDeviceDescription apiDescription = new ApiDeviceDescription();
         apiDescription.setActive(true);
-        if (deviceDefinition != null) {
-            // Really device definition cannot be null but may be in some initial dev data. Remove check after release of loto.
-            apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
-            apiDescription.setAttributes(attrResource.convertInfoOptions(deviceDefinition.getAttributeValues()));
-            apiDescription.setFreeformDescription(deviceDefinition.getFreeformDescription());
-            apiDescription.setSid(deviceDefinition.getId());
-        }
+        apiDescription.setAssetTypeSid(deviceDefinition.getAssetType() == null ? null : deviceDefinition.getAssetType().getId());
+        apiDescription.setAttributes(attrResource.convertInfoOptions(deviceDefinition.getAttributeValues()));
+        apiDescription.setFreeformDescription(deviceDefinition.getFreeformDescription());
+        apiDescription.setSid(deviceDefinition.getId());
         return apiDescription;
     }
 

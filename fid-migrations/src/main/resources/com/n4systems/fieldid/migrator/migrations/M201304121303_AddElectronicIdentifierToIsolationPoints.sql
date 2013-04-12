@@ -1,0 +1,1 @@
+alter table isolation_points add column electronic_identifier varchar(512) default null;

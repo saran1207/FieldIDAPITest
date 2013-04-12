@@ -98,6 +98,9 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			builder.addWhere(new SmartSearchWhereClause(searchText, true, true, true));
 		}
 
+        builder.addSimpleWhere("type.group.lotoLock", false);
+        builder.addSimpleWhere("type.group.lotoDevice", false);
+
 		List<Asset> assets = persistenceService.findAll(builder, page, pageSize);
 		Long total = persistenceService.count(builder);
 		

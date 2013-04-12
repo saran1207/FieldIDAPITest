@@ -43,7 +43,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             throw new IllegalStateException("Attempt to lock procedure that is not in OPEN state. Actual state: " + procedure.getWorkflowState());
         }
 
-        List<IsolationPointResult> convertedResults = convert(apiProcedure.getIsolationPointResults());
+        List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults());
         procedure.setLockResults(convertedResults);
         procedure.setLockedBy(getCurrentUser());
         procedure.setLockDate(convertedResults.get(convertedResults.size() - 1).getCheckCheckTime());
@@ -69,7 +69,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             throw new IllegalStateException("Attempt to unlock procedure that is not in LOCKED state. Actual state: " + procedure.getWorkflowState());
         }
 
-        List<IsolationPointResult> convertedResults = convert(apiProcedure.getIsolationPointResults());
+        List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults());
         procedure.setUnlockResults(convertedResults);
         procedure.setUnlockedBy(getCurrentUser());
         procedure.setUnlockDate(convertedResults.get(convertedResults.size() - 1).getCheckCheckTime());
@@ -88,7 +88,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         }
     }
 
-    private List<IsolationPointResult> convert(List<ApiIsolationPointResult> isolationPointResults) {
+    private List<IsolationPointResult> convertToEntity(List<ApiIsolationPointResult> isolationPointResults) {
         List<IsolationPointResult> convertedResults = new ArrayList<IsolationPointResult>();
         for (ApiIsolationPointResult isolationPointResult : isolationPointResults) {
             IsolationPointResult result = new IsolationPointResult();
@@ -130,10 +130,27 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         convertedProcedure.setModified(procedure.getModified());
         convertedProcedure.setAssigneeUserGroupId(procedure.getAssignedGroup() == null ? null : procedure.getAssignedGroup().getId());
         convertedProcedure.setAssigneeUserId(procedure.getAssignee() == null ? null : procedure.getAssignee().getId());
-        convertedProcedure.setCompletedDate(procedure.getLockDate());
         convertedProcedure.setDueDate(procedure.getDueDate());
         convertedProcedure.setWorkflowState(procedure.getWorkflowState().name());
+        convertedProcedure.setLockResults(convert(procedure.getLockResults()));
         return convertedProcedure;
+    }
+
+    private List<ApiIsolationPointResult> convert(List<IsolationPointResult> lockResults) {
+        List<ApiIsolationPointResult> apiResults = new ArrayList<ApiIsolationPointResult>();
+        for (IsolationPointResult lockResult : lockResults) {
+            ApiIsolationPointResult apiResult = new ApiIsolationPointResult();
+            apiResult.setCheckCheckTime(lockResult.getCheckCheckTime());
+            apiResult.setDeviceAssetId(lockResult.getDevice() == null ? null : lockResult.getDevice().getMobileGUID());
+            apiResult.setLockAssetId(lockResult.getLock() == null ? null : lockResult.getLock().getMobileGUID());
+            apiResult.setDeviceScanOrCheckTime(lockResult.getDeviceScanOrCheckTime());
+            apiResult.setLockScanOrCheckTime(lockResult.getLockScanOrCheckTime());
+            apiResult.setMethodCheckTime(lockResult.getMethodCheckTime());
+            apiResult.setIsolationPointId(lockResult.getIsolationPoint().getId());
+            apiResult.setLocationCheckTime(lockResult.getLocationCheckTime());
+            apiResults.add(apiResult);
+        }
+        return apiResults;
     }
 
 }

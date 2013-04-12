@@ -5,6 +5,8 @@ import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 public class ApiAssetTypeGroup extends ApiReadonlyModel {
 	private String name;
 	private Long weight;
+    private boolean lotoLock;
+    private boolean lotoDevice;
 
 	public String getName() {
 		return name;
@@ -22,4 +24,19 @@ public class ApiAssetTypeGroup extends ApiReadonlyModel {
 		this.weight = weight;
 	}
 
+    public boolean isLotoLock() {
+        return lotoLock;
+    }
+
+    public void setLotoLock(boolean lotoLock) {
+        this.lotoLock = lotoLock;
+    }
+
+    public boolean isLotoDevice() {
+        return lotoDevice;
+    }
+
+    public void setLotoDevice(boolean lotoDevice) {
+        this.lotoDevice = lotoDevice;
+    }
 }

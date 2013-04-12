@@ -10,9 +10,11 @@ import javax.persistence.*;
 @Table(name = "isolation_points")
 public class IsolationPoint extends EntityWithTenant {
 
+    @Column(name="electronic_identifier")
+    private String electronicIdentifier;
+
     @Column(name="identifier")
     private String identifier;
-
 
     @Column(name="source_text")
     private String sourceText;
@@ -112,5 +114,13 @@ public class IsolationPoint extends EntityWithTenant {
 
     public void setSourceText(String sourceText) {
         this.sourceText = sourceText;
+    }
+
+    public String getElectronicIdentifier() {
+        return electronicIdentifier;
+    }
+
+    public void setElectronicIdentifier(String electronicIdentifier) {
+        this.electronicIdentifier = electronicIdentifier;
     }
 }

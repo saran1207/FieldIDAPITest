@@ -4,8 +4,10 @@ import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 
 public class ApiIsolationPoint extends ApiReadonlyModel {
 
+    private String electronicIdentifier;
     private String identifier;
     private String source;
+    private String sourceText;
     private ApiDeviceDescription deviceDefinition;
     private ApiDeviceDescription lockDefinition;
     private String location;
@@ -66,5 +68,21 @@ public class ApiIsolationPoint extends ApiReadonlyModel {
 
     public void setCheck(String check) {
         this.check = check;
+    }
+
+    public String getElectronicIdentifier() {
+        return electronicIdentifier;
+    }
+
+    public void setElectronicIdentifier(String electronicIdentifier) {
+        this.electronicIdentifier = electronicIdentifier;
+    }
+
+    public String getSourceText() {
+        return sourceText;
+    }
+
+    public void setSourceText(String sourceText) {
+        this.sourceText = sourceText;
     }
 }

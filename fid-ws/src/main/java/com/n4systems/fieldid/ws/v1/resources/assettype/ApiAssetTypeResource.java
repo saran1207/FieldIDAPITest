@@ -136,6 +136,8 @@ public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetT
 			apiGroup.setModified(type.getGroup().getModified());
 			apiGroup.setName(type.getGroup().getName());
 			apiGroup.setWeight(type.getGroup().getOrderIdx());
+            apiGroup.setLotoDevice(type.getGroup().isLotoDevice());
+            apiGroup.setLotoLock(type.getGroup().isLotoLock());
 		}
 		return apiGroup;
 	}
