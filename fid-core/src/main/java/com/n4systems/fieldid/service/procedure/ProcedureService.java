@@ -18,8 +18,7 @@ public class ProcedureService extends FieldIdPersistenceService {
         QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
         query.addSimpleWhere("asset", asset);
 
-        WhereParameterGroup workflowStates = new WhereParameterGroup("workflowStates");
-        List<ProcedureWorkflowState> activeStates = Arrays.asList(ProcedureWorkflowState.OPEN, ProcedureWorkflowState.LOCKED, ProcedureWorkflowState.UNLOCKED);
+        List<ProcedureWorkflowState> activeStates = Arrays.asList(ProcedureWorkflowState.OPEN, ProcedureWorkflowState.LOCKED);
         query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", activeStates);
         return persistenceService.exists(query);
     }
