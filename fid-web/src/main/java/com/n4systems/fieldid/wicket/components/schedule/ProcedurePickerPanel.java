@@ -70,11 +70,19 @@ public class ProcedurePickerPanel extends Panel {
     protected void updateVisibility() {
         Asset asset = scheduleModel.getObject().getAsset();
 
+        Boolean isNew = scheduleModel.getObject().isNew();
         Boolean hasPublishedProcedureDef = procedureDefinitionService.hasPublishedProcedureDefinition(asset);
         Boolean hasActiveProcedure = procedureService.hasActiveProcedure(asset);
-        procedureForm.setVisible(hasPublishedProcedureDef && !hasActiveProcedure);
+
         noActiveProcedureDefinitionMessage.setVisible(!hasPublishedProcedureDef);
-        scheduledProcedureExistsMessage.setVisible(hasActiveProcedure);
+        if(isNew) {
+            procedureForm.setVisible(hasPublishedProcedureDef && !hasActiveProcedure);
+            scheduledProcedureExistsMessage.setVisible(hasActiveProcedure);
+        } else {
+            procedureForm.setVisible(hasPublishedProcedureDef);
+            scheduledProcedureExistsMessage.setVisible(false);
+        }
+
     }
 
     class ProcedureForm extends Form<Procedure> {

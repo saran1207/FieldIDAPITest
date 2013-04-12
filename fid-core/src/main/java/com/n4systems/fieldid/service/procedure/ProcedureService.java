@@ -19,13 +19,17 @@ public class ProcedureService extends FieldIdPersistenceService {
         query.addSimpleWhere("asset", asset);
 
         WhereParameterGroup workflowStates = new WhereParameterGroup("workflowStates");
-        List<ProcedureWorkflowState> invalidStates = Arrays.asList(ProcedureWorkflowState.OPEN, ProcedureWorkflowState.LOCKED, ProcedureWorkflowState.UNLOCKED);
-        query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", invalidStates);
+        List<ProcedureWorkflowState> activeStates = Arrays.asList(ProcedureWorkflowState.OPEN, ProcedureWorkflowState.LOCKED, ProcedureWorkflowState.UNLOCKED);
+        query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", activeStates);
         return persistenceService.exists(query);
     }
 
     public Long createSchedule(Procedure openProcedure) {
         return persistenceService.save(openProcedure);
+    }
+
+    public Procedure updateSchedule(Procedure procedure) {
+        return persistenceService.update(procedure);
     }
 
     public Procedure findByMobileId(String mobileId, boolean withArchived) {
@@ -34,4 +38,10 @@ public class ProcedureService extends FieldIdPersistenceService {
         return persistenceService.find(builder);
     }
 
+    public Procedure getOpenProcedure(Asset asset) {
+        QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
+        query.addSimpleWhere("asset", asset);
+        query.addSimpleWhere("workflowState", ProcedureWorkflowState.OPEN);
+        return persistenceService.find(query);
+    }
 }

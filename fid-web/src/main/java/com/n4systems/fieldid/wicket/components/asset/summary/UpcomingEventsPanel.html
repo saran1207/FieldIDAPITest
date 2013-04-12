@@ -1,4 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
 <wicket:panel>
+    <div class="upcomingEvent" wicket:id="upcomingLoto">
+        <div wicket:id="scheduleIcon"></div>
+        <div class="scheduleInfo">
+            <div class="eventType"><wicket:message key="label.lockout_tagout"/></div>
+            <div class="eventDate">
+                <abbr wicket:id="upcomingLotoDate"></abbr>
+                <span wicket:id="onDate"></span>
+            </div>
+        </div>
+        <div wicket:id="editLoto"/>
+    </div>
     <div class="upcomingEvent" wicket:id="upcomingEventsList">
         <div wicket:id="scheduleIcon"></div>
         <div class="scheduleInfo">
@@ -11,3 +28,5 @@
         <div wicket:id="openActions"/>
     </div>
 </wicket:panel>
+
+</html>

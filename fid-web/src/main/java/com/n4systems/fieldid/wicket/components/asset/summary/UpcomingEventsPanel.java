@@ -1,28 +1,48 @@
 package com.n4systems.fieldid.wicket.components.asset.summary;
 
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
+import com.n4systems.fieldid.wicket.components.asset.events.table.EditLotoScheduleLink;
 import com.n4systems.fieldid.wicket.components.asset.events.table.EventStateIcon;
 import com.n4systems.fieldid.wicket.components.asset.events.table.OpenActionsCell;
+import com.n4systems.fieldid.wicket.components.asset.events.table.ProcedureStateIcon;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.WorkflowState;
+import com.n4systems.model.procedure.Procedure;
 import com.n4systems.services.date.DateService;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 public class UpcomingEventsPanel extends Panel {
 
-    private @SpringBean DateService dateService;
+    private @SpringBean
+    DateService dateService;
+
+    private @SpringBean
+    ProcedureService procedureService;
+
+    private Asset asset;
 
     public UpcomingEventsPanel(String id, UpcomingEventsListModel model, final Asset asset) {
         super(id, model);
+        this.asset = asset;
 
         add(new ListView<Event>("upcomingEventsList", model) {
             @Override
@@ -49,10 +69,56 @@ public class UpcomingEventsPanel extends Panel {
                 item.add(new OpenActionsCell("openActions", Model.of(schedule), UpcomingEventsPanel.this));
             }
         });
+
+        add(new ListView<Procedure>("upcomingLoto", new ProcedureModel()) {
+            @Override
+            protected void populateItem(ListItem<Procedure> item) {
+                Procedure procedure = item.getModelObject();
+                if(procedure != null) {
+                    item.add(new ProcedureStateIcon("scheduleIcon", Model.of(procedure)));
+
+                    DayDisplayModel upcomingProcedureDate = new DayDisplayModel(new PropertyModel<Date>(Model.of(procedure), "dueDate")).includeTime();
+
+                    if (isPastDue(procedure)) {
+                        TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingLotoDate", new PropertyModel<Date>(Model.of(procedure), "dueDate"),dateService.getUserTimeZone());
+                        item.add(timeAgoField);
+                    } else if(dateService.getDaysFromToday(procedure.getDueDate()).equals(0L)) {
+                        item.add(new Label("upcomingLotoDate", new FIDLabelModel("label.today")));
+                    } else {
+                        item.add(new Label("upcomingLotoDate", new FIDLabelModel("label.in_x_days", dateService.getDaysFromToday(procedure.getDueDate()), upcomingProcedureDate.getObject())));
+                    }
+
+                    item.add(new Label("onDate", new FIDLabelModel("label.on_date", upcomingProcedureDate.getObject())));
+                } else {
+                    item.add(new WebMarkupContainer("scheduleIcon"));
+                    item.add(new Label("upcomingLotoDate"));
+                    item.add(new Label("onDate"));
+                }
+                item.setVisible(procedure != null);
+                item.add(new EditLotoScheduleLink("editLoto",Model.of(procedure)) {
+                    @Override
+                    public void onProcedureScheduleUpdated(AjaxRequestTarget target) {
+                        target.add(UpcomingEventsPanel.this);
+                    }
+                });
+            }
+        });
     }
-    
+
     private boolean isPastDue(Event schedule) {
         return schedule.getWorkflowState() == WorkflowState.OPEN && dateService.isPastDue(schedule.getDueDate());
+    }
+
+    private boolean isPastDue(Procedure schedule) {
+        return schedule.getWorkflowState() == ProcedureWorkflowState.OPEN && dateService.isPastDue(schedule.getDueDate());
+    }
+
+    class ProcedureModel extends LoadableDetachableModel<List<Procedure>> {
+
+        @Override
+        protected List<Procedure> load() {
+            return Collections.singletonList(procedureService.getOpenProcedure(asset));
+        }
     }
 
 }

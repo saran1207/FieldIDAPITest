@@ -42,6 +42,7 @@ public class EventStateIcon extends Panel {
                 } else {
                     add(image = new ContextImage("resultIcon", "images/event-open-assigned.png"));
                     image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", event.getAssigneeName())));
+                    image.add(new AttributeAppender("class", "scheduleIconMargin").setSeparator(" "));
                 }
             }else {
                 if(isPastDue(event)) {
@@ -50,6 +51,7 @@ public class EventStateIcon extends Panel {
                 } else {
                     add(image = new ContextImage("resultIcon", "images/event-open.png"));
                     image.add(new AttributeAppender("title", new FIDLabelModel("label.event_open").getObject()));
+                    image.add(new AttributeAppender("class", "scheduleIconMargin").setSeparator(" "));
                 }
             }
         } else {
