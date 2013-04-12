@@ -91,9 +91,13 @@ var fieldIdWidgets = (function() {
 	};
 
 
-	function menuButton(el) {
+	function menuButton(el,options) {
 		var mb = el instanceof jQuery ? el : $(el);
 		var items = mb.find('.menu-items');
+		var defaults = {
+			ajaxButton:true
+		};
+		var options = $.extend(defaults, options);
 
 		function showItems() {
 			items.slideDown(100);
@@ -111,7 +115,11 @@ var fieldIdWidgets = (function() {
 		}
 
 		var init = function() {
-			mb.find('.imageButton').click(toggleList);
+			if (!options.ajaxButton) {
+				mb.click(toggleList);
+			} else {
+				mb.find('.imageButton').click(toggleList);
+			}
 			mb.mouseleave(hideItems);
 			items.find('a').click(hideItems);
 		}
@@ -123,8 +131,8 @@ var fieldIdWidgets = (function() {
 	}
 
 
-	var createMenuButton = function(id) {
-		var mb = menuButton($('#'+id));
+	var createMenuButton = function(id,options) {
+		var mb = menuButton($('#'+id),options);
 		mb.init();
 		return mb;
 	};

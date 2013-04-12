@@ -19,16 +19,12 @@ public class AddIsolationPointButton extends MenuButton<IsolationPointSourceType
 
     private static final String CSS_FORMAT = "width:%dpx;";
 
-    private Integer width = 20;
+    private Integer width = 40;
 
     public AddIsolationPointButton(String id) {
         super(id, new FIDLabelModel("label.add_isolation_point"), Lists.newArrayList(IsolationPointSourceType.values()));
         setOutputMarkupId(true);
-    }
-
-    @Override
-    protected void buttonClicked(AjaxRequestTarget target) {
-        doAdd(target, getDefaultSourceType());
+        withNoAjax();
     }
 
     protected IsolationPointSourceType getDefaultSourceType() {
@@ -56,9 +52,9 @@ public class AddIsolationPointButton extends MenuButton<IsolationPointSourceType
         final IsolationPointSourceType type = item.getModelObject();
         ImageAnnotationType label = ImageAnnotationType.valueOf(type.name());
 
-        Component icon = new ContextImage(id, label.getIcon());
+        Component icon = new ContextImage(id, label.getFullIcon());
         if (width!=null) {
-            icon.add(new AttributeAppender("style", String.format(CSS_FORMAT,width))); // TODO : refactor width stuff up to parent class.
+            icon.add(new AttributeAppender("style", String.format(CSS_FORMAT,width)));
         }
         return icon;
     }

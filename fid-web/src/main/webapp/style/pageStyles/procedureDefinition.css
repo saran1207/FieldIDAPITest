@@ -209,13 +209,17 @@ a[class^="btn"] {
 	left: 0;
 	width: 99%;
 	top: 94%;
+    background:white;
 }
 .add-isolation-point .menu-items li {
 	padding: 4px 0;
 }
 .add-isolation-point .menu-items li a {
-	width: 70%;
-	display: inline-block;
+    width: 63%;
+    display: inline-block;
+}
+.add-isolation-point .menu-items li a span {
+    font-size:14px;
 }
 .add-isolation-point .menu-items li:hover {
 	background: #fff;
