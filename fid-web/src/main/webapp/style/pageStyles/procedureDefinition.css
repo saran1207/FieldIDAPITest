@@ -252,16 +252,11 @@ a[class^="btn"] {
 	background: #f6f6f6;
 	padding: 5px 10px;
 }
-.isolation-point-table.headings {
+.isolation-point-table li.headings {
 		border-right: none;
 		border-left: none;
-        margin-top: 30px;
-	}
-	.isolation-point-table.headings li {
-		background: #fff;
-		border-right: #fff;
-		border-left: #fff;
-		font-weight: 600;
+        background: #fff;
+        font-weight: 600;
         font-size: 12px;
 	}
 	.isolation-point-table li span {
@@ -287,7 +282,7 @@ a[class^="btn"] {
 		width: 30px;
 		text-align: center;
 	}
-		.isolation-point-table.headings .identifier {
+		.isolation-point-table li.headings .identifier {
 			width: 74px;
 		}
 	.isolation-point-table .source {

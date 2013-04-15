@@ -1,35 +1,33 @@
 <wicket:panel>
 
-    <h3><wicket:message key="label.images"/></h3>
+	<h3><wicket:message key="label.images"/></h3>
 
-    <div wicket:id="images"/>
-    
-    <ul class="isolation-point-table headings">
-        <li>
-            <span class="identifier">Identifier</span>
-            <span class="source">Source</span>
-            <span class="device">Device</span>
-            <span class="location">Location</span>
-            <span class="method">Method</span>
-            <span class="check">Check</span>
-        </li>
-    </ul>
-    <ul wicket:id="sortableList" class="isolation-point-table">
-        <li wicket:id="list">
-            <span class="delete">
-                <a wicket:id ="delete"><img src="/fieldid/images/delete.gif"/></a>
-            </span>
-            <span wicket:id="id" class="identifier"/>
-            <span wicket:id="source" class="source"/>
-            <span wicket:id="device" class="device"/>
-            <span wicket:id="location" class="location"/>
-            <span wicket:id="method" class="method"/>
-            <span wicket:id="check" class="check"/>
-            <span class="thumbnail"><img wicket:id="image" src="/fieldid/images/add-photo-slate.png"/></span>
-            <span class="actions">
-                <a wicket:id="edit"><wicket:message key="label.edit"/></a>
-            </span>
-            <span class="reorder"><img src="/fieldid/images/icon-reorder.gif"/></span>
-        </li>
-    </ul>
+	<div wicket:id="images"/>
+	
+	<ul wicket:id="sortableList" class="isolation-point-table">
+		 <li class="headings">
+			<span class="identifier">Identifier</span>
+			<span class="source">Source</span>
+			<span class="device">Device</span>
+			<span class="location">Location</span>
+			<span class="method">Method</span>
+			<span class="check">Check</span>
+		</li>
+		<li wicket:id="list">
+			<span class="delete">
+				<a wicket:id ="delete"><img src="/fieldid/images/delete.gif"/></a>
+			</span>
+			<span wicket:id="id" class="identifier"/>
+			<span wicket:id="source" class="source"/>
+			<span wicket:id="device" class="device"/>
+			<span wicket:id="location" class="location"/>
+			<span wicket:id="method" class="method"/>
+			<span wicket:id="check" class="check"/>
+			<span class="thumbnail"><img wicket:id="image" src="/fieldid/images/add-photo-slate.png"/></span>
+			<span class="actions">
+				<a wicket:id="edit"><wicket:message key="label.edit"/></a>
+			</span>
+			<span class="reorder"><img src="/fieldid/images/icon-reorder.gif"/></span>
+		</li>
+	</ul>
 </wicket:panel>
