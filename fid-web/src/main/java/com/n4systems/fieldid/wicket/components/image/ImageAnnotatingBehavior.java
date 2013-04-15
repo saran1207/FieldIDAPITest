@@ -137,8 +137,8 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
 
 
     public class AnnotatedImageOptions {
-        String type = "note";
-        String direction = "west";
+        String type = "water";
+        String direction = "arrow-left";
         String text = "a label";
         String callback = ImageAnnotatingBehavior.this.getCallbackUrl().toString();
         List<ImageAnnotation> annotations = Lists.newArrayList();
@@ -148,6 +148,5 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
             this.annotations = annotations;
         }
     }
-
 
 }

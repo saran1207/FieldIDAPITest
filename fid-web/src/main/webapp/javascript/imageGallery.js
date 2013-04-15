@@ -15,8 +15,18 @@ var imageGallery = (function() {
 		};
 		var options = $.extend(defaults, options);
 
+		function setupForAnnotations(img) {
+			img.parent().children('.image-container').remove();
+			img.wrap('<div class="image-container"/>');
+			var $newParent = img.parent();
+			$newParent.css('top',img.css('top')).css('left',img.css('left'));
+			$newParent.css('width',img.css('width')).css('height',img.css('height'));
+			img.css('top',0).css('left',0);
+		}
 
 		function galleryImageClicked(e) {
+			var img = $(e.imageTarget);
+			setupForAnnotations(img);
 			var imageData = e.galleriaData;
 			var url = new String(callback) +
 				'&action='+'SELECT' +
@@ -70,22 +80,21 @@ var imageGallery = (function() {
 		}
 	}
 
+	var add = function(id,imageData) {
+		// precondition : already been initialized (which populates GALLERY data).
+		$('#'+id).data('gallery').add(imageData);
+	}
+
+	var edit = function(id,options) {
+		// precondition : already been initialized (which populates GALLERY data).
+		$('#'+id).data('gallery').edit(options);
+	}
+
 	var init = function(id, options) {
 		var g = gallery(id,options);
 		$('#'+id).data('gallery',g);
 		g.init();
 		return g;
-	}
-
-	var add = function(id,imageData) {
-		// TODO : use variable instead of passing around id.
-		// e.g.   var editor=init(id,options);  editor.add(imageData);
-
-		$('#'+id).data('gallery').add(imageData);
-	}
-
-	var edit = function(id,options) {
-		$('#'+id).data('gallery').edit(options);
 	}
 
 	return {

@@ -35,6 +35,7 @@ public class IsolationPointEditor extends Panel {
     public IsolationPointEditor(String id) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
         setOutputMarkupPlaceholderTag(true);
+
         add(new AttributeAppender("class","isolation-point-editor"));
 
         add(new ContextImage("icon",getIconModel()));

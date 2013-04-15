@@ -8,6 +8,7 @@
     <form wicket:id="form">
         <div class="column left">
             <label><wicket:message key="label.identifier"/><input type="text" wicket:id="identifier"/></label>
+            <!--<label><wicket:message key="label.electronic_identifier"/><input type="text" wicket:id="electronicIdentifier"/></label>-->            
             <label><wicket:message key="label.source"/><input type="text" wicket:id="sourceText"/></label>
             <label><wicket:message key="label.device"/><a class="asset-type" type="text" wicket:id="device"><span wicket:id="description"/></a></label>
             <label><wicket:message key="label.lock"/><a class="asset-type" type="text" wicket:id="lock"><span wicket:id="description"/></a></label>
@@ -18,6 +19,7 @@
         <div class="column right">
             <label><wicket:message key="label.location"/><input type="text" wicket:id="location"/></label>
             <label><wicket:message key="label.check"/><textarea wicket:id="check" rows="4" cols="80" /></label>
+
             <label><wicket:message key="label.method"/><textarea wicket:id="method" rows="4" cols="80"/></label>
         </div>
 

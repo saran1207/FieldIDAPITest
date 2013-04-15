@@ -164,8 +164,8 @@ public class ImageEditor extends Panel {
 
     protected Object getOptions() {
         JsonObject options = new JsonObject();
-        options.addProperty("type","note");
-        options.addProperty("direction","west");
+        options.addProperty("type","water");
+        options.addProperty("direction","arrow-left");
         options.addProperty("text","a label");
         return options;
     }

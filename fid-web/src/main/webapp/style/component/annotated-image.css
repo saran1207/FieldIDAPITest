@@ -157,10 +157,11 @@
 
 .water { /*white w/green bg*/
 	color: #fff;
-	background: #00a650;
+    background: #00a650;
 }
 	.water input {
 		color: #fff;
+        background: #00a650;
 	}
 
 

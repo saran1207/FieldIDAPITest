@@ -1,4 +1,3 @@
-
 // uses ZURB plugin.   http://www.zurb.com/playground/javascript-annotation-plugin
 
 
@@ -19,9 +18,9 @@ var imageEditor = (function() {
 	function editor(el,options) {
 		var ed = el;
 		var defaults = {
-			direction: 'west',
+			direction: 'arrow-left',
 			text: 'a label',
-			type: 'note',
+			type: 'water',
 			yPosition:'middle',
 			xPosition:'left',
 			centerImage:false,
@@ -46,9 +45,7 @@ var imageEditor = (function() {
 				});
 
 				editor.keypress(function(e) {
-	//					TODO  : need to accommodate for EAST labels.  have to move them back to left?
-	//					if (style==east) { this.style.margin-left = -52-(Math.max(12,(this.value.length + 1) * 6)) + 'px' ;} else...
-						this.style.width = Math.max(12,(this.value.length + 1) * 6) + 'px'; }
+					this.style.width = Math.max(12,(this.value.length + 1) * 6) + 'px'; }
 				);
 
 				editor.blur(function(e) {
@@ -74,7 +71,7 @@ var imageEditor = (function() {
 		}
 
 		function addNewNote() {
-			// remove any other "unsaved" notes. only allowed one each time.
+			// remove any other "unsaved" notes. only one allowed each time.
 			// this is a very specific LOTO requirement.
 			removeOtherUnsavedNotes();
 

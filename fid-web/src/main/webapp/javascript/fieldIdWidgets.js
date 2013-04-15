@@ -143,9 +143,16 @@ var fieldIdWidgets = (function() {
 		return il;
 	}
 
+	var createImageEditor = function(id,options) {
+		var ie = imageEditor(id,options);
+		ie.init();
+		return ie;
+	}
+
 	return {
 		createMenuButton : createMenuButton,
-		createImageList : createImageList
+		createImageList : createImageList,
+		createImageEditor : createImageEditor
 	};
 
 })();

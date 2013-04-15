@@ -35,6 +35,9 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         if (procedureDefinition.getRevisionNumber()==null) {
             procedureDefinition.setRevisionNumber(generateRevisionNumber(procedureDefinition.getAsset()));
         }
+//TODO DD : temporary....publishes when you save.
+procedureDefinition.setPublishedState(PublishedState.PUBLISHED);
+// ....will do proper authorization later.
         saveIsolationPoints(procedureDefinition.getIsolationPoints());
         persistenceService.saveOrUpdate(procedureDefinition);
     }

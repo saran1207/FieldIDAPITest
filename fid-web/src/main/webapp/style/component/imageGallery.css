@@ -24,3 +24,7 @@
 .galleria-thumbnails .galleria-image{
     /*height:100px*/
 }
+
+.galleria-image .image-container {
+    position:relative;
+}
