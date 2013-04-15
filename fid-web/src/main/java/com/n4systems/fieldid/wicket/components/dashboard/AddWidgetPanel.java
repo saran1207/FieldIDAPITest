@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.components.dashboard;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
 import com.n4systems.model.dashboard.WidgetDefinition;
@@ -95,7 +97,11 @@ public class AddWidgetPanel extends Panel {
         return new LoadableDetachableModel<List<WidgetType>>() {
             @Override
             protected List<WidgetType> load() {
-                return Arrays.asList(WidgetType.values());
+                List<WidgetType> widgetTypeList = new ArrayList(Arrays.asList(WidgetType.values()));
+                if(!FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Projects)) {
+                    widgetTypeList.remove(WidgetType.JOBS_ASSIGNED);
+                }
+                return widgetTypeList;
             }
         };
     }
