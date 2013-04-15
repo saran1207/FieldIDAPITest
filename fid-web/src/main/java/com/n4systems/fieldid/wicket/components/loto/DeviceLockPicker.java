@@ -92,7 +92,8 @@ public class DeviceLockPicker extends Panel {
         pickerContainer.add(new AjaxLink<Void>("cancelLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                resetPicker(target);
+                resetPicker();
+                target.add(DeviceLockPicker.this);
             }
         });
 
@@ -134,13 +135,12 @@ public class DeviceLockPicker extends Panel {
         setOutputMarkupId(true);
     }
 
-    public void resetPicker(AjaxRequestTarget target) {
+    public void resetPicker() {
         freeformContainer.setVisible(true);
         pickerContainer.setVisible(false);
         deviceAttributePanel.setVisible(false);
         selectedDeviceType.setObject(null);
         resetAttributeList();
-        target.add(DeviceLockPicker.this);
     }
 
     private void updateOptions(List<IModel<List<InfoOptionBean>>> selectedOptions) {

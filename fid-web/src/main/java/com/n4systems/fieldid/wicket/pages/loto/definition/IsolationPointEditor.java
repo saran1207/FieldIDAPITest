@@ -31,6 +31,8 @@ public class IsolationPointEditor extends Panel {
     private IsolationPoint editedIsolationPoint;
     private DeviceLockPicker isolationDevicePicker;
     private DeviceLockPicker isolationLockPicker;
+    private AjaxLink lockLink;
+    private AjaxLink deviceLink;
 
     public IsolationPointEditor(String id) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
@@ -46,24 +48,27 @@ public class IsolationPointEditor extends Panel {
 
         form.add(new TextField("identifier"));
         form.add(new TextField("sourceText", new PropertyModel(getDefaultModel(),"sourceText")));
-        form.add(new AjaxLink<Void>("lock", new Model()) {
+        form.add(lockLink = new AjaxLink<Void>("lock", new Model()) {
             @Override public void onClick(AjaxRequestTarget target) {
                 isolationLockPicker.setVisible(true);
                 this.setVisible(false);
                 target.add(isolationLockPicker,this);
             }
-        }.add(new Label("description", getLockDescriptionModel())));
+        });
+        lockLink.add(new Label("description", getLockDescriptionModel()));
+        lockLink.setOutputMarkupPlaceholderTag(true);
 
-        form.add(new AjaxLink<Void>("device", new Model()) {
+        form.add(deviceLink = new AjaxLink<Void>("device", new Model()) {
             @Override public void onClick(AjaxRequestTarget target) {
                 isolationDevicePicker.setVisible(true);
                 this.setVisible(false);
                 target.add(isolationDevicePicker,this);
             }
-        }.add(new Label("description", getDeviceDescriptionModel())));
+        });
+        deviceLink.add(new Label("description", getDeviceDescriptionModel()));
+        deviceLink.setOutputMarkupPlaceholderTag(true);
 
-        final IModel<IsolationDeviceDescription> deviceDescriptionModel = Model.of(new IsolationDeviceDescription());
-        form.add(isolationDevicePicker = new DeviceLockPicker("devicePicker", deviceDescriptionModel, true) {
+        form.add(isolationDevicePicker = new DeviceLockPicker("devicePicker", new PropertyModel(getDefaultModel(),"deviceDefinition"), true) {
             @Override public void onPickerUpdated() {
                 getIsolationPointModel().getObject().setDeviceDefinition((IsolationDeviceDescription) getDefaultModelObject());
             }
@@ -71,8 +76,7 @@ public class IsolationPointEditor extends Panel {
         isolationDevicePicker.setOutputMarkupPlaceholderTag(true);
         isolationDevicePicker.setVisible(false);
 
-        final IModel<IsolationDeviceDescription> lockDescriptionModel = Model.of(new IsolationDeviceDescription());
-        form.add(isolationLockPicker = new DeviceLockPicker("lockPicker", lockDescriptionModel, false) {
+        form.add(isolationLockPicker = new DeviceLockPicker("lockPicker", new PropertyModel(getDefaultModel(),"lockDefinition"), false) {
             @Override public void onPickerUpdated() {
                 getIsolationPointModel().getObject().setDeviceDefinition((IsolationDeviceDescription) getDefaultModelObject());
             }
@@ -193,6 +197,12 @@ public class IsolationPointEditor extends Panel {
     public void editNew(IsolationPoint isoPoint) {
         editedIsolationPoint = null;
         copyIntoModel(isoPoint);
+        isolationDevicePicker.resetPicker();
+        isolationLockPicker.resetPicker();
+        isolationDevicePicker.setVisible(false);
+        deviceLink.setVisible(true);
+        isolationLockPicker.setVisible(false);
+        lockLink.setVisible(true);
     };
 
     private IsolationPoint copyIntoModel(IsolationPoint isolationPoint) {
