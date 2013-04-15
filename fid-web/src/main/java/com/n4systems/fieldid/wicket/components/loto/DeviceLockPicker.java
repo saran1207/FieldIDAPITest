@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -61,22 +62,21 @@ public class DeviceLockPicker extends Panel {
                 target.add(DeviceLockPicker.this);
             }
         });
-
-        pickerContainer.add(new FidDropDownChoice<AssetType>("assetTypes", selectedDeviceType, new DeviceListModel(), new ListableChoiceRenderer<AssetType>()) {
-            @Override
-            protected boolean wantOnSelectionChangedNotifications() {
-                return true;
-            }
+        FidDropDownChoice<AssetType> assetTypes;
+        pickerContainer.add(assetTypes = (FidDropDownChoice<AssetType>) new FidDropDownChoice<AssetType>("assetTypes", selectedDeviceType, new DeviceListModel(), new ListableChoiceRenderer<AssetType>()));
+        assetTypes.setNullValid(true);
+        assetTypes.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 
             @Override
-            protected void onSelectionChanged(AssetType newSelection) {
-                if(newSelection == null) {
+            protected void onUpdate(AjaxRequestTarget target) {
+                if(selectedDeviceType.getObject() == null) {
                     deviceAttributePanel.setVisible(false);
                 }
                 resetAttributeList();
                 deviceAttributePanel.resetAttributeAndOptions();
+                target.add(DeviceLockPicker.this);
             }
-        }.setNullValid(true));
+        });
 
         pickerContainer.add(new AjaxLink<Void>("refineLink") {
             @Override
