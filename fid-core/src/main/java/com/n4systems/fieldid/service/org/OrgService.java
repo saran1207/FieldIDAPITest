@@ -69,32 +69,65 @@ public class OrgService extends FieldIdPersistenceService {
             query.addWhere(new WhereParameter<String>(WhereParameter.Comparator.LIKE, "name", "name", orgQueryParser.getSearchTerm(), WhereParameter.WILDCARD_BOTH, false));
         }
 
-        final List<? extends BaseOrg> parents = findParentsLike(orgQueryParser);
-        if(parents.isEmpty()) {
-            // if we were intending to look for parents but found none, then abort search right now & return empty.
-            if (orgQueryParser.getParentTerms().size()>0) {
+        List<? extends BaseOrg> parents = findParentsLike(orgQueryParser);
+
+        List<BaseOrg> results;
+
+        // if we were intending to look for parents but found none, then abort search right now & return empty.
+        if (parents.isEmpty()) {
+            if (orgQueryParser.getParentTerms().size() > 0) {
                 return new OrgList(new ArrayList<BaseOrg>(), orgQueryParser, threshold);
+            } else {
+                results = persistenceService.findAll(query);
             }
-        }
-
-        List<BaseOrg> result = persistenceService.findAll(query);
-
-        if (parents.size()>0) {
-            result = new ArrayList<BaseOrg>(Collections2.filter(result, new Predicate<BaseOrg>() {
-                @Override public boolean apply(BaseOrg input) {
-                    return parents.contains(input.getParent());
-                }
-            }));
+        } else {
+            results = findChildOrgs(parents, threshold);
         }
 
         //add Parent To Results
         if (parents.size()==1) {
-            if (!result.contains(parents.get(0))) {
-                result.add(parents.get(0));
+            if (!results.contains(parents.get(0))) {
+                results.add(parents.get(0));
             }
         }
 
-        return new OrgList(result, orgQueryParser, threshold);
+        return new OrgList(results, orgQueryParser, threshold);
+    }
+
+    private List<BaseOrg> findChildOrgs(List<? extends BaseOrg> parents, int threshold) {
+        List<BaseOrg> results = new ArrayList<BaseOrg>();
+
+        List<BaseOrg> primaryOrgs = findOrgsOfClass(parents, PrimaryOrg.class);
+        if (!primaryOrgs.isEmpty()) {
+            QueryBuilder<SecondaryOrg> secondaryOrgQueryBuilder = createUserSecurityBuilder(SecondaryOrg.class);
+            secondaryOrgQueryBuilder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "primaryOrg", "primaryOrg", primaryOrgs));
+            secondaryOrgQueryBuilder.setLimit(threshold);
+            results.addAll(persistenceService.findAll(secondaryOrgQueryBuilder));
+        }
+
+        QueryBuilder<CustomerOrg> customerOrgQueryBuilder = createUserSecurityBuilder(CustomerOrg.class);
+        customerOrgQueryBuilder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "parent", "parent", parents));
+        customerOrgQueryBuilder.setLimit(threshold);
+        results.addAll(persistenceService.findAll(customerOrgQueryBuilder));
+
+        List<BaseOrg> customerOrgs = findOrgsOfClass(parents, CustomerOrg.class);
+        if (!customerOrgs.isEmpty()) {
+            QueryBuilder<DivisionOrg> divisionOrgQueryBuilder = createUserSecurityBuilder(DivisionOrg.class);
+            divisionOrgQueryBuilder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "parent", "parent", customerOrgs));
+            divisionOrgQueryBuilder.setLimit(threshold);
+            results.addAll(persistenceService.findAll(divisionOrgQueryBuilder));
+        }
+
+        return results;
+    }
+
+    private List<BaseOrg> findOrgsOfClass(List<? extends BaseOrg> orgs, final Class filterClass) {
+        return new ArrayList<BaseOrg>(Collections2.filter(orgs, new Predicate<BaseOrg>() {
+            @Override
+            public boolean apply(BaseOrg input) {
+                return input.getClass().equals(filterClass);
+            }
+        }));
     }
 
     private List<? extends BaseOrg> findParentsLike(OrgQueryParser orgQueryParser) {
