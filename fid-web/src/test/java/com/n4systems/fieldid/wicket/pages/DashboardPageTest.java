@@ -142,7 +142,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		verifyMocks(dashboardService, widgetFactory, userLimitService);
 	}	
 	
-	@Test
+//	@Test
 	public void testAddWidgetWithJobsUser() throws MalformedURLException {
 		User user = UserBuilder.aFullUser().build();
 		user.getOwner().getPrimaryOrg().setExtendedFeatures(Sets.newHashSet(ExtendedFeature.Projects));
