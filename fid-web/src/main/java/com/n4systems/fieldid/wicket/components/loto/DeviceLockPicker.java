@@ -34,23 +34,22 @@ public class DeviceLockPicker extends Panel {
 
     private boolean isDevicePicker;
 
+    private WebMarkupContainer freeformContainer;
+    private WebMarkupContainer pickerContainer;
+
     @SpringBean
     private AssetTypeService assetTypeService;
 
     public DeviceLockPicker(String id, IModel<IsolationDeviceDescription> deviceDescriptionModel, boolean isDevicePicker) {
         super(id, deviceDescriptionModel);
 
-        if(deviceDescriptionModel.getObject() == null) {
-            deviceDescriptionModel.setObject(new IsolationDeviceDescription());
-        }
-
         this.selectedDeviceType = new PropertyModel<AssetType>(deviceDescriptionModel, "assetType");
         this.optionList = new PropertyModel<List<InfoOptionBean>>(deviceDescriptionModel, "attributeValues");
         this.isDevicePicker = isDevicePicker;
         this.attributeList.add(new InfoFieldBean());
 
-        final WebMarkupContainer freeformContainer = new WebMarkupContainer("freeformContainer");
-        final WebMarkupContainer pickerContainer = new WebMarkupContainer("pickerContainer");
+        freeformContainer = new WebMarkupContainer("freeformContainer");
+        pickerContainer = new WebMarkupContainer("pickerContainer");
 
         freeformContainer.add(freeformDescription = new TextField<String>("freeformDescription", new PropertyModel<String>(deviceDescriptionModel, "freeformDescription")));
         freeformContainer.add(new AjaxLink<Void>("specifyLink") {
@@ -93,11 +92,7 @@ public class DeviceLockPicker extends Panel {
         pickerContainer.add(new AjaxLink<Void>("cancelLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                freeformContainer.setVisible(true);
-                pickerContainer.setVisible(false);
-                selectedDeviceType.setObject(null);
-                resetAttributeList();
-                target.add(DeviceLockPicker.this);
+                resetPicker(target);
             }
         });
 
@@ -137,6 +132,15 @@ public class DeviceLockPicker extends Panel {
         add(freeformContainer);
         add(pickerContainer);
         setOutputMarkupId(true);
+    }
+
+    public void resetPicker(AjaxRequestTarget target) {
+        freeformContainer.setVisible(true);
+        pickerContainer.setVisible(false);
+        deviceAttributePanel.setVisible(false);
+        selectedDeviceType.setObject(null);
+        resetAttributeList();
+        target.add(DeviceLockPicker.this);
     }
 
     private void updateOptions(List<IModel<List<InfoOptionBean>>> selectedOptions) {
