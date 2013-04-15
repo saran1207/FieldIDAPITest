@@ -1,6 +1,6 @@
 /*z-index notes :   READONLY NOTES -->  EDITABLE NOTES   (lowest to highest )*/
 
-/* NOTES - SPEECH BUBBLES
+/* NOTES/LABELS
 ----------------------------------*/
 .notes-container {/* created a class to make the styles more specific */
 	position: relative;  
@@ -13,43 +13,31 @@
 	box-shadow: 2px 2px 10px -3px #888;
 	z-index: 10;
 	border: 2px solid;
-	
-	position: absolute;
 }
-	/* top left */
-	.note.arrow-left {
-		margin-left: 28px;
-	}
+
+.note.arrow-left {
+	margin-left: 28px;
+}
 	.note.arrow-left:before {
 		content: url('/fieldid/images/loto/arrow-left.png');
 		left: -28px;
 		top: 4px;
 		position: absolute;
 	}
-	/* top right */
-	.note.arrow-right {
-		margin-right: 28px;
-	}
+
+.note.arrow-right {
+	margin-right: 28px;
+}
 	.note.arrow-right:after {
 		content: url('/fieldid/images/loto/arrow-right.png');
 		right: -28px;
 		top: 4px;
 		position: absolute;
 	}
-/* temp - just for testing edge cases, to be deleted */
-.note.arrow-left {
-	top: 0;
-	left: 0;
-}
-.note.arrow-right {
-	bottom: 0;
-	right: 0;
-}
 
 
 /* INPUTS */
 .notes-container .note input {
-	width: 30px; /* temp, generated dynamically via JS */
 	outline: 1px solid #DDDD99;
 	border: none;
 	height: 16px;
@@ -79,39 +67,37 @@
 	margin-right: 2px;
 }
 /* energy source icons */
-/* Note: control-pane has no icon. */
-.water .icon {
-	background-image: url(/fieldid/images/loto/icon-water.png);
+/* Note: control-panel has no icon. */
+.note.water .icon:before {
+	content: url('/fieldid/images/loto/icon-water.png');
 }
-.valve .icon {
-	background-image: url(/fieldid/images/loto/icon-valve.png);
+.note.valve .icon:before {
+	content: url('/fieldid/images/loto/icon-valve.png');
 }
-.steam .icon {
-	background-image: url(/fieldid/images/loto/icon-steam.png);
+.note.steam .icon:before {
+	content: url('/fieldid/images/loto/icon-steam.png');
 }
-.pneumatic .icon {
-	background-image: url(/fieldid/images/loto/icon-pneumatic.png);
+.note.pneumatic .icon:before {
+	content: url('/fieldid/images/loto/icon-pneumatic.png');
 }
-.gas .icon {
-	background-image: url(/fieldid/images/loto/icon-gas.png);
+.note.gas .icon:before {
+	content: url('/fieldid/images/loto/icon-gas.png');
 }
-.electrical .icon {
-	background-image: url(/fieldid/images/loto/icon-electrical.png);
+.note.electrical .icon:before {
+	content: url('/fieldid/images/loto/icon-electrical.png');
 }
-
-
 
 /* energy sources colors 
 -----------------------------------------------*/
-.control-pane { /*orange w/white bg*/
+.control-panel { /*orange w/white bg*/
 	color: #f78f1e;
 	background: #fff;
 	padding: 2px 2px 2px 6px;
 }
-	.control-pane input {
+	.control-panel input {
 		color: #f78f1e;
 	}
-	.control-pane .icon {
+	.control-panel .icon {
 		display: none;
 	}
 
