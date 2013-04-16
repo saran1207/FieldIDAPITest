@@ -1,5 +1,8 @@
 <wicket:panel>
 
+<!-- temp for testing -->
+<script src="/fieldid/javascript/galleria/galleria-1.2.9.min.js"></script>
+
     <!--NOTE : should handle icon by CSS instead.   IE. add class="water"    .title.water {background:url(blah)} -->
     <div class="title">
         <img wicket:id="icon"/> <h3 wicket:id="title"/>
@@ -12,19 +15,31 @@
             <label><wicket:message key="label.source"/><input type="text" wicket:id="sourceText"/></label>
             <label><wicket:message key="label.device"/><input type="text" wicket:id="device"/></label>
             <label><wicket:message key="label.lock"/><input type="text" wicket:id="lock"/></label>
+            <label><wicket:message key="label.location"/><input type="text" wicket:id="location"/></label>
+            <label><wicket:message key="label.check"/><textarea wicket:id="check"/></label>
+
+            <label><wicket:message key="label.method"/><textarea wicket:id="method"/></label>
         </div>
 
         <div class="column right">
-            <label><wicket:message key="label.location"/><input type="text" wicket:id="location"/></label>
-            <label><wicket:message key="label.check"/><textarea wicket:id="check" rows="4" cols="80" /></label>
-
-            <label><wicket:message key="label.method"/><textarea wicket:id="method" rows="4" cols="80"/></label>
+            <!-- temp for testing -->
+            <div id="galleria">
+                <img src="/fieldid/images/loto/temp-asset-landscape-1.jpg">
+                <img src="/fieldid/images/loto/temp-asset-landscape-2.jpg">
+                <img src="/fieldid/images/loto/temp-asset-portrait-1.jpg">
+            </div>
         </div>
-
+        
         <div class="buttons">
             <a wicket:id="back" class="btn-gray"><wicket:message key="label.back"/></a>
             <a wicket:id="done" class="btn-green"><wicket:message key="label.done"/></a>
         </div>
     </form>
+
+<!-- temp for testing -->
+<script>
+    Galleria.loadTheme('/fieldid/javascript/galleria/themes/classic/galleria.classic.min.js');
+    Galleria.run('#galleria');
+</script>
 
 </wicket:panel>

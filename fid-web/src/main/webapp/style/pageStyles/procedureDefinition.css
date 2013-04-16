@@ -335,24 +335,31 @@ a[class^="btn"] {
 	font-size: 20px;
 }
 .isolation-point-editor .column.left {
-	width: 443px;
+	width: 350px;
+	/*width: 443px;*/
+	margin-right: 20px;
 }
 .isolation-point-editor .column.right {
 	width: 480px;
 }
 /* Form styles */
 .isolation-point-editor input {
-	width: 325px;
+	width: 225px;
+	/*width: 325px;*/
 }
 .isolation-point-editor label.textarea {
 	margin-bottom: 0;
 }
 .isolation-point-editor textarea {
-	height: 75px;
-	width: 327px;
+	height: 50px;
+	width: 227px;
+	/*height: 75px;*/
+	/*width: 327px;*/
+
 }
 .isolation-point-editor a.asset-type {
-	width: 340px;
+	width: 240px;
+	/*width: 340px;*/
 	display: block;
 	float: right;
 	margin-left: 12px;
@@ -362,7 +369,14 @@ a[class^="btn"] {
 	margin-right: 50px;
 }
 
-
+/* GALLERIA */
+#galleria { 
+	width: 565px; 
+	height: 300px; 
+}
+.galleria-container {
+	/*background: #666;*/
+}
 
 /* PUBLISH SECTION
 **********************************************************/
