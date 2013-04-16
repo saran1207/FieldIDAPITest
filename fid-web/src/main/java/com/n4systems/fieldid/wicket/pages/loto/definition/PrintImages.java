@@ -10,7 +10,6 @@ import org.apache.wicket.model.PropertyModel;
 @ComponentWithExternalHtml
 public class PrintImages extends ImageList<ProcedureDefinitionImage> {
 
-    // add image list here...
     public PrintImages(String id, IModel<ProcedureDefinition> model) {
         super(id,new PropertyModel(model,"images"));
     }

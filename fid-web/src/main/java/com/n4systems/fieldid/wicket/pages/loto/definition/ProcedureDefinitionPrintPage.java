@@ -45,6 +45,7 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         add(new AttributeAppender("class", Model.of("print-procedure-definition")));
 
         add(new PrintHeader("header",model));
+        add(new PrintDetails("details", model));
         add(new PrintImages("images",model));
         add(new PrintList("list",model));
         add(new PrintFooter("footer",model));
