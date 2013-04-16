@@ -50,4 +50,13 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     public String getS3Path() {
         return fileName;
     }
+
+    public EditableImage addImageAnnotation(ImageAnnotation annotation) {
+        if (!getAnnotations().contains(annotation)) {
+            getAnnotations().add(annotation);
+        }
+        annotation.setImage(this);
+        annotation.setTenant(this.getTenant());
+        return this;
+    }
 }

@@ -1,7 +1,12 @@
-.image-gallery {
-    width:600px;
-    height:400px;
+/*.image-gallery {*/
+    /*width:400px;*/
+    /*height:300px;*/
     /*border:1px solid black;*/
+/*}*/
+
+.galleria-container {
+    width:  400px;
+    height:300px;
 }
 
 .galleria-container .submit {

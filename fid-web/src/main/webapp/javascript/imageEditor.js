@@ -1,7 +1,6 @@
 // uses ZURB plugin.   http://www.zurb.com/playground/javascript-annotation-plugin
 
 
-// TODO :
 //on click = remove any "new" notes.  (when you create one, it gets a 'unsaved' css class that is outer glow L&F).
 // store current name as default (do this after blur too).
 // add new note with default name & style.
@@ -23,16 +22,18 @@ var imageEditor = (function() {
 			type: 'water',
 			yPosition:'middle',
 			xPosition:'left',
-			centerImage:false,
-			id:null
+			centerImage:false
 		};
 		var options = $.extend(defaults, options);
 		var callback = options.callback;  // MANDATORY!
 
 		function createNote(annotation) {
 			var value = annotation && annotation.text ? annotation.text : options.text;
-			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(options.direction).addClass(options.type).attr('id',options.id);
-			var icon = $('<span/>').addClass('icon').appendTo(span);
+			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(options.direction).addClass(options.type);
+			if (annotation && annotation.id) {
+				span.attr('id','_note'+annotation.id);
+			}
+			var icon = $('<img/>').addClass('icon').appendTo(span);
 			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');
 
 			editor.css('width',(editor.val().length + 1) * 6 + 'px');
@@ -84,26 +85,23 @@ var imageEditor = (function() {
 			return note;
 		}
 
-		function save() {
-			var url = new String(callback)+
-				'&action='+'SAVE';
-			wicketAjaxGet(url, function() {}, function() {});
-		}
-
 		function updateNote(note) {
+			// assumes note html comes right after img.
+			//  <img.../>
+			//  <span class="note water readonly"/>
+			//
 			var loc = note.seralizeAnnotations()[0];   // X,Y will be in relative:  0...1
-			var style = note.attr('class');
+			var type = note.attr('class');
 			var text = note.find('input').val();
-			var id = note.attr('id');
-			var imageId = note.parents('image-editor').attr('id');
+			var noteId = note.attr('id');
+			var imageId = note.siblings('img').attr('id');
 			var url = new String(callback) +
-				'&action='+'LABEL' +
-				'&id='+(id?id:'') +
+				'&noteId='+(noteId?noteId:'') +
+				'&imageId='+(imageId?imageId:'') +
 				'&x='+loc.x +
 				'&y='+loc.y +
-				'&imageId='+(imageId?imageId:'') +
-				'&style='+style +
-				'&text='+text;
+				'&text='+text +
+				'&type='+type;
 			wicketAjaxGet(url, function() {}, function() {});
 		}
 
@@ -128,12 +126,10 @@ var imageEditor = (function() {
 			if (options.centerImage) {
 				centerImage();
 			}
-		//	if (options.editable) { }
 			ed.annotatableImage(function(annotation) {
 				return addNewNote();
 			}, options);
 		}
-
 
 
 		return {

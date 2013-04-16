@@ -15,9 +15,9 @@ var imageGallery = (function() {
 		};
 		var options = $.extend(defaults, options);
 
-		function setupForAnnotations(img) {
-			img.parent().children('.image-container').remove();
-			img.wrap('<div class="image-container"/>');
+		function setupForAnnotations(img,imageData) {
+			img.parents('.galleria-stage').find('.image-container').remove();
+			img.wrap('<div class="image-container"/>').attr('id','_image'+imageData.id);
 			var $newParent = img.parent();
 			$newParent.css('top',img.css('top')).css('left',img.css('left'));
 			$newParent.css('width',img.css('width')).css('height',img.css('height'));
@@ -26,8 +26,8 @@ var imageGallery = (function() {
 
 		function galleryImageClicked(e) {
 			var img = $(e.imageTarget);
-			setupForAnnotations(img);
 			var imageData = e.galleriaData;
+			setupForAnnotations(img, imageData);
 			var url = new String(callback) +
 				'&action='+'SELECT' +
 				'&index=' + galleria.getIndex() +

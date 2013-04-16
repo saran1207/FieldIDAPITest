@@ -17,9 +17,8 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
     public EditableImageGallery(String id, List<T> images) {
         super(id, images);
         setOutputMarkupId(true);
-        add(imageAnnotatingBehavior = new ImageAnnotatingBehavior() {
-            @Override
-            protected EditableImage getEditableImage() {
+        add(imageAnnotatingBehavior = new ImageAnnotatingBehavior<T>() {
+            @Override protected T getEditableImage() {
                 return getCurrentImage();
             }
         }.withEditing());

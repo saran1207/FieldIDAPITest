@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.image;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
@@ -43,7 +44,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     protected FileUploadField uploadField;
     protected final Component gallery;
     private Form form;
-    // TODO : add noAjaxUpdate option.
+    // TODO DD : add noAjaxUpdate option.
 
     public ImageGallery(String id, final List<T> images) {
         super(id);
@@ -85,7 +86,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     }
 
     protected String getImageUrl(T image, S3Service.S3ImagePath path) {
-        // TODO : make this cacheable...expiry date is months? or NEVER?
+        // TODO DD : make this cacheable...expiry date is months? or NEVER?
         return s3Service.generateResourceUrl(path.getMediumPath()).toString();
     }
 
@@ -94,6 +95,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     protected abstract T createImage(S3Service.S3ImagePath path, Tenant tenant);
 
     private String getFileName(String fileName) {
+        // TODO DD : put this in proper space...but where since images can be shared?  under asset/<asset_id>/loto/<loto_id>.....?
         return "/foo/bar/stuff/"+fileName;
     }
 
@@ -107,6 +109,8 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
             @Override protected void respond(AjaxRequestTarget target) {
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
                 currentImageIndex = params.getParameterValue("index").toInt();
+                Long id = params.getParameterValue("id").toLong();
+                Preconditions.checkState(images.get(currentImageIndex).getId().equals(id), "selected image id '" + id + "' doesn't match index '" + currentImageIndex+"'");
                 imageClicked(target, getAction(params), getCurrentImage());
             }
         };
@@ -147,7 +151,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         for (T image:images) {
             data.add(createImageJson(image));
         }
-       // data.add(new GalleryVideoJson());
+//        data.add(new GalleryVideoJson());
         return data;
     }
 
@@ -164,13 +168,13 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         }
     }
 
-    protected class GalleryVideoJson {
-        String video = "http://www.youtube.com/watch?v=fsPebhpQezY";
-        String title = "sampe vidleo";
-        String description = "hey, it moves";
-
-        GalleryVideoJson() { }
-    }
+//    protected class GalleryVideoJson {
+//        String video = "http://www.youtube.com/watch?v=fsPebhpQezY";
+//        String title = "sampe vidleo";
+//        String description = "hey, it moves";
+//
+//        GalleryVideoJson() { }
+//    }
 
     protected class GalleryOptions {
         Object[] dataSource;

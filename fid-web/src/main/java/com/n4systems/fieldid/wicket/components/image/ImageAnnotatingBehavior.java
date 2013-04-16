@@ -1,6 +1,8 @@
-package com.n4systems.fieldid.wicket.components.image;
+    package com.n4systems.fieldid.wicket.components.image;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
@@ -17,13 +19,12 @@ import org.apache.wicket.util.string.StringValueConversionException;
 
 import java.util.List;
 
-public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavior {
+public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends AbstractDefaultAjaxBehavior {
 
     private @SpringBean JsonRenderer jsonRenderer;
+    private @SpringBean PersistenceService persistenceService;
 
     private boolean editable = false;
-
-    enum ImageEditorAction { LABEL };
 
 
     protected ImageAnnotatingBehavior() {
@@ -32,44 +33,59 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
     @Override
     protected void respond(AjaxRequestTarget target) {
         IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-        String action = params.getParameterValue("action").toString();
-        performAction(ImageEditorAction.valueOf(action.toUpperCase()), params);
+        performAction(params);
     }
 
-    private void performAction(ImageEditorAction action, IRequestParameters params) {
+    private void performAction(IRequestParameters params) {
         try {
-            switch (action) {
-                case LABEL:
-                    doLabel(getNullSafeLongParameter(params, "id"),
-                            getNullSafeLongParameter(params, "imageId"),
-                            params.getParameterValue("x").toDouble(),
-                            params.getParameterValue("y").toDouble(),
-                            params.getParameterValue("text").toString(),
-                            params.getParameterValue("style").toString().toUpperCase());
-                    break;
-                default:
-                    // other actions to be implemented later.
-                    break;
-            }
+            doLabel(getNoteId(params),
+                    getImageId(params),
+                    params.getParameterValue("x").toDouble(),
+                    params.getParameterValue("y").toDouble(),
+                    params.getParameterValue("text").toString(),
+                    getAnnotationType(params));
         } catch (StringValueConversionException e) {
             e.printStackTrace();
-            throw new IllegalArgumentException("invalid parameters for action " + action);
+            throw new IllegalArgumentException("invalid parameters for annotating behavior " + params.getParameterNames());
         } catch (NullPointerException e) {
-            throw new IllegalArgumentException("invalid parameters for action " + action);
+            throw new IllegalArgumentException("invalid parameters for annotating behavior " + params.getParameterNames());
         }
     }
 
-    private Long getNullSafeLongParameter(IRequestParameters params, String p) {
-        return params.getParameterValue(p).isEmpty() ? null : params.getParameterValue(p).toLong();
+    private ImageAnnotationType getAnnotationType(IRequestParameters params) {
+        String allClasses = params.getParameterValue("type").toString().toUpperCase();
+        for (ImageAnnotationType type:ImageAnnotationType.values()) {
+            if (allClasses.contains(type.name())) {
+                return type;
+            }
+        }
+        return null;
     }
 
-    private void doLabel(Long id, Long imageId, Number x, Number y,  String text, String type) {
-        // TODO : allow for remove, restyle, etc...  check if id already exists.
-        //if (StringUtils.isNotEmpty(id)) {annotation = getAnnotationWithIdFromEditableImage(id);}  else...
-        ImageAnnotation annotation = getAnnotationTypeWithId(id, x, y, text, type);
+    private Long getNoteId(IRequestParameters params) {
+        String id=getNullSafeStringParameter(params,"noteId");
+        String prefix = "_note";
+        return id==null ? null :
+                id.indexOf(prefix)>=0 ? Long.parseLong(id.substring(prefix.length())) : null;
+    }
 
-        //if (imageId is different, then what to do???)
-        getEditableImage().getAnnotations().add(annotation);
+    private Long getImageId(IRequestParameters params) {
+        String id=getNullSafeStringParameter(params,"imageId");
+        String prefix = "_image";
+        return id==null ? null :
+                id.indexOf(prefix)>=0 ? Long.parseLong(id.substring(prefix.length())) : null;
+    }
+
+    private String getNullSafeStringParameter(IRequestParameters params, String p) {
+        return params.getParameterValue(p).isEmpty() ? null : params.getParameterValue(p).toString();
+    }
+
+    private void doLabel(Long noteId, Long imageId, Double x, Double y,  String text, ImageAnnotationType type) {
+        Preconditions.checkArgument(imageId!=null, "you must specify image when updating an annotation (needs to know which image it is applied to)");
+        ImageAnnotation annotation = getImageAnnotation(noteId,x,y,text,type);
+        getEditableImage().addImageAnnotation(annotation);
+        persistenceService.saveOrUpdate(annotation);
+        persistenceService.saveOrUpdate(getEditableImage());
     }
 
     @Override
@@ -77,27 +93,27 @@ public abstract class ImageAnnotatingBehavior extends AbstractDefaultAjaxBehavio
         super.onBind();
     }
 
-    protected abstract EditableImage getEditableImage();
+    protected abstract T getEditableImage();
 
-    private ImageAnnotation getAnnotationTypeWithId(Long id, Number x, Number y, String text, String type) {
-        ImageAnnotation annotation = new ImageAnnotation();
-        if (id!=null) {
+
+    private ImageAnnotation getImageAnnotation(Long id, Double x, Double y, String text, ImageAnnotationType type) {
+        ImageAnnotation annotation = null;
+        if (id==null) {   // create new one.
+            annotation = new ImageAnnotation(x,y,text,type);
+        } else {
             for (ImageAnnotation value:getEditableImage().getAnnotations()) {
                 if (value.getId().equals(id)) {
                     annotation = value;
                 }
             }
         }
-        // Preconditions.checkState(if id not null, you must find one!);
-        annotation.setX(x.doubleValue());
-        annotation.setY(y.doubleValue());
-        annotation.setText(text);
-        annotation.setType(getAnnotationType(type));
-        return annotation;
-    }
+        Preconditions.checkState(annotation!=null, "couldn't find annotation with id " + id);
 
-    protected ImageAnnotationType getAnnotationType(String typeId) {
-        return ImageAnnotationType.getDefault();
+        annotation.setX(x);
+        annotation.setY(y);
+        annotation.setText(text);
+        annotation.setType(type);
+        return annotation;
     }
 
     @Override
