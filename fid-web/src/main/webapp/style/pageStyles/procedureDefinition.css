@@ -282,7 +282,7 @@ a[class^="btn"] {
 		width: 30px;
 		text-align: center;
 	}
-		.isolation-point-table li.headings .identifier {
+		.isolation-point-table .headings .identifier {
 			width: 74px;
 		}
 	.isolation-point-table .source {

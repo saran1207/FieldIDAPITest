@@ -13,6 +13,7 @@
 	box-shadow: 2px 2px 10px -3px #888;
 	z-index: 10;
 	border: 2px solid;
+	min-width: 70px;
 }
 
 .note.arrow-left {
