@@ -6,7 +6,7 @@ ${action.setPageType('asset_type_group', 'show')!}
 			<label for="name"><@s.text name="label.name"/></label>
 			<span>${(group.name?html) !}</span>
 		</div>
-        <#if securityGuard.lotoProceduresEnabled>
+<#--        <#if securityGuard.lotoProceduresEnabled>
             <div class="infoSet">
                 <label><@s.text name="label.loto_device"/></label>
                 <span class="fieldValue">${group.lotoDevice?string("Yes", "No")}</span>
@@ -15,7 +15,7 @@ ${action.setPageType('asset_type_group', 'show')!}
                 <label><@s.text name="label.loto_lock"/></label>
                 <span class="fieldValue">${group.lotoLock?string("Yes", "No")}</span>
             </div>
-        </#if>
+        </#if>-->
     </div>
 </div>
 

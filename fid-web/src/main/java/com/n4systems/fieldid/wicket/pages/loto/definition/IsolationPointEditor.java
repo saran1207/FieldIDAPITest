@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.search.ProcedureSearchService;
-import com.n4systems.fieldid.wicket.components.loto.DeviceLockPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.common.ImageAnnotationType;
@@ -29,10 +28,6 @@ public class IsolationPointEditor extends Panel {
 
     private Form form;
     private IsolationPoint editedIsolationPoint;
-    private DeviceLockPicker isolationDevicePicker;
-    private DeviceLockPicker isolationLockPicker;
-    private AjaxLink lockLink;
-    private AjaxLink deviceLink;
 
     public IsolationPointEditor(String id) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
@@ -48,41 +43,8 @@ public class IsolationPointEditor extends Panel {
 
         form.add(new TextField("identifier"));
         form.add(new TextField("sourceText", new PropertyModel(getDefaultModel(),"sourceText")));
-        form.add(lockLink = new AjaxLink<Void>("lock", new Model()) {
-            @Override public void onClick(AjaxRequestTarget target) {
-                isolationLockPicker.setVisible(true);
-                this.setVisible(false);
-                target.add(isolationLockPicker,this);
-            }
-        });
-        lockLink.add(new Label("description", getLockDescriptionModel()));
-        lockLink.setOutputMarkupPlaceholderTag(true);
-
-        form.add(deviceLink = new AjaxLink<Void>("device", new Model()) {
-            @Override public void onClick(AjaxRequestTarget target) {
-                isolationDevicePicker.setVisible(true);
-                this.setVisible(false);
-                target.add(isolationDevicePicker,this);
-            }
-        });
-        deviceLink.add(new Label("description", getDeviceDescriptionModel()));
-        deviceLink.setOutputMarkupPlaceholderTag(true);
-
-        form.add(isolationDevicePicker = new DeviceLockPicker("devicePicker", new PropertyModel(getDefaultModel(),"deviceDefinition"), true) {
-            @Override public void onPickerUpdated() {
-                getIsolationPointModel().getObject().setDeviceDefinition((IsolationDeviceDescription) getDefaultModelObject());
-            }
-        });
-        isolationDevicePicker.setOutputMarkupPlaceholderTag(true);
-        isolationDevicePicker.setVisible(false);
-
-        form.add(isolationLockPicker = new DeviceLockPicker("lockPicker", new PropertyModel(getDefaultModel(),"lockDefinition"), false) {
-            @Override public void onPickerUpdated() {
-                getIsolationPointModel().getObject().setDeviceDefinition((IsolationDeviceDescription) getDefaultModelObject());
-            }
-        });
-        isolationLockPicker.setOutputMarkupPlaceholderTag(true);
-        isolationLockPicker.setVisible(false);
+        form.add(new TextField("device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription")));
+        form.add(new TextField("lock", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription")));
 
         form.add(new TextField("location", new PropertyModel(getDefaultModel(),"location")));
         form.add(new TextArea("check"));
@@ -197,12 +159,6 @@ public class IsolationPointEditor extends Panel {
     public void editNew(IsolationPoint isoPoint) {
         editedIsolationPoint = null;
         copyIntoModel(isoPoint);
-        isolationDevicePicker.resetPicker();
-        isolationLockPicker.resetPicker();
-        isolationDevicePicker.setVisible(false);
-        deviceLink.setVisible(true);
-        isolationLockPicker.setVisible(false);
-        lockLink.setVisible(true);
     };
 
     private IsolationPoint copyIntoModel(IsolationPoint isolationPoint) {

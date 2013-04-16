@@ -4,7 +4,7 @@
 	<label for="name"><@s.text name="indicator.required"/> <@s.text name="label.name"/></label>
 	<@s.textfield name="name" required="true"/>
 </div>
-<#if securityGuard.lotoProceduresEnabled>
+<#--<#if securityGuard.lotoProceduresEnabled>
     <div class="infoSet">
         <label for="lotoDevice"><@s.text name="label.loto_device"/></label>
         <@s.checkbox name="lotoDevice"/>
@@ -13,7 +13,7 @@
         <label for="lotoLock"><@s.text name="label.loto_lock"/></label>
         <@s.checkbox name="lotoLock"/>
     </div>
-</#if>
+</#if>-->
 
 
 
