@@ -69,6 +69,9 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
     @JoinColumn(name = "approved_by_id")
     private User approvedBy;
 
+    @Column(name="auth_notification_sent")
+    private boolean authorizationNotificationSent = false;
+
     public String getProcedureCode() {
         return procedureCode;
     }
@@ -201,5 +204,13 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     public void setApprovedBy(User approvedBy) {
         this.approvedBy = approvedBy;
+    }
+
+    public boolean isAuthorizationNotificationSent() {
+        return authorizationNotificationSent;
+    }
+
+    public void setAuthorizationNotificationSent(boolean authorizationNotificationSent) {
+        this.authorizationNotificationSent = authorizationNotificationSent;
     }
 }

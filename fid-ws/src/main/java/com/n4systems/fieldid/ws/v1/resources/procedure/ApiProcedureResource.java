@@ -9,7 +9,7 @@ import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.IsolationPointResult;
 import com.n4systems.model.procedure.Procedure;
-import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -111,9 +111,17 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         return persistenceService.find(assetFinder);
     }
 
-    public List<ApiProcedure> getProcedures(Long assetId) {
+    public List<ApiProcedure> getOpenAndLockedProcedures(Long assetId) {
         QueryBuilder<Procedure> query = createUserSecurityBuilder(Procedure.class);
         query.addSimpleWhere("asset.id", assetId);
+
+        WhereParameterGroup openOrLockedTerm = new WhereParameterGroup("openOrLocked");
+        openOrLockedTerm.setChainOperator(WhereClause.ChainOp.AND);
+        openOrLockedTerm.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "workflowState", ProcedureWorkflowState.OPEN, WhereClause.ChainOp.OR));
+        openOrLockedTerm.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "workflowState", ProcedureWorkflowState.LOCKED, WhereClause.ChainOp.OR));
+
+        query.addWhere(openOrLockedTerm);
+
         List<Procedure> procedures = persistenceService.findAll(query);
         List<ApiProcedure> convertedProcedures = new ArrayList<ApiProcedure>();
         for (Procedure procedure : procedures) {

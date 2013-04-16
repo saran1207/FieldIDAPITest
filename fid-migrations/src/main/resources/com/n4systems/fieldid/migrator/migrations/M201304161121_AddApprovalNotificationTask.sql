@@ -1,0 +1,1 @@
+insert into tasks(id,created,modified,classname,cronexpression,taskgroup,enabled) values ("ProcedureApprovalNotification", now(), now(), "com.n4systems.taskscheduling.task.NotifyProcedureAuthorizersTask", "*/5 * * * *", "default", 1);

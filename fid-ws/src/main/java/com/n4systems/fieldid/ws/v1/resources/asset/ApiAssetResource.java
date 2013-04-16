@@ -217,7 +217,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	protected ApiAsset convertToApiAsset(Asset asset, boolean downloadEvents, SyncDuration syncDuration) {
 		ApiAsset apiAsset = convertEntityToApiModel(asset);		
 		apiAsset.setSchedules(apiEventScheduleResource.findAllSchedules(asset.getId(), syncDuration));
-        apiAsset.setProcedures(procedureResource.getProcedures(asset.getId()));
+        apiAsset.setProcedures(procedureResource.getOpenAndLockedProcedures(asset.getId()));
 		if (downloadEvents) {
 			apiAsset.setEvents(apiSavedEventResource.findLastEventOfEachType(asset.getId()));
 		}		

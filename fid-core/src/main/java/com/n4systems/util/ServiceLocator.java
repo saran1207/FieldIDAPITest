@@ -13,6 +13,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
+import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.fieldid.service.user.UserGroupService;
@@ -112,6 +113,10 @@ public class ServiceLocator implements ApplicationContextAware {
 
     public static final NotifyEventAssigneeService getEventAssigneeService() {
         return getBean(NotifyEventAssigneeService.class);
+    }
+
+    public static final NotifyProcedureAuthorizersService getProcedureAuthorizersService() {
+        return getBean(NotifyProcedureAuthorizersService.class);
     }
 
     public static Notifier getDefaultNotifier() {

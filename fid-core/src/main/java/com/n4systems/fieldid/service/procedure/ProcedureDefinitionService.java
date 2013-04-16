@@ -35,9 +35,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         if (procedureDefinition.getRevisionNumber()==null) {
             procedureDefinition.setRevisionNumber(generateRevisionNumber(procedureDefinition.getAsset()));
         }
-//TODO DD : temporary....publishes when you save.
-procedureDefinition.setPublishedState(PublishedState.PUBLISHED);
-// ....will do proper authorization later.
+        if (getCurrentTenant().getSettings().getApprovalUserOrGroup() != null) {
+            procedureDefinition.setPublishedState(PublishedState.WAITING_FOR_APPROVAL);
+        } else {
+            procedureDefinition.setPublishedState(PublishedState.PUBLISHED);
+        }
         saveIsolationPoints(procedureDefinition.getIsolationPoints());
         persistenceService.saveOrUpdate(procedureDefinition);
     }
@@ -70,6 +72,14 @@ procedureDefinition.setPublishedState(PublishedState.PUBLISHED);
         query.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
 
         return persistenceService.findAll(query);
+    }
+
+    public void publishProcedureDefinition(ProcedureDefinition definition) {
+        ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset());
+        if (previousDefinition != null) {
+            previousDefinition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
+        }
+        definition.setPublishedState(PublishedState.PUBLISHED);
     }
 
 }
