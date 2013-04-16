@@ -4,12 +4,15 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.image.EditableImageGallery;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
+
+import java.util.List;
 
 public class SecretTestPage extends FieldIDAuthenticatedPage {
 
@@ -24,8 +27,12 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 
         procedureDefinition=persistenceService.findAll(ProcedureDefinition.class).get(0);
 
-        add(new EditableImageGallery<ProcedureDefinitionImage>("gallery", persistenceService.findAll(ProcedureDefinitionImage.class)) {
-            @Override protected ProcedureDefinitionImage createImage(S3Service.S3ImagePath path, Tenant tenant) {
+        List<ProcedureDefinitionImage> images = procedureDefinition.getImages();
+        ImageAnnotation annotation = images.get(0).getAnnotations().get(0);
+
+        add(new EditableImageGallery<ProcedureDefinitionImage>("gallery", images, annotation) {
+            @Override
+            protected ProcedureDefinitionImage createImage(S3Service.S3ImagePath path, Tenant tenant) {
                 ProcedureDefinitionImage image = new ProcedureDefinitionImage();
                 image.setTenant(tenant);
                 image.setFileName(path.getOrigPath());

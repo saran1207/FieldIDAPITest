@@ -1,6 +1,7 @@
 
 // uses ZURB plugin.   http://www.zurb.com/playground/javascript-annotation-plugin
 // GALLERIA for gallery.
+// TODO DD : refactor this and put it in fieldIdWidgets.
 
 var imageGallery = (function() {
 
@@ -85,7 +86,11 @@ var imageGallery = (function() {
 		$('#'+id).data('gallery').add(imageData);
 	}
 
-	var edit = function(id,options) {
+	var
+
+
+
+		edit = function(id,options) {
 		// precondition : already been initialized (which populates GALLERY data).
 		$('#'+id).data('gallery').edit(options);
 	}

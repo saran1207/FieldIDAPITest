@@ -84,8 +84,8 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         Preconditions.checkArgument(imageId!=null, "you must specify image when updating an annotation (needs to know which image it is applied to)");
         ImageAnnotation annotation = getImageAnnotation(noteId,x,y,text,type);
         getEditableImage().addImageAnnotation(annotation);
-        persistenceService.saveOrUpdate(annotation);
-        persistenceService.saveOrUpdate(getEditableImage());
+//        persistenceService.saveOrUpdate(annotation);
+//        persistenceService.saveOrUpdate(getEditableImage());
     }
 
     @Override
@@ -148,12 +148,13 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         return this;
     }
 
+    protected abstract String getDefaultType();
 
     // ----------------------------------------------------------------------------------------------
 
 
     public class AnnotatedImageOptions {
-        String type = "water";
+        String type = getDefaultType();
         String direction = "arrow-left";
         String text = "a label";
         String callback = ImageAnnotatingBehavior.this.getCallbackUrl().toString();
@@ -164,5 +165,6 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
             this.annotations = annotations;
         }
     }
+
 
 }

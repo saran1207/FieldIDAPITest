@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.common.ImageAnnotationType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
 import java.util.List;
@@ -14,12 +15,18 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
 
     private ImageAnnotatingBehavior imageAnnotatingBehavior;
 
-    public EditableImageGallery(String id, List<T> images) {
+    private final ImageAnnotation annotation;
+
+    public EditableImageGallery(String id, List<T> images, final ImageAnnotation annotation) {
         super(id, images);
+        this.annotation = annotation;
         setOutputMarkupId(true);
         add(imageAnnotatingBehavior = new ImageAnnotatingBehavior<T>() {
             @Override protected T getEditableImage() {
                 return getCurrentImage();
+            }
+            @Override protected String getDefaultType() {
+                return annotation.getType().getCssClass();
             }
         }.withEditing());
     }
@@ -29,7 +36,7 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
     }
 
     @Override
-    protected T saveImage(S3Service.S3ImagePath path, Tenant tenant) {
+    protected T addImage(S3Service.S3ImagePath path, Tenant tenant) {
         T image = createImage(path, tenant);
         image.setTenant(tenant);
         persistenceService.save(image);
@@ -47,6 +54,10 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
         return new GalleryEditableImageJson(image);
     }
 
+    @Override
+    protected GalleryOptions createGalleryOptions(List<GalleryImageJson> images) {
+        return super.createGalleryOptions(images);
+    }
 
     class GalleryEditableImageJson extends GalleryImageJson {
         private List<ImageAnnotation> annotations;
@@ -54,6 +65,15 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
         GalleryEditableImageJson(T image) {
             super(image);
             annotations = image.getAnnotations();
+        }
+    }
+
+    class EditableGalleryOptions extends GalleryOptions {
+        Long editedId = annotation!=null ? annotation.getId() : null;
+        String type= annotation!=null ? annotation.getType().getCssClass() : ImageAnnotationType.getDefault().getCssClass();
+
+        EditableGalleryOptions(List data) {
+            super(data);
         }
     }
 

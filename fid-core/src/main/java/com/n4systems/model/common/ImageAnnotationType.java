@@ -16,7 +16,10 @@ public enum ImageAnnotationType {
     V("valve","#000000","#FFFFFF","#000000","images/loto/valve.jpg","images/loto/valve-full.png"),
     W("water", "#FFFFFF","#099C4F","#FFFFFF","images/loto/water.jpg","images/loto/water-full.png");
 
+    // in the world of the browser, this is how the annotations are differentiated.
+    // i.e. a P type will be rendered as <span class="pneumatic ..."/>
     private String cssClass;
+
     private String fontColor;
     private String backgroundColor;
     private String borderColor;

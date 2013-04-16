@@ -45,6 +45,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     protected final Component gallery;
     private Form form;
     // TODO DD : add noAjaxUpdate option.
+    // TODO DD : add ability to delete images (check to see if they have annotations first?)
 
     public ImageGallery(String id, final List<T> images) {
         super(id);
@@ -62,7 +63,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
                 FileUpload fileUpload = uploadField.getFileUpload();
                 if (fileUpload != null) {
                     S3Service.S3ImagePath path = s3Service.uploadImage(fileUpload.getBytes(), fileUpload.getContentType(), getFileName(fileUpload.getClientFileName()), FieldIDSession.get().getSessionUser().getTenant().getId());
-                    T image = saveImage(path,getTenant());
+                    T image = addImage(path, getTenant());
                     if (image!=null) {
                         images.add(image);
                     }
@@ -90,7 +91,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         return s3Service.generateResourceUrl(path.getMediumPath()).toString();
     }
 
-    protected abstract T saveImage(S3Service.S3ImagePath path, Tenant tenant);
+    protected abstract T addImage(S3Service.S3ImagePath path, Tenant tenant);
 
     protected abstract T createImage(S3Service.S3ImagePath path, Tenant tenant);
 
@@ -116,9 +117,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         };
     }
 
-    protected void imageClicked(AjaxRequestTarget target, String action, T image) {
-
-    }
+    protected void imageClicked(AjaxRequestTarget target, String action, T image) { }
 
     private String getAction(IRequestParameters params) {
         StringValue p = params.getParameterValue(ACTION);
@@ -139,6 +138,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         response.renderJavaScriptReference("javascript/imageGallery.js");
         response.renderCSSReference("style/component/imageGallery.css");
 
+        // TODO DD : refactor this ...don't pass jsonDataSource.
         response.renderOnDomReadyJavaScript(String.format(GALLERY_JS,gallery.getMarkupId(),jsonRenderer.render(createGalleryOptions(getJsonDataSource()))));
     }
 

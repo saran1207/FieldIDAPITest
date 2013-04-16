@@ -22,6 +22,7 @@ var imageEditor = (function() {
 			type: 'water',
 			yPosition:'middle',
 			xPosition:'left',
+			editedId:null,
 			centerImage:false
 		};
 		var options = $.extend(defaults, options);
@@ -29,7 +30,9 @@ var imageEditor = (function() {
 
 		function createNote(annotation) {
 			var value = annotation && annotation.text ? annotation.text : options.text;
-			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(options.direction).addClass(options.type);
+			var type = annotation && annotation.type ? annotation.type : options.type;
+			var direction = annotation && annotation.x ? (annotation.x <.5) ? 'arrow-right' : 'arrow-left' : options.direction;
+			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass().addClass(type);
 			if (annotation && annotation.id) {
 				span.attr('id','_note'+annotation.id);
 			}

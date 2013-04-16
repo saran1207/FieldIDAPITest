@@ -58,7 +58,7 @@ public class JsonRenderer implements Serializable {
         public JsonElement serialize(ImageAnnotation annotation, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject object = new JsonObject();
             object.addProperty("id",annotation.getId());
-            object.addProperty("type", "note");  // should return css class name. or possibly inline style.  e.g. "electrical" or "background:1px solid red;border 1px solid white;"
+            object.addProperty("type", annotation.getType().getCssClass());
             object.addProperty("text",annotation.getText());
             object.addProperty("x",annotation.getX());
             object.addProperty("y",annotation.getY());
