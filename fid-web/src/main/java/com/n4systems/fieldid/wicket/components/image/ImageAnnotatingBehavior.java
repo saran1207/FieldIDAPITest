@@ -55,7 +55,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
     private ImageAnnotationType getAnnotationType(IRequestParameters params) {
         String allClasses = params.getParameterValue("type").toString().toUpperCase();
         for (ImageAnnotationType type:ImageAnnotationType.values()) {
-            if (allClasses.contains(type.name())) {
+            if (allClasses.contains(type.getCssClass().toUpperCase())) {
                 return type;
             }
         }

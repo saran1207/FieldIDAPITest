@@ -32,10 +32,9 @@ var imageEditor = (function() {
 			var value = annotation && annotation.text ? annotation.text : options.text;
 			var type = annotation && annotation.type ? annotation.type : options.type;
 			var direction = annotation && annotation.x ? (annotation.x <.5) ? 'arrow-right' : 'arrow-left' : options.direction;
-			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass().addClass(type);
-			if (annotation && annotation.id) {
-				span.attr('id','_note'+annotation.id);
-			}
+			var id = annotation && annotation.id ? '_note'+annotation.id : options.editedId;
+
+			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(type).attr('id',id);
 			var icon = $('<img/>').addClass('icon').appendTo(span);
 			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');
 
@@ -49,8 +48,8 @@ var imageEditor = (function() {
 				});
 
 				editor.keypress(function(e) {
-					this.style.width = Math.max(12,(this.value.length + 1) * 6) + 'px'; }
-				);
+					this.style.width = Math.max(12,(this.value.length + 1) * 6) + 'px';
+				});
 
 				editor.blur(function(e) {
 					$(this).parent().addClass('readonly');
