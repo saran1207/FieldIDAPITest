@@ -17,6 +17,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -47,7 +48,7 @@ public class IsolationPointEditor extends Panel {
 
         add(form = new Form("form"));
 
-        form.add(new TextField("identifier"));
+        form.add(new RequiredTextField("identifier"));
         form.add(new TextField("sourceText"));
         form.add(deviceComboBox = new ComboBox("device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription"), getPreConfiguredDevices(new PropertyModel(getDefaultModel(),"sourceType"))));
         deviceComboBox.add(new UpdateComponentOnChange());

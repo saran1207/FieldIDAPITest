@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.wicket.components.text.LabelledAutoCompleteUser;
+import com.n4systems.fieldid.wicket.components.text.LabelledRequiredTextField;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
@@ -24,20 +25,21 @@ public class DetailsPanel extends Panel {
         setOutputMarkupPlaceholderTag(true);
         add(new AttributeAppender("class", Model.of("details")));
 
-        add(new LabelledTextField<String>("procedureCode", "label.procedure_code", new PropertyModel<String>(model, "procedureCode")));
+        add(new LabelledRequiredTextField<String>("procedureCode", "label.procedure_code", new PropertyModel<String>(model, "procedureCode")));
 
-        add(new LabelledTextField<String>("identifier", "label.identifier", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier())));
+        add(new LabelledTextField<String>("identifier", "label.electronic_id", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier())));
 
         add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())));
 
-        add(new LabelledAutoCompleteUser("user", "label.developed_by", ProxyModel.of(model, on(ProcedureDefinition.class).getDevelopedBy())));
+        add(new LabelledAutoCompleteUser("user", "label.developed_by", ProxyModel.of(model, on(ProcedureDefinition.class).getDevelopedBy()), true));
 
-        add(new LabelledTextField<String>("equipmentNumber", "label.equipment_number", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentNumber())));
+        add(new LabelledRequiredTextField<String>("equipmentNumber", "label.equipment_number", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentNumber())));
 
-        // TODO : change location to a string.
-        add(new LabelledTextField<String>("equipmentLocation", "label.equipment_location", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier())));
+        add(new LabelledRequiredTextField<String>("equipmentLocation", "label.equipment_location", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentLocation())));
 
-        add(new LabelledTextField<String>("equipmentDescription", "label.equipment_description", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentDescription())));
+        add(new LabelledTextField<String>("building", "label.building", ProxyModel.of(model, on(ProcedureDefinition.class).getBuilding())));
+
+        add(new LabelledRequiredTextField<String>("equipmentDescription", "label.equipment_description", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentDescription())));
 
         add(new AjaxLink("cancel") {
             @Override public void onClick(AjaxRequestTarget target) {

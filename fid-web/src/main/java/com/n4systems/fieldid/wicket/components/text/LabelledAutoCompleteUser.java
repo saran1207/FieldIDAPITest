@@ -7,6 +7,13 @@ import org.apache.wicket.model.IModel;
 
 public class LabelledAutoCompleteUser extends LabelledComponent<AutoComplete<User>,User> {
 
+    boolean isRequired;
+
+    public LabelledAutoCompleteUser(String id, String key, IModel<User> model, boolean isRequired) {
+        this(id, key, model);
+        this.isRequired = isRequired;
+    }
+
     public LabelledAutoCompleteUser(String id, String key, IModel<User> model) {
         super(id, key, model);
     }
@@ -15,6 +22,7 @@ public class LabelledAutoCompleteUser extends LabelledComponent<AutoComplete<Use
     protected AutoComplete<User> createLabelledComponent(String id, IModel<User> model) {
         AutoCompleteUser autoCompleteUser = new AutoCompleteUser(id, model);
         autoCompleteUser.withAutoUpdate(true).setRenderBodyOnly(true);
+        autoCompleteUser.getAutocompleteField().setRequired(isRequired);
         return autoCompleteUser;
     }
 

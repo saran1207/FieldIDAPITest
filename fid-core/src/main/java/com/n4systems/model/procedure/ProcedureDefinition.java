@@ -2,7 +2,6 @@ package com.n4systems.model.procedure;
 
 import com.google.common.collect.Lists;
 import com.n4systems.model.Asset;
-import com.n4systems.model.location.Location;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.user.User;
 import org.hibernate.annotations.IndexColumn;
@@ -41,8 +40,10 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
     @Column(name="equipment_number")
     private String equipmentNumber;
 
-    @Embedded
-    private Location equipmentLocation;
+    @Column(name="equipment_location")
+    private String equipmentLocation;
+
+    private String building;
 
     @Column(name="equipment_description")
     private String equipmentDescription;
@@ -120,14 +121,20 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         this.equipmentNumber = equipmentNumber;
     }
 
-
-    // TODO : note.  i don't think this is "old school fieldid" location.  should be just a string.
-    public Location getEquipmentLocation() {
+    public String getEquipmentLocation() {
         return equipmentLocation;
     }
 
-    public void setEquipmentLocation(Location equipmentLocation) {
+    public void setEquipmentLocation(String equipmentLocation) {
         this.equipmentLocation = equipmentLocation;
+    }
+
+    public String getBuilding() {
+        return building;
+    }
+
+    public void setBuilding(String building) {
+        this.building = building;
     }
 
     public String getEquipmentDescription() {

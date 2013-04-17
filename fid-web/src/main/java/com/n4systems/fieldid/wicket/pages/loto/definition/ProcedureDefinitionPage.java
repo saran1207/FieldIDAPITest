@@ -58,6 +58,10 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
         pd.setAsset(asset);
         pd.setTenant(asset.getTenant());
         pd.setPublishedState(PublishedState.DRAFT);
+        pd.setDevelopedBy(getCurrentUser());
+        pd.setEquipmentNumber(asset.getIdentifier());
+        pd.setEquipmentLocation(asset.getAdvancedLocation().getFullName());
+        pd.setEquipmentDescription(asset.getType().getDisplayName());
         model = Model.of(pd);
 
         init(model);
@@ -128,7 +132,6 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
     private void sectionChanged(AjaxRequestTarget target) {
         form.updateSection(target);
     }
-
 
     class ProcedureDefinitionForm extends Form {
 
