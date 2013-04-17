@@ -369,6 +369,12 @@ a[class^="btn"] {
 	margin-right: 50px;
 }
 
+.isolation-point-editor select {
+    margin-left: 12px;
+    padding: 5px;
+    width: 240px;
+}
+
 /* GALLERIA */
 #galleria { 
 	width: 565px; 
