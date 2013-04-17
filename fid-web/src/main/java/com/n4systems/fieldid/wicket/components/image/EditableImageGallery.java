@@ -17,18 +17,32 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
 
     private final ImageAnnotation annotation;
 
-    public EditableImageGallery(String id, List<T> images, final ImageAnnotation annotation) {
+    public EditableImageGallery(String id, final List<T> images, final ImageAnnotation annotation) {
         super(id, images);
         this.annotation = annotation;
         setOutputMarkupId(true);
-        add(imageAnnotatingBehavior = new ImageAnnotatingBehavior<T>() {
+        add(imageAnnotatingBehavior = new ImageAnnotatingBehavior<T>(annotation) {
             @Override protected T getEditableImage() {
                 return getCurrentImage();
             }
-            @Override protected String getDefaultType() {
-                return annotation.getType().getCssClass();
+            @Override protected String getDefaultText() {
+                return EditableImageGallery.this.getDefaultText();
+            }
+            @Override protected ImageAnnotation findImageAnnotation(Long id) {
+                for (T image:images) {
+                    for (ImageAnnotation annotation:image.getAnnotations()) {
+                        if (id.equals(annotation.getId())) {
+                            return annotation;
+                        }
+                    }
+                }
+                return null;
             }
         }.withEditing());
+    }
+
+    protected String getDefaultText() {
+        return "new label";
     }
 
     private String getImageEditorJs() {

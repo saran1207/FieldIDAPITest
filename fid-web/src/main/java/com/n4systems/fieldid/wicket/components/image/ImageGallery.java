@@ -38,7 +38,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     protected @SpringBean PersistenceService persistenceService;
     protected @SpringBean S3Service s3Service;
 
-    private final List<T> images;
+    protected final List<T> images;
     private final AbstractDefaultAjaxBehavior behavior;
     protected Integer currentImageIndex;
     protected FileUploadField uploadField;
@@ -95,10 +95,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
 
     protected abstract T createImage(S3Service.S3ImagePath path, Tenant tenant);
 
-    private String getFileName(String fileName) {
-        // TODO DD : put this in proper space...but where since images can be shared?  under asset/<asset_id>/loto/<loto_id>.....?
-        return "/foo/bar/stuff/"+fileName;
-    }
+    protected abstract String getFileName(String fileName);
 
     protected T getCurrentImage() {
         return currentImageIndex==null ? null : images.get(currentImageIndex);

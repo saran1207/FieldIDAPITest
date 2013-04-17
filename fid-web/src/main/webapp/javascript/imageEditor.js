@@ -25,17 +25,21 @@ var imageEditor = (function() {
 			editedId:null,
 			centerImage:false
 		};
+		var notePrefix = '_note';  // i add arbitrary prefix to .note ids just to help out with uniqueness cause suffix is just entity id.
 		var options = $.extend(defaults, options);
 		var callback = options.callback;  // MANDATORY!
 
 		function createNote(annotation) {
 			var value = annotation && annotation.text ? annotation.text : options.text;
 			var type = annotation && annotation.type ? annotation.type : options.type;
-			var direction = annotation && annotation.x ? (annotation.x <.5) ? 'arrow-right' : 'arrow-left' : options.direction;
-			var id = annotation && annotation.id ? '_note'+annotation.id : options.editedId;
+			var direction = options.direction;
+			var id = annotation && annotation.id ? notePrefix+annotation.id : notePrefix+options.editedId;
+			if (annotation && annotation.x) {
+			 	direction = (annotation.x <.5) ? 'arrow-left' : 'arrow-right';
+			}
 
 			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(type).attr('id',id);
-			var icon = $('<img/>').addClass('icon').appendTo(span);
+			var icon = $('<span/>').addClass('icon').appendTo(span);
 			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');
 
 			editor.css('width',(editor.val().length + 1) * 6 + 'px');
@@ -69,16 +73,15 @@ var imageEditor = (function() {
 			return span;
 		}
 
-		function removeOtherUnsavedNotes() {
-			ed.parent().find('.note.unsaved').remove();
+		function existingNote() {
+			return ed.parent().find('.note[id="_note'+options.editedId+'"]');
 		}
 
 		function addNewNote() {
-			// remove any other "unsaved" notes. only one allowed each time.
-			// this is a very specific LOTO requirement.
-			removeOtherUnsavedNotes();
-
-			var note = createNote().addClass('unsaved');
+			var note = existingNote();
+			if (note.length===0) {
+				note=createNote();
+			}
 
 			setTimeout(function() {
 				note.find('input').focus();

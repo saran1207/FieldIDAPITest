@@ -31,13 +31,16 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         ImageAnnotation annotation = images.get(0).getAnnotations().get(0);
 
         add(new EditableImageGallery<ProcedureDefinitionImage>("gallery", images, annotation) {
-            @Override
-            protected ProcedureDefinitionImage createImage(S3Service.S3ImagePath path, Tenant tenant) {
+            @Override protected ProcedureDefinitionImage createImage(S3Service.S3ImagePath path, Tenant tenant) {
                 ProcedureDefinitionImage image = new ProcedureDefinitionImage();
                 image.setTenant(tenant);
                 image.setFileName(path.getOrigPath());
                 image.setProcedureDefinition(procedureDefinition);
                 return image;
+            }
+
+            @Override protected String getFileName(String fileName) {
+                return "/secret/test/images";
             }
         });
     }

@@ -26,8 +26,10 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
 
     private boolean editable = false;
 
+    private ImageAnnotation annotation;
 
-    protected ImageAnnotatingBehavior() {
+    protected ImageAnnotatingBehavior(ImageAnnotation annotation) {
+        this.annotation = annotation;
     }
 
     @Override
@@ -38,12 +40,12 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
 
     private void performAction(IRequestParameters params) {
         try {
-            doLabel(getNoteId(params),
-                    getImageId(params),
+            doLabel(parseNoteId(params),
+                    parseImageId(params),
                     params.getParameterValue("x").toDouble(),
                     params.getParameterValue("y").toDouble(),
                     params.getParameterValue("text").toString(),
-                    getAnnotationType(params));
+                    parseAnnotationType(params));
         } catch (StringValueConversionException e) {
             e.printStackTrace();
             throw new IllegalArgumentException("invalid parameters for annotating behavior " + params.getParameterNames());
@@ -52,7 +54,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         }
     }
 
-    private ImageAnnotationType getAnnotationType(IRequestParameters params) {
+    private ImageAnnotationType parseAnnotationType(IRequestParameters params) {
         String allClasses = params.getParameterValue("type").toString().toUpperCase();
         for (ImageAnnotationType type:ImageAnnotationType.values()) {
             if (allClasses.contains(type.getCssClass().toUpperCase())) {
@@ -62,14 +64,14 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         return null;
     }
 
-    private Long getNoteId(IRequestParameters params) {
+    private Long parseNoteId(IRequestParameters params) {
         String id=getNullSafeStringParameter(params,"noteId");
         String prefix = "_note";
         return id==null ? null :
                 id.indexOf(prefix)>=0 ? Long.parseLong(id.substring(prefix.length())) : null;
     }
 
-    private Long getImageId(IRequestParameters params) {
+    private Long parseImageId(IRequestParameters params) {
         String id=getNullSafeStringParameter(params,"imageId");
         String prefix = "_image";
         return id==null ? null :
@@ -84,8 +86,6 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         Preconditions.checkArgument(imageId!=null, "you must specify image when updating an annotation (needs to know which image it is applied to)");
         ImageAnnotation annotation = getImageAnnotation(noteId,x,y,text,type);
         getEditableImage().addImageAnnotation(annotation);
-//        persistenceService.saveOrUpdate(annotation);
-//        persistenceService.saveOrUpdate(getEditableImage());
     }
 
     @Override
@@ -101,11 +101,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         if (id==null) {   // create new one.
             annotation = new ImageAnnotation(x,y,text,type);
         } else {
-            for (ImageAnnotation value:getEditableImage().getAnnotations()) {
-                if (value.getId().equals(id)) {
-                    annotation = value;
-                }
-            }
+            annotation = findImageAnnotation(id);
         }
         Preconditions.checkState(annotation!=null, "couldn't find annotation with id " + id);
 
@@ -114,6 +110,15 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         annotation.setText(text);
         annotation.setType(type);
         return annotation;
+    }
+
+    protected ImageAnnotation findImageAnnotation(Long id) {
+        for (ImageAnnotation value:getEditableImage().getAnnotations()) {
+            if (value.getId().equals(id)) {
+                return value;
+            }
+        }
+        return null;
     }
 
     @Override
@@ -148,23 +153,35 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         return this;
     }
 
-    protected abstract String getDefaultType();
+    protected String getDefaultType() {
+        return annotation.getType().getCssClass();
+    }
+
+    protected String getAnnotationText() {
+        return annotation!=null ? annotation.getText() : getDefaultText();
+    }
+
+    protected String getDefaultText() {
+        return "a label";
+    }
 
     // ----------------------------------------------------------------------------------------------
 
 
     public class AnnotatedImageOptions {
         String type = getDefaultType();
-        String direction = "arrow-left";
-        String text = "a label";
+        Long editedId = annotation!=null ? annotation.getId() : null;
         String callback = ImageAnnotatingBehavior.this.getCallbackUrl().toString();
-        List<ImageAnnotation> annotations = Lists.newArrayList();
+        String direction = "arrow-left";
+        String text = getAnnotationText();
         Boolean editable = isEditable();
+        List<ImageAnnotation> annotations = Lists.newArrayList();
 
         AnnotatedImageOptions(List<ImageAnnotation> annotations) {
             this.annotations = annotations;
         }
     }
+
 
 
 }

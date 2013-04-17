@@ -86,11 +86,7 @@ var imageGallery = (function() {
 		$('#'+id).data('gallery').add(imageData);
 	}
 
-	var
-
-
-
-		edit = function(id,options) {
+	var edit = function(id,options) {
 		// precondition : already been initialized (which populates GALLERY data).
 		$('#'+id).data('gallery').edit(options);
 	}
