@@ -2,12 +2,12 @@ package com.n4systems.fieldid.service.procedure;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
+import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.IsolationPoint;
+import com.n4systems.model.procedure.PreconfiguredDevice;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
-import com.n4systems.util.persistence.MaxSelect;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -71,6 +71,21 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         query.addSimpleWhere("asset", asset);
         query.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
 
+        return persistenceService.findAll(query);
+    }
+
+    public List<String> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
+        QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredDevice.class);
+        query.setSimpleSelect("device");
+
+        if(sourceType != null) {
+            WhereParameterGroup sourceGroup = new WhereParameterGroup("isolationPointSourceType");
+            sourceGroup.addClause(WhereClauseFactory.createIsNull("isolationPointSourceType"));
+            sourceGroup.addClause(WhereClauseFactory.create("isolationPointSourceType", sourceType, WhereClause.ChainOp.OR));
+            query.addWhere(sourceGroup);
+        } else {
+            query.addWhere(WhereClauseFactory.createIsNull("isolationPointSourceType"));
+        }
         return persistenceService.findAll(query);
     }
 

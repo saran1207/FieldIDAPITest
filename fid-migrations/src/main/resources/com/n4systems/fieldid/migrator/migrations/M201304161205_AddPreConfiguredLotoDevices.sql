@@ -1,0 +1,35 @@
+CREATE TABLE preconfigured_devices (
+  id bigint NOT NULL AUTO_INCREMENT,
+  isolationPointSourceType varchar(1),
+  device varchar(255),
+  PRIMARY KEY (id)
+);
+
+INSERT INTO preconfigured_devices (isolationPointSourceType, device) VALUES
+('W', 'Adjustable Ball Valve Cover'),
+('W', 'Ball Valve Cover'),
+('W', 'Gate Valve Cover'),
+('W', 'Wedge style Ball Valve Cover'),
+('V', 'Adjustable Ball Valve Cover'),
+('V', 'Ball Valve Cover'),
+('V', 'Gate Valve Cover'),
+('V', 'Wedge style Ball Valve Cover'),
+('S', 'Adjustable Ball Valve Cover'),
+('S', 'Ball Valve Cover'),
+('S', 'Gate Valve Cover'),
+('S', 'Wedge style Ball Valve Cover'),
+('P', 'Pneumatic Lockout'),
+('G', 'Pressurized Gas Valve Cover'),
+('G', 'Adjustable Ball Valve Cover'),
+('G', 'Ball Valve Cover'),
+('G', 'Gate Valve Cover'),
+('G', 'Wedge style Ball Valve Cover'),
+('E', 'Circuit Breaker Cover'),
+('E', 'Electrical Lockout Plug'),
+('E', 'Plug & Hoist Control Cover'),
+('E', 'Rotary/Push Button Covers'),
+('E', 'Universal Wall Switch Cover'),
+(null, 'Cable Lockout'),
+(null, 'Group Lock Box'),
+(null, 'Lockout Hasps'),
+(null, 'Steering Wheel Cover');

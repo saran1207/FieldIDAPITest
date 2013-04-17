@@ -1,8 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.search.ProcedureSearchService;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.components.ComboBox;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
@@ -10,24 +14,26 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.*;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.List;
 
 public class IsolationPointEditor extends Panel {
 
     private @SpringBean ProcedureSearchService procedureSearchService;
+    private @SpringBean ProcedureDefinitionService procedureDefinitionService;
 
     private Form form;
     private IsolationPoint editedIsolationPoint;
+    private ComboBox deviceComboBox;
 
     public IsolationPointEditor(String id) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
@@ -42,13 +48,15 @@ public class IsolationPointEditor extends Panel {
         add(form = new Form("form"));
 
         form.add(new TextField("identifier"));
-        form.add(new TextField("sourceText", new PropertyModel(getDefaultModel(),"sourceText")));
-        form.add(new TextField("device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription")));
-        form.add(new TextField("lock", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription")));
+        form.add(new TextField("sourceText"));
+        form.add(deviceComboBox = new ComboBox("device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription"), getPreConfiguredDevices(new PropertyModel(getDefaultModel(),"sourceType"))));
+        deviceComboBox.add(new UpdateComponentOnChange());
 
-        form.add(new TextField("location", new PropertyModel(getDefaultModel(),"location")));
+        form.add(new TextField("lock", new PropertyModel(getDefaultModel(),"lockDefinition.freeformDescription")));
+
+        form.add(new TextField("location"));
         form.add(new TextArea("check"));
-        form.add(new TextArea("method", new PropertyModel(getDefaultModel(),"method")));
+        form.add(new TextArea("method"));
 
         form.add(new AjaxSubmitLink("done") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -179,6 +187,21 @@ public class IsolationPointEditor extends Panel {
 
     public boolean isEditing() {
         return editedIsolationPoint != null;
+    }
+
+    public LoadableDetachableModel<List<String>> getPreConfiguredDevices(final IModel<IsolationPointSourceType> sourceType) {
+        return new LoadableDetachableModel<List<String>>() {
+            @Override
+            protected List<String> load() {
+                return procedureDefinitionService.getPreConfiguredDevices(sourceType.getObject());
+            }
+        };
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderOnDomReadyJavaScript("new toCombo('"+deviceComboBox.getInputName()+"');");
     }
 
 }

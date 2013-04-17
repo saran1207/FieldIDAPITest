@@ -47,4 +47,9 @@ public class IsolationDeviceDescription extends BaseEntity {
     public void setFreeformDescription(String freeformDescription) {
         this.freeformDescription = freeformDescription;
     }
+
+    public boolean isFreeform() {
+        return freeformDescription != null;
+    }
+
 }
