@@ -10,4 +10,5 @@ public class PrintDetails extends Panel {
     public PrintDetails(String id,IModel<ProcedureDefinition> model) {
         super(id,model);
     }
+
 }
