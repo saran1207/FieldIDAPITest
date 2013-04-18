@@ -1,4 +1,5 @@
 @import url('/fieldid/style/chosen/chosen.css');
+@import url('/fieldid/style/matt_buttons.css');
 
 /* WORK AROUND FOR EXISTING CSS
 **********************************************************/
@@ -102,17 +103,21 @@ h3 {
 
 /* FORM STYLES 
 ---------------*/
-.sections .column {
-	width: 460px;
+.sections .left {
 	float: left;
-	text-align: right;
-	font-size: 12px;
-	line-height: 34px;
+	width: 430px;
+}
+.sections .right {
+	float: left;
+	width: 490px;
 }
 .sections label {
 	display: block;
 	margin-bottom: 8px;
-	vertical-align: top;  
+	vertical-align: top;
+	text-align: right;
+	font-size: 14px;
+	line-height: 34px;
 }
 .sections input {
 	width: 285px;
@@ -144,9 +149,12 @@ h3 {
 	padding: 10px 0;
 	float: right;
 }
+	.buttons a {
+		margin-left: 10px;
+	}
 
 /* Targets all classes that start with "btn" to create a global style. Need to add fallback for IE6 */
-a[class^="btn"] {  
+/*a[class^="btn"] {  
 	display: inline-block;
 	padding: 15px 0;
 	text-decoration: none;
@@ -167,7 +175,7 @@ a[class^="btn"] {
 }
 .btn-blue {
 	background: #0099ff;
-}
+}*/
 
 
 
@@ -187,8 +195,7 @@ a[class^="btn"] {
 	position: relative;
 	overflow: hidden;
 	padding-bottom: 28px;
-	min-height: 425px;
-	/*display:none;*/
+	min-height: 500px;
 }
 .image-list-container .blank-slate {
 	width: 99.8%;
@@ -227,7 +234,6 @@ a[class^="btn"] {
 	vertical-align: bottom;
 	padding: 0 5px;
 }
-
 
 .isolation-point-list {
 	position: relative;
@@ -320,7 +326,8 @@ a[class^="btn"] {
 .isolation-point-editor {
 	width: 98.7%;
 	position: absolute;
-	background: #f8f8f8;
+	/*background: #f8f8f8;*/
+	background: #fff;
 	z-index: 10;
 	height: 97.5%;
 	-webkit-box-shadow: 0px 2px 4px 0px #CCC;
@@ -330,55 +337,83 @@ a[class^="btn"] {
 	margin-left:100%;
 }
 
-.isolation-point-editor h3 {
-	padding: 30px 45px;
-	font-size: 20px;
+.isolation-point-editor .title {
+	padding: 25px 58px;
 }
+	.isolation-point-editor .title img {
+		float: left;
+		margin-right: 10px;
+	}
 .isolation-point-editor .column.left {
-	width: 350px;
-	/*width: 443px;*/
-	margin-right: 20px;
+	width: 375px;
+	margin-right: 60px;
 }
 .isolation-point-editor .column.right {
-	width: 480px;
+	width: 550px;
+	text-align: center;
 }
+.isolation-point-editor .blank-slate {
+	padding: 60px 0 130px;
+	border-left: 1px solid gray;
+}
+
 /* Form styles */
+.isolation-point-editor form {
+	overflow: hidden;
+}
 .isolation-point-editor input {
 	width: 225px;
-	/*width: 325px;*/
 }
+	.isolation-point-editor .source-id input {
+		width: 90px;
+		margin-right: 135px;
+	}
 .isolation-point-editor label.textarea {
 	margin-bottom: 0;
 }
 .isolation-point-editor textarea {
 	height: 50px;
 	width: 227px;
-	/*height: 75px;*/
-	/*width: 327px;*/
-
 }
-.isolation-point-editor a.asset-type {
-	width: 240px;
-	/*width: 340px;*/
-	display: block;
-	float: right;
-	margin-left: 12px;
-	text-align: left;
-}
-.isolation-point-editor .buttons {
-	margin-right: 50px;
-}
-
 .isolation-point-editor select {
     margin-left: 12px;
     padding: 5px;
     width: 240px;
 }
+.isolation-point-editor a.asset-type {
+	width: 240px;
+	display: block;
+	float: right;
+	margin-left: 12px;
+	text-align: left;
+}
+.isolation-point-editor .label-button {
+	display: block;
+	margin-top: 20px;
+}
+	.isolation-point-editor .label-button .mattButton {
+		float: none;
+	}
+.isolation-point-editor .buttons {
+	text-align: right;
+	background: #F8F8F8;
+	width: 96%;
+	padding: 20px;
+	position: absolute;
+	bottom: 0;
+}
+.isolation-point-editor .buttons a {
+	float: none;
+}
+
+
 
 /* GALLERIA */
 #galleria { 
-	width: 565px; 
-	height: 300px; 
+	width: 525px;
+	height: 300px;
+	float: right;
+	margin-right: 20px;
 }
 .galleria-container {
 	/*background: #666;*/
