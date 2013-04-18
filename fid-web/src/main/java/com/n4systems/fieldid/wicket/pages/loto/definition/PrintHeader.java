@@ -14,5 +14,12 @@ public class PrintHeader extends Panel {
     public PrintHeader(String id, IModel<ProcedureDefinition> model) {
         super(id,model);
         add(new Label("code", ProxyModel.of(model,on(ProcedureDefinition.class).getProcedureCode())));
+        add(new Label("warnings", ProxyModel.of(model,on(ProcedureDefinition.class).getWarnings())));
+        add(new Label("equipmentNumber", ProxyModel.of(model,on(ProcedureDefinition.class).getEquipmentNumber())));
+        add(new Label("equipmentDescription", ProxyModel.of(model,on(ProcedureDefinition.class).getEquipmentDescription())));
+        add(new Label("electronicIdentifier", ProxyModel.of(model,on(ProcedureDefinition.class).getElectronicIdentifier())));
+        add(new Label("developedBy", ProxyModel.of(model,on(ProcedureDefinition.class).getDevelopedBy().getDisplayName())));
+        add(new Label("equipmentLocation", ProxyModel.of(model,on(ProcedureDefinition.class).getEquipmentLocation())));
+
     }
 }
