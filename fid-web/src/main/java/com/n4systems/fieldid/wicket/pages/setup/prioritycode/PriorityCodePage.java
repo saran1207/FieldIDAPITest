@@ -2,11 +2,13 @@ package com.n4systems.fieldid.wicket.pages.setup.prioritycode;
 
 import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.actions.PriorityCodeArchivedListPanel;
 import com.n4systems.fieldid.wicket.components.actions.PriorityCodeListPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.PriorityCode;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -19,6 +21,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -91,6 +94,10 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
         add(priorityCodeArchivedListPanel = new PriorityCodeArchivedListPanel("priorityCodeArchivedList"));
         priorityCodeArchivedListPanel.setOutputMarkupPlaceholderTag(true);
         priorityCodeArchivedListPanel.setVisible(false);
+
+        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>("backToLink2", AssetsAndEventsPage.class);
+        pageLink.add(new FlatLabel("backToLinkLabel2", new FIDLabelModel("label.back_to_setup")));
+        add(pageLink);
     }
 
     class AddPriorityCodeForm extends Form<PriorityCode> {

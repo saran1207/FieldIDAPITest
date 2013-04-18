@@ -39,6 +39,11 @@
     float:left;
 }
 
+.header h2 a {
+    font-size: 10px;
+    margin-left: 10px;
+}
+
 .formContainer h2 {
     top: 0;
     padding-bottom: 20px;
