@@ -1,5 +1,4 @@
 @import url('/fieldid/style/chosen/chosen.css');
-@import url('/fieldid/style/matt_buttons.css');
 
 /* WORK AROUND FOR EXISTING CSS
 **********************************************************/
@@ -149,7 +148,7 @@ h3 {
 	padding: 10px 0;
 	float: right;
 }
-	.buttons a {
+	.buttons a.mattButton {
 		margin-left: 10px;
 	}
 
@@ -374,6 +373,7 @@ h3 {
 .isolation-point-editor textarea {
 	height: 50px;
 	width: 227px;
+	margin-bottom: -10px;
 }
 .isolation-point-editor select {
     margin-left: 12px;
@@ -428,6 +428,9 @@ h3 {
 }
 .publish .buttons {
 	float: none;
+	overflow: auto;
+	width: 150px;
+	margin: 0 auto;
 }
 .publish-message {
 	font-size:15px;
