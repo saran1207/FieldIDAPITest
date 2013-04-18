@@ -1,10 +1,12 @@
 package com.n4systems.model.common;
 
 import com.google.common.collect.Lists;
+import com.n4systems.model.EventStatus;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "editable_images")
@@ -21,6 +23,12 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     @Column(name = "thumbnail")
     private String thumbnail;
 
+
+    private String mobileGUID;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name="eventstatus_id")
+    private EventStatus eventStatus;
 
     public EditableImage() {
 
@@ -66,4 +74,30 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     public void removeAnnotation(ImageAnnotation annotation) {
         getAnnotations().remove(annotation);
     }
+
+    public String getMobileGUID() {
+        return mobileGUID;
+    }
+    public void setMobileGUID(String mobileGUID) {
+        this.mobileGUID = mobileGUID;
+    }
+
+    @Override
+    protected void onUpdate() {
+        super.onUpdate();
+        ensureMobileGuidIsSet();
+    }
+
+    @Override
+    protected void onCreate() {
+        super.onCreate();
+        ensureMobileGuidIsSet();
+    }
+
+    private void ensureMobileGuidIsSet() {
+        if (mobileGUID == null) {
+            mobileGUID = UUID.randomUUID().toString();
+        }
+    }
+
 }

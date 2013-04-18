@@ -7,6 +7,7 @@ import java.util.List;
 public class ApiProcedureDefinition extends ApiReadonlyModel {
 
     private List<ApiIsolationPoint> isolationPoints;
+    private List<ApiProcedureDefinitionImage> images;
     private String assetId;
     private String procedureCode;
     private String electronicIdentifier;
@@ -86,5 +87,13 @@ public class ApiProcedureDefinition extends ApiReadonlyModel {
 
     public void setAssetId(String assetId) {
         this.assetId = assetId;
+    }
+
+    public List<ApiProcedureDefinitionImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ApiProcedureDefinitionImage> images) {
+        this.images = images;
     }
 }

@@ -13,6 +13,7 @@ public class ApiIsolationPoint extends ApiReadonlyModel {
     private String location;
     private String method;
     private String check;
+    private ApiImageAnnotation annotation;
 
     public String getIdentifier() {
         return identifier;
@@ -84,5 +85,13 @@ public class ApiIsolationPoint extends ApiReadonlyModel {
 
     public void setSourceText(String sourceText) {
         this.sourceText = sourceText;
+    }
+
+    public ApiImageAnnotation getAnnotation() {
+        return annotation;
+    }
+
+    public void setAnnotation(ApiImageAnnotation annotation) {
+        this.annotation = annotation;
     }
 }

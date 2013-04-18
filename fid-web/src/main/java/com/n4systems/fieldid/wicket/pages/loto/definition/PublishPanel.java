@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -10,8 +12,11 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class PublishPanel extends Panel {
+
+    @SpringBean private ProcedureDefinitionService procedureDefinitionService;
 
     public PublishPanel(String id, IModel<ProcedureDefinition> model, Form form) {
         super(id, model);
@@ -25,7 +30,7 @@ public class PublishPanel extends Panel {
             }
         });
 
-        add(new SubmitLink("publish", form) {
+        SubmitLink submitLink = new SubmitLink("publish", form) {
             @Override
             public void onSubmit() {
                 doPublish();
@@ -36,7 +41,13 @@ public class PublishPanel extends Panel {
                 doCancel(null);
             }
 
-        });
+        };
+        if (procedureDefinitionService.isProcedureApprovalRequiredForCurrentUser()) {
+            submitLink.add(new Label("submitLabel", new FIDLabelModel("label.submit_for_approval")));
+        } else {
+            submitLink.add(new Label("submitLabel", new FIDLabelModel("label.publish")));
+        }
+        add(submitLink);
     }
 
     protected void doPublish() { }

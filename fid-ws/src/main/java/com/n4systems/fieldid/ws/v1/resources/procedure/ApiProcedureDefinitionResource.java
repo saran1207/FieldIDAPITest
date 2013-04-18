@@ -1,16 +1,17 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValueResource;
-import com.n4systems.model.procedure.IsolationDeviceDescription;
-import com.n4systems.model.procedure.IsolationPoint;
-import com.n4systems.model.procedure.ProcedureDefinition;
-import com.n4systems.model.procedure.PublishedState;
+import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.procedure.*;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.Path;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,27 +19,31 @@ import java.util.List;
 @Path("procedureDefinition")
 public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedureDefinition, ProcedureDefinition> {
 
+    private static final Logger log = Logger.getLogger(ApiProcedureDefinitionResource.class);
+
     @Autowired private ApiAttributeValueResource attrResource;
+    @Autowired private S3Service s3Service;
 
     public ApiProcedureDefinitionResource() {
         super(ProcedureDefinition.class, false);
     }
 
     @Override
-    protected ApiProcedureDefinition convertEntityToApiModel(ProcedureDefinition entityModel) {
+    protected ApiProcedureDefinition convertEntityToApiModel(ProcedureDefinition procedureDef) {
         ApiProcedureDefinition apiProcedureDef = new ApiProcedureDefinition();
-        apiProcedureDef.setSid(entityModel.getId());
-        apiProcedureDef.setModified(entityModel.getModified());
-        apiProcedureDef.setAssetId(entityModel.getAsset().getMobileGUID());
-        apiProcedureDef.setCompleteIsolationPointInOrder(entityModel.isCompleteIsolationPointInOrder());
-        apiProcedureDef.setElectronicIdentifier(entityModel.getElectronicIdentifier());
-        apiProcedureDef.setEquipmentDescription(entityModel.getEquipmentDescription());
-        apiProcedureDef.setIsolationPoints(convertIsolationPoints(entityModel.getIsolationPoints()));
-        apiProcedureDef.setEquipmentNumber(entityModel.getEquipmentNumber());
-        apiProcedureDef.setRevisionNumber(entityModel.getRevisionNumber());
-        apiProcedureDef.setProcedureCode(entityModel.getProcedureCode());
-        apiProcedureDef.setWarnings(entityModel.getWarnings());
-        apiProcedureDef.setActive(entityModel.isActive());
+        apiProcedureDef.setSid(procedureDef.getId());
+        apiProcedureDef.setModified(procedureDef.getModified());
+        apiProcedureDef.setAssetId(procedureDef.getAsset().getMobileGUID());
+        apiProcedureDef.setCompleteIsolationPointInOrder(procedureDef.isCompleteIsolationPointInOrder());
+        apiProcedureDef.setElectronicIdentifier(procedureDef.getElectronicIdentifier());
+        apiProcedureDef.setEquipmentDescription(procedureDef.getEquipmentDescription());
+        apiProcedureDef.setIsolationPoints(convertIsolationPoints(procedureDef.getIsolationPoints()));
+        apiProcedureDef.setEquipmentNumber(procedureDef.getEquipmentNumber());
+        apiProcedureDef.setRevisionNumber(procedureDef.getRevisionNumber());
+        apiProcedureDef.setProcedureCode(procedureDef.getProcedureCode());
+        apiProcedureDef.setWarnings(procedureDef.getWarnings());
+        apiProcedureDef.setActive(procedureDef.isActive());
+        apiProcedureDef.setImages(convertImages(procedureDef, procedureDef.getImages()));
         return apiProcedureDef;
     }
 
@@ -47,6 +52,7 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
         for (IsolationPoint isolationPoint : isolationPoints) {
             ApiIsolationPoint apiIsolationPoint = new ApiIsolationPoint();
             apiIsolationPoint.setActive(true);
+            apiIsolationPoint.setModified(isolationPoint.getModified());
             apiIsolationPoint.setSid(isolationPoint.getId());
             apiIsolationPoint.setCheck(isolationPoint.getCheck());
             apiIsolationPoint.setDeviceDefinition(convertDefinition(isolationPoint.getDeviceDefinition()));
@@ -55,9 +61,56 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
             apiIsolationPoint.setSourceText(isolationPoint.getSourceText());
             apiIsolationPoint.setIdentifier(isolationPoint.getIdentifier());
             apiIsolationPoint.setElectronicIdentifier(isolationPoint.getElectronicIdentifier());
+            apiIsolationPoint.setAnnotation(convertAnnotation(isolationPoint.getAnnotation()));
             apiIsolationPoints.add(apiIsolationPoint);
         }
         return apiIsolationPoints;
+    }
+
+    private List<ApiProcedureDefinitionImage> convertImages(ProcedureDefinition definition, List<ProcedureDefinitionImage> images) {
+        List<ApiProcedureDefinitionImage> convertedImages = new ArrayList<ApiProcedureDefinitionImage>();
+
+        for (ProcedureDefinitionImage image : images) {
+            ApiProcedureDefinitionImage convertedImage = new ApiProcedureDefinitionImage();
+            convertedImage.setSid(image.getMobileGUID());
+            convertedImage.setModified(image.getModified());
+            convertedImage.setActive(true);
+            convertedImage.setFileName(image.getFileName());
+            convertedImage.setAnnotations(convertAnnotations(image.getAnnotations()));
+
+            try {
+                convertedImage.setData(s3Service.downloadProcedureDefinitionMediumImage(definition.getId(), image.getFileName()));
+            } catch (IOException e) {
+                log.error("IOException downloading procedure def image: " + image.getId(), e);
+            }
+
+            convertedImages.add(convertedImage);
+        }
+
+        return convertedImages;
+    }
+
+    private List<ApiImageAnnotation> convertAnnotations(List<ImageAnnotation> annotations) {
+        List<ApiImageAnnotation> convertedAnnotations = new ArrayList<ApiImageAnnotation>();
+        for (ImageAnnotation annotation : annotations) {
+            convertedAnnotations.add(convertAnnotation(annotation));
+        }
+        return convertedAnnotations;
+    }
+
+    private ApiImageAnnotation convertAnnotation(ImageAnnotation annotation) {
+        if (annotation == null) {
+            return null;
+        }
+        ApiImageAnnotation convertedAnnotation = new ApiImageAnnotation();
+        convertedAnnotation.setSid(annotation.getId());
+        convertedAnnotation.setModified(annotation.getModified());
+        convertedAnnotation.setActive(true);
+        convertedAnnotation.setAnnotationType(annotation.getType().name());
+        convertedAnnotation.setX(annotation.getX());
+        convertedAnnotation.setY(annotation.getY());
+        convertedAnnotation.setImageId(annotation.getImage().getMobileGUID());
+        return convertedAnnotation;
     }
 
     private ApiDeviceDescription convertDefinition(IsolationDeviceDescription deviceDefinition) {

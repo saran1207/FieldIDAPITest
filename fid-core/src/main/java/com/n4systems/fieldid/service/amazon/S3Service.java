@@ -50,6 +50,10 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String ASSET_PROFILE_IMAGE_PATH_THUMB = "/assets/%d/profile/%s.thumbnail";
     public static final String ASSET_PROFILE_IMAGE_PATH_MEDIUM = "/assets/%d/profile/%s.medium";
 
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH = "/procedure_definitions/%d/%s";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB = "/procedure_definitions/%d/%s";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM = "/procedure_definitions/%d/%s";
+
     public static final String THUMBNAIL_EXTENSION = ".thumbnail";
     public static final String MEDIUM_EXTENSION = ".medium";
 
@@ -185,6 +189,11 @@ public class S3Service extends FieldIdPersistenceService {
     public boolean assetProfileImageExists(Long assetId, String imageName) {
         boolean exists = resourceExists(null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
         return exists;
+    }
+
+    public byte[] downloadProcedureDefinitionMediumImage(Long procedureDefinitionId, String imageName) throws IOException {
+        byte[] imageData = downloadResource(null, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM, procedureDefinitionId, imageName);
+        return imageData;
     }
 
     public void uploadAssetProfileImage(File file, Long assetId, String imageName) throws IOException {

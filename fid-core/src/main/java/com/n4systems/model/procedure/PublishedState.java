@@ -24,4 +24,9 @@ public enum PublishedState implements DisplayEnum {
     public String getName() {
         return name();
     }
+
+    public boolean isPreApproval() {
+        return this == DRAFT || this == WAITING_FOR_APPROVAL;
+    }
+
 }

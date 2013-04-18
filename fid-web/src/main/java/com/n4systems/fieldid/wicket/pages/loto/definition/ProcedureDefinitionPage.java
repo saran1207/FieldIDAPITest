@@ -90,7 +90,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
 
     private void init(IModel<ProcedureDefinition> model) {
         // this business requirement may change, but for now only edit DRAFT. even WAITING_FOR_AUTHORIZATION shouldn't be done.
-        Preconditions.checkState(model.getObject().getPublishedState().equals(PublishedState.DRAFT), "you are only allowed to edit DRAFT copies!");
+        Preconditions.checkState(model.getObject().getPublishedState().isPreApproval(), "you are only allowed to edit PRE APPROVAL copies!");
         this.model = model;
         add(assetNameLabel = new Label("assetName", new PropertyModel(model,"asset.displayName")));
         add(pageTileLabel = new Label("pageTitle",new FIDLabelModel("label.author_procedure")));
