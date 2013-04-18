@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
@@ -99,6 +100,8 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
 
         add(new AttributeAppender("class", Model.of("procedure-definition")));
 
+        add(new FIDFeedbackPanel("feedbackPanel"));
+
         visitChildren(FormComponent.class, this);
     }
 
@@ -168,13 +171,13 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
                 }
             }.setVisible(false));
 
-            add(publish = new PublishPanel("publish", model) {
+            add(publish = new PublishPanel("publish", model, this) {
                 @Override protected void doCancel(AjaxRequestTarget target) {
                     // leave the model as a detached object....don't save it.   nothing to "undo".
                     ProcedureDefinitionPage.this.doCancel(target);
                 }
 
-                @Override protected void doPublish(AjaxRequestTarget target) {
+                @Override protected void doPublish() {
                     procedureDefinitionService.saveProcedureDefinition(model.getObject());
                     gotoProceduresPage();
                 }

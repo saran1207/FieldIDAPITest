@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.image.EditableImageList;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
@@ -76,7 +77,7 @@ public class IsolationPointListPanel extends Panel {
         item.add(new Label("id", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getIdentifier())));
         item.add(new Label("source", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getSourceType())));
         if(isolationPoint.getDeviceDefinition().isFreeform()) {
-            item.add(new Label("device", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getDeviceDefinition().getFreeformDescription())));
+            item.add(new Label("device", getDeviceFreeFormDescription(isolationPoint)));
         } else {
             item.add(new Label("device", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getDeviceDefinition().getAssetType().getName())));
         }
@@ -91,6 +92,18 @@ public class IsolationPointListPanel extends Panel {
                 doEdit(target, isolationPoint);
             }
         });
+    }
+
+    private String getDeviceFreeFormDescription(IsolationPoint isolationPoint) {
+        StringBuilder description = new StringBuilder();
+        description.append(isolationPoint.getDeviceDefinition().getFreeformDescription());
+        if(isolationPoint.getLockDefinition().getFreeformDescription() != null) {
+            description.append(" ");
+            description.append(new FIDLabelModel("label.and").getObject());
+            description.append(" ");
+            description.append(isolationPoint.getLockDefinition().getFreeformDescription());
+        }
+        return description.toString();
     }
 
     protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) { }
