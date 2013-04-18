@@ -26,10 +26,6 @@ public class EditableImage extends EntityWithTenant implements S3Image {
 
     private String mobileGUID;
 
-    @ManyToOne(optional = true)
-    @JoinColumn(name="eventstatus_id")
-    private EventStatus eventStatus;
-
     public EditableImage() {
 
     }
