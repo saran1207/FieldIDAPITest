@@ -1,47 +1,59 @@
 <wicket:panel>
-    <h2>Always perform a machine stop before locking out disconnects</h2>
+    <h3>Always perform a machine stop before locking out disconnects</h3>
 	
-
-   	<ul class="isolation-point-table ui-sortable">
-        <li>
-            <span class="delete"><a ><img src="/fieldid/images/delete.gif"></a></span>
-            <span class="thumbnail"><img src="/fieldid/images/add-photo-slate.png" height="28" width="28"></span>
+    <!-- temp markup for styling, can be deleted -->
+   	<ul class="isolation-point-table ui-sortable" id="sortableList234">
+         <li class="headings">
+            <span class="identifier">Identifier</span>
+            <span class="source">Source</span>
+            <span class="device">Device</span>
+            <span class="location">Location</span>
+            <span class="method">Method</span>
+            <span class="check">Check</span>
+        </li>
+        <li id="id0455">
+            <span class="delete">
+                <a id="delete456" href="#" onclick="var wcall=wicketAjaxGet('./procedureDef?72-11.IBehaviorListener.0-form-content-isolationPoints-sortableList-list-0-delete&amp;id=2',function() { }.bind(this),function() { }.bind(this), function() {return Wicket.$('delete456') != null;}.bind(this));return !wcall;"><img src="/fieldid/images/delete.gif"></a>
+            </span>
+            <span class="identifier">1</span>
+            <span class="source">E</span>
+            <span class="device"></span>
+            <span class="location">Isolation point on South side of AHU</span>
+            <span class="method">Move E-1 disconnet to off. Apply lock and tag.</span>
+            <span class="check">Verify machine is deenergized</span>
+            <span class="thumbnail"><img src="/fieldid/images/add-photo-slate.png"></span>
+            <span class="actions">
+                <a id="edit457" href="#" onclick="var wcall=wicketAjaxGet('./procedureDef?72-11.IBehaviorListener.0-form-content-isolationPoints-sortableList-list-0-edit&amp;id=2',function() { }.bind(this),function() { }.bind(this), function() {return Wicket.$('edit457') != null;}.bind(this));return !wcall;">Edit</a>
+            </span>
+            <span class="reorder"><img src="/fieldid/images/icon-reorder.gif"></span>
+        </li><li id="id1458">
+            <span class="delete">
+                <a id="delete459" href="#" onclick="var wcall=wicketAjaxGet('./procedureDef?72-11.IBehaviorListener.0-form-content-isolationPoints-sortableList-list-1-delete&amp;id=2',function() { }.bind(this),function() { }.bind(this), function() {return Wicket.$('delete459') != null;}.bind(this));return !wcall;"><img src="/fieldid/images/delete.gif"></a>
+            </span>
             <span class="identifier">1</span>
             <span class="source">P</span>
             <span class="device"></span>
             <span class="location">Isolation point on South side of AHU</span>
             <span class="method">Turn W-1 valve to closed position. Apply lock and tag.</span>
             <span class="check">Verify zero gauge pressure</span>
+            <span class="thumbnail"><img src="/fieldid/images/add-photo-slate.png"></span>
             <span class="actions">
-                <a>Edit</a>
+                <a id="edit45a" href="#" onclick="var wcall=wicketAjaxGet('./procedureDef?72-11.IBehaviorListener.0-form-content-isolationPoints-sortableList-list-1-edit&amp;id=2',function() { }.bind(this),function() { }.bind(this), function() {return Wicket.$('edit45a') != null;}.bind(this));return !wcall;">Edit</a>
             </span>
             <span class="reorder"><img src="/fieldid/images/icon-reorder.gif"></span>
-        </li>
-        <li>
-            <span class="delete"><a><img src="/fieldid/images/delete.gif"></a></span>
-            <span class="thumbnail"><img src="/fieldid/images/add-photo-slate.png" height="28" width="28"></span>
+        </li><li id="id245b">
+            <span class="delete">
+                <a id="delete45c" href="#" onclick="var wcall=wicketAjaxGet('./procedureDef?72-11.IBehaviorListener.0-form-content-isolationPoints-sortableList-list-2-delete&amp;id=2',function() { }.bind(this),function() { }.bind(this), function() {return Wicket.$('delete45c') != null;}.bind(this));return !wcall;"><img src="/fieldid/images/delete.gif"></a>
+            </span>
             <span class="identifier">W -1</span>
             <span class="source">W</span>
-            <span class="device"></span>
+            <span class="device">Adjustable Ball Valve Cover</span>
             <span class="location"></span>
             <span class="method"></span>
             <span class="check"></span>
+            <span class="thumbnail"><img src="/fieldid/images/add-photo-slate.png"></span>
             <span class="actions">
-                <a>Edit</a>
-            </span>
-            <span class="reorder"><img src="/fieldid/images/icon-reorder.gif"></span>
-        </li>
-        <li>
-            <span class="delete"><a><img src="/fieldid/images/delete.gif"></a></span>
-            <span class="thumbnail"><img src="/fieldid/images/add-photo-slate.png" height="28" width="28"></span>
-            <span class="identifier">1</span>
-            <span class="source">P</span>
-            <span class="device"></span>
-            <span class="location">Isolation point on South side of AHU</span>
-            <span class="method">Turn W-1 valve to closed position. Apply lock and tag.</span>
-            <span class="check">Verify zero gauge pressure</span>
-            <span class="actions">
-                <a>Edit</a>
+                <a id="edit45d" href="#" onclick="var wcall=wicketAjaxGet('./procedureDef?72-11.IBehaviorListener.0-form-content-isolationPoints-sortableList-list-2-edit&amp;id=2',function() { }.bind(this),function() { }.bind(this), function() {return Wicket.$('edit45d') != null;}.bind(this));return !wcall;">Edit</a>
             </span>
             <span class="reorder"><img src="/fieldid/images/icon-reorder.gif"></span>
         </li>

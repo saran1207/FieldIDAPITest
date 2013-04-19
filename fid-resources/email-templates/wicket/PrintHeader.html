@@ -1,81 +1,16 @@
 <wicket:panel>
-<style>
-	@import url('/fieldid/style/component/annotated-image.css');
-	
-	body {
-		font-family: Georgia, serif;
-		background: none;
-		color: #000;
-    	font-size: 12pt;
-    	padding: 20px;
-	}
-	/*temp, should have a wrapper div */
-	.print-header, .temp-content, .image-list, h2, .isolation-point-table {
-		min-width: 1024px;
-		max-width: 1280px;
-	}
-	.print-header ul {
-		margin: 0;
-		padding: 0;
-		overflow: hidden;
-	}
-	.print-header ul li {
-		list-style-type: none;
-		width: 48%;
-		float: left;
-		border: 1px solid black;
-		padding: 2px 5px;
-		margin: 0 1px 1px 0;
-	}
-	
-	.temp-content {
-		clear: both;
-		margin: 20px 0;
-	}
-
-	/* overrides for print */
-	.image-list ul  {
-		width: 100%!important; /* can this be done in js instead? */
-	}
-	.image-list ul li {
-		background: transparent;
-		list-style-type: none;
-	}
-	.navigation {
-		display: none;
-	}
-	h2 {
-		text-transform: uppercase;
-	}
-	.isolation-point-table {
-		font-size: 12px;
-		margin: 0;
-		padding: 0;
-	}
-		.isolation-point-table .actions,
-		.isolation-point-table .reorder {
-			display: none;
-		}
-	@media print {
-		.isolation-point-table {
-			page-break-inside: avoid;
-			font-size: 10pt;
-		}
-	}
-</style>
-	<div class="print-header">
-	    <div id="companyLogo">
-			<img width="215" height="61" src="http://lorempixel.com/400/200/">
-		</div>
-
-        <ul>
-            <li><wicket:message key="label.procedure_code" />: <span wicket:id="code"/></li>
-            <li><wicket:message key="label.identifier" />: <span wicket:id="electronicIdentifier"/></li>
-            <li><wicket:message key="label.warnings" />: <span wicket:id="warnings"/></li>
-            <li><wicket:message key="label.developed_by" />: <span wicket:id="developedBy"/></li>
-            <li><wicket:message key="label.equipment_number" />: <span wicket:id="equipmentNumber"/></li>
-            <li><wicket:message key="label.equipment_location" />: <span wicket:id="equipmentLocation"/></li>
-            <li><wicket:message key="label.equipment_description" />: <span wicket:id="equipmentDescription"/> </li>
-        </ul>
-	</div>
+    <!-- <div class="print-header">
+        <div id="companyLogo">
+            <img width="215" height="61" src="http://lorempixel.com/400/200/">
+        </div> 
+    </div> -->
+    <ul style="display: none;">
+        <li><wicket:message key="label.procedure_code" />: <span wicket:id="code"/></li>
+        <li><wicket:message key="label.identifier" />: <span wicket:id="electronicIdentifier"/></li>
+        <li><wicket:message key="label.warnings" />: <span wicket:id="warnings"/></li>
+        <li><wicket:message key="label.developed_by" />: <span wicket:id="developedBy"/></li>
+        <li><wicket:message key="label.equipment_number" />: <span wicket:id="equipmentNumber"/></li>
+        <li><wicket:message key="label.equipment_location" />: <span wicket:id="equipmentLocation"/></li>
+        <li><wicket:message key="label.equipment_description" />: <span wicket:id="equipmentDescription"/> </li>
+    </ul>
 </wicket:panel>
