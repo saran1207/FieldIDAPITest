@@ -1,12 +1,14 @@
 <wicket:panel>
 
-    <p wicket:id="message" class="publish-message"/>
+    <form wicket:id="publishForm">
+        <p wicket:id="message" class="publish-message"/>
 
-    <div class="buttons">
-        <a wicket:id="cancel"  class="mattButton"><wicket:message key="label.cancel"/></a>
-        <a wicket:id="publish" class="mattButton mattButtonBlue">
-            <span wicket:id="submitLabel"/>
-        </a>
-    </div>
+        <div class="buttons">
+            <a wicket:id="cancel"  class="mattButton"><wicket:message key="label.cancel"/></a>
+            <a wicket:id="publish" class="mattButton mattButtonBlue">
+                <span wicket:id="submitLabel"/>
+            </a>
+        </div>
+    </form>
 
 </wicket:panel>

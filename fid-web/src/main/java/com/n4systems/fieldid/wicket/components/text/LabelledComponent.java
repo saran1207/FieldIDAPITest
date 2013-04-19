@@ -4,13 +4,13 @@ import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.FormComponentLabel;
-import org.apache.wicket.markup.html.form.LabeledWebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public abstract class LabelledComponent<T extends LabeledWebMarkupContainer/*sic*/, M > extends Panel {
+public abstract class LabelledComponent<T extends FormComponent/*sic*/, M > extends Panel {
 
     private static final String INPUT_ID = "input";
 
@@ -20,6 +20,7 @@ public abstract class LabelledComponent<T extends LabeledWebMarkupContainer/*sic
         super(id, model);
 
         component = createLabelledComponent(INPUT_ID,model);
+        component.setLabel(new FIDLabelModel(key));
         Preconditions.checkState(component!=null && component.getId().equals(INPUT_ID), "you must use id of '"+INPUT_ID+"' for labelled component.");
 
         FormComponentLabel label = new FormComponentLabel("label",component);

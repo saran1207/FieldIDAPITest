@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
@@ -14,14 +13,13 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -29,12 +27,10 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 
 import java.util.List;
 
-public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVisitor<FormComponent,Void> {
+public class ProcedureDefinitionPage extends FieldIDFrontEndPage{
 
     private @SpringBean ProcedureDefinitionService procedureDefinitionService;
     private @SpringBean PersistenceService persistenceService;
@@ -44,12 +40,11 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
     protected Label isolationPointLabel;
     private IModel<ProcedureDefinition> model;
 
-
     enum ProcedureDefinitionSection { Details, Content, Publish };
 
     private Navigation navigation;
     private ProcedureDefinitionSection currentSection = ProcedureDefinitionSection.Details;
-    private ProcedureDefinitionForm form;
+    private ProcedureDefinitionFormContainer form;
     private boolean contentFinished = false;
 
     public ProcedureDefinitionPage(Asset asset) {
@@ -96,27 +91,9 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
         add(pageTileLabel = new Label("pageTitle",new FIDLabelModel("label.author_procedure")));
 
         add(navigation = new Navigation("navigation"));
-        add(form = new ProcedureDefinitionForm("form", model));
+        add(form = new ProcedureDefinitionFormContainer("formSections", model));
 
         add(new AttributeAppender("class", Model.of("procedure-definition")));
-
-        add(new FIDFeedbackPanel("feedbackPanel"));
-
-        visitChildren(FormComponent.class, this);
-    }
-
-    @Override  // part of IVisitor interface.  to avoid serialization issues, don't make anonymous IVisistor class, implement here.
-    public void component(FormComponent formComponent, IVisit<Void> visit) {
-        if (formComponent.getForm().equals(form)) {
-            formComponent.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    // TODO DD : this is hook to save draft mode when anything changes...for now it's just here so model is updated.
-                    // makes the form very chatty but gives you lots of saving options.
-                    // don't include components in nested forms.
-                }
-            });
-        }
     }
 
     protected Label createTitleLabel(String labelId) {
@@ -136,14 +113,16 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
         form.updateSection(target);
     }
 
-    class ProcedureDefinitionForm extends Form {
+    class ProcedureDefinitionFormContainer extends WebMarkupContainer {
 
         private final Component details;
         private final Component content;
         private final Component publish;
 
-        ProcedureDefinitionForm(String id, final IModel<ProcedureDefinition> model) {
+        ProcedureDefinitionFormContainer(String id, final IModel<ProcedureDefinition> model) {
             super(id, model);
+
+            setOutputMarkupId(true);
 
             add(details = new DetailsPanel("details", model) {
                 @Override protected void doCancel(AjaxRequestTarget target) {
@@ -171,7 +150,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage implements IVis
                 }
             }.setVisible(false));
 
-            add(publish = new PublishPanel("publish", model, this) {
+            add(publish = new PublishPanel("publish", model) {
                 @Override protected void doCancel(AjaxRequestTarget target) {
                     // leave the model as a detached object....don't save it.   nothing to "undo".
                     ProcedureDefinitionPage.this.doCancel(target);

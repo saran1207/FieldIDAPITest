@@ -18,36 +18,44 @@ public class PublishPanel extends Panel {
 
     @SpringBean private ProcedureDefinitionService procedureDefinitionService;
 
-    public PublishPanel(String id, IModel<ProcedureDefinition> model, Form form) {
+    public PublishPanel(String id, IModel<ProcedureDefinition> model) {
         super(id, model);
         setOutputMarkupPlaceholderTag(true);
         add(new AttributeAppender("class",Model.of("publish")));
+        add(new PublishForm("publishForm"));
 
-        add(new Label("message", Model.of("are you sure you want to publish this?")));
-        add(new AjaxLink("cancel") {
-            @Override public void onClick(AjaxRequestTarget target) {
-                doCancel(target);
+    }
+
+    private class PublishForm extends Form {
+
+        public PublishForm(String id) {
+            super(id);
+            add(new Label("message", Model.of("are you sure you want to publish this?")));
+            add(new AjaxLink("cancel") {
+                @Override public void onClick(AjaxRequestTarget target) {
+                    doCancel(target);
+                }
+            });
+
+            SubmitLink submitLink = new SubmitLink("publish") {
+                @Override
+                public void onSubmit() {
+                    doPublish();
+                }
+
+                @Override
+                public void onError() {
+                    doCancel(null);
+                }
+
+            };
+            if (procedureDefinitionService.isProcedureApprovalRequiredForCurrentUser()) {
+                submitLink.add(new Label("submitLabel", new FIDLabelModel("label.submit_for_approval")));
+            } else {
+                submitLink.add(new Label("submitLabel", new FIDLabelModel("label.publish")));
             }
-        });
-
-        SubmitLink submitLink = new SubmitLink("publish", form) {
-            @Override
-            public void onSubmit() {
-                doPublish();
-            }
-
-            @Override
-            public void onError() {
-                doCancel(null);
-            }
-
-        };
-        if (procedureDefinitionService.isProcedureApprovalRequiredForCurrentUser()) {
-            submitLink.add(new Label("submitLabel", new FIDLabelModel("label.submit_for_approval")));
-        } else {
-            submitLink.add(new Label("submitLabel", new FIDLabelModel("label.publish")));
+            add(submitLink);
         }
-        add(submitLink);
     }
 
     protected void doPublish() { }

@@ -41,12 +41,14 @@ public class EditableImageList<T extends EditableImage> extends ImageList<T> {
 
         EditableImageOptions() {
             super();
-            for (EditableImage image:images.getObject()) {
-                List<AnnotationOptions> options = Lists.newArrayList();
-                for (ImageAnnotation annotation:image.getAnnotations()) {
-                    options.add(new AnnotationOptions(annotation));
+            if(images.getObject() != null) {
+                for (EditableImage image : images.getObject()) {
+                    List<AnnotationOptions> options = Lists.newArrayList();
+                    for (ImageAnnotation annotation:image.getAnnotations()) {
+                        options.add(new AnnotationOptions(annotation));
+                    }
+                    annotationOptions.add(options);
                 }
-                annotationOptions.add(options);
             }
         }
     }
