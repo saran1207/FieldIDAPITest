@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.n4systems.fieldid.service.search.ProcedureSearchService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.IsolationPointSourceType;
-import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.user.User;
@@ -29,10 +28,8 @@ public class ContentPanel extends Panel {
 
     private final Pattern numberPattern = Pattern.compile(".*(\\d+)");
 
-    private List<EditableImage> images;
     private IsolationPointEditor editor;
     private IsolationPointListPanel list;
-    private IsolationPoint newIsolationPoint = createIsolationPoint(IsolationPointSourceType.W);
 
     public ContentPanel(String id, final IModel<ProcedureDefinition> model) {
         super(id, model);
@@ -65,7 +62,7 @@ public class ContentPanel extends Panel {
             }
         });
 
-        add(editor = new IsolationPointEditor("isolationPointEditor") {
+        add(editor = new IsolationPointEditor("isolationPointEditor",getProcedureDefinition()) {
             @Override protected void doDone(AjaxRequestTarget target,Form<?> form) {
                 if (editor.isEditing()) {
                     updateIsolationPoint();

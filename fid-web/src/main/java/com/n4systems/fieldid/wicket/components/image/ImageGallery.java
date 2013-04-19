@@ -12,12 +12,14 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -28,8 +30,9 @@ import java.util.List;
 
 public abstract class ImageGallery<T extends S3Image> extends Panel {
 
-    public static final String IMAGE_ID_PARAMETER = "id";
-    public static final String ACTION = "action";
+    public final String IMAGE_ID_PARAMETER = "imageId";
+    public final String ACTION_PARAMETER = "action";
+    public final String INDEX_PARAMETER = "index";
 
     private static final String GALLERY_JS = "imageGallery.init('%s',%s);";
     private static final String GALLERY_ADD_JS = "imageGallery.add('%s',{image:'%s', id:%d});";
@@ -44,6 +47,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     protected FileUploadField uploadField;
     protected final Component gallery;
     private Form form;
+    private boolean withDone = false;
     // TODO DD : add noAjaxUpdate option.
     // TODO DD : add ability to delete images (check to see if they have annotations first?)
 
@@ -51,6 +55,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         super(id);
         this.images = images;
         setOutputMarkupId(true);
+        add(new AttributeAppender("class", "image-gallery"));
         add(behavior = createBehavior());
 
         form = new Form("uploadForm");
@@ -77,7 +82,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
 
         add(form);
 
-        add(new AttributeAppender("class", "image-gallery"));
+        add(new WebMarkupContainer("done").setVisible(false));
 
         add(gallery = new WebMarkupContainer("images").setOutputMarkupId(true));
     }
@@ -101,14 +106,13 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         return currentImageIndex==null ? null : images.get(currentImageIndex);
     }
 
-
     private AbstractDefaultAjaxBehavior createBehavior() {
         return new AbstractDefaultAjaxBehavior() {
             @Override protected void respond(AjaxRequestTarget target) {
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-                currentImageIndex = params.getParameterValue("index").toInt();
-                Long id = params.getParameterValue("id").toLong();
-                Preconditions.checkState(images.get(currentImageIndex).getId().equals(id), "selected image id '" + id + "' doesn't match index '" + currentImageIndex+"'");
+                currentImageIndex = params.getParameterValue(INDEX_PARAMETER).toInt();
+                Long id = params.getParameterValue(IMAGE_ID_PARAMETER).toLong();
+                Preconditions.checkState(images.get(currentImageIndex).getId().equals(id), "selected image id '" + id + "' doesn't match['" + currentImageIndex+"]=" + images.get(currentImageIndex).getId());
                 imageClicked(target, getAction(params), getCurrentImage());
             }
         };
@@ -116,8 +120,13 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
 
     protected void imageClicked(AjaxRequestTarget target, String action, T image) { }
 
+    public ImageGallery withDoneButton() {
+        withDone = true;
+        return this;
+    }
+
     private String getAction(IRequestParameters params) {
-        StringValue p = params.getParameterValue(ACTION);
+        StringValue p = params.getParameterValue(ACTION_PARAMETER);
         return p==null || p.isEmpty() ? null : p.toString();
     }
 
@@ -136,8 +145,26 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         response.renderCSSReference("style/component/imageGallery.css");
 
         // TODO DD : refactor this ...don't pass jsonDataSource.
-        response.renderOnDomReadyJavaScript(String.format(GALLERY_JS,gallery.getMarkupId(),jsonRenderer.render(createGalleryOptions(getJsonDataSource()))));
+        response.renderOnLoadJavaScript(String.format(GALLERY_JS,gallery.getMarkupId(),jsonRenderer.render(createGalleryOptions(getJsonDataSource()))));
     }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        if (withDone) {
+            replace(createDoneButton("done"));
+        }
+    }
+
+    protected AbstractLink createDoneButton(String id) {
+        return new AjaxLink(id) {
+            @Override public void onClick(AjaxRequestTarget target) {
+                doneClicked(target);
+            }
+        };
+    }
+
+    protected void doneClicked(AjaxRequestTarget target) { }
 
     protected GalleryOptions createGalleryOptions(List<GalleryImageJson> images) {
         return new GalleryOptions(images);

@@ -17,6 +17,7 @@ public class FIDModalWindow extends ModalWindow {
 
     public FIDModalWindow(String id, IModel<?> model, int width, int height) {
     	this(id,model);
+        setResizable(false);
     	setInitialWidth(width);    	
     	setInitialHeight(height);
 	}
@@ -34,6 +35,5 @@ public class FIDModalWindow extends ModalWindow {
         super.renderHead(response);
         response.renderCSSReference("style/modal/fid_modal.css");
     }
-
 
 }

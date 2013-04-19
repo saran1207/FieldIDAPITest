@@ -154,32 +154,6 @@ h3 {
 		margin-left: 10px;
 	}
 
-/* Targets all classes that start with "btn" to create a global style. Need to add fallback for IE6 */
-/*a[class^="btn"] {  
-	display: inline-block;
-	padding: 15px 0;
-	text-decoration: none;
-	color: #fff;
-	font-size: 14px;
-	text-align: center;  
-}  
-.btn-gray {
-	background: #cccccc;
-
-	width: 85px;
-	margin-right: 3px;
-}
-.btn-green {
-	background: #009966;
-
-	width: 175px;
-}
-.btn-blue {
-	background: #0099ff;
-}*/
-
-
-
 /* DETAILS SECTION
 **********************************************************/
 .procedure-wrapper .details {

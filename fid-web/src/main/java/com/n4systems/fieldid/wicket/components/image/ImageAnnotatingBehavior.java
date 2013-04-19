@@ -1,4 +1,4 @@
-    package com.n4systems.fieldid.wicket.components.image;
+package com.n4systems.fieldid.wicket.components.image;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
@@ -154,7 +154,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
     }
 
     protected String getDefaultType() {
-        return annotation.getType().getCssClass();
+        return annotation==null ? ImageAnnotationType.getDefault().getCssClass() : annotation.getType().getCssClass();
     }
 
     protected String getAnnotationText() {

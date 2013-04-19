@@ -107,6 +107,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage{
         super.renderHead(response);
         response.renderCSSReference("style/pageStyles/procedureDefinition.css");
         response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
+        response.renderCSSReference("style/newCss/component/matt_buttons.css");
     }
 
     private void sectionChanged(AjaxRequestTarget target) {

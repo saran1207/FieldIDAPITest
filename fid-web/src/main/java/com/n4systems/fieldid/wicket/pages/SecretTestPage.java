@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.wicket.components.image.EditableImageGallery;
-import com.n4systems.model.Tenant;
+import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -30,19 +28,21 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         List<ProcedureDefinitionImage> images = procedureDefinition.getImages();
         ImageAnnotation annotation = images.get(0).getAnnotations().get(0);
 
-        add(new EditableImageGallery<ProcedureDefinitionImage>("gallery", images, annotation) {
-            @Override protected ProcedureDefinitionImage createImage(S3Service.S3ImagePath path, Tenant tenant) {
-                ProcedureDefinitionImage image = new ProcedureDefinitionImage();
-                image.setTenant(tenant);
-                image.setFileName(path.getOrigPath());
-                image.setProcedureDefinition(procedureDefinition);
-                return image;
-            }
+//        add(new EditableImageGallery<ProcedureDefinitionImage>("gallery", images, annotation) {
+//            @Override protected ProcedureDefinitionImage createImage(S3Service.S3ImagePath path, Tenant tenant) {
+//                ProcedureDefinitionImage image = new ProcedureDefinitionImage();
+//                image.setTenant(tenant);
+//                image.setFileName(path.getOrigPath());
+//                image.setProcedureDefinition(procedureDefinition);
+//                return image;
+//            }
+//
+//            @Override protected String getFileName(String fileName) {
+//                return "/secret/test/images";
+//            }
+//        });
 
-            @Override protected String getFileName(String fileName) {
-                return "/secret/test/images";
-            }
-        });
+        add(new IsolationPointImageGallery("gallery", procedureDefinition, null));
     }
     
     @Override

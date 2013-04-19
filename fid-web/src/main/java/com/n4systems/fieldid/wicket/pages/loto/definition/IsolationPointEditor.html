@@ -1,52 +1,38 @@
 <wicket:panel>
 
-<!-- temp for testing -->
-<script src="/fieldid/javascript/galleria/galleria-1.2.9.min.js"></script>
-
 <!--NOTE : should handle icon by CSS instead.   IE. add class="water"    .title.water {background:url(blah)} -->
 <div class="title">
 	<img wicket:id="icon"/> <h3 wicket:id="title"/>
 </div>
 
-<form wicket:id="form">
-	<div class="column left">
-		<label class="source-id"><wicket:message key="label.identifier"/><input type="text" wicket:id="identifier"/></label>
-		<!--<label><wicket:message key="label.electronic_identifier"/><input type="text" wicket:id="electronicIdentifier"/></label>-->
-		<label><wicket:message key="label.source"/><input type="text" wicket:id="sourceText"/></label>
-		<label><wicket:message key="label.location"/><input type="text" wicket:id="location"/></label>
-		<label><wicket:message key="label.device"/><select wicket:id="device"/></label>
-		<label><wicket:message key="label.lock"/><input type="text" wicket:id="lock"/></label>
-		<label><wicket:message key="label.method"/><textarea wicket:id="method"/></label>
-		<label><wicket:message key="label.check"/><textarea wicket:id="check"/></label>	
-	</div>
+    <div wicket:id="modal"/>
 
-	<div class="column right">
-		<!-- temp for testing -->
-		<!-- 
-		<div id="galleria">
-			<img src="/fieldid/images/loto/temp-asset-landscape-1.jpg">
-			<img src="/fieldid/images/loto/temp-asset-landscape-2.jpg">
-			<img src="/fieldid/images/loto/temp-asset-portrait-1.jpg">
-		</div> 
-		-->
-		<div class="blank-slate">
-			<img src="/fieldid/images/loto/label-blank-slate.png" />
-			<span class="label-button">
-				<a class="mattButton"><wicket:message key="label.label_image"/></a>
-			</span>
-		</div>
-	</div>
-	
-	<div class="buttons">
-		<a wicket:id="back" class="mattButton"><wicket:message key="label.cancel"/></a>
-		<a wicket:id="done" class="mattButton mattButtonBlue"><wicket:message key="label.save_continue"/></a>
-	</div>
-</form>
+    <form wicket:id="form">
+        <div class="column left">
+            <label class="source-id"><wicket:message key="label.identifier"/><input type="text" wicket:id="identifier"/></label>
+            <label><wicket:message key="label.source"/><input type="text" wicket:id="sourceText"/></label>
+            <label><wicket:message key="label.location"/><input type="text" wicket:id="location"/></label>
+            <label><wicket:message key="label.device"/><select wicket:id="device"/></label>
+            <label><wicket:message key="label.lock"/><input type="text" wicket:id="lock"/></label>
+            <label><wicket:message key="label.method"/><textarea wicket:id="method"/></label>
+            <label><wicket:message key="label.check"/><textarea wicket:id="check"/></label>
+        </div>
 
-<!-- temp for testing -->
-<script>
-	// Galleria.loadTheme('/fieldid/javascript/galleria/themes/classic/galleria.classic.min.js');
-	// Galleria.run('#galleria');
-</script>
+        <div class="column right">
+            <div wicket:id="image" class="isolation-point-image"/>
+        </div>
+        
+        <div class="buttons">
+            <a wicket:id="back" class="mattButton"><wicket:message key="label.back"/></a>
+            <a wicket:id="done" class="mattButton mattButtonBlue"><wicket:message key="label.done"/></a>
+        </div>
+    </form>
+
+    <wicket:fragment wicket:id="imageBlankSlate">
+        <div class="blank-slate">
+            <img src="/fieldid/images/loto/label-blank-slate.png" />
+            <span class="label-button"> <a class="mattButton"><wicket:message key="label.label_image"/></a></span>
+        </div>
+    </wicket:fragment>
 
 </wicket:panel>

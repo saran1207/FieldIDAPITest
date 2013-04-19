@@ -4,23 +4,32 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.search.ProcedureSearchService;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.ComboBox;
+import com.n4systems.fieldid.wicket.components.ExternalS3Image;
+import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
+import com.n4systems.model.procedure.ProcedureDefinition;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -32,19 +41,28 @@ public class IsolationPointEditor extends Panel {
     private @SpringBean ProcedureSearchService procedureSearchService;
     private @SpringBean ProcedureDefinitionService procedureDefinitionService;
 
+    public final String IMAGE_COMPONENT_ID = "image";
+
     private Form form;
     private IsolationPoint editedIsolationPoint;
     private ComboBox deviceComboBox;
+    private FIDModalWindow modal;
+    private final ProcedureDefinition procedureDefinition;
+    private IsolationPointImageGallery gallery;
 
-    public IsolationPointEditor(String id) {
+    public IsolationPointEditor(String id, ProcedureDefinition procedureDefinition) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
         setOutputMarkupPlaceholderTag(true);
+        this.procedureDefinition = procedureDefinition;
 
         add(new AttributeAppender("class","isolation-point-editor"));
 
         add(new ContextImage("icon",getIconModel()));
 
         add(new Label("title", getTitleModel()));
+
+        add(modal = new FIDModalWindow("modal", getDefaultModel(), 850, 475));
+        modal.setTitle(new StringResourceModel("label.images", this, null));
 
         add(form = new Form("form"));
 
@@ -59,6 +77,8 @@ public class IsolationPointEditor extends Panel {
         form.add(new TextArea("check"));
         form.add(new TextArea("method"));
 
+        form.add(new WebMarkupContainer(IMAGE_COMPONENT_ID));
+
         form.add(new AjaxSubmitLink("done") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 doDone(target,form);
@@ -66,7 +86,7 @@ public class IsolationPointEditor extends Panel {
             }
             @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
                 System.out.println("hmmm....");
-                // TODO DD : not sure what to do here...have to add validation in last milestone.
+                // TODO DD : not sure what to do here...have to add validation in last milestone.   target.add(feedbackPanel);
             }
         });
 
@@ -75,8 +95,40 @@ public class IsolationPointEditor extends Panel {
                 doCancel(target);
                 closeEditor(target);
             }
-
         });
+
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        if (getIsolationPoint().getAnnotation()!=null) {
+            form.replace(new ExternalS3Image(IMAGE_COMPONENT_ID, getIsolationPoint().getAnnotation().getImage().getS3Path()).add(createEditClickBehavior()));
+        } else {
+            form.replace(new Fragment(IMAGE_COMPONENT_ID, "imageBlankSlate", this).add(createEditClickBehavior()));
+        }
+    }
+
+    private Behavior createEditClickBehavior() {
+        return new AjaxEventBehavior("onclick") {
+            @Override protected void onEvent(AjaxRequestTarget target) {
+                modal.setContent(createImageGallery(FIDModalWindow.CONTENT_ID));
+                modal.show(target);
+            }
+        };
+    }
+
+    protected Component createImageGallery(String id) {
+        if (gallery==null) {
+            gallery = new IsolationPointImageGallery(id,procedureDefinition,getIsolationPoint().getAnnotation()) {
+                @Override protected void doneClicked(AjaxRequestTarget target) {
+                    target.add(form.get("image"));
+                    modal.close(target);
+                }
+            };
+            gallery.setMarkupId("ipe_gallery");
+        }
+        return gallery;
     }
 
     private IModel<String> getDeviceDescriptionModel() {
@@ -172,7 +224,7 @@ public class IsolationPointEditor extends Panel {
 
     private IsolationPoint copyIntoModel(IsolationPoint isolationPoint) {
         // TODO DD : proper cloning here.
-        IsolationPoint ip = (IsolationPoint) getDefaultModelObject();
+        IsolationPoint ip = getIsolationPoint();
         procedureSearchService.copyIsolationPoint(isolationPoint, ip);
         return isolationPoint;
     }
@@ -180,9 +232,9 @@ public class IsolationPointEditor extends Panel {
     public IsolationPoint getEditedIsolationPoint() {
         if (isEditing()) {
             // TODO DD : move this to soon to be created procedureDefinitionService.
-            return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), editedIsolationPoint);
+            return procedureSearchService.copyIsolationPoint(getIsolationPoint(), editedIsolationPoint);
         } else {
-            return procedureSearchService.copyIsolationPoint((IsolationPoint) getDefaultModelObject(), new IsolationPoint());
+            return procedureSearchService.copyIsolationPoint(getIsolationPoint(), new IsolationPoint());
         }
     }
 
@@ -192,11 +244,14 @@ public class IsolationPointEditor extends Panel {
 
     public LoadableDetachableModel<List<String>> getPreConfiguredDevices(final IModel<IsolationPointSourceType> sourceType) {
         return new LoadableDetachableModel<List<String>>() {
-            @Override
-            protected List<String> load() {
+            @Override protected List<String> load() {
                 return procedureDefinitionService.getPreConfiguredDevices(sourceType.getObject());
             }
         };
+    }
+
+    private IsolationPoint getIsolationPoint() {
+        return (IsolationPoint) getDefaultModelObject();
     }
 
     @Override
