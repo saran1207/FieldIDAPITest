@@ -62,6 +62,11 @@ public class S3ServiceTest extends FieldIdServiceTest {
             @Override protected int getExpiryInDays() {
                 return expiryDays;
             }
+
+            @Override
+            protected Tenant getCurrentTenant() {
+                return new Tenant(tenantId,"test");
+            }
         };
     }
 
