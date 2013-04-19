@@ -124,6 +124,7 @@ h3 {
 	float: right;
 	margin-left: 12px;
 	padding: 0 5px;
+	font-size: 13px;
 }
 .sections select {
 	width: 300px;
@@ -134,6 +135,7 @@ h3 {
 	margin-left: 12px;
 	resize: none;
 	padding: 5px;
+	font-size: 13px;
 }
 /* chosen plugin overrides */
 .chzn-container {
@@ -344,8 +346,8 @@ h3 {
 		margin-right: 10px;
 	}
 .isolation-point-editor .column.left {
-	width: 375px;
-	margin-right: 60px;
+	width: 385px;
+	margin-right: 50px;
 }
 .isolation-point-editor .column.right {
 	width: 550px;
@@ -361,24 +363,24 @@ h3 {
 	overflow: hidden;
 }
 .isolation-point-editor input {
-	width: 225px;
+	width: 240px;
 }
 	.isolation-point-editor .source-id input {
 		width: 90px;
-		margin-right: 135px;
+		margin-right: 150px;
 	}
 .isolation-point-editor label.textarea {
 	margin-bottom: 0;
 }
 .isolation-point-editor textarea {
 	height: 50px;
-	width: 227px;
+	width: 242px;
 	margin-bottom: -10px;
 }
 .isolation-point-editor select {
     margin-left: 12px;
     padding: 5px;
-    width: 240px;
+    width: 254px;
 }
 .isolation-point-editor a.asset-type {
 	width: 240px;
