@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.DisplayNoneIfCondition;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
@@ -26,6 +27,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
 import java.util.List;
@@ -33,6 +35,8 @@ import java.util.List;
 import static ch.lambdaj.Lambda.on;
 
 public class ProcedureResultsPage extends FieldIDFrontEndPage {
+
+    @SpringBean private S3Service s3Service;
 
     private IModel<Procedure> procedureModel;
     private ProcedureWorkflowState currentTimelineDisplay = ProcedureWorkflowState.LOCKED;

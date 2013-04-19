@@ -451,7 +451,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 		for (CriteriaResult result: results) {
 			for (CriteriaResultImage criteriaResultImage: result.getCriteriaImages()) {
                 if (criteriaResultImage.getTempFileName() != null) {
-				    s3Service.uploadCriteriaResultImage(criteriaResultImage);
+				    s3Service.finalizeCriteriaResultImageUpload(criteriaResultImage);
                 }
 			}
 		}

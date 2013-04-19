@@ -8,6 +8,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.commons.io.FileUtils;
@@ -51,8 +52,13 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String ASSET_PROFILE_IMAGE_PATH_MEDIUM = "/assets/%d/profile/%s.medium";
 
     public static final String PROCEDURE_DEFINITION_IMAGE_PATH = "/procedure_definitions/%d/%s";
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB = "/procedure_definitions/%d/%s";
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM = "/procedure_definitions/%d/%s";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB = "/procedure_definitions/%d/%s.thumbnail";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM = "/procedure_definitions/%d/%s.medium";
+
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_TEMP = "/temp_procedure_images/%s";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB_TEMP = "/temp_procedure_images/%s.thumbnail";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM_TEMP = "/temp_procedure_images/%s.medium";
+
 
     public static final String THUMBNAIL_EXTENSION = ".thumbnail";
     public static final String MEDIUM_EXTENSION = ".medium";
@@ -156,6 +162,11 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
+    public URL getProcedureImageURL(Long procedureDefinitionId, String imageName) {
+        URL procedureDefinition = generateResourceUrl(null, PROCEDURE_DEFINITION_IMAGE_PATH, procedureDefinitionId, imageName);
+        return procedureDefinition;
+    }
+
     public URL getAssetProfileImageOriginalURL(Long assetId, String imageName) {
         URL assetProfileUrl = generateResourceUrl(null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
         return assetProfileUrl;
@@ -225,44 +236,80 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public String uploadTempCriteriaResultImage(CriteriaResultImage criteriaResultImage, byte[] imageData) {
-        Long tenantId = criteriaResultImage.getCriteriaResult().getTenant().getId();
+        String contentType = criteriaResultImage.getContentType();
+
+        return uploadTempImage(imageData, contentType, CRITERIA_RESULT_IMAGE_TEMP, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, CRITERIA_RESULT_THUMB_IMAGE_TEMP);
+    }
+
+    public String uploadTempProcedureDefImage(ProcedureDefinitionImage image, byte[] imageData) {
+        String contentType = image.getContentType();
+
+        return uploadTempImage(imageData, contentType, PROCEDURE_DEFINITION_IMAGE_PATH_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB_TEMP);
+    }
+
+    private String uploadTempImage(byte[] imageData, String contentType, String imagePathTemplate, String mediumImagePathTemplate, String thumbImagePathTemplate) {
+        Long tenantId = getCurrentTenant().getId();
         String uuid = UUID.randomUUID().toString();
 
         byte[] mediumImage = imageService.generateMedium(imageData);
         byte[] thumbImage = imageService.generateThumbnail(imageData);
 
-        uploadResource(imageData, criteriaResultImage.getContentType(), tenantId,
-                CRITERIA_RESULT_IMAGE_TEMP, uuid);
-        uploadResource(mediumImage, criteriaResultImage.getContentType(), tenantId,
-                CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, uuid);
-        uploadResource(thumbImage, criteriaResultImage.getContentType(), tenantId,
-                CRITERIA_RESULT_THUMB_IMAGE_TEMP, uuid);
+        uploadResource(imageData, contentType, tenantId,
+                imagePathTemplate, uuid);
+        uploadResource(mediumImage, contentType, tenantId,
+                mediumImagePathTemplate, uuid);
+        uploadResource(thumbImage, contentType, tenantId,
+                thumbImagePathTemplate, uuid);
 
         return uuid;
     }
 
-	public void uploadCriteriaResultImage(CriteriaResultImage criteriaResultImage) {
+	public void finalizeProcedureDefinitionImageUpload(ProcedureDefinitionImage image) {
+        Long tenantId = getCurrentTenant().getId();
+        String tempFileName = image.getTempFileName();
+
+        copyTemporaryProcedureImageToFinal(image, PROCEDURE_DEFINITION_IMAGE_PATH_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH);
+        copyTemporaryProcedureImageToFinal(image, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM);
+        copyTemporaryProcedureImageToFinal(image, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB);
+
+        removeResource(tenantId, PROCEDURE_DEFINITION_IMAGE_PATH_TEMP, tempFileName);
+        removeResource(tenantId, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM_TEMP, tempFileName);
+        removeResource(tenantId, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB_TEMP, tempFileName);
+    }
+
+    public void finalizeCriteriaResultImageUpload(CriteriaResultImage criteriaResultImage) {
         Long tenantId = criteriaResultImage.getCriteriaResult().getTenant().getId();
         String tempFileName = criteriaResultImage.getTempFileName();
 
-        copyTemporaryCriteriaResultImageToFinal(criteriaResultImage, CRITERIA_RESULT_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_ORIG);
-        copyTemporaryCriteriaResultImageToFinal(criteriaResultImage, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_MEDIUM);
-        copyTemporaryCriteriaResultImageToFinal(criteriaResultImage, CRITERIA_RESULT_THUMB_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_THUMB);
+        copyTemporaryCriteriaImageToFinal(criteriaResultImage, CRITERIA_RESULT_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_ORIG);
+        copyTemporaryCriteriaImageToFinal(criteriaResultImage, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_MEDIUM);
+        copyTemporaryCriteriaImageToFinal(criteriaResultImage, CRITERIA_RESULT_THUMB_IMAGE_TEMP, CRITERIA_RESULT_IMAGE_PATH_THUMB);
 
         removeResource(tenantId, CRITERIA_RESULT_IMAGE_TEMP, tempFileName);
         removeResource(tenantId, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, tempFileName);
         removeResource(tenantId, CRITERIA_RESULT_THUMB_IMAGE_TEMP, tempFileName);
     }
 
-    private void copyTemporaryCriteriaResultImageToFinal(CriteriaResultImage criteriaResultImage, String tempFileNameTemplate, String finalFileNameTemplate) {
-        Long tenantId = criteriaResultImage.getCriteriaResult().getTenant().getId();
-        String tempFileName = criteriaResultImage.getTempFileName();
+    private void copyTemporaryProcedureImageToFinal(ProcedureDefinitionImage image, String tempFileNameTemplate, String finalFileNameTemplate) {
+        copyTemporaryImageToFinal(image.getTempFileName(), tempFileNameTemplate, finalFileNameTemplate,
+                image.getProcedureDefinition().getId(),
+                image.getFileName());
+    }
+
+    private void copyTemporaryCriteriaImageToFinal(CriteriaResultImage criteriaResultImage, String tempFileNameTemplate, String finalFileNameTemplate) {
+        copyTemporaryImageToFinal(criteriaResultImage.getTempFileName(), tempFileNameTemplate, finalFileNameTemplate,
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
+    }
+
+    private void copyTemporaryImageToFinal(String tempFileName, String tempFileNameTemplate, String finalFileNameTemplate, Object... pathArgs) {
+        Long tenantId = getCurrentTenant().getId();
+
         CopyObjectRequest copyObjectRequest = new CopyObjectRequest(getBucket(),
                 createResourcePath(tenantId, tempFileNameTemplate, tempFileName), getBucket(),
                 createResourcePath(tenantId, finalFileNameTemplate,
-                    criteriaResultImage.getCriteriaResult().getEvent().getId(),
-                    criteriaResultImage.getCriteriaResult().getId(),
-                    criteriaResultImage.getFileName()));
+                    pathArgs));
 
         getClient().copyObject(copyObjectRequest);
     }

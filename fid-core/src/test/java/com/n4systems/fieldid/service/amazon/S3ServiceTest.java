@@ -32,7 +32,6 @@ import java.net.URL;
 import java.util.Date;
 
 import static org.easymock.EasyMock.*;
-import static org.hamcrest.Matchers.any;
 import static org.junit.Assert.assertEquals;
 
 public class S3ServiceTest extends FieldIdServiceTest {
@@ -208,7 +207,7 @@ public class S3ServiceTest extends FieldIdServiceTest {
         /*expect*/s3client.deleteObject(bucket, key6);
         replay(s3client, s3Object);
 
-        s3Service.uploadCriteriaResultImage(criteriaResultImage);
+        s3Service.finalizeCriteriaResultImageUpload(criteriaResultImage);
 
         verifyTestMocks();
 
