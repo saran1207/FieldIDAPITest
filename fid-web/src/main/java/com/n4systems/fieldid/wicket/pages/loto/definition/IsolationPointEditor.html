@@ -1,8 +1,10 @@
 <wicket:panel>
 
-<!--NOTE : should handle icon by CSS instead.   IE. add class="water"    .title.water {background:url(blah)} -->
-<div class="title">
-	<img wicket:id="icon"/> <h3 wicket:id="title"/>
+<!--NOTE : should handle icon by CSS instead.   IE. add class="water"    .title.water {background:url(blah)} 
+Added css classes for title. Don't need the image tag anymore.
+-->
+<div class="title electrical">
+	<img style="display:none;" wicket:id="icon"/> <h3 wicket:id="title"/>
 </div>
 
     <div wicket:id="modal"/>

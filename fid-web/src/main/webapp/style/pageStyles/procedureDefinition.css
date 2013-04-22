@@ -313,12 +313,31 @@ h3 {
 }
 
 .isolation-point-editor .title {
-	padding: 25px 58px;
+	padding: 25px 130px;
+	background: no-repeat 52px 22px;
 }
-	.isolation-point-editor .title img {
-		float: left;
-		margin-right: 10px;
-	}
+.isolation-point-editor .title.electrical {
+	background-image: url(/fieldid/images/loto/electrical-full.png);
+}
+.isolation-point-editor .title.control-panel {
+	background-image: url(/fieldid/images/loto/control-panel-full.png);
+}
+.isolation-point-editor .title.gas {
+	background-image: url(/fieldid/images/loto/gas-full.png);
+}
+.isolation-point-editor .title.pneumatic {
+	background-image: url(/fieldid/images/loto/pneumatic-full.png);
+}
+.isolation-point-editor .title.steam {
+	background-image: url(/fieldid/images/loto/steam-full.png);
+}
+.isolation-point-editor .title.valve {
+	background-image: url(/fieldid/images/loto/valve-full.png);
+}
+.isolation-point-editor .title.water {
+	background-image: url(/fieldid/images/loto/water-full.png);
+}
+
 .isolation-point-editor .column.left {
 	width: 385px;
 	margin-right: 50px;
