@@ -22,7 +22,6 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     @Column(name = "thumbnail")
     private String thumbnail;
 
-
     @Column(name = "mobileguid")
     private String mobileGUID;
 

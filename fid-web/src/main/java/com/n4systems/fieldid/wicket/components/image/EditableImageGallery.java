@@ -29,7 +29,9 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
             @Override protected ImageAnnotation findImageAnnotation(Long id) {
                 for (T image:images) {
                     for (ImageAnnotation annotation:image.getAnnotations()) {
-                        if (annotation.getId().equals(id)) {
+                        if (id==null && annotation.getId()==null) {
+                            return annotation;
+                        } else if (annotation.getId().equals(id)) {
                             return annotation;
                         }
                     }

@@ -40,4 +40,9 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
         return url.toString();
     }
 
+    @Override
+    protected String getThumbnailImageUrl(ProcedureDefinitionImage image) {
+        URL url = s3Service.getProcedureDefinitionImageThumbnailURL(image);
+        return url.toString();
+    }
 }

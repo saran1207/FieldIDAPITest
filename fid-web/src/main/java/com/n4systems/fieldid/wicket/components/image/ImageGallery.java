@@ -87,6 +87,8 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
 
     protected abstract String getImageUrl(T image);
 
+    protected String getThumbnailImageUrl(T image) {return "";}
+
     protected abstract T addImage(byte[] bytes, String contentType, String clientFileName);
 
     protected T getCurrentImage() {
@@ -176,9 +178,11 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
 
     protected class GalleryImageJson {
         String image;
+        String thumb;
         Long id;
         public GalleryImageJson(T image) {
             this.image = getImageUrl(image).toString();
+            this.thumb = getThumbnailImageUrl(image).toString(); /*optional*/
             this.id = image.getId();
         }
     }
