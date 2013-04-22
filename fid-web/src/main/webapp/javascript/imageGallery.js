@@ -48,10 +48,6 @@ var imageGallery = (function() {
 			});
 		}
 
-		var add = function(imageData) {
-			galleria.push(imageData);
-		}
-
 		var edit = function(annotationOptions) {
 			imageEditor.init($(galleria.getActiveImage()),annotationOptions);
 		}
@@ -76,14 +72,8 @@ var imageGallery = (function() {
 
 		return {
 			init : init,
-			add : add,
 			edit : edit
 		}
-	}
-
-	var add = function(id,imageData) {
-		// precondition : already been initialized (which populates GALLERY data).
-		$('#'+id).data('gallery').add(imageData);
 	}
 
 	var edit = function(id,options) {
@@ -103,7 +93,6 @@ var imageGallery = (function() {
 
 	return {
 		init : init,
-		add : add,
 		edit : edit
 	}
 

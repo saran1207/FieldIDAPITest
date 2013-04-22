@@ -19,6 +19,7 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -33,7 +34,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     public final String INDEX_PARAMETER = "index";
 
     private static final String GALLERY_JS = "imageGallery.init('%s',%s);";
-    private static final String GALLERY_ADD_JS = "imageGallery.add('%s',{image:'%s', id:%d});";
+//    private static final String GALLERY_ADD_JS = "imageGallery.add('%s',{image:'%s', id:%d});";
 
     protected @SpringBean JsonRenderer jsonRenderer;
     protected @SpringBean PersistenceService persistenceService;
@@ -46,6 +47,8 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     protected final Component gallery;
     private Form form;
     private boolean withDone = false;
+    private List<FileUpload> fileUploads = Lists.newArrayList();
+
     // TODO DD : add noAjaxUpdate option.
     // TODO DD : add ability to delete images (check to see if they have annotations first?)
 
@@ -60,7 +63,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         form.setMultiPart(true);
         //form.setMaxSize(Bytes.megabytes(5));
 
-        form.add(uploadField = new FileUploadField("fileUpload"));
+        form.add(uploadField = new FileUploadField("fileUpload", new PropertyModel(this,"fileUploads")));
         uploadField.add(new AjaxFormSubmitBehavior("onchange") {
             @Override protected void onSubmit(AjaxRequestTarget target) {
                 FileUpload fileUpload = uploadField.getFileUpload();
@@ -70,7 +73,6 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
                         images.add(image);
                     }
                     target.add(ImageGallery.this);
-                    target.appendJavaScript(String.format(GALLERY_ADD_JS, gallery.getMarkupId(), getImageUrl(image), image.getId()));
                 }
             }
 
@@ -101,8 +103,12 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
                 currentImageIndex = params.getParameterValue(INDEX_PARAMETER).toInt();
                 Long id = params.getParameterValue(IMAGE_ID_PARAMETER).toLong();
-                Preconditions.checkState(images.get(currentImageIndex).getId().equals(id), "selected image id '" + id + "' doesn't match['" + currentImageIndex+"]=" + images.get(currentImageIndex).getId());
-                imageClicked(target, getAction(params), getCurrentImage());
+                if (id==-1) {
+                    // it's a placeholder image...we have none to display.
+                } else {
+                    Preconditions.checkState(images.get(currentImageIndex).getId().equals(id), "selected image id '" + id + "' doesn't match['" + currentImageIndex+"]=" + images.get(currentImageIndex).getId());
+                    imageClicked(target, getAction(params), getCurrentImage());
+                }
             }
         };
     }
@@ -169,6 +175,9 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         for (T image:images) {
             data.add(createImageJson(image));
         }
+        if (images.size()==0) {
+            data.add(new GalleryImageJson());
+        }
         return data;
     }
 
@@ -180,6 +189,12 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         String image;
         String thumb;
         Long id;
+
+        public GalleryImageJson() {
+            this.image = "../images/fieldid-logo-big.png";
+            this.id = -1L;
+        }
+
         public GalleryImageJson(T image) {
             this.image = getImageUrl(image).toString();
             this.thumb = getThumbnailImageUrl(image).toString(); /*optional*/
