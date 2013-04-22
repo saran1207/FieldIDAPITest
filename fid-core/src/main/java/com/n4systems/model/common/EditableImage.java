@@ -1,7 +1,6 @@
 package com.n4systems.model.common;
 
 import com.google.common.collect.Lists;
-import com.n4systems.model.EventStatus;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;

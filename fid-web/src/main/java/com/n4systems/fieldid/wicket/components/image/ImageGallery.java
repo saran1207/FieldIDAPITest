@@ -69,6 +69,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
                     if (image != null) {
                         images.add(image);
                     }
+                    target.add(ImageGallery.this);
                     target.appendJavaScript(String.format(GALLERY_ADD_JS, gallery.getMarkupId(), getImageUrl(image), image.getId()));
                 }
             }

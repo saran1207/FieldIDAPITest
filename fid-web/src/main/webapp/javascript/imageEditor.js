@@ -33,7 +33,8 @@ var imageEditor = (function() {
 			var value = annotation && annotation.text ? annotation.text : options.text;
 			var type = annotation && annotation.type ? annotation.type : options.type;
 			var direction = options.direction;
-			var id = annotation && annotation.id ? notePrefix+annotation.id : notePrefix+options.editedId;
+			var id = annotation && annotation.id ? annotation.id : options.editedId;
+			id = notePrefix+(id?id:'');
 			if (annotation && annotation.x) {
 			 	direction = (annotation.x <.5) ? 'arrow-left' : 'arrow-right';
 			}

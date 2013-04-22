@@ -65,17 +65,23 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
     }
 
     private Long parseNoteId(IRequestParameters params) {
-        String id=getNullSafeStringParameter(params,"noteId");
-        String prefix = "_note";
-        return id==null ? null :
-                id.indexOf(prefix)>=0 ? Long.parseLong(id.substring(prefix.length())) : null;
+        return parsePrefixedId(params,"noteId","_note");
     }
 
     private Long parseImageId(IRequestParameters params) {
-        String id=getNullSafeStringParameter(params,"imageId");
-        String prefix = "_image";
-        return id==null ? null :
-                id.indexOf(prefix)>=0 ? Long.parseLong(id.substring(prefix.length())) : null;
+        return parsePrefixedId(params, "imageId", "_image");
+    }
+
+    private Long parsePrefixedId(IRequestParameters params, String param, String prefix) {
+        String id=getNullSafeStringParameter(params,param);
+        try {
+            if ( id==null || !id.startsWith(prefix) || id.length()==prefix.length()) {
+                return null;
+            }
+            return Long.parseLong(id.substring(prefix.length()));
+        } catch (NumberFormatException nfe) {
+            throw new IllegalArgumentException("can't find " + prefix + "  with id " + id.substring(prefix.length()));
+        }
     }
 
     private String getNullSafeStringParameter(IRequestParameters params, String p) {
@@ -97,11 +103,9 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
 
 
     private ImageAnnotation getImageAnnotation(Long id, Double x, Double y, String text, ImageAnnotationType type) {
-        ImageAnnotation annotation = null;
-        if (id==null) {   // create new one.
+        ImageAnnotation annotation = findImageAnnotation(id);
+        if (annotation==null && id==null) {   // create new one.
             annotation = new ImageAnnotation(x,y,text,type);
-        } else {
-            annotation = findImageAnnotation(id);
         }
         Preconditions.checkState(annotation!=null, "couldn't find annotation with id " + id);
 

@@ -16,6 +16,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.io.Serializable;
 import java.util.List;
 
+
 public class ImageList<T extends S3Image> extends Panel {
 
     private static final String INIT_JS = "fieldIdWidgets.createImageList('%s',%s);";
