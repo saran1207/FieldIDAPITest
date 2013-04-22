@@ -63,6 +63,9 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/pageStyles/procedureDefinition.css");
+        response.renderCSSReference("style/pageStyles/procedureDefinitionPrint.css");
+        response.renderCSSReference("style/component/annotated-image.css");
+
         response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
     }
 
