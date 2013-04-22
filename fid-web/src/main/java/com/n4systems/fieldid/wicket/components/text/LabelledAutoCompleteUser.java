@@ -9,8 +9,6 @@ import org.apache.wicket.model.IModel;
 
 public class LabelledAutoCompleteUser extends LabelledComponent<AutoComplete<User>,User> {
 
-    boolean isRequired;
-
     public LabelledAutoCompleteUser(String id, String key, IModel<User> model, boolean isRequired) {
         this(id, key, model);
         ((AutoCompleteUser) component).getAutocompleteField().setRequired(isRequired);
