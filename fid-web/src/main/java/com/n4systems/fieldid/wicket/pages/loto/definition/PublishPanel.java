@@ -37,6 +37,18 @@ public class PublishPanel extends Panel {
                 }
             });
 
+            add(new SubmitLink("save") {
+                @Override
+                public void onSubmit() {
+                    doSave();
+                }
+
+                @Override
+                public void onError() {
+                    doCancel(null);
+                }
+            });
+
             SubmitLink submitLink = new SubmitLink("publish") {
                 @Override
                 public void onSubmit() {
@@ -47,8 +59,8 @@ public class PublishPanel extends Panel {
                 public void onError() {
                     doCancel(null);
                 }
-
             };
+
             if (procedureDefinitionService.isProcedureApprovalRequiredForCurrentUser()) {
                 submitLink.add(new Label("submitLabel", new FIDLabelModel("label.submit_for_approval")));
             } else {
@@ -58,7 +70,9 @@ public class PublishPanel extends Panel {
         }
     }
 
-    protected void doPublish() { }
+    protected void doPublish() {}
+
+    protected void doSave() {}
 
     protected void doCancel(AjaxRequestTarget target) {}
 

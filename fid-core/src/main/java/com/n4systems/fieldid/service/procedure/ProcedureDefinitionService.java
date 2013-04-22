@@ -11,11 +11,8 @@ import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
-import com.n4systems.util.persistence.MaxSelect;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereParameter;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.n4systems.util.persistence.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Arrays;
 import java.util.List;
@@ -41,13 +38,18 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return query;
     }
 
-    public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) {
+
+    public void saveProcedureDefinitionDraft(ProcedureDefinition procedureDefinition) {
         if (procedureDefinition.getRevisionNumber() == null) {
             procedureDefinition.setRevisionNumber(generateRevisionNumber(procedureDefinition.getAsset()));
         }
 
         saveIsolationPoints(procedureDefinition.getIsolationPoints());
         persistenceService.saveOrUpdate(procedureDefinition);
+    }
+
+    public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) {
+        saveProcedureDefinitionDraft(procedureDefinition);
 
         if (isProcedureApprovalRequiredForCurrentUser()) {
             procedureDefinition.setPublishedState(PublishedState.WAITING_FOR_APPROVAL);

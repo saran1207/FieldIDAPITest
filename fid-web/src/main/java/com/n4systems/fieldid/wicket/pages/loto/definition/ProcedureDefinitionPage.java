@@ -161,6 +161,11 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage{
                     procedureDefinitionService.saveProcedureDefinition(model.getObject());
                     gotoProceduresPage();
                 }
+
+                @Override protected void doSave() {
+                    procedureDefinitionService.saveProcedureDefinitionDraft(model.getObject());
+                    gotoProceduresPage();
+                }
             }.setVisible(false));
 
         }
