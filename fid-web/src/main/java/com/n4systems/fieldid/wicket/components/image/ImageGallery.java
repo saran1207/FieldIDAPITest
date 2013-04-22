@@ -4,8 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.common.S3Image;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.Component;
@@ -67,12 +65,11 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
             @Override protected void onSubmit(AjaxRequestTarget target) {
                 FileUpload fileUpload = uploadField.getFileUpload();
                 if (fileUpload != null) {
-                    S3Service.S3ImagePath path = s3Service.uploadImage(fileUpload.getBytes(), fileUpload.getContentType(), getFileName(fileUpload.getClientFileName()), FieldIDSession.get().getSessionUser().getTenant().getId());
-                    T image = addImage(path, getTenant());
-                    if (image!=null) {
+                    T image = addImage(fileUpload.getBytes(), fileUpload.getContentType(), fileUpload.getClientFileName());
+                    if (image != null) {
                         images.add(image);
                     }
-                    target.appendJavaScript(String.format(GALLERY_ADD_JS,gallery.getMarkupId(),getImageUrl(image, path), image.getId()));
+                    target.appendJavaScript(String.format(GALLERY_ADD_JS, gallery.getMarkupId(), getImageUrl(image), image.getId()));
                 }
             }
 
@@ -87,20 +84,9 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         add(gallery = new WebMarkupContainer("images").setOutputMarkupId(true));
     }
 
-    protected Tenant getTenant() {
-        return FieldIDSession.get().getSessionUser().getTenant();
-    }
+    protected abstract String getImageUrl(T image);
 
-    protected String getImageUrl(T image, S3Service.S3ImagePath path) {
-        // TODO DD : make this cacheable...expiry date is months? or NEVER?
-        return s3Service.generateResourceUrl(path.getMediumPath()).toString();
-    }
-
-    protected abstract T addImage(S3Service.S3ImagePath path, Tenant tenant);
-
-    protected abstract T createImage(S3Service.S3ImagePath path, Tenant tenant);
-
-    protected abstract String getFileName(String fileName);
+    protected abstract T addImage(byte[] bytes, String contentType, String clientFileName);
 
     protected T getCurrentImage() {
         return currentImageIndex==null ? null : images.get(currentImageIndex);
@@ -122,6 +108,11 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
 
     public ImageGallery withDoneButton() {
         withDone = true;
+        return this;
+    }
+
+    public ImageGallery withNoDoneButton() {
+        withDone = false;
         return this;
     }
 
@@ -175,7 +166,6 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         for (T image:images) {
             data.add(createImageJson(image));
         }
-//        data.add(new GalleryVideoJson());
         return data;
     }
 
@@ -187,18 +177,10 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         String image;
         Long id;
         public GalleryImageJson(T image) {
-            this.image = s3Service.generateResourceUrl(image.getS3Path()).toString();
+            this.image = getImageUrl(image).toString();
             this.id = image.getId();
         }
     }
-
-//    protected class GalleryVideoJson {
-//        String video = "http://www.youtube.com/watch?v=fsPebhpQezY";
-//        String title = "sampe vidleo";
-//        String description = "hey, it moves";
-//
-//        GalleryVideoJson() { }
-//    }
 
     protected class GalleryOptions {
         Object[] dataSource;

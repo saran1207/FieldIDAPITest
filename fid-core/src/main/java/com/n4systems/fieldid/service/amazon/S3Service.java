@@ -51,14 +51,9 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String ASSET_PROFILE_IMAGE_PATH_THUMB = "/assets/%d/profile/%s.thumbnail";
     public static final String ASSET_PROFILE_IMAGE_PATH_MEDIUM = "/assets/%d/profile/%s.medium";
 
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH = "/procedure_definitions/%d/%s";
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB = "/procedure_definitions/%d/%s.thumbnail";
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM = "/procedure_definitions/%d/%s.medium";
-
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_TEMP = "/temp_procedure_images/%s";
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB_TEMP = "/temp_procedure_images/%s.thumbnail";
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM_TEMP = "/temp_procedure_images/%s.medium";
-
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH = "/assets/%s/procedure_definitions/%d/%s";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB = "/assets/%s/procedure_definitions/%d/%s.thumbnail";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM = "/assets/%s/procedure_definitions/%d/%s.medium";
 
     public static final String THUMBNAIL_EXTENSION = ".thumbnail";
     public static final String MEDIUM_EXTENSION = ".medium";
@@ -241,10 +236,13 @@ public class S3Service extends FieldIdPersistenceService {
         return uploadTempImage(imageData, contentType, CRITERIA_RESULT_IMAGE_TEMP, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, CRITERIA_RESULT_THUMB_IMAGE_TEMP);
     }
 
-    public String uploadTempProcedureDefImage(ProcedureDefinitionImage image, byte[] imageData) {
-        String contentType = image.getContentType();
-
-        return uploadTempImage(imageData, contentType, PROCEDURE_DEFINITION_IMAGE_PATH_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB_TEMP);
+    public void uploadProcedureDefImage(ProcedureDefinitionImage procedureDefinitionImage, byte[] imageData, String contentType, String fileName) {
+        uploadResource(imageData, contentType, procedureDefinitionImage.getTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
+                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(), procedureDefinitionImage.getProcedureDefinition().getId(), fileName);
+        uploadResource(imageService.generateMedium(imageData), contentType, procedureDefinitionImage.getTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
+                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(), procedureDefinitionImage.getProcedureDefinition().getId(), fileName);
+        uploadResource(imageService.generateThumbnail(imageData), contentType, procedureDefinitionImage.getTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH_THUMB,
+                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(), procedureDefinitionImage.getProcedureDefinition().getId(), fileName);
     }
 
     private String uploadTempImage(byte[] imageData, String contentType, String imagePathTemplate, String mediumImagePathTemplate, String thumbImagePathTemplate) {
@@ -262,19 +260,6 @@ public class S3Service extends FieldIdPersistenceService {
                 thumbImagePathTemplate, uuid);
 
         return uuid;
-    }
-
-	public void finalizeProcedureDefinitionImageUpload(ProcedureDefinitionImage image) {
-        Long tenantId = getCurrentTenant().getId();
-        String tempFileName = image.getTempFileName();
-
-        copyTemporaryProcedureImageToFinal(image, PROCEDURE_DEFINITION_IMAGE_PATH_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH);
-        copyTemporaryProcedureImageToFinal(image, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM);
-        copyTemporaryProcedureImageToFinal(image, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB);
-
-        removeResource(tenantId, PROCEDURE_DEFINITION_IMAGE_PATH_TEMP, tempFileName);
-        removeResource(tenantId, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM_TEMP, tempFileName);
-        removeResource(tenantId, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB_TEMP, tempFileName);
     }
 
     public void finalizeCriteriaResultImageUpload(CriteriaResultImage criteriaResultImage) {
@@ -373,8 +358,22 @@ public class S3Service extends FieldIdPersistenceService {
                 criteriaResultImage.getCriteriaResult().getId(),
                 criteriaResultImage.getFileName());
     }
-	
-	public byte[] downloadCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
+
+    public URL getProcedureDefinitionImageThumbnailURL(ProcedureDefinitionImage procedureDefinitionImage) {
+        return generateResourceUrl(procedureDefinitionImage.getTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH_THUMB,
+                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+                procedureDefinitionImage.getProcedureDefinition().getId(),
+                procedureDefinitionImage.getFileName());
+    }
+
+    public URL getProcedureDefinitionImageMediumURL(ProcedureDefinitionImage procedureDefinitionImage) {
+        return generateResourceUrl(procedureDefinitionImage.getTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
+                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+                procedureDefinitionImage.getProcedureDefinition().getId(),
+                procedureDefinitionImage.getFileName());
+    }
+
+    public byte[] downloadCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
 		return downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
                 criteriaResultImage.getCriteriaResult().getEvent().getId(),
                 criteriaResultImage.getCriteriaResult().getId(),

@@ -1,16 +1,14 @@
 package com.n4systems.fieldid.wicket.pages;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
-import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
-
-import java.util.List;
 
 public class SecretTestPage extends FieldIDAuthenticatedPage {
 
@@ -25,24 +23,9 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 
         procedureDefinition=persistenceService.findAll(ProcedureDefinition.class).get(0);
 
-        List<ProcedureDefinitionImage> images = procedureDefinition.getImages();
-        ImageAnnotation annotation = images.get(0).getAnnotations().get(0);
+        procedureDefinition.setImages(Lists.<ProcedureDefinitionImage>newArrayList());
 
-//        add(new EditableImageGallery<ProcedureDefinitionImage>("gallery", images, annotation) {
-//            @Override protected ProcedureDefinitionImage createImage(S3Service.S3ImagePath path, Tenant tenant) {
-//                ProcedureDefinitionImage image = new ProcedureDefinitionImage();
-//                image.setTenant(tenant);
-//                image.setFileName(path.getOrigPath());
-//                image.setProcedureDefinition(procedureDefinition);
-//                return image;
-//            }
-//
-//            @Override protected String getFileName(String fileName) {
-//                return "/secret/test/images";
-//            }
-//        });
-
-        add(new IsolationPointImageGallery("gallery", procedureDefinition, null));
+        add(new IsolationPointImageGallery("gallery", procedureDefinition, null).withNoDoneButton());
     }
     
     @Override

@@ -1,7 +1,5 @@
 package com.n4systems.fieldid.wicket.components.image;
 
-import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
@@ -50,12 +48,16 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
     }
 
     @Override
-    protected T addImage(S3Service.S3ImagePath path, Tenant tenant) {
-        T image = createImage(path, tenant);
-        image.setTenant(tenant);
+    protected T addImage(byte[] bytes, String contentType, String clientFileName) {
+        T image = createImage(clientFileName);
+        uploadImage(image, bytes, contentType, clientFileName);
         persistenceService.save(image);
         return image;
     }
+
+    protected abstract void uploadImage(T image, byte[] bytes, String path, String clientFileName);
+
+    protected abstract T createImage(String path);
 
     @Override
     protected void imageClicked(AjaxRequestTarget target, String action, T image) {
