@@ -1,0 +1,35 @@
+<wicket:panel xmlns:wicket="http://www.apache.org/internal/xmlbeans/wsdlsubst">
+
+    <div class="print-header">
+
+
+            <img wicket:id="tenantLogo"/>
+
+
+        <table border="1">
+            <tr>
+                <td><wicket:message key="label.developed_by" /></td>
+                <td><wicket:message key="label.reviewed_by" /></td>
+                <td><wicket:message key="label.revised_by" /></td>
+
+            </tr>
+
+            <tr>
+                <td> <span wicket:id="developedBy"/> </td>
+                <td> <span wicket:id="reviewedBy"/> </td>
+                <td> <span wicket:id="revisedBy"/> </td>
+            </tr>
+
+            <tr>
+                <td colspan="2"> <span wicket:id="date"/> </td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+
+        <wicket:message key="label.revision" /> <br/> <span wicket:id="revisionNumber"/>
+
+
+    </div>
+
+
+</wicket:panel>
