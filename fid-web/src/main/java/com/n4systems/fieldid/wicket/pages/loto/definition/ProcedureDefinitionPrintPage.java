@@ -49,7 +49,7 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         add(new PrintAsset("assetpage",model));
         add(new PrintProductSummary("productsummary",model));
 
-        add(new PrintAssetDescription("asset",model));
+        //add(new PrintAssetDescription("asset",model));
         // add ProcedureSummary ...new Panel();
         // add(new PrintHeader("header",model));
 
