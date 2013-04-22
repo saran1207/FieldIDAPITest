@@ -1,34 +1,24 @@
 <wicket:panel xmlns:wicket="http://www.apache.org/internal/xmlbeans/wsdlsubst">
 
-    <div>
+    <table class="equipment-details">
+        <tr>
+            <td><wicket:message key="label.equipment_number" />: <span wicket:id="equipmentNumber"/></td>
+            <td><wicket:message key="label.location" />: <span wicket:id="equipmentLocation"/></td>
+            <td class="building"><wicket:message key="label.building" />: <span wicket:id="building"/></td>
+        </tr>
+    </table>
 
-        <table border="1">
-            <tr>
-                <td><wicket:message key="label.equipment_number" /> #: <span wicket:id="equipmentNumber"/></td>
-                <td><wicket:message key="label.location" />: <span wicket:id="equipmentLocation"/></td>
-                <td><wicket:message key="label.building" />: <span wicket:id="building"/></td>
-            </tr>
-        </table>
-
-    </div>
-
-    <div>
-
-        <table border="1">
-            <tr>
-                <td><wicket:message key="label.lockout_points" /> </td>
-                <td><wicket:message key="label.devices" /> </td>
-                <td><wicket:message key="label.caution" /> </td>
-            </tr>
-
-            <tr>
-                <td><span wicket:id="lockoutPoints"/> </td>
-                <td><span wicket:id="deviceCount"/> </td>
-                <td><span wicket:id="warnings"/> </td>
-            </tr>
-
-        </table>
-
-    </div>
+    <table class="procedure-details">
+        <tr>
+            <th><wicket:message key="label.lockout_points" /> </th>
+            <th><wicket:message key="label.devices" /> </th>
+            <th class="warning"><wicket:message key="label.caution" /> </th>
+        </tr>
+        <tr>
+            <td><span wicket:id="lockoutPoints"/> </td>
+            <td><span wicket:id="deviceCount"/> </td>
+            <td class="warning"><span wicket:id="warnings"/> </td>
+        </tr>
+    </table>
 
 </wicket:panel>
