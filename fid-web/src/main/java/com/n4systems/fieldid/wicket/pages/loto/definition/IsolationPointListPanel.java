@@ -76,7 +76,9 @@ public class IsolationPointListPanel extends Panel {
         });
         item.add(new Label("id", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getIdentifier())));
         item.add(new Label("source", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getSourceType())));
-        if(isolationPoint.getDeviceDefinition().isFreeform()) {
+        if (isolationPoint.getDeviceDefinition() == null) {
+            item.add(new Label("device"));
+        } else if(isolationPoint.getDeviceDefinition().isFreeform()) {
             item.add(new Label("device", getDeviceFreeFormDescription(isolationPoint)));
         } else {
             item.add(new Label("device", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getDeviceDefinition().getAssetType().getName())));

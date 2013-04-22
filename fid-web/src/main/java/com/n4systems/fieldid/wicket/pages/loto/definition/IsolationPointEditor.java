@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.search.ProcedureSearchService;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.ComboBox;
 import com.n4systems.fieldid.wicket.components.ExternalS3Image;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -49,11 +50,14 @@ public class IsolationPointEditor extends Panel {
     private FIDModalWindow modal;
     private final ProcedureDefinition procedureDefinition;
     private IsolationPointImageGallery gallery;
+    private FIDFeedbackPanel feedbackPanel;
 
     public IsolationPointEditor(String id, ProcedureDefinition procedureDefinition) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
         setOutputMarkupPlaceholderTag(true);
         this.procedureDefinition = procedureDefinition;
+
+        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
         add(new AttributeAppender("class","isolation-point-editor"));
 
@@ -85,8 +89,7 @@ public class IsolationPointEditor extends Panel {
                 closeEditor(target);
             }
             @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
-                System.out.println("hmmm....");
-                // TODO DD : not sure what to do here...have to add validation in last milestone.   target.add(feedbackPanel);
+                target.add(feedbackPanel);
             }
         });
 
