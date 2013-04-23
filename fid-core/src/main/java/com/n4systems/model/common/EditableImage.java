@@ -1,5 +1,6 @@
 package com.n4systems.model.common;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.model.parents.EntityWithTenant;
 
@@ -73,6 +74,7 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     }
 
     public void removeAnnotation(ImageAnnotation annotation) {
+        Preconditions.checkArgument(getAnnotations().contains(annotation),"trying to remove annotation " + annotation.getId() + " that isn't currently contained in " + getId());
         getAnnotations().remove(annotation);
     }
 
@@ -116,4 +118,5 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
+
 }

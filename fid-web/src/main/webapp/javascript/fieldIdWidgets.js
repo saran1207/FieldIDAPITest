@@ -30,10 +30,12 @@ var fieldIdWidgets = (function() {
 					var newWidth = imageWidth * (imageContainerHeight/imageHeight);
 					$this.parent().css('height', imageContainerHeight).css('width',newWidth);
 					$this.parent().css('margin-left',(imageContainerWidth-newWidth)/2);
+					$this.css('height',imageContainerHeight);
 				} else {
 					var newHeight = imageHeight * (imageContainerWidth/imageWidth);
 					$this.parent().css('margin-top',(imageContainerHeight-newHeight)/2);
 					$this.parent().css('width', imageContainerWidth).css('height',newHeight);
+					$this.css('width',imageContainerWidth);
 				}
 			});
 

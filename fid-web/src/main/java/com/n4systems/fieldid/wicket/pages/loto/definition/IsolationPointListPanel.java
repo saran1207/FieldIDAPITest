@@ -44,7 +44,7 @@ public class IsolationPointListPanel extends Panel {
 
         add(new EditableImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
             @Override protected void createImage(final ListItem<ProcedureDefinitionImage> item) {
-                URL url = s3Service.getProcedureDefinitionImageMediumURL(item.getModel().getObject());
+                URL url = s3Service.getProcedureDefinitionImageThumbnailURL(item.getModel().getObject());
                 item.add(new ContextImage("image",url.toString()));
             }
         });

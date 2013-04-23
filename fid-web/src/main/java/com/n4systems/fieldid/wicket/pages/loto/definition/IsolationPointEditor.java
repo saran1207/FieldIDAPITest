@@ -122,16 +122,13 @@ public class IsolationPointEditor extends Panel {
     }
 
     protected Component createImageGallery(String id) {
-        if (gallery==null) {
-            gallery = new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
-                @Override protected void doneClicked(AjaxRequestTarget target) {
-                    target.add(form.get("image"));
-                    modal.close(target);
-                }
-            };
-            gallery.setMarkupId("ipe_gallery");
-        }
-        return gallery;
+        return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
+            @Override protected void doneClicked(AjaxRequestTarget target) {
+                target.add(IsolationPointEditor.this);
+                modal.close(target);
+                IsolationPointEditor.this.getDefaultModel().detach();
+            }
+        };
     }
 
     private IModel<String> getDeviceDescriptionModel() {

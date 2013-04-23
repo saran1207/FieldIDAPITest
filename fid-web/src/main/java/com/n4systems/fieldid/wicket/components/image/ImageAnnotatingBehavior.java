@@ -91,9 +91,6 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
     private void doLabel(Long noteId, Long imageId, Double x, Double y,  String text, ImageAnnotationType type) {
         Preconditions.checkArgument(imageId!=null, "you must specify image when updating an annotation (needs to know which image it is applied to)");
         ImageAnnotation annotation = getImageAnnotation(noteId,x,y,text,type);
-        if (!annotation.getImage().getAnnotations().contains(annotation)) {
-            annotation.getImage().getAnnotations().add(annotation);
-        }
         getEditableImage().addImageAnnotation(annotation);
     }
 

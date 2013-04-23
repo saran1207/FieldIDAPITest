@@ -37,14 +37,14 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
         image.setTenant(procedureDefinition.getTenant());
         image.setFileName(path);
         image.setProcedureDefinition(procedureDefinition);
-        // TODO DD : when/how can i remove these? if they have no annotations then they shouldn't exist.
+        // TODO DD : when/how can i remove these images? if they have no annotations then they shouldn't exist.
         procedureDefinition.getImages().add(image);
         return image;
     }
 
     @Override
     protected String getImageUrl(ProcedureDefinitionImage image) {
-        URL url = s3Service.getProcedureDefinitionImageMediumURL(image);
+        URL url = s3Service.getProcedureDefinitionImageThumbnailURL(image);
         return url.toString();
     }
 
