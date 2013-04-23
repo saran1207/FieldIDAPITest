@@ -37,6 +37,8 @@ public class DetailsPanel extends Panel {
         public ProcedureDefinitionDetailsForm(String id, IModel<ProcedureDefinition> model) {
             super(id, model);
 
+            setMarkupId("detailsForm");
+
             add(new LabelledRequiredTextField<String>("procedureCode", "label.procedure_code", new PropertyModel<String>(model, "procedureCode")));
 
             add(new LabelledTextField<String>("identifier", "label.electronic_id", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier())));
@@ -58,7 +60,8 @@ public class DetailsPanel extends Panel {
                     doCancel(target);
                 }
             });
-            add(new AjaxSubmitLink("continue") {
+            AjaxSubmitLink submitLink;
+            add(submitLink = new AjaxSubmitLink("continue") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     doContinue(target);
@@ -69,7 +72,7 @@ public class DetailsPanel extends Panel {
                     target.add(feedbackPanel);
                 }
             });
-
+            submitLink.setMarkupId("detailsContinueLink");
         }
     }
 
