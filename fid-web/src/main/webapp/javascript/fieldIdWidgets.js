@@ -13,10 +13,10 @@ var fieldIdWidgets = (function() {
 		var options = $.extend(defaults, options);
 
 		var init = function() {
-			var numberOfImages = $('.image-list .notes-container').length;
-			var imageWidthContainer = $('.image-list ul li').outerWidth(true);
+			var numberOfImages = il.find('.notes-container').length;
+			var imageWidthContainer = il.find('ul li').outerWidth(true);
 			var carouselWidth = numberOfImages * imageWidthContainer;
-			$('.image-list ul').css('width', carouselWidth);
+			il.find('ul').css('width', carouselWidth);
 
 			//Set height of images to fit in the image list without cropping
 			il.find('ul li img').each(function(){
@@ -39,28 +39,32 @@ var fieldIdWidgets = (function() {
 				}
 			});
 
-			// TODO DD : hide nav if < 4 images? need some max to compare against.
 			//navigation buttons
-			$('.image-list .prev').click(function(){
-				$(".image-list ul").animate({
-					marginLeft: imageWidthContainer
-				}, 500,
-				function(){
-					//Place first image after the last to create a continuous loop
-					$(this).find("li:first").before($(this).find("li:last"));
-					$(this).css({marginLeft: 0});
-				})
-			});
-			$('.image-list .next').click(function(){
-				$(".image-list ul").animate({
-					marginLeft: -imageWidthContainer
-				}, 500,
-				function(){
-					//Place last image before the first to create a continuous loop
-					$(this).find("li:last").after($(this).find("li:first"));
-					$(this).css({marginLeft: 0});
-				})
-			});	
+			if (numberOfImages<5) {
+				il.find('.navigation').hide();
+			} else {
+				il.find('.prev').click(function(){
+					il.find('ul').animate({
+						marginLeft: imageWidthContainer
+					}, 500,
+					function(){
+						//Place first image after the last to create a continuous loop
+						$(this).find("li:first").before($(this).find("li:last"));
+						$(this).css({marginLeft: 0});
+					})
+				});
+				il.find('.next').click(function(){
+					il.find('ul').animate({
+						marginLeft: -imageWidthContainer
+					}, 500,
+					function(){
+						//Place last image before the first to create a continuous loop
+						$(this).find("li:last").after($(this).find("li:first"));
+						$(this).css({marginLeft: 0});
+					})
+				});
+			}
+
 
 			if (options.annotationOptions) {
 				il.find('ul li div').each(
