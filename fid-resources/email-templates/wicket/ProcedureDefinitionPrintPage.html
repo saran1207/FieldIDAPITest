@@ -7,21 +7,24 @@
 <wicket:extend>
 
 	<div class="procedure-print-container">
+        <div class="header">
+          <div wicket:id="meta" class="metadata"/>
 
-        <div wicket:id="meta" class="metadata"/>
+          <div wicket:id="assetpage" class="assets"/>
 
-        <div wicket:id="assetpage" class="assets"/>
-
-        <div wicket:id="productsummary" class="procedure-summary" />
+          <div wicket:id="productsummary" class="procedure-summary" />
+		    </div>
+        
 		
-		<!-- remove, no longer needed -->
-        <div style="display:none;" wicket:id="details"/>
+        <div style="display:none;" wicket:id="details"/><!-- remove, no longer needed -->
+        
+        <div class="content">
+          <div wicket:id="images"/>
 
-        <div wicket:id="images"/>
+          <div wicket:id="list"/>
 
-        <div wicket:id="list"/>
-
-        <div wicket:id="footer"/>
+          <div wicket:id="footer"/>
+        </div>
 	</div>
 
 </wicket:extend>
