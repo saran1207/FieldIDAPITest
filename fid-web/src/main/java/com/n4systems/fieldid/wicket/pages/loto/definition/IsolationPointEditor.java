@@ -123,7 +123,7 @@ public class IsolationPointEditor extends Panel {
 
     protected Component createImageGallery(String id) {
         if (gallery==null) {
-            gallery = new IsolationPointImageGallery(id,procedureDefinition,getIsolationPoint().getAnnotation()) {
+            gallery = new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
                 @Override protected void doneClicked(AjaxRequestTarget target) {
                     target.add(form.get("image"));
                     modal.close(target);

@@ -1,18 +1,21 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.image.EditableImageList;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -21,21 +24,30 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
+import java.net.URL;
+
 import static ch.lambdaj.Lambda.on;
 
 public class IsolationPointListPanel extends Panel {
 
     private @SpringBean PersistenceService persistenceService;
+    private @SpringBean S3Service s3Service;
+
     private final IModel<ProcedureDefinition> model;
 
-    public IsolationPointListPanel(String id, IModel<ProcedureDefinition> model) {
+    public IsolationPointListPanel(String id, final IModel<ProcedureDefinition> model) {
         super(id, model);
         this.model = model;
         setOutputMarkupPlaceholderTag(true);
 
         add(new AttributeAppender("class", "isolation-point-list"));
 
-        add(new EditableImageList("images", new PropertyModel(model,"images")));
+        add(new EditableImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
+            @Override protected void createImage(final ListItem<ProcedureDefinitionImage> item) {
+                URL url = s3Service.getProcedureDefinitionImageMediumURL(item.getModel().getObject());
+                item.add(new ContextImage("image",url.toString()));
+            }
+        });
 
         final ListView<IsolationPoint> listView = new ListView<IsolationPoint>("list",new PropertyModel(model,"isolationPoints")) {
             @Override protected void populateItem(ListItem<IsolationPoint> item) {
@@ -90,7 +102,8 @@ public class IsolationPointListPanel extends Panel {
         item.add(new WebMarkupContainer("image"));
 
         item.add(new AjaxLink("edit") {
-            @Override public void onClick(AjaxRequestTarget target) {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
                 doEdit(target, isolationPoint);
             }
         });

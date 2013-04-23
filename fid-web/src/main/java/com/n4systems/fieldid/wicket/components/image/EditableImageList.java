@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.IModel;
 
 import java.io.Serializable;
@@ -14,11 +13,6 @@ public class EditableImageList<T extends EditableImage> extends ImageList<T> {
 
     public EditableImageList(String id, IModel<List<T>> imageModel) {
         super(id,imageModel);
-    }
-
-    @Override
-    protected void createImage(final ListItem<T> item, String url) {
-        super.createImage(item,url);
     }
 
     @Override

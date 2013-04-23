@@ -13,7 +13,7 @@ var fieldIdWidgets = (function() {
 		var options = $.extend(defaults, options);
 
 		var init = function() {
-			var numberOfImages = $('.image-list ul li').length;
+			var numberOfImages = $('.image-list .notes-container').length;
 			var imageWidthContainer = $('.image-list ul li').outerWidth(true);
 			var carouselWidth = numberOfImages * imageWidthContainer;
 			$('.image-list ul').css('width', carouselWidth);

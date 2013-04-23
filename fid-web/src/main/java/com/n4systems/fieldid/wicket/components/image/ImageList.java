@@ -6,7 +6,6 @@ import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -17,7 +16,7 @@ import java.io.Serializable;
 import java.util.List;
 
 
-public class ImageList<T extends S3Image> extends Panel {
+public abstract class ImageList<T extends S3Image> extends Panel {
 
     private static final String INIT_JS = "fieldIdWidgets.createImageList('%s',%s);";
 
@@ -35,22 +34,16 @@ public class ImageList<T extends S3Image> extends Panel {
         add(new AttributeAppender("class", "image-list"));
         listView = new ListView<T>("list", images) {
             @Override protected void populateItem(final ListItem<T> item) {
-                createImage(item, getImageUrl(item));
+                createImage(item);
+//                item.setRenderBodyOnly(true);
             }
         };
         add(listView.setVisible(hasImages));
         add(new WebMarkupContainer("blankSlate").setVisible(!hasImages));
     }
 
-    protected String getImageUrl(ListItem<T> item) {
-        String path = item.getModelObject().getS3Path();
-        String imageUrl = s3Service.generateResourceUrl(path).toString();
-        return imageUrl;
-    }
-
-    protected void createImage(ListItem<T> item, String path) {
-        item.add(new ContextImage("image",path));
-        item.setRenderBodyOnly(false);
+    protected void createImage(ListItem<T> item) {
+        item.add(new WebMarkupContainer("image"));
     }
 
     @Override

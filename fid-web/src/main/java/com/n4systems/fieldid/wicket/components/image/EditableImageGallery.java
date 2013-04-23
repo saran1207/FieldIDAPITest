@@ -4,22 +4,22 @@ import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.model.IModel;
 
 import java.util.List;
 
 public abstract class EditableImageGallery<T extends EditableImage> extends ImageGallery<T> {
 
-    private static final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.edit('%s',%s)";
+    private final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.edit('%s',%s)";
 
-    private ImageAnnotatingBehavior imageAnnotatingBehavior;
+    private final ImageAnnotatingBehavior imageAnnotatingBehavior;
+    private final IModel<ImageAnnotation> model;
 
-    private final ImageAnnotation annotation;
-
-    public EditableImageGallery(String id, final List<T> images, final ImageAnnotation annotation) {
+    public EditableImageGallery(String id, final List<T> images, IModel<ImageAnnotation> model) {
         super(id, images);
-        this.annotation = annotation;
+        this.model = model;
         setOutputMarkupId(true);
-        add(imageAnnotatingBehavior = new ImageAnnotatingBehavior<T>(annotation) {
+        add(imageAnnotatingBehavior = new ImageAnnotatingBehavior<T>(model.getObject()) {
             @Override protected T getEditableImage() {
                 return getCurrentImage();
             }
@@ -49,6 +49,10 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
         return String.format(IMAGE_EDITOR_ENABLE_JS,gallery.getMarkupId(),jsonRenderer.render(imageAnnotatingBehavior.getImageAnnotationOptions()));
     }
 
+    private ImageAnnotation getAnnotation() {
+        return model.getObject();
+    }
+
     @Override
     protected T addImage(byte[] bytes, String contentType, String clientFileName) {
         T image = createImage(clientFileName);
@@ -65,6 +69,10 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
     protected void imageClicked(AjaxRequestTarget target, String action, T image) {
         super.imageClicked(target, action, image);
         target.appendJavaScript(getImageEditorJs());
+    }
+
+    public IModel<ImageAnnotation> getImageAnnotationModel() {
+        return model;
     }
 
     @Override
@@ -87,12 +95,13 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
     }
 
     class EditableGalleryOptions extends GalleryOptions {
-        Long editedId = annotation!=null ? annotation.getId() : null;
-        String type= annotation!=null ? annotation.getType().getCssClass() : ImageAnnotationType.getDefault().getCssClass();
+        Long editedId = getAnnotation()!=null ? getAnnotation().getId() : null;
+        String type= getAnnotation()!=null ? getAnnotation().getType().getCssClass() : ImageAnnotationType.getDefault().getCssClass();
 
         EditableGalleryOptions(List data) {
             super(data);
         }
     }
+
 
 }
