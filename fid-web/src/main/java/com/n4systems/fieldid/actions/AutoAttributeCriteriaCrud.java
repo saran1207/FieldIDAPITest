@@ -18,6 +18,7 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemConfig})
@@ -94,12 +95,25 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 				lookUpOutputs.add(new StringListingPair(infoOptionBean.getInfoField().getUniqueID().toString(),
 						infoOptionBean.getUniqueID().toString()));
 			} else {
+                if(infoOptionBean.getInfoField().getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
+                    lookUpOutputs.add(new StringListingPair(infoOptionBean.getInfoField().getUniqueID().toString(),
+                            getDateString(infoOptionBean)));
+                } else {
 				lookUpOutputs.add(new StringListingPair(infoOptionBean.getInfoField().getUniqueID().toString(),
 						infoOptionBean.getName()));
+                }
 			}
 			
 		}
 	}
+
+    private String getDateString(InfoOptionBean infoOptionBean) {
+        Date date = new Date(Long.valueOf(infoOptionBean.getName()));
+        if (infoOptionBean.getInfoField().isIncludeTime())
+            return formatAnyDate(date, false, true);
+        else
+            return formatDate(date, false);
+    }
 
 	private boolean isDefinitionFound(AutoAttributeDefinition definition) {
 		return definition != null;
