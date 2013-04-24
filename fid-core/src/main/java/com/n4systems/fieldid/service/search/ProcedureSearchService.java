@@ -69,6 +69,7 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
         Preconditions.checkArgument(from!=null && to!=null, "can't use null isolation points when copying.");
 
         to.setId(from.getId());
+        to.setAnnotation(from.getAnnotation());
         to.setIdentifier(from.getIdentifier());
         to.setLocation(from.getLocation());
         to.setMethod(from.getMethod());

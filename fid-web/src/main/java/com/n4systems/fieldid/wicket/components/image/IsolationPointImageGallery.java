@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.components.image;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -43,8 +45,15 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
     }
 
     @Override
+    protected void doLabel(ProcedureDefinitionImage image, ImageAnnotation annotation) {
+        super.doLabel(image, annotation);
+        Preconditions.checkState(annotation.getImage().equals(image));
+        model.getObject().setAnnotation(annotation);
+    }
+
+    @Override
     protected String getImageUrl(ProcedureDefinitionImage image) {
-        URL url = s3Service.getProcedureDefinitionImageThumbnailURL(image);
+        URL url = s3Service.getProcedureDefinitionImageMediumURL(image);
         return url.toString();
     }
 

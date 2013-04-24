@@ -38,6 +38,10 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
                 }
                 return null;
             }
+            @Override protected void doLabel(T editableImage, ImageAnnotation annotation) {
+                super.doLabel(editableImage,annotation);
+                EditableImageGallery.this.doLabel(editableImage, annotation);
+            }
         }.withEditing());
     }
 
@@ -61,18 +65,10 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
         return image;
     }
 
-    protected abstract void uploadImage(T image, byte[] bytes, String path, String clientFileName);
-
-    protected abstract T createImage(String path);
-
     @Override
     protected void imageClicked(AjaxRequestTarget target, String action, T image) {
         super.imageClicked(target, action, image);
         target.appendJavaScript(getImageEditorJs());
-    }
-
-    public IModel<ImageAnnotation> getImageAnnotationModel() {
-        return model;
     }
 
     @Override
@@ -84,6 +80,14 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
     protected GalleryOptions createGalleryOptions(List<GalleryImageJson> images) {
         return super.createGalleryOptions(images);
     }
+
+    protected abstract void uploadImage(T image, byte[] bytes, String path, String clientFileName);
+
+    protected abstract T createImage(String path);
+
+    protected void doLabel(T editableImage, ImageAnnotation annotation) { }
+
+    // ----------------------------------------------------------------------------------------------------------------------------------------
 
     class GalleryEditableImageJson extends GalleryImageJson {
         private List<ImageAnnotation> annotations;

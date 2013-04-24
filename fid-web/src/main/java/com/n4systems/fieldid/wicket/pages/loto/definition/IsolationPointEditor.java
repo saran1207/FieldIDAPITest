@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.search.ProcedureSearchService;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.ComboBox;
-import com.n4systems.fieldid.wicket.components.ExternalS3Image;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
@@ -23,14 +22,12 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -42,8 +39,6 @@ public class IsolationPointEditor extends Panel {
     private @SpringBean ProcedureSearchService procedureSearchService;
     private @SpringBean ProcedureDefinitionService procedureDefinitionService;
 
-    public final String IMAGE_COMPONENT_ID = "image";
-
     private Form form;
     private IsolationPoint editedIsolationPoint;
     private ComboBox deviceComboBox;
@@ -51,6 +46,7 @@ public class IsolationPointEditor extends Panel {
     private final ProcedureDefinition procedureDefinition;
     private IsolationPointImageGallery gallery;
     private FIDFeedbackPanel feedbackPanel;
+    private Component imagePanel;
 
     public IsolationPointEditor(String id, ProcedureDefinition procedureDefinition) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
@@ -81,7 +77,7 @@ public class IsolationPointEditor extends Panel {
         form.add(new TextArea("check"));
         form.add(new TextArea("method"));
 
-        form.add(new WebMarkupContainer(IMAGE_COMPONENT_ID));
+        form.add(imagePanel = new IsolationPointImagePanel("annotation").add(createEditClickBehavior()));
 
         form.add(new AjaxSubmitLink("done") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -102,16 +98,6 @@ public class IsolationPointEditor extends Panel {
 
     }
 
-    @Override
-    protected void onBeforeRender() {
-        super.onBeforeRender();
-        if (getIsolationPoint().getAnnotation()!=null) {
-            form.replace(new ExternalS3Image(IMAGE_COMPONENT_ID, getIsolationPoint().getAnnotation().getImage().getS3Path()).add(createEditClickBehavior()));
-        } else {
-            form.replace(new Fragment(IMAGE_COMPONENT_ID, "imageBlankSlate", this).add(createEditClickBehavior()));
-        }
-    }
-
     private Behavior createEditClickBehavior() {
         return new AjaxEventBehavior("onclick") {
             @Override protected void onEvent(AjaxRequestTarget target) {
@@ -124,7 +110,7 @@ public class IsolationPointEditor extends Panel {
     protected Component createImageGallery(String id) {
         return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
             @Override protected void doneClicked(AjaxRequestTarget target) {
-                target.add(IsolationPointEditor.this);
+                target.add(imagePanel);
                 modal.close(target);
                 IsolationPointEditor.this.getDefaultModel().detach();
             }

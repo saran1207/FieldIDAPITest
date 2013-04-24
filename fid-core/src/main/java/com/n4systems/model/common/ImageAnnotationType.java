@@ -7,7 +7,6 @@ public enum ImageAnnotationType {
     // currently, the annotation types match up with IsolationPointSourceTypes.
     //  they don't have to, but it's just the only need now.
 
-    // TODO DD : need to get proper images from matt here. these are placeholders.
     CP("control-panel","#D68741","#FFFFFF",	"#D68741","images/loto/proof_test.jpg","images/loto/control-panel-full.png"),
     E("electrical", "#D52029","#FFFFFF","#D52029","images/setup-wizard-gear.png","images/loto/electrical-full.png"),
     G("gas", "#7C4075","#FFFFFF","#7C4075","images/loto/gas.jpg","images/loto/gas-full.png"),

@@ -19,13 +19,14 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     @Column(name = "filename", nullable = false)
     private String fileName;
 
-    // TODO DD : remove this.
+    // TODO DD : remove this field.
     @Column(name = "thumbnail")
     private String thumbnail;
 
     @Column(name = "mobileguid")
     private String mobileGUID;
 
+    // TODO DD : do i need this? methinks not.
     @Transient
     private String tempFileName;
 

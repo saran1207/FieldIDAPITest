@@ -13,6 +13,10 @@ public class ExternalImage extends WebComponent {
         this.imageUrl = imageUrl;
     }
 
+    public ExternalImage(String id) {
+        this(id,"");
+    }
+
     @Override
     protected void onInitialize() {
         super.onInitialize();

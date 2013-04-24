@@ -88,11 +88,14 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         return params.getParameterValue(p).isEmpty() ? null : params.getParameterValue(p).toString();
     }
 
-    private void doLabel(Long noteId, Long imageId, Double x, Double y,  String text, ImageAnnotationType type) {
+    private final void doLabel(Long noteId, Long imageId, Double x, Double y,  String text, ImageAnnotationType type) {
         Preconditions.checkArgument(imageId!=null, "you must specify image when updating an annotation (needs to know which image it is applied to)");
         ImageAnnotation annotation = getImageAnnotation(noteId,x,y,text,type);
         getEditableImage().addImageAnnotation(annotation);
+        doLabel(getEditableImage(), annotation);
     }
+
+    protected void doLabel(T editableImage, ImageAnnotation annotation) {}
 
     @Override
     protected void onBind() {

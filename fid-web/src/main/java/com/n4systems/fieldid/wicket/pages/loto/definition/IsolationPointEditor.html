@@ -1,9 +1,6 @@
 <wicket:panel>
 
-<!--NOTE : should handle icon by CSS instead.   IE. add class="water"    .title.water {background:url(blah)} 
-Added css classes for title. Don't need the image tag anymore.
--->
-<div class="title electrical">
+<div class="title">
 	<img style="display:none;" wicket:id="icon"/> <h3 wicket:id="title"/>
 </div>
 
@@ -23,7 +20,7 @@ Added css classes for title. Don't need the image tag anymore.
         </div>
 
         <div class="column right">
-            <div wicket:id="image" class="isolation-point-image"/>
+            <div wicket:id="annotation" class="isolation-point-image"/>
         </div>
         
         <div class="buttons">
@@ -31,12 +28,5 @@ Added css classes for title. Don't need the image tag anymore.
             <a wicket:id="done" class="mattButton mattButtonBlue"><wicket:message key="label.done"/></a>
         </div>
     </form>
-
-    <wicket:fragment wicket:id="imageBlankSlate">
-        <div class="blank-slate">
-            <img src="/fieldid/images/loto/label-blank-slate.png" />
-            <span class="label-button"> <a class="mattButton"><wicket:message key="label.label_image"/></a></span>
-        </div>
-    </wicket:fragment>
 
 </wicket:panel>
