@@ -36,6 +36,7 @@ public class IsolationPointListPanel extends Panel {
     private @SpringBean S3Service s3Service;
 
     private final IModel<ProcedureDefinition> model;
+    private final Component blankSlate;
 
     public IsolationPointListPanel(String id, final IModel<ProcedureDefinition> model) {
         super(id, model);
@@ -47,11 +48,11 @@ public class IsolationPointListPanel extends Panel {
         add(new EditableImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
             @Override protected void createImage(final ListItem<ProcedureDefinitionImage> item) {
                 URL url = s3Service.getProcedureDefinitionImageThumbnailURL(item.getModel().getObject());
-                item.add(new ContextImage("image",url.toString()));
+                item.add(new ContextImage("image", url.toString()));
             }
         });
 
-        final ListView<IsolationPoint> listView = new ListView<IsolationPoint>("list",new PropertyModel(model,"isolationPoints")) {
+        ListView<IsolationPoint> listView = new ListView<IsolationPoint>("list",new PropertyModel(model,"isolationPoints")) {
             @Override protected void populateItem(ListItem<IsolationPoint> item) {
                 populateIsolationPoint(item);
                 item.setOutputMarkupId(true);
@@ -78,6 +79,7 @@ public class IsolationPointListPanel extends Panel {
         sortableAjaxWicket.setOutputMarkupId(true);
         sortableAjaxWicket.add(listView);
         add(sortableAjaxWicket);
+        add(blankSlate = new WebMarkupContainer("blankSlate").setVisible(false));
     }
 
     protected void populateIsolationPoint(ListItem<IsolationPoint> item) {
@@ -106,8 +108,7 @@ public class IsolationPointListPanel extends Panel {
         item.add(new WebMarkupContainer("image"));
 
         item.add(new AjaxLink("edit") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
+            @Override public void onClick(AjaxRequestTarget target) {
                 doEdit(target, isolationPoint);
             }
         });
@@ -138,6 +139,13 @@ public class IsolationPointListPanel extends Panel {
             description.append(isolationPoint.getLockDefinition().getFreeformDescription());
         }
         return description.toString();
+    }
+
+    @Override
+    protected void onBeforeRender() {
+        super.onBeforeRender();
+        boolean showBlankSlate = model.getObject().getIsolationPoints().size()==0;
+        blankSlate.setVisible(showBlankSlate);
     }
 
     protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) { }
