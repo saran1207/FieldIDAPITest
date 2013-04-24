@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.ComponentWithExternalHtml;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.IMarkupFragment;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -17,6 +18,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
     private @SpringBean PersistenceService persistenceService;
+    protected @SpringBean JsonRenderer renderer;
 
     private IModel<ProcedureDefinition> model;
 
@@ -66,7 +68,14 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         response.renderCSSReference("style/component/annotated-image.css");
         response.renderCSSReference("style/pageStyles/procedureDefinitionPrint.css");
 
-        response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
+        response.renderJavaScriptReference("javascript/component/printimages.js");
+        //setupPrintPage(id,{imageCount:6,pointCount:3});
+
+        // response.renderOnDomReadyJavaScript(String.format(INIT_CALENDAR_JS, getJsVariableName(), getMarkupId(), getJsonMonthlyWorkSummary(), behavior.getCallbackUrl()));
+        response.renderOnDomReadyJavaScript("setupPrintPage("+ getJsonPrintOptions() +")");
+
+
+
     }
 
 
@@ -74,4 +83,26 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     public IMarkupFragment getMarkup() {
         return super.getMarkup();
     }
+
+
+    private String getJsonPrintOptions() {
+        return renderer.render(new JsonPrintOption(getMarkupId(), "6", "3"));
+    }
+
+    class JsonPrintOption {
+
+        String id;
+        String imageCount;
+        String pointCount;
+
+        JsonPrintOption () {}
+
+        JsonPrintOption (String id, String imageCount, String pointCount) {
+            this.id = id;
+            this.imageCount = imageCount;
+            this.pointCount = pointCount;
+        }
+
+    }
+
 }
