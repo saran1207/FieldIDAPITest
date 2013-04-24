@@ -2,6 +2,9 @@ package com.n4systems.model.common;
 
 import com.google.common.base.Joiner;
 
+//There is a corresponding table 'image_annotation_type' with this information in that database
+//Should we be using the db or is the enum enough?
+
 public enum ImageAnnotationType {
 
     // currently, the annotation types match up with IsolationPointSourceTypes.

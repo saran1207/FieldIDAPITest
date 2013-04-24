@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.image.EditableImageList;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -20,6 +21,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
@@ -87,7 +89,9 @@ public class IsolationPointListPanel extends Panel {
             }
         });
         item.add(new Label("id", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getIdentifier())));
-        item.add(new Label("source", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getSourceType())));
+        Label source;
+        item.add(source = new Label("source", getSourceTypeDescription(isolationPoint)));
+        source.add(new AttributeAppender("class", getSourceCssClass(isolationPoint), " "));
         if (isolationPoint.getDeviceDefinition() == null) {
             item.add(new Label("device"));
         } else if(isolationPoint.getDeviceDefinition().isFreeform()) {
@@ -107,6 +111,21 @@ public class IsolationPointListPanel extends Panel {
                 doEdit(target, isolationPoint);
             }
         });
+    }
+
+    private IModel<String> getSourceCssClass(IsolationPoint isolationPoint) {
+        ImageAnnotationType annotationType = ImageAnnotationType.valueOf(isolationPoint.getSourceType().name());
+        return Model.of(annotationType.getCssClass());
+    }
+
+    private String getSourceTypeDescription(IsolationPoint isolationPoint) {
+        StringBuilder description = new StringBuilder();
+        description.append(isolationPoint.getSourceType().getIdentifier());
+        if(isolationPoint.getSourceText() != null){
+            description.append(" ");
+            description.append(isolationPoint.getSourceText());
+        }
+        return description.toString();
     }
 
     private String getDeviceFreeFormDescription(IsolationPoint isolationPoint) {

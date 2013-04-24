@@ -21,12 +21,12 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -55,9 +55,10 @@ public class IsolationPointEditor extends Panel {
 
         add(new AttributeAppender("class","isolation-point-editor"));
 
-        add(new ContextImage("icon",getIconModel()));
-
-        add(new Label("title", getTitleModel()));
+        WebMarkupContainer titleContainer = new WebMarkupContainer("titleContainer");
+        titleContainer.add(new AttributeAppender("class", getIconCssModel(), " "));
+        titleContainer.add(new Label("title", getTitleModel()));
+        add(titleContainer);
 
         add(modal = new FIDModalWindow("modal", getDefaultModel(), 850, 475));
         modal.setTitle(new StringResourceModel("label.images", this, null));
@@ -169,12 +170,12 @@ public class IsolationPointEditor extends Panel {
         };
     }
 
-    private IModel<String> getIconModel() {
+    private IModel<String> getIconCssModel() {
         return new Model<String>() {
             @Override public String getObject() {
                 IsolationPoint isolationPoint = (IsolationPoint) getDefaultModel().getObject();
                 ImageAnnotationType label = ImageAnnotationType.valueOf(isolationPoint.getSourceType().name());
-                return label.getFullIcon();
+                return label.getCssClass();
             }
         };
     }
