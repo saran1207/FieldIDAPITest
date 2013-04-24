@@ -164,7 +164,7 @@ public class AutoAttributeCriteriaCrud extends AbstractCrud {
 		}
 
 		if (!assetHasStaticFields()) {
-			addFlashError("The asset needs at least 1 attributes that is a select or combo boxs to use a template.");
+			addFlashError("The asset needs at least 1 attribute that is a select or combo box to use a template.");
 			return ERROR;
 		}
 
