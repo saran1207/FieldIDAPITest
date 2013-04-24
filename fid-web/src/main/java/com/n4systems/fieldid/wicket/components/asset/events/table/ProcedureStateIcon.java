@@ -24,7 +24,7 @@ public class ProcedureStateIcon extends Panel {
         if(state.equals(ProcedureWorkflowState.OPEN)) {
             if(isPastDue(procedure)) {
                 add(image = new ContextImage("resultIcon", "images/loto-icon-overdue.png"));
-                image.add(new AttributeAppender("title", new FIDLabelModel("label.lotto_open_assigned_overdue", procedure.getAssignee().getDisplayName())));
+                image.add(new AttributeAppender("title", new FIDLabelModel("label.loto_open_assigned_overdue", procedure.getAssignee().getDisplayName())));
             } else {
                 add(image = new ContextImage("resultIcon", "images/loto-icon.png"));
                 image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", procedure.getAssignee().getDisplayName())));
