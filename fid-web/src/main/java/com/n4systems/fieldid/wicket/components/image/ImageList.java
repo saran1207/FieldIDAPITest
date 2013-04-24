@@ -35,7 +35,6 @@ public abstract class ImageList<T extends S3Image> extends Panel {
         listView = new ListView<T>("list", images) {
             @Override protected void populateItem(final ListItem<T> item) {
                 createImage(item);
-//                item.setRenderBodyOnly(true);
             }
         };
         add(listView.setVisible(hasImages));

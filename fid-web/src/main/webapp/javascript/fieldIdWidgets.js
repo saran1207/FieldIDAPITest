@@ -20,23 +20,7 @@ var fieldIdWidgets = (function() {
 
 			//Set height of images to fit in the image list without cropping
 			il.find('ul li img').each(function(){
-				var $this = $(this);
-				var imageHeight = $this.height();
-				var imageWidth = $this.width();
-				var imageContainerHeight = $this.parent().parent().height();
-				var imageContainerWidth = $this.parent().parent().width();
-
-				if (imageHeight/imageWidth >= imageContainerHeight/imageContainerWidth) {
-					var newWidth = imageWidth * (imageContainerHeight/imageHeight);
-					$this.parent().css('height', imageContainerHeight).css('width',newWidth);
-					$this.parent().css('margin-left',(imageContainerWidth-newWidth)/2);
-					$this.css('height',imageContainerHeight);
-				} else {
-					var newHeight = imageHeight * (imageContainerWidth/imageWidth);
-					$this.parent().css('margin-top',(imageContainerHeight-newHeight)/2);
-					$this.parent().css('width', imageContainerWidth).css('height',newHeight);
-					$this.css('width',imageContainerWidth);
-				}
+				updateImage($(this));
 			});
 
 			//navigation buttons
@@ -78,6 +62,34 @@ var fieldIdWidgets = (function() {
 		}
 
 
+		function updateImage($this) {
+			var imageHeight = $this.height();
+			var imageWidth = $this.width();
+			var imageContainerHeight = $this.parent().parent().height();
+			var imageContainerWidth = $this.parent().parent().width();
+
+			if (imageHeight==0 || imageWidth==0) {
+				// arggh : this is messy but i need to have the image loaded before i do this code.
+				// if it's not [width()==0] then i'll just hide it, wait and try again.
+				$this.parent().css('visibility','hidden');
+				setTimeout(function() { updateImage($this); } ,300);
+				return;
+			}
+			$this.parent().css('visibility','visible');
+
+			if (imageHeight/imageWidth >= imageContainerHeight/imageContainerWidth) {
+				var newWidth = imageWidth * (imageContainerHeight/imageHeight);
+				$this.parent().css('height', imageContainerHeight).css('width',newWidth);
+				$this.parent().css('margin-left',(imageContainerWidth-newWidth)/2);
+				$this.css('height',imageContainerHeight);
+			} else {
+				var newHeight = imageHeight * (imageContainerWidth/imageWidth);
+				$this.parent().css('margin-top',(imageContainerHeight-newHeight)/2);
+				$this.parent().css('width', imageContainerWidth).css('height',newHeight);
+				$this.css('width',imageContainerWidth);
+			}
+		}
+
 		function createNote(annotation) {
 			var value = annotation?annotation.text:options.text;
 			var direction = annotation.x < .5 ? 'arrow-left' : 'arrow-right';
@@ -89,7 +101,6 @@ var fieldIdWidgets = (function() {
 			editor.attr('disabled',true);
 			return span;
 		}
-
 
 		return {
 			init : init
