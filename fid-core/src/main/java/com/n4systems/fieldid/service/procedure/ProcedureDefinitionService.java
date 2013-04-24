@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.procedure;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.model.Asset;
@@ -131,4 +132,20 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return true;
     }
 
-}
+    public IsolationPoint copyIsolationPoint(IsolationPoint from, IsolationPoint to) {
+        Preconditions.checkArgument(from != null && to != null, "can't use null isolation points when copying.");
+
+        to.setId(from.getId());
+        to.setAnnotation(from.getAnnotation());
+        to.setIdentifier(from.getIdentifier());
+        to.setLocation(from.getLocation());
+        to.setMethod(from.getMethod());
+        to.setCheck(from.getCheck());
+        to.setSourceType(from.getSourceType());
+        to.setTenant(from.getTenant());
+        to.setSourceText(from.getSourceText());
+        to.setDeviceDefinition(from.getDeviceDefinition());
+        to.setLockDefinition(from.getLockDefinition());
+
+        return to;
+    }}

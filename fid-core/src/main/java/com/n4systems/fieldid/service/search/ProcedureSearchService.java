@@ -65,21 +65,5 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
         return procedureDefinition;
     }
 
-    public IsolationPoint copyIsolationPoint(IsolationPoint from, IsolationPoint to) {
-        Preconditions.checkArgument(from!=null && to!=null, "can't use null isolation points when copying.");
 
-        to.setId(from.getId());
-        to.setAnnotation(from.getAnnotation());
-        to.setIdentifier(from.getIdentifier());
-        to.setLocation(from.getLocation());
-        to.setMethod(from.getMethod());
-        to.setCheck(from.getCheck());
-        to.setSourceType(from.getSourceType());
-        to.setTenant(from.getTenant());
-        to.setSourceText(from.getSourceText());
-        to.setDeviceDefinition(from.getDeviceDefinition());
-        to.setLockDefinition(from.getLockDefinition());
-
-        return to;
-    }
 }

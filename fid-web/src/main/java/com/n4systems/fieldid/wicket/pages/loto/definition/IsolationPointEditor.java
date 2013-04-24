@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
-import com.n4systems.fieldid.service.search.ProcedureSearchService;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.ComboBox;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -36,7 +35,6 @@ import java.util.List;
 
 public class IsolationPointEditor extends Panel {
 
-    private @SpringBean ProcedureSearchService procedureSearchService;
     private @SpringBean ProcedureDefinitionService procedureDefinitionService;
 
     private Form form;
@@ -209,18 +207,16 @@ public class IsolationPointEditor extends Panel {
     };
 
     private IsolationPoint copyIntoModel(IsolationPoint isolationPoint) {
-        // TODO DD : proper cloning here.
         IsolationPoint ip = getIsolationPoint();
-        procedureSearchService.copyIsolationPoint(isolationPoint, ip);
+        procedureDefinitionService.copyIsolationPoint(isolationPoint, ip);
         return isolationPoint;
     }
 
     public IsolationPoint getEditedIsolationPoint() {
         if (isEditing()) {
-            // TODO DD : move this to soon to be created procedureDefinitionService.
-            return procedureSearchService.copyIsolationPoint(getIsolationPoint(), editedIsolationPoint);
+            return procedureDefinitionService.copyIsolationPoint(getIsolationPoint(), editedIsolationPoint);
         } else {
-            return procedureSearchService.copyIsolationPoint(getIsolationPoint(), new IsolationPoint());
+            return procedureDefinitionService.copyIsolationPoint(getIsolationPoint(), new IsolationPoint());
         }
     }
 
