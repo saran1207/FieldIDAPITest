@@ -11,6 +11,7 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -33,6 +34,10 @@ public class PrintImages extends Panel {
 
     public PrintImages(String id, final IModel<ProcedureDefinition> model) {
         super(id,new PropertyModel(model,"images"));
+
+        //add print button icon
+        add(new ContextImage("printIcon", "images/print-icon.png"));
+
         // if no images...add one....
 //        ProcedureDefinitionImage image = new ProcedureDefinitionImage();
 //        model.getObject().getImages().add(image);

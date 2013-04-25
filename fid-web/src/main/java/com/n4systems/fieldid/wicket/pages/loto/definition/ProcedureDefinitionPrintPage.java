@@ -48,7 +48,6 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         add(new PrintMetaData("meta",model));
         add(new PrintAsset("assetpage",model));
         add(new PrintProductSummary("productsummary",model));
-        add(new PrintDetails("details", model));
         add(new PrintImages("images",model));
         add(new PrintList("list",model));
         add(new PrintFooter("footer",model));
