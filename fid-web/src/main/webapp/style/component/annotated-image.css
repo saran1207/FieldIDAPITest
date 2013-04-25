@@ -151,6 +151,28 @@
         background: #00a650;
 	}
 
+.isolation-point-table .source {
+	background: transparent;
+}
+.isolation-point-table .electrical {
+	color: #ee1c25;
+}
+.isolation-point-table .gas {
+	color: #a5439a;
+}
+.isolation-point-table .pneumatic {
+	color: #0055a5;
+}
+.isolation-point-table .steam {
+	color: #ef3e36;
+}
+.isolation-point-table .valve {
+	color: #231f20;
+}
+.isolation-point-table .water {
+	color: #00a650;
+}
+
 
 
 
