@@ -32,6 +32,9 @@ public class ProcedureDefinitionListPage extends LotoPage {
     private @SpringBean
     ProcedureDefinitionService procedureDefinitionService;
 
+    private WebMarkupContainer listContainer;
+    private WebMarkupContainer blankSlate;
+
     enum NewMode {
         COPY_EXISTING("label.copy_existing"), FROM_SCRATCH("label.start_blank");
 
@@ -52,7 +55,8 @@ public class ProcedureDefinitionListPage extends LotoPage {
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
-        WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+        listContainer = new WebMarkupContainer("listContainer");
+        listContainer.setOutputMarkupPlaceholderTag(true);
         ListView listView;
 
         listContainer.add(listView = new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
@@ -72,6 +76,16 @@ public class ProcedureDefinitionListPage extends LotoPage {
                         editProcedureDefinition(procedureDefinition);
                     }
                 }.setVisible(procedureDefinition.getPublishedState().isPreApproval()));
+                item.add(new AjaxLink("delete") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        procedureDefinitionService.deleteProcedureDefinition(procedureDefinition);
+                        listContainer.setVisible(!getList().isEmpty());
+                        blankSlate.setVisible(getList().isEmpty());
+                        target.add(listContainer);
+                        target.add(blankSlate);
+                    }
+                }.setVisible(procedureDefinition.getPublishedState().isPreApproval()));
                 item.add(new Link("print") {
                     @Override
                     public void onClick() {
@@ -84,7 +98,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
         listContainer.setVisible(!listView.getList().isEmpty());
         add(listContainer);
 
-        WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
+        blankSlate = new WebMarkupContainer("blankSlate");
         blankSlate.add(new Label("blankSlateMessage", new FIDLabelModel("message.no_published_procedures", assetModel.getObject().getType().getDisplayName())));
         blankSlate.add(new AjaxLink("authorLink") {
             @Override
@@ -93,6 +107,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
             }
         });
         blankSlate.setVisible(listView.getList().isEmpty());
+        blankSlate.setOutputMarkupPlaceholderTag(true);
         add(blankSlate);
     }
 

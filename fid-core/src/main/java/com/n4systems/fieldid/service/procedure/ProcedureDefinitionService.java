@@ -148,4 +148,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setLockDefinition(from.getLockDefinition());
 
         return to;
-    }}
+    }
+
+    public void deleteProcedureDefinition(ProcedureDefinition procedureDefinition) {
+        persistenceService.reattach(procedureDefinition);
+        persistenceService.delete(procedureDefinition);
+    }
+
+}
