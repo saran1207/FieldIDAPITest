@@ -1,6 +1,7 @@
 package com.n4systems.model.common;
 
 import com.google.common.base.Joiner;
+import com.n4systems.model.IsolationPointSourceType;
 
 //There is a corresponding table 'image_annotation_type' with this information in that database
 //Should we be using the db or is the enum enough?
@@ -71,4 +72,25 @@ public enum ImageAnnotationType {
                                     "border-color:",borderColor,
                                     "background-url:",icon);
     }
+
+    public static ImageAnnotationType fromIsolationPointSourceType(IsolationPointSourceType source) {
+        try {
+            return valueOf(source.name());
+        } catch (IllegalArgumentException iae) {
+            return null;
+        } catch (NullPointerException npe) {
+            return null;
+        }
+    }
+
+    public ImageAnnotationType toIsolationPointSourceType() {
+        try {
+            return valueOf(name());
+        } catch (IllegalArgumentException iae) {
+            return null;
+        } catch (NullPointerException npe) {
+            return null;
+        }
+    }
+
 }

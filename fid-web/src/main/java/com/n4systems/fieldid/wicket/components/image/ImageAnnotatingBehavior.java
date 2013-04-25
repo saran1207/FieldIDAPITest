@@ -160,8 +160,8 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         return this;
     }
 
-    protected String getDefaultType() {
-        return annotation==null ? ImageAnnotationType.getDefault().getCssClass() : annotation.getType().getCssClass();
+    protected ImageAnnotationType getDefaultType() {
+        return annotation==null ? ImageAnnotationType.getDefault() : annotation.getType();
     }
 
     protected String getAnnotationText() {
@@ -176,7 +176,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
 
 
     public class AnnotatedImageOptions {
-        String type = getDefaultType();
+        String type = getDefaultType().getCssClass();
         Long editedId = annotation!=null ? annotation.getId() : null;
         String callback = ImageAnnotatingBehavior.this.getCallbackUrl().toString();
         String direction = "arrow-left";

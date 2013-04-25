@@ -34,7 +34,6 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     public final String INDEX_PARAMETER = "index";
 
     private static final String GALLERY_JS = "imageGallery.init('%s',%s);";
-//    private static final String GALLERY_ADD_JS = "imageGallery.add('%s',{image:'%s', id:%d});";
 
     protected @SpringBean JsonRenderer jsonRenderer;
     protected @SpringBean PersistenceService persistenceService;
@@ -196,8 +195,8 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         }
 
         public GalleryImageJson(T image) {
-            this.image = getImageUrl(image).toString();
-            this.thumb = getThumbnailImageUrl(image).toString(); /*optional*/
+            this.image = getImageUrl(image);
+            this.thumb = getThumbnailImageUrl(image); /*optional*/
             this.id = image.getId();
         }
     }

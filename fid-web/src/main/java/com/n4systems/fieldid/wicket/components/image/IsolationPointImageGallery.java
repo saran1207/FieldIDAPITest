@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -61,5 +62,15 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
     protected String getThumbnailImageUrl(ProcedureDefinitionImage image) {
         URL url = s3Service.getProcedureDefinitionImageThumbnailURL(image);
         return url.toString();
+    }
+
+    @Override
+    protected ImageAnnotationType getDefaultType() {
+        return ImageAnnotationType.fromIsolationPointSourceType(model.getObject().getSourceType());
+    }
+
+    @Override
+    protected String getDefaultText() {
+        return model.getObject().getIdentifier();
     }
 }

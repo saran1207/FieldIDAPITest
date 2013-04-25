@@ -26,6 +26,10 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
             @Override protected String getDefaultText() {
                 return EditableImageGallery.this.getDefaultText();
             }
+            @Override protected ImageAnnotationType getDefaultType() {
+                return EditableImageGallery.this.getDefaultType();
+            }
+
             @Override protected ImageAnnotation findImageAnnotation(Long id) {
                 for (T image:images) {
                     for (ImageAnnotation annotation:image.getAnnotations()) {
@@ -45,7 +49,12 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
         }.withEditing());
     }
 
+    protected ImageAnnotationType getDefaultType() {
+        return ImageAnnotationType.getDefault();
+    }
+
     protected String getDefaultText() {
+
         return "new label";
     }
 
@@ -100,7 +109,6 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
 
     class EditableGalleryOptions extends GalleryOptions {
         Long editedId = getAnnotation()!=null ? getAnnotation().getId() : null;
-        String type= getAnnotation()!=null ? getAnnotation().getType().getCssClass() : ImageAnnotationType.getDefault().getCssClass();
 
         EditableGalleryOptions(List data) {
             super(data);
