@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.dashboard;
 
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.ExtendedFeature;
@@ -18,6 +19,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +29,8 @@ public class AddWidgetPanel extends Panel {
 
     private List<WidgetType> selectedTypes;
 
+    @SpringBean EventService eventService;
+
     public AddWidgetPanel(String id, final IModel<DashboardLayout> currentLayoutModel) {
         super(id);
 
@@ -35,31 +39,43 @@ public class AddWidgetPanel extends Panel {
 
         final WebMarkupContainer widgetsContainer = new WebMarkupContainer("widgets");
 
-        ListView<WidgetType> widgetList = new ListView<WidgetType>("widgetList", createWidgetListModel()) {
+        final boolean hasEvents = eventService.hasEvents();
+
+        final ListView<WidgetType> widgetList = new ListView<WidgetType>("widgetList", createWidgetListModel()) {
+
+
             @Override
             protected void populateItem(ListItem<WidgetType> item) {
+
                 final WidgetType type = item.getModelObject();
-
-                item.add(new Label("name", new PropertyModel<WidgetType>(type, "name")));
-                item.add(new Label("description", new PropertyModel<WidgetType>(type, "description")));
-
-                final AjaxLink addLink = new AjaxLink<Void>("add") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        onWidgetTypeSelected(target, type);
-                        selectedTypes.add(type);
-                        target.add(widgetsContainer);
-                    }
-                };
-                addLink.setOutputMarkupId(true);
-                item.add(addLink);
-
-                if(selectedTypes.contains(type)) {
-                    addLink.setEnabled(false);
-                    addLink.add(new Label("addLabel", new FIDLabelModel("label.added")));
+               // if event type and has no events - do not show widget
+               if (type.isEventRelated() && !hasEvents) {
+                    item.setVisible(false);
                 } else {
-                    addLink.add(new Label("addLabel", new FIDLabelModel("label.add")));
+                    // show widget.
+                    item.add(new Label("name", new PropertyModel<WidgetType>(type, "name")));
+                    item.add(new Label("description", new PropertyModel<WidgetType>(type, "description")));
+
+                    final AjaxLink addLink = new AjaxLink<Void>("add") {
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            onWidgetTypeSelected(target, type);
+                            selectedTypes.add(type);
+                            target.add(widgetsContainer);
+                        }
+                    };
+                    addLink.setOutputMarkupId(true);
+                    item.add(addLink);
+
+                    if(selectedTypes.contains(type)) {
+                        addLink.setEnabled(false);
+                        addLink.add(new Label("addLabel", new FIDLabelModel("label.added")));
+                    } else {
+                        addLink.add(new Label("addLabel", new FIDLabelModel("label.add")));
+                    }
                 }
+
+
             }
         };
         widgetsContainer.setOutputMarkupId(true);

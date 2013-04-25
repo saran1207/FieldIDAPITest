@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.collect.Sets;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.wicket.*;
 import com.n4systems.fieldid.wicket.FieldIdWicketTestRunner.WithUsers;
@@ -18,6 +19,7 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.user.User;
+import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.services.dashboard.DashboardService;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -49,6 +51,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	private DashboardService dashboardService;
 	private WidgetFactory widgetFactory;
 	private JobService jobService;
+    private EventService eventService;
 
 	private DashboardLayout layout;
 	private WidgetDefinition testWidgetDefinition;
@@ -68,6 +71,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	protected void init() {
 		dashboardService = wire(DashboardService.class);
     	widgetFactory = wire(WidgetFactory.class);
+        eventService = wire(EventService.class);
 		testWidgetDefinition = new WidgetDefinition(WidgetType.COMPLETED_EVENTS);  // use arbitrary bogus widget type for testWidget.
 		testWidgetDefinition.setId(0L);
 		jobService = wire(JobService.class);
@@ -106,6 +110,8 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	@Test
 	public void testAddWidget() throws MalformedURLException {
         expectingConfig();
+        expect(eventService.hasEvents()).andReturn(true);
+        replay(eventService);
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(4);  // have to add some expectations because our asserts actually trigger calls...yecccch.
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));

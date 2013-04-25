@@ -35,6 +35,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -614,6 +615,11 @@ public class EventService extends FieldIdPersistenceService {
         builder.setLimit(1);
 
         return persistenceService.find(builder);
+    }
+
+    public boolean hasEvents() {
+        QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getTenantSecurityFilter());
+        return persistenceService.exists(builder);
     }
 
 }

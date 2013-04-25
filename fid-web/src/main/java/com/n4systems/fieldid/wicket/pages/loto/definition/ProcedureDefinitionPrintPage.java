@@ -45,16 +45,9 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     private void init(IModel<ProcedureDefinition> model) {
         this.model = model;
         add(new AttributeAppender("class", Model.of("print-procedure-definition")));
-
-
         add(new PrintMetaData("meta",model));
         add(new PrintAsset("assetpage",model));
         add(new PrintProductSummary("productsummary",model));
-
-        //add(new PrintAssetDescription("asset",model));
-        // add ProcedureSummary ...new Panel();
-        // add(new PrintHeader("header",model));
-
         add(new PrintDetails("details", model));
         add(new PrintImages("images",model));
         add(new PrintList("list",model));
@@ -74,8 +67,6 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
         // response.renderOnDomReadyJavaScript(String.format(INIT_CALENDAR_JS, getJsVariableName(), getMarkupId(), getJsonMonthlyWorkSummary(), behavior.getCallbackUrl()));
         response.renderOnDomReadyJavaScript("setupPrintPage("+ getJsonPrintOptions() +")");
-
-
 
     }
 
