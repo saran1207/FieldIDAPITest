@@ -42,7 +42,6 @@ public class IsolationPointEditor extends Panel {
     private ComboBox deviceComboBox;
     private FIDModalWindow modal;
     private final ProcedureDefinition procedureDefinition;
-    private IsolationPointImageGallery gallery;
     private FIDFeedbackPanel feedbackPanel;
     private Component imagePanel;
 

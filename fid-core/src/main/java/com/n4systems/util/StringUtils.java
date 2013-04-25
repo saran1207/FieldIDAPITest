@@ -4,7 +4,8 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StringUtils {
+public class
+        StringUtils {
     
     private static final String copyFilePrefix = "Copy of ";
 	private static final Pattern numericPattern = Pattern.compile("[0-9]+");
@@ -61,14 +62,26 @@ public class StringUtils {
 	public static String stringOrEmpty(Object value) {
 		return (value == null) ? new String() : value.toString();
 	}
-	
-	/**
-	 * @return true iff str is non-null and has non-zero length after trimming.  false otherwise.
-	 */
+
+    /**
+     * @return true iff str is non-null and has non-zero length after trimming.  false otherwise.
+     */
 	public static boolean isNotEmpty(String str) {
 		return (str != null && str.trim().length() > 0);
 	}
-	
+
+    /**
+     * @return true iff str an integer type number.   e.g.   "123567238"  or "23"
+     */
+    public static boolean isNumber(String str) {
+        try {
+            long l = Long.parseLong(str);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
+
 	/**
 	 * @return false iff str is non-null and has non-zero length after trimming.  true otherwise.
 	 */

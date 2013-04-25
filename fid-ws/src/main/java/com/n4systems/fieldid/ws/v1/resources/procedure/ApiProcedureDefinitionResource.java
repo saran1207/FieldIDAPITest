@@ -79,7 +79,7 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
             convertedImage.setAnnotations(convertAnnotations(image.getAnnotations()));
 
             try {
-                convertedImage.setData(s3Service.downloadProcedureDefinitionMediumImage(definition.getId(), image.getFileName()));
+                convertedImage.setData(s3Service.downloadProcedureDefinitionMediumImage(image.getFileName()));
             } catch (IOException e) {
                 log.error("IOException downloading procedure def image: " + image.getId(), e);
             }

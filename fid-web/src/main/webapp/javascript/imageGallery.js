@@ -18,7 +18,7 @@ var imageGallery = (function() {
 
 		function setupForAnnotations(img,imageData) {
 			img.parents('.galleria-stage').find('.image-container').remove();
-			img.wrap('<div class="image-container"/>').attr('id','_image'+imageData.id);
+			img.wrap('<div class="image-container"/>').attr('id','image_'+imageData.id);
 			var $newParent = img.parent();
 			$newParent.css('top',img.css('top')).css('left',img.css('left'));
 			$newParent.css('width',img.css('width')).css('height',img.css('height'));
@@ -31,8 +31,7 @@ var imageGallery = (function() {
 			setupForAnnotations(img, imageData);
 			var url = new String(callback) +
 				'&action='+'SELECT' +
-				'&index=' + galleria.getIndex() +
-				'&imageId='+(imageData.id?imageData.id:'');
+				'&index=' + galleria.getIndex();
 			wicketAjaxGet(url, function() {}, function() {});
 		}
 

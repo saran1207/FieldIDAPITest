@@ -41,7 +41,6 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
     private void performAction(IRequestParameters params) {
         try {
             doLabel(parseNoteId(params),
-                    parseImageId(params),
                     params.getParameterValue("x").toDouble(),
                     params.getParameterValue("y").toDouble(),
                     params.getParameterValue("text").toString(),
@@ -68,10 +67,6 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         return parsePrefixedId(params,"noteId","_note");
     }
 
-    private Long parseImageId(IRequestParameters params) {
-        return parsePrefixedId(params, "imageId", "_image");
-    }
-
     private Long parsePrefixedId(IRequestParameters params, String param, String prefix) {
         String id=getNullSafeStringParameter(params,param);
         try {
@@ -88,8 +83,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         return params.getParameterValue(p).isEmpty() ? null : params.getParameterValue(p).toString();
     }
 
-    private final void doLabel(Long noteId, Long imageId, Double x, Double y,  String text, ImageAnnotationType type) {
-        Preconditions.checkArgument(imageId!=null, "you must specify image when updating an annotation (needs to know which image it is applied to)");
+    private final void doLabel(Long noteId, Double x, Double y,  String text, ImageAnnotationType type) {
         ImageAnnotation annotation = getImageAnnotation(noteId,x,y,text,type);
         getEditableImage().addImageAnnotation(annotation);
         doLabel(getEditableImage(), annotation);

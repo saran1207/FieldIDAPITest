@@ -57,7 +57,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
     @JoinTable(name="procedure_definitions_isolation_points", joinColumns = @JoinColumn(name = "procedure_definition_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_id"))
     private List<IsolationPoint> isolationPoints = Lists.newArrayList();
 
-    @OneToMany(mappedBy = "procedureDefinition")
+    @OneToMany(mappedBy = "procedureDefinition", cascade = CascadeType.ALL)
     private List<ProcedureDefinitionImage> images = Lists.newArrayList();
 
     @Column(name="origin_date")
@@ -219,5 +219,11 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     public void setAuthorizationNotificationSent(boolean authorizationNotificationSent) {
         this.authorizationNotificationSent = authorizationNotificationSent;
+    }
+
+    public void addImage(ProcedureDefinitionImage image) {
+        if (!getImages().contains(image)) {
+            getImages().add(image);
+        }
     }
 }

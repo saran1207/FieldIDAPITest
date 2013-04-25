@@ -19,8 +19,8 @@ var fieldIdWidgets = (function() {
 			il.find('ul').css('width', carouselWidth);
 
 			//Set height of images to fit in the image list without cropping
-			il.find('ul li img').each(function(){
-				updateImage($(this));
+			il.find('.notes-container img').each(function(index, value){
+				updateImage($(this),index);
 			});
 
 			//navigation buttons
@@ -41,28 +41,17 @@ var fieldIdWidgets = (function() {
 					il.find('ul').animate({
 						marginLeft: -imageWidthContainer
 					}, 500,
-					function(){
+					function() {
 						//Place last image before the first to create a continuous loop
 						$(this).find("li:last").after($(this).find("li:first"));
 						$(this).css({marginLeft: 0});
 					})
 				});
 			}
-
-
-			if (options.annotationOptions) {
-				il.find('ul li div').each(
-					function(index) {
-						$(this).addAnnotations(
-							function(annotation) {
-								return createNote(annotation);
-							},options.annotationOptions[index],options);
-					});
-			}
 		}
 
 
-		function updateImage($this) {
+		function updateImage($this,index) {
 			var imageHeight = $this.height();
 			var imageWidth = $this.width();
 			var imageContainerHeight = $this.parent().parent().height();
@@ -87,6 +76,14 @@ var fieldIdWidgets = (function() {
 				$this.parent().css('margin-top',(imageContainerHeight-newHeight)/2);
 				$this.parent().css('width', imageContainerWidth).css('height',newHeight);
 				$this.css('width',imageContainerWidth);
+			}
+
+			if (options.annotationOptions) {
+				var $notesContainer = $this.parent();
+				$notesContainer.addAnnotations(
+					function(annotation) {return createNote(annotation);},
+					options.annotationOptions[index],
+					options );
 			}
 		}
 

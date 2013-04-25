@@ -51,6 +51,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage{
         super(new PageParameters());
 
         ProcedureDefinition pd = new ProcedureDefinition();
+        pd.setProcedureCode("New Procedure");
         pd.setAsset(asset);
         pd.setTenant(asset.getTenant());
         pd.setPublishedState(PublishedState.DRAFT);

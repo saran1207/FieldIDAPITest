@@ -1,9 +1,6 @@
 package com.n4systems.fieldid.wicket.components.image;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.common.S3Image;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.Component;
@@ -19,6 +16,7 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.link.AbstractLink;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
@@ -29,17 +27,16 @@ import java.util.List;
 
 public abstract class ImageGallery<T extends S3Image> extends Panel {
 
-    public final String IMAGE_ID_PARAMETER = "imageId";
-    public final String ACTION_PARAMETER = "action";
-    public final String INDEX_PARAMETER = "index";
-
-    private static final String GALLERY_JS = "imageGallery.init('%s',%s);";
-
     protected @SpringBean JsonRenderer jsonRenderer;
-    protected @SpringBean PersistenceService persistenceService;
-    protected @SpringBean S3Service s3Service;
 
-    protected final List<T> images;
+    private final String GALLERY_JS = "imageGallery.init('%s',%s);";
+
+    private final String PLACEHOLDER_ID = "_placeholder";
+    private final String IMAGE_ID_PARAMETER = "imageId";
+    private final String ACTION_PARAMETER = "action";
+    private final String INDEX_PARAMETER = "index";
+
+    protected IModel<List<T>> model;
     private final AbstractDefaultAjaxBehavior behavior;
     protected Integer currentImageIndex;
     protected FileUploadField uploadField;
@@ -51,9 +48,9 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     // TODO DD : add noAjaxUpdate option.
     // TODO DD : add ability to delete images (check to see if they have annotations first?)
 
-    public ImageGallery(String id, final List<T> images) {
+    public ImageGallery(String id, final IModel<List<T>> model) {
         super(id);
-        this.images = images;
+        this.model = model;
         setOutputMarkupId(true);
         add(new AttributeAppender("class", "image-gallery"));
         add(behavior = createBehavior());
@@ -68,15 +65,11 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
                 FileUpload fileUpload = uploadField.getFileUpload();
                 if (fileUpload != null) {
                     T image = addImage(fileUpload.getBytes(), fileUpload.getContentType(), fileUpload.getClientFileName());
-                    if (image != null) {
-                        images.add(image);
-                    }
                     target.add(ImageGallery.this);
                 }
             }
 
-            @Override protected void onError(AjaxRequestTarget target) {
-            }
+            @Override protected void onError(AjaxRequestTarget target) { }
         });
 
         add(form);
@@ -93,7 +86,11 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     protected abstract T addImage(byte[] bytes, String contentType, String clientFileName);
 
     protected T getCurrentImage() {
-        return currentImageIndex==null ? null : images.get(currentImageIndex);
+        List<T> images = model.getObject();
+        if (images.size()==0 || currentImageIndex==null) {
+            return null;
+        }
+        return images.get(currentImageIndex);
     }
 
     private AbstractDefaultAjaxBehavior createBehavior() {
@@ -101,12 +98,9 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
             @Override protected void respond(AjaxRequestTarget target) {
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
                 currentImageIndex = params.getParameterValue(INDEX_PARAMETER).toInt();
-                Long id = params.getParameterValue(IMAGE_ID_PARAMETER).toLong();
-                if (id==-1) {
-                    // it's a placeholder image...we have none to display.
-                } else {
-                    Preconditions.checkState(images.get(currentImageIndex).getId().equals(id), "selected image id '" + id + "' doesn't match['" + currentImageIndex+"]=" + images.get(currentImageIndex).getId());
-                    imageClicked(target, getAction(params), getCurrentImage());
+                T currentImage = getCurrentImage();
+                if (currentImage!=null) {
+                    imageClicked(target, getAction(params), currentImage);
                 }
             }
         };
@@ -171,10 +165,10 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
 
     private List<GalleryImageJson> getJsonDataSource() {
         List data = Lists.newArrayList();
-        for (T image:images) {
+        for (T image: model.getObject()) {
             data.add(createImageJson(image));
         }
-        if (images.size()==0) {
+        if (model.getObject().size()==0) {
             data.add(new GalleryImageJson());
         }
         return data;
@@ -184,20 +178,27 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         return new GalleryImageJson(image);
     }
 
+    protected String getPlaceholderImageUrl() {
+        // TODO : need a correct blank slate image for "no images in gallery" situation.
+        return "/fieldid/images/add-photo-slate.png";
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------------
+
     protected class GalleryImageJson {
         String image;
         String thumb;
-        Long id;
+        String id;
 
         public GalleryImageJson() {
-            this.image = "../images/fieldid-logo-big.png";
-            this.id = -1L;
+            this.image = getPlaceholderImageUrl();
+            this.id = PLACEHOLDER_ID;
         }
 
         public GalleryImageJson(T image) {
+            this.id = image.getId()==null ? "_unsaved_" + image.getS3Path() : image.getId()+"";  // we'll look it up by filename if it hasn't been persisted yet.
             this.image = getImageUrl(image);
             this.thumb = getThumbnailImageUrl(image); /*optional*/
-            this.id = image.getId();
         }
     }
 

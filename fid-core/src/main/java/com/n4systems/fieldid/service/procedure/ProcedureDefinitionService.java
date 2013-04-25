@@ -5,10 +5,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
-import com.n4systems.model.procedure.IsolationPoint;
-import com.n4systems.model.procedure.PreconfiguredDevice;
-import com.n4systems.model.procedure.ProcedureDefinition;
-import com.n4systems.model.procedure.PublishedState;
+import com.n4systems.model.procedure.*;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -44,8 +41,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         if (procedureDefinition.getRevisionNumber() == null) {
             procedureDefinition.setRevisionNumber(generateRevisionNumber(procedureDefinition.getAsset()));
         }
-
-        saveIsolationPoints(procedureDefinition.getIsolationPoints());
         persistenceService.saveOrUpdate(procedureDefinition);
     }
 
@@ -66,12 +61,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         query.setSelectArgument(new MaxSelect("revisionNumber"));
         Long biggestRevision = persistenceService.find(query);
         return biggestRevision==null ? 1 :  biggestRevision+1;
-    }
-
-    private void saveIsolationPoints(List<IsolationPoint> isolationPoints) {
-        for (IsolationPoint isolationPoint:isolationPoints) {
-            persistenceService.saveOrUpdate(isolationPoint);
-        }
     }
 
     public List<ProcedureDefinition> getActiveProceduresForAsset(Asset asset) {

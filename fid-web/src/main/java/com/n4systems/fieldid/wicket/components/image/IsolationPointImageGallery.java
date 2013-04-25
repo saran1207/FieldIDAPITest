@@ -9,6 +9,7 @@ import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.net.URL;
@@ -23,7 +24,7 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
     private final IModel<IsolationPoint> model;
 
     public IsolationPointImageGallery(String id, ProcedureDefinition procedureDefinition, IModel<IsolationPoint> model) {
-        super(id, procedureDefinition.getImages(), ProxyModel.of(model, on(IsolationPoint.class).getAnnotation()));
+        super(id, new PropertyModel(procedureDefinition,"images"), ProxyModel.of(model, on(IsolationPoint.class).getAnnotation()));
         this.model = model;
         this.procedureDefinition = procedureDefinition;
         withDoneButton();
@@ -41,7 +42,7 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
         image.setFileName(path);
         image.setProcedureDefinition(procedureDefinition);
         // TODO DD : when/how can i remove these images? if they have no annotations then they shouldn't exist.
-        procedureDefinition.getImages().add(image);
+        procedureDefinition.addImage(image);
         return image;
     }
 

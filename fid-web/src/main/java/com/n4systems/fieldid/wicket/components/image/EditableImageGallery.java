@@ -15,7 +15,7 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
     private final ImageAnnotatingBehavior imageAnnotatingBehavior;
     private final IModel<ImageAnnotation> model;
 
-    public EditableImageGallery(String id, final List<T> images, IModel<ImageAnnotation> model) {
+    public EditableImageGallery(String id, final IModel<List<T>> images, IModel<ImageAnnotation> model) {
         super(id, images);
         this.model = model;
         setOutputMarkupId(true);
@@ -29,9 +29,8 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
             @Override protected ImageAnnotationType getDefaultType() {
                 return EditableImageGallery.this.getDefaultType();
             }
-
             @Override protected ImageAnnotation findImageAnnotation(Long id) {
-                for (T image:images) {
+                for (T image:images.getObject()) {
                     for (ImageAnnotation annotation:image.getAnnotations()) {
                         if (id==null && annotation.getId()==null) {
                             return annotation;
@@ -54,7 +53,6 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
     }
 
     protected String getDefaultText() {
-
         return "new label";
     }
 
@@ -70,7 +68,6 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
     protected T addImage(byte[] bytes, String contentType, String clientFileName) {
         T image = createImage(clientFileName);
         uploadImage(image, bytes, contentType, clientFileName);
-        persistenceService.save(image);
         return image;
     }
 
