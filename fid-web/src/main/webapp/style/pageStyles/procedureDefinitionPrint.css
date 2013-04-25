@@ -41,7 +41,7 @@
         width: 100%;
     }
     .metadata td, .metadata th,
-    .assets td {
+    .equipment-details td {
         border: 1px solid #888;
         padding: 5px;
     }
@@ -95,12 +95,12 @@
 		text-transform: uppercase;
 		padding: 6px;
     }
-    .procedure-summary td {
+    .procedure-details td {
         background: #f8f8f8;
         font-size: 50px;
     }
-    .procedure-summary td,
-    .procedure-summary th {
+    .procedure-details td,
+    .procedure-details th {
         border: 3px solid #fff;
         width: 25%;
         text-align: center;
