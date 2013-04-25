@@ -151,7 +151,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     public void deleteProcedureDefinition(ProcedureDefinition procedureDefinition) {
-        persistenceService.reattach(procedureDefinition);
         persistenceService.delete(procedureDefinition);
     }
 

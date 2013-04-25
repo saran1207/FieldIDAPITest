@@ -19,6 +19,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -34,6 +35,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
 
     private WebMarkupContainer listContainer;
     private WebMarkupContainer blankSlate;
+    private ListView listView;
 
     enum NewMode {
         COPY_EXISTING("label.copy_existing"), FROM_SCRATCH("label.start_blank");
@@ -57,13 +59,12 @@ public class ProcedureDefinitionListPage extends LotoPage {
 
         listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupPlaceholderTag(true);
-        ListView listView;
 
         listContainer.add(listView = new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
 
             @Override
-            protected void populateItem(ListItem<ProcedureDefinition> item) {
-                final ProcedureDefinition procedureDefinition = item.getModelObject();
+            protected void populateItem(final ListItem<ProcedureDefinition> item) {
+                final IModel<ProcedureDefinition> procedureDefinition = item.getModel();
                 item.add(new Label("name", new PropertyModel<String>(procedureDefinition, "procedureCode")));
                 item.add(new Label("revisionNumber", new PropertyModel<String>(procedureDefinition, "revisionNumber")));
                 item.add(new Label("developedBy", new PropertyModel<String>(procedureDefinition, "developedBy.displayName")));
@@ -73,25 +74,26 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 item.add(new Link("edit") {
                     @Override
                     public void onClick() {
-                        editProcedureDefinition(procedureDefinition);
+                        editProcedureDefinition(procedureDefinition.getObject());
                     }
-                }.setVisible(procedureDefinition.getPublishedState().isPreApproval()));
+                }.setVisible(procedureDefinition.getObject().getPublishedState().isPreApproval()));
                 item.add(new AjaxLink("delete") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        procedureDefinitionService.deleteProcedureDefinition(procedureDefinition);
+                        procedureDefinitionService.deleteProcedureDefinition(procedureDefinition.getObject());
+                        listView.detach();
                         listContainer.setVisible(!getList().isEmpty());
                         blankSlate.setVisible(getList().isEmpty());
                         target.add(listContainer);
                         target.add(blankSlate);
                     }
-                }.setVisible(procedureDefinition.getPublishedState().isPreApproval()));
+                }.setVisible(procedureDefinition.getObject().getPublishedState().isPreApproval()));
                 item.add(new Link("print") {
                     @Override
                     public void onClick() {
-                        setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition));
+                        setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject()));
                     }
-                }.setVisible(!procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)));
+                }.setVisible(!procedureDefinition.getObject().getPublishedState().equals(PublishedState.DRAFT)));
             }
         });
 
@@ -145,6 +147,11 @@ public class ProcedureDefinitionListPage extends LotoPage {
         @Override
         protected List<ProcedureDefinition> load() {
             return procedureDefinitionService.getActiveProceduresForAsset(assetModel.getObject());
+        }
+
+        @Override
+        public void detach() {
+            super.detach();
         }
     }
 
