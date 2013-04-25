@@ -313,6 +313,7 @@ public class DownloadLinkAction extends AbstractDownloadAction {
 		List<String> validEmails = new ArrayList<String>(); ;
 		
 		for (String recipient : recipients.split(",")){
+            recipient = recipient.trim();
 			if (validator.validEmail(recipient)){
 				validEmails.add(recipient);
 			}
