@@ -1,13 +1,14 @@
 <wicket:panel>
 
-    <span class="identifier">Identifier</span>
-    <span class="source">Source</span>
-    <span class="device">Device</span>
-    <span class="location">Location</span>
-    <span class="method">Method</span>
-    <span class="check">Check</span>
-
-    <ul>
+    <ul class="isolation-point-table">
+        <li class="headings">
+            <span class="identifier">Identifier</span>
+            <span class="source">Source</span>
+            <span class="device">Device</span>
+            <span class="location">Location</span>
+            <span class="method">Method</span>
+            <span class="check">Check</span>
+        </li>
         <li wicket:id="list">
             <span wicket:id="id" class="identifier"/>
             <span wicket:id="source" class="source"/>
@@ -15,6 +16,7 @@
             <span wicket:id="location" class="location"/>
             <span wicket:id="method" class="method"/>
             <span wicket:id="check" class="check"/>
+            <span class="thumbnail"><img src="/fieldid/images/add-photo-slate.png"></span>
         </li>
     </ul>
 
