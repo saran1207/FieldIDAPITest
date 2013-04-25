@@ -10,6 +10,8 @@ import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.PlainDate;
@@ -107,9 +109,11 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private void notifyEventAssignee(List<Event> events, UserGroup assignedGroup) {
         try {
 
+            securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(assignedGroup.getTenant()));
+
             for (User member : userGroupService.getUsersInGroup(assignedGroup.getId())) {
                 // Instead of sending a multi message, since users can define their own date
-                // formats and we want our notificatino to reflect this, we send an individual email to each member.
+                // formats and we want our notification to reflect this, we send an individual email to each member.
                 TemplateMailMessage message = createMultiNotifications(events, member);
 
                 message.getToAddresses().add(member.getEmailAddress());
@@ -121,6 +125,8 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
         } catch (Exception e) {
             logger.error("Could not notify assigned group", e);
+        } finally {
+            securityContext.reset();
         }
     }
 
