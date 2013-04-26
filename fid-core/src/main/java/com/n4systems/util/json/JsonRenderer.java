@@ -57,7 +57,8 @@ public class JsonRenderer implements Serializable {
         @Override
         public JsonElement serialize(ImageAnnotation annotation, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject object = new JsonObject();
-            object.addProperty("id",annotation.getId());
+            Long id = annotation.getId()!=null ? annotation.getId() : annotation.getTempId();
+            object.addProperty("id",id);
             object.addProperty("type", annotation.getType().getCssClass());
             object.addProperty("text",annotation.getText());
             object.addProperty("x",annotation.getX());

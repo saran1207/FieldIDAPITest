@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.procedure;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
     @Autowired private UserGroupService userGroupService;
+    @Autowired private S3Service s3Service;
 
     public Boolean hasPublishedProcedureDefinition(Asset asset) {
         return persistenceService.exists(getPublishedProcedureDefinitionQuery(asset));
@@ -42,6 +44,9 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             procedureDefinition.setRevisionNumber(generateRevisionNumber(procedureDefinition.getAsset()));
         }
         persistenceService.saveOrUpdate(procedureDefinition);
+        for (ProcedureDefinitionImage image:procedureDefinition.getImages()) {
+            s3Service.finalizeProcedureDefinitionImageUpload(image);
+        }
     }
 
     public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) {

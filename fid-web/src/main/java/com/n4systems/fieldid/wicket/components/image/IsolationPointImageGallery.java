@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.components.image;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
@@ -14,8 +13,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.net.URL;
 
-import static ch.lambdaj.Lambda.on;
-
 public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDefinitionImage> {
 
     private @SpringBean S3Service s3Service;
@@ -24,15 +21,16 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
     private final IModel<IsolationPoint> model;
 
     public IsolationPointImageGallery(String id, ProcedureDefinition procedureDefinition, IModel<IsolationPoint> model) {
-        super(id, new PropertyModel(procedureDefinition,"images"), ProxyModel.of(model, on(IsolationPoint.class).getAnnotation()));
+        super(id, new PropertyModel(procedureDefinition,"images"));
         this.model = model;
         this.procedureDefinition = procedureDefinition;
         withDoneButton();
     }
 
     @Override
-    protected void uploadImage(ProcedureDefinitionImage image, byte[] bytes, String contentType, String clientFileName) {
-        s3Service.uploadProcedureDefImage(image, bytes, contentType, clientFileName);
+    protected void uploadImage(ProcedureDefinitionImage image, String contentType, byte[] bytes, String clientFileName) {
+        s3Service.uploadTempProcedureDefImage(image, contentType, bytes);
+        image.setFileName(clientFileName);
     }
 
     @Override
@@ -51,6 +49,11 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
         super.doLabel(image, annotation);
         Preconditions.checkState(annotation.getImage().equals(image));
         model.getObject().setAnnotation(annotation);
+    }
+
+    @Override
+    protected ImageAnnotation getAnnotation() {
+        return model.getObject().getAnnotation();
     }
 
     @Override

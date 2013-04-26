@@ -26,10 +26,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
 
     private boolean editable = false;
 
-    private ImageAnnotation annotation;
-
-    protected ImageAnnotatingBehavior(ImageAnnotation annotation) {
-        this.annotation = annotation;
+    protected ImageAnnotatingBehavior() {
     }
 
     @Override
@@ -64,7 +61,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
     }
 
     private Long parseNoteId(IRequestParameters params) {
-        return parsePrefixedId(params,"noteId","_note");
+        return parsePrefixedId(params, "noteId", "_note");
     }
 
     private Long parsePrefixedId(IRequestParameters params, String param, String prefix) {
@@ -103,6 +100,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         ImageAnnotation annotation = findImageAnnotation(id);
         if (annotation==null && id==null) {   // create new one.
             annotation = new ImageAnnotation(x,y,text,type);
+            annotation.setTempId(System.currentTimeMillis());  // use this for non-persisted annotations.
         }
         Preconditions.checkState(annotation!=null, "couldn't find annotation with id " + id);
 
@@ -132,9 +130,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         response.renderJavaScriptReference("javascript/imageEditor.js");
     }
 
-    protected final Object getJsonImageAnnotationOptions() {
-        return jsonRenderer.render(getImageAnnotationOptions());
-    }
+    protected abstract ImageAnnotation getAnnotation();
 
     protected AnnotatedImageOptions getImageAnnotationOptions() {
         return new AnnotatedImageOptions(getEditableImage().getAnnotations());
@@ -155,23 +151,31 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
     }
 
     protected ImageAnnotationType getDefaultType() {
-        return annotation==null ? ImageAnnotationType.getDefault() : annotation.getType();
+        return getAnnotation() ==null ? ImageAnnotationType.getDefault() : getAnnotation().getType();
     }
 
     protected String getAnnotationText() {
-        return annotation!=null ? annotation.getText() : getDefaultText();
+        return getAnnotationId()!=null ? getAnnotation().getText() : getDefaultText();
+    }
+
+    protected Long getAnnotationId() {
+        if (getAnnotation()!=null) {
+            return getAnnotation().getId()!=null ? getAnnotation().getId() : getAnnotation().getTempId();
+        }
+        return null;
     }
 
     protected String getDefaultText() {
         return "a label";
     }
 
+
     // ----------------------------------------------------------------------------------------------
 
 
     public class AnnotatedImageOptions {
         String type = getDefaultType().getCssClass();
-        Long editedId = annotation!=null ? annotation.getId() : null;
+        Long editedId = getAnnotationId();
         String callback = ImageAnnotatingBehavior.this.getCallbackUrl().toString();
         String direction = "arrow-left";
         String text = getAnnotationText();
@@ -182,7 +186,5 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
             this.annotations = annotations;
         }
     }
-
-
 
 }

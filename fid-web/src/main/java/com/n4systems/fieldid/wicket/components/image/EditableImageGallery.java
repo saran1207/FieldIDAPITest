@@ -13,15 +13,16 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
     private final String IMAGE_EDITOR_ENABLE_JS = "imageGallery.edit('%s',%s)";
 
     private final ImageAnnotatingBehavior imageAnnotatingBehavior;
-    private final IModel<ImageAnnotation> model;
 
-    public EditableImageGallery(String id, final IModel<List<T>> images, IModel<ImageAnnotation> model) {
+    public EditableImageGallery(String id, final IModel<List<T>> images) {
         super(id, images);
-        this.model = model;
         setOutputMarkupId(true);
-        add(imageAnnotatingBehavior = new ImageAnnotatingBehavior<T>(model.getObject()) {
+        add(imageAnnotatingBehavior = new ImageAnnotatingBehavior<T>() {
             @Override protected T getEditableImage() {
                 return getCurrentImage();
+            }
+            @Override protected ImageAnnotation getAnnotation() {
+                return EditableImageGallery.this.getAnnotation();
             }
             @Override protected String getDefaultText() {
                 return EditableImageGallery.this.getDefaultText();
@@ -32,9 +33,7 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
             @Override protected ImageAnnotation findImageAnnotation(Long id) {
                 for (T image:images.getObject()) {
                     for (ImageAnnotation annotation:image.getAnnotations()) {
-                        if (id==null && annotation.getId()==null) {
-                            return annotation;
-                        } else if (annotation.getId().equals(id)) {
+                        if (isAnnotationForId(id, annotation)) {
                             return annotation;
                         }
                     }
@@ -46,6 +45,19 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
                 EditableImageGallery.this.doLabel(editableImage, annotation);
             }
         }.withEditing());
+    }
+
+    private boolean isAnnotationForId(Long id, ImageAnnotation annotation) {
+        if (id==null) { // it's either a new one for this isolation point or an non-persisted one...
+           if (annotation.getId()==null && annotation.getTempId()==null) {
+               return true;
+           }
+        } else if (id.equals(annotation.getId())) {
+            return true;
+        } else if (id!=null && annotation.getId()==null && id.equals(annotation.getTempId())) {
+            return true;
+        }
+        return false;
     }
 
     protected ImageAnnotationType getDefaultType() {
@@ -60,14 +72,10 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
         return String.format(IMAGE_EDITOR_ENABLE_JS,gallery.getMarkupId(),jsonRenderer.render(imageAnnotatingBehavior.getImageAnnotationOptions()));
     }
 
-    private ImageAnnotation getAnnotation() {
-        return model.getObject();
-    }
-
     @Override
     protected T addImage(byte[] bytes, String contentType, String clientFileName) {
         T image = createImage(clientFileName);
-        uploadImage(image, bytes, contentType, clientFileName);
+        uploadImage(image, contentType, bytes, clientFileName);
         return image;
     }
 
@@ -87,11 +95,13 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
         return super.createGalleryOptions(images);
     }
 
-    protected abstract void uploadImage(T image, byte[] bytes, String path, String clientFileName);
+    protected abstract void uploadImage(T image, String contentType, byte[] bytes, String clientFileName);
 
     protected abstract T createImage(String path);
 
     protected void doLabel(T editableImage, ImageAnnotation annotation) { }
+
+    protected abstract ImageAnnotation getAnnotation();
 
     // ----------------------------------------------------------------------------------------------------------------------------------------
 
@@ -111,6 +121,5 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
             super(data);
         }
     }
-
 
 }

@@ -22,6 +22,12 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     @Column(name = "mobileguid")
     private String mobileGUID;
 
+    @Transient
+    private String tempFileName;
+
+    @Transient
+    private String contentType;
+
     public EditableImage() {
     }
 
@@ -70,6 +76,7 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     public String getMobileGUID() {
         return mobileGUID;
     }
+
     public void setMobileGUID(String mobileGUID) {
         this.mobileGUID = mobileGUID;
     }
@@ -84,6 +91,22 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     protected void onCreate() {
         super.onCreate();
         ensureMobileGuidIsSet();
+    }
+
+    public String getTempFileName() {
+        return tempFileName;
+    }
+
+    public void setTempFileName(String tempFileName) {
+        this.tempFileName = tempFileName;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
     }
 
     private void ensureMobileGuidIsSet() {

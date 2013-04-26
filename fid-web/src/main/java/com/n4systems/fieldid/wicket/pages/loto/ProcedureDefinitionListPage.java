@@ -89,8 +89,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                     }
                 }.setVisible(procedureDefinition.getObject().getPublishedState().isPreApproval()));
                 item.add(new Link("print") {
-                    @Override
-                    public void onClick() {
+                    @Override public void onClick() {
                         setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject()));
                     }
                 }.setVisible(!procedureDefinition.getObject().getPublishedState().equals(PublishedState.DRAFT)));

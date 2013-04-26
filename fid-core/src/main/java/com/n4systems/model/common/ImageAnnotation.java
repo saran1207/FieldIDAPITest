@@ -22,6 +22,9 @@ public class ImageAnnotation extends EntityWithTenant {
 
     private double y;
 
+    @Transient
+    private Long tempId;
+
     public ImageAnnotation() {
     }
 
@@ -70,5 +73,13 @@ public class ImageAnnotation extends EntityWithTenant {
 
     public void setY(double y) {
         this.y = y;
+    }
+
+    public Long getTempId() {
+        return tempId;
+    }
+
+    public void setTempId(Long tempId) {
+        this.tempId = tempId;
     }
 }
