@@ -10,15 +10,36 @@
 
     <table class="procedure-details">
         <tr>
-            <th><wicket:message key="label.lockout_points" /><img src="/fieldid/images/loto/bg-gray.gif"></th>
-            <th><wicket:message key="label.devices" /><img src="/fieldid/images/loto/bg-gray.gif"></th>
-            <th class="warning"><wicket:message key="label.caution" /><img src="/fieldid/images/loto/bg-yellow.gif"></th>
+            <th>
+            	<img src="/fieldid/images/loto/bg-gray.gif">
+            	<span><wicket:message key="label.lockout_points" /></span>
+            </th>
+            <th class="devices">
+            	<img src="/fieldid/images/loto/bg-gray.gif">
+            	<span><wicket:message key="label.devices" /></span>
+            </th>
+            <th class="warning">
+            	<img src="/fieldid/images/loto/bg-yellow.gif">
+            	<span><wicket:message key="label.caution" /></span>
+            </th>
         </tr>
         <tr>
-            <td><span wicket:id="lockoutPoints"/><img src="/fieldid/images/loto/bg-gray-light.gif"></td>
-            <td><span wicket:id="deviceCount"/><img src="/fieldid/images/loto/bg-gray-light.gif"></td>
-            <td class="warning"><span wicket:id="warnings"/><img src="/fieldid/images/loto/bg-gray-light.gif"></td>
+            <td>
+            	<img src="/fieldid/images/loto/bg-gray-light.gif">
+            	<span wicket:id="lockoutPoints"/>
+            </td>
+            <td class="devices">
+            	<img src="/fieldid/images/loto/bg-gray-light.gif">
+            	<span wicket:id="deviceCount"/>
+            </td>
+            <td class="warning">
+            	<img src="/fieldid/images/loto/bg-gray-light.gif">
+            	<span wicket:id="warnings"/>
+            	
+            </td>
         </tr>
     </table>
 
 </wicket:panel>
+
+

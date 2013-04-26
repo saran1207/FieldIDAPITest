@@ -1,212 +1,252 @@
 /* apply a natural box layout model to all elements */
-	* { 
-		-moz-box-sizing: border-box; 
-		-webkit-box-sizing: border-box; 
-		box-sizing: border-box; 
-	}
-	h2, h3 {
-    	margin: 0;
-    	text-align: center;
-    	padding: 5px 0;
-    }
-    h3 {
-		text-transform: uppercase;
-		color: #222;
-	}
-	
-	/* Hiding these components from being printed */
-	.navigation, .isolation-point-table .delete,
-	.isolation-point-table .actions,
-	.isolation-point-table .reorder {
-		display: none;
+* { 
+	-moz-box-sizing: border-box; 
+	-webkit-box-sizing: border-box; 
+	box-sizing: border-box; 
+}
+body {
+	font: 400 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color: #222;
+}
+h2, h3 {
+	margin: 0;
+	text-align: center;
+	padding: 5px 0;
+}
+h3 {
+	text-transform: uppercase;
+	line-height: 20px;
+	padding: 0 0 10px;
+}
+
+.procedure-print-container {
+	min-width: 1000px;
+	max-width: 1024px;
+	margin: auto;
+}
+
+/* table styles */
+.procedure-print-container table {
+	border-spacing: 0;
+	border-collapse: collapse;
+	width: 100%;
+}
+.metadata td, .metadata th,
+.equipment-details td {
+	border: 1px solid #888;
+	padding: 4px;
+}
+
+
+/* metadata section 
+------------------------------------*/
+.metadata {
+	overflow: hidden;
+	border-bottom: 1px solid #888;
+	padding-bottom: 8px;
+}
+.tenant-logo {
+	float: left;
+	text-align: left;
+}
+.metadata table {
+	float: right;
+	width: 40%;
+	height: 95px;
+	font-size: 11px;
+}
+.metadata td, .metadata th {
+	width: 26%;
+}
+.metadata th {
+	text-align: left;
+}
+th.revision, td.revision  {
+	color: #fff;
+	width: 22%;
+	text-align: center;
+	position: relative;
+}
+td.revision  {
+	font-size: 30px;
+}
+
+
+/* asset section
+------------------------------------*/
+.assets h2 {
+	font-size: 30px;		
+}
+.assets table {
+	font-size: 16px;
+}
+
+
+/* procedure summary
+------------------------------------*/
+.procedure-summary th {
+	/*background: #888;*/
+	color: #fff;
+	font-weight: normal;
+	font-size: 20px;
+	text-transform: uppercase;
+	padding: 6px;
+}
+
+.equipment-details td {
+	width: 37%;
+	font-size: 13px;
+}
+	.equipment-details td.building {
+		width: 26%;
 	}
 
-	.procedure-print-container {
-		/*font-family: Georgia, "Times New Roman", serif;*/
-		font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-		font-weight: 400;
-		background: none;
-		color: #222;
-    	font-size: 12px;
-    	padding: 20px;
-    	min-width: 1000px;
-		max-width: 1280px;
+.procedure-details {
+	margin: 5px 0;
+}
+	.procedure-details th, 
+	.procedure-details td {
+		position: relative;
 	}
-
-	/* table styles */
-	.procedure-print-container table {
-        border-spacing: 0;
-        border-collapse: collapse;
-        margin-bottom: 10px;
-        width: 100%;
-    }
-    .metadata td, .metadata th,
-    .equipment-details td {
-        border: 1px solid #888;
-        padding: 5px;
-    }
-    
-	/* metadata section */
-	.metadata {
-		overflow: hidden;
-		border-bottom: 1px solid #888;
-	}
-	.logo {
-		width: 60%;
-		float: left;
-	}
-	.metadata table {
-		float: right;
-		width: 40%;
-		height: 95px;
-	}
-	.metadata td, .metadata th {
-    	width: 26%;
-    }
-    .metadata th {
-		text-align: left;
-    }
-	th.revision, td.revision  {
-		background: #888;
-		color: #fff;
-		width: 22%;
+	.procedure-details td {
+		/*background: #f8f8f8;*/
+		font-size: 50px;
 		text-align: center;
 	}
-	td.revision  {
-		font-size: 30px;
-	}
+		.procedure-details span,
+		.revision span {
+			position: relative;
+			z-index: 2;
+		}
+		.procedure-details img,
+		.revision img {
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 1;
+		}
 
-	
-    /* asset section */
-    .assets h2 {
-		font-size: 35px;		
-	}
-	.assets table {
-		font-size: 16px;
-	}
-
-
-	/* procedure summary */
-    .procedure-summary th {
-        background: #888;
-        color: #fff;
-        font-weight: normal;
-		font-size: 20px;
-		text-transform: uppercase;
-		padding: 6px;
-    }
-    .procedure-details td {
-        background: #f8f8f8;
-        font-size: 50px;
-    }
-    .procedure-details td,
-    .procedure-details th {
-        border: 3px solid #fff;
-        width: 25%;
-        text-align: center;
-    }
-    .procedure-summary .warning {
-        width: 50%;
-    }
-    .procedure-summary th.warning {   
-        background: #E4E43A;
-        color: #888;
-    }
-    .procedure-summary td.warning { 
-    	font-size: 16px;
-    	text-align: left; 
-    	padding: 10px;
-    }
-
-	/* image list */
-	.image-list {
-		margin: 35px 0;
-	}
-	.image-list ul  {
-		width: 100%!important; /* can this be done in js instead? */
-	}
-	.image-list ul li {
-		background: transparent;
-		list-style-type: none;
-		margin: 4px;
+	.procedure-details .devices {
+		border-right: 3px solid #fff;
+		border-left: 3px solid #fff;
+		width: 25%;	
 	}
 	
-	/* isolation points table/list */
-	.isolation-point-table {
-		font-size: 14px;
-		margin: 0;
-		padding: 0;
+	.procedure-details .warning {
+		width: 50%;
 	}
-	.isolation-point-table li {
-		background-color: #fff;
-		display: table;
-		width: 100%;
-		border: none;
-		padding: 0;
-		margin-bottom: 0;
-	}
-		.isolation-point-table li span {
-			border-color: black;
-			border-style: solid;
-			border-width: 0 1px 1px 0;
-			display: table-cell;
-			padding: 5px;
+		.procedure-details th.warning {   
+			/*background: #E4E43A;*/
+			color: #888;
 		}
-		.isolation-point-table .identifier {
-			border-left: 1px solid black;
+		.procedure-details td.warning { 
+			font-size: 16px;
+			text-align: left; 
+			padding: 10px;
 		}
-		.isolation-point-table li.headings {
-			border-top: 1px solid black;
-			text-align: center;
-		}
-		
-	/* column widths */
-	.isolation-point-table .identifier,
-	.isolation-point-table .headings .identifier  {
-		width: 8%;
-		/*border-left: 1px solid black;*/
+
+
+/* image list
+------------------------------------*/
+.image-list {
+	margin: 35px 0;
+}
+.image-list ul  {
+	width: 100%!important; /* can this be done in js instead? */
+}
+.image-list ul li {
+	background: transparent;
+	list-style-type: none;
+	margin: 4px;
+}
+
+
+/* isolation points table/list
+------------------------------------*/
+.isolation-point-table {
+	font-size: 14px;
+	margin: 0;
+	padding: 0;
+}
+.isolation-point-table li {
+	background-color: #fff;
+	display: table;
+	width: 100%;
+	border: none;
+	padding: 0;
+	margin-bottom: 0;
+}
+	.isolation-point-table li span {
+		border-color: black;
+		border-style: solid;
+		border-width: 0 1px 1px 0;
+		display: table-cell;
+		padding: 5px;
 	}
-	.isolation-point-table .source {
-		width: 12%;
+	.isolation-point-table .identifier {
+		border-left: 1px solid black;
 	}
-	.isolation-point-table .device {
-		width: 10%;
+	.isolation-point-table li.headings {
+		border-top: 1px solid black;
+		text-align: center;
 	}
-	.isolation-point-table .location {
-		width: 20%;
-		padding-right: 10px;
-	}
-	.isolation-point-table .method {
+	
+/* column widths */
+.isolation-point-table .identifier,
+.isolation-point-table .headings .identifier  {
+	width: 8%;
+	/*border-left: 1px solid black;*/
+}
+.isolation-point-table .source {
+	width: 12%;
+}
+.isolation-point-table .device {
+	width: 10%;
+}
+.isolation-point-table .location {
+	width: 20%;
+	padding-right: 10px;
+}
+.isolation-point-table .method {
+	width: 25%;
+}
+.isolation-point-table .check {
+	width: 20%;
+}
+	.isolation-point-table .headings .check {
 		width: 25%;
 	}
-	.isolation-point-table .check {
-		width: 20%;
-	}
-		.isolation-point-table .headings .check {
-			width: 25%;
-		}
-	.isolation-point-table .thumbnail {
-		width: 5%;
-	}
+.isolation-point-table .thumbnail {
+	width: 5%;
+}
 
-	/* footer */
-	.footer p {
-		text-align: center;
+
+/* footer
+------------------------------------*/
+.footer p {
+	text-align: center;
+	font-weight: bold;
+	font-size: 14px;
+}
+
+
+/* print specific
+------------------------------------*/
+@media print { 
+	.procedure-print-container {
+		font-size: 12pt;
+		width: 100%;
+	}
+	.isolation-point-table li {
+		page-break-inside: avoid;
+		font-size: 10pt;
 	}
 	
-	/* print specific */
-	@media print { 
-		.procedure-print-container {
-			font-size: 12pt;
-			width: 100%;
-		}
-		.isolation-point-table li {
-			page-break-inside: avoid;
-			font-size: 10pt;
-		}
-		.procedure-summary td,
-	    .procedure-summary th {
-	        border: 1px solid #222;
-	        color: #222;
-	    }
-	}	    
+	/*thead {display: table-header-group;}*/
+}
+
+
+
+
