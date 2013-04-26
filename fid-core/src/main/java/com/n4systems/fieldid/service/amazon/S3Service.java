@@ -51,9 +51,9 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String ASSET_PROFILE_IMAGE_PATH_THUMB = "/assets/%d/profile/%s.thumbnail";
     public static final String ASSET_PROFILE_IMAGE_PATH_MEDIUM = "/assets/%d/profile/%s.medium";
 
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH = "/assets/%s/procedure_definitions/%s";
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB = "/assets/%s/procedure_definitions/%s.thumbnail";
-    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM = "/assets/%s/procedure_definitions/%s.medium";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH = "/assets/%d/procedure_definitions/%s";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB = "/assets/%d/procedure_definitions/%s.thumbnail";
+    public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM = "/assets/%d/procedure_definitions/%s.medium";
 
     public static final String THUMBNAIL_EXTENSION = ".thumbnail";
     public static final String MEDIUM_EXTENSION = ".medium";
