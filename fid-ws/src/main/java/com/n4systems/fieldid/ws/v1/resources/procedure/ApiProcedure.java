@@ -11,6 +11,7 @@ public class ApiProcedure extends ApiReadWriteModel {
     private Long assigneeUserId;
     private Long assigneeUserGroupId;
     private String assetId;
+    private String assetIdentifier;
     private String workflowState;
     private List<ApiIsolationPointResult> lockResults;
 
@@ -60,5 +61,13 @@ public class ApiProcedure extends ApiReadWriteModel {
 
     public void setLockResults(List<ApiIsolationPointResult> lockResults) {
         this.lockResults = lockResults;
+    }
+
+    public String getAssetIdentifier() {
+        return assetIdentifier;
+    }
+
+    public void setAssetIdentifier(String assetIdentifier) {
+        this.assetIdentifier = assetIdentifier;
     }
 }

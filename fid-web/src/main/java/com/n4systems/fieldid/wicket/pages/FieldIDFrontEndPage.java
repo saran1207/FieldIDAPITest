@@ -354,7 +354,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         response.renderJavaScript(javascriptBuffer.toString(), null);
 
-        response.renderJavaScriptReference(CoreJavaScriptResourceReference.get());
+        renderJqueryJavaScriptReference(response);
 
         response.renderJavaScriptReference("javascript/common-jquery.js");
         response.renderJavaScriptReference("javascript/sessionTimeout-jquery.js");
@@ -378,6 +378,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             TextTemplate apptegicTemplate = new PackageTextTemplate(FieldIDFrontEndPage.class, "apptegic.js");
             response.renderJavaScript(apptegicTemplate.asString(apptegicParams), null);
         }
+    }
+
+    protected void renderJqueryJavaScriptReference(IHeaderResponse response) {
+        response.renderJavaScriptReference(CoreJavaScriptResourceReference.get());
     }
 
     protected Long getTenantId() {

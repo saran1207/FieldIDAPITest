@@ -16,6 +16,13 @@
 	min-width: 70px;
 }
 
+.note .noteText {
+    display:block;
+    float:left;
+    /*required on procedure results page to override timeline js stuff*/
+    line-height:normal;
+}
+
 .note.arrow-left {
 	margin-left: 28px;
 }

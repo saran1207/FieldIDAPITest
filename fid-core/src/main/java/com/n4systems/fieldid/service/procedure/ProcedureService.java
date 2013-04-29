@@ -7,10 +7,8 @@ import com.n4systems.model.procedure.Procedure;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereParameterGroup;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class ProcedureService extends FieldIdPersistenceService {
 
@@ -18,8 +16,7 @@ public class ProcedureService extends FieldIdPersistenceService {
         QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
         query.addSimpleWhere("asset", asset);
 
-        List<ProcedureWorkflowState> activeStates = Arrays.asList(ProcedureWorkflowState.OPEN, ProcedureWorkflowState.LOCKED);
-        query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", activeStates);
+        query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
         return persistenceService.exists(query);
     }
 
@@ -41,6 +38,7 @@ public class ProcedureService extends FieldIdPersistenceService {
         QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
         query.addSimpleWhere("asset", asset);
         query.addSimpleWhere("workflowState", ProcedureWorkflowState.OPEN);
+        query.setLimit(1);
         return persistenceService.find(query);
     }
 }

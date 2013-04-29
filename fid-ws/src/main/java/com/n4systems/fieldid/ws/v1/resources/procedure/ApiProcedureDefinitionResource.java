@@ -62,6 +62,8 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
             apiIsolationPoint.setIdentifier(isolationPoint.getIdentifier());
             apiIsolationPoint.setElectronicIdentifier(isolationPoint.getElectronicIdentifier());
             apiIsolationPoint.setAnnotation(convertAnnotation(isolationPoint.getAnnotation()));
+            apiIsolationPoint.setLocation(isolationPoint.getLocation());
+            apiIsolationPoint.setMethod(isolationPoint.getMethod());
             apiIsolationPoints.add(apiIsolationPoint);
         }
         return apiIsolationPoints;
@@ -79,7 +81,7 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
             convertedImage.setAnnotations(convertAnnotations(image.getAnnotations()));
 
             try {
-                convertedImage.setData(s3Service.downloadProcedureDefinitionMediumImage(image.getFileName()));
+                convertedImage.setData(s3Service.downloadProcedureDefinitionMediumImage(image));
             } catch (IOException e) {
                 log.error("IOException downloading procedure def image: " + image.getId(), e);
             }

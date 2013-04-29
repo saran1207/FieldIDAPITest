@@ -1,8 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.utils.Predicate;
-import com.n4systems.fieldid.wicket.behavior.DisplayNoneIfCondition;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
@@ -15,8 +16,11 @@ import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.ProcedureWorkflowState;
+import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.IsolationPointResult;
 import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.procedure.ProcedureDefinitionImage;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -39,12 +43,13 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
     @SpringBean private S3Service s3Service;
 
     private IModel<Procedure> procedureModel;
-    private ProcedureWorkflowState currentTimelineDisplay = ProcedureWorkflowState.LOCKED;
-    private Component lockResultsPanel;
-    private Component unlockResultsPanel;
+    private ProcedureWorkflowState currentTimelineDisplay;
+    private Long procedureId;
 
     public ProcedureResultsPage(PageParameters params) {
-        Long procedureId = params.get("id").toLong();
+        procedureId = params.get("id").toLong();
+        currentTimelineDisplay = params.get("unlocking").isEmpty() ? ProcedureWorkflowState.LOCKED : ProcedureWorkflowState.UNLOCKED;
+
         procedureModel = new EntityModel<Procedure>(Procedure.class, procedureId);
 
         PropertyModel<List<IsolationPointResult>> lockResults = ProxyModel.of(procedureModel, on(Procedure.class).getLockResults());
@@ -53,8 +58,12 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         WebMarkupContainer timelinesContainer = new WebMarkupContainer("timelinesContainer");
         timelinesContainer.setOutputMarkupPlaceholderTag(true);
         timelinesContainer.add(createLockingResultsSelector());
-        timelinesContainer.add(lockResultsPanel = createTimelinePanel("lockResults", lockResults, ProcedureWorkflowState.LOCKED));
-        timelinesContainer.add(unlockResultsPanel = createTimelinePanel("unlockResults", unlockResults, ProcedureWorkflowState.UNLOCKED));
+
+        if (currentTimelineDisplay == ProcedureWorkflowState.LOCKED) {
+            timelinesContainer.add(createTimelinePanel("resultsTimeline", lockResults, ProcedureWorkflowState.LOCKED));
+        } else {
+            timelinesContainer.add(createTimelinePanel("resultsTimeline", unlockResults, ProcedureWorkflowState.UNLOCKED));
+        }
 
         add(new Label("assetTypeName", ProxyModel.of(procedureModel, on(Procedure.class).getAsset().getType().getName())));
         add(new Label("procedureCode", ProxyModel.of(procedureModel, on(Procedure.class).getType().getProcedureCode())));
@@ -100,16 +109,7 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
     }
 
     private Component createTimelinePanel(String id, IModel<List<IsolationPointResult>> results, final ProcedureWorkflowState state) {
-        return new TimelinePanel<IsolationPointResult>(id, results, new IsolationPointResultTimePointProvider(state)) {
-            {
-                add(new DisplayNoneIfCondition(new Predicate() {
-                    @Override
-                    public boolean evaluate() {
-                        return state != currentTimelineDisplay;
-                    }
-                }));
-            }
-        };
+        return new TimelinePanel<IsolationPointResult>(id, results, new IsolationPointResultTimePointProvider(state));
     }
 
     private Component createLockingResultsSelector() {
@@ -117,16 +117,17 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
             {
                 addLink(new FIDLabelModel("label.locking"), ProcedureWorkflowState.LOCKED);
                 addLink(new FIDLabelModel("label.unlocking"), ProcedureWorkflowState.UNLOCKED);
-                setCurrentState(ProcedureWorkflowState.LOCKED);
+                setCurrentState(currentTimelineDisplay);
                 setVisible(procedureModel.getObject().getWorkflowState()==ProcedureWorkflowState.UNLOCKED);
             }
             @Override
             protected void onEnterState(AjaxRequestTarget target, Object state) {
-                if (state == ProcedureWorkflowState.LOCKED) {
-                    target.appendJavaScript("$('#"+unlockResultsPanel.getMarkupId()+"').hide();$('#"+lockResultsPanel.getMarkupId()+"').show();");
-                } else {
-                    target.appendJavaScript("$('#"+lockResultsPanel.getMarkupId()+"').hide();$('#"+unlockResultsPanel.getMarkupId()+"').show();");
+                PageParameters params = new PageParameters();
+                params.add("id", procedureId);
+                if (state == ProcedureWorkflowState.UNLOCKED) {
+                    params.add("unlocking", true);
                 }
+                setResponsePage(ProcedureResultsPage.class, params);
             }
         };
     }
@@ -143,7 +144,15 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
 
         @Override
         public String getTitle(IsolationPointResult item) {
-            return item.getIsolationPoint().getIdentifier() + " " + (state==ProcedureWorkflowState.LOCKED ? getString("label.locked_out") : getString("label.unlocked"));
+            StringBuffer sb = new StringBuffer();
+            if (item.getIsolationPoint().getIdentifier() != null) {
+                sb.append(item.getIsolationPoint().getIdentifier()).append(" ");
+            }
+            if (item.getIsolationPoint().getSourceText() != null) {
+                sb.append(item.getIsolationPoint().getSourceText()).append(" ");
+            }
+            sb.append(state==ProcedureWorkflowState.LOCKED ? getString("label.locked_out") : getString("label.unlocked"));
+            return sb.toString();
         }
 
         @Override
@@ -152,16 +161,66 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         }
 
         @Override
-        public String getUrl(IsolationPointResult item) {
-            return "http://www.fieldid.com/assets/images/video/fieldid-overview-base-large.png";
+        public String getMediaUrl(IsolationPointResult item) {
+            ImageAnnotation annotation = item.getIsolationPoint().getAnnotation();
+            if (annotation != null) {
+                return s3Service.getProcedureDefinitionImageMediumURL((ProcedureDefinitionImage) annotation.getImage()).toString();
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public String getThumbnailUrl(IsolationPointResult item) {
+            ImageAnnotation annotation = item.getIsolationPoint().getAnnotation();
+            if (annotation != null) {
+                return s3Service.getProcedureDefinitionImageMediumURL((ProcedureDefinitionImage) annotation.getImage()).toString();
+            } else {
+                return null;
+            }
         }
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderJavaScriptReference("javascript/timeline/storyjs-embed.js");
         response.renderCSSReference("style/pageStyles/procedureResults.css");
         response.renderCSSReference("style/newCss/asset/header.css");
+
+        response.renderCSSReference("style/component/annotated-image.css");
+        response.renderJavaScriptReference("javascript/jquery.annotate.js");
+        response.renderJavaScriptReference("javascript/displayAnnotations.js");
+
+        JsonElement convertedIsolationAnnotations = serializeImageAnnotations(procedureModel.getObject().getLockResults());
+        response.renderJavaScript("var isolationAnnotations = " + convertedIsolationAnnotations.toString()+";", null);
+
+        response.renderJavaScript("waitForLockingTimelineToLoadThenAnnotate();", null);
+        if (procedureModel.getObject().getWorkflowState() == ProcedureWorkflowState.UNLOCKED) {
+            response.renderJavaScript("waitForUnlockingTimelineToLoadThenAnnotate();", null);
+        }
+    }
+
+    @Override
+    protected void renderJqueryJavaScriptReference(IHeaderResponse response) {
+        response.renderJavaScriptReference("javascript/jquery-1.7.2.js");
+    }
+
+    protected JsonElement serializeImageAnnotations(List<IsolationPointResult> results) {
+        JsonArray points = new JsonArray();
+
+        for (IsolationPointResult result : results) {
+            ImageAnnotation annotation = result.getIsolationPoint().getAnnotation();
+            if (annotation != null && annotation.getImage() != null) {
+                JsonObject point = new JsonObject();
+                point.addProperty("x", annotation.getX());
+                point.addProperty("y", annotation.getY());
+                String escapedText = StringEscapeUtils.escapeJavaScript(annotation.getText());
+                point.addProperty("text", escapedText);
+                point.addProperty("cssStyle", annotation.getType().getCssClass());
+                points.add(point);
+            }
+        }
+
+        return points;
     }
 }

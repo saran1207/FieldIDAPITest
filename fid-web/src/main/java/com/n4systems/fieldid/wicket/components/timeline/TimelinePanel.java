@@ -74,12 +74,21 @@ public class TimelinePanel<T> extends Panel {
         timePoint.addProperty("text", timePointInfoProvider.getText(item));
 
         JsonObject assetObject = new JsonObject();
-        assetObject.addProperty("media", timePointInfoProvider.getUrl(item));
         assetObject.addProperty("credit", "");
         assetObject.addProperty("caption", "");
 
-        timePoint.add("asset", assetObject);
+        String mediaUrl = timePointInfoProvider.getMediaUrl(item);
+        String thumbnailUrl = timePointInfoProvider.getThumbnailUrl(item);
 
+        if (mediaUrl != null) {
+            assetObject.addProperty("media", mediaUrl);
+        }
+
+        if (thumbnailUrl != null) {
+            assetObject.addProperty("thumbnail", thumbnailUrl);
+        }
+
+        timePoint.add("asset", assetObject);
         return timePoint;
     }
 

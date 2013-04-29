@@ -197,8 +197,11 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
-    public byte[] downloadProcedureDefinitionMediumImage(String imageName) throws IOException {
-        byte[] imageData = downloadResource(null, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM, imageName);
+    public byte[] downloadProcedureDefinitionMediumImage(ProcedureDefinitionImage image) throws IOException {
+        byte[] imageData = downloadResource(null, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
+                image.getProcedureDefinition().getAsset().getId(),
+                image.getProcedureDefinition().getId(),
+                image.getFileName());
         return imageData;
     }
 

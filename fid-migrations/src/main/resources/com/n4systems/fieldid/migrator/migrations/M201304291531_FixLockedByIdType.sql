@@ -1,0 +1,1 @@
+alter table procedures modify column lockedby_id bigint;
