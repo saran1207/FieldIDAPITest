@@ -28,6 +28,8 @@
 
 .note.arrow-right {
 	margin-right: 28px;
+	
+	margin-left: -100px;
 }
 	.note.arrow-right:after {
 		content: url('/fieldid/images/loto/arrow-right.png');
