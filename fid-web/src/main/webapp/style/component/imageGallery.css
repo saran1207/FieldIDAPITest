@@ -4,6 +4,10 @@
     /*border:1px solid black;*/
 /*}*/
 
+.image-gallery .uploadForm {
+    display:none;
+}
+
 .galleria-container {
     width:  400px;
     height:300px;

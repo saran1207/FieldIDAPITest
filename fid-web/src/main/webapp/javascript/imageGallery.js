@@ -66,12 +66,12 @@ var imageGallery = (function() {
 			Galleria.loadTheme('/fieldid/javascript/galleria/themes/classic/galleria.classic.min.js');
 			Galleria.run('#'+id,$.extend(defaults, options));
 
-			setTimeout(initUploadButton,300);
 		}
 
 		return {
 			init : init,
-			edit : edit
+			edit : edit,
+			initForm : function() { setTimeout(initUploadButton,300); }
 		}
 	}
 
@@ -87,6 +87,7 @@ var imageGallery = (function() {
 			g.init();
 			$('#'+id).data('gallery',g);
 		}
+		g.initForm();
 		return g;
 	}
 
