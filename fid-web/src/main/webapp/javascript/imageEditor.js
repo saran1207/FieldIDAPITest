@@ -74,10 +74,21 @@ var imageEditor = (function() {
 			}
 
 			setTimeout(function() {
+				adjustNoteDirection(note);
+			},0);
+			setTimeout(function() {
 				note.find('input').focus();
 			},100);
 
 			return note;
+		}
+
+		function adjustNoteDirection(note) {
+			if (parseInt(note.css('left')) > parseInt(note.parent().css('width'))/2) {
+				note.removeClass('arrow-left').addClass('arrow-right');
+			} else {
+				note.removeClass('arrow-right').addClass('arrow-left');
+			}
 		}
 
 		function updateNote(note) {
