@@ -60,3 +60,7 @@
 .pageContent h1 a:hover label{
     cursor: pointer;
 }
+
+.navHeader .mattButton.right {
+    float: right;
+}

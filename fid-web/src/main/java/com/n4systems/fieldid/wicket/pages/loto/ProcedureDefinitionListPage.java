@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -37,14 +38,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
     private WebMarkupContainer blankSlate;
     private ListView listView;
 
-    enum NewMode {
-        COPY_EXISTING("label.copy_existing"), FROM_SCRATCH("label.start_blank");
-
-        private String label;
-        NewMode(String label) {this.label = label;}
-        public String getLabel() {return label;}
-    }
-
     public ProcedureDefinitionListPage(PageParameters params) {
         super(params);
 
@@ -57,6 +50,15 @@ public class ProcedureDefinitionListPage extends LotoPage {
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
+        add(new Link("copyProcedureDefLink") {
+            @Override
+            public void onClick() {
+                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(assetModel.getObject());
+                ProcedureDefinition copiedDefinition = procedureDefinitionService.copyProcedureDefinition(publishedDef, new ProcedureDefinition());
+                copiedDefinition.setPublishedState(PublishedState.DRAFT);
+                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
+            }
+        }.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())));
         listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupPlaceholderTag(true);
 
@@ -92,7 +94,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                     @Override public void onClick() {
                         setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject()));
                     }
-                }.setVisible(!procedureDefinition.getObject().getPublishedState().equals(PublishedState.DRAFT)));
+                });
             }
         });
 
@@ -104,7 +106,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
         blankSlate.add(new AjaxLink("authorLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                doNewProcedureDef(NewMode.FROM_SCRATCH);
+                doNewProcedureDef();
             }
         });
         blankSlate.setVisible(listView.getList().isEmpty());
@@ -116,15 +118,8 @@ public class ProcedureDefinitionListPage extends LotoPage {
         setResponsePage(new ProcedureDefinitionPage(new PageParameters().add("id",procedureDefinition.getId())));
     }
 
-    private void doNewProcedureDef(NewMode mode) {
-        switch (mode) {
-            case FROM_SCRATCH:
-                setResponsePage(new ProcedureDefinitionPage(assetModel.getObject()));
-                break;
-            default:
-                // currently only one mode supported.
-                break;
-        }
+    private void doNewProcedureDef() {
+        setResponsePage(new ProcedureDefinitionPage(assetModel.getObject()));
     }
 
     @Override

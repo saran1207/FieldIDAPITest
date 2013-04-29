@@ -241,6 +241,37 @@ public class S3Service extends FieldIdPersistenceService {
         return image;
     }
 
+    public void copyProcedureDefImageToTemp(ProcedureDefinitionImage from, ProcedureDefinitionImage to) {
+        String tempFileName = UUID.randomUUID().toString();
+        to.setTempFileName(tempFileName);
+
+        String contentType = getObjectMetadata(createResourcePath(from.getTenant().getId(),
+                                                                  PROCEDURE_DEFINITION_IMAGE_TEMP,
+                                                                  from.getProcedureDefinition().getAsset().getId(),
+                                                                  from.getProcedureDefinition().getId(),
+                                                                  from.getFileName()).toString()).getContentType();
+        to.setContentType(contentType);
+
+        copyProcedureDefinitionImageToTemp(from, tempFileName, PROCEDURE_DEFINITION_IMAGE_PATH, PROCEDURE_DEFINITION_IMAGE_TEMP);
+        copyProcedureDefinitionImageToTemp(from, tempFileName, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM, PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM);
+        copyProcedureDefinitionImageToTemp(from, tempFileName, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB, PROCEDURE_DEFINITION_IMAGE_TEMP_THUMB);
+
+    }
+
+    private void copyProcedureDefinitionImageToTemp(ProcedureDefinitionImage image, String tempFileName, String source, String dest) {
+        Long tenantId = getCurrentTenant().getId();
+
+        CopyObjectRequest copyObjectRequest = new CopyObjectRequest(getBucket(),
+                createResourcePath(tenantId, source,
+                        image.getProcedureDefinition().getAsset().getId(),
+                        image.getProcedureDefinition().getId(),
+                        image.getFileName()),
+                getBucket(), createResourcePath(tenantId, dest, tempFileName));
+
+        getClient().copyObject(copyObjectRequest);
+
+    }
+
     public String uploadTempCriteriaResultImage(CriteriaResultImage criteriaResultImage, byte[] imageData) {
         String contentType = criteriaResultImage.getContentType();
 

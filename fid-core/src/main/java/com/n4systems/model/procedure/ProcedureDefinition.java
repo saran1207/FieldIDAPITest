@@ -225,5 +225,8 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         if (!getImages().contains(image)) {
             getImages().add(image);
         }
+        if(image.getProcedureDefinition() == null) {
+            image.setProcedureDefinition(this);
+        }
     }
 }
