@@ -59,9 +59,6 @@ public abstract class ImageList<T extends S3Image> extends Panel {
     class ImageListOptions implements Serializable {
         String yPosition = "middle";
         String xPosition ="left";
-
-        ImageListOptions() {
-        }
     }
 
 }

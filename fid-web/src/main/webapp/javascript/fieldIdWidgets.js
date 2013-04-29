@@ -52,6 +52,7 @@ var fieldIdWidgets = (function() {
 
 
 		function updateImage($this,index) {
+			var optionIndex = index;
 			var imageHeight = $this.height();
 			var imageWidth = $this.width();
 			var imageContainerHeight = $this.parent().parent().height();
@@ -61,7 +62,7 @@ var fieldIdWidgets = (function() {
 				// arggh : this is messy but i need to have the image loaded before i do this code.
 				// if it's not [width()==0] then i'll just hide it, wait and try again.
 				$this.parent().css('visibility','hidden');
-				setTimeout(function() { updateImage($this); } ,300);
+				setTimeout(function() { updateImage($this,index); } ,300);
 				return;
 			}
 			$this.parent().css('visibility','visible');
@@ -82,7 +83,7 @@ var fieldIdWidgets = (function() {
 				var $notesContainer = $this.parent();
 				$notesContainer.addAnnotations(
 					function(annotation) {return createNote(annotation);},
-					options.annotationOptions[index],
+					options.annotationOptions[optionIndex],
 					options );
 			}
 		}

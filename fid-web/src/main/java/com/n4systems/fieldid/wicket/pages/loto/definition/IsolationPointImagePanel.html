@@ -5,6 +5,10 @@
         <span class="label-button"> <a class="mattButton"><wicket:message key="label.label_image"/></a></span>
     </div>
 
-    <img wicket:id="image"/>
+    <div wicket:id="annotatedImage">
+        <ul>
+            <li wicket:id="container"><div class="notes-container" style="visibility: hidden"><img wicket:id="image"/></div></li>
+        </ul>
+    </div>
 
 </wicket:panel>
