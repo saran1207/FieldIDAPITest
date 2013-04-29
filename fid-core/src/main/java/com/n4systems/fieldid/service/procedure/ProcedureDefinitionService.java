@@ -133,8 +133,9 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     public void deleteProcedureDefinition(ProcedureDefinition procedureDefinition) {
+        Preconditions.checkArgument(procedureDefinition.getPublishedState().isPreApproval(), "can't delete a procedure that has been published");
+        s3Service.removeProcedureDefinitionImages(procedureDefinition);
         persistenceService.delete(procedureDefinition);
-        //TODO: Delete draft images?
     }
 
     public ProcedureDefinition copyProcedureDefinition(ProcedureDefinition from, ProcedureDefinition to) {

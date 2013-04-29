@@ -8,6 +8,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
@@ -161,11 +162,6 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
-//    public URL getProcedureImageURL(Long procedureDefinitionId, String imageName) {
-//        URL procedureDefinition = generateResourceUrl(null, PROCEDURE_DEFINITION_IMAGE_PATH, procedureDefinitionId, imageName);
-//        return procedureDefinition;
-//    }
-//
     public URL getAssetProfileImageOriginalURL(Long assetId, String imageName) {
         URL assetProfileUrl = generateResourceUrl(null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
         return assetProfileUrl;
@@ -246,10 +242,10 @@ public class S3Service extends FieldIdPersistenceService {
         to.setTempFileName(tempFileName);
 
         String contentType = getObjectMetadata(createResourcePath(from.getTenant().getId(),
-                                                                  PROCEDURE_DEFINITION_IMAGE_TEMP,
-                                                                  from.getProcedureDefinition().getAsset().getId(),
-                                                                  from.getProcedureDefinition().getId(),
-                                                                  from.getFileName()).toString()).getContentType();
+                PROCEDURE_DEFINITION_IMAGE_PATH,
+                from.getProcedureDefinition().getAsset().getId(),
+                from.getProcedureDefinition().getId(),
+                from.getFileName()).toString()).getContentType();
         to.setContentType(contentType);
 
         copyProcedureDefinitionImageToTemp(from, tempFileName, PROCEDURE_DEFINITION_IMAGE_PATH, PROCEDURE_DEFINITION_IMAGE_TEMP);
@@ -442,6 +438,39 @@ public class S3Service extends FieldIdPersistenceService {
 
     public URL getProcedureDefinitionImageThumbnailURL(ProcedureDefinitionImage procedureDefinitionImage) {
         return getProcedureDefinitionImageURLImpl(procedureDefinitionImage, PROCEDURE_DEFINITION_IMAGE_TEMP_THUMB, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB);
+    }
+
+    public void removeProcedureDefinitionImages(ProcedureDefinition procedureDefinition) {
+        for (ProcedureDefinitionImage image: procedureDefinition.getImages()) {
+            removeProcedureDefinitionImage(image);
+        }
+        removeResource(procedureDefinition.getTenant().getId(),
+                       PROCEDURE_DEFINITION_IMAGE_PATH,
+                       procedureDefinition.getAsset().getId(),
+                       procedureDefinition.getId(),
+                       ""
+        );
+    }
+
+    public void removeProcedureDefinitionImage(ProcedureDefinitionImage procedureDefinitionImage) {
+        removeResource(procedureDefinitionImage.getProcedureDefinition().getTenant().getId(),
+                PROCEDURE_DEFINITION_IMAGE_PATH,
+                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+                procedureDefinitionImage.getProcedureDefinition().getId(),
+                procedureDefinitionImage.getFileName()
+        );
+        removeResource(procedureDefinitionImage.getProcedureDefinition().getTenant().getId(),
+                PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
+                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+                procedureDefinitionImage.getProcedureDefinition().getId(),
+                procedureDefinitionImage.getFileName()
+        );
+        removeResource(procedureDefinitionImage.getProcedureDefinition().getTenant().getId(),
+                PROCEDURE_DEFINITION_IMAGE_PATH_THUMB,
+                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+                procedureDefinitionImage.getProcedureDefinition().getId(),
+                procedureDefinitionImage.getFileName()
+        );
     }
 
     public byte[] downloadCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
