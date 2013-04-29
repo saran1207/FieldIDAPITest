@@ -50,14 +50,10 @@ public class PrintProductSummary extends Panel {
         }
 
         //lockout points
-        add(new Label("lockoutPoints", ProxyModel.of(model, lockoutPts)));
-
-        // number of isolation pts
-        //add(new Label("lockoutPoints", ProxyModel.of(model, on(ProcedureDefinition.class).getIsolationPoints().size())));
+        add(new Label("lockoutPoints", Model.of(String.valueOf(lockoutPts))));
 
         //device count
-        add(new Label("deviceCount", ProxyModel.of(model, deviceCount)));
-        //add(new Label("deviceCount", Model.of("3")));
+        add(new Label("deviceCount", Model.of(String.valueOf(deviceCount))));
 
         //warnings
         add(new Label("warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())));
