@@ -28,16 +28,19 @@ public class PrintMetaData extends Panel {
         add(new Label("developedBy", ProxyModel.of(model, on(ProcedureDefinition.class).getDevelopedBy().getDisplayName())));
 
         //reviewedBy
-        add(new Label("reviewedBy", ProxyModel.of(model, on(ProcedureDefinition.class).getCreatedBy().getDisplayName())));
+        add(new Label("reviewedBy", ProxyModel.of(model, on(ProcedureDefinition.class).getApprovedBy().getDisplayName())));
+
 
         //revisedBy
-        add(new Label("revisedBy", ProxyModel.of(model, on(ProcedureDefinition.class).getApprovedBy().getDisplayName())));
+        add(new Label("revisedBy", ProxyModel.of(model, on(ProcedureDefinition.class).getModifiedBy().getDisplayName())));
+
 
         //date
-        add(new Label("date", ProxyModel.of(model, on(ProcedureDefinition.class).getOriginDate())));
+        add(new Label("date", ProxyModel.of(model, on(ProcedureDefinition.class).getModified())));
 
         //revision number
         add(new Label("revisionNumber", ProxyModel.of(model, on(ProcedureDefinition.class).getRevisionNumber())));
+
 
 
     }
