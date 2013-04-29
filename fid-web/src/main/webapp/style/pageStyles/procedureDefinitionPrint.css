@@ -5,7 +5,7 @@
 	box-sizing: border-box; 
 }
 body {
-	font: 400 12px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font: 400 12px Arial, sans-serif;
 	color: #222;
 }
 h2, h3 {
@@ -17,12 +17,22 @@ h3 {
 	text-transform: uppercase;
 	line-height: 20px;
 	padding: 0 0 10px;
+	color: #222;
 }
-
+.header {
+	padding-bottom: 20px;
+}
+.navigation {
+	display: none;
+}
 .procedure-print-container {
 	min-width: 1000px;
 	max-width: 1024px;
 	margin: auto;
+}
+.printIcon {
+	float: right;
+	padding: 5px;
 }
 
 /* table styles */
@@ -85,9 +95,7 @@ td.revision  {
 /* procedure summary
 ------------------------------------*/
 .procedure-summary th {
-	/*background: #888;*/
 	color: #fff;
-	font-weight: normal;
 	font-size: 20px;
 	text-transform: uppercase;
 	padding: 6px;
@@ -150,16 +158,16 @@ td.revision  {
 
 /* image list
 ------------------------------------*/
-.image-list {
-	margin: 35px 0;
-}
 .image-list ul  {
 	width: 100%!important; /* can this be done in js instead? */
+	text-align: center;
 }
 .image-list ul li {
 	background: transparent;
 	list-style-type: none;
-	margin: 4px;
+	margin: 10px 20px;
+	float: none;
+	display: inline-block;
 }
 
 
@@ -239,9 +247,21 @@ td.revision  {
 		font-size: 12pt;
 		width: 100%;
 	}
+
+	/* add this class to any element that needs to be printed on the next page */
+	.page-break {
+		page-break-before: always;
+	}
+	/* printed page will always break before the header */
+	.header {
+		page-break-before: always;
+	}
+	/* page will not break inside a list item */
 	.isolation-point-table li {
 		page-break-inside: avoid;
-		font-size: 10pt;
+	}
+	.printIcon {
+		display: none;
 	}
 	
 	/*thead {display: table-header-group;}*/
