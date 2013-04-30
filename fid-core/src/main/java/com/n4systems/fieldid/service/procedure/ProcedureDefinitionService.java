@@ -203,6 +203,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     public IsolationPoint copyIsolationPointForEditing(IsolationPoint from, IsolationPoint to) {
         Preconditions.checkArgument(from != null && to != null, "can't use null isolation points when copying.");
 
+        to.setId(from.getId());
         to.setAnnotation(from.getAnnotation());
         to.setIdentifier(from.getIdentifier());
         to.setLocation(from.getLocation());

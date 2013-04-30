@@ -57,7 +57,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
     @JoinTable(name="procedure_definitions_isolation_points", joinColumns = @JoinColumn(name = "procedure_definition_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_id"))
     private List<IsolationPoint> isolationPoints = Lists.newArrayList();
 
-    @OneToMany(mappedBy = "procedureDefinition", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "procedureDefinition", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ProcedureDefinitionImage> images = Lists.newArrayList();
 
     @Column(name="origin_date")

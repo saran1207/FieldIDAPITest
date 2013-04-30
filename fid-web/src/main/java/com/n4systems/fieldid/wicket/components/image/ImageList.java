@@ -30,15 +30,21 @@ public abstract class ImageList<T extends S3Image> extends Panel {
         super(id);
         this.images = images;
         setOutputMarkupId(true);
-        boolean hasImages = images.getObject().size()>0;
         add(new AttributeAppender("class", "image-list"));
         listView = new ListView<T>("list", images) {
             @Override protected void populateItem(final ListItem<T> item) {
                 createImage(item);
             }
+            @Override public boolean isVisible() {
+                return images.getObject().size()>0;
+            }
         };
-        add(listView.setVisible(hasImages));
-        add(new WebMarkupContainer("blankSlate").setVisible(!hasImages));
+        add(listView);
+        add(new WebMarkupContainer("blankSlate") {
+            @Override public boolean isVisible() {
+                return images.getObject().size()==0;
+            }
+        });
     }
 
     protected void createImage(ListItem<T> item) {

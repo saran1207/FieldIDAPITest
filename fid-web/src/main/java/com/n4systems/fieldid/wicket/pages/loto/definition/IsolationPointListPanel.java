@@ -37,6 +37,7 @@ public class IsolationPointListPanel extends Panel {
 
     private final IModel<ProcedureDefinition> model;
     private final Component blankSlate;
+    private final EditableImageList<ProcedureDefinitionImage> images;
 
     public IsolationPointListPanel(String id, final IModel<ProcedureDefinition> model) {
         super(id, model);
@@ -45,7 +46,7 @@ public class IsolationPointListPanel extends Panel {
 
         add(new AttributeAppender("class", "isolation-point-list"));
 
-        add(new EditableImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
+        add(images = new EditableImageList<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
             @Override protected void createImage(final ListItem<ProcedureDefinitionImage> item) {
                 URL url = s3Service.getProcedureDefinitionImageThumbnailURL(item.getModel().getObject());
                 item.add(new ContextImage("image", url.toString()));
@@ -104,14 +105,21 @@ public class IsolationPointListPanel extends Panel {
         item.add(new Label("location", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getLocation())));
         item.add(new Label("method", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getMethod())));
         item.add(new Label("check", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getCheck())));
-        // TODO DD : add images to row.
-        item.add(new WebMarkupContainer("image"));
+        item.add(new WebMarkupContainer("label").add(new AttributeAppender("class", getLabelCss(item.getModel())," ")));
 
         item.add(new AjaxLink("edit") {
             @Override public void onClick(AjaxRequestTarget target) {
                 doEdit(target, isolationPoint);
             }
         });
+    }
+
+    private IModel<String> getLabelCss(final IModel<IsolationPoint> model) {
+        return new Model<String>() {
+            @Override public String getObject() {
+                return model.getObject().getAnnotation()!=null ? "labelled" : "unlabelled";
+            }
+        };
     }
 
     private IModel<String> getSourceCssClass(IsolationPoint isolationPoint) {

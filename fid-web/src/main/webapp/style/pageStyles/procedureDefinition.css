@@ -268,12 +268,22 @@ h3 {
         .isolation-point-table .delete img {
             vertical-align: middle;
         }
+
+        /*FIX THIS!!!*/
 	.isolation-point-table .thumbnail {
 		width: 30px;
+        height:30px;
+        background-size:36px;
+        background-repeat: no-repeat;
 	}
-		.isolation-point-table .thumbnail img {
-			width: 35px;
-		}
+        .isolation-point-table .thumbnail.labelled {
+            background-image: url(/fieldid/images/attachment-icon.png);
+            outline:1px solid #d3d3d3;
+        }
+        .isolation-point-table .thumbnail.unlabelled {
+            outline:1px dashed #708090;
+        }
+        /*FIX THIS*/
 	.isolation-point-table .identifier {
 		width: 30px;
 		text-align: center;
@@ -332,7 +342,7 @@ h3 {
 	background: no-repeat 52px 22px;
 }
 .isolation-point-editor .title.electrical {
-	background-image: url(/fieldid/images/loto/electrical-full.png);
+    background-image: url(/fieldid/images/loto/electrical-full.png);
 }
 .isolation-point-editor .title.control-panel {
 	background-image: url(/fieldid/images/loto/control-panel-full.png);

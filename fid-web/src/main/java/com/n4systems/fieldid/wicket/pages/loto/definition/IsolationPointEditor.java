@@ -239,7 +239,6 @@ public class IsolationPointEditor extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        // TODO DD: is this needed? remove?? ask diana.
         response.renderOnDomReadyJavaScript("new toCombo('"+deviceComboBox.getInputName()+"');");
     }
 
