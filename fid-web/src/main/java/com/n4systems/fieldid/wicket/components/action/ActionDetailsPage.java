@@ -47,6 +47,11 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
             @Override public void onClick() {
                 setActionsListResponsePage(criteriaResultModel);
             }
+
+            @Override
+            public boolean isVisible() {
+                return !assetSummaryContext;
+            }
         };
         add(actionsListLink);
 
@@ -82,6 +87,11 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
                 AddEditActionPage page = new AddEditActionPage(criteriaResultModel, actionModel);
                 page.setImmediateSaveMode(assetSummaryContext);
                 setResponsePage(page);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return !assetSummaryContext;
             }
         };
         add(editLink);
