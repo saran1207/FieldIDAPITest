@@ -36,7 +36,10 @@ public class PrintMetaData extends Panel {
 
 
         //date
-        add(new Label("date", ProxyModel.of(model, on(ProcedureDefinition.class).getModified())));
+        add(new Label("date", ProxyModel.of(model, on(ProcedureDefinition.class).getOriginDate())));
+
+        //modified date
+        add(new Label("modifiedDate", ProxyModel.of(model, on(ProcedureDefinition.class).getModified())));
 
         //revision number
         add(new Label("revisionNumber", ProxyModel.of(model, on(ProcedureDefinition.class).getRevisionNumber())));
