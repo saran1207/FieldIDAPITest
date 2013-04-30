@@ -109,9 +109,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset());
         if (previousDefinition != null) {
             previousDefinition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
+            previousDefinition.setRetireDate(dateService.now().toDate());
             persistenceService.update(previousDefinition);
         }
         definition.setPublishedState(PublishedState.PUBLISHED);
+        definition.setOriginDate(dateService.now().toDate());
         persistenceService.update(definition);
     }
 
