@@ -197,6 +197,29 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return to;
     }
 
+    /**
+     * used to copy data backing wicket model. this result is re-attached and peristed.
+     */
+    public IsolationPoint copyIsolationPointForEditing(IsolationPoint from, IsolationPoint to) {
+        Preconditions.checkArgument(from != null && to != null, "can't use null isolation points when copying.");
+
+        to.setAnnotation(from.getAnnotation());
+        to.setIdentifier(from.getIdentifier());
+        to.setLocation(from.getLocation());
+        to.setMethod(from.getMethod());
+        to.setCheck(from.getCheck());
+        to.setSourceType(from.getSourceType());
+        to.setTenant(from.getTenant());
+        to.setSourceText(from.getSourceText());
+        to.setDeviceDefinition(from.getDeviceDefinition());
+        to.setLockDefinition(from.getLockDefinition());
+        Date now = dateService.now().toDate();
+        to.setCreated(now);
+        to.setModified(now);
+
+        return to;
+    }
+
     private IsolationDeviceDescription copyIsolationDeviceDescription(IsolationDeviceDescription from, IsolationDeviceDescription to) {
         Preconditions.checkArgument(from != null && to != null, "can't use null isolation deviceDescription when copying.");
         to.setFreeformDescription(from.getFreeformDescription());

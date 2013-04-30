@@ -208,15 +208,15 @@ public class IsolationPointEditor extends Panel {
 
     private IsolationPoint copyIntoModel(IsolationPoint isolationPoint) {
         IsolationPoint ip = getIsolationPoint();
-        procedureDefinitionService.copyIsolationPoint(isolationPoint, ip);
+        procedureDefinitionService.copyIsolationPointForEditing(isolationPoint, ip);
         return isolationPoint;
     }
 
     public IsolationPoint getEditedIsolationPoint() {
         if (isEditing()) {
-            return procedureDefinitionService.copyIsolationPoint(getIsolationPoint(), editedIsolationPoint);
+            return procedureDefinitionService.copyIsolationPointForEditing(getIsolationPoint(), editedIsolationPoint);
         } else {
-            return procedureDefinitionService.copyIsolationPoint(getIsolationPoint(), new IsolationPoint());
+            return procedureDefinitionService.copyIsolationPointForEditing(getIsolationPoint(), new IsolationPoint());
         }
     }
 
@@ -239,6 +239,7 @@ public class IsolationPointEditor extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        // TODO DD: is this needed? remove?? ask diana.
         response.renderOnDomReadyJavaScript("new toCombo('"+deviceComboBox.getInputName()+"');");
     }
 

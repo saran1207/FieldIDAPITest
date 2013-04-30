@@ -37,7 +37,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
 
     private void performAction(IRequestParameters params) {
         try {
-            doLabel(parseNoteId(params),
+            processNote(parseNoteId(params),
                     params.getParameterValue("x").toDouble(),
                     params.getParameterValue("y").toDouble(),
                     params.getParameterValue("text").toString(),
@@ -80,7 +80,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
         return params.getParameterValue(p).isEmpty() ? null : params.getParameterValue(p).toString();
     }
 
-    private final void doLabel(Long noteId, Double x, Double y,  String text, ImageAnnotationType type) {
+    private final void processNote(Long noteId, Double x, Double y, String text, ImageAnnotationType type) {
         ImageAnnotation annotation = getImageAnnotation(noteId,x,y,text,type);
         getEditableImage().addImageAnnotation(annotation);
         doLabel(getEditableImage(), annotation);
