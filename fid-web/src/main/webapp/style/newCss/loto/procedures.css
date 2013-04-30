@@ -64,3 +64,34 @@
 .navHeader .mattButton.right {
     float: right;
 }
+
+/* edit, print, view, copy buttons */
+.action-buttons > div,
+.action-buttons > .mattButton {
+    margin-right: 4px;
+}
+    .action-buttons .mattButton img {
+        vertical-align: middle;
+    }
+    .action-buttons .menu-button .menu-items {
+        width: 76px;
+        right: 1%;
+        left: auto;
+        /*-webkit-box-shadow: 0px 0px 4px 0px #000;*/
+        -webkit-box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+    }
+    .action-buttons .menu-button .menu-items li a {
+        padding: 6px 8px;
+        display: block;
+        color: #356CA2;
+        font-size: 13px;
+    }
+    .action-buttons .menu-button.edit .menu-items {
+        left: -4%;
+    }
+    
+
+
+
+
