@@ -39,7 +39,6 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
         image.setTenant(procedureDefinition.getTenant());
         image.setFileName(path);
         image.setProcedureDefinition(procedureDefinition);
-        // TODO DD : when/how can i remove these images? if they have no annotations then they shouldn't exist.
         procedureDefinition.addImage(image);
         return image;
     }

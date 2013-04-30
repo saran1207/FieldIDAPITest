@@ -45,9 +45,6 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     private boolean withDone = false;
     private List<FileUpload> fileUploads = Lists.newArrayList();
 
-    // TODO DD : add noAjaxUpdate option.
-    // TODO DD : add ability to delete images (check to see if they have annotations first?)
-
     public ImageGallery(String id, final IModel<List<T>> model) {
         super(id);
         this.model = model;
@@ -136,8 +133,6 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         response.renderJavaScriptReference("javascript/imageEditor.js");
         response.renderJavaScriptReference("javascript/imageGallery.js");
         response.renderCSSReference("style/component/imageGallery.css");
-
-        // TODO DD : refactor this ...don't pass jsonDataSource.
         response.renderOnLoadJavaScript(String.format(GALLERY_JS,gallery.getMarkupId(),jsonRenderer.render(createGalleryOptions(getJsonDataSource()))));
     }
 
