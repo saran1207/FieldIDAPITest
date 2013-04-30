@@ -11,10 +11,14 @@
 	font-weight: 400;
 	width: 1010px; /* Added 10px here to make the .procedure-wrapper equal 1000px since 5px of margin was added. */
 }
-#contentHeader {
-	display: none;
+
+#contentHeader .options {
+    display: none;
 }
 
+#contentHeader, #contentTitle {
+    margin-bottom: 0;
+}
 
 /* PROCEDURE/LOTO
 **********************************************************/
@@ -26,13 +30,22 @@ hr {
 	margin: 0;
 }
 
-.title {
-	color: #999;
-	font-size: 23px;
-	font-weight: 300;
+#contentTitle h1 a {
+    text-decoration: none;
 }
-	.title .page-title,
-	.title .isolation-point {
+
+#contentTitle h1 a:hover label{
+    cursor: pointer;
+}
+
+#contentTitle h1 {
+    font-size: 21px;
+    font-weight: normal;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.title .isolation-point {
 		color: #666;
 	}
 

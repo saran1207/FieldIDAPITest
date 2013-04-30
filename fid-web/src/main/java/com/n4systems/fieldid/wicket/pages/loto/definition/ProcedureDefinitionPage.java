@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.components.loto.ProcedureTitleLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
@@ -59,9 +60,8 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage{
         pd.setEquipmentNumber(asset.getIdentifier());
         pd.setEquipmentLocation(asset.getAdvancedLocation().getFullName());
         pd.setEquipmentDescription(asset.getType().getDisplayName());
-        model = Model.of(pd);
 
-        init(model);
+        init(Model.of(pd));
     }
 
     public ProcedureDefinitionPage(IModel<ProcedureDefinition> model) {
@@ -88,21 +88,19 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage{
         // this business requirement may change, but for now only edit DRAFT. even WAITING_FOR_AUTHORIZATION shouldn't be done.
         Preconditions.checkState(model.getObject().getPublishedState().isPreApproval(), "you are only allowed to edit PRE APPROVAL copies!");
         this.model = model;
-        add(assetNameLabel = new Label("assetName", new PropertyModel(model,"asset.displayName")));
-        add(pageTileLabel = new Label("pageTitle",new FIDLabelModel("label.author_procedure")));
-
         add(navigation = new Navigation("navigation"));
         add(form = new ProcedureDefinitionFormContainer("formSections", model));
 
         add(new AttributeAppender("class", Model.of("procedure-definition")));
     }
 
-    protected Label createTitleLabel(String labelId) {
-         Label label = new Label(labelId, Model.of("THIS SHOULDN'T BE SHOWN"));
-         label.setVisible(false);
-         return label;
+    @Override
+    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
+        if(isTopTitle)
+            return new Label(labelId, new FIDLabelModel("label.procedures"));
+        else
+            return new ProcedureTitleLabel(labelId, new PropertyModel<Asset>(model, "asset"));
     }
-
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);

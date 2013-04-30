@@ -2,16 +2,16 @@ package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.components.loto.ProcedureTitleLabel;
 import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
-import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -44,12 +44,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
 
     public ProcedureDefinitionListPage(PageParameters params) {
         super(params);
-
-        BookmarkablePageLink assetLink;
-        add(assetLink = new BookmarkablePageLink<AssetSummaryPage>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetId)));
-        Asset asset = assetModel.getObject();
-        String assetLabel = asset.getType().getDisplayName() + " / " + asset.getIdentifier();
-        assetLink.add(new Label("label", assetLabel));
 
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
@@ -152,10 +146,12 @@ public class ProcedureDefinitionListPage extends LotoPage {
     }
 
     @Override
-    protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.procedures"));
+    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
+        if(isTopTitle)
+            return new Label(labelId, new FIDLabelModel("label.procedures"));
+        else
+            return new ProcedureTitleLabel(labelId, assetModel);
     }
-
 
     class ProcedureDefinitionModel extends LoadableDetachableModel<List<ProcedureDefinition>> {
 

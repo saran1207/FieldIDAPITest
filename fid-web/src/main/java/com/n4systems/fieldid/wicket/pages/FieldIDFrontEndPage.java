@@ -69,8 +69,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     @SpringBean
     private S3Service s3Service;
 
-    private Label titleLabel;
-	private Label topTitleLabel;
+    private Component titleLabel;
+	private Component topTitleLabel;
     private ConfigurationProvider configurationProvider;
     private TopFeedbackPanel topFeedbackPanel;
 
@@ -141,10 +141,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         // eg. Labels may require details of entities to be loaded.
         addNavBar("navBar");
 
-        add(titleLabel = createTitleLabel("titleLabel"));
+        add(titleLabel = createTitleLabel("titleLabel", false));
         titleLabel.setRenderBodyOnly(true);
 
-        add(topTitleLabel = createTitleLabel("topTitleLabel"));
+        add(topTitleLabel = createTitleLabel("topTitleLabel", true));
         topTitleLabel.setRenderBodyOnly(true);
     }
 
@@ -210,7 +210,11 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     protected void storePageParameters(PageParameters params) {
     }
 
-    protected Label createTitleLabel(String labelId) {
+    protected Component createTitleLabel(String labelId) {
+        return createTitleLabel(labelId, false);
+    }
+
+    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
         return new Label(labelId, "Field ID");
     }
 

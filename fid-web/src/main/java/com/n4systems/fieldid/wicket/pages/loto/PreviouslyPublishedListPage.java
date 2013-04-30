@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.components.loto.ProcedureTitleLabel;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
-import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -27,12 +28,6 @@ public class PreviouslyPublishedListPage extends LotoPage{
 
     public PreviouslyPublishedListPage(PageParameters params) {
         super(params);
-
-        BookmarkablePageLink assetLink;
-        add(assetLink = new BookmarkablePageLink<AssetSummaryPage>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetId)));
-        Asset asset = assetModel.getObject();
-        String assetLabel = asset.getType().getDisplayName() + " / " + asset.getIdentifier();
-        assetLink.add(new Label("label", assetLabel));
 
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
@@ -77,4 +72,13 @@ public class PreviouslyPublishedListPage extends LotoPage{
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
         response.renderCSSReference("style/newCss/loto/procedures.css");
     }
+
+    @Override
+    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
+        if(isTopTitle)
+            return new Label(labelId, new FIDLabelModel("label.procedures"));
+        else
+            return new ProcedureTitleLabel(labelId, assetModel);
+    }
+
 }
