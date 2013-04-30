@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -38,6 +40,8 @@ public class ProcedureDefinitionListPage extends LotoPage {
     private WebMarkupContainer blankSlate;
     private ListView listView;
 
+    private enum PrintOptions { Compact, Normal, Spacious};
+
     public ProcedureDefinitionListPage(PageParameters params) {
         super(params);
 
@@ -50,15 +54,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
-        add(new Link("copyProcedureDefLink") {
-            @Override
-            public void onClick() {
-                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(assetModel.getObject());
-                ProcedureDefinition copiedDefinition = procedureDefinitionService.copyProcedureDefinition(publishedDef, new ProcedureDefinition());
-                copiedDefinition.setPublishedState(PublishedState.DRAFT);
-                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
-            }
-        }.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())));
         listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupPlaceholderTag(true);
 
@@ -73,26 +68,52 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 item.add(new Label("created", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "created"), true, getCurrentUser().getTimeZone())));
                 item.add(new Label("approvedBy", new PropertyModel<String>(procedureDefinition, "approvedBy")));
                 item.add(new Label("publishedState", new PropertyModel<String>(procedureDefinition, "publishedState.label")));
-                item.add(new Link("edit") {
+                item.add(new MenuButton<FIDLabelModel>("edit", new FIDLabelModel("label.edit"), Lists.newArrayList(new FIDLabelModel("label.delete"))){
+
                     @Override
-                    public void onClick() {
+                    protected WebMarkupContainer populateLink(String linkId, String labelId, ListItem<FIDLabelModel> item) {
+                        return (WebMarkupContainer) new AjaxLink(linkId) {
+                            @Override
+                            public void onClick(AjaxRequestTarget target) {
+                                procedureDefinitionService.deleteProcedureDefinition(procedureDefinition.getObject());
+                                listView.detach();
+                                listContainer.setVisible(!getList().isEmpty());
+                                blankSlate.setVisible(getList().isEmpty());
+                                target.add(listContainer);
+                                target.add(blankSlate);
+                            }
+                        }.add(new Label(labelId, item.getModelObject()));
+                    }
+
+                    @Override
+                    protected void buttonClicked(AjaxRequestTarget target) {
                         editProcedureDefinition(procedureDefinition.getObject());
                     }
+
                 }.setVisible(procedureDefinition.getObject().getPublishedState().isPreApproval()));
-                item.add(new AjaxLink("delete") {
+
+                item.add(new Link("copyProcedureDefLink") {
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        procedureDefinitionService.deleteProcedureDefinition(procedureDefinition.getObject());
-                        listView.detach();
-                        listContainer.setVisible(!getList().isEmpty());
-                        blankSlate.setVisible(getList().isEmpty());
-                        target.add(listContainer);
-                        target.add(blankSlate);
+                    public void onClick() {
+                        ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(assetModel.getObject());
+                        ProcedureDefinition copiedDefinition = procedureDefinitionService.copyProcedureDefinition(publishedDef, new ProcedureDefinition());
+                        copiedDefinition.setPublishedState(PublishedState.DRAFT);
+                        setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
                     }
-                }.setVisible(procedureDefinition.getObject().getPublishedState().isPreApproval()));
-                item.add(new Link("print") {
-                    @Override public void onClick() {
-                        setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject()));
+                }.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())
+                        && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED)));
+
+                item.add(new MenuButton<PrintOptions>("print", new FIDLabelModel("label.view_print"), Lists.newArrayList(PrintOptions.values())){
+                    @Override
+                    protected WebMarkupContainer populateLink(String linkId, String labelId, ListItem<PrintOptions> item) {
+                        return (WebMarkupContainer) new Link(linkId) {
+
+                            @Override
+                            public void onClick() {
+                                //TODO: implement correct print options
+                                setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject()));
+                            }
+                        }.add(new Label(labelId, item.getModelObject().name()));
                     }
                 });
             }
