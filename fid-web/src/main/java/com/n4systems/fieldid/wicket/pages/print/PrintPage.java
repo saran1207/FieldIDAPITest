@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.print;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.downloadlink.DownloadLink;
@@ -25,6 +26,9 @@ public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthent
 
     public PrintPage(IModel<T> criteria) {
         this.criteria = criteria;
+
+        FieldIDSession.get().getSessionUser();
+
 
         storeLocalizedNamesInColumns(criteria.getObject());
         final DownloadLink downloadLink = createDownloadLink();

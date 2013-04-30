@@ -1,9 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
-import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.print.ExportReportToExcelPage;
-import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.model.search.ProcedureCriteria;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
@@ -13,34 +10,20 @@ import org.apache.wicket.model.Model;
 
 public class ProcedureSubMenu extends SubMenu<ProcedureCriteria> {
 
-    private Link exportLink;
-    private WebMarkupContainer print;
-
     public ProcedureSubMenu(String id, final Model<ProcedureCriteria> model) {
 		super(id, model);
 
-        add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportReportToExcelPage>("exportToExcelLink", ExportReportToExcelPage.class, model)));
+        // all this stuff goes away...possibly implemented later. DD
+        add(new WebMarkupContainer("exportToExcelLink").setVisible(false));
+        add(new WebMarkupContainer("print").setVisible(false));
+        add(new WebMarkupContainer("emailLink").setVisible(false));
 
-        print = new WebMarkupContainer("print");
-        // TODO DD : what should print do...hook this up.
-        add(print);
-
-        add(new Link("emailLink") {
-            @Override public void onClick() {
-                setResponsePage(new SendSavedItemPage(model, getPage()));
-            }
-        });
-
-        initializeLimits();
+        msg.setVisible(false);
     }
 
     @Override
     protected void updateMenuBeforeRender(ProcedureCriteria criteria) {
-        super.updateMenuBeforeRender(criteria);
-        int selected = criteria.getSelection().getNumSelectedIds();
-
-        exportLink.setVisible(selected > 0 && selected < maxExport);
-        print.setVisible(selected > 0 && selected < maxPrint);
+       ;    // do nothing.
     }
 
     @Override
@@ -61,6 +44,5 @@ public class ProcedureSubMenu extends SubMenu<ProcedureCriteria> {
     @Override protected IModel<String> getHeaderModel() {
         return new FIDLabelModel("label.procedures");
     }
-
 
 }

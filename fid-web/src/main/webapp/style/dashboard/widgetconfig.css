@@ -123,8 +123,6 @@
     margin-left:600px;
 }
 
-/* TODO DD : these should move into the widgets own .CSS file.   e.g. news.css, jobsassigned.css etc.. */ 
-
 .jobsAssignedConfig { 
 	max-height : 140px;
 }
