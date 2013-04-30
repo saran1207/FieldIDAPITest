@@ -11,44 +11,53 @@
     <table class="procedure-details">
         <tr>
             <th class="print-image">
-            	<div>
-                    <span><img src="/fieldid/images/loto/bg-gray.gif"></span>
-                </div>
+            	<div><span><img src="/fieldid/images/loto/bg-gray.gif"></span></div>
             	<span><wicket:message key="label.lockout_points" /></span>
             </th>
             <th class="devices print-image">
-            	<div>
-                    <span><img src="/fieldid/images/loto/bg-gray.gif"></span>
-                </div>
+            	<div><span><img src="/fieldid/images/loto/bg-gray.gif"></span></div>
             	<span><wicket:message key="label.devices" /></span>
             </th>
             <th class="warning print-image">
-            	<div>
-                    <span><img src="/fieldid/images/loto/bg-yellow.gif"></span>
-                </div>
+            	<div><span><img src="/fieldid/images/loto/bg-yellow.gif"></span></div>
             	<span><wicket:message key="label.caution" /></span>
             </th>
         </tr>
         <tr>
             <td class="print-image">
-            	<div>
-                    <span><img src="/fieldid/images/loto/bg-gray-light.gif"></span>
-                </div>
+            	<div><span><img src="/fieldid/images/loto/bg-gray-light.gif"></span></div>
             	<span wicket:id="lockoutPoints"/>
             </td>
             <td class="devices print-image">
-                <div>
-                    <span><img src="/fieldid/images/loto/bg-gray-light.gif"></span>
-                </div>
+                <div><span><img src="/fieldid/images/loto/bg-gray-light.gif"></span></div>
             	<span wicket:id="deviceCount"/>
             </td>
             <td class="warning print-image">
-                <div>
-                    <span><img src="/fieldid/images/loto/bg-gray-light.gif"></span>
-                </div>
+                <div><span><img src="/fieldid/images/loto/bg-gray-light.gif"></span></div>
             	<span wicket:id="warnings"/>
             </td>
         </tr>
     </table>
+
+    <div class="audit-dates">
+        <ul>
+            <li>
+                <h3>Next audit due</h3>
+                <span class="date">Jan 2013</span><!-- these dates should be related to the origin date, temp hard-coded for styling -->
+            </li>
+            <li>
+                <h3>Next audit due</h3>
+                <span class="date">Jan 2014</span>
+            </li>
+            <li>
+                <h3>Next audit due</h3>
+                <span class="date">Jan 2015</span>
+            </li>
+            <li>
+                <h3>Next audit due</h3>
+                <span class="date">Jan 2016</span>
+            </li>
+        </ul>
+    </div>
 
 </wicket:panel>

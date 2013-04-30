@@ -101,7 +101,6 @@ h3 {
 	height: 25px;
 }
 th.revision, td.revision  {
-	color: #fff;
 	width: 22%;
 	text-align: center;
 	padding: 0;
@@ -128,10 +127,9 @@ td.revision > span {
 /* procedure summary
 ------------------------------------*/
 .procedure-summary th {
-	color: #fff;
 	font-size: 20px;
 	text-transform: uppercase;
-	/*padding: 6px;*/
+	font-weight: normal;
 }
 
 .equipment-details td {
@@ -170,8 +168,33 @@ td.revision > span {
 		.procedure-details td.warning { 
 			font-size: 16px;
 			text-align: left; 
-			/*padding: 10px;*/
 		}
+
+.audit-dates ul {
+	padding: 0;
+	margin: 0;
+}
+.audit-dates ul li {
+	list-style-type: none;
+	float: left;
+	width: 20%;
+	margin: 10px 2.5%;
+	border: 2px solid #ccc;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	padding: 4px;
+	text-align: center;
+}
+.audit-dates h3 {
+	font-size: 16px;
+	color: #aaa;
+	padding: 0;
+}
+.audit-dates .date {
+	text-transform: uppercase;
+	font-size: 26px;
+	color: #aaa;
+}
 
 
 /* image list
