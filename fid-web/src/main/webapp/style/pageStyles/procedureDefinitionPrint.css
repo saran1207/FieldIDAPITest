@@ -7,6 +7,8 @@
 body {
 	font: 400 12px Arial, sans-serif;
 	color: #222;
+	margin: 0;
+	padding: 0;
 }
 h2, h3 {
 	margin: 0;
@@ -19,6 +21,24 @@ h3 {
 	padding: 0 0 10px;
 	color: #222;
 }
+
+.printbar {
+	width: 100%;
+	color: white;
+	background: #333;
+	padding: 10px;
+	margin-bottom: 10px;
+}
+	.printbar p {
+		max-width: 1024px;
+		margin: 0 auto;
+		text-align: right;
+		cursor: pointer;
+	}
+	.printbar img {
+		vertical-align: middle;
+		margin-left: 5px;
+	}
 .header {
 	padding-bottom: 20px;
 }
@@ -64,15 +84,9 @@ h3 {
 .print-image > span {
 	position: relative;
 	display: block;
-	padding: 4px;
+	padding: 6px;
 }
 .print-image img {
-	/*height: 100%;
-	width: 100%;
-	position: absolute;
-	top: 0;
-	left: 0;
-	z-index: 1;*/
 	width: 100%;
 }
 
@@ -295,14 +309,17 @@ td.revision > span {
 	.isolation-point-table li {
 		page-break-inside: avoid;
 	}
+	.printbar {
+		display: none;
+	}
 	.printIcon {
 		display: none;
 	}
 	
 	/*thead {display: table-header-group;}*/
-	/*#add-item, #add-image {
+	#add-item, #add-image {
 		display: none;
-	}*/
+	}
 }
 
 
