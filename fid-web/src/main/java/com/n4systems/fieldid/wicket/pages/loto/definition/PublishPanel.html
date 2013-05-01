@@ -9,7 +9,27 @@
             <a wicket:id="publish" class="mattButton mattButtonBlue">
                 <span wicket:id="submitLabel"/>
             </a>
+
+            <a wicket:id="openRejectionPanelLink" class="mattButton"><wicket:message key="label.reject"/>...</a>
         </div>
+
+        <div wicket:id="rejectionMessageContainer">
+
+            <div class="publish-message"><wicket:message key="message.enter_rejection_message"/>
+            </div>
+            <textarea wicket:id="rejectionMessage" style="clear:both; margin-top:6px;">
+            </textarea>
+
+            <div class="buttons">
+                <a wicket:id="rejectLink" class="mattButton"><wicket:message key="label.reject"/></a>
+                <div class="orCancel">
+                    <wicket:message key="label.or"/>
+                    <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+                </div>
+            </div>
+
+        </div>
+
     </form>
 
 </wicket:panel>

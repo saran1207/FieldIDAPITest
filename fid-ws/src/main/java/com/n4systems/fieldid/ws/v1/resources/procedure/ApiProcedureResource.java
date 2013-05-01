@@ -67,7 +67,8 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         Procedure procedure = procedureService.findByMobileId(apiProcedure.getProcedureId(), true);
 
         if (procedure.getWorkflowState() != ProcedureWorkflowState.LOCKED) {
-            throw new IllegalStateException("Attempt to unlock procedure that is not in LOCKED state. Actual state: " + procedure.getWorkflowState());
+            logger.error("Attempt to unlock procedure that is not in LOCKED state. Actual state: " + procedure.getWorkflowState());
+            return;
         }
 
         List<IsolationPointResult> convertedResults = convertToEntity(apiProcedure.getIsolationPointResults());

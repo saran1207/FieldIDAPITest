@@ -23,6 +23,7 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
     private static final Logger log = Logger.getLogger(NotifyProcedureAuthorizersService.class);
 
     private static final String NOTIFY_PROCEDURE_AUTH_TEMPLATE = "procedureDefinitionApproval";
+    private static final String NOTIFY_PROCEDURE_REJECTION_TEMPLATE = "procedureDefinitionRejection";
 
     @Autowired private UserGroupService userGroupService;
     @Autowired private ProcedureDefinitionService procedureDefinitionService;
@@ -43,6 +44,24 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
             } finally {
                 persistenceService.update(procedureDefinition);
             }
+        }
+    }
+
+    public void notifyProcedureRejection(ProcedureDefinition definition, String rejectionMessage) {
+        String subject = "Lockout/Tagout Procedure Rejected";
+        TemplateMailMessage msg = new TemplateMailMessage(subject, NOTIFY_PROCEDURE_REJECTION_TEMPLATE);
+        msg.setSubject(subject);
+        msg.getToAddresses().add(definition.getDevelopedBy().getEmailAddress());
+
+        msg.getTemplateMap().put("systemUrl", SystemUrlUtil.getSystemUrl(definition.getTenant()));
+        msg.getTemplateMap().put("procedureDefinition", definition);
+        msg.getTemplateMap().put("rejector", getCurrentUser());
+        msg.getTemplateMap().put("rejectionMessage", rejectionMessage);
+
+        try {
+            mailService.sendMessage(msg);
+        } catch (Exception e) {
+            log.error("Could not notify procedure rejection", e);
         }
     }
 

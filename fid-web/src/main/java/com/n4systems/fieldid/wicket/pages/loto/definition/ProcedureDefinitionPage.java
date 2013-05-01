@@ -3,7 +3,9 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.loto.ProcedureTitleLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -35,6 +37,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage{
 
     private @SpringBean ProcedureDefinitionService procedureDefinitionService;
     private @SpringBean PersistenceService persistenceService;
+    private @SpringBean NotifyProcedureAuthorizersService notifyService;
 
     protected Label assetNameLabel;
     protected Label pageTileLabel;
@@ -165,8 +168,14 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage{
                     procedureDefinitionService.saveProcedureDefinitionDraft(model.getObject());
                     gotoProceduresPage();
                 }
-            }.setVisible(false));
 
+                @Override
+                protected void doReject(String message) {
+                    FieldIDSession.get().info(getString("message.rejection_notification_sent"));
+                    notifyService.notifyProcedureRejection(model.getObject(), message);
+                    gotoProceduresPage();
+                }
+            }.setVisible(false));
         }
 
         public void updateSection(AjaxRequestTarget target) {

@@ -60,6 +60,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
         if (isProcedureApprovalRequiredForCurrentUser()) {
             procedureDefinition.setPublishedState(PublishedState.WAITING_FOR_APPROVAL);
+            procedureDefinition.setAuthorizationNotificationSent(false);
             persistenceService.update(procedureDefinition);
         } else {
             publishProcedureDefinition(procedureDefinition);
@@ -123,15 +124,21 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             // There is no approval user/group, no approval required
             return false;
         }
+        return !canCurrentUserApprove();
+    }
+
+    public boolean canCurrentUserApprove() {
+        Assignable approvalUserOrGroup = getCurrentTenant().getSettings().getApprovalUserOrGroup();
+
         if (approvalUserOrGroup instanceof User && getCurrentUser().equals(approvalUserOrGroup)) {
             // The current user is the approval user, no approval required
-            return false;
+            return true;
         }
         if (approvalUserOrGroup instanceof UserGroup && userGroupService.getUsersInGroup((UserGroup) approvalUserOrGroup).contains(getCurrentUser())) {
             // The current user is in the approval user group, no approval required
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     public void deleteProcedureDefinition(ProcedureDefinition procedureDefinition) {

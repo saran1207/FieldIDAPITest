@@ -6,17 +6,21 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class PublishPanel extends Panel {
 
     @SpringBean private ProcedureDefinitionService procedureDefinitionService;
+    private String rejectionText;
 
     public PublishPanel(String id, IModel<ProcedureDefinition> model) {
         super(id, model);
@@ -67,6 +71,37 @@ public class PublishPanel extends Panel {
                 submitLink.add(new Label("submitLabel", new FIDLabelModel("label.publish")));
             }
             add(submitLink);
+
+            final WebMarkupContainer rejectionMessageContainer = new WebMarkupContainer("rejectionMessageContainer");
+            rejectionMessageContainer.setOutputMarkupPlaceholderTag(true).setVisible(false);
+
+            AjaxLink openRejectionMessageLink = new AjaxLink("openRejectionPanelLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    target.add(rejectionMessageContainer.setVisible(true));
+                }
+            };
+            openRejectionMessageLink.setVisible(procedureDefinitionService.canCurrentUserApprove());
+
+            add(openRejectionMessageLink);
+
+            SubmitLink rejectLink = new SubmitLink("rejectLink") {
+                @Override
+                public void onSubmit() {
+                    doReject(rejectionText);
+                }
+            };
+
+            rejectionMessageContainer.add(new TextArea<String>("rejectionMessage", new PropertyModel<String>(PublishPanel.this, "rejectionText")));
+            rejectionMessageContainer.add(rejectLink);
+            rejectionMessageContainer.add(new AjaxLink("cancelLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    target.add(rejectionMessageContainer.setVisible(false));
+                }
+            });
+
+            add(rejectionMessageContainer);
         }
     }
 
@@ -75,5 +110,7 @@ public class PublishPanel extends Panel {
     protected void doSave() {}
 
     protected void doCancel(AjaxRequestTarget target) {}
+
+    protected void doReject(String message) {}
 
 }
