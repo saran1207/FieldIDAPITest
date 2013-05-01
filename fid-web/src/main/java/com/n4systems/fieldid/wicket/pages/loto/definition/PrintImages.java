@@ -9,7 +9,6 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -31,46 +30,29 @@ public class PrintImages extends Panel {
     public PrintImages(String id, final IModel<ProcedureDefinition> model) {
         super(id,new PropertyModel(model,"images"));
 
-        //add print button icon
-        add(new ContextImage("printIcon", "images/print-icon.png"));
-
-        // if no images...add one....
-//        ProcedureDefinitionImage image = new ProcedureDefinitionImage();
-//        model.getObject().getImages().add(image);
-        //
-
-//        image.addImageAnnotation(new ImageAnnotation(.3434,.1235,"hello", ImageAnnotationType.getDefault()));
-
-        // add images for testing
-
-        //addTestImages(images);
-
+// add images for testing
 //        PropertyModel<List<ProcedureDefinitionImage>> pmod = ProxyModel.of(model, on(ProcedureDefinition.class).getImages());
 //
 //        List<ProcedureDefinitionImage> pimgs = ( List<ProcedureDefinitionImage>)pmod.getObject();
 //        addTestImages(pimgs);
+//
+//        add(new ListView<ProcedureDefinitionImage>("images", pimgs) {
+//            @Override
+//            protected void populateItem(ListItem<ProcedureDefinitionImage> item) {
+//                item.getDefaultModelObject();
+//                item.add(new ExternalImage("image", getImageUrl(item)));
+//            }
+//        });
+
 
         add(new ListView<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
             @Override
             protected void populateItem(ListItem<ProcedureDefinitionImage> item) {
                 item.getDefaultModelObject();
                 item.add(new ExternalImage("image", getImageUrl(item)));
-
-
             }
         });
 
-        /*
-        add(new ListView<ProcedureDefinitionImage>("images", pimgs) {
-            @Override
-            protected void populateItem(ListItem<ProcedureDefinitionImage> item) {
-                item.getDefaultModelObject();
-                item.add(new ExternalImage("image", getImageUrl(item)));
-
-
-            }
-        });
-          */
     }
 
     protected String getImageUrl(ListItem<ProcedureDefinitionImage> item) {
@@ -100,11 +82,13 @@ public class PrintImages extends Panel {
     private void addTestImages(List<ProcedureDefinitionImage> images) {
         ProcedureDefinitionImage imge = null;
 
-        for(int i=0; i<=15; i++) {
+        for(int i=0; i<=25; i++) {
             imge = new ProcedureDefinitionImage();
-            imge.setId(new Long(12+i));
+           // imge.setId(images.get(0).getId());
             imge.setProcedureDefinition(images.get(0).getProcedureDefinition());
             imge.setFileName(images.get(0).getFileName());
+           // imge.setAnnotations(images.get(0).getAnnotations());
+            imge.setTenant(images.get(0).getTenant());
             images.add(imge);
         }
 
