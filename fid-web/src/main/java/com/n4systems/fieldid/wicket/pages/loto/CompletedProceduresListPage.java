@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.loto;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.Procedure;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -41,13 +42,25 @@ public class CompletedProceduresListPage extends LotoPage {
             protected void populateItem(ListItem<Procedure> item) {
                 final IModel<Procedure> procedure = item.getModel();
 
-                item.add(new Label("dateLocked", new DayDisplayModel(new PropertyModel<Date>(procedure, "lockDate"), true, getCurrentUser().getTimeZone())));
+                if(procedure.getObject().getWorkflowState().equals(ProcedureWorkflowState.OPEN)) {
+                    item.add(new Label("dateLocked"));
+                    item.add(new Label("dateUnlocked"));
+                }else {
+                    item.add(new Label("dateLocked", new DayDisplayModel(new PropertyModel<Date>(procedure, "lockDate"), true, getCurrentUser().getTimeZone())));
+                    if(procedure.getObject().getWorkflowState().equals(ProcedureWorkflowState.LOCKED)) {
+                        item.add(new Label("dateUnlocked"));
+                    } else {
+                        item.add(new Label("dateUnlocked", new DayDisplayModel(new PropertyModel<Date>(procedure, "unlockDate"), true, getCurrentUser().getTimeZone())));
+                    }
+                }
                 item.add(new Label("lockedBy", new PropertyModel<String>(procedure, "lockedBy.displayName")));
-                item.add(new Label("dateUnlocked", new DayDisplayModel(new PropertyModel<Date>(procedure, "unlockDate"), true, getCurrentUser().getTimeZone())));
                 item.add(new Label("unlockedBy", new PropertyModel<String>(procedure, "unlockedBy.displayName")));
                 item.add(new Label("procedureCode", new PropertyModel<String>(procedure, "type.procedureCode")));
                 item.add(new Label("revision", new PropertyModel<Long>(procedure, "type.revisionNumber")));
-                item.add(new BookmarkablePageLink<ProcedureResultsPage>("viewLink", ProcedureResultsPage.class, PageParametersBuilder.id(procedure.getObject().getId())));
+                item.add(new Label("state", new PropertyModel<Long>(procedure, "workflowState.label")));
+                item.add(new BookmarkablePageLink<ProcedureResultsPage>("viewLink", ProcedureResultsPage.class, PageParametersBuilder.id(procedure.getObject().getId())).
+                        setVisible(!procedure.getObject().getWorkflowState().equals(ProcedureWorkflowState.OPEN)));
+
             }
         });
         listContainer.setVisible(!listView.getList().isEmpty());
@@ -62,7 +75,7 @@ public class CompletedProceduresListPage extends LotoPage {
 
         @Override
         protected List<Procedure> load() {
-            return procedureService.getCompletedProcedures(assetModel.getObject());
+            return procedureService.getAllProcedures(assetModel.getObject());
         }
     }
 

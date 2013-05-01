@@ -43,10 +43,9 @@ public class ProcedureService extends FieldIdPersistenceService {
         return persistenceService.find(query);
     }
 
-    public List<Procedure> getCompletedProcedures(Asset asset) {
+    public List<Procedure> getAllProcedures(Asset asset) {
         QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
         query.addSimpleWhere("asset", asset);
-        query.addSimpleWhere("workflowState", ProcedureWorkflowState.UNLOCKED);
         return persistenceService.findAll(query);
     }
 }
