@@ -15,9 +15,10 @@
 .image-list ul li {
     margin-right: 6px;
     float:left;
-    background-color: #000;
+    border: 1px dashed #ddd;
+    background-color: #f8f8f8;
     text-align: center;
-    width: 239px;
+    width: 238px;
     height: 200px;
 }
 .image-list .navigation {
@@ -28,12 +29,3 @@
         cursor: pointer;
         padding: 8px 0 8px 10px;
     }
-
-
-/*.blank-slate {
-    height:100px;
-    width:95%;
-    background:#eee;
-    border: 1px solid #bbb;
-    display:block;
-}*/

@@ -1,39 +1,41 @@
-/*.image-gallery {*/
-    /*width:400px;*/
-    /*height:300px;*/
-    /*border:1px solid black;*/
-/*}*/
+.image-gallery .galleria-counter {
+    color:black;
+}
 
 .image-gallery .uploadForm {
     display:none;
 }
 
-.galleria-container {
+.image-gallery  .galleria-container {
     width:  400px;
     height:300px;
+    background: #eee;
+    overflow:visible;
 }
 
-.galleria-container .submit {
-    background: grey;
-    border-radius: 4px;
-    color:white;
-    font-size:14px;
-    padding:8px;
-    z-index:5;
-    position: absolute;
-    top: 5px;
-    left:5px;
-}
+    .galleria-container .add {
+        z-index:5;
+        position: absolute;
+        bottom:-36px;
+        left:10px;
+    }
 
-.galleria-container .submit:hover {
-    cursor:pointer;
-    cursor:hand;
+    .galleria-container .submit:hover {
+        cursor:pointer;
+        cursor:hand;
+    }
+
+.galleria-image .image-container {
+    position:relative;
 }
 
 .galleria-thumbnails .galleria-image{
     /*height:100px*/
 }
 
-.galleria-image .image-container {
-    position:relative;
+
+.image-gallery .done {
+    margin-right:10px;
+    margin-top:10px;
+    float:right;
 }

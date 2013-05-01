@@ -40,7 +40,7 @@ var imageGallery = (function() {
 			var gallery = $('#'+id);
 			var form = gallery.prev('.uploadForm');
 			var oldSubmit = form.children('.submit');
-			var newSubmit = $('<a>').html('Add').addClass('submit');
+			var newSubmit = $('<a>').html('Add').addClass('add').addClass('mattButton');
 			newSubmit.appendTo($('#'+id + ' .galleria-container'));
 			newSubmit.click(function() {
 				oldSubmit.click();

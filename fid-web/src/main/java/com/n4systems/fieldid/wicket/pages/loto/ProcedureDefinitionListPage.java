@@ -18,7 +18,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -86,8 +85,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 }.setVisible(procedureDefinition.getObject().getPublishedState().isPreApproval()));
 
                 item.add(new Link("copyProcedureDefLink") {
-                    @Override
-                    public void onClick() {
+                    @Override public void onClick() {
                         ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(assetModel.getObject());
                         ProcedureDefinition copiedDefinition = procedureDefinitionService.copyProcedureDefinition(publishedDef, new ProcedureDefinition());
                         copiedDefinition.setPublishedState(PublishedState.DRAFT);
@@ -100,20 +98,18 @@ public class ProcedureDefinitionListPage extends LotoPage {
                     @Override
                     protected WebMarkupContainer populateLink(String linkId, String labelId, final ListItem<PrintOptions> item) {
                         return (WebMarkupContainer) new Link(linkId) {
-
-                            @Override
-                            public void onClick() {
-                               setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject(),item.getModelObject()));
+                            @Override public void onClick() {
+                                printWithMode(procedureDefinition, item.getModelObject());
                             }
                         }.add(new Label(labelId, item.getModelObject().name()));
                     }
 
                     @Override protected void buttonClicked(AjaxRequestTarget target) {
-                        //TODO SU/DD: implement correct print options
-                        setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject()));
+                        printWithMode(procedureDefinition,PrintOptions.Normal);
                     }
                 });
             }
+
         });
 
         listContainer.setVisible(!listView.getList().isEmpty());
@@ -130,6 +126,11 @@ public class ProcedureDefinitionListPage extends LotoPage {
         blankSlate.setVisible(listView.getList().isEmpty());
         blankSlate.setOutputMarkupPlaceholderTag(true);
         add(blankSlate);
+    }
+
+    private void printWithMode(IModel<ProcedureDefinition> procedureDefinition, PrintOptions mode) {
+        PageParameters params = new PageParameters().add("id", procedureDefinition.getObject().getId()).add("mode", mode.name());
+        setResponsePage(new ProcedureDefinitionPrintPage(params));
     }
 
     private void editProcedureDefinition(ProcedureDefinition procedureDefinition) {
