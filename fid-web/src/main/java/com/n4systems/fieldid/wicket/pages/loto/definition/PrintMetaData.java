@@ -57,6 +57,7 @@ public class PrintMetaData extends Panel {
         Date dte1 = null;
         Date dte2 = null;
         Date dte3 = null;
+        Date dte4 = null;
         User user = securityContext.getUserSecurityFilter().getUser();
 
         if (null != model.getObject().getOriginDate()) {
@@ -75,6 +76,9 @@ public class PrintMetaData extends Panel {
 
             cal.add(Calendar.YEAR,1);
             dte3 = cal.getTime();
+
+            cal.add(Calendar.YEAR,1);
+            dte4 = cal.getTime();
         }
 
 
@@ -94,6 +98,10 @@ public class PrintMetaData extends Panel {
 
             //audit date three
             add(new Label("auditDateThree", Model.of( DateHelper.format(dte3, new DateTimeDefiner(user)) )));
+
+            //audit date four
+            add(new Label("auditDateFour", Model.of( DateHelper.format(dte4, new DateTimeDefiner(user)) )));
+
         } else {
         //audit date one
             add(new Label("auditDateOne", Model.of( "" )));
@@ -103,6 +111,9 @@ public class PrintMetaData extends Panel {
 
             //audit date three
             add(new Label("auditDateThree", Model.of( "" )));
+
+            //audit date four
+            add(new Label("auditDateFour", Model.of( "" )));
         }
 
     }
