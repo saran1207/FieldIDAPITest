@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
-import com.n4systems.fieldid.wicket.components.loto.ProcedureTitleLabel;
 import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -11,7 +10,6 @@ import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPag
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -43,8 +41,9 @@ public class ProcedureDefinitionListPage extends LotoPage {
     public ProcedureDefinitionListPage(PageParameters params) {
         super(params);
 
-        add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
+        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
+        add(new BookmarkablePageLink<CompletedProceduresListPage>("completedProceduresListLink", CompletedProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
         listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupPlaceholderTag(true);
@@ -109,7 +108,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
                     }
                 });
             }
-
         });
 
         listContainer.setVisible(!listView.getList().isEmpty());
@@ -134,7 +132,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
     }
 
     private void editProcedureDefinition(ProcedureDefinition procedureDefinition) {
-        setResponsePage(new ProcedureDefinitionPage(new PageParameters().add("id",procedureDefinition.getId())));
+        setResponsePage(new ProcedureDefinitionPage(new PageParameters().add("id", procedureDefinition.getId())));
     }
 
     private void doNewProcedureDef() {
@@ -145,16 +143,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/new_procedure_list.js");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/newCss/loto/procedures.css");
-    }
-
-    @Override
-    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
-        if(isTopTitle)
-            return new Label(labelId, new FIDLabelModel("label.procedures"));
-        else
-            return new ProcedureTitleLabel(labelId, assetModel);
     }
 
     class ProcedureDefinitionModel extends LoadableDetachableModel<List<ProcedureDefinition>> {

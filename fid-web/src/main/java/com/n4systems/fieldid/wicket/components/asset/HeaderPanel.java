@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.asset;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventTypeService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -20,6 +21,7 @@ import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.user.UserGroup;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -43,6 +45,7 @@ public class HeaderPanel extends Panel {
     @SpringBean private EventScheduleService eventScheduleService;
     @SpringBean private EventTypeService eventTypeService;
     @SpringBean private ProcedureService procedureService;
+    @SpringBean private ProcedureDefinitionService procedureDefinitionService;
 
     private Boolean useContext;
     private Event scheduleToAdd;
@@ -70,20 +73,29 @@ public class HeaderPanel extends Panel {
 
         BookmarkablePageLink summaryLink;
         BookmarkablePageLink eventHistoryLink;
-        
+        NonWicketIframeLink traceabilityLink;
+        boolean hasProcedures = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures);
+
         add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
-        NonWicketIframeLink traceabilityLink;
         add(traceabilityLink = new NonWicketIframeLink("traceabilityLink", "aHtml/iframe/assetTraceability.action?uniqueID=" + asset.getId() + "&useContext=false", false, 1000, 600, new AttributeModifier("class", "mattButtonMiddle")));
         traceabilityLink.setVisible(assetService.hasLinkedAssets(asset) || isInVendorContext());
 
-        
         add(eventHistoryLink = new BookmarkablePageLink<Void>("eventHistoryLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
+        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("lotoProceduresLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(asset.getId()))
+                .setVisible(hasProcedures));
+
         if (isView) {
-            summaryLink.add(new AttributeAppender("class", " mattButtonPressed"));
+            summaryLink.add(new AttributeAppender("class", "mattButtonPressed").setSeparator(" "));
         } else {
-           eventHistoryLink.add(new AttributeAppender("class", " mattButtonPressed"));
+           eventHistoryLink.add(new AttributeAppender("class", "mattButtonPressed").setSeparator(" "));
+        }
+
+        if (hasProcedures) {
+            eventHistoryLink.add(new AttributeAppender("class", "mattButtonMiddle").setSeparator(" "));
+        } else {
+            eventHistoryLink.add(new AttributeAppender("class", "mattButtonRight").setSeparator(" "));
         }
 
         if (FieldIDSession.get().getSessionUser().hasAccess("editevent") && !FieldIDSession.get().getSessionUser().isReadOnlyUser())
@@ -156,13 +168,12 @@ public class HeaderPanel extends Panel {
 
         add(schedulePicker);
         add(procedurePicker);
-
-        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("lotoProceduresLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(asset.getId()))
-                .setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures)));
     }
 
     private Procedure createNewProcedure(Asset asset) {
+        ProcedureDefinition procedureDefinition = procedureDefinitionService.getPublishedProcedureDefinition(asset);
         Procedure procedure = new Procedure();
+        procedure.setType(procedureDefinition);
         procedure.setAsset(asset);
         procedure.setTenant(FieldIDSession.get().getTenant());
         procedure.setWorkflowState(ProcedureWorkflowState.OPEN);

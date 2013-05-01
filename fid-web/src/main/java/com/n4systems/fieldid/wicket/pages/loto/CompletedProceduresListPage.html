@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+    <div class="navHeader">
+        <a wicket:id="activeLink" class="mattButtonLeft"><wicket:message key="label.active"/></a>
+        <a wicket:id="previouslyPublishedListLink" class="mattButtonMiddle"><wicket:message key="label.previously_published"/></a>
+        <a wicket:id="completedProceduresListLink" class="mattButtonRight mattButtonPressed"><wicket:message key="label.completed_procedures"/></a>
+    </div>
+
+    <div wicket:id="listContainer" class="content">
+        <table class="list">
+            <tbody>
+            <tr>
+                <th><wicket:message key="label.lock_date"/></th>
+                <th><wicket:message key="label.locked_by"/></th>
+                <th><wicket:message key="label.unlock_date"/></th>
+                <th><wicket:message key="label.unlocked_by"/></th>
+                <th><wicket:message key="label.procedure_code"/></th>
+                <th><wicket:message key="label.revision_number"/></th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr wicket:id="list">
+                <td wicket:id="dateLocked"/>
+                <td wicket:id="lockedBy"/>
+                <td wicket:id="dateUnlocked"/>
+                <td wicket:id="unlockedBy"/>
+                <td wicket:id="procedureCode"/>
+                <td wicket:id="revision"/>
+                <td class="action-buttons">
+                    <a wicket:id="viewLink" class="mattButton right"><wicket:message key="label.view"/></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div wicket:id="blankSlate" class="blankSlate">
+        <img src="/fieldid/images/procedures-blank-slate-icon.png"/>
+        <p><label><wicket:message key="message.completed_procedures_blank_slate"/></label></p>
+    </div>
+
+</wicket:extend>
+</html>

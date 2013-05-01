@@ -1,13 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
-import com.n4systems.fieldid.wicket.components.loto.ProcedureTitleLabel;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.procedure.ProcedureDefinition;
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -29,11 +25,12 @@ public class PreviouslyPublishedListPage extends LotoPage{
     public PreviouslyPublishedListPage(PageParameters params) {
         super(params);
 
-        add(new BookmarkablePageLink<PreviouslyPublishedListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
+        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
-
+        add(new BookmarkablePageLink<CompletedProceduresListPage>("completedProceduresListLink", CompletedProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
         WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
+        WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
         ListView listView;
 
         listContainer.add(listView = new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
@@ -53,7 +50,6 @@ public class PreviouslyPublishedListPage extends LotoPage{
         listContainer.setVisible(!listView.getList().isEmpty());
         add(listContainer);
 
-        WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
         blankSlate.setVisible(listView.getList().isEmpty());
         add(blankSlate);
     }
@@ -64,21 +60,6 @@ public class PreviouslyPublishedListPage extends LotoPage{
         protected List<ProcedureDefinition> load() {
             return procedureDefinitionService.getPreviouslyPublishedProceduresForAsset(assetModel.getObject());
         }
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/newCss/loto/procedures.css");
-    }
-
-    @Override
-    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
-        if(isTopTitle)
-            return new Label(labelId, new FIDLabelModel("label.procedures"));
-        else
-            return new ProcedureTitleLabel(labelId, assetModel);
     }
 
 }

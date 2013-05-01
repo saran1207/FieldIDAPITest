@@ -1,10 +1,14 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.wicket.components.loto.ProcedureTitleLabel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.Asset;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -32,6 +36,8 @@ public abstract class LotoPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/loto/layout.css");
+        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/newCss/loto/procedures.css");
     }
 
     public Long getAssetId() {
@@ -40,6 +46,14 @@ public abstract class LotoPage extends FieldIDFrontEndPage {
 
     public void setAssetId(Long assetId) {
         this.assetId = assetId;
+    }
+
+    @Override
+    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
+        if(isTopTitle)
+            return new Label(labelId, new FIDLabelModel("label.procedures"));
+        else
+            return new ProcedureTitleLabel(labelId, assetModel);
     }
 
 }
