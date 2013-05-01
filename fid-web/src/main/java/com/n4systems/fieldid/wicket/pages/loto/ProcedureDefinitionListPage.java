@@ -18,6 +18,7 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -39,8 +40,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
     private WebMarkupContainer listContainer;
     private WebMarkupContainer blankSlate;
     private ListView listView;
-
-    private enum PrintOptions { Compact, Normal, Spacious};
 
     public ProcedureDefinitionListPage(PageParameters params) {
         super(params);
@@ -98,11 +97,13 @@ public class ProcedureDefinitionListPage extends LotoPage {
                         && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED)));
 
                 item.add(new MenuButton<PrintOptions>("print", new FIDLabelModel("label.view_print"), Lists.newArrayList(PrintOptions.values())){
-                    @Override protected WebMarkupContainer populateLink(String linkId, String labelId, ListItem<PrintOptions> item) {
+                    @Override
+                    protected WebMarkupContainer populateLink(String linkId, String labelId, final ListItem<PrintOptions> item) {
                         return (WebMarkupContainer) new Link(linkId) {
-                            @Override public void onClick() {
-                                //TODO SU/DD : implement correct print options
-                                setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject()));
+
+                            @Override
+                            public void onClick() {
+                               setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject(),item.getModelObject()));
                             }
                         }.add(new Label(labelId, item.getModelObject().name()));
                     }
