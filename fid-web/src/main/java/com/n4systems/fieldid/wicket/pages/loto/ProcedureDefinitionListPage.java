@@ -98,16 +98,18 @@ public class ProcedureDefinitionListPage extends LotoPage {
                         && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED)));
 
                 item.add(new MenuButton<PrintOptions>("print", new FIDLabelModel("label.view_print"), Lists.newArrayList(PrintOptions.values())){
-                    @Override
-                    protected WebMarkupContainer populateLink(String linkId, String labelId, ListItem<PrintOptions> item) {
+                    @Override protected WebMarkupContainer populateLink(String linkId, String labelId, ListItem<PrintOptions> item) {
                         return (WebMarkupContainer) new Link(linkId) {
-
-                            @Override
-                            public void onClick() {
-                                //TODO: implement correct print options
+                            @Override public void onClick() {
+                                //TODO SU/DD : implement correct print options
                                 setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject()));
                             }
                         }.add(new Label(labelId, item.getModelObject().name()));
+                    }
+
+                    @Override protected void buttonClicked(AjaxRequestTarget target) {
+                        //TODO SU/DD: implement correct print options
+                        setResponsePage(new ProcedureDefinitionPrintPage(procedureDefinition.getObject()));
                     }
                 });
             }

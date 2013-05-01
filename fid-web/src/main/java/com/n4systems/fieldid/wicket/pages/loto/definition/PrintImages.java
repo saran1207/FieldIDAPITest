@@ -3,10 +3,8 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.ComponentWithExternalHtml;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
-import com.n4systems.fieldid.wicket.components.image.ImageList;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.common.ImageAnnotation;
-import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.util.json.JsonRenderer;
@@ -17,9 +15,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,9 +74,7 @@ public class PrintImages extends Panel {
     }
 
     protected String getImageUrl(ListItem<ProcedureDefinitionImage> item) {
-        String path = item.getModelObject().getS3Path();
-        String imageUrl = s3Service.generateResourceUrl(path).toString();
-        return imageUrl;
+        return s3Service.getProcedureDefinitionImageURL(item.getModelObject()).toString();
     }
 
     @Override

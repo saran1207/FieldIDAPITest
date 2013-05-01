@@ -88,18 +88,6 @@ var fieldIdWidgets = (function() {
 			}
 		}
 
-		function createNote(annotation) {
-			var value = annotation?annotation.text:options.text;
-			var direction = annotation.x < .5 ? 'arrow-left' : 'arrow-right';
-			var type = annotation.cssStyle ? annotation.cssStyle : options.type;
-			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(type);
-			var icon = $('<span/>').addClass('icon').appendTo(span);
-			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');
-			editor.css('width',(editor.val().length + 1) * 6 + 'px');
-			editor.attr('disabled',true);
-			return span;
-		}
-
 		return {
 			init : init
 		}
@@ -145,6 +133,19 @@ var fieldIdWidgets = (function() {
 
 	}
 
+	//	------------------------------------------------------------------------------------------------------------
+
+	function createNote(annotation) {
+		var value = annotation?annotation.text:options.text;
+		var direction = annotation.x < .5 ? 'arrow-left' : 'arrow-right';
+		var type = annotation.cssStyle ? annotation.cssStyle : options.type;
+		var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(type);
+		var icon = $('<span/>').addClass('icon').appendTo(span);
+		var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');
+		editor.css('width',(editor.val().length + 1) * 6 + 'px');
+		editor.attr('disabled',true);
+		return span;
+	}
 
 	var createMenuButton = function(id,options) {
 		var mb = menuButton($('#'+id),options);
@@ -164,10 +165,21 @@ var fieldIdWidgets = (function() {
 		return ie;
 	}
 
+	var annotate = function(options) {
+
+		$.each(options.images,function(index,value) {
+			$('#'+value.id).addAnnotations(
+				function(annotation) {return createNote(annotation);},
+				value.annotations[optionIndex],
+				value );
+		});
+	}
+
 	return {
 		createMenuButton : createMenuButton,
 		createImageList : createImageList,
-		createImageEditor : createImageEditor
+		createImageEditor : createImageEditor,
+		annotate : annotate
 	};
 
 })();
