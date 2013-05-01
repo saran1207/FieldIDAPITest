@@ -10,11 +10,12 @@ import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.IMarkupFragment;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.util.string.*;
+import org.apache.wicket.util.string.StringValue;
 
 @ComponentWithExternalHtml
 public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
@@ -23,6 +24,7 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     protected @SpringBean JsonRenderer renderer;
 
     private IModel<ProcedureDefinition> model;
+
     private PrintOptions mode = PrintOptions.Normal;
 
     public ProcedureDefinitionPrintPage(PageParameters params) {
@@ -42,6 +44,9 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
     private void init(IModel<ProcedureDefinition> model) {
         this.model = model;
+        //add print button icon
+        add(new ContextImage("printIcon", "/images/print-icon-transparent.png"));
+
         mode = initMode();
         add(new AttributeAppender("class", Model.of("print-procedure-definition")));
         add(new PrintMetaData("meta",model));
@@ -84,21 +89,18 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
 
     private String getJsonPrintOptions() {
-        return renderer.render(new JsonPrintOption(getMarkupId(), "6", "3"));
+        return renderer.render(new JsonPrintOption(String.valueOf(mode.getSpacing())));
     }
+
 
     class JsonPrintOption {
 
-        String id;
-        String imageCount;
-        String pointCount;
+        String printOption;
 
         JsonPrintOption () {}
 
-        JsonPrintOption (String id, String imageCount, String pointCount) {
-            this.id = id;
-            this.imageCount = imageCount;
-            this.pointCount = pointCount;
+        JsonPrintOption (String printOption) {
+            this.printOption = printOption;
         }
 
     }
