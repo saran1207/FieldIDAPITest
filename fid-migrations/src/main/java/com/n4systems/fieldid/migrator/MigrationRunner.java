@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.sql.*;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -83,7 +84,7 @@ public class MigrationRunner {
 
 	public SortedSet<? extends Migration> loadMigrations(List<Long> completedMigrations) throws ClassNotFoundException, IOException, IllegalAccessException, InstantiationException {
 		URL codeSourceUrl = getClass().getProtectionDomain().getCodeSource().getLocation();
-		File codeSourceFile = new File(codeSourceUrl.getFile());
+		File codeSourceFile = new File(URLDecoder.decode(codeSourceUrl.getFile(), "UTF-8"));
 		MigrationFileFilter migrationFileFilter = new MigrationFileFilter(completedMigrations);
 
 		List<File> migrationFiles;
