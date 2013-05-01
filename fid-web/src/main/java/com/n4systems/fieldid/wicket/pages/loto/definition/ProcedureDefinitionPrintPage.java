@@ -45,7 +45,7 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     private void init(IModel<ProcedureDefinition> model) {
         this.model = model;
         //add print button icon
-        add(new ContextImage("printIcon", "/images/print-icon-transparent.png"));
+        add(new ContextImage("printIcon", "/fieldid/images/print-icon-transparent.png"));
 
         mode = initMode();
         add(new AttributeAppender("class", Model.of("print-procedure-definition")));
