@@ -83,10 +83,10 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
     private final void processNote(Long noteId, Double x, Double y, String text, ImageAnnotationType type) {
         ImageAnnotation annotation = getImageAnnotation(noteId,x,y,text,type);
         getEditableImage().addImageAnnotation(annotation);
-        doLabel(getEditableImage(), annotation);
+        processNote(getEditableImage(), annotation);
     }
 
-    protected void doLabel(T editableImage, ImageAnnotation annotation) {}
+    protected void processNote(T editableImage, ImageAnnotation annotation) {}
 
     @Override
     protected void onBind() {

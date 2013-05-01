@@ -3,9 +3,6 @@ package com.n4systems.model.common;
 import com.google.common.base.Joiner;
 import com.n4systems.model.IsolationPointSourceType;
 
-//There is a corresponding table 'image_annotation_type' with this information in that database
-//Should we be using the db or is the enum enough?
-
 public enum ImageAnnotationType {
 
     // currently, the annotation types match up with IsolationPointSourceTypes.
@@ -23,9 +20,11 @@ public enum ImageAnnotationType {
     // i.e. a P type will be rendered as <span class="pneumatic ..."/>
     private String cssClass;
 
+    // TODO DD : i don't think fontColor, backgroundColor etc... are currently used.  remove these?.
     private String fontColor;
     private String backgroundColor;
     private String borderColor;
+
     private String icon;
     private final String fullIcon;
 

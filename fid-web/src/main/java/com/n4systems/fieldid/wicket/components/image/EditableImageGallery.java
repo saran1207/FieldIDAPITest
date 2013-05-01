@@ -40,8 +40,8 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
                 }
                 return null;
             }
-            @Override protected void doLabel(T editableImage, ImageAnnotation annotation) {
-                super.doLabel(editableImage,annotation);
+            @Override protected void processNote(T editableImage, ImageAnnotation annotation) {
+                super.processNote(editableImage, annotation);
                 EditableImageGallery.this.doLabel(editableImage, annotation);
             }
         }.withEditing());

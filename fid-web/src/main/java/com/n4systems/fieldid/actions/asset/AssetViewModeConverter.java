@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.util.List;
-import java.util.TreeSet;
-
-import rfid.ejb.entity.InfoOptionBean;
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.ejb.OrderManager;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.model.Asset;
@@ -21,6 +15,11 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.services.TenantFinder;
+import rfid.ejb.entity.InfoOptionBean;
+import rfid.web.helper.SessionUser;
+
+import java.util.List;
+import java.util.TreeSet;
 
 public class AssetViewModeConverter {
 	private final LoaderFactory loaderFactory;
@@ -40,7 +39,7 @@ public class AssetViewModeConverter {
 		// TODO DD WEB-2157 : cache this result for reuse within same multi-add transaction.
 		PrimaryOrg primaryOrg = TenantFinder.getInstance().findPrimaryOrg(identifier.getTenant().getId());
 
-		// TODO DD WEB-2157 : having multiple transactions for multi-add seems slow and dangerous. 
+		// TODO DD WEB-2157 : having multiple transactions for multi-add seems slow and dangerous.
 		transaction = PersistenceManager.startTransaction();
 		
 		try {
