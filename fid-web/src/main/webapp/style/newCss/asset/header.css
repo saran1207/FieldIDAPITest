@@ -1,3 +1,7 @@
+#pageContent {
+    overflow: visible;
+}
+
 .options, #contentTitle{
     display : none;
 }

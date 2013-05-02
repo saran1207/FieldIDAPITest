@@ -105,11 +105,11 @@ public class HeaderPanel extends Panel {
 
         boolean hasAssociatedEventTypes = !asset.getType().getAssociatedEventTypes().isEmpty();
         boolean isLotoEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures);
-        final boolean hasEventTypes = eventTypeService.hasEventTypes();
+        boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
 
         NonWicketLink startEventLink;
         add(startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton blueButton")));
-        startEventLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && hasAssociatedEventTypes);
+        startEventLink.setVisible(hasCreateEvent && hasAssociatedEventTypes);
 
         scheduleToAdd = createNewSchedule(asset);
 
@@ -125,7 +125,6 @@ public class HeaderPanel extends Panel {
 
         procedureToSchedule = createNewProcedure(asset);
 
-
         final ProcedurePicker procedurePicker = new ProcedurePicker("procedurePicker", new PropertyModel<Procedure>(HeaderPanel.this, "procedureToSchedule")) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
@@ -135,34 +134,47 @@ public class HeaderPanel extends Panel {
             }
         };
 
+        boolean showScheduleEventLink;
+        boolean showScheduleProcedureLink;
+
+        if (isLotoEnabled) {
+            showScheduleEventLink = false;
+            showScheduleProcedureLink = !hasAssociatedEventTypes;
+        } else {
+            showScheduleEventLink = hasCreateEvent && hasAssociatedEventTypes;
+            showScheduleProcedureLink = false;
+        }
         add(new AjaxLink("scheduleEventLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if(hasEventTypes) {
                     schedulePicker.show(target);
-                }else {
-                    procedurePicker.show(target);
-                }
             }
-        }.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && !isLotoEnabled && !hasEventTypes));
+        }.setVisible(showScheduleEventLink));
+
+        add(new AjaxLink("scheduleProcedureLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                    procedurePicker.show(target);
+            }
+        }.setVisible(showScheduleProcedureLink));
 
         WebMarkupContainer scheduleMenu = new WebMarkupContainer("scheduleMenu");
 
-        scheduleMenu.add(new AjaxLink("menuStartEventLink") {
+        scheduleMenu.add(new AjaxLink("menuScheduleEventLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 schedulePicker.show(target);
             }
         });
 
-        scheduleMenu.add(new AjaxLink("menuStartProcedureLink") {
+        scheduleMenu.add(new AjaxLink("menuScheduleProcedureLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 procedurePicker.show(target);
             }
         });
 
-        scheduleMenu.setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && isLotoEnabled && hasEventTypes);
+        scheduleMenu.setVisible(hasCreateEvent && isLotoEnabled && hasAssociatedEventTypes);
 
         add(scheduleMenu);
 
