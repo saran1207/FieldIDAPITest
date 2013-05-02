@@ -20,6 +20,7 @@ public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
 		apiTenant.setUsingJobSites(primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites));
 		apiTenant.setUsingAdvancedLocation(primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedLocation));
 		apiTenant.setUsingOrderDetails(primaryOrg.hasExtendedFeature(ExtendedFeature.OrderDetails));
+        apiTenant.setUsingLoto(primaryOrg.hasExtendedFeature(ExtendedFeature.LotoProcedures));
 		apiTenant.setUsingGpsCapture(primaryOrg.getTenant().getSettings().isGpsCapture());
 		return apiTenant;
 	}

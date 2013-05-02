@@ -9,6 +9,7 @@ public class ApiTenant {
 	private boolean usingAdvancedLocation;
 	private boolean usingOrderDetails;
 	private boolean usingGpsCapture;
+    private boolean usingLoto;
 	
 	public void setSerialNumberLabel(String serialNumberLabel) {
 		this.serialNumberLabel = serialNumberLabel;
@@ -72,5 +73,13 @@ public class ApiTenant {
 
 	public String getSerialNumberFormat() {
 		return serialNumberFormat;
-	}	
+	}
+
+    public boolean isUsingLoto() {
+        return usingLoto;
+    }
+
+    public void setUsingLoto(boolean usingLoto) {
+        this.usingLoto = usingLoto;
+    }
 }
