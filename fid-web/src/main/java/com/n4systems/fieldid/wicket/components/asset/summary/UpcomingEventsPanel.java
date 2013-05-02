@@ -102,11 +102,6 @@ public class UpcomingEventsPanel extends Panel {
                 });
             }
 
-            @Override
-            protected void onDetach() {
-                super.onDetach();
-                System.out.println("detach list");
-            }
         });
     }
 
@@ -121,21 +116,10 @@ public class UpcomingEventsPanel extends Panel {
     class ProcedureModel extends LoadableDetachableModel<List<Procedure>> {
 
         @Override
-        public List<Procedure> getObject() {
-            List<Procedure> object = super.getObject();
-            System.out.println("getting proc model");
-            return object;
-        }
-
-        @Override
         protected List<Procedure> load() {
             return Collections.singletonList(procedureService.getOpenProcedure(asset));
         }
 
-        public ProcedureModel() {
-            super();
-            System.out.println("detach procedure");
-        }
     }
 
 }
