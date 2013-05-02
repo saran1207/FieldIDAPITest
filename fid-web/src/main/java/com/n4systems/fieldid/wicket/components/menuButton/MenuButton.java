@@ -31,7 +31,6 @@ public class MenuButton<T> extends Panel {
         super(id);
         this.labelModel = label;
         setOutputMarkupId(true);
-        add(new WebMarkupContainer(BUTTON_ID));
         add(new AjaxLink("dropDown") {
             @Override
             public void onClick(AjaxRequestTarget target) {
@@ -61,13 +60,19 @@ public class MenuButton<T> extends Panel {
     protected void onInitialize() {
         super.onInitialize();
         if (ajaxButton) {
-            replace(new AjaxLink(BUTTON_ID) {
+            add(new AjaxLink(BUTTON_ID) {
                 @Override public void onClick(AjaxRequestTarget target) {
                     buttonClicked(target);
                 }
             });
+        } else {
+            add(populateButton(BUTTON_ID));
         }
         ((MarkupContainer)get(BUTTON_ID)).add(new Label("label", labelModel));
+    }
+
+    protected WebMarkupContainer populateButton(String linkId) {
+        return new WebMarkupContainer(linkId);
     }
 
     protected WebMarkupContainer populateLink(String linkId, String labelId, ListItem<T> item) { return null; }

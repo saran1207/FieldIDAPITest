@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.components.loto.ViewPrintProcedureDefMenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -48,13 +47,7 @@ public class PreviouslyPublishedListPage extends LotoPage{
                 item.add(new Label("approvedBy", new PropertyModel<String>(procedureDefinition, "approvedBy")));
                 item.add(new Label("originDate", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "originDate"), true, getCurrentUser().getTimeZone())));
                 item.add(new Label("retireDate", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "retireDate"), true, getCurrentUser().getTimeZone())));
-                item.add(new ViewPrintProcedureDefMenuButton("print", procedureDefinition) {
-                    @Override
-                    protected void onPrintOptionSelected(IModel<ProcedureDefinition> procedureDefinition, PrintOptions printOption) {
-                        PageParameters params = PageParametersBuilder.id(procedureDefinition.getObject().getId()).add("mode", printOption.name());
-                        setResponsePage(new ProcedureDefinitionPrintPage(params));
-                    }
-                });
+                item.add(new ViewPrintProcedureDefMenuButton("print", procedureDefinition));
             }
         });
         listContainer.setVisible(!listView.getList().isEmpty());
