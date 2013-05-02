@@ -45,7 +45,7 @@ public class PrintImages extends Panel {
 //        });
 
 
-        add(new ListView<ProcedureDefinitionImage>("images", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
+        add(new ListView<ProcedureDefinitionImage>("imagesu", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
             @Override
             protected void populateItem(ListItem<ProcedureDefinitionImage> item) {
                 item.getDefaultModelObject();
