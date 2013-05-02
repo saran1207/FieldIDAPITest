@@ -4,8 +4,8 @@ function setupPrintPage(options)
    // don't add page break to first header
    $(".header").first().css("page-break-before", "avoid");
 
-    var $header = $('.print-header');
-    var count = $('div.print-images ul li').length;
+    var $header = $('.header');
+
 
 //    var isolationPointSize = 45;  //  or 75 or 110 depending on setting.   use options.spacing to get this value.
     var isolationPointSize = options.printOption;
@@ -30,19 +30,22 @@ function setupPrintPage(options)
     //pagePixelCount will be 0..900
     //create UL.   append to "current UL".   when > 900 pixels. close UL and open next current UL.
     $ul = $('<ul></ul>').addClass('isolation-point-table');
-    $ul.appendTo($('div.list'));
-    $('.isolation-point-table li').each(function(index,value) {
+    $ul.appendTo($('#print-isolation-points-list'));
+    //$('.isolation-point-table li').each(function(index,value) {
+    $('#iso-table li').each(function(index,value) {
         pagePixelCount += isolationPointSize;
         if (pagePixelCount>815) {
             //current UL = $('ul class='paginated-isolation-points');
             $header.clone().insertAfter($ul);
             pagePixelCount = 0;
-            $ul = $('<ul></ul>');
+            $ul = $('<ul class="isolation-point-table"></ul>');
             $ul.appendTo($('div.list'));
         }
         $(value).appendTo($ul);
     });
 
-    $('.isolation-point-table').hide();   // remove this stuff, delete element.
+   // $('.isolation-point-table').hide();   // remove this stuff, delete element.
+    $('#iso-table').hide();
 
-};
+
+}

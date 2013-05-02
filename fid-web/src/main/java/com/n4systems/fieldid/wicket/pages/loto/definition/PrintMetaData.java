@@ -4,11 +4,9 @@ import com.n4systems.fieldid.wicket.ComponentWithExternalHtml;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import static ch.lambdaj.Lambda.on;
@@ -23,7 +21,7 @@ public class PrintMetaData extends Panel {
     public PrintMetaData(String id, IModel<ProcedureDefinition> model) {
         super(id, model);
 
-        add(new AttributeAppender("class", Model.of("print-header")));
+        //add(new AttributeAppender("class", Model.of("print-header")));
 
         // tenant image
         add(new ExternalImage("tenantLogo", s3Service.getBrandingLogoURL(model.getObject().getTenant().getId()).toString()).setEscapeModelStrings(false));
