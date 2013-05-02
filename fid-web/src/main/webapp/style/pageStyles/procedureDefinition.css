@@ -267,23 +267,20 @@ h3 {
 	}
         .isolation-point-table .delete img {
             vertical-align: middle;
-        }
-
-        /*FIX THIS!!!*/
-	.isolation-point-table .thumbnail {
-		width: 30px;
-        height:30px;
+        }   
+	.isolation-point-table [class*="labelled"] {
+		width: 36px;
+        height: 21px;
         background-size:36px;
         background-repeat: no-repeat;
+        padding: 0 16px 0 0;
 	}
-        .isolation-point-table .thumbnail.labelled {
-            background-image: url(/fieldid/images/attachment-icon.png);
-            outline:1px solid #d3d3d3;
+		.isolation-point-table .labelled {
+            background-image: url(/fieldid/images/loto/isolation-point-labeled.png);
         }
-        .isolation-point-table .thumbnail.unlabelled {
-            outline:1px dashed #708090;
+        .isolation-point-table .unlabelled {
+            background-image: url(/fieldid/images/loto/isolation-point-unlabeled.png);
         }
-        /*FIX THIS*/
 	.isolation-point-table .identifier {
 		width: 30px;
 		text-align: center;
