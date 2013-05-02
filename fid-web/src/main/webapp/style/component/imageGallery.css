@@ -2,9 +2,12 @@
     color:black;
 }
 
-.image-gallery .uploadForm {
-    display:none;
+.image-gallery .add-image {
+    position:absolute;
+    bottom:40px;
+    left:10px;
 }
+
 
 .image-gallery  .galleria-container {
     width:  400px;

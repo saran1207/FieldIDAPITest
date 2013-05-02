@@ -52,7 +52,12 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         add(new AttributeAppender("class", "image-gallery"));
         add(behavior = createBehavior());
 
-        form = new Form("uploadForm");
+        form = new Form("uploadForm") {
+            @Override public boolean isRootForm() {
+                return ImageGallery.this.isRootForm(super.isRootForm());
+            }
+        };
+
         form.setMultiPart(true);
         //form.setMaxSize(Bytes.megabytes(5));
 
@@ -74,6 +79,10 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         add(new WebMarkupContainer("done").setVisible(false));
 
         add(gallery = new WebMarkupContainer("images").setOutputMarkupId(true));
+    }
+
+    protected boolean isRootForm(boolean isRootDefault) {
+        return isRootDefault;
     }
 
     protected abstract String getImageUrl(T image);

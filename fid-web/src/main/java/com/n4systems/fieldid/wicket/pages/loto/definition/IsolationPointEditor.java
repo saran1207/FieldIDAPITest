@@ -113,6 +113,11 @@ public class IsolationPointEditor extends Panel {
                 modal.close(target);
                 IsolationPointEditor.this.getDefaultModel().detach();
             }
+
+            @Override
+            protected boolean isRootForm(boolean form) {
+                return false;
+            }
         };
     }
 

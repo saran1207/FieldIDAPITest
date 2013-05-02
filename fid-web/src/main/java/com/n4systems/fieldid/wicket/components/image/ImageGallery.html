@@ -1,10 +1,9 @@
 <wicket:panel>
 
-    <!--NOTE : This is hidden because JS code creates a button that delegates to this one for aesthetic reasons. -->
-    <form wicket:id="uploadForm" class="uploadForm" style="display:none">
-        <input type="file" wicket:id="fileUpload" class="submit"/>
+    <form wicket:id="uploadForm">
+        <input type="file" wicket:id="fileUpload" class="add-image">
     </form>
 
     <div wicket:id="images"/>
-    <a wicket:id="done" class="mattButton done"><wicket:message key="label.finish_labelling"/></a>
+    <a wicket:id="done" class="mattButton done">Done</a>
 </wicket:panel>
