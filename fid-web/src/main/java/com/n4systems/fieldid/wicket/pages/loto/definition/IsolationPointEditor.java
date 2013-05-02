@@ -60,7 +60,7 @@ public class IsolationPointEditor extends Panel {
         add(titleContainer);
 
         add(modal = new FIDModalWindow("modal", getDefaultModel(), 810, 475));
-        modal.setTitle(new StringResourceModel("label.images", this, null));
+        modal.setTitle(new StringResourceModel("label.isolation_point_images", this, null));
 
         add(form = new Form("form"));
 

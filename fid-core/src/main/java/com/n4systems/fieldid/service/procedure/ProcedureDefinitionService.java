@@ -164,6 +164,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             IsolationPoint copiedIsolationPoint = copyIsolationPoint(isolationPoint, new IsolationPoint(), true);
             to.getIsolationPoints().add(copiedIsolationPoint);
             if(copiedIsolationPoint.getAnnotation() != null) {
+                // Set<Images>
                 ProcedureDefinitionImage originalImage = (ProcedureDefinitionImage) isolationPoint.getAnnotation().getImage();
                 ProcedureDefinitionImage copiedImage = (ProcedureDefinitionImage) copiedIsolationPoint.getAnnotation().getImage();
                 s3Service.copyProcedureDefImageToTemp(originalImage, copiedImage);
@@ -243,7 +244,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setTenant(from.getTenant());
         to.setType(from.getType());
         to.setText(from.getText());
-        if (from.isNew() || !isDeepCopy) {
+        to.setX(from.getX());
+        to.setY(from.getY());
+        // TODO DD : don't create new image if already existing.
+        if (!isDeepCopy) {
             to.setImage(from.getImage());
         } else {
             to.setImage(copyEditableImage((ProcedureDefinitionImage) from.getImage(), new ProcedureDefinitionImage(), to));

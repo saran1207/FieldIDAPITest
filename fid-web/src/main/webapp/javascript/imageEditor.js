@@ -41,7 +41,8 @@ var imageEditor = (function() {
 				});
 
 				editor.keypress(function(e) {
-					this.style.width = Math.max(12,(this.value.length + 1) * 6) + 'px';
+					// TODO DD : replace this with exact font --> pixel size measuring.
+					this.style.width = Math.max(12,(this.value.length + 1) * 6) + 4 + 'px';
 				});
 
 				editor.blur(function(e) {
@@ -76,9 +77,6 @@ var imageEditor = (function() {
 			setTimeout(function() {
 				adjustNoteDirection(note);
 			},0);
-			setTimeout(function() {
-				note.find('input').focus();
-			},100);
 
 			return note;
 		}

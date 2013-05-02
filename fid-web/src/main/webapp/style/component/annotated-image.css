@@ -47,24 +47,27 @@
 
 
 /* INPUTS */
-.notes-container .note input {
+.note input {
 	outline: 1px solid #DDDD99;
 	border: none;
 	height: 16px;
 	margin-left: 0px;
 	font-weight: bold;
 	padding: 0;
+    margin-top:2px;
+    padding:1px;
 }
 .note.readonly {
 	z-index: 2;
 }
-.notes-container .note.readonly input {
-	border: none;
-	background-color: transparent;
-	outline: none;
-	height:16px;
-	margin-left:0px;
-}
+    .note.readonly input {
+    	border: none;
+    	background-color: transparent;
+    	outline: none;
+    	height:16px;
+    	margin-left:0px;
+        margin-top:3px;
+    }
 
 
 /* ICONS 

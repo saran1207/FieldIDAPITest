@@ -76,4 +76,10 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
     protected String getDefaultText() {
         return model.getObject().getIdentifier();
     }
+
+    @Override
+    protected String getPlaceholderImageUrl() {
+        return "/fieldid/images/loto/upload-lightbox-blank-slate.png";
+    }
+
 }
