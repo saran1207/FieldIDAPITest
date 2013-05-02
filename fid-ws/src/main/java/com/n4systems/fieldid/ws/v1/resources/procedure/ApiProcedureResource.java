@@ -4,7 +4,9 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.GpsLocation;
+import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.IsolationPointResult;
 import com.n4systems.model.procedure.Procedure;
@@ -90,13 +92,32 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             @QueryParam("endDate") Date endDate,
             @DefaultValue("0") @QueryParam("page") int page,
             @DefaultValue("25") @QueryParam("pageSize") int pageSize) {
-        User user = getCurrentUser();
+        QueryBuilder<Procedure> query = createOpenAssignedProcedureBuilder(startDate, endDate);
 
+        List<Procedure> procedures = persistenceService.findAll(query, page, pageSize);
+        Long total = persistenceService.count(query);
+        List<ApiProcedure> apiSchedules = convertProcedures(procedures);
+        ListResponse<ApiProcedure> response = new ListResponse<ApiProcedure>(apiSchedules, page, pageSize, total);
+
+        logger.info("findAssignedProcedures: >= startDate: " + startDate + " < endDate: " + endDate);
+
+        return response;
+    }
+
+    public QueryBuilder<Procedure> createOpenAssignedProcedureBuilder(Date startDate, Date endDate) {
+        User user = getCurrentUser();
         QueryBuilder<Procedure> query = createUserSecurityBuilder(Procedure.class)
                 .addOrder("dueDate")
-                .addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES))
-                .addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate))
-                .addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
+                .addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
+
+        if (startDate != null) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "startDate", "dueDate", startDate));
+
+        }
+
+        if (endDate != null) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "endDate", "dueDate", endDate));	//excludes end date.
+        }
 
         if (user.getGroups().isEmpty()) {
             query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "assignee.id", user.getId()));
@@ -108,15 +129,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.IN, "assignedGroup", user.getGroups(), WhereClause.ChainOp.OR));
             query.addWhere(group);
         }
-
-        List<Procedure> procedures = persistenceService.findAll(query, page, pageSize);
-        Long total = persistenceService.count(query);
-        List<ApiProcedure> apiSchedules = convertProcedures(procedures);
-        ListResponse<ApiProcedure> response = new ListResponse<ApiProcedure>(apiSchedules, page, pageSize, total);
-
-        logger.info("findAssignedProcedures: >= startDate: " + startDate + " < endDate: " + endDate);
-
-        return response;
+        return query;
     }
 
 
@@ -160,15 +173,8 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
     }
 
     public List<ApiProcedure> getOpenAndLockedProcedures(Long assetId) {
-        QueryBuilder<Procedure> query = createUserSecurityBuilder(Procedure.class);
+        QueryBuilder<Procedure> query = createOpenAssignedProcedureBuilder(null, null);
         query.addSimpleWhere("asset.id", assetId);
-
-        WhereParameterGroup openOrLockedTerm = new WhereParameterGroup("openOrLocked");
-        openOrLockedTerm.setChainOperator(WhereClause.ChainOp.AND);
-        openOrLockedTerm.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "workflowState", ProcedureWorkflowState.OPEN, WhereClause.ChainOp.OR, "openState"));
-        openOrLockedTerm.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "workflowState", ProcedureWorkflowState.LOCKED, WhereClause.ChainOp.OR, "lockedState"));
-
-        query.addWhere(openOrLockedTerm);
 
         List<Procedure> procedures = persistenceService.findAll(query);
         return convertProcedures(procedures);

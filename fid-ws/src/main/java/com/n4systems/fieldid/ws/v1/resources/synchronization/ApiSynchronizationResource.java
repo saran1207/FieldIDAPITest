@@ -1,10 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.synchronization;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -12,7 +8,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
 import com.n4systems.model.WorkflowState;
+import com.n4systems.model.procedure.Procedure;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -46,6 +44,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(ApiSynchronizationResource.class);
 
 	@Autowired private OfflineProfileService offlineProfileService;
+    @Autowired private ApiProcedureResource procedureResource;
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -60,6 +59,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 			assets.addAll(getOfflineProfileOrgs(profile));
 		}
 		assets.addAll(getAssignedOpenEventAssets(profile));
+        assets.addAll(getAssignedOpenProcedureAssets(profile));
 		assets.addAll(getLinkedAssets(assets));
 		
 		ListResponse<ApiSynchronizationAsset> response = new ListResponse<ApiSynchronizationAsset>();
@@ -67,8 +67,24 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 		response.setTotal(response.getList().size());
 		return response;
 	}
-	
-	private List<ApiSynchronizationAsset> getOfflineProfileAssets(OfflineProfile profile) {
+
+    private List<ApiSynchronizationAsset> getAssignedOpenProcedureAssets(OfflineProfile profile) {
+        Date startDate = new LocalDate().toDate();
+        Date endDate = profile == null
+                ? getSyncEndDate(OfflineProfile.DEFAULT_SYNC_DURATION, startDate)
+                : getSyncEndDate(profile.getSyncDuration(), startDate);
+
+        QueryBuilder<Procedure> query = procedureResource.createOpenAssignedProcedureBuilder(startDate, endDate);
+
+        List<ApiSynchronizationAsset> assets = new ArrayList<ApiSynchronizationAsset>();
+        List<Procedure> openProcedures = persistenceService.findAll(query);
+        for (Procedure openProcedure : openProcedures) {
+            assets.add(convert(openProcedure.getAsset()));
+        }
+        return assets;
+    }
+
+    private List<ApiSynchronizationAsset> getOfflineProfileAssets(OfflineProfile profile) {
 		List<ApiSynchronizationAsset> assets = new ArrayList<ApiSynchronizationAsset>();
 		if (!profile.getAssets().isEmpty()) {
 			QueryBuilder<ApiSynchronizationAsset> builder = createBuilder();
