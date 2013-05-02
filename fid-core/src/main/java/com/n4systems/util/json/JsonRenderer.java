@@ -2,7 +2,6 @@ package com.n4systems.util.json;
 
 import com.google.gson.*;
 import com.n4systems.model.common.ImageAnnotation;
-import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.util.chart.Chartable;
 import com.n4systems.util.chart.ChartableMap;
 
@@ -15,7 +14,6 @@ public class JsonRenderer implements Serializable {
 
 	private Gson gson = new GsonBuilder().
                                 registerTypeAdapter(ChartableMap.class, new ChartableMapSerializer()).
-                                registerTypeAdapter(ImageAnnotationType.class, new ImageAnnotationTypeSerializer()).
                                 registerTypeAdapter(ImageAnnotation.class, new ImageAnnotationSerializer()).
                                 create();
 
@@ -41,16 +39,6 @@ public class JsonRenderer implements Serializable {
 	        return data;
 		}
 	}
-
-    class ImageAnnotationTypeSerializer implements JsonSerializer<ImageAnnotationType> {
-
-        @Override
-        public JsonElement serialize(ImageAnnotationType type, Type typeOfSrc, JsonSerializationContext context) {
-            JsonObject object = new JsonObject();
-            object.addProperty("class", "electrical");   // TODO : IMPLEMENT THIS...needs to return css class
-            return object;
-        }
-    }
 
     class ImageAnnotationSerializer implements JsonSerializer<ImageAnnotation> {
 

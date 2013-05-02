@@ -6,6 +6,7 @@ import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
+import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.procedure.ProcedureDefinition;
@@ -26,7 +27,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
@@ -53,8 +53,8 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String ASSET_PROFILE_IMAGE_PATH_MEDIUM = "/assets/%d/profile/%s.medium";
 
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP = "/temp/procedure_definition_images/%s";
-    public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM = "/temp/procedure_definition_images/%s";
-    public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_THUMB = "/temp/procedure_definition_images/%s";
+    public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM = "/temp/procedure_definition_images/%s.medium";
+    public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_THUMB = "/temp/procedure_definition_images/%s.thumb";
 
     public static final String PROCEDURE_DEFINITION_IMAGE_PATH = "/assets/%d/procedure_definitions/%d/%s";
     public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB = "/assets/%d/procedure_definitions/%d/%s.thumbnail";
@@ -66,6 +66,7 @@ public class S3Service extends FieldIdPersistenceService {
     @Autowired private ConfigService configService;
 	@Autowired private ImageService imageService;
     @Autowired private AmazonS3Client s3client;
+    @Autowired private UUIDService uuidService;
 
     public URL getBrandingLogoURL() {
         return getBrandingLogoURL(null);
@@ -241,7 +242,7 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public void copyProcedureDefImageToTemp(ProcedureDefinitionImage from, ProcedureDefinitionImage to) {
-        String tempFileName = UUID.randomUUID().toString();
+        String tempFileName = uuidService.createUuid();
         to.setTempFileName(tempFileName);
 
         String contentType = getObjectMetadata(createResourcePath(from.getTenant().getId(),
@@ -277,18 +278,9 @@ public class S3Service extends FieldIdPersistenceService {
         return uploadTempImage(imageData, contentType, CRITERIA_RESULT_IMAGE_TEMP, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP, CRITERIA_RESULT_THUMB_IMAGE_TEMP);
     }
 
-    public void uploadProcedureDefImage(ProcedureDefinitionImage procedureDefinitionImage, byte[] imageData, String contentType, String fileName) {
-        uploadResource(imageData, contentType, procedureDefinitionImage.getTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH,
-                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(), fileName);
-        uploadResource(imageService.generateMedium(imageData), contentType, procedureDefinitionImage.getTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
-                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(), fileName);
-        uploadResource(imageService.generateThumbnail(imageData), contentType, procedureDefinitionImage.getTenant().getId(), PROCEDURE_DEFINITION_IMAGE_PATH_THUMB,
-                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(), fileName);
-    }
-
     private String uploadTempImage(byte[] imageData, String contentType, String imagePathTemplate, String mediumImagePathTemplate, String thumbImagePathTemplate) {
         Long tenantId = getCurrentTenant().getId();
-        String uuid = UUID.randomUUID().toString();
+        String uuid = uuidService.createUuid();
 
         byte[] mediumImage = imageService.generateMedium(imageData);
         byte[] thumbImage = imageService.generateThumbnail(imageData);
@@ -557,6 +549,7 @@ public class S3Service extends FieldIdPersistenceService {
         URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
         return url;
     }
+
 
     private String createResourcePath(Long tenantId, String resourcePath, Object...pathArgs) {
         if (tenantId == null) {

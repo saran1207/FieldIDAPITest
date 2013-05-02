@@ -53,6 +53,7 @@ import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
@@ -472,6 +473,11 @@ public class FieldIdCoreConfig {
     @Bean
     public UserGroupService userGroupService() {
         return new UserGroupService();
+    }
+
+    @Bean
+    public UUIDService uuidService() {
+        return new UUIDService();
     }
 
 }

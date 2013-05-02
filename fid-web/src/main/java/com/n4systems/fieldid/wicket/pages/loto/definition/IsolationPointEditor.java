@@ -59,7 +59,7 @@ public class IsolationPointEditor extends Panel {
         titleContainer.add(new Label("title", getTitleModel()));
         add(titleContainer);
 
-        add(modal = new FIDModalWindow("modal", getDefaultModel(), 800, 450));
+        add(modal = new FIDModalWindow("modal", getDefaultModel(), 810, 475));
         modal.setTitle(new StringResourceModel("label.images", this, null));
 
         add(form = new Form("form"));
