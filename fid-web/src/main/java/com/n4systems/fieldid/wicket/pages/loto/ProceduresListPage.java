@@ -20,17 +20,17 @@ import java.util.Date;
 import java.util.List;
 
 
-public class CompletedProceduresListPage extends LotoPage {
+public class ProceduresListPage extends LotoPage {
 
     @SpringBean
     private ProcedureService procedureService;
 
-    public CompletedProceduresListPage(PageParameters params) {
+    public ProceduresListPage(PageParameters params) {
         super(params);
 
         add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
-        add(new BookmarkablePageLink<CompletedProceduresListPage>("completedProceduresListLink", CompletedProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
+        add(new BookmarkablePageLink<ProceduresListPage>("proceduresListLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
         WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
         WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");

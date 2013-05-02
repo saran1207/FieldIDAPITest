@@ -1,14 +1,17 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.components.loto.ViewPrintProcedureDefMenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -27,7 +30,7 @@ public class PreviouslyPublishedListPage extends LotoPage{
 
         add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
-        add(new BookmarkablePageLink<CompletedProceduresListPage>("completedProceduresListLink", CompletedProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
+        add(new BookmarkablePageLink<ProceduresListPage>("proceduresListLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
         WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
         WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
@@ -37,7 +40,7 @@ public class PreviouslyPublishedListPage extends LotoPage{
 
             @Override
             protected void populateItem(ListItem<ProcedureDefinition> item) {
-                final ProcedureDefinition procedureDefinition = item.getModelObject();
+                final IModel<ProcedureDefinition> procedureDefinition = item.getModel();
                 item.add(new Label("name", new PropertyModel<String>(procedureDefinition, "procedureCode")));
                 item.add(new Label("revisionNumber", new PropertyModel<String>(procedureDefinition, "revisionNumber")));
                 item.add(new Label("developedBy", new PropertyModel<String>(procedureDefinition, "developedBy.displayName")));
@@ -45,6 +48,13 @@ public class PreviouslyPublishedListPage extends LotoPage{
                 item.add(new Label("approvedBy", new PropertyModel<String>(procedureDefinition, "approvedBy")));
                 item.add(new Label("originDate", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "originDate"), true, getCurrentUser().getTimeZone())));
                 item.add(new Label("retireDate", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "retireDate"), true, getCurrentUser().getTimeZone())));
+                item.add(new ViewPrintProcedureDefMenuButton("print", procedureDefinition) {
+                    @Override
+                    protected void onPrintOptionSelected(IModel<ProcedureDefinition> procedureDefinition, PrintOptions printOption) {
+                        PageParameters params = PageParametersBuilder.id(procedureDefinition.getObject().getId()).add("mode", printOption.name());
+                        setResponsePage(new ProcedureDefinitionPrintPage(params));
+                    }
+                });
             }
         });
         listContainer.setVisible(!listView.getList().isEmpty());

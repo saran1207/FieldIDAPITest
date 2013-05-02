@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.components.loto.ViewPrintProcedureDefMenuButton;
 import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -43,7 +44,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
 
         add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
-        add(new BookmarkablePageLink<CompletedProceduresListPage>("completedProceduresListLink", CompletedProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
+        add(new BookmarkablePageLink<ProceduresListPage>("proceduresListLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
 
         listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupPlaceholderTag(true);
@@ -93,18 +94,11 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 }.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())
                         && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED)));
 
-                item.add(new MenuButton<PrintOptions>("print", new FIDLabelModel("label.view_print"), Lists.newArrayList(PrintOptions.values())){
+                item.add(new ViewPrintProcedureDefMenuButton("print", procedureDefinition) {
                     @Override
-                    protected WebMarkupContainer populateLink(String linkId, String labelId, final ListItem<PrintOptions> item) {
-                        return (WebMarkupContainer) new Link(linkId) {
-                            @Override public void onClick() {
-                                printWithMode(procedureDefinition, item.getModelObject());
-                            }
-                        }.add(new Label(labelId, item.getModelObject().name()));
-                    }
-
-                    @Override protected void buttonClicked(AjaxRequestTarget target) {
-                        printWithMode(procedureDefinition,PrintOptions.Normal);
+                    protected void onPrintOptionSelected(IModel<ProcedureDefinition> procedureDefinition, PrintOptions printOption) {
+                        PageParameters params = PageParametersBuilder.id(procedureDefinition.getObject().getId()).add("mode", printOption.name());
+                        setResponsePage(new ProcedureDefinitionPrintPage(params));
                     }
                 });
             }
@@ -124,11 +118,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
         blankSlate.setVisible(listView.getList().isEmpty());
         blankSlate.setOutputMarkupPlaceholderTag(true);
         add(blankSlate);
-    }
-
-    private void printWithMode(IModel<ProcedureDefinition> procedureDefinition, PrintOptions mode) {
-        PageParameters params = new PageParameters().add("id", procedureDefinition.getObject().getId()).add("mode", mode.name());
-        setResponsePage(new ProcedureDefinitionPrintPage(params));
     }
 
     private void editProcedureDefinition(ProcedureDefinition procedureDefinition) {

@@ -15,10 +15,10 @@ import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.fieldid.wicket.pages.event.EditEventPage;
 import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
-import com.n4systems.fieldid.wicket.pages.loto.CompletedProceduresListPage;
 import com.n4systems.fieldid.wicket.pages.loto.PreviouslyPublishedListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureResultsPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
@@ -146,7 +146,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("procedureDefinitions", ProcedureDefinitionListPage.class);
         mountPage("procedureDefinitionPrint", ProcedureDefinitionPrintPage.class);
         mountPage("previouslyPublished", PreviouslyPublishedListPage.class);
-        mountPage("completedProcedures", CompletedProceduresListPage.class);
+        mountPage("completedProcedures", ProceduresListPage.class);
         mountPage("procedureResults", ProcedureResultsPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
