@@ -368,12 +368,13 @@ h3 {
 	margin-right: 50px;
 }
 .isolation-point-editor .column.right {
-	width: 550px;
+	width: 548px;
 	text-align: center;
+	height: 295px;
+	border-left: 1px solid gray;
 }
 .isolation-point-editor .blank-slate {
-	padding: 60px 0 130px;
-	border-left: 1px solid gray;
+	padding-top: 60px;
 }
 
 /* Form styles */
