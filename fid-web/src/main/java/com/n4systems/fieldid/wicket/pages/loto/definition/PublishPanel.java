@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -21,9 +22,11 @@ public class PublishPanel extends Panel {
 
     @SpringBean private ProcedureDefinitionService procedureDefinitionService;
     private String rejectionText;
+    private IModel<ProcedureDefinition> model;
 
     public PublishPanel(String id, IModel<ProcedureDefinition> model) {
         super(id, model);
+        this.model = model;
         setOutputMarkupPlaceholderTag(true);
         add(new AttributeAppender("class",Model.of("publish")));
         add(new PublishForm("publishForm"));
@@ -81,7 +84,7 @@ public class PublishPanel extends Panel {
                     target.add(rejectionMessageContainer.setVisible(true));
                 }
             };
-            openRejectionMessageLink.setVisible(procedureDefinitionService.canCurrentUserApprove());
+            openRejectionMessageLink.setVisible(model.getObject().getPublishedState() == PublishedState.WAITING_FOR_APPROVAL && procedureDefinitionService.canCurrentUserApprove());
 
             add(openRejectionMessageLink);
 

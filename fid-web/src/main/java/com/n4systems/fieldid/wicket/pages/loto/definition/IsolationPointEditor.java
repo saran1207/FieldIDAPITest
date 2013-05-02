@@ -65,6 +65,7 @@ public class IsolationPointEditor extends Panel {
         add(form = new Form("form"));
 
         form.add(new RequiredTextField("identifier"));
+        form.add(new TextField("electronicIdentifier"));
         form.add(new TextField("sourceText"));
         form.add(deviceComboBox = new ComboBox("device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription"), getPreConfiguredDevices(new PropertyModel(getDefaultModel(),"sourceType"))));
         deviceComboBox.add(new UpdateComponentOnChange());
