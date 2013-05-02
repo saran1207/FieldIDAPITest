@@ -27,7 +27,7 @@ public class ProcedureStateIcon extends Panel {
                 image.add(new AttributeAppender("title", new FIDLabelModel("label.loto_open_assigned_overdue", procedure.getAssignee().getDisplayName())));
             } else {
                 add(image = new ContextImage("resultIcon", "images/loto-icon.png"));
-                image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", procedure.getAssignee().getDisplayName())));
+                image.add(new AttributeAppender("title", new FIDLabelModel("label.assignee_is", procedure.getAssignedUserOrGroup().getDisplayName())));
                 image.add(new AttributeAppender("class", "scheduleIconMargin").setSeparator(" "));
             }
         }

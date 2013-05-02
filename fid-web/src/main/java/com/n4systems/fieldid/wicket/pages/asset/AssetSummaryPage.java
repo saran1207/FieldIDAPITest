@@ -125,7 +125,7 @@ public class AssetSummaryPage extends AssetPage {
         upcomingEventsPanel.setOutputMarkupPlaceholderTag(true);
         add(upcomingEventsMessage = new Label("upcomingEventsMessage", new FIDLabelModel("label.empty_schedule_list").getObject()));
         upcomingEventsMessage.setOutputMarkupPlaceholderTag(true);
-        if (hasUpcomingEvents(asset)) {
+        if (hasUpcomingEventsOrProcedures(asset)) {
             upcomingEventsMessage.setVisible(false);
         } else {
             upcomingEventsPanel.setVisible(false);
@@ -178,8 +178,8 @@ public class AssetSummaryPage extends AssetPage {
         return assetService.findLastEvents(asset, FieldIDSession.get().getSessionUser().getSecurityFilter()) != null;
     }
     
-    private boolean hasUpcomingEvents(Asset asset) {
-        return !eventScheduleService.getAvailableSchedulesFor(asset).isEmpty();
+    private boolean hasUpcomingEventsOrProcedures(Asset asset) {
+        return !eventScheduleService.getAvailableSchedulesFor(asset).isEmpty() || procedureService.getOpenProcedure(asset) != null ;
     }
 
     private boolean hasAttachments(Asset asset) {

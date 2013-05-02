@@ -73,19 +73,18 @@ public class UpcomingEventsPanel extends Panel {
         add(new ListView<Procedure>("upcomingLoto", new ProcedureModel()) {
             @Override
             protected void populateItem(ListItem<Procedure> item) {
-                Procedure procedure = item.getModelObject();
-                if(procedure != null) {
-                    item.add(new ProcedureStateIcon("scheduleIcon", Model.of(procedure)));
+                if(item.getModelObject() != null) {
+                    item.add(new ProcedureStateIcon("scheduleIcon", item.getModel()));
 
-                    DayDisplayModel upcomingProcedureDate = new DayDisplayModel(new PropertyModel<Date>(Model.of(procedure), "dueDate")).includeTime();
+                    DayDisplayModel upcomingProcedureDate = new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "dueDate")).includeTime();
 
-                    if (isPastDue(procedure)) {
-                        TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingLotoDate", new PropertyModel<Date>(Model.of(procedure), "dueDate"),dateService.getUserTimeZone());
+                    if (isPastDue(item.getModelObject())) {
+                        TimeAgoLabel timeAgoField = new TimeAgoLabel("upcomingLotoDate", new PropertyModel<Date>(item.getModel(), "dueDate"),dateService.getUserTimeZone());
                         item.add(timeAgoField);
-                    } else if(dateService.getDaysFromToday(procedure.getDueDate()).equals(0L)) {
+                    } else if(dateService.getDaysFromToday(item.getModelObject().getDueDate()).equals(0L)) {
                         item.add(new Label("upcomingLotoDate", new FIDLabelModel("label.today")));
                     } else {
-                        item.add(new Label("upcomingLotoDate", new FIDLabelModel("label.in_x_days", dateService.getDaysFromToday(procedure.getDueDate()), upcomingProcedureDate.getObject())));
+                        item.add(new Label("upcomingLotoDate", new FIDLabelModel("label.in_x_days", dateService.getDaysFromToday(item.getModelObject().getDueDate()), upcomingProcedureDate.getObject())));
                     }
 
                     item.add(new Label("onDate", new FIDLabelModel("label.on_date", upcomingProcedureDate.getObject())));
@@ -94,13 +93,19 @@ public class UpcomingEventsPanel extends Panel {
                     item.add(new Label("upcomingLotoDate"));
                     item.add(new Label("onDate"));
                 }
-                item.setVisible(procedure != null);
-                item.add(new EditLotoScheduleLink("editLoto",Model.of(procedure)) {
+                item.setVisible(item.getModelObject() != null);
+                item.add(new EditLotoScheduleLink("editLoto",item.getModel()) {
                     @Override
                     public void onProcedureScheduleUpdated(AjaxRequestTarget target) {
                         target.add(UpcomingEventsPanel.this);
                     }
                 });
+            }
+
+            @Override
+            protected void onDetach() {
+                super.onDetach();
+                System.out.println("detach list");
             }
         });
     }
@@ -116,8 +121,20 @@ public class UpcomingEventsPanel extends Panel {
     class ProcedureModel extends LoadableDetachableModel<List<Procedure>> {
 
         @Override
+        public List<Procedure> getObject() {
+            List<Procedure> object = super.getObject();
+            System.out.println("getting proc model");
+            return object;
+        }
+
+        @Override
         protected List<Procedure> load() {
             return Collections.singletonList(procedureService.getOpenProcedure(asset));
+        }
+
+        public ProcedureModel() {
+            super();
+            System.out.println("detach procedure");
         }
     }
 
