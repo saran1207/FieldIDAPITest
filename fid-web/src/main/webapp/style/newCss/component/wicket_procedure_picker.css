@@ -11,7 +11,7 @@
 }
 
 .blankSlate img {
-    display: table-caption;
+    display: block;
     margin: 20px auto;
     width: 120px;
 }
