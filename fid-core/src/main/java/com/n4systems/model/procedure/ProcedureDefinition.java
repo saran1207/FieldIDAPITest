@@ -2,6 +2,7 @@ package com.n4systems.model.procedure;
 
 import com.google.common.collect.Lists;
 import com.n4systems.model.Asset;
+import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.user.User;
 import org.hibernate.annotations.IndexColumn;
@@ -52,12 +53,12 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
     @Enumerated(EnumType.STRING)
     private PublishedState publishedState;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
     @IndexColumn(name="orderIdx")
     @JoinTable(name="procedure_definitions_isolation_points", joinColumns = @JoinColumn(name = "procedure_definition_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_id"))
     private List<IsolationPoint> isolationPoints = Lists.newArrayList();
 
-    @OneToMany(mappedBy = "procedureDefinition", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "procedureDefinition", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<ProcedureDefinitionImage> images = Lists.newArrayList();
 
     @Column(name="origin_date")
@@ -227,6 +228,29 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         }
         if(image.getProcedureDefinition() == null) {
             image.setProcedureDefinition(this);
+        }
+    }
+
+    public void removeIsolationPoint(IsolationPoint isolationPoint) {
+        softDeleteImage(isolationPoint.getAnnotation());
+        getIsolationPoints().remove(isolationPoint);
+    }
+
+    private void softDeleteImage(ImageAnnotation annotation) {
+        if (annotation==null) {
+            return;
+        }
+        boolean usedInOtherIsolationPoint = false;
+
+        ProcedureDefinitionImage image = (ProcedureDefinitionImage) annotation.getImage();
+        for (IsolationPoint ip:getIsolationPoints()) {
+            if (!annotation.equals(ip.getAnnotation()) && ip.getAnnotation().getImage().equals(annotation.getImage())) {
+                usedInOtherIsolationPoint = true;
+            }
+        }
+
+        if (!usedInOtherIsolationPoint) {
+            getImages().remove(image);
         }
     }
 }

@@ -1,11 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.search.ProcedureSearchService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
-import com.n4systems.model.user.User;
 import com.n4systems.services.date.DateService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -15,7 +13,6 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
@@ -51,12 +48,12 @@ public class ContentPanel extends Panel {
             }
 
             @Override protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) {
-                model.getObject().getIsolationPoints().remove(isolationPoint);
+                getProcedureDefinition().removeIsolationPoint(isolationPoint);
                 target.add(list);
             }
 
             @Override protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint isolationPoint, int index) {
-                List<IsolationPoint> isolationPoints = model.getObject().getIsolationPoints();
+                List<IsolationPoint> isolationPoints = getProcedureDefinition().getIsolationPoints();
                 int i = isolationPoints.indexOf(isolationPoint);
                 isolationPoints.set(i,null);
                 isolationPoints.add(index,isolationPoint);
