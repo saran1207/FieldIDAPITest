@@ -222,9 +222,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setSourceText(from.getSourceText());
         to.setDeviceDefinition(from.getDeviceDefinition());
         to.setLockDefinition(from.getLockDefinition());
-        Date now = dateService.now().toDate();
-        to.setCreated(now);
-        to.setModified(now);
+        to.setElectronicIdentifier(from.getElectronicIdentifier());
 
         return to;
     }
@@ -252,9 +250,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         } else {
             to.setImage(copyEditableImage((ProcedureDefinitionImage) from.getImage(), new ProcedureDefinitionImage(), to));
         }
-        Date now = dateService.now().toDate();
-        to.setCreated(now);
-        to.setModified(now);
         return to;
     }
 
@@ -263,10 +258,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setTenant(from.getTenant());
         to.addImageAnnotation(imageAnnotation);
         to.setFileName(from.getFileName());
-        to.setMobileGUID(from.getMobileGUID());
-        Date now = dateService.now().toDate();
-        to.setCreated(now);
-        to.setModified(now);
         return to;
     }
 }

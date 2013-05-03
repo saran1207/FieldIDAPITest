@@ -117,13 +117,7 @@ public class ContentPanel extends Panel {
         IsolationPoint isolationPoint = new IsolationPoint();
         isolationPoint.setIdentifier(getNextIdentifier(sourceType));
         isolationPoint.setSourceType(sourceType);
-        User user = FieldIDSession.get().getSessionUser().getSecurityFilter().getUser();
-        isolationPoint.setCreatedBy(user);
-        isolationPoint.setModifiedBy(user);
         isolationPoint.setTenant(getProcedureDefinition().getTenant());
-        Date now = dateService.now().toDate();
-        isolationPoint.setCreated(now);
-        isolationPoint.setModified(now);
         return isolationPoint;
     }
 
