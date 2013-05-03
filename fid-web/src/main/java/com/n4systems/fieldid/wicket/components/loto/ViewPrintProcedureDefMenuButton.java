@@ -24,7 +24,7 @@ public class ViewPrintProcedureDefMenuButton extends MenuButton<PrintOptions> {
     public ViewPrintProcedureDefMenuButton(String id, IModel<ProcedureDefinition> procedureDefinition) {
         super(id, new FIDLabelModel("label.view_print"), Lists.newArrayList(PrintOptions.values()));
         withNoAjax();
-        add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print").getObject(), TipsyBehavior.Gravity.N));
+        add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print").getObject(), TipsyBehavior.Gravity.W));
         add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
         this.procedureDefinition = procedureDefinition;
     }
