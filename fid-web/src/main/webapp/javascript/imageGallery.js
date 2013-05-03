@@ -37,13 +37,16 @@ var imageGallery = (function() {
 
 		function initUploadButton() {
 			// create a prettier submit button and delegate to the existing/underlying one.
-//			var gallery = $('#'+id);
-//			var oldSubmit  = gallery.parent().find('.add-image');
-//			var newSubmit = $('<a>').html('Add').addClass('add').addClass('mattButton');
-//			newSubmit.appendTo($('#'+id + ' .galleria-container'));
-//			newSubmit.click(function() {
-//				oldSubmit.click();
-//			});
+			var $originalSubmit = $('.image-gallery .add-image');
+			if ($originalSubmit.length==0) {
+				throw "can't find ADD button. should have class '.image-gallery .add-image'";
+			}
+			var $newSubmit = $('<a>').html('Upload New Image').addClass('add').addClass('mattButton');
+			$newSubmit.appendTo($('#'+id + ' .galleria-container'));
+			$newSubmit.click(function() {
+				$originalSubmit.click();
+			});
+			$originalSubmit.hide();
 		}
 
 		var edit = function(annotationOptions) {
