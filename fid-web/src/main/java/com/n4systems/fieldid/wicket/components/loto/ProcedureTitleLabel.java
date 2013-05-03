@@ -17,6 +17,6 @@ public class ProcedureTitleLabel extends Panel {
         String assetLabel = asset.getType().getDisplayName() + " / " + asset.getIdentifier();
 
         add(assetLink = new BookmarkablePageLink<AssetSummaryPage>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
-        assetLink.add(new Label("label", assetLabel));
+        assetLink.add(new Label("label", assetLabel).setRenderBodyOnly(true));
     }
 }
