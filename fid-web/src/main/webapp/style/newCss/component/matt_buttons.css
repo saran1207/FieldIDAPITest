@@ -133,6 +133,7 @@ a.mattButtonBlue:hover {
 .menu-button {
     float:left;
     position:relative;
+    white-space: nowrap; /* buttons won't wrap when multiple anchors are used */
 }
 
 .menu-button .menu-items {
