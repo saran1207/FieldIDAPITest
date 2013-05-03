@@ -58,6 +58,7 @@ var imageGallery = (function() {
 				extend : function(options) {
 					// initialize editors here!
 					galleria = this;
+
 					galleria.unbind('image');
 					Galleria.on('image', function(e) {
 						galleryImageClicked(e);

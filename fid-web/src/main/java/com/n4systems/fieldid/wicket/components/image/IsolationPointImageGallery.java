@@ -82,4 +82,9 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
         return "/fieldid/images/loto/upload-lightbox-blank-slate.png";
     }
 
+    @Override
+    protected Long getIntialImageIndex() {
+        ImageAnnotation annotation = model.getObject().getAnnotation();
+        return annotation!=null ? getIndexOfImage(annotation.getImage()) : null;
+    }
 }

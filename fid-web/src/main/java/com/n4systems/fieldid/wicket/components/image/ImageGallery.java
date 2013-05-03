@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.image;
 
 import com.google.common.collect.Lists;
+import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.S3Image;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.Component;
@@ -183,8 +184,17 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     }
 
     protected String getPlaceholderImageUrl() {
-        // TODO : need a correct blank slate image for "no images in gallery" situation.
+        // override with appropriate blank slate image. this is just placeholder.
         return "/fieldid/images/add-photo-slate.png";
+    }
+
+    protected Long getIntialImageIndex() {
+        return null;
+    }
+
+    protected Long getIndexOfImage(EditableImage image) {
+        int i = model.getObject().indexOf(image);
+        return i>=0 ? new Long(i) : null;
     }
 
     // -----------------------------------------------------------------------------------------------------------------------
@@ -211,6 +221,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         int width=800;
         int height=400;
         String callback = behavior!=null ? behavior.getCallbackUrl().toString() : null;
+        Long show = getIntialImageIndex();
 
         GalleryOptions(List data) {
             this.dataSource = data.toArray(new Object[data.size()]);
