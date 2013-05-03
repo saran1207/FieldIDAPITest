@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
@@ -30,8 +31,8 @@ public class PublishPanel extends Panel {
         this.model = model;
         setOutputMarkupPlaceholderTag(true);
         add(new AttributeAppender("class",Model.of("publish")));
+        add(new FIDFeedbackPanel("feedbackPanel"));
         add(new PublishForm("publishForm"));
-
     }
 
     private class PublishForm extends Form {
@@ -60,7 +61,11 @@ public class PublishPanel extends Panel {
             SubmitLink submitLink = new SubmitLink("publish") {
                 @Override
                 public void onSubmit() {
-                    doPublish();
+                    if (model.getObject().getIsolationPoints().isEmpty()) {
+                        error(getString("message.isolation_point_required"));
+                    } else {
+                        doPublish();
+                    }
                 }
 
                 @Override

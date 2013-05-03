@@ -476,3 +476,8 @@ h3 {
     padding-top:8px;
     padding-left:6px;
 }
+
+.publish .formErrors {
+    text-align: left;
+    margin:28px;
+}
