@@ -214,11 +214,11 @@ td.revision > span {
 
 /* image list
 ------------------------------------*/
-.image-list ul  {
+.image-list #print-images-container > ul  {
 	width: 100%!important; /* can this be done in js instead? */
 	text-align: center;
 }
-.image-list ul li {
+.image-list #print-images-container > ul  >li {
 	background: transparent;
 	list-style-type: none;
 	margin: 10px 20px;

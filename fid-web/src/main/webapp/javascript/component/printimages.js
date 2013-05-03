@@ -8,44 +8,61 @@ function setupPrintPage(options)
 
 
 //    var isolationPointSize = 45;  //  or 75 or 110 depending on setting.   use options.spacing to get this value.
-    var isolationPointSize = options.printOption;
+    var isolationPointSize = parseInt(options.printOption);
     var pagePixelCount = 0;
 
 
     var $ul = $('<ul></ul>');
-    $ul.appendTo($('div.image-list'));
-    $('.print-images ul li').each(function(index,value) {
-        if (index%3==0) pagePixelCount += 250;
+    $ul.appendTo($('#print-images-container'));
+    $('#print-images li').each(function(index,value) {
+        if (index%3==0) {
+            pagePixelCount =  pagePixelCount + 250;
+
+        }
         if (pagePixelCount>815) {
             $header.clone().appendTo($ul);
             pagePixelCount = 0;
             $ul = $('<ul></ul>');
-            $ul.appendTo($('div.image-list'));
+            $ul.appendTo($('#print-images-container'));
         }
         $(value).clone().appendTo($ul);
     });
 
-    $('.print-images').hide();    // delete this element after.
+    $('#print-images').hide();    // delete this element after.
+
 
     //pagePixelCount will be 0..900
     //create UL.   append to "current UL".   when > 900 pixels. close UL and open next current UL.
-    $ul = $('<ul></ul>').addClass('isolation-point-table');
-    $ul.appendTo($('#print-isolation-points-list'));
+
+   // $ul = $('<ul></ul>').addClass('isolation-point-table');
+   // $ul.appendTo($('#print-isolation-points-list'));
     //$('.isolation-point-table li').each(function(index,value) {
+
+
+    var $ulI = $('<ul class="isolation-point-table"></ul>');;
+    $ulI.appendTo($('#print-isolation-points-list'));
+    pagePixelCount = 0;
+
+    var $heading = $('#iso-table-headings').clone();
+
+
     $('#iso-table li').each(function(index,value) {
-        pagePixelCount += isolationPointSize;
-        if (pagePixelCount>815) {
-            //current UL = $('ul class='paginated-isolation-points');
-            $header.clone().insertAfter($ul);
+
+      pagePixelCount = pagePixelCount + isolationPointSize;
+
+      if (pagePixelCount>815) {
+            $header.clone().insertAfter($ulI);
             pagePixelCount = 0;
-            $ul = $('<ul class="isolation-point-table"></ul>');
-            $ul.appendTo($('div.list'));
-        }
-        $(value).appendTo($ul);
+            $ulI = $('<ul class="isolation-point-table"></ul>');
+            $heading.clone().appendTo($ulI);
+            $ulI.appendTo($('#print-isolation-points-list'));
+      }
+
+        $(value).appendTo($ulI);
     });
 
-   // $('.isolation-point-table').hide();   // remove this stuff, delete element.
-    $('#iso-table').hide();
+   // $('.isolation-point-table').hide();  // remove this stuff, delete element.
+   $('#iso-table').hide();
 
 
 }
