@@ -39,17 +39,28 @@ h3 {
 		vertical-align: middle;
 		margin-left: 5px;
 	}
-.header {
-	padding-bottom: 20px;
+
+.watermark {
+	position: absolute;
+	top: 30px;
+	left: 160px;
+	z-index: 100;
 }
-.navigation {
-	display: none;
-}
+	.watermark img {
+		width: 700px;
+	}
+
 .procedure-print-container {
 	min-width: 1000px;
 	max-width: 1024px;
 	margin: auto;
+	position: relative;
 }
+
+.header {
+	padding-bottom: 20px;
+}
+
 
 /* table styles */
 .procedure-print-container table {
@@ -293,7 +304,6 @@ td.revision > span {
 ------------------------------------*/
 @media print { 
 	.procedure-print-container {
-		font-size: 12pt;
 		width: 100%;
 	}
 
@@ -313,11 +323,6 @@ td.revision > span {
 		display: none;
 	}
 	.printIcon {
-		display: none;
-	}
-	
-	/*thead {display: table-header-group;}*/
-	#add-item, #add-image {
 		display: none;
 	}
 }
