@@ -14,7 +14,6 @@ public class ComboBox extends DropDownChoice<String> {
     public ComboBox(String id, IModel<String> stringIModel, IModel<? extends List<? extends String>> choices) {
         super(id, stringIModel, choices);
     }
-    
     @Override
     protected String convertChoiceIdToChoice(String id) {
         if (id != null && id.startsWith("!")) {

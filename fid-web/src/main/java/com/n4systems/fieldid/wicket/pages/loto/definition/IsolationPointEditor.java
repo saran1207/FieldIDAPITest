@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.components.ComboBox;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
+import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
+import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.IsolationPointSourceType;
@@ -20,7 +22,6 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -39,7 +40,7 @@ public class IsolationPointEditor extends Panel {
 
     private Form form;
     private IsolationPoint editedIsolationPoint;
-    private ComboBox deviceComboBox;
+    private LabelledComboBox<String> deviceComboBox;
     private FIDModalWindow modal;
     private final ProcedureDefinition procedureDefinition;
     private FIDFeedbackPanel feedbackPanel;
@@ -65,10 +66,18 @@ public class IsolationPointEditor extends Panel {
         add(form = new Form("form"));
 
         form.add(new RequiredTextField("identifier"));
-        form.add(new TextField("electronicIdentifier"));
+        form.add(new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<String>(getDefaultModel(), "electronicIdentifier"))
+                .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id").getObject(), TipsyBehavior.Gravity.E)));
         form.add(new TextField("sourceText"));
-        form.add(deviceComboBox = new ComboBox("device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription"), getPreConfiguredDevices(new PropertyModel(getDefaultModel(),"sourceType"))));
-        deviceComboBox.add(new UpdateComponentOnChange());
+
+        form.add(deviceComboBox = new LabelledComboBox<String>("device", "label.device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription")){
+            @Override
+            protected IModel<List<String>> getChoices() {
+                return getPreConfiguredDevices(new PropertyModel(getDefaultModel(),"sourceType"));
+            }
+        });
+        deviceComboBox.addBehavior(new UpdateComponentOnChange());
+        deviceComboBox.add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.device").getObject(), TipsyBehavior.Gravity.E));
 
         form.add(new TextField("lock", new PropertyModel(getDefaultModel(),"lockDefinition.freeformDescription")));
 
@@ -240,12 +249,6 @@ public class IsolationPointEditor extends Panel {
 
     private IsolationPoint getIsolationPoint() {
         return (IsolationPoint) getDefaultModelObject();
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.renderOnDomReadyJavaScript("new toCombo('"+deviceComboBox.getInputName()+"');");
     }
 
 }

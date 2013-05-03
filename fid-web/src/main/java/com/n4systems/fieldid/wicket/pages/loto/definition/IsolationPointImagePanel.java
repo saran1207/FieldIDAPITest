@@ -2,6 +2,8 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.util.json.JsonRenderer;
@@ -46,6 +48,8 @@ public class IsolationPointImagePanel extends Panel {
                 checkComponentTag(tag, "img");
             }
         });
+
+        outer.add(new WebMarkupContainer("labelButton").add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.label_image").getObject(), TipsyBehavior.Gravity.N)));
     }
 
     protected Model<String> getImageUrl() {

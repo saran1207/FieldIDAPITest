@@ -12,9 +12,9 @@
         <div class="column left">
             <label class="source-id"><wicket:message key="label.identifier"/><input type="text" wicket:id="identifier"/></label>
             <label><wicket:message key="label.source"/><input type="text" wicket:id="sourceText"/></label>
-            <label><wicket:message key="label.electronic_id"/><input type="text" wicket:id="electronicIdentifier"/></label>
+            <div wicket:id="electronicIdentifier" class="tooltip-label"/>
             <label><wicket:message key="label.location"/><input type="text" wicket:id="location"/></label>
-            <label><wicket:message key="label.device"/><select wicket:id="device"/></label>
+            <div wicket:id="device" class="tooltip-label"/>
             <label><wicket:message key="label.lock"/><input type="text" wicket:id="lock"/></label>
             <label><wicket:message key="label.method"/><textarea wicket:id="method"/></label>
             <label><wicket:message key="label.check"/><textarea wicket:id="check"/></label>

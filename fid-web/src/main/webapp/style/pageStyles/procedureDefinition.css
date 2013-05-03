@@ -175,7 +175,12 @@ h3 {
 	overflow: hidden;
 }
 
-
+.tooltip-label, .tooltip-label label {
+    color: #356CA2;
+}
+.tooltip-label:hover, .tooltip-label label:hover {
+    cursor: pointer;
+}
 
 /* CONTENT SECTION
 **********************************************************/

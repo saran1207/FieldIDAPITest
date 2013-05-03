@@ -1,12 +1,14 @@
 package com.n4systems.fieldid.wicket.components.loto;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.loto.PrintOptions;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -22,6 +24,8 @@ public class ViewPrintProcedureDefMenuButton extends MenuButton<PrintOptions> {
     public ViewPrintProcedureDefMenuButton(String id, IModel<ProcedureDefinition> procedureDefinition) {
         super(id, new FIDLabelModel("label.view_print"), Lists.newArrayList(PrintOptions.values()));
         withNoAjax();
+        add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print").getObject(), TipsyBehavior.Gravity.N));
+        add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
         this.procedureDefinition = procedureDefinition;
     }
 

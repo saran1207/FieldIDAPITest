@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
@@ -54,7 +55,7 @@ public class PublishPanel extends Panel {
                 public void onError() {
                     doCancel(null);
                 }
-            });
+            }.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.save").getObject(), TipsyBehavior.Gravity.N)));
 
             SubmitLink submitLink = new SubmitLink("publish") {
                 @Override
@@ -67,6 +68,8 @@ public class PublishPanel extends Panel {
                     doCancel(null);
                 }
             };
+
+            submitLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.publish").getObject(), TipsyBehavior.Gravity.N));
 
             if (procedureDefinitionService.isProcedureApprovalRequiredForCurrentUser()) {
                 submitLink.add(new Label("submitLabel", new FIDLabelModel("label.submit_for_approval")));

@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.text.LabelledAutoCompleteUser;
 import com.n4systems.fieldid.wicket.components.text.LabelledRequiredTextField;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -41,7 +43,8 @@ public class DetailsPanel extends Panel {
 
             add(new LabelledRequiredTextField<String>("procedureCode", "label.procedure_code", new PropertyModel<String>(model, "procedureCode")));
 
-            add(new LabelledTextField<String>("identifier", "label.electronic_id", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier())));
+            add(new LabelledTextField<String>("identifier", "label.electronic_id", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier()))
+                    .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.electronic_id").getObject(), TipsyBehavior.Gravity.E)));
 
             add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())));
 

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.loto.ViewPrintProcedureDefMenuButton;
 import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
@@ -41,9 +42,12 @@ public class ProcedureDefinitionListPage extends LotoPage {
     public ProcedureDefinitionListPage(PageParameters params) {
         super(params);
 
-        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
-        add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
-        add(new BookmarkablePageLink<ProceduresListPage>("proceduresListLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId())));
+        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
+                .add(new TipsyBehavior(getString("message.procedure_definitions.active"), TipsyBehavior.Gravity.N)));
+        add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
+                .add(new TipsyBehavior(getString("message.procedure_definitions.previously_published"), TipsyBehavior.Gravity.N)));
+        add(new BookmarkablePageLink<ProceduresListPage>("proceduresListLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
+                .add(new TipsyBehavior(getString("message.procedures.completed_inprogress"), TipsyBehavior.Gravity.N)));
 
         listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupPlaceholderTag(true);
@@ -83,15 +87,18 @@ public class ProcedureDefinitionListPage extends LotoPage {
 
                 }.setVisible(procedureDefinition.getObject().getPublishedState().isPreApproval()));
 
-                item.add(new Link("copyProcedureDefLink") {
+                Link copyLink;
+                item.add(copyLink = new Link("copyProcedureDefLink") {
                     @Override public void onClick() {
                         ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(assetModel.getObject());
                         ProcedureDefinition copiedDefinition = procedureDefinitionService.copyProcedureDefinition(publishedDef, new ProcedureDefinition());
                         copiedDefinition.setPublishedState(PublishedState.DRAFT);
                         setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
                     }
-                }.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())
-                        && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED)));
+                });
+                copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())
+                        && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
+                copyLink.add(new TipsyBehavior(getString("message.procedure_definitions.copy"), TipsyBehavior.Gravity.N));
 
                 item.add(new ViewPrintProcedureDefMenuButton("print", procedureDefinition));
             }
