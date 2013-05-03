@@ -74,8 +74,10 @@ var imageEditor = (function() {
 				note=createNote();
 			}
 
+			// CAVEAT : must do these things AFTER event handling complete.
 			setTimeout(function() {
 				adjustNoteDirection(note);
+				doNote(note.find('input'));
 			},0);
 
 			return note;
@@ -94,7 +96,7 @@ var imageEditor = (function() {
 			//  <img.../>
 			//  <span class="note water readonly"/>
 			//
-			var loc = note.seralizeAnnotations()[0];   // X,Y will be in relative:  0...1
+			var loc = note.seralizeAnnotations(options.xPosition, options.yPosition)[0];   // X,Y will be in relative:  0...1
 			var type = note.attr('class');
 			var text = note.find('input').val();
 			var noteId = note.attr('id');
