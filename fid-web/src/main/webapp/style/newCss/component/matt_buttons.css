@@ -118,7 +118,7 @@ a.mattButtonBlue {
 	background: -webkit-linear-gradient(top, #4B8EFA 0%,#4888EE 100%);
 	background: -o-linear-gradient(top, #4B8EFA 0%,#4888EE 100%);
 	background: -ms-linear-gradient(top, #4B8EFA 0%,#4888EE 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#bababa', endColorstr='#ededed',GradientType=0 );
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4B8EFA', endColorstr='#4888EE',GradientType=0 );
 	background: linear-gradient(top, #4B8EFA 0%,#4888EE 100%);
 	color: #fff;
 }

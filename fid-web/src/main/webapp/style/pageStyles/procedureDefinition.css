@@ -93,6 +93,7 @@ h3 {
 	border-radius: 50%;
 	height: 18px;
 	width: 18px;
+	outline: none;
 }
 .navigation input[type=button].active {
 	background: #0099ff;
