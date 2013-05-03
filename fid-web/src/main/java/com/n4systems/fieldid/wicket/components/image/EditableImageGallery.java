@@ -21,6 +21,9 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
             @Override protected T getEditableImage() {
                 return getCurrentImage();
             }
+            @Override protected ImageAnnotation getImageAnnotation(Long id, Double x, Double y, String text, ImageAnnotationType type) {
+                return EditableImageGallery.this.getImageAnnotation(id,x,y,text,type);
+            }
             @Override protected ImageAnnotation getAnnotation() {
                 return EditableImageGallery.this.getAnnotation();
             }
@@ -30,22 +33,14 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
             @Override protected ImageAnnotationType getDefaultType() {
                 return EditableImageGallery.this.getDefaultType();
             }
-            @Override protected ImageAnnotation findImageAnnotation(Long id) {
-                for (T image:images.getObject()) {
-                    for (ImageAnnotation annotation:image.getAnnotations()) {
-                        if (isAnnotationForId(id, annotation)) {
-                            return annotation;
-                        }
-                    }
-                }
-                return null;
-            }
             @Override protected void processNote(T editableImage, ImageAnnotation annotation) {
                 super.processNote(editableImage, annotation);
                 EditableImageGallery.this.doLabel(editableImage, annotation);
             }
         }.withEditing());
     }
+
+    protected abstract ImageAnnotation getImageAnnotation(Long id, Double x, Double y, String text, ImageAnnotationType type);
 
     private boolean isAnnotationForId(Long id, ImageAnnotation annotation) {
         if (id==null) { // it's either a new one for this isolation point or an non-persisted one...

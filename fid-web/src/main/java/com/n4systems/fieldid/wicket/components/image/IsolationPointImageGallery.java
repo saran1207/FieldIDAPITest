@@ -47,12 +47,16 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
     protected void doLabel(ProcedureDefinitionImage image, ImageAnnotation annotation) {
         super.doLabel(image, annotation);
         Preconditions.checkState(annotation.getImage().equals(image));
-        model.getObject().setAnnotation(annotation);
+        getIsolationPoint().setAnnotation(annotation);
+    }
+
+    private IsolationPoint getIsolationPoint() {
+        return model.getObject();
     }
 
     @Override
     protected ImageAnnotation getAnnotation() {
-        return model.getObject().getAnnotation();
+        return getIsolationPoint().getAnnotation();
     }
 
     @Override
@@ -69,12 +73,12 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
 
     @Override
     protected ImageAnnotationType getDefaultType() {
-        return ImageAnnotationType.fromIsolationPointSourceType(model.getObject().getSourceType());
+        return ImageAnnotationType.fromIsolationPointSourceType(getIsolationPoint().getSourceType());
     }
 
     @Override
     protected String getDefaultText() {
-        return model.getObject().getIdentifier();
+        return getIsolationPoint().getIdentifier();
     }
 
     @Override
@@ -84,7 +88,24 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
 
     @Override
     protected Long getIntialImageIndex() {
-        ImageAnnotation annotation = model.getObject().getAnnotation();
+        ImageAnnotation annotation = getIsolationPoint().getAnnotation();
         return annotation!=null ? getIndexOfImage(annotation.getImage()) : null;
     }
+
+    @Override
+    protected ImageAnnotation getImageAnnotation(Long id, Double x, Double y, String text, ImageAnnotationType type) {
+        ImageAnnotation annotation = getIsolationPoint().getAnnotation();
+        if (annotation==null && id==null) {   // create new one.
+            annotation = new ImageAnnotation(x,y,text,type);
+            annotation.setTempId(System.currentTimeMillis());  // use this for non-persisted annotations.
+        }
+        Preconditions.checkState(annotation!=null, "couldn't find annotation with id " + id);
+
+        annotation.setX(x);
+        annotation.setY(y);
+        annotation.setText(text);
+        annotation.setType(type);
+        return annotation;
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.image;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.common.EditableImage;
@@ -95,30 +94,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
 
     protected abstract T getEditableImage();
 
-
-    private ImageAnnotation getImageAnnotation(Long id, Double x, Double y, String text, ImageAnnotationType type) {
-        ImageAnnotation annotation = findImageAnnotation(id);
-        if (annotation==null && id==null) {   // create new one.
-            annotation = new ImageAnnotation(x,y,text,type);
-            annotation.setTempId(System.currentTimeMillis());  // use this for non-persisted annotations.
-        }
-        Preconditions.checkState(annotation!=null, "couldn't find annotation with id " + id);
-
-        annotation.setX(x);
-        annotation.setY(y);
-        annotation.setText(text);
-        annotation.setType(type);
-        return annotation;
-    }
-
-    protected ImageAnnotation findImageAnnotation(Long id) {
-        for (ImageAnnotation value:getEditableImage().getAnnotations()) {
-            if (value.getId().equals(id)) {
-                return value;
-            }
-        }
-        return null;
-    }
+    protected abstract ImageAnnotation getImageAnnotation(Long id, Double x, Double y, String text, ImageAnnotationType type);
 
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
