@@ -38,6 +38,7 @@ public class ViewPrintProcedureDefMenuButton extends MenuButton<PrintOptions> {
 
     @Override
     protected WebMarkupContainer populateButton(String linkId) {
+        withAjax(); //So that the drop down menu doesn't open when you click the link, a bit of hack :-/
         return (WebMarkupContainer)getLink(linkId, PrintOptions.Normal);
     }
 
