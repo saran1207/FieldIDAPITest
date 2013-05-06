@@ -151,6 +151,7 @@ h3 {
 	resize: none;
 	padding: 5px;
 	font-size: 13px;
+    vertical-align: top;
 }
 /* chosen plugin overrides */
 .chzn-container {
@@ -402,7 +403,6 @@ h3 {
 .isolation-point-editor textarea {
 	height: 50px;
 	width: 242px;
-	margin-bottom: -10px;
 }
 .isolation-point-editor select {
     margin-left: 12px;
