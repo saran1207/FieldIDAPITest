@@ -242,4 +242,16 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     public void setUnlockedBy(User unlockedBy) {
         this.unlockedBy = unlockedBy;
     }
+
+    @Transient
+    public String getAssigneeName() {
+        // Used as a path_expression in reporting for column event_search_assignee
+        if (assignedGroup != null) {
+            return assignedGroup.getName();
+        } else if (assignee != null) {
+            return assignee.getFullName();
+        }
+        return null;
+    }
+
 }
