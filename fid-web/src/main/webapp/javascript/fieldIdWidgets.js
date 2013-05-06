@@ -170,7 +170,7 @@ var fieldIdWidgets = (function() {
 		$.each(options.images,function(index,value) {
 			$('#'+value.id).addAnnotations(
 				function(annotation) {return createNote(annotation);},
-				value.annotations[optionIndex],
+				value.annotations,
 				value );
 		});
 	}
