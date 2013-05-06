@@ -223,11 +223,13 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage{
                     ProcedureDefinitionSection section = item.getModelObject();
                     Button button = new AjaxButton("section") {
                         @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                            if(currentSection.equals(ProcedureDefinitionSection.Details)) {
-                                target.appendJavaScript("document.getElementById('detailsContinueLink').click();");
-                            } else {
-                                currentSection = item.getModelObject();
-                                sectionChanged(target);
+                            if(!currentSection.equals(item.getModelObject())) {
+                                if(currentSection.equals(ProcedureDefinitionSection.Details)) {
+                                    target.appendJavaScript("document.getElementById('detailsContinueLink').click();");
+                                } else {
+                                    currentSection = item.getModelObject();
+                                    sectionChanged(target);
+                                }
                             }
                         }
                         @Override protected void onError(AjaxRequestTarget target, Form<?> form) { }
