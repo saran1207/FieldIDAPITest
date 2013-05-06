@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.service.procedure;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserGroupService;
@@ -13,19 +15,19 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.persistence.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
     @Autowired private UserGroupService userGroupService;
     @Autowired private S3Service s3Service;
     @Autowired private DateService dateService;
+
+    private static final Logger logger=Logger.getLogger(ProcedureDefinitionService.class);
 
     public Boolean hasPublishedProcedureDefinition(Asset asset) {
         return persistenceService.exists(getPublishedProcedureDefinitionQuery(asset));
@@ -110,6 +112,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset());
         if (previousDefinition != null) {
             previousDefinition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
+            // TODO DD : should this use dateService.nowUTC() instead? confirm...
+            logger.error("need to check the date.   is it properly saved as UTC?");
             previousDefinition.setRetireDate(dateService.now().toDate());
             persistenceService.update(previousDefinition);
         }
@@ -147,66 +151,103 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         persistenceService.delete(procedureDefinition);
     }
 
-    public ProcedureDefinition copyProcedureDefinition(ProcedureDefinition from, ProcedureDefinition to) {
-        Preconditions.checkArgument(from != null && to != null, "can't use null procedure definitions when copying.");
-        to.setAsset(from.getAsset());
-        to.setTenant(from.getTenant());
-        to.setProcedureCode(from.getProcedureCode());
-        to.setElectronicIdentifier(from.getElectronicIdentifier());
-        to.setWarnings(from.getWarnings());
-        to.setDevelopedBy(from.getDevelopedBy());
-        to.setEquipmentNumber(from.getEquipmentNumber());
-        to.setEquipmentLocation(from.getEquipmentLocation());
-        to.setBuilding(from.getBuilding());
-        to.setEquipmentDescription(from.getEquipmentDescription());
+    public ProcedureDefinition cloneProcedureDefinition(ProcedureDefinition source) {
+        Preconditions.checkArgument(source != null, "can't use null procedure definitions when cloning.");
+        ProcedureDefinition to = new ProcedureDefinition();
+        to.setAsset(source.getAsset());
+        to.setTenant(source.getTenant());
+        to.setProcedureCode(source.getProcedureCode());
+        to.setElectronicIdentifier(source.getElectronicIdentifier());
+        to.setWarnings(source.getWarnings());
+        to.setDevelopedBy(source.getDevelopedBy());
+        to.setEquipmentNumber(source.getEquipmentNumber());
+        to.setEquipmentLocation(source.getEquipmentLocation());
+        to.setBuilding(source.getBuilding());
+        to.setEquipmentDescription(source.getEquipmentDescription());
         to.setPublishedState(PublishedState.DRAFT);
-        for(IsolationPoint isolationPoint: from.getIsolationPoints()) {
-            IsolationPoint copiedIsolationPoint = copyIsolationPoint(isolationPoint, new IsolationPoint(), true);
+
+        Map<String, ProcedureDefinitionImage> clonedImages = cloneImages(source,to);
+        to.setImages(Lists.newArrayList(clonedImages.values()));
+
+        for(IsolationPoint isolationPoint: source.getIsolationPoints()) {
+            IsolationPoint copiedIsolationPoint = cloneIsolationPoint(isolationPoint, clonedImages);
             to.getIsolationPoints().add(copiedIsolationPoint);
-            if(copiedIsolationPoint.getAnnotation() != null) {
-                // Set<Images>
-                ProcedureDefinitionImage originalImage = (ProcedureDefinitionImage) isolationPoint.getAnnotation().getImage();
-                ProcedureDefinitionImage copiedImage = (ProcedureDefinitionImage) copiedIsolationPoint.getAnnotation().getImage();
-                s3Service.copyProcedureDefImageToTemp(originalImage, copiedImage);
-                to.addImage(copiedImage);
-            }
         }
+
         return to;
     }
 
-    public IsolationPoint copyIsolationPoint(IsolationPoint from, IsolationPoint to) {
-        return copyIsolationPoint(from, to, false);
+    private IsolationPoint cloneIsolationPoint(IsolationPoint source, Map<String, ProcedureDefinitionImage> clonedImages) {
+        Preconditions.checkArgument(source != null , "can't use null isolation points when cloning.");
+
+        IsolationPoint isolationPoint = new IsolationPoint();
+        isolationPoint.setAnnotation(source.getAnnotation());
+        isolationPoint.setIdentifier(source.getIdentifier());
+        isolationPoint.setLocation(source.getLocation());
+        isolationPoint.setMethod(source.getMethod());
+        isolationPoint.setCheck(source.getCheck());
+        isolationPoint.setSourceType(source.getSourceType());
+        isolationPoint.setTenant(source.getTenant());
+        isolationPoint.setSourceText(source.getSourceText());
+        if(source.getDeviceDefinition() != null) {
+            isolationPoint.setDeviceDefinition(cloneIsolationDeviceDescription(source.getDeviceDefinition(), new IsolationDeviceDescription()));
+        }
+        if(source.getLockDefinition() != null) {
+            isolationPoint.setLockDefinition(cloneIsolationDeviceDescription(source.getLockDefinition(), new IsolationDeviceDescription()));
+        }
+        if(source.getAnnotation() != null) {
+            isolationPoint.setAnnotation(cloneImageAnnotation(source.getAnnotation(), clonedImages));
+        }
+        return isolationPoint;
     }
 
-    public IsolationPoint copyIsolationPoint(IsolationPoint from, IsolationPoint to, boolean isDeepCopy) {
-        Preconditions.checkArgument(from != null && to != null, "can't use null isolation points when copying.");
+    private IsolationDeviceDescription cloneIsolationDeviceDescription(IsolationDeviceDescription from, IsolationDeviceDescription to) {
+        Preconditions.checkArgument(from != null && to != null, "can't use null isolation deviceDescription when cloning.");
+        to.setFreeformDescription(from.getFreeformDescription());
+        to.setAssetType(from.getAssetType());
+        to.setAttributeValues(new ArrayList<InfoOptionBean>());
+        //TODO: Deal with copying the list later...currently not used.
+        //to.setAttributeValues(Lists.newArrayList(from.getAttributeValues()));
+        return to;
+    }
 
-        to.setAnnotation(from.getAnnotation());
-        to.setIdentifier(from.getIdentifier());
-        to.setLocation(from.getLocation());
-        to.setMethod(from.getMethod());
-        to.setCheck(from.getCheck());
-        to.setSourceType(from.getSourceType());
+    private ImageAnnotation cloneImageAnnotation(ImageAnnotation from, Map<String, ProcedureDefinitionImage> clonedImages) {
+        Preconditions.checkArgument(from != null, "can't use null isolation annotation when cloning.");
+
+        ImageAnnotation to = new ImageAnnotation();
         to.setTenant(from.getTenant());
-        to.setSourceText(from.getSourceText());
-        if(from.getDeviceDefinition() != null) {
-            to.setDeviceDefinition(copyIsolationDeviceDescription(from.getDeviceDefinition(), new IsolationDeviceDescription()));
-        }
-        if(from.getLockDefinition() != null) {
-            to.setLockDefinition(copyIsolationDeviceDescription(from.getLockDefinition(), new IsolationDeviceDescription()));
-        }
-        if(from.getAnnotation() != null) {
-            to.setAnnotation(copyImageAnnotation(from.getAnnotation(), new ImageAnnotation(), isDeepCopy));
-        }
-        Date now = dateService.now().toDate();
-        to.setCreated(now);
-        to.setModified(now);
+        to.setType(from.getType());
+        to.setText(from.getText());
+        to.setX(from.getX());
+        to.setY(from.getY());
 
+        ProcedureDefinitionImage image = clonedImages.get(from.getImage().getFileName());
+        image.addImageAnnotation(to);
+        return to;
+    }
+
+    private Map<String,ProcedureDefinitionImage> cloneImages(ProcedureDefinition from, ProcedureDefinition to) {
+        Map<String, ProcedureDefinitionImage> result = Maps.newHashMap();
+        for (ProcedureDefinitionImage image:from.getImages()) {
+            ProcedureDefinitionImage imageCopy = cloneEditableImage(image);
+            imageCopy.setProcedureDefinition(to);
+            result.put(image.getFileName(), imageCopy);
+            s3Service.copyProcedureDefImageToTemp(image, imageCopy);
+        }
+        return result;
+    }
+
+    private ProcedureDefinitionImage cloneEditableImage(ProcedureDefinitionImage from) {
+        Preconditions.checkArgument(from != null, "can't use null isolation annotation when cloning.");
+        ProcedureDefinitionImage to = new ProcedureDefinitionImage();
+        to.setTenant(from.getTenant());
+        to.setFileName(from.getFileName());
         return to;
     }
 
     /**
      * used to copy data backing wicket model. this result is re-attached and peristed.
+     * if you want to actually make a copy, use the cloning methods.
      */
     public IsolationPoint copyIsolationPointForEditing(IsolationPoint from, IsolationPoint to) {
         Preconditions.checkArgument(from != null && to != null, "can't use null isolation points when copying.");
@@ -227,37 +268,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return to;
     }
 
-    private IsolationDeviceDescription copyIsolationDeviceDescription(IsolationDeviceDescription from, IsolationDeviceDescription to) {
-        Preconditions.checkArgument(from != null && to != null, "can't use null isolation deviceDescription when copying.");
-        to.setFreeformDescription(from.getFreeformDescription());
-        to.setAssetType(from.getAssetType());
-        to.setAttributeValues(new ArrayList<InfoOptionBean>());
-        //TODO: Deal with copying the list later...
-        //to.setAttributeValues(Lists.newArrayList(from.getAttributeValues()));
-        return to;
-    }
 
-    private ImageAnnotation copyImageAnnotation(ImageAnnotation from, ImageAnnotation to, boolean isDeepCopy) {
-        Preconditions.checkArgument(from != null && to != null, "can't use null isolation annotation when copying.");
-        to.setTenant(from.getTenant());
-        to.setType(from.getType());
-        to.setText(from.getText());
-        to.setX(from.getX());
-        to.setY(from.getY());
-        // TODO DD : don't create new image if already existing.
-        if (!isDeepCopy) {
-            to.setImage(from.getImage());
-        } else {
-            to.setImage(copyEditableImage((ProcedureDefinitionImage) from.getImage(), new ProcedureDefinitionImage(), to));
-        }
-        return to;
-    }
 
-    private ProcedureDefinitionImage copyEditableImage(ProcedureDefinitionImage from, ProcedureDefinitionImage to, ImageAnnotation imageAnnotation) {
-        Preconditions.checkArgument(from != null && to != null, "can't use null isolation annotation when copying.");
-        to.setTenant(from.getTenant());
-        to.addImageAnnotation(imageAnnotation);
-        to.setFileName(from.getFileName());
-        return to;
-    }
 }

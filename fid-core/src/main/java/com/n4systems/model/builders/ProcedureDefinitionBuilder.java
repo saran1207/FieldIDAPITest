@@ -1,6 +1,7 @@
 package com.n4systems.model.builders;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.procedure.IsolationPoint;
@@ -11,6 +12,7 @@ import com.n4systems.model.user.User;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 
 public class ProcedureDefinitionBuilder extends EntityWithTenantBuilder<ProcedureDefinition> {
@@ -28,7 +30,7 @@ public class ProcedureDefinitionBuilder extends EntityWithTenantBuilder<Procedur
     private String equipmentDescription;
     private PublishedState publishedState = PublishedState.DRAFT;
     private List<IsolationPoint> isolationPoints = Lists.newArrayList();
-    private List<ProcedureDefinitionImage> images = Lists.newArrayList();
+    private Set<ProcedureDefinitionImage> images = Sets.newHashSet();
     private Date originDate;
     private Date retireDate;
     private User approvedBy;
@@ -52,18 +54,31 @@ public class ProcedureDefinitionBuilder extends EntityWithTenantBuilder<Procedur
         this.procedureCode = procedureCode;
     }
 
+    public ProcedureDefinitionBuilder withAsset(Asset asset) {
+        this.asset = asset;
+        return this;
+    }
+
+    public ProcedureDefinitionBuilder withIsolationPoints(List<IsolationPoint> isolationPoints) {
+        this.isolationPoints = isolationPoints;
+        images = Sets.newHashSet();
+        for (IsolationPoint isolationPoint:isolationPoints) {
+            if (isolationPoint.getAnnotation()!=null) {
+                images.add((ProcedureDefinitionImage) isolationPoint.getAnnotation().getImage());
+            }
+        }
+        return this;
+    }
 
     @Override
     public ProcedureDefinition createObject() {
         ProcedureDefinition procedureDefinition = assignAbstractFields(new ProcedureDefinition());
         procedureDefinition.setAsset(asset);
         procedureDefinition.setProcedureCode(procedureCode);
+        procedureDefinition.setIsolationPoints(isolationPoints);
+        procedureDefinition.setImages(Lists.newArrayList(images.iterator()));
         return procedureDefinition;
     }
 
-    public ProcedureDefinitionBuilder withAsset(Asset asset) {
-        this.asset = asset;
-        return this;
-    }
 }
 
