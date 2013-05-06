@@ -126,6 +126,7 @@ function toCombo(selectName, buttonName){
 			}
 
 			switch(key){
+                case  9:	// TAB
 				case 33:	// PAGE UP
 				case 34:	// PAGE DOWN
 				case 35:	// END

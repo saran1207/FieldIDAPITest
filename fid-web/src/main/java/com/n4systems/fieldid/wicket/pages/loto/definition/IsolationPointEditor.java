@@ -73,7 +73,7 @@ public class IsolationPointEditor extends Panel {
         form.add(deviceComboBox = new LabelledComboBox<String>("device", "label.device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription")){
             @Override
             protected IModel<List<String>> getChoices() {
-                return getPreConfiguredDevices(new PropertyModel(getDefaultModel(),"sourceType"));
+                return getPreConfiguredDevices(new PropertyModel(getIsolationPoint(),"sourceType"));
             }
         });
         deviceComboBox.addBehavior(new UpdateComponentOnChange());
