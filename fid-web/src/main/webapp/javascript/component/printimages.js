@@ -8,7 +8,7 @@ function setupPrintPage(options)
     //hide watermark if not PUBLISHED
     var state = options.state;
 
-    if (options.state != 'PUBLISHED') {
+    if (options.state == 'PUBLISHED') {
        $('.watermark').hide();
     }
 
@@ -83,6 +83,5 @@ function setupPrintPage(options)
     });
 
     $('#iso-table').hide();
-
 
 }
