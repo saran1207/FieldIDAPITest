@@ -36,18 +36,31 @@ var imageGallery = (function() {
 		}
 
 		function initUploadButton() {
-			if ($.browser.msie) return;   // just use the ugly default 'cause it can't handle this code. gives Access Denied.
-			// create a prettier submit button and delegate to the existing/underlying one.
 			var $originalSubmit = $('.image-gallery .add-image');
-			if ($originalSubmit.length==0) {
-				throw "can't find ADD button. should have class '.image-gallery .add-image'";
+			var $indicator= $('<img class="indicator" src="/fieldid/images/loader.gif"/>');
+			if ($.browser.msie) {
+				// for IE use the ugly default. gives Access Denied if i try to delegate from prettier button.
+				$originalSubmit.change(function() {
+					$originalSubmit.attr('disabled',true);
+					$indicator.addClass('ie').insertAfter($originalSubmit);
+				});
+				return;
+			} else {
+				// create a prettier submit button and delegate to the existing/underlying one.
+				if ($originalSubmit.length==0) {
+					throw "can't find ADD button. should have class '.image-gallery .add-image'";
+				}
+				$originalSubmit.hide();
+				var $newSubmit = $('<a>').html('Upload New Image').addClass('add-image').addClass('mattButton');
+				$originalSubmit.change(function() {
+					$indicator.insertAfter($newSubmit.parent());
+					$originalSubmit.attr('disabled',true);
+				});
+				$newSubmit.insertAfter($originalSubmit);
+				$newSubmit.click(function() {
+					$originalSubmit.click();
+				});
 			}
-			var $newSubmit = $('<a>').html('Upload New Image').addClass('add-image').addClass('mattButton');
-			$newSubmit.insertAfter($originalSubmit);
-			$newSubmit.click(function() {
-				$originalSubmit.click();
-			});
-			$originalSubmit.hide();
 		}
 
 		var edit = function(annotationOptions) {
