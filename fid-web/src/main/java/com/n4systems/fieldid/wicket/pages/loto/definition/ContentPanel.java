@@ -129,7 +129,7 @@ public class ContentPanel extends Panel {
             }
         }
         Long next = reservedSourceNumbers.size()>0 ? reservedSourceNumbers.lastEntry().getKey()+1L : 1L;
-        return sourceType.name() + " -" +  next;
+        return sourceType.name() + "-" +  next;
     }
 
     private Long parseNumber(String text) {

@@ -118,7 +118,7 @@ public class IsolationPointEditor extends Panel {
     protected Component createImageGallery(String id) {
         return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
             @Override protected void doneClicked(AjaxRequestTarget target) {
-                target.add(imagePanel);
+                target.add(imagePanel,form);
                 modal.close(target);
                 IsolationPointEditor.this.getDefaultModel().detach();
             }

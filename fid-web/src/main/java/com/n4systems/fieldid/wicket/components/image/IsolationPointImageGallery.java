@@ -44,10 +44,11 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
     }
 
     @Override
-    protected void doLabel(ProcedureDefinitionImage image, ImageAnnotation annotation) {
-        super.doLabel(image, annotation);
+    protected void doNote(ProcedureDefinitionImage image, ImageAnnotation annotation) {
+        super.doNote(image, annotation);
         Preconditions.checkState(annotation.getImage().equals(image));
         getIsolationPoint().setAnnotation(annotation);
+        getIsolationPoint().setIdentifier(annotation.getText());
     }
 
     private IsolationPoint getIsolationPoint() {

@@ -35,7 +35,7 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
             }
             @Override protected void processNote(T editableImage, ImageAnnotation annotation) {
                 super.processNote(editableImage, annotation);
-                EditableImageGallery.this.doLabel(editableImage, annotation);
+                EditableImageGallery.this.doNote(editableImage, annotation);
             }
         }.withEditing());
     }
@@ -94,7 +94,7 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
 
     protected abstract T createImage(String path);
 
-    protected void doLabel(T editableImage, ImageAnnotation annotation) { }
+    protected void doNote(T editableImage, ImageAnnotation annotation) { }
 
     protected abstract ImageAnnotation getAnnotation();
 
