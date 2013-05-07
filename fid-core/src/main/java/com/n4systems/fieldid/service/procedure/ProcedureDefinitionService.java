@@ -19,7 +19,10 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
@@ -159,7 +162,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setProcedureCode(source.getProcedureCode());
         to.setElectronicIdentifier(source.getElectronicIdentifier());
         to.setWarnings(source.getWarnings());
-        to.setDevelopedBy(source.getDevelopedBy());
+        to.setDevelopedBy(getCurrentUser());
         to.setEquipmentNumber(source.getEquipmentNumber());
         to.setEquipmentLocation(source.getEquipmentLocation());
         to.setBuilding(source.getBuilding());
