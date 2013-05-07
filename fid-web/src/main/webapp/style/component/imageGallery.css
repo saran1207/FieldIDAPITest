@@ -16,10 +16,11 @@
     overflow:visible;
 }
 
-    .galleria-container .add {
+    .galleria-container .add-image {
         z-index:5;
         position: absolute;
-        bottom:-36px;
+        position:absolute;
+        bottom:40px;
         left:10px;
     }
 

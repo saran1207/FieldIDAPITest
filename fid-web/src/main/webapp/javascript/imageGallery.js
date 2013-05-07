@@ -36,13 +36,14 @@ var imageGallery = (function() {
 		}
 
 		function initUploadButton() {
+			if ($.browser.msie) return;   // just use the ugly default 'cause it can't handle this code. gives Access Denied.
 			// create a prettier submit button and delegate to the existing/underlying one.
 			var $originalSubmit = $('.image-gallery .add-image');
 			if ($originalSubmit.length==0) {
 				throw "can't find ADD button. should have class '.image-gallery .add-image'";
 			}
-			var $newSubmit = $('<a>').html('Upload New Image').addClass('add').addClass('mattButton');
-			$newSubmit.appendTo($('#'+id + ' .galleria-container'));
+			var $newSubmit = $('<a>').html('Upload New Image').addClass('add-image').addClass('mattButton');
+			$newSubmit.insertAfter($originalSubmit);
 			$newSubmit.click(function() {
 				$originalSubmit.click();
 			});
