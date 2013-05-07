@@ -1,78 +1,108 @@
+/* WORK AROUND FOR EXISTING CSS
+-------------------------------*/
+#page {
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background: transparent;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+/* Location
+-------------------------------*/
 .locationContainer {
     display:block;
     float:right;
     padding-left:200px;
     color:#afafaf;
 }
+.locationContainer .locationDescription {
+    color:#666666;
+    padding-bottom:5px;
+}
 .locationContainer .googleMap {
     width:300px;
     height:170px;
 }
 
-.workflowState {
-    text-transform: uppercase;
-    color:#fff;
-    font-size:20px;
-    padding:16px 90px 16px 90px;
-    display:block;
-    float:left;
-}
 
+/* Work Flow state
+-------------------------------*/
+.workflowState {
+    float: left;
+    width:250px;
+    height: 48px;
+    font-size: 24px;
+    line-height: 48px;
+    text-align:center;
+    text-transform:uppercase;
+    color:#fff;  
+    font-weight: 200;
+}
 .LOCKED {
     background-color: #993300;
 }
-
 .UNLOCKED {
     background-color: #339900;
 }
 
-.locationContainer .locationDescription {
-    color:#666666;
-    padding-bottom:5px;
-}
-
-.timelineHeader {
-    clear:both;
-    display:block;
-    float:left;
-    font-size:18px;
-    overflow:visible;
-    width:500px;
-    padding-bottom:8px;
-}
-
-.timelineHeader .mattBar {
-    float:left;
-    padding-left:10px;
-}
-
+/* Procedure Details
+-------------------------------*/
 .procedureDetails {
     clear:left;
-    padding-top:10px;
+    padding-top:14px;
     width:500px;
+    height: 180px;
     float:left;
+    font-size: 13px;
+    line-height: 23px;
 }
-
 .procedureDetails .detailItem {
     display:block;
     clear:both;
-    margin-bottom:8px;
     float:left;
     overflow: visible;
+}
+
+.procedureDetails .detailItem:nth-child(4) {
+    margin-top: 25px;
 }
 
 .procedureDetails .left {
     float:left;
     text-align: right;
-    width:150px;
+    width:140px;
 }
 
 .procedureDetails .right {
     float:left;
-    text-align: left;
     width:150px;
-    padding-left:5px;
+    padding-left:8px;
 }
+
+
+/* Timeline
+-------------------------------*/
+.timelineHeader {
+    clear:both;
+    overflow:hidden;
+    padding-bottom:8px;
+}
+.timelineHeader h2 {
+    font-size: 24px;
+    line-height: 16px;
+    float: left;
+    color: #666;
+    font-weight: 200;
+    padding: 0 8px;
+}
+.timelineHeader .mattBar {
+    float:left;
+    padding-left:10px;
+}
+
+
 
 .media-image {
     position:relative;
