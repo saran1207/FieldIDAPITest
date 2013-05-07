@@ -384,6 +384,7 @@ h3 {
 }
 .isolation-point-editor .blank-slate {
 	padding-top: 60px;
+    margin-left:-165px;
 }
 
 /* Form styles */
@@ -421,7 +422,8 @@ h3 {
 	margin-top: 20px;
 }
 	.isolation-point-editor .label-button .mattButton {
-		float: none;
+		margin-left:80px;
+        float:left;
 	}
 .isolation-point-editor .buttons {
 	text-align: right;
@@ -436,6 +438,10 @@ h3 {
 	float: none;
 }
 
+
+.isolation-point-image {
+    margin-left:130px;
+}
 
 
 /* GALLERIA */

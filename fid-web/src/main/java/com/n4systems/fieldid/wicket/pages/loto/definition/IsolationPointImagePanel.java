@@ -28,14 +28,17 @@ public class IsolationPointImagePanel extends Panel {
 
     private final WebComponent image;
     private final WebMarkupContainer blankSlate;
+    private final WebMarkupContainer outer;
 
 
     public IsolationPointImagePanel(String id) {
         super(id);
         add(blankSlate = new WebMarkupContainer("blankSlate"));
-        WebMarkupContainer outer, container;
-        add(outer = new WebMarkupContainer("annotatedImage"));
-        outer.add(container =  new WebMarkupContainer("container"));
+        WebMarkupContainer annotatedImage, container;
+        add(annotatedImage = new WebMarkupContainer("annotatedImage"));
+        annotatedImage.add(outer = new WebMarkupContainer("outerContainer"));
+
+        outer.add(container = new WebMarkupContainer("container"));
 
         container.add(image = new WebComponent("image") {
             @Override protected void onInitialize() {
@@ -49,7 +52,7 @@ public class IsolationPointImagePanel extends Panel {
             }
         });
 
-        outer.add(new WebMarkupContainer("labelButton").add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.label_image").getObject(), TipsyBehavior.Gravity.N)));
+        annotatedImage.add(new WebMarkupContainer("labelButton").add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.label_image").getObject(), TipsyBehavior.Gravity.N)));
     }
 
     protected Model<String> getImageUrl() {
@@ -70,7 +73,7 @@ public class IsolationPointImagePanel extends Panel {
         super.onBeforeRender();
         boolean showBlankSlate = getDefaultModel().getObject()==null;
         blankSlate.setVisible(showBlankSlate);
-        image.setVisible(!showBlankSlate);
+        outer.setVisible(!showBlankSlate);
     }
 
     @Override
