@@ -38,7 +38,7 @@ public class ProcedureService extends FieldIdPersistenceService {
     public Procedure getOpenProcedure(Asset asset) {
         QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
         query.addSimpleWhere("asset", asset);
-        query.addSimpleWhere("workflowState", ProcedureWorkflowState.OPEN);
+        query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
         query.setLimit(1);
         return persistenceService.find(query);
     }

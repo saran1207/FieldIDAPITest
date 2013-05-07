@@ -107,3 +107,7 @@
 .media-image {
     position:relative;
 }
+
+.media-image .note {
+    font-size:13px;
+}

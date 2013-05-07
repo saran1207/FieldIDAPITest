@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -23,6 +24,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 public class PublishPanel extends Panel {
 
     @SpringBean private ProcedureDefinitionService procedureDefinitionService;
+    @SpringBean private ProcedureService procedureService;
     private String rejectionText;
     private IModel<ProcedureDefinition> model;
 
@@ -63,6 +65,8 @@ public class PublishPanel extends Panel {
                 public void onSubmit() {
                     if (model.getObject().getIsolationPoints().isEmpty()) {
                         error(getString("message.isolation_point_required"));
+                    } else if (procedureService.hasActiveProcedure(model.getObject().getAsset())) {
+                        error(getString("message.cant_publish_with_active_procedure"));
                     } else {
                         doPublish();
                     }

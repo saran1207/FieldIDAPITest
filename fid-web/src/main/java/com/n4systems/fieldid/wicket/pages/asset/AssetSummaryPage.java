@@ -179,7 +179,7 @@ public class AssetSummaryPage extends AssetPage {
     }
     
     private boolean hasUpcomingEventsOrProcedures(Asset asset) {
-        return !eventScheduleService.getAvailableSchedulesFor(asset).isEmpty() || procedureService.getOpenProcedure(asset) != null ;
+        return !eventScheduleService.getAvailableSchedulesFor(asset).isEmpty() || procedureService.hasActiveProcedure(asset);
     }
 
     private boolean hasAttachments(Asset asset) {

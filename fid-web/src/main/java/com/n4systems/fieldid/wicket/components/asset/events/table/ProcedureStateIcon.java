@@ -10,6 +10,8 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Arrays;
+
 public class ProcedureStateIcon extends Panel {
 
     private @SpringBean
@@ -21,7 +23,7 @@ public class ProcedureStateIcon extends Panel {
         Procedure procedure = procedureModel.getObject();
         ProcedureWorkflowState state = procedure.getWorkflowState();
         ContextImage image;
-        if(state.equals(ProcedureWorkflowState.OPEN)) {
+        if (Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES).contains(state)) {
             if(isPastDue(procedure)) {
                 add(image = new ContextImage("resultIcon", "images/loto-icon-overdue.png"));
                 image.add(new AttributeAppender("title", new FIDLabelModel("label.loto_open_assigned_overdue", procedure.getAssignedUserOrGroup().getDisplayName())));
@@ -34,6 +36,6 @@ public class ProcedureStateIcon extends Panel {
     }
 
     private boolean isPastDue(Procedure procedure) {
-        return procedure.getWorkflowState() == ProcedureWorkflowState.OPEN && dateService.isPastDue(procedure.getDueDate());
+        return Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES).contains(procedure.getWorkflowState()) && dateService.isPastDue(procedure.getDueDate());
     }
 }

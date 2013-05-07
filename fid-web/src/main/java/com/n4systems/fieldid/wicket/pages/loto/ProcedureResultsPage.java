@@ -60,9 +60,9 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         timelinesContainer.add(createLockingResultsSelector());
 
         if (currentTimelineDisplay == ProcedureWorkflowState.LOCKED) {
-            timelinesContainer.add(createTimelinePanel("resultsTimeline", lockResults, ProcedureWorkflowState.LOCKED));
+            timelinesContainer.add(createTimelinePanel("resultsTimeline", lockResults, ProcedureWorkflowState.LOCKED, "lockingTimeline"));
         } else {
-            timelinesContainer.add(createTimelinePanel("resultsTimeline", unlockResults, ProcedureWorkflowState.UNLOCKED));
+            timelinesContainer.add(createTimelinePanel("resultsTimeline", unlockResults, ProcedureWorkflowState.UNLOCKED, "unlockingTimeline"));
         }
 
         add(new Label("assetTypeName", ProxyModel.of(procedureModel, on(Procedure.class).getAsset().getType().getName())));
@@ -108,8 +108,10 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
         return locationContainer;
     }
 
-    private Component createTimelinePanel(String id, IModel<List<IsolationPointResult>> results, final ProcedureWorkflowState state) {
-        return new TimelinePanel<IsolationPointResult>(id, results, new IsolationPointResultTimePointProvider(state));
+    private Component createTimelinePanel(String id, IModel<List<IsolationPointResult>> results, final ProcedureWorkflowState state, String cssClass) {
+        TimelinePanel<IsolationPointResult> components = new TimelinePanel<IsolationPointResult>(id, results, new IsolationPointResultTimePointProvider(state));
+        components.add(new AttributeAppender("class", cssClass));
+        return components;
     }
 
     private Component createLockingResultsSelector() {

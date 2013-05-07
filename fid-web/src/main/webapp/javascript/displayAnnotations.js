@@ -2,7 +2,7 @@ var defaults={};
 
 function createLabel(annotation) {
     var value = annotation.text;
-    var direction = annotation.x < .5 ? 'arrow-left' : 'arrow-right';
+    var direction =  annotation.x < .5 ? 'arrow-left' : 'arrow-right';
     var type = annotation.cssStyle;
     var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(type);
     var icon = $('<span/>').addClass('icon').appendTo(span);
@@ -11,24 +11,35 @@ function createLabel(annotation) {
     return span;
 }
 
+var lockingImagesAnnotated = false;
+var unlockingImagesAnnotated = false;
+
 function annotateLockingImages() {
-    $('.lockingTimeline div.media-image').each(
-        function(index, element) {
-            $(element).addAnnotations(
-                function(annotation) {
-                    return createLabel(annotation);
-                }, [ isolationAnnotations[index] ], defaults);
-        });
+    if (!lockingImagesAnnotated) {
+        lockingImagesAnnotated = true;
+        $('.lockingTimeline div.media-image').each(
+            function(index, element) {
+                var currentAnnotation = isolationAnnotations[index];
+                $(element).addAnnotations(
+                    function(annotation) {
+                        return createLabel(annotation);
+                    }, [ currentAnnotation ], { xPosition:"left" } );
+            });
+    }
 }
 
 function annotateUnlockingImages() {
-    $('.unlockingTimeline div.media-image').each(
-        function(index, element) {
-            $(element).addAnnotations(
-                function(annotation) {
-                    return createLabel(annotation);
-                }, [ isolationAnnotations[isolationAnnotations.length - 1 - index] ], defaults);
-        });
+    if (!unlockingImagesAnnotated) {
+        unlockingImagesAnnotated = true;
+        $('.unlockingTimeline div.media-image').each(
+            function(index, element) {
+                var currentAnnotation = isolationAnnotations[isolationAnnotations.length - 1 - index];
+                $(element).addAnnotations(
+                    function(annotation) {
+                        return createLabel(annotation);
+                    }, [ currentAnnotation ], { xPosition:"left" });
+            });
+    }
 }
 
 
@@ -36,23 +47,23 @@ var lockTimeoutCheck = null;
 var unlockTimeoutCheck = null;
 
 function waitForLockingTimelineToLoadThenAnnotate() {
-    lockTimeoutCheck = window.setInterval(annotateLockAfterLoad, 200);
+    lockTimeoutCheck = window.setInterval(annotateLockAfterLoad, 100);
 }
 
 function waitForUnlockingTimelineToLoadThenAnnotate() {
-    unlockTimeoutCheck = window.setInterval(annotateUnlockAfterLoad, 200);
+    unlockTimeoutCheck = window.setInterval(annotateUnlockAfterLoad, 100);
 }
 
 function annotateLockAfterLoad() {
-    if ($('.lockingTimeline div.media-image').size() > 0) {
-        annotateLockingImages();
+    if ($('.lockingTimeline div.media-image img').size() > 0) {
+        $('.lockingTimeline div.media-image img').load(function() { annotateLockingImages() });
         window.clearInterval(lockTimeoutCheck);
     }
 }
 
 function annotateUnlockAfterLoad() {
-    if ($('.unlockingTimeline div.media-image').size() > 0) {
-        annotateUnlockingImages();
+    if ($('.unlockingTimeline div.media-image img').size() > 0) {
+        $('.unlockingTimeline div.media-image img').load(function() { annotateUnlockingImages() } );
         window.clearInterval(unlockTimeoutCheck);
     }
 }
