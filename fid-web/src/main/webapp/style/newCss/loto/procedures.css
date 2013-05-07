@@ -58,7 +58,7 @@
 /* edit, print, view, copy buttons */
 .action-buttons > div,
 .action-buttons > .mattButton {
-    margin-right: 4px;
+    margin-left: 4px;
 }
     .action-buttons .mattButton img {
         vertical-align: middle;
@@ -80,6 +80,12 @@
     .action-buttons .menu-button.edit .menu-items {
         left: -4%;
     }
+
+    .menu-button.view-print-btn {
+        width: 112px;
+        margin-left: 0;
+    }
+    
     
 
 
