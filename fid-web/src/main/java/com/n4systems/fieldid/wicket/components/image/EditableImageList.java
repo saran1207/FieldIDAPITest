@@ -12,7 +12,7 @@ import java.util.List;
 public class EditableImageList<T extends EditableImage> extends ImageList<T> {
 
     public EditableImageList(String id, IModel<List<T>> imageModel) {
-        super(id,imageModel);
+        super(id,new FilteredImageListModel<T>(imageModel));
     }
 
     @Override

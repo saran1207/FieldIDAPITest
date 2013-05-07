@@ -42,19 +42,6 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
 
     protected abstract ImageAnnotation getImageAnnotation(Long id, Double x, Double y, String text, ImageAnnotationType type);
 
-    private boolean isAnnotationForId(Long id, ImageAnnotation annotation) {
-        if (id==null) { // it's either a new one for this isolation point or an non-persisted one...
-           if (annotation.getId()==null && annotation.getTempId()==null) {
-               return true;
-           }
-        } else if (id.equals(annotation.getId())) {
-            return true;
-        } else if (id!=null && annotation.getId()==null && id.equals(annotation.getTempId())) {
-            return true;
-        }
-        return false;
-    }
-
     protected ImageAnnotationType getDefaultType() {
         return ImageAnnotationType.getDefault();
     }
