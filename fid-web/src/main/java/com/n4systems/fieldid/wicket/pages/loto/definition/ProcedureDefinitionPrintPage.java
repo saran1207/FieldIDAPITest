@@ -55,6 +55,8 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         add(new PrintImages("images",model));
         add(new PrintList("list",model));
         add(new PrintFooter("footer",model));
+
+
     }
 
     private PrintOptions initMode() {
@@ -89,18 +91,20 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
 
     private String getJsonPrintOptions() {
-        return renderer.render(new JsonPrintOption(String.valueOf(mode.getSpacing())));
+        return renderer.render(new JsonPrintOption(String.valueOf(mode.getSpacing()),  model.getObject().getPublishedState().getName()));
     }
 
 
     class JsonPrintOption {
 
         String printOption;
+        String state;
 
         JsonPrintOption () {}
 
-        JsonPrintOption (String printOption) {
+        JsonPrintOption (String printOption, String state) {
             this.printOption = printOption;
+            this.state = state;
         }
 
     }

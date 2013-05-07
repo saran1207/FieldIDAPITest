@@ -40,6 +40,11 @@ h3 {
 		margin-left: 5px;
 	}
 
+.printpage {
+    position: relative;
+
+}
+
 .watermark {
 	position: absolute;
 	top: 30px;
@@ -225,11 +230,11 @@ td.revision > span {
 
 /* image list
 ------------------------------------*/
-.image-list #print-images-container > ul  {
+.image-list #print-images-container > #printpage > ul  {
 	width: 100%!important; /* can this be done in js instead? */
 	text-align: center;
 }
-.image-list #print-images-container > ul  >li {
+.image-list #print-images-container > #printpage > ul  >li {
 	background: transparent;
 	list-style-type: none;
 	margin: 10px 20px;
@@ -244,6 +249,7 @@ td.revision > span {
 	font-size: 14px;
 	margin: 0;
 	padding: 0;
+    z-index: 1;
 }
 .isolation-point-table li {
 	background-color: #fff;

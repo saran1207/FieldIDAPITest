@@ -12,6 +12,7 @@
     overflow: hidden;
     width:9000px;  /*to be overridden via javascript */
 }
+
 .image-list > div > ul > li {
     margin-right: 6px;
     float:left;
@@ -29,3 +30,18 @@
         cursor: pointer;
         padding: 8px 0 8px 10px;
     }
+.image-list > div > #printpage > ul > li {
+    margin-right: 6px;
+    float:left;
+    border: 1px dashed #ddd;
+    background-color: #f8f8f8;
+    text-align: center;
+    width: 238px;
+    height: 200px;
+}
+.image-list > div > #printpage > ul {
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    width:9000px;  /*to be overridden via javascript */
+}
