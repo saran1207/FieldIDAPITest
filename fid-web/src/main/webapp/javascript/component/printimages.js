@@ -15,7 +15,7 @@ function setupPrintPage(options)
     var $page = $('<div class="printpage" id="printpage">');
     $page.appendTo($('#print-images-container'));
 
-    var $wmark = $('.watermark').clone();
+    //var $wmark = $('.watermark').clone();
 
 //  var isolationPointSize = 45;  //  or 75 or 110 depending on setting.   use options.spacing to get this value.
     var isolationPointSize = parseInt(options.printOption);
@@ -45,7 +45,7 @@ function setupPrintPage(options)
             //$ul.appendTo($('#print-images-container'));
 
             $ul.appendTo($page);
-            $wmark.clone().appendTo($hclone);
+            //$wmark.clone().appendTo($hclone);
 
 //        } else {
 //
@@ -86,7 +86,7 @@ function setupPrintPage(options)
             $ulI = $('<ul class="isolation-point-table"></ul>');
             $heading.clone().appendTo($ulI);
             $ulI.appendTo($pagei);
-            $wmark.clone().appendTo($cheader);
+            //$wmark.clone().appendTo($cheader);
 
         }
        $(value).appendTo($ulI);

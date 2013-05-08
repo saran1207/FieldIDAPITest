@@ -61,12 +61,17 @@ h3 {
 .procedure-print-container {
 	min-width: 1000px;
 	max-width: 1024px;
-	margin: auto;
+	margin: 0 auto 100px;
 	position: relative;
 }
 
 .header {
 	padding-bottom: 20px;
+	margin-top: 150px;
+	position: relative;
+}
+.header:first-child {
+	margin-top: 0;
 }
 
 
@@ -314,6 +319,7 @@ td.revision > span {
 @media print { 
 	.procedure-print-container {
 		width: 100%;
+		margin-bottom: 0;
 	}
 
 	/* add this class to any element that needs to be printed on the next page */
@@ -323,6 +329,7 @@ td.revision > span {
 	/* printed page will always break before the header */
 	.header {
 		page-break-before: always;
+		margin-top: 0px;
 	}
 	/* page will not break inside a list item */
 	.isolation-point-table li {
