@@ -83,9 +83,9 @@ public class IsolationPointEditor extends Panel {
 
         form.add(new TextField("lock", new PropertyModel(getDefaultModel(),"lockDefinition.freeformDescription")));
 
-        form.add(new TextField("location"));
-        form.add(new TextArea("check"));
-        form.add(new TextArea("method"));
+        form.add(new TextField("location").setLabel(new FIDLabelModel("label.location")).setRequired(true));
+        form.add(new TextArea("check").setLabel(new FIDLabelModel("label.check")).setRequired(true));
+        form.add(new TextArea("method").setLabel(new FIDLabelModel("label.method")).setRequired(true));
 
         form.add(imagePanel = new IsolationPointImagePanel("annotation").add(createEditClickBehavior()));
 
