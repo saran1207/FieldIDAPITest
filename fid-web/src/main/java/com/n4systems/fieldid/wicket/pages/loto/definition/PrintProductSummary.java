@@ -90,8 +90,8 @@ public class PrintProductSummary extends Panel {
 
             User user = securityContext.getUserSecurityFilter().getUser();
 
-            // dte = model.getObject().getOriginDate();
-            dte = model.getObject().getModified();
+            dte = model.getObject().getOriginDate();
+            //dte = model.getObject().getModified();
 
 
             GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
