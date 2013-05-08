@@ -23,6 +23,7 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     private @SpringBean PersistenceService persistenceService;
     protected @SpringBean JsonRenderer renderer;
 
+
     private IModel<ProcedureDefinition> model;
 
     private PrintOptions mode = PrintOptions.Normal;
@@ -76,11 +77,7 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         response.renderCSSReference("style/pageStyles/procedureDefinitionPrint.css");
 
         response.renderJavaScriptReference("javascript/component/printimages.js");
-        //setupPrintPage(id,{imageCount:6,pointCount:3});
-
-        // response.renderOnDomReadyJavaScript(String.format(INIT_CALENDAR_JS, getJsVariableName(), getMarkupId(), getJsonMonthlyWorkSummary(), behavior.getCallbackUrl()));
         response.renderOnDomReadyJavaScript("setupPrintPage("+ getJsonPrintOptions() +")");
-
     }
 
 

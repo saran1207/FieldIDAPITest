@@ -49,8 +49,7 @@ function setupPrintPage(options)
         }
         $(value).clone().appendTo($ul);
     });
-    $('#print-images').hide();    // delete this element after.
-
+     $('#print-images').remove();    // delete this element after.
 
 //  var isolationPointSize = 45;  //  or 75 or 110 depending on setting.   use options.spacing to get this value.
     var $pagei = $('<div class="printpage" id="printpage">');

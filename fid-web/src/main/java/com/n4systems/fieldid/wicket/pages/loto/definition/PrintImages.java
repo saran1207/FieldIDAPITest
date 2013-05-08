@@ -17,6 +17,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
@@ -26,6 +27,9 @@ public class PrintImages extends Panel {
 
     protected @SpringBean com.n4systems.fieldid.service.amazon.S3Service s3Service;
     protected @SpringBean JsonRenderer renderer;
+
+    private static final String INIT_JS = "fieldIdWidgets.annotate('%s');";
+    private List<String> imageMarkupIds = new ArrayList<String>();
 
     public PrintImages(String id, final IModel<ProcedureDefinition> model) {
         super(id,new PropertyModel(model,"images"));
@@ -49,7 +53,10 @@ public class PrintImages extends Panel {
             @Override
             protected void populateItem(ListItem<ProcedureDefinitionImage> item) {
                 item.getDefaultModelObject();
-                item.add(new ExternalImage("image", getImageUrl(item)));
+                ExternalImage image = new ExternalImage("image", getImageUrl(item));
+                image.setOutputMarkupId(true);
+                imageMarkupIds.add(image.getMarkupId());
+                item.add(image);
             }
         });
 
@@ -63,20 +70,40 @@ public class PrintImages extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
+        response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
+        response.renderJavaScriptReference("javascript/jquery.annotate.js");
+
+        response.renderCSSReference("style/component/annotated-image.css");
+
+
 
        List<ProcedureDefinitionImage> images = (List<ProcedureDefinitionImage>) getDefaultModel().getObject();
 
         String jsonStr = "";
-        List<AnnotatedImage> anns = new ArrayList<AnnotatedImage>();
+        List<AnnotatedImage> annotatedImages = new ArrayList<AnnotatedImage>();
 
+        Iterator<String> imageIdIterator = imageMarkupIds.iterator();
         for(ProcedureDefinitionImage image: images) {
-            anns.add(new AnnotatedImage(image.getId(), image.getAnnotations()));
+            annotatedImages.add(new AnnotatedImage(imageIdIterator.next(), convertAnnotations(image.getAnnotations())));
         }
 
-        if (null != anns && anns.size() > 0) {
-            jsonStr = renderer.render(anns);
-            // response.renderOnLoadJavaScript("alert('" + jsonStr + "')");
+        if (null != annotatedImages && annotatedImages.size() > 0) {
+            jsonStr = renderer.render(new ImageList(annotatedImages));
+
+            response.renderOnLoadJavaScript("fieldIdWidgets.annotate(" + jsonStr + ");");
+
+           // response.renderOnDomReadyJavaScript("fieldIdWidgets.annotate('" + jsonStr + "');");
+           // response.renderOnDomReadyJavaScript("fieldIdWidgets.createMenuButton('"+getMarkupId()+"',"+jsonRenderer.render(new MenuButtonOptions())+");");
+
         }
+    }
+
+    private List<Annotation> convertAnnotations(List<ImageAnnotation> annotations) {
+        List<Annotation> convertedAnnotations =  new ArrayList<Annotation>();
+        for (ImageAnnotation annotation : annotations) {
+            convertedAnnotations.add(new Annotation(annotation));
+        }
+        return convertedAnnotations;
     }
 
     private void addTestImages(List<ProcedureDefinitionImage> images) {
@@ -97,16 +124,52 @@ public class PrintImages extends Panel {
 
     class AnnotatedImage {
 
-     Long wid;
-     List<ImageAnnotation> annotations = Lists.newArrayList();
+     String id;
+     List<Annotation> annotations = Lists.newArrayList();
 
         AnnotatedImage() {}
 
-        AnnotatedImage(Long wid, List<ImageAnnotation> annotations) {
-            this.wid = wid;
+        AnnotatedImage(String id, List<Annotation> annotations) {
+            this.id = id;
             this.annotations = annotations;
         }
 
+    }
+
+    class ImageList {
+
+        public List<AnnotatedImage> images = Lists.newArrayList();
+
+        ImageList() {}
+
+        ImageList(List<AnnotatedImage> images) {
+            this.images = images;
+        }
+
+    }
+
+    class Options {
+
+        ImageList options = null;
+
+        Options(ImageList options) {
+            this.options = options;
+        }
+
+    }
+
+    class Annotation {
+        Double x;
+        Double y;
+        String text;
+        String cssStyle;
+
+        Annotation(ImageAnnotation imageAnnotation) {
+            x = imageAnnotation.getX();
+            y = imageAnnotation.getY();
+            text = imageAnnotation.getText();
+            cssStyle = imageAnnotation.getType().getCssClass();
+        }
     }
 
 }

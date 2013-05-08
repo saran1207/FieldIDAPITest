@@ -136,7 +136,7 @@ var fieldIdWidgets = (function() {
 	//	------------------------------------------------------------------------------------------------------------
 
 	function createNote(annotation) {
-		var value = annotation?annotation.text:options.text;
+      	var value = annotation?annotation.text:options.text;
 		var direction = annotation.x < .5 ? 'arrow-left' : 'arrow-right';
 		var type = annotation.cssStyle ? annotation.cssStyle : options.type;
 		var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(type);
@@ -168,10 +168,11 @@ var fieldIdWidgets = (function() {
 	var annotate = function(options) {
 
 		$.each(options.images,function(index,value) {
-			$('#'+value.id).addAnnotations(
+
+			$('#'+value.id).parent().addAnnotations(
 				function(annotation) {return createNote(annotation);},
 				value.annotations,
-				value );
+                { xPosition:"left"} );
 		});
 	}
 
