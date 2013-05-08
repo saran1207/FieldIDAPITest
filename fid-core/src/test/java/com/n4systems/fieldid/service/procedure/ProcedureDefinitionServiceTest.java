@@ -1,4 +1,3 @@
-/*
 package com.n4systems.fieldid.service.procedure;
 
 import com.google.common.collect.Lists;
@@ -13,14 +12,17 @@ import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.procedure.PublishedState;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.easymock.EasyMock.isA;
+import static com.n4systems.model.builders.UserBuilder.aUser;
+import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -33,8 +35,14 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
     @TestMock private S3Service s3Service;
 
 
+    @Before
+    public void setup() {
+        expect(securityContext.getUserSecurityFilter()).andReturn(new UserSecurityFilter(aUser().createObject()));
+        expect(persistenceService.find(anyObject(Class.class), anyLong())).andReturn(null);
+        replay(securityContext, persistenceService);
+    }
 
-    //@Test
+    @Test
     public void test_cloneProcedureDefinition_empty() {
 
         ProcedureDefinition source = ProcedureDefinitionBuilder.aProcedureDefinition().build();
@@ -54,7 +62,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
         verifyTestMocks();
     }
 
-    //@Test
+    @Test
     public void test_cloneProcedureDefinition_withIsolationPoints() {
         List<IsolationPoint> isolationPoints = Lists.newArrayList(
                 IsolationPointBuilder.anIsolationPoint().withIdentifer("A").build(),
@@ -71,7 +79,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
         }
     }
 
-    //@Test
+    @Test
     public void test_cloneProcedureDefinition_withAnnotations() {
         ImageAnnotation annotation = ImageAnnotationBuilder.anImageAnnotation().withText("hello").withX(.1).withY(.2).build();
         List<IsolationPoint> isolationPoints = Lists.newArrayList(
@@ -106,4 +114,3 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
         assertEquals(expected.getMethod(), actual.getMethod());
     }
 }
-*/
