@@ -163,7 +163,7 @@ h3 {
 /* BUTTON STYLES 
 -----------------*/
 .buttons {
-	padding: 10px 0;
+	padding: 5px 0 20px;
 	float: right;
 }
 	.buttons a.mattButton {
@@ -174,7 +174,7 @@ h3 {
 **********************************************************/
 .procedure-wrapper .details {
 	padding: 28px;
-	overflow: hidden;
+	min-height: 375px;
 }
 
 .tooltip-label, .tooltip-label label {
@@ -189,7 +189,7 @@ h3 {
 .procedure-wrapper .content {
 	padding: 0 12px;
 	position: relative;
-	overflow: hidden;
+	/*overflow: hidden;*/
 	padding-bottom: 28px;
 	min-height: 550px;
 }
@@ -333,20 +333,20 @@ h3 {
 .isolation-point-editor {
 	width: 98.7%;
 	position: absolute;
-	/*background: #f8f8f8;*/
 	background: #fff;
 	z-index: 10;
-	height: 97.5%;
+	height: 114%;
 	-webkit-box-shadow: 0px 2px 4px 0px #CCC;
 	box-shadow: 0px 2px 4px 0px #CCC;
 	border: 1px solid #ccc;
-	top: 0;
+	top: -91px;
 	margin-left:100%;
 }
 
 .isolation-point-editor .title {
 	padding: 25px 130px;
 	background: no-repeat 52px 22px;
+	margin-top: 55px;
 }
 .isolation-point-editor .title.electrical {
     background-image: url(/fieldid/images/loto/electrical-full.png);
@@ -429,7 +429,7 @@ h3 {
 	width: 96%;
 	padding: 20px;
 	position: absolute;
-	bottom: 0;
+	top: 0;
 	clear: both;
 }
 .isolation-point-editor .buttons a {
