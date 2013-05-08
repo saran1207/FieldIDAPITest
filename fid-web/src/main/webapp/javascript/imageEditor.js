@@ -31,7 +31,7 @@ var imageEditor = (function() {
 			var icon = $('<span/>').addClass('icon').appendTo(span);
 			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');
 
-			editor.css('width',(editor.val().length + 1) * 6 + 'px');
+			editor.css('width','30px');
 
 			if (options.editable) {
 
@@ -42,7 +42,7 @@ var imageEditor = (function() {
 
 				editor.keypress(function(e) {
 					// TODO DD : replace this with exact font --> pixel size measuring.
-					this.style.width = Math.max(12,(this.value.length + 1) * 6) + 4 + 'px';
+					this.style.width = '30px'; //Math.min(12,(this.value.length + 1) * 6) + 4 + 'px';
 				});
 
 				editor.blur(function(e) {

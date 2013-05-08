@@ -24,13 +24,16 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+
+
 public class ProcedureDefinitionService extends FieldIdPersistenceService {
+
+    private static final Logger logger=Logger.getLogger(ProcedureDefinitionService.class);
 
     @Autowired private UserGroupService userGroupService;
     @Autowired private S3Service s3Service;
     @Autowired private DateService dateService;
 
-    private static final Logger logger=Logger.getLogger(ProcedureDefinitionService.class);
 
     public Boolean hasPublishedProcedureDefinition(Asset asset) {
         return persistenceService.exists(getPublishedProcedureDefinitionQuery(asset));
@@ -256,6 +259,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         Preconditions.checkArgument(from != null && to != null, "can't use null isolation points when copying.");
 
         to.setId(from.getId());
+        // normalize isolation point id === annotation text.
+        if (from.getAnnotation()!=null) {
+            from.getAnnotation().setText(from.getIdentifier());
+        }
         to.setAnnotation(from.getAnnotation());
         to.setIdentifier(from.getIdentifier());
         to.setLocation(from.getLocation());
