@@ -24,7 +24,7 @@ function setupPrintPage(options)
     var $ul = $('<ul></ul>');
    // $ul.appendTo($('#print-images-container'));
     $ul.appendTo($('.printpage'));
-    $wmark.appendTo($('.printpage'));
+  //  $wmark.appendTo($('.printpage'));
 
 
     $('#print-images li').each(function(index,value) {
@@ -37,19 +37,29 @@ function setupPrintPage(options)
 
             $page = $('<div class="printpage" id="printpage">');
             $page.appendTo($('#print-images-container'));
-            $header.clone().insertAfter($ul);
+            var $hclone = $header.clone()
+            $hclone.insertAfter($ul);
 
             pagePixelCount = 0;
             $ul = $('<ul></ul>');
             //$ul.appendTo($('#print-images-container'));
 
             $ul.appendTo($page);
-            $wmark.clone().appendTo($page);
+            $wmark.clone().appendTo($hclone);
 
+//        } else {
+//
+//            var $hclone = $header.clone()
+//            $hclone.insertAfter($ul);
+//            $wmark.clone().appendTo($hclone);
         }
+
+
         $(value).clone().appendTo($ul);
     });
      $('#print-images').remove();    // delete this element after.
+
+
 
 //  var isolationPointSize = 45;  //  or 75 or 110 depending on setting.   use options.spacing to get this value.
     var $pagei = $('<div class="printpage" id="printpage">');
@@ -69,13 +79,14 @@ function setupPrintPage(options)
             $pagei = $('<div class="printpage" id="printpage">');
             $pagei.appendTo($('#print-isolation-points-list'));
 
-            $header.clone().insertAfter($ulI);
+            var $cheader = $header.clone();
+            $cheader.insertAfter($ulI);
 
             pagePixelCount = 0;
             $ulI = $('<ul class="isolation-point-table"></ul>');
             $heading.clone().appendTo($ulI);
             $ulI.appendTo($pagei);
-            $wmark.clone().appendTo($pagei);
+            $wmark.clone().appendTo($cheader);
 
         }
        $(value).appendTo($ulI);
