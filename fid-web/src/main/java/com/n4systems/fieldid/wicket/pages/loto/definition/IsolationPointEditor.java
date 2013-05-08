@@ -45,6 +45,7 @@ public class IsolationPointEditor extends Panel {
     private final ProcedureDefinition procedureDefinition;
     private FIDFeedbackPanel feedbackPanel;
     private Component imagePanel;
+    private RequiredTextField sourceID;
 
     public IsolationPointEditor(String id, ProcedureDefinition procedureDefinition) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
@@ -65,7 +66,8 @@ public class IsolationPointEditor extends Panel {
 
         add(form = new Form("form"));
 
-        form.add(new RequiredTextField("identifier"));
+        form.add(sourceID = new RequiredTextField("identifier"));
+        sourceID.setOutputMarkupId(true);
         form.add(new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<String>(getDefaultModel(), "electronicIdentifier"))
                 .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id").getObject(), TipsyBehavior.Gravity.N)));
         form.add(new TextField("sourceText"));
@@ -118,7 +120,7 @@ public class IsolationPointEditor extends Panel {
     protected Component createImageGallery(String id) {
         return new IsolationPointImageGallery(id,procedureDefinition, (IModel<IsolationPoint>) getDefaultModel()) {
             @Override protected void doneClicked(AjaxRequestTarget target) {
-                target.add(imagePanel,form);
+                target.add(imagePanel, sourceID);
                 modal.close(target);
                 IsolationPointEditor.this.getDefaultModel().detach();
             }
