@@ -45,14 +45,17 @@ h3 {
 
 }
 
+.procedure-print-container > .watermark {
+	display: none;
+}
 .watermark {
 	position: absolute;
-	top: 30px;
-	left: 160px;
 	z-index: 100;
+	top: 60px;
+	left: 200px;
 }
 	.watermark img {
-		width: 700px;
+		max-width: 700px;
 	}
 
 .procedure-print-container {
