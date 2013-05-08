@@ -464,16 +464,16 @@ h3 {
 }
 .publish .buttons {
 	float: none;
-	overflow: auto;
-	width: 210px;
-	margin: 0 auto;
+	text-align: center;
 }
 .publish-message {
-	font-size:15px;
+	font-size: 15px;
 	color: #999;
 }
 .publish .buttons .mattButton {
-    margin-top:4px;
+    float: none;
+    display: inline-block;
+    margin: 0 5px;
 }
 
 .publish .orCancel {
