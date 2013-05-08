@@ -76,7 +76,7 @@ public class DateService extends FieldIdPersistenceService {
         return new DateTime(DateTimeZone.UTC);
     }
 
-    public DateTime now() {
+    public DateTime nowInUsersTimeZone() {
         return new DateTime(DateTimeZone.forTimeZone(getUserTimeZone()));
     }
 

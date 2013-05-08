@@ -75,7 +75,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
     }
 
-    private Long generateRevisionNumber(Asset asset) {
+    /*package protected for testing purposes*/
+    Long generateRevisionNumber(Asset asset) {
         QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
         query.addSimpleWhere("asset", asset);
         query.setSelectArgument(new MaxSelect("revisionNumber"));
@@ -118,13 +119,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset());
         if (previousDefinition != null) {
             previousDefinition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
-            // TODO DD : should this use dateService.nowUTC() instead? confirm...
-            logger.error("need to check the date.   is it properly saved as UTC?");
-            previousDefinition.setRetireDate(dateService.now().toDate());
+            previousDefinition.setRetireDate(dateService.nowUTC().toDate());
             persistenceService.update(previousDefinition);
         }
         definition.setPublishedState(PublishedState.PUBLISHED);
-        definition.setOriginDate(dateService.now().toDate());
+        definition.setOriginDate(dateService.nowUTC().toDate());
         persistenceService.update(definition);
     }
 

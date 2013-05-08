@@ -144,7 +144,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
         private BaseOrg owner;
         private PredefinedLocation location;
-        private Date dateTime = dateService.now().toDate();
+        private Date dateTime = dateService.nowInUsersTimeZone().toDate();
         private TimeContainer timePicker;
         private DateTimePicker dateTimepicker;
         private DropDownChoice<RecurrenceType> recurrenceTypeDropDown;

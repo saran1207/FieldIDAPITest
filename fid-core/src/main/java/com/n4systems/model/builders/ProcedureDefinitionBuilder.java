@@ -70,6 +70,11 @@ public class ProcedureDefinitionBuilder extends EntityWithTenantBuilder<Procedur
         return this;
     }
 
+    public ProcedureDefinitionBuilder withRevisionNumber(Long revisionNumber) {
+        this.revisionNumber = revisionNumber;
+        return this;
+    }
+
     @Override
     public ProcedureDefinition createObject() {
         ProcedureDefinition procedureDefinition = assignAbstractFields(new ProcedureDefinition());
@@ -77,6 +82,7 @@ public class ProcedureDefinitionBuilder extends EntityWithTenantBuilder<Procedur
         procedureDefinition.setProcedureCode(procedureCode);
         procedureDefinition.setIsolationPoints(isolationPoints);
         procedureDefinition.setImages(Lists.newArrayList(images.iterator()));
+        procedureDefinition.setRevisionNumber(revisionNumber);
         return procedureDefinition;
     }
 

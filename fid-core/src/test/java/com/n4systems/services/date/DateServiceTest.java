@@ -70,7 +70,7 @@ public class DateServiceTest extends FieldIdServiceTest {
         // .: whatever the GMT time is, "now" should be 9 hours later in that timezone.
 
         setCurrentMillisFixed(jan1_2011);
-        DateTime result = dateService.now();
+        DateTime result = dateService.nowInUsersTimeZone();
 
         assertEquals(HOURS_OFFSET,result.getHourOfDay());
         assertEquals(1,result.getDayOfYear());
@@ -81,7 +81,7 @@ public class DateServiceTest extends FieldIdServiceTest {
         for (int hour=0;hour<50;hour++) {
             setCurrentMillisFixed(new LocalDateTime(jan1_2011.toDate()).plusHours(hour));
 
-            result = dateService.now();
+            result = dateService.nowInUsersTimeZone();
             int expectedDay = 1 + (hour+HOURS_OFFSET)/24;
             int expectedHour = (hour + HOURS_OFFSET) % 24;
             assertEquals(expectedDay,result.getDayOfYear());
@@ -129,17 +129,17 @@ public class DateServiceTest extends FieldIdServiceTest {
     @Test
     public void test_now_timezone() {
         timeZone = DateTimeZone.forOffsetHours(5).toTimeZone();
-        DateTime now = dateService.now();
+        DateTime now = dateService.nowInUsersTimeZone();
         assertEquals(5,now.getHourOfDay());
         assertEquals(1,now.getDayOfYear());
 
         timeZone = DateTimeZone.forOffsetHours(13).toTimeZone();
-        now = dateService.now();
+        now = dateService.nowInUsersTimeZone();
         assertEquals(13,now.getHourOfDay());
         assertEquals(1,now.getDayOfYear());
 
         timeZone = DateTimeZone.forOffsetHours(-4).toTimeZone();
-        now = dateService.now();
+        now = dateService.nowInUsersTimeZone();
         assertEquals(24-4,now.getHourOfDay());
         assertEquals(31,now.getDayOfMonth());
         assertEquals(DateTimeConstants.DECEMBER,now.getMonthOfYear());

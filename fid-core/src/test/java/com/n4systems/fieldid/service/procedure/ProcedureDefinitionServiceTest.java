@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.model.Asset;
 import com.n4systems.model.builders.ImageAnnotationBuilder;
 import com.n4systems.model.builders.IsolationPointBuilder;
 import com.n4systems.model.builders.ProcedureDefinitionBuilder;
@@ -19,6 +20,7 @@ import com.n4systems.test.TestTarget;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import static com.n4systems.model.builders.UserBuilder.aUser;
@@ -34,16 +36,79 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
     @TestMock private SecurityContext securityContext;
     @TestMock private S3Service s3Service;
 
+    private Long expectedRevisionNumber;
+
 
     @Before
     public void setup() {
-        expect(securityContext.getUserSecurityFilter()).andReturn(new UserSecurityFilter(aUser().createObject()));
-        expect(persistenceService.find(anyObject(Class.class), anyLong())).andReturn(null);
-        replay(securityContext, persistenceService);
+    }
+
+
+    @Override
+    protected Object createSut(Field sutField) throws Exception {
+        return new ProcedureDefinitionService() {
+            @Override Long generateRevisionNumber(Asset asset) {
+                return expectedRevisionNumber;
+            }
+        };
     }
 
     @Test
+    public void test_saveProcedureDefinitionDraft_newRevision() {
+        ProcedureDefinition procedureDefinition = ProcedureDefinitionBuilder.aProcedureDefinition().withRevisionNumber(null).build();
+        expectedRevisionNumber = 22L;
+
+        expect(persistenceService.saveOrUpdate(procedureDefinition)).andReturn(procedureDefinition);
+        replay(persistenceService);
+
+        procedureDefinitionService.saveProcedureDefinitionDraft(procedureDefinition);
+
+        assertEquals(expectedRevisionNumber, procedureDefinition.getRevisionNumber());
+
+        verifyTestMocks();
+    }
+
+    @Test
+    public void test_saveProcedureDefinitionDraft_existingRevision() {
+        ProcedureDefinition procedureDefinition = ProcedureDefinitionBuilder.aProcedureDefinition().withRevisionNumber(123L).build();
+
+        expect(persistenceService.saveOrUpdate(procedureDefinition)).andReturn(procedureDefinition);
+        replay(persistenceService);
+
+        procedureDefinitionService.saveProcedureDefinitionDraft(procedureDefinition);
+
+        assertEquals(new Long(123L), procedureDefinition.getRevisionNumber());
+
+        verifyTestMocks();
+    }
+
+    @Test
+    public void test_saveProcedureDefinitionDraft_withImages() {
+
+        ImageAnnotation annotation = ImageAnnotationBuilder.anImageAnnotation().withText("hello").withX(.1).withY(.2).build();
+        List<IsolationPoint> isolationPoints = Lists.newArrayList(
+                IsolationPointBuilder.anIsolationPoint().withIdentifer("A").withAnnotation(annotation).build()
+        );
+
+        ProcedureDefinition procedureDefinition = ProcedureDefinitionBuilder.aProcedureDefinition().withRevisionNumber(1L).withIsolationPoints(isolationPoints).build();
+
+        s3Service.finalizeProcedureDefinitionImageUpload((ProcedureDefinitionImage) annotation.getImage());
+        expect(persistenceService.saveOrUpdate(procedureDefinition)).andReturn(procedureDefinition);
+        replay(persistenceService);
+
+        procedureDefinitionService.saveProcedureDefinitionDraft(procedureDefinition);
+
+        assertEquals(new Long(1), procedureDefinition.getRevisionNumber());
+
+        verifyTestMocks();
+    }
+
+
+    @Test
     public void test_cloneProcedureDefinition_empty() {
+        expect(securityContext.getUserSecurityFilter()).andReturn(new UserSecurityFilter(aUser().createObject()));
+        expect(persistenceService.find(anyObject(Class.class), anyLong())).andReturn(null);
+        replay(securityContext, persistenceService);
 
         ProcedureDefinition source = ProcedureDefinitionBuilder.aProcedureDefinition().build();
         ProcedureDefinition result = procedureDefinitionService.cloneProcedureDefinition(source);
@@ -64,6 +129,10 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
 
     @Test
     public void test_cloneProcedureDefinition_withIsolationPoints() {
+        expect(securityContext.getUserSecurityFilter()).andReturn(new UserSecurityFilter(aUser().createObject()));
+        expect(persistenceService.find(anyObject(Class.class), anyLong())).andReturn(null);
+        replay(securityContext, persistenceService);
+
         List<IsolationPoint> isolationPoints = Lists.newArrayList(
                 IsolationPointBuilder.anIsolationPoint().withIdentifer("A").build(),
                 IsolationPointBuilder.anIsolationPoint().withIdentifer("B").build(),
@@ -81,13 +150,19 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
 
     @Test
     public void test_cloneProcedureDefinition_withAnnotations() {
+        expect(securityContext.getUserSecurityFilter()).andReturn(new UserSecurityFilter(aUser().createObject()));
+        expect(persistenceService.find(anyObject(Class.class), anyLong())).andReturn(null);
+        replay(securityContext, persistenceService);
+
         ImageAnnotation annotation = ImageAnnotationBuilder.anImageAnnotation().withText("hello").withX(.1).withY(.2).build();
         List<IsolationPoint> isolationPoints = Lists.newArrayList(
                 IsolationPointBuilder.anIsolationPoint().withIdentifer("A").withAnnotation(annotation).build()
         );
 
-        s3Service.copyProcedureDefImageToTemp(isA(ProcedureDefinitionImage.class), isA(ProcedureDefinitionImage.class) );
         ProcedureDefinition source = ProcedureDefinitionBuilder.aProcedureDefinition().withIsolationPoints(isolationPoints).build();
+
+        s3Service.copyProcedureDefImageToTemp(isA(ProcedureDefinitionImage.class), isA(ProcedureDefinitionImage.class) );
+
         ProcedureDefinition result = procedureDefinitionService.cloneProcedureDefinition(source);
 
         List<IsolationPoint> pts = result.getIsolationPoints();

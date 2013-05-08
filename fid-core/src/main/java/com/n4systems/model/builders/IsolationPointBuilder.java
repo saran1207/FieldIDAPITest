@@ -58,8 +58,6 @@ public class IsolationPointBuilder extends EntityWithTenantBuilder<IsolationPoin
         this.electronicIdentifier = electronicIdentifier;
     }
 
-
-
     private IsolationPointBuilder(Tenant tenant,String identifier, IsolationPointSourceType sourceType ) {
         this.tenant = tenant;
         this.identifier = identifier;
