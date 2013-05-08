@@ -13,7 +13,7 @@
 	box-shadow: 2px 2px 10px -3px #888;
 	z-index: 10;
 	border: 2px solid;
-	min-width: 70px;
+	min-width: 55px;
 }
 
 .note .noteText {
@@ -35,7 +35,6 @@
 
 .note.arrow-right {
 	margin-right: 28px;
-	
 	margin-left: -100px;
 }
 	.note.arrow-right:after {
@@ -48,14 +47,13 @@
 
 /* INPUTS */
 .note input {
-	outline: 1px solid #DDDD99;
+	outline: 1px solid #eee;
 	border: none;
-	height: 16px;
+	height: 20px;
 	margin-left: 0px;
 	font-weight: bold;
-	padding: 0;
-    margin-top:2px;
-    padding:1px;
+    padding: 0 6px;
+    float: left;
 }
 .note.readonly {
 	z-index: 2;
@@ -64,9 +62,8 @@
     	border: none;
     	background-color: transparent;
     	outline: none;
-    	height:16px;
+    	height: 20px;
     	margin-left:0px;
-        margin-top:3px;
     }
 
 
@@ -113,7 +110,6 @@
 	.control-panel .icon {
 		display: none;
 	}
-
 .electrical { /*red w/white bg*/
 	color: #ee1c25;
 	background: #fff;
@@ -121,7 +117,6 @@
 	.electrical input {
 		color: #ee1c25;
 	}
-
 .gas { /*purple w/white bg*/
 	color: #a5439a;
 	background: #fff;
@@ -129,23 +124,14 @@
 	.gas input {
 		color: #a5439a;
 	}
-
-.pneumatic { /*white w/blue bg*/
+.pneumatic, .pneumatic input { /*white w/blue bg*/
 	color: #fff;
 	background: #0055a5;
 }
-	.pneumatic input {
-		color: #fff;
-	}
-
-.steam { /*white w/lighter red bg*/
+.steam, .steam input { /*white w/lighter red bg*/
 	color: #fff;
 	background: #ef3e36;
 }
-	.steam input {
-		color: #fff;
-	}
-
 .valve { /* almost black w/white bg*/
 	color: #231f20;
 	background: #fff;
@@ -153,15 +139,10 @@
 	.valve input {
 		color: #231f20;
 	}
-
-.water { /*white w/green bg*/
+.water, .water input { /*white w/green bg*/
 	color: #fff;
     background: #00a650;
 }
-	.water input {
-		color: #fff;
-        background: #00a650;
-	}
 
 .isolation-point-table .source {
 	background: transparent;

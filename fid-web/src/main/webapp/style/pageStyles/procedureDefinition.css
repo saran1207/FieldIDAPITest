@@ -235,10 +235,8 @@ h3 {
 	position: relative;
 	z-index: 1;
 }
-
     .isolation-point-list .blank-slate {
-        /*DEREK says...christina, this is a hack for now. better way to position this?*/
-        margin-left:85px;
+        text-align: center;
     }
 
 
