@@ -111,3 +111,8 @@
 .media-image .note {
     font-size:13px;
 }
+
+a.greyText, a.greyText:hover, a.greyText:visited, a.greyText:active {
+    color:#888888;
+    text-decoration: none;
+}

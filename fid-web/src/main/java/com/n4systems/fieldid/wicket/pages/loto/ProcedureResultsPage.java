@@ -13,7 +13,9 @@ import com.n4systems.fieldid.wicket.components.timeline.TimelinePanel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.common.ImageAnnotation;
@@ -27,6 +29,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -65,7 +68,10 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
             timelinesContainer.add(createTimelinePanel("resultsTimeline", unlockResults, ProcedureWorkflowState.UNLOCKED, "unlockingTimeline"));
         }
 
-        add(new Label("assetTypeName", ProxyModel.of(procedureModel, on(Procedure.class).getAsset().getType().getName())));
+        BookmarkablePageLink assetSummaryLink = new BookmarkablePageLink("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(procedureModel.getObject().getAsset().getId()));
+        add(assetSummaryLink);
+        assetSummaryLink.add(new Label("assetTypeName", ProxyModel.of(procedureModel, on(Procedure.class).getAsset().getType().getName())));
+        assetSummaryLink.add(new Label("assetIdentifier", ProxyModel.of(procedureModel, on(Procedure.class).getAsset().getIdentifier())));
         add(new Label("procedureCode", ProxyModel.of(procedureModel, on(Procedure.class).getType().getProcedureCode())));
 
         add(createLocationDetailsPanel("locationDetailsPanel"));

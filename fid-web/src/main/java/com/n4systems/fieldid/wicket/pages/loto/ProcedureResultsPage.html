@@ -2,7 +2,11 @@
 
     <div class="header">
         <h1>
-            <span class="greyText" wicket:id="assetTypeName"></span> /
+            <a class="greyText" wicket:id="assetLink">
+                <span wicket:id="assetTypeName"></span>
+                <span wicket:id="assetIdentifier"></span>
+            </a>
+            /
             <wicket:message key="label.lockout_tagout_procedure"/>
             <span wicket:id="procedureCode"></span>
         </h1>
