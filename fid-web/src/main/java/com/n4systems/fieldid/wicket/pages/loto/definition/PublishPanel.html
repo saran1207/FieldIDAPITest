@@ -16,22 +16,16 @@
         </div>
 
         <div wicket:id="rejectionMessageContainer">
-
-            <div class="publish-message"><wicket:message key="message.enter_rejection_message"/>
+            <div class="publish-message">
+                <label><wicket:message key="message.enter_rejection_message"/></label>
+                <textarea wicket:id="rejectionMessage"></textarea> 
             </div>
-            <textarea wicket:id="rejectionMessage" style="clear:both; margin-top:6px;">
-            </textarea>
-
             <div class="buttons">
                 <a wicket:id="rejectLink" class="mattButton"><wicket:message key="label.reject"/></a>
-                <div class="orCancel">
-                    <wicket:message key="label.or"/>
-                    <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
-                </div>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink" class="mattButton"><wicket:message key="label.cancel"/></a>
             </div>
-
         </div>
-
     </form>
 
 </wicket:panel>

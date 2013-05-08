@@ -460,28 +460,40 @@ h3 {
 	min-height: 405px;
 	margin-top: 40px;
 }
+
 .publish .buttons {
 	float: none;
 	text-align: center;
 }
+	.publish .buttons .mattButton {
+	    float: none;
+	    display: inline-block;
+	    margin: 0 5px;
+	}
+
 .publish-message {
 	font-size: 15px;
 	color: #999;
 }
-.publish .buttons .mattButton {
-    float: none;
-    display: inline-block;
-    margin: 0 5px;
-}
+	.publish-message label {
+		margin: 15px 0 0;
+		text-align: center;
+		line-height: 24px;
+	}
+	.publish-message textarea {
+		margin-left: 0;
+	}
 
-.publish .orCancel {
+
+/*.publish .orCancel {
     display:block;
     float:left;
     padding-top:8px;
     padding-left:6px;
-}
-
+}*/
 .publish .formErrors {
     text-align: left;
     margin:28px;
 }
+
+
