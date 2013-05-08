@@ -15,11 +15,12 @@
             <a wicket:id="openRejectionPanelLink" class="mattButton"><wicket:message key="label.reject"/>...</a>
         </div>
 
-        <div wicket:id="rejectionMessageContainer">
+        <div wicket:id="rejectionMessageContainer" class="rejection-message">
             <div class="publish-message">
-                <label><wicket:message key="message.enter_rejection_message"/></label>
-                <textarea wicket:id="rejectionMessage"></textarea> 
+                <wicket:message key="message.enter_rejection_message"/>
             </div>
+            <textarea wicket:id="rejectionMessage"></textarea>
+
             <div class="buttons">
                 <a wicket:id="rejectLink" class="mattButton"><wicket:message key="label.reject"/></a>
                 <wicket:message key="label.or"/>
