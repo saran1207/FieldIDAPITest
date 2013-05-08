@@ -25,7 +25,7 @@ public class LabelledAutoCompleteUser extends LabelledComponent<AutoComplete<Use
     @Override
     protected AutoComplete<User> createLabelledComponent(String id, IModel<User> model) {
         AutoCompleteUser autoCompleteUser = new AutoCompleteUser(id, model);
-        autoCompleteUser.withAutoUpdate(true).setRenderBodyOnly(true);
+        autoCompleteUser.withAutoUpdate(false).setRenderBodyOnly(true);
         return autoCompleteUser;
     }
 
