@@ -1,0 +1,2 @@
+update column_mappings set output_handler = null where name = "procedure_search_identified_date";
+update column_mappings set output_handler = "com.n4systems.fieldid.viewhelpers.handlers.NonConvertingDateTimeHandler" where name = "procedure_search_due_date";
