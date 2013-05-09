@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserGroupService;
+import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.ImageAnnotation;
@@ -33,6 +34,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     @Autowired private UserGroupService userGroupService;
     @Autowired private S3Service s3Service;
     @Autowired private DateService dateService;
+    @Autowired private AtomicLongService atomicLongService;
 
 
     public Boolean hasPublishedProcedureDefinition(Asset asset) {
@@ -186,7 +188,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         Preconditions.checkArgument(source != null , "can't use null isolation points when cloning.");
 
         IsolationPoint isolationPoint = new IsolationPoint();
-        isolationPoint.setAnnotation(source.getAnnotation());
         isolationPoint.setIdentifier(source.getIdentifier());
         isolationPoint.setLocation(source.getLocation());
         isolationPoint.setMethod(source.getMethod());
@@ -225,6 +226,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setText(from.getText());
         to.setX(from.getX());
         to.setY(from.getY());
+        to.setTempId(atomicLongService.getNext());
 
         ProcedureDefinitionImage image = clonedImages.get(from.getImage().getFileName());
         image.addImageAnnotation(to);

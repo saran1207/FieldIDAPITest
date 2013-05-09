@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.image;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.common.EditableImage;
@@ -136,7 +137,12 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
 
     protected Long getAnnotationId() {
         if (getAnnotation()!=null) {
-            return getAnnotation().getId()!=null ? getAnnotation().getId() : getAnnotation().getTempId();
+            if (getAnnotation().getId()==null) {
+                Preconditions.checkState(getAnnotation().getTempId()!=null,"annotation must either have persisted id or temp id");
+                return getAnnotation().getTempId();
+            } else {
+                return getAnnotation().getId();
+            }
         }
         return null;
     }

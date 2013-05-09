@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public abstract class LabelledComponent<T extends FormComponent/*sic*/, M > extends Panel {
+public abstract class LabelledComponent<T extends FormComponent, M > extends Panel {
 
     private static final String INPUT_ID = "input";
 

@@ -60,7 +60,7 @@ public class EditableImage extends EntityWithTenant implements S3Image {
         if (!getAnnotations().contains(annotation)) {
             getAnnotations().add(annotation);
         }
-        if(annotation.getImage()!=null && annotation.getImage().getId()!=this.getId()) {  // remove it from other image, add it to this one.
+        if(annotation.getImage()!=null && annotation.getImage()!=this) {  // remove it from other image, add it to this one.
             annotation.getImage().removeAnnotation(annotation);
         }
         annotation.setImage(this);

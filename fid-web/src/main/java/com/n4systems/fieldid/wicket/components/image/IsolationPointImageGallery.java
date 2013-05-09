@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.image;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
@@ -16,6 +17,7 @@ import java.net.URL;
 public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDefinitionImage> {
 
     private @SpringBean S3Service s3Service;
+    private @SpringBean AtomicLongService atomicLongService;
 
     private final ProcedureDefinition procedureDefinition;
     private final IModel<IsolationPoint> model;
@@ -98,7 +100,7 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
         ImageAnnotation annotation = getIsolationPoint().getAnnotation();
         if (annotation==null && id==null) {   // create new one.
             annotation = new ImageAnnotation(x,y,text,type);
-            annotation.setTempId(System.currentTimeMillis());  // use this for non-persisted annotations.
+            annotation.setTempId(atomicLongService.getNext());  // use temporary # for non-persisted annotations.  not globally unique, but jvm unique.
         }
         Preconditions.checkState(annotation!=null, "couldn't find annotation with id " + id);
 

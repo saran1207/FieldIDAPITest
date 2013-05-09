@@ -53,6 +53,7 @@ import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
@@ -478,6 +479,11 @@ public class FieldIdCoreConfig {
     @Bean
     public UUIDService uuidService() {
         return new UUIDService();
+    }
+
+    @Bean
+    public AtomicLongService atomicLongService() {
+        return new AtomicLongService();
     }
 
 }

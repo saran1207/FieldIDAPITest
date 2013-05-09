@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.builders.ImageAnnotationBuilder;
 import com.n4systems.model.builders.IsolationPointBuilder;
@@ -25,8 +26,8 @@ import java.util.List;
 
 import static com.n4systems.model.builders.UserBuilder.aUser;
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
 
@@ -35,9 +36,9 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
     @TestMock private PersistenceService persistenceService;
     @TestMock private SecurityContext securityContext;
     @TestMock private S3Service s3Service;
+    @TestMock private AtomicLongService atomicLongService;
 
     private Long expectedRevisionNumber;
-
 
     @Before
     public void setup() {
@@ -84,7 +85,6 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
 
     @Test
     public void test_saveProcedureDefinitionDraft_withImages() {
-
         ImageAnnotation annotation = ImageAnnotationBuilder.anImageAnnotation().withText("hello").withX(.1).withY(.2).build();
         List<IsolationPoint> isolationPoints = Lists.newArrayList(
                 IsolationPointBuilder.anIsolationPoint().withIdentifer("A").withAnnotation(annotation).build()
@@ -150,9 +150,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
 
     @Test
     public void test_cloneProcedureDefinition_withAnnotations() {
-        expect(securityContext.getUserSecurityFilter()).andReturn(new UserSecurityFilter(aUser().createObject()));
-        expect(persistenceService.find(anyObject(Class.class), anyLong())).andReturn(null);
-        replay(securityContext, persistenceService);
+        Long tempId = 1234L;
 
         ImageAnnotation annotation = ImageAnnotationBuilder.anImageAnnotation().withText("hello").withX(.1).withY(.2).build();
         List<IsolationPoint> isolationPoints = Lists.newArrayList(
@@ -161,7 +159,15 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
 
         ProcedureDefinition source = ProcedureDefinitionBuilder.aProcedureDefinition().withIsolationPoints(isolationPoints).build();
 
+        expect(atomicLongService.getNext()).andReturn(tempId);
+        replay(atomicLongService);
+
+        expect(securityContext.getUserSecurityFilter()).andReturn(new UserSecurityFilter(aUser().createObject()));
+        expect(persistenceService.find(anyObject(Class.class), anyLong())).andReturn(null);
+        replay(securityContext, persistenceService);
+
         s3Service.copyProcedureDefImageToTemp(isA(ProcedureDefinitionImage.class), isA(ProcedureDefinitionImage.class) );
+        replay(s3Service);
 
         ProcedureDefinition result = procedureDefinitionService.cloneProcedureDefinition(source);
 
@@ -172,6 +178,9 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
         assertEquals(.2, actual.getY(), .000001);
         assertEquals("hello", actual.getText());
         assertEquals(actual.getImage().getFileName(),annotation.getImage().getFileName());
+        assertEquals(tempId, actual.getTempId());
+
+        verifyTestMocks();
     }
 
     private void assertIsolationPoint(List<IsolationPoint> expecteds, List<IsolationPoint> actuals, int index) {

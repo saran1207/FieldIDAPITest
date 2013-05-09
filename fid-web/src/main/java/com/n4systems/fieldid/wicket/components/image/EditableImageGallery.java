@@ -74,7 +74,7 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
 
     @Override
     protected GalleryOptions createGalleryOptions(List<GalleryImageJson> images) {
-        return super.createGalleryOptions(images);
+        return super.createGalleryOptions(images);//new EditableImageGalleryOptions(images);
     }
 
     protected abstract void uploadImage(T image, String contentType, byte[] bytes, String clientFileName);
@@ -93,14 +93,6 @@ public abstract class EditableImageGallery<T extends EditableImage> extends Imag
         GalleryEditableImageJson(T image) {
             super(image);
             annotations = image.getAnnotations();
-        }
-    }
-
-    class EditableGalleryOptions extends GalleryOptions {
-        Long editedId = getAnnotation()!=null ? getAnnotation().getId() : null;
-
-        EditableGalleryOptions(List data) {
-            super(data);
         }
     }
 
