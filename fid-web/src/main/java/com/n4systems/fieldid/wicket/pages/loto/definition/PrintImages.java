@@ -63,7 +63,7 @@ public class PrintImages extends Panel {
     }
 
     protected String getImageUrl(ListItem<ProcedureDefinitionImage> item) {
-        return s3Service.getProcedureDefinitionImageURL(item.getModelObject()).toString();
+        return s3Service.getProcedureDefinitionImageMediumURL(item.getModelObject()).toString();
     }
 
     @Override
