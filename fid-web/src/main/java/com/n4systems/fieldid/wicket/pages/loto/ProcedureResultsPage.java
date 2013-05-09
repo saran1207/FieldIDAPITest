@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
@@ -22,6 +23,8 @@ import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.IsolationPointResult;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
+import com.n4systems.services.date.DateService;
+import com.n4systems.util.DateHelper;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -44,6 +47,7 @@ import static ch.lambdaj.Lambda.on;
 public class ProcedureResultsPage extends FieldIDFrontEndPage {
 
     @SpringBean private S3Service s3Service;
+    @SpringBean private DateService dateService;
 
     private IModel<Procedure> procedureModel;
     private ProcedureWorkflowState currentTimelineDisplay;
@@ -147,7 +151,8 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
 
         @Override
         public Date getDate(IsolationPointResult item) {
-            return item.getCheckCheckTime();
+            Date checkTimeInUserTimeZone = DateHelper.convertToUserTimeZone(item.getCheckCheckTime(), FieldIDSession.get().getSessionUser().getTimeZone());
+            return checkTimeInUserTimeZone;
         }
 
         @Override
