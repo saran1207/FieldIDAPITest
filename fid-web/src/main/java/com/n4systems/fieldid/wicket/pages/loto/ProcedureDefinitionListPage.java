@@ -3,21 +3,23 @@ package com.n4systems.fieldid.wicket.pages.loto;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
-import com.n4systems.fieldid.wicket.components.loto.ViewPrintProcedureDefMenuButton;
 import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
+import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.PopupSettings;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
@@ -100,7 +102,19 @@ public class ProcedureDefinitionListPage extends LotoPage {
                         && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
                 copyLink.add(new TipsyBehavior(getString("message.procedure_definitions.copy"), TipsyBehavior.Gravity.N));
 
-                item.add(new ViewPrintProcedureDefMenuButton("print", procedureDefinition));
+
+
+                Link printLink;
+                item.add(printLink = new Link("print") {
+                    @Override public void onClick() {
+                        setResponsePage(new ProcedureDefinitionPrintPage(PageParametersBuilder.id(procedureDefinition.getObject().getId())));
+                    }
+                });
+                printLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print").getObject(), TipsyBehavior.Gravity.W));
+                printLink.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
+                PopupSettings popupSettings = new PopupSettings("popupWindow", PopupSettings.SCROLLBARS).setWidth(1000).setTop(1);
+                printLink.setPopupSettings(popupSettings);
+
             }
         });
 
