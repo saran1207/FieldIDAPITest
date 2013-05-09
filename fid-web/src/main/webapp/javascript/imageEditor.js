@@ -29,20 +29,13 @@ var imageEditor = (function() {
 
 			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(type).attr('id',id);
 			var icon = $('<span/>').addClass('icon').appendTo(span);
-			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('60px');
-
-			editor.css('width','30px');
+			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('30px');
 
 			if (options.editable) {
 
 				editor.focus(function(e) {
 					this.select();
 					$(this).parent().removeClass('readonly');
-				});
-
-				editor.keypress(function(e) {
-					// TODO DD : replace this with exact font --> pixel size measuring.
-					this.style.width = '30px'; //Math.min(12,(this.value.length + 1) * 6) + 4 + 'px';
 				});
 
 				editor.blur(function(e) {
@@ -69,18 +62,18 @@ var imageEditor = (function() {
 		}
 
 		function addNewNote() {
-			var note = existingNote();
-			if (note.length===0) {
-				note=createNote();
+			var $note = existingNote();
+			if ($note.length===0) {
+				$note=createNote();
 			}
 
 			// CAVEAT : must do these things AFTER event handling complete.
 			setTimeout(function() {
-				adjustNoteDirection(note);
-				doNote(note.find('input'));
+				adjustNoteDirection($note);
+				doNote($note.find('input'));
 			},0);
 
-			return note;
+			return $note;
 		}
 
 		function adjustNoteDirection(note) {
