@@ -169,7 +169,37 @@ var fieldIdWidgets = (function() {
 
 		$.each(options.images,function(index,value) {
 
-			$('#'+value.id).parent().addAnnotations(
+            var $img = $('#'+value.id);  // change all references from $this to $img.
+            var optionIndex = index;
+            var imageHeight = $img.height();
+            var imageWidth = $img.width();
+            var imageContainerHeight = $img.parent().parent().height();
+            var imageContainerWidth = $img.parent().parent().width();
+
+            if (imageHeight==0 || imageWidth==0) {
+                // arggh : this is messy but i need to have the image loaded before i do this code.
+                // if it's not [width()==0] then i'll just hide it, wait and try again.
+                $img.parent().css('visibility','hidden');
+                setTimeout(function() { updateImage($img,index); } ,300);
+                return;
+            }
+            $img.parent().css('visibility','visible');
+
+            if (imageHeight/imageWidth >= imageContainerHeight/imageContainerWidth) {
+                var newWidth = imageWidth * (imageContainerHeight/imageHeight);
+                $img.parent().css('height', imageContainerHeight).css('width',newWidth);
+                $img.parent().css('margin-left',(imageContainerWidth-newWidth)/2);
+                $img.css('height',imageContainerHeight);
+            } else {
+                var newHeight = imageHeight * (imageContainerWidth/imageWidth);
+                $img.parent().css('margin-top',(imageContainerHeight-newHeight)/2);
+                $img.parent().css('width', imageContainerWidth).css('height',newHeight);
+                $img.css('width',imageContainerWidth);
+            }
+
+
+
+            $('#'+value.id).parent().addAnnotations(
 				function(annotation) {return createNote(annotation);},
 				value.annotations,
                 { xPosition:"left"} );
