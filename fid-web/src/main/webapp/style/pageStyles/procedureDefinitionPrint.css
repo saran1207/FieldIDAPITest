@@ -270,6 +270,7 @@ td.revision > span {
 	border: none;
 	padding: 0;
 	margin-bottom: 0;
+	height: 80px;
 }
 	.isolation-point-table li span {
 		border-color: black;
@@ -284,28 +285,29 @@ td.revision > span {
 	.isolation-point-table li.headings {
 		border-top: 1px solid black;
 		text-align: center;
+		height: 26px;
 	}
 	
 /* column widths */
 .isolation-point-table .identifier,
 .isolation-point-table .headings .identifier  {
-	width: 8%;
+	width: 7%;
 }
 .isolation-point-table .source {
-	width: 12%;
+	width: 11%;
 }
 .isolation-point-table .device {
 	width: 10%;
 }
 .isolation-point-table .location {
-	width: 20%;
+	width: 16%;
 	padding-right: 10px;
 }
 .isolation-point-table .method {
-	width: 25%;
+	width: 38%;
 }
 .isolation-point-table .check {
-	width: 25%;
+	width: 18%;
 }
 
 
