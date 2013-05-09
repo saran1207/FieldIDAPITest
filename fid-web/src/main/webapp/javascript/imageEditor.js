@@ -68,8 +68,10 @@ var imageEditor = (function() {
 			}
 
 			// CAVEAT : must do these things AFTER event handling complete.
+			$note.hide();
 			setTimeout(function() {
 				adjustNoteDirection($note);
+				$note.show();
 				doNote($note.find('input'));
 			},0);
 
