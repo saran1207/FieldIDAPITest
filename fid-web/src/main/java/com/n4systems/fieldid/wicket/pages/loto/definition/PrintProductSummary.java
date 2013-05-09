@@ -45,7 +45,7 @@ public class PrintProductSummary extends Panel {
         int lockoutPts = 0;
         int deviceCount = 0;
 
-        List<IsolationPoint> isoPts =  on(ProcedureDefinition.class).getIsolationPoints();
+        List<IsolationPoint> isoPts =  model.getObject().getIsolationPoints();
 
         if (null != isoPts && isoPts.size() > 0) {
             lockoutPts = isoPts.size();
