@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.asset.summary;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
 import com.n4systems.fieldid.wicket.components.asset.events.table.EditLotoScheduleLink;
@@ -26,7 +27,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -94,9 +94,10 @@ public class UpcomingEventsPanel extends Panel {
                     item.add(new Label("onDate"));
                 }
                 item.setVisible(item.getModelObject() != null);
-                item.add(new EditLotoScheduleLink("editLoto",item.getModel()) {
+                item.add(new EditLotoScheduleLink("editLoto", item.getModel()) {
                     @Override
                     public void onProcedureScheduleUpdated(AjaxRequestTarget target) {
+                        UpcomingEventsPanel.this.detach();
                         target.add(UpcomingEventsPanel.this);
                     }
                 });
@@ -117,7 +118,7 @@ public class UpcomingEventsPanel extends Panel {
 
         @Override
         protected List<Procedure> load() {
-            return Collections.singletonList(procedureService.getOpenProcedure(asset));
+            return Lists.newArrayList(procedureService.getOpenProcedure(asset));
         }
 
     }

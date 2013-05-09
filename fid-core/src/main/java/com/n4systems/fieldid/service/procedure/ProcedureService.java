@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.procedure;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ProcedureWorkflowState;
@@ -27,6 +28,11 @@ public class ProcedureService extends FieldIdPersistenceService {
 
     public Procedure updateSchedule(Procedure procedure) {
         return persistenceService.update(procedure);
+    }
+
+    public void deleteSchedule(Procedure procedure) {
+        Preconditions.checkArgument(procedure.getWorkflowState().equals(ProcedureWorkflowState.OPEN));
+        persistenceService.delete(procedure);
     }
 
     public Procedure findByMobileId(String mobileId, boolean withArchived) {

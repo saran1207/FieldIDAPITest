@@ -6,8 +6,18 @@
 
 <wicket:panel>
     <span class="actions">
-        <a class="mattButton" wicket:id="editLink"><wicket:message key="label.edit"/></a>
-        <div wicket:id="procedurePicker"></div>
+        <ul>
+            <li>
+                <a class="mattButtonLeft" wicket:id="editLink"><wicket:message key="label.edit"/></a>
+            </li>
+            <li class="menu">
+                <a class="mattButtonRight" href="javascript:void(0);"><img src="/fieldid/images/menu-down.png"/></a>
+                <ul class="menu-items">
+                    <li><a wicket:id="deleteLink"><wicket:message key="label.delete"/></a></li>
+                </ul>
+            </li>
+        </ul>
+        <div wicket:id="procedurePicker"/>
     </span>
 </wicket:panel>
 </html>

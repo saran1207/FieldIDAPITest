@@ -32,17 +32,25 @@ public class EditLotoScheduleLink extends Panel {
             procedurePicker.setSaveButtonLabel(new FIDLabelModel("label.save"));
             add(procedurePicker);
 
-
-            AjaxLink<Void> editLink = new AjaxLink<Void>("editLink") {
+            add(new AjaxLink<Void>("editLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     procedurePicker.show(target);
                 }
-            };
-            add(editLink);
+            });
+
+            add(new AjaxLink<Void>("deleteLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    procedureService.deleteSchedule(procedureModel.getObject());
+                    onProcedureScheduleUpdated(target);
+                }
+            });
+
         } else {
             add(new WebMarkupContainer("procedurePicker"));
             add(new WebMarkupContainer("editLink"));
+            add(new WebMarkupContainer("deleteLink"));
         }
 
     }
