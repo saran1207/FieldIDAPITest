@@ -1,8 +1,6 @@
 
 function setupPrintPage(options)
 {
-   // don't add page break to first header
-  // $(".header").first().css("page-break-before", "avoid");
     var $header = $('.header');
 
     //hide watermark if not PUBLISHED
@@ -47,11 +45,7 @@ function setupPrintPage(options)
             $ul.appendTo($page);
             //$wmark.clone().appendTo($hclone);
 
-//        } else {
-//
-//            var $hclone = $header.clone()
-//            $hclone.insertAfter($ul);
-//            $wmark.clone().appendTo($hclone);
+
         }
 
 
@@ -93,5 +87,10 @@ function setupPrintPage(options)
     });
 
     $('#iso-table').hide();
+
+
+    // don't add page break to first header
+    $(".header").first().css("page-break-before", "avoid");
+
 
 }
