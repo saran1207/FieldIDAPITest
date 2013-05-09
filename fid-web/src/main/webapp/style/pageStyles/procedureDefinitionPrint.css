@@ -128,7 +128,6 @@ h3 {
 .metadata table {
 	float: right;
 	width: 40%;
-	/*height: 95px;*/
 	font-size: 11px;
 }
 .metadata td, .metadata th {
@@ -248,6 +247,11 @@ td.revision > span {
 	margin: 10px 20px;
 	float: none;
 	display: inline-block;
+}
+
+.note input {
+	padding: 0;
+	margin-right: 6px;
 }
 
 
