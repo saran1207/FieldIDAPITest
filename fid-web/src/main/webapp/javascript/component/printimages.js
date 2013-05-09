@@ -27,10 +27,10 @@ function setupPrintPage(options)
 
     $('#print-images li').each(function(index,value) {
         if (index%3==0) {
-            pagePixelCount =  pagePixelCount + 250;
+            pagePixelCount =  pagePixelCount + 220;
 
         }
-        if (pagePixelCount>815) {
+        if (pagePixelCount>830) {
            // $header.clone().appendTo($ul);
 
             $page = $('<div class="printpage" id="printpage">');
@@ -61,7 +61,7 @@ function setupPrintPage(options)
 
     var $ulI = $('<ul class="isolation-point-table"></ul>');
     $ulI.appendTo($pagei);
-    pagePixelCount = 0;
+    //pagePixelCount = 0;
 
     var $heading = $('#iso-table-headings').clone();
 
@@ -69,7 +69,7 @@ function setupPrintPage(options)
 
       pagePixelCount = pagePixelCount + isolationPointSize;
 
-        if (pagePixelCount>815) {
+        if (pagePixelCount>830) {
             $pagei = $('<div class="printpage" id="printpage">');
             $pagei.appendTo($('#print-isolation-points-list'));
 
