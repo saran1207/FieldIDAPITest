@@ -77,9 +77,14 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
 
         add(form);
 
+        add(createInstructions("instructions"));
         add(new WebMarkupContainer("done").setVisible(false));
 
         add(gallery = new WebMarkupContainer("images").setOutputMarkupId(true));
+    }
+
+    protected Component createInstructions(String id) {
+        return new WebMarkupContainer(id).setVisible(false);
     }
 
     protected boolean isRootForm(boolean isRootDefault) {

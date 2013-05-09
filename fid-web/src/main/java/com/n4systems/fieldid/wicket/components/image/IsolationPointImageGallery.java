@@ -3,11 +3,14 @@ package com.n4systems.fieldid.wicket.components.image;
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -27,6 +30,11 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
         this.model = model;
         this.procedureDefinition = procedureDefinition;
         withDoneButton();
+    }
+
+    @Override
+    protected Component createInstructions(String id) {
+        return new Label(id,new FIDLabelModel("label.annotate_instructions"));
     }
 
     @Override
