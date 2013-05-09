@@ -99,8 +99,13 @@ public class IsolationPointImageGallery extends EditableImageGallery<ProcedureDe
 
     @Override
     protected Long getIntialImageIndex() {
-        ImageAnnotation annotation = getIsolationPoint().getAnnotation();
-        return annotation!=null ? getIndexOfImage(annotation.getImage()) : null;
+        Long suggestedIndex = super.getIntialImageIndex();
+        if (suggestedIndex==null) {
+            ImageAnnotation annotation = getIsolationPoint().getAnnotation();
+            return annotation!=null ? getIndexOfImage(annotation.getImage()) : null;
+        } else {
+            return suggestedIndex;
+        }
     }
 
     @Override

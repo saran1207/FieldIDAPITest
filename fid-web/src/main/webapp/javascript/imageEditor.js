@@ -31,7 +31,7 @@ var imageEditor = (function() {
 			var icon = $('<span/>').addClass('icon').appendTo(span);
 			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('30px');
 
-			if (options.editable && id===notePrefix+options.editedId) {
+			if (options.editable && id===notePrefix+(options.editedId?options.editedId:'')) {
 
 				editor.focus(function(e) {
 					this.select();

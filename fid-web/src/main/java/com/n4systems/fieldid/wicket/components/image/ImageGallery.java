@@ -45,6 +45,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     private Form form;
     private boolean withDone = false;
     private List<FileUpload> fileUploads = Lists.newArrayList();
+    private Long suggestedIndex = null;
 
     public ImageGallery(String id, final IModel<List<T>> model) {
         super(id);
@@ -68,6 +69,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
                 FileUpload fileUpload = uploadField.getFileUpload();
                 if (fileUpload != null) {
                     T image = addImage(fileUpload.getBytes(), fileUpload.getContentType(), fileUpload.getClientFileName());
+                    suggestUploadedImage();
                     target.add(ImageGallery.this);
                 }
             }
@@ -81,6 +83,10 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
         add(new WebMarkupContainer("done").setVisible(false));
 
         add(gallery = new WebMarkupContainer("images").setOutputMarkupId(true));
+    }
+
+    private void suggestUploadedImage() {
+        suggestedIndex = new Long(model.getObject().size()-1);
     }
 
     protected Component createInstructions(String id) {
@@ -111,11 +117,16 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
                 currentImageIndex = params.getParameterValue(INDEX_PARAMETER).toInt();
                 T currentImage = getCurrentImage();
+                resetSuggestedIndex();
                 if (currentImage!=null) {
                     imageClicked(target, getAction(params), currentImage);
                 }
             }
         };
+    }
+
+    private void resetSuggestedIndex() {
+        suggestedIndex = null;
     }
 
     protected void imageClicked(AjaxRequestTarget target, String action, T image) { }
@@ -133,11 +144,6 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     private String getAction(IRequestParameters params) {
         StringValue p = params.getParameterValue(ACTION_PARAMETER);
         return p==null || p.isEmpty() ? null : p.toString();
-    }
-
-    private Long getImageId(IRequestParameters params) {
-        StringValue p = params.getParameterValue(IMAGE_ID_PARAMETER);
-        return p==null || p.isEmpty() ? null : p.toLong();
     }
 
     @Override
@@ -194,7 +200,7 @@ public abstract class ImageGallery<T extends S3Image> extends Panel {
     }
 
     protected Long getIntialImageIndex() {
-        return null;
+        return suggestedIndex;
     }
 
     protected Long getIndexOfImage(EditableImage image) {
