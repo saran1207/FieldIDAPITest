@@ -13,7 +13,8 @@ var procedureDefinitionPage = (function() {
 		$('input[name="identifier"]').bind('change.ipe', function(e) {
 			$('.notes-container .note input').val($(e.target).val());
 		});
-	}
+       $(window).scrollTop(0);
+    }
 
 	return {
 			openIsolationPointEditor : openIsolationPointEditor,
