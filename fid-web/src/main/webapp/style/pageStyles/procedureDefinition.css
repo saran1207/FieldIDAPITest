@@ -10,6 +10,7 @@
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: 400;
 	width: 1010px; /* Added 10px here to make the .procedure-wrapper equal 1000px since 5px of margin was added. */
+	*overflow: hidden;
 }
 
 #contentHeader .options {
@@ -337,6 +338,7 @@ h3 {
 	box-shadow: 0px 2px 4px 0px #CCC;
 	border: 1px solid #ccc;
 	top: -91px;
+	*top: -70px;
 	margin-left:100%;
 }
 

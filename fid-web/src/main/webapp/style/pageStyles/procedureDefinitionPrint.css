@@ -86,6 +86,9 @@ h3 {
 	border: 1px solid #888;
 	padding: 4px;
 }
+.procedure-details th, .procedure-details td {
+	*border: 1px solid #888;
+}
 
 /* setting images to print as a background */
 .print-image {
@@ -108,7 +111,9 @@ h3 {
 }
 .print-image img {
 	width: 100%;
+	*display: none;
 }
+
 
 /* metadata section 
 ------------------------------------*/
@@ -217,6 +222,7 @@ td.revision > span {
 	float: left;
 	width: 20%;
 	margin: 10px 2.5%;
+	*margin: 10px 18px;
 	border: 2px solid #ccc;
 	-webkit-border-radius: 10px;
 	border-radius: 10px;
@@ -246,6 +252,7 @@ td.revision > span {
 	list-style-type: none;
 	margin: 5px 20px;
 	float: none;
+	*float: left;
 	display: inline-block;
 }
 
@@ -278,6 +285,9 @@ td.revision > span {
 		border-width: 0 1px 1px 0;
 		display: table-cell;
 		padding: 5px;
+		*display: inline-block;
+		*float: left;
+		*height: 80px;
 	}
 	.isolation-point-table .identifier {
 		border-left: 1px solid black;
@@ -305,6 +315,7 @@ td.revision > span {
 }
 .isolation-point-table .method {
 	width: 38%;
+	*width: 30%;
 }
 .isolation-point-table .check {
 	width: 18%;
