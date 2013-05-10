@@ -31,7 +31,7 @@ public class IsolationPoint extends EntityWithTenant {
     @JoinColumn(name="lock_definition_id")
     private IsolationDeviceDescription lockDefinition = new IsolationDeviceDescription();
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "image_annotation_id")
     private ImageAnnotation annotation;
 

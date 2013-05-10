@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.image;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
@@ -23,6 +24,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
 
     private @SpringBean JsonRenderer jsonRenderer;
     private @SpringBean PersistenceService persistenceService;
+    private @SpringBean ProcedureDefinitionService procedureDefinitionService;
 
     private boolean editable = false;
 
@@ -82,7 +84,7 @@ public abstract class ImageAnnotatingBehavior<T extends EditableImage> extends A
 
     private final void processNote(Long noteId, Double x, Double y, String text, ImageAnnotationType type) {
         ImageAnnotation annotation = getImageAnnotation(noteId,x,y,text,type);
-        getEditableImage().addImageAnnotation(annotation);
+        annotation = procedureDefinitionService.addImageAnnotationToImage(getEditableImage(),annotation);
         processNote(getEditableImage(), annotation);
     }
 

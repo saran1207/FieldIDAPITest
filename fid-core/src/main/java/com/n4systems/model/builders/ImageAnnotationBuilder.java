@@ -51,7 +51,7 @@ public class ImageAnnotationBuilder extends EntityWithTenantBuilder<ImageAnnotat
         annotation.setX(x);
         annotation.setY(y);
         annotation.setImage(image);
-        image.addImageAnnotation(annotation);
+        image.addAnnotation(annotation);
         annotation.setText(text);
         annotation.setType(type);
         return annotation;

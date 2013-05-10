@@ -58,7 +58,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
     @JoinTable(name="procedure_definitions_isolation_points", joinColumns = @JoinColumn(name = "procedure_definition_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_id"))
     private List<IsolationPoint> isolationPoints = Lists.newArrayList();
 
-    @OneToMany(mappedBy = "procedureDefinition", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(mappedBy = "procedureDefinition", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ProcedureDefinitionImage> images = Lists.newArrayList();
 
     @Column(name="origin_date")
@@ -243,13 +243,13 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         boolean usedInOtherIsolationPoint = false;
 
         ProcedureDefinitionImage image = (ProcedureDefinitionImage) annotation.getImage();
-        image.removeAnnotation(annotation);
 
-        for (IsolationPoint ip:getIsolationPoints()) {
-            if (!annotation.equals(ip.getAnnotation()) && ip.getAnnotation().getImage().equals(annotation.getImage())) {
+        for (IsolationPoint isolationPoint:getIsolationPoints()) {
+            if (!annotation.equals(isolationPoint.getAnnotation()) && annotation.getImage().equals(isolationPoint.getAnnotation().getImage())) {
                 usedInOtherIsolationPoint = true;
             }
         }
+        image.removeAnnotation(annotation);
 
         if (!usedInOtherIsolationPoint) {
             getImages().remove(image);

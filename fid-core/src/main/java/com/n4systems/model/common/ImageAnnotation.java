@@ -14,7 +14,7 @@ public class ImageAnnotation extends EntityWithTenant {
     @Column(name="text")
     private String text;
 
-    @ManyToOne(cascade= CascadeType.ALL, fetch= FetchType.EAGER, optional=false)
+    @ManyToOne(cascade={CascadeType.REFRESH,CascadeType.PERSIST,CascadeType.MERGE}, fetch= FetchType.EAGER, optional=false)
     @JoinColumn(name="image_id")
     private EditableImage image;
 

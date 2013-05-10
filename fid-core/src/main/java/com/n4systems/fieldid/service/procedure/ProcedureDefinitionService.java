@@ -9,6 +9,7 @@ import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.*;
 import com.n4systems.model.user.Assignable;
@@ -220,16 +221,21 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     private ImageAnnotation cloneImageAnnotation(ImageAnnotation from, Map<String, ProcedureDefinitionImage> clonedImages) {
         Preconditions.checkArgument(from != null, "can't use null isolation annotation when cloning.");
 
+        ImageAnnotation to = cloneImageAnnotation(from, clonedImages.get(from.getImage().getFileName()) );
+        to.setTempId(atomicLongService.getNext());
+
+        return to;
+    }
+
+    public ImageAnnotation cloneImageAnnotation(ImageAnnotation from, EditableImage image) {
         ImageAnnotation to = new ImageAnnotation();
         to.setTenant(from.getTenant());
         to.setType(from.getType());
         to.setText(from.getText());
         to.setX(from.getX());
         to.setY(from.getY());
-        to.setTempId(atomicLongService.getNext());
-
-        ProcedureDefinitionImage image = clonedImages.get(from.getImage().getFileName());
-        image.addImageAnnotation(to);
+        to.setImage(image);
+        image.addAnnotation(to);
         return to;
     }
 
@@ -280,5 +286,13 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
 
-
+    public ImageAnnotation addImageAnnotationToImage(EditableImage image, ImageAnnotation annotation) {
+        if(annotation.getImage()!=null && annotation.getImage()!=image) {
+            annotation.getImage().removeAnnotation(annotation);
+        }
+        image.addAnnotation(annotation);
+        annotation.setImage(image);
+        annotation.setTenant(image.getTenant());
+        return annotation;
+    }
 }

@@ -13,9 +13,10 @@ import java.util.UUID;
 @Inheritance(strategy= InheritanceType.JOINED)
 public class EditableImage extends EntityWithTenant implements S3Image {
 
-    @OneToMany(mappedBy = "image", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "image", fetch = FetchType.EAGER)
+    // TODO DD : change this to a Set.
     private List<ImageAnnotation> annotations = Lists.newArrayList();
-
+    
     @Column(name = "filename", nullable = false)
     private String fileName;
 
@@ -56,21 +57,10 @@ public class EditableImage extends EntityWithTenant implements S3Image {
         return fileName;
     }
 
-    public EditableImage addImageAnnotation(ImageAnnotation annotation) {
-        if (!getAnnotations().contains(annotation)) {
-            getAnnotations().add(annotation);
-        }
-        if(annotation.getImage()!=null && annotation.getImage()!=this) {  // remove it from other image, add it to this one.
-            annotation.getImage().removeAnnotation(annotation);
-        }
-        annotation.setImage(this);
-        annotation.setTenant(this.getTenant());
-        return this;
-    }
-
     public void removeAnnotation(ImageAnnotation annotation) {
         Preconditions.checkArgument(getAnnotations().contains(annotation),"trying to remove annotation " + annotation.getId() + " that isn't currently contained in " + getId());
         getAnnotations().remove(annotation);
+        annotation.setImage(null);
     }
 
     public String getMobileGUID() {
@@ -115,4 +105,9 @@ public class EditableImage extends EntityWithTenant implements S3Image {
         }
     }
 
+    public void addAnnotation(ImageAnnotation annotation) {
+        if (!getAnnotations().contains(annotation)) {
+            getAnnotations().add(annotation);
+        }
+    }
 }
