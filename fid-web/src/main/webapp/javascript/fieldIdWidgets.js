@@ -142,7 +142,7 @@ var fieldIdWidgets = (function() {
 		var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(type);
 		var icon = $('<span/>').addClass('icon').appendTo(span);
 		var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span);
-		editor.css('width',(editor.val().length + 1) * 6 + 'px');
+		//editor.css('width',(editor.val().length + 1) * 6 + 'px');
 		editor.attr('disabled',true);
 		return span;
 	}

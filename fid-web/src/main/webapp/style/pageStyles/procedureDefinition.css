@@ -223,9 +223,6 @@ h3 {
 .add-isolation-point .menu-items li a span {
     font-size:14px;
 }
-.add-isolation-point .menu-items li:hover {
-	background: #fff;
-}
 .add-isolation-point .menu-items img {
 	vertical-align: bottom;
 	padding: 0 5px;

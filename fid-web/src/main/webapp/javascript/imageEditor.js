@@ -29,7 +29,7 @@ var imageEditor = (function() {
 
 			var span = $(document.createElement('span')).addClass('readonly').addClass('note').addClass(direction).addClass(type).attr('id',id);
 			var icon = $('<span/>').addClass('icon').appendTo(span);
-			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span).width('30px');
+			var editor = $('<input/>').attr({type:'text', value:value}).appendTo(span);
 
 			if (options.editable && id===notePrefix+(options.editedId?options.editedId:'')) {
 
