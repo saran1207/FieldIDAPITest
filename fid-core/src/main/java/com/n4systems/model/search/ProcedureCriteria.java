@@ -44,7 +44,7 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
 
     private User performedBy;
 
-    private ProcedureWorkflowStateCriteria workflowState = ProcedureWorkflowStateCriteria.OPEN;
+    private ProcedureWorkflowStateCriteria workflowState = ProcedureWorkflowStateCriteria.ALL;
 
     public AssetStatus getAssetStatus() {
         return assetStatus;

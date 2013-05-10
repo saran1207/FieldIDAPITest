@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.service.search;
 
-import com.google.common.base.Preconditions;
 import com.n4systems.model.ProcedureWorkflowState;
-import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.search.ProcedureCriteria;
@@ -10,6 +8,7 @@ import com.n4systems.model.search.ProcedureWorkflowStateCriteria;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.terms.DateRangeTerm;
+import com.n4systems.util.persistence.search.terms.ProcedurePerformedByTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,7 +29,8 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
         addSimpleTerm(searchTerms, "type.asset.type.group", criteriaModel.getAssetTypeGroup());
         addSimpleTerm(searchTerms, "assignee", criteriaModel.getAssignee());
         addSimpleTerm(searchTerms, "assignedGroup", criteriaModel.getAssignedUserGroup());
-        addSimpleTerm(searchTerms, "performedBy", criteriaModel.getPerformedBy());
+
+        searchTerms.add(new ProcedurePerformedByTerm(criteriaModel.getPerformedBy()));
 
         if (criteriaModel.getWorkflowState() == ProcedureWorkflowStateCriteria.LOCKED) {
             addSimpleTerm(searchTerms, "workflowState", ProcedureWorkflowState.LOCKED);

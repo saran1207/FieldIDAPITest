@@ -2,10 +2,8 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
-import com.n4systems.model.AssetType;
 import com.n4systems.model.search.ProcedureCriteria;
 import com.n4systems.model.search.ProcedureWorkflowStateCriteria;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -13,7 +11,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
 import java.util.Arrays;
-import java.util.List;
 
 
 public class ProcedureFilterPanel extends Panel {
@@ -35,11 +32,7 @@ public class ProcedureFilterPanel extends Panel {
         add(new CollapsiblePanel("assetDetailsCriteriaPanel", new StringResourceModel("label.asset_details", this, null)) {
             @Override
             protected Panel createContainedPanel(String id) {
-                return new AssetDetailsCriteriaPanel(id, model) {
-                    @Override protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
-                        ProcedureFilterPanel.this.onAssetTypeOrGroupUpdated(target, selectedAssetType, availableAssetTypes);
-                    }
-                };
+                return new AssetDetailsCriteriaPanel(id, model);
             }
         });
 
@@ -64,7 +57,5 @@ public class ProcedureFilterPanel extends Panel {
 		response.renderCSSReference("style/component/searchFilter.css");
 		super.renderHead(response);
 	}
-
-    protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {}
 
 }
