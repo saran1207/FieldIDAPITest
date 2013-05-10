@@ -1,4 +1,3 @@
-
 function setupPrintPage(options)
 {
     var $header = $('.header');
@@ -20,19 +19,17 @@ function setupPrintPage(options)
     var pagePixelCount = 0;
 
     var $ul = $('<ul></ul>');
-   // $ul.appendTo($('#print-images-container'));
+    // $ul.appendTo($('#print-images-container'));
     $ul.appendTo($('.printpage'));
-  //  $wmark.appendTo($('.printpage'));
-
 
     $('#print-images li').each(function(index,value) {
+        
         if (index%3==0) {
-            pagePixelCount =  pagePixelCount + 220;
-
+            pagePixelCount =  pagePixelCount + 200;
         }
-        if (pagePixelCount>830) {
-           // $header.clone().appendTo($ul);
 
+        if (pagePixelCount>860) {
+           // $header.clone().appendTo($ul);
             $page = $('<div class="printpage" id="printpage">');
             $page.appendTo($('#print-images-container'));
             var $hclone = $header.clone()
@@ -44,14 +41,11 @@ function setupPrintPage(options)
 
             $ul.appendTo($page);
             //$wmark.clone().appendTo($hclone);
-
-
         }
-
-
         $(value).clone().appendTo($ul);
     });
-     $('#print-images').remove();    // delete this element after.
+
+    $('#print-images').remove();    // delete this element after.
 
 
 
@@ -91,6 +85,4 @@ function setupPrintPage(options)
 
     // don't add page break to first header
     $(".header").first().css("page-break-before", "avoid");
-
-
 }
