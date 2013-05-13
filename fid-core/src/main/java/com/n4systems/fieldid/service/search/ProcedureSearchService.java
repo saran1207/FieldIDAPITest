@@ -30,7 +30,9 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
         addSimpleTerm(searchTerms, "assignee", criteriaModel.getAssignee());
         addSimpleTerm(searchTerms, "assignedGroup", criteriaModel.getAssignedUserGroup());
 
-        searchTerms.add(new ProcedurePerformedByTerm(criteriaModel.getPerformedBy()));
+        if (criteriaModel.getPerformedBy() != null) {
+            searchTerms.add(new ProcedurePerformedByTerm(criteriaModel.getPerformedBy()));
+        }
 
         if (criteriaModel.getWorkflowState() == ProcedureWorkflowStateCriteria.LOCKED) {
             addSimpleTerm(searchTerms, "workflowState", ProcedureWorkflowState.LOCKED);
