@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.print;
 
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
+import com.n4systems.fieldid.service.task.DownloadLinkService;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
+import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.reporting.EventReportType;
@@ -14,6 +16,9 @@ public class PrintObservationCertReportPage extends PrintPage<EventReportCriteri
     @SpringBean
     private PrintAllCertificateService printAllCertificateService;
 
+    @SpringBean
+    private DownloadLinkService downloadLinkService;
+
     public PrintObservationCertReportPage(IModel<EventReportCriteria> criteria) {
         super(criteria);
     }
@@ -22,7 +27,8 @@ public class PrintObservationCertReportPage extends PrintPage<EventReportCriteri
     protected DownloadLink createDownloadLink() {
         String reportName = String.format("%s Report - %s", EventReportType.OBSERVATION_CERT.getDisplayName(), DateHelper.getFormattedCurrentDate(getCurrentUser()));
         String linkUrl = ContextAbsolutizer.toAbsoluteUrl("showDownloads.action?fileId=");
-        return printAllCertificateService.generateEventCertificates(criteria.getObject(), EventReportType.OBSERVATION_CERT, linkUrl, reportName);
+        DownloadLink link = downloadLinkService.createDownloadLink(reportName, ContentType.ZIP);
+        return printAllCertificateService.generateEventCertificates(criteria.getObject(), EventReportType.OBSERVATION_CERT, linkUrl, link);
     }
 
 }

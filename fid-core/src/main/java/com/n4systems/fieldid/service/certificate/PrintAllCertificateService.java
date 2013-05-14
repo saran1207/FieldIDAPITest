@@ -11,7 +11,6 @@ import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.service.task.AsyncService.AsyncTask;
 import com.n4systems.fieldid.service.task.DownloadLinkService;
 import com.n4systems.model.Event;
-import com.n4systems.model.downloadlink.ContentType;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.search.AssetSearchCriteria;
@@ -51,9 +50,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
     @Autowired private ReportService reportService;
     @Autowired private AssetSearchService assetSearchService;
 	
-	public DownloadLink generateAssetCertificates(AssetSearchCriteria criteria, final String downloadUrl, String reportName) {
-		final DownloadLink link = downloadLinkService.createDownloadLink(reportName, ContentType.ZIP);
-
+	public DownloadLink generateAssetCertificates(AssetSearchCriteria criteria, final String downloadUrl, final DownloadLink link) {
         final List<Long> assetIds = criteria.getSelection().getSelectedIds();
 
         if (criteria.getSortColumn() != null) {
@@ -82,8 +79,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
         });
     }
 
-    public DownloadLink generateEventCertificates(EventReportCriteria criteriaModel, final EventReportType reportType, final String downloadUrl, String reportName) {
-		final DownloadLink link = downloadLinkService.createDownloadLink(reportName, ContentType.ZIP);
+    public DownloadLink generateEventCertificates(EventReportCriteria criteriaModel, final EventReportType reportType, final String downloadUrl, final DownloadLink link) {
         final List<Long> sortedSearchResultsList = reportService.idSearch(criteriaModel);
         final List<Long> sortedSelectedList = sortSelectionBasedOnIndexIn(criteriaModel.getSelection(), sortedSearchResultsList);
 
@@ -95,7 +91,7 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 			}
 		});
 		asyncService.run(task);
-		
+
 		return link;
 	}
 
@@ -107,8 +103,8 @@ public class PrintAllCertificateService extends FieldIdPersistenceService {
 				mailService.sendMessage(link.generateMailMessage("We're sorry, your report did not contain any printable events."));
 				return;
 			}
-			
-			downloadLinkService.updateState(link, DownloadState.INPROGRESS);
+
+            downloadLinkService.updateState(link, DownloadState.INPROGRESS);
 			
 			Integer maxCertsPerGroup = configService.getInteger(ConfigEntry.REPORTING_MAX_REPORTS_PER_FILE);
 			
