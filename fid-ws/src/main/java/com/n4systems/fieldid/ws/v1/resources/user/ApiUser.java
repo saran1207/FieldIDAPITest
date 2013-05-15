@@ -129,4 +129,12 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
     public void setGroupIds(List<Long> groupIds) {
         this.groupIds = groupIds;
     }
+
+    public Long getGroupId() {
+        if (groupIds == null || groupIds.isEmpty()) {
+            return null;
+        }
+        return groupIds.get(0);
+    }
+
 }
