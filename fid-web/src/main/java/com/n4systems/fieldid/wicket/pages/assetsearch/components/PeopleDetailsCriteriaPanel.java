@@ -24,6 +24,10 @@ import static ch.lambdaj.Lambda.on;
 public class PeopleDetailsCriteriaPanel extends Panel {
 
     public PeopleDetailsCriteriaPanel(String id, IModel<? extends PeopleCriteria> criteriaModel) {
+        this(id, criteriaModel, true);
+    }
+
+    public PeopleDetailsCriteriaPanel(String id, IModel<? extends PeopleCriteria> criteriaModel, boolean includeUnassignedOption) {
         super(id, criteriaModel);
 
         UsersForTenantModel usersForTenantModel = new UsersForTenantModel();
@@ -34,12 +38,15 @@ public class PeopleDetailsCriteriaPanel extends Panel {
         VisibleUsersModel usersModel = new VisibleUsersModel();
         IModel<List<Assignable>> assigneesModel = new AssigneesModel(userGroupsModel, usersModel);
 
-        ListWithBlankOptionModel blankOptionUserList = new ListWithBlankOptionModel(assigneesModel, UnassignedIndicator.UNASSIGNED);
+        IModel<List<Assignable>> assignablesWithBlankOptionIfNecessary = assigneesModel;
+        if (includeUnassignedOption) {
+            assignablesWithBlankOptionIfNecessary = new ListWithBlankOptionModel(assigneesModel, UnassignedIndicator.UNASSIGNED);
+        }
 
         add(new AssignedUserOrGroupSelect("assignee",
                 createWrappedModel(criteriaModel, assigneeModel),
                 usersModel, userGroupsModel,
-                blankOptionUserList).setRenderBodyOnly(true));
+                assignablesWithBlankOptionIfNecessary).setRenderBodyOnly(true));
 
         add(new FidDropDownChoice<User>("performedBy", usersForTenantModel, new ListableChoiceRenderer<User>()).setNullValid(true));
     }

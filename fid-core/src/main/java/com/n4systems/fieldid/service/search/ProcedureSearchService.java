@@ -25,10 +25,14 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
 
     @Override
     protected void addSearchTerms(ProcedureCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
-        addSimpleTerm(searchTerms, "type.asset.type", criteriaModel.getAssetType());
-        addSimpleTerm(searchTerms, "type.asset.type.group", criteriaModel.getAssetTypeGroup());
+        addSimpleTerm(searchTerms, "asset.type", criteriaModel.getAssetType());
+        addSimpleTerm(searchTerms, "asset.type.group", criteriaModel.getAssetTypeGroup());
         addSimpleTerm(searchTerms, "assignee", criteriaModel.getAssignee());
         addSimpleTerm(searchTerms, "assignedGroup", criteriaModel.getAssignedUserGroup());
+        addWildcardOrStringTerm(searchTerms, "asset.rfidNumber", criteriaModel.getRfidNumber());
+        addWildcardOrStringTerm(searchTerms, "asset.identifier", criteriaModel.getIdentifier());
+        addWildcardOrStringTerm(searchTerms, "asset.customerRefNumber", criteriaModel.getReferenceNumber());
+        addSimpleTerm(searchTerms, "asset.assetStatus", criteriaModel.getAssetStatus());
 
         if (criteriaModel.getPerformedBy() != null) {
             searchTerms.add(new ProcedurePerformedByTerm(criteriaModel.getPerformedBy()));

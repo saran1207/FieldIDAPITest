@@ -46,7 +46,7 @@ public class ProcedureFilterPanel extends Panel {
         add( new CollapsiblePanel("peopleDetailsCriteriaPanel", new StringResourceModel("label.people", this, null)) {
             @Override
             protected Panel createContainedPanel(String id) {
-                return new PeopleDetailsCriteriaPanel(id, model);
+                return new PeopleDetailsCriteriaPanel(id, model, false);
             }
         });
         

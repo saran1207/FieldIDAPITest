@@ -1,0 +1,2 @@
+update column_mappings set path_expression = "asset.rfidNumber" where name = "procedure_search_rfidnumber";
+update column_mappings set join_expression = "asset.type.group" where name = "procedure_search_assettypegroup";
