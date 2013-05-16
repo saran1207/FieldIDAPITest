@@ -11,10 +11,12 @@
 
 		<#if !isArchivedPage>
 			<#assign columns = ["", "userID", "group", "owner", "owner.customerOrg", "owner.divisionOrg", "emailAddress"]>
+            <#assign sortables = [true, true, false, true, true, true, true, true] >
 			<#assign labels = ["${namelabel}", "${usernamelabel}", "${usergrouplabel}", "${orglabel}", "${customerlabel}", "${divisionlabel}", "${emaillabel}"]>
 			<#assign sortAction = "userList" >
 		<#else>
 			<#assign columns = ["","owner", "owner.customerOrg", "owner.divisionOrg", "emailAddress"]>
+            <#assign sortables = [true, true, true, true, true] >
 			<#assign labels = ["${namelabel}", "${orglabel}", "${customerlabel}", "${divisionlabel}", "${emaillabel}"]>
 			<#assign sortAction = "archivedUserList" >			
 		</#if>

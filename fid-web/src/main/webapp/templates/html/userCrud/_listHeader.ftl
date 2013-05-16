@@ -17,7 +17,11 @@
 </#if> 
 
 <th class="${sortDisplay}">
-	<a href='<@s.url action="${sortAction}" sortColumn="${column}" sortDirection="${direction}"/>'>
-		${labels[x]}
-	</a>
+    <#if sortables[x]>
+        <a href='<@s.url action="${sortAction}" sortColumn="${column}" sortDirection="${direction}"/>'>
+            ${labels[x]}
+        </a>
+    <#else>
+        ${labels[x]}
+    </#if>
 </th>
