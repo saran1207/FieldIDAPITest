@@ -73,5 +73,6 @@ function storeScheduleId(index, scheduleSelectBox){
 function selectUnscheduledForAllDropDowns(){
 	$$('.eventSchedules').each(function(selectBox) {
 		selectBox[0].selected=true;
+        jQuery(selectBox).trigger('change');
 	});	
 }
