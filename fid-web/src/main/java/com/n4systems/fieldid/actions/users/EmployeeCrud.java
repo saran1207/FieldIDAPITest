@@ -86,6 +86,7 @@ public class EmployeeCrud extends UserCrud {
 	}
 	
 	@Override
+    @SkipValidation
 	public String doShow() {
 		setupPermissions();
 		return super.doShow();
