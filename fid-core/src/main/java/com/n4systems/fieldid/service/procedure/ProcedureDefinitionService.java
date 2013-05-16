@@ -196,6 +196,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         isolationPoint.setSourceType(source.getSourceType());
         isolationPoint.setTenant(source.getTenant());
         isolationPoint.setSourceText(source.getSourceText());
+        isolationPoint.setElectronicIdentifier(source.getElectronicIdentifier());
         if(source.getDeviceDefinition() != null) {
             isolationPoint.setDeviceDefinition(cloneIsolationDeviceDescription(source.getDeviceDefinition(), new IsolationDeviceDescription()));
         }
