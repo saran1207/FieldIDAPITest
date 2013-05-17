@@ -28,6 +28,7 @@
 			<interceptor name="eulaRequired" class="com.n4systems.fieldid.utils.EULAInterceptor"/>
 			<interceptor name="setupWizard" class="com.n4systems.fieldid.utils.SetupWizardFirstTimeInterceptor"/>
 			<interceptor name="concurrentSession" class="com.n4systems.fieldid.utils.ConcurrentSessionInterceptor"/>
+            <interceptor name="noRobots" class="com.n4systems.fieldid.utils.AntiRobotInterceptor"/>
 			
 			<interceptor-stack name="publicStack">
 				<interceptor-ref name="paramsPrepareParamsStack" />
@@ -39,7 +40,7 @@
 				<interceptor-ref name="publicStack" />
 				<interceptor-ref name="enabledFeatures"/>
 			</interceptor-stack>
-			
+
 			<interceptor-stack name="loggedInStack">
 				<interceptor-ref name="tenatRequired" />
 				<interceptor-ref name="login" />
@@ -74,6 +75,11 @@
 				<interceptor-ref name="flashScope" />
 				<interceptor-ref name="brandedPublicStack" />
 			</interceptor-stack>
+
+            <interceptor-stack name="noRobotsBrandedFlashPublicStack">
+                <interceptor-ref name="brandedFlashPublicStack" />
+                <interceptor-ref name="noRobots" />
+            </interceptor-stack>
 			
 			<interceptor-stack name="homeStack">
 				<interceptor-ref name="flashSecureStack"/>

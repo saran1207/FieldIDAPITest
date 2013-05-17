@@ -35,7 +35,7 @@
 	</package>
 	
 	<package name="publicAjax" extends="default" namespace="/public/ajax">
-		<default-interceptor-ref name="brandedFlashPublicStack" />
+		<default-interceptor-ref name="noRobotsBrandedFlashPublicStack" />
 		
 		<global-results>
 			<result name="error" type="freemarker">/templates/ajax/ajax/error.ftl</result>
