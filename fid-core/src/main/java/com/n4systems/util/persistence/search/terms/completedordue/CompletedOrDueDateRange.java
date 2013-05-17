@@ -46,10 +46,10 @@ public class CompletedOrDueDateRange extends CompleteOrIncompleteTerm {
     // TODO : should put the isCustom() logic in the actual dateRange object itself.
     private Date getToDate() {
         LocalDate to = dateRange.getTo();
-        if (dateRange.getRangeType().isCustom() && to!=null) {
+        if (dateRange.getRangeType().isCustom() && to != null) {
             to = to.plusDays(1);
         }
-        return to.toDate();
+        return to == null ? null : to.toDate();
     }
 
 }
