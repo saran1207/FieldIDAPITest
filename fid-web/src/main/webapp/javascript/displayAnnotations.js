@@ -46,6 +46,8 @@ function annotateUnlockingImages() {
 var lockTimeoutCheck = null;
 var unlockTimeoutCheck = null;
 
+var numIsolationPoints = 0;
+
 function waitForLockingTimelineToLoadThenAnnotate() {
     lockTimeoutCheck = window.setInterval(annotateLockAfterLoad, 100);
 }
@@ -55,15 +57,15 @@ function waitForUnlockingTimelineToLoadThenAnnotate() {
 }
 
 function annotateLockAfterLoad() {
-    if ($('.lockingTimeline div.media-image img').size() > 0) {
-        $('.lockingTimeline div.media-image img').load(function() { annotateLockingImages() });
+    if ($('.lockingTimeline div.media-image img').size() == numIsolationPoints) {
+        $($('.lockingTimeline div.media-image img')[numIsolationPoints-1]).load(function() { annotateLockingImages() });
         window.clearInterval(lockTimeoutCheck);
     }
 }
 
 function annotateUnlockAfterLoad() {
-    if ($('.unlockingTimeline div.media-image img').size() > 0) {
-        $('.unlockingTimeline div.media-image img').load(function() { annotateUnlockingImages() } );
+    if ($('.unlockingTimeline div.media-image img').size() == numIsolationPoints) {
+        $($('.unlockingTimeline div.media-image img')[numIsolationPoints-1]).load(function() { annotateUnlockingImages() } );
         window.clearInterval(unlockTimeoutCheck);
     }
 }

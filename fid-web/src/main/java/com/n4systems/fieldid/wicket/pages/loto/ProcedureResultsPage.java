@@ -206,6 +206,7 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
 
         JsonElement convertedIsolationAnnotations = serializeImageAnnotations(procedureModel.getObject().getLockResults());
         response.renderJavaScript("var isolationAnnotations = " + convertedIsolationAnnotations.toString()+";", null);
+        response.renderJavaScript("numIsolationPoints = " + procedureModel.getObject().getLockResults().size() + ";", null);
 
         response.renderJavaScript("waitForLockingTimelineToLoadThenAnnotate();", null);
         if (procedureModel.getObject().getWorkflowState() == ProcedureWorkflowState.UNLOCKED) {
