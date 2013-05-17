@@ -33,6 +33,7 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.services.asset.AssetSaveService;
+import com.n4systems.services.date.DateService;
 import com.n4systems.tools.Pager;
 import com.n4systems.uitags.views.HierarchicalNode;
 import com.n4systems.util.AssetRemovalSummary;
@@ -55,6 +56,9 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private static final long serialVersionUID = 1L;
 	private static Logger logger = Logger.getLogger(AssetCrud.class);
 
+
+    @Autowired
+    protected DateService dateService;
     @Autowired
     protected UserService userService;
     @Autowired
@@ -202,7 +206,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	private void applyDefaults() {
 		refreshRegirstation = true;
 
-		asset.setIdentified(DateHelper.getToday());
+        asset.setIdentified(dateService.todayAsDate());
 
 		loadAddAssetHistory();
 		if (addAssetHistory != null) {
