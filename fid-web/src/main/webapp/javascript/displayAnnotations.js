@@ -11,61 +11,61 @@ function createLabel(annotation) {
     return span;
 }
 
-var lockingImagesAnnotated = false;
-var unlockingImagesAnnotated = false;
 
 function annotateLockingImages() {
-    if (!lockingImagesAnnotated) {
-        lockingImagesAnnotated = true;
-        $('.lockingTimeline div.media-image').each(
-            function(index, element) {
-                var currentAnnotation = isolationAnnotations[index];
-                $(element).addAnnotations(
-                    function(annotation) {
-                        return createLabel(annotation);
-                    }, [ currentAnnotation ], { xPosition:"left" } );
-            });
-    }
+    $('span.note').remove();
+    $('.timelineContainer div.media-image').each(
+        function(index, element) {
+            var currentAnnotation = isolationAnnotations[index];
+            $(element).addAnnotations(
+                function(annotation) {
+                    return createLabel(annotation);
+                }, [ currentAnnotation ], { xPosition:"left" } );
+        });
 }
 
 function annotateUnlockingImages() {
-    if (!unlockingImagesAnnotated) {
-        unlockingImagesAnnotated = true;
-        $('.unlockingTimeline div.media-image').each(
-            function(index, element) {
-                var currentAnnotation = isolationAnnotations[isolationAnnotations.length - 1 - index];
-                $(element).addAnnotations(
-                    function(annotation) {
-                        return createLabel(annotation);
-                    }, [ currentAnnotation ], { xPosition:"left" });
-            });
+    $('span.note').remove();
+    $('.timelineContainer div.media-image').each(
+        function(index, element) {
+            var currentAnnotation = isolationAnnotations[isolationAnnotations.length - 1 - index];
+            $(element).addAnnotations(
+                function(annotation) {
+                    return createLabel(annotation);
+                }, [ currentAnnotation ], { xPosition:"left" });
+        });
+}
+
+var unlockingState = false;
+
+var waitForTimelineToShowUp = null;
+
+function waitForTimelineToLoadThenAnnotate() {
+    waitForTimelineToShowUp = window.setInterval(checkIfTimelineIsThereYet, 200);
+}
+
+function redrawAnnotations() {
+    if (unlockingState) {
+        annotateUnlockingImages();
+    } else {
+        annotateLockingImages();
     }
 }
 
+function checkIfTimelineIsThereYet() {
+    if ($('.timelineContainer div.media-image img').size() > 0) {
 
-var lockTimeoutCheck = null;
-var unlockTimeoutCheck = null;
+        var firstImage = $('.timelineContainer div.media-image img')[0];
+        var firstContainer = $(firstImage).parent();
 
-var numIsolationPoints = 0;
-
-function waitForLockingTimelineToLoadThenAnnotate() {
-    lockTimeoutCheck = window.setInterval(annotateLockAfterLoad, 100);
-}
-
-function waitForUnlockingTimelineToLoadThenAnnotate() {
-    unlockTimeoutCheck = window.setInterval(annotateUnlockAfterLoad, 100);
-}
-
-function annotateLockAfterLoad() {
-    if ($('.lockingTimeline div.media-image img').size() == numIsolationPoints) {
-        $($('.lockingTimeline div.media-image img')[numIsolationPoints-1]).load(function() { annotateLockingImages() });
-        window.clearInterval(lockTimeoutCheck);
+        if (firstContainer.width() > 0) {
+            $(firstImage).load(function() { redrawAnnotations() });
+            window.clearInterval(waitForTimelineToShowUp);
+        }
     }
 }
 
-function annotateUnlockAfterLoad() {
-    if ($('.unlockingTimeline div.media-image img').size() == numIsolationPoints) {
-        $($('.unlockingTimeline div.media-image img')[numIsolationPoints-1]).load(function() { annotateUnlockingImages() } );
-        window.clearInterval(unlockTimeoutCheck);
-    }
-}
+$(document).ready(function() {
+    waitForTimelineToLoadThenAnnotate();
+    $('.timelineContainer').bind("UPDATE", redrawAnnotations);
+});
