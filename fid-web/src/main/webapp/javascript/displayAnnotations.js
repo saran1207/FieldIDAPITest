@@ -41,7 +41,7 @@ var unlockingState = false;
 var waitForTimelineToShowUp = null;
 
 function waitForTimelineToLoadThenAnnotate() {
-    waitForTimelineToShowUp = window.setInterval(checkIfTimelineIsThereYet, 200);
+    waitForTimelineToShowUp = window.setInterval(checkIfTimelineIsThereYet, 150);
 }
 
 function redrawAnnotations() {
@@ -55,11 +55,14 @@ function redrawAnnotations() {
 function checkIfTimelineIsThereYet() {
     if ($('.timelineContainer div.media-image img').size() > 0) {
 
-        var firstImage = $('.timelineContainer div.media-image img')[0];
+        var firstImage = $($('.timelineContainer div.media-image img')[0]);
         var firstContainer = $(firstImage).parent();
 
         if (firstContainer.width() > 0) {
-            $(firstImage).load(function() { redrawAnnotations() });
+            if (firstImage.width()>0) {
+                redrawAnnotations();
+            }
+            firstImage.load(function() { redrawAnnotations() });
             window.clearInterval(waitForTimelineToShowUp);
         }
     }
