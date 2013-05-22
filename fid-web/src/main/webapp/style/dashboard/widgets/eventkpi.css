@@ -44,7 +44,6 @@
 
 .kpi .bar-chart .bar.passed {
     background:#aDFFb1;
-    border-right: 1px solid #9DeDb2;
 }
 
 .kpi .bar-chart .bar.closed {
