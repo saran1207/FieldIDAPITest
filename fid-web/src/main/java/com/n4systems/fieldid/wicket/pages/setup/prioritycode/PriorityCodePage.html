@@ -2,15 +2,14 @@
 
     <div class="header">
 
-        <h2><wicket:message key="label.priority_codes"/><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/><a wicket:id="backToLink2">&#171; <span wicket:id="backToLinkLabel2"/></a></h2>
-        
-        <a class="mattButtonLeft" wicket:id="viewAll"><wicket:message key="label.active"/></a>
-        <a class="mattButtonRight" wicket:id="viewArchived"><wicket:message key="label.archived"/></a>
-
         <form class="openForm" wicket:id="openForm">
             <a class="mattButton blueButton" wicket:id="openFormButton"><wicket:message key="label.add_priority_code"/></a>
         </form>
 
+        <div class="mattBar">
+            <a class="mattButtonLeft" wicket:id="viewAll"><wicket:message key="label.active"/></a>
+            <a class="mattButtonRight" wicket:id="viewArchived"><wicket:message key="label.archived"/></a>
+        </div>
         <form class="form" wicket:id="form">
             <div wicket:id="formContainer" class="formContainer" style="position:absolute;top:40px;left:-223px;">
                 <h2>

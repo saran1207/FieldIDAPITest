@@ -13,7 +13,7 @@ public class TipsyBehavior extends Behavior {
     private Gravity gravity;
     private String title = null;
 
-    public enum Gravity { S,N,E,W };
+    public enum Gravity { S,N,E,W,SW,NW,SE,NE };
 
     public TipsyBehavior(Gravity gravity) {
         this(null, gravity);

@@ -5,12 +5,14 @@ import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TextFieldHintBehavior;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.user.UserGroup;
@@ -20,14 +22,12 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -72,10 +72,6 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
 
         add(userGroupsTable = new WebMarkupContainer("userGroupsTable"));
         userGroupsTable.setOutputMarkupId(true);
-
-        ContextImage tooltip;
-        add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
-        tooltip.add(new AttributeAppender("title", new FIDLabelModel("label.manage_user_groups_msg")));
 
         groupsModel = createUserGroupsModel();
         userGroupsTable.add(new ListView<UserGroup>("userGroups", groupsModel) {
@@ -248,8 +244,19 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
     }
 
     @Override
-    protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.user_groups"));
+    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
+        if(isTopTitle)
+            return new Label(labelId, new FIDLabelModel("label.user_groups"));
+        else {
+            return new UserGroupTitleLabel(labelId);
+        }
+    }
+
+    @Override
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, OwnersUsersLocationsPage.class);
+        pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
+        return pageLink;
     }
 
     private IModel<List<UserGroup>> createUserGroupsModel() {
@@ -265,12 +272,10 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/setup/prettyItemList.css");
-        response.renderCSSReference("style/tipsy/tipsy.css");
     }
 
     private void redrawTable(AjaxRequestTarget target) {
         groupsModel.detach();
         target.add(userGroupsTable, filterForm);
-        target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
     }
 }

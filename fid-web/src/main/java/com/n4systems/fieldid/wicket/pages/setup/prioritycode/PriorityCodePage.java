@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.PriorityCode;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -20,7 +21,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -83,11 +83,6 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
         });
         add(openForm);
 
-        ContextImage tooltip;
-        
-        add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
-        tooltip.add(new AttributeAppender("title", new FIDLabelModel("msg.priority_codes")));
-
         add(priorityCodeListPanel = new PriorityCodeListPanel("priorityCodeList"));
         priorityCodeListPanel.setOutputMarkupPlaceholderTag(true);
 
@@ -95,9 +90,6 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
         priorityCodeArchivedListPanel.setOutputMarkupPlaceholderTag(true);
         priorityCodeArchivedListPanel.setVisible(false);
 
-        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>("backToLink2", AssetsAndEventsPage.class);
-        pageLink.add(new FlatLabel("backToLinkLabel2", new FIDLabelModel("label.back_to_setup")));
-        add(pageLink);
     }
 
     class AddPriorityCodeForm extends Form<PriorityCode> {
@@ -173,5 +165,20 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
     @Override
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("label.priority_codes"));
+    }
+
+    @Override
+    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
+        if (isTopTitle)
+            return new Label(labelId, new FIDLabelModel("label.priority_codes"));
+        else
+            return new PriorityCodeTitleLabel(labelId);
+    }
+
+    @Override
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, AssetsAndEventsPage.class);
+        pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
+        return pageLink;
     }
 }
