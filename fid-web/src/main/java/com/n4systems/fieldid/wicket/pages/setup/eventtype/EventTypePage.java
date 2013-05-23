@@ -26,7 +26,7 @@ public class EventTypePage extends FieldIDFrontEndPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.manage_event_type"));
+        return new Label(labelId, new FIDLabelModel("title.manage_event_type_named", eventTypeModel.getObject().getDisplayName()));
     }
 
     @Override
