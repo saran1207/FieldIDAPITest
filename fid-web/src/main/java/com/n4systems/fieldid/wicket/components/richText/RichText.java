@@ -4,12 +4,14 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.services.SecurityContext;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -150,13 +152,32 @@ public class RichText extends Panel {
     public RichText withAutoUpdate() {
         // use this if you want your model updated via ajax after blur event
         area.add(behavior = new AjaxFormComponentUpdatingBehavior("onblur") {
-            @Override protected void onUpdate(AjaxRequestTarget target) {
-                ; // nop...just here to inherit the model binding feature.
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                onRichTextUpdate(target);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, RuntimeException e) {
+                onRichTextError(target, e);
             }
         });
         return this;
     }
 
+    protected void onRichTextError(AjaxRequestTarget target, RuntimeException e) {}
+
+    protected void onRichTextUpdate(AjaxRequestTarget target) {}
+
+    public RichText addBehavior(Behavior validator) {
+        area.add(validator);
+        return this;
+    }
+
+    public RichText withValidationBehavior() {
+        ValidationBehavior.addValidationBehaviorToComponent(area);
+        return this;
+    }
 
     /**
      *  java object converted to json & used by nicEdit javascript widget.

@@ -23,7 +23,7 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	@Column(nullable=false)
 	private boolean retired = false;
 
-    @Column(nullable = true)
+    @Column(nullable = true, length=5000)
     private String instructions;
 	
 	@Column(name="text", nullable=false, length=511)
