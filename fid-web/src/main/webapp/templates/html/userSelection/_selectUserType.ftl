@@ -3,7 +3,7 @@
 <head>
 	<@n4.includeStyle href="../newCss/user/user_select" type="page"/>
     <@n4.includeStyle href="../newCss/component/matt_buttons" type="page"/>
-	<title><@s.text name="label.upgrade" /></title>
+	<title><@s.text name="label.add_user" /></title>
 </head>
 
 <@s.url id="addFullUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addEmployeeUser"/>
