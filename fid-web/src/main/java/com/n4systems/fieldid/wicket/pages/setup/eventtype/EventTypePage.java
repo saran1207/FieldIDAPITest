@@ -2,10 +2,12 @@ package com.n4systems.fieldid.wicket.pages.setup.eventtype;
 
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
 import com.n4systems.model.EventType;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -20,6 +22,11 @@ public class EventTypePage extends FieldIDFrontEndPage {
 
     public EventTypePage(PageParameters params) {
         super(params);
+    }
+
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.manage_event_type"));
     }
 
     @Override

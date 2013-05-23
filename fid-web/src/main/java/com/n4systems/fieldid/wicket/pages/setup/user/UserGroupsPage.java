@@ -244,12 +244,18 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
     }
 
     @Override
-    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
-        if(isTopTitle)
-            return new Label(labelId, new FIDLabelModel("label.user_groups"));
-        else {
-            return new UserGroupTitleLabel(labelId);
-        }
+    protected Component createTitleLabel(String labelId) {
+        return new UserGroupTitleLabel(labelId);
+    }
+
+    @Override
+    protected Component createTopTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("label.user_groups"));
+    }
+
+    @Override
+    protected boolean useTopTitleLabel() {
+        return true;
     }
 
     @Override

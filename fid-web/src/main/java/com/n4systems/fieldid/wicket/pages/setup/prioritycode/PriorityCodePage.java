@@ -163,16 +163,18 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
     }
 
     @Override
-    protected Label createTitleLabel(String labelId) {
+    protected Component createTitleLabel(String labelId) {
+        return new PriorityCodeTitleLabel(labelId);
+    }
+
+    @Override
+    protected Component createTopTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("label.priority_codes"));
     }
 
     @Override
-    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
-        if (isTopTitle)
-            return new Label(labelId, new FIDLabelModel("label.priority_codes"));
-        else
-            return new PriorityCodeTitleLabel(labelId);
+    protected boolean useTopTitleLabel() {
+        return true;
     }
 
     @Override

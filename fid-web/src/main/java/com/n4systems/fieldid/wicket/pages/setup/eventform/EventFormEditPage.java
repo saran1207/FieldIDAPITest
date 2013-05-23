@@ -6,15 +6,13 @@ import com.n4systems.fieldid.wicket.components.eventform.CriteriaConfigurationPa
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaPanel;
 import com.n4systems.fieldid.wicket.components.eventform.CriteriaSectionsPanel;
 import com.n4systems.fieldid.wicket.components.eventform.save.SavePanel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.eventtype.EventTypePage;
+import com.n4systems.model.ButtonGroup;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.model.ScoreGroup;
-import com.n4systems.model.ButtonGroup;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -37,11 +35,6 @@ public class EventFormEditPage extends EventTypePage {
 
     private SavePanel topSavePanel;
     private SavePanel bottomSavePanel;
-
-    @Override
-    protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.manage_event_type"));
-    }
 
     public EventFormEditPage(PageParameters params) {
         super(params);

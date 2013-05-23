@@ -49,11 +49,19 @@ public abstract class LotoPage extends FieldIDFrontEndPage {
     }
 
     @Override
-    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
-        if(isTopTitle)
-            return new Label(labelId, new FIDLabelModel("label.procedures"));
-        else
-            return new ProcedureTitleLabel(labelId, assetModel);
+    protected Component createTitleLabel(String labelId) {
+        return new ProcedureTitleLabel(labelId, assetModel);
     }
+
+    @Override
+    protected Component createTopTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("label.procedures"));
+    }
+
+    @Override
+    protected boolean useTopTitleLabel() {
+        return true;
+    }
+
 
 }

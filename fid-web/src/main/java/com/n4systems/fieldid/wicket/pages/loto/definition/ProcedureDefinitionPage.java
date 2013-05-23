@@ -98,12 +98,21 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     }
 
     @Override
-    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
-        if(isTopTitle)
-            return new Label(labelId, new FIDLabelModel("label.procedures"));
-        else
+    protected Component createTitleLabel(String labelId) {
             return new ProcedureTitleLabel(labelId, new PropertyModel<Asset>(model, "asset"));
     }
+
+    @Override
+    protected Component createTopTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("label.procedures"));
+
+    }
+
+    @Override
+    protected boolean useTopTitleLabel() {
+        return true;
+    }
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);

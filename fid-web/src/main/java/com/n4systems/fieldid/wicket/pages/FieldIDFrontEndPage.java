@@ -141,10 +141,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         // eg. Labels may require details of entities to be loaded.
         addNavBar("navBar");
 
-        add(titleLabel = createTitleLabel("titleLabel", false));
+        add(titleLabel = createTitleLabel("titleLabel"));
         titleLabel.setRenderBodyOnly(true);
 
-        add(topTitleLabel = createTitleLabel("topTitleLabel", true));
+        add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
     }
 
@@ -211,11 +211,15 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     }
 
     protected Component createTitleLabel(String labelId) {
-        return createTitleLabel(labelId, false);
+        return new Label(labelId, "Field ID");
     }
 
-    protected Component createTitleLabel(String labelId, boolean isTopTitle) {
+    protected Component createTopTitleLabel(String labelId) {
         return new Label(labelId, "Field ID");
+    }
+
+    protected boolean useTopTitleLabel() {
+        return false;
     }
 
     protected Component createBackToLink(String linkId, String linkLabelId) {
