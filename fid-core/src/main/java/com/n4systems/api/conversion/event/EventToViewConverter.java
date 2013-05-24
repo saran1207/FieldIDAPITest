@@ -44,10 +44,11 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 		convertDirectFields(model, view);
 		converterPerformedBy(model, view);
 		convertAssetIdentifier(model, view);
-		convertEventStatus(model, view);
+		convertEventResult(model, view);
 		convertOwnerFields(model.getOwner(), view);
 		convertBook(model, view);
 		convertAssetStatus(model, view);
+        convertEventStatus(model, view);
 		convertNextDate(model, view);
 		convertCriteriaResults(model, view);
 		
@@ -113,7 +114,7 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
         view.setNotes(model.getNotes());
 	}
 
-	protected void convertEventStatus(Event model, EventView view) {
+	protected void convertEventResult(Event model, EventView view) {
         EventResult eventResult = model.getEventResult();
         if (eventResult ==null) {
             eventResult = EventResult.VOID;
@@ -145,6 +146,12 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 			view.setAssetStatus(model.getAssetStatus().getName());
 		}
 	}
+
+    protected void convertEventStatus(Event model, EventView view) {
+        if (model.getEventStatus() != null) {
+            view.setEventStatus(model.getEventStatus().getName());
+        }
+    }
 
 	protected void convertOwnerFields(BaseOrg owner, EventView view) {
 		view.setOrganization(owner.getInternalOrg().getName());

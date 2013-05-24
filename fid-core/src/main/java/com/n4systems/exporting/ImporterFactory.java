@@ -93,8 +93,9 @@ public class ImporterFactory {
 		EventToModelConverter converter = new EventToModelConverter(
 				loaderFactory.createOrgByNameLoader(), 
 				loaderFactory.createAssetByIdOwnerTypeLoader(), 
-				loaderFactory.createAssetStatusByNameLoader(), 
-				loaderFactory.createEventBookFindOrCreateLoader(),
+				loaderFactory.createAssetStatusByNameLoader(),
+                loaderFactory.createEventStatusByNameLoader(),
+                loaderFactory.createEventBookFindOrCreateLoader(),
 				loaderFactory.createUserByFullNameLoader(),
                 loaderFactory.createPredefinedLocationTreeLoader(),
 				type, timeZone);

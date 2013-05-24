@@ -32,9 +32,7 @@ public class EventImporter extends AbstractImporter<EventView> {
 	protected void importView(Transaction transaction, EventView view) throws ConversionException {		
 		try {
 			Event event = converter.toModel(view, transaction);
-/*
-            normalizeDueDate(event, view, converter.getTimeZone());
-*/
+
             ContinueExistingTransactionManager continueTransaction = new ContinueExistingTransactionManager(transaction);
 			eventPersistenceFactory.createEventCreator(continueTransaction).create(
 						new CreateEventParameterBuilder(event, modifiedBy)
@@ -46,17 +44,6 @@ public class EventImporter extends AbstractImporter<EventView> {
 			throw new ConversionException("Could not create event ", e);
 		}
 	}
-
-/*    private void normalizeDueDate(Event event, EventView view, TimeZone timeZone) {
-        if(timeZone.inDaylightTime(event.getDueDate())) {
-            Date fixedDate = new Date(event.getDueDate().getTime() + timeZone.getDSTSavings());
-            event.setDueDate(fixedDate);
-        }
-        if(timeZone.inDaylightTime(view.getNextEventDateAsDate())) {
-           Date fixedDate = new Date(view.getNextEventDateAsDate().getTime() + timeZone.getDSTSavings());
-           view.setNextEventDate(fixedDate);
-        }
-    }*/
 
     public void setModifiedBy(Long modifiedBy) {
 		this.modifiedBy = modifiedBy;

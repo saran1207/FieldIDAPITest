@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 public class EventToModelConverterTest {
 	private final class EventToModelConverterWithAllButConvertPerformedByEmptied extends EventToModelConverter {
 		private EventToModelConverterWithAllButConvertPerformedByEmptied(UserByFullNameLoader userLoader) {
-			super(null, null, null, null, userLoader, null, null, TimeZone.getDefault());
+			super(null, null, null, null, null, userLoader, null, null, TimeZone.getDefault());
 		}
 		@Override protected void resolveType(Event model) {}
 		@Override protected void resolveStatus(String statusName, Event model) {}
@@ -47,7 +47,7 @@ public class EventToModelConverterTest {
 		EventType type = EventTypeBuilder.anEventType().build();
 		type.setTenant(TenantBuilder.aTenant().build());
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, type, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, null, type, TimeZone.getDefault()) {
 			@Override protected void resolveStatus(String statusName, Event model) {}
 			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
 			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
@@ -82,7 +82,7 @@ public class EventToModelConverterTest {
 		expect(orgLoader.load(transaction)).andReturn(org);
 		replay(orgLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(orgLoader, null, null, null, null, null, null, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(orgLoader, null, null, null, null, null, null, null, TimeZone.getDefault()) {
 			@Override protected void resolveType(Event model) {}
 			@Override protected void resolveStatus(String statusName, Event model) {}
 			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -115,7 +115,7 @@ public class EventToModelConverterTest {
         expect(predefinedLocationTreeLoader.load(transaction)).andReturn(tree);
         replay(predefinedLocationTreeLoader);
 
-        EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, predefinedLocationTreeLoader, null, TimeZone.getDefault()) {
+        EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, predefinedLocationTreeLoader, null, TimeZone.getDefault()) {
             @Override protected void resolveType(Event model) {}
             @Override protected void resolveStatus(String statusName, Event model) {}
             @Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -140,7 +140,7 @@ public class EventToModelConverterTest {
 
     @Test
 	public void to_model_resolves_status_ignoring_case() throws ConversionException {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, null, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, null, null, TimeZone.getDefault()) {
 			@Override protected void resolveType(Event model) {}
 			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
 			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
@@ -165,7 +165,7 @@ public class EventToModelConverterTest {
 	
 	@Test
 	public void to_model_resolves_status_defaulting_to_na() throws ConversionException {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, null, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, null, null, TimeZone.getDefault()) {
 			@Override protected void resolveType(Event model) {}
 			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
 			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
@@ -195,7 +195,7 @@ public class EventToModelConverterTest {
 		expect(loader.load(transaction)).andReturn(Arrays.asList(asset));
 		replay(loader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, loader, null, null, null, null, null, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(null, loader, null, null, null, null, null, null, TimeZone.getDefault()) {
 			@Override protected void resolveType(Event model) {}
 			@Override protected void resolveStatus(String statusName, Event model) {}
 			@Override protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {}
@@ -230,7 +230,7 @@ public class EventToModelConverterTest {
 	
 	@Test
 	public void to_model_resolves_printable() throws ConversionException {
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, null, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, null, null, null, null, TimeZone.getDefault()) {
 			@Override protected void resolveType(Event model) {}
 			@Override protected void resolveStatus(String statusName, Event model) {}
 			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -264,7 +264,7 @@ public class EventToModelConverterTest {
 		expect(bookLoader.load(transaction)).andReturn(book);
 		replay(bookLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null, null, null, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, bookLoader, null, null, null, TimeZone.getDefault()) {
 			@Override protected void resolveType(Event model) {}
 			@Override protected void resolveStatus(String statusName, Event model) {}
 			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -286,7 +286,7 @@ public class EventToModelConverterTest {
 		EventBookFindOrCreateLoader bookLoader = createMock(EventBookFindOrCreateLoader.class);
 		replay(bookLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, null, bookLoader, null, null, null, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, null, null, bookLoader, null, null, null, TimeZone.getDefault()) {
 			@Override protected void resolveType(Event model) {}
 			@Override protected void resolveStatus(String statusName, Event model) {}
 			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -313,7 +313,7 @@ public class EventToModelConverterTest {
 		expect(psLoader.load(transaction)).andReturn(ps);
 		replay(psLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null, null, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null, null, null, TimeZone.getDefault()) {
 			@Override protected void resolveType(Event model) {}
 			@Override protected void resolveStatus(String statusName, Event model) {}
 			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -333,7 +333,7 @@ public class EventToModelConverterTest {
 		AssetStatusByNameLoader psLoader = createMock(AssetStatusByNameLoader.class);
 		replay(psLoader);
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null, null, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null, null, null, TimeZone.getDefault()) {
 			@Override protected void resolveType(Event model) {}
 			@Override protected void resolveStatus(String statusName, Event model) {}
 			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}
@@ -372,7 +372,7 @@ public class EventToModelConverterTest {
 		EventType type = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
 		type.setTenant(TenantBuilder.aTenant().build());
 		
-		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null, type, TimeZone.getDefault()) {
+		EventToModelConverter converter = new EventToModelConverter(null, null, psLoader, null, null, null, null, type, TimeZone.getDefault()) {
 			@Override protected void resolveType(Event model) {}
 			@Override protected void resolveStatus(String statusName, Event model) {}
 			@Override protected void resolveAsset(EventView view, Event model, Transaction transaction) {}

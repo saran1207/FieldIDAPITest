@@ -10,6 +10,7 @@ import com.n4systems.api.validation.validators.LocationValidator;
 import com.n4systems.model.*;
 import com.n4systems.model.assetstatus.AssetStatusByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
+import com.n4systems.model.eventstatus.EventStatusByNameLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocationTree;
 import com.n4systems.model.location.PredefinedLocationTreeLoader;
@@ -33,6 +34,7 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	private final OrgByNameLoader orgLoader;
 	private final AssetsByIdOwnerTypeLoader assetLoader;
 	private final AssetStatusByNameLoader assetStatusLoader;
+    private final EventStatusByNameLoader eventStatusLoader;
 	private final EventBookFindOrCreateLoader eventBookLoader;
 	private final UserByFullNameLoader userLoader;
     private final PredefinedLocationTreeLoader predefinedLocationTreeLoader;
@@ -41,11 +43,12 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	
 	private EventType type;
 	
-	public EventToModelConverter(OrgByNameLoader orgLoader, AssetsByIdOwnerTypeLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, PredefinedLocationTreeLoader predefinedLocationTreeLoader, EventType type, TimeZone timeZone) {
+	public EventToModelConverter(OrgByNameLoader orgLoader, AssetsByIdOwnerTypeLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventStatusByNameLoader eventStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, PredefinedLocationTreeLoader predefinedLocationTreeLoader, EventType type, TimeZone timeZone) {
 		this.orgLoader = orgLoader;
 		this.assetLoader = assetLoader;
 		this.assetStatusLoader = assetStatusLoader;
-		this.eventBookLoader = eventBookLoader;
+        this.eventStatusLoader = eventStatusLoader;
+        this.eventBookLoader = eventBookLoader;
 		this.userLoader = userLoader;
         this.predefinedLocationTreeLoader = predefinedLocationTreeLoader;
 		this.type = type;
@@ -70,7 +73,8 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 		resolvePerformedBy(view, model, transaction);
 		resolveEventBook(view, model, transaction);
 		
-		resolveAssetStatus(view, model, transaction);		
+		resolveAssetStatus(view, model, transaction);
+        resolveEventStatus(view, model, transaction);
 		
 		// practically speaking, the type should not be null.  it can happen in test classes tho. 
 		if (type != null) { 
@@ -308,6 +312,13 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 			model.setAssetStatus(status);
 		}
 	}
+
+    protected void resolveEventStatus(EventView view, Event model, Transaction transaction) {
+        if (view.getEventStatus() != null) {
+            EventStatus status = eventStatusLoader.setName(view.getEventStatus()).load(transaction);
+            model.setEventStatus(status);
+        }
+    }
 
 	protected void resolveOwner(EventView view, Event model, Transaction transaction) {
 		orgLoader.setOrganizationName(view.getOrganization());

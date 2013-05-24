@@ -23,6 +23,7 @@ import com.n4systems.model.eventbook.EventBookByNameLoader;
 import com.n4systems.model.eventbook.EventBookFindOrCreateLoader;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
+import com.n4systems.model.eventstatus.EventStatusByNameLoader;
 import com.n4systems.model.eventtype.AssociatedEventTypesLoader;
 import com.n4systems.model.eventtype.EventTypeListLoader;
 import com.n4systems.model.eventtype.EventTypeListableLoader;
@@ -119,6 +120,10 @@ public class LoaderFactory implements Serializable {
 	public AssetStatusByNameLoader createAssetStatusByNameLoader() {
 		return new AssetStatusByNameLoader(filter);
 	}
+
+    public EventStatusByNameLoader createEventStatusByNameLoader() {
+        return new EventStatusByNameLoader(filter);
+    }
 
 	public AssetStatusFilteredLoader createAssetStatusFilteredLoader() {
 		return new AssetStatusFilteredLoader(filter);

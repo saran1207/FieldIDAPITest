@@ -22,7 +22,7 @@ public class EventView extends ExternalModelView {
 	@SerializableField(title = "Date Performed", order = 200, validators = { NotNullValidator.class, DateValidator.class })
 	private Object datePerformed;
 
-	@SerializableField(title = "Event Result (Pass, Fail, N/A)", order = 300, validators = { NotNullValidator.class, EventStatusValidator.class })
+	@SerializableField(title = "Event Result (Pass, Fail, N/A)", order = 300, validators = { NotNullValidator.class, EventResultValidator.class })
 	private String status;
 
 	@SerializableField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
@@ -40,7 +40,10 @@ public class EventView extends ExternalModelView {
 	@SerializableField(title = "Asset Status", order = 800, validators = { AssetStatusExistsValidator.class })
 	private String assetStatus;
 
-	@SerializableField(title = "Next Event Date", order = 900, handler = DateSerializationHandler.class, validators = { DateValidator.class })
+    @SerializableField(title = "Event Status", order = 850, validators = { EventStatusExistsValidator.class })
+    private String eventStatus;
+
+    @SerializableField(title = "Next Event Date", order = 900, handler = DateSerializationHandler.class, validators = { DateValidator.class })
 	private Object nextEventDate;
 
 	@SerializableField(title = "Location", order = 1000, validators = {LocationValidator.class})
@@ -134,7 +137,15 @@ public class EventView extends ExternalModelView {
 		this.assetStatus = assetStatus;
 	}
 
-	public Object getNextEventDate() {
+    public String getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(String eventStatus) {
+        this.eventStatus = eventStatus;
+    }
+
+    public Object getNextEventDate() {
 		return nextEventDate;
 	}
 

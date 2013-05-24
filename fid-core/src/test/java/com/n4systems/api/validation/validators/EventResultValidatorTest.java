@@ -1,10 +1,12 @@
 package com.n4systems.api.validation.validators;
-import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class EventStatusValidatorTest {
-	private EventStatusValidator validator = new EventStatusValidator();
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+public class EventResultValidatorTest {
+	private EventResultValidator validator = new EventResultValidator();
 	
 	@Test
 	public void validate_passes_on_null() { 
