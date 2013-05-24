@@ -578,6 +578,9 @@ span.fieldHolder img {
     padding:5px;
     display:block;
     float:left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .attachedFile .removeLink {
