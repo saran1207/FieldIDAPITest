@@ -25,9 +25,7 @@
 
 		<@s.select id="userBelongsToFilter" name="userBelongsToFilter" list="userBelongsToFilters" listKey="id" listValue="name" key="label.belongs_to" labelposition="left"/>
 
-		<#if userLimitService.readOnlyUsersEnabled>
-			<@s.select cssClass="userTypeSelect" id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>
-		</#if>
+		<@s.select cssClass="userTypeSelect" id="userType" name="userType" list="userTypes" listKey="id" listValue="name" key="label.usertype" labelposition="left"/>
 
         <@s.select id="userGroupFilter" name="userGroupFilter" list="availableUserGroups" listKey="id" listValue="name" key="label.user_group" labelposition="left" headerKey="" headerValue="All" />
 		
