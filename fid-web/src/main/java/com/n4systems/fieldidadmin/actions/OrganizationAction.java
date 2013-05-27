@@ -20,8 +20,10 @@ import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.tools.Pager;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.chart.RangeType;
+import com.n4systems.util.timezone.CountryList;
 import com.opensymphony.xwork2.Preparable;
 import com.opensymphony.xwork2.validator.annotations.*;
 import org.apache.commons.lang.StringUtils;
@@ -84,7 +86,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
 	@Override
 	protected void initMemberFields() {}
-	
+
 	public void prepare() throws Exception {
 		if (id != null) {
 			tenant = TenantFinder.getInstance().findTenant(id);
@@ -479,5 +481,11 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
     public void setActiveOnly(boolean activeOnly) {
         this.activeOnly = activeOnly;
+    }
+
+    @Override
+    public String convertDateTime(Date date) {
+        TimeZone timezone = CountryList.getInstance().getRegionByFullId(ConfigEntry.DEFAULT_TIMEZONE_ID.getDefaultValue()).getTimeZone();
+        return DateHelper.date2String("MM/dd/yy hh:mm:ss a z", date, timezone);
     }
 }
