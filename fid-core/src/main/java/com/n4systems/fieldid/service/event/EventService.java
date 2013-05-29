@@ -10,6 +10,7 @@ import com.n4systems.fieldid.service.event.util.NewEventTransientCriteriaResultP
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.TypedOrgConnection;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -20,6 +21,7 @@ import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.*;
+import com.n4systems.services.tenant.Tenant30DayCountRecord;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
@@ -619,6 +621,29 @@ public class EventService extends FieldIdPersistenceService {
     public boolean hasEvents() {
         QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getTenantSecurityFilter());
         return persistenceService.exists(builder);
+    }
+
+    public Map<Long, Long> getTenantsLast30DaysCount(Map<Tenant,PrimaryOrg> tenants) {
+        QueryBuilder<Tenant30DayCountRecord> builder = new QueryBuilder<Tenant30DayCountRecord>(Event.class, new OpenSecurityFilter());
+
+        NewObjectSelect select = new NewObjectSelect(Tenant30DayCountRecord.class);
+        select.setConstructorArgs(Lists.newArrayList("obj.tenant", "COUNT(*)"));
+        builder.setSelectArgument(select);
+
+        builder.addWhere(WhereClauseFactory.create(Comparator.GT, "created", LocalDate.now().minusDays(30).toDate()));
+        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "tenant", tenants.keySet()));
+
+        builder.addGroupBy("tenant.id");
+
+        List<Tenant30DayCountRecord> data = persistenceService.findAll(builder);
+
+        Map<Long, Long> result = Maps.newHashMap();
+
+        for (Tenant30DayCountRecord record: data) {
+            result.put(tenants.get(record.getTenant()).getId(), record.getCount());
+        }
+
+        return result;
     }
 }
 

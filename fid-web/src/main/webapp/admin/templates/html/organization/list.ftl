@@ -59,8 +59,8 @@
 			<td><a href="<@s.url namespace="/admin" action="organizationEdit"/>?id=${primaryOrg.tenant.id}">${primaryOrg.displayName?html}</a></td>
 			<td>${primaryOrg.tenant.name!}</td>
 
-			<td>${action.getTotal30DayAssets(primaryOrg.id)?string.number}</td>
-			<td>${action.getTotal30DayEvents(primaryOrg.id)?string.number}</td>
+			<td>${action.getTotal30DayAssets(primaryOrg)?string.number}</td>
+			<td>${action.getTotal30DayEvents(primaryOrg)?string.number}</td>
 			<#if primaryOrg.tenant.lastLoginUser?exists && primaryOrg.tenant.lastLoginUser.userID?exists && primaryOrg.tenant.lastLoginUser.userID != 'n4systems'>
 				<td>${action.convertDateTime(primaryOrg.tenant.lastLoginTime)}</td>
 				<td>${primaryOrg.tenant.lastLoginUser.userID}</td>

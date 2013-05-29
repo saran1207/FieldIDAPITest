@@ -1,6 +1,9 @@
 package com.n4systems.fieldidadmin.actions;
 
+import com.google.common.collect.Maps;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
@@ -61,9 +64,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private LastActiveSessionLoader lastActiveSessionLoader = new LastActiveSessionLoader();
 
 	Collection<PrimaryOrg> primaryOrgs = null;
-	private Map<Long, Long> totalAssets = new HashMap<Long, Long>();
 	private Map<Long, Long> total30DayAssets = new HashMap<Long, Long>();
-	private Map<Long, Long> totalEvents = new HashMap<Long, Long>();
 	private Map<Long, Long> total30DayEvents = new HashMap<Long, Long>();
 	private Map<Long, ActiveSession> lastActiveSessions = new HashMap<Long, ActiveSession>();
 
@@ -80,6 +81,10 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private TenantSettingsService tenantSettingsService;
     @Autowired
     private ExtendedFeatureService extendedFeatureService;
+    @Autowired
+    private AssetService assetService;
+    @Autowired
+    private EventService eventService;
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {}
@@ -96,11 +101,13 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
             loadExtendedFeatures();
 		} else {
             logger.info("start");
+            Map<Tenant, PrimaryOrg> tenants = Maps.newHashMap();
 			for (PrimaryOrg org : getPage().getList()) {
-				total30DayAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), true));
-				total30DayEvents.put(org.getId(), loadTotalEvents(org.getTenant().getId(), true));
 				lastActiveSessions.put(org.getId(), loadLastActiveSession(org.getTenant().getId()));
+                tenants.put(org.getTenant(), org);
 			}
+            total30DayAssets.putAll(assetService.getTenantsLast30DaysCount(tenants));
+            total30DayEvents.putAll(eventService.getTenantsLast30DaysCount(tenants));
             logger.info("end");
 		}
 	}
@@ -356,34 +363,26 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		return lastActiveSessionLoader.setTenant(tenantId).excludeN4User().load();
 	}
 
-	public Long getTotalAssets(Long orgId) {
-		Long total = totalAssets.get(orgId);
+	public Long getTotalAssets(PrimaryOrg org) {
+		return loadTotalAssets(org.getTenant().getId(), false);
+	}
+
+	public Long getTotal30DayAssets(PrimaryOrg org) {
+		Long total = total30DayAssets.get(org.getId());
 		if (total == null)
-			return loadTotalAssets(orgId, false);
+			return loadTotalAssets(org.getTenant().getId(), true);
 		else
 			return total;
 	}
 
-	public Long getTotal30DayAssets(Long orgId) {
-		Long total = total30DayAssets.get(orgId);
-		if (total == null)
-			return loadTotalAssets(orgId, true);
-		else
-			return total30DayAssets.get(orgId);
+	public Long getTotalEvents(PrimaryOrg org) {
+		return loadTotalEvents(org.getTenant().getId(), false);
 	}
 
-	public Long getTotalEvents(Long orgId) {
-		Long total = totalEvents.get(orgId);
+	public Long getTotal30DayEvents(PrimaryOrg org) {
+		Long total = total30DayEvents.get(org.getId());
 		if (total == null)
-			return loadTotalEvents(orgId, false);
-		else
-			return total;
-	}
-
-	public Long getTotal30DayEvents(Long orgId) {
-		Long total = total30DayEvents.get(orgId);
-		if (total == null)
-			return loadTotalEvents(orgId, true);
+			return loadTotalEvents(org.getTenant().getId(), true);
         else
 			return total;
 	}

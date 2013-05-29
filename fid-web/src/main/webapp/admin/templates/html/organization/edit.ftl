@@ -51,10 +51,10 @@
 	</div>
 	<div id="activity">
 		<h3>Activity</h3>
-		<div class="infoSet"><label>Total Assets:</label><span>${action.getTotalAssets(id)?string.number}</span></div>
-		<div class="infoSet"><label>Assets Last 30 Days:</label><span>${action.getTotal30DayAssets(id)?string.number}</span></div>
-		<div class="infoSet"><label>Total Events</label> <span>${action.getTotalEvents(id)?string.number}</span></div>
-		<div class="infoSet"><label>Events Last 30 Days:</label><span>${action.getTotal30DayEvents(id)?string.number}</span></div>
+		<div class="infoSet"><label>Total Assets:</label><span>${action.getTotalAssets(primaryOrg)?string.number}</span></div>
+		<div class="infoSet"><label>Assets Last 30 Days:</label><span>${action.getTotal30DayAssets(primaryOrg)?string.number}</span></div>
+		<div class="infoSet"><label>Total Events</label> <span>${action.getTotalEvents(primaryOrg)?string.number}</span></div>
+		<div class="infoSet"><label>Events Last 30 Days:</label><span>${action.getTotal30DayEvents(primaryOrg)?string.number}</span></div>
 		<#if action.getLastActiveSession(tenant.id)?exists && action.getLastActiveSession(tenant.id).user.userID?exists && action.getLastActiveSession(tenant.id).user.userID != 'n4systems'>
 			<div class="infoSet"><label>Last Login Date:</label><span>${action.convertDateTime(action.getLastActiveSession(tenant.id).lastTouched)}</span></div>
 			<div class="infoSet"><label>Last Login User:</label><span>${action.getLastActiveSession(tenant.id).user.userID}</span></div>

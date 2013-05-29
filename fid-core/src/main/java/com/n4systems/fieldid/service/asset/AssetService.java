@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.asset;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -16,6 +17,7 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -23,6 +25,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
+import com.n4systems.services.tenant.Tenant30DayCountRecord;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
@@ -30,6 +33,7 @@ import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.AddAssetHistory;
@@ -596,7 +600,7 @@ public class AssetService extends FieldIdPersistenceService {
     public List<Asset> search(int threshold) {
         // if no search term given for search, just pull up the most recently modified ones.  (arbitrary decision).
         QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
-        builder.setLimit(threshold*4);
+        builder.setLimit(threshold * 4);
         builder.getOrderArguments().add(new OrderClause("modified", false));
         List<Asset> results = persistenceService.findAll(builder);
         return new PrioritizedList<Asset>(results, threshold);
@@ -608,6 +612,29 @@ public class AssetService extends FieldIdPersistenceService {
         builder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", asset.getId()));
 
         return persistenceService.exists(builder);
+    }
+
+    public Map<Long, Long> getTenantsLast30DaysCount(Map<Tenant,PrimaryOrg> tenants) {
+        QueryBuilder<Tenant30DayCountRecord> builder = new QueryBuilder<Tenant30DayCountRecord>(Asset.class, new OpenSecurityFilter());
+
+        NewObjectSelect select = new NewObjectSelect(Tenant30DayCountRecord.class);
+        select.setConstructorArgs(Lists.newArrayList("obj.tenant", "COUNT(*)"));
+        builder.setSelectArgument(select);
+
+        builder.addWhere(WhereClauseFactory.create(Comparator.GT, "created", LocalDate.now().minusDays(30).toDate()));
+        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "tenant", tenants.keySet()));
+
+        builder.addGroupBy("tenant.id");
+
+        List<Tenant30DayCountRecord> data = persistenceService.findAll(builder);
+
+        Map<Long, Long> result = Maps.newHashMap();
+
+        for (Tenant30DayCountRecord record: data) {
+            result.put(tenants.get(record.getTenant()).getId(), record.getCount());
+        }
+
+        return result;
     }
 
 }
