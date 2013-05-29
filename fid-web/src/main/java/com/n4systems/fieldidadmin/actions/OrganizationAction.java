@@ -103,9 +103,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		} else {
             logger.info("START");
             total30DayAssets = assetService.getTenantsLast30DaysCount();
-            logger.info("ASSETS");
             total30DayEvents = eventService.getTenantsLast30DaysCount();
-            logger.info("EVENTS");
             for (PrimaryOrg org : getPage().getList()) {
 				lastActiveSessions.put(org.getId(), loadLastActiveSession(org.getTenant().getId()));
 			}
