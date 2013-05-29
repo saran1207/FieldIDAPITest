@@ -1,6 +1,8 @@
 package com.n4systems.fieldidadmin.actions;
 
 import com.n4systems.fieldid.actions.api.AbstractCrud;
+import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
@@ -80,7 +82,11 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	private TenantSettingsService tenantSettingsService;
     @Autowired
     private ExtendedFeatureService extendedFeatureService;
-	
+    @Autowired
+    private AssetService assetService;
+    @Autowired
+    private EventService eventService;
+
 	@Override
 	protected void loadMemberFields(Long uniqueId) {}
 
@@ -95,11 +101,15 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
             loadExtendedFeatures();
 		} else {
-			for (PrimaryOrg org : getPage().getList()) {
-				total30DayAssets.put(org.getId(), loadTotalAssets(org.getTenant().getId(), true));
-				total30DayEvents.put(org.getId(), loadTotalEvents(org.getTenant().getId(), true));
+            logger.info("START");
+            total30DayAssets = assetService.getTenantsLast30DaysCount();
+            logger.info("ASSETS");
+            total30DayEvents = eventService.getTenantsLast30DaysCount();
+            logger.info("EVENTS");
+            for (PrimaryOrg org : getPage().getList()) {
 				lastActiveSessions.put(org.getId(), loadLastActiveSession(org.getTenant().getId()));
 			}
+            logger.info("END");
 		}
 	}
 
@@ -365,9 +375,9 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public Long getTotal30DayAssets(Long orgId) {
 		Long total = total30DayAssets.get(orgId);
 		if (total == null)
-			return loadTotalAssets(orgId, true);
+			return 0L;
 		else
-			return total30DayAssets.get(orgId);
+			return total;
 	}
 
 	public Long getTotalEvents(Long orgId) {
@@ -381,7 +391,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public Long getTotal30DayEvents(Long orgId) {
 		Long total = total30DayEvents.get(orgId);
 		if (total == null)
-			return loadTotalEvents(orgId, true);
+			return 0L;
 		else
 			return total;
 	}

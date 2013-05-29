@@ -20,6 +20,7 @@ import com.n4systems.model.utils.DateRange;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.*;
+import com.n4systems.services.tenant.Tenant30DayCountRecord;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.ChartSeries;
@@ -35,7 +36,6 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Query;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -622,7 +622,27 @@ public class EventService extends FieldIdPersistenceService {
         return persistenceService.exists(builder);
     }
 
+    public Map<Long, Long> getTenantsLast30DaysCount() {
+        QueryBuilder<Tenant30DayCountRecord> builder = new QueryBuilder<Tenant30DayCountRecord>(Event.class, new OpenSecurityFilter());
+
+        NewObjectSelect select = new NewObjectSelect(Tenant30DayCountRecord.class);
+        select.setConstructorArgs(Lists.newArrayList("obj.tenant.id", "COUNT(*)"));
+        builder.setSelectArgument(select);
+
+        builder.addWhere(WhereClauseFactory.create(Comparator.GT, "created", LocalDate.now().minusDays(30).toDate()));
+
+        builder.addGroupBy("tenant.id");
+
+        List<Tenant30DayCountRecord> data = persistenceService.findAll(builder);
+
+        Map<Long, Long> result = Maps.newHashMap();
+
+        for (Tenant30DayCountRecord record: data) {
+            result.put(record.getTenantId(), record.getCount());
+        }
+
+        return result;
+
+    }
 }
-
-
 
