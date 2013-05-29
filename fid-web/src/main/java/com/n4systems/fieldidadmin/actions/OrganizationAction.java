@@ -384,6 +384,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		Long total = total30DayEvents.get(orgId);
 		if (total == null)
 			return loadTotalEvents(orgId, true);
+        else
 			return total;
 	}
 

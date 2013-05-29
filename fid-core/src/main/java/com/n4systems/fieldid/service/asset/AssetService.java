@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.service.asset;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
@@ -24,7 +23,6 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
-import com.n4systems.services.tenant.Tenant30DayCountRecord;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
@@ -32,7 +30,6 @@ import com.n4systems.util.persistence.WhereClause.ChainOp;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.AddAssetHistory;
@@ -611,28 +608,6 @@ public class AssetService extends FieldIdPersistenceService {
         builder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", asset.getId()));
 
         return persistenceService.exists(builder);
-    }
-
-    public Map<Long, Long> getTenantsLast30DaysCount() {
-        QueryBuilder<Tenant30DayCountRecord> builder = new QueryBuilder<Tenant30DayCountRecord>(Asset.class, new OpenSecurityFilter());
-
-        NewObjectSelect select = new NewObjectSelect(Tenant30DayCountRecord.class);
-        select.setConstructorArgs(Lists.newArrayList("obj.tenant.id", "COUNT(*)"));
-        builder.setSelectArgument(select);
-
-        builder.addWhere(WhereClauseFactory.create(Comparator.GT, "created", LocalDate.now().minusDays(30).toDate()));
-
-        builder.addGroupBy("tenant.id");
-
-        List<Tenant30DayCountRecord> data = persistenceService.findAll(builder);
-
-        Map<Long, Long> result = Maps.newHashMap();
-
-        for (Tenant30DayCountRecord record: data) {
-            result.put(record.getTenantId(), record.getCount());
-        }
-
-        return result;
     }
 
 }
