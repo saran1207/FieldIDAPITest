@@ -81,10 +81,10 @@
 						</li>
 					</#if>
 					<li>
-						<a href="/fieldid/w/wicket/search2" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" /></a>
+						<a href="/fieldid/w/wicket/search" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" /></a>
 					</li>
                     <li>
-                        <a href="/fieldid/w/wicket/reporting2" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
+                        <a href="/fieldid/w/wicket/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
                     </li>
 
                     <#if securityGuard.lotoProceduresEnabled>
