@@ -17,3 +17,10 @@
 	<@n4.percentbar progress="${userLimitService.readOnlyUserCount}" total="${userLimitService.maxReadOnlyUsers}"/>
 	<div class="limitInfo"> ${userLimitService.readOnlyUserCount} <@s.text name="label.of"/> <#if userLimitService.readOnlyUsersUnlimited><@s.text name="label.unlimited"/><#else>${userLimitService.maxReadOnlyUsers}</#if></div>
 </div>
+
+<div id="unlimitedUserAccounts" class="limit">
+    <div class="limitLabel"><@s.text name="label.unlimited_user_accounts"/></div>
+    <div class="unlimitedUsersSettings">
+        ${userLimits.unlimitedUsersEnabled?string('Enabled', 'Disabled')}<#if userLimits.unlimitedUsersEnabled>, ${userLimits.unlimitedUserEvents} remaining.</#if>
+    </div>
+</div>

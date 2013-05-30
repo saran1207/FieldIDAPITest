@@ -105,3 +105,10 @@ function doSubmit(event) {
 		return false; 
 	}
 }
+
+function toggleUnlimitedUserEvents(enabled) {
+    if(enabled)
+        $('unlimitedUserEvents').enable();
+    else
+        $('unlimitedUserEvents').disable();
+}

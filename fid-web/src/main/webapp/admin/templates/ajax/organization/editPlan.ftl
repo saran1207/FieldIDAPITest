@@ -3,4 +3,5 @@
 	<#include "../../html/organization/_planForm.ftl" >
 </#assign>
 	$('orgLimits').update("${html}");
+    toggleUnlimitedUserEvents($('unlimitedUsersEnabled').checked);
 </#escape>

@@ -1,10 +1,5 @@
 package com.n4systems.fieldid.service.user;
 
-import java.util.Arrays;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.tenant.UserLimits;
@@ -14,6 +9,10 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
 
 @Transactional
 public class UserLimitService extends FieldIdPersistenceService {
@@ -120,8 +119,8 @@ public class UserLimitService extends FieldIdPersistenceService {
 		return atMax;
 	}
 	
-	public void updateUserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers) {
-		tenantSettingsService.updateUserLimits(new UserLimits(maxEmployeeUsers, maxLiteUsers, maxReadOnlyUsers));
+	public void updateUserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers, boolean unlimitedUsersEnabled, int unlimitedUserEvents) {
+		tenantSettingsService.updateUserLimits(new UserLimits(maxEmployeeUsers, maxLiteUsers, maxReadOnlyUsers, unlimitedUsersEnabled, unlimitedUserEvents));
 		userLimits = tenantSettingsService.getTenantSettings().getUserLimits();
 	}
 	

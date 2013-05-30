@@ -1,23 +1,28 @@
 package com.n4systems.model.tenant;
 
-import java.io.Serializable;
-
 import javax.persistence.Embeddable;
+import java.io.Serializable;
 
 @Embeddable
 public class UserLimits implements Serializable {
-	private int maxEmployeeUsers;
+
+    private int maxEmployeeUsers;
 	private int maxLiteUsers;
 	private int maxReadOnlyUsers;
+    private boolean unlimitedUsersEnabled = false;
+    private int unlimitedUserEvents;
+
 	
 	public UserLimits() {
-		this(1, 0, 0);
+		this(1, 0, 0, false, 0);
 	}
-	
-	public UserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers) {
+
+	public UserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers, boolean unlimitedUsersEnabled, int unlimitedUserEvents) {
 		this.maxEmployeeUsers = maxEmployeeUsers;
 		this.maxLiteUsers = maxLiteUsers;
 		this.maxReadOnlyUsers = maxReadOnlyUsers;
+        this.unlimitedUsersEnabled = unlimitedUsersEnabled;
+        this.unlimitedUserEvents = unlimitedUserEvents;
 	}
 	
 	public int getMaxEmployeeUsers() {
@@ -43,4 +48,20 @@ public class UserLimits implements Serializable {
 	public void setMaxReadOnlyUsers(int maxReadonlyUsers) {
 		this.maxReadOnlyUsers = maxReadonlyUsers;
 	}
+
+    public boolean isUnlimitedUsersEnabled() {
+        return unlimitedUsersEnabled;
+    }
+
+    public void setUnlimitedUsersEnabled(boolean unlimitedUsersEnabled) {
+        this.unlimitedUsersEnabled = unlimitedUsersEnabled;
+    }
+
+    public int getUnlimitedUserEvents() {
+        return unlimitedUserEvents;
+    }
+
+    public void setUnlimitedUserEvents(int unlimitedUserEvents) {
+        this.unlimitedUserEvents = unlimitedUserEvents;
+    }
 }

@@ -241,7 +241,11 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public String doSavePlan() {
 		try {
 			UserLimits newSettings = tenant.getSettings().getUserLimits();
-			userLimitService.updateUserLimits(newSettings.getMaxEmployeeUsers(), newSettings.getMaxLiteUsers(), newSettings.getMaxReadOnlyUsers());
+			userLimitService.updateUserLimits(newSettings.getMaxEmployeeUsers(),
+                                            newSettings.getMaxLiteUsers(),
+                                            newSettings.getMaxReadOnlyUsers(),
+                                            newSettings.isUnlimitedUsersEnabled(),
+                                            newSettings.getUnlimitedUserEvents());
 			return SUCCESS;
 		} catch (Exception e) {
 			logger.error("Failed to update user limits", e);

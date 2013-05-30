@@ -1,15 +1,5 @@
 package com.n4systems.exporting;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.assertEquals;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.junit.Test;
-
 import com.google.common.collect.Lists;
 import com.n4systems.api.conversion.users.UserToModelConverter;
 import com.n4systems.api.model.ExternalModelView;
@@ -28,6 +18,15 @@ import com.n4systems.persistence.Transaction;
 import com.n4systems.security.UserType;
 import com.n4systems.testutils.DummyTransaction;
 import com.n4systems.utils.email.WelcomeNotifier;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 public class UserImporterTest {
 	private static final String TIME_ZONE_ID = "timeZoneId";
@@ -147,7 +146,7 @@ public class UserImporterTest {
 		replay(validator);
 		replay(converter);
 		
-		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, 50, 50, 50);
+		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, 50, 50, 50, false, 0);
 
 		importer.runImport(transaction);
 
@@ -184,7 +183,7 @@ public class UserImporterTest {
 		replay(validator);
 		replay(converter);
 
-		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, 0, 0, 0);
+		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, 0, 0, 0, false, 0);
 
 		List<ValidationResult> results = importer.readAndValidate();
 
@@ -227,7 +226,7 @@ public class UserImporterTest {
 		replay(validator);
 		replay(converter);
 
-		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1);
+		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1, false, 0);
 
 		List<ValidationResult> results = importer.readAndValidate();
 
@@ -264,7 +263,7 @@ public class UserImporterTest {
 		replay(validator);
 		replay(converter);
 		
-		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1);
+		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1, false, 0);
 
 		List<ValidationResult> results = importer.readAndValidate();
 
@@ -300,7 +299,7 @@ public class UserImporterTest {
 		replay(validator);
 		replay(converter);
 		
-		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1);
+		UserImporter importer = createImporter(reader, saver, notifier, validator, converter, userViews, -1, -1, -1, false, 0);
 
 		List<ValidationResult> results = importer.readAndValidate();
 
@@ -310,9 +309,9 @@ public class UserImporterTest {
 
 	private UserImporter createImporter(MapReader reader, UserSaver saver, WelcomeNotifier notifier,
 			Validator<ExternalModelView> validator, UserToModelConverter converter, final List<UserView> userViews,
-			final int employeesLimit, final int liteUsersLimit, final int readOnlyUsersLimit) {
+			int employeesLimit, int liteUsersLimit, int readOnlyUsersLimit, boolean unlimitedUsersEnabled, int unlimitedUserEvents) {
 
-		UserLimits settings = new UserLimits(employeesLimit, liteUsersLimit, readOnlyUsersLimit);
+		UserLimits settings = new UserLimits(employeesLimit, liteUsersLimit, readOnlyUsersLimit, unlimitedUsersEnabled, unlimitedUserEvents);
 		UserImporter importer = new UserImporter(reader, validator, settings, saver, converter, notifier, TIME_ZONE_ID, new PasswordPolicy()) {
 			@Override
 			List<UserView> getViews() {
