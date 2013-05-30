@@ -2,14 +2,7 @@ package rfid.ejb.entity;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
@@ -17,6 +10,7 @@ import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBeanTenant;
 import com.n4systems.model.user.User;
 
@@ -24,17 +18,16 @@ import com.n4systems.model.user.User;
  * This stores, for each system user, the last options they used when creating a
  * new asset
  * 
- * @see InfoOptionHistory
  * @author Jesse Miller
  * 
  */
 @Entity
-@Table(name = "addassethistory")
-public class AddAssetHistory extends LegacyBeanTenant implements HasUser, HasOwner {
+@Table(name = "add_asset_history")
+public class AddAssetHistory extends EntityWithTenant implements HasUser, HasOwner {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(optional = true)
-	@JoinColumn(name = "r_fieldiduser")
+	@JoinColumn(name = "user_id")
 	private User user;
 	
 	
@@ -43,24 +36,25 @@ public class AddAssetHistory extends LegacyBeanTenant implements HasUser, HasOwn
 	private BaseOrg owner;
 	
 	@ManyToOne(optional = true)
-	@JoinColumn(name = "r_producttype")
+	@JoinColumn(name = "asset_type_id")
 	private AssetType assetType;
 	
 	@ManyToOne(optional = true)
-	@JoinColumn(name = "r_productstatus")
+	@JoinColumn(name = "asset_status_id")
 	private AssetStatus assetStatus;
-	
+
+    @Column(name="purchase_order")
 	private String purchaseOrder;
 	
 	
 	private Location location = new Location();
 	
     @ManyToOne(optional = true)
-    @JoinColumn(name = "assigneduser_id")
+    @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
 	
 	@ManyToMany(targetEntity = InfoOptionBean.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinTable(name = "addassethistory_infooption", joinColumns = @JoinColumn(name = "r_addproducthistory", referencedColumnName = "uniqueid"), inverseJoinColumns = @JoinColumn(name = "r_infooption", referencedColumnName = "uniqueid"))
+	@JoinTable(name = "add_asset_history_infooption", joinColumns = @JoinColumn(name = "add_asset_history_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "infooption_id", referencedColumnName = "uniqueid"))
 	private List<InfoOptionBean> infoOptions;
 
 	public User getUser() {

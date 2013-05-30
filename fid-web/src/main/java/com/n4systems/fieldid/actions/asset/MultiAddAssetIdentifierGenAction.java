@@ -1,18 +1,17 @@
 package com.n4systems.fieldid.actions.asset;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.n4systems.ejb.legacy.IdentifierCounter;
-import com.n4systems.model.AssetType;
-import org.apache.log4j.Logger;
-
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.asset.AssetIdentifierService;
+import com.n4systems.model.AssetType;
 import com.n4systems.security.Permissions;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
 public class MultiAddAssetIdentifierGenAction extends AbstractAction {
@@ -20,9 +19,10 @@ public class MultiAddAssetIdentifierGenAction extends AbstractAction {
 	private static Logger logger = Logger.getLogger(MultiAddAssetIdentifierGenAction.class);
 	
 	public enum SerialNumberGenType { RANGE, AUTO, BATCH, MANUAL }
-	
-	private final IdentifierCounter identifierCounter;
-	
+
+    @Autowired
+    private AssetIdentifierService assetIdentifierService;
+
 	private Integer quantity = 1;
 	private String type = SerialNumberGenType.RANGE.name();
 	private String prefix = "";
@@ -35,9 +35,8 @@ public class MultiAddAssetIdentifierGenAction extends AbstractAction {
     private AssetType assetType;
     private Long assetTypeId;
 	
-	public MultiAddAssetIdentifierGenAction(PersistenceManager persistenceManager, IdentifierCounter identifierCounter) {
+	public MultiAddAssetIdentifierGenAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
-		this.identifierCounter = identifierCounter;
 	}
 
 	public String doGenerate() {
@@ -88,7 +87,7 @@ public class MultiAddAssetIdentifierGenAction extends AbstractAction {
 	}
 	
 	private String getNextAutoSerial() {
-		return identifierCounter.generateIdentifier(getPrimaryOrg(), assetType);
+		return assetIdentifierService.generateIdentifier(getPrimaryOrg(), assetType);
 	}
 
 	public Integer getQuantity() {

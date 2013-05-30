@@ -22,7 +22,7 @@ import com.n4systems.model.user.User;
 import org.apache.log4j.Logger;
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.AssetCodeMapping;
-import rfid.ejb.entity.IdentifierCounterBean;
+import rfid.ejb.entity.IdentifierCounter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -74,7 +74,7 @@ public class TenantCleaner {
         removeAllForTenants(ActiveColumnMapping.class, tenantIds);
         removeAllForTenants(ColumnLayout.class, tenantIds);
         removeAllForTenants(SetupDataLastModDates.class, tenantIds);
-        removeAllForTenants(IdentifierCounterBean.class, tenantIds);
+        removeAllForTenants(IdentifierCounter.class, tenantIds);
 
 //        removeAllForTenants(TextFieldCriteria.class, tenantIds);
 //        removeAllForTenants(SelectCriteria.class, tenantIds);

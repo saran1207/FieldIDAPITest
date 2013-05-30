@@ -44,4 +44,10 @@ public class GroupedAssetTypesForTenantModel extends LoadableDetachableModel<Lis
         });
     }
 
+
+    @Override
+    public void detach() {
+        super.detach();
+        assetTypeGroupModel.detach();
+    }
 }

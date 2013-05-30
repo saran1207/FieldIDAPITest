@@ -14,6 +14,12 @@ public abstract class GroupedDropDownChoice<T,G> extends DropDownChoice<T> {
     protected G currentGroup;
 
     @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        setOutputMarkupPlaceholderTag(true);
+    }
+
+    @Override
     protected void appendOptionHtml(AppendingStringBuffer buffer, T choice, int index, String selected) {
         beginGroupIfNecessary(buffer, choice);
         super.appendOptionHtml(buffer, choice, index, selected);

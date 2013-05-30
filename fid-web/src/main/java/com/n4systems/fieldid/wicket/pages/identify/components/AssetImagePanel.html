@@ -1,0 +1,20 @@
+<wicket:panel>
+
+    <div wicket:id="imageUploadPanel">
+        <form wicket:id="fileUploadForm">
+            <wicket:message key="message.asset_image"/>
+
+            <input type="file" wicket:id="assetImageFile">
+        </form>
+
+    </div>
+
+    <div wicket:id="uploadedFileDisplayPanel">
+
+        <img src="/fieldid/images/asset-image-icon.png"> <span wicket:id="fileName"></span>
+
+        <a wicket:id="removeLink"><wicket:message key="label.remove"/></a>
+
+    </div>
+
+</wicket:panel>

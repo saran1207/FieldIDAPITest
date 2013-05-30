@@ -1,18 +1,17 @@
 package rfid.ejb.entity;
 
-import java.util.Date;
+import com.n4systems.model.api.Saveable;
+import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import com.n4systems.model.api.Saveable;
-import com.n4systems.model.parents.legacy.LegacyBeanTenant;
+import java.util.Date;
 
 @Entity
-@Table(name = "serialnumbercounter")
-public class IdentifierCounterBean extends LegacyBeanTenant implements Saveable {
+@Table(name = "identifier_counters")
+public class IdentifierCounter extends EntityWithTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 	
 	private Long counter;

@@ -6,11 +6,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.legacy.IdentifierCounter;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
@@ -18,6 +18,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.security.Permissions;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.Tag})
@@ -25,8 +26,10 @@ public class AssetUtilAction extends AbstractAction {
 
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger( AssetUtilAction.class );
-	
-	private IdentifierCounter identifierCounter;
+
+    @Autowired
+    private AssetIdentifierService assetIdentifierService;
+
 	private LegacyAsset legacyAssetManager;
 	private AssetManager assetManager;
 	
@@ -41,9 +44,8 @@ public class AssetUtilAction extends AbstractAction {
     private String [] rfids = {};
     private List<String> duplicateRfids = new ArrayList<String>();
     
-	public AssetUtilAction(IdentifierCounter identifierCounter, LegacyAsset legacyAssetManager, AssetManager assetManager, PersistenceManager persistenceManager ) {
+	public AssetUtilAction(LegacyAsset legacyAssetManager, AssetManager assetManager, PersistenceManager persistenceManager ) {
 		super(persistenceManager);
-		this.identifierCounter = identifierCounter;
 		this.legacyAssetManager = legacyAssetManager;
 		this.assetManager = assetManager;
 	}
@@ -75,7 +77,7 @@ public class AssetUtilAction extends AbstractAction {
 	
 	public String doGenerateIdentifier() {
 		try {
-			identifier = identifierCounter.generateIdentifier(getPrimaryOrg(), assetType);
+			identifier = assetIdentifierService.generateIdentifier(getPrimaryOrg(), assetType);
 		} catch (Exception e) {
 			logger.error("Generating identifier", e);
             addActionErrorText("message.error_generating_identifier");

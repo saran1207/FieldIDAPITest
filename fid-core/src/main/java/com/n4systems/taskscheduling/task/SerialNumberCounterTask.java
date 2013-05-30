@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import rfid.ejb.entity.IdentifierCounterBean;
+import com.n4systems.fieldid.service.asset.AssetIdentifierService;
+import rfid.ejb.entity.IdentifierCounter;
 
-import com.n4systems.ejb.legacy.IdentifierCounter;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
 
@@ -25,13 +25,13 @@ public class SerialNumberCounterTask extends ScheduledTask {
 
 	@Override
     protected void runTask() throws Exception {
-		Collection<IdentifierCounterBean> identifierCounters = null;
-		IdentifierCounter identifierCounterManager = ServiceLocator.getIdentifierCounter();
+		Collection<IdentifierCounter> identifierCounters = null;
+		AssetIdentifierService assetIdentifierService = ServiceLocator.getAssetIdentifierService();
 
-		identifierCounters = identifierCounterManager.getIdentifierCounters();
+		identifierCounters = assetIdentifierService.getIdentifierCounters();
 
 		if (identifierCounters != null) {
-			for (IdentifierCounterBean identifierCounter : identifierCounters) {
+			for (IdentifierCounter identifierCounter : identifierCounters) {
 
 				// Check each serial number counter to see if its reset time has
 				// passed.
@@ -46,7 +46,7 @@ public class SerialNumberCounterTask extends ScheduledTask {
 					// supposed to have been reset. and set the counter to 1
 					identifierCounter.setLastReset(new Date(nextReset.getTimeInMillis()));
 					identifierCounter.setCounter(1L);
-					identifierCounterManager.updateIdentifierCounter(identifierCounter);
+					assetIdentifierService.updateIdentifierCounter(identifierCounter);
 				}
 			}
 		}

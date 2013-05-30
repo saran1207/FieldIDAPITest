@@ -50,9 +50,6 @@
 
     <bean id="orderMappingEJBContainer" class="com.n4systems.ejb.legacy.wrapper.OrderMappingEJBContainer"/>
 
-    <bean id="identifierCounterEJBContainer"
-          class="com.n4systems.ejb.legacy.wrapper.IdentifierCounterEJBContainer"/>
-
     <bean id="productCodeMappingEJBContainer" class="com.n4systems.ejb.legacy.wrapper.AssetCodeMappingEJBContainer"/>
 
     <!--bean id="persistenceEJBContainer" class="com.n4systems.ejb.wrapper.PersistenceManagerEJBContainer"/-->

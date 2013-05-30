@@ -2,7 +2,6 @@ package com.n4systems.util;
 
 import com.n4systems.ejb.*;
 import com.n4systems.ejb.legacy.*;
-import com.n4systems.ejb.legacy.wrapper.IdentifierCounterEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.OptionEJBContainer;
 import com.n4systems.ejb.legacy.wrapper.PopulatorLogEJBContainer;
 import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
@@ -10,6 +9,7 @@ import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
 import com.n4systems.ejb.wrapper.EventManagerEJBContainer;
 import com.n4systems.ejb.wrapper.PredefinedLocationManagerEJBContainer;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
@@ -55,11 +55,7 @@ public class ServiceLocator implements ApplicationContextAware {
 		return new PopulatorLogEJBContainer();
 	}
 
-	public static final IdentifierCounter getIdentifierCounter() {
-		return new IdentifierCounterEJBContainer();
-	}	
-	
-	public static final UserManager getUser() {	
+	public static final UserManager getUser() {
 		return getBean(UserManager.class);		
 	}
 
@@ -154,6 +150,10 @@ public class ServiceLocator implements ApplicationContextAware {
 
     public static UserGroupService getUserGroupService() {
         return getBean(UserGroupService.class);
+    }
+
+    public static AssetIdentifierService getAssetIdentifierService() {
+        return getBean(AssetIdentifierService.class);
     }
 
 	@SuppressWarnings("unchecked")

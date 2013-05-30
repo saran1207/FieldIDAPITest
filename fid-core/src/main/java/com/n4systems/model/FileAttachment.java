@@ -4,6 +4,7 @@ import javax.activation.FileTypeMap;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 import com.n4systems.model.parents.EntityWithTenant;
@@ -14,7 +15,10 @@ import com.n4systems.util.ContentTypeUtil;
 @Table(name = "fileattachments")
 public class FileAttachment extends EntityWithTenant implements Attachment {
 	private static final long serialVersionUID = 1L;
-	
+
+    @Transient
+    private String tempFileName;
+
 	@Column(length=255)
 	private String fileName;
 	
@@ -69,4 +73,11 @@ public class FileAttachment extends EntityWithTenant implements Attachment {
 		return fileName != null && !fileName.isEmpty();
 	}
 
+    public String getTempFileName() {
+        return tempFileName;
+    }
+
+    public void setTempFileName(String tempFileName) {
+        this.tempFileName = tempFileName;
+    }
 }

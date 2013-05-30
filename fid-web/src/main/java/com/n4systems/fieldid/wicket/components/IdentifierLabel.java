@@ -16,7 +16,7 @@ public class IdentifierLabel extends Label {
 
     public IdentifierLabel(String id, IModel<AssetType> assetTypeModel) {
         super(id, new IdentifierLabelModel(assetTypeModel));
-        setRenderBodyOnly(true);
+        setOutputMarkupPlaceholderTag(true);
     }
 
     static class IdentifierLabelModel extends LoadableDetachableModel<String> {

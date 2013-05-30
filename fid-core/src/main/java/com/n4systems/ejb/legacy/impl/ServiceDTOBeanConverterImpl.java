@@ -4,7 +4,6 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.ejb.impl.PersistenceManagerImpl;
-import com.n4systems.ejb.legacy.IdentifierCounter;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.exceptions.NotImplementedException;
@@ -66,7 +65,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	
 	private EventScheduleManager eventScheduleManager;
 	
-	private IdentifierCounter identifierCounter;
+//	private IdentifierCounter identifierCounter;
 
 	
 	
@@ -77,7 +76,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		this.em = em;
 		this.persistenceManager = new PersistenceManagerImpl(em);
 		this.eventScheduleManager = new EventScheduleManagerImpl(em);
-		this.identifierCounter = new IdentifierCounterManager(em);
+//		this.identifierCounter = new IdentifierCounterManager(em);
 	}
 
 	/**
@@ -303,7 +302,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
         targetAsset.setNonIntergrationOrderNumber(productServiceDTO.getOrderNumber());
 
 		if (productServiceDTO.getSerialNumber().equals(GENERATE_IDENTIFIER)) {
-			targetAsset.setIdentifier(identifierCounter.generateIdentifier(primaryOrg, assetType));
+			targetAsset.setIdentifier(ServiceLocator.getAssetIdentifierService().generateIdentifier(primaryOrg, assetType));
 		} else {
 			targetAsset.setIdentifier(productServiceDTO.getSerialNumber());
 		}

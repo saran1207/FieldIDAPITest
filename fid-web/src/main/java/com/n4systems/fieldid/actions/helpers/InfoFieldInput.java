@@ -135,6 +135,7 @@ public class InfoFieldInput {
 				field.setFieldType( InfoFieldBean.SELECTBOX_FIELD_TYPE );
 				break;
 			case UnitOfMeasure:
+                // TODO: Is this a copy pasta bug? -NC
 				field.setFieldType( InfoFieldBean.TEXTFIELD_FIELD_TYPE );
 				field.setUsingUnitOfMeasure( true );
 				break;

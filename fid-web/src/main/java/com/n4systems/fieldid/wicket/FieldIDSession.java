@@ -37,6 +37,7 @@ public class FieldIDSession extends WebSession {
     private String previouslyStoredTempFileId;
     private boolean concurrentSessionDetected;
     private CriteriaResult previouslyStoredCriteriaResult;
+    private Event previouslyStoredEventSchedule;
 
     public FieldIDSession(Request request) {
         super(request);
@@ -152,11 +153,24 @@ public class FieldIDSession extends WebSession {
         return actionsList.get(criteriaResult.getCriteria().getId());
     }
 
+    // Previously Stored Stuff:
+    // The issue is that when you have a page that does some transient editing in place before a final commit,
+    // and some of that editing is done inside modal windows, there is difficulty editing transient state in a way
+    // that remains visible to the underlying page, due to wicket giving us multiple page maps. These are used
+    // to pass back data created or modified inside a modal window to the primary transient edit page. (Identify Asset, Perform Event).
     public CriteriaResult getPreviouslyStoredCriteriaResult() {
         return previouslyStoredCriteriaResult;
     }
 
     public void setPreviouslyStoredCriteriaResult(CriteriaResult previouslyStoredCriteriaResult) {
         this.previouslyStoredCriteriaResult = previouslyStoredCriteriaResult;
+    }
+
+    public Event getPreviouslyStoredEventSchedule() {
+        return previouslyStoredEventSchedule;
+    }
+
+    public void setPreviouslyStoredEventSchedule(Event previouslyStoredEventSchedule) {
+        this.previouslyStoredEventSchedule = previouslyStoredEventSchedule;
     }
 }

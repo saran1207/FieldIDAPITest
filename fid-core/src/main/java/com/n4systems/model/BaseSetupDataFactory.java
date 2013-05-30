@@ -2,7 +2,7 @@ package com.n4systems.model;
 
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.util.DateHelper;
-import rfid.ejb.entity.IdentifierCounterBean;
+import rfid.ejb.entity.IdentifierCounter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +18,8 @@ public class BaseSetupDataFactory {
 		return new SetupDataLastModDates(tenant);
 	}
 	
-	public IdentifierCounterBean createSerialNumberCounterBean() {
-		IdentifierCounterBean identifierCounter = new IdentifierCounterBean();
+	public IdentifierCounter createSerialNumberCounterBean() {
+		IdentifierCounter identifierCounter = new IdentifierCounter();
 		identifierCounter.setTenant(tenant);
 		identifierCounter.setCounter(1L);
 		identifierCounter.setDecimalFormat("000000");

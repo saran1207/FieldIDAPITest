@@ -355,35 +355,6 @@ public class AssetService extends FieldIdPersistenceService {
         }
     }
 
-    /**
-     * creates the asset serial and updates the given users add
-     * assetHistory.
-     */
-    @LegacyMethod
-    public Asset createWithHistory(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
-        asset = create(asset, modifiedBy);
-
-        AddAssetHistory addAssetHistory = getAddAssetHistory(modifiedBy.getId());
-
-        if (addAssetHistory == null) {
-            addAssetHistory = new AddAssetHistory();
-            addAssetHistory.setTenant(modifiedBy.getTenant());
-            addAssetHistory.setUser(modifiedBy);
-        }
-
-        addAssetHistory.setOwner(asset.getOwner());
-        addAssetHistory.setAssetType(asset.getType());
-        addAssetHistory.setAssetStatus(asset.getAssetStatus());
-        addAssetHistory.setPurchaseOrder(asset.getPurchaseOrder());
-        addAssetHistory.setLocation(asset.getAdvancedLocation());
-        addAssetHistory.setInfoOptions(new ArrayList<InfoOptionBean>(asset.getInfoOptions()));
-        addAssetHistory.setAssignedUser(asset.getAssignedUser());
-
-        getEntityManager().merge(addAssetHistory);
-
-        return asset;
-    }
-
     private void moveRfidFromAssets(Asset asset, User modifiedBy) {
         AssetSaver saver = new AssetSaver();
         saver.setModifiedBy(modifiedBy);
@@ -413,23 +384,6 @@ public class AssetService extends FieldIdPersistenceService {
         qBuilder.addSimpleWhere("rfidNumber", rfidNumber.trim());
 
         return persistenceService.findAll(qBuilder);
-    }
-
-    @LegacyMethod
-    public AddAssetHistory getAddAssetHistory(Long rFieldidUser) {
-        Query query = persistenceService.createQuery("from "+ AddAssetHistory.class.getName()+" aph where aph.user.id = :rFieldidUser");
-        query.setParameter("rFieldidUser", rFieldidUser);
-
-        @SuppressWarnings("unchecked")
-        List<AddAssetHistory> addAssetHistoryList = query.getResultList();
-
-        if (addAssetHistoryList != null) {
-            if (addAssetHistoryList.size() > 0) {
-                return addAssetHistoryList.get(0);
-            }
-        }
-
-        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -637,4 +591,35 @@ public class AssetService extends FieldIdPersistenceService {
         return result;
     }
 
+    public Asset createAssetWithHistory() {
+        Asset asset = new Asset();
+
+        AddAssetHistory history = getAddAssetHistory();
+        if (history != null) {
+            asset.setType(history.getAssetType());
+            asset.setAssetStatus(history.getAssetStatus());
+            asset.setAdvancedLocation(history.getLocation());
+            asset.setOwner(history.getOwner());
+            asset.setAssignedUser(history.getAssignedUser());
+            asset.setInfoOptions(new TreeSet<InfoOptionBean>(history.getInfoOptions()));
+            asset.setPurchaseOrder(history.getPurchaseOrder());
+        }
+
+        return asset;
+    }
+
+    public AddAssetHistory getAddAssetHistory() {
+        QueryBuilder<AddAssetHistory> query = createUserSecurityBuilder(AddAssetHistory.class);
+        query.addSimpleWhere("user", getCurrentUser());
+
+        List<AddAssetHistory> addAssetHistoryList = persistenceService.findAll(query);
+
+        if (addAssetHistoryList != null) {
+            if (addAssetHistoryList.size() > 0) {
+                return addAssetHistoryList.get(0);
+            }
+        }
+
+        return null;
+    }
 }

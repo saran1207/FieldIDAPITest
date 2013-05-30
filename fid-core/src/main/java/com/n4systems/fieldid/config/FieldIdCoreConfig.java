@@ -20,10 +20,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.SecurityContextInitializer;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.fieldid.service.asset.AssetStatusService;
-import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
-import com.n4systems.fieldid.service.asset.AssetTypeService;
+import com.n4systems.fieldid.service.asset.*;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.event.*;
@@ -484,6 +481,11 @@ public class FieldIdCoreConfig {
     @Bean
     public AtomicLongService atomicLongService() {
         return new AtomicLongService();
+    }
+
+    @Bean
+    public AssetIdentifierService assetIdentifierService() {
+        return new AssetIdentifierService();
     }
 
 }

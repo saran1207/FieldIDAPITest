@@ -1,0 +1,20 @@
+<wicket:panel>
+
+    <div wicket:id="existingAttachmentsContainer">
+
+        <div wicket:id="existingAttachments">
+
+            <img src="/fieldid/images/attachment-icon.png"/> <span wicket:id="fileName"></span>
+            <textarea wicket:id="comments"></textarea>
+            <a wicket:id="removeLink"><wicket:message key="label.remove"/></a>
+        </div>
+
+    </div>
+
+    <form wicket:id="uploadAttachmentForm">
+        <div>
+            <input type="file" wicket:id="attachmentUpload">
+        </div>
+    </form>
+
+</wicket:panel>

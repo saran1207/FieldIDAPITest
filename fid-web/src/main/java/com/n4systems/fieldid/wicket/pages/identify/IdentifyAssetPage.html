@@ -1,0 +1,86 @@
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"></div>
+
+    <form wicket:id="identifyAssetForm">
+        <div>
+            <wicket:message key="label.assettype"/>
+            <select wicket:id="assetType"></select>
+        </div>
+
+        <div>
+            * <wicket:message key="label.identified"/>
+            <div wicket:id="identifiedDate"></div>
+        </div>
+
+        <div>
+            * <span wicket:id="identifierLabel"></span>
+            <input wicket:id="identifier"> <a wicket:id="generateIdentifierLink"><wicket:message key="label.generate"/></a>
+        </div>
+
+        <div>
+            <wicket:message key="label.rfidnumber"/>
+            <input wicket:id="rfidNumber">
+        </div>
+
+        <div>
+            <wicket:message key="label.reference_number"/>
+            <input wicket:id="referenceNumber">
+        </div>
+
+        <div>
+            <wicket:message key="label.assignedto"/>
+            <select wicket:id="assignedToSelect"/> <a wicket:id="assignToMeLink"><wicket:message key="label.assign_to_me"/></a>
+        </div>
+
+        <div>
+            * <wicket:message key="label.owner"/>
+            <div wicket:id="ownerPicker"/>
+        </div>
+
+        <div>
+            <wicket:message key="label.location"/>
+            <div wicket:id="locationPicker"/>
+        </div>
+
+        <div>
+            <wicket:message key="label.purchaseorder"/>
+            <input wicket:id="purchaseOrder">
+        </div>
+
+        <div>
+            <wicket:message key="label.assetstatus"/>
+            <select wicket:id="assetStatusSelect"/>
+        </div>
+
+        <div>
+            <wicket:message key="label.comments"/>
+            <div wicket:id="comments"/>
+        </div>
+
+        <div>
+            <wicket:message key="label.visibility"/>
+            <select wicket:id="visibilitySelect"/>
+        </div>
+
+        <div wicket:id="assetImagePanel">
+        </div>
+
+        <div wicket:id="assetAttachmentsPanel">
+        </div>
+
+        <div wicket:id="eventSchedulesPanel">
+        </div>
+
+        <div wicket:id="attributesPanel">
+        </div>
+
+
+        <input type="submit" wicket:message="value:label.save" wicket:id="saveButton">
+        <input type="submit" wicket:message="value:hbutton.saveandstartevent" wicket:id="saveAndStartEventButton">
+
+    </form>
+
+    <div wicket:id="schedulePicker"></div>
+
+</wicket:extend>

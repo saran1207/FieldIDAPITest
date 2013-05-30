@@ -44,11 +44,11 @@ public class DateTimePicker extends Panel {
     private Integer monthsDisplayed = 3;
     private boolean performSetDateOnInitialization = true;
 
-    public DateTimePicker(String id, IModel<Date> dateModel) {
+    public DateTimePicker(String id, IModel<? extends Date> dateModel) {
         this(id, dateModel, false);
     }
 
-    public DateTimePicker(String id, IModel<Date> dateModel, boolean includeTime) {
+    public DateTimePicker(String id, IModel<? extends Date> dateModel, boolean includeTime) {
         super(id);
 
         this.includeTime = includeTime;
@@ -56,7 +56,7 @@ public class DateTimePicker extends Panel {
         setOutputMarkupId(true);
 		setOutputMarkupPlaceholderTag(true);
 
-        add(dateTextField = new DateTextField("dateField", dateModel) {
+        add(dateTextField = new DateTextField("dateField", (IModel<Date>) dateModel) {
             // need to make the format dynamic since we can toggle the "includeTime" attribute after component created.
             @Override public <C> IConverter<C> getConverter(Class<C> type) {
                 return (IConverter<C>)new DateConverter() {

@@ -7,7 +7,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
-import rfid.ejb.entity.IdentifierCounterBean;
+import rfid.ejb.entity.IdentifierCounter;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -36,13 +36,13 @@ public class MinimalTenantDataSetup {
     }
 
     private void createIdentifierFormat() {
-        IdentifierCounterBean identifierCounterBean = new IdentifierCounterBean();
-        identifierCounterBean.setTenant(tenant);
-        identifierCounterBean.setDecimalFormat("000000");
-        identifierCounterBean.setCounter(1L);
-        identifierCounterBean.setDaysToReset(366L);
-        identifierCounterBean.setLastReset(new Date());
-        em.persist(identifierCounterBean);
+        IdentifierCounter identifierCounter = new IdentifierCounter();
+        identifierCounter.setTenant(tenant);
+        identifierCounter.setDecimalFormat("000000");
+        identifierCounter.setCounter(1L);
+        identifierCounter.setDaysToReset(366L);
+        identifierCounter.setLastReset(new Date());
+        em.persist(identifierCounter);
     }
 
     private void createPassFailButtonGroup() {
