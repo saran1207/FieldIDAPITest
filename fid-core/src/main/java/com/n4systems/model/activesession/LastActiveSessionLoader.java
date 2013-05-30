@@ -1,7 +1,10 @@
 package com.n4systems.model.activesession;
 
 import com.n4systems.persistence.loaders.Loader;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -16,6 +19,8 @@ public class LastActiveSessionLoader extends Loader<ActiveSession> {
 	public ActiveSession load(EntityManager em) {
 		QueryBuilder<ActiveSession> builder = new QueryBuilder<ActiveSession>(ActiveSession.class);
 		builder.addSimpleWhere("user.tenant.id", tenantId);
+        if(excludeN4User)
+            builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "user.userID", ConfigEntry.SYSTEM_USER_USERNAME.getDefaultValue()));
 		builder.addOrder("lastTouched", false);
         builder.setLimit(1);
 		
@@ -24,17 +29,7 @@ public class LastActiveSessionLoader extends Loader<ActiveSession> {
 		if (results == null || results.isEmpty()) {
 			return null;
 		} else {
-			if (excludeN4User) {
-				for (ActiveSession session: results) {
-					if (!session.getUser().isSystem()) {
-						return session;
-					}
-				}
-				return null;
-			} else {
-				return results.get(0);
-			}
-			
+			return results.get(0);
 		}
 	}
 	

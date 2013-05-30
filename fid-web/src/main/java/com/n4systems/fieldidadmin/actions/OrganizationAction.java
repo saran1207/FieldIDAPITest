@@ -387,10 +387,10 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			return total;
 	}
 
-	public ActiveSession getLastActiveSession(Long orgId) {
-		ActiveSession activeSession = lastActiveSessions.get(orgId);
+	public ActiveSession getLastActiveSession(PrimaryOrg org) {
+		ActiveSession activeSession = lastActiveSessions.get(org.getId());
 		if (activeSession == null)
-			return loadLastActiveSession(orgId);
+			return loadLastActiveSession(org.getTenant().getId());
 		else
 			return activeSession;
 	}
