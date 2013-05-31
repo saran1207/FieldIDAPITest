@@ -377,11 +377,15 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		} else {
 			InfoOptionBean staticOption = findStaticInfoOption(infoField, value);
 			
-			if(staticOption != null) {
+			if (staticOption != null) {
 				//TODO, We need to remove the existing infoOptionBean if there was one at this point! Ask Mark.
 				infoOptionBean = staticOption;
 			} else {
-				infoOptionBean.setName(value.toString());
+                if (infoOptionBean.isStaticData()) {
+                    infoOptionBean = new InfoOptionBean();
+                    infoOptionBean.setInfoField(infoField);
+                }
+                infoOptionBean.setName(value.toString());
 			}
 		}
 		
