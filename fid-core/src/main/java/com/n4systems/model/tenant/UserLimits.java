@@ -9,20 +9,20 @@ public class UserLimits implements Serializable {
     private int maxEmployeeUsers;
 	private int maxLiteUsers;
 	private int maxReadOnlyUsers;
-    private boolean unlimitedUsersEnabled = false;
-    private int unlimitedUserEvents;
+    private boolean usageBasedUsersEnabled = false;
+    private int usageBasedUserEvents;
 
 	
 	public UserLimits() {
 		this(1, 0, 0, false, 0);
 	}
 
-	public UserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers, boolean unlimitedUsersEnabled, int unlimitedUserEvents) {
+	public UserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers, boolean usageBasedUsersEnabled, int usageBasedUserEvents) {
 		this.maxEmployeeUsers = maxEmployeeUsers;
 		this.maxLiteUsers = maxLiteUsers;
 		this.maxReadOnlyUsers = maxReadOnlyUsers;
-        this.unlimitedUsersEnabled = unlimitedUsersEnabled;
-        this.unlimitedUserEvents = unlimitedUserEvents;
+        this.usageBasedUsersEnabled = usageBasedUsersEnabled;
+        this.usageBasedUserEvents = usageBasedUserEvents;
 	}
 	
 	public int getMaxEmployeeUsers() {
@@ -49,19 +49,19 @@ public class UserLimits implements Serializable {
 		this.maxReadOnlyUsers = maxReadonlyUsers;
 	}
 
-    public boolean isUnlimitedUsersEnabled() {
-        return unlimitedUsersEnabled;
+    public boolean isUsageBasedUsersEnabled() {
+        return usageBasedUsersEnabled;
     }
 
-    public void setUnlimitedUsersEnabled(boolean unlimitedUsersEnabled) {
-        this.unlimitedUsersEnabled = unlimitedUsersEnabled;
+    public void setUsageBasedUsersEnabled(boolean usageBasedUsersEnabled) {
+        this.usageBasedUsersEnabled = usageBasedUsersEnabled;
     }
 
-    public int getUnlimitedUserEvents() {
-        return unlimitedUserEvents;
+    public int getUsageBasedUserEvents() {
+        return usageBasedUserEvents;
     }
 
-    public void setUnlimitedUserEvents(int unlimitedUserEvents) {
-        this.unlimitedUserEvents = unlimitedUserEvents;
+    public void setUsageBasedUserEvents(int usageBasedUserEvents) {
+        this.usageBasedUserEvents = usageBasedUserEvents;
     }
 }

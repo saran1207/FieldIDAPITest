@@ -309,9 +309,9 @@ public class UserImporterTest {
 
 	private UserImporter createImporter(MapReader reader, UserSaver saver, WelcomeNotifier notifier,
 			Validator<ExternalModelView> validator, UserToModelConverter converter, final List<UserView> userViews,
-			int employeesLimit, int liteUsersLimit, int readOnlyUsersLimit, boolean unlimitedUsersEnabled, int unlimitedUserEvents) {
+			int employeesLimit, int liteUsersLimit, int readOnlyUsersLimit, boolean usageBasedUsersEnabled, int usageBasedUserEvents) {
 
-		UserLimits settings = new UserLimits(employeesLimit, liteUsersLimit, readOnlyUsersLimit, unlimitedUsersEnabled, unlimitedUserEvents);
+		UserLimits settings = new UserLimits(employeesLimit, liteUsersLimit, readOnlyUsersLimit, usageBasedUsersEnabled, usageBasedUserEvents);
 		UserImporter importer = new UserImporter(reader, validator, settings, saver, converter, notifier, TIME_ZONE_ID, new PasswordPolicy()) {
 			@Override
 			List<UserView> getViews() {

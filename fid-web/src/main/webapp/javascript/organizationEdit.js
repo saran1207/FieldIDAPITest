@@ -106,9 +106,9 @@ function doSubmit(event) {
 	}
 }
 
-function toggleUnlimitedUserEvents(enabled) {
+function toggleUsageBasedUserEvents(enabled) {
     if(enabled)
-        $('unlimitedUserEvents').enable();
+        $('usageBasedUserEvents').enable();
     else
-        $('unlimitedUserEvents').disable();
+        $('usageBasedUserEvents').disable();
 }

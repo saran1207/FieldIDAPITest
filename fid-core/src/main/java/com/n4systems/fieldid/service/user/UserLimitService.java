@@ -119,8 +119,8 @@ public class UserLimitService extends FieldIdPersistenceService {
 		return atMax;
 	}
 	
-	public void updateUserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers, boolean unlimitedUsersEnabled, int unlimitedUserEvents) {
-		tenantSettingsService.updateUserLimits(new UserLimits(maxEmployeeUsers, maxLiteUsers, maxReadOnlyUsers, unlimitedUsersEnabled, unlimitedUserEvents));
+	public void updateUserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers, boolean usageBasedUsersEnabled, int usageBasedUserEvents) {
+		tenantSettingsService.updateUserLimits(new UserLimits(maxEmployeeUsers, maxLiteUsers, maxReadOnlyUsers, usageBasedUsersEnabled, usageBasedUserEvents));
 		userLimits = tenantSettingsService.getTenantSettings().getUserLimits();
 	}
 	

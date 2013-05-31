@@ -244,8 +244,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			userLimitService.updateUserLimits(newSettings.getMaxEmployeeUsers(),
                                             newSettings.getMaxLiteUsers(),
                                             newSettings.getMaxReadOnlyUsers(),
-                                            newSettings.isUnlimitedUsersEnabled(),
-                                            newSettings.getUnlimitedUserEvents());
+                                            newSettings.isUsageBasedUsersEnabled(),
+                                            newSettings.getUsageBasedUserEvents());
 			return SUCCESS;
 		} catch (Exception e) {
 			logger.error("Failed to update user limits", e);
