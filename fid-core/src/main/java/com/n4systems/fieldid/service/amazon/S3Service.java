@@ -43,8 +43,6 @@ public class S3Service extends FieldIdPersistenceService {
 	public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
 
-    public static final String ASSET_FILES_TEMP = "/temp_asset_files/%s";
-
     public static final String CRITERIA_RESULT_IMAGE_TEMP = "/temp_criteria_result_images/%s";
     public static final String CRITERIA_RESULT_THUMB_IMAGE_TEMP = "/temp_criteria_result_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_MEDIUM_IMAGE_TEMP = "/temp_criteria_result_images/%s.medium";
@@ -234,13 +232,6 @@ public class S3Service extends FieldIdPersistenceService {
         removeResource(null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
         removeResource(null, ASSET_PROFILE_IMAGE_PATH_MEDIUM, assetId, imageName);
         removeResource(null, ASSET_PROFILE_IMAGE_PATH_THUMB, assetId, imageName);
-    }
-
-    public String uploadTempAssetFile(String contentType, byte[] data) {
-        String tempFileName = uuidService.createUuid();
-        String s3Path = createResourcePath(null, ASSET_FILES_TEMP, tempFileName);
-        putObject(s3Path, data, contentType);
-        return tempFileName;
     }
 
     public ProcedureDefinitionImage uploadTempProcedureDefImage(ProcedureDefinitionImage image, String contentType, byte[] imageData) {

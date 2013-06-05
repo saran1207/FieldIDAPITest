@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectAttributeEditor extends Panel {
+
     public SelectAttributeEditor(String id, IModel<InfoOptionBean> infoOption) {
         super(id);
 
@@ -19,8 +20,12 @@ public class SelectAttributeEditor extends Panel {
         select.setNullValid(true);
 
         select.setRequired(infoOption.getObject().getInfoField().isRequired());
-
         add(select);
+
+        // Initialize a blank info option to null to avoid warnings that the selected object is not in the list of choices
+        if (infoOption.getObject().getName() == null) {
+            infoOption.setObject(null);
+        }
     }
 
     static class InfoOptionChoiceRenderer implements IChoiceRenderer<InfoOptionBean> {
@@ -34,4 +39,5 @@ public class SelectAttributeEditor extends Panel {
             return object.getUniqueID() == null ? "null" : object.getUniqueID().toString();
         }
     }
+
 }

@@ -18,8 +18,9 @@ public class AssetImagePanel extends Panel {
     @SpringBean
     private S3Service s3Service;
 
-    FileUpload uploadedFile;
     String tempFileName;
+    String clientFileName;
+    private byte[] uploadedBytes;
 
     public AssetImagePanel(String id) {
         super(id);
@@ -37,8 +38,9 @@ public class AssetImagePanel extends Panel {
         fileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
-                uploadedFile = fileUploadField.getFileUpload();
-                tempFileName = s3Service.uploadTempAssetFile(uploadedFile.getContentType(), uploadedFile.getBytes());
+                FileUpload uploadedFile = fileUploadField.getFileUpload();
+                uploadedBytes = uploadedFile.getBytes();
+                clientFileName = uploadedFile.getClientFileName();
                 uploadContainer.setVisible(false);
                 uploadedFileDisplayPanel.setVisible(true);
                 target.add(uploadContainer, uploadedFileDisplayPanel);
@@ -51,17 +53,21 @@ public class AssetImagePanel extends Panel {
 
         fileUploadForm.add(fileUploadField);
 
-        uploadedFileDisplayPanel.add(new Label("fileName", new PropertyModel<String>(this, "uploadedFile.clientFileName")));
+        uploadedFileDisplayPanel.add(new Label("fileName", new PropertyModel<String>(this, "clientFileName")));
         uploadedFileDisplayPanel.add(new AjaxLink("removeLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                uploadedFile = null;
+                uploadedBytes = null;
                 tempFileName = null;
                 uploadContainer.setVisible(true);
                 uploadedFileDisplayPanel.setVisible(false);
                 target.add(uploadContainer, uploadedFileDisplayPanel);
             }
         });
+    }
+
+    public byte[] getAssetImageBytes() {
+        return uploadedBytes;
     }
 
 }

@@ -18,15 +18,18 @@ public class DateAttributeEditor extends FormComponentPanel<InfoOptionBean> {
         InfoFieldBean infoField = infoOption.getObject().getInfoField();
         boolean includeTime = infoField.isIncludeTime();
 
-        String textField = infoField.getName();
+        String textField = infoOption.getObject().getName();
 
         if (textField != null) {
             try {
-                selectedDate = new Date(Long.valueOf(textField));
+                Long longValue = Long.valueOf(textField);
+                if (longValue > 0L) {
+                    selectedDate = new Date(longValue);
+                }
             } catch(NumberFormatException e) { }
         }
 
-        add(new DateTimePicker("datePicker", new PropertyModel<Date>(this, "selectedDate")).setIncludeTime(includeTime));
+        add(new DateTimePicker("datePicker", new PropertyModel<Date>(this, "selectedDate")).setIncludeTime(includeTime).withNoAllDayCheckbox());
     }
 
     @Override
@@ -38,7 +41,7 @@ public class DateAttributeEditor extends FormComponentPanel<InfoOptionBean> {
         if (selectedDate == null) {
             option.setName(null);
         } else {
-            option.setName(selectedDate.getTime()+"");
+            option.setName(selectedDate.getTime() + "");
         }
         setConvertedInput(option);
     }

@@ -645,5 +645,30 @@ public class EventService extends FieldIdPersistenceService {
 
         return result;
     }
+
+    public List<Event> getAutoEventSchedules(Asset asset) {
+        List<Event> schedules = new ArrayList<Event>();
+
+        if (asset.getType() == null) {
+            return schedules;
+        }
+
+        AssetType assetType = persistenceService.find(AssetType.class, asset.getType().getId());
+        if (assetType != null) {
+            for (AssociatedEventType type : assetType.getAssociatedEventTypes()) {
+                AssetTypeSchedule schedule = assetType.getSchedule(type.getEventType(), asset.getOwner());
+                if (schedule != null && schedule.isAutoSchedule()) {
+                    Event openEvent = new Event();
+                    openEvent.setOwner(asset.getOwner());
+                    openEvent.setTenant(asset.getTenant());
+                    openEvent.setAsset(asset);
+                    openEvent.setType(type.getEventType());
+                    openEvent.setDueDate(assetType.getSuggestedNextEventDate(asset.getIdentified(), type.getEventType(), asset.getOwner()));
+                    schedules.add(openEvent);
+                }
+            }
+        }
+        return schedules;
+    }
 }
 

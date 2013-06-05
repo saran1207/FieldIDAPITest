@@ -3,6 +3,7 @@ package com.n4systems.ejb.impl;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.*;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.EventScheduleService;
@@ -35,7 +36,8 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 		eventScheduleService = new EventScheduleServiceImpl(persistenceManager);
 	}
 
-	@SuppressWarnings("deprecation")
+    @Deprecated
+    @CopiedToService(EventService.class)
 	public List<Event> autoSchedule(Asset asset) {
 		List<Event> schedules = new ArrayList<Event>();
 		

@@ -29,6 +29,9 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 	@Transient
 	private byte[] data;
 
+    @Transient
+    private String tempFileName;
+
 	public AssetAttachment() {
 	}
 
@@ -111,4 +114,11 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 		this.data = data;
 	}
 
+    public String getTempFileName() {
+        return tempFileName;
+    }
+
+    public void setTempFileName(String tempFileName) {
+        this.tempFileName = tempFileName;
+    }
 }

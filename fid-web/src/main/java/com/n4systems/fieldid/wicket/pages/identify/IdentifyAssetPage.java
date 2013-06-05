@@ -1,14 +1,16 @@
 package com.n4systems.fieldid.wicket.pages.identify;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.IdentifierLabel;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.location.LocationPicker;
 import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
@@ -20,25 +22,30 @@ import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.components.ModalLocationPicker;
 import com.n4systems.fieldid.wicket.pages.identify.components.AssetAttachmentsPanel;
 import com.n4systems.fieldid.wicket.pages.identify.components.AssetImagePanel;
 import com.n4systems.fieldid.wicket.pages.identify.components.AttributesEditPanel;
 import com.n4systems.fieldid.wicket.pages.identify.components.EventSchedulesPanel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.user.User;
+import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.services.date.DateService;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,16 +55,17 @@ import static ch.lambdaj.Lambda.on;
 
 public class IdentifyAssetPage extends FieldIDFrontEndPage {
 
-    @SpringBean
-    private AssetIdentifierService assetIdentifierService;
-
-    @SpringBean
-    private AssetService assetService;
-
-    @SpringBean
-    private DateService dateService;
+    @SpringBean private AssetIdentifierService assetIdentifierService;
+    @SpringBean private AssetService assetService;
+    @SpringBean private EventService eventService;
+    @SpringBean private DateService dateService;
+    @SpringBean private AssetSaveServiceSpring assetSaveService;
+    @SpringBean private PersistenceService persistenceService;
 
     EventSchedulesPanel eventSchedulesPanel;
+    AttributesEditPanel attributesEditPanel;
+    AssetAttachmentsPanel assetAttachmentsPanel;
+    AssetImagePanel assetImagePanel;
 
     SchedulePicker schedulePicker;
     Event currentEventSchedule = new Event();
@@ -72,19 +80,29 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         add(new IdentifyAssetForm("identifyAssetForm", newAssetModel));
     }
 
-
     class IdentifyAssetForm extends Form<Asset> {
-        public IdentifyAssetForm(String id, IModel<Asset> newAssetModel) {
+        public IdentifyAssetForm(String id, final IModel<Asset> newAssetModel) {
             super(id, newAssetModel);
+            setMultiPart(true);
+
             IModel<AssetType> assetTypeModel = ProxyModel.of(newAssetModel, on(Asset.class).getType());
-            GroupedAssetTypePicker assetTypePicker = new GroupedAssetTypePicker("assetType", assetTypeModel, new GroupedAssetTypesForTenantModel(Model.of((AssetTypeGroup) null)));
+            GroupedAssetTypesForTenantModel allAssetTypesModel = new GroupedAssetTypesForTenantModel(Model.of((AssetTypeGroup) null));
+            if (assetTypeModel.getObject() == null) {
+                assetTypeModel.setObject(allAssetTypesModel.getObject().get(0));
+            }
+
+            autoSchedule(newAssetModel);
+
+            GroupedAssetTypePicker assetTypePicker = new GroupedAssetTypePicker("assetType", assetTypeModel, allAssetTypesModel);
             add(assetTypePicker);
+
             IModel<String> identifierModel = ProxyModel.of(newAssetModel, on(Asset.class).getIdentifier());
             TextField<String> identifierField = new RequiredTextField<String>("identifier", identifierModel);
+            ValidationBehavior.addValidationBehaviorToComponent(identifierField);
             add(identifierField.setOutputMarkupId(true));
 
-            add(new TextField<String>("rfidNumber", identifierModel));
-            add(new TextField<String>("referenceNumber", identifierModel));
+            add(new TextField<String>("rfidNumber", ProxyModel.of(newAssetModel, on(Asset.class).getRfidNumber())));
+            add(new TextField<String>("referenceNumber", ProxyModel.of(newAssetModel, on(Asset.class).getCustomerRefNumber())));
 
             add(new DateTimePicker("identifiedDate", ProxyModel.of(newAssetModel, on(Asset.class).getIdentified()), false).withNoAllDayCheckbox());
 
@@ -96,7 +114,8 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             add(assignedToSelect);
 
             add(new AutoCompleteOrgPicker("ownerPicker", ProxyModel.of(newAssetModel, on(Asset.class).getOwner())));
-            add(new LocationPicker("locationPicker", ProxyModel.of(newAssetModel, on(Asset.class).getAdvancedLocation())));
+
+            add(new ModalLocationPicker("locationPicker", ProxyModel.of(newAssetModel, on(Asset.class).getAdvancedLocation())));
 
             add(new TextField<String>("purchaseOrder", ProxyModel.of(newAssetModel, on(Asset.class).getPurchaseOrder())));
 
@@ -116,28 +135,29 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
 
             add(createGenerateLink(identifierModel, identifierField, assetTypeModel));
 
-            final AssetImagePanel assetImagePanel = new AssetImagePanel("assetImagePanel");
-            add(assetImagePanel);
+            add(assetImagePanel = new AssetImagePanel("assetImagePanel"));
 
-            final AssetAttachmentsPanel assetAttachmentsPanel = new AssetAttachmentsPanel("assetAttachmentsPanel");
-            add(assetAttachmentsPanel);
+            add(assetAttachmentsPanel = new AssetAttachmentsPanel("assetAttachmentsPanel"));
 
             eventSchedulesPanel = new EventSchedulesPanel("eventSchedulesPanel", schedulePicker, new PropertyModel<List<Event>>(IdentifyAssetPage.this, "schedulesToAdd"));
             add(eventSchedulesPanel);
 
-            add(new AttributesEditPanel("attributesPanel", assetTypeModel));
+            add(attributesEditPanel = new AttributesEditPanel("attributesPanel", assetTypeModel));
 
-            assetTypePicker.add(new OnChangeAjaxBehavior() {
+            assetTypePicker.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
-                    schedulesToAdd.clear();
-                    target.add(identifierLabel, eventSchedulesPanel);
+                    autoSchedule(newAssetModel);
+                    attributesEditPanel.refreshInfoOptions();
+                    target.add(identifierLabel, eventSchedulesPanel, attributesEditPanel);
                 }
             });
 
             add(new Button("saveButton") {
                 @Override
                 public void onSubmit() {
+                    processAssetSave(newAssetModel);
+                    setResponsePage(IdentifyAssetPage.class);
                 }
             });
 
@@ -149,12 +169,42 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         }
     }
 
+    private void autoSchedule(IModel<Asset> assetModel) {
+        schedulesToAdd.clear();
+        if (assetModel.getObject().getType() != null) {
+            schedulesToAdd.addAll(eventService.getAutoEventSchedules(assetModel.getObject()));
+        }
+    }
+
+    private void processAssetSave(IModel<Asset> newAssetModel) {
+        Asset asset = newAssetModel.getObject();
+        asset.setTenant(getTenant());
+        List<InfoOptionBean> enteredInfoOptions = attributesEditPanel.getEnteredInfoOptions();
+        List<AssetAttachment> attachments = assetAttachmentsPanel.getAttachments();
+        byte[] assetImageBytes = assetImagePanel.getAssetImageBytes();
+
+        asset.getInfoOptions().clear();
+        asset.getInfoOptions().addAll(enteredInfoOptions);
+
+        Asset createdAsset = assetSaveService.create(asset, attachments, assetImageBytes);
+
+        for (Event event : schedulesToAdd) {
+            event.setAsset(createdAsset);
+            event.setTenant(getTenant());
+            event.setOwner(asset.getOwner());
+            persistenceService.save(event);
+        }
+
+        getSession().info("Asset Creation Successful Yo!");
+    }
+
     private Component createGenerateLink(final IModel<String> identifierModel, final TextField<String> identifierField, final IModel<AssetType> assetTypeModel) {
         return new AjaxLink("generateIdentifierLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 String generatedIdentifier = assetIdentifierService.generateIdentifier(assetTypeModel.getObject());
                 identifierModel.setObject(generatedIdentifier);
+                identifierField.clearInput();
                 target.add(identifierField);
             }
         };
@@ -189,4 +239,8 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         return new Label(labelId, new FIDLabelModel("title.identify"));
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/newCss/asset/identify_asset.css");
+    }
 }

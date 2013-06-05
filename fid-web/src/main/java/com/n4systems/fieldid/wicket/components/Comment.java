@@ -22,7 +22,7 @@ public class Comment extends Panel implements IEventBehavior {
 
 	@SpringBean private CommentService commentService;
 	
-	private CommentTemplate comment = new CommentTemplate();
+	private CommentTemplate comment;
 	
 	private List<IEventBehavior> onChangeBehaviors = Lists.newArrayList(); 
 

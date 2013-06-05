@@ -1,0 +1,24 @@
+<wicket:panel>
+
+    <div wicket:id="displayContainer">
+        <input readonly="true" type="text" wicket:id="uomTextField">
+        <img wicket:id="openEditorImage" src="/fieldid/images/unit_of_measure.png">
+    </div>
+
+    <div wicket:id="editorContainer">
+
+        <select wicket:id="unitOfMeasureSelect"></select>
+
+        <span wicket:id="unitOfMeasureLabel"></span> <input type="text" wicket:id="primaryValue">
+
+        <div wicket:id="secondaryContainer">
+            <span wicket:id="secondaryUnitOfMeasureLabel"></span> <input type="text" wicket:id="secondaryValue">
+        </div>
+
+        <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        <a wicket:id="storeLink"><wicket:message key="label.store"/></a>
+
+    </div>
+
+
+</wicket:panel>
