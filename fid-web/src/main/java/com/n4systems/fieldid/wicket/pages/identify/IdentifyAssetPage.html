@@ -2,83 +2,111 @@
 
     <div wicket:id="feedbackPanel"></div>
 
-    <form wicket:id="identifyAssetForm">
-        <div>
-            <wicket:message key="label.assettype"/>
+    <form wicket:id="identifyAssetForm" class="form-horizontal">
+        <div class="primary-selection">  
+            <label><wicket:message key="label.assettype"/></label>
             <select wicket:id="assetType"></select>
         </div>
 
-        <div>
-            * <wicket:message key="label.identified"/>
-            <div wicket:id="identifiedDate"></div>
+        <div class="column-left">
+            <fieldset>
+                <legend>Identifiers</legend>
+                <div class="control-group">
+                    <label>* <wicket:message key="label.identified"/></label>
+                    <div wicket:id="identifiedDate"></div>
+                </div>
+
+                <div class="control-group">
+                    <label>* <span wicket:id="identifierLabel"></span></label>
+                    <input wicket:id="identifier">
+                    <a class="links" wicket:id="generateIdentifierLink"><wicket:message key="label.generate"/></a>
+                </div>
+
+                <div class="control-group">
+                    <label><wicket:message key="label.rfidnumber"/></label>
+                    <input wicket:id="rfidNumber">
+                </div>
+
+                <div class="control-group">
+                    <label><wicket:message key="label.reference_number"/></label>
+                    <input wicket:id="referenceNumber">
+                </div>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Owner</legend>
+                <div class="control-group">
+                    <label><wicket:message key="label.assignedto"/></label>
+                    <select wicket:id="assignedToSelect"/>
+                    <a class="links" wicket:id="assignToMeLink"><wicket:message key="label.assign_to_me"/></a>
+                </div>
+
+                <div class="control-group">
+                    <label>* <wicket:message key="label.owner"/></label>
+                    <div wicket:id="ownerPicker"/>
+                </div>
+
+                <div class="control-group">
+                    <label><wicket:message key="label.location"/></label>
+                    <div wicket:id="locationPicker"/>
+                </div>
+
+                <div class="control-group">
+                    <label><wicket:message key="label.purchaseorder"/></label>
+                    <input wicket:id="purchaseOrder">
+                </div>
+            </fieldset>
+            
+
+            <fieldset>
+                <legend>Asset Details</legend>
+                <div class="control-group">
+                    <label><wicket:message key="label.assetstatus"/></label>
+                    <select wicket:id="assetStatusSelect"/>
+                </div>
+
+                <div class="control-group">
+                    <!-- label included in the wicket -->
+                    <div wicket:id="comments"/>
+                </div>
+
+                <div class="control-group">
+                    <label><wicket:message key="label.visibility"/></label>
+                    <select wicket:id="visibilitySelect"/>
+                </div>
+            </fieldset>
         </div>
 
-        <div>
-            * <span wicket:id="identifierLabel"></span>
-            <input wicket:id="identifier"> <a wicket:id="generateIdentifierLink"><wicket:message key="label.generate"/></a>
+        <div class="column-right">
+            <fieldset>
+                <legend>Asset Image</legend>
+                <div wicket:id="assetImagePanel" class="uploads">
+                </div>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Attachments</legend>
+                <div wicket:id="assetAttachmentsPanel" class="uploads">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Event Schedules</legend>
+                <div wicket:id="eventSchedulesPanel" class="uploads">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Attributes</legend>
+                <div wicket:id="attributesPanel" class="uploads">
+                </div>
+            </fieldset>
         </div>
 
-        <div>
-            <wicket:message key="label.rfidnumber"/>
-            <input wicket:id="rfidNumber">
+        <div class="form-action">
+            <input type="submit" wicket:message="value:label.save" wicket:id="saveButton">
+            <input type="submit" wicket:message="value:hbutton.saveandstartevent" wicket:id="saveAndStartEventButton">
         </div>
-
-        <div>
-            <wicket:message key="label.reference_number"/>
-            <input wicket:id="referenceNumber">
-        </div>
-
-        <div>
-            <wicket:message key="label.assignedto"/>
-            <select wicket:id="assignedToSelect"/> <a wicket:id="assignToMeLink"><wicket:message key="label.assign_to_me"/></a>
-        </div>
-
-        <div>
-            * <wicket:message key="label.owner"/>
-            <div wicket:id="ownerPicker"/>
-        </div>
-
-        <div>
-            <wicket:message key="label.location"/>
-            <div wicket:id="locationPicker"/>
-        </div>
-
-        <div>
-            <wicket:message key="label.purchaseorder"/>
-            <input wicket:id="purchaseOrder">
-        </div>
-
-        <div>
-            <wicket:message key="label.assetstatus"/>
-            <select wicket:id="assetStatusSelect"/>
-        </div>
-
-        <div>
-            <wicket:message key="label.comments"/>
-            <div wicket:id="comments"/>
-        </div>
-
-        <div>
-            <wicket:message key="label.visibility"/>
-            <select wicket:id="visibilitySelect"/>
-        </div>
-
-        <div wicket:id="assetImagePanel">
-        </div>
-
-        <div wicket:id="assetAttachmentsPanel">
-        </div>
-
-        <div wicket:id="eventSchedulesPanel">
-        </div>
-
-        <div wicket:id="attributesPanel">
-        </div>
-
-
-        <input type="submit" wicket:message="value:label.save" wicket:id="saveButton">
-        <input type="submit" wicket:message="value:hbutton.saveandstartevent" wicket:id="saveAndStartEventButton">
-
     </form>
 
     <div wicket:id="schedulePicker"></div>
