@@ -1,18 +1,16 @@
 package com.n4systems.model.asset;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.persistence.EntityManager;
-
-import org.apache.commons.io.FileUtils;
-
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.ModifiedBySaver;
 import com.n4systems.reporting.PathHandler;
+import org.apache.commons.io.FileUtils;
+
+import javax.persistence.EntityManager;
+import java.io.File;
+import java.io.IOException;
 
 public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	private final Asset asset;
@@ -41,7 +39,7 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 
 		// this must be captured prior to merge as data is a transient field
 		byte[] attachmentData = entity.getData();
-		entity = em.merge(entity);
+        entity = em.merge(entity);
 		saveAttachmentData(entity, attachmentData);
 	}
 	

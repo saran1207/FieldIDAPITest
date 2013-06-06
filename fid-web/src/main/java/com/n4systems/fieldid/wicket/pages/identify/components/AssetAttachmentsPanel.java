@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -16,6 +17,8 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.util.FileCopyUtils;
 
@@ -24,7 +27,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static ch.lambdaj.Lambda.on;
 
@@ -45,8 +47,12 @@ public class AssetAttachmentsPanel extends Panel {
         existingAttachmentsContainer.add(new ListView<AssetAttachment>("existingAttachments", attachments) {
             @Override
             protected void populateItem(final ListItem<AssetAttachment> item) {
-                item.add(new TextArea<String>("comments", ProxyModel.of(item.getModel(), on(AssetAttachment.class).getComments())));
-                item.add(new Label("fileName", ProxyModel.of(item.getModel(), on(AssetAttachment.class).getFileName())));
+                TextArea<String> comments = new TextArea<String>("comments", ProxyModel.of(item.getModel(), on(AssetAttachment.class).getComments()));
+                item.add(comments);
+                comments.add(new AjaxFormComponentUpdatingBehavior("onblur") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) { } });
+                item.add(new Label("fileName", new NameAfterLastFileSeparatorModel(ProxyModel.of(item.getModel(), on(AssetAttachment.class).getFileName()))));
                 item.add(new AjaxLink("removeLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -75,7 +81,7 @@ public class AssetAttachmentsPanel extends Panel {
 
 
                     File tempDir = PathHandler.getTempDir();
-                    String fileName = UUID.randomUUID().toString();
+                    String fileName = fileUpload.getClientFileName();
                     File file = new File(tempDir, fileName);
 
                     try {
@@ -85,8 +91,7 @@ public class AssetAttachmentsPanel extends Panel {
                     }
 
                     AssetAttachment attachment = new AssetAttachment();
-                    attachment.setTempFileName(fileName);
-                    attachment.setFileName(fileUpload.getClientFileName());
+                    attachment.setFileName(tempDir.getName() + File.separator + fileName);
 
                     attachments.add(attachment);
                     target.add(existingAttachmentsContainer);
@@ -101,6 +106,30 @@ public class AssetAttachmentsPanel extends Panel {
 
     public List<AssetAttachment> getAttachments() {
         return attachments;
+    }
+
+    public class NameAfterLastFileSeparatorModel extends LoadableDetachableModel<String> {
+
+        private IModel<String> wrappedModel;
+
+        public NameAfterLastFileSeparatorModel(IModel<String> wrappedModel) {
+            this.wrappedModel = wrappedModel;
+        }
+
+        @Override
+        protected String load() {
+            String name = wrappedModel.getObject();
+            if (name == null) {
+                return null;
+            }
+            return name.substring(name.lastIndexOf(File.separator)+1);
+        }
+
+        @Override
+        public void detach() {
+            super.detach();
+            wrappedModel.detach();
+        }
     }
 
 }

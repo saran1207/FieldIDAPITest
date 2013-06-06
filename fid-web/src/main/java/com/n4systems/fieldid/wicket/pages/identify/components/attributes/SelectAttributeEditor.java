@@ -16,7 +16,7 @@ public class SelectAttributeEditor extends FormComponentPanel<InfoOptionBean> {
 
 
     public SelectAttributeEditor(String id, IModel<InfoOptionBean> infoOptionModel) {
-        super(id);
+        super(id, infoOptionModel);
         this.infoOption = infoOptionModel.getObject();
 
         List<InfoOptionBean> unfilteredOptions = new ArrayList<InfoOptionBean>(infoOption.getInfoField().getUnfilteredInfoOptions());
@@ -46,6 +46,6 @@ public class SelectAttributeEditor extends FormComponentPanel<InfoOptionBean> {
 
     @Override
     protected void convertInput() {
-        setModelObject(infoOption);
+        setConvertedInput(infoOption);
     }
 }

@@ -257,7 +257,6 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             persistenceService.save(event);
         }
 
-
         getSession().info(new AssetCreatedFeedbackMessage(createdAsset.getId(), createdAsset.getIdentifier()));
         return asset;
     }
