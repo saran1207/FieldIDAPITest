@@ -13,8 +13,10 @@ ${action.setPageType('user','view')!}
 			<@s.url id="archiveUrl" action="liteUserArchive" uniqueID="${(user.id)!}" />
 		<#elseif user.readOnly>
 			<@s.url  id="archiveUrl" action="readOnlyUserArchive" uniqueID="${(user.id)!}" />
-        <#else>
+        <#elseif user.person>
             <@s.url  id="archiveUrl" action="personArchive" uniqueID="${(user.id)!}" />
+        <#else>
+            <@s.url  id="archiveUrl" action="usageBasedUserArchive" uniqueID="${(user.id)!}" />
 		</#if>
 	<div class="useractions delete">
 		<p>

@@ -44,4 +44,9 @@ public class UserCrudSelection extends UserCrud {
     public boolean isPerson() {
         return false;
     }
+
+    @Override
+    public boolean isUsageBasedUser() {
+        return false;
+    }
 }

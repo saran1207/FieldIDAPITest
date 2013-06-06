@@ -202,6 +202,10 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
         return userType.equals(UserType.PERSON);
     }
 
+    public boolean isUsageBasedUser() {
+        return userType.equals(UserType.USAGE_BASED);
+    }
+
 	public void archiveUser() {
 		userID = null;
 		archiveEntity();

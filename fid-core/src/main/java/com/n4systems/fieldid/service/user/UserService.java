@@ -8,6 +8,7 @@ import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
@@ -205,6 +206,21 @@ public class UserService extends FieldIdPersistenceService {
 
     public void update(User user) {
         persistenceService.update(user);
+    }
+
+    public boolean userIdIsUnique(Long tenantId, String userId, Long currentUserId) {
+        if (userId == null) {
+            return true;
+        }
+
+        QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(User.class, new TenantOnlySecurityFilter(tenantId)).setCountSelect();
+        queryBuilder.addWhere(Comparator.EQ, "userID", "userID", userId);
+
+        if (currentUserId != null) {
+            queryBuilder.addWhere(Comparator.NE, "id", "id", currentUserId);
+        }
+
+        return !persistenceService.exists(queryBuilder);
     }
 
 }

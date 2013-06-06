@@ -183,4 +183,9 @@ public class LiteUserCrud extends UserCrud {
         return false;
     }
 
+    @Override
+    public boolean isUsageBasedUser() {
+        return false;
+    }
+
 }

@@ -84,4 +84,9 @@ public class UserUpgradeCrud extends UserCrud {
 		return Permissions.NO_PERMISSIONS;
 	}
 
+    @Override
+    public boolean isUsageBasedUser() {
+        return false;
+    }
+
 }

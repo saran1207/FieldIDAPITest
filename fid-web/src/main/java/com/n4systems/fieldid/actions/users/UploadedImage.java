@@ -1,10 +1,11 @@
 package com.n4systems.fieldid.actions.users;
 
-import java.io.File;
-
 import com.n4systems.util.StringUtils;
 
-public class UploadedImage {
+import java.io.File;
+import java.io.Serializable;
+
+public class UploadedImage implements Serializable {
 	private File currentImage;
 	private String uploadDirectory;
 	private boolean removeImage = false;

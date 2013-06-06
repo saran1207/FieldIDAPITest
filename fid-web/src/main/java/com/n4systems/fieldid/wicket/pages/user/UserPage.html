@@ -8,62 +8,17 @@
     <div wicket:id="feedbackPanel"/>
 
     <form class="fullForm fluidSets" wicket:id="addUserForm">
+
         <div class="multiColumn">
-            <div class="fieldGroup fieldGroupGap">
-                <h2><wicket:message key="label.identifiers"/></h2>
 
-                <div class="infoSet">
-                    <label class="label">* <wicket:message key="label.owner"/></label>
-                    <span wicket:id="orgPicker"/>
-                </div>
+            <div wicket:id="identifiersPanel" class="fieldGroup fieldGroupGap"/>
 
-                <div class="infoSet">
-                    <label class="label">* <wicket:message key="label.emailaddress"/></label>
-                    <span class="fieldHolder">
-                        <input type="text" wicket:id="email"/>
-                    </span>
-                </div>
+            <div wicket:id="accountPanel" class="fieldGroup"/>
 
-                <div class="infoSet">
-                    <label class="label">* <wicket:message key="label.firstname"/></label>
-                    <span class="fieldHolder">
-                        <input type="text" wicket:id="firstname">
-                    </span>
-                </div>
+            <div wicket:id="localizationPanel" class="fieldGroup fieldGroupGap clearLeft"/>
 
-                <div class="infoSet">
-                    <label class="label">* <wicket:message key="label.lastname"/></label>
-                    <span class="fieldHolder">
-                        <input type="text" wicket:id="lastname">
-                    </span>
-                </div>
+            <div wicket:id="permissionsPanel" class="fieldGroup permissionsFieldGroup"/>
 
-                <div class="infoSet">
-                    <label class="label"><wicket:message key="label.initials"/></label>
-                    <span class="fieldHolder">
-                        <input type="text" wicket:id="initials">
-                    </span>
-                </div>
-
-                <div class="infoSet">
-                    <label class="label"><wicket:message key="label.id"/></label>
-                    <span class="fieldHolder">
-                        <input type="text" wicket:id="identifier">
-                    </span>
-                </div>
-
-                <div class="infoSet">
-                    <label class="label"><wicket:message key="label.position"/></label>
-                    <span class="fieldHolder">
-                        <input type="text" wicket:id="position">
-                    </span>
-                </div>
-            </div>
-        </div>
-
-        <div class="fieldGroup fieldGroupGap clearLeft">
-            <h2><wicket:message key="label.localization"/></h2>
-            <div wicket:id="timeZoneContainer"></div>
         </div>
 
         <div class="formAction">

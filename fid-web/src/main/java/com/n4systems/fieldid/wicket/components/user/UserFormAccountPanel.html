@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:panel>
+    <h2><wicket:message key="label.account_heading"/></h2>
+
+    <div class="infoSet">
+        <label class="label">* <wicket:message key="label.username"/></label>
+        <span class="fieldHolder">
+            <input type="text" wicket:id="username"/>
+        </span>
+    </div>
+    <div wicket:id="newAccountFields">
+        <div class="infoSet">
+            <label class="label"><wicket:message key="label.assign_password"/></label>
+            <span class="fieldHolder">
+                <label class="checkBoxLabel">
+                    <input type="checkbox" wicket:id="assignPassword">
+                </label>
+            </span>
+        </div>
+        <div id="passwords">
+            <div wicket:enclosure="password" class="infoSet">
+                <label class="label">* <wicket:message key="label.password"/></label>
+                <span class="fieldHolder">
+                    <input type="password" wicket:id="password"/>
+                </span>
+                <span class="fieldHolder">
+                    <input type="password" wicket:id="confirmPassword"/>
+                </span>
+                <div class="labelContainers increasedMargin"><wicket:message key="label.password"/></div>
+                <div class="labelContainers"><wicket:message key="label.vpassword"/></div>
+            </div>
+        </div>
+        <div class="infoSet">
+            <label class="label"><wicket:message key="label.securityrfidnumber"/></label>
+            <span class="fieldHolder">
+                <input type="text" wicket:id="rfidNumber"/>
+            </span>
+        </div>
+        <div class="infoSet">
+            <label class="label"><wicket:message key="label.send_welcome_email"/></label>
+            <span class="fieldHolder">
+                <label class="checkBoxLabel">
+                    <input type="checkbox" wicket:id="sendWelcomeEmail"/>&nbsp;<wicket:message key="label.welcome_email_description"/>
+                </label>
+            </span>
+        </div>
+        <div wicket:id="welcomeEmailMessageContainer" class="infoSet" >
+            <div class="personalMessageHeading"><wicket:message key="label.personal_message_title"/></div>
+            <span class="fieldHolder">
+                <textarea wicket:id="welcomeEmailMessage" class="welcomeMessageTextarea"/>
+            </span>
+        </div>
+    </div>
+</wicket:panel>
+</html>

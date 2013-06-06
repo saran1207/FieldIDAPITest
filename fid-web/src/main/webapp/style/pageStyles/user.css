@@ -11,8 +11,7 @@
 }
 
 .permissions {
-	margin: 5px 0px;
-	width:250px;
+	margin: 5px;
 }
 
 .permissions th, .permissions td {
@@ -60,7 +59,7 @@ td.permissionName{
 	margin-bottom:10px;
 }
 
-.fieldGroup #welcomeMessageTextarea {
+.fieldGroup #welcomeMessageTextarea, .fieldGroup .welcomeMessageTextarea {
 	margin-left: 165px;	
 }
 
@@ -261,4 +260,8 @@ pre {
 
 #listFilterForm select {
     width: 110px;
+}
+
+.fieldGroup .userGroup {
+    overflow: visible;
 }

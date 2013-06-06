@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components;
 
 import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import org.apache.log4j.Logger;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.ListMultipleChoice;
@@ -30,6 +31,7 @@ public class MultiSelectDropDownChoice<T extends Serializable> extends ListMulti
     protected void onInitialize() {
         super.onInitialize();
         add(new JChosenBehavior());
+        add(new AttributeModifier("multiple", "multiple"));
     }
 
     protected void onComponentTag(ComponentTag tag) {

@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:panel>
+    <h2><wicket:message key="label.permissions"/></h2>
+    <table class="permissions fieldHolder">
+        <tr class="titleRow">
+            <th class="permissionName">&nbsp;</th>
+            <th>
+                <span class="radio floatLeft"><wicket:message key="label.on"/></span>
+                <span class="radio floatLeft"><wicket:message key="label.off"/></span>
+            </th>
+        </tr>
+        <tr wicket:id="permissions">
+            <td class="permissionName" wicket:id="name"/>
+            <td wicket:id="group">
+                <span class="radio floatLeft">
+                    <input class="permissionOn" wicket:id="on" type="radio"/>
+                </span>
+                <span class="radio floatLeft">
+                    <input class="permissionOff" wicket:id="off" type="radio"/>
+                </span>
+
+            </td>
+        </tr>
+        <tr>
+            <td class="permissionName permissionAction">&nbsp;</td>
+            <td class="permissionAction">
+                <span class="radio floatLeft">
+                    <input type="reset" value="All On" class="allOn" onclick="$('.permissionOn').trigger('click');return false;">
+                </span>
+                <span class="radio floatLeft">
+                <input type="reset" value="All Off" class="allOff" onclick="$('.permissionOff').trigger('click');return false;">
+                </span>
+            </td>
+        </tr>
+    </table>
+</wicket:panel>
+</html>

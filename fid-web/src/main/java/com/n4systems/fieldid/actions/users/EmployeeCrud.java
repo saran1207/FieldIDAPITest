@@ -217,5 +217,10 @@ public class EmployeeCrud extends UserCrud {
     public boolean isPerson() {
         return false;
     }
+
+    @Override
+    public boolean isUsageBasedUser() {
+        return false;
+    }
 	
 }

@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:panel>
+
+    <h2><wicket:message key="label.identifiers"/></h2>
+
+    <div class="infoSet">
+        <label class="label">* <wicket:message key="label.owner"/></label>
+        <div wicket:id="orgPicker"/>
+    </div>
+
+    <div class="infoSet userGroup" wicket:enclosure="group">
+        <label class="label"><wicket:message key="label.user_group"/></label>
+        <span class="fieldHolder">
+            <select wicket:id="group"/>
+        </span>
+    </div>
+
+    <div class="infoSet">
+        <label class="label">* <wicket:message key="label.emailaddress"/></label>
+        <span class="fieldHolder">
+            <input type="text" wicket:id="email"/>
+        </span>
+    </div>
+
+    <div class="infoSet">
+        <label class="label">* <wicket:message key="label.firstname"/></label>
+        <span class="fieldHolder">
+            <input type="text" wicket:id="firstname">
+        </span>
+    </div>
+
+    <div class="infoSet">
+        <label class="label">* <wicket:message key="label.lastname"/></label>
+        <span class="fieldHolder">
+            <input type="text" wicket:id="lastname">
+        </span>
+    </div>
+
+    <div class="infoSet">
+        <label class="label"><wicket:message key="label.initials"/></label>
+        <span class="fieldHolder">
+            <input type="text" wicket:id="initials">
+        </span>
+    </div>
+
+    <div class="infoSet">
+        <label class="label"><wicket:message key="label.id"/></label>
+        <span class="fieldHolder">
+            <input type="text" wicket:id="identifier">
+        </span>
+    </div>
+
+    <div class="infoSet">
+        <label class="label"><wicket:message key="label.position"/></label>
+        <span class="fieldHolder">
+            <input type="text" wicket:id="position">
+        </span>
+    </div>
+
+    <div class="infoSet" wicket:enclosure="uploadForm">
+        <label class="label"><wicket:message key="label.digital_signature"/></label>
+        <span class="fieldHolder">
+            <form wicket:id="uploadForm">
+                <input type="file" wicket:id="digitalSignature">
+                <span wicket:enclosure="digitalSignature"><wicket:message key="label.signature_size"/></span>
+                <span class="displaySignature" wicket:id="fileDisplay">
+                    <img src="/fieldid/images/attachment-icon.png" class="attachmentImage"> <label wicket:id="fileName" class="fileName"/> <a wicket:id="removeLink" class="removeLink"><wicket:message key="label.remove"/></a>
+                </span>
+            </form>
+        </span>
+    </div>
+
+</wicket:panel>
+
+</html>

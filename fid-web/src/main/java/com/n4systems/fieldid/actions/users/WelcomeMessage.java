@@ -2,7 +2,9 @@ package com.n4systems.fieldid.actions.users;
 
 import com.n4systems.util.StringUtils;
 
-public class WelcomeMessage {
+import java.io.Serializable;
+
+public class WelcomeMessage implements Serializable {
 	private boolean sendEmail = false;
 	private String personalMessage = null;
 	

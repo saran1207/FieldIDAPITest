@@ -12,9 +12,9 @@ public enum UserType {
 	FULL( "Full", PermissionType.values() ),
 	LITE( "Lite", PermissionType.CreateEvent, PermissionType.EditEvent ),
 	READONLY( "Read-Only" /*no permissions*/ ),
-    PERSON("Person" /*no permissions*/);
+    PERSON("Person" /*no permissions*/),
+    USAGE_BASED("Usage Based", PermissionType.CreateEvent, PermissionType.EditEvent);
 
-	
 	private String label;
 	private final Set<PermissionType> permissionSet = new HashSet<PermissionType>();
 	

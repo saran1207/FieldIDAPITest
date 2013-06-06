@@ -47,6 +47,7 @@ import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigur
 import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.pages.user.AddPersonPage;
+import com.n4systems.fieldid.wicket.pages.user.AddUsageBasedUserPage;
 import com.n4systems.fieldid.wicket.pages.user.EditPersonPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
@@ -143,6 +144,7 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("addPerson", AddPersonPage.class);
         mountPage("editPerson", EditPersonPage.class);
+        mountPage("addUsageBasedUser", AddUsageBasedUserPage.class);
 
         mountPage("procedureDefinitions", ProcedureDefinitionListPage.class);
         mountPage("procedureDefinitionPrint", ProcedureDefinitionPrintPage.class);

@@ -74,4 +74,9 @@ public class ReadOnlyUserCrud extends UserCrud {
         return false;
     }
 
+    @Override
+    public boolean isUsageBasedUser() {
+        return false;
+    }
+
 }

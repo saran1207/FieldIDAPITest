@@ -3,7 +3,10 @@ package com.n4systems.fieldid.wicket.pages.user;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
@@ -18,6 +21,16 @@ public class AddPersonPage extends UserPage {
         User person = user.getObject();
         userService.create(person);
         return person;
+    }
+
+    @Override
+    protected Component createAccountPanel(String id, Form form) {
+        return new WebMarkupContainer(id).setVisible(false);
+    }
+
+    @Override
+    protected Component createPermissionsPanel(String id) {
+        return new WebMarkupContainer(id).setVisible(false);
     }
 
     private IModel<User> createPersonUser() {
@@ -35,4 +48,7 @@ public class AddPersonPage extends UserPage {
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("label.addperson"));
     }
+
+
+
 }

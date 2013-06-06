@@ -118,6 +118,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 
     public abstract boolean isPerson();
 
+    public abstract boolean isUsageBasedUser();
+
 	private void initializeTimeZoneLists() {
 		country = CountryList.getInstance().getCountryByFullName(user.getTimeZoneID());
 		region = CountryList.getInstance().getRegionByFullId(user.getTimeZoneID());

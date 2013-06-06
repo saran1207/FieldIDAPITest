@@ -796,6 +796,19 @@
             </result>
         </action>
 
+        <action name="usageBasedUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.UsageBasedUserCrud">
+            <result name="success" type="redirectAction">
+                <param name="actionName">userList</param>
+                <param name="currentPage">${currentPage}</param>
+                <param name="listFilter">${listFilter}</param>
+            </result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">userList</param>
+                <param name="currentPage">${currentPage}</param>
+                <param name="listFilter">${listFilter}</param>
+            </result>
+        </action>
+
 
 		<action name="employeeUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="redirectAction">
@@ -821,6 +834,15 @@
 		</action>
 
         <action name="personUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.PersonCrud">
+            <result name="success" type="redirectAction">
+                <param name="actionName">userList</param>
+                <param name="currentPage">${currentPage}</param>
+                <param name="listFilter">${listFilter}</param>
+            </result>
+            <result name="error" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
+        </action>
+
+        <action name="usageBasedUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.UsageBasedUserCrud">
             <result name="success" type="redirectAction">
                 <param name="actionName">userList</param>
                 <param name="currentPage">${currentPage}</param>

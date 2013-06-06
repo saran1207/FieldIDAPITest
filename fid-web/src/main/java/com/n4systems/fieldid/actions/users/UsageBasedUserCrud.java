@@ -11,17 +11,17 @@ import com.n4systems.security.Permissions;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.ManageSystemUsers})
-public class PersonCrud extends UserCrud {
+public class UsageBasedUserCrud extends UserCrud {
 	private static final long serialVersionUID = 1L;
 
-	public PersonCrud(UserManager userManager, UserGroupService userGroupService, PersistenceManager persistenceManager) {
+	public UsageBasedUserCrud(UserManager userManager, UserGroupService userGroupService, PersistenceManager persistenceManager) {
 		super(userManager, userGroupService, persistenceManager);
 	}
 	
 	@Override
 	protected void testRequiredEntities(boolean existing) {
 		super.testRequiredEntities(existing);
-		if (existing && !user.isPerson()) {
+		if (existing && !user.isUsageBasedUser()) {
 			throw new MissingEntityException("another user was loaded for when a person user was expected.");
 		}
 	}
@@ -36,7 +36,7 @@ public class PersonCrud extends UserCrud {
 
 	@Override
 	protected int processPermissions() {
-		return Permissions.CUSTOMER;
+		return Permissions.ALLEVENT;
 	}
 
 	@Override

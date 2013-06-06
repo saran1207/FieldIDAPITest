@@ -47,6 +47,7 @@ import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.transaction.TransactionService;
+import com.n4systems.fieldid.service.user.SendWelcomeEmailService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
@@ -486,6 +487,11 @@ public class FieldIdCoreConfig {
     @Bean
     public AssetIdentifierService assetIdentifierService() {
         return new AssetIdentifierService();
+    }
+
+    @Bean
+    public SendWelcomeEmailService sendWelcomeEmailService() {
+        return new SendWelcomeEmailService();
     }
 
 }
