@@ -194,43 +194,43 @@ public class AssetService extends FieldIdPersistenceService {
         return obj;
     }
 
-    @LegacyMethod
-    public boolean rfidExists(String rfidNumber, Long tenantId) {
-        return rfidExists(rfidNumber, tenantId, null);
+    public boolean rfidExists(String rfidNumber) {
+        return rfidExists(rfidNumber, null);
     }
 
-    @LegacyMethod
-    public boolean rfidExists(String rfidNumber, Long tenantId, Long uniqueID) {
-        long rfidCount = 0;
-        String uniqueIDClause = "";
+    public boolean rfidExists(String rfidNumber, Long uniqueID) {
+        return duplicateFieldExists("rfidNumber", rfidNumber, uniqueID);
+
+    }
+
+    public boolean identifierExists(String identifier) {
+        return duplicateFieldExists("identifier", identifier, null);
+    }
+
+    public boolean identifierExists(String identifier, Long uniqueID) {
+        return duplicateFieldExists("identifier", identifier, uniqueID);
+    }
+
+    private boolean duplicateFieldExists(String field, String value, Long uniqueID) {
         // null or zero-length rfidNumbers are never duplicates
-        if (rfidNumber == null || rfidNumber.trim().length() == 0) {
+        if (value == null || value.trim().length() == 0) {
             return false;
         }
 
-        if (uniqueID != null) {
-            uniqueIDClause = " and p.id <> :id";
-        }
-
-        Query query = persistenceService.createQuery("select count(p) from "+Asset.class.getName()+" p where p.state = :activeState AND p.rfidNumber = :rfidNumber" + uniqueIDClause
-                + " and p.tenant.id = :tenantId group by p.rfidNumber");
-
-        query.setParameter("rfidNumber", rfidNumber.toUpperCase());
-        query.setParameter("tenantId", tenantId);
-        query.setParameter("activeState", Archivable.EntityState.ACTIVE);
+        QueryBuilder<Asset> rfidQuery = createTenantSecurityBuilder(Asset.class);
+        rfidQuery.addSimpleWhere(field, value.toUpperCase());
 
         if (uniqueID != null) {
-            query.setParameter("id", uniqueID);
+            rfidQuery.addSimpleWhere("id", uniqueID);
         }
 
         try {
-            rfidCount = (Long) query.getSingleResult();
+            return persistenceService.exists(rfidQuery);
         } catch (NoResultException e) {
-            rfidCount = 0;
+            return false;
         }
-
-        return (rfidCount > 0) ? true : false;
     }
+
 
     public Asset create(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
         runAssetSavePreRecs(asset, modifiedBy);
@@ -359,7 +359,7 @@ public class AssetService extends FieldIdPersistenceService {
         AssetSaver saver = new AssetSaver();
         saver.setModifiedBy(modifiedBy);
 
-        if (rfidExists(asset.getRfidNumber(), asset.getTenant().getId())) {
+        if (rfidExists(asset.getRfidNumber())) {
             Collection<Asset> duplicateRfidAssets = findAssetsByRfidNumber(asset.getRfidNumber());
             for (Asset duplicateRfidAsset : duplicateRfidAssets) {
                 if (!duplicateRfidAsset.getId().equals(asset.getId())) {

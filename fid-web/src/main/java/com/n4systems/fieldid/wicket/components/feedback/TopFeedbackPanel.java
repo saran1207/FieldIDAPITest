@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.wicket.components.feedback;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.feedback.classy.ClassyFeedbackPanel;
 import org.apache.wicket.feedback.ErrorLevelFeedbackMessageFilter;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 
 public class TopFeedbackPanel extends Panel {
@@ -26,13 +26,15 @@ public class TopFeedbackPanel extends Panel {
                 return FieldIDSession.get().getFeedbackMessages().hasMessage(filter);
             }
         };
-        feedbackPanelContainer.add(new FeedbackPanel("feedbackPanel", filter) {
+        feedbackPanelContainer.add(new ClassyFeedbackPanel("feedbackPanel", filter) {
             @Override
             protected String getCSSClass(FeedbackMessage message) {
                 if (message.getLevel() == FeedbackMessage.INFO) {
                     return "actionMessage";
                 }
                 return super.getCSSClass(message);
+
+
             }
         });
         add(feedbackPanelContainer);

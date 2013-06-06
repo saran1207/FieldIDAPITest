@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.wicket.components.feedback.classy;
 
-import java.io.Serializable;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 
-public class AssetCreatedFeedbackMessage implements Serializable {
+public class AssetCreatedFeedbackMessage extends ClassyFeedbackMessage<AssetCreatedFeedbackMessageDisplayPanel> {
 
     private Long newAssetId;
     private String identifier;
@@ -28,4 +28,13 @@ public class AssetCreatedFeedbackMessage implements Serializable {
         this.identifier = identifier;
     }
 
+    @Override
+    public AssetCreatedFeedbackMessageDisplayPanel createComponent(String id) {
+        return new AssetCreatedFeedbackMessageDisplayPanel(id, this);
+    }
+
+    @Override
+    public String getPlainMessage() {
+        return new FIDLabelModel("message.asset_created_successfully").getObject();
+    }
 }

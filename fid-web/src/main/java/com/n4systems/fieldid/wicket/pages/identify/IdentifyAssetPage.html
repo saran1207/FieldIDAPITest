@@ -16,15 +16,21 @@
                     <div wicket:id="identifiedDate"></div>
                 </div>
 
-                <div class="control-group">
+                <div class="control-group" wicket:id="identifierContainer">
                     <label>* <span wicket:id="identifierLabel"></span></label>
                     <input wicket:id="identifier">
                     <a class="links" wicket:id="generateIdentifierLink"><wicket:message key="label.generate"/></a>
+                    <div wicket:id="duplicateIdentifierWarning">
+                        <wicket:message key="message.warning_duplicate_id_number"/>
+                    </div>
                 </div>
 
-                <div class="control-group">
+                <div class="control-group" wicket:id="rfidContainer">
                     <label><wicket:message key="label.rfidnumber"/></label>
                     <input wicket:id="rfidNumber">
+                    <div wicket:id="duplicateRfidWarning">
+                        <wicket:message key="message.warning_duplicate_rfid_number"/>
+                    </div>
                 </div>
 
                 <div class="control-group">
