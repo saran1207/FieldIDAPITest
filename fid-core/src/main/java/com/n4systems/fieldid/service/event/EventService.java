@@ -204,7 +204,7 @@ public class EventService extends FieldIdPersistenceService {
 		eventKpiRecord.setCustomer(owner);
 		
 		QueryBuilder<EventScheduleStatusCount> builder1 = new QueryBuilder<EventScheduleStatusCount>(Event.class, securityContext.getUserSecurityFilter());
-		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "workflowState", "COUNT(*)"));
+		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "obj.workflowState", "COUNT(*)"));
         builder1.applyFilter(new OwnerAndDownFilter(owner));
 
 		builder1.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
@@ -225,7 +225,7 @@ public class EventService extends FieldIdPersistenceService {
 		builder2.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
         builder2.addGroupBy("eventResult");
 
-        builder2.setSelectArgument(new NewObjectSelect(CompletedResultRecord.class, "eventResult", "COUNT(*)"));
+        builder2.setSelectArgument(new NewObjectSelect(CompletedResultRecord.class, "obj.eventResult", "COUNT(*)"));
 
         List<CompletedResultRecord> completed = persistenceService.findAll(builder2);
 		
