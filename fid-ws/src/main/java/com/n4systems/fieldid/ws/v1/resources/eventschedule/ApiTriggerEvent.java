@@ -8,6 +8,7 @@ public class ApiTriggerEvent {
 	private Date date;
 	private String performedBy;
 	private String criteria;
+    private List<String> imageComments;
 	private List<byte[]> images;
 	private int imageTotal;
 	
@@ -61,4 +62,12 @@ public class ApiTriggerEvent {
 	public void setImageTotal(int imageTotal) {
 		this.imageTotal = imageTotal;
 	}
+
+    public List<String> getImageComments() {
+        return imageComments;
+    }
+
+    public void setImageComments(List<String> imageComments) {
+        this.imageComments = imageComments;
+    }
 }
