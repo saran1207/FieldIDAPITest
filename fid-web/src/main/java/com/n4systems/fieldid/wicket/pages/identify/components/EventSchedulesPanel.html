@@ -1,24 +1,15 @@
 <wicket:panel>
-
-    <div wicket:id="currentSchedulesContainer">
-
+    <p>No schedules have been added.</p>
+    
+    <div wicket:id="currentSchedulesContainer" class="current-schedule">
         <div wicket:id="currentSchedules">
-
-            <div>
-                <span wicket:id="dueDate"></span>
-            </div>
-
-            <span wicket:id="eventTypeName"/>
-
-            <a wicket:id="removeLink">
-                <img src="/fieldid/images/small-x.png"/>
-            </a>
-
+            <span wicket:id="dueDate" class="due-date"></span>
+            <span wicket:id="eventTypeName" class="event-name" />
+            <a class="remove-link" wicket:id="removeLink"><img src="/fieldid/images/small-x.png"/></a>
         </div>
-
     </div>
 
-    <form wicket:id="addScheduleForm">
+    <form wicket:id="addScheduleForm" class="add-schedule-form">
         <input type="button" wicket:id="addScheduleButton" wicket:message="value:label.add_a_schedule">
     </form>
 

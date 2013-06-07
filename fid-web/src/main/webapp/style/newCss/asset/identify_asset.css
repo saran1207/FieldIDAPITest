@@ -2,6 +2,7 @@
     background-color: #ffff66;
 }
 
+/* General form styles */
 .form-horizontal legend {
 	font-size: 12px;
 	font-weight: bold;
@@ -11,7 +12,6 @@
 	padding: 7px 2.5%;
 	width: 95%;
 }
-
 .form-horizontal label {
 	width: 175px;
 	display: inline-block;
@@ -25,6 +25,7 @@
 	resize: none;
 }
 
+/* Main selection option - Asset type */
 .form-horizontal .primary-selection {
 	background-color: #F8F8F8;
 	padding: 24px 0 14px;
@@ -36,6 +37,7 @@
 		width: 175px;
 	}
 
+/* Column layout */
 .form-horizontal .column-left {
 	width: 670px;
 	float: left;
@@ -48,6 +50,7 @@
 	float: right;
 }
 
+/* Styles for creating rows and aligning form fields */
 .form-horizontal .control-group {
 	margin-bottom: 20px;
 }	
@@ -77,6 +80,7 @@
 		display: block;
 	}
 
+/* Uploads/right column section */
 .form-horizontal .uploads {
 	padding: 20px 10px;
 	background-color: #F5FBFF;
@@ -85,7 +89,34 @@
 	.form-horizontal .uploads p {
 		margin-bottom: 10px;
 	}
+	.form-horizontal .event-schedules {
+		background-color: #fff;
+		padding: 20px 0;
+	}
+	.form-horizontal .event-schedules .current-schedule,
+	.form-horizontal .event-schedules p {
+		padding: 0 10px;
+	}
+	.form-horizontal .event-schedules .due-date {
+		background-color: #ccc;
+		padding: 6px 10px;
+		display: inline-block;
+	}
+		.form-horizontal .event-schedules .remove-link {
+			float: right;
+			line-height: 28px;
+		}
+		.form-horizontal .add-schedule-form {
+			border-bottom: 1px solid #E2E2E2;
+			border-top: 1px solid #E2E2E2;
+			padding: 10px;
+			margin-top: 20px;
+		}
+	.form-horizontal .uploads.event-schedules .event-name {
+		font-weight: bold;
+	}
 
+/* bottom bar/save options */
 .form-horizontal .form-action {
 	clear: both;
 	border-top: 1px solid #E2E2E2;
