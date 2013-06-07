@@ -145,7 +145,7 @@ ${action.setPageType('user','view')!}
 		<div class="viewpermissions viewSection smallViewSection">
 			<h2><@s.text name="label.permissions"/></h2>
 			
-			<#if user.liteUser>
+			<#if user.liteUser || user.usageBasedUser>
 				<#assign permissionsList = litePermissions >			
 			<#else>
 				<#assign permissionsList = permissions >			

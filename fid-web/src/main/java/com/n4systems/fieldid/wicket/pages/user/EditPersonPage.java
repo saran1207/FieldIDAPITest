@@ -7,7 +7,6 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
@@ -16,11 +15,8 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 
 public class EditPersonPage extends UserPage{
 
-    Long uniqueId;
-
     public EditPersonPage(PageParameters parameters) {
-        uniqueId = parameters.get("uniqueID").toLong();
-        user = Model.of(loadExistingPerson());
+        super(parameters);
     }
 
     @Override
@@ -29,10 +25,6 @@ public class EditPersonPage extends UserPage{
         userService.update(person);
 
         return person;
-    }
-
-    private User loadExistingPerson() {
-        return userService.getUser(uniqueId);
     }
 
     @Override

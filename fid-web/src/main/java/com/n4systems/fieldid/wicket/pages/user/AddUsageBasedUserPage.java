@@ -3,9 +3,11 @@ package com.n4systems.fieldid.wicket.pages.user;
 import com.n4systems.fieldid.actions.users.UploadedImage;
 import com.n4systems.fieldid.wicket.components.user.UserFormAccountPanel;
 import com.n4systems.fieldid.wicket.components.user.UserFormPermissionsPanel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -60,6 +62,7 @@ public class AddUsageBasedUserPage extends UserPage {
         return new UserFormPermissionsPanel(id, user);
     }
 
+
     private IModel<User> createUsageBasedUser() {
         User usageBasedUser = new User();
         usageBasedUser.setTenant(getTenant());
@@ -71,5 +74,8 @@ public class AddUsageBasedUserPage extends UserPage {
         return Model.of(usageBasedUser);
     }
 
-
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("label.addusageBasedUser"));
+    }
 }

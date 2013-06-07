@@ -10,6 +10,7 @@
 <@s.url id="addLiteUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addLiteUser"/>
 <@s.url id="addReadOnlyUserUrl" namespace="/" listFilter="${listFilter!}" currentPage="${currentPage!}" action="addReadOnlyUser"/>
 <@s.url id="addPersonUrl" namespace="/" value="w/addPerson"/>
+<@s.url id="addUsageBasedUserUrl" namespace="/" value="w/addUsageBasedUser"/>
 
 <div class="viewLinks">
     <a class="mattButtonLeft" href="<@s.url action='userList'/>"><@s.text name="nav.view_all"/></a>
@@ -99,5 +100,6 @@
         </div>
     </div>
 
+    <input id="addUsageBasedUser" type="button" value="<@s.text name="label.add_new_usage_based_user" />" onclick="return redirect('${addUsageBasedUserUrl}');"/>
 
 </div>

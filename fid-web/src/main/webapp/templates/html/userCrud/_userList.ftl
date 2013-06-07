@@ -85,7 +85,7 @@
                             <@s.url  id="editUrl" namespace="/" value="w/editPerson?uniqueID=${(user.id)!}" />
                         <#else>
                             <@s.url  id="archiveUrl" action="usageBasedUserArchive" uniqueID="${(user.id)!}" />
-                            <@s.url  id="editUrl" namespace="/" value="w/editUsagedBasedUser?uniqueID=${(user.id)!}" />
+                            <@s.url  id="editUrl" namespace="/" value="w/editUsageBasedUser?uniqueID=${(user.id)!}" />
                         </#if>
 						<#if user.id != sessionUser.id>
 							<a href="${editUrl}"/><@s.text name="label.edit"/></a>

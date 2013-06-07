@@ -42,9 +42,9 @@ public class UserFormIdentifiersPanel extends Panel {
 
     private UploadedImage uploadedImage;
 
-    public UserFormIdentifiersPanel(String id, IModel<User> user) {
+    public UserFormIdentifiersPanel(String id, IModel<User> user, UploadedImage signatureImage) {
         super(id, user);
-
+        this.uploadedImage = signatureImage;
         add(new OrgPicker("orgPicker", new PropertyModel<BaseOrg>(user, "owner")));
         add(new MultiSelectDropDownChoice<UserGroup>("group",
                 new PropertyModel<List<UserGroup>>(user, "groups"),
@@ -56,10 +56,10 @@ public class UserFormIdentifiersPanel extends Panel {
         add(new TextField<String>("initials", new PropertyModel<String>(user, "initials")));
         add(new TextField<String>("identifier", new PropertyModel<String>(user, "identifier")));
         add(new TextField<String>("position", new PropertyModel<String>(user, "position")));
-
-        uploadedImage = new UploadedImage();
-        add(new UploadForm("uploadForm").setVisible(!user.getObject().isPerson()));
-
+        UploadForm uploadForm;
+        add(uploadForm = new UploadForm("uploadForm"));
+        uploadForm.setMultiPart(true);
+        uploadForm.setVisible(!user.getObject().isPerson());
     }
 
     class UploadForm extends Form<FileAttachment> {
@@ -88,18 +88,22 @@ public class UserFormIdentifiersPanel extends Panel {
                 protected void onError(AjaxRequestTarget target) {
                 }
             });
-
-            fileDisplay.add(fileName = new Label("fileName", Model.of(new String())));
+            if(uploadedImage.isExistingImage())
+                fileDisplay.add(fileName = new Label("fileName", Model.of(uploadedImage.getImage().getName())));
+            else
+                fileDisplay.add(fileName = new Label("fileName", Model.of(new String())));
             fileDisplay.add(new AjaxLink<Void>("removeLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     fileDisplay.setVisible(false);
                     uploadField.setVisible(true);
                     target.add(UploadForm.this);
+                    uploadedImage.setRemoveImage(true);
                 }
             });
             fileDisplay.setOutputMarkupId(true);
-            fileDisplay.setVisible(false);
+            fileDisplay.setVisible(uploadedImage.isExistingImage());
+            uploadField.setVisible(!uploadedImage.isExistingImage());
             add(fileDisplay);
         }
     }

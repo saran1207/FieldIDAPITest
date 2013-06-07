@@ -183,7 +183,10 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	}
 
 	public boolean isEmployee() {
-		return userType.equals(UserType.FULL) || userType.equals(UserType.ADMIN) || userType.equals(UserType.LITE);
+		return userType.equals(UserType.FULL)
+                || userType.equals(UserType.ADMIN)
+                || userType.equals(UserType.LITE)
+                || userType.equals(UserType.USAGE_BASED);
 	}
 	
 	public boolean isFullUser(){

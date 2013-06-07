@@ -30,18 +30,19 @@ public class UserFormPermissionsPanel extends Panel {
             @Override
             protected void populateItem(final ListItem<Permission> item) {
                 final Permission permission = item.getModelObject();
-                final Model<Boolean> selection = Model.of(new Boolean(false));
 
                 item.add(new Label("name", new FIDLabelModel(permission.label)));
+
+                final Model<Boolean> selection = Model.of(permission.enabled? Boolean.TRUE: Boolean.FALSE);
 
                 RadioGroup<Boolean> group = new RadioGroup<Boolean>("group", selection);
                 group.add(new AjaxFormChoiceComponentUpdatingBehavior() {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
-                        permission.enabled = selection.getObject();
+                        Permission updatedPermission = new Permission(permission.id, permission.label, selection.getObject());
                         int index = item.getIndex();
                         permissions.remove(index);
-                        permissions.add(index, permission);
+                        permissions.add(index, updatedPermission);
                     }
                 });
                 group.add(new Radio<Boolean>("on", new Model<Boolean>(Boolean.TRUE)));
@@ -55,14 +56,16 @@ public class UserFormPermissionsPanel extends Panel {
     private List<Permission> getPermissionsList(IModel<User> userModel) {
        permissions = Lists.newArrayList();
         int[] permissionList;
+        User user = userModel.getObject();
+        BitField permField = new BitField(user.isNew() ? 0 : user.getPermissions());
 
-        if(userModel.getObject().isLiteUser() || userModel.getObject().isUsageBasedUser())
+        if(user.isLiteUser() || user.isUsageBasedUser())
             permissionList =  Permissions.getVisibleLiteUserPermissions();
         else
             permissionList =  Permissions.getVisibleSystemUserPermissions();
 
         for (int permission: permissionList) {
-            permissions.add(new Permission(permission, Permissions.getLabel(permission), false));
+            permissions.add(new Permission(permission, Permissions.getLabel(permission), permField.isSet(permission)));
         }
         return permissions;
     }
@@ -80,7 +83,7 @@ public class UserFormPermissionsPanel extends Panel {
     private class Permission implements Serializable {
         int id;
         String label;
-        boolean enabled;
+        Boolean enabled;
 
         public Permission(int id, String label, boolean enabled) {
             this.id = id;
