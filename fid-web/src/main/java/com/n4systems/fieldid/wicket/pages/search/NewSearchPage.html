@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+
+    <h2>New Search Page</h2>
+
+    <div wicket:id="feedback"></div>
+
+    <form wicket:id="NewSearchForm">
+        <input type="text" wicket:id="searchCriteria"/>
+        <input type="button" value="Search" wicket:id="searchButtonId"/>
+    </form>
+    <br/>
+    <br/>
+    <hr/>
+    <br/>
+    <br/>
+
+    <div wicket:id="listViewContainer">
+
+          <form wicket:id="resultForm">
+
+          <!-- add actions button -->
+          <span class="actions">
+    	    <ul>
+            <li wicket:id="actions" class="menu">
+                <a href="javascript:void(0);" class="mattButton"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
+                <ul class="menu-items">
+                    <wicket:enclosure>
+                        <li>
+                            <a wicket:id="massUpdateLink"><wicket:message key="label.massupdate2"/></a>
+                        </li>
+                    </wicket:enclosure>
+                    <wicket:enclosure>
+                        <li>
+                           <a wicket:id="massScheduleLink"><wicket:message key="label.massschedule" /></a>
+                        </li>
+                    </wicket:enclosure>
+                    <wicket:enclosure>
+                        <li>
+                            <a wicket:id="massEventLink"><wicket:message key="label.perform_event" /></a>
+                        </li>
+                    </wicket:enclosure>
+            </ul>
+            </li>
+            </ul>
+	        </span>
+
+    <!-- add actions button end -->
+      <br/>
+      <br/>
+      <br/>
+      <hr/>
+      <br/>
+      <br/>
+
+          <span wicket:id="selected_assets">
+              <input type="checkbox" wicket:id="groupselector">&nbsp;<b>Select/Unselect all</b></input>
+        <br/><br/>
+           <div wicket:id="assets">
+
+                <h1>
+                    <input type="checkbox" wicket:id="check"/> <span class="greyText"><span wicket:id="assetType"/> / </span><a wicket:id="summaryLink"><span wicket:id="assetIdentifier"></span></a><span class="greyText" wicket:enclosure="assetStatus"> / <span id="assetStatus" wicket:id="assetStatus"/></span>
+                </h1>
+                <b>Description:</b> <span wicket:id="assetDescription"></span>
+                <b>Customer Name:</b> <span wicket:id="customer"></span>
+                <b>Location:</b> <span wicket:id="location"></span>
+                <b>Date Identified:</b> <span wicket:id="dateIdentified"></span>
+                <b>RFID Number:</b> <span wicket:id="rfidNumber"></span>
+                <b>Order Number:</b> <span wicket:id="orderNumber"></span>
+                <b>Attributes:</b> <span wicket:id="attributes"></span>
+
+               <div class="assetImage">
+                   <img wicket:id="assetImage" alt=""/>
+               </div>
+               <div wicket:id="assetImageModalWindow"/>
+
+            </div>
+         </span>
+
+       <br/>
+       <br/>
+       <hr/>
+       <br/>
+       <br/>
+<input type="submit" value="Submit"/>
+      <div wicket:id="navigator"></div>
+
+      </form>
+  </div>
+
+</wicket:extend>
+
+</html>

@@ -34,6 +34,7 @@ import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.search.NewSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
@@ -73,6 +74,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventFormEdit", EventFormEditPage.class);
         mountPage("setup/columnsLayout", ColumnsLayoutPage.class);
 
+
         mountPage("setup/settings", SettingsPage.class);
         mountPage("setup/ownersUsersLocations", OwnersUsersLocationsPage.class);
         mountPage("setup/assetsEvents", AssetsAndEventsPage.class);
@@ -98,6 +100,12 @@ public class FieldIDWicketApp extends WebApplication {
         //  a preferred solution would be to put colorbox in iframe (which requires CSS love) or to force absolute urls to be rendered by wicket.
         mountPage("wicket/reporting", ReportPage.class);
         mountPage("wicket/procedure", ProcedureSearchPage.class);
+
+        mountPage("newSearch", NewSearchPage.class);
+
+
+
+
 
         mountPage("procedureDef", ProcedureDefinitionPage.class);
 
