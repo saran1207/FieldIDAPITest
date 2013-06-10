@@ -42,6 +42,8 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Transactional
@@ -194,43 +196,43 @@ public class AssetService extends FieldIdPersistenceService {
         return obj;
     }
 
-    public boolean rfidExists(String rfidNumber) {
-        return rfidExists(rfidNumber, null);
+    @LegacyMethod
+    public boolean rfidExists(String rfidNumber, Long tenantId) {
+        return rfidExists(rfidNumber, tenantId, null);
     }
 
-    public boolean rfidExists(String rfidNumber, Long uniqueID) {
-        return duplicateFieldExists("rfidNumber", rfidNumber, uniqueID);
-
-    }
-
-    public boolean identifierExists(String identifier) {
-        return duplicateFieldExists("identifier", identifier, null);
-    }
-
-    public boolean identifierExists(String identifier, Long uniqueID) {
-        return duplicateFieldExists("identifier", identifier, uniqueID);
-    }
-
-    private boolean duplicateFieldExists(String field, String value, Long uniqueID) {
+    @LegacyMethod
+    public boolean rfidExists(String rfidNumber, Long tenantId, Long uniqueID) {
+        long rfidCount = 0;
+        String uniqueIDClause = "";
         // null or zero-length rfidNumbers are never duplicates
-        if (value == null || value.trim().length() == 0) {
+        if (rfidNumber == null || rfidNumber.trim().length() == 0) {
             return false;
         }
 
-        QueryBuilder<Asset> rfidQuery = createTenantSecurityBuilder(Asset.class);
-        rfidQuery.addSimpleWhere(field, value.toUpperCase());
+        if (uniqueID != null) {
+            uniqueIDClause = " and p.id <> :id";
+        }
+
+        Query query = persistenceService.createQuery("select count(p) from "+Asset.class.getName()+" p where p.state = :activeState AND p.rfidNumber = :rfidNumber" + uniqueIDClause
+                + " and p.tenant.id = :tenantId group by p.rfidNumber");
+
+        query.setParameter("rfidNumber", rfidNumber.toUpperCase());
+        query.setParameter("tenantId", tenantId);
+        query.setParameter("activeState", Archivable.EntityState.ACTIVE);
 
         if (uniqueID != null) {
-            rfidQuery.addSimpleWhere("id", uniqueID);
+            query.setParameter("id", uniqueID);
         }
 
         try {
-            return persistenceService.exists(rfidQuery);
+            rfidCount = (Long) query.getSingleResult();
         } catch (NoResultException e) {
-            return false;
+            rfidCount = 0;
         }
-    }
 
+        return (rfidCount > 0) ? true : false;
+    }
 
     public Asset create(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
         runAssetSavePreRecs(asset, modifiedBy);
@@ -355,11 +357,40 @@ public class AssetService extends FieldIdPersistenceService {
         }
     }
 
+    /**
+     * creates the asset serial and updates the given users add
+     * assetHistory.
+     */
+    @LegacyMethod
+    public Asset createWithHistory(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
+        asset = create(asset, modifiedBy);
+
+        AddAssetHistory addAssetHistory = getAddAssetHistory(modifiedBy.getId());
+
+        if (addAssetHistory == null) {
+            addAssetHistory = new AddAssetHistory();
+            addAssetHistory.setTenant(modifiedBy.getTenant());
+            addAssetHistory.setUser(modifiedBy);
+        }
+
+        addAssetHistory.setOwner(asset.getOwner());
+        addAssetHistory.setAssetType(asset.getType());
+        addAssetHistory.setAssetStatus(asset.getAssetStatus());
+        addAssetHistory.setPurchaseOrder(asset.getPurchaseOrder());
+        addAssetHistory.setLocation(asset.getAdvancedLocation());
+        addAssetHistory.setInfoOptions(new ArrayList<InfoOptionBean>(asset.getInfoOptions()));
+        addAssetHistory.setAssignedUser(asset.getAssignedUser());
+
+        getEntityManager().merge(addAssetHistory);
+
+        return asset;
+    }
+
     private void moveRfidFromAssets(Asset asset, User modifiedBy) {
         AssetSaver saver = new AssetSaver();
         saver.setModifiedBy(modifiedBy);
 
-        if (rfidExists(asset.getRfidNumber())) {
+        if (rfidExists(asset.getRfidNumber(), asset.getTenant().getId())) {
             Collection<Asset> duplicateRfidAssets = findAssetsByRfidNumber(asset.getRfidNumber());
             for (Asset duplicateRfidAsset : duplicateRfidAssets) {
                 if (!duplicateRfidAsset.getId().equals(asset.getId())) {
@@ -384,6 +415,23 @@ public class AssetService extends FieldIdPersistenceService {
         qBuilder.addSimpleWhere("rfidNumber", rfidNumber.trim());
 
         return persistenceService.findAll(qBuilder);
+    }
+
+    @LegacyMethod
+    public AddAssetHistory getAddAssetHistory(Long rFieldidUser) {
+        Query query = persistenceService.createQuery("from "+ AddAssetHistory.class.getName()+" aph where aph.user.id = :rFieldidUser");
+        query.setParameter("rFieldidUser", rFieldidUser);
+
+        @SuppressWarnings("unchecked")
+        List<AddAssetHistory> addAssetHistoryList = query.getResultList();
+
+        if (addAssetHistoryList != null) {
+            if (addAssetHistoryList.size() > 0) {
+                return addAssetHistoryList.get(0);
+            }
+        }
+
+        return null;
     }
 
     @SuppressWarnings("unchecked")
@@ -554,7 +602,7 @@ public class AssetService extends FieldIdPersistenceService {
     public List<Asset> search(int threshold) {
         // if no search term given for search, just pull up the most recently modified ones.  (arbitrary decision).
         QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class);
-        builder.setLimit(threshold * 4);
+        builder.setLimit(threshold*4);
         builder.getOrderArguments().add(new OrderClause("modified", false));
         List<Asset> results = persistenceService.findAll(builder);
         return new PrioritizedList<Asset>(results, threshold);
@@ -567,6 +615,25 @@ public class AssetService extends FieldIdPersistenceService {
 
         return persistenceService.exists(builder);
     }
+
+
+    public List<Asset> getBogusAssets() {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date d = null;
+        try {
+            d = sdf.parse("30/12/2012");
+        } catch (ParseException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+
+        QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, securityContext.getTenantSecurityFilter());
+        builder.addWhere(WhereClauseFactory.create(Comparator.GT, "created", d));   // something better to return more assets.
+        return persistenceService.findAll(builder);
+        //SELECT count(*) from assets where tenant_id=15511493 and created > '2012-12-30 00:00:00';
+    }
+
 
     public Map<Long, Long> getTenantsLast30DaysCount(Map<Tenant,PrimaryOrg> tenants) {
         QueryBuilder<Tenant30DayCountRecord> builder = new QueryBuilder<Tenant30DayCountRecord>(Asset.class, new OpenSecurityFilter());
