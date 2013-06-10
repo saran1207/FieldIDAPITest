@@ -7,6 +7,7 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.*;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.reporting.PathHandler;
@@ -30,8 +31,6 @@ public class ManagerBackedEventSaver implements EventSaver {
 	public final PersistenceManager persistenceManager;
 	public final EntityManager em;
 	public final LastEventDateFinder lastEventDateFinder;
-
-	
 
 	public ManagerBackedEventSaver(LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
 			EntityManager em, LastEventDateFinder lastEventDateFinder) {
@@ -73,6 +72,16 @@ public class ManagerBackedEventSaver implements EventSaver {
             parameterObject.event = persistenceManager.update(parameterObject.event, parameterObject.userId);
         } else {
             persistenceManager.save(parameterObject.event, parameterObject.userId);
+
+            User user = persistenceManager.find(User.class, parameterObject.userId);
+
+            if(user.isUsageBasedUser()) {
+                int eventCount = parameterObject.event.getSubEvents().size() + 1;
+
+                TenantSettings tenantSettings = user.getTenant().getSettings();
+                tenantSettings.getUserLimits().setUsageBasedUserEvents(tenantSettings.getUserLimits().getUsageBasedUserEvents() - eventCount);
+                persistenceManager.update(tenantSettings);
+            }
         }
 
 		updateAsset(parameterObject.event, parameterObject.userId);

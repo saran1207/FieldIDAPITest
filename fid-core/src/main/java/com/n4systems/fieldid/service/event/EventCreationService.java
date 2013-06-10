@@ -9,6 +9,7 @@ import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.user.User;
@@ -40,6 +41,9 @@ public class EventCreationService extends FieldIdPersistenceService {
 
 	@Autowired
 	private S3Service s3Service;
+
+    @Autowired
+    private TenantSettingsService tenantSettingsService;
 
     @Transactional
     public Event createEventWithSchedules(Event event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
@@ -121,6 +125,10 @@ public class EventCreationService extends FieldIdPersistenceService {
         // Do this last, as it can throw an exception if the schedule is in an invalid state.
 //        event.getSchedule().completed(event);
 //        persistenceService.update(event.getSchedule());
+
+        if(user.isUsageBasedUser()) {
+            tenantSettingsService.decrementUsageBasedEventCount();
+        }
 
         return event;
     }

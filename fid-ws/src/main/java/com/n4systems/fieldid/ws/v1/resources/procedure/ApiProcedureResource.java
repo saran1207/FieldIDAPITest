@@ -3,6 +3,7 @@ package com.n4systems.fieldid.ws.v1.resources.procedure;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.GpsLocation;
@@ -30,6 +31,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
 
     @Autowired private ProcedureService procedureService;
     @Autowired private ProcedureDefinitionService procedureDefinitionService;
+    @Autowired private TenantSettingsService tenantSettingsService;
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -53,6 +55,10 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         procedure.setWorkflowState(ProcedureWorkflowState.LOCKED);
         procedure.setType(procedureDefinitionService.getPublishedProcedureDefinition(procedure.getAsset()));
         convertGpsLocation(apiProcedure, procedure);
+
+        if(getCurrentUser().isUsageBasedUser()) {
+            tenantSettingsService.decrementUsageBasedEventCount();
+        }
 
         persistenceService.update(procedure);
     }

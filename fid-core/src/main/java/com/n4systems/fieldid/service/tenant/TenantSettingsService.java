@@ -44,6 +44,16 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 		tenantSettings.setUserLimits(userLimits);
 		update(tenantSettings);
 	}
+
+    public void decrementUsageBasedEventCount() {
+        decrementUsageBasedEventCount(1);
+    }
+
+    public void decrementUsageBasedEventCount(int count) {
+        TenantSettings tenantSettings = getTenantSettings();
+        tenantSettings.getUserLimits().setUsageBasedUserEvents(tenantSettings.getUserLimits().getUsageBasedUserEvents() - count);
+        update(tenantSettings);
+    }
 	
 	public void updateGpsCapture(boolean gpsCapture) {
 		TenantSettings tenantSettings = getTenantSettings();
