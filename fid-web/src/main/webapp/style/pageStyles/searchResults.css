@@ -1,0 +1,35 @@
+/* fieldid.css OVERRIDES */
+#page {
+	background: none;
+	border: none;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	font-size: 11px;
+	padding: 0;
+}
+strong {
+	font-weight: bold;
+}
+
+
+/* NEW SEARCH BAR */
+.search-bar {
+
+}
+
+/* CONTAINER FOR PAGE CONTENT (excluding the search bar) */
+.search-container {
+
+}
+
+/* SEARCH RESULTS LISTING */
+.search-results {
+	clear: both;
+	margin-top: 10px;
+}
+
+.search-results .asset-item {
+	border-top: 1px solid #cecece;
+}	
+

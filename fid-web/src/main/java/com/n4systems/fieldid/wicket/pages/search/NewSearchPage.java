@@ -349,10 +349,11 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/asset/asset.css");
+//        response.renderCSSReference("style/newCss/asset/asset.css");
         response.renderCSSReference("style/newCss/asset/actions-menu.css");
-        response.renderCSSReference("style/newCss/asset/header.css");
+//        response.renderCSSReference("style/newCss/asset/header.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/pageStyles/searchResults.css");
 
         response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");
