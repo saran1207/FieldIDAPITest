@@ -70,6 +70,7 @@ public class UserImporter extends AbstractImporter<UserView> {
 		Set<UserView> fullUsers = new HashSet<UserView>();
 		Set<UserView> readOnlyUsers = new HashSet<UserView>();
         Set<UserView> personUsers = new HashSet<UserView>();
+        Set<UserView> usageBasedUsers = new HashSet<UserView>();
 
 		for (UserView userView : views) {
 			UserType userType = UserType.valueFromLabel(userView.getAccountType());
@@ -88,6 +89,9 @@ public class UserImporter extends AbstractImporter<UserView> {
 					break;
                 case PERSON:
                     personUsers.add(userView);
+                    break;
+                case USAGE_BASED:
+                    usageBasedUsers.add(userView);
                     break;
 				default:
 					throw new IllegalStateException("illegal user account type '" + userView.getAccountType() + "' ");
