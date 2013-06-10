@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
@@ -138,7 +139,7 @@ public class UnitOfMeasureEditor extends FormComponentPanel<InfoOptionBean> {
         return new LoadableDetachableModel<List<UnitOfMeasure>>() {
             @Override
             protected List<UnitOfMeasure> load() {
-                QueryBuilder<UnitOfMeasure> query = new QueryBuilder<UnitOfMeasure>(UnitOfMeasure.class);
+                QueryBuilder<UnitOfMeasure> query = new QueryBuilder<UnitOfMeasure>(UnitOfMeasure.class, new OpenSecurityFilter());
                 return persistenceService.findAll(query);
             }
         };

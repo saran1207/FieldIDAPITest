@@ -1,19 +1,18 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.CrossTenantEntity;
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.parents.AbstractEntity;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.n4systems.model.api.CrossTenantEntity;
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.api.UnsecuredEntity;
-import com.n4systems.model.parents.AbstractEntity;
-
 @Entity
 @Table(name = "unitofmeasures")
-public class UnitOfMeasure extends AbstractEntity implements NamedEntity, CrossTenantEntity, UnsecuredEntity, Listable<Long> {
+public class UnitOfMeasure extends AbstractEntity implements NamedEntity, CrossTenantEntity, Listable<Long> {
 	private static final long serialVersionUID = 1L;
 	
 	private String name;
