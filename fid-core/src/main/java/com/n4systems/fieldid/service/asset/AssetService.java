@@ -48,15 +48,16 @@ import java.util.*;
 
 @Transactional
 public class AssetService extends FieldIdPersistenceService {
-	
+
 	@Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private TransactionService transactionService;
     @Autowired private LastEventDateService lastEventDateService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
-			
+
     @Transactional(readOnly=true)
     public Long countAssets() {
+
         QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, securityContext.getTenantSecurityFilter());
         return persistenceService.count(builder);
     }
@@ -69,17 +70,17 @@ public class AssetService extends FieldIdPersistenceService {
 		List<String> args = Lists.newArrayList("COUNT(*)");
 		args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularity("identified", granularity));
 		select.setConstructorArgs(args);
-		
+
 		builder.setSelectArgument(select);
         builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity,"identified"));
-				
-		builder.addWhere(whereFromTo(fromDate, toDate));		
+
+		builder.addWhere(whereFromTo(fromDate, toDate));
 		builder.applyFilter(new OwnerAndDownFilter(org));
 		builder.addOrder("identified");
-		
-		return persistenceService.findAll(builder);				
+
+		return persistenceService.findAll(builder);
 	}
-	
+
 	private WhereClause<?> whereFromTo(Date fromDate,Date toDate) {
 		if (fromDate!=null && toDate!=null) {
 			WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
@@ -87,7 +88,7 @@ public class AssetService extends FieldIdPersistenceService {
 			filterGroup.addClause(WhereClauseFactory.create(Comparator.LT, "to", "identified", toDate, null, ChainOp.AND));
 			return filterGroup;
 		}
-		if (fromDate!=null) { 
+		if (fromDate!=null) {
 			return new WhereParameter<Date>(WhereParameter.Comparator.GE, "from", fromDate);
 		}
 		if (toDate!=null) {
@@ -98,17 +99,17 @@ public class AssetService extends FieldIdPersistenceService {
 
 	/**
 	 * Caveat : it is important to know that assets can have a null status.  in that case they will *not* be returned from this service call.
-	 * i.e. the groupBy assetStatus.name won't include them.  this is working as designed - just an fyi because it might be confusing if you 
-	 * have 10 assets identified, but the asset status widget shows < 10 for the same date range.   
+	 * i.e. the groupBy assetStatus.name won't include them.  this is working as designed - just an fyi because it might be confusing if you
+	 * have 10 assets identified, but the asset status widget shows < 10 for the same date range.
 	 */
 	public List<AssetsStatusReportRecord> getAssetsStatus(Date fromDate, Date toDate, BaseOrg org) {
 		QueryBuilder<AssetsStatusReportRecord> builder = new QueryBuilder<AssetsStatusReportRecord>(Asset.class, securityContext.getUserSecurityFilter());
-		
-		builder.setSelectArgument(new NewObjectSelect(AssetsStatusReportRecord.class, "assetStatus.name", "COUNT(*)"));		
+
+		builder.setSelectArgument(new NewObjectSelect(AssetsStatusReportRecord.class, "assetStatus.name", "COUNT(*)"));
 		builder.addWhere(whereFromTo(fromDate, toDate));
 		builder.addGroupBy("assetStatus.name");
 		builder.applyFilter(new OwnerAndDownFilter(org));
-		
+
 		return persistenceService.findAll(builder);
 	}
 
@@ -140,18 +141,18 @@ public class AssetService extends FieldIdPersistenceService {
     public Asset findByMobileId(String mobileId) {
     	return findByMobileId(mobileId, false);
     }
-    
+
     public Asset findByMobileId(String mobileId, boolean withArchived) {
     	QueryBuilder<Asset> builder = createUserSecurityBuilder(Asset.class, withArchived);
     	builder.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));
     	Asset asset = persistenceService.find(builder);
     	return asset;
     }
-    
+
     public Asset getAsset(Long assetId) {
         return persistenceService.find(Asset.class, assetId);
     }
-    
+
 	public Asset fillInSubAssetsOnAsset(Asset asset) {
 		if (asset != null) {
 			asset.setSubAssets(findSubAssets(asset));
@@ -165,7 +166,7 @@ public class AssetService extends FieldIdPersistenceService {
 		List<SubAsset> subAssets = persistenceService.findAll(subAssetQuery);
 		return subAssets;
 	}
-	
+
 	public Asset parentAsset(Asset asset) {
 		QueryBuilder<SubAsset> query = new QueryBuilder<SubAsset>(SubAsset.class, new OpenSecurityFilter()).addSimpleWhere("asset", asset);
 		try {
@@ -196,42 +197,41 @@ public class AssetService extends FieldIdPersistenceService {
         return obj;
     }
 
-    @LegacyMethod
-    public boolean rfidExists(String rfidNumber, Long tenantId) {
-        return rfidExists(rfidNumber, tenantId, null);
+    public boolean rfidExists(String rfidNumber) {
+        return rfidExists(rfidNumber, null);
     }
 
-    @LegacyMethod
-    public boolean rfidExists(String rfidNumber, Long tenantId, Long uniqueID) {
-        long rfidCount = 0;
-        String uniqueIDClause = "";
+    public boolean rfidExists(String rfidNumber, Long uniqueID) {
+        return duplicateFieldExists("rfidNumber", rfidNumber, uniqueID);
+
+    }
+
+    public boolean identifierExists(String identifier) {
+        return duplicateFieldExists("identifier", identifier, null);
+    }
+
+    public boolean identifierExists(String identifier, Long uniqueID) {
+        return duplicateFieldExists("identifier", identifier, uniqueID);
+    }
+
+    private boolean duplicateFieldExists(String field, String value, Long uniqueID) {
         // null or zero-length rfidNumbers are never duplicates
-        if (rfidNumber == null || rfidNumber.trim().length() == 0) {
+        if (value == null || value.trim().length() == 0) {
             return false;
         }
 
-        if (uniqueID != null) {
-            uniqueIDClause = " and p.id <> :id";
-        }
-
-        Query query = persistenceService.createQuery("select count(p) from "+Asset.class.getName()+" p where p.state = :activeState AND p.rfidNumber = :rfidNumber" + uniqueIDClause
-                + " and p.tenant.id = :tenantId group by p.rfidNumber");
-
-        query.setParameter("rfidNumber", rfidNumber.toUpperCase());
-        query.setParameter("tenantId", tenantId);
-        query.setParameter("activeState", Archivable.EntityState.ACTIVE);
+        QueryBuilder<Asset> rfidQuery = createTenantSecurityBuilder(Asset.class);
+        rfidQuery.addSimpleWhere(field, value.toUpperCase());
 
         if (uniqueID != null) {
-            query.setParameter("id", uniqueID);
+            rfidQuery.addSimpleWhere("id", uniqueID);
         }
 
         try {
-            rfidCount = (Long) query.getSingleResult();
+            return persistenceService.exists(rfidQuery);
         } catch (NoResultException e) {
-            rfidCount = 0;
+            return false;
         }
-
-        return (rfidCount > 0) ? true : false;
     }
 
     public Asset create(Asset asset, User modifiedBy) throws SubAssetUniquenessException {
