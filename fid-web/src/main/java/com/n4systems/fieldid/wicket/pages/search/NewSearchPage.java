@@ -17,6 +17,8 @@ import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.Asset;
+import com.n4systems.model.location.Location;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteriaContainer;
 import com.n4systems.reporting.PathHandler;
@@ -182,6 +184,11 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 item.add(new Label("orderNumber", assetView.getPurchaseOrder()));
         //      item.add(new Label("orderNumber",(asset.getOrderNumber()==null) ? "":asset.getOrderNumber()));
                 item.add(new Label("rfidNumber",  assetView.getRfidNumber()));
+
+
+                BaseOrg owner = asset.getOwner();
+                item.add(new Label("ownerInfo", getOwnerLabel(owner, asset.getAdvancedLocation())));
+
 
 
 //                add image
@@ -350,6 +357,16 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");
 
+    }
+
+    private String getOwnerLabel(BaseOrg owner, Location advancedLocation) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(owner.getHierarchicalDisplayName());
+
+        if(advancedLocation != null && !advancedLocation.getFullName().isEmpty()) {
+            stringBuilder.append(", ").append(advancedLocation.getFullName());
+        }
+        return stringBuilder.toString();
     }
 
     public static String markSearchResults(String searchCriteria, HashMap<String,String> fdoc) {
