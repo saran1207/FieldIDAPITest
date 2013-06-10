@@ -50,6 +50,9 @@ public class AssetSummaryPage extends AssetPage {
         this(new PageParameters().add("uniqueID",asset.getId()).add("useContext","false"));
     }
 
+    public AssetSummaryPage(int id) {
+        this(new PageParameters().add("uniqueID",id).add("useContext","false"));
+    }
 
     public AssetSummaryPage(PageParameters params) {
         super(params);
