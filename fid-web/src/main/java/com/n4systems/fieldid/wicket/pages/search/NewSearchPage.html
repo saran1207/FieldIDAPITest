@@ -12,13 +12,13 @@
 
     <form wicket:id="NewSearchForm" class="search-bar">
         <input type="text" wicket:id="searchCriteria"/>
-        <input type="button" value="Search" wicket:id="searchButtonId"/>
+        <a href="#" class="search mattButton" wicket:id="searchButtonId">Search</a>
     </form>
 
     <div wicket:id="listViewContainer" class="search-container">
 
         <form wicket:id="resultForm">
-            
+
             <!-- mass actions button -->
             <div class="actions">
                 <ul>
@@ -26,13 +26,13 @@
                         <a href="javascript:void(0);" class="mattButton"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
                         <ul class="menu-items">
                             <wicket:enclosure>
-                            <li><a wicket:id="massUpdateLink"><wicket:message key="label.massupdate2"/></a></li>
+                                <li><a wicket:id="massUpdateLink"><wicket:message key="label.massupdate2"/></a></li>
                             </wicket:enclosure>
                             <wicket:enclosure>
-                            <li><a wicket:id="massScheduleLink"><wicket:message key="label.massschedule" /></a></li>
+                                <li><a wicket:id="massScheduleLink"><wicket:message key="label.massschedule" /></a></li>
                             </wicket:enclosure>
                             <wicket:enclosure>
-                            <li><a wicket:id="massEventLink"><wicket:message key="label.perform_event" /></a></li>
+                                <li><a wicket:id="massEventLink"><wicket:message key="label.perform_event" /></a></li>
                             </wicket:enclosure>
                         </ul>
                     </li>
@@ -42,21 +42,22 @@
             <!-- search results list -->
             <div class="search-results">
                 <div wicket:id="selected_assets">
-                    <div class="actions">
+                    <div class="asset-item">
                         <input type="checkbox" wicket:id="groupselector"> <label wicket:for="groupselector">Select/Unselect all</label>
                     </div>
                     <div wicket:id="assets" class="asset-item">
                         <input type="checkbox" wicket:id="check"/> 
                         <h2><span wicket:id="assetType"/> / <a wicket:id="summaryLink"><span wicket:id="assetIdentifier" /></a> / <span class="asset-status" id="assetStatus" wicket:id="assetStatus"/></h2>
                         <img class="assetImage" wicket:id="assetImage" alt=""/>
-                        <ul>
-                            <li><img src="/fieldid/images/location-icon.png">Location:<span wicket:id="location"></span></li>
+                        <ul id="asset-values">
+                            <li class="location"><img src="/fieldid/images/location-icon.png">Location: <span wicket:id="location"></span></li>
                             <li><strong>Description:</strong> <span wicket:id="assetDescription"></span></li>
                             <li><strong>Customer Name:</strong> <span wicket:id="customer"></span></li>
                             <li><strong>Date Identified:</strong> <span wicket:id="dateIdentified"></span></li>
                             <li><strong>RFID Number:</strong> <span wicket:id="rfidNumber"></span></li>
                             <li><strong>Order Number:</strong> <span wicket:id="orderNumber"></span></li>
                             <li><strong>Attributes:</strong> <span wicket:id="attributes"></span></li>
+                            <li><strong>Owner Info:</strong> <span wicket:id="ownerInfo"></span></li>
                         </ul>  
                         <div wicket:id="assetImageModalWindow" class="assetImageModalWindow"/>
                     </div><!-- /end .assets -->
@@ -69,6 +70,16 @@
 
         </form>
     </div>
+
+    <script>
+        $(function() {
+            var assetValues = $('#asset-values li span').text();
+            if (assetValues == "") {
+                console.log("hello");
+                $(this).parent().hide;
+            }
+        });
+    </script>
 
 </wicket:extend>
 
