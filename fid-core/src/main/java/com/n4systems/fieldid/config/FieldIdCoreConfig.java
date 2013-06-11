@@ -494,4 +494,9 @@ public class FieldIdCoreConfig {
         return new SendWelcomeEmailService();
     }
 
+    @Bean
+    public UsageBasedEventThresholdAlert usageBasedEventThresholdAlert() {
+        return new UsageBasedEventThresholdAlert();
+    }
+
 }

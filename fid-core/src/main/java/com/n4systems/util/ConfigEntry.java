@@ -41,9 +41,9 @@ public enum ConfigEntry {
 	MASS_ACTIONS_LIMIT			        		(	"250"					),
     MAX_SIZE_FOR_ASSIGNING_INSPECTIONS_TO_JOBS	(	"400"					),
 	DEFAULT_EXECUTOR_POOL_SIZE					(	"4"						),
-	MINIMUM_MOBILE_MINOR_VERSION               (   "11"                    ),
-	MINIMUM_MOBILE_MAJOR_VERSION               (   "1"                     ),
-	CURRENT_MOBILE_MAJOR_VERSION               (   "1"                     ),
+	MINIMUM_MOBILE_MINOR_VERSION                (   "11"                    ),
+	MINIMUM_MOBILE_MAJOR_VERSION                (   "1"                     ),
+	CURRENT_MOBILE_MAJOR_VERSION                (   "1"                     ),
 	CURRENT_MOBILE_MINOR_VERSION                (   "12"                    ),
 	CURRENT_MOBILE_BUILD_VERSION                (   "0"                     ),
 	CURRENT_MOBILE_FILE_NAME                    (   "Field ID Mobile.CAB"   ),
@@ -51,6 +51,7 @@ public enum ConfigEntry {
 	UPLOAD_FILE_SIZE_LIMIT_DEFAULT_IN_KB			(	"5120"				),
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_ATTACHMENT_IN_KB	(	"2048"				), 
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_TYPE_IMAGE_IN_KB (	"500"				),
+    USAGE_BASED_EVENT_COUNT_THRESHOLD           (	"500"			    	),
 	
 	
 	// ones below here are never overridden by the tenant.
@@ -80,7 +81,8 @@ public enum ConfigEntry {
     APPTEGIC_DATASET                            (   "test" ),
     AMAZON_S3_BUCKET                            (   "fieldid_dev"),
     AMAZON_ACCESS_KEY_ID                        (   "AKIAJYAZBOFFRZAZSIGA"),
-    AMAZON_SECRET_ACCESS_KEY                    (   "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");
+    AMAZON_SECRET_ACCESS_KEY                    (   "8KbxrpNpStOOCWbSdncClqEjAqG5El96WxA2KIBK"),
+    FIELDID_SALES_MANAGERS_EMAIL                (   "salesmanagers@fieldid.com");
 	
 	private String defaultValue;
 	

@@ -1,16 +1,21 @@
 package com.n4systems.fieldid.service.tenant;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.event.UsageBasedEventThresholdAlert;
 import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.model.user.Assignable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional
 public class TenantSettingsService extends FieldIdPersistenceService {
+
+    @Autowired
+    private UsageBasedEventThresholdAlert notifyUsageBasedThresholdAlert;
 
 	public TenantSettings getTenantSettings() {
 		return persistenceService.find(createTenantSecurityBuilder(TenantSettings.class));
@@ -51,8 +56,10 @@ public class TenantSettingsService extends FieldIdPersistenceService {
 
     public void decrementUsageBasedEventCount(int count) {
         TenantSettings tenantSettings = getTenantSettings();
-        tenantSettings.getUserLimits().setUsageBasedUserEvents(tenantSettings.getUserLimits().getUsageBasedUserEvents() - count);
+        int eventCount = tenantSettings.getUserLimits().getUsageBasedUserEvents() - count;
+        tenantSettings.getUserLimits().setUsageBasedUserEvents(eventCount);
         update(tenantSettings);
+        notifyUsageBasedThresholdAlert.sendAlert(tenantSettings.getTenant(), eventCount);
     }
 	
 	public void updateGpsCapture(boolean gpsCapture) {
