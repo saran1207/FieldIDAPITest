@@ -57,26 +57,38 @@ public class UserUpgradeCrud extends UserCrud {
         return SUCCESS;
     }
 
+    @SkipValidation
+    public String doChangeToUsageBased() {
+        user.setUserType(UserType.USAGE_BASED);
+        save();
+        return SUCCESS;
+    }
+
 	@Override
 	public boolean isEmployee() {
 		return user.isEmployee();
 	}
 	
 	public boolean isFullUser() {
-		return user.getUserType().equals(UserType.FULL);
+		return user.isFullUser();
 	}
 	
 	public boolean isLiteUser() {
-		return user.getUserType().equals(UserType.LITE);
+		return user.isLiteUser();
 	}
 	
 	public boolean isReadOnlyUser() {
-		return user.getUserType().equals(UserType.READONLY);
+		return user.isReadOnly();
 	}
 
     @Override
     public boolean isPerson() {
-        return user.getUserType().equals(UserType.PERSON);
+        return user.isPerson();
+    }
+
+    @Override
+    public boolean isUsageBasedUser() {
+        return user.isUsageBasedUser();
     }
 
 	@Override
@@ -84,9 +96,5 @@ public class UserUpgradeCrud extends UserCrud {
 		return Permissions.NO_PERMISSIONS;
 	}
 
-    @Override
-    public boolean isUsageBasedUser() {
-        return false;
-    }
 
 }

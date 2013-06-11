@@ -603,7 +603,11 @@
             </result>
         </action>
 
-		<action name="addReadOnlyUser" method="add" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+        <action name="changeToUsageBased" method="changeToUsageBased" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+            <result name="success" type="redirect">/w/editUsageBasedUser?uniqueID=${uniqueID}</result>
+        </action>
+
+        <action name="addReadOnlyUser" method="add" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/addReadOnly.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/addReadOnly.ftl</result>
 			<result name="error" type="redirectAction">
