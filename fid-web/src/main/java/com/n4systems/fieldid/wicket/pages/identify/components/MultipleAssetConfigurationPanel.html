@@ -1,0 +1,68 @@
+<wicket:panel>
+
+    <div wicket:id="feedbackPanel"></div>
+
+    <div wicket:id="step1Panel">
+        <form wicket:id="step1Form">
+            How many assets do you want to identify? (Maximum 250)
+            <input type="text" wicket:id="howMany">
+            <input type="submit" wicket:id="continueButton" wicket:message="value:label.continue">
+        </form>
+    </div>
+
+    <div wicket:id="step2Panel">
+
+        <form wicket:id="step2Form">
+
+            <div wicket:id="identifierMethodGroup">
+
+                <span wicket:id="identifierMethod">
+                    <input type="radio" wicket:id="methodRadio">
+
+                    <div wicket:id="methodConfigurationPanel"></div>
+                </span>
+
+            </div>
+
+            <input type="submit" wicket:id="continueButton" wicket:message="value:label.continue"> or <a wicket:id="backLink"><wicket:message key="label.back"/></a>
+
+        </form>
+
+    </div>
+
+    <div wicket:id="step3Panel">
+
+        <form wicket:id="step3Form">
+
+            <table class="identifiers-grid">
+                <tr>
+                    <th>
+                        <wicket:message key="label.identifier"/>
+                    </th>
+                    <th>
+                        <wicket:message key="label.rfidnumber"/>
+                    </th>
+                    <th>
+                        <wicket:message key="label.customer_reference"/>
+                    </th>
+                </tr>
+                <tr wicket:id="identifierGrid">
+                    <td>
+                        <input type="text" wicket:id="identifier"/>
+                    </td>
+                    <td>
+                        <input type="text" wicket:id="rfidNumber"/>
+                    </td>
+                    <td>
+                        <input type="text" wicket:id="customerRefNumber"/>
+                    </td>
+                </tr>
+            </table>
+
+            <input type="submit" wicket:id="confirmButton" wicket:message="value:label.confirm"> or <a wicket:id="backLink"><wicket:message key="label.back"/></a>
+
+        </form>
+
+    </div>
+
+</wicket:panel>

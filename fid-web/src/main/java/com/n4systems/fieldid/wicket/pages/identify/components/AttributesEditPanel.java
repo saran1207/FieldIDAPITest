@@ -73,7 +73,7 @@ public class AttributesEditPanel extends Panel {
     }
 
     public void refreshInfoOptions() {
-        List<InfoFieldBean> infoFields = new ArrayList<InfoFieldBean>(assetTypeModel.getObject().getInfoFields());
+        List<InfoFieldBean> infoFields = new ArrayList<InfoFieldBean>(assetTypeModel.getObject().getAvailableInfoFields());
         Collections.sort(infoFields, new Comparator<InfoFieldBean>(){
             @Override
             public int compare(InfoFieldBean infoFieldBean, InfoFieldBean infoFieldBean2) {

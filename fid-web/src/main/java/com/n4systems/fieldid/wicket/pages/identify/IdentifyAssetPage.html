@@ -2,6 +2,10 @@
 
     <div wicket:id="feedbackPanel"></div>
 
+    <form wicket:id="modalContainerForm">
+        <div wicket:id="multiAssetConfigurationWindow"></div>
+    </form>
+
     <form wicket:id="identifyAssetForm" class="form-horizontal">
         <div class="primary-selection">  
             <label><wicket:message key="label.assettype"/></label>
@@ -9,6 +13,7 @@
         </div>
 
         <div class="column-left">
+
             <fieldset>
                 <legend>Identifiers</legend>
                 <div class="control-group">
@@ -16,27 +21,37 @@
                     <div wicket:id="identifiedDate"></div>
                 </div>
 
-                <div class="control-group" wicket:id="identifierContainer">
-                    <label>* <span wicket:id="identifierLabel"></span></label>
-                    <input wicket:id="identifier">
-                    <a class="links" wicket:id="generateIdentifierLink"><wicket:message key="label.generate"/></a>
-                    <div wicket:id="duplicateIdentifierWarning">
-                        <wicket:message key="message.warning_duplicate_id_number"/>
+                <div wicket:id="singleIdentifyContainer">
+                    <div class="control-group" wicket:id="identifierContainer">
+                        <label>* <span wicket:id="identifierLabel"></span></label>
+                        <input wicket:id="identifier">
+                        <a class="links" wicket:id="generateIdentifierLink"><wicket:message key="label.generate"/></a>
+                        <a class="links" wicket:id="identifyMultiple">Identify Multiple Assets...</a>
+
+                        <div wicket:id="duplicateIdentifierWarning">
+                            <wicket:message key="message.warning_duplicate_id_number"/>
+                        </div>
                     </div>
+
+                    <div class="control-group" wicket:id="rfidContainer">
+                        <label><wicket:message key="label.rfidnumber"/></label>
+                        <input wicket:id="rfidNumber">
+                        <div wicket:id="duplicateRfidWarning">
+                            <wicket:message key="message.warning_duplicate_rfid_number"/>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label><wicket:message key="label.reference_number"/></label>
+                        <input wicket:id="referenceNumber">
+                    </div>
+
                 </div>
 
-                <div class="control-group" wicket:id="rfidContainer">
-                    <label><wicket:message key="label.rfidnumber"/></label>
-                    <input wicket:id="rfidNumber">
-                    <div wicket:id="duplicateRfidWarning">
-                        <wicket:message key="message.warning_duplicate_rfid_number"/>
-                    </div>
+                <div wicket:id="multiIdentifyContainer">
+
                 </div>
 
-                <div class="control-group">
-                    <label><wicket:message key="label.reference_number"/></label>
-                    <input wicket:id="referenceNumber">
-                </div>
             </fieldset>
             
             <fieldset>
@@ -109,9 +124,13 @@
             </fieldset>
         </div>
 
-        <div class="form-action">
+        <div wicket:id="actionsContainer" class="form-action">
             <input type="submit" wicket:message="value:label.save" wicket:id="saveButton">
             <input type="submit" wicket:message="value:hbutton.saveandstartevent" wicket:id="saveAndStartEventButton">
+            <input type="submit" wicket:message="value:hbutton.saveandprint" wicket:id="saveAndPrintButton">
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+
         </div>
     </form>
 
