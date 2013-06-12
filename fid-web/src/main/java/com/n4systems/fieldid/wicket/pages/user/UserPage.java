@@ -35,7 +35,7 @@ import java.net.URI;
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 
-public abstract class UserPage extends FieldIDFrontEndPage{
+public abstract class UserPage extends FieldIDFrontEndPage {
 
     @SpringBean
     protected UserService userService;

@@ -20,19 +20,28 @@
 }
 
 .horizontalGrouping {
+    list-style: none;
+    text-align: center; /* center aligns the li and text */
     background: none repeat scroll 0 0 #FFFFFF;
     box-shadow: 5px 0 2px -5px #CCCCCC, -5px 0 2px -5px #CCCCCC, 0 2px 5px 0 #CCCCCC;
-    float: left;
-    margin-bottom: 20px;
-}
-.horizontalGrouping h2{
-    padding: 10px;
-    font-size: 1.3em;
-    margin-bottom: 20px;
+    margin: 5px;
+    padding-bottom: 20px;
 }
 
-.horizontalGroup h2{
+.horizontalGrouping .horizontalGroup {
+    display: inline-block; /* floats element but is still center aligned */
+    width: 100px;
+    padding: 20px;
+    border: 1px solid #E8E8E8;
+}
+
+.horizontalGrouping h2{
+    font-size: 1.3em;
     text-align: center;
+}
+
+.horizontalGroup {
+    margin: 20px 20px 0;
 }
 
 .horizontalGroup p{
@@ -41,15 +50,13 @@
 }
 
 .horizontalGroup img{
-    margin: 20px 0 10px 75px;
-
+    margin: 10px;
 }
 
 .horizontalGroup .addUserAction, .horizontalGroup .upgradeUserAction {
     margin-left: auto;
     margin-right: auto;
-    margin-top: 60px;
-    width: 180px;
+    margin-top: 10px;
     text-align: center;
 }
 
@@ -57,22 +64,17 @@
     padding: 5px;
     font-size: 14px;
     overflow: visible;
+    margin-bottom: 10px;
 }
 
 div.groupContents{
-    height: 250px;
+    height: 220px;
 }
 
 .horizontalGrouping .horizontalGroup{
     width: 225px;
-    float: left;
-    height: 400px;
     overflow: hidden;
     padding: 10px;
-}
-
-.rightBorder {
-    border-right: 1px solid #999;
 }
 
 .horizontalGroup .permissionListing{
@@ -82,7 +84,7 @@ div.groupContents{
 
 .permissionListing li{
     text-align: center;
-    padding: 5px;
+    padding: 2px;
     font-size: 13px;
 }
 

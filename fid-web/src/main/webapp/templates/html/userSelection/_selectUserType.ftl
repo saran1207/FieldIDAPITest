@@ -19,7 +19,7 @@
 </div>
 
 <div class="horizontalGrouping">
-	<div class="horizontalGroup rightBorder">
+	<div class="horizontalGroup">
 		<div class="groupContents ">
             <img src="<@s.url value="/images/icon-full.png"/>">
 			<h2><@s.text name="label.full_user" /></h2>
@@ -42,7 +42,7 @@
 		</#if>
 	</div>
 	
-    <div class="horizontalGroup rightBorder">
+    <div class="horizontalGroup">
         <div class="groupContents">
             <img src="<@s.url value="/images/icon-lite.png"/>">
             <h2><@s.text name="label.lite_user" /></h2>
@@ -64,7 +64,7 @@
         </#if>
     </div>
 
-    <div class="horizontalGroup rightBorder ">
+    <div class="horizontalGroup">
         <div class="groupContents">
             <img src="<@s.url value="/images/icon-readonly.png"/>">
             <h2><@s.text name="label.ready_only_user" /></h2>
@@ -100,6 +100,20 @@
         </div>
     </div>
 
-    <input id="addUsageBasedUser" type="button" value="<@s.text name="label.add_new_usage_based_user" />" onclick="return redirect('${addUsageBasedUserUrl}');"/>
+
+    <div class="horizontalGroup">
+        <div class="groupContents ">
+            <img src="<@s.url value="/images/icon-person.png"/>">
+            <h2><@s.text name="label.usage_based_user"/></h2>
+
+            <ul class="permissionListing">
+                <li><label><@s.text name="label.perform_events" /></label></li>
+                <li><label><@s.text name="label.run_searches" /></label></li>
+            </ul>
+        </div>
+        <div class="addUserAction">
+            <input id="addUsageBasedUser" type="button" value="<@s.text name="label.add_new_usage_based_user" />" onclick="return redirect('${addUsageBasedUserUrl}');"/>
+        </div>
+    </div>
 
 </div>
