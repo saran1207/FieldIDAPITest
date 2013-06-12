@@ -103,7 +103,7 @@
 
     <div class="horizontalGroup">
         <div class="groupContents ">
-            <img src="<@s.url value="/images/icon-person.png"/>">
+            <img src="<@s.url value="/images/usage-based-user.png"/>">
             <h2><@s.text name="label.usage_based_user"/></h2>
 
             <ul class="permissionListing">
