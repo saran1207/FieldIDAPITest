@@ -46,24 +46,29 @@
                         <input type="checkbox" wicket:id="groupselector"> <label wicket:for="groupselector">Select/Unselect all</label>
                     </div>
                     <div wicket:id="assets" class="asset-item">
-                        <input type="checkbox" wicket:id="check"/> 
-                        <h2><span wicket:id="assetType"/> / <a wicket:id="summaryLink"><span wicket:id="assetIdentifier" /></a> / <span class="asset-status" id="assetStatus" wicket:id="assetStatus"/></h2>
-                        <img class="assetImage" wicket:id="assetImage" alt=""/>
-                        <ul id="asset-values">
-                            <li class="location"><img src="/fieldid/images/location-icon.png">Location: <span wicket:id="location"></span></li>
-                            <li><strong>Description:</strong> <span wicket:id="assetDescription"></span></li>
-                            <li><strong>Customer Name:</strong> <span wicket:id="customer"></span></li>
-                            <li><strong>Date Identified:</strong> <span wicket:id="dateIdentified"></span></li>
-                            <li><strong>RFID Number:</strong> <span wicket:id="rfidNumber"></span></li>
-                            <li><strong>Order Number:</strong> <span wicket:id="orderNumber"></span></li>
-                            <li><strong>Attributes:</strong> <span wicket:id="attributes"></span></li>
-                            <li><strong>Owner Info:</strong> <span wicket:id="ownerInfo"></span></li>
-                        </ul>  
-                        <div wicket:id="assetImageModalWindow" class="assetImageModalWindow"/>
+                        <div class="select"><input type="checkbox" wicket:id="check"/></div>
+                        <div class="details">
+                            <h2><span wicket:id="assetType"/> / <a wicket:id="summaryLink"><span wicket:id="assetIdentifier" /></a> / <span class="asset-status" id="assetStatus" wicket:id="assetStatus"/></h2>
+                            <img class="assetImage" wicket:id="assetImage" alt=""/>
+                            <ul class="fixed-attributes">
+                                <li><!-- <img src="/fieldid/images/location-icon.png"> --><span wicket:id="location"></span></li>
+                                <li>, <span wicket:id="assetDescription"></span></li>
+                                <li>, <span wicket:id="customer"></span></li>
+                                <li>, <span wicket:id="dateIdentified"></span></li>
+                                <li>, <span wicket:id="rfidNumber"></span></li>
+                                <li>, <span wicket:id="orderNumber"></span></li>
+                                <li>, <span wicket:id="ownerInfo"></span></li>
+                            </ul>
+                            <ul class="custom-attributes">
+                                <li><span wicket:id="attributes"></span></li> 
+                            </ul>  
+                            <div wicket:id="assetImageModalWindow" class="assetImageModalWindow"/>
+                        </div>
                     </div><!-- /end .assets -->
                 </div>
             </div><!-- /end .search-results -->
-
+            
+            <br />
             <input type="submit" value="Submit"/>
             <!-- pagination -->
             <div wicket:id="navigator" class="navigator"></div>
@@ -73,11 +78,7 @@
 
     <script>
         $(function() {
-            var assetValues = $('#asset-values li span').text();
-            if (assetValues == "") {
-                console.log("hello");
-                $(this).parent().hide;
-            }
+
         });
     </script>
 
