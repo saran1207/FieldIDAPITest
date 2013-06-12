@@ -127,7 +127,8 @@ public class EventCreationService extends FieldIdPersistenceService {
 //        persistenceService.update(event.getSchedule());
 
         if(user.isUsageBasedUser()) {
-            tenantSettingsService.decrementUsageBasedEventCount();
+            int eventCount = event.getSubEvents().size() + 1;
+            tenantSettingsService.decrementUsageBasedEventCount(eventCount);
         }
 
         return event;
