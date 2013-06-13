@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.pages.widgets.OrgDateRangeSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgPeriodSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
+import com.n4systems.services.brainforest.SearchParserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -65,6 +66,11 @@ public class FieldIdAppConfig {
     @Bean
     public CommentService commentService() {
     	return new CommentService();
+    }
+
+    @Bean
+    public SearchParserService globalSearchService() {
+        return new SearchParserService();
     }
 
     @Bean

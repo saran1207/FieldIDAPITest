@@ -13,6 +13,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.SelectClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.hibernate.LockMode;
@@ -23,6 +24,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,10 +71,21 @@ public class PersistenceService extends FieldIdService {
         return find(queryBuilder);
     }
 
+    @Transactional(readOnly = true)
+    public <T extends AbstractEntity> T findById(Class<T> entityClass, Long entityId) {
+        QueryBuilder<T> queryBuilder = createUserSecurityBuilder(entityClass).addSimpleWhere("id", entityId);
+        return find(queryBuilder);
+    }
+
     @Transactional
     public <T extends AbstractEntity> void delete(T entity) {
         em.remove(entity);
     }
+
+	@Transactional
+	public <T extends Serializable> void deleteAny(T entity) {
+		em.remove(entity);
+	}
 
     @Transactional(readOnly = true)
     public <T extends BaseEntity & UnsecuredEntity> T findUnsecured(Class<T> entityClass, Long entityId) {
@@ -119,12 +132,23 @@ public class PersistenceService extends FieldIdService {
         Query query = queryBuilder.createQuery(em).setFirstResult(page*pageSize).setMaxResults(pageSize);
         return query.getResultList();
     }
+
+	@Transactional
+	public <T> List<T> findAllNonSecure(Class<T> clazz) throws InvalidQueryException {
+		Query query = em.createQuery("SELECT t FROM " + clazz.getName() + " t", clazz);
+		return query.getResultList();
+	}
     
     @Transactional(readOnly = true)
 	public boolean exists(QueryBuilder<?> queryBuilder) throws InvalidQueryException {
         boolean exists = queryBuilder.entityExists(em);
         return exists;
     }
+
+	@Transactional
+	public void saveAny(Object entity) {
+		em.persist(entity);
+	}
 
     @Transactional
     public void save(Saveable saveable) {
@@ -166,7 +190,14 @@ public class PersistenceService extends FieldIdService {
 
     @Transactional
     public Long count(QueryBuilder<?> searchBuilder) {
-        return (Long) searchBuilder.setCountSelect().createQuery(em).getSingleResult();
+		SelectClause originalSelect = searchBuilder.getSelectArgument();
+		Long count = null;
+		try {
+			count = (Long) searchBuilder.setCountSelect().createQuery(em).getSingleResult();
+		} finally {
+			searchBuilder.setSelectArgument(originalSelect);
+		}
+        return count;
     }
 
     @Deprecated
@@ -228,7 +259,6 @@ public class PersistenceService extends FieldIdService {
         try {
             QueryBuilder<T> query = createTenantSecurityBuilder(entityClass);
             query.addSimpleWhere("name", entityName);
-
             entity = find(query);
         } catch (NoResultException ne) {
             entity = null;
@@ -249,3 +279,9 @@ public class PersistenceService extends FieldIdService {
 
 }
 
+
+
+//b.bool().
+//        must(b.keyword().onField("identifier").matching(text).createQuery()).
+//        must(b.keyword().onField("attributes.attribute").matching("type").createQuery()).
+//        must(b.keyword().onField("attributes.textValue").matching("Multi Leg Bridle").createQuery()).createQuery();

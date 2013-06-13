@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.model.parents.AbstractEntity;
-import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.WicketRuntimeException;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -31,9 +30,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.odlabs.wiquery.core.javascript.JsStatement;
 import org.odlabs.wiquery.core.javascript.JsUtils;
 import org.odlabs.wiquery.core.options.Options;
-import org.odlabs.wiquery.core.resources.WiQueryJavaScriptResourceReference;
 import org.odlabs.wiquery.ui.autocomplete.Autocomplete;
-import org.odlabs.wiquery.ui.autocomplete.AutocompleteAjaxComponent;
 import org.odlabs.wiquery.ui.autocomplete.AutocompleteSource;
 import org.odlabs.wiquery.ui.autocomplete.WiQueryAutocompleteJavaScriptResourceReference;
 import org.odlabs.wiquery.ui.core.JsScopeUiEvent;
@@ -44,14 +41,16 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AutoComplete<T extends EntityWithTenant> extends FormComponentPanel<T> {
+public abstract class AutoComplete<T> extends FormComponentPanel<T> {
     
-    public static final WiQueryJavaScriptResourceReference WIQUERY_AUTOCOMPLETE_JS =
-            new WiQueryJavaScriptResourceReference(AutocompleteAjaxComponent.class,
-                    "wiquery-autocomplete.js");
+//    public static final WiQueryJavaScriptResourceReference WIQUERY_AUTOCOMPLETE_JS =
+//            new WiQueryJavaScriptResourceReference(AutocompleteAjaxComponent.class,
+//                    "wiquery-autocomplete.js");
     
     private static final String NOT_ENTERED = "NOT_ENTERED";
-    
+
+    @SpringBean protected PersistenceService persistenceService;
+
     private boolean autoUpdate = false;
     protected String term = "";
     private InnerAutocompleteBehavior autocompleteBehavior;
@@ -62,13 +61,8 @@ public abstract class AutoComplete<T extends EntityWithTenant> extends FormCompo
     protected int threshold = 15;
     private String[] containers;
 
-    @SpringBean
-    private PersistenceService persistenceService;
-    private Class<T> entityClass;
-
-    public AutoComplete(String id, final Class<T> entityClass, final IModel<T> model) {
+    public AutoComplete(String id, final IModel<T> model) {
         super(id, model);
-        this.entityClass = entityClass;
         setOutputMarkupPlaceholderTag(true);
         setOutputMarkupId(true);
 
@@ -252,7 +246,7 @@ public abstract class AutoComplete<T extends EntityWithTenant> extends FormCompo
             setConvertedInput(null);
         } else if (object == null || (selectedValueId!=null && !selectedValueId.equals(valueId))) {
             long entityId = Long.valueOf(valueId);
-            T entity = persistenceService.find(entityClass, entityId);
+            T entity = findEntity(entityId,input);
             if (entity != null) {
                 setConvertedInput(entity);
             } else {
@@ -269,6 +263,7 @@ public abstract class AutoComplete<T extends EntityWithTenant> extends FormCompo
         }
     }
 
+    protected abstract T findEntity(long entityId, String input);
 
     protected abstract List<T> getChoices(String term);
 

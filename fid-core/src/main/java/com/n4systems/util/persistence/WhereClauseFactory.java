@@ -91,4 +91,12 @@ public class WhereClauseFactory {
 	public static NoVariableClause createNoVariable(String leftSide, String rightSide) {
 		return new NoVariableClause(leftSide+rightSide, Comparator.EQ, leftSide, rightSide, ChainOp.AND);
 	}
+
+	public static WhereParameterGroup group(String name, WhereClause<?> ... clauses) {
+		WhereParameterGroup group = new WhereParameterGroup(name);
+		for (WhereClause<?> clause: clauses) {
+			group.addClause(clause);
+		}
+		return group;
+	}
 }

@@ -126,6 +126,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("savedReport", RunReportPage.class);
         mountPage("savedSearch", RunSearchPage.class);
         mountPage("massSchedule", MassSchedulePage.class);
+        mountPage("newSearch", NewSearchPage.class);
 
         mountPage("savedItems", SavedItemsDropdownPage.class);
         mountPage("manageSavedItems", ManageSavedItemsPage.class);

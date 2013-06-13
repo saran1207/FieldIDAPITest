@@ -6,6 +6,8 @@ import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.chart.RangeType;
 import org.joda.time.*;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.Date;
 import java.util.TimeZone;
@@ -53,7 +55,7 @@ public class DateService extends FieldIdPersistenceService {
     }
 
     public LocalDate today() {
-        return new LocalDate(new DateMidnight(DateTimeZone.forTimeZone(getUserTimeZone())));
+        return new LocalDate(new DateMidnight(getUserJodaTimeZone()));
     }
 
     public Date todayAsDate() {
@@ -68,6 +70,10 @@ public class DateService extends FieldIdPersistenceService {
         return super.getUserTimeZone();
     }
 
+    private DateTimeZone getUserJodaTimeZone() {
+        return DateTimeZone.forTimeZone(getUserTimeZone());
+    }
+
     public DateTimeDefinition getDateTimeDefinition() {
         return getCurrentUser();
     }
@@ -77,7 +83,7 @@ public class DateService extends FieldIdPersistenceService {
     }
 
     public DateTime nowInUsersTimeZone() {
-        return new DateTime(DateTimeZone.forTimeZone(getUserTimeZone()));
+        return new DateTime(getUserJodaTimeZone());
     }
 
     @Deprecated
@@ -109,4 +115,5 @@ public class DateService extends FieldIdPersistenceService {
     public boolean isPastDue(Date dueDate) {
         return todayAsDate().after(dueDate);
     }
+
 }

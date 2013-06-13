@@ -8,6 +8,7 @@ import com.n4systems.ejb.wrapper.AutoAttributeManagerEJBContainer;
 import com.n4systems.ejb.wrapper.ConfigManagerEJBContainer;
 import com.n4systems.ejb.wrapper.EventManagerEJBContainer;
 import com.n4systems.ejb.wrapper.PredefinedLocationManagerEJBContainer;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.event.EventService;
@@ -67,9 +68,13 @@ public class ServiceLocator implements ApplicationContextAware {
 		return new OptionEJBContainer();
 	}
 
-	public static final PersistenceManager getPersistenceManager() {		
+    public static final PersistenceManager getPersistenceManager() {
 		return getBean(PersistenceManager.class);
 	}
+
+    public static final PersistenceService getPersistenceService() {
+        return getBean(PersistenceService.class);
+    }
 
 	public static final ProofTestHandler getProofTestHandler() {
 		return getBean(ProofTestHandler.class);

@@ -122,8 +122,9 @@ public class QueryBuilder<E> {
      * Calls {@link QueryFilter#applyFilter(QueryBuilder)} using this QueryBuilder
      * @param filter	A QueryFilter
      */
-	public void applyFilter(QueryFilter filter) {
+	public QueryBuilder<E> applyFilter(QueryFilter filter) {
 		filter.applyFilter(this);
+		return this;
 	}
 	
 	/**

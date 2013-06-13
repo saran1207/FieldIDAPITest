@@ -18,7 +18,7 @@ public class AutoCompleteUser extends AutoComplete<User> {
     private HashSet<String> categories = new HashSet<String>();
     
     public AutoCompleteUser(String id, final IModel<User> model) {
-        super(id, User.class, model);
+        super(id, model);
     }
 
     @Override
@@ -39,6 +39,11 @@ public class AutoCompleteUser extends AutoComplete<User> {
     @Override
     protected void startRequest(Request request) {
         categories = new HashSet<String>();
+    }
+
+    @Override
+    protected User findEntity(long entityId, String input) {
+        return persistenceService.find(User.class,entityId);
     }
 
     protected String getCategory(User user) {

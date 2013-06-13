@@ -1,7 +1,7 @@
 alter table procedures drop foreign key fk_procedures_performedby;
 
 alter table procedures change column performedby_id unlockedby_id bigint;
-alter table procedures add column lockedby_id datetime;
+alter table procedures add column lockedby_id bigint;
 
 alter table procedures add constraint fk_procedures_locking_user foreign key (unlockedby_id) references users (id);
 alter table procedures add constraint fk_procedures_unlocking_user foreign key (lockedby_id) references users (id);

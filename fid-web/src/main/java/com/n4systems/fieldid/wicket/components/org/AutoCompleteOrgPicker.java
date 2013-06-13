@@ -23,7 +23,7 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
     private HashSet<OrgLocationEnum> categories = new HashSet<OrgLocationEnum>();
 
     public AutoCompleteOrgPicker(String id, final IModel<BaseOrg> model) {
-        super(id, BaseOrg.class, model);
+        super(id, model);
         withAutoUpdate(false);
     }
 
@@ -48,6 +48,11 @@ public class AutoCompleteOrgPicker extends AutoComplete<BaseOrg> {
     @Override
     protected String normalizeSearchTerm(String term) {
         return new OrgQueryParser(term).getSearchTerm();
+    }
+
+    @Override
+    protected BaseOrg findEntity(long entityId, String input) {
+        return persistenceService.find(BaseOrg.class,entityId);
     }
 
     private String getCategory(BaseOrg entity) {

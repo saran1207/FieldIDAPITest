@@ -63,7 +63,12 @@ public class DateRange implements Serializable, Cloneable {
         withTimeZone(timeZone);
     }
 
-	public String getFromDateDisplayString() {
+    public DateRange(RangeType rangeType, DateTimeZone timeZone) {
+        this.rangeType = rangeType;
+        withTimeZone(timeZone.toTimeZone());
+    }
+
+    public String getFromDateDisplayString() {
 		return rangeType.getFormatter().getFromDateDisplayString(getFrom());
 	}
     
@@ -328,6 +333,23 @@ public class DateRange implements Serializable, Cloneable {
 
     public boolean isEmptyCustom() {
         return rangeType == RangeType.CUSTOM && fromDate == null && toDate == null;
+    }
+
+    public boolean isCustom() {
+        return rangeType == RangeType.CUSTOM;
+    }
+
+    public boolean isRange() {
+        switch (rangeType) {
+            case CUSTOM:
+                return getFrom().isBefore(getTo());
+            case YESTERDAY:
+            case TODAY:
+            case TOMORROW:
+                return false;
+            default:
+                return true;
+        }
     }
 
     @Override

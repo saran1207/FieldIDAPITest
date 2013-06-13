@@ -9,15 +9,24 @@
 			<param name="ConversionPattern" value="%D: %-5p [%c{1}] %m%n" />
 		</layout>
 	</appender>
-	<appender name="AUDIT_LOG" class="org.apache.log4j.RollingFileAppender">
-		<param name="File" value="/var/fieldid/logs/fieldid-audit.log" />
-		<param name="Append" value="true" />
-		<param name="MaxFileSize" value="500MB" />
-		<param name="MaxBackupIndex" value="10" />
-		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
-			<param name="ConversionPattern" value="%D: %c: %m%n" />
-		</layout>
-	</appender>
+    <appender name="AUDIT_LOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/fieldid/logs/fieldid-audit.log" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="500MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+            <param name="ConversionPattern" value="%D: %c: %m%n" />
+        </layout>
+    </appender>
+    <appender name="SEARCH_LOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/fieldid/logs/fieldid-search.log" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="500MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+            <param name="ConversionPattern" value="%D: %c: %m%n" />
+        </layout>
+    </appender>
 	<appender name="CACHE_LOG" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/fieldid-cache.log" />
 		<param name="Append" value="true" />
@@ -108,6 +117,16 @@
         </layout>
     </appender>
 
+    <appender name="Indexer" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="/var/fieldid/logs/indexer.log" />
+        <param name="Append" value="true" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+            <param name="ConversionPattern" value="%D [%t] %-5p: %m%n" />
+        </layout>
+    </appender>
+
+
     <category name="org.springframework">
         <priority value="INFO" />
     </category>
@@ -143,6 +162,10 @@
 		<priority value="INFO" />
 		<appender-ref ref="AUDIT_LOG" />
 	</category>
+    <category name="SearchLog" additivity="false">
+        <priority value="INFO" />
+        <appender-ref ref="SEARCH_LOG" />
+    </category>
 	<category name="MobileErrorLogger" additivity="false">
 		<priority value="INFO" />
 		<appender-ref ref="MOBILE_ERROR" />
@@ -180,6 +203,11 @@
 
     <category name="org.apache.wicket.resource.PropertiesFactory" additivity="false">
         <priority value="ERROR" />
+    </category>
+
+    <category name="com.n4systems.services.search" additivity="false">
+        <priority value="INFO" />
+        <appender-ref ref="Indexer" />
     </category>
 
     <category name="com.n4systems.fieldid.migrator">

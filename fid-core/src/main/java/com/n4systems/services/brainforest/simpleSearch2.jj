@@ -1,0 +1,252 @@
+options
+{
+    LOOKAHEAD=4;
+    FORCE_LA_CHECK=true;
+    STATIC=false;
+    IGNORE_CASE=true;
+    USER_TOKEN_MANAGER=false;
+    USER_CHAR_STREAM=false;
+}
+
+PARSER_BEGIN(SimpleParser)
+package com.n4systems.services.brainforest;
+
+import java.io.*;
+import java.util.*;
+import com.n4systems.services.brainforest.*;
+import org.springframework.beans.factory.annotation.Autowired;
+
+public class SimpleParser {
+
+    SearchQuery searchQuery;
+    Stack<Value> values;
+    Stack<SearchQuery.Conjunction> conjunctions;
+    SimpleValue.DateFormatType currentDateType = null;
+    @Autowired ValueFactory valueFactory;
+
+    public SearchQuery getSearchQuery() {
+        return searchQuery;
+    }
+
+    public List<QueryTerm> getQueryTerms() {
+        return searchQuery.getQueryTerms();
+    }
+
+    // use this method...don't call parse() directly!
+    // because need to re-init variables and reset input.
+    public SearchQuery parseQuery(String query) throws ParseException, TokenMgrError {
+        init();
+        ReInit(new StringReader(query));
+        return _$$parse();
+    }
+
+    private void init() {
+        searchQuery = new SearchQuery();
+        values = new Stack<Value>();
+        conjunctions = new Stack<SearchQuery.Conjunction>();
+    }
+
+    public ValueFactory getValueFactory() {
+     return this.valueFactory;
+    }
+
+}
+PARSER_END(SimpleParser)
+
+SKIP :
+{
+    " "
+    | "\t"
+    | "\r"
+    | "\n"
+}
+
+TOKEN:
+{
+    <COMMA:","> |
+    <AND:"and"> |
+    <OR: "or"> |
+    <TO:"to"> |
+    <HAS: "has"> |
+    <IS: "is"(" a")? > |
+    <IN:"in"> |
+    <EXACTLY:"!"> |
+    <ELLIPSIS:".."(".")?> |
+    <DASH:"-"> |
+    <LPAREN: "["> |
+    <RPAREN: "]"> |
+    <EQUALS: "="|":"> |
+    <HIERARCHY_DELIMITER: "\\"> |
+    <GREATER_THAN: ">"> |
+    <GREATER_THAN_EQUALS: ">="> |
+    <LESS_THAN_EQUALS: "<="> |
+    <LESS_THAN: "<"> |
+    <NOT_EQUALS: "!="> |
+    <TODAY:"today"> |
+    <TOMORROW:"tomorrow"> |
+    <YESTERDAY:"yesterday"> |
+    <SLASH_DATE : (["0"-"9"]){1,2} "/" (["0"-"9"]){1,2} "/" (["0"-"9"]){2} ((["0"-"9"]){2})?>  |
+    <DASH_DATE : (["0"-"9"]){1,2} "-" (["0"-"9"]){1,2} "-" (["0"-"9"]){2} ((["0"-"9"]){2})?>
+}
+
+MORE : {
+    <"jan"("uary")?|"feb"("ruary")?|"mar"("ch")?|"apr"("il")?|"may"|"jun"("e")?|"jul"("y")?|"aug"("ust")?|"oct"("ober")?|"nov"("ember")?|"dec"("ember")?>
+        : InVerboseDate
+}
+
+<InVerboseDate> TOKEN : {
+    <VERBOSE_DATE : (["0"-"9"]){1,2} ([" "])* (",")? ([" "])* (["0"-"9"]){2,4} >  : DEFAULT
+}
+
+<InVerboseDate>  MORE : {
+    " " : InVerboseDate
+}
+
+MORE : {
+    <"this"|"next"|"last"> : InFloatingDate
+}
+
+<InFloatingDate>  TOKEN : {
+    <FLOATING_DATE :
+            "mon"("day")?|
+            "tues"("day")?|
+            "wed"("day")?|
+            "thurs"("day")?|
+            "fri"("day")?|
+            "sat"("day")?|
+            "sun"("day")?|
+            "quarter"|
+            "year"|
+            "month"|
+            "week"|
+            "jan"("uary")?|
+            "feb"("ruary")?|
+            "mar"("ch")?|
+            "apr"("il")?|
+            "may"|
+            "jun"("e")?|
+            "jul"("y")?|
+            "aug"("ust")?|
+            "oct"("ober")?|
+            "nov"("ember")?|
+            "dec"("ember")?>
+     : DEFAULT
+}
+
+<InFloatingDate>  MORE : {
+    " " : InFloatingDate
+}
+
+TOKEN : {
+    <DOUBLE_QUOTED_STRING: "\"" (~["\""])+ "\"" > |
+    <SINGLE_QUOTED_STRING: "'" (~["'"])+ "'" > |
+    <NUMBER : (["0"-"9"])+(["."](["0"-"9"])+)?> |
+    <STRING : (["0"-"9","A"-"Z","a"-"z","/","\\","-"])+ >
+}
+
+SearchQuery _$$parse() : { SearchQuery.Conjunction conjunction=null; }
+{
+        queryTerm() { conjunction=SearchQuery.Conjunction.AND;}
+        ( [conjunction() {conjunction=SearchQuery.Conjunction.fromString(token.image);} ] queryTerm() {searchQuery.add(conjunction); conjunction=SearchQuery.Conjunction.AND;}  )*
+        {return searchQuery;}
+}
+
+void conjunction() : {}
+{
+    (<AND>|<OR>)
+}
+
+void queryTerm() : {
+    Token attr;
+    Token operand;
+    Value value;
+}
+{
+    LOOKAHEAD(simpleString() operand())
+    attr = attribute() operand = operand() value = complexValue()
+        {searchQuery.add(new QueryTerm(attr.image, operand.image, value ));}     |
+    value = complexValue()
+        {searchQuery.add(new QueryTerm(null, "=", value ));}
+}
+
+
+Token operand() : {Token op;}
+{
+    (<EQUALS>|<NOT_EQUALS>|<GREATER_THAN>|<GREATER_THAN_EQUALS>|<LESS_THAN>|<LESS_THAN_EQUALS>|<IN>) {op=token;}
+    {return op;}
+}
+
+void simpleString() : {}
+{
+    <STRING>|<DOUBLE_QUOTED_STRING>|<SINGLE_QUOTED_STRING>
+}
+
+Token attribute() : {}
+{
+    simpleString() {return token;}
+}
+
+
+Value complexValue() : {}
+{
+    LOOKAHEAD(date())
+        date() {values.push(getValueFactory().createDateValue(token.image, currentDateType)); }  [moreDates()]
+            {return values.peek();}   |
+        value() {values.push(getValueFactory().createSimpleValue(token.image));} [moreValues()|valueRange()]
+            {return values.peek();}
+}
+
+void value() : {}
+{
+      string() [<EXACTLY>]
+}
+
+
+void moreValues() : {}
+{
+    (   <COMMA>
+        (value() { values.push(getValueFactory().augmentValue(token.image,values.pop(),MultiValue.Delimiter.COMMA)); })
+    )+
+}
+
+void valueRange() : {}
+{
+    (   to()
+        (value() { values.push(getValueFactory().augmentValue(token.image,values.pop(), MultiValue.Delimiter.RANGE)); })
+    )
+}
+
+
+void moreDates() : {}
+{
+    LOOKAHEAD(to())
+        to() date()
+            { values.push(getValueFactory().augmentValue(token.image,currentDateType,values.pop(), MultiValue.Delimiter.RANGE));} |
+        (
+            <COMMA> date()
+            {values.push(getValueFactory().augmentValue(token.image,currentDateType, values.pop(), MultiValue.Delimiter.COMMA));}
+         )+
+}
+
+void date() : {}
+{
+    <TODAY> {currentDateType=SimpleValue.DateFormatType.TODAY;}|
+    <TOMORROW> {currentDateType=SimpleValue.DateFormatType.TOMORROW;}|
+    <DASH_DATE> {currentDateType=SimpleValue.DateFormatType.DASH_DATE;}|
+    <SLASH_DATE> {currentDateType=SimpleValue.DateFormatType.SLASH_DATE;}|
+    <VERBOSE_DATE> {currentDateType=SimpleValue.DateFormatType.VERBOSE_DATE;}|
+    <FLOATING_DATE> {currentDateType=SimpleValue.DateFormatType.FLOATING_DATE;}
+}
+
+
+void to() : {}
+{
+    <TO>|<ELLIPSIS>
+}
+
+
+void string() : {}
+{
+    (<STRING>|<DOUBLE_QUOTED_STRING>|<SINGLE_QUOTED_STRING>|<NUMBER>)
+}
+

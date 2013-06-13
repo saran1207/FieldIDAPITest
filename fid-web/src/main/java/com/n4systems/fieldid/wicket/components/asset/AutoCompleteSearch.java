@@ -21,7 +21,7 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
     private HashSet<AssetType> categories = new HashSet<AssetType>();
     
     public AutoCompleteSearch(String id, final IModel<Asset> model) {
-        super(id, Asset.class, model);
+        super(id, model);
     }
 
     @Override
@@ -83,10 +83,14 @@ public class AutoCompleteSearch extends AutoComplete<Asset> {
         return term;
     }
 
+    @Override
+    protected Asset findEntity(long entityId, String input) {
+        return persistenceService.find(Asset.class,entityId);
+    }
+
     protected String getDisplayValue(Asset asset) {
         return asset.getIdentifier();
     }
-
 
 }
 

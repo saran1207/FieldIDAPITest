@@ -56,9 +56,15 @@ import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
+import com.n4systems.services.brainforest.DateParser;
+import com.n4systems.services.brainforest.SearchParserService;
+import com.n4systems.services.brainforest.SimpleParser;
+import com.n4systems.services.brainforest.ValueFactory;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.DashboardReportingService;
+import com.n4systems.services.search.AssetIndexerService;
+import com.n4systems.services.search.FullTextSearchService;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
@@ -71,6 +77,8 @@ import org.springframework.orm.jpa.AbstractEntityManagerFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+
+import java.io.StringReader;
 
 @Configuration
 public class FieldIdCoreConfig {
