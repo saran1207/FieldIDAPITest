@@ -1,27 +1,30 @@
-/* fieldid.css OVERRIDES 
-------------------------------------*/
+/* fieldid.css OVERRIDES & GLOBAL STYLES
+-----------------------------------------*/
 * { 
 	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
 	-moz-box-sizing: border-box;    /* Firefox, other Gecko */
 	box-sizing: border-box;         /* Opera/IE 8+ */
-
-	/**behavior: url(/scripts/boxsizing.htc);*/
+	*behavior: url(/fieldid/javascript/boxsizing.htc); /* IE 6 & 7 */
 }
 body {
 	background: #fff;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
 }
 #page {
 	border: none;
 	box-shadow: none;
 	-moz-box-shadow: none;
 	-webkit-box-shadow: none;
-	padding: 0;
+	padding: 0;	
 }
 #contentHeader {
 	display: none;
 }
 strong {
 	font-weight: bold;
+}
+em {
+	text-decoration: none;
 }
 h2 {
 	font-size: 18px;
@@ -30,20 +33,21 @@ h2 {
 	color: #3366cc;
 	font-weight: normal;
 }
-h2 a {
-	text-decoration: none;
-}
-h2 a span {
-	color: #3366cc;
-	font-size: 18px;
-}
+	h2 a {
+		text-decoration: none;
+	}
+	h2 a span {
+		color: #3366cc;
+		font-size: 18px;
+	}
 
 
 /* NEW SEARCH BAR
-------------------------------------*/
+-----------------------------------------*/
 .search-bar {
-	margin-top: 40px;
+	margin: 40px auto;
 	overflow: hidden;
+	width: 790px;
 }
 .search-bar input[type=text]{
 	width: 700px;
@@ -63,44 +67,55 @@ h2 a span {
 }
 
 
-/* CONTAINER FOR PAGE CONTENT 
-(excluding the search bar)
-------------------------------------*/
+/* CONTENT CONTAINER (excluding search bar)
+-----------------------------------------*/
 .search-container {
 	margin-top: 30px;
+	position: relative;
 }
 
 
-/* MASS ACTIONS BUTTON
-------------------------------------*/
+/* MASS ACTIONS
+-----------------------------------------*/
 .actions {
-	/*overflow: hidden;*/
-	/* overrides */
-	margin: 0;
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.actions ul {
+	width: auto;
+}
+.menu-items {
+	left: 0;
 }
 	/* overrides */
 	.actions .mattButton {
 		width: 100px;
-		/*height: 40px;
-		font-size: 16px;*/
 	}
 
 
-/* SEARCH RESULTS LISTING
-------------------------------------*/
+/* SEARCH RESULTS LIST
+-----------------------------------------*/
 .search-results {
 	clear: both;
 	margin-top: 10px;
-}
-.search-results input[type=checkbox] {
-	/*float: left;
-	width: 2%;*/
+	overflow: hidden;
 }
 
-
+.select-all {
+	height: 40px;
+}
+.select-all input[type=checkbox] {
+	margin-right: 20px;
+}
+.select-all p {
+	display: inline;
+	font-style: italic;
+	margin-left: 10px;
+}
 
 .asset-item .select {
-	width: 3.5%;
+	width: 35px;
 	float: left;
 	margin-top: 40px;
 }
@@ -109,34 +124,60 @@ h2 a span {
 	border-bottom: 0;
 	padding: 14px 10px;
 	background: #f8f8f8;
-	width: 96.5%;
+	width: 965px;
 	float: left;
+	position: relative;
 }
-	.asset-item .details:hover {
+	.asset-item .details.selected {
 		background: #ffffd3;
+		font-weight: normal;
+	}
+	.asset-item .details > img {
+		width: 72px;
+		float: left;
+		padding: 11px 10px 0 0;
+	}
+	.asset-item .details .btn-group {
+		display: none;
+		position: absolute;
+		top: 30px;
+		right: 20px;
+	}
+	.asset-item .details:hover .btn-group {
+		display: block;
 	}
 
 .asset-item ul {
 	margin-top: 10px;
-}
-	/*.asset-item .location img {
-		margin-right: 4px;
-		vertical-align: middle;
-	}*/
-
-	
+}	
 	.asset-item ul li {
 		display: inline;
 	}
-	.asset-item .fixed-attributes {
-		font-size: 14px;
-	}
-	.asset-item .custom-attribute {
-		font-size: 12px;
-	}
-.asset-item .details > img {
-	width: 72px;
-	float: left;
-	padding: 11px 10px 0 0;
+
+.asset-item .fixed-attributes {
+	font-size: 14px;
 }
+.asset-item .custom-attributes {
+	font-size: 12px;
+	font-family: Helvetica, Arial, "Lucida Grande", sans-serif; 
+}
+
+.btn-group {
+	float: right;
+}
+
+
+/* PAGINATION
+-----------------------------------------*/
+.navigator {
+	float: right;
+	margin-top: 10px;
+}
+.navigator a {
+	border: 1px solid #D0DAFA;
+	text-decoration: none;
+	padding: 5px 8px;
+	display: inline-block;
+}
+
 

@@ -6,20 +6,19 @@
 
 <wicket:extend>
 
-    <!-- <h2>New Search Page</h2> -->
-
     <div wicket:id="feedback" class="feedback"></div>
-
+    
+    <!-- Search bar -->
     <form wicket:id="NewSearchForm" class="search-bar">
         <input type="text" wicket:id="searchCriteria"/>
         <a href="#" class="search mattButton" wicket:id="searchButtonId">Search</a>
     </form>
 
+    <!-- Search results -->
     <div wicket:id="listViewContainer" class="search-container">
-
         <form wicket:id="resultForm">
 
-            <!-- mass actions button -->
+            <!-- mass actions -->
             <div class="actions">
                 <ul>
                     <li wicket:id="actions" class="menu">
@@ -42,16 +41,29 @@
             <!-- search results list -->
             <div class="search-results">
                 <div wicket:id="selected_assets">
-                    <div class="asset-item">
-                        <input type="checkbox" wicket:id="groupselector"> <label wicket:for="groupselector">Select/Unselect all</label>
+
+                    <!-- select/unselect option -->
+                    <div class="select-all">
+                        <input type="checkbox" wicket:id="groupselector"> 
+                        <label wicket:for="groupselector">Select all</label>
+                        <p>select assets to perform mass actions</p>
                     </div>
+
+                    <!-- individual results item -->
                     <div wicket:id="assets" class="asset-item">
+
+                        <!-- checkbox -->
                         <div class="select"><input type="checkbox" wicket:id="check"/></div>
+
+                        <!-- individual asset info -->
                         <div class="details">
                             <h2><span wicket:id="assetType"/> / <a wicket:id="summaryLink"><span wicket:id="assetIdentifier" /></a> / <span class="asset-status" id="assetStatus" wicket:id="assetStatus"/></h2>
+
                             <img class="assetImage" wicket:id="assetImage" alt=""/>
-                            <ul class="fixed-attributes">
-                                <li><!-- <img src="/fieldid/images/location-icon.png"> --><span wicket:id="location"></span></li>
+                            <div wicket:id="assetImageModalWindow" class="assetImageModalWindow"/>
+
+                            <ul class="fixed-attributes"><!-- change to a paragraph -->
+                                <li><span wicket:id="location"></span></li>
                                 <li>, <span wicket:id="assetDescription"></span></li>
                                 <li>, <span wicket:id="customer"></span></li>
                                 <li>, <span wicket:id="dateIdentified"></span></li>
@@ -59,26 +71,34 @@
                                 <li>, <span wicket:id="orderNumber"></span></li>
                                 <li>, <span wicket:id="ownerInfo"></span></li>
                             </ul>
-                            <ul class="custom-attributes">
+
+                            <ul class="custom-attributes"><!-- change to a paragraph -->
                                 <li><span wicket:id="attributes"></span></li> 
                             </ul>  
-                            <div wicket:id="assetImageModalWindow" class="assetImageModalWindow"/>
+
+                            <div class="btn-group">
+                                <a href="#" class="mattButtonLeft">View</a>
+                                <a href="#" class="mattButtonMiddle">Start Event</a>
+                                <a href="#" class="mattButtonRight">Merge</a>
+                            </div>
                         </div>
                     </div><!-- /end .assets -->
                 </div>
             </div><!-- /end .search-results -->
-            
-            <br />
-            <input type="submit" value="Submit"/>
+
             <!-- pagination -->
             <div wicket:id="navigator" class="navigator"></div>
 
         </form>
-    </div>
+    </div><!-- /end .search-container -->
 
     <script>
         $(function() {
 
+            // adds class to selected search result
+            $(".select input[type=checkbox]").click(function() {
+                $(this).parent().next().toggleClass("selected");
+            });
         });
     </script>
 
