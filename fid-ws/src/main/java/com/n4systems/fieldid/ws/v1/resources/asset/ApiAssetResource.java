@@ -98,8 +98,11 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			builder.addWhere(new SmartSearchWhereClause(searchText, true, true, true));
 		}
 
-        builder.addSimpleWhere("type.group.lotoLock", false);
-        builder.addSimpleWhere("type.group.lotoDevice", false);
+        // WEB-3886 TODO: If/when the loto locks / device concept comes back, we need to fix this filtering.
+        // Asset type groups can be null so we need to account for that. This was filtering all assets that didn't
+        // have an asset type group.
+//        builder.addSimpleWhere("type.group.lotoLock", false);
+//        builder.addSimpleWhere("type.group.lotoDevice", false);
 
 		List<Asset> assets = persistenceService.findAll(builder, page, pageSize);
 		Long total = persistenceService.count(builder);
