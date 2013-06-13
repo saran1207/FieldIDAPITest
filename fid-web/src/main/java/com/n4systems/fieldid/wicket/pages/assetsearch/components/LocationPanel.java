@@ -52,7 +52,6 @@ public class LocationPanel extends Panel {
 
         public LocationForm(String id) {
             super(id);
-            setMultiPart(true);
 
             add(new TextField<String>("predefFreeformLocation", new PropertyModel<String>(this, "freeformLocation")));
 
