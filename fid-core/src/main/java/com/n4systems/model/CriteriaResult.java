@@ -37,7 +37,7 @@ public abstract class CriteriaResult extends EntityWithTenant {
 	@IndexColumn(name="orderidx")
 	private List<Deficiency> deficiencies = new ArrayList<Deficiency>();
 
-	@OneToMany(mappedBy = "criteriaResult", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "criteriaResult", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	@OrderBy // Ordered by primary key
 	private List<CriteriaResultImage> criteriaImages = new ArrayList<CriteriaResultImage>();
 
