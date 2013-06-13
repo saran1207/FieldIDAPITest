@@ -18,9 +18,11 @@ public class PerformMultiEventOnIdentifiedAssetsPage extends FieldIDFrontEndPage
                 WebMarkupContainer hiddenInputWithAssetId= new WebMarkupContainer("assetId");
                 hiddenInputWithAssetId.add(new AttributeModifier("name", "assetIds["+item.getIndex()+"]"));
                 hiddenInputWithAssetId.add(new AttributeModifier("value", item.getModelObject()));
+                item.add(hiddenInputWithAssetId);
             }
         });
-
     }
+
+
 
 }
