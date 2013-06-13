@@ -19,7 +19,7 @@
 </div>
 
 <div id="unlimitedUserAccounts" class="limit">
-    <div class="limitLabel"><@s.text name="label.usage_based_user_accounts"/></div>
+    <div class="limitLabel"><@s.text name="label.usage_based_user_events"/></div>
     <div class="unlimitedUsersSettings">
         ${userLimits.usageBasedUsersEnabled?string('Enabled', 'Disabled')}<#if userLimits.usageBasedUsersEnabled>, ${userLimits.usageBasedUserEvents} remaining.</#if>
     </div>

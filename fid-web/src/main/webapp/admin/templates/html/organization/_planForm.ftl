@@ -14,7 +14,7 @@
 	</div>
 
 	<div class="infoSet">
-		<label><@s.text name="label.usage_based_user_accounts"/></label>
+		<label><@s.text name="label.usage_based_user_events"/></label>
         <span>
             <@s.checkbox id="usageBasedUsersEnabled" name="userLimits.usageBasedUsersEnabled" onclick="toggleUsageBasedUserEvents(this.checked);"/>
             <@s.textfield id="usageBasedUserEvents" name="userLimits.usageBasedUserEvents" cssStyle="width:130px"/>
