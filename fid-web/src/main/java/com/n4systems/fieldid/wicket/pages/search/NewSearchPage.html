@@ -6,19 +6,20 @@
 
 <wicket:extend>
 
+    <!-- <h2>New Search Page</h2> -->
+
     <div wicket:id="feedback" class="feedback"></div>
-    
-    <!-- Search bar -->
+
     <form wicket:id="NewSearchForm" class="search-bar">
         <input type="text" wicket:id="searchCriteria"/>
         <a href="#" class="search mattButton" wicket:id="searchButtonId">Search</a>
     </form>
 
-    <!-- Search results -->
     <div wicket:id="listViewContainer" class="search-container">
+
         <form wicket:id="resultForm">
 
-            <!-- mass actions -->
+            <!-- mass actions button -->
             <div class="actions">
                 <ul>
                     <li wicket:id="actions" class="menu">
@@ -50,30 +51,24 @@
                     </div>
 
                     <!-- individual results item -->
-                    <div wicket:id="assets" class="asset-item">
+                    <div wicket:id="results" class="asset-item">
 
                         <!-- checkbox -->
                         <div class="select"><input type="checkbox" wicket:id="check"/></div>
 
                         <!-- individual asset info -->
                         <div class="details">
-                            <h2><span wicket:id="assetType"/> / <a wicket:id="summaryLink"><span wicket:id="assetIdentifier" /></a> / <span class="asset-status" id="assetStatus" wicket:id="assetStatus"/></h2>
+                            <h2><a wicket:id="summaryLink"><span wicket:id="summary" /></a></h2>
 
                             <img class="assetImage" wicket:id="assetImage" alt=""/>
-                            <div wicket:id="assetImageModalWindow" class="assetImageModalWindow"/>
+                            <!--<div wicket:id="assetImageModalWindow" class="assetImageModalWindow"/>-->
 
                             <ul class="fixed-attributes"><!-- change to a paragraph -->
-                                <li><span wicket:id="location"></span></li>
-                                <li>, <span wicket:id="assetDescription"></span></li>
-                                <li>, <span wicket:id="customer"></span></li>
-                                <li>, <span wicket:id="dateIdentified"></span></li>
-                                <li>, <span wicket:id="rfidNumber"></span></li>
-                                <li>, <span wicket:id="orderNumber"></span></li>
-                                <li>, <span wicket:id="ownerInfo"></span></li>
+                                <li wicket:id="fixedAttributes"></li>
                             </ul>
 
                             <ul class="custom-attributes"><!-- change to a paragraph -->
-                                <li><span wicket:id="attributes"></span></li> 
+                                <li wicket:id="customAttributes"></li>
                             </ul>  
 
                             <div class="btn-group">
