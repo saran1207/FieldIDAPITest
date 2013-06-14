@@ -122,9 +122,9 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 BookmarkablePageLink summaryLink;
                 final Long assetId = result.getLong(AssetIndexField.ID.getField());
                 item.add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetId)));
-                summaryLink.add(new Label("summary", getIdentifier(result)));
+                summaryLink.add(new Label("summary", getIdentifier(result)).setEscapeModelStrings(false));
 
-                item.add(new Label("fixedAttributes", getFixedAttributes(result)));
+                item.add(new Label("fixedAttributes", getFixedAttributes(result)).setEscapeModelStrings(false));
 
                 item.add(new Label("customAttributes", getCustomAttributes(result)).setEscapeModelStrings(false));
 
