@@ -507,4 +507,37 @@ public class FieldIdCoreConfig {
         return new UsageBasedEventThresholdAlert();
     }
 
+	@Bean
+	public FullTextSearchService fullTextSearchService() {
+		return new FullTextSearchService();
+	}
+
+	@Bean
+	@Scope("singleton")
+	public AssetIndexerService assetIndexerService() {
+		return new AssetIndexerService();
+	}
+
+	@Bean
+	public SearchParserService globalSearchService() {
+		return new SearchParserService();
+	}
+
+	@Bean
+	public DateParser dateParser() {
+		return new DateParser();
+	}
+
+	@Bean
+	public SimpleParser simpleParser() {
+		// NOTE : because this bean is generated via javaCC we have no control over the constructors.
+		// .: we have to use this single arg one....users are required to call SearchParser.REINIT(myReader) before using.
+		return new SimpleParser(new StringReader(""));
+	}
+
+	@Bean
+	public ValueFactory valueFactory() {
+		return new ValueFactory();
+	}
+
 }
