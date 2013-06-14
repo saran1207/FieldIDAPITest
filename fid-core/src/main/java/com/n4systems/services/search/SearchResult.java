@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexableField;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.io.Serializable;
 import java.util.Map;
@@ -11,7 +13,11 @@ import java.util.Set;
 
 public class SearchResult implements Serializable {
 
+    // TODO : get this from tenant settings.
+    private static final DateTimeFormatter fmt = DateTimeFormat.forPattern("MMMM d,yyyy");
+
     private Map<String,String> results = Maps.newHashMap();
+
 
     public SearchResult(Document doc) {
         for (IndexableField field:doc.getFields()) {
@@ -20,6 +26,12 @@ public class SearchResult implements Serializable {
     }
 
     public String get(String key) {
+        // TODO : add formatting.
+        DateTime dateTime = getDateTime(key);
+        return dateTime==null ? results.get(key) : fmt.print(dateTime);
+    }
+
+    public String getString(String key) {
         return results.get(key);
     }
 
@@ -34,7 +46,7 @@ public class SearchResult implements Serializable {
 
     public Long getLong(String key) {
         try {
-            return Long.parseLong(get(key));
+            return Long.parseLong(getString(key));
         } catch (NumberFormatException e) {
             return null;
         }
