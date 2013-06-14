@@ -16,6 +16,10 @@ import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.*;
+import org.apache.lucene.search.highlight.Formatter;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.QueryScorer;
+import org.apache.lucene.search.highlight.SimpleSpanFragmenter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.IOUtils;
@@ -38,11 +42,11 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     private @Autowired AssetIndexerService assetIndexerService;
 
 
-	private List<Document> search(IndexReader reader, Analyzer analyzer, String queryString) throws IOException, ParseException {
+	private List<Document> search(IndexReader reader, Analyzer analyzer, Query query) throws IOException, ParseException {
         // TODO DD: do i need analyzer parameter???
 		List<Document> docs = new ArrayList<Document>();
 
-		Query query = searchParserService.createSearchQuery(queryString);     //new QueryParser(Version.LUCENE_43, "identifier", analyzer).parse(queryString);
+		//Query query = searchParserService.createSearchQuery(queryString);     //new QueryParser(Version.LUCENE_43, "identifier", analyzer).parse(queryString);
 
 		IndexSearcher searcher = new IndexSearcher(reader);
 		TopDocs topDocs = searcher.search(query, getSecurityQueryFilter(), DOC_COUNT);
@@ -56,33 +60,70 @@ public class FullTextSearchService extends FieldIdPersistenceService {
 		return docs;
 	}
 
-	public SearchResults search(String queryString) {
-		Analyzer analyzer = null;
-		Directory dir = null;
-		IndexReader reader = null;
-		try {
-			analyzer = new StandardAnalyzer(Version.LUCENE_43);
-			dir = FSDirectory.open(new File(assetIndexerService.getIndexPath(getCurrentTenant())));
-			reader = DirectoryReader.open(dir);
+    public SearchResults search(final String queryString, Formatter formatter) {
 
-			List<Document> docs = search(reader, analyzer, queryString);
+        boolean isFormatted = false;
+
+        if (null != formatter) {
+            isFormatted = true;
+        }
+
+        Analyzer analyzer = null;
+        Directory dir = null;
+        IndexReader reader = null;
+        SearchResults results = null;
+
+        try {
+            analyzer = new StandardAnalyzer(Version.LUCENE_43);
+            dir = FSDirectory.open(new File(assetIndexerService.getIndexPath(getCurrentTenant())));
+            reader = DirectoryReader.open(dir);
+
+            Query query = searchParserService.createSearchQuery(queryString);     //new QueryParser(Version.LUCENE_43, "identifier", analyzer).parse(queryString);
+
+            List<Document> docs = search(reader, analyzer, query);
+
+
+            QueryScorer queryScorer = new QueryScorer(query);
+            Highlighter highlighter = null;
+
+            /* TODO - dont bother highlighting if no Formatter*/
+            if (isFormatted) {
+                highlighter = new Highlighter(formatter, queryScorer);
+                highlighter.setTextFragmenter(new SimpleSpanFragmenter(queryScorer, Integer.MAX_VALUE));
+                highlighter.setMaxDocCharsToAnalyze(Integer.MAX_VALUE);
+
+            }
 
             // TODO DD :put search query in results so we can normalize display.
-            SearchResults results = new SearchResults();
-			logger.info(queryString + ": " + docs.size());
-			for (Document doc: docs) {
-                results.add(doc);
-				logDocument(doc);
-			}
+            results = new SearchResults();
+            logger.info(queryString + ": " + docs.size());
+            for (Document doc: docs) {
+                if (isFormatted) {
+                    results.add(doc, highlighter, analyzer);
+                } else {
+                    results.add(doc);
+                }
+
+                logDocument(doc);
+            }
             return results;
 
-		} catch (Exception e) {
-			logger.error(e);
-		} finally {
-			closeQuietly(reader, dir, analyzer);
-		}
-        return new SearchResults();
+        } catch (Exception e) {
+            logger.error(e);
+        } finally {
+            closeQuietly(reader, dir, analyzer);
+        }
+
+        return results;
+
     }
+
+
+    public SearchResults search(String queryString) {
+        return search(queryString, null);
+    }
+
+
 
 	public List<Document> findAll(String tenantName) {
 		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());

@@ -1,12 +1,16 @@
 package com.n4systems.services.search;
 
 import com.google.common.collect.Maps;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexableField;
+import org.apache.lucene.search.highlight.Highlighter;
+import org.apache.lucene.search.highlight.InvalidTokenOffsetsException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +26,29 @@ public class SearchResult implements Serializable {
     public SearchResult(Document doc) {
         for (IndexableField field:doc.getFields()) {
             results.put(field.name(), field.stringValue());
+        }
+    }
+
+    public SearchResult(Document doc, Highlighter highlighter, Analyzer analyzer) {
+
+        for (IndexableField field:doc.getFields()) {
+
+            String result = "";
+            try {
+                result = highlighter.getBestFragment(analyzer, field.name(), field.stringValue());
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (InvalidTokenOffsetsException e) {
+                e.printStackTrace();
+            }
+
+            if (result != null && result.length()>0) {
+                results.put(field.name(), result);
+            } else {
+                results.put(field.name(), field.stringValue());
+            }
+
+
         }
     }
 

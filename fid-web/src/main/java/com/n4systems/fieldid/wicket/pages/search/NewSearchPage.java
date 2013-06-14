@@ -23,6 +23,8 @@ import com.n4systems.services.search.SearchResult;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
+import org.apache.lucene.search.highlight.Formatter;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -124,7 +126,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
                 item.add(new Label("fixedAttributes", getFixedAttributes(result)));
 
-                item.add(new Label("customAttributes", getCustomAttributes(result)));
+                item.add(new Label("customAttributes", getCustomAttributes(result)).setEscapeModelStrings(false));
 
                 item.add(new Check<SearchResult>("check", item.getModel()));
 
@@ -261,7 +263,9 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             add(new AjaxSubmitLink("searchButtonId") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    results = fullTextSearchService.search(searchText).getResults();
+                    Formatter formatter = new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>");
+                    results = fullTextSearchService.search(searchText,formatter).getResults();
+//                    results = fullTextSearchService.search(searchText).getResults();
                     target.add(NewSearchPage.this);
                     target.add(NewSearchPage.this.feedbackPanel);
                 }
