@@ -1,5 +1,9 @@
 package com.n4systems.services.search;
 
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.HasTenant;
@@ -22,6 +26,7 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
+import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
@@ -35,9 +40,7 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.File;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Transactional
 public class AssetIndexerService extends FieldIdPersistenceService {
@@ -261,10 +264,24 @@ public class AssetIndexerService extends FieldIdPersistenceService {
                 addField(doc, infoOption.getInfoField().getName(), parseInfoOptionValue(infoOption));
             }
         }
+
+        // CAVEAT : always do this LAST!! after all other fields have been added 'cause it depends on existence of doc's fields.
+        addAllField(doc);
+
         return doc;
     }
 
-	private Object parseInfoOptionValue(InfoOptionBean infoOption) {
+    private void addAllField(Document doc) {
+        ArrayList<String> fields = Lists.newArrayList(Iterables.transform(doc.getFields(), new Function<IndexableField, String>() {
+            @Override
+            public String apply(IndexableField input) {
+                return input.stringValue();
+            }
+        }));
+        addField(doc, AssetIndexField.ALL.getField(), Joiner.on(" ").join(fields));
+    }
+
+    private Object parseInfoOptionValue(InfoOptionBean infoOption) {
 		String strValue = StringUtils.clean(infoOption.getName());
 		if (strValue == null) return null;
 
@@ -313,6 +330,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
 	private void addField(Document doc, String name, Object value) {
 		if (value != null) {
+            name = name.toLowerCase().trim();
 			if (value instanceof String) {
 				doc.add(new TextField(name, (String) value, Field.Store.YES));
 			} else if (value instanceof Float) {

@@ -15,8 +15,6 @@ import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.Asset;
-import com.n4systems.model.location.Location;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteriaContainer;
 import com.n4systems.services.search.AssetIndexField;
@@ -148,7 +146,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 assetImage.setVisible(false);
             }
         };
-        assetListView.setReuseItems(true);
+        //assetListView.setReuseItems(true);
         assetCheckGroup.add(assetListView);
 //
         resultForm.add(new PagingNavigator("navigator", assetListView){
@@ -264,7 +262,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     results = fullTextSearchService.search(searchText).getResults();
-                    target.add(listViewContainer);
+                    target.add(NewSearchPage.this);
                     target.add(NewSearchPage.this.feedbackPanel);
                 }
 
@@ -287,15 +285,15 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         response.renderOnDomReadyJavaScript("subMenu.init();");
     }
 
-    private String getOwnerLabel(BaseOrg owner, Location advancedLocation) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(owner.getHierarchicalDisplayName());
-
-        if(advancedLocation != null && !advancedLocation.getFullName().isEmpty()) {
-            stringBuilder.append(", ").append(advancedLocation.getFullName());
-        }
-        return stringBuilder.toString();
-    }
-
+//    private String getOwnerLabel(BaseOrg owner, Location advancedLocation) {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        stringBuilder.append(owner.getHierarchicalDisplayName());
+//
+//        if(advancedLocation != null && !advancedLocation.getFullName().isEmpty()) {
+//            stringBuilder.append(", ").append(advancedLocation.getFullName());
+//        }
+//        return stringBuilder.toString();
+//    }
+//
 
 }

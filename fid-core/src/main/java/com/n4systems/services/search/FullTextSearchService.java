@@ -31,7 +31,7 @@ import java.util.List;
 public class FullTextSearchService extends FieldIdPersistenceService {
     private static Logger logger = Logger.getLogger(FullTextSearchService.class);
 
-    public static final int DOC_COUNT = 25;
+    public static final int DOC_COUNT = 1000;
 
     private @Autowired SearchParserService searchParserService;
     private @Autowired SecurityContext securityContext;

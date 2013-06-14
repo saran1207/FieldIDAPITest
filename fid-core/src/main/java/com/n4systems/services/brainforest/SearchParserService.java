@@ -3,6 +3,7 @@ package com.n4systems.services.brainforest;
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.services.SecurityContext;
+import com.n4systems.services.search.AssetIndexField;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
@@ -65,7 +66,7 @@ public class SearchParserService extends FieldIdService {
     }
 
     private Query getQueryForTerm(QueryTerm term) {
-        String field = term.getAttribute()!=null ? term.getAttribute() : "all";  // TODO DD : make constant for this. ask mark.
+        String field = term.getAttribute()!=null ? term.getAttribute() : AssetIndexField.ALL.getField();
         Value value = term.getValue();
         return getQueryForTerm(field, value, term.getOperator());
     }

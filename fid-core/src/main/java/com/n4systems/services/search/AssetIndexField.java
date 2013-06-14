@@ -1,12 +1,12 @@
 package com.n4systems.services.search;
 
 public enum AssetIndexField {
+    ID("_id"),
     SECONDARY_ID("_secondaryOrgId"),
     CUSTOMER_ID("_customerOrgId"),
     DIVISION_ID("_divisionOrgId"),
     CREATED("assetcreated"),
     MODIFIED("assetmodified"),
-    ID("_id"),
     IDENTIFIER("id"),
     RFID("rfid"),
     REFERENCE_NUMBER("ref"),
@@ -26,7 +26,8 @@ public enum AssetIndexField {
     DIVISION("div"),
     TYPE("at"),
     TYPE_GROUP("atg"),
-    STATUS("assetstatus");
+    STATUS("assetstatus"),
+    ALL("_all");
 
     private final String field;
 

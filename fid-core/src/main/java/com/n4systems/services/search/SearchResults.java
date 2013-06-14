@@ -15,7 +15,6 @@ public class SearchResults implements Serializable {
 
     public SearchResults() {
         // TODO DD : get query string in here...
-        System.out.println("creating");
     }
 
     public SearchResults add(Document doc) {
