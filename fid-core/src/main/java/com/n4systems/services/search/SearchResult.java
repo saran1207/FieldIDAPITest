@@ -46,7 +46,7 @@ public class SearchResult implements Serializable {
             return null;
         }
         DateTime dateTime = new DateTime(ms);
-        if (dateTime.getYear()<2000) {   //arbitrarily picked 2000 as cutoff point.   we don't want "1970" type dates sneaking through.
+        if (dateTime.getYear()<2000 || dateTime.getYear()>2050) {   //arbitrarily picked 2000 as cutoff point.   we don't want "1970" type dates sneaking through.
             return null;    // it's a number but not a valid year...
         }
         return dateTime;

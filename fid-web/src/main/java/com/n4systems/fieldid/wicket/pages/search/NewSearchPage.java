@@ -4,7 +4,9 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -25,6 +27,7 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -108,13 +111,16 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
+        final boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
+        final boolean hasEditEvent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
+
         assetListView = new PageableListView<SearchResult>("results", new PropertyModel<List<? extends SearchResult>>(this, "results"), 10) {
             @Override
             protected void populateItem(ListItem<SearchResult> item) {
-                SearchResult result = item.getModelObject();
+                final SearchResult result = item.getModelObject();
 
                 BookmarkablePageLink summaryLink;
-                Long assetId = result.getLong(AssetIndexField.ID.getField());
+                final Long assetId = result.getLong(AssetIndexField.ID.getField());
                 item.add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetId)));
                 summaryLink.add(new Label("summary", getIdentifier(result)));
 
@@ -124,8 +130,16 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
                 item.add(new Check<SearchResult>("check", item.getModel()));
 
-                // TODO DD : do immediate ajax call to find images in list.  get url via s3, change <img src> and update style accordingly.
+                item.add(new Link("viewLink") {
+                    @Override public void onClick() {
+                        setResponsePage(new AssetSummaryPage(new PageParameters().add("uniqueID",assetId)));
+                    }
+                });
 
+                item.add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + assetId, new AttributeAppender("class", "mattButtonMiddle")).setVisible(hasCreateEvent));
+                item.add(new NonWicketLink("mergeLink", "assetMergeAdd.action?uniqueID=" + assetId, new AttributeAppender("class", "mattButtonRight")).setVisible(hasEditEvent));
+
+                // TODO DD : do immediate ajax call to find images in list.  get url via s3, change <img src> and update style accordingly.
 
                 final String imageUrl;
                 imageUrl = "";
@@ -144,11 +158,9 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             }
         });
         listViewContainer.add(resultForm);
-//
-//
+
         actions=new WebMarkupContainer("actions"){
-            @Override
-            public boolean isVisible() {
+            @Override public boolean isVisible() {
                 return (results != null && !results.isEmpty());
             }
         };
