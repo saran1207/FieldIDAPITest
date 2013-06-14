@@ -1,15 +1,11 @@
 package com.n4systems.fieldid.wicket.pages.search;
 
-import com.n4systems.api.conversion.ConversionException;
-import com.n4systems.api.conversion.asset.AssetToViewConverter;
-import com.n4systems.api.model.AssetView;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
-import com.n4systems.fieldid.wicket.components.asset.summary.AssetImagePanel;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
-import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
@@ -21,14 +17,14 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteriaContainer;
-import com.n4systems.reporting.PathHandler;
+import com.n4systems.services.search.AssetIndexField;
+import com.n4systems.services.search.FullTextSearchService;
+import com.n4systems.services.search.SearchResult;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -38,7 +34,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -49,29 +44,27 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 public class NewSearchPage extends FieldIDFrontEndPage {
 
     @SpringBean
-    protected AssetService assetService;
+    protected FullTextSearchService fullTextSearchService;
 
     @SpringBean
     private S3Service s3Service;
 
     protected IModel<Asset> assetModel;
-    private String searchText = "Type search here.";
-    private List<Asset> assets = null;
+    private String searchText = "comments:asset";  // TODO DD: for debugging only, should be blank (or cookie based?)
     private PageableListView assetListView = null;
     private WebMarkupContainer listViewContainer = null;
     private IModel assetList = null;
     private TextField<String> searchCriteria = null;
-    private FeedbackPanel feedbackPanel = null;
+    private FIDFeedbackPanel feedbackPanel = null;
     private WebMarkupContainer actions;
     private Link printLink;
     private Link exportLink;
@@ -81,11 +74,11 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     private Model<AssetSearchCriteria> model = null;
     private AssetSearchCriteria assetSearchCriteria = null;
     private List<Asset> selectedAssets;
-    String link = "";
     SubmitLink massEventsLink;
     AssetSearchCriteria assetSearchCriteria1 = null;
     final  SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yy");
-
+    private List<SearchResult> results = Lists.newArrayList();
+    private Form resultForm;
 
 
     public NewSearchPage(PageParameters params) {
@@ -94,30 +87,6 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
     public NewSearchPage() {
         this(new PageParameters());
-       addStuff();
-    }
-
-    private void addStuff() {
-
-     /* TODO - look at using detachable model */
-     //get the list of items to display from provider (database, etc)
-     //in the form of a LoadableDetachableModel
-//       assetList =  new LoadableDetachableModel()
-//        {
-//            protected Object load() {
-//                return getAssetList();
-//            }
-//        };
-
-//        assetListView = new ListView<Asset>("assets", assetList) {
-//            @Override
-//            protected void populateItem(ListItem<Asset> item) {
-//                Asset asset = item.getModelObject();
-//                item.add(new Label("identifier", asset.getIdentifier()));
-//                item.add(new Label("name", asset.getRfidNumber()));
-//
-//            }
-//        };
 
         add(new NewSearchForm("NewSearchForm"));
 
@@ -125,123 +94,62 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         listViewContainer.setOutputMarkupId(true);
         add(listViewContainer);
 
+        add(resultForm = new Form("resultForm"));
+
         final CheckGroup<Asset> assetCheckGroup = new CheckGroup<Asset>("selected_assets", new ArrayList<Asset>());
-
-        Form resultForm = new Form("resultForm"){
-            @Override
-            protected void onSubmit() {
-                info("Languages : " + assetCheckGroup.getDefaultModelObjectAsString());
-                AssetSearchCriteria assetSearchCriteria1 = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
-               if (link.equals("update")) {
-                setResponsePage(new MassUpdateAssetsPage(new Model(assetSearchCriteria1)));
-               } else if (link.equals("schedule")) {
-                    setResponsePage(new MassSchedulePage(new Model(assetSearchCriteria1)));
-               }
-            }
-        };
-
-        add(resultForm);
         resultForm.add(assetCheckGroup);
-        assetCheckGroup.add(new CheckGroupSelector("groupselector"){
-            @Override
-            public boolean isVisible() {
-                return (assets != null && !assets.isEmpty());
+        assetCheckGroup.add(new CheckGroupSelector("groupselector") {
+            @Override public boolean isVisible() {
+                return (results != null && !results.isEmpty());
             }
-
         });
 
-        assetListView = new PageableListView<Asset>("assets", new PropertyModel<List<? extends Asset>>(NewSearchPage.this, "assets"), 10) {
+        feedbackPanel = new FIDFeedbackPanel("feedback");
+        feedbackPanel.setOutputMarkupId(true);
+        add(feedbackPanel);
+
+        assetListView = new PageableListView<SearchResult>("results", new PropertyModel<List<? extends SearchResult>>(this, "results"), 10) {
             @Override
-            protected void populateItem(ListItem<Asset> item) {
-                Asset asset = item.getModelObject();
-                AssetToViewConverter assetToViewConverter = new AssetToViewConverter();
-                AssetView assetView = null;
-                try {
-                    assetView = assetToViewConverter.toView(asset);
-                } catch (ConversionException e) {
-                    e.printStackTrace();
-                }
+            protected void populateItem(ListItem<SearchResult> item) {
+                SearchResult result = item.getModelObject();
 
                 BookmarkablePageLink summaryLink;
-                item.add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
+                Long assetId = result.getLong(AssetIndexField.ID.getField());
+                item.add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetId)));
+                summaryLink.add(new Label("summary", getIdentifier(result)));
 
-                item.add(new Check<Asset>("check", item.getModel()));
-                summaryLink.add(new Label("assetIdentifier", assetView.getIdentifier()));
+                item.add(new Label("fixedAttributes", getFixedAttributes(result)));
 
-                item.add(new Label("assetType", (asset.getType()==null) ? "":asset.getType().getDisplayName()));
-                item.add(new Label("assetDescription", asset.getDescription()));
-                item.add(new Label("assetStatus", assetView.getStatus()));
-                item.add(new Label("customer", assetView.getCustomer()));
-                item.add(new Label("location", assetView.getLocation()));
+                item.add(new Label("customAttributes", getCustomAttributes(result)));
 
-//                item.add(new Label("dateIdentified", assetView.getIdentified().toString()));
-                item.add(new Label("dateIdentified", (assetView.getIdentified()==null) ? "": sf.format(assetView.getIdentified())));
+                item.add(new Check<SearchResult>("check", item.getModel()));
 
-                Map<String, String> attrs = assetView.getAttributes();
-                String attributes = attrs.toString();
-                item.add(new Label("attributes", attributes));
-
-                item.add(new Label("orderNumber", assetView.getPurchaseOrder()));
-        //      item.add(new Label("orderNumber",(asset.getOrderNumber()==null) ? "":asset.getOrderNumber()));
-                item.add(new Label("rfidNumber",  assetView.getRfidNumber()));
+                // TODO DD : do immediate ajax call to find images in list.  get url via s3, change <img src> and update style accordingly.
 
 
-                BaseOrg owner = asset.getOwner();
-                item.add(new Label("ownerInfo", getOwnerLabel(owner, asset.getAdvancedLocation())));
-
-
-
-//                add image
-                boolean imageExists;
                 final String imageUrl;
-                if(asset.getImageName() == null) {
-                    imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("/file/downloadAssetTypeImage.action?uniqueID=" + asset.getType().getId());
-                    if(asset.getType().getImageName() != null)
-                        imageExists = new File(PathHandler.getAssetTypeImageFile(asset.getType()), asset.getType().getImageName()).exists();
-                    else
-                        imageExists = false;
-                } else {
-                    imageExists = s3Service.assetProfileImageExists(asset.getId(), asset.getImageName());
-                    imageUrl = s3Service.getAssetProfileImageThumbnailURL(asset.getId(), asset.getImageName()).toString();
-                }
-
-
-                final ModalWindow modalWindow = new FIDModalWindow("assetImageModalWindow");
-                modalWindow.setInitialHeight(500);
-                modalWindow.setInitialWidth(540);
-                item.add(modalWindow);
-
+                imageUrl = "";
                 ExternalImage assetImage;
                 item.add(assetImage = new ExternalImage("assetImage", imageUrl));
-                assetImage.setVisible(imageExists);
-                assetImage.add(new AjaxEventBehavior("onclick") {
-                    @Override
-                    protected void onEvent(AjaxRequestTarget target) {
-                        modalWindow.setContent(new AssetImagePanel(modalWindow.getContentId(), Model.of(imageUrl)));
-                        modalWindow.show(target);
-                    }
-                });
+                assetImage.setVisible(false);
             }
         };
         assetListView.setReuseItems(true);
         assetCheckGroup.add(assetListView);
-
+//
         resultForm.add(new PagingNavigator("navigator", assetListView){
             @Override
             public boolean isVisible() {
-                return (assets != null && !assets.isEmpty());
+                return (results!= null && !results.isEmpty());
             }
         });
         listViewContainer.add(resultForm);
-
-        feedbackPanel = new FeedbackPanel("feedback");
-        feedbackPanel.setOutputMarkupId(true);
-        add(feedbackPanel);
-
+//
+//
         actions=new WebMarkupContainer("actions"){
             @Override
             public boolean isVisible() {
-                return (assets != null && !assets.isEmpty());
+                return (results != null && !results.isEmpty());
             }
         };
 
@@ -265,20 +173,52 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
         actions.add(massUpdateLink = new SubmitLink("massUpdateLink") {
             @Override public void onSubmit() {
-                link = "update";
-//                setResponsePage(new MassUpdateAssetsPage(model));
+                AssetSearchCriteria assetSearchCriteria1 = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
+                setResponsePage(new MassUpdateAssetsPage(new Model(assetSearchCriteria1)));
             }
         });
 
         actions.add(massScheduleLink = new SubmitLink("massScheduleLink") {
             @Override public void onSubmit() {
-                link = "schedule";
-//                setResponsePage(new MassSchedulePage(model));
+                AssetSearchCriteria assetSearchCriteria1 = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
+                setResponsePage(new MassSchedulePage(new Model(assetSearchCriteria1)));
             }
         });
 
         resultForm.add(actions);
+    }
 
+    private String getCustomAttributes(SearchResult result) {
+        // TODO : result should use a tree map sorted by priority.
+        List<String> fields = Lists.newArrayList();
+        for (String field:result.getFields()) {
+            AssetIndexField f = AssetIndexField.fromString(field);
+            if (f==null) {
+                fields.add(result.getKeyValueString(field));
+            }
+        }
+        return Joiner.on(" | ").join(fields.toArray(new String[fields.size()]));
+    }
+
+    private String getFixedAttributes(SearchResult result) {
+        // TODO : add AssetIndexField.getFixedFieldsToDisplay() method...
+        return Joiner.on(" / ").skipNulls().join(
+                result.get(AssetIndexField.LOCATION.getField()),
+                result.get(AssetIndexField.TYPE.getField()),
+                result.get(AssetIndexField.IDENTIFIED.getField()),
+                result.get(AssetIndexField.RFID.getField()),
+                result.get(AssetIndexField.PURCHASE_ORDER.getField()),
+                result.get(AssetIndexField.OWNER.getField()),
+                result.get(AssetIndexField.CUSTOMER.getField()),
+                result.get(AssetIndexField.DIVISION.getField())
+        );
+    }
+
+    private String getIdentifier(SearchResult result) {
+        String type = result.get(AssetIndexField.TYPE.getField());
+        String id = result.get(AssetIndexField.IDENTIFIER.getField());
+        String status = result.get(AssetIndexField.STATUS.getField());
+        return Joiner.on(" / ").skipNulls().join(type, id, status);
     }
 
     private AssetSearchCriteria transformToAssetSearchCriteria(Collection<Asset> modelObject) {
@@ -307,22 +247,13 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             searchCriteria = new TextField<String>("searchCriteria",new PropertyModel<String>(NewSearchPage.this, "searchText"));
             searchCriteria.setRequired(true);
             add(searchCriteria);
-//            TextField<String> searchCriteria = new TextField<String>("searchCriteria",new PropertyModel<String>(NewSearchPage.this, "searchCriteria"));
 
             add(new AjaxSubmitLink("searchButtonId") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    // do stuff...
-//                    assets = NewSearchPage.getDummyAssets();
-
-                  assets = assetService.getBogusAssets();
-                  target.add(listViewContainer);
-                  target.add(NewSearchPage.this.feedbackPanel);
-
-//                  user entered search criteria
-//                  System.out.println("" + searchCriteria.getModelObject());
-
-
+                    results = fullTextSearchService.search(searchText).getResults();
+                    target.add(listViewContainer);
+                    target.add(NewSearchPage.this.feedbackPanel);
                 }
 
                 @Override
@@ -333,31 +264,15 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         }
     }
 
-    private List<Asset> getAssetList() {
-        List assets = assetService.getBogusAssets();
-        return assets;
-    }
-
-    public static List<Asset> getDummyAssets() {
-        List assets = new ArrayList();
-        Asset asset1 = new Asset();
-        asset1.setRfidNumber("123");
-        assets.add(asset1);
-        return assets;
-    }
-
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-//        response.renderCSSReference("style/newCss/asset/asset.css");
         response.renderCSSReference("style/newCss/asset/actions-menu.css");
-//        response.renderCSSReference("style/newCss/asset/header.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
         response.renderCSSReference("style/pageStyles/searchResults.css");
 
         response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");
-
     }
 
     private String getOwnerLabel(BaseOrg owner, Location advancedLocation) {
@@ -368,69 +283,6 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             stringBuilder.append(", ").append(advancedLocation.getFullName());
         }
         return stringBuilder.toString();
-    }
-
-    public static String markSearchResults(String searchCriteria, HashMap<String,String> fdoc) {
-
-     // loop through fdoc
-       // Pattern pattern = Pattern.compile("/\\{\\w+\\}/");
-        Pattern pattern = Pattern.compile(searchCriteria);
-
-        for (Map.Entry<String, String> entry : fdoc.entrySet())
-        {
-            // if matches search criteria add span around value
-            //System.out.println(entry.getKey() + "/" + entry.getValue());
-
-            Matcher matcher = pattern.matcher(entry.getValue());
-            if (matcher.find()) {
-                System.out.println(matcher.group(0) + " " + entry.getValue()); //prints /{item}/
-                entry.setValue("<span>" + entry.getValue() + "</span>");
-            //    return matcher.group(0);
-            } else {
-                System.out.println("Match not found");
-            }
-
-
-
-        }
-
-        // mark matching search with span tage - return string of all Map.toString
-
-        return "";
-
-
-    }
-
-
-    class FDocument {
-
-        private HashMap<String,String> fields;
-
-        public FDocument(HashMap<String,String> fields) {
-            this.fields = fields;
-        }
-
-        public HashMap<String,String> getFields() {
-            return fields;
-        }
-
-
-    }
-
-    public static void main(String[] args) {
-
-      HashMap<String,String> fdoc = new HashMap<String, String>();
-        fdoc.put("colour","blue");
-        fdoc.put("size","large");
-        fdoc.put("shape","round");
-        fdoc.put("song", "blue skies");
-        fdoc.put("song1", "overhead light-blue skies");
-
-        String result = NewSearchPage.markSearchResults("blue", fdoc);
-
-        System.out.println("Result is " + result);
-        System.out.println("Map is " + fdoc.toString());
-
     }
 
 
