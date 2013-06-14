@@ -32,6 +32,10 @@ var autoCompleter = (function() {
         });
         auto.bind("autocompleteclose", function(event, ui) {
             $("#"+id).focus();
+            var container = $('#'+id).closest('.auto-complete-container');
+            if (typeof(container.attr('onchange')) == 'string') {
+                eval(container.attr('onchange'));
+            }
         });
         if (containers) {
             $.each(containers,function(index,selector) {

@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.FormComponentPanelUpdatingBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
@@ -150,6 +151,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             rfidContainer.add(new TextField<String>("rfidNumber", ProxyModel.of(assetModel, on(Asset.class).getRfidNumber())).add(new AjaxFormComponentUpdatingBehavior("onblur") {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
+                    autoSchedule(assetModel);
                     target.add(rfidContainer);
                 }
             }));
@@ -160,7 +162,16 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             final GroupedUserPicker assignedToSelect = new GroupedUserPicker("assignedToSelect", assignedUserModel, new GroupedVisibleUsersModel());
             add(assignedToSelect);
 
-            add(new AutoCompleteOrgPicker("ownerPicker", ProxyModel.of(assetModel, on(Asset.class).getOwner())));
+            AutoCompleteOrgPicker ownerPicker = new AutoCompleteOrgPicker("ownerPicker", ProxyModel.of(assetModel, on(Asset.class).getOwner()));
+            add(ownerPicker);
+
+            ownerPicker.add(new FormComponentPanelUpdatingBehavior("onchange") {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    autoSchedule(assetModel);
+                    target.add(eventSchedulesPanel);
+                }
+            });
 
             ModalLocationPicker locationPicker = new ModalLocationPicker("locationPicker", ProxyModel.of(assetModel, on(Asset.class).getAdvancedLocation()));
             setChildFormsToMultipart(locationPicker);

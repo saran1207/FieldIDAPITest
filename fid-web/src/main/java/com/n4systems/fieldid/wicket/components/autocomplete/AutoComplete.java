@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.WicketAjaxReference;
 import org.apache.wicket.behavior.AbstractAjaxBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WicketEventReference;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
@@ -65,6 +66,8 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         super(id, model);
         setOutputMarkupPlaceholderTag(true);
         setOutputMarkupId(true);
+        // This css class is used to find this component to trigger any onchange behavior, from the autoComplete.js
+        add(new AttributeAppender("class", Model.of("auto-complete-container"), " "));
 
         autocompleteHidden = new HiddenField<String>("autocompleteHidden", new Model<String>(NOT_ENTERED) {
             @Override
