@@ -71,7 +71,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
         Analyzer analyzer = null;
         Directory dir = null;
         IndexReader reader = null;
-        SearchResults results = null;
+        SearchResults results = new SearchResults();
 
         try {
             analyzer = new StandardAnalyzer(Version.LUCENE_43);

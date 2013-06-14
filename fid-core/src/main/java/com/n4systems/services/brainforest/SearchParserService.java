@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.TimeUnit;
 
 
 public class SearchParserService extends FieldIdService {
@@ -92,7 +93,8 @@ public class SearchParserService extends FieldIdService {
             }
         } else if (value.isDate()) {
             DateTime date = value.getDate();
-            return NumericRangeQuery.newLongRange(field, date.toDate().getTime(), date.plusDays(1).toDate().getTime(), true, false);
+            NumberRangeInfo rangeInfo = new NumberRangeInfo(date.toDate().getTime(), operator).withGranularity(TimeUnit.DAYS.toMillis(1));
+            return NumericRangeQuery.newLongRange(field, rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
         } else if (value.isString()) {
             return getPhraseQueryForTerm(field, value);
         }
@@ -125,9 +127,9 @@ public class SearchParserService extends FieldIdService {
             double to = value.getTo().getNumber().doubleValue();
             return NumericRangeQuery.newDoubleRange(field, from, to, true, true);
         } else if (value.isDate()) {
-            double from = (double) value.getFrom().getDate().toDate().getTime();
-            double to = (double) value.getTo().getDate().toDate().getTime();
-            return NumericRangeQuery.newDoubleRange(field, from, to, true, false);
+            long from = value.getFrom().getDate().toDate().getTime();
+            long to = value.getTo().getDate().toDate().getTime();
+            return NumericRangeQuery.newLongRange(field, from, to, true, false);
         } else if (value.isString()) {
             return new TermRangeQuery(field, new BytesRef(value.getFrom().getString()), new BytesRef(value.getTo().getString()), true, true);
         }
@@ -144,13 +146,14 @@ public class SearchParserService extends FieldIdService {
         }
     }
 
-    class NumberRangeInfo<T> {
+    class NumberRangeInfo {
         boolean includeMin = false;
         boolean includeMax = false;
         Number min=null;
         Number max=null;
         BooleanClause.Occur occur = BooleanClause.Occur.MUST;
         Class<? extends Number> type;
+        Number granularity=0.0;
 
         public NumberRangeInfo(Number number, QueryTerm.Operator operator) {
             type = number.getClass();
@@ -173,7 +176,8 @@ public class SearchParserService extends FieldIdService {
                     includeMax = true;
                     break;
                 case EQ:
-                    min = max = value;
+                    min = value;
+                    max = new Double(min.doubleValue() + granularity.doubleValue());
                     includeMin = includeMax = true;
                     break;
                 case NE:
@@ -184,20 +188,24 @@ public class SearchParserService extends FieldIdService {
             }
         }
 
-        public long getMinLong() {
+        public NumberRangeInfo withGranularity(Number granularity){
+            this.granularity = granularity;
+            return this;
+        }
+
+        public Long getMinLong() {
             return min == null ? null : min.longValue();
         }
-        public long getMaxLong() {
-            return min == null ? null : max.longValue();
+        public Long getMaxLong() {
+            return max == null ? null : max.longValue();
         }
-        public double getMinDouble() {
-            return min == null ? null : max.doubleValue();
+        public Double getMinDouble() {
+            return min == null ? null : min.doubleValue();
         }
-        public double getMaxDouble() {
-            return min == null ? null : max.doubleValue();
+        public Double getMaxDouble() {
+            return max == null ? null : max.doubleValue();
         }
     }
-
 
 
 }
