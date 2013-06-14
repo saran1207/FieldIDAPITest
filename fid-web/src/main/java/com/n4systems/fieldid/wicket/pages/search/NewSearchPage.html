@@ -84,7 +84,7 @@
     <script>
         $(function() {
 
-            $(".search-results input[type=checkbox]").click(function() {
+            $(".search-results input[type=checkbox]").live("click", function() {
 
                 // Highlights selected result(s)
                 $(this).parent().next().toggleClass("selected");
