@@ -27,18 +27,16 @@ em {
 	text-decoration: none;
 }
 h2 {
-	font-size: 18px;
 	padding: 0;
-	line-height: 1;
 	color: #3366cc;
 	font-weight: normal;
 }
 	h2 a {
 		text-decoration: none;
+		font-size: 18px;
 	}
 	h2 a span {
 		color: #3366cc;
-		font-size: 18px;
 	}
 
 
@@ -81,37 +79,39 @@ h2 {
 	position: absolute;
 	top: 0;
 	right: 0;
+	display: none;
 }
+	.actions.show {
+		display: block
+	}
 .actions ul {
 	width: auto;
 }
 .menu-items {
 	left: 0;
 }
-	/* overrides */
-	.actions .mattButton {
-		width: 100px;
-	}
+.mattButton img {
+	margin-left: 10px;
+	vertical-align: middle;
+}
 
 
 /* SEARCH RESULTS LIST
 -----------------------------------------*/
-.search-results {
-	clear: both;
-	margin-top: 10px;
-	overflow: hidden;
-}
-
-.select-all {
+.select-options {
 	height: 40px;
 }
-.select-all input[type=checkbox] {
-	margin-right: 20px;
+.select-options input[type=checkbox] {
+	margin: 14px 24px 0 0;
 }
-.select-all p {
+.select-options label {
+	font-size: 14px;
+}
+.select-options p {
 	display: inline;
 	font-style: italic;
 	margin-left: 10px;
+	color: #8F8F8F;
 }
 
 .asset-item .select {
@@ -122,7 +122,7 @@ h2 {
 .asset-item .details {
 	border: 2px solid #fff;
 	border-bottom: 0;
-	padding: 14px 10px;
+	padding: 14px;
 	background: #f8f8f8;
 	width: 965px;
 	float: left;
@@ -147,19 +147,13 @@ h2 {
 		display: block;
 	}
 
-.asset-item ul {
-	margin-top: 10px;
-}	
-	.asset-item ul li {
-		display: inline;
-	}
-
 .asset-item .fixed-attributes {
 	font-size: 14px;
+	margin-bottom: 20px;
 }
 .asset-item .custom-attributes {
-	font-size: 12px;
-	font-family: Helvetica, Arial, "Lucida Grande", sans-serif; 
+	color: #666;
+	font-size: 13px; 
 }
 
 .btn-group {
@@ -172,12 +166,21 @@ h2 {
 .navigator {
 	float: right;
 	margin-top: 10px;
+	font-family: Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 .navigator a {
-	border: 1px solid #D0DAFA;
+	border: 1px solid #cecece;
 	text-decoration: none;
 	padding: 5px 8px;
 	display: inline-block;
 }
-
+	.navigator a span {
+		color: #3366cc;
+	}
+.navigator em {
+	padding: 5px 8px;
+}
+#pageFooter {
+	padding-bottom: 100px;
+}
 

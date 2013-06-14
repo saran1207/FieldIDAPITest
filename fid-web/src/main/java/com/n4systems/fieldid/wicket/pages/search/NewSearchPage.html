@@ -43,8 +43,8 @@
             <div class="search-results">
                 <div wicket:id="selected_assets">
 
-                    <!-- select/unselect option -->
-                    <div class="select-all">
+                    <!-- select options -->
+                    <div class="select-options">
                         <input type="checkbox" wicket:id="groupselector"> 
                         <label wicket:for="groupselector">Select all</label>
                         <p>select assets to perform mass actions</p>
@@ -52,7 +52,6 @@
 
                     <!-- individual results item -->
                     <div wicket:id="results" class="asset-item">
-
                         <!-- checkbox -->
                         <div class="select"><input type="checkbox" wicket:id="check"/></div>
 
@@ -62,37 +61,40 @@
 
                             <img class="assetImage" wicket:id="assetImage" alt=""/>
                             <!--<div wicket:id="assetImageModalWindow" class="assetImageModalWindow"/>-->
-
-                            <ul class="fixed-attributes"><!-- change to a paragraph -->
-                                <li wicket:id="fixedAttributes"></li>
-                            </ul>
-
-                            <ul class="custom-attributes"><!-- change to a paragraph -->
-                                <li wicket:id="customAttributes"></li>
-                            </ul>  
-
+                            
+                            <p wicket:id="fixedAttributes" class="fixed-attributes"></p>
+                            <p wicket:id="customAttributes" class="custom-attributes"></p>
+                            
                             <div class="btn-group">
                                 <a wicket:id="viewLink" href="#" class="mattButtonLeft">View</a>
                                 <a wicket:id="startEventLink" href="#" class="mattButtonMiddle">Start Event</a>
                                 <a wicket:id="mergeLink" href="#" class="mattButtonRight">Merge</a>
                             </div>
                         </div>
-                    </div><!-- /end .assets -->
+                    </div><!-- /.asset-item -->
                 </div>
-            </div><!-- /end .search-results -->
+            </div><!-- /.search-results -->
 
             <!-- pagination -->
             <div wicket:id="navigator" class="navigator"></div>
 
         </form>
-    </div><!-- /end .search-container -->
+    </div><!-- /.search-container -->
 
     <script>
         $(function() {
 
-            // adds class to selected search result
-            $(".select input[type=checkbox]").click(function() {
+            $(".search-results input[type=checkbox]").click(function() {
+
+                // Highlights selected result(s)
                 $(this).parent().next().toggleClass("selected");
+
+                // Show/Hide mass actions button
+                if ($(".search-results input[type=checkbox]").is(':checked')) {
+                    $(".actions").addClass("show");
+                } else {
+                    $(".actions").removeClass("show");
+                }
             });
         });
     </script>
