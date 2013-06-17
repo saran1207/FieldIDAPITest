@@ -14,6 +14,7 @@ import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
+import com.n4systems.fieldid.wicket.pages.search.NewSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
@@ -104,7 +105,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         addCssContainers();
 
         add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class));
+
         add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
+        add(new BookmarkablePageLink<Void>("newAssetSearchLink", NewSearchPage.class));
+
         BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
         procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
         add(procedureLink);

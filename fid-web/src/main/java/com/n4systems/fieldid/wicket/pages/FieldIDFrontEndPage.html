@@ -85,14 +85,23 @@
 									<li><a wicket:id="subMenuIdentifyLink"><wicket:message key="nav.single_add"/></a></li>
 									<li><a href="/fieldid/assetMultiAdd.action"><wicket:message key="nav.multi_add"/></a></li>
 									<li><a href="/fieldid/assetImportExport.action"><wicket:message key="nav.import"/></a></li>
+
+                                    <li><a href="/fieldid/assetImportExport.action"><wicket:message key="nav.import"/></a></li>
+
 								</ul>
 							</li>
+
 				            <li wicket:id="startEventLinkContainer">
 				                <a href="/fieldid/startEvent.action" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
 				            </li>
 				            <li>
-				                <a wicket:id="assetSearchLink" class="speedLink textLink" id="menuAssets"><wicket:message key="speed.search"/></a>
+				                <a wicket:id="assetSearchLink" class="speedLink textLink" id="menuAssets"><wicket:message key="speed.search"/><img src="/fieldid/images/down-arrow.png" /></a>
+
+                                <ul class="sub_menu">
+                                    <li><a wicket:id="newAssetSearchLink"><wicket:message key="nav.new_search"/></a></li>
+                                </ul>
 				            </li>
+
                             <li>
                                 <a wicket:id="reportingLink" class="speedLink textLink" id="menuReport"><wicket:message key="speed.reporting"/></a>
                             </li>
