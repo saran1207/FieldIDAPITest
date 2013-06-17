@@ -377,6 +377,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
 
         for (MultipleAssetConfiguration.AssetConfiguration assetConfig : assetConfigs) {
             assetToCreate.reset();
+            cleanseNonStaticInfoOptionIds(enteredInfoOptions);
             assetToCreate.getInfoOptions().clear();
             assetToCreate.getInfoOptions().addAll(enteredInfoOptions);
             assetToCreate.setIdentifier(assetConfig.getIdentifier());
@@ -387,6 +388,14 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         }
 
         return createdAssetIds;
+    }
+
+    private void cleanseNonStaticInfoOptionIds(List<InfoOptionBean> enteredInfoOptions) {
+        for (InfoOptionBean enteredInfoOption : enteredInfoOptions) {
+            if (!enteredInfoOption.isStaticData()) {
+                enteredInfoOption.setUniqueID(null);
+            }
+        }
     }
 
     private Component createGenerateLink(final IModel<String> identifierModel, final TextField<String> identifierField, final IModel<AssetType> assetTypeModel) {

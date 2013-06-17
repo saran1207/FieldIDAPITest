@@ -1,20 +1,10 @@
 package com.n4systems.ejb.impl;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.Query;
-
-import com.n4systems.model.AssetType;
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.ejb.AutoAttributeManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.CopiedToService;
+import com.n4systems.fieldid.service.asset.AutoAttributeService;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
 import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.Tenant;
@@ -22,6 +12,16 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.tools.Page;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.persistence.QueryBuilder;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 public class AutoAttributeManagerImpl implements AutoAttributeManager {
@@ -53,12 +53,14 @@ public class AutoAttributeManagerImpl implements AutoAttributeManager {
 
 	}
 
+    @CopiedToService(AutoAttributeService.class)
 	public AutoAttributeDefinition findTemplateToApply(AssetType assetType, Collection<InfoOptionBean> selectedInfoOptions) {
 		// make sure the asset type is attached.
 		AssetType pt = em.find(AssetType.class, assetType.getId());
 		return findTemplateToApply(pt.getAutoAttributeCriteria(), selectedInfoOptions);
 	}
 
+    @CopiedToService(AutoAttributeService.class)
 	public AutoAttributeDefinition findTemplateToApply(AutoAttributeCriteria criteria, Collection<InfoOptionBean> selectedInfoOptions) {
 		if (criteria == null || criteria.getInputs().size() > selectedInfoOptions.size()) {
 			return null; // no way to find a template. if the number of

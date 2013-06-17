@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.identify.components.attributes;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -14,7 +16,6 @@ public class SelectAttributeEditor extends FormComponentPanel<InfoOptionBean> {
 
     private InfoOptionBean infoOption;
 
-
     public SelectAttributeEditor(String id, IModel<InfoOptionBean> infoOptionModel) {
         super(id, infoOptionModel);
         this.infoOption = infoOptionModel.getObject();
@@ -26,6 +27,13 @@ public class SelectAttributeEditor extends FormComponentPanel<InfoOptionBean> {
 
         select.setRequired(infoOption.getInfoField().isRequired());
         add(select);
+
+        select.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                onChange(target);
+            }
+        });
 
         if (infoOption.getName() == null) {
             infoOption = null;
@@ -48,4 +56,8 @@ public class SelectAttributeEditor extends FormComponentPanel<InfoOptionBean> {
     protected void convertInput() {
         setConvertedInput(infoOption);
     }
+
+    protected void onChange(AjaxRequestTarget target) {
+    }
+
 }

@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.identify.components.attributes;
 
 import com.n4systems.fieldid.wicket.components.ComboBox;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -21,6 +23,15 @@ public class ComboBoxAttributeEditor extends FormComponentPanel<InfoOptionBean> 
 
         IModel<ArrayList<String>> choices = new Model<ArrayList<String>>(prepareChoices(optionModel.getObject().getInfoField()));
         ComboBox comboBox = new ComboBox("combo", new PropertyModel<String>(this, "selectedItemText"), choices);
+        comboBox.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                // We have to do a little processing here to make sure the model's updated for auto attribute checking
+                convertInput();
+                updateModel();
+                onChange(target);
+            }
+        });
 
         add(comboBox);
     }
@@ -55,5 +66,9 @@ public class ComboBoxAttributeEditor extends FormComponentPanel<InfoOptionBean> 
             newOption.setStaticData(false);
             setConvertedInput(newOption);
         }
+    }
+
+    protected void onChange(AjaxRequestTarget target) {
+
     }
 }

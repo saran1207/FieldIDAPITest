@@ -7,12 +7,14 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.AssetCodeMapping;
 
 public class AssetCodeMappingService extends FieldIdPersistenceService {
 
     private Logger logger = Logger.getLogger(AssetCodeMappingService.class);
 
+    @Transactional
     public AssetCodeMapping getAssetCodeByAssetCodeAndTenant(String assetCode) {
         QueryBuilder<AssetCodeMapping> query = createTenantSecurityBuilder(AssetCodeMapping.class);
         query.addSimpleWhere("assetCode", assetCode);

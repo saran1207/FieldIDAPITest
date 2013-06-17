@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.identify.components;
 
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.asset.AutoAttributeService;
 import com.n4systems.fieldid.wicket.components.measure.UnitOfMeasureEditor;
 import com.n4systems.fieldid.wicket.pages.identify.components.attributes.ComboBoxAttributeEditor;
 import com.n4systems.fieldid.wicket.pages.identify.components.attributes.DateAttributeEditor;
@@ -8,7 +9,9 @@ import com.n4systems.fieldid.wicket.pages.identify.components.attributes.SelectA
 import com.n4systems.fieldid.wicket.pages.identify.components.attributes.TextAttributeEditor;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.AutoAttributeDefinition;
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -30,8 +33,9 @@ import static ch.lambdaj.Lambda.on;
 
 public class AttributesEditPanel extends Panel {
 
-    @SpringBean
-    private AssetService assetService;
+    @SpringBean private AssetService assetService;
+    @SpringBean private AutoAttributeService autoAttributeService;
+
     private IModel<AssetType> assetTypeModel;
     List<InfoOptionBean> infoOptions;
 
@@ -44,7 +48,7 @@ public class AttributesEditPanel extends Panel {
 
         add(new ListView<InfoOptionBean>("attributes", new PropertyModel<List<InfoOptionBean>>(this, "infoOptions")) {
             @Override
-            protected void populateItem(ListItem<InfoOptionBean> item) {
+            protected void populateItem(final ListItem<InfoOptionBean> item) {
                 InfoOptionBean infoOption = item.getModelObject();
                 PropertyModel<InfoFieldBean> infoFieldModel = ProxyModel.of(item.getModel(), on(InfoOptionBean.class).getInfoField());
                 item.add(new Label("attributeName", ProxyModel.of(infoFieldModel, on(InfoFieldBean.class).getName())));
@@ -52,13 +56,25 @@ public class AttributesEditPanel extends Panel {
                 InfoFieldBean.InfoFieldType fieldType = infoOption.getInfoField().getType();
                 switch (fieldType) {
                     case ComboBox:
-                        item.add(new ComboBoxAttributeEditor("attributeEditor", item.getModel()));
+                        item.add(new ComboBoxAttributeEditor("attributeEditor", item.getModel()) {
+                            @Override
+                            protected void onChange(AjaxRequestTarget target) {
+                                performAutoAttributeAdjustments();
+                                target.add(AttributesEditPanel.this);
+                            }
+                        });
                         break;
                     case DateField:
                         item.add(new DateAttributeEditor("attributeEditor", item.getModel()));
                         break;
                     case SelectBox:
-                        item.add(new SelectAttributeEditor("attributeEditor", item.getModel()));
+                        item.add(new SelectAttributeEditor("attributeEditor", item.getModel()) {
+                            @Override
+                            protected void onChange(AjaxRequestTarget target) {
+                                performAutoAttributeAdjustments();
+                                target.add(AttributesEditPanel.this);
+                            }
+                        });
                         break;
                     case TextField:
                         if (!infoOption.getInfoField().isUsingUnitOfMeasure()) {
@@ -112,4 +128,46 @@ public class AttributesEditPanel extends Panel {
         }
         return optionsWithBlanksRemoved;
     }
+
+    private void performAutoAttributeAdjustments() {
+        AutoAttributeDefinition template = autoAttributeService.findTemplateToApply(assetTypeModel.getObject(), infoOptions);
+
+        if (template == null) {
+            // No auto attribute template here!!
+            return;
+        }
+
+        List<InfoOptionBean> outputs = template.getOutputs();
+        List<InfoOptionBean> newAttributesList = new ArrayList<InfoOptionBean>(infoOptions.size());
+
+        for (InfoOptionBean infoOption : infoOptions) {
+            boolean foundInOutput = false;
+            for (InfoOptionBean output : outputs) {
+                if (output.getInfoField().getUniqueID().equals(infoOption.getInfoField().getUniqueID())) {
+                    foundInOutput = true;
+                    if (output.isStaticData()) {
+                        newAttributesList.add(output);
+                    } else {
+                        infoOption.setName(output.getName());
+                        newAttributesList.add(infoOption);
+                    }
+                    break;
+                }
+            }
+            if (!foundInOutput) {
+                // If there was no output value for this info field, we just restore whatever value we were currently editing.
+                // UNLESS the Criteria definition had this field as a POTENTIAL output, in which case we want to clear whatever value was entered.
+                if (template.getCriteria().getOutputs().contains(infoOption.getInfoField())) {
+                    InfoOptionBean newDummyOption = new InfoOptionBean();
+                    newDummyOption.setInfoField(infoOption.getInfoField());
+                    newAttributesList.add(newDummyOption);
+                } else {
+                    newAttributesList.add(infoOption);
+                }
+            }
+        }
+
+        infoOptions = newAttributesList;
+    }
+
 }

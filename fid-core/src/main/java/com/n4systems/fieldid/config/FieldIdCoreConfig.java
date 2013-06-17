@@ -550,4 +550,9 @@ public class FieldIdCoreConfig {
         return new AssetCodeMappingService();
     }
 
+    @Bean
+    public AutoAttributeService autoAttributeService() {
+        return new AutoAttributeService();
+    }
+
 }
