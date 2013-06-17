@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.components;
 
-import java.util.List;
-
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.comment.CommentService;
+import com.n4systems.model.commenttemplate.CommentTemplate;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -11,11 +13,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.StringValidator;
 
-import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.comment.CommentService;
-import com.n4systems.model.commenttemplate.CommentTemplate;
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class Comment extends Panel implements IEventBehavior {
@@ -50,6 +50,7 @@ public class Comment extends Panel implements IEventBehavior {
 		
 		text.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			@Override protected void onUpdate(AjaxRequestTarget target) {
+                fireOnChange(target);
 				target.add(text);
 			}			
 		});
@@ -78,6 +79,11 @@ public class Comment extends Panel implements IEventBehavior {
 			behavior.onEvent(target);
 		}
 	}
+
+    public Comment addMaxLengthValidation(int maxLength ) {
+        text.add(new StringValidator.MaximumLengthValidator(maxLength));
+        return this;
+    }
 	
 	@Override
 	public void onEvent(AjaxRequestTarget target) {

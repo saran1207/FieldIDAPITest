@@ -15,7 +15,7 @@ import java.util.*;
 public abstract class AbstractEvent extends EntityWithTenant implements HasFileAttachments {
 	private static final long serialVersionUID = 1L;
 
-	@Column( length=2500 )
+	@Column(length=2500)
 	private String comments;
 	
 	@ManyToOne(fetch=FetchType.EAGER, optional = false)

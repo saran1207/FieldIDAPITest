@@ -1,0 +1,1 @@
+ALTER TABLE eventaudit MODIFY comments varchar(2500);

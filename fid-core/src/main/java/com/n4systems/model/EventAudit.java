@@ -43,7 +43,7 @@ public class EventAudit extends BaseEntity {
     @Column(name="result", nullable = true)
     private String result;
 
-    @Column(name="comments", nullable = true)
+    @Column(name="comments", nullable = true, length = 2500)
     private String comments;
 
     @Column(name = "asset_status", nullable = true)

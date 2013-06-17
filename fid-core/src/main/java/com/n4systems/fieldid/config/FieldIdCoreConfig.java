@@ -540,4 +540,9 @@ public class FieldIdCoreConfig {
 		return new ValueFactory();
 	}
 
+    @Bean
+    public MassUpdateEventService massUpdateEventService() {
+        return new MassUpdateEventService();
+    }
+
 }

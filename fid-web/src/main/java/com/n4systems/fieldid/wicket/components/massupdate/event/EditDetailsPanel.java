@@ -201,6 +201,7 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 					updateCheckbox(commentCheck, target);
 				} 				
 			});
+            comment.addMaxLengthValidation(2500);
 			add(commentCheck);
 			add(comment);
 

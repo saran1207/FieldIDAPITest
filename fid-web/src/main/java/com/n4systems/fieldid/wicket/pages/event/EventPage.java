@@ -222,7 +222,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             add(locationPicker = new LocationPicker("locationPicker", new PropertyModel<Location>(event, "advancedLocation")).withRelativePosition());
             locationPicker.setOwner(new PropertyModel<BaseOrg>(event, "owner").getObject());
 
-            add(new Comment("comments", new PropertyModel<String>(event, "comments")));
+            add(new Comment("comments", new PropertyModel<String>(event, "comments")).addMaxLengthValidation(2500));
 
             DropDownChoice assetStatus = new DropDownChoice<AssetStatus>("assetStatus", new PropertyModel<AssetStatus>(event, "assetStatus"), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>());
             assetStatus.add(new UpdateComponentOnChange());
