@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.search;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.amazon.S3Service;
@@ -23,6 +25,7 @@ import com.n4systems.services.search.SearchResult;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
+import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -225,8 +228,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     }
 
     private String getFixedAttributes(SearchResult result) {
-        // TODO : add AssetIndexField.getFixedFieldsToDisplay() method...
-        return Joiner.on(" / ").skipNulls().join(
+        List<String> fields = Lists.newArrayList(
                 result.get(AssetIndexField.LOCATION.getField()),
                 result.get(AssetIndexField.TYPE.getField()),
                 result.get(AssetIndexField.IDENTIFIED.getField()),
@@ -236,6 +238,11 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 result.get(AssetIndexField.CUSTOMER.getField()),
                 result.get(AssetIndexField.DIVISION.getField())
         );
+        return Joiner.on(" / ").skipNulls().join(Iterables.filter(fields, new Predicate<String>() {
+            @Override public boolean apply(String input) {
+                return input != null && StringUtils.isNotBlank(input);
+            }
+        }));
     }
 
     private String getIdentifier(SearchResult result) {
