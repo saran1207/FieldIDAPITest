@@ -76,14 +76,20 @@
 <table id="extendedFeaturesList">
 	<#list availableExtendedFeatures as feature>
 		<#if feature == "JobSites">
-			<tr><td colspan = "4">&nbsp;</td></td>
+			<tr><td colspan = "4">&nbsp;</td></tr>
 		</#if> 		
 		<tr id="extendedFeatureRow_${feature}">
 			<#assign featureLabel="${feature.label}">
 			<#include "_extendedFeatures.ftl"/>
 		</tr>
-	</#list>	
-	<tr><td colspan = "4">&nbsp;</td></td>	
+	</#list>
+    <tr>
+        <td colspan="2">&nbsp;</td>
+        <td>
+            <a href='<@s.url namespace="/admin" action="rebuildIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_index"/></a>
+        </td>
+    </tr>
+	<tr><td colspan = "4">&nbsp;</td></tr>
 	<tr id="plansAndPricingRow">
 		<#include "_plansAndPricing.ftl"/>		
 	</tr>

@@ -94,6 +94,16 @@
 			</result>
 		</action>
 
+        <action name="rebuildIndex" method="rebuildIndex"
+                class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">organizationEdit</param>
+                <param name="namespace">/admin</param>
+                <param name="id">${id}</param>
+            </result>
+
+        </action>
+
 		<action name="unitOfMeasureList" method="list"
 			class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
 			<result name="success" type="freemarker">/admin/templates/html/unitofmeasure/list.ftl

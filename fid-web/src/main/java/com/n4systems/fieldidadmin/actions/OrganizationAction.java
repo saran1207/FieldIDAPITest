@@ -22,6 +22,7 @@ import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.services.TenantFinder;
+import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -85,6 +86,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
     private AssetService assetService;
     @Autowired
     private EventService eventService;
+    @Autowired
+    private AssetIndexerService assetIndexerService;
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {}
@@ -252,6 +255,12 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			return ERROR;
 		}
 	}
+
+    @SkipValidation
+    public String doRebuildIndex() {
+        assetIndexerService.indexTenant(tenant.getName());
+        return SUCCESS;
+    }
 
 	private void updatePrimaryOrg() {
 		new OrgSaver().update(primaryOrg);

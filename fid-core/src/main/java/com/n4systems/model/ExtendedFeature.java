@@ -12,7 +12,8 @@ public enum ExtendedFeature {
 	AdvancedLocation("feature.advanced_location"),
 	ProofTestIntegration("feature.proof_test_integration"), 
 	OrderDetails("feature.order_details"),
-    LotoProcedures("feature.loto_procedures");
+    LotoProcedures("feature.loto_procedures"),
+    GlobalSearch("feature.global_search");
 	
 	private String label;
 	
