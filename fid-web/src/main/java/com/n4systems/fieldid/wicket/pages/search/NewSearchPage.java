@@ -5,9 +5,10 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.ExternalImage;
+import com.n4systems.fieldid.wicket.components.LatentImage;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -62,11 +63,11 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     @SpringBean
     protected FullTextSearchService fullTextSearchService;
 
-    @SpringBean
-    private S3Service s3Service;
+    private @SpringBean PersistenceService persistenceService;
+    private @SpringBean S3Service s3Service;
 
     protected IModel<Asset> assetModel;
-    private String searchText = "comments:asset";  // TODO DD: for debugging only, should be blank (or cookie based?)
+    private String searchText = null;
     private PageableListView resultsListView = null;
     private WebMarkupContainer listViewContainer = null;
     private IModel assetList = null;
@@ -170,13 +171,17 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 item.add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + assetId, new AttributeAppender("class", "mattButtonMiddle")).setVisible(hasCreateEvent));
                 item.add(new NonWicketLink("mergeLink", "assetMergeAdd.action?uniqueID=" + assetId, new AttributeAppender("class", "mattButtonRight")).setVisible(hasEditEvent));
 
-                // TODO DD : do immediate ajax call to find images in list.  get url via s3, change <img src> and update style accordingly.
-
-                final String imageUrl;
-                imageUrl = "";
-                ExternalImage assetImage;
-                item.add(assetImage = new ExternalImage("assetImage", imageUrl));
-                assetImage.setVisible(false);
+                // TODO DD ;
+                item.add(new LatentImage("assetImage") {
+                    @Override protected String updateSrc() {
+                        Asset asset = persistenceService.find(Asset.class, assetId);
+                        if (StringUtils.isBlank(asset.getImageName())) {
+                            return null;
+                        } else {
+                            return s3Service.getAssetProfileImageThumbnailURL(assetId, asset.getImageName()).toString();
+                        }
+                    }
+                });
             }
 
         };
@@ -325,5 +330,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");
     }
+
+
 
 }
