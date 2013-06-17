@@ -23,4 +23,6 @@ public interface SystemSecurityGuard {
 	public boolean isManufacturerCertificateEnabled();
 	public boolean isOrderDetailsEnabled();
     public boolean isLotoProceduresEnabled();
+    public boolean isGlobalSearchEnabled();
+
 }
