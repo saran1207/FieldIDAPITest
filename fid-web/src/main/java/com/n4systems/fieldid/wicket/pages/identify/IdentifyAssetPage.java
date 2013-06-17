@@ -53,6 +53,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
@@ -92,8 +93,16 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
     List<Long> createdAssetIds;
     Asset createdAsset;
 
-    public IdentifyAssetPage() {
-        Asset asset = assetService.createAssetWithHistory();
+    Long lineItemId;
+
+    public IdentifyAssetPage(PageParameters params) {
+        Asset asset;
+        if (!params.get("lineItemId").isEmpty()) {
+            lineItemId = params.get("lineItemId").toLongObject();
+            asset = assetService.createAssetFromOrder(lineItemId);
+        } else {
+            asset = assetService.createAssetWithHistory();
+        }
         asset.setIdentified(dateService.todayAsDate());
         IModel<Asset> assetModel = Model.of(asset);
         Form modalContainerForm = new Form("modalContainerForm");

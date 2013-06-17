@@ -26,6 +26,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
 import com.n4systems.services.tenant.Tenant30DayCountRecord;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
@@ -37,6 +38,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.AssetExtension;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -52,6 +54,7 @@ public class AssetService extends FieldIdPersistenceService {
 	@Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private TransactionService transactionService;
     @Autowired private LastEventDateService lastEventDateService;
+    @Autowired private AssetCodeMappingService assetCodeMappingService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -688,5 +691,33 @@ public class AssetService extends FieldIdPersistenceService {
         }
 
         return null;
+    }
+
+    public Asset createAssetFromOrder(Long lineItemId) {
+
+        LineItem lineItem = persistenceService.find(LineItem.class, lineItemId);
+
+        // find the asset code mapping by asset code. This will return the
+        // default asset code if one could not be found.
+        AssetCodeMapping assetCodeMapping = assetCodeMappingService.getAssetCodeByAssetCodeAndTenant(lineItem.getAssetCode());
+        Asset asset;
+
+        if (assetCodeMapping.getAssetInfo() != null && !assetCodeMapping.getAssetInfo().getName().equals(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME.getDefaultValue())) {
+            asset = new Asset();
+            asset.setType(assetCodeMapping.getAssetInfo());
+
+            if (assetCodeMapping.getInfoOptions() != null && !assetCodeMapping.getInfoOptions().isEmpty()) {
+                asset.setInfoOptions(new TreeSet<InfoOptionBean>(assetCodeMapping.getInfoOptions()));
+            }
+        } else {
+            asset = createAssetWithHistory();
+        }
+
+        asset.setCustomerRefNumber(assetCodeMapping.getCustomerRefNumber());
+        asset.setShopOrder(lineItem);
+        asset.setOwner(lineItem.getOrder().getOwner());
+        asset.setPurchaseOrder(lineItem.getOrder().getPoNumber());
+
+        return asset;
     }
 }

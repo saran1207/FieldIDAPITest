@@ -8,6 +8,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 import com.n4systems.ejb.legacy.AssetCodeMappingService;
+import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.model.AssetType;
 import org.apache.log4j.Logger;
 
@@ -45,7 +46,8 @@ public class AssetCodeMappingManager implements AssetCodeMappingService {
 		q.setParameter( "manufacturer", r_manufacturer );
 		return q.getResultList();
 	}
-	
+
+    @CopiedToService(com.n4systems.fieldid.service.asset.AssetCodeMappingService.class)
 	public AssetCodeMapping getAssetCodeByAssetCodeAndTenant(String assetCode, Long tenantId ) {
 		Query q = em.createQuery("SELECT DISTINCT pcm from "+AssetCodeMapping.class.getName()+" as pcm left join fetch pcm.assetInfo as pi left join fetch pi.infoFields where pcm.tenant.id = :manufacturer AND pcm.assetCode = :assetCode ");
 		q.setParameter( "assetCode", assetCode);
@@ -71,13 +73,15 @@ public class AssetCodeMappingManager implements AssetCodeMappingService {
 		
 		return assetMapping;
 	}
-	
+
+    @CopiedToService(com.n4systems.fieldid.service.asset.AssetCodeMappingService.class)
 	private AssetCodeMapping getDefaultMapping(Long tenantId) {
 		AssetCodeMapping defaultMapping = new AssetCodeMapping();
 		defaultMapping.setAssetInfo(defaultAssetType(tenantId));
 		return defaultMapping;
 	}
-	
+
+    @CopiedToService(com.n4systems.fieldid.service.asset.AssetCodeMappingService.class)
 	private AssetType defaultAssetType( Long tenantId ) {
 		// find the default asset type name for this tenant
 		String defaultTypeName = ConfigContext.getCurrentContext().getString(ConfigEntry.DEFAULT_PRODUCT_TYPE_NAME, tenantId);

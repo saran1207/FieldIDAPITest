@@ -12,10 +12,8 @@
 			<#list lineItems as lineItem >
 				<tr>
 					<td class="lineAddLink" >
-						<a href="<@s.url action="assetAddWithOrder" lineItemId="${lineItem.id}" tagOptionId="${tagOptionId}" />"><@s.text name="label.identifysingle" /></a>
-						|
-						<a href="<@s.url action="assetMultiAddWithOrder" lineItemId="${lineItem.id}" tagOptionId="${tagOptionId}" />"><@s.text name="label.identifymultiple" /></a>
-					</td>
+                        <a href="/fieldid/w/identify?lineItemId=${lineItem.id}"><@s.text name="label.identify_single_or_multiple"/></a>
+                    </td>
 					<td class="linePcode" >${lineItem.assetCode}</td>
 					<td>${lineItem.description!}</td>
 					<td class="lineQty" >${lineItem.quantity}</td>
