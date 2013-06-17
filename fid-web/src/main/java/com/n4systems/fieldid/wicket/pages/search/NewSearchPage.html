@@ -15,6 +15,9 @@
         <a href="#" class="search mattButton" wicket:id="searchButtonId">Search</a>
     </form>
 
+    <!-- blank slate -->
+    <div wicket:id="blankSlate" class="message"><wicket:message key="message.no_search_results"/></div>
+
     <div wicket:id="listViewContainer" class="search-container">
 
         <form wicket:id="resultForm">
@@ -38,14 +41,15 @@
                     </li>
                 </ul>
             </div>
-            
+
+
             <!-- search results list -->
             <div class="search-results">
                 <div wicket:id="selected_assets">
 
                     <!-- select options -->
                     <div class="select-options">
-                        <input type="checkbox" wicket:id="groupselector"> 
+                        <input type="checkbox" wicket:id="groupselector">
                         <label wicket:for="groupselector">Select all</label>
                         <p>select assets to perform mass actions</p>
                     </div>

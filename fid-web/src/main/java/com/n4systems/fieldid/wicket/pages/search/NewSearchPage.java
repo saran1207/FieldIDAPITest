@@ -63,7 +63,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
     protected IModel<Asset> assetModel;
     private String searchText = "comments:asset";  // TODO DD: for debugging only, should be blank (or cookie based?)
-    private PageableListView assetListView = null;
+    private PageableListView resultsListView = null;
     private WebMarkupContainer listViewContainer = null;
     private IModel assetList = null;
     private TextField<String> searchCriteria = null;
@@ -99,7 +99,11 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
         add(resultForm = new Form("resultForm"));
 
-        final CheckGroup<Asset> assetCheckGroup = new CheckGroup<Asset>("selected_assets", new ArrayList<Asset>());
+        final CheckGroup<Asset> assetCheckGroup = new CheckGroup<Asset>("selected_assets", new ArrayList<Asset>()) {
+            @Override public boolean isVisible() {
+                return !results.isEmpty();
+            }
+        };
         resultForm.add(assetCheckGroup);
         assetCheckGroup.add(new CheckGroupSelector("groupselector") {
             @Override public boolean isVisible() {
@@ -111,10 +115,16 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
+        add(new WebMarkupContainer("blankSlate") {
+            @Override public boolean isVisible() {
+                return results.isEmpty();
+            }
+        }.setOutputMarkupPlaceholderTag(true));
+
         final boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
         final boolean hasEditEvent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
 
-        assetListView = new PageableListView<SearchResult>("results", new PropertyModel<List<? extends SearchResult>>(this, "results"), 10) {
+        resultsListView = new PageableListView<SearchResult>("results", new PropertyModel<List<? extends SearchResult>>(this, "results"), 10) {
             @Override
             protected void populateItem(ListItem<SearchResult> item) {
                 final SearchResult result = item.getModelObject();
@@ -147,11 +157,13 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 item.add(assetImage = new ExternalImage("assetImage", imageUrl));
                 assetImage.setVisible(false);
             }
+
         };
         //assetListView.setReuseItems(true);
-        assetCheckGroup.add(assetListView);
-//
-        resultForm.add(new PagingNavigator("navigator", assetListView){
+        assetCheckGroup.add(resultsListView);
+
+
+        resultForm.add(new PagingNavigator("navigator", resultsListView){
             @Override
             public boolean isVisible() {
                 return (results!= null && !results.isEmpty());
@@ -288,16 +300,5 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");
     }
-
-//    private String getOwnerLabel(BaseOrg owner, Location advancedLocation) {
-//        StringBuilder stringBuilder = new StringBuilder();
-//        stringBuilder.append(owner.getHierarchicalDisplayName());
-//
-//        if(advancedLocation != null && !advancedLocation.getFullName().isEmpty()) {
-//            stringBuilder.append(", ").append(advancedLocation.getFullName());
-//        }
-//        return stringBuilder.toString();
-//    }
-//
 
 }
