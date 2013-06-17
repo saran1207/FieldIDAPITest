@@ -43,6 +43,7 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -109,6 +110,23 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         };
         resultForm.add(assetCheckGroup);
         assetCheckGroup.add(new CheckGroupSelector("groupselector") {
+            @Override public boolean isVisible() {
+                return (results != null && !results.isEmpty());
+            }
+        });
+
+
+        StringResourceModel stringResourceModel = new StringResourceModel("label.select_assets_all",
+                this, null, getLocale());
+        assetCheckGroup.add(new Label("selectAssetsAllLabel", stringResourceModel) {
+            @Override public boolean isVisible() {
+                return (results != null && !results.isEmpty());
+            }
+        });
+
+        StringResourceModel stringResourceAModel = new StringResourceModel("label.select_assets",
+                this, null, getLocale());
+        assetCheckGroup.add(new Label("selectAssetsLabel", stringResourceAModel) {
             @Override public boolean isVisible() {
                 return (results != null && !results.isEmpty());
             }
