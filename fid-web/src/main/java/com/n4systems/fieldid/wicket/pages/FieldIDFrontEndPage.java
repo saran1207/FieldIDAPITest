@@ -38,11 +38,13 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.util.template.TextTemplate;
@@ -107,14 +109,27 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class));
 
-        add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
+
+
+        add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class).add(new Image("down-arrow", new ContextRelativeResource("/images/down-arrow.png")){
+            @Override
+            public boolean isVisible() {
+                return getSecurityGuard().isGlobalSearchEnabled();
+                //return true;
+            }
+
+        }));
+
+
 
         add(new BookmarkablePageLink<Void>("newAssetSearchLink", NewSearchPage.class) {
             @Override
             public boolean isVisible() {
-                return getSecurityGuard().isGlobalSearchEnabled();
+            return getSecurityGuard().isGlobalSearchEnabled();
+            //return true;
             }
         });
+
 
         BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
         procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
