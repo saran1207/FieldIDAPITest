@@ -20,6 +20,9 @@ body {
 #contentHeader {
 	display: none;
 }
+#pageContent {
+	min-height: 625px;
+}
 strong {
 	font-weight: bold;
 }
@@ -39,30 +42,75 @@ h2 {
 		color: #3366cc;
 	}
 
-
 /* NEW SEARCH BAR
 -----------------------------------------*/
 .search-bar {
 	margin: 40px auto;
-	overflow: hidden;
-	width: 790px;
+	position: relative;
 }
 .search-bar input[type=text]{
-	width: 700px;
-	height: 50px;
-	border: 1px solid #cecece;;
-	border-radius: 3px;
+	width: 825px;
+	height: 42px;
+	border: 1px solid #343434;
 	font-size: 16px;
 	padding-left: 10px;
 	float: left;
 }
-.search.mattButton {
-	width: 80px;
-	height: 50px;
-	font-size: 16px;
-	line-height: 2.5;
+a.search {
+	width: 170px;
+	height: 42px;
+	font-size: 20px;
+	line-height: 2;
 	margin-left: 4px;
+	background: #0066cc;
+	display: inline-block;
+	color: #fff;
+	text-decoration: none;
+	text-align: center;
 }
+.syntax-help {
+	position: absolute;
+	right: 175px;
+}
+	.question,
+	.close {
+		font-size: 20px;
+		padding: 9px 16px;
+		height: 42px;
+		position: absolute;
+		right: 0;
+		cursor: pointer;
+	}
+	.close {
+		background: #343434;
+		color: #fff;
+		display: none;
+	}
+	.syntax-details {
+		display: none;
+		width: 318px;
+		padding: 25px 20px;
+		margin-top: 42px;
+		background: #343434;
+		color: #cccccc;
+		-webkit-border-radius: 12px 0 12px 12px;
+		border-radius: 12px 0 12px 12px;
+		font-size: 13px;
+	}
+		.syntax-details h3 {
+			color: #cccccc;
+		}
+
+		ul.syntax-terms {
+			margin: 10px 0;
+			overflow: hidden;
+		}
+			ul.syntax-terms > li {
+				width: 50%;
+				float: left;
+				margin: 15px 0;
+			}
+
 
 
 /* CONTENT CONTAINER (excluding search bar)

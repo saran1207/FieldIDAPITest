@@ -12,7 +12,68 @@
 
     <form wicket:id="NewSearchForm" class="search-bar">
         <input type="text" wicket:id="searchCriteria"/>
-        <a href="#" class="search mattButton" wicket:id="searchButtonId">Search</a>
+        <div class="syntax-help">
+            <div class="question">?</div>
+            <div class="close">X</div>
+            <div class="syntax-details">
+                <p>The search bar accepts a number of different parameters. Below is a list of the terms you can use. For example, location=building 21. You can combine search terms with AND, OR.</p>
+                <ul class="syntax-terms">
+                    <li>
+                        <h3>IDENTIFIERS</h3>
+                        <ul>
+                            <li>id</li>
+                            <li>ref</li>
+                            <li>rfid</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h3>OWNER</h3>
+                        <ul>
+                            <li>org</li>
+                            <li>cu</li>
+                            <li>div</li>
+                            <li>owner (the lowest level)</li>
+                            <li>assigned</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h3>DATES</h3>
+                        <ul>
+                            <li>assetcreated</li>
+                            <li>assetmodified</li>
+                            <li>assetidentified</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h3>USERS</h3>
+                        <ul>
+                            <li>usercreated</li>
+                            <li>usermodified</li>
+                            <li>identifiedby</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h3>TYPE</h3>
+                        <ul>
+                            <li>at (asset type)</li>
+                            <li>atg (asset type group)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <h3>OTHER</h3>
+                        <ul>
+                            <li>comments</li>
+                            <li>po</li>
+                            <li>order</li>
+                            <li>lasteventdate</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>CUSTOM ATTRIBUTES</h3>
+                <p>Customer attribtues can be search by all lowercase and no spaces. For example, Working Load would be workingload=21 Tons</p>
+            </div>
+       </div>
+        <a href="#" class="search" wicket:id="searchButtonId">Search</a>
     </form>
 
     <!-- blank slate -->
@@ -90,7 +151,6 @@
         $(function() {
 
             $(".search-results input[type=checkbox]").live("click", function() {
-
                 // Highlights selected result(s)
                 $(this).parent().next().toggleClass("selected");
 
@@ -100,6 +160,16 @@
                 } else {
                     $(".actions").removeClass("show");
                 }
+            });
+
+            // Show/hide syntax help dropdown
+            $(".syntax-help .question").click(function(){
+                $(".syntax-help .close, .syntax-details").fadeIn(200);
+                $(this).hide(); 
+            });
+             $(".syntax-help .close").click(function(){
+                $(".syntax-help .close, .syntax-details").fadeOut(200);
+                $(".syntax-help .question").show(); 
             });
         });
     </script>
