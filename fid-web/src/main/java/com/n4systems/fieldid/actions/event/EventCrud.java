@@ -823,7 +823,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 				for (SubEvent subEvent : event.getSubEvents()) {
 					ids.add(subEvent.getId());
 				}
-				subEvents = persistenceManager.findAll(SubEvent.class, ids, getTenant(), "asset", "eventForm.sections", "results", "attachments", "infoOptionMap");
+				subEvents = persistenceManager.findAll(SubEvent.class, ids, getTenant(), SubEvent.ALL_FIELD_PATHS);
 			}
 		}
 		return subEvents;
