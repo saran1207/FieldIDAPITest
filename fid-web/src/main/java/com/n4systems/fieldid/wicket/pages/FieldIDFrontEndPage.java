@@ -14,6 +14,7 @@ import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
+import com.n4systems.fieldid.wicket.pages.identify.IdentifyAssetPage;
 import com.n4systems.fieldid.wicket.pages.search.NewSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
@@ -244,14 +245,12 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         WebMarkupContainer identifyMenuContainer = new WebMarkupContainer("identifyMenuContainer");
         identifyMenuContainer.setVisible(sessionUser.hasAccess("tag"));
 
-        String url;
-        if(getSecurityGuard().isIntegrationEnabled()) {
-        	url = "/fieldid/identify.action";
-        }else {
-        	url = "/fieldid/assetAdd.action";
+        if (getSecurityGuard().isIntegrationEnabled()) {
+            identifyMenuContainer.add(new ExternalLink("identifyLink", "/fieldid/identify.action"));
+        } else {
+            identifyMenuContainer.add(new BookmarkablePageLink("identifyLink", IdentifyAssetPage.class));
         }
-        identifyMenuContainer.add(new ExternalLink("identifyLink", url));
-        identifyMenuContainer.add(new ExternalLink("subMenuIdentifyLink", url));
+
         add(identifyMenuContainer);
     }
     

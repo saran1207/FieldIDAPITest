@@ -4,12 +4,14 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.FormComponentPanelUpdatingBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.IdentifierLabel;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.feedback.classy.AssetCreatedFeedbackMessage;
@@ -32,9 +34,11 @@ import com.n4systems.fieldid.wicket.pages.identify.components.multi.MultiIdentif
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.services.date.DateService;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -73,6 +77,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
     @SpringBean private DateService dateService;
     @SpringBean private AssetSaveServiceSpring assetSaveService;
     @SpringBean private PersistenceService persistenceService;
+    @SpringBean private OrgService orgService;
 
     EventSchedulesPanel eventSchedulesPanel;
     AttributesEditPanel attributesEditPanel;
@@ -108,6 +113,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         Form modalContainerForm = new Form("modalContainerForm");
         modalContainerForm.add(multipleWindow = new DialogModalWindow("multiAssetConfigurationWindow", Model.of("Multiple Assets...")));
         add(modalContainerForm);
+        add(new NonWicketLink("importPageLink", "assetImportExport.action", new AttributeModifier("class", "mattButton")));
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(schedulePicker = createSchedulePicker(ProxyModel.of(assetModel, on(Asset.class).getType())));
         add(new IdentifyAssetForm("identifyAssetForm", assetModel));
@@ -117,6 +123,8 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         public IdentifyAssetForm(String id, final IModel<Asset> assetModel) {
             super(id, assetModel);
             setMultiPart(true);
+
+            PrimaryOrg primaryOrgForTenant = orgService.getPrimaryOrgForTenant(getTenantId());
 
             IModel<AssetType> assetTypeModel = ProxyModel.of(assetModel, on(Asset.class).getType());
             GroupedAssetTypesForTenantModel allAssetTypesModel = new GroupedAssetTypesForTenantModel(Model.of((AssetTypeGroup) null));
@@ -167,9 +175,20 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             singleIdentifyContainer.add(new TextField<String>("referenceNumber", ProxyModel.of(assetModel, on(Asset.class).getCustomerRefNumber())));
 
 
+            WebMarkupContainer assignedToContainer = new WebMarkupContainer("assignedToContainer");
+            assignedToContainer.setVisible(primaryOrgForTenant.hasExtendedFeature(ExtendedFeature.AssignedTo));
+            add(assignedToContainer);
             final PropertyModel<User> assignedUserModel = ProxyModel.of(assetModel, on(Asset.class).getAssignedUser());
             final GroupedUserPicker assignedToSelect = new GroupedUserPicker("assignedToSelect", assignedUserModel, new GroupedVisibleUsersModel());
-            add(assignedToSelect);
+            assignedToContainer.add(assignedToSelect);
+
+            assignedToContainer.add(new AjaxLink("assignToMeLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    assignedUserModel.setObject(getCurrentUser());
+                    target.add(assignedToSelect);
+                }
+            });
 
             AutoCompleteOrgPicker ownerPicker = new AutoCompleteOrgPicker("ownerPicker", ProxyModel.of(assetModel, on(Asset.class).getOwner()));
             add(ownerPicker);
@@ -188,19 +207,19 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
 
             add(new TextField<String>("purchaseOrder", ProxyModel.of(assetModel, on(Asset.class).getPurchaseOrder())));
 
+            WebMarkupContainer nonIntegrationOrderContainer = new WebMarkupContainer("nonIntegrationOrderNumberContainer");
+            add(nonIntegrationOrderContainer);
+            nonIntegrationOrderContainer.setVisible(!primaryOrgForTenant.hasExtendedFeature(ExtendedFeature.Integration));
+            nonIntegrationOrderContainer.add(new TextField<String>("orderNumber", ProxyModel.of(assetModel, on(Asset.class).getNonIntergrationOrderNumber())));
+
             add(new DropDownChoice<AssetStatus>("assetStatusSelect", ProxyModel.of(assetModel, on(Asset.class).getAssetStatus()), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()));
 
             add(new Comment("comments", ProxyModel.of(assetModel, on(Asset.class).getComments())));
 
-            add(new DropDownChoice<Boolean>("visibilitySelect", ProxyModel.of(assetModel, on(Asset.class).isPublished()), Arrays.asList(false, true), new PublishOverSafetyNetworkChoiceRenderer()));
-
-            add(new AjaxLink("assignToMeLink") {
-                @Override
-                public void onClick(AjaxRequestTarget target) {
-                    assignedUserModel.setObject(getCurrentUser());
-                    target.add(assignedToSelect);
-                }
-            });
+            WebMarkupContainer visibilityContainer = new WebMarkupContainer("visibilityContainer");
+            add(visibilityContainer);
+            visibilityContainer.add(new DropDownChoice<Boolean>("visibilitySelect", ProxyModel.of(assetModel, on(Asset.class).isPublished()), Arrays.asList(false, true), new PublishOverSafetyNetworkChoiceRenderer()));
+            visibilityContainer.setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork());
 
             add(assetImagePanel = new AssetImagePanel("assetImagePanel"));
 
@@ -443,6 +462,8 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/asset/identify_asset.css");
+        response.renderCSSReference("style/newCss/asset/header.css");
+        response.renderCSSReference("style/newCss/component/matt_buttons.css");
     }
 
 }

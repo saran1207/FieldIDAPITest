@@ -12,7 +12,7 @@
 			<#list lineItems as lineItem >
 				<tr>
 					<td class="lineAddLink" >
-                        <a href="/fieldid/w/identify?lineItemId=${lineItem.id}"><@s.text name="label.identify_single_or_multiple"/></a>
+                        <a href="/fieldid/w/identify?lineItemId=${lineItem.id}"><@s.text name="label.identify"/></a>
                     </td>
 					<td class="linePcode" >${lineItem.assetCode}</td>
 					<td>${lineItem.description!}</td>

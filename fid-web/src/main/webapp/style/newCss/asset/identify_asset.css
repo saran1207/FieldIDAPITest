@@ -46,7 +46,7 @@
 		margin-bottom: 25px;
 	}
 .form-horizontal .column-right {
-	width: 320px;
+	width: 310px;
 	float: right;
 }
 
@@ -130,4 +130,30 @@ table.identifiers-grid {
 }
 table.identifiers-grid tr {
     padding:3px 0 3px 0;
+}
+
+
+/* TODO: nasty. We must refactor this into a common place instead of reusing this hack from the asset summary page */
+#page {
+    background: none;
+    border: none;
+    box-shadow: none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow: none;
+    font-size: 11px;
+    padding: 0;
+}
+
+.realPage {
+    clear: both;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    width: 988px;
+    -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    -webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    border:1px solid #CCC;
+    background:#FFF;
+    padding: 9px 5px 0 5px;;
 }

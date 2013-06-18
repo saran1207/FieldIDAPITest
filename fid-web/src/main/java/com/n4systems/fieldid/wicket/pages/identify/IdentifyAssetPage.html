@@ -1,5 +1,15 @@
 <wicket:extend>
 
+    <div class="header">
+        <h1><wicket:message key="title.identify"/></h1>
+        <div style="float:right">
+            <a class="mattButton" wicket:id="importPageLink">
+                <wicket:message key="label.import"/>
+            </a>
+        </div>
+    </div>
+
+    <div class="realPage">
     <div wicket:id="feedbackPanel"></div>
 
     <form wicket:id="modalContainerForm">
@@ -53,10 +63,23 @@
                 </div>
 
             </fieldset>
-            
+
+            <fieldset>
+                <legend>Order Details</legend>
+                <div class="control-group">
+                    <label><wicket:message key="label.purchaseorder"/></label>
+                    <input wicket:id="purchaseOrder">
+                </div>
+
+                <div class="control-group" wicket:id="nonIntegrationOrderNumberContainer">
+                    <label><wicket:message key="label.order_number"/></label>
+                    <input wicket:id="orderNumber">
+                </div>
+            </fieldset>
+
             <fieldset>
                 <legend>Owner</legend>
-                <div class="control-group">
+                <div class="control-group" wicket:id="assignedToContainer">
                     <label><wicket:message key="label.assignedto"/></label>
                     <select wicket:id="assignedToSelect"/>
                     <a class="links" wicket:id="assignToMeLink"><wicket:message key="label.assign_to_me"/></a>
@@ -72,10 +95,6 @@
                     <div wicket:id="locationPicker"/>
                 </div>
 
-                <div class="control-group">
-                    <label><wicket:message key="label.purchaseorder"/></label>
-                    <input wicket:id="purchaseOrder">
-                </div>
             </fieldset>
             
 
@@ -91,7 +110,7 @@
                     <div wicket:id="comments"/>
                 </div>
 
-                <div class="control-group">
+                <div class="control-group" wicket:id="visibilityContainer">
                     <label><wicket:message key="label.visibility"/></label>
                     <select wicket:id="visibilitySelect"/>
                 </div>
@@ -135,5 +154,6 @@
     </form>
 
     <div wicket:id="schedulePicker"></div>
+    </div>
 
 </wicket:extend>

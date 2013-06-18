@@ -62,16 +62,15 @@
 							<@s.url id="identifyUrl" action="assetAdd" namespace="/" />
 						</#if>
 						<li>
-							<a href="${identifyUrl}" class="speedLink textLink" id="menuIdentify">
-								<@s.text name="speed.identify"/>
-								<img src="/fieldid/images/down-arrow.png" />
-							</a>
-							<ul class="sub_menu regular_menu">
-								<li><a href="${identifyUrl}"><@s.text name="nav.single_add"/></a></li>
-								<li><a href="<@s.url action='assetMultiAdd' namespace='/' />"><@s.text name="nav.multi_add"/></a></li>
-								<li><a href="<@s.url action='assetImportExport' namespace='/' />"><@s.text name="nav.import"/></a></li>
-							</ul>
-							
+                            <#if securityGuard.integrationEnabled>
+                                <a href="<@s.url action="identify" namespace="/"/>" class="speedLink textLink" id="menuIdentify">
+                                    <@s.text name="speed.identify"/>
+                                </a>
+                            <#else>
+                                <a href="/fieldid/w/identify" class="speedLink textLink" id="menuIdentify">
+                                    <@s.text name="speed.identify"/>
+                                </a>
+                            </#if>
 						</li>
 					</#if>
 					
