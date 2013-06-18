@@ -80,9 +80,21 @@
 							<a href="<@s.url action="startEvent" namespace="/"/>" class="speedLink textLink" id="menuEvent"><@s.text name="speed.event"/></a>
 						</li>
 					</#if>
+
 					<li>
 						<a href="/fieldid/w/wicket/search" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" /></a>
-					</li>
+
+                    <#if securityGuard.isGlobalSearchEnabled()>
+                        <ul class="sub_menu">
+                            <li>
+                                <a href="<@s.url value='/w/newSearch'/>" ><@s.text name="nav.new_search" /></a>
+                            </li>
+                        </ul>
+                    </#if>
+
+                     </li>
+
+
                     <li>
                         <a href="/fieldid/w/wicket/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
                     </li>

@@ -107,7 +107,16 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class));
 
         add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
-        add(new BookmarkablePageLink<Void>("newAssetSearchLink", NewSearchPage.class));
+
+        if (getSecurityGuard().isGlobalSearchEnabled()) {
+            add(new BookmarkablePageLink<Void>("newAssetSearchLink", NewSearchPage.class) {
+                @Override
+                public boolean isVisible() {
+                    return true;
+                    // return tenantSettings.hasNewSearch();
+                }
+            });
+        }
 
         BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
         procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
