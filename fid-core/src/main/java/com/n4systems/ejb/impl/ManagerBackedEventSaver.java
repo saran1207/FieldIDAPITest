@@ -75,7 +75,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 
             User user = persistenceManager.find(User.class, parameterObject.userId);
 
-            if(user.isUsageBasedUser()) {
+            if(user.isUsageBasedUser() && user.getTenant().getSettings().getUserLimits().isUsageBasedUsersEnabled()) {
                 int eventCount = parameterObject.event.getSubEvents().size() + 1;
 
                 TenantSettings tenantSettings = user.getTenant().getSettings();

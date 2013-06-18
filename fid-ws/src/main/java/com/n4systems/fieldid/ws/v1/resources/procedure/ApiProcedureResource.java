@@ -56,7 +56,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         procedure.setType(procedureDefinitionService.getPublishedProcedureDefinition(procedure.getAsset()));
         convertGpsLocation(apiProcedure, procedure);
 
-        if(getCurrentUser().isUsageBasedUser()) {
+        if(getCurrentUser().isUsageBasedUser() && getCurrentUser().getTenant().getSettings().getUserLimits().isUsageBasedUsersEnabled()) {
             tenantSettingsService.decrementUsageBasedEventCount();
         }
 
