@@ -103,7 +103,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
             loadExtendedFeatures();
 		} else {
-            logger.info("start");
             Map<Tenant, PrimaryOrg> tenants = Maps.newHashMap();
 			for (PrimaryOrg org : getPage().getList()) {
 				lastActiveSessions.put(org.getId(), loadLastActiveSession(org.getTenant().getId()));
@@ -111,7 +110,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 			}
             total30DayAssets.putAll(assetService.getTenantsLast30DaysCount(tenants));
             total30DayEvents.putAll(eventService.getTenantsLast30DaysCount(tenants));
-            logger.info("end");
 		}
 	}
 
