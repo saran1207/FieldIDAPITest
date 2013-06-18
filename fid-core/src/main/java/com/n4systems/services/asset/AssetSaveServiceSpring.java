@@ -1,11 +1,5 @@
 package com.n4systems.services.asset;
 
-import java.util.List;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
@@ -17,6 +11,14 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetAttachmentListLoader;
 import com.n4systems.model.asset.AssetAttachmentSaver;
 import com.n4systems.model.asset.AssetImageFileSaver;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+import rfid.ejb.entity.AddAssetHistory;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -37,8 +39,31 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 
 	@Autowired
 	private AssetService assetService;
-	
-	@LegacyMethod
+
+    public Asset createWithHistory(Asset asset, List<AssetAttachment> uploadedAttachments, byte[] imageData) {
+        Asset createdAsset = create(asset, uploadedAttachments, imageData);
+
+        AddAssetHistory addAssetHistory = assetService.getAddAssetHistory();
+
+        if (addAssetHistory == null) {
+            addAssetHistory = new AddAssetHistory();
+            addAssetHistory.setTenant(getCurrentTenant());
+            addAssetHistory.setUser(getCurrentUser());
+        }
+
+        addAssetHistory.setOwner(asset.getOwner());
+        addAssetHistory.setAssetType(asset.getType());
+        addAssetHistory.setAssetStatus(asset.getAssetStatus());
+        addAssetHistory.setPurchaseOrder(asset.getPurchaseOrder());
+        addAssetHistory.setLocation(asset.getAdvancedLocation());
+        addAssetHistory.setInfoOptions(new ArrayList<InfoOptionBean>(asset.getInfoOptions()));
+        addAssetHistory.setAssignedUser(asset.getAssignedUser());
+
+        persistenceService.saveOrUpdate(addAssetHistory);
+
+        return createdAsset;
+    }
+
 	public Asset create(Asset asset, List<AssetAttachment> uploadedAttachments, byte[] imageData) {
 		try {
             if (asset.getType().isArchived()) {
@@ -54,7 +79,6 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 		}
 	}
 
-	@LegacyMethod
 	public Asset update(Asset asset, List<AssetAttachment> existingAttachments, List<AssetAttachment> uploadedAttachments, byte[] imageData) {
 		try {
 			asset = assetService.update(asset, getCurrentUser());
@@ -67,7 +91,6 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 		}
 	}
 
-	@LegacyMethod
 	private void saveUploadedAttachments(Asset asset, List<AssetAttachment> uploadedAttachments) {
 		if (uploadedAttachments != null) {
 			AssetAttachmentSaver saver = new AssetAttachmentSaver(getCurrentUser(), asset);
@@ -131,4 +154,5 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 			assetImageFileSaver.remove();
 		}
 	}
+
 }

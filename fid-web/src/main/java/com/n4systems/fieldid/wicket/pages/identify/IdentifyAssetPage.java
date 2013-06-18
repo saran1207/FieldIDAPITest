@@ -354,7 +354,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         asset.getInfoOptions().clear();
         asset.getInfoOptions().addAll(enteredInfoOptions);
 
-        Asset createdAsset = assetSaveService.create(asset, attachments, assetImageBytes);
+        Asset createdAsset = assetSaveService.createWithHistory(asset, attachments, assetImageBytes);
 
         for (Event event : schedulesToAdd) {
             event.setAsset(createdAsset);

@@ -101,22 +101,36 @@ public class AttributesEditPanel extends Panel {
 
         infoOptions = new ArrayList<InfoOptionBean>(infoFields.size());
         for (InfoFieldBean infoField : infoFields) {
-            InfoOptionBean infoOption = new InfoOptionBean();
-            infoOption.setInfoField(infoField);
+
+            InfoOptionBean infoOption = null;
+
             if (addAssetHistory != null && addAssetHistory.getAssetType().equals(assetTypeModel.getObject())) {
-                populateAttributeValueFromHistoryIfPresent(infoOption, addAssetHistory);
+                infoOption = populateAttributeValueFromHistoryIfPresent(infoField, addAssetHistory);
             }
+
+            if (infoOption == null) {
+                infoOption = new InfoOptionBean();
+                infoOption.setInfoField(infoField);
+            }
+
             infoOptions.add(infoOption);
         }
     }
 
-    private void populateAttributeValueFromHistoryIfPresent(InfoOptionBean infoOption, AddAssetHistory addAssetHistory) {
+    private InfoOptionBean populateAttributeValueFromHistoryIfPresent(InfoFieldBean infoField, AddAssetHistory addAssetHistory) {
         List<InfoOptionBean> historyOptions = addAssetHistory.getInfoOptions();
         for (InfoOptionBean historyOption : historyOptions) {
-            if (historyOption.getInfoField().equals(infoOption.getInfoField())) {
-                infoOption.setName(historyOption.getName());
+            if (historyOption.getInfoField().equals(infoField)) {
+                if (historyOption.isStaticData()) {
+                    return historyOption;
+                }
+                InfoOptionBean optionBean = new InfoOptionBean();
+                optionBean.setInfoField(infoField);
+                optionBean.setName(historyOption.getName());
+                return optionBean;
             }
         }
+        return null;
     }
 
     public List<InfoOptionBean> getEnteredInfoOptions() {
