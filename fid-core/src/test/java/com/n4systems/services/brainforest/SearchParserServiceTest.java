@@ -4,7 +4,6 @@ import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
-import org.apache.lucene.search.Query;
 import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 import org.junit.Test;
@@ -31,7 +30,7 @@ public class SearchParserServiceTest extends FieldIdServiceTest {
         expect(searchParser.parseQuery("x=100")).andReturn(searchQuery);
         replay(searchParser);
 
-        Query query = searchParserService.createSearchQuery("x=100");
+//        Query query = searchParserService.createSearchQuery("x=100");
 
         // TODO DD : assertions on this stuff....
         // check for lowercase, proper use of phraseTerms, and all that jazz.

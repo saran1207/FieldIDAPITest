@@ -66,12 +66,12 @@ public class SearchResult implements Serializable {
         private String originalValue;
         private String highlightedValue;
         private String dateValue;
-        private String longValue;
+        private Long longValue;
         private Number numberValue;
 
         public ResultValue(IndexableField field, NumericHighlighter highlighter, Analyzer analyzer) {
             this.originalValue = field.stringValue();
-            initValues();
+            initValues(field);
             maybeHighlight(field, highlighter, analyzer);
         }
 
@@ -83,7 +83,7 @@ public class SearchResult implements Serializable {
             try {
                 if (dateValue!=null || numberValue!=null && field.numericValue()!=null) {
                     // TODO : need to have field Id SearchQuery object
-                    highlightedValue = highlighter.getBestNumericFragment(field.name(), field.numericValue());
+                    highlightedValue = highlighter.getBestNumericFragment(field.name(), numberValue, getMostAppropriateValue() );
                 } else {
                     highlightedValue = highlighter.getBestFragment(analyzer, field.name(), field.stringValue());
                 }
@@ -94,10 +94,10 @@ public class SearchResult implements Serializable {
             }
         }
 
-        private void initValues() {
+        private void initValues(IndexableField field) {
             try {
-                numberValue = Double.parseDouble(originalValue);
-                longValue = numberValue==null ? null : numberValue.longValue()+"";
+                numberValue = field.numericValue();
+                longValue = numberValue==null ? null : numberValue.longValue();
                 dateValue = getDateTime(numberValue);
             } catch (NumberFormatException e) {} // not a date or long.  that's ok.
         }
@@ -106,7 +106,7 @@ public class SearchResult implements Serializable {
             if (dateValue!=null) {
                 return dateValue;
             } else if (longValue!=null) {
-                return longValue;
+                return longValue+"";
             } else {
                 return originalValue;
             }

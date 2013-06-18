@@ -24,23 +24,20 @@ public class SearchParserService extends FieldIdService {
     private @Autowired SecurityContext securityContext;
     private @Autowired SimpleParser searchParser;
 
-    public Query createSearchQuery(String search) {
+
+
+    public SearchQuery createSearchQuery(String search) {
         try {
-            SearchQuery searchQuery = parseSearchQuery(search);
-            return convertToLuceneQuery(searchQuery);
+            return parseSearchQuery(search);
         } catch (ParseException e) {
-            logger.error("can't parse [" + search + "]");
+            logger.error("can't parse search query [" + search + "]");
         } catch (TokenMgrError te) {
-            logger.error("can't parse [" + search + "]");
+            logger.error("can't parse search query [" + search + "]");
         }
-        // TODO DD : what is proper approach here for handling non-parseable strings???
-        // for now, just search everywhere for whatever they typed in.
-        PhraseQuery query = new PhraseQuery();
-        String[] words = search.split(" ");
-        for (String word : words) {
-            query.add(new Term("all", word));
-        }
-        return query;
+//        // TODO DD : what is proper approach here for handling non-parseable strings???
+//        // for now, just search everywhere for whatever they typed in.
+        // maybe i should break "search" into words and add separate terms for each?
+        return new SearchQuery().add(new QueryTerm(null, QueryTerm.Operator.EQ,  new SimpleValue(search)));
     }
 
 
@@ -48,7 +45,7 @@ public class SearchParserService extends FieldIdService {
         return searchParser.parseQuery(search);
     }
 
-    private Query convertToLuceneQuery(SearchQuery searchQuery) {
+    public Query convertToLuceneQuery(SearchQuery searchQuery) {
         if (searchQuery.getNumberOfTerms()==0) {
             return null;
         }

@@ -1,26 +1,35 @@
 package com.n4systems.services.search;
 
+import com.n4systems.services.brainforest.SearchQuery;
+import org.apache.lucene.analysis.miscellaneous.EmptyTokenStream;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.Highlighter;
 import org.apache.lucene.search.highlight.Scorer;
+import org.apache.lucene.search.highlight.TokenGroup;
 
 class NumericHighlighter extends Highlighter  {
 
     private Formatter formatter;
-    private NumericAnalyzer numericAnalyzer = new NumericAnalyzer();
+    private NumericAnalyzer numericAnalyzer;
 
 
-    public NumericHighlighter(Formatter formatter, Scorer fragmentScorer) {
+    public NumericHighlighter(Formatter formatter, Scorer fragmentScorer, SearchQuery searchQuery) {
         super(formatter, fragmentScorer);
         this.formatter = formatter;
+        this.numericAnalyzer = new NumericAnalyzer(searchQuery);
     }
 
-    public Formatter getFormatter() {
-        return formatter;
+    public String getBestNumericFragment(String fieldName, Number numberValue, String text) {
+        if (numericAnalyzer.matches(fieldName, numberValue)) {
+            return formatter.highlightTerm(text,new TokenGroup(new EmptyTokenStream()) {
+                @Override public float getTotalScore() {
+                    System.out.println("total score " + super.getTotalScore());
+                    return 1;
+                }
+            });
+        }
+        return text;
     }
 
-    public String getBestNumericFragment(String fieldName, Number value) {
-        return null;
-    }
 
 }

@@ -69,4 +69,17 @@ public class SearchQuery implements Serializable {
         return builder.toString();
     }
 
+    public QueryTerm getTermForAttribute(String attribute) {
+        if (attribute==null) {
+            return null;
+        }
+        for (QueryTerm term:terms) {
+            if (attribute.equals(term.getAttribute())) {
+                return term;
+            }
+        }
+        return null;
+    }
+
+
 }

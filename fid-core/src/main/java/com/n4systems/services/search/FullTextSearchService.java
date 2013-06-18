@@ -6,6 +6,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.brainforest.SearchParserService;
+import com.n4systems.services.brainforest.SearchQuery;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
@@ -17,6 +18,7 @@ import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.*;
 import org.apache.lucene.search.highlight.Formatter;
+import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.IOUtils;
@@ -57,24 +59,30 @@ public class FullTextSearchService extends FieldIdPersistenceService {
 		return docs;
 	}
 
-    public SearchResults search(final String queryString, Formatter formatter) {
+    public SearchResults search(final String queryString, final Formatter formatter) {
 
-        Analyzer analyzer = null;
+        final Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_43);
         Directory dir = null;
         IndexReader reader = null;
-        SearchResults results = new SearchResults();
 
         try {
-            analyzer = new StandardAnalyzer(Version.LUCENE_43);
             dir = FSDirectory.open(new File(assetIndexerService.getIndexPath(getCurrentTenant())));
             reader = DirectoryReader.open(dir);
 
-            Query query = searchParserService.createSearchQuery(queryString);
+            final SearchQuery searchQuery = searchParserService.createSearchQuery(queryString);
+            final Query query = searchParserService.convertToLuceneQuery(searchQuery);
 
             List<Document> docs = search(reader, analyzer, query);
 
             // ?? DO WE STILL WANT TO LOG EACH SEARCH HIT???
-            results = new SearchResults(formatter, query, analyzer);
+            SearchResults results = new SearchResults() {
+                @Override protected Analyzer getAnalyzer() {
+                    return analyzer;
+                }
+                @Override protected NumericHighlighter getHighlighter() {
+                    return formatter==null?null : new NumericHighlighter(formatter,new QueryScorer(query), searchQuery);
+                }
+            };
 
             logger.info(queryString + ": " + docs.size());
             for (Document doc: docs) {
@@ -89,7 +97,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
             closeQuietly(reader, dir, analyzer);
         }
 
-        return results;
+        return new SearchResults();
     }
 
     public SearchResults search(String queryString) {
