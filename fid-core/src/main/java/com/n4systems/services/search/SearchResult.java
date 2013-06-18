@@ -22,10 +22,6 @@ public class SearchResult implements Serializable {
 
     private Map<String,ResultValue> results = Maps.newHashMap();
 
-    public SearchResult(Document doc) {
-        this(doc, null, null);
-    }
-
     public SearchResult(Document doc, NumericHighlighter highlighter, Analyzer analyzer) {
         for (IndexableField field:doc.getFields()) {
             results.put(field.name(), new ResultValue(field, highlighter, analyzer));
@@ -135,9 +131,9 @@ public class SearchResult implements Serializable {
             Preconditions.checkState(numberValue!=null,"trying to get numeric value from non-numeric string '" + originalValue + "'");
             return numberValue.longValue();
         }
+
     }
 
-    protected String highlightDateTerm(String dateValue) {
-        return dateValue;
-    }
+
+
 }

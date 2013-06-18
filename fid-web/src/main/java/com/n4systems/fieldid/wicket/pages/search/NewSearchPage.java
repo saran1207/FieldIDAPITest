@@ -40,7 +40,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
@@ -51,7 +50,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -59,31 +57,16 @@ import java.util.List;
 
 public class NewSearchPage extends FieldIDFrontEndPage {
 
-    @SpringBean
-    protected FullTextSearchService fullTextSearchService;
-
+    private @SpringBean FullTextSearchService fullTextSearchService;
     private @SpringBean PersistenceService persistenceService;
     private @SpringBean S3Service s3Service;
 
-    protected IModel<Asset> assetModel;
     private String searchText = null;
     private PageableListView resultsListView = null;
     private WebMarkupContainer listViewContainer = null;
-    private IModel assetList = null;
     private TextField<String> searchCriteria = null;
     private FIDFeedbackPanel feedbackPanel = null;
     private WebMarkupContainer actions;
-    private Link printLink;
-    private Link exportLink;
-    private Link massEventLink;
-    private SubmitLink massUpdateLink;
-    private SubmitLink massScheduleLink;
-    private Model<AssetSearchCriteria> model = null;
-    private AssetSearchCriteria assetSearchCriteria = null;
-    private List<Asset> selectedAssets;
-    SubmitLink massEventsLink;
-    AssetSearchCriteria assetSearchCriteria1 = null;
-    final  SimpleDateFormat sf = new SimpleDateFormat("MM/dd/yy");
     private List<SearchResult> results = Lists.newArrayList();
     private Form resultForm;
 
@@ -170,7 +153,6 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 item.add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + assetId, new AttributeAppender("class", "mattButtonMiddle")).setVisible(hasCreateEvent));
                 item.add(new NonWicketLink("mergeLink", "assetMergeAdd.action?uniqueID=" + assetId, new AttributeAppender("class", "mattButtonRight")).setVisible(hasEditEvent));
 
-                // TODO DD ;
                 item.add(new LatentImage("assetImage") {
                     @Override protected String updateSrc() {
                         Asset asset = persistenceService.find(Asset.class, assetId);
@@ -184,7 +166,6 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             }
 
         };
-        //assetListView.setReuseItems(true);
         assetCheckGroup.add(resultsListView);
 
 
@@ -220,14 +201,14 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             }
         });
 
-        actions.add(massUpdateLink = new SubmitLink("massUpdateLink") {
+        actions.add(new SubmitLink("massUpdateLink") {
             @Override public void onSubmit() {
                 AssetSearchCriteria assetSearchCriteria1 = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
                 setResponsePage(new MassUpdateAssetsPage(new Model(assetSearchCriteria1)));
             }
         });
 
-        actions.add(massScheduleLink = new SubmitLink("massScheduleLink") {
+        actions.add(new SubmitLink("massScheduleLink") {
             @Override public void onSubmit() {
                 AssetSearchCriteria assetSearchCriteria1 = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
                 setResponsePage(new MassSchedulePage(new Model(assetSearchCriteria1)));
@@ -241,11 +222,13 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         List<String> fields = Lists.newArrayList();
         for (String field:result.getFields()) {
             AssetIndexField f = AssetIndexField.fromString(field);
-            if (f==null || (f.isNonDisplayedFixedAttribute() && result.isHighlighted(f.getField()))) {
-                fields.add(result.getKeyValueString(field));
+            boolean highlighted = result.isHighlighted(field);
+            if (f==null || (f.isNonDisplayedFixedAttribute() && highlighted)) {
+                int index = highlighted ? 0 :fields.size();
+                fields.add(index, result.getKeyValueString(field));
             }
         }
-        return Joiner.on(" | ").join(fields.toArray(new String[fields.size()]));
+        return Joiner.on(" | ").skipNulls().join(fields.toArray(new String[fields.size()]));
     }
 
     private String getFixedAttributes(SearchResult result) {
