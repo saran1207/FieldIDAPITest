@@ -122,25 +122,26 @@
         </#if>
     </div>
 
+    <#if userLimitService.usageBasedUsersEnabled>
+        <div class="horizontalGroup">
+            <div class="groupContents">
+                <img src="<@s.url value="/images/usage-based-user.png"/>">
+                <h2><@s.text name="label.usage_based_user" /></h2>
 
-    <div class="horizontalGroup">
-        <div class="groupContents">
-            <img src="<@s.url value="/images/usage-based-user.png"/>">
-            <h2><@s.text name="label.usage_based_user" /></h2>
-
-            <ul class="permissionListing">
-                <li><label><@s.text name="label.perform_events" /></label></li>
-                <li><label><@s.text name="label.run_searches" /></label></li>
-            </ul>
+                <ul class="permissionListing">
+                    <li><label><@s.text name="label.perform_events" /></label></li>
+                    <li><label><@s.text name="label.run_searches" /></label></li>
+                </ul>
+            </div>
+            <#if usageBasedUser >
+                <div class="upgradeUserAction center">
+                    <input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
+                </div>
+            <#else>
+                <div class="upgradeUserAction center">
+                    <@s.url id="changeToUsageBased" action="changeToUsageBased" uniqueID="${uniqueID}"/>
+                    <input type="button" value="<@s.text name='hbutton.change_to_usage_based'/>" onclick="return redirect('${changeToUsageBased}');"/>
+                </div>
+            </#if>
         </div>
-        <#if usageBasedUser >
-            <div class="upgradeUserAction center">
-                <input type="button" value="<@s.text name="hbutton.current_user_type"/>" disabled="true" />
-            </div>
-        <#else>
-            <div class="upgradeUserAction center">
-                <@s.url id="changeToUsageBased" action="changeToUsageBased" uniqueID="${uniqueID}"/>
-                <input type="button" value="<@s.text name='hbutton.change_to_usage_based'/>" onclick="return redirect('${changeToUsageBased}');"/>
-            </div>
-        </#if>
-    </div>
+    </#if>

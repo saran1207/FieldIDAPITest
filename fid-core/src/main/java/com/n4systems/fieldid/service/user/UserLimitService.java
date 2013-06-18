@@ -118,6 +118,10 @@ public class UserLimitService extends FieldIdPersistenceService {
 		boolean atMax = !isReadOnlyUsersUnlimited() && getReadOnlyUserCount() >= getMaxReadOnlyUsers();
 		return atMax;
 	}
+
+    public boolean isUsageBasedUsersEnabled() {
+        return getUserLimits().isUsageBasedUsersEnabled();
+    }
 	
 	public void updateUserLimits(int maxEmployeeUsers, int maxLiteUsers, int maxReadOnlyUsers, boolean usageBasedUsersEnabled, int usageBasedUserEvents) {
 		tenantSettingsService.updateUserLimits(new UserLimits(maxEmployeeUsers, maxLiteUsers, maxReadOnlyUsers, usageBasedUsersEnabled, usageBasedUserEvents));
