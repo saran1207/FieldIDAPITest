@@ -1,38 +1,51 @@
 package com.n4systems.services.search;
 
+import java.util.EnumSet;
+
 public enum AssetIndexField {
     ID("_id"),
     SECONDARY_ID("_secondaryOrgId"),
     CUSTOMER_ID("_customerOrgId"),
     DIVISION_ID("_divisionOrgId"),
-    CREATED("assetcreated"),
-    MODIFIED("assetmodified"),
-    IDENTIFIER("id"),
-    RFID("rfid"),
-    REFERENCE_NUMBER("ref"),
-    PURCHASE_ORDER("po"),
-    COMMENTS("comments"),
-    IDENTIFIED("assetidentifed"),
-    ORDER("order"),
-    LAST_EVENT_DATE("lasteventdate"),
-    LOCATION("location"),
-    CREATED_BY("usercreated"),
-    MODIFIED_BY("usermodified"),
-    IDENTIFIED_BY("identifiedby"),
-    ASSIGNED("assigned"),
-    OWNER("owner"),
-    INTERNAL_ORG("org"),
-    CUSTOMER("cu"),
-    DIVISION("div"),
-    TYPE("at"),
-    TYPE_GROUP("atg"),
-    STATUS("assetstatus"),
+    CREATED("assetcreated",1),
+    MODIFIED("assetmodified",1),
+    IDENTIFIER("id",10),
+    RFID("rfid",9),
+    REFERENCE_NUMBER("ref",9),
+    PURCHASE_ORDER("po",9),
+    COMMENTS("comments",1),
+    IDENTIFIED("assetidentifed",5),
+    ORDER("order",1),
+    LAST_EVENT_DATE("lasteventdate",1),
+    LOCATION("location",5),
+    CREATED_BY("usercreated",1),
+    MODIFIED_BY("usermodified",1),
+    IDENTIFIED_BY("identifiedby",5),
+    ASSIGNED("assigned",5),
+    OWNER("owner",9),
+    INTERNAL_ORG("org",9),
+    CUSTOMER("cu",9),
+    DIVISION("div",9),
+    TYPE("at",9),
+    TYPE_GROUP("atg",5),
+    STATUS("assetstatus",5),
     ALL("_all");
 
+    private static EnumSet<AssetIndexField> displayedFixedAttributes = EnumSet.of(LOCATION, TYPE, IDENTIFIED, RFID, PURCHASE_ORDER, INTERNAL_ORG, CUSTOMER, DIVISION);
+    private static EnumSet<AssetIndexField> nonDisplayedFixedAttributes = EnumSet.of( CREATED, MODIFIED, MODIFIED_BY, REFERENCE_NUMBER, COMMENTS, ORDER, LAST_EVENT_DATE,
+            CREATED_BY, MODIFIED_BY, IDENTIFIED_BY, ASSIGNED, TYPE_GROUP, STATUS);
+    private static EnumSet<AssetIndexField> internalAttributes = EnumSet.of(ALL, ID, CUSTOMER_ID, DIVISION_ID, SECONDARY_ID);
+
     private final String field;
+    private int boost = 1;
+
+    AssetIndexField(String field, int boost) {
+        this.field = field;
+        this.boost = boost;
+    }
 
     AssetIndexField(String field) {
-        this.field = field;
+        this(field,1);
     }
 
     public String getField() {
@@ -48,5 +61,29 @@ public enum AssetIndexField {
             }
         }
         return null;
+    }
+
+    public static EnumSet<AssetIndexField> getDisplayedFixedAttributes() {
+        return displayedFixedAttributes;
+    }
+
+    public static EnumSet<AssetIndexField> getNonDisplayedFixedAttributes() {
+        return nonDisplayedFixedAttributes;
+    }
+
+    public boolean isInternal() {
+        return internalAttributes.contains(this);
+    }
+
+    public boolean isNonDisplayedFixedAttribute() {
+        return nonDisplayedFixedAttributes.contains(this);
+    }
+
+    public boolean isDisplayedFixedAttribute() {
+        return displayedFixedAttributes.contains(this);
+    }
+
+    public int getBoost() {
+        return boost;
     }
 }

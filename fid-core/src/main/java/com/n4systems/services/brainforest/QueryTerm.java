@@ -3,9 +3,10 @@ package com.n4systems.services.brainforest;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class QueryTerm {
+public class QueryTerm implements Serializable {
 
     enum Conjunction { AND, OR };
 

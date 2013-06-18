@@ -17,9 +17,6 @@ import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.*;
 import org.apache.lucene.search.highlight.Formatter;
-import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.QueryScorer;
-import org.apache.lucene.search.highlight.SimpleSpanFragmenter;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.IOUtils;
@@ -35,7 +32,7 @@ import java.util.List;
 public class FullTextSearchService extends FieldIdPersistenceService {
     private static Logger logger = Logger.getLogger(FullTextSearchService.class);
 
-    public static final int DOC_COUNT = 1000;
+    public static final int DOC_COUNT = Integer.MAX_VALUE;
 
     private @Autowired SearchParserService searchParserService;
     private @Autowired SecurityContext securityContext;
@@ -49,7 +46,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
 		//Query query = searchParserService.createSearchQuery(queryString);     //new QueryParser(Version.LUCENE_43, "identifier", analyzer).parse(queryString);
 
 		IndexSearcher searcher = new IndexSearcher(reader);
-		TopDocs topDocs = searcher.search(query, getSecurityQueryFilter(), DOC_COUNT);
+		TopDocs topDocs = searcher.search(query, getSecurityQueryFilter(),DOC_COUNT);
 
         // TODO DD : if query doesn't specify attributes, then use indexSearcher to explain query results (i.e. which fields matched).
         //   also should return the query along with the docs, so UI can normalize it and also use it to find specified results.
@@ -62,12 +59,6 @@ public class FullTextSearchService extends FieldIdPersistenceService {
 
     public SearchResults search(final String queryString, Formatter formatter) {
 
-        boolean isFormatted = false;
-
-        if (null != formatter) {
-            isFormatted = true;
-        }
-
         Analyzer analyzer = null;
         Directory dir = null;
         IndexReader reader = null;
@@ -78,32 +69,16 @@ public class FullTextSearchService extends FieldIdPersistenceService {
             dir = FSDirectory.open(new File(assetIndexerService.getIndexPath(getCurrentTenant())));
             reader = DirectoryReader.open(dir);
 
-            Query query = searchParserService.createSearchQuery(queryString);     //new QueryParser(Version.LUCENE_43, "identifier", analyzer).parse(queryString);
+            Query query = searchParserService.createSearchQuery(queryString);
 
             List<Document> docs = search(reader, analyzer, query);
 
+            // ?? DO WE STILL WANT TO LOG EACH SEARCH HIT???
+            results = new SearchResults(formatter, query, analyzer);
 
-            QueryScorer queryScorer = new QueryScorer(query);
-            Highlighter highlighter = null;
-
-            /* TODO - dont bother highlighting if no Formatter*/
-            if (isFormatted) {
-                highlighter = new Highlighter(formatter, queryScorer);
-                highlighter.setTextFragmenter(new SimpleSpanFragmenter(queryScorer, Integer.MAX_VALUE));
-                highlighter.setMaxDocCharsToAnalyze(Integer.MAX_VALUE);
-
-            }
-
-            // TODO DD :put search query in results so we can normalize display.
-            results = new SearchResults();
             logger.info(queryString + ": " + docs.size());
             for (Document doc: docs) {
-                if (isFormatted) {
-                    results.add(doc, highlighter, analyzer);
-                } else {
-                    results.add(doc);
-                }
-
+                results.add(doc);
                 logDocument(doc);
             }
             return results;
@@ -115,17 +90,13 @@ public class FullTextSearchService extends FieldIdPersistenceService {
         }
 
         return results;
-
     }
-
 
     public SearchResults search(String queryString) {
         return search(queryString, null);
     }
 
-
-
-	public List<Document> findAll(String tenantName) {
+    public List<Document> findAll(String tenantName) {
 		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("name", tenantName);
 		Tenant tenant = persistenceService.find(builder);
@@ -203,7 +174,6 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     private void closeQuietly(Closeable ... closeables) {
         try { IOUtils.close(closeables); } catch (Exception e) {}
     }
-
 
 
 }

@@ -27,7 +27,6 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -239,11 +238,10 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     }
 
     private String getCustomAttributes(SearchResult result) {
-        // TODO : result should use a tree map sorted by priority.
         List<String> fields = Lists.newArrayList();
         for (String field:result.getFields()) {
             AssetIndexField f = AssetIndexField.fromString(field);
-            if (f==null) {
+            if (f==null || (f.isNonDisplayedFixedAttribute() && result.isHighlighted(f.getField()))) {
                 fields.add(result.getKeyValueString(field));
             }
         }
@@ -251,16 +249,12 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     }
 
     private String getFixedAttributes(SearchResult result) {
-        List<String> fields = Lists.newArrayList(
-                result.get(AssetIndexField.LOCATION.getField()),
-                result.get(AssetIndexField.TYPE.getField()),
-                result.get(AssetIndexField.IDENTIFIED.getField()),
-                result.get(AssetIndexField.RFID.getField()),
-                result.get(AssetIndexField.PURCHASE_ORDER.getField()),
-                result.get(AssetIndexField.OWNER.getField()),
-                result.get(AssetIndexField.CUSTOMER.getField()),
-                result.get(AssetIndexField.DIVISION.getField())
-        );
+        List<String> fields = Lists.newArrayList();
+        for (AssetIndexField field : AssetIndexField.getDisplayedFixedAttributes()) {
+            if (!field.isInternal()) {
+                fields.add(result.get(field.getField()));
+            }
+        }
         return Joiner.on(" / ").skipNulls().join(Iterables.filter(fields, new Predicate<String>() {
             @Override public boolean apply(String input) {
                 return input != null && StringUtils.isNotBlank(input);
@@ -303,17 +297,13 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             add(searchCriteria);
 
             add(new AjaxSubmitLink("searchButtonId") {
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    Formatter formatter = new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>");
-                    results = fullTextSearchService.search(searchText,formatter).getResults();
-//                    results = fullTextSearchService.search(searchText).getResults();
+                @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    results = fullTextSearchService.search(searchText,new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>")).getResults();
                     target.add(NewSearchPage.this);
                     target.add(NewSearchPage.this.feedbackPanel);
                 }
 
-                @Override
-                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
                     error("Error searching based on the following criteria:" + searchCriteria.getModelObject());
                 }
             });

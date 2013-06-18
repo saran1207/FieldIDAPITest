@@ -3,10 +3,11 @@ package com.n4systems.services.brainforest;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-public class SearchQuery {
+public class SearchQuery implements Serializable {
 
     public enum Conjunction {
         AND,OR;
