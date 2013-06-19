@@ -108,8 +108,11 @@ p.fileUploadShow label{
 
 
 .imageUploadPreview .ellipsis_text, .previewImageLabel .ellipsis_text{
-	width: 200px;
-	word-wrap: break-word;
+	display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 200px;
 }
 
 .imageUploadPreview span a{ 

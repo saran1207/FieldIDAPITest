@@ -89,6 +89,13 @@
 	.form-horizontal .uploads p {
 		margin-bottom: 10px;
 	}
+    .form-horizontal .uploads span {
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        width: 200px;
+    }
 	.form-horizontal .event-schedules {
 		background-color: #fff;
 		padding: 20px 0;
