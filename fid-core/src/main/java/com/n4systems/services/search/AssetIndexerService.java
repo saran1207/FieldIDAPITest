@@ -169,12 +169,22 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 		builder.addSimpleWhere("name", tenantName);
 		Tenant tenant = persistenceService.find(builder);
 
-		IndexQueueItem item = new IndexQueueItem();
-		item.setType(IndexQueueItem.IndexQueueItemType.TENANT);
-		item.setId(tenant.getId());
+        if(!queueItemExists(tenant.getId(), IndexQueueItem.IndexQueueItemType.TENANT)) {
+            IndexQueueItem item = new IndexQueueItem();
+            item.setType(IndexQueueItem.IndexQueueItemType.TENANT);
+            item.setId(tenant.getId());
 
-		persistenceService.saveAny(item);
+            persistenceService.saveAny(item);
+        }
 	}
+
+    private boolean queueItemExists(Long id, IndexQueueItem.IndexQueueItemType type){
+        QueryBuilder<IndexQueueItem> builder = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
+        builder.addSimpleWhere("id", id);
+        builder.addSimpleWhere("type", IndexQueueItem.IndexQueueItemType.TENANT);
+
+        return persistenceService.exists(builder);
+    }
 
 	private void reindexAssets(final Tenant tenant, final QueryBuilder<Asset> query) {
 		Long count = persistenceService.count(query);
