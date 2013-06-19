@@ -99,7 +99,7 @@
             <result name="success" type="redirectAction">
                 <param name="actionName">organizationEdit</param>
                 <param name="namespace">/admin</param>
-                <param name="id">${id}</param>
+                <param name="id">${tenant.id}</param>
             </result>
 
         </action>
