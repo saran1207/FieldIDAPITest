@@ -55,6 +55,7 @@ public class AssetService extends FieldIdPersistenceService {
     @Autowired private TransactionService transactionService;
     @Autowired private LastEventDateService lastEventDateService;
     @Autowired private AssetCodeMappingService assetCodeMappingService;
+    @Autowired private AssetTypeService assetTypeService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -673,6 +674,9 @@ public class AssetService extends FieldIdPersistenceService {
             asset.setAssignedUser(history.getAssignedUser());
             asset.setInfoOptions(new TreeSet<InfoOptionBean>(history.getInfoOptions()));
             asset.setPurchaseOrder(history.getPurchaseOrder());
+        } else {
+            asset.setType(assetTypeService.getAssetTypes(null).iterator().next());
+            asset.setOwner(getCurrentUser().getOwner());
         }
 
         return asset;

@@ -23,6 +23,10 @@ public class EventTypesForAssetTypeModel extends FieldIDSpringModel<List<EventTy
     protected List<EventType> load() {
         List<EventType> eventTypes = new ArrayList<EventType>();
 
+        if (assetType.getObject() == null) {
+            return eventTypes;
+        }
+
         for (AssociatedEventType associatedEventType : assetType.getObject().getAssociatedEventTypes()) {
             eventTypes.add(associatedEventType.getEventType());
         }
