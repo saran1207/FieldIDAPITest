@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.CachingStrategyLink;
+import com.n4systems.fieldid.wicket.components.CustomJavascriptPanel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -97,6 +98,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         
         add(new DebugBar("debugBar"));
 
+        add(new CustomJavascriptPanel("customJsPanel"));
         add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
 
         SessionUser sessionUser = getSessionUser();

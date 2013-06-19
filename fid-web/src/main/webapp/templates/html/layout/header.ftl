@@ -15,6 +15,10 @@
 		});
 	</script>
 
+    <script type="text/javascript">
+        ${action.getCustomJs()}
+    </script>
+
 </head>
 <div id="pageHeader" class="frontPageHeader">
 

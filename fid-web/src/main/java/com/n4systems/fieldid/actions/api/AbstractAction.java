@@ -33,6 +33,7 @@ import com.n4systems.notifiers.Notifier;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.loaders.NonSecureLoaderFactory;
 import com.n4systems.persistence.savers.SaverFactory;
+import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.util.*;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -40,6 +41,7 @@ import com.n4systems.util.time.SystemClock;
 import com.n4systems.util.uri.ActionURLBuilder;
 import freemarker.template.utility.StringUtil;
 import org.apache.commons.io.FileUtils;
+import org.apache.wicket.util.string.interpolator.MapVariableInterpolator;
 import org.springframework.beans.factory.annotation.Autowired;
 import rfid.web.helper.SessionUser;
 
@@ -85,6 +87,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
     @Autowired
     protected S3Service s3Service;
+
+    @Autowired
+    protected ConfigService configService;
 
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -648,5 +653,18 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
     public String getVersion() {
         return FieldIdVersion.getVersion();
+    }
+
+    public String getCustomJs() {
+        String js = configService.getString(ConfigEntry.CUSTOM_JS);
+
+        Map<String,String> variableMap = new HashMap<String, String>();
+        variableMap.put("tenant", getTenant().getName());
+        variableMap.put("user", getSessionUser().getName());
+        variableMap.put("userType", getSessionUser().getUserTypeLabel());
+        variableMap.put("accountType", getSessionUser().getAccountType());
+
+        MapVariableInterpolator interpolator = new MapVariableInterpolator(js, variableMap);
+        return interpolator.toString();
     }
 }

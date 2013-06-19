@@ -82,7 +82,8 @@ public enum ConfigEntry {
     AMAZON_S3_BUCKET                            (   "fieldid_dev"),
     AMAZON_ACCESS_KEY_ID                        (   "AKIAJYAZBOFFRZAZSIGA"),
     AMAZON_SECRET_ACCESS_KEY                    (   "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"),
-    FIELDID_SALES_MANAGERS_EMAIL                (   "salesmanagers@fieldid.com");
+    FIELDID_SALES_MANAGERS_EMAIL                (   "salesmanagers@fieldid.com"),
+    CUSTOM_JS                                   (   "");
 	
 	private String defaultValue;
 	
