@@ -596,6 +596,7 @@ public class EventService extends FieldIdPersistenceService {
             builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.OPEN));
         }
 
+        builder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", event.getId()));
         builder.addWhere(WhereClauseFactory.create("asset.id", event.getAsset().getId()));
         builder.addWhere(WhereClauseFactory.create("type.id", event.getType().getId()));
 
