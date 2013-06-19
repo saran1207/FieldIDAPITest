@@ -95,6 +95,11 @@
 	width: 80px;
 }
 
+div.wicket-modal div.w_caption,
+div.dialog-modal div.w_caption {
+ 	padding: 0;
+}
+
 .step1 {
 	text-align: center;
 }
@@ -110,10 +115,16 @@
 .step2 {
 	padding: 0 10px;
 }
+.feedbackPanel {
+	margin-bottom: 0;
+}
+.formErrors ul li {
+	padding: 0;
+}
 .step2 hr {
 	border: none;
 	border-top: 1px solid gray;
-	margin: 14px 0 8px;
+	margin: 8px 0;
 }
 	.method input[type=radio] {
 		float: left;
@@ -131,7 +142,7 @@
 		margin: 4px 18px;
 	}
 	.format-configuration input {
-		margin: 4px 0;
+		margin: 2px 0;
 	}
 	.format-configuration label {
 		width: 60px;
