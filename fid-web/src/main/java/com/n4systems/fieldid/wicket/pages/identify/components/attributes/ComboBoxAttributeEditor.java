@@ -16,12 +16,14 @@ import java.util.List;
 public class ComboBoxAttributeEditor extends FormComponentPanel<InfoOptionBean> {
 
     private String selectedItemText;
+    private IModel<InfoFieldBean> fieldModel;
 
-    public ComboBoxAttributeEditor(String id, IModel<InfoOptionBean> optionModel) {
+    public ComboBoxAttributeEditor(String id, IModel<InfoOptionBean> optionModel, IModel<InfoFieldBean> fieldModel) {
         super(id, optionModel);
-        selectedItemText = optionModel.getObject().getName();
+        this.fieldModel = fieldModel;
+        selectedItemText = optionModel.getObject() == null ? null : optionModel.getObject().getName();
 
-        IModel<ArrayList<String>> choices = new Model<ArrayList<String>>(prepareChoices(optionModel.getObject().getInfoField()));
+        IModel<ArrayList<String>> choices = new Model<ArrayList<String>>(prepareChoices(fieldModel.getObject()));
         ComboBox comboBox = new ComboBox("combo", new PropertyModel<String>(this, "selectedItemText"), choices);
         comboBox.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
@@ -50,7 +52,7 @@ public class ComboBoxAttributeEditor extends FormComponentPanel<InfoOptionBean> 
         if (selectedItemText == null) {
             setConvertedInput(null);
         } else {
-            List<InfoOptionBean> infoOptions = getModel().getObject().getInfoField().getInfoOptions();
+            List<InfoOptionBean> infoOptions = fieldModel.getObject().getInfoOptions();
 
             for (InfoOptionBean infoOption : infoOptions) {
                 if (selectedItemText.equals(infoOption.getName())) {
@@ -59,16 +61,14 @@ public class ComboBoxAttributeEditor extends FormComponentPanel<InfoOptionBean> 
                 }
             }
 
-            InfoOptionBean existingOption = getModelObject();
             InfoOptionBean newOption = new InfoOptionBean();
             newOption.setName(selectedItemText);
-            newOption.setInfoField(existingOption.getInfoField());
+            newOption.setInfoField(fieldModel.getObject());
             newOption.setStaticData(false);
             setConvertedInput(newOption);
         }
     }
 
-    protected void onChange(AjaxRequestTarget target) {
+    protected void onChange(AjaxRequestTarget target) { }
 
-    }
 }

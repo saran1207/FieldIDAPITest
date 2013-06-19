@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.identify.components.attributes;
 
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -29,7 +31,11 @@ public class DateAttributeEditor extends FormComponentPanel<InfoOptionBean> {
             } catch(NumberFormatException e) { }
         }
 
-        add(new DateTimePicker("datePicker", new PropertyModel<Date>(this, "selectedDate")).setIncludeTime(includeTime).withNoAllDayCheckbox());
+        DateTimePicker picker = new DateTimePicker("datePicker", new PropertyModel<Date>(this, "selectedDate"));
+        add(picker.setIncludeTime(includeTime).withNoAllDayCheckbox());
+        picker.getDateTextField().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) { } } );
     }
 
     @Override

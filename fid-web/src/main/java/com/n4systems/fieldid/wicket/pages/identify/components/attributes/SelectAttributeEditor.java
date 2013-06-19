@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.ArrayList;
@@ -16,16 +17,16 @@ public class SelectAttributeEditor extends FormComponentPanel<InfoOptionBean> {
 
     private InfoOptionBean infoOption;
 
-    public SelectAttributeEditor(String id, IModel<InfoOptionBean> infoOptionModel) {
+    public SelectAttributeEditor(String id, IModel<InfoOptionBean> infoOptionModel, IModel<InfoFieldBean> infoFieldModel) {
         super(id, infoOptionModel);
         this.infoOption = infoOptionModel.getObject();
 
-        List<InfoOptionBean> unfilteredOptions = new ArrayList<InfoOptionBean>(infoOption.getInfoField().getUnfilteredInfoOptions());
+        List<InfoOptionBean> unfilteredOptions = new ArrayList<InfoOptionBean>(infoFieldModel.getObject().getUnfilteredInfoOptions());
 
         DropDownChoice<InfoOptionBean> select = new DropDownChoice<InfoOptionBean>("select", new PropertyModel<InfoOptionBean>(this,"infoOption"), unfilteredOptions, new InfoOptionChoiceRenderer());
         select.setNullValid(true);
 
-        select.setRequired(infoOption.getInfoField().isRequired());
+        select.setRequired(infoFieldModel.getObject().isRequired());
         add(select);
 
         select.add(new AjaxFormComponentUpdatingBehavior("onchange") {

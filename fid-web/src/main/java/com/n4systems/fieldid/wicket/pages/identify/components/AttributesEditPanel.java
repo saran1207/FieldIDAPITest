@@ -24,6 +24,7 @@ import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -37,7 +38,7 @@ public class AttributesEditPanel extends Panel {
     @SpringBean private AutoAttributeService autoAttributeService;
 
     private IModel<AssetType> assetTypeModel;
-    List<InfoOptionBean> infoOptions;
+    List<AttributeNameValuePair> infoOptions;
 
     public AttributesEditPanel(String id, IModel<AssetType> assetTypeModel) {
         super(id);
@@ -46,17 +47,19 @@ public class AttributesEditPanel extends Panel {
 
         refreshInfoOptions();
 
-        add(new ListView<InfoOptionBean>("attributes", new PropertyModel<List<InfoOptionBean>>(this, "infoOptions")) {
+        add(new ListView<AttributeNameValuePair>("attributes", new PropertyModel<List<AttributeNameValuePair>>(this, "infoOptions")) {
             @Override
-            protected void populateItem(final ListItem<InfoOptionBean> item) {
-                InfoOptionBean infoOption = item.getModelObject();
-                PropertyModel<InfoFieldBean> infoFieldModel = ProxyModel.of(item.getModel(), on(InfoOptionBean.class).getInfoField());
+            protected void populateItem(final ListItem<AttributeNameValuePair> item) {
+                AttributeNameValuePair pair = item.getModelObject();
+                PropertyModel<InfoFieldBean> infoFieldModel = ProxyModel.of(item.getModel(), on(AttributeNameValuePair.class).getInfoField());
+                PropertyModel<InfoOptionBean> infoOptionModel  = ProxyModel.of(item.getModel(), on(AttributeNameValuePair.class).getInfoOption());
                 item.add(new Label("attributeName", ProxyModel.of(infoFieldModel, on(InfoFieldBean.class).getName())));
-                item.add(new WebMarkupContainer("requiredIndicator").setVisible(infoOption.getInfoField().isRequired()));
-                InfoFieldBean.InfoFieldType fieldType = infoOption.getInfoField().getType();
+                item.add(new WebMarkupContainer("requiredIndicator").setVisible(pair.infoField.isRequired()));
+                InfoFieldBean.InfoFieldType fieldType = pair.infoField.getType();
+
                 switch (fieldType) {
                     case ComboBox:
-                        item.add(new ComboBoxAttributeEditor("attributeEditor", item.getModel()) {
+                        item.add(new ComboBoxAttributeEditor("attributeEditor", infoOptionModel, infoFieldModel) {
                             @Override
                             protected void onChange(AjaxRequestTarget target) {
                                 performAutoAttributeAdjustments();
@@ -65,10 +68,10 @@ public class AttributesEditPanel extends Panel {
                         });
                         break;
                     case DateField:
-                        item.add(new DateAttributeEditor("attributeEditor", item.getModel()));
+                        item.add(new DateAttributeEditor("attributeEditor", infoOptionModel));
                         break;
                     case SelectBox:
-                        item.add(new SelectAttributeEditor("attributeEditor", item.getModel()) {
+                        item.add(new SelectAttributeEditor("attributeEditor", infoOptionModel, infoFieldModel) {
                             @Override
                             protected void onChange(AjaxRequestTarget target) {
                                 performAutoAttributeAdjustments();
@@ -77,10 +80,10 @@ public class AttributesEditPanel extends Panel {
                         });
                         break;
                     case TextField:
-                        if (!infoOption.getInfoField().isUsingUnitOfMeasure()) {
-                            item.add(new TextAttributeEditor("attributeEditor", item.getModel()));
+                        if (!infoFieldModel.getObject().isUsingUnitOfMeasure()) {
+                            item.add(new TextAttributeEditor("attributeEditor", infoOptionModel));
                         } else {
-                            item.add(new UnitOfMeasureEditor("attributeEditor", item.getModel()));
+                            item.add(new UnitOfMeasureEditor("attributeEditor", infoOptionModel));
                         }
                         break;
                 }
@@ -99,8 +102,11 @@ public class AttributesEditPanel extends Panel {
 
         AddAssetHistory addAssetHistory = assetService.getAddAssetHistory();
 
-        infoOptions = new ArrayList<InfoOptionBean>(infoFields.size());
+        infoOptions = new ArrayList<AttributeNameValuePair>(infoFields.size());
         for (InfoFieldBean infoField : infoFields) {
+
+            AttributeNameValuePair pair = new AttributeNameValuePair();
+            pair.infoField = infoField;
 
             InfoOptionBean infoOption = null;
 
@@ -113,7 +119,8 @@ public class AttributesEditPanel extends Panel {
                 infoOption.setInfoField(infoField);
             }
 
-            infoOptions.add(infoOption);
+            pair.infoOption = infoOption;
+            infoOptions.add(pair);
         }
     }
 
@@ -135,7 +142,8 @@ public class AttributesEditPanel extends Panel {
 
     public List<InfoOptionBean> getEnteredInfoOptions() {
         List<InfoOptionBean> optionsWithBlanksRemoved = new ArrayList<InfoOptionBean>();
-        for (InfoOptionBean infoOption : infoOptions) {
+        for (AttributeNameValuePair pair : infoOptions) {
+            InfoOptionBean infoOption = pair.infoOption;
             if (infoOption != null && !StringUtils.isBlank(infoOption.getName())) {
                 optionsWithBlanksRemoved.add(infoOption);
             }
@@ -143,8 +151,17 @@ public class AttributesEditPanel extends Panel {
         return optionsWithBlanksRemoved;
     }
 
+    protected List<InfoOptionBean> getAllInfoOptions() {
+        List<InfoOptionBean> allInfoOptions = new ArrayList<InfoOptionBean>();
+        for (AttributeNameValuePair pair : infoOptions) {
+            allInfoOptions.add(pair.getInfoOption());
+        }
+        return allInfoOptions;
+    }
+
     private void performAutoAttributeAdjustments() {
-        AutoAttributeDefinition template = autoAttributeService.findTemplateToApply(assetTypeModel.getObject(), infoOptions);
+        List<InfoOptionBean> allInfoOptions = getAllInfoOptions();
+        AutoAttributeDefinition template = autoAttributeService.findTemplateToApply(assetTypeModel.getObject(), allInfoOptions);
 
         if (template == null) {
             // No auto attribute template here!!
@@ -152,18 +169,18 @@ public class AttributesEditPanel extends Panel {
         }
 
         List<InfoOptionBean> outputs = template.getOutputs();
-        List<InfoOptionBean> newAttributesList = new ArrayList<InfoOptionBean>(infoOptions.size());
+        List<AttributeNameValuePair> newAttributesList = new ArrayList<AttributeNameValuePair>(infoOptions.size());
 
-        for (InfoOptionBean infoOption : infoOptions) {
+        for (InfoOptionBean infoOption : allInfoOptions) {
             boolean foundInOutput = false;
             for (InfoOptionBean output : outputs) {
                 if (output.getInfoField().getUniqueID().equals(infoOption.getInfoField().getUniqueID())) {
                     foundInOutput = true;
                     if (output.isStaticData()) {
-                        newAttributesList.add(output);
+                        newAttributesList.add(createNVP(output));
                     } else {
                         infoOption.setName(output.getName());
-                        newAttributesList.add(infoOption);
+                        newAttributesList.add(createNVP(infoOption));
                     }
                     break;
                 }
@@ -174,14 +191,43 @@ public class AttributesEditPanel extends Panel {
                 if (template.getCriteria().getOutputs().contains(infoOption.getInfoField())) {
                     InfoOptionBean newDummyOption = new InfoOptionBean();
                     newDummyOption.setInfoField(infoOption.getInfoField());
-                    newAttributesList.add(newDummyOption);
+                    newAttributesList.add(createNVP(newDummyOption));
                 } else {
-                    newAttributesList.add(infoOption);
+                    newAttributesList.add(createNVP(infoOption));
                 }
             }
         }
 
         infoOptions = newAttributesList;
+    }
+
+    private AttributeNameValuePair createNVP(InfoOptionBean bean) {
+        AttributeNameValuePair pair = new AttributeNameValuePair();
+        pair.setInfoField(bean.getInfoField());
+        pair.setInfoOption(bean);
+        return pair;
+    }
+
+    public static class AttributeNameValuePair implements Serializable {
+
+        public InfoFieldBean infoField;
+        public InfoOptionBean infoOption;
+
+        public InfoFieldBean getInfoField() {
+            return infoField;
+        }
+
+        public void setInfoField(InfoFieldBean infoField) {
+            this.infoField = infoField;
+        }
+
+        public InfoOptionBean getInfoOption() {
+            return infoOption;
+        }
+
+        public void setInfoOption(InfoOptionBean infoOption) {
+            this.infoOption = infoOption;
+        }
     }
 
 }
