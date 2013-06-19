@@ -187,12 +187,12 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             @Override
             public void onSubmit() {
 
-                AssetSearchCriteria assetSearchCriteria3 = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
+                AssetSearchCriteria assetSearchCriteria = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
 
                 HttpServletRequest httpServletRequest = ((ServletWebRequest) getRequest()).getContainerRequest();
                 HttpSession session = httpServletRequest.getSession();
 
-                SearchCriteriaContainer<AssetSearchCriteria> container = new LegacyReportCriteriaStorage().storeCriteria(assetSearchCriteria3, session);
+                SearchCriteriaContainer<AssetSearchCriteria> container = new LegacyReportCriteriaStorage().storeCriteria(assetSearchCriteria, session);
 
                 String formattedUrl = String.format("/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", container.getSearchId());
                 String destination = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://" + httpServletRequest.getServerName() + httpServletRequest.getContextPath() + formattedUrl;
@@ -203,15 +203,15 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
         actions.add(new SubmitLink("massUpdateLink") {
             @Override public void onSubmit() {
-                AssetSearchCriteria assetSearchCriteria1 = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
-                setResponsePage(new MassUpdateAssetsPage(new Model(assetSearchCriteria1)));
+                AssetSearchCriteria assetSearchCriteria = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
+                setResponsePage(new MassUpdateAssetsPage(new Model(assetSearchCriteria)));
             }
         });
 
         actions.add(new SubmitLink("massScheduleLink") {
             @Override public void onSubmit() {
-                AssetSearchCriteria assetSearchCriteria1 = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
-                setResponsePage(new MassSchedulePage(new Model(assetSearchCriteria1)));
+                AssetSearchCriteria assetSearchCriteria = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
+                setResponsePage(new MassSchedulePage(new Model(assetSearchCriteria)));
             }
         });
 
@@ -259,14 +259,14 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             ids.add(asset.getID());
         }
 
-        AssetSearchCriteria assetSearchCriteria1 = new AssetSearchCriteria();
+        AssetSearchCriteria assetSearchCriteria = new AssetSearchCriteria();
 
         MultiIdSelection multiIdSelection = new MultiIdSelection();
         multiIdSelection.addAllIds(ids);
 
-        assetSearchCriteria1.setSelection(multiIdSelection);
+        assetSearchCriteria.setSelection(multiIdSelection);
 
-        return assetSearchCriteria1;
+        return assetSearchCriteria;
     }
 
     class NewSearchForm extends Form {
@@ -277,19 +277,24 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
             searchCriteria = new TextField<String>("searchCriteria",new PropertyModel<String>(NewSearchPage.this, "searchText"));
             searchCriteria.setRequired(true);
+
             add(searchCriteria);
 
-            add(new AjaxSubmitLink("searchButtonId") {
-                @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    results = fullTextSearchService.search(searchText,new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>")).getResults();
+            AjaxSubmitLink submit;
+            add( submit = new AjaxSubmitLink("searchButtonId") {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    results = fullTextSearchService.search(searchText, new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>")).getResults();
                     target.add(NewSearchPage.this);
                     target.add(NewSearchPage.this.feedbackPanel);
                 }
 
-                @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
                     error("Error searching based on the following criteria:" + searchCriteria.getModelObject());
                 }
             });
+            setDefaultButton(submit);
         }
     }
 

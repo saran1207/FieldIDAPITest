@@ -59,7 +59,7 @@ public class LatentImage extends WebComponent {
     private IModel<String> getCssClass() {
         return new Model<String>() {
             @Override public String getObject() {
-                return src==null || StringUtils.isEmpty(src) ? "not-loaded" : "loaded";
+                return NOT_INITIALIZED.equals(src) || StringUtils.isEmpty(src)? "not-loaded" : "loaded";
             }
         };
     }
