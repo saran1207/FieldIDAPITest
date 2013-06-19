@@ -1,11 +1,13 @@
 package com.n4systems.services.search;
 
+import com.n4systems.model.api.UnsecuredEntity;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "index_queue_items")
-public class IndexQueueItem implements Serializable {
+public class IndexQueueItem implements Serializable, UnsecuredEntity {
 
 	public enum IndexQueueItemType { ASSET_INSERT, ASSET_UPDATE, USER, ORG, ORDER, PREDEFINEDLOCATION, ASSETTYPE, ASSETTYPEGROUP, ASSETSTATUS, TENANT };
 
