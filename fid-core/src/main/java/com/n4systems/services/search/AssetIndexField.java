@@ -54,8 +54,9 @@ public enum AssetIndexField {
 
     public static AssetIndexField fromString(String s) {
         if (s!=null) {
+            s = s.toLowerCase().trim();
             for (AssetIndexField field:values()) {
-                if (field.getField().equals(s)) {
+                if (field.getField().equalsIgnoreCase(s)) {
                     return field;
                 }
             }

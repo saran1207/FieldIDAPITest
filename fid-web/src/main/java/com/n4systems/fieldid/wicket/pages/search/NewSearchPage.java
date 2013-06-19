@@ -223,7 +223,9 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         for (String field:result.getFields()) {
             AssetIndexField f = AssetIndexField.fromString(field);
             boolean highlighted = result.isHighlighted(field);
-            if (f==null || (f.isNonDisplayedFixedAttribute() && highlighted)) {
+            // if no predefined field exists, we know its a custom field .: display it.
+            // if it's a predefined field but one that isn't always displayed, display it if it matches the criteria.
+            if (f==null || (f.isNonDisplayedFixedAttribute() && highlighted && !f.isInternal())) {
                 int index = highlighted ? 0 :fields.size();
                 fields.add(index, result.getKeyValueString(field));
             }
@@ -306,6 +308,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/pageStyles/searchResults.css");
 
         response.renderJavaScriptReference("javascript/subMenu.js");
+        response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");
     }
 

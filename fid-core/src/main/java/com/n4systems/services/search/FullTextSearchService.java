@@ -80,7 +80,9 @@ public class FullTextSearchService extends FieldIdPersistenceService {
                     return analyzer;
                 }
                 @Override protected NumericHighlighter getHighlighter() {
-                    return formatter==null?null : new NumericHighlighter(formatter,new QueryScorer(query), searchQuery);
+                    QueryScorer scorer = new QueryScorer(query);
+                    scorer.setExpandMultiTermQuery(true);
+                    return formatter==null?null : new NumericHighlighter(formatter, scorer, searchQuery);
                 }
             };
 
