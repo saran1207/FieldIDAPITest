@@ -53,6 +53,7 @@
 /* Styles for creating rows and aligning form fields */
 .form-horizontal .control-group {
 	margin-bottom: 20px;
+	position: relative;
 }	
 	.form-horizontal .control-group input,
 	.form-horizontal .control-group select,
@@ -79,6 +80,74 @@
 	.form-horizontal .control-group a.links {
 		display: block;
 	}
+
+/* Identify Multiple Assets modal window */
+
+.multiple-option {
+	position: absolute;
+	top: 5px;
+	left: 290px;
+}
+.multiple-option a {
+	margin-left: 10px;
+}
+.form-horizontal .control-group input.short {
+	width: 80px;
+}
+
+.step1 {
+	text-align: center;
+}
+	.step1 label {
+		display: block;
+	}
+	.step1 input[type=text] {
+		width: 40px;
+		padding: 1px 2px;
+		margin-top: 6px;
+	}
+
+.step2 {
+	padding: 0 10px;
+}
+.step2 hr {
+	border: none;
+	border-top: 1px solid gray;
+	margin: 14px 0 8px;
+}
+	.method input[type=radio] {
+		float: left;
+		*float: none;
+		margin-right: 5px;
+	}
+	.method label {
+		font-weight: bold;
+		margin-right: 4px;
+	}
+	.method .title {
+		font-size: 12px;
+	}
+	.method p {
+		margin: 4px 18px;
+	}
+	.format-configuration input {
+		margin: 4px 0;
+	}
+	.format-configuration label {
+		width: 60px;
+		display: inline-block;
+		margin-left: 18px;
+	}
+
+.step3 th {
+	font-weight: bold;
+	padding-bottom: 4px;
+	font-size: 12px;
+}
+.step3 input {
+	margin-bottom: 4px;
+}
+
 
 /* Uploads/right column section */
 .form-horizontal .uploads {
@@ -150,6 +219,16 @@ table.identifiers-grid tr {
     font-size: 11px;
     padding: 0;
 }
+
+/* overriding default css */
+.header {
+	border-bottom: none;
+	padding-bottom: 0;
+	margin-top: 10px;
+}
+	.header h1 {
+		float: left;
+	}
 
 .realPage {
     clear: both;

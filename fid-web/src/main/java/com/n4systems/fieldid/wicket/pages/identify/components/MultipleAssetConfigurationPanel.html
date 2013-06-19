@@ -2,9 +2,9 @@
 
     <div wicket:id="feedbackPanel"></div>
 
-    <div wicket:id="step1Panel">
+    <div wicket:id="step1Panel" class="step1">
         <form wicket:id="step1Form">
-            How many assets do you want to identify? (Maximum 250)
+            <label wicket:for="howMany">How many assets do you want to identify? (Maximum 250)</label>
             <input type="text" wicket:id="howMany">
             <input type="submit" wicket:id="continueButton" wicket:message="value:label.continue">
         </form>
@@ -12,15 +12,14 @@
 
     <div wicket:id="step2Panel">
 
-        <form wicket:id="step2Form">
+        <form wicket:id="step2Form" class="step2">
 
             <div wicket:id="identifierMethodGroup">
 
-                <span wicket:id="identifierMethod">
+                <div wicket:id="identifierMethod" class="method">
                     <input type="radio" wicket:id="methodRadio">
-
                     <div wicket:id="methodConfigurationPanel"></div>
-                </span>
+                </div>
 
             </div>
 
@@ -30,7 +29,7 @@
 
     </div>
 
-    <div wicket:id="step3Panel">
+    <div wicket:id="step3Panel" class="step3">
 
         <form wicket:id="step3Form">
 

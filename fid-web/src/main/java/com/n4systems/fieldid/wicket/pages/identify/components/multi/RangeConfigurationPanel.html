@@ -1,19 +1,13 @@
 <wicket:panel>
 
-
-    <div class="format-title">Range</div>
-
-    <div class="format-description">Do not generate ID Numbers, I will set ID Number manually.</div>
+    <label class="title" wicket:for="methodRadio">Range</label>
+    <p>Do not generate ID Numbers, I will set ID Number manually.</p>
 
     <div class="format-configuration">
-        Prefix
-        <input wicket:id="prefix">
-
-        Start
-        <input wicket:id="start">
-
-        Suffix
-        <input wicket:id="suffix">
+        <label wicket:for="prefix">Prefix</label><input wicket:id="prefix"><br />
+        <label wicket:for="start">Start</label><input wicket:id="start"><br />
+        <label wicket:for="suffix">Suffix</label><input wicket:id="suffix">
     </div>
+    <hr />
 
 </wicket:panel>

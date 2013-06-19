@@ -33,10 +33,13 @@
 
                 <div wicket:id="singleIdentifyContainer">
                     <div class="control-group" wicket:id="identifierContainer">
+                         
                         <label>* <span wicket:id="identifierLabel"></span></label>
-                        <input wicket:id="identifier">
+                        <input class="short" wicket:id="identifier">
                         <a class="links" wicket:id="generateIdentifierLink"><wicket:message key="label.generate"/></a>
-                        <a class="links" wicket:id="identifyMultiple">Identify Multiple Assets...</a>
+
+                        <span class="multiple-option"> OR <a wicket:id="identifyMultiple">Identify Multiple Assets</a></span>
+                       
 
                         <div wicket:id="duplicateIdentifierWarning">
                             <wicket:message key="message.warning_duplicate_id_number"/>
@@ -59,7 +62,6 @@
                 </div>
 
                 <div wicket:id="multiIdentifyContainer">
-
                 </div>
 
             </fieldset>
@@ -152,7 +154,7 @@
 
         </div>
     </form>
-
+    
     <div wicket:id="schedulePicker"></div>
     </div>
 

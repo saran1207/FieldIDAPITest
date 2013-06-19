@@ -1,11 +1,12 @@
 <wicket:panel>
 
-    <div class="format-title">Batch or Lot Number</div>
+    <label class="title" wicket:for="methodRadio">Batch or Lot Number</label>
 
-    <div class="format-description">Use this when you would like all assets to have the same identifier. This could be a batch or lot number.</div>
+    <p>Use this when you would like all assets to have the same identifier. This could be a batch or lot number.</p>
 
     <div class="format-configuration">
-        Identifier <input wicket:id="identifier">
+        <label wicket:for="identifier">Identifier</label><input wicket:id="identifier">
     </div>
+    <hr />
 
 </wicket:panel>
