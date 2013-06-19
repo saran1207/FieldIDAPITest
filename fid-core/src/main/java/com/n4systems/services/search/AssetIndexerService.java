@@ -180,8 +180,8 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
     private boolean queueItemExists(Long id, IndexQueueItem.IndexQueueItemType type){
         QueryBuilder<IndexQueueItem> builder = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
-        builder.addSimpleWhere("id", id);
-        builder.addSimpleWhere("type", IndexQueueItem.IndexQueueItemType.TENANT);
+        builder.addSimpleWhere("item.id", id);
+        builder.addSimpleWhere("item.type", IndexQueueItem.IndexQueueItemType.TENANT);
 
         return persistenceService.exists(builder);
     }
