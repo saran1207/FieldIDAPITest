@@ -45,8 +45,6 @@ public class FullTextSearchService extends FieldIdPersistenceService {
         // TODO DD: do i need analyzer parameter???
 		List<Document> docs = new ArrayList<Document>();
 
-		//Query query = searchParserService.createSearchQuery(queryString);     //new QueryParser(Version.LUCENE_43, "identifier", analyzer).parse(queryString);
-
 		IndexSearcher searcher = new IndexSearcher(reader);
 		TopDocs topDocs = searcher.search(query, getSecurityQueryFilter(),DOC_COUNT);
 

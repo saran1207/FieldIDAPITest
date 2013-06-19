@@ -1,12 +1,14 @@
 package com.n4systems.services.search;
 
+import com.google.common.base.Preconditions;
+
 import java.util.EnumSet;
 
 public enum AssetIndexField {
     ID("_id"),
-    SECONDARY_ID("_secondaryOrgId"),
-    CUSTOMER_ID("_customerOrgId"),
-    DIVISION_ID("_divisionOrgId"),
+    SECONDARY_ID("_secondaryorgid"),
+    CUSTOMER_ID("_customerorgid"),
+    DIVISION_ID("_divisionorgid"),
     CREATED("assetcreated",1),
     MODIFIED("assetmodified",1),
     IDENTIFIER("id",10),
@@ -40,6 +42,7 @@ public enum AssetIndexField {
     private int boost = 1;
 
     AssetIndexField(String field, int boost) {
+        Preconditions.checkArgument(field.equals(field.toLowerCase()), "WARNING : since all fields are index as lowercase, you should not be using uppercase in " + field);
         this.field = field;
         this.boost = boost;
     }

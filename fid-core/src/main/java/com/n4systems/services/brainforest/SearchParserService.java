@@ -64,71 +64,71 @@ public class SearchParserService extends FieldIdService {
     }
 
     private Query getQueryForTerm(QueryTerm term) {
-        String field = term.getAttribute()!=null ? term.getAttribute() : AssetIndexField.ALL.getField();
+        String attribute = term.getAttribute()!=null ? term.getAttribute().toLowerCase() : AssetIndexField.ALL.getField();
         Value value = term.getValue();
-        return getQueryForTerm(field, value, term.getOperator());
+        return getQueryForTerm(attribute, value, term.getOperator());
     }
 
-    private Query getQueryForTerm(String field, Value value, QueryTerm.Operator operator) {
+    private Query getQueryForTerm(String attribute, Value value, QueryTerm.Operator operator) {
         if (value instanceof RangeValue) {
-            return getRangeQueryForTerm(field, (RangeValue)value);
+            return getRangeQueryForTerm(attribute, (RangeValue)value);
         } else if (value instanceof ListValue) {
-            return getListQueryForTerm(field,(ListValue)value);
+            return getListQueryForTerm(attribute,(ListValue)value);
         } else {
             Preconditions.checkState(value instanceof SimpleValue, "type of value not supported " + value.getClass().getSimpleName());
-            return getSimpleQueryForTerm(field, operator, (SimpleValue)value);
+            return getSimpleQueryForTerm(attribute, operator, (SimpleValue)value);
         }
     }
 
-    private Query getSimpleQueryForTerm(String field, QueryTerm.Operator operator, SimpleValue value) {
+    private Query getSimpleQueryForTerm(String attribute, QueryTerm.Operator operator, SimpleValue value) {
         if (value.isNumber()) {
             NumberRangeInfo rangeInfo = new NumberRangeInfo(value.getNumber(), operator);
             if (rangeInfo.type==Long.class) {
-                return NumericRangeQuery.newLongRange(field,rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
+                return NumericRangeQuery.newLongRange(attribute,rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
             } else if (rangeInfo.type==Double.class) {
-                return NumericRangeQuery.newDoubleRange(field, rangeInfo.getMinDouble(), rangeInfo.getMaxDouble(), rangeInfo.includeMin, rangeInfo.includeMax);
+                return NumericRangeQuery.newDoubleRange(attribute, rangeInfo.getMinDouble(), rangeInfo.getMaxDouble(), rangeInfo.includeMin, rangeInfo.includeMax);
             }
         } else if (value.isDate()) {
             DateTime date = value.getDate();
             NumberRangeInfo rangeInfo = new NumberRangeInfo(date.toDate().getTime(), operator).withGranularity(TimeUnit.DAYS.toMillis(1));
-            return NumericRangeQuery.newLongRange(field, rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
+            return NumericRangeQuery.newLongRange(attribute, rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
         } else if (value.isString()) {
-            return getPhraseQueryForTerm(field, value);
+            return getPhraseQueryForTerm(attribute, value);
         }
         return null;
     }
 
-    private Query getPhraseQueryForTerm(String field, SimpleValue value) {
+    private Query getPhraseQueryForTerm(String attribute, SimpleValue value) {
         // TODO DD : is it better to return a single termQuery if there is only one string value??
         PhraseQuery query = new PhraseQuery();
         StringTokenizer stringTokenizer = new StringTokenizer(value.getString());
         while (stringTokenizer.hasMoreTokens()) {
-            query.add(new Term(field,stringTokenizer.nextToken().toLowerCase()));
+            query.add(new Term(attribute,stringTokenizer.nextToken().toLowerCase()));
         }
         return query;
     }
 
-    private Query getListQueryForTerm(String field, ListValue value) {
+    private Query getListQueryForTerm(String attribute, ListValue value) {
         BooleanQuery query = new BooleanQuery();
         List<Value> values = value.getValues();
         // what about date values/numeric values...need to handle them here.
         for (Value v:values) {
-            query.add(getQueryForTerm(field, v, QueryTerm.Operator.EQ), BooleanClause.Occur.SHOULD);
+            query.add(getQueryForTerm(attribute, v, QueryTerm.Operator.EQ), BooleanClause.Occur.SHOULD);
         }
         return query;
     }
 
-    private Query getRangeQueryForTerm(String field, RangeValue value) {
+    private Query getRangeQueryForTerm(String attribute, RangeValue value) {
         if (value.isNumber()) {
             double from = value.getFrom().getNumber().doubleValue();
             double to = value.getTo().getNumber().doubleValue();
-            return NumericRangeQuery.newDoubleRange(field, from, to, true, true);
+            return NumericRangeQuery.newDoubleRange(attribute, from, to, true, true);
         } else if (value.isDate()) {
             long from = value.getFrom().getDate().toDate().getTime();
             long to = value.getTo().getDate().toDate().getTime();
-            return NumericRangeQuery.newLongRange(field, from, to, true, false);
+            return NumericRangeQuery.newLongRange(attribute, from, to, true, false);
         } else if (value.isString()) {
-            return new TermRangeQuery(field, new BytesRef(value.getFrom().getString()), new BytesRef(value.getTo().getString()), true, true);
+            return new TermRangeQuery(attribute, new BytesRef(value.getFrom().getString()), new BytesRef(value.getTo().getString()), true, true);
         }
         return null;
     }
