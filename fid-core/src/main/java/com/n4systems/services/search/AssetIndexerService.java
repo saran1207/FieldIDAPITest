@@ -40,7 +40,10 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Transactional
 public class AssetIndexerService extends FieldIdPersistenceService {
@@ -234,17 +237,17 @@ public class AssetIndexerService extends FieldIdPersistenceService {
         addIdField(doc, AssetIndexField.CUSTOMER_ID.getField(), owner.getCustomerOrg());
         addIdField(doc, AssetIndexField.DIVISION_ID.getField(), owner.getDivisionOrg());
 
-        addField(doc, AssetIndexField.CREATED.getField(), asset.getCreated());
-        addField(doc, AssetIndexField.MODIFIED.getField(), asset.getModified());
-        addField(doc, AssetIndexField.IDENTIFIER.getField(), asset.getIdentifier());
-        addField(doc, AssetIndexField.RFID.getField(), asset.getRfidNumber());
-        addField(doc, AssetIndexField.REFERENCE_NUMBER.getField(), asset.getCustomerRefNumber());
-        addField(doc, AssetIndexField.PURCHASE_ORDER.getField(), asset.getPurchaseOrder());
-        addField(doc, AssetIndexField.COMMENTS.getField(), asset.getComments());
-        addField(doc, AssetIndexField.IDENTIFIED.getField(), asset.getIdentified());
-        addField(doc, AssetIndexField.ORDER.getField(), asset.getOrderNumber());
-        addField(doc, AssetIndexField.LAST_EVENT_DATE.getField(), asset.getLastEventDate());
-        addField(doc, AssetIndexField.LOCATION.getField(), asset.getAdvancedLocation().getFullName());
+        addField(doc, AssetIndexField.CREATED, asset.getCreated());
+        addField(doc, AssetIndexField.MODIFIED, asset.getModified());
+        addField(doc, AssetIndexField.IDENTIFIER, asset.getIdentifier());
+        addField(doc, AssetIndexField.RFID, asset.getRfidNumber());
+        addField(doc, AssetIndexField.REFERENCE_NUMBER, asset.getCustomerRefNumber());
+        addField(doc, AssetIndexField.PURCHASE_ORDER, asset.getPurchaseOrder());
+        addField(doc, AssetIndexField.COMMENTS, asset.getComments());
+        addField(doc, AssetIndexField.IDENTIFIED, asset.getIdentified());
+        addField(doc, AssetIndexField.ORDER, asset.getOrderNumber());
+        addField(doc, AssetIndexField.LAST_EVENT_DATE, asset.getLastEventDate());
+        addField(doc, AssetIndexField.LOCATION, asset.getAdvancedLocation().getFullName());
 
         addUserField(doc, AssetIndexField.CREATED_BY.getField(), asset.getCreatedBy());
         addUserField(doc, AssetIndexField.MODIFIED_BY.getField(), asset.getModifiedBy());
@@ -261,7 +264,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
         for (InfoOptionBean infoOption : asset.getInfoOptions()) {
             if (!infoOption.getInfoField().isRetired()) {
-                addField(doc, infoOption.getInfoField().getName(), parseInfoOptionValue(infoOption));
+                addField(doc, AssetIndexField.fromString(infoOption.getInfoField().getName()), parseInfoOptionValue(infoOption));
             }
         }
 
@@ -278,7 +281,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
                 return input.stringValue();
             }
         }));
-        addField(doc, AssetIndexField.ALL.getField(), Joiner.on(" ").join(fields));
+        addField(doc, AssetIndexField.ALL, Joiner.on(" ").join(fields));
     }
 
     private Object parseInfoOptionValue(InfoOptionBean infoOption) {
@@ -311,40 +314,52 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
 	private void addIdField(Document doc, String name, BaseEntity baseEntity) {
 		if (baseEntity != null) {
-			addField(doc, name, baseEntity.getId());
+			addField(doc, AssetIndexField.fromString(name), baseEntity.getId());
 		}
         // TODO DD : else addField(doc,name,-1L);
 	}
 
 	private void addNamedEntity(Document doc, String name, NamedEntity namedEntity) {
 		if (namedEntity != null) {
-			addField(doc, name, namedEntity.getName());
+			addField(doc, AssetIndexField.fromString(name), namedEntity.getName());
 		}
 	}
 
 	private void addUserField(Document doc, String name, User user) {
 		if (user != null) {
-			addField(doc, name, user.getDisplayName());
+			addField(doc, AssetIndexField.fromString(name), user.getDisplayName());
 		}
 	}
 
-	private void addField(Document doc, String name, Object value) {
+	private void addField(Document doc, AssetIndexField assetIndexField, Object value) {
 		if (value != null) {
-            name = name.toLowerCase().trim();
+            // name = name.toLowerCase().trim();
 			if (value instanceof String) {
-				doc.add(new TextField(name, (String) value, Field.Store.YES));
+                Field f = new TextField(assetIndexField.name(), (String) value, Field.Store.YES);
+                f.setBoost(assetIndexField.getBoost());
+				doc.add(f);
 			} else if (value instanceof Float) {
-				doc.add(new FloatField(name, (Float) value, Field.Store.YES));
-			} else if (value instanceof Double) {
-				doc.add(new DoubleField(name, (Double) value, Field.Store.YES));
-			} else if (value instanceof Long) {
-				doc.add(new LongField(name, (Long) value, Field.Store.YES));
+				Field f = new FloatField(assetIndexField.name(), (Float) value, Field.Store.YES);
+                f.setBoost(assetIndexField.getBoost());
+                doc.add(f);
+            } else if (value instanceof Double) {
+				Field f = new DoubleField(assetIndexField.name(), (Double) value, Field.Store.YES);
+                f.setBoost(assetIndexField.getBoost());
+                doc.add(f);
+            } else if (value instanceof Long) {
+				doc.add(new LongField(assetIndexField.name(), (Long) value, Field.Store.YES));
+                Field f = new DoubleField(assetIndexField.name(), (Double) value, Field.Store.YES);
+                f.setBoost(assetIndexField.getBoost());
+                doc.add(f);
 			} else if (value instanceof Integer) {
-				doc.add(new IntField(name, (Integer) value, Field.Store.YES));
-			} else if (value instanceof Date) {
-//				doc.add(new TextField(name, DateTools.dateToString((Date) value, DateTools.Resolution.SECOND), Field.Store.YES));
-				doc.add(new LongField(name, ((Date) value).getTime(), Field.Store.YES));
-			} else {
+				Field f = new IntField(assetIndexField.name(), (Integer) value, Field.Store.YES);
+                f.setBoost(assetIndexField.getBoost());
+                doc.add(f);
+            } else if (value instanceof Date) {
+                Field f = new LongField(assetIndexField.name(), ((Date) value).getTime(), Field.Store.YES);
+                f.setBoost(assetIndexField.getBoost());
+                doc.add(f);
+            } else {
 				throw new RuntimeException("Unhandled Field Type: " + value.getClass());
 			}
 		}
