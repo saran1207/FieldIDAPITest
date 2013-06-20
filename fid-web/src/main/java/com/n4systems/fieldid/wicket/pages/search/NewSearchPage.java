@@ -60,10 +60,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 public class NewSearchPage extends FieldIDFrontEndPage {
@@ -106,13 +103,8 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 return provider.size() > 0;
             }
         };
+        searchResults.setOutputMarkupPlaceholderTag(true);
         resultForm.add(searchResults);
-
-        searchResults.add(new CheckBox("groupselector") {
-            @Override public boolean isVisible() {
-                return provider.size() > 0;
-            }
-        });
 
         feedbackPanel = new FIDFeedbackPanel("feedback");
         feedbackPanel.setOutputMarkupId(true);
@@ -127,7 +119,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         final boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
         final boolean hasEditEvent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
 
-        DataView<SearchResult> dataView = new DataView<SearchResult>("results", provider, 10) {
+        final DataView<SearchResult> dataView = new DataView<SearchResult>("results", provider, 10) {
             @Override
             protected void populateItem(Item<SearchResult> item) {
                 final SearchResult result = item.getModelObject();
@@ -160,7 +152,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 check.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
-                        target.add(detailsContainer, actions);
+                        target.add(listViewContainer, actions);
                     }
                 });
 
@@ -188,6 +180,17 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
         searchResults.add(dataView);
 
+        searchResults.add(new CheckBox("groupselector", createMultiSelectModel(dataView)) {
+            { add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                @Override protected void onUpdate(AjaxRequestTarget target) {
+                    target.add(searchResults, actions);
+                } });}
+
+            @Override public boolean isVisible() {
+                return provider.size() > 0;
+            }
+        });
+
 
         resultForm.add(new PagingNavigator("navigator", dataView) {
             @Override
@@ -200,7 +203,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         actions = new WebMarkupContainer("actions") {
             { setOutputMarkupPlaceholderTag(true); }
             @Override public boolean isVisible() {
-                return provider.size() > 0;
+                return !selectedIds.isEmpty();
             }
         };
 
@@ -239,6 +242,36 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         });
 
         resultForm.add(actions);
+    }
+
+    private IModel<Boolean> createMultiSelectModel(final DataView<SearchResult> dataView) {
+        return new IModel<Boolean>() {
+            private boolean selected;
+            @Override
+            public Boolean getObject() {
+                return selected;
+            }
+
+            @Override
+            public void setObject(Boolean object) {
+                IDataProvider<SearchResult> dataProvider = dataView.getDataProvider();
+                selected = object;
+                int currentPage = dataView.getCurrentPage();
+                int itemsPerPage = dataView.getItemsPerPage();
+                for (Iterator<? extends SearchResult> it = dataProvider.iterator(currentPage * itemsPerPage, itemsPerPage);it.hasNext();) {
+                    String idField = it.next().get(AssetIndexField.ID.getField());
+                    if (object) {
+                        selectedIds.add(idField);
+                    } else {
+                        selectedIds.remove(idField);
+                    }
+                }
+            }
+
+            @Override
+            public void detach() {
+            }
+        };
     }
 
     class IsItemSelectedModel implements IModel<Boolean> {
