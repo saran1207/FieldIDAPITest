@@ -1,8 +1,9 @@
 package com.n4systems.fieldid.service.search;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SearchResult<T> {
+public class SearchResult<T> implements Serializable {
 
     private Integer totalResultCount;
     private List<T> results;

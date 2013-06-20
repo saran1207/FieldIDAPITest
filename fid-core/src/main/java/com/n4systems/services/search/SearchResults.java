@@ -11,11 +11,6 @@ public class SearchResults implements Serializable {
 
     private List<SearchResult> results = Lists.newArrayList();
 
-
-    public SearchResults() {
-        super();
-    }
-
     public SearchResults add(Document doc) {
         results.add(new SearchResult(doc, getHighlighter(), getAnalyzer()));
         return this;

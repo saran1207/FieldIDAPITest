@@ -84,7 +84,7 @@
         <form wicket:id="resultForm">
 
             <!-- mass actions button -->
-            <div class="actions">
+            <div class="actions show">
                 <ul>
                     <li wicket:id="actions" class="menu">
                         <a href="javascript:void(0);" class="mattButton"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
@@ -105,16 +105,18 @@
 
 
             <!-- search results list -->
-            <div class="search-results">
-                <div wicket:id="selected_assets">
+            <div class="search-results" wicket:id="searchResults">
+                <div>
 
-                    <!-- select options -->
-                    <div class="select-options">
-                        <input type="checkbox" wicket:id="groupselector">
-                        <label wicket:id="selectAssetsAllLabel"></label>
-                        <p><span wicket:id="selectAssetsLabel"></span></p>
+                    <wicket:enclosure>
+                        <!-- select options -->
+                        <div class="select-options">
+                            <input type="checkbox" wicket:id="groupselector">
+                            <label><wicket:message key="label.select_assets_all"/></label>
+                            <p><span><wicket:message key="label.select_assets"/></span></p>
 
-                    </div>
+                        </div>
+                    </wicket:enclosure>
 
                     <!-- individual results item -->
                     <div wicket:id="results" class="asset-item">
@@ -122,7 +124,7 @@
                         <div class="select"><input type="checkbox" wicket:id="check"/></div>
 
                         <!-- individual asset info -->
-                        <div class="details">
+                        <div class="details" wicket:id="detailsContainer">
                             <h2><a wicket:id="summaryLink"><span wicket:id="summary" /></a></h2>
 
                             <img class="assetImage" wicket:id="assetImage" alt=""/>
@@ -151,14 +153,14 @@
 
             $(".search-results input[type=checkbox]").live("click", function() {
                 // Highlights selected result(s)
-                $(this).parent().next().toggleClass("selected");
+//                $(this).parent().next().toggleClass("selected");
 
                 // Show/Hide mass actions button
-                if ($(".search-results input[type=checkbox]").is(':checked')) {
-                    $(".actions").addClass("show");
-                } else {
-                    $(".actions").removeClass("show");
-                }
+//                if ($(".search-results input[type=checkbox]").is(':checked')) {
+//                    $(".actions").addClass("show");
+//                } else {
+//                    $(".actions").removeClass("show");
+//                }
             });
 
             // Show/hide syntax help dropdown

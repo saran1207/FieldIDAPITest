@@ -41,8 +41,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     private @Autowired AssetIndexerService assetIndexerService;
 
 
-	private List<Document> search(IndexReader reader, Analyzer analyzer, Query query) throws IOException, ParseException {
-        // TODO DD: do i need analyzer parameter???
+	private List<Document> search(IndexReader reader, Query query) throws IOException, ParseException {
 		List<Document> docs = new ArrayList<Document>();
 
 		IndexSearcher searcher = new IndexSearcher(reader);
@@ -57,6 +56,14 @@ public class FullTextSearchService extends FieldIdPersistenceService {
 		return docs;
 	}
 
+    public int count(final String queryString) {
+        return 30;
+    }
+
+    public SearchResults search(final String queryString, final Formatter formatter, int start, int count) {
+        return search(queryString, formatter);
+    }
+
     public SearchResults search(final String queryString, final Formatter formatter) {
 
         final Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_43);
@@ -70,7 +77,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
             final SearchQuery searchQuery = searchParserService.createSearchQuery(queryString);
             final Query query = searchParserService.convertToLuceneQuery(searchQuery);
 
-            List<Document> docs = search(reader, analyzer, query);
+            List<Document> docs = search(reader, query);
 
             // TODO DD : ?? DO WE STILL WANT TO LOG EACH SEARCH HIT???
             SearchResults results = new SearchResults() {

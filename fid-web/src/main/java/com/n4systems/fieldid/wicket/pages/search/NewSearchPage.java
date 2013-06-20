@@ -11,7 +11,6 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.LatentImage;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.form.IndicatingAjaxSubmitLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
@@ -28,23 +27,27 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
-import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.SubmitLink;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.model.StringResourceModel;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -53,8 +56,9 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class NewSearchPage extends FieldIDFrontEndPage {
@@ -69,19 +73,14 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     private TextField<String> searchCriteria = null;
     private FIDFeedbackPanel feedbackPanel = null;
     private WebMarkupContainer actions;
-    private List<SearchResult> results = Lists.newArrayList();
     private Form resultForm;
-    private MarkupContainer loadingPanel;
-
-
-    public NewSearchPage(PageParameters params) {
-        super(params);
-    }
+    private Set<String> selectedIds = new HashSet<String>();
+    private IDataProvider<SearchResult> provider;
 
     public NewSearchPage() {
-        this(new PageParameters());
-
-        add(new NewSearchForm("NewSearchForm"));
+        IModel<String> searchTextModel = new PropertyModel<String>(NewSearchPage.this, "searchText");
+        provider = new SearchDataProvider(searchTextModel);
+        add(new NewSearchForm("NewSearchForm", searchTextModel));
 
         listViewContainer = new WebMarkupContainer("listViewContainer");
         listViewContainer.setOutputMarkupId(true);
@@ -89,32 +88,16 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
         add(resultForm = new Form("resultForm"));
 
-        final CheckGroup<Asset> assetCheckGroup = new CheckGroup<Asset>("selected_assets", new ArrayList<Asset>()) {
+        final WebMarkupContainer searchResults = new WebMarkupContainer("searchResults") {
             @Override public boolean isVisible() {
-                return !results.isEmpty();
+                return provider.size() > 0;
             }
         };
-        resultForm.add(assetCheckGroup);
-        assetCheckGroup.add(new CheckGroupSelector("groupselector") {
-            @Override public boolean isVisible() {
-                return (results != null && !results.isEmpty());
-            }
-        });
+        resultForm.add(searchResults);
 
-
-        StringResourceModel stringResourceModel = new StringResourceModel("label.select_assets_all",
-                this, null, getLocale());
-        assetCheckGroup.add(new Label("selectAssetsAllLabel", stringResourceModel) {
+        searchResults.add(new CheckBox("groupselector") {
             @Override public boolean isVisible() {
-                return (results != null && !results.isEmpty());
-            }
-        });
-
-        StringResourceModel stringResourceAModel = new StringResourceModel("label.select_assets",
-                this, null, getLocale());
-        assetCheckGroup.add(new Label("selectAssetsLabel", stringResourceAModel) {
-            @Override public boolean isVisible() {
-                return (results != null && !results.isEmpty());
+                return provider.size() > 0;
             }
         });
 
@@ -124,39 +107,60 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
         add(new WebMarkupContainer("blankSlate") {
             @Override public boolean isVisible() {
-                return results.isEmpty();
+                return provider.size() == 0;
             }
         }.setOutputMarkupPlaceholderTag(true));
 
         final boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
         final boolean hasEditEvent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
 
-        resultsListView = new PageableListView<SearchResult>("results", new PropertyModel<List<? extends SearchResult>>(this, "results"), 10) {
+        DataView<SearchResult> dataView = new DataView<SearchResult>("results", provider, 10) {
             @Override
-            protected void populateItem(ListItem<SearchResult> item) {
+            protected void populateItem(Item<SearchResult> item) {
                 final SearchResult result = item.getModelObject();
+
+                final IsItemSelectedModel itemIsSelectedModel = new IsItemSelectedModel(item.getModel());
+
+                final WebMarkupContainer detailsContainer = new WebMarkupContainer("detailsContainer");
+                item.add(detailsContainer.setOutputMarkupId(true));
+
+                detailsContainer.add(new AttributeAppender("class", Model.of("selected"), " ") {
+                    @Override
+                    public boolean isEnabled(Component component) {
+                        return itemIsSelectedModel.getObject();
+                    }
+                });
 
                 BookmarkablePageLink summaryLink;
                 final Long assetId = result.getLong(AssetIndexField.ID.getField());
-                item.add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetId)));
+                detailsContainer.add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetId)));
                 summaryLink.add(new Label("summary", getIdentifier(result)).setEscapeModelStrings(false));
 
-                item.add(new Label("fixedAttributes", getFixedAttributes(result)).setEscapeModelStrings(false));
 
-                item.add(new Label("customAttributes", getCustomAttributes(result)).setEscapeModelStrings(false));
+                detailsContainer.add(new Label("fixedAttributes", getFixedAttributes(result)).setEscapeModelStrings(false));
 
-                item.add(new Check<SearchResult>("check", item.getModel()));
+                detailsContainer.add(new Label("customAttributes", getCustomAttributes(result)).setEscapeModelStrings(false));
 
-                item.add(new Link("viewLink") {
+
+                CheckBox check = new CheckBox("check", itemIsSelectedModel);
+                item.add(check);
+                check.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(detailsContainer, actions);
+                    }
+                });
+
+                detailsContainer.add(new Link("viewLink") {
                     @Override public void onClick() {
                         setResponsePage(new AssetSummaryPage(new PageParameters().add("uniqueID",assetId)));
                     }
                 });
 
-                item.add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + assetId, new AttributeAppender("class", "mattButtonMiddle")).setVisible(hasCreateEvent));
-                item.add(new NonWicketLink("mergeLink", "assetMergeAdd.action?uniqueID=" + assetId, new AttributeAppender("class", "mattButtonRight")).setVisible(hasEditEvent));
+                detailsContainer.add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + assetId, new AttributeAppender("class", "mattButtonMiddle")).setVisible(hasCreateEvent));
+                detailsContainer.add(new NonWicketLink("mergeLink", "assetMergeAdd.action?uniqueID=" + assetId, new AttributeAppender("class", "mattButtonRight")).setVisible(hasEditEvent));
 
-                item.add(new LatentImage("assetImage") {
+                detailsContainer.add(new LatentImage("assetImage") {
                     @Override protected String updateSrc() {
                         Asset asset = persistenceService.find(Asset.class, assetId);
                         if (StringUtils.isBlank(asset.getImageName())) {
@@ -167,29 +171,32 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                     }
                 });
             }
-
         };
-        assetCheckGroup.add(resultsListView);
+
+        searchResults.add(dataView);
 
 
-        resultForm.add(new PagingNavigator("navigator", resultsListView){
+        resultForm.add(new PagingNavigator("navigator", dataView) {
             @Override
             public boolean isVisible() {
-                return (results!= null && !results.isEmpty());
+                return provider.size() > 0;
             }
         });
         listViewContainer.add(resultForm);
 
-        actions=new WebMarkupContainer("actions"){
+        actions = new WebMarkupContainer("actions") {
+            { setOutputMarkupPlaceholderTag(true); }
             @Override public boolean isVisible() {
-                return (results != null && !results.isEmpty());
+                return provider.size() > 0;
             }
         };
 
         actions.add(new SubmitLink("massEventLink") {
             @Override
             public void onSubmit() {
-                AssetSearchCriteria assetSearchCriteria = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
+
+                AssetSearchCriteria assetSearchCriteria = createAssetSearchCriteria();
+
                 HttpServletRequest httpServletRequest = ((ServletWebRequest) getRequest()).getContainerRequest();
                 HttpSession session = httpServletRequest.getSession();
 
@@ -202,21 +209,48 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             }
         });
 
-        actions.add(new SubmitLink("massUpdateLink") {
-            @Override public void onSubmit() {
-                AssetSearchCriteria assetSearchCriteria = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
+        actions.add(new Link("massUpdateLink") {
+            @Override
+            public void onClick() {
+                AssetSearchCriteria assetSearchCriteria = createAssetSearchCriteria();
                 setResponsePage(new MassUpdateAssetsPage(new Model(assetSearchCriteria)));
             }
         });
 
-        actions.add(new SubmitLink("massScheduleLink") {
-            @Override public void onSubmit() {
-                AssetSearchCriteria assetSearchCriteria = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
+        actions.add(new Link("massScheduleLink") {
+            @Override
+            public void onClick() {
+                AssetSearchCriteria assetSearchCriteria = createAssetSearchCriteria();
                 setResponsePage(new MassSchedulePage(new Model(assetSearchCriteria)));
             }
         });
 
         resultForm.add(actions);
+    }
+
+    class IsItemSelectedModel implements IModel<Boolean> {
+        private IModel<SearchResult> resultModel;
+        public IsItemSelectedModel(IModel<SearchResult> resultModel) {
+            this.resultModel = resultModel;
+        }
+
+        @Override
+        public Boolean getObject() {
+            return selectedIds.contains(resultModel.getObject().get(AssetIndexField.ID.getField()));
+        }
+
+        @Override
+        public void setObject(Boolean object) {
+            if (object) {
+                selectedIds.add(resultModel.getObject().get(AssetIndexField.ID.getField()));
+            } else {
+                selectedIds.remove(resultModel.getObject().get(AssetIndexField.ID.getField()));
+            }
+        }
+
+        @Override
+        public void detach() {
+        }
     }
 
     private String getCustomAttributes(SearchResult result) {
@@ -228,10 +262,10 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             // if it's a predefined field but one that isn't always displayed, display it if it matches the criteria.
             if (f==null || (f.isNonDisplayedFixedAttribute() && highlighted && !f.isInternal())) {
                 int index = highlighted ? 0 :fields.size();
-                fields.add(index, result.getKeyValueStringCapitalized(field));
+                fields.add(index, result.getKeyValueString(field));
             }
         }
-        return Joiner.on("<span class='separator'>|</span>").skipNulls().join(fields.toArray(new String[fields.size()]));
+        return Joiner.on(" | ").skipNulls().join(fields.toArray(new String[fields.size()]));
     }
 
     private String getFixedAttributes(SearchResult result) {
@@ -255,11 +289,12 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         return Joiner.on(" / ").skipNulls().join(type, id, status);
     }
 
-    private AssetSearchCriteria transformToAssetSearchCriteria(Collection<Asset> modelObject) {
+    private AssetSearchCriteria createAssetSearchCriteria() {
 
         List<Long> ids = new ArrayList<Long>();
-        for(Asset asset: modelObject) {
-            ids.add(asset.getID());
+
+        for (String selectedId : selectedIds) {
+            ids.add(Long.parseLong(selectedId));
         }
 
         AssetSearchCriteria assetSearchCriteria = new AssetSearchCriteria();
@@ -274,26 +309,25 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
     class NewSearchForm extends Form {
 
-        public NewSearchForm(String id) {
+        public NewSearchForm(String id, IModel<String> searchTextModel) {
             super(id);
             setOutputMarkupPlaceholderTag(true);
 
-            searchCriteria = new TextField<String>("searchCriteria",new PropertyModel<String>(NewSearchPage.this, "searchText"));
+            searchCriteria = new TextField<String>("searchCriteria", searchTextModel);
             searchCriteria.setRequired(true);
 
             add(searchCriteria);
 
-            AjaxSubmitLink submit;
-            add( submit = new IndicatingAjaxSubmitLink("searchButtonId") {
+            SubmitLink submit;
+            add( submit = new SubmitLink("searchButtonId") {
                 @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    results = fullTextSearchService.search(searchText, new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>")).getResults();
-                    target.add(NewSearchPage.this);
-                    target.add(NewSearchPage.this.feedbackPanel);
+                public void onSubmit() {
+                    selectedIds.clear();
+//                    results = fullTextSearchService.search(searchText, new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>")).getResults();
                 }
 
                 @Override
-                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                public void onError() {
                     error("Error searching based on the following criteria:" + searchCriteria.getModelObject());
                 }
             });
