@@ -87,7 +87,6 @@ public class SearchResult implements Serializable {
 
             try {
                 if (dateValue!=null || numberValue!=null && field.numericValue()!=null) {
-                    // TODO : need to have field Id SearchQuery object
                     highlightedValue = highlighter.getBestNumericFragment(field.name(), numberValue, getMostAppropriateValue() );
                 } else {
                     highlightedValue = highlighter.getBestTextFragment(analyzer, field.name(), field.stringValue());
@@ -126,7 +125,7 @@ public class SearchResult implements Serializable {
                 return null;
             }
             DateTime dateTime = new DateTime(value.longValue());
-            if (dateTime.getYear()<2000 || dateTime.getYear()>2050) {   //arbitrarily picked 2000 as cutoff point.   we don't want "1970" type dates sneaking through.
+            if (dateTime.getYear()<2000 || dateTime.getYear()>2050) {   //arbitrarily picked cutoff points.   we don't want "pre-1970" type dates sneaking through. not all longs are dates!
                 return null;    // it's a number but not a valid year...
             }
             return fmt.print(dateTime);

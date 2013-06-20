@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.LatentImage;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.form.IndicatingAjaxSubmitLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
@@ -27,9 +28,12 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -63,9 +67,14 @@ import java.util.Set;
 
 public class NewSearchPage extends FieldIDFrontEndPage {
 
+    private static final String HIDE_LIST_JS = "$('#%s').hide();";
+    private static final String SHOW_LIST_JS = "$('#%s').show();";
+
     private @SpringBean FullTextSearchService fullTextSearchService;
     private @SpringBean PersistenceService persistenceService;
     private @SpringBean S3Service s3Service;
+
+    private final SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>");
 
     private String searchText = null;
     private PageableListView resultsListView = null;
@@ -76,10 +85,11 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     private Form resultForm;
     private Set<String> selectedIds = new HashSet<String>();
     private IDataProvider<SearchResult> provider;
+    private final Component blankSlate;
 
     public NewSearchPage() {
         IModel<String> searchTextModel = new PropertyModel<String>(NewSearchPage.this, "searchText");
-        provider = new SearchDataProvider(searchTextModel);
+        provider = new SearchDataProvider(searchTextModel,formatter);
         add(new NewSearchForm("NewSearchForm", searchTextModel));
 
         listViewContainer = new WebMarkupContainer("listViewContainer");
@@ -105,7 +115,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
-        add(new WebMarkupContainer("blankSlate") {
+        add(blankSlate = new WebMarkupContainer("blankSlate") {
             @Override public boolean isVisible() {
                 return provider.size() == 0;
             }
@@ -262,10 +272,13 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             // if it's a predefined field but one that isn't always displayed, display it if it matches the criteria.
             if (f==null || (f.isNonDisplayedFixedAttribute() && highlighted && !f.isInternal())) {
                 int index = highlighted ? 0 :fields.size();
-                fields.add(index, result.getKeyValueString(field));
+//                String key = result.getKeyValueStringCapitalized(field);
+//                String value = result.get(field);
+                // TODO DD : format these. <span class="search_attr">key</span>   <span class="search-value">value</span>
+                fields.add(index, result.getKeyValueStringCapitalized(field));
             }
         }
-        return Joiner.on(" | ").skipNulls().join(fields.toArray(new String[fields.size()]));
+        return Joiner.on("<span class='separator'>|</span>").skipNulls().join(fields.toArray(new String[fields.size()]));
     }
 
     private String getFixedAttributes(SearchResult result) {
@@ -318,19 +331,31 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
             add(searchCriteria);
 
-            SubmitLink submit;
-            add( submit = new SubmitLink("searchButtonId") {
-                @Override
-                public void onSubmit() {
+            final AjaxCallDecorator ajaxCallDecorator = new AjaxCallDecorator() {
+                @Override public CharSequence decorateScript(Component c, CharSequence script) {
+                    return String.format(HIDE_LIST_JS, listViewContainer.getMarkupId()) + super.decorateScript(c, script);
+                }
+                @Override public CharSequence decorateOnSuccessScript(Component c, CharSequence script) {
+                    return String.format(SHOW_LIST_JS, listViewContainer.getMarkupId()) + super.decorateOnSuccessScript(c, script);
+                }
+                @Override public CharSequence decorateOnFailureScript(Component c, CharSequence script) {
+                    return String.format(SHOW_LIST_JS, listViewContainer.getMarkupId()) + super.decorateOnSuccessScript(c, script);
+                }
+            };
+
+            AjaxSubmitLink submit;
+            add( submit = new IndicatingAjaxSubmitLink("searchButtonId") {
+                @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     selectedIds.clear();
-//                    results = fullTextSearchService.search(searchText, new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>")).getResults();
+                    target.add(listViewContainer, feedbackPanel, blankSlate);
                 }
 
-                @Override
-                public void onError() {
+                @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    // TODO DD : replace msg with properties file.
                     error("Error searching based on the following criteria:" + searchCriteria.getModelObject());
                 }
-            });
+            }.withAjaxCallDecorator(ajaxCallDecorator));
+
             setDefaultButton(submit);
         }
     }

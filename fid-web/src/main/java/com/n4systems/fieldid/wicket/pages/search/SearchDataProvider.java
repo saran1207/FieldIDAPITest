@@ -17,9 +17,11 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
 
     private @SpringBean FullTextSearchService fullTextSearchService;
     private IModel<String> searchText;
+    private final SimpleHTMLFormatter formatter;
 
-    public SearchDataProvider(IModel<String> searchText) {
+    public SearchDataProvider(IModel<String> searchText, SimpleHTMLFormatter formatter) {
         this.searchText = searchText;
+        this.formatter = formatter;
     }
 
     @Override
@@ -27,7 +29,7 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
         if (StringUtils.isBlank(searchText.getObject())) {
             return Collections.<SearchResult>emptyList().iterator();
         }
-        List<com.n4systems.services.search.SearchResult> results = fullTextSearchService.search(searchText.getObject(), new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>")).getResults();
+        List<SearchResult> results = fullTextSearchService.search(searchText.getObject(), formatter).getResults();
         return results.iterator();
     }
 
