@@ -228,10 +228,10 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             // if it's a predefined field but one that isn't always displayed, display it if it matches the criteria.
             if (f==null || (f.isNonDisplayedFixedAttribute() && highlighted && !f.isInternal())) {
                 int index = highlighted ? 0 :fields.size();
-                fields.add(index, result.getKeyValueString(field));
+                fields.add(index, result.getKeyValueStringCapitalized(field));
             }
         }
-        return Joiner.on(" | ").skipNulls().join(fields.toArray(new String[fields.size()]));
+        return Joiner.on("<span class='separator'>|</span>").skipNulls().join(fields.toArray(new String[fields.size()]));
     }
 
     private String getFixedAttributes(SearchResult result) {

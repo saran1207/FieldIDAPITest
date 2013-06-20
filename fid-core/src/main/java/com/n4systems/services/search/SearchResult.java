@@ -2,6 +2,7 @@ package com.n4systems.services.search;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang.WordUtils;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.IndexableField;
@@ -42,6 +43,14 @@ public class SearchResult implements Serializable {
         return value!=null ? value.isHighlighted() : false;
     }
 
+    public String getKeyValueStringCapitalized(String key) {
+        String value = results.get(key).getValue();
+        if (value!=null) {
+            return WordUtils.capitalize(key) + "=" + value;
+        }
+        return null;
+
+    }
 
     public String getKeyValueString(String key) {
         // TODO : pass in format string??

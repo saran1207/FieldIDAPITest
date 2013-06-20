@@ -208,6 +208,10 @@ a.search {
 	color: #666;
 	font-size: 13px; 
 }
+    .asset-item .custom-attributes .separator {
+        color:#c3c3c3;
+        padding: 0 4px;
+    }
 
 .btn-group {
 	float: right;
@@ -258,3 +262,4 @@ a.search {
     padding:20px 200px 0 0;
     display:block;
 }
+
