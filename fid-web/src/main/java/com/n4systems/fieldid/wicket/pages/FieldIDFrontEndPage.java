@@ -116,8 +116,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class).add(new Image("down-arrow", new ContextRelativeResource("/images/down-arrow.png")){
             @Override
             public boolean isVisible() {
-                //return getSecurityGuard().isGlobalSearchEnabled();
-                return true;
+                return getSecurityGuard().isGlobalSearchEnabled();
             }
 
         }));
@@ -127,8 +126,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new BookmarkablePageLink<Void>("newAssetSearchLink", NewSearchPage.class) {
             @Override
             public boolean isVisible() {
-            //return getSecurityGuard().isGlobalSearchEnabled();
-            return true;
+                return getSecurityGuard().isGlobalSearchEnabled();
             }
         });
 
