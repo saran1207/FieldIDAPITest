@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.services.search.FullTextSearchService;
 import com.n4systems.services.search.SearchResult;
 import org.apache.commons.lang.StringUtils;
-import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.lucene.search.highlight.Formatter;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -17,11 +17,9 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
 
     private @SpringBean FullTextSearchService fullTextSearchService;
     private IModel<String> searchText;
-    private final SimpleHTMLFormatter formatter;
 
-    public SearchDataProvider(IModel<String> searchText, SimpleHTMLFormatter formatter) {
+    public SearchDataProvider(IModel<String> searchText) {
         this.searchText = searchText;
-        this.formatter = formatter;
     }
 
     @Override
@@ -29,8 +27,12 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
         if (StringUtils.isBlank(searchText.getObject())) {
             return Collections.<SearchResult>emptyList().iterator();
         }
-        List<SearchResult> results = fullTextSearchService.search(searchText.getObject(), formatter).getResults();
+        List<SearchResult> results = fullTextSearchService.search(searchText.getObject(), getFormatter()).getResults();
         return results.iterator();
+    }
+
+    protected Formatter getFormatter() {
+        return null;
     }
 
     @Override

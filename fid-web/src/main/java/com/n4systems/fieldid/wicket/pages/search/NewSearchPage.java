@@ -28,6 +28,7 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.commons.lang.StringUtils;
+import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -74,8 +75,6 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     private @SpringBean PersistenceService persistenceService;
     private @SpringBean S3Service s3Service;
 
-    private final SimpleHTMLFormatter formatter = new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>");
-
     private String searchText = null;
     private PageableListView resultsListView = null;
     private WebMarkupContainer listViewContainer = null;
@@ -89,7 +88,11 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
     public NewSearchPage() {
         IModel<String> searchTextModel = new PropertyModel<String>(NewSearchPage.this, "searchText");
-        provider = new SearchDataProvider(searchTextModel,formatter);
+        provider = new SearchDataProvider(searchTextModel) {
+            @Override protected Formatter getFormatter() {
+                return new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>");
+            }
+        };
         add(new NewSearchForm("NewSearchForm", searchTextModel));
 
         listViewContainer = new WebMarkupContainer("listViewContainer");
