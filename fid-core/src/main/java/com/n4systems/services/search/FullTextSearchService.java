@@ -1,5 +1,6 @@
 package com.n4systems.services.search;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
@@ -40,6 +41,21 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     private @Autowired SecurityContext securityContext;
     private @Autowired AssetIndexerService assetIndexerService;
 
+    private List<Document> search(IndexReader reader, Analyzer analyzer, Query query, int threshold) throws IOException, ParseException {
+        // TODO DD: do i need analyzer parameter???
+        List<Document> docs = new ArrayList<Document>();
+
+        IndexSearcher searcher = new IndexSearcher(reader);
+        TopDocs topDocs = searcher.search(query, getSecurityQueryFilter(),threshold);
+
+        // TODO DD : if query doesn't specify attributes, then use indexSearcher to explain query results (i.e. which fields matched).
+        //   also should return the query along with the docs, so UI can normalize it and also use it to find specified results.
+
+        for (ScoreDoc scoreDoc: topDocs.scoreDocs) {
+            docs.add(searcher.doc(scoreDoc.doc));
+        }
+        return docs;
+    }
 
 	private List<Document> search(IndexReader reader, Query query) throws IOException, ParseException {
 		List<Document> docs = new ArrayList<Document>();
@@ -110,6 +126,38 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     public SearchResults search(String queryString) {
         return search(queryString, null);
     }
+
+    public List<Long> searchForAssetIdsOnlyByQuery(final String queryString) {
+
+        final Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_43);
+        Directory dir = null;
+        IndexReader reader = null;
+
+        try {
+            dir = FSDirectory.open(new File(assetIndexerService.getIndexPath(getCurrentTenant())));
+            reader = DirectoryReader.open(dir);
+
+            final SearchQuery searchQuery = searchParserService.createSearchQuery(queryString);
+            final Query query = searchParserService.convertToLuceneQuery(searchQuery);
+
+            List<Document> docs = search(reader, analyzer, query, Integer.MAX_VALUE);
+
+            List<Long> results = Lists.newArrayList();
+            for (Document doc: docs) {
+                long l = doc.getField(AssetIndexField.ID.getField()).numericValue().longValue();
+                results.add(l);
+            }
+            return results;
+
+        } catch (Exception e) {
+            logger.error(e);
+        } finally {
+            closeQuietly(reader, dir, analyzer);
+        }
+
+        return Lists.newArrayList();
+    }
+
 
     public List<Document> findAll(String tenantName) {
 		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
