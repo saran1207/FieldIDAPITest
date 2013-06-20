@@ -17,6 +17,8 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
 
     private @SpringBean FullTextSearchService fullTextSearchService;
     private IModel<String> searchText;
+    private Integer size = null;
+    List<SearchResult> pageResults = null;
 
     public SearchDataProvider(IModel<String> searchText) {
         this.searchText = searchText;
@@ -27,8 +29,9 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
         if (StringUtils.isBlank(searchText.getObject())) {
             return Collections.<SearchResult>emptyList().iterator();
         }
-        List<SearchResult> results = fullTextSearchService.search(searchText.getObject(), getFormatter()).getResults();
-        return results.iterator();
+        return pageResults == null ?
+                (pageResults = fullTextSearchService.search(searchText.getObject(), getFormatter(), first, first+count).getResults()).iterator() :
+                pageResults.iterator();
     }
 
     protected Formatter getFormatter() {
@@ -40,7 +43,7 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
         if (StringUtils.isBlank(searchText.getObject())) {
             return 0;
         }
-        return fullTextSearchService.count(searchText.getObject());
+        return size==null ? size = fullTextSearchService.count(searchText.getObject()) : size;
     }
 
     @Override
@@ -51,5 +54,7 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
     @Override
     public void detach() {
         searchText.detach();
+        pageResults = null;
+        size = null;
     }
 }

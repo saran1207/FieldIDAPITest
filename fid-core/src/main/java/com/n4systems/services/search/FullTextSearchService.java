@@ -2,13 +2,10 @@ package com.n4systems.services.search;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.brainforest.SearchParserService;
 import com.n4systems.services.brainforest.SearchQuery;
-import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -16,7 +13,6 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.*;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.QueryScorer;
@@ -29,106 +25,73 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class FullTextSearchService extends FieldIdPersistenceService {
     private static Logger logger = Logger.getLogger(FullTextSearchService.class);
 
-    public static final int DOC_COUNT = Integer.MAX_VALUE;
-
     private @Autowired SearchParserService searchParserService;
     private @Autowired SecurityContext securityContext;
     private @Autowired AssetIndexerService assetIndexerService;
 
-    private List<Document> search(IndexReader reader, Analyzer analyzer, Query query, int threshold) throws IOException, ParseException {
-        // TODO DD: do i need analyzer parameter???
-        List<Document> docs = new ArrayList<Document>();
-
-        IndexSearcher searcher = new IndexSearcher(reader);
-        TopDocs topDocs = searcher.search(query, getSecurityQueryFilter(),threshold);
-
-        // TODO DD : if query doesn't specify attributes, then use indexSearcher to explain query results (i.e. which fields matched).
-        //   also should return the query along with the docs, so UI can normalize it and also use it to find specified results.
-
-        for (ScoreDoc scoreDoc: topDocs.scoreDocs) {
-            docs.add(searcher.doc(scoreDoc.doc));
-        }
-        return docs;
-    }
-
-	private List<Document> search(IndexReader reader, Query query) throws IOException, ParseException {
-		List<Document> docs = new ArrayList<Document>();
-
-		IndexSearcher searcher = new IndexSearcher(reader);
-		TopDocs topDocs = searcher.search(query, getSecurityQueryFilter(),DOC_COUNT);
-
-        // TODO DD : if query doesn't specify attributes, then use indexSearcher to explain query results (i.e. which fields matched).
-        //   also should return the query along with the docs, so UI can normalize it and also use it to find specified results.
-
-		for (ScoreDoc scoreDoc: topDocs.scoreDocs) {
-			docs.add(searcher.doc(scoreDoc.doc));
-		}
-		return docs;
-	}
 
     public int count(final String queryString) {
-        return 30;
+        return lucene(new SearchQueryLuceneWorker<Integer>(queryString) {
+            @Override Integer runQuery(Analyzer analyzer, IndexSearcher searcher) throws IOException {
+                TotalHitCountCollector collector = new TotalHitCountCollector();
+                searcher.search(getQuery(), getSecurityQueryFilter(), collector);
+                return collector.getTotalHits();
+            }
+            @Override Integer defaultReturnValue() {
+                return 0;
+            }
+        });
     }
 
-    public SearchResults search(final String queryString, final Formatter formatter, int start, int count) {
-        return search(queryString, formatter);
+    public SearchResults search(final String queryString, final Formatter formatter, final int start, final int count) {
+        return lucene(new SearchResultsLuceneWorker(queryString, formatter) {
+            @Override
+            SearchResults runQuery(IndexSearcher searcher, Query query, SearchResults searchResults) throws IOException {
+                TopDocs topDocs = searcher.search(query, getSecurityQueryFilter(), start + count);
+                return searchResults.add(searcher, Arrays.copyOfRange(topDocs.scoreDocs, start, count));
+            }
+        });
     }
 
     public SearchResults search(final String queryString, final Formatter formatter) {
-
-        final Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_43);
-        Directory dir = null;
-        IndexReader reader = null;
-
-        try {
-            dir = FSDirectory.open(new File(assetIndexerService.getIndexPath(getCurrentTenant())));
-            reader = DirectoryReader.open(dir);
-
-            final SearchQuery searchQuery = searchParserService.createSearchQuery(queryString);
-            final Query query = searchParserService.convertToLuceneQuery(searchQuery);
-
-            List<Document> docs = search(reader, query);
-
-            // TODO DD : ?? DO WE STILL WANT TO LOG EACH SEARCH HIT???
-            SearchResults results = new SearchResults() {
-                @Override protected Analyzer getAnalyzer() {
-                    return analyzer;
-                }
-                @Override protected FieldIdHighlighter getHighlighter() {
-                    QueryScorer scorer = new QueryScorer(query);
-                    scorer.setExpandMultiTermQuery(true);
-                    return formatter==null?null : new FieldIdHighlighter(formatter, scorer, searchQuery);
-                }
-            };
-
-            logger.info(queryString + ": " + docs.size());
-            for (Document doc: docs) {
-                results.add(doc);
-                logDocument(doc);
+        return lucene(new SearchResultsLuceneWorker(queryString, formatter) {
+            @Override SearchResults runQuery(IndexSearcher searcher, Query query, SearchResults searchResults) throws IOException {
+                TopDocs topDocs = searcher.search(query, getSecurityQueryFilter(), Integer.MAX_VALUE);
+                return searchResults.add(searcher, topDocs.scoreDocs);
             }
-            return results;
-
-        } catch (Exception e) {
-            logger.error(e);
-        } finally {
-            closeQuietly(reader, dir, analyzer);
-        }
-
-        return new SearchResults();
+        });
     }
 
     public SearchResults search(String queryString) {
         return search(queryString, null);
     }
 
-    public List<Long> searchForAssetIdsOnlyByQuery(final String queryString) {
+    public List<Document> findAll(String tenantName) {
+        return lucene(new LuceneWorker<List<Document>>() {
 
+            @Override
+            List<Document> runQuery(Analyzer analyzer, IndexSearcher searcher) throws IOException {
+                List<Document> docs = Lists.newArrayList();
+                TopDocs topDocs = searcher.search(new MatchAllDocsQuery(), Integer.MAX_VALUE);
+                for (ScoreDoc scoreDoc: topDocs.scoreDocs) {
+                    docs.add(searcher.doc(scoreDoc.doc));
+			    }
+                return docs;
+            }
+
+            @Override List<Document> defaultReturnValue() {
+                return Lists.newArrayList();
+            }
+        });
+    }
+
+    private <T> T lucene(LuceneWorker<T> worker) {
         final Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_43);
         Directory dir = null;
         IndexReader reader = null;
@@ -136,63 +99,31 @@ public class FullTextSearchService extends FieldIdPersistenceService {
         try {
             dir = FSDirectory.open(new File(assetIndexerService.getIndexPath(getCurrentTenant())));
             reader = DirectoryReader.open(dir);
-
-            final SearchQuery searchQuery = searchParserService.createSearchQuery(queryString);
-            final Query query = searchParserService.convertToLuceneQuery(searchQuery);
-
-            List<Document> docs = search(reader, analyzer, query, Integer.MAX_VALUE);
-
-            List<Long> results = Lists.newArrayList();
-            for (Document doc: docs) {
-                long l = doc.getField(AssetIndexField.ID.getField()).numericValue().longValue();
-                results.add(l);
-            }
-            return results;
-
+            IndexSearcher indexSearcher = new IndexSearcher(reader);
+            return worker.runQuery(analyzer, indexSearcher);
         } catch (Exception e) {
             logger.error(e);
         } finally {
             closeQuietly(reader, dir, analyzer);
         }
 
-        return Lists.newArrayList();
+        return worker.defaultReturnValue();
     }
 
-
-    public List<Document> findAll(String tenantName) {
-		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
-		builder.addSimpleWhere("name", tenantName);
-		Tenant tenant = persistenceService.find(builder);
-
-		Analyzer analyzer = null;
-		Directory dir = null;
-		IndexReader reader = null;
-		try {
-			analyzer = new StandardAnalyzer(Version.LUCENE_43);
-			dir = FSDirectory.open(new File(assetIndexerService.getIndexPath(tenant)));
-			reader = DirectoryReader.open(dir);
-
-			List<Document> docs = new ArrayList<Document>();
-
-			IndexSearcher searcher = new IndexSearcher(reader);
-			TopDocs topDocs = searcher.search(new MatchAllDocsQuery(), Integer.MAX_VALUE);
-			for (ScoreDoc scoreDoc: topDocs.scoreDocs) {
-				docs.add(searcher.doc(scoreDoc.doc));
-			}
-
-			logger.info(tenant.getName() +  " Documents: ");
-			for (Document doc: docs) {
-				logDocument(doc);
-			}
-
-            return docs;
-
-		} catch (Exception e) {
-			logger.error(e);
-		} finally {
-			closeQuietly(reader, dir, analyzer);
-		}
-        return null;
+    private SearchResults createSearchResults(final Query query, final Analyzer analyzer, final SearchQuery searchQuery, final Formatter formatter) {
+        return new SearchResults() {
+            @Override protected Analyzer getAnalyzer() {
+                return analyzer;
+            }
+            @Override protected FieldIdHighlighter getHighlighter() {
+                if (formatter==null) {
+                    return null;
+                }
+                QueryScorer scorer = new QueryScorer(query);
+                scorer.setExpandMultiTermQuery(true);
+                return new FieldIdHighlighter(formatter, scorer, searchQuery);
+            }
+        };
     }
 
 	private void logDocument(Document doc) {
@@ -238,5 +169,48 @@ public class FullTextSearchService extends FieldIdPersistenceService {
         try { IOUtils.close(closeables); } catch (Exception e) {}
     }
 
+
+    // --------------------------------------------------------------
+
+
+    abstract class LuceneWorker<T> {
+        abstract T runQuery(Analyzer analyzer, IndexSearcher searcher) throws IOException;
+        abstract T defaultReturnValue();
+    }
+
+    abstract class SearchQueryLuceneWorker<T> extends LuceneWorker<T> {
+        protected  SearchQuery searchQuery;
+        protected String queryString;
+
+        protected SearchQueryLuceneWorker(String queryString) {
+            this.queryString = queryString;
+        }
+
+        Query getQuery() {
+            searchQuery = searchParserService.createSearchQuery(queryString);
+            return searchParserService.convertToLuceneQuery(searchQuery);
+        }
+    }
+
+    abstract class SearchResultsLuceneWorker extends SearchQueryLuceneWorker<SearchResults> {
+        private final Formatter formatter;
+
+        protected SearchResultsLuceneWorker(String queryString, Formatter formatter) {
+            super(queryString);
+            this.formatter = formatter;
+        }
+
+        SearchResults runQuery(Analyzer analyzer, IndexSearcher searcher) throws IOException {
+            Query query = getQuery();
+            SearchResults searchResults = createSearchResults(query, analyzer, searchQuery, formatter);
+            return runQuery(searcher, query, searchResults);
+        }
+
+        SearchResults defaultReturnValue() {
+            return new SearchResults();
+        }
+
+        abstract SearchResults runQuery(IndexSearcher searcher, Query query, SearchResults searchResults) throws IOException;
+    }
 
 }
