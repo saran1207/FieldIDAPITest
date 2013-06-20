@@ -22,7 +22,9 @@ public class SearchResults implements Serializable {
     public SearchResults add(IndexSearcher searcher, ScoreDoc... docs) {
         try {
             for (ScoreDoc scoreDoc:docs) {
-                add(searcher.doc(scoreDoc.doc));
+                if (scoreDoc!=null) {
+                    add(searcher.doc(scoreDoc.doc));
+                }
             }
         } catch (IOException e) {
             ;

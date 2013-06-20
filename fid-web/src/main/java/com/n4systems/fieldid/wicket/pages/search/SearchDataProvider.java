@@ -30,7 +30,7 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
             return Collections.<SearchResult>emptyList().iterator();
         }
         return pageResults == null ?
-                (pageResults = fullTextSearchService.search(searchText.getObject(), getFormatter(), first, first+count).getResults()).iterator() :
+                (pageResults = fullTextSearchService.search(searchText.getObject(), getFormatter(), first, count).getResults()).iterator() :
                 pageResults.iterator();
     }
 

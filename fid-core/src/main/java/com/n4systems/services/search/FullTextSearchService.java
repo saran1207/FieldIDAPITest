@@ -54,7 +54,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
             @Override
             SearchResults runQuery(IndexSearcher searcher, Query query, SearchResults searchResults) throws IOException {
                 TopDocs topDocs = searcher.search(query, getSecurityQueryFilter(), start + count);
-                return searchResults.add(searcher, Arrays.copyOfRange(topDocs.scoreDocs, start, count));
+                return searchResults.add(searcher, Arrays.copyOfRange(topDocs.scoreDocs, start, start+count));
             }
         });
     }
