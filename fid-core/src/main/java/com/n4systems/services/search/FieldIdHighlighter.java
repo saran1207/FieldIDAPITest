@@ -1,22 +1,24 @@
 package com.n4systems.services.search;
 
 import com.n4systems.services.brainforest.SearchQuery;
+import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.miscellaneous.EmptyTokenStream;
-import org.apache.lucene.search.highlight.Formatter;
-import org.apache.lucene.search.highlight.Highlighter;
-import org.apache.lucene.search.highlight.Scorer;
-import org.apache.lucene.search.highlight.TokenGroup;
+import org.apache.lucene.search.highlight.*;
 
-class NumericHighlighter extends Highlighter  {
+import java.io.IOException;
+
+class FieldIdHighlighter extends Highlighter  {
 
     private Formatter formatter;
     private NumericAnalyzer numericAnalyzer;
+    private final SearchQuery searchQuery;
 
 
-    public NumericHighlighter(Formatter formatter, Scorer fragmentScorer, SearchQuery searchQuery) {
+    public FieldIdHighlighter(Formatter formatter, Scorer fragmentScorer, SearchQuery searchQuery) {
         super(formatter, fragmentScorer);
         this.formatter = formatter;
         this.numericAnalyzer = new NumericAnalyzer(searchQuery);
+        this.searchQuery = searchQuery;
     }
 
     public String getBestNumericFragment(String fieldName, Number numberValue, String text) {
@@ -32,5 +34,11 @@ class NumericHighlighter extends Highlighter  {
         return null;
     }
 
+    public String getBestTextFragment(Analyzer analyzer, String fieldName, String value) throws IOException, InvalidTokenOffsetsException {
+        if (searchQuery.usesAttribute(fieldName)) {
+            return super.getBestFragment(analyzer,fieldName,value);
+        }
+        return null;
+    }
 
 }

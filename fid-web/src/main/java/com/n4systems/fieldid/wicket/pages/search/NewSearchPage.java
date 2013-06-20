@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.LatentImage;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.form.IndicatingAjaxSubmitLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
@@ -28,6 +29,7 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -69,6 +71,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     private WebMarkupContainer actions;
     private List<SearchResult> results = Lists.newArrayList();
     private Form resultForm;
+    private MarkupContainer loadingPanel;
 
 
     public NewSearchPage(PageParameters params) {
@@ -186,9 +189,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         actions.add(new SubmitLink("massEventLink") {
             @Override
             public void onSubmit() {
-
                 AssetSearchCriteria assetSearchCriteria = transformToAssetSearchCriteria(assetCheckGroup.getModelObject());
-
                 HttpServletRequest httpServletRequest = ((ServletWebRequest) getRequest()).getContainerRequest();
                 HttpSession session = httpServletRequest.getSession();
 
@@ -283,7 +284,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             add(searchCriteria);
 
             AjaxSubmitLink submit;
-            add( submit = new AjaxSubmitLink("searchButtonId") {
+            add( submit = new IndicatingAjaxSubmitLink("searchButtonId") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     results = fullTextSearchService.search(searchText, new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>")).getResults();
@@ -311,7 +312,5 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");
     }
-
-
 
 }

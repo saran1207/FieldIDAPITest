@@ -1,7 +1,6 @@
 package com.n4systems.services.search;
 
 import com.google.common.collect.Lists;
-import com.n4systems.services.brainforest.SearchQuery;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 
@@ -11,7 +10,6 @@ import java.util.List;
 public class SearchResults implements Serializable {
 
     private List<SearchResult> results = Lists.newArrayList();
-    private SearchQuery searchQuery;
 
 
     public SearchResults() {
@@ -27,7 +25,7 @@ public class SearchResults implements Serializable {
         return null;// override if you want highlighting to occur.
     }
 
-    protected NumericHighlighter getHighlighter() {
+    protected FieldIdHighlighter getHighlighter() {
         return null;  // override if you want highlighting to occur.
     }
 

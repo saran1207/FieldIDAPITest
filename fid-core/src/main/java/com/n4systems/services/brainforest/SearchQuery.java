@@ -47,7 +47,7 @@ public class SearchQuery implements Serializable {
     }
 
     public Iterator<Conjunction> conjunctions() {
-        Preconditions.checkState(conjunctions.size()==terms.size()-1,"somethings wrong with this query...need to have N-1 AND/OR conjunctions for N terms.");
+        Preconditions.checkState(conjunctions.size() == terms.size() - 1, "somethings wrong with this query...need to have N-1 AND/OR conjunctions for N terms.");
         return conjunctions.iterator();
     }
 
@@ -81,5 +81,17 @@ public class SearchQuery implements Serializable {
         return null;
     }
 
+    public boolean usesAttribute(String attribute) {
+        if (attribute==null) {
+            return false;
+        }
+        for (QueryTerm term:terms) {
+            String termAttribute = term.getAttribute();
+            if (attribute.equalsIgnoreCase(termAttribute) || termAttribute==null) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }

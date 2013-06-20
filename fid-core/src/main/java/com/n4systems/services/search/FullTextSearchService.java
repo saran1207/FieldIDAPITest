@@ -72,15 +72,15 @@ public class FullTextSearchService extends FieldIdPersistenceService {
 
             List<Document> docs = search(reader, analyzer, query);
 
-            // ?? DO WE STILL WANT TO LOG EACH SEARCH HIT???
+            // TODO DD : ?? DO WE STILL WANT TO LOG EACH SEARCH HIT???
             SearchResults results = new SearchResults() {
                 @Override protected Analyzer getAnalyzer() {
                     return analyzer;
                 }
-                @Override protected NumericHighlighter getHighlighter() {
+                @Override protected FieldIdHighlighter getHighlighter() {
                     QueryScorer scorer = new QueryScorer(query);
                     scorer.setExpandMultiTermQuery(true);
-                    return formatter==null?null : new NumericHighlighter(formatter, scorer, searchQuery);
+                    return formatter==null?null : new FieldIdHighlighter(formatter, scorer, searchQuery);
                 }
             };
 

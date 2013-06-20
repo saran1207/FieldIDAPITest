@@ -22,7 +22,7 @@ public class SearchResult implements Serializable {
 
     private Map<String,ResultValue> results = Maps.newHashMap();
 
-    public SearchResult(Document doc, NumericHighlighter highlighter, Analyzer analyzer) {
+    public SearchResult(Document doc, FieldIdHighlighter highlighter, Analyzer analyzer) {
         for (IndexableField field:doc.getFields()) {
             results.put(field.name(), new ResultValue(field, highlighter, analyzer));
         }
@@ -65,13 +65,13 @@ public class SearchResult implements Serializable {
         private Long longValue;
         private Number numberValue;
 
-        public ResultValue(IndexableField field, NumericHighlighter highlighter, Analyzer analyzer) {
+        public ResultValue(IndexableField field, FieldIdHighlighter highlighter, Analyzer analyzer) {
             this.originalValue = field.stringValue();
             initValues(field);
             maybeHighlight(field, highlighter, analyzer);
         }
 
-        private void maybeHighlight(IndexableField field, NumericHighlighter highlighter, Analyzer analyzer) {
+        private void maybeHighlight(IndexableField field, FieldIdHighlighter highlighter, Analyzer analyzer) {
             if (highlighter==null) {
                 return;
             }
@@ -81,7 +81,7 @@ public class SearchResult implements Serializable {
                     // TODO : need to have field Id SearchQuery object
                     highlightedValue = highlighter.getBestNumericFragment(field.name(), numberValue, getMostAppropriateValue() );
                 } else {
-                    highlightedValue = highlighter.getBestFragment(analyzer, field.name(), field.stringValue());
+                    highlightedValue = highlighter.getBestTextFragment(analyzer, field.name(), field.stringValue());
                 }
             } catch (IOException e) {
                 ;  // do nothing...just leave it unhighlighted.
