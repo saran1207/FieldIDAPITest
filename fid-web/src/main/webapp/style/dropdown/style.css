@@ -26,7 +26,7 @@ ul.dropdown ul li a,
 ul.dropdown ul li.hover a           { color: #000; }
 									  
                                     /* IE 6 & 7 Needs Inline Block */
-ul.dropdown ul li a					{ border-right: none; width: 178px; display: inline-block; }
+ul.dropdown ul li a					{ border-right: none; padding-right: 0; width: 188px; display: inline-block; }
 
 ul.dropdown li ul li.hover,
 ul.dropdown li ul li:hover          { background: #F5F5F5; position: relative; }
