@@ -18,7 +18,7 @@ public class LatentImage extends WebComponent {
 
     public static final String NOT_INITIALIZED = "NOT_INITIALIZED";
 
-    private String src= NOT_INITIALIZED;
+    private String src=NOT_INITIALIZED;
 
     public LatentImage(String id) {
         super(id);
@@ -43,6 +43,11 @@ public class LatentImage extends WebComponent {
 
     protected void updateImage(AjaxRequestTarget target) {
         src = updateSrc();
+    }
+
+    @Override
+    public boolean isVisible() {
+        return !(NOT_INITIALIZED.equals(src) || StringUtils.isEmpty(src));
     }
 
     protected String updateSrc() {

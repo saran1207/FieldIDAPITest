@@ -16,9 +16,11 @@ import java.util.List;
 public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
 
     private @SpringBean FullTextSearchService fullTextSearchService;
+
     private IModel<String> searchText;
-    private Integer size = null;
-    List<SearchResult> pageResults = null;
+    // caching.
+    private transient Integer size = null;
+    private transient List<SearchResult> pageResults = null;
 
     public SearchDataProvider(IModel<String> searchText) {
         this.searchText = searchText;
@@ -53,6 +55,7 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
 
     @Override
     public void detach() {
+        System.out.println("detaching");
         searchText.detach();
         pageResults = null;
         size = null;

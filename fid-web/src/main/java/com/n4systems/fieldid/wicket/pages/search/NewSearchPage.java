@@ -141,7 +141,6 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 detailsContainer.add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetId)));
                 summaryLink.add(new Label("summary", getIdentifier(result)).setEscapeModelStrings(false));
 
-
                 detailsContainer.add(new Label("fixedAttributes", getFixedAttributes(result)).setEscapeModelStrings(false));
 
                 detailsContainer.add(new Label("customAttributes", getCustomAttributes(result)).setEscapeModelStrings(false));
@@ -175,6 +174,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                         }
                     }
                 });
+
             }
         };
 
