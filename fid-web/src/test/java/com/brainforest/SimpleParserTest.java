@@ -4,6 +4,7 @@ package com.brainforest;
 import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.brainforest.*;
+import com.n4systems.services.date.DateService;
 import com.n4systems.test.TestTarget;
 import com.n4systems.util.chart.RangeType;
 import org.joda.time.LocalDate;
@@ -12,6 +13,7 @@ import org.junit.Test;
 import java.io.StringReader;
 import java.lang.reflect.Field;
 import java.util.Date;
+import java.util.TimeZone;
 
 import static org.apache.commons.lang.time.DateUtils.parseDate;
 import static org.easymock.EasyMock.*;
@@ -27,16 +29,24 @@ public class SimpleParserTest extends FieldIdServiceTest {
     @Override
     public void setUp() {
         super.setUp();
-        dateParser = createMock(DateParser.class);
     }
 
     @Override
     protected Object createSut(Field sutField) throws Exception {
+        // how's this for code smell...
         return new SimpleParser(new StringReader("")) {
             @Override public ValueFactory getValueFactory() {
                 return new ValueFactory() {
                     @Override protected DateParser getDateParser() {
-                        return dateParser;
+                        return new DateParser() {
+                            @Override protected DateService getDateService() {
+                                return new DateService() {
+                                    @Override public TimeZone getUserTimeZone() {
+                                        return TimeZone.getDefault();
+                                    }
+                                };
+                            }
+                        };
                     }
                 };
             }
@@ -65,9 +75,9 @@ public class SimpleParserTest extends FieldIdServiceTest {
 
     @Test
     public void test_parser_stuff() throws ParseException, java.text.ParseException {
-        expect(dateParser.parseRange(anyObject(String.class), anyObject(SimpleValue.DateFormatType.class))).andReturn(new DateRange(RangeType.TODAY)).anyTimes();
-        replay(dateParser);
-        System.out.println(simpleParser.parseQuery("days=01-05-2011, TODAY, 02-06-2012 "));
+        System.out.println(simpleParser.parseQuery("dfdfsdf=march 1,2011,march 10,2012"));
+        System.out.println(simpleParser.parseQuery("dfdfsdf<march 1,2011"));
+        System.out.println(simpleParser.parseQuery("date<sep 21,2008"));
     }
 
 
@@ -93,6 +103,8 @@ public class SimpleParserTest extends FieldIdServiceTest {
         System.out.println(simpleParser.parseQuery("days=TODAY,TOMORROW,march 10,2012"));
 
         System.out.println(simpleParser.parseQuery("dotdotdot=march 1,2011...march 10,2012"));
+
+        System.out.println(simpleParser.parseQuery("dotdotdot=march 1,2011,march 10,2012"));
 
         System.out.println(simpleParser.parseQuery("color:blue"));
 

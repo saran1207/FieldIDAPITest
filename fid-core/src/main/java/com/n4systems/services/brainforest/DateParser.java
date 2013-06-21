@@ -99,7 +99,7 @@ public class DateParser {
     private @Autowired DateService dateService = new DateService();
 
     public DateRange parseRange(String stringValue, SimpleValue.DateFormatType type) throws java.text.ParseException {
-        TimeZone timeZone = dateService.getUserTimeZone();
+        TimeZone timeZone = getDateService().getUserTimeZone();
         switch (type) {
             case VOID:
             case TODAY:
@@ -128,6 +128,10 @@ public class DateParser {
             default:
                 throw new IllegalStateException("can't parse date with invalid type " + type);
         }
+    }
+
+    protected DateService getDateService() {
+        return dateService;
     }
 
     private DateRange parseFloatingDate(String stringValue) {

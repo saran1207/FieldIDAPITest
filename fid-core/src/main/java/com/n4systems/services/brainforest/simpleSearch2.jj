@@ -90,7 +90,7 @@ TOKEN:
 }
 
 MORE : {
-    <"jan"("uary")?|"feb"("ruary")?|"mar"("ch")?|"apr"("il")?|"may"|"jun"("e")?|"jul"("y")?|"aug"("ust")?|"oct"("ober")?|"nov"("ember")?|"dec"("ember")?>
+    <"jan"("uary")?|"feb"("ruary")?|"mar"("ch")?|"apr"("il")?|"may"|"jun"("e")?|"jul"("y")?|"aug"("ust")?|"sep"("tember")?|"oct"("ober")?|"nov"("ember")?|"dec"("ember")?>
         : InVerboseDate
 }
 
