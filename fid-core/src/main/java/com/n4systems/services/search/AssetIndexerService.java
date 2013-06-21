@@ -353,6 +353,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
             } else if (value instanceof Double) {
                 doc.add(field = new DoubleField(name, (Double) value, Field.Store.YES));
             } else if (value instanceof Long) {
+                // TODO DD : may just want to index all numeric fields as Double.  (except internal ID's).   for example length>1 still searches for > 1.0
                 doc.add(field = new LongField(name, (Long) value, Field.Store.YES));
             } else if (value instanceof Integer) {
                 doc.add(field = new IntField(name, (Integer) value, Field.Store.YES));

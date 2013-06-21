@@ -114,6 +114,11 @@ public class SimpleValue extends Value {
 
     @Override
     public String getString() {
+        return stringValue.toLowerCase();
+    }
+
+    @Override
+    public String getStringOriginalCase() {
         return stringValue;
     }
 

@@ -62,6 +62,10 @@ public class QueryTerm implements Serializable {
     }
 
     public String getAttribute() {
+        return attribute.toLowerCase();
+    }
+
+    public String getAttributeOriginalCase() {
         return attribute;
     }
 

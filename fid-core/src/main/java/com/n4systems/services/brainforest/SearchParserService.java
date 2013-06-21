@@ -7,7 +7,6 @@ import com.n4systems.services.search.AssetIndexField;
 import org.apache.log4j.Logger;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
-import org.apache.lucene.util.BytesRef;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,6 +15,9 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
+
+// CAVEAT : it is assumed that analyzer/app code used when indexing data forces to lowercase.
+//  .: when generating queries all terms are lowercase.
 
 public class SearchParserService extends FieldIdService {
 
@@ -64,7 +66,7 @@ public class SearchParserService extends FieldIdService {
     }
 
     private Query getQueryForTerm(QueryTerm term) {
-        String attribute = term.getAttribute()!=null ? term.getAttribute().toLowerCase() : AssetIndexField.ALL.getField();
+        String attribute = term.getAttribute()!=null ? term.getAttribute() : AssetIndexField.ALL.getField();
         Value value = term.getValue();
         return getQueryForTerm(attribute, value, term.getOperator());
     }
@@ -82,18 +84,23 @@ public class SearchParserService extends FieldIdService {
 
     private Query getSimpleQueryForTerm(String attribute, QueryTerm.Operator operator, SimpleValue value) {
         if (value.isNumber()) {
-            NumberRangeInfo rangeInfo = new NumberRangeInfo(value.getNumber(), operator);
-            if (rangeInfo.type==Long.class) {
+            NumericRangeInfo rangeInfo = new NumericRangeInfo(value.getNumber(), operator);
+            if (value.getNumber() instanceof Long) {
                 return NumericRangeQuery.newLongRange(attribute,rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
-            } else if (rangeInfo.type==Double.class) {
+            } else if (value.getNumber() instanceof Double) {
                 return NumericRangeQuery.newDoubleRange(attribute, rangeInfo.getMinDouble(), rangeInfo.getMaxDouble(), rangeInfo.includeMin, rangeInfo.includeMax);
             }
         } else if (value.isDate()) {
             DateTime date = value.getDate();
-            NumberRangeInfo rangeInfo = new NumberRangeInfo(date.toDate().getTime(), operator).withGranularity(TimeUnit.DAYS.toMillis(1));
+            NumericRangeInfo rangeInfo = new NumericRangeInfo(date.toDate().getTime(), operator).withGranularity(TimeUnit.DAYS.toMillis(1));
             return NumericRangeQuery.newLongRange(attribute, rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
         } else if (value.isString()) {
-            return getPhraseQueryForTerm(attribute, value);
+            if (operator.equals(QueryTerm.Operator.EQ)) {
+                return getPhraseQueryForTerm(attribute, value);
+            } else {
+                StringRangeInfo rangeInfo = new StringRangeInfo(value.getString(), operator);
+                return TermRangeQuery.newStringRange(attribute,rangeInfo.min, rangeInfo.max, rangeInfo.includeMin, rangeInfo.includeMax);
+            }
         }
         return null;
     }
@@ -103,7 +110,7 @@ public class SearchParserService extends FieldIdService {
         PhraseQuery query = new PhraseQuery();
         StringTokenizer stringTokenizer = new StringTokenizer(value.getString());
         while (stringTokenizer.hasMoreTokens()) {
-            query.add(new Term(attribute,stringTokenizer.nextToken().toLowerCase()));
+            query.add(new Term(attribute,stringTokenizer.nextToken()));
         }
         return query;
     }
@@ -128,7 +135,7 @@ public class SearchParserService extends FieldIdService {
             long to = value.getTo().getDate().toDate().getTime();
             return NumericRangeQuery.newLongRange(attribute, from, to, true, false);
         } else if (value.isString()) {
-            return new TermRangeQuery(attribute, new BytesRef(value.getFrom().getString()), new BytesRef(value.getTo().getString()), true, true);
+            return TermRangeQuery.newStringRange(attribute,value.getFrom().getString(), value.getTo().getString(), true, true);
         }
         return null;
     }
@@ -143,18 +150,25 @@ public class SearchParserService extends FieldIdService {
         }
     }
 
-    class NumberRangeInfo {
-        boolean includeMin = false;
-        boolean includeMax = false;
-        Number min=null;
-        Number max=null;
-        BooleanClause.Occur occur = BooleanClause.Occur.MUST;
-        Class<? extends Number> type;
-        Number granularity=0.0;
 
-        public NumberRangeInfo(Number number, QueryTerm.Operator operator) {
-            type = number.getClass();
-            double value = number.doubleValue();
+    // -------------------------------------------------------------------------------
+
+    class RangeInfo<T> {
+        protected boolean includeMin = false;
+        protected boolean includeMax = false;
+        protected T min=null;
+        protected T max=null;
+        protected BooleanClause.Occur occur = BooleanClause.Occur.MUST;
+        protected final T value;
+        protected final QueryTerm.Operator operator;
+
+        public RangeInfo(T value, QueryTerm.Operator operator) {
+            this.value = value;
+            this.operator = operator;
+            process();
+        }
+
+        private void process() {
             switch (operator) {
                 case GT:
                     includeMin = false;
@@ -174,7 +188,6 @@ public class SearchParserService extends FieldIdService {
                     break;
                 case EQ:
                     min = value;
-                    max = new Double(min.doubleValue() + granularity.doubleValue());
                     includeMin = includeMax = true;
                     break;
                 case NE:
@@ -185,8 +198,27 @@ public class SearchParserService extends FieldIdService {
             }
         }
 
-        public NumberRangeInfo withGranularity(Number granularity){
+    }
+
+
+    class NumericRangeInfo extends RangeInfo<Number> {
+        Number granularity=null;
+
+        public NumericRangeInfo(Number value, QueryTerm.Operator operator) {
+            super(value,operator);
+        }
+
+        public NumericRangeInfo withGranularity(Number granularity){
             this.granularity = granularity;
+            switch (operator) {
+                case EQ:
+                    min = value;
+                    max = new Double(min.doubleValue() + granularity.doubleValue());
+                    includeMin = includeMax = true;
+                    break;
+                default:
+                    break;
+            }
             return this;
         }
 
@@ -201,6 +233,15 @@ public class SearchParserService extends FieldIdService {
         }
         public Double getMaxDouble() {
             return max == null ? null : max.doubleValue();
+        }
+    }
+
+
+    class StringRangeInfo extends RangeInfo<String> {
+        BooleanClause.Occur occur = BooleanClause.Occur.MUST;
+
+        public StringRangeInfo(String value, QueryTerm.Operator operator) {
+            super(value, operator);
         }
     }
 

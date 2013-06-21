@@ -20,6 +20,10 @@ public abstract class Value {
         return toString();
     }
 
+    public String getStringOriginalCase() {
+        return toString();
+    }
+
     public boolean isDate() {
         return false;
     }
