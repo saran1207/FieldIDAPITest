@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.taskscheduling.TaskExecutor;
 import com.n4systems.taskscheduling.task.MassUpdateAssetsTask;
@@ -42,7 +41,7 @@ public class ConfirmEditPanel extends AbstractMassUpdatePanel {
 				List<Long> assetIds = assetSearchCriteria.getObject().getSelection().getSelectedIds();
 				MassUpdateAssetsTask task = new MassUpdateAssetsTask(massUpdateManager, assetIds, massUpdateAssetModel.getAsset(), massUpdateAssetModel.getSelect(), getCurrentUser(), getNonIntegrationOrderNumber());
 				TaskExecutor.getInstance().execute(task);
-				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
+                ConfirmEditPanel.this.onSubmit();
 				info(new FIDLabelModel("message.massupdating", new FIDLabelModel("label.assets").getObject()).getObject());
 			}
 		};

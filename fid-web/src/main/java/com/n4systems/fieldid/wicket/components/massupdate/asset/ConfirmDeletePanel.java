@@ -6,7 +6,6 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.log4j.Logger;
 import org.apache.wicket.markup.html.form.Button;
@@ -48,7 +47,7 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
                     List<Long> assetIds = assetSearchCriteria.getObject().getSelection().getSelectedIds();
                     Long results = massUpdateManager.deleteAssets(assetIds, getCurrentUser());
 					assetSearchCriteria.getObject().getSelection().clear();
-					setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
+                    ConfirmDeletePanel.this.onSubmit();
 					info(new FIDLabelModel("message.asset_massdelete_successful", results.toString()).getObject());
 				} catch (UpdateFailureException e) {
                     error("Mass deletion failed. (Are one or more of the assets used in master events?)");

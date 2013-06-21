@@ -9,9 +9,11 @@ import com.n4systems.fieldid.wicket.model.asset.MassUpdateAssetModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteria;
+import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import java.util.Arrays;
 import java.util.List;
@@ -39,7 +41,7 @@ public class MassUpdateAssetsPanel extends Panel {
 
             @Override
             protected void onCancel() {
-                setResponsePage(new SearchPage((AssetSearchCriteria)assetSearchCriteria.getObject()));
+                setResponsePage(getResponsePage(assetSearchCriteria));
             }
 
 		};
@@ -52,7 +54,7 @@ public class MassUpdateAssetsPanel extends Panel {
 		return new MassUpdateNavigationPanel("navPanel", assetSearchCriteria.getObject(), panel) {
 			@Override
 			protected void onBackToSearch(SearchCriteria assetSearchCriteria) {
-				setResponsePage(new SearchPage((AssetSearchCriteria)assetSearchCriteria));
+				setResponsePage(getResponsePage(Model.of((AssetSearchCriteria)assetSearchCriteria)));
 			}
 			
 			@Override
@@ -79,9 +81,9 @@ public class MassUpdateAssetsPanel extends Panel {
 
 	private DeleteDetailsPanel getDeleteDetailsPanel(final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		return new DeleteDetailsPanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
-			@Override
+            @Override
 			protected void onCancel() {
-				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
+				setResponsePage(getResponsePage(assetSearchCriteria));
 			}
 			
 			@Override
@@ -94,9 +96,9 @@ public class MassUpdateAssetsPanel extends Panel {
 	
 	private AbstractMassUpdatePanel getEditDetailsPanel(final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		return new EditDetailsPanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
-			@Override
+ 			@Override
 			protected void onCancel() {
-				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
+				setResponsePage(getResponsePage(assetSearchCriteria));
 			}
 			
 			@Override
@@ -110,18 +112,27 @@ public class MassUpdateAssetsPanel extends Panel {
 
 	private ConfirmDeletePanel getConfirmDeletePanel(final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel) {
 		return new ConfirmDeletePanel("massUpdatePanel", assetSearchCriteria, previousPanel) {
-			@Override
+            @Override
+            protected void onSubmit() {
+                setResponsePage(getResponsePage(assetSearchCriteria));
+            }
+
+            @Override
 			protected void onCancel() {
-				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
+				setResponsePage(getResponsePage(assetSearchCriteria));
 			}
 		};
 	}
 	
 	private ConfirmEditPanel getConfirmEditPanel(final IModel<AssetSearchCriteria> assetSearchCriteria, AbstractMassUpdatePanel previousPanel, MassUpdateAssetModel massUpdateAssetModel) {
 		return new ConfirmEditPanel("massUpdatePanel", assetSearchCriteria, previousPanel, massUpdateAssetModel){
+            @Override
+            protected void onSubmit() {
+                setResponsePage(getResponsePage(assetSearchCriteria));
+            }
 			@Override
 			protected void onCancel() {
-				setResponsePage(new SearchPage(assetSearchCriteria.getObject()));
+				setResponsePage(getResponsePage(assetSearchCriteria));
 			}			
 		};
 	}
@@ -130,5 +141,9 @@ public class MassUpdateAssetsPanel extends Panel {
 		this.currentPanel = panel;
 	}
 
+
+    protected Page getResponsePage(IModel<AssetSearchCriteria> searchCriteria) {
+        return new SearchPage(searchCriteria.getObject());
+    }
 
 }

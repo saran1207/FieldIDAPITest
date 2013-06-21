@@ -229,7 +229,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             @Override
             public void onClick() {
                 AssetSearchCriteria assetSearchCriteria = createAssetSearchCriteria();
-                setResponsePage(new MassUpdateAssetsPage(new Model(assetSearchCriteria)));
+                setResponsePage(new MassUpdateAssetsPage(new Model(assetSearchCriteria), NewSearchPage.this));
             }
         });
 
