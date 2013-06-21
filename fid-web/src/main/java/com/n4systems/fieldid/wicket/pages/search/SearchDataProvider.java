@@ -55,7 +55,6 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
 
     @Override
     public void detach() {
-        System.out.println("detaching");
         searchText.detach();
         pageResults = null;
         size = null;
