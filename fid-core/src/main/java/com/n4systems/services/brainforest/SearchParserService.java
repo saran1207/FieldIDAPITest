@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.search.AssetIndexField;
 import org.apache.log4j.Logger;
+import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
 import org.joda.time.DateTime;
@@ -25,6 +26,7 @@ public class SearchParserService extends FieldIdService {
 
     private @Autowired SecurityContext securityContext;
     private @Autowired SimpleParser searchParser;
+    private @Autowired CharArraySet stopWords;
 
 
 
@@ -86,7 +88,7 @@ public class SearchParserService extends FieldIdService {
         if (value.isNumber()) {
             NumericRangeInfo rangeInfo = new NumericRangeInfo(value.getNumber(), operator);
             if (value.getNumber() instanceof Long) {
-                return NumericRangeQuery.newLongRange(attribute,rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
+                return NumericRangeQuery.newLongRange(attribute, rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
             } else if (value.getNumber() instanceof Double) {
                 return NumericRangeQuery.newDoubleRange(attribute, rangeInfo.getMinDouble(), rangeInfo.getMaxDouble(), rangeInfo.includeMin, rangeInfo.includeMax);
             }
@@ -99,7 +101,7 @@ public class SearchParserService extends FieldIdService {
                 return getPhraseQueryForTerm(attribute, value);
             } else {
                 StringRangeInfo rangeInfo = new StringRangeInfo(value.getString(), operator);
-                return TermRangeQuery.newStringRange(attribute,rangeInfo.min, rangeInfo.max, rangeInfo.includeMin, rangeInfo.includeMax);
+                return TermRangeQuery.newStringRange(attribute, rangeInfo.min, rangeInfo.max, rangeInfo.includeMin, rangeInfo.includeMax);
             }
         }
         return null;
@@ -110,9 +112,17 @@ public class SearchParserService extends FieldIdService {
         PhraseQuery query = new PhraseQuery();
         StringTokenizer stringTokenizer = new StringTokenizer(value.getString());
         while (stringTokenizer.hasMoreTokens()) {
-            query.add(new Term(attribute,stringTokenizer.nextToken()));
+            String word = stringTokenizer.nextToken();
+            if (!isCommonWord(word)) {
+                query.add(new Term(attribute, word));
+            }
         }
+        query.setSlop(6);
         return query;
+    }
+
+    private boolean isCommonWord(String word) {
+        return stopWords.contains(word);
     }
 
     private Query getListQueryForTerm(String attribute, ListValue value) {
@@ -205,7 +215,7 @@ public class SearchParserService extends FieldIdService {
         Number granularity=null;
 
         public NumericRangeInfo(Number value, QueryTerm.Operator operator) {
-            super(value,operator);
+            super(value, operator);
         }
 
         public NumericRangeInfo withGranularity(Number granularity){

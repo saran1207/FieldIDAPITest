@@ -65,10 +65,12 @@ import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.services.search.FullTextSearchService;
+import com.n4systems.services.search.StopWordSet;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.json.JsonRenderer;
+import org.apache.lucene.analysis.util.CharArraySet;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -553,6 +555,11 @@ public class FieldIdCoreConfig {
     @Bean
     public AutoAttributeService autoAttributeService() {
         return new AutoAttributeService();
+    }
+
+    @Bean
+    public CharArraySet stopWordSet() {
+        return new StopWordSet();
     }
 
 }

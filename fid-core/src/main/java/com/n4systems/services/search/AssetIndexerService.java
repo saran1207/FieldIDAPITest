@@ -23,6 +23,7 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -34,20 +35,27 @@ import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.IOUtils;
 import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.Version;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Transactional
 public class AssetIndexerService extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(AssetIndexerService.class);
 
+
     private static final String INDEX_FORMAT = "/var/fieldid/private/indexes/%s/assets";
     private static final int DEFAULT_BOOST = 1;
+
+    private @Autowired CharArraySet stopWords;
 
 
     @Scheduled(fixedDelay = 5000)
@@ -202,11 +210,12 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
 	public void index(final Tenant tenant, final List<Asset> assets, boolean update) {
 		long startTime = System.currentTimeMillis();
-		Analyzer analyzer = null;
 		Directory dir = null;
 		IndexWriter writer = null;
-		try {
-			analyzer = new StandardAnalyzer(Version.LUCENE_43);
+        Analyzer analyzer = null;
+
+        try {
+            analyzer = new StandardAnalyzer(Version.LUCENE_43, stopWords);  // Caveat : english stopwords only currently supported.
 			IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LUCENE_43, analyzer);
 			writerConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 			writerConfig.setRAMBufferSizeMB(256.0);

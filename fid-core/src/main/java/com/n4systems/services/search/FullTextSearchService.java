@@ -74,7 +74,6 @@ public class FullTextSearchService extends FieldIdPersistenceService {
 
     public List<Document> findAll(String tenantName) {
         return lucene(new LuceneWorker<List<Document>>() {
-
             @Override
             List<Document> runQuery(Analyzer analyzer, IndexSearcher searcher) throws IOException {
                 List<Document> docs = Lists.newArrayList();
@@ -103,6 +102,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
             return worker.runQuery(analyzer, indexSearcher);
         } catch (Exception e) {
             logger.error(e);
+//            throw new FullTextSearchException(e);
         } finally {
             closeQuietly(reader, dir, analyzer);
         }
