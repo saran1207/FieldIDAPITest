@@ -85,7 +85,11 @@
 					</#if>
 
 					<li>
-						<a href="/fieldid/w/wicket/search" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" /></a>
+						<a href="/fieldid/w/wicket/search" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" />
+                            <#if securityGuard.isGlobalSearchEnabled()>
+                                <img src="/fieldid/images/down-arrow.png" />
+                            </#if>
+                        </a>
 
                     <#if securityGuard.isGlobalSearchEnabled()>
                         <ul class="sub_menu">
