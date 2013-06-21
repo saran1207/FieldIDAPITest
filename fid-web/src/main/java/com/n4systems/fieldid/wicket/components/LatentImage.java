@@ -38,7 +38,7 @@ public class LatentImage extends WebComponent {
             }
         });
 
-        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
     }
 
     protected void updateImage(AjaxRequestTarget target) {
