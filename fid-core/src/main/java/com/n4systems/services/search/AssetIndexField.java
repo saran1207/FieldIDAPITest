@@ -16,7 +16,7 @@ public enum AssetIndexField {
     REFERENCE_NUMBER("ref",9),
     PURCHASE_ORDER("po",9),
     COMMENTS("comments",1),
-    IDENTIFIED("assetidentifed",5),
+    IDENTIFIED("assetidentified",5),
     ORDER("order",1),
     LAST_EVENT_DATE("lasteventdate",1),
     LOCATION("location",5),
