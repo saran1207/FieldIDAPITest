@@ -9,7 +9,6 @@ import com.n4systems.services.brainforest.ValueFactory;
 import com.n4systems.services.date.DateService;
 import com.n4systems.test.TestTarget;
 import org.joda.time.LocalDate;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.StringReader;
@@ -76,9 +75,7 @@ public class SimpleParserTest extends FieldIdServiceTest {
 
     @Test
     public void test_parser_stuff() throws ParseException, java.text.ParseException {
-        System.out.println(simpleParser.parseQuery("dfdfsdf=march 1,2011,march 10,2012"));
-        System.out.println(simpleParser.parseQuery("dfdfsdf<march 1,2011"));
-        System.out.println(simpleParser.parseQuery("date<sep 21,2008"));
+        System.out.println(simpleParser.parseQuery("fruit=this monday ddd:next tuesday  bbb:last october"));
     }
 
 
@@ -95,7 +92,6 @@ public class SimpleParserTest extends FieldIdServiceTest {
 
 
     @Test
-    @Ignore
     public void test_parser() throws ParseException, java.text.ParseException {
         System.out.println(simpleParser.parseQuery("days=TODAY,TOMORROW,march 10,2012"));
 
@@ -128,9 +124,9 @@ public class SimpleParserTest extends FieldIdServiceTest {
         System.out.println(simpleParser.parseQuery("x:this week to next week"));
         System.out.println(simpleParser.parseQuery("x:this week"));
 
-//        System.out.println(simpleParser.parseQuery("foo=this tuesday to next march"));
+        System.out.println(simpleParser.parseQuery("foo=this tuesday to next march"));
 
-        System.out.println(simpleParser.parseQuery("ellip=this  week...March 1 2012"));
+        System.out.println(simpleParser.parseQuery("ellip=this week...March 1 2012"));
 
         System.out.println(simpleParser.parseQuery("foo=March 1,2012 to March 11,2012"));
 
@@ -171,7 +167,9 @@ public class SimpleParserTest extends FieldIdServiceTest {
         System.out.println(simpleParser.parseQuery("apple, cherry, pear and banana"));
 
         System.out.println(simpleParser.parseQuery("fruit=apple, cherry, pear or  smoothie=banana or XYZ ZZZ"));
-        
+
+        System.out.println(simpleParser.parseQuery("fruit=this monday ddd:next tuesday  bbb:last october"));
+
     }
 
 }

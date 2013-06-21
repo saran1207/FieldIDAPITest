@@ -1,96 +1,125 @@
 package com.n4systems.services.brainforest;
 
+import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
+import com.n4systems.util.StringUtils;
 import com.n4systems.util.chart.RangeType;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
 import org.joda.time.LocalDate;
+import org.joda.time.Period;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+import java.util.StringTokenizer;
 import java.util.TimeZone;
 
 public class DateParser {
 
     private static final Logger logger=Logger.getLogger(DateParser.class);
 
-    public enum FloatingDate {
-        TODAY( "today"),
-        TOMORROW( "tomorrow"),
-        YESTERDAY("yesterday"),
+    static Period day = Period.days(1);
+    static Period week = Period.weeks(1);
+    static Period month = Period.months(1);
+    static Period year = Period.years(1);
+    static Period quarter = Period.months(3);
 
-//        MONDAY(DateTimeConstants.MONDAY,"monday","mon"),
-//        TUESDAY(DateTimeConstants.TUESDAY,"tuesday","tue"),
-//        WEDNESDAY(DateTimeConstants.WEDNESDAY,"wednesday","wed"),
-//        THURSDAY(DateTimeConstants.THURSDAY,"thursday","thu"),
-//        FRIDAY(DateTimeConstants.FRIDAY,"friday","fri"),
-//        SATURDAY(DateTimeConstants.SATURDAY,"saturday","sat"),
-//        SUNDAY(DateTimeConstants.SUNDAY,"sunday","sun"),
-//
-//        NEXT_MONDAY(DateTimeConstants.MONDAY,"monday","mon"),
-//        NEXT_TUESDAY(DateTimeConstants.TUESDAY,"tuesday","tue"),
-//        NEXT_WEDNESDAY(DateTimeConstants.WEDNESDAY,"wednesday","wed"),
-//        NEXT_THURSDAY(DateTimeConstants.THURSDAY,"thursday","thu"),
-//        NEXT_FRIDAY(DateTimeConstants.FRIDAY,"friday","fri"),
-//        NEXT_SATURDAY(DateTimeConstants.SATURDAY,"saturday","sat"),
-//        NEXT_SUNDAY(DateTimeConstants.SUNDAY,"sunday","sun"),
-//
-//        LAST_MONDAY(DateTimeConstants.MONDAY,"monday","mon"),
-//        LAST_TUESDAY(DateTimeConstants.TUESDAY,"tuesday","tue"),
-//        LAST_WEDNESDAY(DateTimeConstants.WEDNESDAY,"wednesday","wed"),
-//        LAST_THURSDAY(DateTimeConstants.THURSDAY,"thursday","thu"),
-//        LAST_FRIDAY(DateTimeConstants.FRIDAY,"friday","fri"),
-//        LAST_SATURDAY(DateTimeConstants.SATURDAY,"saturday","sat"),
-//        LAST_SUNDAY(DateTimeConstants.SUNDAY,"sunday","sun"),
+    enum FloatingDateModifier {
+        THIS(0),NEXT(1),LAST(-1);
 
-        JANUARY(DateTimeConstants.JANUARY,"january","jan"),
-        FEBRUARY(DateTimeConstants.FEBRUARY,"february","feb"),
-        MARCH(DateTimeConstants.MARCH,"march","mar"),
-        APRIL(DateTimeConstants.APRIL,"april","apr"),
-        MAY(DateTimeConstants.MAY,"may","may"),
-        JUNE(DateTimeConstants.JUNE,"june","jun"),
-        JULY(DateTimeConstants.JULY,"july","jul"),
-        AUGUST(DateTimeConstants.AUGUST,"august","aug"),
-        SEPTEMBER(DateTimeConstants.SEPTEMBER,"september","sept"),
-        OCTOBER(DateTimeConstants.OCTOBER,"october","oct"),
-        NOVEMBER(DateTimeConstants.NOVEMBER,"november","nov"),
-        DECEMBER(DateTimeConstants.DECEMBER,"december","dec"),
+        private final int offset;
 
-        THIS_WEEK("this week"),
-        THIS_MONTH("this month"),
-        THIS_QUARTER("this quarter"),
-        THIS_YEAR("this year"),
-
-        LAST_WEEK("last week"),
-        LAST_MONTH("last month"),
-        LAST_QUARTER("last quarter"),
-        LAST_YEAR("last year"),
-
-        NEXT_WEEK("next week"),
-        NEXT_MONTH("next month"),
-        NEXT_QUARTER("next quarter"),
-        NEXT_YEAR("next year");
-
-        private String[] alias;
-        private Integer constant;
-
-        FloatingDate(String... alias) {
-            this.alias = alias;
-            constant = null;
+        FloatingDateModifier(int offset) {
+            this.offset = offset;
         }
 
-        FloatingDate(int constant, String...alias) {
-            this.constant = constant;
-            this.alias = alias;
+        public int getOffset() {
+            return offset;
         }
 
-        public String[] getAliases() {
-            return alias;
+        public static FloatingDateModifier fromString(String text) {
+            String s = text.trim();
+            for (FloatingDateModifier modifier:values()) {
+                if (modifier.name().equalsIgnoreCase(s)) {
+                    return modifier;
+                }
+            }
+            return null;
         }
     }
 
+    enum FloatingDateSpec {
+        TODAY(day, "today"),
+        TOMORROW(day, "tomorrow"),
+        YESTERDAY(day, "yesterday"),
+
+        WEEK(week,"week"),
+        MONTH(month,"month"),
+        QUARTER(quarter,"quarter"),
+        YEAR(year, "year"),
+
+        MONDAY(week, DateTimeConstants.MONDAY,"monday","mon"),
+        TUESDAY(week, DateTimeConstants.TUESDAY,"tuesday","tue"),
+        WEDNESDAY(week, DateTimeConstants.WEDNESDAY,"wednesday","wed"),
+        THURSDAY(week, DateTimeConstants.THURSDAY,"thursday","thu"),
+        FRIDAY(week, DateTimeConstants.FRIDAY,"friday","fri"),
+        SATURDAY(week, DateTimeConstants.SATURDAY,"saturday","sat"),
+        SUNDAY(week, DateTimeConstants.SUNDAY,"sunday","sun"),
+
+        JANUARY(year, DateTimeConstants.JANUARY,"january","jan"),
+        FEBRUARY(year, DateTimeConstants.FEBRUARY,"february","feb"),
+        MARCH(year, DateTimeConstants.MARCH,"march","mar"),
+        APRIL(year, DateTimeConstants.APRIL,"april","apr"),
+        MAY(year, DateTimeConstants.MAY,"may","may"),
+        JUNE(year, DateTimeConstants.JUNE,"june","jun"),
+        JULY(year, DateTimeConstants.JULY,"july","jul"),
+        AUGUST(year, DateTimeConstants.AUGUST,"august","aug"),
+        SEPTEMBER(year, DateTimeConstants.SEPTEMBER,"september","sept"),
+        OCTOBER(year, DateTimeConstants.OCTOBER,"october","oct"),
+        NOVEMBER(year, DateTimeConstants.NOVEMBER,"november","nov"),
+        DECEMBER(year, DateTimeConstants.DECEMBER,"december","dec");
+
+        private List<String> alias;
+        private int constant;
+        private Period period;
+
+        FloatingDateSpec(Period period, int constant,String... alias) {
+            this.alias = Lists.newArrayList(alias);
+            this.constant  = constant;
+            this.period = period;
+        }
+
+        FloatingDateSpec(Period period, String... alias) {
+            this.alias = Lists.newArrayList(alias);
+            this.period = period;
+        }
+
+        public List<String> getAlias() {
+            return alias;
+        }
+
+        public int getConstant() {
+            return constant;
+        }
+
+        public Period getPeriod() {
+            return period;
+        }
+
+        public static FloatingDateSpec fromString(String text) {
+            String s = text.toLowerCase().trim();
+            for (FloatingDateSpec spec:values()) {
+                if (spec.getAlias().contains(s)) {
+                    return spec;
+                }
+            }
+            return null;
+        }
+    }
 
 
     // TODO : make sure all dates have timeZone applied!!!
@@ -99,6 +128,8 @@ public class DateParser {
     private @Autowired DateService dateService = new DateService();
 
     public DateRange parseRange(String stringValue, SimpleValue.DateFormatType type) throws java.text.ParseException {
+        Preconditions.checkArgument(!StringUtils.isEmpty(stringValue), "can't parse date from empty string");
+
         TimeZone timeZone = getDateService().getUserTimeZone();
         switch (type) {
             case VOID:
@@ -128,6 +159,7 @@ public class DateParser {
             default:
                 throw new IllegalStateException("can't parse date with invalid type " + type);
         }
+
     }
 
     protected DateService getDateService() {
@@ -135,18 +167,43 @@ public class DateParser {
     }
 
     private DateRange parseFloatingDate(String stringValue) {
-        stringValue = stringValue.toLowerCase();
-        for (FloatingDate floatingDate: FloatingDate.values()) {
-            for (String alias:floatingDate.getAliases()) {
-                if (alias.equals(stringValue)) {
-                    return parseFloatingDate(floatingDate);
-                }
-            }
+        StringTokenizer tokenizer = new StringTokenizer(stringValue);
+        String token = tokenizer.nextToken();
+        FloatingDateModifier modifier = FloatingDateModifier.fromString(token);
+        if (modifier==null) {
+            modifier=FloatingDateModifier.THIS;
+        } else {
+            token = tokenizer.nextToken();
         }
-        throw new IllegalStateException("can't parse floating date [" + stringValue + "]");
+        FloatingDateSpec spec = FloatingDateSpec.fromString(token);
+
+        DateRange dateRange = parseFloatingDate(spec);
+        return modifyRange(dateRange, spec, modifier);
     }
 
-    private DateRange parseFloatingDate(FloatingDate floatingDate) {
+    private DateRange modifyRange(DateRange dateRange, FloatingDateSpec spec, FloatingDateModifier modifier) {
+        LocalDate from = dateRange.getFrom();
+        LocalDate to = dateRange.getTo();
+
+        switch (modifier) {
+            case THIS:
+                break;
+            case NEXT:
+                from = from.plus(spec.getPeriod());
+                to = to.plus(spec.getPeriod());
+                break;
+            case LAST:
+                from = from.minus(spec.getPeriod());
+                to = to.minus(spec.getPeriod());
+                break;
+            default:
+                throw new IllegalArgumentException("illegal modifier for date " + modifier);
+        }
+        return new DateRange(from,to);
+    }
+
+
+    private DateRange parseFloatingDate(FloatingDateSpec floatingDate) {
         LocalDate monday = now().withDayOfWeek(DateTimeConstants.MONDAY);
         LocalDate firstOfMonth = now().withDayOfMonth(1);
         LocalDate firstOfQuarter = now().minusMonths((now().getMonthOfYear()-1)%3).withDayOfMonth(1);
@@ -159,33 +216,7 @@ public class DateParser {
                 return new DateRange(now().plusDays(1),now().plusDays(2));
             case YESTERDAY:
                 return new DateRange(now().minusDays(1),now());
-//            case MONDAY:
-//            case TUESDAY:
-//            case WEDNESDAY:
-//            case THURSDAY:
-//            case FRIDAY:
-//            case SATURDAY:
-//            case SUNDAY:
-//                LocalDate day = now().withDayOfWeek(floatingDate.constant);
-//                return new DateRange(day, day.plusDays(7));
-//            case LAST_MONDAY:
-//            case LAST_TUESDAY:
-//            case LAST_WEDNESDAY:
-//            case LAST_THURSDAY:
-//            case LAST_FRIDAY:
-//            case LAST_SATURDAY:
-//            case LAST_SUNDAY:
-//                day = now().withDayOfWeek(floatingDate.constant).minusWeeks(1);
-//                return new DateRange(day, day.plusDays(7));
-//            case NEXT_MONDAY:
-//            case NEXT_TUESDAY:
-//            case NEXT_WEDNESDAY:
-//            case NEXT_THURSDAY:
-//            case NEXT_FRIDAY:
-//            case NEXT_SATURDAY:
-//            case NEXT_SUNDAY:
-//                day = now().withDayOfWeek(floatingDate.constant).plusWeeks(1);
-//                return new DateRange(day, day.plusDays(7));
+
             case JANUARY:
             case FEBRUARY:
             case MARCH:
@@ -200,33 +231,28 @@ public class DateParser {
             case DECEMBER:
                 LocalDate month = now().withDayOfMonth(1).withMonthOfYear(floatingDate.constant);
                 return new DateRange(month, month.plusMonths(1));
-            case THIS_WEEK:
+
+            case MONDAY:
+            case TUESDAY:
+            case WEDNESDAY:
+            case THURSDAY:
+            case FRIDAY:
+            case SATURDAY:
+            case SUNDAY:
+                LocalDate day = LocalDate.now().withDayOfWeek(floatingDate.constant);
+                return new DateRange(day, day.plusDays(1));
+
+            case WEEK:
                 return new DateRange(monday, monday.plusWeeks(1));
-            case NEXT_WEEK:
-                return new DateRange(monday.plusWeeks(1), monday.plusWeeks(2));
-            case LAST_WEEK:
-                return new DateRange(monday.minusWeeks(1), monday);
 
-            case THIS_MONTH:
+            case MONTH:
                 return new DateRange(firstOfMonth, firstOfMonth.plusMonths(1));
-            case LAST_MONTH:
-                return new DateRange(firstOfMonth.minusMonths(1), firstOfMonth);
-            case NEXT_MONTH:
-                return new DateRange(firstOfMonth.plusMonths(1), firstOfMonth.plusMonths(2));
 
-            case THIS_QUARTER:
+            case QUARTER:
                 return new DateRange(firstOfQuarter, firstOfQuarter.plusMonths(3));
-            case LAST_QUARTER:
-                return new DateRange(firstOfQuarter.minusMonths(3), firstOfQuarter);
-            case NEXT_QUARTER:
-                return new DateRange(firstOfQuarter.plusMonths(3), firstOfQuarter.plusMonths(6));
 
-            case THIS_YEAR:
+            case YEAR:
                 return new DateRange(jan1,jan1.plusYears(1));
-            case LAST_YEAR:
-                return new DateRange(jan1.minusYears(1), jan1);
-            case NEXT_YEAR:
-                return new DateRange(jan1.plusYears(1), jan1.plusYears(2));
             default:
                 throw new IllegalStateException("can't parse floating date type " + floatingDate);
         }
