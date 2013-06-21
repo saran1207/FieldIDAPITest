@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components;
 
 import com.n4systems.fieldid.wicket.util.ProxyModel;
-import com.n4systems.util.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -16,16 +15,15 @@ import static ch.lambdaj.Lambda.on;
 
 public class LatentImage extends WebComponent {
 
-    public static final String NOT_INITIALIZED = "NOT_INITIALIZED";
-
-    private String src=NOT_INITIALIZED;
+    private String src=null;
+    private boolean initialized = false;
 
     public LatentImage(String id) {
         super(id);
 
         add(new AbstractDefaultAjaxBehavior() {
             @Override public void renderHead(Component component, IHeaderResponse response) {
-                if (NOT_INITIALIZED.equals(src)) {
+                if (!initialized) {
                     StringBuilder javascript = new StringBuilder();
                     javascript.append("wicketAjaxGet('" + getCallbackUrl() + "', function() {}, function() { });\n");
                     response.renderOnLoadJavaScript(javascript.toString());
@@ -34,7 +32,6 @@ public class LatentImage extends WebComponent {
 
             @Override protected void respond(AjaxRequestTarget target) {
                 updateImage(target);
-                target.add(LatentImage.this);
             }
         });
 
@@ -43,11 +40,8 @@ public class LatentImage extends WebComponent {
 
     protected void updateImage(AjaxRequestTarget target) {
         src = updateSrc();
-    }
-
-    @Override
-    public boolean isVisible() {
-        return !(NOT_INITIALIZED.equals(src) || StringUtils.isEmpty(src));
+        initialized = true;
+        target.add(this);
     }
 
     protected String updateSrc() {
@@ -64,7 +58,7 @@ public class LatentImage extends WebComponent {
     private IModel<String> getCssClass() {
         return new Model<String>() {
             @Override public String getObject() {
-                return NOT_INITIALIZED.equals(src) || StringUtils.isEmpty(src)? "not-loaded" : "loaded";
+                return !initialized || src==null ? "not-loaded" : "loaded";
             }
         };
     }

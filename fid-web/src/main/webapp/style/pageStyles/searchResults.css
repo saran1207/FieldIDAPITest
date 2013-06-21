@@ -249,8 +249,14 @@ a.search {
 .message {
 }
 
+
+.noimagewhatsoever {
+    display:none;
+}
+
 .not-loaded {
     display:none;
+
 }
 
 .loaded {
