@@ -256,12 +256,10 @@ a.search {
 
 .not-loaded {
     display:none;
-
 }
 
 .loaded {
     display:block;
-    outline: 1px dotted lightgray;
 }
 
 .wicket-ajax-indicator {

@@ -68,6 +68,8 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     private static final String HIDE_LIST_JS = "$('#%s').hide();";
     private static final String SHOW_LIST_JS = "$('#%s').show();";
 
+    public static final int ITEMS_PER_PAGE = 10;
+
     private @SpringBean FullTextSearchService fullTextSearchService;
     private @SpringBean PersistenceService persistenceService;
     private @SpringBean S3Service s3Service;
@@ -82,6 +84,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     private Set<String> selectedIds = new HashSet<String>();
     private IDataProvider<SearchResult> provider;
     private final Component blankSlate;
+    private DataView<SearchResult> dataView;
 
     public NewSearchPage() {
         IModel<String> searchTextModel = new PropertyModel<String>(NewSearchPage.this, "searchText");
@@ -119,7 +122,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         final boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
         final boolean hasEditEvent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
 
-        final DataView<SearchResult> dataView = new DataView<SearchResult>("results", provider, 10) {
+        dataView = new DataView<SearchResult>("results", provider, ITEMS_PER_PAGE) {
             @Override
             protected void populateItem(Item<SearchResult> item) {
                 final SearchResult result = item.getModelObject();
@@ -383,6 +386,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             add( submit = new IndicatingAjaxSubmitLink("searchButtonId") {
                 @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     selectedIds.clear();
+                    dataView.setCurrentPage(0);
                     target.add(listViewContainer, feedbackPanel, blankSlate);
                 }
 
