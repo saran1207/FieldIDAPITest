@@ -77,7 +77,7 @@ public class MultipleAssetConfigurationPanel extends Panel {
 
             RequiredTextField<Integer> howManyField = new RequiredTextField<Integer>("howMany", new PropertyModel<Integer>(MultipleAssetConfigurationPanel.this, "numAssets"));
             form.add(howManyField);
-            howManyField.add(new RangeValidator<Integer>(1, 250));
+            howManyField.add(new RangeValidator<Integer>(2, 250));
 
             form.add(new AjaxButton("continueButton") {
                 @Override
