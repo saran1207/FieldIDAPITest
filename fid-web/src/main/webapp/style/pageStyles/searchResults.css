@@ -213,6 +213,14 @@ a.search {
         padding: 0 4px;
     }
 
+        .asset-item .custom-attributes .attr {
+            color:#888;
+        }
+
+        .asset-item .custom-attributes .value {
+
+        }
+
 .btn-group {
 	float: right;
 }
@@ -266,4 +274,3 @@ a.search {
     padding:20px 200px 0 0;
     display:block;
 }
-

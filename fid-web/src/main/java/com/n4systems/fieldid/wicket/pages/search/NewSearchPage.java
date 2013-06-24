@@ -28,6 +28,7 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.wicket.Component;
@@ -67,6 +68,8 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
     private static final String HIDE_LIST_JS = "$('#%s').hide();";
     private static final String SHOW_LIST_JS = "$('#%s').show();";
+
+    private static String CUSTOM_ATTR_FORMAT = "<span class='attr'>%s=</span><span class='value'>%s</span>";
 
     public static final int ITEMS_PER_PAGE = 10;
 
@@ -311,10 +314,9 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             // if it's a predefined field but one that isn't always displayed, display it if it matches the criteria.
             if (f==null || (f.isNonDisplayedFixedAttribute() && highlighted && !f.isInternal())) {
                 int index = highlighted ? 0 :fields.size();
-//                String key = result.getKeyValueStringCapitalized(field);
-//                String value = result.get(field);
-                // TODO DD : format these. <span class="search_attr">key</span>   <span class="search-value">value</span>
-                fields.add(index, result.getKeyValueStringCapitalized(field));
+                String key = WordUtils.capitalize(field);
+                String value = result.get(field);
+                fields.add(index, String.format(CUSTOM_ATTR_FORMAT, key, value));
             }
         }
         return Joiner.on("<span class='separator'>|</span>").skipNulls().join(fields.toArray(new String[fields.size()]));
