@@ -58,7 +58,7 @@ public class QueryTerm implements Serializable {
 
     @Override
     public String toString() {
-        return "{"+(attribute==null?"<default>":attribute) + " " + operator.getText() + " " + value.toVerboseString()+"}";
+        return "{"+(attribute==null?"<any-attribute>":attribute) + " " + operator.getText() + " " + value.toVerboseString()+"}";
     }
 
     public String getAttribute() {

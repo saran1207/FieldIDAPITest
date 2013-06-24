@@ -63,6 +63,7 @@ import com.n4systems.services.brainforest.ValueFactory;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.DashboardReportingService;
+import com.n4systems.services.search.AnalyzerFactory;
 import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.services.search.FullTextSearchService;
 import com.n4systems.services.search.StopWordSet;
@@ -560,6 +561,11 @@ public class FieldIdCoreConfig {
     @Bean
     public CharArraySet stopWordSet() {
         return new StopWordSet();
+    }
+
+    @Bean
+    public AnalyzerFactory analyzerFactory() {
+        return new AnalyzerFactory();
     }
 
 }

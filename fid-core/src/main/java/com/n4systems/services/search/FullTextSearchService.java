@@ -8,7 +8,6 @@ import com.n4systems.services.brainforest.SearchParserService;
 import com.n4systems.services.brainforest.SearchQuery;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.IndexReader;
@@ -19,7 +18,6 @@ import org.apache.lucene.search.highlight.QueryScorer;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.IOUtils;
-import org.apache.lucene.util.Version;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Closeable;
@@ -34,6 +32,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     private @Autowired SearchParserService searchParserService;
     private @Autowired SecurityContext securityContext;
     private @Autowired AssetIndexerService assetIndexerService;
+    private @Autowired AnalyzerFactory analyzerFactory;
 
 
     public int count(final String queryString) {
@@ -91,7 +90,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     }
 
     private <T> T lucene(LuceneWorker<T> worker) {
-        final Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_43);
+        final Analyzer analyzer = analyzerFactory.createAnalyzer(AssetIndexField.values());
         Directory dir = null;
         IndexReader reader = null;
 

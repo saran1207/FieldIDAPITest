@@ -22,8 +22,6 @@ import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
@@ -55,7 +53,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
     private static final String INDEX_FORMAT = "/var/fieldid/private/indexes/%s/assets";
     private static final int DEFAULT_BOOST = 1;
 
-    private @Autowired CharArraySet stopWords;
+    private @Autowired AnalyzerFactory analyzerFactory;
 
 
     @Scheduled(fixedDelay = 5000)
@@ -215,7 +213,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
         Analyzer analyzer = null;
 
         try {
-            analyzer = new StandardAnalyzer(Version.LUCENE_43, stopWords);  // Caveat : english stopwords only currently supported.
+            analyzer = analyzerFactory.createAnalyzer(AssetIndexField.values());
 			IndexWriterConfig writerConfig = new IndexWriterConfig(Version.LUCENE_43, analyzer);
 			writerConfig.setOpenMode(IndexWriterConfig.OpenMode.CREATE_OR_APPEND);
 			writerConfig.setRAMBufferSizeMB(256.0);
@@ -307,10 +305,10 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
 		Object value;
 		if (infoOption.getInfoField().getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
-            // TODO DD : what if this fails?  it might be in another format or even worse invalid text string.  confirm with mark.
             try {
                 value = new Date(Long.parseLong(strValue));
             } catch (NumberFormatException nfe) {
+                logger.warn("Couldn't parse date infoFieldBean '" + strValue + "'  for InfoFieldBean " +  infoOption.getUniqueID() + ". Treating it as a string for now. ",  nfe);
                 value = strValue;
             }
 		} else {

@@ -17,7 +17,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
 
 
-// CAVEAT : it is assumed that analyzer/app code used when indexing data forces to lowercase.
+// CAVEAT : it is assumed that analyzer/indexer service forces data to lowercase.
 //  .: when generating queries all terms are lowercase.
 
 public class SearchParserService extends FieldIdService {
@@ -44,7 +44,6 @@ public class SearchParserService extends FieldIdService {
         return new SearchQuery().add(new QueryTerm(null, QueryTerm.Operator.EQ,  new SimpleValue(search)));
     }
 
-
     private SearchQuery parseSearchQuery(String search) throws ParseException,TokenMgrError {
         return searchParser.parseQuery(search);
     }
@@ -68,9 +67,14 @@ public class SearchParserService extends FieldIdService {
     }
 
     private Query getQueryForTerm(QueryTerm term) {
-        String attribute = term.getAttribute()!=null ? term.getAttribute() : AssetIndexField.ALL.getField();
-        Value value = term.getValue();
-        return getQueryForTerm(attribute, value, term.getOperator());
+        if (term.getAttribute()==null) {
+            return getAllQueryForTerm(term);
+        }
+        return getQueryForTerm(term.getAttribute(), term.getValue(), term.getOperator());
+    }
+
+    private Query getAllQueryForTerm(QueryTerm term) {
+        return getQueryForTerm(AssetIndexField.ALL.getField(), term.getValue(), QueryTerm.Operator.EQ);
     }
 
     private Query getQueryForTerm(String attribute, Value value, QueryTerm.Operator operator) {
