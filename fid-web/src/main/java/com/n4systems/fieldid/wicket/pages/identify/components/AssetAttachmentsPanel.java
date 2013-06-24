@@ -73,6 +73,7 @@ public class AssetAttachmentsPanel extends Panel {
             super(id);
 
             final FileUploadField attachmentUpload = new FileUploadField("attachmentUpload");
+            attachmentUpload.setOutputMarkupId(true);
             add(attachmentUpload);
             attachmentUpload.add(new AjaxFormSubmitBehavior("onchange") {
                 @Override
@@ -94,7 +95,7 @@ public class AssetAttachmentsPanel extends Panel {
                     attachment.setFileName(tempDir.getName() + File.separator + fileName);
 
                     attachments.add(attachment);
-                    target.add(existingAttachmentsContainer);
+                    target.add(existingAttachmentsContainer, attachmentUpload);
                 }
 
                 @Override
