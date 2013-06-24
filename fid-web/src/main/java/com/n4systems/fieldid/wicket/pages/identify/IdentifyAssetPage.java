@@ -149,7 +149,12 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             final WebMarkupContainer identifierContainer = createIdentifierContainer(assetModel);
             singleIdentifyContainer.add(identifierContainer);
             IModel<String> identifierModel = ProxyModel.of(assetModel, on(Asset.class).getIdentifier());
-            TextField<String> identifierField = new TextField<String>("identifier", identifierModel);
+            TextField<String> identifierField = new TextField<String>("identifier", identifierModel) {
+                @Override
+                public boolean isRequired() {
+                    return !multiAssetConfig.isConfigurationComplete();
+                }
+            };
             identifierField.add(new AjaxFormComponentUpdatingBehavior("onblur") {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
@@ -246,7 +251,6 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
                     performSingleOrMultiSave(assetModel);
                     setResponsePage(IdentifyAssetPage.class);
                 }
-
             });
 
             actionsContainer.add(new Button("saveAndStartEventButton") {
@@ -258,7 +262,6 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
                     } else {
                         throw new RedirectToUrlException("/quickEvent.action?assetId=" + createdAsset.getId());
                     }
-
                 }
             });
 
