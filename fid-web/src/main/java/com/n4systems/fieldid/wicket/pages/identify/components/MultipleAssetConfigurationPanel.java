@@ -2,6 +2,8 @@ package com.n4systems.fieldid.wicket.pages.identify.components;
 
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.utils.Predicate;
+import com.n4systems.fieldid.wicket.behavior.DisplayNoneIfCondition;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.pages.identify.components.multi.AutoGenerateConfigurationPanel;
 import com.n4systems.fieldid.wicket.pages.identify.components.multi.BatchIdentifierConfigurationPanel;
@@ -25,24 +27,25 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.visit.IVisit;
+import org.apache.wicket.util.visit.IVisitor;
 import org.apache.wicket.validation.validator.RangeValidator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
 public class MultipleAssetConfigurationPanel extends Panel {
 
-    @SpringBean
-    private AssetIdentifierService assetIdentifierService;
-
-    @SpringBean
-    private AssetService assetService;
+    @SpringBean private AssetIdentifierService assetIdentifierService;
+    @SpringBean private AssetService assetService;
 
     private Integer numAssets;
     private GenerationMethod generationMethod = GenerationMethod.RANGE;
@@ -182,29 +185,62 @@ public class MultipleAssetConfigurationPanel extends Panel {
             super(id);
             setOutputMarkupPlaceholderTag(true);
 
-            Form form = new Form("step3Form");
-            add(form);
+            final Form form = new Form("step3Form");
+            add(form.setOutputMarkupId(true));
 
-            form.add(new ListView<MultipleAssetConfiguration.AssetConfiguration>("identifierGrid", ProxyModel.of(model, on(MultipleAssetConfiguration.class).getAssetConfigs())) {
+            final List<IModel<Boolean>> duplicateRfidsModels = new ArrayList<IModel<Boolean>>();
+            final PropertyModel<List<MultipleAssetConfiguration.AssetConfiguration>> assetConfigsModel = ProxyModel.of(model, on(MultipleAssetConfiguration.class).getAssetConfigs());
+
+            final WebMarkupContainer duplicateWarningContainer = createDuplicateWarningContainer(duplicateRfidsModels);
+            form.add(duplicateWarningContainer);
+
+            form.add(new ListView<MultipleAssetConfiguration.AssetConfiguration>("identifierGrid", assetConfigsModel) {
                 @Override
                 protected void populateItem(final ListItem<MultipleAssetConfiguration.AssetConfiguration> item) {
                     item.setOutputMarkupId(true);
                     final PropertyModel<String> rfidNumModel = ProxyModel.of(item.getModel(), on(MultipleAssetConfiguration.AssetConfiguration.class).getRfidNumber());
                     final TextField<String> rfidField = new TextField<String>("rfidNumber", rfidNumModel);
 
-                    item.add(createDuplicateWarningBehavior(rfidNumModel));
+                    final LoadableDetachableModel<Boolean> rfidIsDuplicateModel = new LoadableDetachableModel<Boolean>() {
+                        @Override
+                        protected Boolean load() {
+                            if (assetService.rfidExists(rfidNumModel.getObject()))
+                                return true;
+                            int index = 0;
+                            for (MultipleAssetConfiguration.AssetConfiguration assetConfiguration : assetConfigsModel.getObject()) {
+                                if (index != item.getIndex() && rfidNumModel.getObject() != null && rfidNumModel.getObject().equals(assetConfiguration.getRfidNumber())) {
+                                    return true;
+                                }
+                                index++;
+                            }
+                            return false;
+                        }
+                    };
+
+                    duplicateRfidsModels.add(rfidIsDuplicateModel);
+
+                    item.add(createDuplicateWarningBehavior(rfidIsDuplicateModel));
 
                     item.add(new RequiredTextField<String>("identifier", ProxyModel.of(item.getModel(), on(MultipleAssetConfiguration.AssetConfiguration.class).getIdentifier())));
                     item.add(rfidField);
-                    item.add(new TextField<String>("customerRefNumber", ProxyModel.of(item.getModel(), on(MultipleAssetConfiguration.AssetConfiguration.class).getCustomerRefNumber())));
+                    final TextField<String> customerRefNumber = new TextField<String>("customerRefNumber", ProxyModel.of(item.getModel(), on(MultipleAssetConfiguration.AssetConfiguration.class).getCustomerRefNumber()));
+                    item.add(customerRefNumber.setOutputMarkupId(true));
 
                     rfidField.add(new AjaxFormComponentUpdatingBehavior("onblur") {
                         @Override
                         protected void onUpdate(AjaxRequestTarget target) {
-                            target.add(item);
+                            updateDuplicateWarnings(target, form, duplicateRfidsModels);
+                            target.add(duplicateWarningContainer);
+                            target.focusComponent(customerRefNumber);
+                        }
+
+                        @Override
+                        public void detach(Component component) {
+                            rfidIsDuplicateModel.detach();
                         }
                     });
                 }
+
             });
 
             form.add(new AjaxButton("confirmButton") {
@@ -226,13 +262,47 @@ public class MultipleAssetConfigurationPanel extends Panel {
                 }
             });
         }
+
+        public void updateDuplicateWarnings(final AjaxRequestTarget target, WebMarkupContainer container, final List<IModel<Boolean>> rfidsAreDuplicateModels) {
+            final Iterator<IModel<Boolean>> iterator = rfidsAreDuplicateModels.iterator();
+            container.visitChildren(ListItem.class, new IVisitor<Component, Object>() {
+                @Override
+                public void component(Component object, IVisit<Object> visit) {
+                    boolean isDuplicate = iterator.next().getObject();
+                    if (isDuplicate) {
+                        target.appendJavaScript(String.format("$('#%s').addClass('duplicate-field');", object.getMarkupId()));
+                    } else {
+                        target.appendJavaScript(String.format("$('#%s').removeClass('duplicate-field');", object.getMarkupId()));
+                    }
+                }
+            });
+        }
+
+        private WebMarkupContainer createDuplicateWarningContainer(final List<IModel<Boolean>> rfidsAreDuplicateModels) {
+            return new WebMarkupContainer("duplicateRfidWarning") {
+                {
+                    setOutputMarkupPlaceholderTag(true);
+                    add(new DisplayNoneIfCondition(new Predicate() {
+                        @Override
+                        public boolean evaluate() {
+                            for (IModel<Boolean> duplicateRfid : rfidsAreDuplicateModels) {
+                                if (duplicateRfid.getObject()) {
+                                    return false;
+                                }
+                            }
+                            return true;
+                        }
+                    }));
+                }
+            };
+        }
     }
 
-    private Behavior createDuplicateWarningBehavior(final PropertyModel<String> rfidNumModel) {
+    private Behavior createDuplicateWarningBehavior(final IModel<Boolean> rfidExistsModel) {
         return new AttributeAppender("class", Model.of("duplicate-field"), " ") {
             @Override
             public boolean isEnabled(Component component) {
-                return assetService.rfidExists(rfidNumModel.getObject());
+                return rfidExistsModel.getObject();
             }
         };
     }
