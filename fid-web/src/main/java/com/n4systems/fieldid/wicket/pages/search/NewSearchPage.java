@@ -36,6 +36,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
+import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -47,7 +49,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
+import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -88,6 +90,9 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     private IDataProvider<SearchResult> provider;
     private final Component blankSlate;
     private DataView<SearchResult> dataView;
+    private CheckBox groupSelector;
+
+    private boolean currentPageSelected = false;
 
     public NewSearchPage() {
         IModel<String> searchTextModel = new PropertyModel<String>(NewSearchPage.this, "searchText");
@@ -157,7 +162,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 check.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
-                        target.add(listViewContainer, actions);
+                        target.add(listViewContainer, actions, groupSelector);
                     }
                 });
 
@@ -186,24 +191,58 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
         searchResults.add(dataView);
 
-        searchResults.add(new CheckBox("groupselector", createMultiSelectModel(dataView)) {
-            { add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                @Override protected void onUpdate(AjaxRequestTarget target) {
-                    target.add(searchResults, actions);
-                } });}
-
-            @Override public boolean isVisible() {
-                return provider.size() > 0;
+        groupSelector = new CheckBox("groupselector", createMultiSelectModel(dataView)) {
+            {
+                setOutputMarkupId(true);
+                add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(searchResults, actions);
+                    }
+                });
             }
-        });
 
-
-        resultForm.add(new PagingNavigator("navigator", dataView) {
             @Override
             public boolean isVisible() {
                 return provider.size() > 0;
             }
+        };
+        searchResults.add(groupSelector);
+
+
+//        resultForm.add(new PagingNavigator("navigator", dataView) {
+//            { add(new AjaxPagingNavigationBehavior("onchange") {
+//                @Override protected void onUpdate(AjaxRequestTarget target) {
+//                    target.add(searchResults, actions);
+//                } });}
+//
+//            @Override
+//            public boolean isVisible() {
+//                return provider.size() > 0;
+//            }
+//        });
+
+        resultForm.add(new AjaxPagingNavigator("navigator", dataView) {
+           @Override
+            public boolean isVisible() {
+                return provider.size() > 0;
+            }
+
+            @Override
+            protected Link<?> newPagingNavigationLink(String id, IPageable pageable, int pageNumber) {
+                return new AjaxPagingNavigationLink(id, pageable, pageNumber) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        super.onClick(target);
+                        currentPageSelected = false;
+                        target.add(groupSelector);
+                    }
+
+                };
+            }
         });
+
+
         listViewContainer.add(resultForm);
 
         actions = new WebMarkupContainer("actions") {
@@ -252,16 +291,25 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
     private IModel<Boolean> createMultiSelectModel(final DataView<SearchResult> dataView) {
         return new IModel<Boolean>() {
-            private boolean selected;
             @Override
             public Boolean getObject() {
-                return selected;
+                IDataProvider<SearchResult> dataProvider = dataView.getDataProvider();
+                int currentPage = dataView.getCurrentPage();
+                int itemsPerPage = dataView.getItemsPerPage();
+                for (Iterator<? extends SearchResult> it = dataProvider.iterator(currentPage * itemsPerPage, itemsPerPage);it.hasNext();) {
+                    String idField = it.next().get(AssetIndexField.ID.getField());
+                    if (!selectedIds.contains(idField)) {
+                        return false;
+                    }
+                }
+
+                return true;
             }
 
             @Override
             public void setObject(Boolean object) {
                 IDataProvider<SearchResult> dataProvider = dataView.getDataProvider();
-                selected = object;
+                currentPageSelected = object;
                 int currentPage = dataView.getCurrentPage();
                 int itemsPerPage = dataView.getItemsPerPage();
                 for (Iterator<? extends SearchResult> it = dataProvider.iterator(currentPage * itemsPerPage, itemsPerPage);it.hasNext();) {
@@ -275,8 +323,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             }
 
             @Override
-            public void detach() {
-            }
+            public void detach() { }
         };
     }
 
