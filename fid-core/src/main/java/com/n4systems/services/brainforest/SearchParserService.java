@@ -1,6 +1,7 @@
 package com.n4systems.services.brainforest;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.search.AssetIndexField;
@@ -32,7 +33,8 @@ public class SearchParserService extends FieldIdService {
 
     public SearchQuery createSearchQuery(String search) {
         try {
-            return parseSearchQuery(search);
+            SearchQuery searchQuery = parseSearchQuery(search).addSuggestion(getSuggestions(search));
+            return searchQuery;
         } catch (ParseException e) {
             logger.error("can't parse search query [" + search + "]");
         } catch (TokenMgrError te) {
@@ -41,7 +43,12 @@ public class SearchParserService extends FieldIdService {
 //        // TODO DD : what is proper approach here for handling non-parseable strings???
 //        // for now, just search everywhere for whatever they typed in.
         // maybe i should break "search" into words and add separate terms for each?
-        return new SearchQuery().add(new QueryTerm(null, QueryTerm.Operator.EQ,  new SimpleValue(search)));
+        return new SearchQuery().add(new QueryTerm(null, QueryTerm.Operator.EQ,  new SimpleValue(search))).addSuggestion(getSuggestions(search));
+    }
+
+    private List<String> getSuggestions(String search) {
+//        return Lists.newArrayList();
+        return Lists.newArrayList("blue");
     }
 
     private SearchQuery parseSearchQuery(String search) throws ParseException,TokenMgrError {

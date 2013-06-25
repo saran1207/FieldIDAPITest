@@ -2,10 +2,13 @@ package com.n4systems.services.brainforest;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class SearchQuery implements Serializable {
 
@@ -25,6 +28,7 @@ public class SearchQuery implements Serializable {
 
     private List<QueryTerm> terms = Lists.newArrayList();
     private List<Conjunction> conjunctions = Lists.newArrayList();
+    private Set<String> suggestions = Sets.newHashSet();
 
     public SearchQuery add(QueryTerm term) {
         terms.add(term);
@@ -33,6 +37,19 @@ public class SearchQuery implements Serializable {
 
     public List<QueryTerm> getQueryTerms() {
         return terms;
+    }
+
+    public SearchQuery addSuggestion(List<String> suggestions) {
+        for (String suggestion:suggestions) {
+            if (StringUtils.isNotBlank(suggestion)) {
+                this.suggestions.add(suggestion);
+            }
+        }
+        return this;
+    }
+
+    public Set<String> getSuggestions() {
+        return suggestions;
     }
 
     public SearchQuery add(String conjunction) {

@@ -22,7 +22,6 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteriaContainer;
 import com.n4systems.services.search.AssetIndexField;
-import com.n4systems.services.search.FullTextSearchService;
 import com.n4systems.services.search.SearchResult;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
@@ -35,8 +34,8 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigationLink;
 import org.apache.wicket.ajax.markup.html.navigation.paging.AjaxPagingNavigator;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -48,8 +47,9 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
-import org.apache.wicket.markup.html.navigation.paging.IPageable;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -75,7 +75,6 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
     public static final int ITEMS_PER_PAGE = 10;
 
-    private @SpringBean FullTextSearchService fullTextSearchService;
     private @SpringBean PersistenceService persistenceService;
     private @SpringBean S3Service s3Service;
 
@@ -87,10 +86,12 @@ public class NewSearchPage extends FieldIDFrontEndPage {
     private WebMarkupContainer actions;
     private Form resultForm;
     private Set<String> selectedIds = new HashSet<String>();
-    private IDataProvider<SearchResult> provider;
-    private final Component blankSlate;
+    private SearchDataProvider provider;
+    private Component blankSlate;
     private DataView<SearchResult> dataView;
     private CheckBox groupSelector;
+    private WebMarkupContainer suggestionsContainer;
+    private final NewSearchForm form;
 
     private boolean currentPageSelected = false;
 
@@ -101,7 +102,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 return new SimpleHTMLFormatter("<span class=\"matched-text\">", "</span>");
             }
         };
-        add(new NewSearchForm("NewSearchForm", searchTextModel));
+        add(form = new NewSearchForm("form", searchTextModel));
 
         listViewContainer = new WebMarkupContainer("listViewContainer");
         listViewContainer.setOutputMarkupId(true);
@@ -117,15 +118,16 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         searchResults.setOutputMarkupPlaceholderTag(true);
         resultForm.add(searchResults);
 
-        feedbackPanel = new FIDFeedbackPanel("feedback");
-        feedbackPanel.setOutputMarkupId(true);
-        add(feedbackPanel);
-
-        add(blankSlate = new WebMarkupContainer("blankSlate") {
-            @Override public boolean isVisible() {
+        resultForm.add(blankSlate = new WebMarkupContainer("blankSlate") {
+            @Override
+            public boolean isVisible() {
                 return provider.size() == 0;
             }
         }.setOutputMarkupPlaceholderTag(true));
+
+        feedbackPanel = new FIDFeedbackPanel("feedback");
+        feedbackPanel.setOutputMarkupId(true);
+        add(feedbackPanel);
 
         final boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
         final boolean hasEditEvent = FieldIDSession.get().getSessionUser().hasAccess("editevent");
@@ -155,7 +157,6 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 detailsContainer.add(new Label("fixedAttributes", getFixedAttributes(result)).setEscapeModelStrings(false));
 
                 detailsContainer.add(new Label("customAttributes", getCustomAttributes(result)).setEscapeModelStrings(false));
-
 
                 CheckBox check = new CheckBox("check", itemIsSelectedModel);
                 item.add(check);
@@ -209,40 +210,12 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         };
         searchResults.add(groupSelector);
 
-
-//        resultForm.add(new PagingNavigator("navigator", dataView) {
-//            { add(new AjaxPagingNavigationBehavior("onchange") {
-//                @Override protected void onUpdate(AjaxRequestTarget target) {
-//                    target.add(searchResults, actions);
-//                } });}
-//
-//            @Override
-//            public boolean isVisible() {
-//                return provider.size() > 0;
-//            }
-//        });
-
         resultForm.add(new AjaxPagingNavigator("navigator", dataView) {
-           @Override
+            @Override
             public boolean isVisible() {
                 return provider.size() > 0;
             }
-
-            @Override
-            protected Link<?> newPagingNavigationLink(String id, IPageable pageable, int pageNumber) {
-                return new AjaxPagingNavigationLink(id, pageable, pageNumber) {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        super.onClick(target);
-                        currentPageSelected = false;
-                        target.add(groupSelector);
-                    }
-
-                };
-            }
         });
-
-
         listViewContainer.add(resultForm);
 
         actions = new WebMarkupContainer("actions") {
@@ -419,6 +392,22 @@ public class NewSearchPage extends FieldIDFrontEndPage {
 
             add(searchCriteria);
 
+            suggestionsContainer = new WebMarkupContainer("suggestionsContainer");
+            suggestionsContainer.add( new ListView<String>("suggestions", new SuggestionsModel()) {
+                @Override
+                protected void populateItem(ListItem<String> item) {
+                    final String suggestion = item.getModelObject();
+                    item.add(new AjaxLink("link") {
+                        @Override public void onClick(AjaxRequestTarget target) {
+                            searchText = suggestion;
+                            performSearch(target);
+                        }
+                    }.add(new Label("text",Model.of(suggestion))));
+                }
+            }).add(new AttributeAppender("class",getSuggestionsCss())).setOutputMarkupPlaceholderTag(true);
+
+            add(suggestionsContainer);
+
             final AjaxCallDecorator ajaxCallDecorator = new AjaxCallDecorator() {
                 @Override public CharSequence decorateScript(Component c, CharSequence script) {
                     return String.format(HIDE_LIST_JS, listViewContainer.getMarkupId()) + super.decorateScript(c, script);
@@ -434,9 +423,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             AjaxSubmitLink submit;
             add( submit = new IndicatingAjaxSubmitLink("searchButtonId") {
                 @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    selectedIds.clear();
-                    dataView.setCurrentPage(0);
-                    target.add(listViewContainer, feedbackPanel, blankSlate);
+                    performSearch(target);
                 }
 
                 @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
@@ -449,6 +436,20 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         }
     }
 
+    private IModel<?> getSuggestionsCss() {
+        return new Model<String>() {
+            @Override public String getObject() {
+                return provider.getSuggestions().size()>0 ? "suggestion" : "hide";
+            }
+        };
+    }
+
+    private void performSearch(AjaxRequestTarget target) {
+        selectedIds.clear();
+        dataView.setCurrentPage(0);
+        target.add(listViewContainer, feedbackPanel, blankSlate, form);
+    }
+
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -459,6 +460,23 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");
+    }
+
+
+
+    class SuggestionsModel implements IModel<List<String>> {
+        @Override
+        public List<String> getObject() {
+            return provider.getSuggestions();
+        }
+
+        @Override public void setObject(List<String> object) {
+            ; // do nothing.
+        }
+
+        @Override public void detach() {
+            ; // do nothing.
+        }
     }
 
 }

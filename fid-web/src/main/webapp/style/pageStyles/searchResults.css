@@ -272,5 +272,9 @@ a.search {
 
 .wicket-ajax-indicator {
     padding:20px 200px 0 0;
+    display:inline;
+}
+
+.suggestion {
     display:block;
 }

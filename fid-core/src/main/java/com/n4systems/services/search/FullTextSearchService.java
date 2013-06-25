@@ -35,15 +35,18 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     private @Autowired AnalyzerFactory analyzerFactory;
 
 
-    public int count(final String queryString) {
-        return lucene(new SearchQueryLuceneWorker<Integer>(queryString) {
-            @Override Integer runQuery(Analyzer analyzer, IndexSearcher searcher) throws IOException {
-                TotalHitCountCollector collector = new TotalHitCountCollector();
+    public SearchResults count(final String queryString) {
+        return lucene(new SearchResultsLuceneWorker(queryString) {
+            @Override
+            SearchResults runQuery(IndexSearcher searcher, Query query, SearchResults searchResults) throws IOException {
+                final TotalHitCountCollector collector = new TotalHitCountCollector();
                 searcher.search(getQuery(), getSecurityQueryFilter(), collector);
-                return collector.getTotalHits();
-            }
-            @Override Integer defaultReturnValue() {
-                return 0;
+                // return dummy result that only holds query and total hits....doesn't actually contain doc info.
+                return new SearchResults(searchQuery) {
+                    @Override public int getCount() {
+                        return collector.getTotalHits();
+                    }
+                };
             }
         });
     }
@@ -101,7 +104,6 @@ public class FullTextSearchService extends FieldIdPersistenceService {
             return worker.runQuery(analyzer, indexSearcher);
         } catch (Exception e) {
             logger.error(e);
-//            throw new FullTextSearchException(e);
         } finally {
             closeQuietly(reader, dir, analyzer);
         }
@@ -110,7 +112,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     }
 
     private SearchResults createSearchResults(final Query query, final Analyzer analyzer, final SearchQuery searchQuery, final Formatter formatter) {
-        return new SearchResults() {
+        return new SearchResults(searchQuery) {
             @Override protected Analyzer getAnalyzer() {
                 return analyzer;
             }
@@ -197,6 +199,10 @@ public class FullTextSearchService extends FieldIdPersistenceService {
         protected SearchResultsLuceneWorker(String queryString, Formatter formatter) {
             super(queryString);
             this.formatter = formatter;
+        }
+
+        protected SearchResultsLuceneWorker(String queryString) {
+            this(queryString,null);
         }
 
         SearchResults runQuery(Analyzer analyzer, IndexSearcher searcher) throws IOException {

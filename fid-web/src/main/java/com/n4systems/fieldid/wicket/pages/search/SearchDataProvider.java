@@ -1,17 +1,17 @@
 package com.n4systems.fieldid.wicket.pages.search;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.services.search.FullTextSearchService;
 import com.n4systems.services.search.SearchResult;
+import com.n4systems.services.search.SearchResults;
 import org.apache.commons.lang.StringUtils;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
 
@@ -21,9 +21,14 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
     // caching.
     private transient Integer size = null;
     private transient List<SearchResult> pageResults = null;
+    private transient Set<String> suggestions = null;
 
     public SearchDataProvider(IModel<String> searchText) {
         this.searchText = searchText;
+    }
+
+    public List<String> getSuggestions() {
+        return suggestions==null ? new ArrayList<String>() : Lists.newArrayList(suggestions);
     }
 
     @Override
@@ -31,9 +36,12 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
         if (StringUtils.isBlank(searchText.getObject())) {
             return Collections.<SearchResult>emptyList().iterator();
         }
-        return pageResults == null ?
-                (pageResults = fullTextSearchService.search(searchText.getObject(), getFormatter(), first, count).getResults()).iterator() :
-                pageResults.iterator();
+        if (pageResults==null) {
+            SearchResults searchResults = fullTextSearchService.search(searchText.getObject(), getFormatter(), first, count);
+            suggestions = searchResults.getSuggestions();
+            pageResults = searchResults.getResults();
+        }
+        return pageResults.iterator();
     }
 
     protected Formatter getFormatter() {
@@ -45,7 +53,12 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
         if (StringUtils.isBlank(searchText.getObject())) {
             return 0;
         }
-        return size==null ? size = fullTextSearchService.count(searchText.getObject()) : size;
+        if (size==null) {
+            SearchResults searchResults = fullTextSearchService.count(searchText.getObject());
+            size = searchResults.getCount();
+            suggestions = searchResults.getSuggestions();
+        }
+        return size;
     }
 
     @Override
@@ -58,5 +71,6 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
         searchText.detach();
         pageResults = null;
         size = null;
+        suggestions = null;
     }
 }

@@ -10,7 +10,7 @@
 
     <div wicket:id="feedback" class="feedback"></div>
 
-    <form wicket:id="NewSearchForm" class="search-bar">
+    <form wicket:id="form" class="search-bar">
         <input type="text" wicket:id="searchCriteria"/>
         <div class="syntax-help">
             <div class="question">?</div>
@@ -73,11 +73,18 @@
                 <p>Customer attribtues can be search by all lowercase and no spaces. For example, Working Load would be workingload=21 Tons</p>
             </div>
        </div>
-        <a href="#" class="search" wicket:id="searchButtonId">Search</a>
+        <a href="#" class="search" wicket:id="searchButtonId"><wicket:message key="label.search"/></a>
+
+       <span wicket:id="suggestionsContainer">
+            <wicket:message key="label.suggest_prefix"/>
+            <span wicket:id="suggestions">
+                <a wicket:id="link"><span wicket:id="text"/></a>
+            </span>
+            <wicket:message key="label.suggest_suffix"/>
+        </span>
+
     </form>
 
-    <!-- blank slate -->
-    <div wicket:id="blankSlate" class="message"><wicket:message key="message.no_search_results"/></div>
 
     <div wicket:id="listViewContainer" class="search-container">
 
@@ -103,9 +110,12 @@
                 </ul>
             </div>
 
+            <!-- blank slate -->
+             <div wicket:id="blankSlate" class="message"><wicket:message key="message.no_search_results"/></div>
 
             <!-- search results list -->
             <div class="search-results" wicket:id="searchResults">
+
                 <div>
 
                     <wicket:enclosure>
@@ -131,7 +141,7 @@
 
                             <p wicket:id="fixedAttributes" class="fixed-attributes"></p>
                             <p wicket:id="customAttributes" class="custom-attributes"></p>
-                            
+
                             <div class="btn-group">
                                 <a wicket:id="viewLink" href="#" class="mattButtonLeft">View</a>
                                 <a wicket:id="startEventLink" href="#" class="mattButtonMiddle">Start Event</a>
@@ -150,29 +160,19 @@
 
     <script>
         $(function() {
-
-            $(".search-results input[type=checkbox]").live("click", function() {
-                // Highlights selected result(s)
-//                $(this).parent().next().toggleClass("selected");
-
-                // Show/Hide mass actions button
-//                if ($(".search-results input[type=checkbox]").is(':checked')) {
-//                    $(".actions").addClass("show");
-//                } else {
-//                    $(".actions").removeClass("show");
-//                }
-            });
-
             // Show/hide syntax help dropdown
             $(".syntax-help .question").click(function(){
                 $(".syntax-help .close, .syntax-details").fadeIn(200);
-                $(this).hide(); 
+                $(this).hide();
             });
              $(".syntax-help .close").click(function(){
                 $(".syntax-help .close, .syntax-details").fadeOut(200);
-                $(".syntax-help .question").show(); 
+                $(".syntax-help .question").show();
             });
         });
+        function suggestSearch(suggestion) {
+            $('')
+        }
     </script>
 
 </wicket:extend>
