@@ -28,6 +28,15 @@ public class EventSchedulesPanel extends Panel {
         final WebMarkupContainer currentSchedulesContainer = new WebMarkupContainer("currentSchedulesContainer");
         currentSchedulesContainer.setOutputMarkupPlaceholderTag(true);
 
+        final WebMarkupContainer noSchedulesIndicator = new WebMarkupContainer("noSchedulesIndicator") {
+            { setOutputMarkupId(true); }
+            @Override
+            public boolean isVisible() {
+                return schedulesModel.getObject() != null && schedulesModel.getObject().isEmpty();
+            }
+        };
+        add(noSchedulesIndicator);
+
         add(currentSchedulesContainer);
         currentSchedulesContainer.add(new ListView<Event>("currentSchedules", schedulesModel) {
             @Override
@@ -38,7 +47,7 @@ public class EventSchedulesPanel extends Panel {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         schedulesModel.getObject().remove(item.getIndex());
-                        target.add(currentSchedulesContainer);
+                        target.add(currentSchedulesContainer, noSchedulesIndicator);
                     }
                 });
             }
