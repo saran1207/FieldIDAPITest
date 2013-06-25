@@ -189,6 +189,8 @@ div.dialog-modal div.w_caption {
 		background-color: #ccc;
 		padding: 6px 10px;
 		display: inline-block;
+        width:50px;
+        text-align: center;
 	}
 		.form-horizontal .event-schedules .remove-link {
 			float: right;
@@ -202,6 +204,7 @@ div.dialog-modal div.w_caption {
 		}
 	.form-horizontal .uploads.event-schedules .event-name {
 		font-weight: bold;
+        width:180px;
 	}
 
 
