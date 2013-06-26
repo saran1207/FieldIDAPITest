@@ -160,19 +160,29 @@
 
     <script>
         $(function() {
+
+            $(".search-results input[type=checkbox]").live("click", function() {
+                // Highlights selected result(s)
+//                $(this).parent().next().toggleClass("selected");
+
+                // Show/Hide mass actions button
+//                if ($(".search-results input[type=checkbox]").is(':checked')) {
+//                    $(".actions").addClass("show");
+//                } else {
+//                    $(".actions").removeClass("show");
+//                }
+            });
+
             // Show/hide syntax help dropdown
             $(".syntax-help .question").click(function(){
                 $(".syntax-help .close, .syntax-details").fadeIn(200);
                 $(this).hide();
             });
-             $(".syntax-help .close").click(function(){
+            $(".syntax-help .close").click(function(){
                 $(".syntax-help .close, .syntax-details").fadeOut(200);
                 $(".syntax-help .question").show();
             });
         });
-        function suggestSearch(suggestion) {
-            $('')
-        }
     </script>
 
 </wicket:extend>
