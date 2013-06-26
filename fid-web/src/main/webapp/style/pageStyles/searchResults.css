@@ -75,6 +75,7 @@ a.search {
 .syntax-help {
 	position: absolute;
 	right: 175px;
+    top: 42px;
 }
 	.question,
 	.close {
@@ -84,6 +85,7 @@ a.search {
 		position: absolute;
 		right: 0;
 		cursor: pointer;
+        top: -42px;
 	}
 	.close {
 		background: #343434;
@@ -94,7 +96,7 @@ a.search {
 		display: none;
 		width: 318px;
 		padding: 25px 20px;
-		margin-top: 42px;
+		/*margin-top: 42px;*/
 		background: #343434;
 		color: #cccccc;
 		-webkit-border-radius: 12px 0 12px 12px;
