@@ -724,4 +724,5 @@ public class AssetService extends FieldIdPersistenceService {
 
         return asset;
     }
+
 }

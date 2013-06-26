@@ -1,27 +1,14 @@
 package rfid.ejb.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.Where;
-
 import com.n4systems.model.AssetType;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
+import org.hibernate.annotations.Where;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "infofield")
@@ -274,7 +261,6 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	 * Creates a dynamic InfoOptionBean setting this as it's infoField.
 	 * @see #createInfoOption(String, boolean)
 	 * @param name			Name of the new InfoOption
-	 * @param staticData	Sets the staticData field of InfoOptionBean
 	 * @return				A new InfoOption
 	 */
 	public InfoOptionBean createDynamicInfoOption(String name) {

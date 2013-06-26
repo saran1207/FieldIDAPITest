@@ -1,19 +1,21 @@
 package com.n4systems.fieldid.service.asset;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.collections.PrioritizedList;
+import com.n4systems.util.persistence.*;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
+import rfid.ejb.entity.InfoFieldBean;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -120,13 +122,11 @@ public class AssetTypeService extends FieldIdPersistenceService {
         }
     }
 
-
     public List<RecurringAssetTypeEvent> getRecurringEvents(AssetType assetType) {
         QueryBuilder<RecurringAssetTypeEvent> query = new QueryBuilder<RecurringAssetTypeEvent>(RecurringAssetTypeEvent.class, new TenantOnlySecurityFilter(assetType.getTenant().getId()));
         query.addSimpleWhere("assetType", assetType);
         return persistenceService.findAll(query);
     }
-
 
     public void deleteRecurringEvent(AssetType assetType, EventType eventType) {
         QueryBuilder<RecurringAssetTypeEvent> query = new QueryBuilder<RecurringAssetTypeEvent>(RecurringAssetTypeEvent.class, new OpenSecurityFilter());
@@ -154,5 +154,25 @@ public class AssetTypeService extends FieldIdPersistenceService {
         query.addSimpleWhere("group.lotoLock", true);
         return persistenceService.findAll(query);
     }
+
+    public List<String> getInfoFieldBeansLike(final String name) {
+        if (StringUtils.isBlank(name)) {
+            return Lists.newArrayList();
+        }
+        QueryBuilder<String> query = new QueryBuilder(InfoFieldBean.class, securityContext.getUserSecurityFilter());
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name", "name", name.substring(0,Math.min(3,name.length())), WhereParameter.WILDCARD_RIGHT, WhereClause.ChainOp.OR));
+
+        SimpleSelect nameSelect = new SimpleSelect("name", true);
+        nameSelect.setDistinct(true);
+        query.setSelectArgument(nameSelect);
+        List<String> all = persistenceService.findAll(query);
+        return new PrioritizedList<String>(all,5, new Comparator<String>() {
+            public @Override int compare(String o1, String o2) {
+                return o1.equalsIgnoreCase(name) ? -1 : o2.equalsIgnoreCase(name) ? 1 :
+                        (o1.indexOf(name)+o1.length()) - (o2.indexOf(name)+o2.length());
+            }
+        });
+    }
+
 
 }

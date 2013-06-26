@@ -3,8 +3,9 @@ package com.n4systems.services.brainforest;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdService;
-import com.n4systems.services.SecurityContext;
+import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.services.search.AssetIndexField;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.index.Term;
@@ -16,6 +17,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 // CAVEAT : it is assumed that analyzer/indexer service forces data to lowercase.
@@ -25,16 +28,16 @@ public class SearchParserService extends FieldIdService {
 
     private static final Logger logger=Logger.getLogger("SearchLog");
 
-    private @Autowired SecurityContext securityContext;
+    private Pattern operatorPattern = Pattern.compile("([<=>:]|>=|<=|<>|!=)");
+
     private @Autowired SimpleParser searchParser;
+    private @Autowired AssetTypeService assetTypeService;
     private @Autowired CharArraySet stopWords;
-
-
 
     public SearchQuery createSearchQuery(String search) {
         try {
-            SearchQuery searchQuery = parseSearchQuery(search).addSuggestion(getSuggestions(search));
-            return searchQuery;
+            SearchQuery searchQuery = parseSearchQuery(search);
+            return searchQuery.addSuggestion(makeSuggestions(search, searchQuery));
         } catch (ParseException e) {
             logger.error("can't parse search query [" + search + "]");
         } catch (TokenMgrError te) {
@@ -43,12 +46,82 @@ public class SearchParserService extends FieldIdService {
 //        // TODO DD : what is proper approach here for handling non-parseable strings???
 //        // for now, just search everywhere for whatever they typed in.
         // maybe i should break "search" into words and add separate terms for each?
-        return new SearchQuery().add(new QueryTerm(null, QueryTerm.Operator.EQ,  new SimpleValue(search))).addSuggestion(getSuggestions(search));
+        SearchQuery searchQuery = new SearchQuery().add(new QueryTerm(null, QueryTerm.Operator.EQ, new SimpleValue(search)));
+        return searchQuery.addSuggestion(makeSimpleSuggestion(search));
     }
 
-    private List<String> getSuggestions(String search) {
-//        return Lists.newArrayList();
-        return Lists.newArrayList("blue");
+    private List<String> makeSimpleSuggestion(String search) {
+        // TODO DD : should actually look for a spot to add matching quote instead of removing one.
+        if (StringUtils.countMatches(search,"'")%2!=0) {
+            return Lists.newArrayList(search.replace("'",""));
+        }
+        if (StringUtils.countMatches(search,"\"")%2!=0) {
+            return Lists.newArrayList(search.replace("\"",""));
+        }
+        // TODO : look for unbalanced quotes, invalid dates, and whatever else might be common...called only if parser throws exception?
+        return Lists.newArrayList();
+    }
+
+    private List<String> makeSuggestions(String search, SearchQuery searchQuery) {
+        List<String> suggestions = Lists.newArrayList();
+        String suggestion = null;
+        if ((suggestion = multiWordAttribute(search))!=null) {
+            suggestions.add(suggestion);
+        }
+        if ((suggestion = multiWordNoAttribute(search))!=null) {
+            suggestions.add(suggestion);
+        }
+        if (suggestions.size()==0) {
+            suggestions.addAll(incorrectAttributes(search, searchQuery));
+        }
+        return suggestions;
+    }
+
+    private List<String> incorrectAttributes(String search, SearchQuery searchQuery) {
+        List<String> result = Lists.newArrayList();
+        for (QueryTerm term:searchQuery.getQueryTerms()) {
+            String attribute = term.getAttribute();
+            List<String> suggestions = assetTypeService.getInfoFieldBeansLike(attribute);
+            if (!suggestions.isEmpty() && !suggestions.get(0).equalsIgnoreCase(attribute) ) {    // it exists? if not, get the next suggestion.  (perfect match will always be first in list).
+                for (String suggestion:suggestions) {
+                    result.add(search.replaceAll("(?i)"+attribute, suggestion));
+                }
+                return result;
+            }
+        }
+        return Lists.newArrayList();
+    }
+
+    private String multiWordNoAttribute(String search) {
+        // e.g. if user types in {hello there}  which will search for two values, hello & there.
+        // instead they mean search for one attribute that has the two word string "hello there".
+        String s = search.trim();
+        if (s.startsWith("'") || s.startsWith("\"")) {
+            return null;  // already quoted. skip it.
+        }
+        Matcher matcher = operatorPattern.matcher(s);
+        if (!matcher.find() && search.indexOf(" ")!=-1) {
+            return String.format("'%s'", search);
+        }
+        return null;
+    }
+
+    private String multiWordAttribute(String search) {
+        Matcher matcher = operatorPattern.matcher(search);
+        if (matcher.find()) {
+            String before = search.substring(0,matcher.start()).trim();
+            String after = search.substring(matcher.end());
+            String operator  = search.substring(matcher.start(),matcher.end());
+            if (before.indexOf(" ")!=-1) {
+                before = "'" + before  + "'";
+                int end = matcher.end();
+                if (!matcher.find() && after.indexOf(" ")!=-1) {  // if following operators don't try to fix...too confusing/difficult.
+                    after = "'" + search.substring(end) + "'";
+                }
+                return before + operator + after;
+            }
+        }
+        return null;
     }
 
     private SearchQuery parseSearchQuery(String search) throws ParseException,TokenMgrError {
@@ -259,7 +332,6 @@ public class SearchParserService extends FieldIdService {
 
 
     class StringRangeInfo extends RangeInfo<String> {
-        BooleanClause.Occur occur = BooleanClause.Occur.MUST;
 
         public StringRangeInfo(String value, QueryTerm.Operator operator) {
             super(value, operator);
