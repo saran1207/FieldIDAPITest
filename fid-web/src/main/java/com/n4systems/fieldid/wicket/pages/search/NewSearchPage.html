@@ -174,11 +174,11 @@
             });
 
             // Show/hide syntax help dropdown
-            $(".syntax-help .question").click(function(){
+            $(".syntax-help .question").live("click",function(){
                 $(".syntax-help .close, .syntax-details").fadeIn(200);
                 $(this).hide();
             });
-            $(".syntax-help .close").click(function(){
+            $(".syntax-help .close").live("click",function(){
                 $(".syntax-help .close, .syntax-details").fadeOut(200);
                 $(".syntax-help .question").show();
             });
