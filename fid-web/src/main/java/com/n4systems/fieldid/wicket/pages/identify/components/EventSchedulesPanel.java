@@ -47,7 +47,7 @@ public class EventSchedulesPanel extends Panel {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         schedulesModel.getObject().remove(item.getIndex());
-                        target.add(currentSchedulesContainer, noSchedulesIndicator);
+                        target.add(EventSchedulesPanel.this);
                     }
                 });
             }
