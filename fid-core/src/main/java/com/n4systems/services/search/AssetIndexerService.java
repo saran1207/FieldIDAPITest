@@ -291,7 +291,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
         for (InfoOptionBean infoOption : asset.getInfoOptions()) {
             if (!infoOption.getInfoField().isRetired()) {
-                addField(doc, infoOption.getInfoField().getName(), parseInfoOptionValue(infoOption));
+                addCustomField(doc, infoOption.getInfoField().getName(), parseInfoOptionValue(infoOption));
             }
         }
 
@@ -324,17 +324,14 @@ public class AssetIndexerService extends FieldIdPersistenceService {
                 value = strValue;
             }
 		} else {
-			// attempt to parse the string into a more specific type (Long then Double otherwise String)
-			try {
-				value = Long.parseLong(strValue);
-			} catch (NumberFormatException e1) {
-				try {
-					value = Double.parseDouble(strValue);
-				} catch (NumberFormatException e2) {
-					// fall back to String
-					value = strValue;
-				}
-			}
+			// attempt to parse the string into a more specific type (Double otherwise String).
+			// recall all numeric custom attributes are considered double because we won't know at query time so just use widest type of query.
+            try {
+                value = Double.parseDouble(strValue);
+            } catch (NumberFormatException e2) {
+                // fall back to String
+                value = strValue;
+            }
 		}
 		return value;
 	}
@@ -357,8 +354,13 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 		}
 	}
 
-    private void addField(Document doc, String name, Object value) {
-        addField(doc, name, value, DEFAULT_BOOST);
+    private void addCustomField(Document doc, String name, Object value) {
+        // for custom fields, all numeric values are forced to double.
+        if (value instanceof Number) {
+            addField(doc,name,((Number)value).doubleValue());
+        } else {
+            addField(doc,name,value);
+        }
     }
 
     private void addField(Document doc, String name, Object value, int boost) {
@@ -372,7 +374,6 @@ public class AssetIndexerService extends FieldIdPersistenceService {
             } else if (value instanceof Double) {
                 doc.add(field = new DoubleField(name, (Double) value, Field.Store.YES));
             } else if (value instanceof Long) {
-                // TODO DD : may just want to index all numeric fields as Double.  (except internal ID's).   for example length>1 still searches for > 1.0
                 doc.add(field = new LongField(name, (Long) value, Field.Store.YES));
             } else if (value instanceof Integer) {
                 doc.add(field = new IntField(name, (Integer) value, Field.Store.YES));
@@ -386,6 +387,10 @@ public class AssetIndexerService extends FieldIdPersistenceService {
                 field.setBoost(boost);
             }
         }
+    }
+
+    private void addField(Document doc, String name, Object value) {
+        addField(doc, name, value, DEFAULT_BOOST);
     }
 
     private void addField(Document doc, AssetIndexField assetIndexField, Object value) {

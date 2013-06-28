@@ -174,11 +174,7 @@ public class SearchParserService extends FieldIdService {
     private Query getSimpleQueryForTerm(String attribute, QueryTerm.Operator operator, SimpleValue value) {
         if (value.isNumber()) {
             NumericRangeInfo rangeInfo = new NumericRangeInfo(value.getNumber(), operator);
-            if (value.getNumber() instanceof Long) {
-                return NumericRangeQuery.newLongRange(attribute, rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
-            } else if (value.getNumber() instanceof Double) {
-                return NumericRangeQuery.newDoubleRange(attribute, rangeInfo.getMinDouble(), rangeInfo.getMaxDouble(), rangeInfo.includeMin, rangeInfo.includeMax);
-            }
+            return NumericRangeQuery.newDoubleRange(attribute, rangeInfo.getMinDouble(), rangeInfo.getMaxDouble(), rangeInfo.includeMin, rangeInfo.includeMax);
         } else if (value.isDate()) {
             DateTime date = value.getDate();
             NumericRangeInfo rangeInfo = new NumericRangeInfo(date.toDate().getTime(), operator).withGranularity(TimeUnit.DAYS.toMillis(1));
