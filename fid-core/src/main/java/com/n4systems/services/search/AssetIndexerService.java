@@ -34,11 +34,15 @@ import org.apache.lucene.util.IOUtils;
 import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.Version;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -54,11 +58,11 @@ public class AssetIndexerService extends FieldIdPersistenceService {
     private static final int DEFAULT_BOOST = 1;
 
     private @Autowired AnalyzerFactory analyzerFactory;
-
+    private @Resource PlatformTransactionManager transactionManager;
 
     @Scheduled(fixedDelay = 5000)
 	public void processIndexQueue() {
-		long startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
 		logger.info("ProcessIndexQueue: Running");
 
 		List<IndexQueueItem> items = persistenceService.findAllNonSecure(IndexQueueItem.class);
@@ -197,10 +201,18 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 		int page = 0, pageSize = 512;
 		List<Asset> assets;
 		do {
-			assets = persistenceService.findAll(query, page, pageSize);
-			index(tenant, assets, true);
-			logger.info("Indexed " + ((page * pageSize) + assets.size()) + " assets for tenant " + tenant.getName());
-			page++;
+
+            EntityManager em = ((JpaTransactionManager) transactionManager).getEntityManagerFactory().createEntityManager();
+
+            try {
+                assets = query.createQuery(em).setFirstResult(page*pageSize).setMaxResults(pageSize).getResultList();
+                index(tenant, assets, true);
+                logger.info("Indexed " + ((page * pageSize) + assets.size()) + " assets for tenant " + tenant.getName());
+                page++;
+            } finally {
+                em.close();
+            }
+
 		} while (assets.size() == pageSize);
 
 		logger.info("Indexing " + tenant.getName() + " completed");
@@ -230,8 +242,8 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 				} else {
 					writer.addDocument(doc);
 				}
-			}
-		} catch (Exception e) {
+            }
+        } catch (Exception e) {
 			throw new IndexException(e);
 		} finally {
 			try {
