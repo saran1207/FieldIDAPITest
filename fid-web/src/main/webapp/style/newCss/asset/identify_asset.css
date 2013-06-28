@@ -177,6 +177,9 @@ div.dialog-modal div.w_caption {
         white-space: nowrap;
         width: 200px;
     }
+    .form-horizontal .uploads.attributes span {
+        width: auto;
+    }
 	.form-horizontal .event-schedules {
 		background-color: #fff;
 		padding: 20px 0;
