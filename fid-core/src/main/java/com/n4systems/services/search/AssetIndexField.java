@@ -16,7 +16,7 @@ public enum AssetIndexField implements HasAnalyzerType {
     REFERENCE_NUMBER("ref", AnalyzerFactory.Type.WHITESPACE,9),
     PURCHASE_ORDER("po", AnalyzerFactory.Type.WHITESPACE,9),
     COMMENTS("comments",1),
-    IDENTIFIED("assetidentifed", AnalyzerFactory.Type.WHITESPACE,5),
+    IDENTIFIED("assetidentified", AnalyzerFactory.Type.WHITESPACE,5),
     ORDER("order", AnalyzerFactory.Type.WHITESPACE,1),
     LAST_EVENT_DATE("lasteventdate", AnalyzerFactory.Type.WHITESPACE,1),
     LOCATION("location",5),
