@@ -81,6 +81,9 @@ public class SearchParserService extends FieldIdService {
         List<String> result = Lists.newArrayList();
         for (QueryTerm term:searchQuery.getQueryTerms()) {
             String attribute = term.getAttribute();
+            if (AssetIndexField.fromString(attribute)!=null) {
+                continue;
+            }
             List<String> suggestions = assetTypeService.getInfoFieldBeansLike(attribute);
             if (!suggestions.isEmpty() && !suggestions.get(0).equalsIgnoreCase(attribute) ) {    // it exists? if not, get the next suggestion.  (perfect match will always be first in list).
                 for (String suggestion:suggestions) {
