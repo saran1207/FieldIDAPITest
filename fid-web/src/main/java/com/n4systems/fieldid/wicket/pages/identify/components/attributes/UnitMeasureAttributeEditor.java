@@ -10,7 +10,9 @@ public class UnitMeasureAttributeEditor extends Panel {
     public UnitMeasureAttributeEditor(String id, IModel<InfoOptionBean> optionBean) {
         super(id);
 
-        add(new UnitOfMeasureEditor("editor", optionBean));
+        UnitOfMeasureEditor uomEditor = new UnitOfMeasureEditor("editor", optionBean);
+        uomEditor.add(new ValidateIfRequiredValidator<InfoOptionBean>(optionBean.getObject().getInfoField()));
+        add(uomEditor);
     }
 
 }

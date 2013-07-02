@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.identify.components.attributes;
 
+import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.ComboBox;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -34,6 +35,10 @@ public class ComboBoxAttributeEditor extends FormComponentPanel<InfoOptionBean> 
                 onChange(target);
             }
         });
+
+        comboBox.add(new ValidateIfRequiredValidator<String>(fieldModel.getObject()));
+
+        ValidationBehavior.addValidationBehaviorToComponent(comboBox);
 
         add(comboBox);
     }

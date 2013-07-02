@@ -17,7 +17,7 @@ public class TextAttributeEditor extends Panel {
 
         TextField<String> textField = new TextField<String>("text", ProxyModel.of(optionBean, on(InfoOptionBean.class).getName()));
 
-        textField.setRequired(optionBean.getObject().getInfoField().isRequired());
+        textField.add(new ValidateIfRequiredValidator<String>(optionBean.getObject().getInfoField()));
 
         textField.add(new AjaxFormComponentUpdatingBehavior("onblur") {
             @Override

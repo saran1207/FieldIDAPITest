@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.identify.components.attributes;
 
+import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -33,9 +34,13 @@ public class DateAttributeEditor extends FormComponentPanel<InfoOptionBean> {
 
         DateTimePicker picker = new DateTimePicker("datePicker", new PropertyModel<Date>(this, "selectedDate"));
         add(picker.setIncludeTime(includeTime).withNoAllDayCheckbox());
+        ValidationBehavior.addValidationBehaviorToComponent(picker.getDateTextField());
+        picker.getDateTextField().add(new ValidateIfRequiredValidator<Date>(infoField));
         picker.getDateTextField().add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
-            protected void onUpdate(AjaxRequestTarget target) { } } );
+            protected void onUpdate(AjaxRequestTarget target) {
+            }
+        });
     }
 
     @Override

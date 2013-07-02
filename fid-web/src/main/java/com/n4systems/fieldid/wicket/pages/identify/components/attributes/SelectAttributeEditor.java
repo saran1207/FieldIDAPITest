@@ -26,7 +26,7 @@ public class SelectAttributeEditor extends FormComponentPanel<InfoOptionBean> {
         DropDownChoice<InfoOptionBean> select = new DropDownChoice<InfoOptionBean>("select", new PropertyModel<InfoOptionBean>(this,"infoOption"), unfilteredOptions, new InfoOptionChoiceRenderer());
         select.setNullValid(true);
 
-        select.setRequired(infoFieldModel.getObject().isRequired());
+        select.add(new ValidateIfRequiredValidator<InfoOptionBean>(infoFieldModel.getObject()));
         add(select);
 
         select.add(new AjaxFormComponentUpdatingBehavior("onchange") {
