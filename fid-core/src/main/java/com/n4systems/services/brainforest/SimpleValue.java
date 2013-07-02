@@ -152,5 +152,10 @@ public class SimpleValue extends Value {
     public DateRange getDateRange() {
         return date;
     }
+
+    @Override
+    public boolean isDateRange() {
+        return isDate() && date.isRange();
+    }
 }
 

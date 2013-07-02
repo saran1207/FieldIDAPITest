@@ -30,7 +30,7 @@ public class NumericAnalyzer {
         if (value instanceof RangeValue) {
             RangeValue rangeValue = (RangeValue) value;
             return rangeMatches(numberValue,getValueNumber(rangeValue.getFrom()), getValueNumber(rangeValue.getTo()));
-        } else if (value.getDateRange().isRange()) {
+        } else if (value.getDateRange()!=null) {
             DateRange dateRange = value.getDateRange();
             return rangeMatches(numberValue, dateRange.getFrom().toDate().getTime(), dateRange.getTo().toDate().getTime(), term.getOperator());
         } else {

@@ -59,6 +59,9 @@ public abstract class Value {
                         "'%s'";
     }
 
+    public boolean isDateRange() {
+        return false;
+    }
 }
 
 
