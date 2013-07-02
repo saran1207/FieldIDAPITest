@@ -4,19 +4,18 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.search.AssetIndexField;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.util.CharArraySet;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
-import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -176,8 +175,7 @@ public class SearchParserService extends FieldIdService {
             NumericRangeInfo rangeInfo = new NumericRangeInfo(value.getNumber(), operator);
             return NumericRangeQuery.newDoubleRange(attribute, rangeInfo.getMinDouble(), rangeInfo.getMaxDouble(), rangeInfo.includeMin, rangeInfo.includeMax);
         } else if (value.isDate()) {
-            DateTime date = value.getDate();
-            NumericRangeInfo rangeInfo = new NumericRangeInfo(date.toDate().getTime(), operator).withGranularity(TimeUnit.DAYS.toMillis(1));
+            DateRangeInfo rangeInfo = new DateRangeInfo(value.getDateRange(), operator);
             return NumericRangeQuery.newLongRange(attribute, rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
         } else if (value.isString()) {
             if (operator.equals(QueryTerm.Operator.EQ)) {
@@ -252,11 +250,19 @@ public class SearchParserService extends FieldIdService {
         protected T min=null;
         protected T max=null;
         protected BooleanClause.Occur occur = BooleanClause.Occur.MUST;
-        protected final T value;
         protected final QueryTerm.Operator operator;
+        protected T low;
+        private T high;
+
+        public RangeInfo(T low, T high, QueryTerm.Operator operator) {
+            this.low = low;
+            this.high = high;
+            this.operator = operator;
+            process();
+        }
 
         public RangeInfo(T value, QueryTerm.Operator operator) {
-            this.value = value;
+            this.low = this.high = value;
             this.operator = operator;
             process();
         }
@@ -265,26 +271,28 @@ public class SearchParserService extends FieldIdService {
             switch (operator) {
                 case GT:
                     includeMin = false;
-                    min = value;
+                    min = high;
                     break;
                 case LT:
-                    max = value;
+                    max = low;
                     includeMax = false;
                     break;
                 case GE:
-                    min = value;
+                    min = high;
                     includeMin = true;
                     break;
                 case LE:
-                    max = value;
+                    max = low;
                     includeMax = true;
                     break;
                 case EQ:
-                    min = value;
+                    min = low;
+                    max = high;
                     includeMin = includeMax = true;
                     break;
                 case NE:
-                    min = max = value;
+                    min = low;
+                    max = high;
                     includeMin = includeMax = true;
                     occur = BooleanClause.Occur.MUST_NOT;
                     break;
@@ -297,22 +305,12 @@ public class SearchParserService extends FieldIdService {
     class NumericRangeInfo extends RangeInfo<Number> {
         Number granularity=null;
 
-        public NumericRangeInfo(Number value, QueryTerm.Operator operator) {
-            super(value, operator);
+        public NumericRangeInfo(Number low, Number high, QueryTerm.Operator operator) {
+            super(low, high, operator);
         }
 
-        public NumericRangeInfo withGranularity(Number granularity){
-            this.granularity = granularity;
-            switch (operator) {
-                case EQ:
-                    min = value;
-                    max = new Double(min.doubleValue() + granularity.doubleValue());
-                    includeMin = includeMax = true;
-                    break;
-                default:
-                    break;
-            }
-            return this;
+        public NumericRangeInfo(Number value, QueryTerm.Operator operator) {
+            super(value, operator);
         }
 
         public Long getMinLong() {
@@ -337,6 +335,15 @@ public class SearchParserService extends FieldIdService {
         }
     }
 
+    class DateRangeInfo extends NumericRangeInfo {
+
+        // NOTE : we can assume all date ranges have granularity incorporated.
+        // i.e. June 1,2012  --> June 1 to June 2,2012.       Today = July 2...July 3   etc...
+        //  this means that we can NOT do queries on hourly or less basis.   can only search on day granularity.
+        // you'll need to change the DateParser if this spec changes.
+        public DateRangeInfo(DateRange dateRange, QueryTerm.Operator operator) {
+            super(dateRange.getFrom().toDate().getTime(), dateRange.getTo().toDate().getTime(), operator);
+        }
+    }
 
 }
-

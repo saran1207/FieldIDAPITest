@@ -148,9 +148,12 @@ public class DateParser {
                 from = to = new LocalDate(DateUtils.parseDate(stringValue, type.getPatterns()));
 
                 if (from.getYear()<2005) {
+                    // if year is earlier, assume it was just defaulted to 1970 or something like that.  let's make a better
+                    // assumption and populate it with current year.   i.e. March 1 ===>  March 1,2013
                     from = from.withYear(DateTime.now().getYear());
                 }
                 if (from.getDayOfMonth()==1 && stringValue.indexOf("1")==-1) {
+                    // if day of month just assumed, then user just input month.  e.g.  "March"  means March 1...April 1.
                     to = from.plusMonths(1);
                 }
                 return new DateRange(from,to.plusDays(1));

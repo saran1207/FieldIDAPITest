@@ -41,11 +41,9 @@ public class SimpleValue extends Value {
     private Number number;
     protected String stringValue;
     private boolean isQuoted = false;
-    private Object originalValue;
 
     public SimpleValue(String s) {
         super();
-        this.originalValue = s;
         this.stringValue = convertToString(s);
         number = convertToNumber(s);
         // this constructor is used when parser knows its dealing with string or number only!
@@ -56,7 +54,6 @@ public class SimpleValue extends Value {
         this.date = dateRange;
         this.number = null;
         this.stringValue = formatDate();
-        this.originalValue = date;
     }
 
     private String formatDate() {
@@ -150,16 +147,10 @@ public class SimpleValue extends Value {
     public boolean isQuoted() {
         return isQuoted;
     }
+
+    @Override
+    public DateRange getDateRange() {
+        return date;
+    }
 }
-
-
-
-
-
-
-
-
-
-
-
 

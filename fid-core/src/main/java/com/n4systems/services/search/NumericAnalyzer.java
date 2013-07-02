@@ -1,6 +1,7 @@
 package com.n4systems.services.search;
 
 import com.google.common.base.Preconditions;
+import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.brainforest.QueryTerm;
 import com.n4systems.services.brainforest.RangeValue;
 import com.n4systems.services.brainforest.SearchQuery;
@@ -29,6 +30,9 @@ public class NumericAnalyzer {
         if (value instanceof RangeValue) {
             RangeValue rangeValue = (RangeValue) value;
             return rangeMatches(numberValue,getValueNumber(rangeValue.getFrom()), getValueNumber(rangeValue.getTo()));
+        } else if (value.getDateRange().isRange()) {
+            DateRange dateRange = value.getDateRange();
+            return rangeMatches(numberValue, dateRange.getFrom().toDate().getTime(), dateRange.getTo().toDate().getTime(), term.getOperator());
         } else {
             return valueMatches(term, numberValue.doubleValue(),getValueNumber(value));
         }
@@ -55,10 +59,32 @@ public class NumericAnalyzer {
     }
 
     private boolean rangeMatches(Number value, double from, double to) {
+        return rangeMatches(value, from, to, QueryTerm.Operator.EQ);
+    }
+
+
+    private boolean rangeMatches(Number value, double from, double to, QueryTerm.Operator operator) {
         BigDecimal left = new BigDecimal(from).setScale(4, BigDecimal.ROUND_DOWN);
         BigDecimal right = new BigDecimal(to).setScale(4, BigDecimal.ROUND_DOWN);
         BigDecimal x  = new BigDecimal(value.doubleValue()).setScale(4, BigDecimal.ROUND_DOWN);
-        return x.compareTo(left)>=0 && x.compareTo(right)<=0;
+        int a = x.compareTo(left);
+        int b = x.compareTo(right);
+        switch (operator) {
+            case GT:
+                return b>0;
+            case LT:
+                return a<0;
+            case GE:
+                return b>=0;
+            case LE:
+                return a<0;
+            case EQ:
+                return a>=0 && b<=0;
+            case NE:
+                return a<0 || b>0;
+            default:
+                throw new IllegalArgumentException("operator not supported " + operator);
+        }
     }
 
     private double getValueNumber(Value value) {

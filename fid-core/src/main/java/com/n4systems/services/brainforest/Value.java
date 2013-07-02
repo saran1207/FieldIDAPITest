@@ -1,11 +1,16 @@
 package com.n4systems.services.brainforest;
 
 
+import com.n4systems.model.utils.DateRange;
 import org.joda.time.DateTime;
 
 public abstract class Value {
 
     public Value() {
+    }
+
+    public DateRange getDateRange() {
+        throw new UnsupportedOperationException("implement this in concrete classes");
     }
 
     public DateTime getDate() {
