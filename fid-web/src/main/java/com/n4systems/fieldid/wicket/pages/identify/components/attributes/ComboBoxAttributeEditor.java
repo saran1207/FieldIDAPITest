@@ -4,7 +4,9 @@ import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.ComboBox;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -18,6 +20,7 @@ public class ComboBoxAttributeEditor extends FormComponentPanel<InfoOptionBean> 
 
     private String selectedItemText;
     private IModel<InfoFieldBean> fieldModel;
+    private ComboBox comboBox;
 
     public ComboBoxAttributeEditor(String id, IModel<InfoOptionBean> optionModel, IModel<InfoFieldBean> fieldModel) {
         super(id, optionModel);
@@ -25,7 +28,8 @@ public class ComboBoxAttributeEditor extends FormComponentPanel<InfoOptionBean> 
         selectedItemText = optionModel.getObject() == null ? null : optionModel.getObject().getName();
 
         IModel<ArrayList<String>> choices = new Model<ArrayList<String>>(prepareChoices(fieldModel.getObject()));
-        ComboBox comboBox = new ComboBox("combo", new PropertyModel<String>(this, "selectedItemText"), choices);
+        comboBox = new ComboBox("combo", new PropertyModel<String>(this, "selectedItemText"), choices)
+                    .withNullAlwaysValid();
         comboBox.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -76,4 +80,9 @@ public class ComboBoxAttributeEditor extends FormComponentPanel<InfoOptionBean> 
 
     protected void onChange(AjaxRequestTarget target) { }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderOnDomReadyJavaScript("new toCombo('"+comboBox.getInputName()+"');");
+    }
 }

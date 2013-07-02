@@ -32,6 +32,8 @@ public class SelectAttributeEditor extends FormComponentPanel<InfoOptionBean> {
         select.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                convertInput();
+                updateModel();
                 onChange(target);
             }
         });

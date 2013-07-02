@@ -51,7 +51,7 @@ public class AttributesEditPanel extends Panel {
             @Override
             protected void populateItem(final ListItem<AttributeNameValuePair> item) {
                 AttributeNameValuePair pair = item.getModelObject();
-                PropertyModel<InfoFieldBean> infoFieldModel = ProxyModel.of(item.getModel(), on(AttributeNameValuePair.class).getInfoField());
+                final PropertyModel<InfoFieldBean> infoFieldModel = ProxyModel.of(item.getModel(), on(AttributeNameValuePair.class).getInfoField());
                 PropertyModel<InfoOptionBean> infoOptionModel  = ProxyModel.of(item.getModel(), on(AttributeNameValuePair.class).getInfoOption());
                 item.add(new Label("attributeName", ProxyModel.of(infoFieldModel, on(InfoFieldBean.class).getName())));
                 item.add(new WebMarkupContainer("requiredIndicator").setVisible(pair.infoField.isRequired()));
@@ -62,7 +62,7 @@ public class AttributesEditPanel extends Panel {
                         item.add(new ComboBoxAttributeEditor("attributeEditor", infoOptionModel, infoFieldModel) {
                             @Override
                             protected void onChange(AjaxRequestTarget target) {
-                                performAutoAttributeAdjustments();
+                                performAutoAttributeAdjustments(infoFieldModel);
                                 target.add(AttributesEditPanel.this);
                             }
                         });
@@ -74,7 +74,7 @@ public class AttributesEditPanel extends Panel {
                         item.add(new SelectAttributeEditor("attributeEditor", infoOptionModel, infoFieldModel) {
                             @Override
                             protected void onChange(AjaxRequestTarget target) {
-                                performAutoAttributeAdjustments();
+                                performAutoAttributeAdjustments(infoFieldModel);
                                 target.add(AttributesEditPanel.this);
                             }
                         });
@@ -159,12 +159,26 @@ public class AttributesEditPanel extends Panel {
         return allInfoOptions;
     }
 
-    private void performAutoAttributeAdjustments() {
+    private void performAutoAttributeAdjustments(IModel<InfoFieldBean> infoField) {
         List<InfoOptionBean> allInfoOptions = getAllInfoOptions();
         AutoAttributeDefinition template = autoAttributeService.findTemplateToApply(assetTypeModel.getObject(), allInfoOptions);
 
         if (template == null) {
             // No auto attribute template here!!
+            return;
+        }
+
+        List<InfoOptionBean> inputs = template.getInputs();
+
+        boolean foundInfoField = false;
+        for (InfoOptionBean input : inputs) {
+            if (input.getInfoField().equals(infoField.getObject())) {
+                foundInfoField = true;
+            }
+        }
+
+        if (!foundInfoField) {
+            // We changed an attribute that's not an input in our template. We don't adjust auto attributes in this case.
             return;
         }
 

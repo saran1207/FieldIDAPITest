@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ComboBox extends DropDownChoice<String> {
+
+    private boolean nullAlwaysValid;
     
     private static final String COMBO_BOX_JS_ID = ComboBox.class.getName()+".COMBO_BOX_JS";
 
@@ -25,6 +27,10 @@ public class ComboBox extends DropDownChoice<String> {
 
     @Override
     public boolean isNullValid() {
+        if (nullAlwaysValid) {
+            return true;
+        }
+
         // We only want the blank choice to appear if it so happens that we haven't entered
         // anything OR we've selected one of the default options.
         String modelObject = getModelObject();
@@ -54,6 +60,11 @@ public class ComboBox extends DropDownChoice<String> {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/combobox.js", COMBO_BOX_JS_ID);
+    }
+
+    public ComboBox withNullAlwaysValid() {
+        nullAlwaysValid = true;
+        return this;
     }
 
 }
