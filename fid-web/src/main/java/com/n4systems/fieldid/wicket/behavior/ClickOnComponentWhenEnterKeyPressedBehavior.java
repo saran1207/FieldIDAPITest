@@ -17,7 +17,11 @@ public class ClickOnComponentWhenEnterKeyPressedBehavior extends Behavior {
 
     @Override
     public void onComponentTag(Component component, ComponentTag tag) {
-        tag.put("onkeypress", "if (event.keyCode == 13) { document.getElementById('"+componentToClickOn.getMarkupId()+"').click(); return false;}");
+        tag.put("onkeypress", "if (event.keyCode == 13) { " + getBeforeClickJs() + " document.getElementById('"+componentToClickOn.getMarkupId()+"').click(); return false;}");
+    }
+
+    protected String getBeforeClickJs() {
+        return "";
     }
 
 }

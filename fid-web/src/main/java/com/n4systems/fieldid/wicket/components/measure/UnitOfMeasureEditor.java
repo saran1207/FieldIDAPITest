@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.measure;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.behavior.ChangeThenClickComponentWhenEnterPressed;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
@@ -98,8 +99,17 @@ public class UnitOfMeasureEditor extends FormComponentPanel<InfoOptionBean> {
 
         editorContainer.add(secondaryContainer);
 
-        editorContainer.add(createUpdatingTextField("primaryValue", new PropertyModel<String>(this, "primaryValue")));
-        secondaryContainer.add(createUpdatingTextField("secondaryValue", new PropertyModel<String>(this, "secondaryValue")));
+        AjaxLink storeLink = new AjaxLink("storeLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                infoOption.getObject().setName(convertUomToString());
+                primaryValue = secondaryValue = null;
+                setEditMode(false, target);
+            }
+        };
+
+        editorContainer.add(createUpdatingTextField("primaryValue", new PropertyModel<String>(this, "primaryValue"), storeLink));
+        secondaryContainer.add(createUpdatingTextField("secondaryValue", new PropertyModel<String>(this, "secondaryValue"), storeLink));
 
         editorContainer.add(new AjaxLink("cancelLink") {
             @Override
@@ -107,19 +117,16 @@ public class UnitOfMeasureEditor extends FormComponentPanel<InfoOptionBean> {
                 setEditMode(false, target);
             }
         });
-        editorContainer.add(new AjaxLink("storeLink") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                infoOption.getObject().setName(convertUomToString());
-                primaryValue = secondaryValue = null;
-                setEditMode(false, target);
-            }
-        });
+
+        editorContainer.add(storeLink);
     }
 
-    private Component createUpdatingTextField(String id, PropertyModel<String> model) {
+    private Component createUpdatingTextField(String id, PropertyModel<String> model, final AjaxLink storeLink) {
         return new TextField<String>(id,model) {
-            { add(new UpdateComponentOnChange()); }
+            {
+                add(new UpdateComponentOnChange());
+                add(new ChangeThenClickComponentWhenEnterPressed(storeLink));
+            }
         };
     }
 
