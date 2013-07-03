@@ -34,12 +34,6 @@ public class PrioritizedList<T> extends ArrayList<T> implements Comparator<T> {
 
     private void init(List<? extends T> values, int threshold) {
         TreeSet<T> priorities = new TreeSet<T>(getComparator());
-
-        if (values.size()<threshold) {
-            addAll(values);     //simple case.   we keep them all 'cause we've got room for everybody.
-            return;
-        }
-
         for (T value : values) {
             priorities.add(value);
         }

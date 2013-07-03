@@ -170,6 +170,7 @@ public class SearchParserService extends FieldIdService {
         }
     }
 
+    // TODO DD : add custom scoring for date/numeric fields.
     private Query getSimpleQueryForTerm(String attribute, QueryTerm.Operator operator, SimpleValue value) {
         if (value.isNumber()) {
             NumericRangeInfo rangeInfo = new NumericRangeInfo(value.getNumber(), operator);

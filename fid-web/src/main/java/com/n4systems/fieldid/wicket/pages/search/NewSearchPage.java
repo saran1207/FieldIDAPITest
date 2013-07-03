@@ -179,7 +179,11 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                 detailsContainer.add(new LatentImage("assetImage") {
                     @Override protected String updateSrc() {
                         Asset asset = persistenceService.find(Asset.class, assetId);
-                        if (StringUtils.isBlank(asset.getImageName())) {
+                        // CAVEAT : careful about making assumptions regarding asset Ids retrieved from search results (ie. lucene index).
+                        // it is entirely possible that it might be a stale id and therefore might not exist.
+                        // e.g. if user deletes an asset and you search for it before the asset index has been updated.
+                        // .: lesson learned is always guard against nulls!
+                        if (asset==null || StringUtils.isBlank(asset.getImageName())) {
                             return null;
                         } else {
                             return s3Service.getAssetProfileImageThumbnailURL(assetId, asset.getImageName()).toString();
