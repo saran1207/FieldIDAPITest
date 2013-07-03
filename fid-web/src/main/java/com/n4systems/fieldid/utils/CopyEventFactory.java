@@ -47,7 +47,6 @@ public class CopyEventFactory {
 		return newSubEvents;
 	}
 	
-	
 	protected static ProofTestInfo copyProofTestInfo( ProofTestInfo oldProofTestInfo ) {
 		if( oldProofTestInfo == null ) { return null; }
 		
@@ -63,12 +62,10 @@ public class CopyEventFactory {
 		SubEvent newSubEvent = new SubEvent();
 		copyAbstractEvent(newSubEvent, oldSubEvent);
 		newSubEvent.setName( oldSubEvent.getName() );
-		
-		
+
 		return newSubEvent;
 	}
-	
-	
+
 	protected static void copyAbstractEvent( AbstractEvent newEvent, AbstractEvent originalEvent) {
 		copyEntity(newEvent, originalEvent);
 		
@@ -96,8 +93,7 @@ public class CopyEventFactory {
 			newFileAttachment.setFileName( oldFileAttachment.getFileName() );
 			newFileAttachments.add( newFileAttachment );
 		}
-		
-		
+
 		return newFileAttachments;
 	}
 
@@ -120,12 +116,13 @@ public class CopyEventFactory {
 			newResult.setEvent(newEvent);
 			newResult.setRecommendations( copyRecommendations( oldResult.getRecommendations() ) );
 			newResult.setDeficiencies( copyDeficiencies( oldResult.getDeficiencies() ) );
+            newResult.setActions( oldResult.getActions() );
+            newResult.setCriteriaImages( oldResult.getCriteriaImages() );
 			
 			newResults.add( newResult );
 			
 		}
-		
-		
+
 		return newResults;
 	}
 
