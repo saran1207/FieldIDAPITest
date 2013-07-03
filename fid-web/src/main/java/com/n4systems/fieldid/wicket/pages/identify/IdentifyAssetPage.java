@@ -195,7 +195,17 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
                 }
             });
 
-            AutoCompleteOrgPicker ownerPicker = new AutoCompleteOrgPicker("ownerPicker", ProxyModel.of(assetModel, on(Asset.class).getOwner()));
+            final ModalLocationPicker locationPicker = new ModalLocationPicker("locationPicker", ProxyModel.of(assetModel, on(Asset.class).getAdvancedLocation()));
+            setChildFormsToMultipart(locationPicker);
+            add(locationPicker);
+
+            AutoCompleteOrgPicker ownerPicker = new AutoCompleteOrgPicker("ownerPicker", ProxyModel.of(assetModel, on(Asset.class).getOwner())) {
+                { withAutoUpdate(true); }
+                @Override
+                protected void onUpdate(AjaxRequestTarget target, String hiddenInput, String fieldInput) {
+                    locationPicker.setOwner(getModelObject());
+                }
+            };
             add(ownerPicker);
 
             ownerPicker.add(new FormComponentPanelUpdatingBehavior("onchange") {
@@ -205,10 +215,6 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
                     target.add(eventSchedulesPanel);
                 }
             });
-
-            ModalLocationPicker locationPicker = new ModalLocationPicker("locationPicker", ProxyModel.of(assetModel, on(Asset.class).getAdvancedLocation()));
-            setChildFormsToMultipart(locationPicker);
-            add(locationPicker);
 
             add(new TextField<String>("purchaseOrder", ProxyModel.of(assetModel, on(Asset.class).getPurchaseOrder())));
 
