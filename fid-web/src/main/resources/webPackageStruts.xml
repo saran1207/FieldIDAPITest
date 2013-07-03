@@ -485,7 +485,7 @@
 				<param name="actionName">assetEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
-			<result name="success" type="redirectAction">assetAdd</result>
+			<result name="success" type="redirect">/w/identify</result>
 			<result name="input" type="redirectAction">
 				<param name="actionName">assetEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
