@@ -83,8 +83,12 @@
 		width: 250px;
 	}
 	.form-horizontal .control-group a.links {
-		display: block;
+		display: inline;
+        position:absolute;
+        top:100%;
+        left:28%;
 	}
+
 
 
 /* Identify Multiple Assets modal window */
