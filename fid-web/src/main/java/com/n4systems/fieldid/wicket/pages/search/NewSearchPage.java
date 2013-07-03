@@ -8,6 +8,7 @@ import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.LatentImage;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -213,6 +214,39 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             }
         };
         searchResults.add(groupSelector);
+
+        searchResults.add(new FlatLabel("currentlySelectedItems", new PropertyModel<Integer>(this, "numSelectedIds")));
+        searchResults.add(new FlatLabel("totalAvailableItems", new PropertyModel<Integer>(this, "totalRows")));
+
+        AjaxLink clearSelectionLink = new AjaxLink("clearSelectionLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                selectedIds.clear();
+                target.add(listViewContainer, actions, groupSelector);
+            }
+        };
+        searchResults.add(clearSelectionLink);
+
+        AjaxLink selectAllLink = null;
+        searchResults.add(selectAllLink = new AjaxLink("selectAllLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                selectedIds.clear();
+
+                List<Long> idList = provider.getIdList();
+                for (Long id : idList) {
+                    selectedIds.add(Long.toString(id));
+                }
+
+                target.add(listViewContainer, actions, groupSelector);
+
+
+            }
+        });
+
+        selectAllLink.add(new FlatLabel("totalAvailableItems", new PropertyModel<Integer>(this, "totalRows")));
+
+
 
         resultForm.add(new AjaxPagingNavigator("navigator", dataView) {
             @Override
@@ -482,5 +516,28 @@ public class NewSearchPage extends FieldIDFrontEndPage {
             ; // do nothing.
         }
     }
+
+
+    public Integer getTotalRows() {
+        return provider.size();
+    }
+
+    public String getTotalRowsLabel() {
+        return String.format("(%d items)", provider.size());
+    }
+
+    public Integer getNumSelectedIds() {
+
+        if (null == selectedIds) {
+            return 0;
+        }
+
+        return selectedIds.size();
+    }
+
+    public String getNumSelectedIdsLabel() {
+        return String.format("(%d items)", getNumSelectedIds());
+    }
+
 
 }

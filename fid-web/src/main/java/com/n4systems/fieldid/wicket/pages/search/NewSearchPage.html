@@ -125,8 +125,15 @@
                             <label><wicket:message key="label.select_assets_all"/></label>
                             <p><span><wicket:message key="label.select_assets"/></span></p>
 
+
+
                         </div>
                     </wicket:enclosure>
+
+
+                    <b><span wicket:id="currentlySelectedItems"></span></b> of <b><span wicket:id="totalAvailableItems"></span></b> items in the results are selected. &nbsp;
+                    <a wicket:id="selectAllLink">Select all <span wicket:id="totalAvailableItems"></span> items</a> <i>or</i>
+                    <a wicket:id="clearSelectionLink">Clear selection</a>
 
                     <!-- individual results item -->
                     <div wicket:id="results" class="asset-item">

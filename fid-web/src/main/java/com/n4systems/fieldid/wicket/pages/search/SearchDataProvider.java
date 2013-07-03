@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.search;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
+import com.n4systems.services.search.AssetIndexField;
 import com.n4systems.services.search.FullTextSearchService;
 import com.n4systems.services.search.SearchResult;
 import com.n4systems.services.search.SearchResults;
@@ -59,6 +60,20 @@ public class SearchDataProvider extends FieldIDDataProvider<SearchResult> {
             suggestions = searchResults.getSuggestions();
         }
         return size;
+    }
+
+    public List<Long> getIdList() {
+
+        SearchResults searchResults = fullTextSearchService.search(searchText.getObject(), getFormatter());
+        List<SearchResult> results = searchResults.getResults();
+
+        List<Long> ids = new ArrayList<Long>();
+
+        for (SearchResult searchResult: results) {
+            ids.add(searchResult.getLong(AssetIndexField.ID.getField()));
+        }
+
+        return ids;
     }
 
     @Override
