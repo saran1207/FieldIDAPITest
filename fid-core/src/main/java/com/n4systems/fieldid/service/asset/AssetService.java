@@ -10,6 +10,7 @@ import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
@@ -44,8 +45,6 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Transactional
@@ -56,6 +55,7 @@ public class AssetService extends FieldIdPersistenceService {
     @Autowired private LastEventDateService lastEventDateService;
     @Autowired private AssetCodeMappingService assetCodeMappingService;
     @Autowired private AssetTypeService assetTypeService;
+    @Autowired private OrgService orgService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -620,25 +620,6 @@ public class AssetService extends FieldIdPersistenceService {
         return persistenceService.exists(builder);
     }
 
-
-    public List<Asset> getBogusAssets() {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Date d = null;
-        try {
-            d = sdf.parse("30/12/2012");
-        } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-
-
-        QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, securityContext.getTenantSecurityFilter());
-        builder.addWhere(WhereClauseFactory.create(Comparator.GT, "created", d));   // something better to return more assets.
-        return persistenceService.findAll(builder);
-        //SELECT count(*) from assets where tenant_id=15511493 and created > '2012-12-30 00:00:00';
-    }
-
-
     public Map<Long, Long> getTenantsLast30DaysCount(Map<Tenant,PrimaryOrg> tenants) {
         QueryBuilder<Tenant30DayCountRecord> builder = new QueryBuilder<Tenant30DayCountRecord>(Asset.class, new OpenSecurityFilter());
 
@@ -666,6 +647,7 @@ public class AssetService extends FieldIdPersistenceService {
         Asset asset = new Asset();
 
         AddAssetHistory history = getAddAssetHistory();
+
         if (history != null) {
             asset.setType(history.getAssetType());
             asset.setAssetStatus(history.getAssetStatus());
@@ -678,6 +660,8 @@ public class AssetService extends FieldIdPersistenceService {
             asset.setType(assetTypeService.getAssetTypes(null).iterator().next());
             asset.setOwner(getCurrentUser().getOwner());
         }
+
+        asset.setPublished(orgService.getPrimaryOrgForTenant(getCurrentTenant().getId()).isAutoPublish());
 
         return asset;
     }
@@ -721,6 +705,7 @@ public class AssetService extends FieldIdPersistenceService {
         asset.setShopOrder(lineItem);
         asset.setOwner(lineItem.getOrder().getOwner());
         asset.setPurchaseOrder(lineItem.getOrder().getPoNumber());
+        asset.setPublished(orgService.getPrimaryOrgForTenant(getCurrentTenant().getId()).isAutoPublish());
 
         return asset;
     }
