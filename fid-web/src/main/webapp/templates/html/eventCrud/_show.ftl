@@ -222,7 +222,7 @@
 			var map = googleMapFactory.create('mapCanvas');
 			map.makeMarker = googleMapFactory.makeMarkerForStatus;		
 			Event.observe(window, 'load', function() { 
-				map.addLocation(${action.latitude}, ${action.longitude}, '', "${event.eventResult}", "../../");
+				map.addLocation(${action.latitude}, ${action.longitude}, '', "${event.eventResult}", "");
 				map.show();				
 			});		
 		</script>						
