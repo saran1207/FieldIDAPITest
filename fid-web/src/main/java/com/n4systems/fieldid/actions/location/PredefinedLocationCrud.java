@@ -20,7 +20,7 @@ import org.apache.struts2.interceptor.validation.SkipValidation;
 import java.util.List;
 
 @Validation
-@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageSystemConfig })
+@UserPermissionFilter(userRequiresOneOf = { Permissions.ManageEndUsers })
 public class PredefinedLocationCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
 	private Logger logger = Logger.getLogger(PredefinedLocationCrud.class);
