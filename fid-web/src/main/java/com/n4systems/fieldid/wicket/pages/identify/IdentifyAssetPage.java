@@ -185,6 +185,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             add(assignedToContainer);
             final PropertyModel<User> assignedUserModel = ProxyModel.of(assetModel, on(Asset.class).getAssignedUser());
             final GroupedUserPicker assignedToSelect = new GroupedUserPicker("assignedToSelect", assignedUserModel, new GroupedVisibleUsersModel());
+            assignedToSelect.setNullValid(true);
             assignedToContainer.add(assignedToSelect);
 
             assignedToContainer.add(new AjaxLink("assignToMeLink") {
