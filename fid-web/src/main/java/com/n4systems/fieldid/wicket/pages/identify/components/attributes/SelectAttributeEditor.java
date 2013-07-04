@@ -38,7 +38,7 @@ public class SelectAttributeEditor extends FormComponentPanel<InfoOptionBean> {
             }
         });
 
-        if (infoOption.getName() == null) {
+        if (infoOption == null || infoOption.getName() == null) {
             infoOption = null;
         }
     }
