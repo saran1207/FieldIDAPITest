@@ -117,7 +117,7 @@ public class UserImporter extends AbstractImporter<UserView> {
 		if (user.getTimeZoneID() == null) { 
 			user.setTimeZoneID(timeZoneId);
 		}
-		saver.saveOrUpdate(user);
+		saver.saveOrUpdate(transaction, user);
 		maybeSendWelcomeEmail(user, view);
 	}
 
