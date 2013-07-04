@@ -9,6 +9,7 @@ import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -64,7 +65,8 @@ public class UnitOfMeasureEditor extends FormComponentPanel<InfoOptionBean> {
         editorContainer.setOutputMarkupPlaceholderTag(true);
         displayContainer.setOutputMarkupPlaceholderTag(true);
 
-        displayContainer.add(new TextField<String>("uomTextField", ProxyModel.of(infoOption, on(InfoOptionBean.class).getName())));
+        final PropertyModel<String> infoOptionName = ProxyModel.of(infoOption, on(InfoOptionBean.class).getName());
+        displayContainer.add(new WebMarkupContainer("uomTextField").add(new AttributeModifier("value", infoOptionName)));
 
         DropDownChoice<UnitOfMeasure> unitOfMeasureSelect = new DropDownChoice<UnitOfMeasure>("unitOfMeasureSelect", new PropertyModel<UnitOfMeasure>(this, "primaryUnit"), unitOfMeasuresModel, new ListableChoiceRenderer<UnitOfMeasure>());
         editorContainer.add(unitOfMeasureSelect);
@@ -102,7 +104,7 @@ public class UnitOfMeasureEditor extends FormComponentPanel<InfoOptionBean> {
         AjaxLink storeLink = new AjaxLink("storeLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                infoOption.getObject().setName(convertUomToString());
+                infoOptionName.setObject(convertUomToString());
                 primaryValue = secondaryValue = null;
                 setEditMode(false, target);
             }
@@ -154,9 +156,6 @@ public class UnitOfMeasureEditor extends FormComponentPanel<InfoOptionBean> {
 
     @Override
     protected void convertInput() {
-        String value = convertUomToString();
-
-        getModelObject().setName(value);
         setConvertedInput(getModelObject());
     }
 
