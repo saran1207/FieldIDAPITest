@@ -1,0 +1,1 @@
+alter table configurations modify value varchar(2000);
