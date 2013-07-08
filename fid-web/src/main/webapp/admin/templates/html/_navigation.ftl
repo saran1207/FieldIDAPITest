@@ -13,39 +13,11 @@
             <a href="/fieldid/admin/eulas.action">EULA</a>
         </#if>
     </li>
-    <li class=" <#if action.isPageName('releaseNotes')>selected</#if>">
-        <#if action.isPageName('releaseNotes')>
-            Release Notes
-        <#else>
-            <a href="/fieldid/admin/releaseNotes.action">Release Notes</a>
-        </#if>
-    </li>
-    <li class=" <#if action.isPageName('instructionalVideos')>selected</#if>">
-        <#if action.isPageName('instructionalVideos')>
-            Instructional Videos
-        <#else>
-            <a href="/fieldid/admin/instructionalVideos.action">Instructional Videos</a>
-        </#if>
-    </li>
-    <li class=" <#if action.isPageName('unitOfMeasure')>selected</#if>">
-        <#if action.isPageName('unitOfMeasure')>
-            Units of Measure
-        <#else>
-            <a href="/fieldid/admin/unitOfMeasureList.action">Units of Measure</a>
-        </#if>
-    </li>
     <li class=" <#if action.isPageName('orderMapping')>selected</#if>">
         <#if action.isPageName('orderMapping')>
             Order Mappings
         <#else>
             <a href="/fieldid/admin/orderMappingList.action">Order Mappings</a>
-        </#if>
-    </li>
-    <li class=" <#if action.isPageName('importObservations')>selected</#if>">
-        <#if action.isPageName('importObservations')>
-            Observation Importer
-        <#else>
-            <a href="/fieldid/admin/importObservations.action">Observation Importer</a>
         </#if>
     </li>
     <li class=" <#if action.isPageName('mail')>selected</#if>">

@@ -104,22 +104,6 @@
 
         </action>
 
-		<action name="unitOfMeasureList" method="list"
-			class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
-			<result name="success" type="freemarker">/admin/templates/html/unitofmeasure/list.ftl
-			</result>
-		</action>
-
-		<action name="unitOfMeasureCrud" method="formInput"
-			class="com.n4systems.fieldidadmin.actions.UnitOfMeasureAction">
-			<result name="input" type="freemarker">/admin/templates/html/unitofmeasure/unitOfMeasureForm.ftl
-			</result>
-			<result name="success" type="redirectAction">
-				<param name="namespace">/admin</param>
-				<param name="actionName">unitOfMeasureList</param>
-			</result>
-		</action>
-
 		<action name="orderMappingList" method="list"
 			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
 			<result name="success" type="freemarker">/admin/templates/html/ordermapping/list.ftl
@@ -174,70 +158,6 @@
 			<result name="success" type="freemarker">/admin/templates/html/config/config.ftl
 			</result>
 			<result name="error" type="freemarker">/admin/templates/html/config/config.ftl
-			</result>
-		</action>
-
-		<action name="importObservations" method="show"
-			class="com.n4systems.fieldidadmin.actions.ObservationImporterAction">
-			<result name="success" type="freemarker">/admin/templates/html/observations/show.ftl
-			</result>
-			<result name="error" type="freemarker">/admin/templates/html/observations/show.ftl
-			</result>
-		</action>
-
-		<action name="instructionalVideos" method="list"
-			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="success" type="freemarker">/admin/templates/html/instructionalVideos/list.ftl
-			</result>
-			<result name="error" type="freemarker">/admin/templates/html/instructionalVideos/list.ftl
-			</result>
-		</action>
-
-		<action name="instructionalVideoAdd" method="add"
-			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="success" type="freemarker">/admin/templates/html/instructionalVideos/add.ftl
-			</result>
-		</action>
-
-		<action name="instructionalVideoEdit" method="edit"
-			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="success" type="freemarker">/admin/templates/html/instructionalVideos/edit.ftl
-			</result>
-		</action>
-
-		<action name="instructionalVideoCreate" method="save"
-			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="error" type="freemarker">/admin/templates/html/instructionalVideos/add.ftl
-			</result>
-			<result name="input" type="freemarker">/admin/templates/html/instructionalVideos/add.ftl
-			</result>
-			<result name="success" type="redirectAction">
-				<param name="namespace">/admin</param>
-				<param name="actionName">instructionalVideos</param>
-			</result>
-		</action>
-
-		<action name="instructionalVideoUpdate" method="save"
-			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="error" type="freemarker">/admin/templates/html/instructionalVideos/edit.ftl
-			</result>
-			<result name="input" type="freemarker">/admin/templates/html/instructionalVideos/edit.ftl
-			</result>
-			<result name="success" type="redirectAction">
-				<param name="namespace">/admin</param>
-				<param name="actionName">instructionalVideos</param>
-			</result>
-		</action>
-		
-		<action name="instructionalVideoDelete" method="delete"
-			class="com.n4systems.fieldidadmin.actions.InstructionalVideoCrud">
-			<result name="success" type="redirectAction">
-				<param name="namespace">/admin</param>
-				<param name="actionName">instructionalVideos</param>
-			</result>
-			<result name="error" type="redirectAction">
-				<param name="namespace">/admin</param>
-				<param name="actionName">instructionalVideos</param>
 			</result>
 		</action>
 
@@ -485,29 +405,6 @@
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
 				<param name="actionName">eulas</param>
-			</result>
-		</action>
-
-		<action name="releaseNotes" method="show"
-			class="com.n4systems.fieldidadmin.actions.ReleaseNotesCrud">
-			<result name="success" type="freemarker">/admin/templates/html/releaseNotes/show.ftl
-			</result>
-		</action>
-		<action name="releaseNotesEdit" method="edit"
-			class="com.n4systems.fieldidadmin.actions.ReleaseNotesCrud">
-			<result name="success" type="freemarker">/admin/templates/html/releaseNotes/edit.ftl
-			</result>
-		</action>
-
-		<action name="releaseNotesUpdate" method="update"
-			class="com.n4systems.fieldidadmin.actions.ReleaseNotesCrud">
-			<result name="input" type="freemarker">/admin/templates/html/releaseNotes/edit.ftl
-			</result>
-			<result name="error" type="freemarker">/admin/templates/html/releaseNotes/edit.ftl
-			</result>
-			<result name="success" type="redirectAction">
-				<param name="namespace">/admin</param>
-				<param name="actionName">releaseNotes</param>
 			</result>
 		</action>
 	</package>
