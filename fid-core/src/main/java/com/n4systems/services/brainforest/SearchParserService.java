@@ -35,6 +35,9 @@ public class SearchParserService extends FieldIdService {
 
     public SearchQuery createSearchQuery(String search) {
         try {
+            // TODO DD : this is being called too many times from wicket page.
+            // need to look into model/provider to see what's happening and why it isn't cached.
+            // furthermore, should refactor these queries so they are cached with expiration of say, 1 minute.
             SearchQuery searchQuery = parseSearchQuery(search);
             return searchQuery.addSuggestion(makeSuggestions(search, searchQuery));
         } catch (ParseException e) {

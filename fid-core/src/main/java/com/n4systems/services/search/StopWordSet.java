@@ -24,8 +24,7 @@ public class StopWordSet extends CharArraySet {
         );
 
     public StopWordSet() {
-        super(Version.LUCENE_CURRENT, stopWords, false);
+        super(Version.LUCENE_43, stopWords, false);
     }
-
 
 }

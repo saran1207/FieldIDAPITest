@@ -5,25 +5,26 @@ import com.google.common.base.Preconditions;
 import java.util.EnumSet;
 
 public enum AssetIndexField implements HasAnalyzerType {
-    ID("_id", AnalyzerFactory.Type.WHITESPACE),
-    SECONDARY_ID("_secondaryorgid", AnalyzerFactory.Type.WHITESPACE),
-    CUSTOMER_ID("_customerorgid", AnalyzerFactory.Type.WHITESPACE),
-    DIVISION_ID("_divisionorgid", AnalyzerFactory.Type.WHITESPACE),
-    CREATED("assetcreated", AnalyzerFactory.Type.WHITESPACE, 1 ),
-    MODIFIED("assetmodified", AnalyzerFactory.Type.WHITESPACE,1),
-    IDENTIFIER("id", AnalyzerFactory.Type.WHITESPACE,10),
+
+    ID("_id", AnalyzerFactory.Type.KEYWORD),
+    SECONDARY_ID("_secondaryorgid", AnalyzerFactory.Type.KEYWORD),
+    CUSTOMER_ID("_customerorgid", AnalyzerFactory.Type.KEYWORD),
+    DIVISION_ID("_divisionorgid", AnalyzerFactory.Type.KEYWORD),
+    CREATED("assetcreated", AnalyzerFactory.Type.KEYWORD, 1),
+    MODIFIED("assetmodified", AnalyzerFactory.Type.KEYWORD, 1),
+    IDENTIFIER("id", 10),
     TYPE("at",9),
     CUSTOMER("cu",9),
     DIVISION("div",9),
     LOCATION("location",5),
     INTERNAL_ORG("org",9),
-    IDENTIFIED("assetidentified", AnalyzerFactory.Type.WHITESPACE,5),
-    RFID("rfid", AnalyzerFactory.Type.WHITESPACE,9),
-    REFERENCE_NUMBER("ref", AnalyzerFactory.Type.WHITESPACE,9),
-    PURCHASE_ORDER("po", AnalyzerFactory.Type.WHITESPACE,9),
-    COMMENTS("comments",1),
-    ORDER("order", AnalyzerFactory.Type.WHITESPACE,1),
-    LAST_EVENT_DATE("lasteventdate", AnalyzerFactory.Type.WHITESPACE,1),
+    IDENTIFIED("assetidentified", 5),
+    RFID("rfid", 9),
+    REFERENCE_NUMBER("ref", 9),
+    PURCHASE_ORDER("po", 9),
+    COMMENTS("comments",AnalyzerFactory.Type.STANDARD,1),
+    ORDER("order", 1),
+    LAST_EVENT_DATE("lasteventdate", AnalyzerFactory.Type.KEYWORD,1),
     CREATED_BY("usercreated",1),
     MODIFIED_BY("usermodified",1),
     IDENTIFIED_BY("identifiedby",5),
@@ -31,7 +32,7 @@ public enum AssetIndexField implements HasAnalyzerType {
     OWNER("owner",9),
     TYPE_GROUP("atg",5),
     STATUS("assetstatus",5),
-    //note that there is a subtle difference here...the ALL field uses whitepsace analyzer uses WHITESPACE while most of the fields it contains use the STANDARD analyzer;
+    //note that there is a subtle difference here...the ALL field uses WHITESPACE while some of the fields it contains use the STANDARD analyzer;
     // this may lead to inconsistent results.
     //  i.e. search for "blah-blah-blah"  compared to searching for "comments:blah-blah-blah" will yield different results due to different analyzers
     //  different processing of hyphen.
@@ -45,7 +46,7 @@ public enum AssetIndexField implements HasAnalyzerType {
 
     private final String field;
     private int boost = DEFAULT_BOOST;
-    private AnalyzerFactory.Type analyzerType = AnalyzerFactory.Type.STANDARD;
+    private AnalyzerFactory.Type analyzerType = AnalyzerFactory.Type.WHITESPACE;
 
     AssetIndexField(String field,AnalyzerFactory.Type analyzerType, int boost) {
         Preconditions.checkArgument(field.equals(field.toLowerCase()), "WARNING : since all fields are index as lowercase, you should not be using uppercase in " + field);

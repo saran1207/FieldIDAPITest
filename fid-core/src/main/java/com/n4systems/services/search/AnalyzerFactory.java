@@ -23,7 +23,7 @@ public class AnalyzerFactory {
 
     private @Autowired CharArraySet stopWordSet;
 
-    private Type defaultType = Type.STANDARD;
+    private Type defaultType = Type.WHITESPACE;
 
 
     public Analyzer create(Type type) {
