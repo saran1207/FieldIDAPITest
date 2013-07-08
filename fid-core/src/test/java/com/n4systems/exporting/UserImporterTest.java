@@ -48,7 +48,7 @@ public class UserImporterTest {
 
 		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(converter.toModel(userViews.get(0), transaction)).andReturn(user);
-		expect(saver.saveOrUpdate(user)).andReturn(user);
+		expect(saver.saveOrUpdate(transaction, user)).andReturn(user);
 		reader.close();
 
 		replay(reader);
@@ -90,7 +90,7 @@ public class UserImporterTest {
 
 		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(converter.toModel(userViews.get(0), transaction)).andReturn(user);
-		expect(saver.saveOrUpdate(user)).andReturn(user);
+		expect(saver.saveOrUpdate(transaction, user)).andReturn(user);
 		notifier.sendWelcomeNotificationTo(user);
 		reader.close();
 
@@ -135,7 +135,7 @@ public class UserImporterTest {
 
 		expect(validator.getValidationContext()).andReturn(validationContext);
 		expect(converter.toModel(userViews.get(0), transaction)).andReturn(user);
-		expect(saver.saveOrUpdate(user)).andReturn(user);
+		expect(saver.saveOrUpdate(transaction, user)).andReturn(user);
 		notifier.sendWelcomeNotificationTo(user);
 		reader.close();
 		
