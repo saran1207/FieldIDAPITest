@@ -39,4 +39,5 @@
  <validator name="subAssetValidator" class="com.n4systems.fieldid.validators.SubAssetTypeValidator" />
  <validator name="conditionalVisitorFieldValidator" class="com.n4systems.fieldid.validators.ConditionalVisitorFieldValidator" />
  <validator name="uniqueInfoFieldValidator" class="com.n4systems.fieldid.validators.UniqueInfoFieldValidator" />
+ <validator name="rfcEmailValidator" class="com.n4systems.fieldid.validators.RFCEmailValidator" />
 </validators>

@@ -1,9 +1,5 @@
 package com.n4systems.fieldid.actions.user;
 
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
@@ -11,10 +7,11 @@ import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.EmailValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 public class MyAccount extends AbstractCrud implements HasDuplicateValueValidator {
 	private static final long serialVersionUID = 1L;
@@ -77,7 +74,7 @@ public class MyAccount extends AbstractCrud implements HasDuplicateValueValidato
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.emailrequired")
-	@EmailValidator(type = ValidatorType.FIELD, message = "", key = "error.emailformat")
+    @CustomValidator(type = "rfcEmailValidator", message = "", key = "error.emailformat")
 	public void setEmailAddress(String emailAddress) {
 		currentUser.setEmailAddress(emailAddress);
 	}

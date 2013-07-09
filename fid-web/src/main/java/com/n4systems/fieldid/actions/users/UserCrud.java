@@ -427,8 +427,8 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.emailrequired")
-	@EmailValidator(type = ValidatorType.FIELD, message = "", key = "error.emailformat")
-	public String getEmailAddress() {
+    @CustomValidator(type = "rfcEmailValidator", message = "", key = "errors.data.emailformat")
+    public String getEmailAddress() {
 		return user.getEmailAddress();
 	}
 

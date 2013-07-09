@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.users;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.service.user.UserGroupService;
+import org.apache.struts2.interceptor.validation.SkipValidation;
 
 public class UserCrudSelection extends UserCrud {
 	protected UserCrudSelection(UserManager userManager, UserGroupService userGroupService, PersistenceManager persistenceManager) {
@@ -15,7 +16,8 @@ public class UserCrudSelection extends UserCrud {
 	protected int processPermissions() {
 		return 0;
 	}
-	
+
+    @SkipValidation
 	public String doShow(){
 		return SUCCESS;
 	}

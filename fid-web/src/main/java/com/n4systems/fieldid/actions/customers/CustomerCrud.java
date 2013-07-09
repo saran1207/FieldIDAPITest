@@ -303,8 +303,8 @@ public class CustomerCrud extends AbstractCrud {
 		return customer.getContact().getEmail();
 	}
 
-	@EmailValidator(type = ValidatorType.FIELD, message = "", key = "error.emailformat")
-	public void setAccountManagerEmail(String accountManagerEmail) {
+    @CustomValidator(type = "rfcEmailValidator", message = "", key = "error.emailformat")
+    public void setAccountManagerEmail(String accountManagerEmail) {
 		customer.getContact().setEmail(accountManagerEmail);
 	}
 

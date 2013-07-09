@@ -1,14 +1,14 @@
 package com.n4systems.fieldid.actions.notifications;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.model.orgs.BaseOrg;
-import com.opensymphony.xwork2.validator.annotations.EmailValidator;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.Validation;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Validation
 
@@ -122,7 +122,7 @@ public class NotificationSettingView implements Serializable {
     	return addresses;
     }
 
-	@EmailValidator(message="", key = "error.emailformat")
+    @CustomValidator(type = "rfcEmailValidator", message = "", key = "error.emailformat")
 	public void setAddresses(List<String> addresses) {
     	this.addresses = addresses;
     }

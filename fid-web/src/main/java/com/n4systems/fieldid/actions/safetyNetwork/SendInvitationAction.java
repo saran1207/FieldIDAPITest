@@ -7,7 +7,7 @@ import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.uri.BaseUrlBuilder;
 import com.n4systems.util.uri.UrlBuilder;
-import com.opensymphony.xwork2.validator.annotations.EmailValidator;
+import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
 import com.opensymphony.xwork2.validator.annotations.ValidatorType;
 import org.apache.log4j.Logger;
@@ -95,8 +95,8 @@ public class SendInvitationAction extends SafetyNetwork {
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, key="label.email_required", message="")
-	@EmailValidator(key="label.not_valid_email", message="")
-	public void setEmail(String email) {
+    @CustomValidator(type = "rfcEmailValidator", message = "", key = "label.not_valid_email")
+    public void setEmail(String email) {
 		this.email = email;
 	}
 

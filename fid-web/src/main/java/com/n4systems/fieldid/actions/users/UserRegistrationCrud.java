@@ -1,11 +1,5 @@
 package com.n4systems.fieldid.actions.users;
 
-import java.util.SortedSet;
-
-import org.apache.log4j.Logger;
-import org.apache.struts2.interceptor.validation.SkipValidation;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.DuplicateUserException;
@@ -26,12 +20,12 @@ import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
 import com.n4systems.util.timezone.TimeZoneSelectionHelper;
-import com.opensymphony.xwork2.validator.annotations.CustomValidator;
-import com.opensymphony.xwork2.validator.annotations.EmailValidator;
-import com.opensymphony.xwork2.validator.annotations.FieldExpressionValidator;
-import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
-import com.opensymphony.xwork2.validator.annotations.StringLengthFieldValidator;
-import com.opensymphony.xwork2.validator.annotations.ValidatorType;
+import com.opensymphony.xwork2.validator.annotations.*;
+import org.apache.log4j.Logger;
+import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.SortedSet;
 
 public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateValueValidator {
 
@@ -153,7 +147,7 @@ public class UserRegistrationCrud extends AbstractCrud implements HasDuplicateVa
 	}
 
 	@RequiredStringValidator(type = ValidatorType.FIELD, message = "", key = "error.emailrequired")
-	@EmailValidator(type = ValidatorType.FIELD, message = "", key = "error.emailformat")
+    @CustomValidator(type = "rfcEmailValidator", message = "", key = "error.emailformat")
 	public String getEmailAddress() {
 		return userAccount.getEmailAddress();
 	}
