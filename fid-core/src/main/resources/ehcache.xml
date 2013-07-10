@@ -131,31 +131,54 @@
       net.sf.ehcache.store.compound.CopyStrategy. This strategy will be used for copyOnRead
       and copyOnWrite in place of the default which is serialization.
     -->
-    
-	<defaultCache 
-		maxElementsInMemory="128000" 
-		eternal="false" 
-		timeToIdleSeconds="900" 
-		timeToLiveSeconds="900" 
-		overflowToDisk="true" 
-		diskSpoolBufferSizeMB="64" 
-		maxElementsOnDisk="10000000" 
-		diskPersistent="false" 
-		diskExpiryThreadIntervalSeconds="300" 
-		memoryStoreEvictionPolicy="LRU" 
+
+
+
+	<defaultCache
+		maxElementsInMemory="128000"
+		eternal="false"
+		timeToIdleSeconds="900"
+		timeToLiveSeconds="900"
+		overflowToDisk="true"
+		diskSpoolBufferSizeMB="64"
+		maxElementsOnDisk="10000000"
+		diskPersistent="false"
+		diskExpiryThreadIntervalSeconds="300"
+		memoryStoreEvictionPolicy="LRU"
 		statistics="false"/>
 
-	<cache
+
+    <!--DISABLED THESE 'CAUSE THEY WEREN'T BEING USED -->
+
+
+    <cache
 	    name="org.hibernate.cache.StandardQueryCache"
 	    maxElementsInMemory="256"
 	    eternal="false"
 	    timeToLiveSeconds="300"
 	    overflowToDisk="true"/>
-	    
+
 	<cache
 	    name="org.hibernate.cache.UpdateTimestampsCache"
-	    maxElementsInMemory="5000"
+        maxElementsInMemory="5000"
 	    eternal="true"
 	    overflowToDisk="true"/>
+
+
+    <!-- custom caches for service calls -->
+
+    <!-- TODO DD : this cache should be purged every time asset type is changed. -->
+    <cache name="assetTypes"
+           timeToLiveSeconds="9000"
+           overflowToDisk="true">
+    </cache>
+
+    <cache name="search"
+           timeToLiveSeconds="60">
+    </cache>
+
+    <cache name="searchCount"
+           timeToLiveSeconds="60">
+    </cache>
 
 </ehcache>

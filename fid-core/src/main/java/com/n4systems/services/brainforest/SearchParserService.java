@@ -1,11 +1,15 @@
 package com.n4systems.services.brainforest;
 
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.search.AssetIndexField;
+import com.n4systems.util.collections.PrioritizedList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.util.CharArraySet;
@@ -13,6 +17,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -86,7 +91,7 @@ public class SearchParserService extends FieldIdService {
             if (AssetIndexField.fromString(attribute)!=null) {
                 continue;
             }
-            List<String> suggestions = assetTypeService.getInfoFieldBeansLike(attribute);
+            List<String> suggestions = getAttributesLike(attribute);
             if (!suggestions.isEmpty() && !suggestions.get(0).equalsIgnoreCase(attribute) ) {    // it exists? if not, get the next suggestion.  (perfect match will always be first in list).
                 for (String suggestion:suggestions) {
                     result.add(search.replaceAll("(?i)"+attribute, suggestion));
@@ -95,6 +100,47 @@ public class SearchParserService extends FieldIdService {
             }
         }
         return Lists.newArrayList();
+    }
+
+    private List<String> getAttributesLike(final String name) {
+        List<String> all = assetTypeService.getInfoFieldBeans(securityContext.getUserSecurityFilter().getUser().getTenant());
+        // workaround : some users have created attribute names with actual semi-colons on the end.
+        //  e.g. "SIZE:"    we'll try to accommodate for this.  (recall: parser will not understand that and discard semi-colon).
+        final String normalizedName = name.endsWith(":") ? name.toLowerCase().substring(0, name.length() - 1) : name.toLowerCase();
+        final String shortForm = normalizedName.substring(0,Math.min(normalizedName.length(),3));
+
+        List<String> filteredList = ImmutableList.copyOf(Iterables.filter(all, new Predicate<String>() {
+                @Override public boolean apply(String input) {
+                    return input != null && input.indexOf(shortForm) >= 0;
+                }
+            }
+        ));
+
+        // TODO DD : this should all be replaced with a lucene analyzed index of attribute names.
+
+        return new PrioritizedList<String>(filteredList,5, new Comparator<String>() {
+            public @Override int compare(String o1, String o2) {
+                if (o1.equalsIgnoreCase(normalizedName)) {
+                    return -1;
+                } else if (o2.equalsIgnoreCase(normalizedName)) {
+                    return 1;
+                }
+                int index1 = o1.indexOf(shortForm);
+                int index2 = o2.indexOf(shortForm);
+                if (index1==-1 && index2==-1) {
+                    return o1.compareTo(o2);
+                }
+                if (index1==-1) {
+                    return 1;
+                } else if (index2==-1) {
+                    return -1;
+                } else {
+                    int r = index1 - index2;
+                    return r==0 ? o1.compareTo(o2) : r;
+                }
+            }
+        });
+
     }
 
     private String multiWordNoAttribute(String search) {
@@ -164,7 +210,7 @@ public class SearchParserService extends FieldIdService {
 
     private Query getQueryForTerm(String attribute, Value value, QueryTerm.Operator operator) {
         if (value instanceof RangeValue) {
-            return getRangeQueryForTerm(attribute, (RangeValue)value);
+            return getRangeQueryForTerm(attribute, (RangeValue) value);
         } else if (value instanceof ListValue) {
             return getListQueryForTerm(attribute,(ListValue)value);
         } else {

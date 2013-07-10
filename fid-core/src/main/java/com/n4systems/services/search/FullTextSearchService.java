@@ -19,6 +19,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 
 import java.io.Closeable;
 import java.io.File;
@@ -35,6 +36,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     private @Autowired AnalyzerFactory analyzerFactory;
 
 
+    @Cacheable("searchCount")
     public SearchResults count(final String queryString) {
         return lucene(new SearchResultsLuceneWorker(queryString) {
             @Override
@@ -51,6 +53,7 @@ public class FullTextSearchService extends FieldIdPersistenceService {
         });
     }
 
+    @Cacheable("search")
     public SearchResults search(final String queryString, final Formatter formatter, final int start, final int count) {
         return lucene(new SearchResultsLuceneWorker(queryString, formatter) {
             @Override

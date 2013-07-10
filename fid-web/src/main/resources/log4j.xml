@@ -27,7 +27,7 @@
             <param name="ConversionPattern" value="%D: %c: %m%n" />
         </layout>
     </appender>
-	<appender name="CACHE_LOG" class="org.apache.log4j.RollingFileAppender">
+    <appender name="CACHE_LOG" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/fieldid-cache.log" />
 		<param name="Append" value="true" />
 		<param name="MaxFileSize" value="500MB" />
@@ -213,6 +213,16 @@
     <category name="com.n4systems.fieldid.migrator">
         <priority value="DEBUG" />
         <appender-ref ref="FIELDID_MIGRATIONS" />
+    </category>
+
+    <category name="com.googlecode.ehcache">
+        <priority value="DEBUG" />
+        <appender-ref ref="CACHE_LOG" />
+    </category>
+
+    <category name="net.sf.ehcache">
+        <priority value="DEBUG" />
+        <appender-ref ref="CACHE_LOG" />
     </category>
 
     <root>

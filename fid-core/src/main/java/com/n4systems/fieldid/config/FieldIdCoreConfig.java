@@ -72,6 +72,10 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.lucene.analysis.util.CharArraySet;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.ehcache.EhCacheManagerFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -84,6 +88,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import java.io.StringReader;
 
 @Configuration
+@EnableCaching
 public class FieldIdCoreConfig {
 
     @Bean
@@ -566,6 +571,22 @@ public class FieldIdCoreConfig {
     @Bean
     public AnalyzerFactory analyzerFactory() {
         return new AnalyzerFactory();
+    }
+
+    @Bean
+    public CacheManager cacheManager() {
+        EhCacheCacheManager ehCacheCacheManager = new EhCacheCacheManager();
+        try {
+            ehCacheCacheManager.setCacheManager(ehCache().getObject());
+        } catch (Exception e) {
+            throw new IllegalStateException("failed to create ehCache");
+        }
+        return ehCacheCacheManager;
+    }
+
+    @Bean
+    public EhCacheManagerFactoryBean ehCache() {
+        return new EhCacheManagerFactoryBean();
     }
 
 }
