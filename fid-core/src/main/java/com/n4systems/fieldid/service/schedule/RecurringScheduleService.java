@@ -20,6 +20,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
     public static final int DAILY_EVENT_COUNT = 14;
     public static final int WEEKLY_EVENT_COUNT = 6;
+    public static final int BIWEEKLY_EVENT_COUNT = 8;
     public static final int MONTHLY_EVENT_COUNT = 2;
     public static final int ANNUAL_EVENT_COUNT = 2;
     public static final int ANNUAL_MONTH_THRESHOLD = 18;
@@ -91,7 +92,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
     List<Asset> getAssetsByAssetType(RecurringAssetTypeEvent event) {
         QueryBuilder<Asset> query = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
         query.addWhere(WhereClauseFactory.create("type", event.getAssetType()));
-        if(event.getOwner() != null) {
+        if(event.getOwner() != null) {  // owner.isPrimary()...skip this...?
             query.addWhere(WhereClauseFactory.create("owner", event.getOwner()));
         }
         return persistenceService.findAll(query);
@@ -153,6 +154,20 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
                 case MONTHLY_15TH:
                 case MONTHLY_LAST:
                     return Months.monthsBetween(start,localDate).getMonths() >= MONTHLY_EVENT_COUNT;
+                case BIWEEKLY_MONDAY:
+                    return Weeks.weeksBetween(start, localDate).getWeeks() >= BIWEEKLY_EVENT_COUNT;
+                case BIWEEKLY_TUESDAY:
+                    return Weeks.weeksBetween(start, localDate).getWeeks() >= BIWEEKLY_EVENT_COUNT;
+                case BIWEEKLY_WEDNESDAY:
+                    return Weeks.weeksBetween(start, localDate).getWeeks() >= BIWEEKLY_EVENT_COUNT;
+                case BIWEEKLY_THURSDAY:
+                    return Weeks.weeksBetween(start, localDate).getWeeks() >= BIWEEKLY_EVENT_COUNT;
+                case BIWEEKLY_FRIDAY:
+                    return Weeks.weeksBetween(start, localDate).getWeeks() >= BIWEEKLY_EVENT_COUNT;
+                case BIWEEKLY_SATURDAY:
+                    return Weeks.weeksBetween(start, localDate).getWeeks() >= BIWEEKLY_EVENT_COUNT;
+                case BIWEEKLY_SUNDAY:
+                    return Weeks.weeksBetween(start, localDate).getWeeks() >= BIWEEKLY_EVENT_COUNT;
                 case ANNUALLY:
                     return Months.monthsBetween(start,localDate).getMonths() >= ANNUAL_MONTH_THRESHOLD;
                 default:

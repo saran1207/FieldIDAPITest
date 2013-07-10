@@ -184,6 +184,8 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             inputContainer.add(recurrenceTypeDropDown);
             inputContainer.add(dateTimepicker.setOutputMarkupPlaceholderTag(true));
             inputContainer.add(timePicker);
+
+            //??withAutoUpdate();
             inputContainer.add(new AutoCompleteOrgPicker("org", new PropertyModel<BaseOrg>(this, "owner")).setRequired(false));
 
             recurrenceTypeDropDown.setNullValid(false).setOutputMarkupId(true).add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -247,7 +249,6 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         }
 
         private RecurringAssetTypeEvent createNewEventFromForm() {
-            Recurrence recurrence = null;
             RecurringAssetTypeEvent newEvent = new RecurringAssetTypeEvent(getAssetType(), eventType, createRecurrence());
             newEvent.setOwner(owner);
             newEvent.setTenant(assetTypeModel.getObject().getTenant());
@@ -308,6 +309,13 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 case MONTHLY_1ST:
                 case MONTHLY_15TH:
                 case MONTHLY_LAST:
+                case BIWEEKLY_MONDAY:
+                case BIWEEKLY_TUESDAY:
+                case BIWEEKLY_WEDNESDAY:
+                case BIWEEKLY_THURSDAY:
+                case BIWEEKLY_FRIDAY:
+                case BIWEEKLY_SATURDAY:
+                case BIWEEKLY_SUNDAY:
                 case WEEKDAYS:
                     if (timePicker.getSingleTime().getConvertedInput()==null) {
                         form.error(getString("label.time.required"));

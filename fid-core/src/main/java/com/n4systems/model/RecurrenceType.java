@@ -21,10 +21,25 @@
      MONTHLY_15TH,
      MONTHLY_LAST,
      WEEKDAYS,
-     ANNUALLY;
+     ANNUALLY,
+     BIWEEKLY_MONDAY,
+     BIWEEKLY_TUESDAY,
+     BIWEEKLY_WEDNESDAY,
+     BIWEEKLY_THURSDAY,
+     BIWEEKLY_FRIDAY,
+     BIWEEKLY_SATURDAY,
+     BIWEEKLY_SUNDAY;
 
      static private EnumSet<RecurrenceType> monthly = EnumSet.of(MONTHLY_1ST,MONTHLY_15TH,MONTHLY_LAST);
-     static private EnumSet<RecurrenceType> weekly = EnumSet.of(WEEKLY_MONDAY,WEEKLY_TUESDAY,WEEKLY_WEDNESDAY,WEEKLY_THURSDAY,WEEKLY_FRIDAY,WEEKLY_SATURDAY,WEEKLY_SUNDAY);
+     static private EnumSet<RecurrenceType> weekly =
+             EnumSet.of(WEEKLY_MONDAY,
+                     WEEKLY_TUESDAY,WEEKLY_WEDNESDAY,WEEKLY_THURSDAY,WEEKLY_FRIDAY,WEEKLY_SATURDAY,WEEKLY_SUNDAY,BIWEEKLY_MONDAY,
+             BIWEEKLY_TUESDAY,
+             BIWEEKLY_WEDNESDAY,
+             BIWEEKLY_THURSDAY,
+             BIWEEKLY_FRIDAY,
+             BIWEEKLY_SATURDAY,
+             BIWEEKLY_SUNDAY);
 
      RecurrenceType() {
      }
@@ -57,12 +72,34 @@
                  return day.getDayOfWeek()==DateTimeConstants.FRIDAY ? day.plusDays(3) :
                          day.getDayOfWeek()==DateTimeConstants.SATURDAY ? day.plusDays(2) :
                          day.plusDays(1);
+             case BIWEEKLY_MONDAY:
+                 return newTwoWeeks(day, DateTimeConstants.MONDAY);
+             case BIWEEKLY_TUESDAY:
+                 return newTwoWeeks(day, DateTimeConstants.TUESDAY);
+             case BIWEEKLY_WEDNESDAY:
+                 return newTwoWeeks(day, DateTimeConstants.WEDNESDAY);
+             case BIWEEKLY_THURSDAY:
+                 return newTwoWeeks(day, DateTimeConstants.THURSDAY);
+             case BIWEEKLY_FRIDAY:
+                 return newTwoWeeks(day, DateTimeConstants.FRIDAY);
+             case BIWEEKLY_SATURDAY:
+                 return newTwoWeeks(day, DateTimeConstants.SATURDAY);
+             case BIWEEKLY_SUNDAY:
+                 return newTwoWeeks(day, DateTimeConstants.SUNDAY);
              case ANNUALLY:
                  return nextYear(day);
              // NOTE : ANNUALLY should be handled via getNext(day, triggerDate) method, never via this method!
              default:
                  throw new IllegalStateException("Recurrence " + this.name() + " not supported");
          }
+     }
+
+     private LocalDate newTwoWeeks(LocalDate date, int day) {
+         if (date.getDayOfWeek()> day) {
+             date = date.plusWeeks(1);
+         }
+
+         return date.plusWeeks(2).withDayOfWeek(day);
      }
 
      private LocalDate nextYear(LocalDate day) {
@@ -108,6 +145,13 @@
              case MONTHLY_1ST:
              case MONTHLY_15TH:
              case WEEKDAYS:
+             case BIWEEKLY_MONDAY:
+             case BIWEEKLY_TUESDAY:
+             case BIWEEKLY_WEDNESDAY:
+             case BIWEEKLY_THURSDAY:
+             case BIWEEKLY_FRIDAY:
+             case BIWEEKLY_SATURDAY:
+             case BIWEEKLY_SUNDAY:
              case MONTHLY_LAST:
                  return false;
              case ANNUALLY:
@@ -131,6 +175,13 @@
              case MONTHLY_1ST:
              case MONTHLY_15TH:
              case WEEKDAYS:
+             case BIWEEKLY_MONDAY:
+             case BIWEEKLY_TUESDAY:
+             case BIWEEKLY_WEDNESDAY:
+             case BIWEEKLY_THURSDAY:
+             case BIWEEKLY_FRIDAY:
+             case BIWEEKLY_SATURDAY:
+             case BIWEEKLY_SUNDAY:
              case MONTHLY_LAST:
              case ANNUALLY:
                  return false;
@@ -159,6 +210,14 @@
              case WEEKLY_FRIDAY:
              case WEEKLY_SATURDAY:
              case WEEKLY_SUNDAY:
+             case BIWEEKLY_MONDAY:
+             case BIWEEKLY_TUESDAY:
+             case BIWEEKLY_WEDNESDAY:
+             case BIWEEKLY_THURSDAY:
+             case BIWEEKLY_FRIDAY:
+             case BIWEEKLY_SATURDAY:
+             case BIWEEKLY_SUNDAY:
+                 return now.minusWeeks(2);
              case WEEKDAYS:
                  return now.minusDays(1);
              case MONTHLY_1ST:
@@ -183,4 +242,6 @@
          }
          throw new IllegalArgumentException("MonthlyDay only applicable on monthly types = Monthly 1st/15th/last");
      }
+
+
  }
