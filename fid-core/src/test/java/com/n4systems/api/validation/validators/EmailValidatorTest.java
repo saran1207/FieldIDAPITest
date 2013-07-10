@@ -1,8 +1,8 @@
 package com.n4systems.api.validation.validators;
 
-import static org.junit.Assert.*;
-
 import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
 
 public class EmailValidatorTest {
 	private EmailValidator validator = new EmailValidator();
@@ -35,8 +35,10 @@ public class EmailValidatorTest {
 				"joe@example.us",
 				"joe@example.uk",
 				"joe@example.org",
-				"joe@example.mil"
-		};
+				"joe@example.mil",
+                "asd@example.badtld",
+                "asd?dsm@example.com"
+        };
 		
 		for (String email: emails) {
 			testEmailPasses(email);
@@ -54,8 +56,6 @@ public class EmailValidatorTest {
 				"no_domain@",
 				"no_domain@.com",
 				".starts_with_dot@example.com",
-				"asd@example.badtld",
-				"asd?dsm@example.com",
 				"name@example."
 		};
 		
