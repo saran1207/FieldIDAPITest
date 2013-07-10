@@ -137,8 +137,15 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             GroupedAssetTypePicker assetTypePicker = new GroupedAssetTypePicker("assetType", assetTypeModel, allAssetTypesModel);
             add(assetTypePicker);
 
-            add(new DateTimePicker("identifiedDate", ProxyModel.of(assetModel, on(Asset.class).getIdentified()), false).withNoAllDayCheckbox());
-
+            DateTimePicker identifiedDate;
+            add(identifiedDate = new DateTimePicker("identifiedDate", ProxyModel.of(assetModel, on(Asset.class).getIdentified()), false).withNoAllDayCheckbox());
+            identifiedDate.getDateTextField().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    autoSchedule(assetModel);
+                    target.add(eventSchedulesPanel);
+                }
+            });
             singleIdentifyContainer = new WebMarkupContainer("singleIdentifyContainer");
             singleIdentifyContainer.setOutputMarkupPlaceholderTag(true);
             multiIdentifyContainer = new MultiIdentifyStatusDisplayPanel("multiIdentifyContainer", multiAssetConfigModel, multipleWindow);
