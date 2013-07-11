@@ -237,6 +237,7 @@ public class DateTimePicker extends Panel {
         Boolean changeYear = true;
         Boolean ampm = null;
         String timeFormat = null;
+        String yearRange = "1900:+10";
 
         public DateTimePickerOptions() {
             if (!allDay && includeTime) {
