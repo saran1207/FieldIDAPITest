@@ -1,10 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
 import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Tenant;
 import com.n4systems.util.uri.ActionURLBuilder;
-import org.apache.wicket.markup.html.basic.Label;
 
 import java.net.URI;
 
@@ -34,11 +32,6 @@ public class WidgetsPage extends SetupPage {
 	public URI getBaseURI() {
 		// creates a URI based on the current url, and resolved against the context path which should be /fieldid.  We add on the extra / since we currently need it.
 		return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
-	}
-
-	@Override
-	protected Label createTitleLabel(String labelId) {
-		return new Label(labelId, new FIDLabelModel("title.widgets"));
 	}
 
 }

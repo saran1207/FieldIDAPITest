@@ -7,13 +7,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.columnlayout.CustomColumnsModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.TemplatesPage;
-import com.n4systems.model.columns.ActiveColumnMapping;
-import com.n4systems.model.columns.ColumnLayout;
-import com.n4systems.model.columns.ColumnMapping;
-import com.n4systems.model.columns.ColumnMappingGroup;
-import com.n4systems.model.columns.CustomColumnCategory;
-import com.n4systems.model.columns.CustomColumnMapping;
-import com.n4systems.model.columns.ReportType;
+import com.n4systems.model.columns.*;
 import com.n4systems.model.columns.loader.ColumnLayoutLoader;
 import com.n4systems.model.columns.loader.ColumnMappingGroupLoader;
 import com.n4systems.model.columns.saver.ColumnLayoutService;
@@ -34,12 +28,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class ColumnsLayoutPage extends FieldIDFrontEndPage {
 
@@ -59,7 +48,10 @@ public class ColumnsLayoutPage extends FieldIDFrontEndPage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.column_layout"));
+        if(reportType.equals(ReportType.ASSET))
+            return new Label(labelId, new FIDLabelModel("title.column_layout_asset"));
+        else
+            return new Label(labelId, new FIDLabelModel("title.column_layout_event"));
     }
 
     public ColumnsLayoutPage(PageParameters pageParams) {

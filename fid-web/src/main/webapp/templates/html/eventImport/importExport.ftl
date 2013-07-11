@@ -1,4 +1,4 @@
-<title><@s.text name="label.startevent"/></title>
+<title><@s.text name="label.import_events"/></title>
 <head>
 	<@n4.includeScript src="eventImport"/>
 	<@n4.includeStyle type="page" href="import"/>

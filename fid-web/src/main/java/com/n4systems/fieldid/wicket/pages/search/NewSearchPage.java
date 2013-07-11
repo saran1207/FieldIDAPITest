@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.components.LatentImage;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.form.IndicatingAjaxSubmitLink;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
@@ -298,6 +299,11 @@ public class NewSearchPage extends FieldIDFrontEndPage {
         });
 
         resultForm.add(actions);
+    }
+
+    @Override
+    protected Component createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.assetsearch"));
     }
 
     private IModel<Boolean> createMultiSelectModel(final DataView<SearchResult> dataView) {
