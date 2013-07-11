@@ -1,4 +1,4 @@
-package com.n4systems.services.brainforest;
+package com.n4systems.services.search.parser;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;

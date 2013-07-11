@@ -4,8 +4,8 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.SecurityContext;
-import com.n4systems.services.brainforest.SearchParserService;
-import com.n4systems.services.brainforest.SearchQuery;
+import com.n4systems.services.search.parser.SearchParserService;
+import com.n4systems.services.search.parser.SearchQuery;
 import org.apache.log4j.Logger;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
@@ -30,7 +30,8 @@ import java.util.List;
 public class FullTextSearchService extends FieldIdPersistenceService {
     private static Logger logger = Logger.getLogger(FullTextSearchService.class);
 
-    private @Autowired SearchParserService searchParserService;
+    private @Autowired
+    SearchParserService searchParserService;
     private @Autowired SecurityContext securityContext;
     private @Autowired AssetIndexerService assetIndexerService;
     private @Autowired AnalyzerFactory analyzerFactory;

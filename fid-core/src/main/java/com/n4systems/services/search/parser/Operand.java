@@ -1,4 +1,4 @@
-package com.n4systems.services.brainforest;
+package com.n4systems.services.search.parser;
 
 public class Operand {
     public static final Operand EQUALS = new Operand("=");

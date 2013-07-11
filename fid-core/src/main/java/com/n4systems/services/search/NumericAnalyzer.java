@@ -2,10 +2,10 @@ package com.n4systems.services.search;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.model.utils.DateRange;
-import com.n4systems.services.brainforest.QueryTerm;
-import com.n4systems.services.brainforest.RangeValue;
-import com.n4systems.services.brainforest.SearchQuery;
-import com.n4systems.services.brainforest.Value;
+import com.n4systems.services.search.parser.QueryTerm;
+import com.n4systems.services.search.parser.RangeValue;
+import com.n4systems.services.search.parser.SearchQuery;
+import com.n4systems.services.search.parser.Value;
 
 import java.math.BigDecimal;
 

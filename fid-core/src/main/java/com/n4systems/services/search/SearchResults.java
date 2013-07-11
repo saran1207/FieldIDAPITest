@@ -1,7 +1,7 @@
 package com.n4systems.services.search;
 
 import com.google.common.collect.Lists;
-import com.n4systems.services.brainforest.SearchQuery;
+import com.n4systems.services.search.parser.SearchQuery;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.search.IndexSearcher;

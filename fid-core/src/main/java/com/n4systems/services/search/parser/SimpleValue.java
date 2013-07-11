@@ -1,4 +1,4 @@
-package com.n4systems.services.brainforest;
+package com.n4systems.services.search.parser;
 
 import com.n4systems.model.utils.DateRange;
 import org.apache.log4j.Logger;

@@ -1,4 +1,4 @@
-package com.n4systems.services.brainforest;
+package com.n4systems.services.search.parser;
 
 public abstract class MultiValue extends Value {
 

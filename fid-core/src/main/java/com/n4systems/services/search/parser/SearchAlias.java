@@ -1,4 +1,4 @@
-package com.n4systems.services.brainforest;
+package com.n4systems.services.search.parser;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

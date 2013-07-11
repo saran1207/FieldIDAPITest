@@ -1,6 +1,7 @@
 package com.n4systems.services.search;
 
-import com.n4systems.services.brainforest.SearchQuery;
+
+import com.n4systems.services.search.parser.SearchQuery;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.miscellaneous.EmptyTokenStream;
 import org.apache.lucene.search.highlight.*;

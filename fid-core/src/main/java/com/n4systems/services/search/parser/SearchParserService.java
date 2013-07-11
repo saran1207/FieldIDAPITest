@@ -1,4 +1,4 @@
-package com.n4systems.services.brainforest;
+package com.n4systems.services.search.parser;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
@@ -40,9 +40,6 @@ public class SearchParserService extends FieldIdService {
 
     public SearchQuery createSearchQuery(String search) {
         try {
-            // TODO DD : this is being called too many times from wicket page.
-            // need to look into model/provider to see what's happening and why it isn't cached.
-            // furthermore, should refactor these queries so they are cached with expiration of say, 1 minute.
             SearchQuery searchQuery = parseSearchQuery(search);
             return searchQuery.addSuggestion(makeSuggestions(search, searchQuery));
         } catch (ParseException e) {
@@ -103,6 +100,9 @@ public class SearchParserService extends FieldIdService {
     }
 
     private List<String> getAttributesLike(final String name) {
+        if (StringUtils.isBlank(name)) {
+            return Lists.newArrayList();
+        }
         List<String> all = assetTypeService.getInfoFieldBeans(securityContext.getUserSecurityFilter().getUser().getTenant());
         // workaround : some users have created attribute names with actual semi-colons on the end.
         //  e.g. "SIZE:"    we'll try to accommodate for this.  (recall: parser will not understand that and discard semi-colon).
