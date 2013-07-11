@@ -40,7 +40,8 @@ public class UserView extends ExternalModelView {
 	public static final String CUSTOMER_FIELD = "Customer/Job Site";
     public static final String USER_GROUP = "User Group";
     public static final String IDENTIFIER ="ID";
-	
+	public static final String ARCHIVE_FIELD="Archive";
+
 	public static UserView newUser() {
 		UserView view = new UserView();		
 		return view;
@@ -127,12 +128,15 @@ public class UserView extends ExternalModelView {
 	@SerializableField(title=ASSIGN_PASSWORD_FIELD, order = 700, validators = {YNValidator.class})
 	private String assignPassword = "N";
 	
-	@SerializableField(title=PASSWORD_FIELD, order = 705, validators = {PasswordValidator.class}, handler=MaskedSerializationHandler.class)
+	@SerializableField(title=PASSWORD_FIELD, order = 800, validators = {PasswordValidator.class}, handler=MaskedSerializationHandler.class)
 	private String password;
 	
-	@SerializableField(title=SEND_WELCOME_EMAIL_FIELD, order = 750, validators = {YNValidator.class})		
+	@SerializableField(title=SEND_WELCOME_EMAIL_FIELD, order = 900, validators = {YNValidator.class})
 	private String sendWelcomeEmail;
-	
+
+    @SerializableField(title=ARCHIVE_FIELD, order = 1000, validators = {})
+    private String archive;
+
 	@SerializableField(title=SYSTEM_ID_FIELD, order = 9999999, validators = {ExternalUserGlobalIdValidator.class})
 	private String globalId;
 
@@ -388,5 +392,13 @@ public class UserView extends ExternalModelView {
             sb.append(group.getName()).append(",");
         }
         return sb.deleteCharAt(sb.length()-1).toString();
+    }
+
+    public String getArchive() {
+        return archive;
+    }
+
+    public void setArchive(String archive) {
+        this.archive = archive;
     }
 }

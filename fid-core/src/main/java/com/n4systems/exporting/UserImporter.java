@@ -52,10 +52,11 @@ public class UserImporter extends AbstractImporter<UserView> {
 		int row = FIRST_DATA_ROW;
 		for (UserView userView : views) {
 			String userName = userView.getUserID();
-			// if (userName!=null) {
-			if (map.containsKey(userName)) {
-				results.add(ValidationResult.fail("Username %s is duplicated", userName).setRow(row));
-			}
+			if(!UserType.valueFromLabel(userView.getAccountType()).equals(UserType.PERSON)) {
+                if (map.containsKey(userName)) {
+                    results.add(ValidationResult.fail("Username %s is duplicated", userName).setRow(row));
+                }
+            }
 			map.put(userName, userView);
 			// }
 			row++;
