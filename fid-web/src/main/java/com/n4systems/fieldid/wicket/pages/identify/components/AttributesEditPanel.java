@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.identify.components.attributes.DateAtt
 import com.n4systems.fieldid.wicket.pages.identify.components.attributes.SelectAttributeEditor;
 import com.n4systems.fieldid.wicket.pages.identify.components.attributes.TextAttributeEditor;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeDefinition;
 import org.apache.commons.lang.StringUtils;
@@ -25,10 +26,7 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import static ch.lambdaj.Lambda.on;
 
@@ -40,12 +38,16 @@ public class AttributesEditPanel extends Panel {
     private IModel<AssetType> assetTypeModel;
     List<AttributeNameValuePair> infoOptions;
 
-    public AttributesEditPanel(String id, IModel<AssetType> assetTypeModel) {
+    public AttributesEditPanel(String id, IModel<AssetType> assetTypeModel, IModel<Asset> assetModel) {
         super(id);
         this.assetTypeModel = assetTypeModel;
         setOutputMarkupPlaceholderTag(true);
 
-        refreshInfoOptions();
+        if (assetModel.getObject().isNew()) {
+            pouplateInfoOptionsFromTypeAndHistory();
+        } else {
+            populateInfoOptionsFromExistingValues(assetModel.getObject());
+        }
 
         add(new ListView<AttributeNameValuePair>("attributes", new PropertyModel<List<AttributeNameValuePair>>(this, "infoOptions")) {
             @Override
@@ -91,16 +93,30 @@ public class AttributesEditPanel extends Panel {
         });
     }
 
-    public void refreshInfoOptions() {
+    private void populateInfoOptionsFromExistingValues(Asset asset) {
+        poupulateInfoOptionsFromExistingValues(asset.getInfoOptions());
+    }
+
+    public void pouplateInfoOptionsFromTypeAndHistory() {
+        AddAssetHistory addAssetHistory = assetService.getAddAssetHistory();
+
+        // If our add asset history is of a different asset type, we have no "existing options" to populate
+        List<InfoOptionBean> existingOptions = new ArrayList<InfoOptionBean>();
+        if (addAssetHistory.getAssetType().equals(assetTypeModel.getObject())) {
+            existingOptions = addAssetHistory.getInfoOptions();
+        }
+
+        poupulateInfoOptionsFromExistingValues(existingOptions);
+    }
+
+    private void poupulateInfoOptionsFromExistingValues(Collection<InfoOptionBean> existingOptions) {
         List<InfoFieldBean> infoFields = new ArrayList<InfoFieldBean>(assetTypeModel.getObject().getAvailableInfoFields());
-        Collections.sort(infoFields, new Comparator<InfoFieldBean>(){
+        Collections.sort(infoFields, new Comparator<InfoFieldBean>() {
             @Override
             public int compare(InfoFieldBean infoFieldBean, InfoFieldBean infoFieldBean2) {
                 return infoFieldBean.getWeight().compareTo(infoFieldBean2.getWeight());
             }
         });
-
-        AddAssetHistory addAssetHistory = assetService.getAddAssetHistory();
 
         infoOptions = new ArrayList<AttributeNameValuePair>(infoFields.size());
         for (InfoFieldBean infoField : infoFields) {
@@ -108,11 +124,7 @@ public class AttributesEditPanel extends Panel {
             AttributeNameValuePair pair = new AttributeNameValuePair();
             pair.infoField = infoField;
 
-            InfoOptionBean infoOption = null;
-
-            if (addAssetHistory != null && addAssetHistory.getAssetType().equals(assetTypeModel.getObject())) {
-                infoOption = populateAttributeValueFromHistoryIfPresent(infoField, addAssetHistory);
-            }
+            InfoOptionBean infoOption = populateAttributeValueFromExistingValueIfPresent(infoField, existingOptions);
 
             if (infoOption == null) {
                 infoOption = new InfoOptionBean();
@@ -124,9 +136,8 @@ public class AttributesEditPanel extends Panel {
         }
     }
 
-    private InfoOptionBean populateAttributeValueFromHistoryIfPresent(InfoFieldBean infoField, AddAssetHistory addAssetHistory) {
-        List<InfoOptionBean> historyOptions = addAssetHistory.getInfoOptions();
-        for (InfoOptionBean historyOption : historyOptions) {
+    private InfoOptionBean populateAttributeValueFromExistingValueIfPresent(InfoFieldBean infoField, Collection<InfoOptionBean> existingInfoOptions) {
+        for (InfoOptionBean historyOption : existingInfoOptions) {
             if (historyOption.getInfoField().equals(infoField)) {
                 if (historyOption.isStaticData()) {
                     return historyOption;

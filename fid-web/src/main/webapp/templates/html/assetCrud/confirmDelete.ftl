@@ -46,7 +46,6 @@ ${action.setPageType('asset', 'edit')!}
 		
 	</div>
 	<div class="formAction">
-		<@s.url id="cancelUrl" action="assetEdit" uniqueID="${uniqueID}"/>
 		<@s.url id="deleteUrl" action="assetDelete" uniqueID="${uniqueID}"/>
 		
 		<@s.submit key="label.delete" onclick="return redirect('${deleteUrl}');" theme="fieldid" >
@@ -57,7 +56,7 @@ ${action.setPageType('asset', 'edit')!}
 		
 		<@s.text name="label.or"/>
 		
-		<a href="#" onclick="return redirect('${cancelUrl}');"><@s.text name="label.cancel"/></a>
+		<a href="#" onclick="return redirect('/fieldid/w/identify?id=${uniqueID}');"><@s.text name="label.cancel"/></a>
 	</div>
 </div>
 

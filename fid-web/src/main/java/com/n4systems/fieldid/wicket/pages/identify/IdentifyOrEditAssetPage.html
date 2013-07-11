@@ -38,7 +38,9 @@
                         <input class="short" wicket:id="identifier">
                         <a class="links" wicket:id="generateIdentifierLink"><wicket:message key="label.generate"/></a>
 
-                        <span class="multiple-option"> OR <a wicket:id="identifyMultiple">Identify Multiple Assets</a></span>
+                        <wicket:enclosure>
+                            <span class="multiple-option"> OR <a wicket:id="identifyMultiple">Identify Multiple Assets</a></span>
+                        </wicket:enclosure>
                        
 
                         <p wicket:id="duplicateIdentifierWarning">
@@ -136,11 +138,13 @@
                 </div>
             </fieldset>
 
-            <fieldset>
-                <legend>Event Schedules</legend>
-                <div wicket:id="eventSchedulesPanel" class="uploads event-schedules">
-                </div>
-            </fieldset>           
+            <wicket:enclosure>
+                <fieldset>
+                    <legend>Event Schedules</legend>
+                    <div wicket:id="eventSchedulesPanel" class="uploads event-schedules">
+                    </div>
+                </fieldset>
+            </wicket:enclosure>
         </div>
 
         <div wicket:id="actionsContainer" class="form-action">
@@ -149,6 +153,13 @@
             <input type="submit" wicket:message="value:hbutton.saveandprint" wicket:id="saveAndPrintButton">
             <wicket:message key="label.or"/>
             <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+
+            <wicket:enclosure child="mergeLink">
+                <wicket:message key="label.or"/>
+                <a wicket:id="mergeLink"><wicket:message key="label.merge"/></a>
+                <wicket:message key="label.or"/>
+                <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+            </wicket:enclosure>
 
         </div>
     </form>

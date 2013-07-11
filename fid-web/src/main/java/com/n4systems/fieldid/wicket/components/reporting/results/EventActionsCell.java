@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
+import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
@@ -79,7 +80,7 @@ public class EventActionsCell extends Panel {
 
         BookmarkablePageLink viewAssetLink = new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
 
-        NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+event.getAsset().getId());
+        BookmarkablePageLink editAssetLink = new BookmarkablePageLink<Void>("editAssetLink", IdentifyOrEditAssetPage.class, PageParametersBuilder.id(event.getAsset().getId()));
 
         resolveEventLink.setVisible(!isReadOnly && WorkflowState.OPEN.equals(event.getWorkflowState()));
         deleteScheduleLink.setVisible(!isReadOnly);
@@ -110,7 +111,7 @@ public class EventActionsCell extends Panel {
 
         NonWicketLink startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId="+event.getAsset().getId());
         BookmarkablePageLink viewAssetLink = new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
-        NonWicketLink editAssetLink = new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID="+event.getAsset().getId());
+        BookmarkablePageLink editAssetLink = new BookmarkablePageLink<Void>("editAssetLink", IdentifyOrEditAssetPage.class, PageParametersBuilder.id(event.getAsset().getId()));
 
         viewLink.setVisible(localEndUser);
         editLink.setVisible(hasEditEvent);

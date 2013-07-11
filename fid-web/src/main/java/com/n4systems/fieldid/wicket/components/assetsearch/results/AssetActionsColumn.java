@@ -15,7 +15,7 @@ public class AssetActionsColumn extends AbstractColumn<RowView> {
 
     @Override
     public void populateItem(Item<ICellPopulator<RowView>> item, String componentId, IModel<RowView> rowModel) {
-        item.add(new AssetActionsCell(componentId, rowModel, item.getMarkupId()));
+        item.add(new AssetActionsCell(componentId, rowModel));
     }
 
 }

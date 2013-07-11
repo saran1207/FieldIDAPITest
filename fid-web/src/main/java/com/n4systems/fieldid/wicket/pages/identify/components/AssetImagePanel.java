@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.identify.components;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.model.Asset;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -10,6 +11,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -21,9 +23,12 @@ public class AssetImagePanel extends Panel {
     String tempFileName;
     String clientFileName;
     private byte[] uploadedBytes;
+    private boolean imageUpdated = false;
 
-    public AssetImagePanel(String id) {
+    public AssetImagePanel(String id, IModel<Asset> assetModel) {
         super(id);
+
+        clientFileName = assetModel.getObject().getImageName();
 
         final WebMarkupContainer uploadContainer = new WebMarkupContainer("imageUploadPanel");
         final WebMarkupContainer uploadedFileDisplayPanel = new WebMarkupContainer("uploadedFileDisplayPanel");
@@ -33,6 +38,7 @@ public class AssetImagePanel extends Panel {
 
         Form fileUploadForm = new Form("fileUploadForm");
         uploadContainer.add(fileUploadForm);
+        uploadContainer.setVisible(clientFileName == null);
 
         final FileUploadField fileUploadField = new FileUploadField("assetImageFile");
         fileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
@@ -44,6 +50,7 @@ public class AssetImagePanel extends Panel {
                 uploadContainer.setVisible(false);
                 uploadedFileDisplayPanel.setVisible(true);
                 target.add(uploadContainer, uploadedFileDisplayPanel);
+                imageUpdated = true;
             }
 
             @Override
@@ -62,12 +69,23 @@ public class AssetImagePanel extends Panel {
                 uploadContainer.setVisible(true);
                 uploadedFileDisplayPanel.setVisible(false);
                 target.add(uploadContainer, uploadedFileDisplayPanel);
+                imageUpdated = true;
             }
         });
+
+        uploadedFileDisplayPanel.setVisible(clientFileName != null);
     }
 
     public byte[] getAssetImageBytes() {
         return uploadedBytes;
+    }
+
+    public String getClientFileName() {
+        return clientFileName;
+    }
+
+    public boolean isImageUpdated() {
+        return imageUpdated;
     }
 
 }

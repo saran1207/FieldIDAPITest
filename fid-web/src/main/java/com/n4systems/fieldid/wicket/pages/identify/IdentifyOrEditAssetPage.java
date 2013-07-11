@@ -25,9 +25,11 @@ import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantMode
 import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.components.ModalLocationPicker;
 import com.n4systems.fieldid.wicket.pages.identify.components.*;
 import com.n4systems.fieldid.wicket.pages.identify.components.multi.MultiIdentifyStatusDisplayPanel;
@@ -69,7 +71,7 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
-public class IdentifyAssetPage extends FieldIDFrontEndPage {
+public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
     @SpringBean private AssetIdentifierService assetIdentifierService;
     @SpringBean private AssetService assetService;
@@ -96,15 +98,18 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
     DialogModalWindow multipleWindow;
 
     List<Long> createdAssetIds;
-    Asset createdAsset;
+    Asset createdOrEditedAsset;
 
     Long lineItemId;
 
-    public IdentifyAssetPage(PageParameters params) {
+    public IdentifyOrEditAssetPage(PageParameters params) {
         Asset asset;
         if (!params.get("lineItemId").isEmpty()) {
             lineItemId = params.get("lineItemId").toLongObject();
             asset = assetService.createAssetFromOrder(lineItemId);
+        } else if (!params.get("id").isEmpty()) {
+            Long assetId = params.get("id").toLongObject();
+            asset = persistenceService.find(Asset.class, assetId);
         } else {
             asset = assetService.createAssetWithHistory();
         }
@@ -116,11 +121,11 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         add(new NonWicketLink("importPageLink", "assetImportExport.action", new AttributeModifier("class", "mattButton")));
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(schedulePicker = createSchedulePicker(ProxyModel.of(assetModel, on(Asset.class).getType())));
-        add(new IdentifyAssetForm("identifyAssetForm", assetModel));
+        add(new IdentifyOrEditAssetForm("identifyAssetForm", assetModel));
     }
 
-    class IdentifyAssetForm extends Form<Asset> {
-        public IdentifyAssetForm(String id, final IModel<Asset> assetModel) {
+    class IdentifyOrEditAssetForm extends Form<Asset> {
+        public IdentifyOrEditAssetForm(String id, final IModel<Asset> assetModel) {
             super(id, assetModel);
             setMultiPart(true);
 
@@ -146,6 +151,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
                     target.add(eventSchedulesPanel);
                 }
             });
+
             singleIdentifyContainer = new WebMarkupContainer("singleIdentifyContainer");
             singleIdentifyContainer.setOutputMarkupPlaceholderTag(true);
             multiIdentifyContainer = new MultiIdentifyStatusDisplayPanel("multiIdentifyContainer", multiAssetConfigModel, multipleWindow);
@@ -170,7 +176,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             });
             ValidationBehavior.addValidationBehaviorToComponent(identifierField);
             identifierContainer.add(identifierField.setOutputMarkupId(true));
-            addMultipleIdentificationControls(identifierContainer, assetTypeModel);
+            addMultipleIdentificationControls(identifierContainer, assetTypeModel, assetModel);
 
             final IdentifierLabel identifierLabel = new IdentifierLabel("identifierLabel", assetTypeModel);
             identifierContainer.add(identifierLabel);
@@ -185,7 +191,6 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
                 }
             }));
             singleIdentifyContainer.add(new TextField<String>("referenceNumber", ProxyModel.of(assetModel, on(Asset.class).getCustomerRefNumber())));
-
 
             WebMarkupContainer assignedToContainer = new WebMarkupContainer("assignedToContainer");
             assignedToContainer.setVisible(primaryOrgForTenant.hasExtendedFeature(ExtendedFeature.AssignedTo));
@@ -240,30 +245,36 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             visibilityContainer.add(new DropDownChoice<Boolean>("visibilitySelect", ProxyModel.of(assetModel, on(Asset.class).isPublished()), Arrays.asList(false, true), new PublishOverSafetyNetworkChoiceRenderer()));
             visibilityContainer.setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork());
 
-            add(assetImagePanel = new AssetImagePanel("assetImagePanel"));
+            add(assetImagePanel = new AssetImagePanel("assetImagePanel", assetModel));
 
-            add(assetAttachmentsPanel = new AssetAttachmentsPanel("assetAttachmentsPanel"));
+            add(assetAttachmentsPanel = new AssetAttachmentsPanel("assetAttachmentsPanel", assetModel));
 
-            eventSchedulesPanel = new EventSchedulesPanel("eventSchedulesPanel", schedulePicker, new PropertyModel<List<Event>>(IdentifyAssetPage.this, "schedulesToAdd"));
+            eventSchedulesPanel = new EventSchedulesPanel("eventSchedulesPanel", schedulePicker, new PropertyModel<List<Event>>(IdentifyOrEditAssetPage.this, "schedulesToAdd"));
+            eventSchedulesPanel.setVisible(assetModel.getObject().isNew());
             add(eventSchedulesPanel);
 
-            add(attributesEditPanel = new AttributesEditPanel("attributesPanel", assetTypeModel));
+            add(attributesEditPanel = new AttributesEditPanel("attributesPanel", assetTypeModel, assetModel));
 
             assetTypePicker.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
                     autoSchedule(assetModel);
-                    attributesEditPanel.refreshInfoOptions();
+                    attributesEditPanel.pouplateInfoOptionsFromTypeAndHistory();
                     target.add(identifierLabel, eventSchedulesPanel, attributesEditPanel);
                 }
             });
 
             add(actionsContainer = new WebMarkupContainer("actionsContainer"));
+
             actionsContainer.add(new Button("saveButton") {
                 @Override
                 public void onSubmit() {
                     performSingleOrMultiSave(assetModel);
-                    setResponsePage(IdentifyAssetPage.class);
+                    if (assetModel.getObject().isNew()) {
+                        setResponsePage(IdentifyOrEditAssetPage.class);
+                    } else {
+                        setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetModel.getObject().getId()));
+                    }
                 }
             });
 
@@ -274,7 +285,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
                     if (multiAssetConfig.isConfigurationComplete()) {
                         setResponsePage(new PerformMultiEventOnIdentifiedAssetsPage(createdAssetIds));
                     } else {
-                        throw new RedirectToUrlException("/quickEvent.action?assetId=" + createdAsset.getId());
+                        throw new RedirectToUrlException("/quickEvent.action?assetId=" + createdOrEditedAsset.getId());
                     }
                 }
             });
@@ -283,7 +294,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
                 @Override
                 public void onSubmit() {
                     // Button disappears for multi identify so we only have to process a single add here
-                    Asset asset = performSingleSave(assetModel);
+                    Asset asset = performSingleSaveOrUpdate(assetModel);
                     setResponsePage(new PrintIdentifiedCertPage(asset.getId()));
                 }
 
@@ -293,8 +304,15 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
                 }
             });
 
+            actionsContainer.add(new NonWicketLink("mergeLink", "assetMergeAdd.action?uniqueID="+assetModel.getObject().getId()).setVisible(!assetModel.getObject().isNew()));
+            actionsContainer.add(new NonWicketLink("deleteLink", "assetConfirmDelete.action?uniqueID="+assetModel.getObject().getId()).setVisible(!assetModel.getObject().isNew()));
+
             actionsContainer.setOutputMarkupId(true);
-            actionsContainer.add(new BookmarkablePageLink<Void>("cancelLink", DashboardPage.class));
+            if (assetModel.getObject().isNew()) {
+                actionsContainer.add(new BookmarkablePageLink<Void>("cancelLink", DashboardPage.class));
+            } else {
+                actionsContainer.add(new BookmarkablePageLink<Void>("cancelLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetModel.getObject().getId())));
+            }
         }
 
         private void performSingleOrMultiSave(IModel<Asset> assetModel) {
@@ -302,8 +320,12 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
                 createdAssetIds = processMultiSave(assetModel);
                 getSession().info(new FIDLabelModel("message.multiple_assets_created", createdAssetIds.size()).getObject());
             } else {
-                createdAsset = performSingleSave(assetModel);
-                getSession().info(new AssetCreatedFeedbackMessage(createdAsset.getId(), createdAsset.getIdentifier()));
+                createdOrEditedAsset = performSingleSaveOrUpdate(assetModel);
+                if (assetModel.getObject().isNew()) {
+                    getSession().info(new AssetCreatedFeedbackMessage(createdOrEditedAsset.getId(), createdOrEditedAsset.getIdentifier()));
+                } else {
+                    getSession().info(getString("message.asset_updated_successfully"));
+                }
             }
         }
 
@@ -313,13 +335,13 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             rfidContainer.add(new AttributeAppender("class", Model.of("duplicate-field"), " ") {
                 @Override
                 public boolean isEnabled(Component component) {
-                    return assetService.rfidExists(newAssetModel.getObject().getRfidNumber());
+                    return assetService.rfidExists(newAssetModel.getObject().getRfidNumber(), newAssetModel.getObject().getId());
                 }
             });
             rfidContainer.add(new WebMarkupContainer("duplicateRfidWarning") {
                 @Override
                 public boolean isVisible() {
-                    return assetService.rfidExists(newAssetModel.getObject().getRfidNumber());
+                    return assetService.rfidExists(newAssetModel.getObject().getRfidNumber(), newAssetModel.getObject().getId());
                 }
             });
             return rfidContainer;
@@ -330,13 +352,13 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             identifierContainer.add(new AttributeAppender("class", Model.of("duplicate-field"), " ") {
                 @Override
                 public boolean isEnabled(Component component) {
-                    return assetService.identifierExists(newAssetModel.getObject().getIdentifier());
+                    return assetService.identifierExists(newAssetModel.getObject().getIdentifier(), newAssetModel.getObject().getId());
                 }
             });
             identifierContainer.add(new WebMarkupContainer("duplicateIdentifierWarning") {
                 @Override
                 public boolean isVisible() {
-                    return assetService.identifierExists(newAssetModel.getObject().getIdentifier());
+                    return assetService.identifierExists(newAssetModel.getObject().getIdentifier(), newAssetModel.getObject().getId());
                 }
             });
             return identifierContainer;
@@ -352,10 +374,13 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         });
     }
 
-    private void addMultipleIdentificationControls(WebMarkupContainer component, IModel<AssetType> assetTypeModel) {
+    private void addMultipleIdentificationControls(WebMarkupContainer component, IModel<AssetType> assetTypeModel, final IModel<Asset> assetModel) {
         multipleWindow.setContent(new MultipleAssetConfigurationPanel(multipleWindow.getContentId(), assetTypeModel,
                 new PropertyModel<MultipleAssetConfiguration>(this, "multiAssetConfig")));
         component.add(new AjaxLink("identifyMultiple") {
+            {
+                setVisible(assetModel.getObject().isNew());
+            }
             @Override
             public void onClick(AjaxRequestTarget target) {
                 multipleWindow.show(target);
@@ -380,26 +405,33 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         }
     }
 
-    private Asset performSingleSave(IModel<Asset> newAssetModel) {
+    private Asset performSingleSaveOrUpdate(IModel<Asset> newAssetModel) {
         Asset asset = newAssetModel.getObject();
-        asset.setTenant(getTenant());
+
         List<InfoOptionBean> enteredInfoOptions = attributesEditPanel.getEnteredInfoOptions();
         List<AssetAttachment> attachments = assetAttachmentsPanel.getAttachments();
         byte[] assetImageBytes = assetImagePanel.getAssetImageBytes();
+        String assetImageFileName = assetImagePanel.getClientFileName();
+        boolean imageUpdated = assetImagePanel.isImageUpdated();
 
+        asset.setTenant(getTenant());
         asset.getInfoOptions().clear();
         asset.getInfoOptions().addAll(enteredInfoOptions);
 
-        Asset createdAsset = assetSaveService.createWithHistory(asset, attachments, assetImageBytes);
+        if (asset.isNew()) {
+            createdOrEditedAsset = assetSaveService.createWithHistory(asset, attachments, assetImageBytes, assetImageFileName);
 
-        for (Event event : schedulesToAdd) {
-            event.setAsset(createdAsset);
-            event.setTenant(getTenant());
-            event.setOwner(asset.getOwner());
-            persistenceService.save(event);
+            for (Event event : schedulesToAdd) {
+                event.setAsset(createdOrEditedAsset);
+                event.setTenant(getTenant());
+                event.setOwner(asset.getOwner());
+                persistenceService.save(event);
+            }
+        } else {
+            createdOrEditedAsset = assetSaveService.update(asset, attachments, assetImageBytes, assetImageFileName, imageUpdated);
         }
 
-        return createdAsset;
+        return createdOrEditedAsset;
     }
 
     private List<Long> processMultiSave(IModel<Asset> newAssetModel) {
@@ -409,6 +441,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
         List<InfoOptionBean> enteredInfoOptions = attributesEditPanel.getEnteredInfoOptions();
         List<AssetAttachment> attachments = assetAttachmentsPanel.getAttachments();
         byte[] assetImageBytes = assetImagePanel.getAssetImageBytes();
+        String clientFileName = assetImagePanel.getClientFileName();
         List<Long> createdAssetIds = new ArrayList<Long>();
 
         for (MultipleAssetConfiguration.AssetConfiguration assetConfig : assetConfigs) {
@@ -419,7 +452,7 @@ public class IdentifyAssetPage extends FieldIDFrontEndPage {
             assetToCreate.setIdentifier(assetConfig.getIdentifier());
             assetToCreate.setRfidNumber(assetConfig.getRfidNumber());
             assetToCreate.setCustomerRefNumber(assetConfig.getCustomerRefNumber());
-            Asset newAsset = assetSaveService.create(assetToCreate, attachments, assetImageBytes);
+            Asset newAsset = assetSaveService.create(assetToCreate, attachments, assetImageBytes, clientFileName);
             createdAssetIds.add(newAsset.getId());
         }
 

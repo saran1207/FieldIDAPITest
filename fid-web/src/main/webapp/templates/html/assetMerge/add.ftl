@@ -185,9 +185,8 @@ ${action.setPageType('asset', 'edit')!}
 		</script>
 	</div>
 	
-	<@s.url id="cancelUrl" action="assetEdit" uniqueID="${uniqueID}"/>
 	<div id="cancelButton" class="stepAction" >
-		<@s.submit key="label.cancel_merge" id="cancel" onclick="return redirect('${cancelUrl}');"/>
+		<@s.submit key="label.cancel_merge" id="cancel" onclick="return redirect('/fieldid/w/identify?id=${uniqueID}');"/>
 	</div>
 </div>
 

@@ -205,8 +205,8 @@ public class AssetService extends FieldIdPersistenceService {
         return rfidExists(rfidNumber, null);
     }
 
-    public boolean rfidExists(String rfidNumber, Long uniqueID) {
-        return duplicateFieldExists("rfidNumber", rfidNumber, uniqueID);
+    public boolean rfidExists(String rfidNumber, Long excludingId) {
+        return duplicateFieldExists("rfidNumber", rfidNumber, excludingId);
 
     }
 
@@ -214,11 +214,11 @@ public class AssetService extends FieldIdPersistenceService {
         return duplicateFieldExists("identifier", identifier, null);
     }
 
-    public boolean identifierExists(String identifier, Long uniqueID) {
-        return duplicateFieldExists("identifier", identifier, uniqueID);
+    public boolean identifierExists(String identifier, Long excludingId) {
+        return duplicateFieldExists("identifier", identifier, excludingId);
     }
 
-    private boolean duplicateFieldExists(String field, String value, Long uniqueID) {
+    private boolean duplicateFieldExists(String field, String value, Long excludingId) {
         // null or zero-length rfidNumbers are never duplicates
         if (value == null || value.trim().length() == 0) {
             return false;
@@ -227,8 +227,8 @@ public class AssetService extends FieldIdPersistenceService {
         QueryBuilder<Asset> rfidQuery = createTenantSecurityBuilder(Asset.class);
         rfidQuery.addSimpleWhere(field, value.toUpperCase());
 
-        if (uniqueID != null) {
-            rfidQuery.addSimpleWhere("id", uniqueID);
+        if (excludingId != null) {
+            rfidQuery.addWhere(WhereClauseFactory.create(Comparator.NE, "id", excludingId));
         }
 
         try {

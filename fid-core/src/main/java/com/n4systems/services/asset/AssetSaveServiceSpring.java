@@ -1,22 +1,21 @@
 package com.n4systems.services.asset;
 
-import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.fieldid.LegacyMethod;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.model.asset.AssetAttachmentListLoader;
 import com.n4systems.model.asset.AssetAttachmentSaver;
 import com.n4systems.model.asset.AssetImageFileSaver;
+import com.n4systems.reporting.PathHandler;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.AddAssetHistory;
 import rfid.ejb.entity.InfoOptionBean;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +39,8 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 	@Autowired
 	private AssetService assetService;
 
-    public Asset createWithHistory(Asset asset, List<AssetAttachment> uploadedAttachments, byte[] imageData) {
-        Asset createdAsset = create(asset, uploadedAttachments, imageData);
+    public Asset createWithHistory(Asset asset, List<AssetAttachment> uploadedAttachments, byte[] imageData, String assetImageName) {
+        Asset createdAsset = create(asset, uploadedAttachments, imageData, assetImageName);
 
         AddAssetHistory addAssetHistory = assetService.getAddAssetHistory();
 
@@ -64,7 +63,7 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
         return createdAsset;
     }
 
-	public Asset create(Asset asset, List<AssetAttachment> uploadedAttachments, byte[] imageData) {
+	public Asset create(Asset asset, List<AssetAttachment> uploadedAttachments, byte[] imageData, String imageFileName) {
 		try {
             if (asset.getType().isArchived()) {
                 asset.archiveEntity();
@@ -72,26 +71,56 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
             
 			asset = assetService.create(asset, getCurrentUser());
 			saveUploadedAttachments(asset, uploadedAttachments);
-			saveAssetImage(asset, imageData);
+			saveAssetImage(asset, imageData, imageFileName, true);
 			return asset;
 		} catch (SubAssetUniquenessException e) {
 			throw new ProcessFailureException("could not save asset", e);
 		}
 	}
 
-	public Asset update(Asset asset, List<AssetAttachment> existingAttachments, List<AssetAttachment> uploadedAttachments, byte[] imageData) {
+	public Asset update(Asset asset, List<AssetAttachment> assetAttachments, byte[] imageData, String imageFileName, boolean updateImage) {
 		try {
 			asset = assetService.update(asset, getCurrentUser());
-			updateExistingAttachments(asset, existingAttachments);
-			saveUploadedAttachments(asset, uploadedAttachments);
-			saveAssetImage(asset, imageData);
+            if (assetAttachments != null) {
+                // When attachments are null, we mean do not update attachments here. The mobile takes care of attachments
+                // separately by calling ApiAttachmentResource
+                reconcileAttachments(asset, assetAttachments);
+            }
+			saveAssetImage(asset, imageData, imageFileName, updateImage);
 			return asset;
 		} catch (SubAssetUniquenessException e) {
 			throw new ProcessFailureException("could not save asset", e);
 		}
 	}
 
-	private void saveUploadedAttachments(Asset asset, List<AssetAttachment> uploadedAttachments) {
+    private void reconcileAttachments(Asset asset, List<AssetAttachment> assetAttachments) {
+        List<AssetAttachment> existingAttachments = assetService.findAssetAttachments(asset);
+        for (AssetAttachment existingAttachment : existingAttachments) {
+            if (!assetAttachments.contains(existingAttachment)) {
+                File attachedFile = PathHandler.getAssetAttachmentFile(existingAttachment);
+
+                if (attachedFile.exists()) {
+                    boolean successfulDelete = attachedFile.delete();
+                    if (!successfulDelete) {
+                        logger.error("Couldn't delete asset attachment: " + attachedFile.getAbsolutePath());
+                    }
+                }
+
+                persistenceService.delete(existingAttachment);
+            }
+        }
+
+        List<AssetAttachment> newAttachments = new ArrayList<AssetAttachment>();
+        for (AssetAttachment assetAttachment : assetAttachments) {
+            if (assetAttachment.isNew()) {
+                newAttachments.add(assetAttachment);
+            }
+        }
+
+        saveUploadedAttachments(asset, newAttachments);
+    }
+
+    private void saveUploadedAttachments(Asset asset, List<AssetAttachment> uploadedAttachments) {
 		if (uploadedAttachments != null) {
 			AssetAttachmentSaver saver = new AssetAttachmentSaver(getCurrentUser(), asset);
 			for (AssetAttachment attachment : uploadedAttachments) {
@@ -100,57 +129,20 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
 		}
 	}
 
-	public void updateExistingAttachments(Asset asset, List<AssetAttachment> existingAttachments) {
-		if (existingAttachments != null) {
-			reattachAttachments(asset, existingAttachments);
-			updateAttachments(asset, existingAttachments);
-			removeAttachments(asset, existingAttachments);
-		}
-	}
-
-	private void reattachAttachments(Asset asset, List<AssetAttachment> existingAttachments) {
-		List<AssetAttachment> loadedAttachments = new AssetAttachmentListLoader(securityContext.getUserSecurityFilter()).setAsset(asset).load(getEntityManager());
-		for (AssetAttachment loadedAttachment : loadedAttachments) {
-			if (existingAttachments.contains(loadedAttachment)) {
-				AssetAttachment existingAttachment = existingAttachments.get(existingAttachments.indexOf(loadedAttachment));
-				existingAttachment.setCreated(loadedAttachment.getCreated());
-			}
-		}
-	}
-	
-	@LegacyMethod
-	private void updateAttachments(Asset asset, List<AssetAttachment> existingAttachments) {
-		AssetAttachmentSaver saver = new AssetAttachmentSaver(getCurrentUser(), asset);
-		for (AssetAttachment attachment : existingAttachments) {
-			saver.update(getEntityManager(), attachment);
-		}
-	}
-	
-	private void removeAttachments(Asset asset, List<AssetAttachment> existingAttachments) {
-		List<AssetAttachment> loadedAttachments = new AssetAttachmentListLoader(securityContext.getUserSecurityFilter()).setAsset(asset).load();
-		AssetAttachmentSaver deleter = new AssetAttachmentSaver(asset);
-		for (AssetAttachment loadedAttachment : loadedAttachments) {
-			if (!existingAttachments.contains(loadedAttachment)) {
-				try {
-					deleter.remove(loadedAttachment);
-				} catch (EntityStillReferencedException e) {
-					logger.error("Could not delete attachment", e);
-				}
-			}
-		}
-	}
-	
-	private void saveAssetImage(Asset asset, byte[] imageData) {		
-		if(imageData != null) {
+	private void saveAssetImage(Asset asset, byte[] imageData, String imageFileName, boolean updateImage) {
+        if (!updateImage) {
+            return;
+        }
+		if (imageData != null) {
 			logger.info("Saved Asset Image to Amazon S3 for " + asset.getIdentifier());
-			asset.setImageName("Asset.jpg");
-			AssetImageFileSaver assetImageFileSaver =  new AssetImageFileSaver(asset, "Asset.jpg");
+			asset.setImageName(imageFileName);
+			AssetImageFileSaver assetImageFileSaver =  new AssetImageFileSaver(asset, imageFileName);
 			assetImageFileSaver.setData(imageData);
 			assetImageFileSaver.save();
 		} else if(asset.getImageName() != null) { // imageData is null but asset has imageName. So we need to remove image.
 			logger.info("Removed Asset Image from Amazon S3 for " + asset.getIdentifier());
 			asset.setImageName(null);
-			AssetImageFileSaver assetImageFileSaver =  new AssetImageFileSaver(asset, "Asset.jpg");
+			AssetImageFileSaver assetImageFileSaver =  new AssetImageFileSaver(asset, imageFileName);
 			assetImageFileSaver.remove();
 		}
 	}

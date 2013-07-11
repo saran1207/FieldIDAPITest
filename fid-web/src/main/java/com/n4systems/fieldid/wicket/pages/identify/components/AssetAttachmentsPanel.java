@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.identify.components;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,11 +37,18 @@ public class AssetAttachmentsPanel extends Panel {
     @SpringBean
     private S3Service s3Service;
 
+    @SpringBean
+    private AssetService assetService;
+
     List<AssetAttachment> attachments = new ArrayList<AssetAttachment>();
     private WebMarkupContainer existingAttachmentsContainer;
 
-    public AssetAttachmentsPanel(String id) {
+    public AssetAttachmentsPanel(String id, IModel<Asset> assetModel) {
         super(id);
+
+        if (!assetModel.getObject().isNew()) {
+            attachments.addAll(assetService.findAssetAttachments(assetModel.getObject()));
+        }
 
         existingAttachmentsContainer = new WebMarkupContainer("existingAttachmentsContainer");
         existingAttachmentsContainer.setOutputMarkupPlaceholderTag(true);
@@ -79,7 +88,6 @@ public class AssetAttachmentsPanel extends Panel {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target) {
                     FileUpload fileUpload = attachmentUpload.getFileUpload();
-
 
                     File tempDir = PathHandler.getTempDir();
                     String fileName = fileUpload.getClientFileName();

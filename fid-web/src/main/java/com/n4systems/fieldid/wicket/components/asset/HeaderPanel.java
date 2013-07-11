@@ -16,6 +16,8 @@ import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
+import com.n4systems.fieldid.wicket.pages.identify.LimitedEditAsset;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
@@ -51,7 +53,7 @@ public class HeaderPanel extends Panel {
     private Event scheduleToAdd;
     private Procedure procedureToSchedule;
 
-    public HeaderPanel(String id, IModel<Asset> assetModel, Boolean isView, Boolean useContext) {
+    public  HeaderPanel(String id, IModel<Asset> assetModel, Boolean isView, Boolean useContext) {
         super(id, assetModel);
         this.useContext = useContext;
 
@@ -59,10 +61,10 @@ public class HeaderPanel extends Panel {
 
         add(new Label("assetType", asset.getType().getName()));
         add(new Label("assetIdentifier", asset.getIdentifier()));
-        Label assetStatus;
         if(asset.getAssetStatus() != null) {
-            add(assetStatus = new Label("assetStatus", asset.getAssetStatus().getDisplayName()));
+            add(new Label("assetStatus", asset.getAssetStatus().getDisplayName()));
         } else {
+            Label assetStatus;
             add(assetStatus = new Label("assetStatus"));
             assetStatus.setVisible(false);
         }
@@ -99,9 +101,9 @@ public class HeaderPanel extends Panel {
         }
 
         if (FieldIDSession.get().getSessionUser().hasAccess("editevent") && !FieldIDSession.get().getSessionUser().isReadOnlyUser())
-            add(new NonWicketLink("editAssetLink", "assetEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
+            add(new BookmarkablePageLink<Void>("editAssetLink", IdentifyOrEditAssetPage.class, PageParametersBuilder.id(asset.getId())));
         else
-            add(new NonWicketLink("editAssetLink", "customerInformationEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
+            add(new BookmarkablePageLink<Void>("editAssetLink", LimitedEditAsset.class, PageParametersBuilder.id(asset.getId())));
 
         boolean hasAssociatedEventTypes = !asset.getType().getAssociatedEventTypes().isEmpty();
         boolean isLotoEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures);
