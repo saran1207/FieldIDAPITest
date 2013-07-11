@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.FormComponentPanelUpdatingBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
@@ -421,17 +422,22 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         if (asset.isNew()) {
             createdOrEditedAsset = assetSaveService.createWithHistory(asset, attachments, assetImageBytes, assetImageFileName);
 
-            for (Event event : schedulesToAdd) {
-                event.setAsset(createdOrEditedAsset);
-                event.setTenant(getTenant());
-                event.setOwner(asset.getOwner());
-                persistenceService.save(event);
-            }
+            saveSchedulesForAsset(createdOrEditedAsset);
         } else {
             createdOrEditedAsset = assetSaveService.update(asset, attachments, assetImageBytes, assetImageFileName, imageUpdated);
         }
 
         return createdOrEditedAsset;
+    }
+
+    private void saveSchedulesForAsset(Asset asset) {
+        for (Event eventToSchedule : schedulesToAdd) {
+            Event copiedEvent = CopyEventFactory.copyEvent(eventToSchedule);
+            copiedEvent.setAsset(asset);
+            copiedEvent.setTenant(getTenant());
+            copiedEvent.setOwner(asset.getOwner());
+            persistenceService.save(copiedEvent);
+        }
     }
 
     private List<Long> processMultiSave(IModel<Asset> newAssetModel) {
@@ -454,6 +460,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             assetToCreate.setCustomerRefNumber(assetConfig.getCustomerRefNumber());
             Asset newAsset = assetSaveService.create(assetToCreate, attachments, assetImageBytes, clientFileName);
             createdAssetIds.add(newAsset.getId());
+            saveSchedulesForAsset(newAsset);
         }
 
         return createdAssetIds;
