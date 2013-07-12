@@ -8,7 +8,6 @@ import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.schedule.ProcedurePicker;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
@@ -16,6 +15,7 @@ import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.identify.LimitedEditAsset;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
@@ -109,8 +109,8 @@ public class HeaderPanel extends Panel {
         boolean isLotoEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures);
         boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
 
-        NonWicketLink startEventLink;
-        add(startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + asset.getId(), new AttributeModifier("class", "mattButton blueButton")));
+        BookmarkablePageLink startEventLink;
+        add(startEventLink = new BookmarkablePageLink<Void>("startEventLink", QuickEventPage.class, PageParametersBuilder.id(asset.getId())));
         startEventLink.setVisible(hasCreateEvent && hasAssociatedEventTypes);
 
         scheduleToAdd = createNewSchedule(asset);

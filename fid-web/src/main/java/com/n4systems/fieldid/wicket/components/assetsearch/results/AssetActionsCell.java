@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -31,7 +32,7 @@ public class AssetActionsCell extends Panel {
         BookmarkablePageLink viewEventsLink = new BookmarkablePageLink<Void>("viewEventsLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(rowModel.getObject().getId()));
         BookmarkablePageLink viewSchedulesLink = new BookmarkablePageLink<Void>("viewSchedulesLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(rowModel.getObject().getId()));
 
-        NonWicketLink startEventLink = new NonWicketLink("startEventLink", "quickEvent.action?assetId="+rowModel.getObject().getId());
+        BookmarkablePageLink startEventLink = new BookmarkablePageLink("startEventLink", QuickEventPage.class, PageParametersBuilder.id(rowModel.getObject().getId()));
 
         BookmarkablePageLink editAssetLink = new BookmarkablePageLink<Void>("editAssetLink", IdentifyOrEditAssetPage.class, PageParametersBuilder.id(rowModel.getObject().getId()));
         NonWicketLink mergeAssetLink = new NonWicketLink("mergeAssetLink", "assetMergeAdd.action?uniqueID="+rowModel.getObject().getId());

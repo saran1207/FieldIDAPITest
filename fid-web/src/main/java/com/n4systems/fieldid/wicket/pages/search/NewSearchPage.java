@@ -17,6 +17,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
@@ -175,7 +176,7 @@ public class NewSearchPage extends FieldIDFrontEndPage {
                     }
                 });
 
-                detailsContainer.add(new NonWicketLink("startEventLink", "quickEvent.action?assetId=" + assetId, new AttributeAppender("class", "mattButtonMiddle")).setVisible(hasCreateEvent));
+                detailsContainer.add(new BookmarkablePageLink("startEventLink", QuickEventPage.class, PageParametersBuilder.id(assetId)).setVisible(hasCreateEvent));
                 detailsContainer.add(new NonWicketLink("mergeLink", "assetMergeAdd.action?uniqueID=" + assetId, new AttributeAppender("class", "mattButtonRight")).setVisible(hasEditEvent));
 
                 detailsContainer.add(new LatentImage("assetImage") {

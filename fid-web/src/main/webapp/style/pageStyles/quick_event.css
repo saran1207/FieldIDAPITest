@@ -31,14 +31,14 @@ fieldset td{
 	padding-left: 0;
 }
 
-fieldset .passColor, fieldset .failColor{
-	margin-left: 8px;
+.daysAway {
+    margin-left: 8px;
 }
 
-.passColor p, .failColor p{
-	padding-left: 7.5px;
-	padding-right: 7.5px;
-	width: 95px;
+.daysAway p {
+    padding-left: 7.5px;
+    padding-right: 7.5px;
+    width: 95px;
 }
 
 .schedule {

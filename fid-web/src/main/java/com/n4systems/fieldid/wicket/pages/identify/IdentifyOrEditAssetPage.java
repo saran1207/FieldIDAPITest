@@ -32,6 +32,7 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.components.ModalLocationPicker;
+import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.components.*;
 import com.n4systems.fieldid.wicket.pages.identify.components.multi.MultiIdentifyStatusDisplayPanel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
@@ -59,7 +60,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.visit.IVisit;
@@ -286,7 +286,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                     if (multiAssetConfig.isConfigurationComplete()) {
                         setResponsePage(new PerformMultiEventOnIdentifiedAssetsPage(createdAssetIds));
                     } else {
-                        throw new RedirectToUrlException("/quickEvent.action?assetId=" + createdOrEditedAsset.getId());
+                        setResponsePage(QuickEventPage.class, PageParametersBuilder.id(createdOrEditedAsset.getId()));
                     }
                 }
             });

@@ -1,0 +1,46 @@
+<wicket:extend>
+
+    <fieldset class="leftColumn">
+        <legend class="schedule">
+            <span class="labeltext"><wicket:message key="label.perform_scheduled_event"/></span>
+        </legend>
+        <table wicket:id="schedules">
+            <tbody>
+                <tr>
+                    <td>
+                        <div wicket:id="daysAwayContainer" class="daysAway">
+                            <p wicket:id="daysAwayLabel"></p>
+                        </div>
+                    </td>
+                    <td>
+                        <label wicket:id="dateTimeLabel"></label>
+                    </td>
+                    <td>
+                        <a wicket:id="startScheduledEventLink">
+                            <span wicket:id="eventTypeName"></span>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="emptyScheduleList" wicket:id="noSchedulesMessageContainer">
+            <wicket:message key="label.no_schedules_on_this_asset"/>
+        </p>
+        <p class="footer">
+            <a wicket:id="manageSchedulesLink"><wicket:message key="label.manage_schedules"/></a>
+        </p>
+
+    </fieldset>
+
+    <fieldset>
+        <legend class="adhoc">
+            <span class="labeltext"><wicket:message key="label.perform_an_unscheduled_event"/></span>
+        </legend>
+        <p wicket:id="eventTypes">
+            <a wicket:id="startEventLink">
+                <span wicket:id="eventTypeName"></span>
+            </a>
+        </p>
+    </fieldset>
+
+</wicket:extend>
