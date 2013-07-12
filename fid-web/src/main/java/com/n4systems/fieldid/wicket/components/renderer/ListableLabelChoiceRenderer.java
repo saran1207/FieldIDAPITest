@@ -8,7 +8,11 @@ public class ListableLabelChoiceRenderer<T extends Listable> extends ListableCho
 
     @Override
     public Object getDisplayValue(T listable) {
-        return new FIDLabelModel(super.getDisplayValue(listable).toString()).getObject();
+        Object displayValue = super.getDisplayValue(listable);
+        if (displayValue == null) {
+            return null;
+        }
+        return new FIDLabelModel(displayValue.toString()).getObject();
     }
 
 }

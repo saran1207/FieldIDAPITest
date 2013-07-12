@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.action;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -15,11 +16,9 @@ import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
-import com.n4systems.model.PriorityCode;
+import com.n4systems.model.*;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.services.date.DateService;
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -34,7 +33,6 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.StringValidator;
 
@@ -47,6 +45,9 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
     @SpringBean
     private PersistenceService persistenceService;
+
+    @SpringBean
+    private DateService dateService;
 
     private boolean editMode = false;
     private boolean immediateSaveMode = false;
@@ -68,8 +69,8 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             final FIDFeedbackPanel feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
             add(feedbackPanel);
 
-            PropertyModel<Date> scheduledDateModel = new PropertyModel<Date>(getModel(), "dueDate");
-            DateTimePicker scheduledDatePicker = new DateTimePicker("dueDate", scheduledDateModel).withMonthsDisplayed(1).withNoAllDayCheckbox();
+            IModel<Date> scheduledDateModel = ProxyModel.of(getModel(), on(Event.class).getDueDate());
+            final DateTimePicker scheduledDatePicker = new DateTimePicker("dueDate", scheduledDateModel).withMonthsDisplayed(1).withNoAllDayCheckbox();
             scheduledDatePicker.getDateTextField().setRequired(true);
 
             add(scheduledDatePicker);
@@ -81,16 +82,25 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                     usersModel, userGroupsModel,
                     new AssigneesModel(userGroupsModel, usersModel)).setRequired(true));
 
-            add(new DropDownChoice<EventType>("type", new PropertyModel<EventType>(getModel(), "type"), new ActionTypesForTenantModel(), new ListableChoiceRenderer<EventType>()).setNullValid(true).setRequired(true));
+            add(new DropDownChoice<EventType>("type", ProxyModel.of(getModel(), on(Event.class).getType()), new ActionTypesForTenantModel(), new ListableChoiceRenderer<EventType>()).setNullValid(true).setRequired(true));
 
             addQuickDateLinks(scheduledDatePicker, scheduledDateModel);
 
-            DropDownChoice<PriorityCode> priorityChoice = new DropDownChoice<PriorityCode>("priority", new PropertyModel<PriorityCode>(getModel(), "priority"), new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>());
+            DropDownChoice<PriorityCode> priorityChoice = new DropDownChoice<PriorityCode>("priority", ProxyModel.of(getModel(), on(Event.class).getPriority()), new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>());
             priorityChoice.setRequired(true);
             priorityChoice.setNullValid(true);
+            priorityChoice.add(new UpdateComponentOnChange() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    if (getModelObject().isNew()) {
+                        autoScheduleBasedOnPriority(getModel());
+                        target.add(scheduledDatePicker);
+                    }
+                }
+            });
             add(priorityChoice);
 
-            TextArea<String> noteTextArea = new TextArea<String>("notes", new PropertyModel<String>(getModel(), "notes"));
+            TextArea<String> noteTextArea = new TextArea<String>("notes", ProxyModel.of(getModel(), on(Event.class).getNotes()));
             add(noteTextArea);
             noteTextArea.add(new StringValidator.MaximumLengthValidator(500));
 
@@ -167,43 +177,71 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             add(deleteLink);
         }
 
-        private void addQuickDateLinks(DateTimePicker scheduledDatePicker, PropertyModel<Date> scheduledDateModel) {
+        private void addQuickDateLinks(DateTimePicker scheduledDatePicker, IModel<Date> scheduledDateModel) {
             add(createQuickDateLink("todayLink", 0, scheduledDatePicker, scheduledDateModel));
             add(createQuickDateLink("tomorrowLink", 1, scheduledDatePicker, scheduledDateModel));
             add(createEndOfWeekLink("endOfWeekLink", scheduledDatePicker, scheduledDateModel));
             add(createQuickDateLink("in30DaysLink", 30, scheduledDatePicker, scheduledDateModel));
         }
 
-        private AjaxLink createQuickDateLink(String id, final int deltaDays, final DateTimePicker scheduledDatePicker, final PropertyModel<Date> scheduledDateModel) {
+        private AjaxLink createQuickDateLink(String id, final int deltaDays, final DateTimePicker scheduledDatePicker, final IModel<Date> scheduledDateModel) {
             return new AjaxLink(id) {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    Date date = new Date();
-                    date = DateUtils.addDays(date, deltaDays);
+                    Date date = getDaysFromNow(deltaDays);
                     scheduledDateModel.setObject(new PlainDate(date));
                     target.add(scheduledDatePicker);
                 }
             };
         }
 
-        private AjaxLink createEndOfWeekLink(String id,final DateTimePicker scheduledDatePicker, final PropertyModel<Date> scheduledDateModel) {
+        private AjaxLink createEndOfWeekLink(String id,final DateTimePicker scheduledDatePicker, final IModel<Date> scheduledDateModel) {
             return new AjaxLink(id) {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    Date date = new Date();
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.setTime(date);
-
-                    if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-                        calendar.add(Calendar.WEEK_OF_YEAR, 1);
-                    }
-
-                    calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
-                    scheduledDateModel.setObject(new PlainDate(calendar.getTime()));
+                    Date date = getEndOfWeek();
+                    scheduledDateModel.setObject(new PlainDate(date));
                     target.add(scheduledDatePicker);
                 }
             };
         }
+    }
+
+    private Date getDaysFromNow(int deltaDays) {
+        Date date = dateService.todayAsDate();
+        date = DateUtils.addDays(date, deltaDays);
+        return date;
+    }
+
+    private void autoScheduleBasedOnPriority(IModel<Event> model) {
+        PriorityCode priority = model.getObject().getPriority();
+        if (priority != null && priority.getAutoSchedule() != null) {
+            PriorityCodeAutoScheduleType autoSchedule = priority.getAutoSchedule();
+            if (autoSchedule == PriorityCodeAutoScheduleType.END_OF_WEEK) {
+                model.getObject().setDueDate(getEndOfWeek());
+            } else if (autoSchedule == PriorityCodeAutoScheduleType.IN_30_DAYS) {
+                model.getObject().setDueDate(getDaysFromNow(30));
+            } else if (autoSchedule == PriorityCodeAutoScheduleType.TODAY) {
+                model.getObject().setDueDate(getDaysFromNow(0));
+            } else if (autoSchedule == PriorityCodeAutoScheduleType.TOMORROW) {
+                model.getObject().setDueDate(getDaysFromNow(1));
+            } else if (autoSchedule == PriorityCodeAutoScheduleType.CUSTOM && priority.getAutoScheduleCustomDays() != null) {
+                model.getObject().setDueDate(getDaysFromNow(priority.getAutoScheduleCustomDays()));
+            }
+        }
+    }
+
+    private Date getEndOfWeek() {
+        Date date = dateService.todayAsDate();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+            calendar.add(Calendar.WEEK_OF_YEAR, 1);
+        }
+
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+        return calendar.getTime();
     }
 
     @Override

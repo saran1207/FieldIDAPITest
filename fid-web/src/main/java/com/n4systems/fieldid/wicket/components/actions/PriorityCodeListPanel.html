@@ -5,6 +5,7 @@
             <th><wicket:message key="label.priority_code" /></th>
             <th><wicket:message key="label.created" /></th>
             <th><wicket:message key="label.last_modified" /></th>
+            <th><wicket:message key="label.auto_schedule" /></th>
             <th>&nbsp;</th>
         </tr>
         <tr wicket:id="priorityCode">
@@ -18,6 +19,7 @@
             </td>
             <td><span wicket:enclosure="createdBy"><span wicket:id="createdBy"/>, </span><span wicket:id="created"/></td>
             <td><span wicket:enclosure="modifiedBy"><span wicket:id="modifiedBy"/>, </span><span wicket:id="lastModified"/></td>
+            <td><span wicket:id="autoSchedule"/></td>
             <td>
                 <a class="mattButton tipsy-tooltip" wicket:id="archive"><img src="/fieldid/images/archive.png"/></a>
                 <a class="mattButton tipsy-tooltip" wicket:id="edit"><img src="/fieldid/images/edit.png"/></a>

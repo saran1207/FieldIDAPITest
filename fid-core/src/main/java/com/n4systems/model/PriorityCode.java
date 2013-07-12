@@ -4,8 +4,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "prioritycode")
@@ -13,6 +12,13 @@ public class PriorityCode extends ArchivableEntityWithTenant implements Listable
     private static final long serialVersionUID = 1L;
 
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="auto_schedule")
+    private PriorityCodeAutoScheduleType autoSchedule;
+
+    @Column(name="auto_schedule_custom_days")
+    private Integer autoScheduleCustomDays;
 
     public String getName() {
         return name;
@@ -26,4 +32,21 @@ public class PriorityCode extends ArchivableEntityWithTenant implements Listable
     public String getDisplayName() {
         return name;
     }
+
+    public PriorityCodeAutoScheduleType getAutoSchedule() {
+        return autoSchedule;
+    }
+
+    public void setAutoSchedule(PriorityCodeAutoScheduleType autoSchedule) {
+        this.autoSchedule = autoSchedule;
+    }
+
+    public Integer getAutoScheduleCustomDays() {
+        return autoScheduleCustomDays;
+    }
+
+    public void setAutoScheduleCustomDays(Integer autoScheduleCustomDays) {
+        this.autoScheduleCustomDays = autoScheduleCustomDays;
+    }
+
 }

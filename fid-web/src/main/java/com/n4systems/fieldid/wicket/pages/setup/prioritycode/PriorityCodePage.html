@@ -10,15 +10,33 @@
             <a class="mattButtonLeft" wicket:id="viewAll"><wicket:message key="label.active"/></a>
             <a class="mattButtonRight" wicket:id="viewArchived"><wicket:message key="label.archived"/></a>
         </div>
+
         <form class="form" wicket:id="form">
+
             <div wicket:id="formContainer" class="formContainer" style="position:absolute;top:40px;left:-223px;">
                 <h2>
                     <wicket:message key="label.add_priority_code"/>
                     <a wicket:id="cancelLink" class="cancelLink"><img src="/fieldid/images/modal-close.png"/></a>
                 </h2>
+
                 <div wicket:id="feedbackPanel"/>
+
                 <label><wicket:message key="label.name"/></label>
                 <input type="text" wicket:id="name">
+
+                <div class="auto-schedule-description">
+                    <wicket:message key="message.when_priority_occurs_auto_schedule"/>
+                </div>
+
+                <select class="auto-schedule" wicket:id="autoSchedule">
+                </select>
+
+                <div wicket:id="customDaysContainer">
+                    <wicket:message key="label.in"/>
+                    <input type="text" wicket:id="autoScheduleCustomDays" class="custom-days">
+                    <wicket:message key="label.days"/>
+                </div>
+
                 <div class="formActions">
                     <a class="mattButton blueButton" wicket:id="saveButton"><wicket:message key="label.save"/></a>
                 </div>

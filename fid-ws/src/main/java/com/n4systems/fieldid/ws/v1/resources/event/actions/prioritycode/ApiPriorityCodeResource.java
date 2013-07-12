@@ -1,11 +1,10 @@
 package com.n4systems.fieldid.ws.v1.resources.event.actions.prioritycode;
 
-import javax.ws.rs.Path;
-
-import org.springframework.stereotype.Component;
-
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.PriorityCode;
+import org.springframework.stereotype.Component;
+
+import javax.ws.rs.Path;
 
 @Component
 @Path("priorityCode")
@@ -22,6 +21,10 @@ public class ApiPriorityCodeResource extends SetupDataResource<ApiPriorityCode, 
 		apiPriorityCode.setModified(priorityCode.getModified());
 		apiPriorityCode.setActive(priorityCode.isActive());
 		apiPriorityCode.setName(priorityCode.getName());
+        if (priorityCode.getAutoSchedule() != null) {
+            apiPriorityCode.setAutoScheduleType(priorityCode.getAutoSchedule().name());
+        }
+        apiPriorityCode.setAutoScheduleCustomDays(priorityCode.getAutoScheduleCustomDays());
 		return apiPriorityCode;
 	}
 

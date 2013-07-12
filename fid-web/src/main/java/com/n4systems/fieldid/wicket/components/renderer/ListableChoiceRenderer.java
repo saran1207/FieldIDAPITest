@@ -7,12 +7,12 @@ public class ListableChoiceRenderer<T extends Listable> implements IChoiceRender
 
     @Override
     public Object getDisplayValue(T listable) {
-        return listable.getDisplayName();
+        return listable != null ? listable.getDisplayName() : null;
     }
 
     @Override
     public String getIdValue(T listable, int index) {
-        return listable.getId() + "";
+        return listable != null ? listable.getId() + "" : null;
     }
 
 }

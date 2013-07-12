@@ -2,14 +2,17 @@ package com.n4systems.fieldid.wicket.pages.setup.prioritycode;
 
 import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.actions.PriorityCodeArchivedListPanel;
 import com.n4systems.fieldid.wicket.components.actions.PriorityCodeListPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.PriorityCode;
+import com.n4systems.model.PriorityCodeAutoScheduleType;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -19,13 +22,17 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.Arrays;
 
 public class PriorityCodePage extends FieldIDFrontEndPage {
 
@@ -96,23 +103,51 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
 
         FIDFeedbackPanel feedbackPanel;
         String name;
+        PriorityCodeAutoScheduleType autoScheduleType;
+        Integer autoScheduleCustomDays;
         public WebMarkupContainer formContainer;
 
         public AddPriorityCodeForm(String id, IModel<PriorityCode> model) {
             super(id, model);
             add(formContainer = new WebMarkupContainer("formContainer"));
             formContainer.add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
-            RequiredTextField nameField;
-            formContainer.add(nameField = new RequiredTextField("name", new PropertyModel(this, "name")));
+            RequiredTextField<String> nameField;
+            formContainer.add(nameField = new RequiredTextField<String>("name", new PropertyModel<String>(this, "name")));
             nameField.add(new PriorityCodeUniqueNameValidator());
 
-            formContainer.add(new AjaxSubmitLink("saveButton"){
+            final TextField<Integer> customDaysField = new TextField<Integer>("autoScheduleCustomDays", new PropertyModel<Integer>(this, "autoScheduleCustomDays"));
+            final WebMarkupContainer customDaysContainer = new WebMarkupContainer("customDaysContainer");
+            customDaysContainer.setOutputMarkupPlaceholderTag(true).setVisible(autoScheduleType == PriorityCodeAutoScheduleType.CUSTOM);
+            customDaysContainer.add(customDaysField);
+            formContainer.add(customDaysContainer);
 
+            formContainer.add(new DropDownChoice<PriorityCodeAutoScheduleType>("autoSchedule", new PropertyModel<PriorityCodeAutoScheduleType>(this, "autoScheduleType"), Arrays.asList(PriorityCodeAutoScheduleType.values()), new ListableLabelChoiceRenderer<PriorityCodeAutoScheduleType>()) {
+                {
+                    setNullValid(true);
+                    add(new UpdateComponentOnChange() {
+                        @Override
+                        protected void onUpdate(AjaxRequestTarget target) {
+                            autoScheduleCustomDays = null;
+                            customDaysContainer.setVisible(PriorityCodeAutoScheduleType.CUSTOM.equals(autoScheduleType));
+                            target.add(customDaysContainer);
+                        }
+                    });
+                }
+            });
+
+            formContainer.add(new AjaxSubmitLink("saveButton") {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    if (autoScheduleType == PriorityCodeAutoScheduleType.CUSTOM && (autoScheduleCustomDays == null || autoScheduleCustomDays < 1 || autoScheduleCustomDays > 1000)) {
+                        error(getString("message.invalid_custom_days"));
+                        target.add(feedbackPanel);
+                        return;
+                    }
                     PriorityCode newPriorityCode = getModelObject();
                     newPriorityCode.setName(name);
                     newPriorityCode.setTenant(FieldIDSession.get().getTenant());
+                    newPriorityCode.setAutoSchedule(autoScheduleType);
+                    newPriorityCode.setAutoScheduleCustomDays(autoScheduleCustomDays);
 
                     priorityCodeService.create(newPriorityCode);
                     setModelObject(new PriorityCode());
@@ -152,6 +187,7 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/newCss/priority/priority_codes.css");
 
         response.renderCSSReference("style/newCss/setup/prettyItemList.css");
 

@@ -3,9 +3,11 @@ package com.n4systems.fieldid.wicket.components.actions;
 import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodeUniqueNameValidator;
 import com.n4systems.model.PriorityCode;
+import com.n4systems.model.PriorityCodeAutoScheduleType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -16,6 +18,7 @@ import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -53,6 +56,8 @@ public class PriorityCodeListPanel extends Panel {
                 item.add(modifiedBy = new Label("modifiedBy", new PropertyModel<Object>(priorityCode, "modifiedBy.userID")));
                 modifiedBy.setVisible(priorityCode.getModifiedBy() != null);
                 item.add(new DateTimeLabel("lastModified", new PropertyModel<Date>(priorityCode, "modified")));
+
+                item.add(new Label("autoSchedule", createAutoScheduleDescriptionModel(item.getModel())));
 
                 final Form<Void> editForm = new Form("editForm");
                 final AjaxLink edit;
@@ -128,4 +133,18 @@ public class PriorityCodeListPanel extends Panel {
            }
        };
    }
+
+    private LoadableDetachableModel<String> createAutoScheduleDescriptionModel(final IModel<PriorityCode> priorityCode) {
+        return new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (PriorityCodeAutoScheduleType.CUSTOM.equals(priorityCode.getObject().getAutoSchedule())) {
+                    return new FIDLabelModel("label.x_days_later", priorityCode.getObject().getAutoScheduleCustomDays()).getObject();
+                } else {
+                    Object displayValue = new ListableLabelChoiceRenderer<PriorityCodeAutoScheduleType>().getDisplayValue(priorityCode.getObject().getAutoSchedule());
+                    return displayValue == null ? null : displayValue.toString();
+                }
+            }
+        };
+    }
 }

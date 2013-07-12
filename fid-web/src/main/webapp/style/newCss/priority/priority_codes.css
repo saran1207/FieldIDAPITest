@@ -1,0 +1,13 @@
+.formContainer input.custom-days {
+    width:50px;
+}
+
+.formContainer .auto-schedule {
+    width:290px;
+    padding:5px;
+    font-size:12px;
+}
+
+.auto-schedule-description {
+    padding-bottom:5px;
+}
