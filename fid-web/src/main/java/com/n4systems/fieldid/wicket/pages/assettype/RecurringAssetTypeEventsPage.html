@@ -1,3 +1,8 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
 <wicket:extend>
 
     <h2 wicket:id="blankSlate"/>
@@ -7,15 +12,20 @@
         <div wicket:id="feedbackPanel"></div>
 
         <div wicket:id="createContainer" class="new-event">
-            <p><wicket:message key="label.capital_schedule_a"/></p>
-            <span class="chosen"><select class="event-type" wicket:id="eventType"></select></span>
-            <span class="chosen"><select class="recurrence" wicket:id="recurrence"></select></span>
-            <p><wicket:message key="label.at"/></p>
-            <span class="chosen" wicket:id="timeContainer"><select class="time" wicket:id="time"/><select class="time" wicket:id="multipleTimes"/></span>
-            <span wicket:id="dateTime"/>
-            <p><wicket:message key="label.for"/></p>
-            <div style="display:inline" wicket:id="org"></div>
-            <a class="blue-submit" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
+            <div>
+                <p><wicket:message key="label.capital_schedule_a"/></p>
+                <span class="chosen"><select class="event-type" wicket:id="eventType"></select></span>
+                <span class="chosen"><select class="recurrence" wicket:id="recurrence"></select></span>
+                <p><wicket:message key="label.at"/></p>
+                <span class="chosen" wicket:id="timeContainer"><select class="time" wicket:id="time"/><select class="time" wicket:id="multipleTimes"/></span>
+                <span wicket:id="dateTime"/>
+                <p><wicket:message key="label.for"/></p>
+                <div style="display:inline" wicket:id="org"></div>
+                <a class="blue-submit" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
+            </div>
+            <div class="affect-all">
+                <input type="checkbox" wicket:id="ownerAndDown"><label><wicket:message key="label.affect_all"/></label>
+            </div>
         </div>
 
         <div wicket:id="tableContainer">
@@ -40,3 +50,4 @@
     </form>
 
 </wicket:extend>
+</html>

@@ -74,6 +74,7 @@ public class EventScheduleService extends FieldIdPersistenceService {
     public Long createSchedule(Event openEvent) {
         openEvent.setOwner(openEvent.getAsset().getOwner());
         Long id = persistenceService.save(openEvent);
+        //Update the asset to notify mobile of change
         openEvent.getAsset().touch();
         persistenceService.update(openEvent.getAsset());
         return id;

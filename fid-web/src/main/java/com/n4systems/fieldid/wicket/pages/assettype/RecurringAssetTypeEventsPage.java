@@ -33,10 +33,7 @@ import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.FormValidatorAdapter;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -150,6 +147,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         private DropDownChoice<RecurrenceType> recurrenceTypeDropDown;
         private final FIDFeedbackPanel feedback;
         private Object x;
+        private Boolean ownerAndDown;
 
         public RecurringEventsForm(String id) {
             super(id);
@@ -187,6 +185,8 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
             //??withAutoUpdate();
             inputContainer.add(new AutoCompleteOrgPicker("org", new PropertyModel<BaseOrg>(this, "owner")).setRequired(false));
+
+            inputContainer.add(new CheckBox("ownerAndDown", new PropertyModel<Boolean>(this, "ownerAndDown")));
 
             recurrenceTypeDropDown.setNullValid(false).setOutputMarkupId(true).add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override protected void onUpdate(AjaxRequestTarget target) {
@@ -251,6 +251,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         private RecurringAssetTypeEvent createNewEventFromForm() {
             RecurringAssetTypeEvent newEvent = new RecurringAssetTypeEvent(getAssetType(), eventType, createRecurrence());
             newEvent.setOwner(owner);
+            newEvent.setOwnerAndDown(ownerAndDown);
             newEvent.setTenant(assetTypeModel.getObject().getTenant());
             return newEvent;
         }

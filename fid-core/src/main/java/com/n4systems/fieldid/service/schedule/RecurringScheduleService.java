@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.model.*;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
@@ -70,6 +71,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
                 schedule.setTenant(asset.getTenant());
                 schedule.setRecurringEvent(event);
                 schedule.setOwner(asset.getOwner());
+                schedule.setEventResult(EventResult.VOID);
                 eventScheduleService.createSchedule(schedule);
             }
         }
@@ -92,8 +94,12 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
     List<Asset> getAssetsByAssetType(RecurringAssetTypeEvent event) {
         QueryBuilder<Asset> query = new QueryBuilder<Asset>(Asset.class, new OpenSecurityFilter());
         query.addWhere(WhereClauseFactory.create("type", event.getAssetType()));
-        if(event.getOwner() != null) {  // owner.isPrimary()...skip this...?
-            query.addWhere(WhereClauseFactory.create("owner", event.getOwner()));
+        if(event.getOwner() != null) {
+            if(event.getOwnerAndDown())
+                query.applyFilter(new OwnerAndDownFilter(event.getOwner() ));
+            else {
+                query.addWhere(WhereClauseFactory.create("owner", event.getOwner()));
+            }
         }
         return persistenceService.findAll(query);
     }

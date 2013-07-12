@@ -1,0 +1,1 @@
+ALTER TABLE recurring_asset_type_events ADD ownerAndDown TINYINT(1) NOT NULL;

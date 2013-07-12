@@ -7,7 +7,9 @@ import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.NewObjectSelect;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,36 +74,9 @@ public class AssetTypeService extends FieldIdPersistenceService {
      * @param recurringEvent
      */
     private void scheduleInitialEvents(RecurringAssetTypeEvent recurringEvent) {
-        QueryBuilder<Asset> builder = new QueryBuilder<Asset>(Asset.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
-        builder.addSimpleWhere("type", recurringEvent.getAssetType());
-        if (recurringEvent.getOwner()!=null) {
-            builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner", "owner", recurringEvent.getOwner(), null, WhereClause.ChainOp.AND));
+        for (LocalDateTime dateTime : recurringScheduleService.getBoundedScheduledTimesIterator(recurringEvent.getRecurrence())) {
+            recurringScheduleService.scheduleAnEventFor(recurringEvent, dateTime);
         }
-
-        List<Asset> assets = persistenceService.findAll(builder);
-
-        // this code is a candidate for "WEB-3129 : Refactor event creation to common service."
-        for (Asset asset:assets) {
-            for (LocalDateTime nextDate:recurringScheduleService.getBoundedScheduledTimesIterator(recurringEvent.getRecurrence())) {
-                Event event = new Event();
-                event.setDueDate(nextDate.toDate());
-                event.setWorkflowState(WorkflowState.OPEN);
-                event.setAsset(asset);
-                event.setEventResult(EventResult.VOID);
-                event.setOwner(asset.getOwner());
-                event.setTenant(asset.getTenant());
-                event.setType(recurringEvent.getEventType());
-                event.setRecurringEvent(recurringEvent);
-                persistenceService.save(event);
-                updateAssetToNotifyMobileOfChange(asset);
-                logger.debug("saving recurring scheduled event " + event.getAsset().getIdentifier() + " on " + event.getDueDate());
-            }
-        }
-    }
-
-    private void updateAssetToNotifyMobileOfChange(Asset asset) {
-        asset.touch();
-        persistenceService.update(asset);
     }
 
     private void removeScheduledEvents(RecurringAssetTypeEvent recurringEvent) {
@@ -109,9 +84,6 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
         builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
         builder.addSimpleWhere("recurringEvent", recurringEvent);
-        if (recurringEvent.getOwner()!=null) {
-            builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner", "owner", recurringEvent.getOwner(), null, WhereClause.ChainOp.AND));
-        }
 
         List<Event> events = persistenceService.findAll(builder);
         for (Event event:events) {

@@ -25,6 +25,7 @@ public class RecurringAssetTypeEvent extends ArchivableEntityWithOwner implement
     @JoinColumn(name="recurrence_id")
     private Recurrence recurrence;
 
+    private Boolean ownerAndDown;
 
     public RecurringAssetTypeEvent() {
         this(null, null, new Recurrence());
@@ -62,6 +63,14 @@ public class RecurringAssetTypeEvent extends ArchivableEntityWithOwner implement
 
     public void setRecurrence(Recurrence recurrence) {
         this.recurrence = recurrence;
+    }
+
+    public Boolean getOwnerAndDown() {
+        return ownerAndDown;
+    }
+
+    public void setOwnerAndDown(Boolean ownerAndDown) {
+        this.ownerAndDown = ownerAndDown;
     }
 
     @Override
