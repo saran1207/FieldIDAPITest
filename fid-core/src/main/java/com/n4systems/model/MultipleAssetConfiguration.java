@@ -52,7 +52,7 @@ public class MultipleAssetConfiguration implements Serializable {
 
     public static class RangeConfiguration implements Serializable {
         private String prefix;
-        private Integer start;
+        private String start;
         private String suffix;
 
         public String getPrefix() {
@@ -63,11 +63,11 @@ public class MultipleAssetConfiguration implements Serializable {
             this.prefix = prefix;
         }
 
-        public Integer getStart() {
+        public String getStart() {
             return start;
         }
 
-        public void setStart(Integer start) {
+        public void setStart(String start) {
             this.start = start;
         }
 

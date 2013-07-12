@@ -14,7 +14,7 @@ public class RangeConfigurationPanel extends Panel {
         super(id);
 
         add(new TextField<String>("prefix", ProxyModel.of(rangeConfigModel, on(MultipleAssetConfiguration.RangeConfiguration.class).getPrefix())));
-        add(new TextField<Integer>("start", ProxyModel.of(rangeConfigModel, on(MultipleAssetConfiguration.RangeConfiguration.class).getStart())));
+        add(new TextField<String>("start", ProxyModel.of(rangeConfigModel, on(MultipleAssetConfiguration.RangeConfiguration.class).getStart())));
         add(new TextField<String>("suffix", ProxyModel.of(rangeConfigModel, on(MultipleAssetConfiguration.RangeConfiguration.class).getSuffix())));
     }
 

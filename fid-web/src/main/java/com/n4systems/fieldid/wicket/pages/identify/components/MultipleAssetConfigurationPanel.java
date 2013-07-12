@@ -160,14 +160,19 @@ public class MultipleAssetConfigurationPanel extends Panel {
 
     private void populateIdentifierGrid(MultipleAssetConfiguration multipleAssetConfig) {
         if (generationMethod == GenerationMethod.RANGE) {
-            Integer start = multipleAssetConfig.getRangeConfiguration().getStart();
+            String start = multipleAssetConfig.getRangeConfiguration().getStart();
+
+            Integer istart = Integer.valueOf(start);
+
             for (MultipleAssetConfiguration.AssetConfiguration assetConfig : multipleAssetConfig.getAssetConfigs()) {
                 String prefix = multipleAssetConfig.getRangeConfiguration().getPrefix();
                 String suffix = multipleAssetConfig.getRangeConfiguration().getSuffix();
                 prefix = prefix == null ? "" : prefix;
                 suffix = suffix == null ? "" : suffix;
-                assetConfig.setIdentifier(prefix+start+suffix);
-                start+=1;
+                //assetConfig.setIdentifier(prefix+start+suffix);
+                assetConfig.setIdentifier(prefix+String.format("%0" + start.length() + "d",istart)+suffix);
+
+                istart+=1;
             }
         } else if (generationMethod == GenerationMethod.BATCH) {
             for (MultipleAssetConfiguration.AssetConfiguration assetConfig : multipleAssetConfig.getAssetConfigs()) {
