@@ -28,7 +28,6 @@ public class PriorityCodeUniqueNameValidator extends AbstractValidator<String>{
             ValidationError error = new ValidationError();
             error.addMessageKey("error.prioritycodeduplicate");
             validatable.error(error);
-
         }
     }
 }

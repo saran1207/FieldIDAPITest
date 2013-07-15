@@ -1,13 +1,28 @@
-.formContainer input.custom-days {
+.addPriorityCodeForm input.custom-days {
     width:50px;
 }
 
-.formContainer .auto-schedule {
-    width:290px;
+.addPriorityCodeForm .auto-schedule {
+    width:300px;
     padding:5px;
+    font-size:12px;
+}
+
+.addPriorityCodeForm input {
+    width:290px;
+    margin:5px 0 10px 0;
+    border: 1px solid #9c9c9c;
+    padding:4px;
+}
+
+.addPriorityCodeForm label {
     font-size:12px;
 }
 
 .auto-schedule-description {
     padding-bottom:5px;
+}
+
+.addPriorityCodeForm .formActions a.mattButton {
+    width:280px;
 }
