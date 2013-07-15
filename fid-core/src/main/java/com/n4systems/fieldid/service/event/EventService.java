@@ -8,6 +8,7 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.util.ExistingEventTransientCriteriaResultPopulator;
 import com.n4systems.fieldid.service.event.util.NewEventTransientCriteriaResultPopulator;
 import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -37,6 +38,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Query;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -197,6 +199,9 @@ public class EventService extends FieldIdPersistenceService {
 		
 		return persistenceService.findAll(builder);	
 	}
+
+
+
 
     @Transactional(readOnly = true)
 	public EventKpiRecord getEventKpi(Date fromDate, Date toDate, BaseOrg owner) {
@@ -579,6 +584,26 @@ public class EventService extends FieldIdPersistenceService {
 
         return persistenceService.find(builder);
     }
+
+
+    @Transactional(readOnly = true)
+    public Event getLastCompletedDateEvent(Asset asset) {
+
+        String query = "from "+Event.class.getName()+" event  left join event.asset " + "WHERE  event.asset = :asset AND event.state= :activeState AND event.workflowState= :completed";
+        query = "SELECT event " + query;
+        query += " ORDER BY event.completedDate DESC, event.created ASC";
+
+        Query eventQuery = persistenceService.createQuery(query);
+        eventQuery.setMaxResults(1);
+        eventQuery.setParameter("asset", asset);
+        eventQuery.setParameter("activeState", Archivable.EntityState.ACTIVE);
+        eventQuery.setParameter("completed", WorkflowState.COMPLETED);
+
+
+        return (Event)eventQuery.getSingleResult();
+    }
+
+
 
     @Transactional
     public Event findNextOpenEventOfSameType(Event event) {

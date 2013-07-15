@@ -5,6 +5,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.api.NamedEntity;
@@ -60,8 +61,11 @@ public class AssetIndexerService extends FieldIdPersistenceService {
     private @Autowired AnalyzerFactory analyzerFactory;
     private @Resource PlatformTransactionManager transactionManager;
 
+    private @Autowired
+    EventService eventService;
+
     @Scheduled(fixedDelay = 5000)
-	public void processIndexQueue() {
+        public void processIndexQueue() {
         long startTime = System.currentTimeMillis();
 		logger.info("ProcessIndexQueue: Running");
 
@@ -273,7 +277,8 @@ public class AssetIndexerService extends FieldIdPersistenceService {
         addField(doc, AssetIndexField.COMMENTS, asset.getComments());
         addField(doc, AssetIndexField.IDENTIFIED, asset.getIdentified());
         addField(doc, AssetIndexField.ORDER, asset.getOrderNumber());
-        addField(doc, AssetIndexField.LAST_EVENT_DATE, asset.getLastEventDate());
+        addField(doc, AssetIndexField.LAST_EVENT_DATE, calculateLastEventDate(asset));
+
         addField(doc, AssetIndexField.LOCATION, asset.getAdvancedLocation().getFullName());
 
         addUserField(doc, AssetIndexField.CREATED_BY.getField(), asset.getCreatedBy());
@@ -300,6 +305,11 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
         return doc;
     }
+
+    private Date calculateLastEventDate(Asset asset) {
+        Event lastEvent = eventService.getLastCompletedDateEvent(asset);
+        return lastEvent.getCompletedDate();
+     }
 
     private void addAllField(Document doc) {
         ArrayList<String> fields = Lists.newArrayList(Iterables.transform(doc.getFields(), new Function<IndexableField, String>() {
