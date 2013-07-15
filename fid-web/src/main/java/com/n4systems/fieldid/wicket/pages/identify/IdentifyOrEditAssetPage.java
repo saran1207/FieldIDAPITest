@@ -420,6 +420,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         asset.getInfoOptions().addAll(enteredInfoOptions);
 
         if (asset.isNew()) {
+            asset.setIdentifiedBy(getCurrentUser());
             createdOrEditedAsset = assetSaveService.createWithHistory(asset, attachments, assetImageBytes, assetImageFileName);
 
             saveSchedulesForAsset(createdOrEditedAsset);
