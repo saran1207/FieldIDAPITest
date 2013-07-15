@@ -75,7 +75,7 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
         openForm.add(addPriorityCodeButton = new AjaxSubmitLink("addPriorityCodeButton") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                addEditPriorityCodePanel.setPriorityCodeModel(Model.of(new PriorityCode()));
+                addOrEditPriorityCodeWindow.setContent(createAddEditPanel(Model.of(new PriorityCode())));
                 addOrEditPriorityCodeWindow.show(target);
             }
 
