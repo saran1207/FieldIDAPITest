@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.services.search.FullTextSearchService;
 import com.n4systems.services.search.SearchResult;
@@ -26,7 +27,7 @@ import java.util.List;
 public class SecretTestPage extends FieldIDAuthenticatedPage {
 
 	private @SpringBean PersistenceService persistenceService;
-	private @SpringBean FullTextSearchService fullTextSearchService;
+	private @SpringBean AssetFullTextSearchService fullTextSearchService;
 	private @SpringBean AssetIndexerService assetIndexerService;
 
 	private WebMarkupContainer selectedDeviceList;

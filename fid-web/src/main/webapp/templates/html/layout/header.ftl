@@ -94,7 +94,7 @@
                     <#if securityGuard.isGlobalSearchEnabled()>
                         <ul class="sub_menu">
                             <li>
-                                <a href="<@s.url value='/w/newSearch'/>" ><@s.text name="nav.new_search" /></a>
+                                <a href="<@s.url value='/w/advancedAssetSearch'/>" ><@s.text name="nav.new_search" /></a>
                             </li>
                         </ul>
                     </#if>

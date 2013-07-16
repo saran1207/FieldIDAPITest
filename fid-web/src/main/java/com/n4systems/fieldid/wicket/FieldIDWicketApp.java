@@ -32,7 +32,8 @@ import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
-import com.n4systems.fieldid.wicket.pages.search.NewSearchPage;
+import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
+import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.RecurringAssetTypeEventsPage;
@@ -102,7 +103,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("wicket/reporting", ReportPage.class);
         mountPage("wicket/procedure", ProcedureSearchPage.class);
 
-        mountPage("newSearch", NewSearchPage.class);
+        mountPage("advancedAssetSearch", AdvancedAssetSearchPage.class);
+        mountPage("advancedEventSearch", AdvancedEventSearchPage.class);
 
         mountPage("procedureDef", ProcedureDefinitionPage.class);
 
@@ -125,7 +127,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("savedReport", RunReportPage.class);
         mountPage("savedSearch", RunSearchPage.class);
         mountPage("massSchedule", MassSchedulePage.class);
-        mountPage("newSearch", NewSearchPage.class);
 
         mountPage("savedItems", SavedItemsDropdownPage.class);
         mountPage("manageSavedItems", ManageSavedItemsPage.class);

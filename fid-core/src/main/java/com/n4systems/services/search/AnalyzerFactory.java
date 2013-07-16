@@ -1,6 +1,7 @@
 package com.n4systems.services.search;
 
 import com.google.common.collect.Maps;
+import com.n4systems.services.search.field.IndexField;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.KeywordAnalyzer;
 import org.apache.lucene.analysis.core.LowerCaseFilter;
@@ -49,13 +50,13 @@ public class AnalyzerFactory {
         }
     }
 
-    public Analyzer createAnalyzer(HasAnalyzerType[] fields) {
+    public Analyzer createAnalyzer(IndexField[] fields) {
         Map<Type,Analyzer> analyzerTypes = Maps.newHashMap();
         for (Type type:Type.values()) {
             analyzerTypes.put(type, create(type));
         }
         Map<String, Analyzer> fieldAnalyzers = Maps.newHashMap();
-        for (HasAnalyzerType field:fields) {
+        for (IndexField field:fields) {
             Type type = field.getAnalyzerType();
             fieldAnalyzers.put(field.getField(),analyzerTypes.get(type));
         }

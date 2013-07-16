@@ -38,6 +38,7 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.*;
 
@@ -585,25 +586,25 @@ public class EventService extends FieldIdPersistenceService {
         return persistenceService.find(builder);
     }
 
-
-    @Transactional(readOnly = true)
-    public Event getLastCompletedDateEvent(Asset asset) {
-
+    public Event getLastCompletedDateEvent(EntityManager em, Asset asset) {
         String query = "from "+Event.class.getName()+" event  left join event.asset " + "WHERE  event.asset = :asset AND event.state= :activeState AND event.workflowState= :completed";
         query = "SELECT event " + query;
         query += " ORDER BY event.completedDate DESC, event.created ASC";
 
-        Query eventQuery = persistenceService.createQuery(query);
+
+        Query eventQuery = em.createQuery(query);
         eventQuery.setMaxResults(1);
         eventQuery.setParameter("asset", asset);
         eventQuery.setParameter("activeState", Archivable.EntityState.ACTIVE);
         eventQuery.setParameter("completed", WorkflowState.COMPLETED);
 
-
-        return (Event)eventQuery.getSingleResult();
+        List resultList = eventQuery.getResultList();
+        if (resultList.size() > 0) {
+            return (Event) resultList.get(0);
+        } else {
+            return null;
+        }
     }
-
-
 
     @Transactional
     public Event findNextOpenEventOfSameType(Event event) {

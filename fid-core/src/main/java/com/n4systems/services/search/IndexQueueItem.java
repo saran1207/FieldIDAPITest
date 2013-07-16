@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Table(name = "index_queue_items")
 public class IndexQueueItem implements Serializable, UnsecuredEntity {
 
-	public enum IndexQueueItemType { ASSET_INSERT, ASSET_UPDATE, USER, ORG, ORDER, PREDEFINEDLOCATION, ASSETTYPE, ASSETTYPEGROUP, ASSETSTATUS, TENANT };
+	public enum IndexQueueItemType { ASSET_INSERT, ASSET_UPDATE, USER, ORG, ORDER, PREDEFINEDLOCATION, ASSETTYPE, ASSETTYPEGROUP, ASSETSTATUS, TENANT, EVENT_INSERT, EVENT_UPDATE };
 
 	@EmbeddedId
 	private IndexQueueItemPK item = new IndexQueueItemPK();

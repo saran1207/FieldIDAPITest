@@ -1,10 +1,11 @@
-package com.n4systems.services.search;
+package com.n4systems.services.search.field;
 
 import com.google.common.base.Preconditions;
+import com.n4systems.services.search.AnalyzerFactory;
 
 import java.util.EnumSet;
 
-public enum AssetIndexField implements HasAnalyzerType {
+public enum AssetIndexField implements IndexField {
 
     ID("_id", AnalyzerFactory.Type.KEYWORD),
     SECONDARY_ID("_secondaryorgid", AnalyzerFactory.Type.KEYWORD),
@@ -63,10 +64,6 @@ public enum AssetIndexField implements HasAnalyzerType {
         this(field,AnalyzerFactory.Type.STANDARD,boost);
     }
 
-    AssetIndexField(String field) {
-        this(field,DEFAULT_BOOST);
-    }
-
     public String getField() {
         return field;
     }
@@ -103,6 +100,7 @@ public enum AssetIndexField implements HasAnalyzerType {
         return displayedFixedAttributes.contains(this);
     }
 
+    @Override
     public int getBoost() {
         return boost;
     }

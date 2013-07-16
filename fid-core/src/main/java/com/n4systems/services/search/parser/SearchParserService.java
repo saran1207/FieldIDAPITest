@@ -8,7 +8,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.model.utils.DateRange;
-import com.n4systems.services.search.AssetIndexField;
+import com.n4systems.services.search.field.AssetIndexField;
 import com.n4systems.util.collections.PrioritizedList;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;

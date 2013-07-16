@@ -59,14 +59,13 @@ import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.services.date.DateService;
 import com.n4systems.services.reporting.DashboardReportingService;
-import com.n4systems.services.search.AnalyzerFactory;
-import com.n4systems.services.search.AssetIndexerService;
-import com.n4systems.services.search.FullTextSearchService;
-import com.n4systems.services.search.StopWordSet;
+import com.n4systems.services.search.*;
 import com.n4systems.services.search.parser.DateParser;
 import com.n4systems.services.search.parser.SearchParserService;
 import com.n4systems.services.search.parser.SimpleParser;
 import com.n4systems.services.search.parser.ValueFactory;
+import com.n4systems.services.search.writer.AssetIndexWriter;
+import com.n4systems.services.search.writer.EventIndexWriter;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
@@ -516,9 +515,14 @@ public class FieldIdCoreConfig {
     }
 
 	@Bean
-	public FullTextSearchService fullTextSearchService() {
-		return new FullTextSearchService();
+	public AssetFullTextSearchService fullTextSearchService() {
+		return new AssetFullTextSearchService();
 	}
+
+    @Bean
+    public EventFullTextSearchService eventFullTextSearchService() {
+        return new EventFullTextSearchService();
+    }
 
 	@Bean
 	@Scope("singleton")
@@ -588,5 +592,16 @@ public class FieldIdCoreConfig {
     public EhCacheManagerFactoryBean ehCache() {
         return new EhCacheManagerFactoryBean();
     }
+
+    @Bean
+    public AssetIndexWriter assetIndexWriter() {
+        return new AssetIndexWriter();
+    }
+
+    @Bean
+    public EventIndexWriter eventIndexWriter() {
+        return new EventIndexWriter();
+    }
+
 
 }

@@ -16,7 +16,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
-import com.n4systems.fieldid.wicket.pages.search.NewSearchPage;
+import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
@@ -123,7 +123,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
 
 
-        add(new BookmarkablePageLink<Void>("newAssetSearchLink", NewSearchPage.class) {
+        add(new BookmarkablePageLink<Void>("newAssetSearchLink", AdvancedAssetSearchPage.class) {
             @Override
             public boolean isVisible() {
                 return getSecurityGuard().isGlobalSearchEnabled();

@@ -2,8 +2,10 @@ package com.n4systems.services.search;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.SecurityContext;
+import com.n4systems.services.search.field.IndexField;
 import com.n4systems.services.search.parser.SearchParserService;
 import com.n4systems.services.search.parser.SearchQuery;
 import org.apache.log4j.Logger;
@@ -19,7 +21,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 
 import java.io.Closeable;
 import java.io.File;
@@ -27,17 +28,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class FullTextSearchService extends FieldIdPersistenceService {
+public abstract class FullTextSearchService extends FieldIdPersistenceService {
     private static Logger logger = Logger.getLogger(FullTextSearchService.class);
 
-    private @Autowired
-    SearchParserService searchParserService;
+    private @Autowired SearchParserService searchParserService;
     private @Autowired SecurityContext securityContext;
-    private @Autowired AssetIndexerService assetIndexerService;
     private @Autowired AnalyzerFactory analyzerFactory;
 
-
-    @Cacheable("searchCount")
     public SearchResults count(final String queryString) {
         return lucene(new SearchResultsLuceneWorker(queryString) {
             @Override
@@ -54,7 +51,6 @@ public class FullTextSearchService extends FieldIdPersistenceService {
         });
     }
 
-    @Cacheable("search")
     public SearchResults search(final String queryString, final Formatter formatter, final int start, final int count) {
         return lucene(new SearchResultsLuceneWorker(queryString, formatter) {
             @Override
@@ -97,12 +93,12 @@ public class FullTextSearchService extends FieldIdPersistenceService {
     }
 
     private <T> T lucene(LuceneWorker<T> worker) {
-        final Analyzer analyzer = analyzerFactory.createAnalyzer(AssetIndexField.values());
+        final Analyzer analyzer = analyzerFactory.createAnalyzer(getIndexFields());
         Directory dir = null;
         IndexReader reader = null;
 
         try {
-            dir = FSDirectory.open(new File(assetIndexerService.getIndexPath(getCurrentTenant())));
+            dir = FSDirectory.open(new File(getIndexPath(getCurrentTenant())));
             reader = DirectoryReader.open(dir);
             IndexSearcher indexSearcher = new IndexSearcher(reader);
             return worker.runQuery(analyzer, indexSearcher);
@@ -114,6 +110,9 @@ public class FullTextSearchService extends FieldIdPersistenceService {
 
         return worker.defaultReturnValue();
     }
+
+    protected abstract IndexField[] getIndexFields();
+    protected abstract String getIndexPath(Tenant tenant);
 
     private SearchResults createSearchResults(final Query query, final Analyzer analyzer, final SearchQuery searchQuery, final Formatter formatter) {
         return new SearchResults(searchQuery) {
@@ -150,21 +149,19 @@ public class FullTextSearchService extends FieldIdPersistenceService {
         if (owner.isPrimary()) {
             return null;    // can see everything...no filtering required.
         } else if (owner.isSecondary()) {
-            Long id = owner.getId();  // secondary can see primary, and this secondary
-            securityQuery.add(new BooleanClause(NumericRangeQuery.newLongRange("_secondaryOrgId", id, id, true, true), BooleanClause.Occur.SHOULD));
-            // TODO DD : might be better to just assume secondary org will be -1 if doesn't exist.  will have to change indexer to do this.
-            securityQuery.add(NumericRangeQuery.newLongRange(AssetIndexField.SECONDARY_ID.getField(), 0L, null, true, true), BooleanClause.Occur.MUST_NOT);  // tricky way of saying "should be null"
+            addSecondaryOrgSecurity(owner, securityQuery);
         } else if (owner.isCustomer() || owner.isDivision()) {
-            addOrgFilter(securityQuery, owner.getSecondaryOrg(), AssetIndexField.SECONDARY_ID.getField());
-            addOrgFilter(securityQuery, owner.getCustomerOrg(), AssetIndexField.CUSTOMER_ID.getField());
-            addOrgFilter(securityQuery, owner.getDivisionOrg(), AssetIndexField.DIVISION_ID.getField());
+            addCustomerOrDivisionOrgSecurity(owner, securityQuery);
         } else {
             throw new IllegalStateException("don't know how to handle security for this owner " + owner.getDisplayName());
         }
         return new QueryWrapperFilter(securityQuery);
     }
 
-    private void addOrgFilter(BooleanQuery query, BaseOrg org, String field) {
+    protected abstract void addSecondaryOrgSecurity(BaseOrg owner, BooleanQuery securityQuery);
+    protected abstract void addCustomerOrDivisionOrgSecurity(BaseOrg owner, BooleanQuery securityQuery);
+
+    protected void addOrgFilter(BooleanQuery query, BaseOrg org, String field) {
         if (org!=null) {
             query.add(NumericRangeQuery.newLongRange(field, org.getId(), org.getId(), true, true), BooleanClause.Occur.MUST);
         }
