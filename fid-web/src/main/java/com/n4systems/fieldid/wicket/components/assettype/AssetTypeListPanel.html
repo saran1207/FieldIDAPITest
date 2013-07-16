@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:panel>
+
+    <table class="list">
+        <tbody>
+        <tr>
+            <th><wicket:message key="label.name"/></th>
+            <th><wicket:message key="label.asset_type_group"/></th>
+            <th><wicket:message key="label.created"/></th>
+            <th><wicket:message key="label.last_modified"/></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr wicket:id="list">
+            <td><a wicket:id="nameLink"><span wicket:id="name"/></a></td>
+            <td><a wicket:id="groupLink"><span wicket:id="group"/></a></td>
+            <td><span wicket:enclosure="createdBy"><label wicket:id="createdBy"/>, </span><label wicket:id="createdDate"/></td>
+            <td><span wicket:enclosure="modifiedBy"><label wicket:id="modifiedBy"/>, </span><label wicket:id="modifiedDate"/></td>
+            <td class="action-buttons">
+                <a class="mattButton"><wicket:message key="label.edit"/></a>
+                |
+                <a class="mattButton"><wicket:message key="label.copy"/></a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</wicket:panel>
+</html>

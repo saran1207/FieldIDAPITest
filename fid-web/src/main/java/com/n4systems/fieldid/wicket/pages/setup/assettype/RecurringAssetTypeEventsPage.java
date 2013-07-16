@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.assettype;
+package com.n4systems.fieldid.wicket.pages.setup.assettype;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;

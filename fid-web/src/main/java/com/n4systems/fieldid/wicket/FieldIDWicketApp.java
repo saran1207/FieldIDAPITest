@@ -10,7 +10,6 @@ import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
-import com.n4systems.fieldid.wicket.pages.assettype.RecurringAssetTypeEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.*;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
@@ -35,6 +34,8 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedule
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.search.NewSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
+import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
+import com.n4systems.fieldid.wicket.pages.setup.assettype.RecurringAssetTypeEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedListPage;
@@ -92,6 +93,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/reassignEventTypeGroups", ReassignEventTypeGroupPage.class);
         mountPage("setup/userGroups", UserGroupsPage.class);
         mountPage("setup/archiveUserGroup", ArchiveUserGroupPage.class);
+        mountPage("setup/assetTypes", AssetTypeListPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 

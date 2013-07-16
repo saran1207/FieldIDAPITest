@@ -10,6 +10,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,25 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     private @Autowired AsyncService asyncService;
     private @Autowired RecurringScheduleService recurringScheduleService;
+
+    public List<AssetType> getAssetTypes(Long assetTypeGroupId, String name) {
+        QueryBuilder<AssetType> queryBuilder = createUserSecurityBuilder(AssetType.class);
+
+        if(assetTypeGroupId != null) {
+            if (assetTypeGroupId == -1)
+                queryBuilder.addWhere(WhereClauseFactory.createIsNull("group.id"));
+            else {
+                queryBuilder.addSimpleWhere("group.id", assetTypeGroupId);
+            }
+        }
+
+        if (name != null) {
+            queryBuilder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name","name", name, WhereParameter.WILDCARD_BOTH, null));
+        }
+
+        queryBuilder.addOrder("name");
+        return persistenceService.findAll(queryBuilder);
+    }
 
     public List<AssetTypeGroup> getAssetTypeGroupsByOrder() {
         QueryBuilder<AssetTypeGroup> queryBuilder = createUserSecurityBuilder(AssetTypeGroup.class);
