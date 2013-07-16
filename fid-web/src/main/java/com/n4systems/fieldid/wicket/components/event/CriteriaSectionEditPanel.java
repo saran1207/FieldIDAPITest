@@ -99,7 +99,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
                     item.add(new Label("criteriaName", new PropertyModel<String>(item.getModel(), "criteria.displayText")));
                     item.add(CriteriaEditorFactory.createEditorFor("criteriaEditor", item.getModel()));
-                    item.add(new CriteriaActionButton("recommendationsButton", "images/rec-icon.png", criteriaResult.getRecommendations().size(), "label.recommendations", "mattButtonLeft") {
+                    item.add(new CriteriaActionButton("recommendationsButton", "images/rec-icon.png", criteriaResult.getRecommendations().size(), "label.recommendations", "mattButtonMiddle") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             criteriaModalWindow.setTitle(new FIDLabelModel("label.recommendations"));
@@ -113,7 +113,7 @@ public class CriteriaSectionEditPanel extends Panel {
                             criteriaModalWindow.show(target);
                         }
                     });
-                    item.add(new CriteriaActionButton("deficienciesButton", "images/def-icon.png", criteriaResult.getDeficiencies().size(), "label.deficiencies", "mattButtonMiddle") {
+                    item.add(new CriteriaActionButton("deficienciesButton", "images/def-icon.png", criteriaResult.getDeficiencies().size(), "label.deficiencies", "mattButtonLeft") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {
                             criteriaModalWindow.setTitle(new FIDLabelModel("label.deficiencies"));
