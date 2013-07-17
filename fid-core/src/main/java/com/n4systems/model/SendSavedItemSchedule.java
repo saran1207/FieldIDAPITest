@@ -5,7 +5,6 @@ import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.user.User;
-import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.DateHelper;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.IndexColumn;
@@ -51,6 +50,9 @@ public class SendSavedItemSchedule extends EntityWithTenant {
     @IndexColumn(name="orderidx")
     @JoinTable(name="send_saved_item_schedules_emails", joinColumns = {@JoinColumn(name="send_saved_item_schedule_id")})
     private List<String> emailAddresses = new ArrayList<String>();
+
+    @Column(name="send_blank_report", nullable = false)
+    private boolean sendBlankReport = false;
 
     public SavedItem getSavedItem() {
         return savedItem;
@@ -163,5 +165,14 @@ public class SendSavedItemSchedule extends EntityWithTenant {
     public void setReportFormat(ReportFormat reportFormat) {
         this.reportFormat = reportFormat;
     }
+
+    public boolean isSendBlankReport() {
+        return sendBlankReport;
+    }
+
+    public void setSendBlankReport(boolean sendBlankReport) {
+        this.sendBlankReport = sendBlankReport;
+    }
+
 
 }

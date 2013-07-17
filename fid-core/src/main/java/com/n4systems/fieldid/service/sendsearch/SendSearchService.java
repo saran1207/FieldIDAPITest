@@ -74,7 +74,7 @@ public class SendSearchService extends FieldIdPersistenceService {
         for (SendSavedItemSchedule schedule : schedules) {
             try {
                 Date utcDateToTheHour = DateHelper.truncate(new Date(), DateHelper.HOUR);
-                if (schedule.shouldRunNow(utcDateToTheHour)) {
+                if (schedule.shouldRunNow(utcDateToTheHour)  ) {
                     sendSavedItemInsideUserContext(schedule.getSavedItem().getId(), schedule);
                 }
             } catch (Exception e) {
@@ -112,15 +112,21 @@ public class SendSearchService extends FieldIdPersistenceService {
     @Transactional
     public void sendSearch(SearchCriteria searchCriteria, SendSavedItemSchedule schedule) throws MessagingException {
         localizeColumnNames(searchCriteria.getSortedStaticAndDynamicColumns());
-        if (schedule.getReportFormat() == ReportFormat.HTML) {
-            sendSearchHtml(searchCriteria, schedule);
-        } else if (schedule.getReportFormat() == ReportFormat.EXCEL) {
-            sendSearchExcel(searchCriteria, schedule);
-        }
+            if (schedule.getReportFormat() == ReportFormat.HTML) {
+                sendSearchHtml(searchCriteria, schedule);
+            } else if (schedule.getReportFormat() == ReportFormat.EXCEL) {
+                sendSearchExcel(searchCriteria, schedule);
+            }
     }
 
     private void sendSearchExcel(SearchCriteria criteria, SendSavedItemSchedule schedule) throws MessagingException {
         File temporaryAttachmentFile = null;
+        int totalResults = criteria.getSelection().getNumSelectedIds();
+
+        if ((totalResults <= 0 && !schedule.isSendBlankReport())) {
+            return;
+        }
+
         try {
             temporaryAttachmentFile = File.createTempFile("excel-export-attachment", getCurrentUser().getTenant().getName()+"."+getCurrentUser().getUserID());
 
@@ -170,7 +176,15 @@ public class SendSearchService extends FieldIdPersistenceService {
         }
 
         List<RowView> results = pageHolder.getPageResults().getRows();
-        sendHtmlMessage(criteria, results, schedule);
+
+        int rowCount = 0;
+        rowCount = results.size();
+
+        if ((rowCount > 0) || (rowCount <= 0 && schedule.isSendBlankReport())) {
+            sendHtmlMessage(criteria, results, schedule);
+        }
+
+        return;
     }
 
     private void sendHtmlMessage(SearchCriteria criteria, List<RowView> results, SendSavedItemSchedule schedule) throws MessagingException {

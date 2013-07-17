@@ -195,6 +195,10 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
             DropDownChoice<ReportFormat> formatSelect = new DropDownChoice<ReportFormat>("format", new PropertyModel<ReportFormat>(model,"reportFormat"), Arrays.asList(ReportFormat.values()), new ListableLabelChoiceRenderer<ReportFormat>());
             formatSelect.setNullValid(false);
             add(formatSelect);
+
+
+            add(new CheckBox("sendBlankReport", new PropertyModel<Boolean>(model, "sendBlankReport")));
+
             
             add(submitLink = new AjaxSubmitLink("scheduleNowLink") {
                 { setOutputMarkupId(true); }

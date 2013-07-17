@@ -47,6 +47,7 @@ public class ManageSendItemSchedulesPage extends FieldIDFrontEndPage {
                 item.add(new Label("format", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "reportFormat.displayName"))));
                 item.add(new Label("sendTo", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "emailAddressesJoined"))));
                 item.add(new Label("sendToMe", new YesOrNoModel(new PropertyModel<Boolean>(item.getModel(), "sendToOwner"))));
+                item.add(new Label("sendBlankReport", new YesOrNoModel(new PropertyModel<Boolean>(item.getModel(), "sendBlankReport"))));
                 item.add(new Label("subject", new PropertyModel<String>(item.getModel(), "subject")));
                 item.add(new Link("deleteLink") {
                     @Override
