@@ -72,10 +72,9 @@ public class SearchResult implements Serializable {
                 } else {
                     highlightedValue = highlighter.getBestTextFragment(analyzer, field.name(), field.stringValue());
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
+                // Needed to change to catch all due to error with date criteria eg lasteventdate>'2013-01-01' was causing page to not render
                 ;  // do nothing...just leave it unhighlighted.
-            } catch (InvalidTokenOffsetsException e) {
-                ;// do nothing...just leave it unhighlighted.
             }
         }
 
