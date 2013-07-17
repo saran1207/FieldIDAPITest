@@ -68,6 +68,7 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
@@ -108,13 +109,14 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         if (!params.get("lineItemId").isEmpty()) {
             lineItemId = params.get("lineItemId").toLongObject();
             asset = assetService.createAssetFromOrder(lineItemId);
+            asset.setIdentified(dateService.todayAsDate());
         } else if (!params.get("id").isEmpty()) {
             Long assetId = params.get("id").toLongObject();
             asset = persistenceService.find(Asset.class, assetId);
         } else {
             asset = assetService.createAssetWithHistory();
+            asset.setIdentified(dateService.todayAsDate());
         }
-        asset.setIdentified(dateService.todayAsDate());
         IModel<Asset> assetModel = Model.of(asset);
         Form modalContainerForm = new Form("modalContainerForm");
         modalContainerForm.add(multipleWindow = new DialogModalWindow("multiAssetConfigurationWindow", Model.of("Multiple Assets...")));
@@ -416,8 +418,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         boolean imageUpdated = assetImagePanel.isImageUpdated();
 
         asset.setTenant(getTenant());
-        asset.getInfoOptions().clear();
-        asset.getInfoOptions().addAll(enteredInfoOptions);
+        asset.setInfoOptions(new HashSet<InfoOptionBean>(enteredInfoOptions));
+//        asset.getInfoOptions().addAll(enteredInfoOptions);
 
         if (asset.isNew()) {
             asset.setIdentifiedBy(getCurrentUser());
