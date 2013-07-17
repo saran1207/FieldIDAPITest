@@ -113,6 +113,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         } else if (!params.get("id").isEmpty()) {
             Long assetId = params.get("id").toLongObject();
             asset = persistenceService.find(Asset.class, assetId);
+            asset.setSubAssets(assetService.findSubAssets(asset));
         } else {
             asset = assetService.createAssetWithHistory();
             asset.setIdentified(dateService.todayAsDate());
