@@ -26,6 +26,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
@@ -149,6 +150,7 @@ public class CriteriaPanel extends SortableListPanel {
             add(new DropDownChoice<CriteriaType>("criteriaType", new PropertyModel<CriteriaType>(this, "criteriaType"), criteriaTypes, new ListableChoiceRenderer<CriteriaType>()).setRequired(true));
             AjaxButton submitButton;
             add(addTextField = new RequiredTextField<String>("criteriaName", new PropertyModel<String>(this, "criteriaName")));
+            addTextField.add(new PatternValidator(".*\\|.*").setReverse(true));
             addTextField.setOutputMarkupId(true);
             addTextField.add(new StringValidator.MaximumLengthValidator(1000));
             add(submitButton = new AjaxButton("submitButton") {

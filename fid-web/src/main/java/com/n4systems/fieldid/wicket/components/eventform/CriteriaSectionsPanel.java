@@ -20,10 +20,13 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CriteriaSectionsPanel extends SortableListPanel {
 
@@ -149,7 +152,9 @@ public class CriteriaSectionsPanel extends SortableListPanel {
         public CriteriaSectionAddForm(String id) {
             super(id);
 
-            add(sectionNameField = new RequiredTextField<String>("sectionNameField", new PropertyModel<String>(this, "sectionTitle")));
+            sectionNameField = new RequiredTextField<String>("sectionNameField", new PropertyModel<String>(this, "sectionTitle"));
+            sectionNameField.add(new PatternValidator(".*\\|.*").setReverse(true));
+            add(sectionNameField);
             sectionNameField.add(new StringValidator.MaximumLengthValidator(2000));
             add(submitButton = new AjaxButton("submitButton") {
                 @Override
