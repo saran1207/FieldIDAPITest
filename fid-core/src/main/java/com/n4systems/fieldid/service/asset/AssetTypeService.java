@@ -156,5 +156,4 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
         return persistenceService.findAll(query);
     }
-
 }
