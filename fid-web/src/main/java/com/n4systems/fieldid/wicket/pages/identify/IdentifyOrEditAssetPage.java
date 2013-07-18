@@ -148,6 +148,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
             DateTimePicker identifiedDate;
             add(identifiedDate = new DateTimePicker("identifiedDate", ProxyModel.of(assetModel, on(Asset.class).getIdentified()), false).withNoAllDayCheckbox());
+            identifiedDate.getDateTextField().setRequired(true);
             identifiedDate.getDateTextField().add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
@@ -420,7 +421,6 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
         asset.setTenant(getTenant());
         asset.setInfoOptions(new HashSet<InfoOptionBean>(enteredInfoOptions));
-//        asset.getInfoOptions().addAll(enteredInfoOptions);
 
         if (asset.isNew()) {
             asset.setIdentifiedBy(getCurrentUser());
