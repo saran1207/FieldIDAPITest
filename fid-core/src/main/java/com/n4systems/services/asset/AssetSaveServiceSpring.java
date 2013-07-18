@@ -114,6 +114,8 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
         for (AssetAttachment assetAttachment : assetAttachments) {
             if (assetAttachment.isNew()) {
                 newAttachments.add(assetAttachment);
+            } else {
+                persistenceService.update(assetAttachment);
             }
         }
 
