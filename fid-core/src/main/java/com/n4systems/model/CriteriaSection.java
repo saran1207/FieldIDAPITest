@@ -3,13 +3,7 @@ package com.n4systems.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 import org.hibernate.annotations.IndexColumn;
 
@@ -23,6 +17,10 @@ import com.n4systems.model.parents.EntityWithTenant;
 public class CriteriaSection extends EntityWithTenant implements Listable<Long>, NamedEntity, Retirable {
 	private static final long serialVersionUID = 1L;
 
+    @ManyToOne
+    @JoinTable(name="eventforms_criteriasections", joinColumns = @JoinColumn(name="sections_id"), inverseJoinColumns = @JoinColumn(name="eventform_id"))
+    private EventForm eventForm;
+
 	@Column(nullable=false)
 	private String title;
 	
@@ -31,6 +29,7 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 	
 	@OneToMany(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	@IndexColumn(name="orderIdx")
+    @JoinTable(name="criteriasections_criteria", joinColumns = @JoinColumn(name="criteriasections_id"), inverseJoinColumns = @JoinColumn(name="criteria_id"))
 	private List<Criteria> criteria = new ArrayList<Criteria>();
 	
 	public CriteriaSection() {}
@@ -97,7 +96,15 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 		setTitle( name );
 	}
 
-	@Override
+    public EventForm getEventForm() {
+        return eventForm;
+    }
+
+    public void setEventForm(EventForm eventForm) {
+        this.eventForm = eventForm;
+    }
+
+    @Override
 	public String toString() {
 		return "CriteriaSection [" + title + "]";
 	}
