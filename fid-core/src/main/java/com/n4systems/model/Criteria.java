@@ -17,10 +17,6 @@ import java.util.List;
 public abstract class Criteria extends EntityWithTenant implements Listable<Long> {
 	private static final long serialVersionUID = 1L;
 
-    @ManyToOne
-    @JoinTable(name="criteriasections_criteria", joinColumns = @JoinColumn(name="criteria_id"), inverseJoinColumns = @JoinColumn(name="criteriasections_id"))
-    private CriteriaSection section;
-
 	@Column(nullable=false)
 	private String displayText;
 	
@@ -84,14 +80,6 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 
     public void setInstructions(String instructions) {
         this.instructions = instructions;
-    }
-
-    public CriteriaSection getSection() {
-        return section;
-    }
-
-    public void setSection(CriteriaSection section) {
-        this.section = section;
     }
 
     @Override

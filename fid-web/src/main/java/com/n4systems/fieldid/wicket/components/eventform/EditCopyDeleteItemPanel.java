@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.eventform;
 
+import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.TrimmedStringModel;
@@ -143,6 +144,8 @@ public class EditCopyDeleteItemPanel extends Panel {
                 }
             });
             storeLink.add(storeLabel = new FlatLabel("storeLabel", new FIDLabelModel("label.store")));
+
+            newText.add(new ClickOnComponentWhenEnterKeyPressedBehavior(storeLink));
             add(new AjaxLink("cancelLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
@@ -197,6 +200,10 @@ public class EditCopyDeleteItemPanel extends Panel {
 
     public void setEditMaximumLength(int maximumLength) {
         newText.add(new StringValidator.MaximumLengthValidator(maximumLength));
+    }
+
+    public TextField<String> getTextField() {
+        return newText;
     }
 
 }

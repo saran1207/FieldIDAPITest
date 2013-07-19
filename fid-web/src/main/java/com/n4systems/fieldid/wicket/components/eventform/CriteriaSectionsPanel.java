@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressed
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
+import com.n4systems.fieldid.wicket.util.NoBarsValidator;
 import com.n4systems.model.CriteriaSection;
 import com.n4systems.util.eventform.CriteriaSectionCopyUtil;
 import org.apache.wicket.Component;
@@ -20,13 +21,10 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class CriteriaSectionsPanel extends SortableListPanel {
 
@@ -61,7 +59,7 @@ public class CriteriaSectionsPanel extends SortableListPanel {
             protected void populateItem(final ListItem<CriteriaSection> item) {
                 item.setOutputMarkupId(true);
                 item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "title")) {
-                    { setEditMaximumLength(2000); }
+                    { setEditMaximumLength(2000); getTextField().add(new NoBarsValidator()); }
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
                         currentlySelectedIndex = item.getIndex();
@@ -153,7 +151,7 @@ public class CriteriaSectionsPanel extends SortableListPanel {
             super(id);
 
             sectionNameField = new RequiredTextField<String>("sectionNameField", new PropertyModel<String>(this, "sectionTitle"));
-            sectionNameField.add(new PatternValidator(".*\\|.*").setReverse(true));
+            sectionNameField.add(new NoBarsValidator());
             add(sectionNameField);
             sectionNameField.add(new StringValidator.MaximumLengthValidator(2000));
             add(submitButton = new AjaxButton("submitButton") {

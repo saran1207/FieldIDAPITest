@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.eventform.CriteriaTypeDescriptionModel;
+import com.n4systems.fieldid.wicket.util.NoBarsValidator;
 import com.n4systems.model.*;
 import com.n4systems.model.stateset.StateSetLoader;
 import com.n4systems.util.eventform.CriteriaCopyUtil;
@@ -26,7 +27,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
@@ -57,7 +57,7 @@ public class CriteriaPanel extends SortableListPanel {
             protected void populateItem(final ListItem<Criteria> item) {
                 item.setOutputMarkupId(true);
                 item.add(new EditCopyDeleteItemPanel("editCopyDeletePanel", new PropertyModel<String>(item.getModel(), "displayText"), new CriteriaTypeDescriptionModel(item.getModel())) {
-                    { setEditMaximumLength(1000); }
+                    { setEditMaximumLength(1000); getTextField().add(new NoBarsValidator()); }
                     @Override
                     protected void onViewLinkClicked(AjaxRequestTarget target) {
                         currentlySelectedIndex = item.getIndex();
@@ -150,7 +150,7 @@ public class CriteriaPanel extends SortableListPanel {
             add(new DropDownChoice<CriteriaType>("criteriaType", new PropertyModel<CriteriaType>(this, "criteriaType"), criteriaTypes, new ListableChoiceRenderer<CriteriaType>()).setRequired(true));
             AjaxButton submitButton;
             add(addTextField = new RequiredTextField<String>("criteriaName", new PropertyModel<String>(this, "criteriaName")));
-            addTextField.add(new PatternValidator(".*\\|.*").setReverse(true));
+            addTextField.add(new NoBarsValidator());
             addTextField.setOutputMarkupId(true);
             addTextField.add(new StringValidator.MaximumLengthValidator(1000));
             add(submitButton = new AjaxButton("submitButton") {

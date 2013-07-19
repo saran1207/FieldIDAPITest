@@ -17,10 +17,6 @@ import com.n4systems.model.parents.EntityWithTenant;
 public class CriteriaSection extends EntityWithTenant implements Listable<Long>, NamedEntity, Retirable {
 	private static final long serialVersionUID = 1L;
 
-    @ManyToOne
-    @JoinTable(name="eventforms_criteriasections", joinColumns = @JoinColumn(name="sections_id"), inverseJoinColumns = @JoinColumn(name="eventform_id"))
-    private EventForm eventForm;
-
 	@Column(nullable=false)
 	private String title;
 	
@@ -95,14 +91,6 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 	public void setName( String name ) {
 		setTitle( name );
 	}
-
-    public EventForm getEventForm() {
-        return eventForm;
-    }
-
-    public void setEventForm(EventForm eventForm) {
-        this.eventForm = eventForm;
-    }
 
     @Override
 	public String toString() {
