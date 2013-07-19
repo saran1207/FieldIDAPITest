@@ -104,6 +104,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
     Long lineItemId;
 
+    IModel<Asset> assetModel;
+
     public IdentifyOrEditAssetPage(PageParameters params) {
         Asset asset;
         if (!params.get("lineItemId").isEmpty()) {
@@ -118,7 +120,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             asset = assetService.createAssetWithHistory();
             asset.setIdentified(dateService.todayAsDate());
         }
-        IModel<Asset> assetModel = Model.of(asset);
+        assetModel = Model.of(asset);
+        add(createTitleLabel("pageTitle"));
         Form modalContainerForm = new Form("modalContainerForm");
         modalContainerForm.add(multipleWindow = new DialogModalWindow("multiAssetConfigurationWindow", Model.of("Multiple Assets...")));
         add(modalContainerForm);
@@ -516,7 +519,12 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.identify"));
+        if (assetModel.getObject().isNew()) {
+            return new Label(labelId, new FIDLabelModel("title.identify"));
+        } else {
+            return new Label(labelId, new FIDLabelModel("label.edit_asset"));
+        }
+
     }
 
     @Override
