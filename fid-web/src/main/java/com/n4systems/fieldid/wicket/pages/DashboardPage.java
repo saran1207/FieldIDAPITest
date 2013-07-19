@@ -77,9 +77,6 @@ public class DashboardPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        // override org picker with inline style...ugly but it works.  i'd suggest actually changing the default size (which is 450px)
-        // but that would require regression testing.
-        response.renderString("<style type='text/css'>.orgSelector { width : 300px !important; }</style>");
 
         JavascriptPackageResourceIE.renderJavaScriptReference(response, "javascript/flot/excanvas.min.js");
 

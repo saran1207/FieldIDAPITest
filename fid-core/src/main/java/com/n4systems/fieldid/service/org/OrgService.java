@@ -152,20 +152,30 @@ public class OrgService extends FieldIdPersistenceService {
         }
     }
 
-
+    // TODO DD : make this @Cacheable with user's org being key.
+    // something like @Cacheable(value="orgs", key="securityContext.user.owner")
     public OrgLocationTree getOrgLocationTree() {
-        OrgLocationTree result = new OrgLocationTree();
-        QueryBuilder<BaseOrg> orgQuery = createTenantSecurityBuilder(BaseOrg.class);
-        result.addOrgs(persistenceService.findAll(orgQuery));
+        return getOrgLocationTree(null);
+    }
 
+    public OrgLocationTree getOrgLocationTree(String search) {
+        OrgLocationTree result = getOrgTree(search);
         QueryBuilder locQuery = createTenantSecurityBuilder(PredefinedLocation.class);
         result.addPredefinedLocations(persistenceService.findAll(locQuery));
-
         return result;
     }
 
+    public OrgLocationTree getOrgTree(String search) {
+        OrgLocationTree result = new OrgLocationTree().withFilter(search);
+        QueryBuilder<BaseOrg> orgQuery = createTenantSecurityBuilder(BaseOrg.class);
+        result.addOrgs(persistenceService.findAll(orgQuery));
+        return result;
+    }
 
-
+    // TODO DD : make this @Cacheable with user's org being key.
+    public OrgLocationTree getOrgTree() {
+        return getOrgTree(null);
+    }
 }
 
 

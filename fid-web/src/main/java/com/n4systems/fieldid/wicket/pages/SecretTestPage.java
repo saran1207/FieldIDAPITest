@@ -2,9 +2,10 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.AssetIndexerService;
-import com.n4systems.services.search.FullTextSearchService;
 import com.n4systems.services.search.SearchResult;
 import com.n4systems.util.SearchRecord;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -27,7 +28,7 @@ import java.util.List;
 public class SecretTestPage extends FieldIDAuthenticatedPage {
 
 	private @SpringBean PersistenceService persistenceService;
-	private @SpringBean AssetFullTextSearchService fullTextSearchService;
+	private @SpringBean AssetFullTextSearchService assetFullTextSearchService;
 	private @SpringBean AssetIndexerService assetIndexerService;
 
 	private WebMarkupContainer selectedDeviceList;
@@ -37,6 +38,8 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 
 	private String text = "08-000028";
 	private String tenant = "n4";
+    private BaseOrg org;
+    private BaseOrg org2;
 
     private List<SearchResult> docs = Lists.newArrayList();
     private final ListView<SearchResult> list;
@@ -47,12 +50,14 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 		form.add(new TextField("text", new PropertyModel<String>(this, "text")));
 		form.add(new AjaxSubmitLink("submit") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                docs = fullTextSearchService.search(text).getResults();
+                docs = assetFullTextSearchService.search(text).getResults();
                 target.add(container);
             }
 
             @Override protected void onError(AjaxRequestTarget target, Form<?> form) { }
         });
+        form.add(new OrgLocationPicker("tree", new PropertyModel(this,"org")));
+//        form.add(new OrgLocationPicker("locTree", new PropertyModel(this,"org2")).withLocations());
 		add(form);
 
 		add(new Form("indexForm") {
@@ -63,12 +68,13 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 			}
 			.add(new TextField("tenant", new PropertyModel<String>(this, "tenant")))
 			.add(new SubmitLink("submitIndex"))
-		);
+
+        );
 
 		add(new Form("showAllDocs") {
 				@Override
 				protected void onSubmit() {
-					fullTextSearchService.findAll(tenant);
+					assetFullTextSearchService.findAll(tenant);
 				}
 			}
 			.add(new TextField("tenant", new PropertyModel<String>(this, "tenant")))
@@ -89,6 +95,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
             }
         };
         container.add(list).setOutputMarkupId(true);
+
 	}
 
 	@Override

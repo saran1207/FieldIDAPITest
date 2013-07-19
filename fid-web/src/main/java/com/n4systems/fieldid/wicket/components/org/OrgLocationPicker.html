@@ -1,7 +1,12 @@
 <wicket:panel>
+
     <span class="org-location">
-        <span class="org-location-text" wicket:id="autoComplete" type="text"/>
-        <a wicket:id="icon"><img wicket:id="image"/></a>
-        <span wicket:id="tree" class="org-location-tree"/>
+        <!--CAVEAT : .js depends on HMTL structure so if you move "tree" then make sure code still finds relative elements -->
+        <input type="hidden" wicket:id="type" class="type-input"/>
+        <input type="hidden" wicket:id="entityId" class="entityId-input"/>
+
+        <span wicket:id="tree" class="tree"/>
+        <input wicket:id="text" type="text" class="text"/>
     </span>
+
 </wicket:panel>
