@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.components.tree.JsonTreeNode;
 import com.n4systems.fieldid.wicket.components.tree.Tree;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.DivisionOrg;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -22,7 +23,6 @@ import java.util.Set;
 public class OrgLocationPicker extends Panel {
 
     private @SpringBean OrgService orgService;
-
 
     private Tree tree;
     private Component text;
@@ -43,8 +43,21 @@ public class OrgLocationPicker extends Panel {
             @Override protected List<JsonTreeNode> getNodes(String search) {
                 return buildJsonTree(getOrgLocationTree(search));
             }
+
+            @Override protected List<JsonTreeNode> getChildNodes(Long parentNodeId,String type) {
+                return buildJsonTree(getOrgLocationTree(parentNodeId,getNodeType(type)));
+            }
+
         });
         setOutputMarkupPlaceholderTag(true);
+    }
+
+    private Class<?> getNodeType(String type) {
+        try {
+            return Class.forName(type);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalStateException("can't figure out type of node " + type);
+        }
     }
 
     public OrgLocationPicker withLocations() {
@@ -61,30 +74,43 @@ public class OrgLocationPicker extends Panel {
         return includeLocations ? orgService.getOrgLocationTree(search) : orgService.getOrgTree(search);
     }
 
+    protected OrgLocationTree getOrgLocationTree(Long parentNodeId, Class type) {
+        return includeLocations ? orgService.getOrgLocationTree(parentNodeId,type) : orgService.getOrgTree(parentNodeId,type);
+    }
+
     private List<JsonTreeNode> buildJsonTree(OrgLocationTree tree) {
         List<JsonTreeNode> result = Lists.newArrayList();
         for (OrgLocationTree.OrgLocationTreeNode node:tree.getRootChildren()) {
             if (node.isIncluded()) {
-                result.add(createNode(node, node.getChildren()));
+                result.add(createNode(node, node.getChildren(), null));
             }
         }
         return result;
     }
 
-    private JsonTreeNode createNode(OrgLocationTree.OrgLocationTreeNode node, Set<OrgLocationTree.OrgLocationTreeNode> children) {
-        JsonTreeNode jsonNode = new JsonTreeNode(node.getEntity());
+    private JsonTreeNode createNode(OrgLocationTree.OrgLocationTreeNode node, Set<OrgLocationTree.OrgLocationTreeNode> children, JsonTreeNode parent) {
+        // arggh.  Gson won't work with inner classes so instead of overriding the "isLeaf" method i have to awkwardly set it here.
+        JsonTreeNode jsonNode = new JsonTreeNode(node.getEntity(), parent).setLeafClass(DivisionOrg.class);
 
         List<JsonTreeNode> nodes = Lists.newArrayList();
         for (OrgLocationTree.OrgLocationTreeNode child:children) {
             if (child.isIncluded()) {
-                nodes.add(createNode(child, child.getChildren()));
+                nodes.add(createNode(child, child.getChildren(), jsonNode));
             }
         }
         jsonNode.setChildren(nodes);
         if (node.matches()) {
             jsonNode.addAttribute("class", "match");
+            setParentsToOpen(parent);
         }
         return jsonNode;
+    }
+
+    private void setParentsToOpen(JsonTreeNode parent) {
+        while (parent!=null) {
+            parent.setState("open");
+            parent = parent.getParent();
+        }
     }
 
 }

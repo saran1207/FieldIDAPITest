@@ -11,29 +11,42 @@ import java.util.List;
 import java.util.Map;
 
 public class JsonTreeNode {
+    private transient JsonTreeNode parent;
+    private transient boolean isLeaf = false;
+
     String data;
     Map<String,String> attr;
-    String icon;
-    Map<String,Object> metadata = Maps.newHashMap();
-    String language;
-    public String state = "open";
+    String state = "closed";
     JsonTreeNode[] children = null;
 
-    public JsonTreeNode(EntityWithTenant entity) {
+
+    public JsonTreeNode(EntityWithTenant entity, JsonTreeNode parent) {
         this.data = getName(entity);
-        metadata.put("entityId", entity.getId());
-        metadata.put("type", entity instanceof BaseOrg ? "org" : "loc");
-        metadata.put("css", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, entity.getClass().getSimpleName()));
-        //addAttribute();  add dynamic css class here...!!
+        addAttribute("id", entity.getId() + "");
+        addAttribute("data", entity.getClass().getName());
+        addAttribute("class", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, entity.getClass().getSimpleName()));
+        this.parent = parent;
     }
 
     public void setChildren(List<JsonTreeNode> nodes) {
         if (nodes!=null && nodes.size()>0) {
-            children =  nodes.toArray(new JsonTreeNode[0]);
+            children =  nodes.toArray(new JsonTreeNode[nodes.size()]);
         } else {
-            icon = "/fieldid/images/asset-statuses-icon.png";
-            addAttribute("class","jstree-leaf");
+            children = isLeaf() ? null : new JsonTreeNode[0];  // don't do this if i know it's leaf level?  how do i know that???
+            state = isLeaf() ? null : "closed";
         }
+    }
+
+    public Class getClassFromData() {
+        try {
+            return Class.forName(attr.get("data"));
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
+    protected boolean isLeaf() {
+        return isLeaf;
     }
 
     protected String getName(EntityWithTenant entity) {
@@ -54,12 +67,24 @@ public class JsonTreeNode {
         attr.put(key,StringUtils.isBlank(v) ? value : v + " " + value);
     }
 
-    public JsonTreeNode[] getChildren() {
-        return children;
-    }
-
     public String getData() {
         return data;
     }
 
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public JsonTreeNode getParent() {
+        return parent;
+    }
+
+    public JsonTreeNode setLeafClass(Class leafClass) {
+        this.isLeaf = leafClass.isAssignableFrom(getClassFromData());
+        if (isLeaf) {
+            children = null;
+            state = null;
+        }
+        return this;
+    }
 }

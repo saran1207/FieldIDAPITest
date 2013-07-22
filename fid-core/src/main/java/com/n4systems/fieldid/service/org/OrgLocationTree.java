@@ -1,22 +1,18 @@
 package com.n4systems.fieldid.service.org;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.commons.lang.StringUtils;
 
-import java.util.Comparator;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 public class OrgLocationTree {
 
-    private Map<EntityWithTenant,OrgLocationTreeNode> nodes;
+    private Map<EntityWithTenant,OrgLocationTreeNode> nodes = Maps.newHashMap();
     private OrgLocationTreeNode rootNode;
     private Predicate<String> filter;
     private boolean isFiltered = false;
@@ -31,12 +27,16 @@ public class OrgLocationTree {
     };
 
     public OrgLocationTree() {
-        nodes = Maps.newHashMap(); //new Comparator<EntityWithTenant>() {
-//            @Override public int compare(EntityWithTenant o1, EntityWithTenant o2) {
-//                return (((BaseOrg)o1).getName()).compareTo((((BaseOrg)o2).getName()));
-//            }
-//        });
         rootNode=new OrgLocationTreeNode(null,null);
+    }
+
+    public OrgLocationTree(List<? extends BaseOrg> orgs) {
+        this();
+        for (BaseOrg org:orgs) {
+            OrgLocationTreeNode node=new OrgTreeNode(org, null);
+            rootNode.addChild(node);
+            nodes.put(org,node);
+        }
     }
 
     public OrgLocationTree addOrgs(Iterable<? extends BaseOrg> orgs) {
@@ -52,12 +52,13 @@ public class OrgLocationTree {
     }
 
     private OrgLocationTreeNode getOrgNode(BaseOrg org) {
-        if (org==null) {
+        if (org==null) {  // TODO DD : or if org=rootNode?
             return rootNode;
         }
         OrgLocationTreeNode node = nodes.get(org);
         if (node==null) {
-            OrgLocationTreeNode parentNode = getOrgNode(org.getParent());
+            // even tho secondary orgs have parent, we treat them as top level orgs (on same level as primary org).
+            OrgLocationTreeNode parentNode = org instanceof SecondaryOrg ? rootNode : getOrgNode(org.getParent());
             node=new OrgTreeNode(org, (BaseOrg) parentNode.getNodeEntity());
             parentNode.addChild(node);
             nodes.put(org,node);
@@ -103,12 +104,6 @@ public class OrgLocationTree {
         return rootNode.getChildren();
     }
 
-    public Set<OrgLocationTreeNode> getChildrenOf(EntityWithTenant entity) {
-        filterIfNeeded();
-        OrgLocationTreeNode node = nodes.get(entity);
-        return ImmutableSet.copyOf(Iterables.filter(node.getChildren(), predicate));
-    }
-
     // TODO DD : optimize this...
     private void filterIfNeeded() {
         if (filter!=null && isFiltered==false) {
@@ -147,6 +142,7 @@ public class OrgLocationTree {
     public class OrgLocationTreeNode<T extends EntityWithTenant> {
         private OrgLocationTreeNode parent;
         private Set<OrgLocationTreeNode> children;
+        // TODO DD : do i need to store entity or just id?  entire entity might be way too heavy?
         private T entity;
         private String name;
         private Boolean matches = null;
@@ -183,11 +179,12 @@ public class OrgLocationTree {
             child.setParent(this);
         }
 
+
         boolean isRootNode() {
             return parent==null;
         }
 
-        OrgLocationTreeNode getParent() {
+        public OrgLocationTreeNode getParent() {
             return parent;
         }
 
@@ -202,6 +199,7 @@ public class OrgLocationTree {
         public boolean matches() {
             return Boolean.TRUE.equals(matches);
         }
+
 
     }
 

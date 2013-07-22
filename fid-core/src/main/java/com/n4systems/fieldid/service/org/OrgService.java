@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.*;
+import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.util.collections.OrgList;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional
 public class OrgService extends FieldIdPersistenceService {
 
     @Transactional(readOnly = true)
@@ -154,27 +156,51 @@ public class OrgService extends FieldIdPersistenceService {
 
     // TODO DD : make this @Cacheable with user's org being key.
     // something like @Cacheable(value="orgs", key="securityContext.user.owner")
-    public OrgLocationTree getOrgLocationTree() {
-        return getOrgLocationTree(null);
-    }
-
+    // in order to do this, refactor the "findAll" parts out into a cacheable method in another spring bean.  (wish we had DAO layer here for this).
     public OrgLocationTree getOrgLocationTree(String search) {
         OrgLocationTree result = getOrgTree(search);
-        QueryBuilder locQuery = createTenantSecurityBuilder(PredefinedLocation.class);
+        QueryBuilder locQuery = createUserSecurityBuilder(PredefinedLocation.class);
         result.addPredefinedLocations(persistenceService.findAll(locQuery));
         return result;
     }
 
     public OrgLocationTree getOrgTree(String search) {
+        if (StringUtils.isBlank(search)) {
+            return getTopLevelOfOrgTree();
+        }
         OrgLocationTree result = new OrgLocationTree().withFilter(search);
-        QueryBuilder<BaseOrg> orgQuery = createTenantSecurityBuilder(BaseOrg.class);
+        QueryBuilder<BaseOrg> orgQuery = createUserSecurityBuilder(BaseOrg.class);
         result.addOrgs(persistenceService.findAll(orgQuery));
         return result;
     }
 
-    // TODO DD : make this @Cacheable with user's org being key.
-    public OrgLocationTree getOrgTree() {
-        return getOrgTree(null);
+    public OrgLocationTree getOrgLocationTree(Long parentNodeId, Class<? extends EntityWithTenant> type) {
+        OrgLocationTree result = getOrgTree(parentNodeId,type);
+        QueryBuilder locQuery = createUserSecurityBuilder(PredefinedLocation.class);
+        locQuery.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner_id", "owner.id", parentNodeId, 0, WhereClause.ChainOp.AND));
+        result.addPredefinedLocations(persistenceService.findAll(locQuery));
+        return result;
+    }
+
+    public OrgLocationTree getOrgTree(Long parentNodeId, Class<? extends EntityWithTenant> type) {
+        if (type.isAssignableFrom(DivisionOrg.class) || type.isAssignableFrom(PredefinedLocation.class)) {
+            return new OrgLocationTree(); /*no results ever for these cases...no need to search DB */
+        } else if (type.isAssignableFrom(CustomerOrg.class)) {
+            QueryBuilder<DivisionOrg> orgQuery = createUserSecurityBuilder(DivisionOrg.class);
+            orgQuery.addSimpleWhere("parent.id", parentNodeId);
+            return new OrgLocationTree(persistenceService.findAll(orgQuery));
+        } else if (InternalOrg.class.isAssignableFrom(type)) {
+            QueryBuilder<CustomerOrg> orgQuery = createUserSecurityBuilder(CustomerOrg.class);
+            orgQuery.addSimpleWhere("parent.id", parentNodeId);
+            return new OrgLocationTree(persistenceService.findAll(orgQuery));
+        }
+        throw new IllegalStateException("illegal type " + type);
+    }
+
+    private OrgLocationTree getTopLevelOfOrgTree() {
+        QueryBuilder<InternalOrg> query = createUserSecurityBuilder(InternalOrg.class);
+        OrgLocationTree result = new OrgLocationTree(persistenceService.findAll(query));
+        return result;
     }
 }
 

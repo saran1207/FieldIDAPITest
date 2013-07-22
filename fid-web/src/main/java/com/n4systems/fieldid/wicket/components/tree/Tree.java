@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components.tree;
 
 import com.google.common.base.CaseFormat;
-import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -15,9 +15,8 @@ import java.util.List;
 
 public abstract class Tree extends Panel {
 
-    // TODO DD: refactor this into separate abstract jsTree component.
-    private static final String INIT_TREE_JS = "treeFactory.createAndShow('%s', '%s');";
-//    private static final String UPDATE_TREE_JS = "%s.update(%s);";
+    private static final String INIT_TREE_JS = "treeFactory.create('%s','%s');";
+
     private final AbstractDefaultAjaxBehavior ajaxBehavior;
     private String search = null;
 
@@ -25,7 +24,7 @@ public abstract class Tree extends Panel {
     public Tree(String id) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
-        add(ajaxBehavior=createAjaxHandler());
+        add(ajaxBehavior = createAjaxHandler());
         // CAVEAT : if you change class, be forewarned that you may have to change CSS!
         add(new AttributeAppender("class", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, getClass().getSimpleName().toString())));
     }
@@ -43,8 +42,18 @@ public abstract class Tree extends Panel {
 
             protected void respond(final AjaxRequestTarget target) {
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-                search = params.getParameterValue("search").toString();
-                TextRequestHandler handler = new TextRequestHandler("application/json","UTF-8", getTreeJsonData(search));
+                List<JsonTreeNode> data = null;
+                if (!params.getParameterValue("nodeId").isEmpty()) {
+                    long nodeId = params.getParameterValue("nodeId").toLong();
+                    String type = params.getParameterValue("type").toString();
+                    System.out.println("getting children for " + type + " : " + nodeId);
+                    data = getChildNodes(nodeId, type);
+                } else {
+                    search = params.getParameterValue("search").toString();
+                    System.out.println("searching for " + search);
+                    data = getNodes(search);
+                }
+                TextRequestHandler handler = new TextRequestHandler("application/json","UTF-8", convertToJson(data));
                 RequestCycle.get().scheduleRequestHandlerAfterCurrent(handler);
             }
 
@@ -52,23 +61,23 @@ public abstract class Tree extends Panel {
     }
 
     private String getInitTreeJs() {
-        String result = String.format(INIT_TREE_JS, getParentMarkupId(), ajaxBehavior.getCallbackUrl().toString());
-        return result;
+        return String.format(INIT_TREE_JS, getParentMarkupId(), ajaxBehavior.getCallbackUrl().toString());
     }
 
     private String getParentMarkupId() {
         return getParent().getMarkupId();
     }
 
-    protected String getTreeJsonData(String search) {
-        return new Gson().toJson(getTreeData(search));
-    }
-
-    protected JsonTreeNode[] getTreeData(String search) {
-        List<JsonTreeNode> nodes = getNodes(search);
-        return nodes.toArray(new JsonTreeNode[nodes.size()]);
+    private final String convertToJson(Object o) {
+        return new GsonBuilder().create().toJson(o);
     }
 
     protected abstract List<JsonTreeNode> getNodes(String search);
+
+    protected abstract List<JsonTreeNode> getChildNodes(Long parentNodeId,String type);
+
+
+
+
 
 }
