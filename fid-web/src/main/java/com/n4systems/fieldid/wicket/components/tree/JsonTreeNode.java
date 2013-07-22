@@ -87,4 +87,8 @@ public class JsonTreeNode {
         }
         return this;
     }
+
+    public String getId() {
+        return attr.get("id");
+    }
 }

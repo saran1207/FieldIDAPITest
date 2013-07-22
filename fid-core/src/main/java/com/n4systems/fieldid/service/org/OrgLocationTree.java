@@ -130,7 +130,7 @@ public class OrgLocationTree {
             final String n = name.toLowerCase();
             filter = new Predicate<String>() {
                 @Override public boolean apply(String input) {
-                    return input.toLowerCase().trim().startsWith(n);
+                    return input.toLowerCase().trim().indexOf(n) >= 0;
                 }
             };
         }

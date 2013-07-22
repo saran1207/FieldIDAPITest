@@ -15,7 +15,7 @@ import java.util.List;
 
 public abstract class Tree extends Panel {
 
-    private static final String INIT_TREE_JS = "treeFactory.create('%s','%s');";
+    private static final String INIT_TREE_JS = "%s = treeFactory.create('%s',%s);";
 
     private final AbstractDefaultAjaxBehavior ajaxBehavior;
     private String search = null;
@@ -61,7 +61,11 @@ public abstract class Tree extends Panel {
     }
 
     private String getInitTreeJs() {
-        return String.format(INIT_TREE_JS, getParentMarkupId(), ajaxBehavior.getCallbackUrl().toString());
+        String url = ajaxBehavior.getCallbackUrl().toString();
+        return String.format(INIT_TREE_JS,
+                getJsVariableName(),
+                getParentMarkupId(),
+                convertToJson(new TreeOptions(url).withData(getInitialNodes())));
     }
 
     private String getParentMarkupId() {
@@ -72,12 +76,44 @@ public abstract class Tree extends Panel {
         return new GsonBuilder().create().toJson(o);
     }
 
+    public String getJsVariableName() {
+        return "tree_" + getMarkupId();
+    }
+
     protected abstract List<JsonTreeNode> getNodes(String search);
 
     protected abstract List<JsonTreeNode> getChildNodes(Long parentNodeId,String type);
 
+    protected List<JsonTreeNode> getInitialNodes() {
+        return null;
+    }
 
 
+    // ----------------------------------------------------------------------------------------
 
+    class TreeOptions {
+        String url;
+        List<JsonTreeNode> data;
+//        List<String> selected;
+
+        TreeOptions(String url) {
+            this.url = url;
+        }
+
+//        TreeOptions withSelectedNodes(List<JsonTreeNode> data) {
+//            List<String> result = Lists.newArrayList();
+//            for (JsonTreeNode node:data) {
+//                result.add(node.getId());
+//            }
+//            selected = result;
+//            return this;
+//        }
+//
+        TreeOptions withData(List<JsonTreeNode> data) {
+            this.data = data;
+            return this;
+        }
+
+    }
 
 }

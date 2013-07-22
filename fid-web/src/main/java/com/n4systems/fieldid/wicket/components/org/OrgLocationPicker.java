@@ -8,10 +8,12 @@ import com.n4systems.fieldid.wicket.components.tree.Tree;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -31,7 +33,6 @@ public class OrgLocationPicker extends Panel {
     private WebMarkupContainer icon;
     private boolean includeLocations = false;
 
-
     // TODO DD : need to store org & location into resulting model.
     // .: use OrgLocationTreeNode as underlying model???
     public OrgLocationPicker(String id, IModel<BaseOrg> orgModel) {
@@ -48,6 +49,16 @@ public class OrgLocationPicker extends Panel {
                 return buildJsonTree(getOrgLocationTree(parentNodeId,getNodeType(type)));
             }
 
+            @Override protected List<JsonTreeNode> getInitialNodes() {
+                return buildJsonTree(getInitialOrgTree());
+            }
+
+        });
+        add(new ContextImage("icon","images/search-icon.png") {
+            @Override protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.put("onClick",String.format("%s.toggleTree()",tree.getJsVariableName()));
+            }
         });
         setOutputMarkupPlaceholderTag(true);
     }
@@ -76,6 +87,10 @@ public class OrgLocationPicker extends Panel {
 
     protected OrgLocationTree getOrgLocationTree(Long parentNodeId, Class type) {
         return includeLocations ? orgService.getOrgLocationTree(parentNodeId,type) : orgService.getOrgTree(parentNodeId,type);
+    }
+
+    private OrgLocationTree getInitialOrgTree() {
+        return orgService.getTopLevelOrgTree();
     }
 
     private List<JsonTreeNode> buildJsonTree(OrgLocationTree tree) {

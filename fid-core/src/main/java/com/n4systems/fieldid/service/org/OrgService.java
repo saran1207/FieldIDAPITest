@@ -166,7 +166,7 @@ public class OrgService extends FieldIdPersistenceService {
 
     public OrgLocationTree getOrgTree(String search) {
         if (StringUtils.isBlank(search)) {
-            return getTopLevelOfOrgTree();
+            return getTopLevelOrgTree();
         }
         OrgLocationTree result = new OrgLocationTree().withFilter(search);
         QueryBuilder<BaseOrg> orgQuery = createUserSecurityBuilder(BaseOrg.class);
@@ -197,7 +197,7 @@ public class OrgService extends FieldIdPersistenceService {
         throw new IllegalStateException("illegal type " + type);
     }
 
-    private OrgLocationTree getTopLevelOfOrgTree() {
+    public OrgLocationTree getTopLevelOrgTree() {
         QueryBuilder<InternalOrg> query = createUserSecurityBuilder(InternalOrg.class);
         OrgLocationTree result = new OrgLocationTree(persistenceService.findAll(query));
         return result;
