@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.identify.components.attributes;
 
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
@@ -32,7 +33,7 @@ public class DateAttributeEditor extends FormComponentPanel<InfoOptionBean> {
             } catch(NumberFormatException e) { }
         }
 
-        DateTimePicker picker = new DateTimePicker("datePicker", new PropertyModel<Date>(this, "selectedDate"));
+        DateTimePicker picker = new DateTimePicker("datePicker", new UserToUTCDateModel(new PropertyModel<Date>(this, "selectedDate")));
         add(picker.setIncludeTime(includeTime).withNoAllDayCheckbox());
         ValidationBehavior.addValidationBehaviorToComponent(picker.getDateTextField());
         picker.getDateTextField().add(new ValidateIfRequiredValidator<Date>(infoField));
