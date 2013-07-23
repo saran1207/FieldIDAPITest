@@ -1,16 +1,39 @@
 package com.n4systems.fieldid.service.org;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
 public class OrgLocationTree {
+
+    public enum NodeType {
+        LOCATION(PredefinedLocation.class), INTERNAL_ORG(InternalOrg.class),CUSTOMER_ORG(CustomerOrg.class), DIVISION_ORG(DivisionOrg.class),VOID(null);
+
+        private final Class nodeClass;
+
+        NodeType(Class nodeClass) {
+            this.nodeClass = nodeClass;
+        }
+
+        public static NodeType fromClass(Class clazz) {
+            if (clazz==null) {
+                return VOID;
+            }
+
+            for (NodeType type:values()) {
+                if (type.nodeClass.isAssignableFrom(clazz)) {
+                    return type;
+                }
+            }
+            return VOID;
+        }
+    }
 
     private Map<EntityWithTenant,OrgLocationTreeNode> nodes = Maps.newHashMap();
     private OrgLocationTreeNode rootNode;
@@ -20,20 +43,21 @@ public class OrgLocationTree {
         @Override public boolean apply(OrgLocationTreeNode input) {
             return Boolean.TRUE.equals(input.included) ? false : true;
         }
-
         @Override public boolean equals(Object object) {
             return this == object;
         }
     };
 
+
+
     public OrgLocationTree() {
-        rootNode=new OrgLocationTreeNode(null,null);
+        rootNode=new OrgLocationTreeNode();
     }
 
     public OrgLocationTree(List<? extends BaseOrg> orgs) {
         this();
         for (BaseOrg org:orgs) {
-            OrgLocationTreeNode node=new OrgTreeNode(org, null);
+            OrgLocationTreeNode node=new OrgTreeNode(org);
             rootNode.addChild(node);
             nodes.put(org,node);
         }
@@ -59,7 +83,7 @@ public class OrgLocationTree {
         if (node==null) {
             // even tho secondary orgs have parent, we treat them as top level orgs (on same level as primary org).
             OrgLocationTreeNode parentNode = org instanceof SecondaryOrg ? rootNode : getOrgNode(org.getParent());
-            node=new OrgTreeNode(org, (BaseOrg) parentNode.getNodeEntity());
+            node=new OrgTreeNode(org);
             parentNode.addChild(node);
             nodes.put(org,node);
         }
@@ -82,7 +106,7 @@ public class OrgLocationTree {
         OrgLocationTreeNode node = nodes.get(location);
         if (node==null) {
             OrgLocationTreeNode parent = getPredefinedLocationParentNode(location);
-            node=new LocationTreeNode(location, parent.getNodeEntity());
+            node=new LocationTreeNode(location);
             parent.addChild(node);
             nodes.put(location,node);
         }
@@ -143,18 +167,28 @@ public class OrgLocationTree {
         private OrgLocationTreeNode parent;
         private Set<OrgLocationTreeNode> children;
         // TODO DD : do i need to store entity or just id?  entire entity might be way too heavy?
-        private T entity;
+        private Long id;
         private String name;
         private Boolean matches = null;
         private Boolean included;
+        private NodeType type;
 
-        OrgLocationTreeNode(T entity, EntityWithTenant parent) {
-            this.entity = entity;
+        OrgLocationTreeNode() {
+            this.id = -1L;
+            this.name = "root";
+            this.type = NodeType.VOID;
+            this.children = new TreeSet<OrgLocationTreeNode>(new OrgLocationComparator());
+        }
+
+        OrgLocationTreeNode(T entity) {
+            this.id = entity.getId();
+            this.type = NodeType.fromClass(entity.getClass());
             this.name = entity instanceof BaseOrg ? ((BaseOrg)entity).getName() :
-                    entity instanceof PredefinedLocation ? ((PredefinedLocation)entity).getName() :
-                            "root";
+                        entity instanceof PredefinedLocation ? ((PredefinedLocation)entity).getName() :
+                        "root";
             children = new TreeSet<OrgLocationTreeNode>(new OrgLocationComparator());
             matches = (filter!=null) ? filter.apply(name) : null;
+            Preconditions.checkArgument(entity!=null,"can't have null entity for tree node");
         }
 
         public boolean isIncluded() {
@@ -162,16 +196,8 @@ public class OrgLocationTree {
             return matches==null  || Boolean.TRUE.equals(included);
         }
 
-        public T getEntity() {
-            return entity;
-        }
-
         public void setParent(OrgLocationTreeNode parent) {
             this.parent = parent;
-        }
-
-        public T getNodeEntity() {
-            return entity;
         }
 
         public void addChild(OrgLocationTreeNode child) {
@@ -179,6 +205,9 @@ public class OrgLocationTree {
             child.setParent(this);
         }
 
+        public Long getId() {
+            return id;
+        }
 
         boolean isRootNode() {
             return parent==null;
@@ -186,6 +215,10 @@ public class OrgLocationTree {
 
         public OrgLocationTreeNode getParent() {
             return parent;
+        }
+
+        public NodeType getType() {
+            return type;
         }
 
         public Set<OrgLocationTreeNode> getChildren() {
@@ -205,16 +238,16 @@ public class OrgLocationTree {
 
     class OrgTreeNode extends OrgLocationTreeNode<BaseOrg> {
 
-        OrgTreeNode(BaseOrg entity, BaseOrg parent) {
-            super(entity, parent);
+        OrgTreeNode(BaseOrg entity) {
+            super(entity);
         }
 
     }
 
     class LocationTreeNode extends OrgLocationTreeNode<PredefinedLocation> {
 
-        LocationTreeNode(PredefinedLocation location, EntityWithTenant parent) {
-            super(location, parent);
+        LocationTreeNode(PredefinedLocation location) {
+            super(location);
         }
     }
 
@@ -227,19 +260,12 @@ public class OrgLocationTree {
             if (o2==null) {
                 return -1;
             }
-            if (o1.getClass().equals(o2.getClass())) {
-                return o1.getClass().equals(LocationTreeNode.class) ? compareAsPredefinedLocation(((LocationTreeNode) o1).getNodeEntity(), ((LocationTreeNode) o2).getNodeEntity()) : compareAsOrg(((OrgTreeNode) o1).getNodeEntity(), ((OrgTreeNode) o2).getNodeEntity());
+            if (o1.getType().equals(o2.getType())) {
+                return o1.getName().compareTo(o2.getName());
             }
-            return o1 instanceof OrgTreeNode ? -1 : 1;
+            return NodeType.INTERNAL_ORG.equals(o1.getType()) ? -1 : 1;
         }
 
-        private int compareAsOrg(BaseOrg org1, BaseOrg org2) {
-            return org1.getName().compareTo(org2.getName());
-        }
-
-        private int compareAsPredefinedLocation(PredefinedLocation loc1, PredefinedLocation loc2) {
-            return loc1.getName().compareTo(loc2.getName());
-        }
     }
 
 }

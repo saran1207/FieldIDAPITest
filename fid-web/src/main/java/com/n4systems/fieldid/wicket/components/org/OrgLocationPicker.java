@@ -6,23 +6,23 @@ import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.components.tree.JsonTreeNode;
 import com.n4systems.fieldid.wicket.components.tree.Tree;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.DivisionOrg;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 import java.util.Set;
 
 @Deprecated  //R&D component to try out JS tree
-public class OrgLocationPicker extends Panel {
+public class OrgLocationPicker extends FormComponentPanel {
 
     private @SpringBean OrgService orgService;
 
@@ -32,14 +32,16 @@ public class OrgLocationPicker extends Panel {
     private final HiddenField entityId;
     private WebMarkupContainer icon;
     private boolean includeLocations = false;
+    private String id;
+    private String entityType;
 
     // TODO DD : need to store org & location into resulting model.
     // .: use OrgLocationTreeNode as underlying model???
     public OrgLocationPicker(String id, IModel<BaseOrg> orgModel) {
         super(id);
-        add(text = new TextField("text", orgModel));
-        add(type = new HiddenField("type"));
-        add(entityId = new HiddenField("entityId"));
+        add(text = new TextField("text",orgModel));
+        add(type = new HiddenField("type", new PropertyModel(this,"entityType")));
+        add(entityId = new HiddenField("entityId", new PropertyModel(this,"id")));
         add(tree = new Tree("tree") {
             @Override protected List<JsonTreeNode> getNodes(String search) {
                 return buildJsonTree(getOrgLocationTree(search));
@@ -63,12 +65,8 @@ public class OrgLocationPicker extends Panel {
         setOutputMarkupPlaceholderTag(true);
     }
 
-    private Class<?> getNodeType(String type) {
-        try {
-            return Class.forName(type);
-        } catch (ClassNotFoundException e) {
-            throw new IllegalStateException("can't figure out type of node " + type);
-        }
+    private OrgLocationTree.NodeType getNodeType(String type) {
+        return OrgLocationTree.NodeType.valueOf(type);
     }
 
     public OrgLocationPicker withLocations() {
@@ -85,7 +83,7 @@ public class OrgLocationPicker extends Panel {
         return includeLocations ? orgService.getOrgLocationTree(search) : orgService.getOrgTree(search);
     }
 
-    protected OrgLocationTree getOrgLocationTree(Long parentNodeId, Class type) {
+    protected OrgLocationTree getOrgLocationTree(Long parentNodeId, OrgLocationTree.NodeType type) {
         return includeLocations ? orgService.getOrgLocationTree(parentNodeId,type) : orgService.getOrgTree(parentNodeId,type);
     }
 
@@ -105,7 +103,7 @@ public class OrgLocationPicker extends Panel {
 
     private JsonTreeNode createNode(OrgLocationTree.OrgLocationTreeNode node, Set<OrgLocationTree.OrgLocationTreeNode> children, JsonTreeNode parent) {
         // arggh.  Gson won't work with inner classes so instead of overriding the "isLeaf" method i have to awkwardly set it here.
-        JsonTreeNode jsonNode = new JsonTreeNode(node.getEntity(), parent).setLeafClass(DivisionOrg.class);
+        JsonTreeNode jsonNode = new JsonTreeNode(node, parent).setLeafType(OrgLocationTree.NodeType.DIVISION_ORG);
 
         List<JsonTreeNode> nodes = Lists.newArrayList();
         for (OrgLocationTree.OrgLocationTreeNode child:children) {

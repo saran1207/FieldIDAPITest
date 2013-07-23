@@ -2,9 +2,7 @@ package com.n4systems.fieldid.wicket.components.tree;
 
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Maps;
-import com.n4systems.model.location.PredefinedLocation;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.fieldid.service.org.OrgLocationTree;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
@@ -14,17 +12,18 @@ public class JsonTreeNode {
     private transient JsonTreeNode parent;
     private transient boolean isLeaf = false;
 
+    // TODO DD : add matching substring.  i.e. aBCDe  where BCD is matched part of string.  need this if going to highlight it in browser.
     String data;
     Map<String,String> attr;
     String state = "closed";
     JsonTreeNode[] children = null;
 
 
-    public JsonTreeNode(EntityWithTenant entity, JsonTreeNode parent) {
-        this.data = getName(entity);
-        addAttribute("id", entity.getId() + "");
-        addAttribute("data", entity.getClass().getName());
-        addAttribute("class", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, entity.getClass().getSimpleName()));
+    public JsonTreeNode(OrgLocationTree.OrgLocationTreeNode node, JsonTreeNode parent) {
+        this.data = node.getName();
+        addAttribute("id", node.getId() + "");
+        addAttribute("data", node.getType().name());
+        addAttribute("class", CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_HYPHEN, node.getType().name()));
         this.parent = parent;
     }
 
@@ -37,25 +36,12 @@ public class JsonTreeNode {
         }
     }
 
-    public Class getClassFromData() {
-        try {
-            return Class.forName(attr.get("data"));
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
+    public OrgLocationTree.NodeType getNodeTypeFromData() {
+        return OrgLocationTree.NodeType.valueOf(attr.get("data"));
     }
 
     protected boolean isLeaf() {
         return isLeaf;
-    }
-
-    protected String getName(EntityWithTenant entity) {
-        if (entity instanceof BaseOrg) {
-            return ((BaseOrg)entity).getName();
-        } else if (entity instanceof PredefinedLocation) {
-            return ((PredefinedLocation)entity).getName();
-        }
-        return entity.getId()+"";
     }
 
     public void addAttribute(String key, String value) {
@@ -79,11 +65,13 @@ public class JsonTreeNode {
         return parent;
     }
 
-    public JsonTreeNode setLeafClass(Class leafClass) {
-        this.isLeaf = leafClass.isAssignableFrom(getClassFromData());
-        if (isLeaf) {
-            children = null;
-            state = null;
+    public JsonTreeNode setLeafType(OrgLocationTree.NodeType type) {
+        if (type!=null) {
+            this.isLeaf = type.equals(getNodeTypeFromData());
+            if (isLeaf) {
+                children = null;
+                state = null;
+            }
         }
         return this;
     }

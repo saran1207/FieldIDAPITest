@@ -6,7 +6,6 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.*;
-import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.util.collections.OrgList;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause;
@@ -174,7 +173,7 @@ public class OrgService extends FieldIdPersistenceService {
         return result;
     }
 
-    public OrgLocationTree getOrgLocationTree(Long parentNodeId, Class<? extends EntityWithTenant> type) {
+    public OrgLocationTree getOrgLocationTree(Long parentNodeId, OrgLocationTree.NodeType type) {
         OrgLocationTree result = getOrgTree(parentNodeId,type);
         QueryBuilder locQuery = createUserSecurityBuilder(PredefinedLocation.class);
         locQuery.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner_id", "owner.id", parentNodeId, 0, WhereClause.ChainOp.AND));
@@ -182,19 +181,22 @@ public class OrgService extends FieldIdPersistenceService {
         return result;
     }
 
-    public OrgLocationTree getOrgTree(Long parentNodeId, Class<? extends EntityWithTenant> type) {
-        if (type.isAssignableFrom(DivisionOrg.class) || type.isAssignableFrom(PredefinedLocation.class)) {
-            return new OrgLocationTree(); /*no results ever for these cases...no need to search DB */
-        } else if (type.isAssignableFrom(CustomerOrg.class)) {
-            QueryBuilder<DivisionOrg> orgQuery = createUserSecurityBuilder(DivisionOrg.class);
-            orgQuery.addSimpleWhere("parent.id", parentNodeId);
-            return new OrgLocationTree(persistenceService.findAll(orgQuery));
-        } else if (InternalOrg.class.isAssignableFrom(type)) {
-            QueryBuilder<CustomerOrg> orgQuery = createUserSecurityBuilder(CustomerOrg.class);
-            orgQuery.addSimpleWhere("parent.id", parentNodeId);
-            return new OrgLocationTree(persistenceService.findAll(orgQuery));
+    public OrgLocationTree getOrgTree(Long parentNodeId, OrgLocationTree.NodeType type) {
+        switch (type) {
+            case INTERNAL_ORG:
+                QueryBuilder<CustomerOrg> customerQuery = createUserSecurityBuilder(CustomerOrg.class);
+                customerQuery.addSimpleWhere("parent.id", parentNodeId);
+                return new OrgLocationTree(persistenceService.findAll(customerQuery));
+            case CUSTOMER_ORG:
+                QueryBuilder<DivisionOrg> divisionQuery = createUserSecurityBuilder(DivisionOrg.class);
+                divisionQuery.addSimpleWhere("parent.id", parentNodeId);
+                return new OrgLocationTree(persistenceService.findAll(divisionQuery));
+            case DIVISION_ORG:
+            case LOCATION:
+                return new OrgLocationTree(); /*no results ever for these cases...no need to search DB */
+            default:
+            throw new IllegalStateException("illegal type " + type);
         }
-        throw new IllegalStateException("illegal type " + type);
     }
 
     public OrgLocationTree getTopLevelOrgTree() {

@@ -46,11 +46,11 @@ public abstract class Tree extends Panel {
                 if (!params.getParameterValue("nodeId").isEmpty()) {
                     long nodeId = params.getParameterValue("nodeId").toLong();
                     String type = params.getParameterValue("type").toString();
-                    System.out.println("getting children for " + type + " : " + nodeId);
+//                    System.out.println("getting children for " + type + " : " + nodeId);
                     data = getChildNodes(nodeId, type);
                 } else {
                     search = params.getParameterValue("search").toString();
-                    System.out.println("searching for " + search);
+//                    System.out.println("searching for " + search);
                     data = getNodes(search);
                 }
                 TextRequestHandler handler = new TextRequestHandler("application/json","UTF-8", convertToJson(data));

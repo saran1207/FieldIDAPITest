@@ -43,11 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AutoComplete<T> extends FormComponentPanel<T> {
-    
-//    public static final WiQueryJavaScriptResourceReference WIQUERY_AUTOCOMPLETE_JS =
-//            new WiQueryJavaScriptResourceReference(AutocompleteAjaxComponent.class,
-//                    "wiquery-autocomplete.js");
-    
+
     private static final String NOT_ENTERED = "NOT_ENTERED";
 
     @SpringBean protected PersistenceService persistenceService;
