@@ -36,10 +36,9 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 
 	private SearchRecord mySearch;
 
-	private String text = "08-000028";
+	private String text = null;
 	private String tenant = "n4";
     private BaseOrg org;
-    private BaseOrg org2;
 
     private List<SearchResult> docs = Lists.newArrayList();
     private final ListView<SearchResult> list;
@@ -53,11 +52,11 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
                 docs = assetFullTextSearchService.search(text).getResults();
                 target.add(container);
             }
-
-            @Override protected void onError(AjaxRequestTarget target, Form<?> form) { }
+            @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+                System.out.println("huh?");
+            }
         });
         form.add(new OrgLocationPicker("tree", new PropertyModel(this,"org")));
-//        form.add(new OrgLocationPicker("locTree", new PropertyModel(this,"org2")).withLocations());
 		add(form);
 
 		add(new Form("indexForm") {

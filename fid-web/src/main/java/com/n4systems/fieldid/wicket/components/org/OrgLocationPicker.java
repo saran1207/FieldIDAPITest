@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.wicket.components.org;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.org.OrgLocationTree;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.components.tree.JsonTreeNode;
 import com.n4systems.fieldid.wicket.components.tree.Tree;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -22,26 +24,28 @@ import java.util.List;
 import java.util.Set;
 
 @Deprecated  //R&D component to try out JS tree
-public class OrgLocationPicker extends FormComponentPanel {
+public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
     private @SpringBean OrgService orgService;
+    private @SpringBean PersistenceService persistenceService;
 
     private Tree tree;
+    private String input;
     private Component text;
-    private final HiddenField type;
-    private final HiddenField entityId;
+    private final HiddenField _type;
+    private final HiddenField _entityId;
     private WebMarkupContainer icon;
     private boolean includeLocations = false;
-    private String id;
+    private String entityId;
     private String entityType;
 
     // TODO DD : need to store org & location into resulting model.
     // .: use OrgLocationTreeNode as underlying model???
-    public OrgLocationPicker(String id, IModel<BaseOrg> orgModel) {
-        super(id);
-        add(text = new TextField("text",orgModel));
-        add(type = new HiddenField("type", new PropertyModel(this,"entityType")));
-        add(entityId = new HiddenField("entityId", new PropertyModel(this,"id")));
+    public OrgLocationPicker(String id, IModel<EntityWithTenant> orgModel) {
+        super(id,orgModel);
+        add(text = new TextField("text", new PropertyModel(this,"input")));
+        add(_type = new HiddenField("type", new PropertyModel(this,"entityType")));
+        add(_entityId = new HiddenField("entityId", new PropertyModel(this,"id")));
         add(tree = new Tree("tree") {
             @Override protected List<JsonTreeNode> getNodes(String search) {
                 return buildJsonTree(getOrgLocationTree(search));
@@ -125,5 +129,33 @@ public class OrgLocationPicker extends FormComponentPanel {
             parent = parent.getParent();
         }
     }
+
+    @Override
+    protected void convertInput() {
+        // load proper entity...
+        EntityWithTenant entity = null;
+        OrgLocationTree.NodeType type = OrgLocationTree.NodeType.valueOf(_type.getRawInput());
+        switch (type) {
+            case LOCATION:
+                entity = persistenceService.findById(BaseOrg.class,  getEntityId());
+                break;
+            case INTERNAL_ORG:
+            case CUSTOMER_ORG:
+            case DIVISION_ORG:
+                entity = persistenceService.findById(BaseOrg.class,  getEntityId());
+                break;
+            case VOID:
+                entity = null;
+                break;
+            default:
+                throw new IllegalStateException("can't convert input of type " + type + "(" + entityType + ")");
+        }
+        setConvertedInput(entity);
+    }
+
+    public Long getEntityId() {
+        return Long.parseLong(_entityId.getRawInput());
+    }
+
 
 }
