@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.assettype;
 
-import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.FileAttachment;
@@ -21,7 +20,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
@@ -33,9 +31,6 @@ import java.util.List;
 import static ch.lambdaj.Lambda.on;
 
 public class AssetTypeAttachmentsPanel extends Panel {
-
-    @SpringBean
-    private S3Service s3Service;
 
     List<FileAttachment> attachments = new ArrayList<FileAttachment>();
     private WebMarkupContainer existingAttachmentsContainer;

@@ -35,7 +35,7 @@ public class AssetTypeListPage extends FieldIDFrontEndPage {
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view_all").page(AssetTypeListPage.class).build(),
-                aNavItem().label("nav.add").page("assetTypeEdit.action").onRight().build()
+                aNavItem().label("nav.add").page(AddOrEditAssetTypePage.class).onRight().build()
         ));
     }
 

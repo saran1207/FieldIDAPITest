@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"/>
+
+
+    <form wicket:id="form">
+
+        <div class="infoSet">
+            <label><wicket:message key="label.name"/></label>
+            <input type="text" wicket:id="name"/>
+        </div>
+
+        <div class="infoSet">
+            <label><wicket:message key="label.asset_type_group"/></label>
+            <select wicket:id="group"/>
+        </div>
+
+        <div class="infoSet">
+            <label><wicket:message key="label.uploadimage"/></label>
+            <div wicket:id="image"/>
+        </div>
+
+        <div class="infoSet">
+            <label><wicket:message key="label.attributes"/></label>
+            <div wicket:id="attributes"/>
+        </div>
+
+        <div class="infoSet">
+            <label><wicket:message key="label.assetdescription"/></label>
+            <input type="text" wicket:id="descriptionTemplate"/>
+        </div>
+
+        <a wicket:id="showHide"><wicket:message key="label.more_information"/></a>
+
+        <div wicket:id="moreInfo">
+            <div class="infoSet">
+                <label><wicket:message key="label.linkable"/></label>
+                <input type="checkbox" wicket:id="linkable"/>
+            </div>
+
+            <div class="infoSet">
+                <label><wicket:message key="label.hasmanufacturercertificate"/></label>
+                <input type="checkbox" wicket:id="hasManufacturerCert"/>
+            </div>
+            <div class="infoSet">
+                <label><wicket:message key="label.manufacturercertificatetext"/></label>
+                <textarea wicket:id="manufacturerCertText"/>
+            </div>
+            <div class="infoSet">
+                <label><wicket:message key="label.attachments"/></label>
+                <div wicket:id="attachments"/>
+            </div>
+            <div class="infoSet">
+                <label><wicket:message key="label.warnings"/></label>
+                <textarea wicket:id="warnings"/>
+            </div>
+            <div class="infoSet">
+                <label><wicket:message key="label.more_information"/></label>
+                <textarea  wicket:id="instructions"/>
+            </div>
+            <div class="infoSet">
+                <label><wicket:message key="label.cautionsurl"/></label>
+                <input type="text" wicket:id="cautionUrl"/>
+            </div>
+        </div>
+
+        <a wicket:id="save"><wicket:message key="label.save"/></a>
+        <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+    </form>
+
+</wicket:extend>
+</html>

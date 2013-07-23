@@ -4,8 +4,11 @@ import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.setup.assettype.AddOrEditAssetTypePage;
 import com.n4systems.model.AssetType;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -46,6 +49,7 @@ public class AssetTypeListPanel extends Panel {
                 item.add(new Label("createdDate", new DayDisplayModel(new PropertyModel<Date>(assetType, "created"), true, timeZone)));
                 item.add(new Label("modifiedBy", new PropertyModel<String>(assetType, "modifiedBy.displayName")).setVisible(assetType.getModifiedBy() != null));
                 item.add(new Label("modifiedDate", new DayDisplayModel(new PropertyModel<Date>(assetType, "modified"), true, timeZone)));
+                item.add(new BookmarkablePageLink<Void>("edit", AddOrEditAssetTypePage.class, PageParametersBuilder.uniqueId(assetType.getId())));
             }
         });
 

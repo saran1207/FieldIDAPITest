@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.assettype;
 
-import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.AssetType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
@@ -13,12 +12,8 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class AssetTypeImagePanel extends Panel {
-
-    @SpringBean
-    private S3Service s3Service;
 
     String tempFileName;
     String clientFileName;
@@ -76,7 +71,7 @@ public class AssetTypeImagePanel extends Panel {
         uploadedFileDisplayPanel.setVisible(clientFileName != null);
     }
 
-    public byte[] getAssetImageBytes() {
+    public byte[] getAssetTypeImageBytes() {
         return uploadedBytes;
     }
 

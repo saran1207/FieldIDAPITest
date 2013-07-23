@@ -1,22 +1,30 @@
 package com.n4systems.fieldid.service.asset;
 
 import com.google.common.collect.Lists;
+import com.n4systems.exceptions.FileAttachmentException;
+import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import rfid.ejb.entity.InfoFieldBean;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
@@ -26,6 +34,10 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     private @Autowired AsyncService asyncService;
     private @Autowired RecurringScheduleService recurringScheduleService;
+
+    public AssetType getAssetType(Long id) {
+        return persistenceService.find(AssetType.class, id);
+    }
 
     public List<AssetType> getAssetTypes(Long assetTypeGroupId, String name) {
         QueryBuilder<AssetType> queryBuilder = createUserSecurityBuilder(AssetType.class);
@@ -156,4 +168,117 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
         return persistenceService.findAll(query);
     }
+
+    public List<UnitOfMeasure> getAllUnitOfMeasures() {
+        QueryBuilder<UnitOfMeasure> query = createTenantSecurityBuilder(UnitOfMeasure.class);
+        return persistenceService.findAll(query);
+    }
+
+    public AssetType saveAssetType(AssetType assetType, List<FileAttachment> uploadedFiles, byte[] imageData ) throws FileAttachmentException, ImageAttachmentException {
+        AssetType oldPI = null;
+        if( assetType.getId() != null ) {
+            oldPI = persistenceService.find( AssetType.class, assetType.getId() );
+        }
+        if( oldPI != null ) {
+            //cleanInfoFields(assetType, oldPI );
+        }
+
+        assetType.touch();
+        assetType = (AssetType) persistenceService.saveOrUpdate(assetType);
+        processUploadedFiles(assetType, uploadedFiles );
+        processAssetImage(assetType, imageData );
+        return assetType;
+    }
+
+    private void processAssetImage( AssetType assetType, byte[] imageData ) throws ImageAttachmentException{
+        File imageDirectory = PathHandler.getAssetTypeImageFile(assetType);
+        // clear the old file if we have a new one uploaded or the image has been removed.
+        if( assetType.getImageName() == null || imageData != null ) {
+            if( imageDirectory.exists() && imageDirectory.isDirectory() ) {
+                try {
+                    FileUtils.cleanDirectory(imageDirectory);
+                } catch (Exception e) {
+                    throw new ImageAttachmentException( e );
+                }
+            }
+        }
+
+        if( imageData != null ) {
+            try {
+                File imageFile = new File( imageDirectory, assetType.getImageName() );
+                FileUtils.writeByteArrayToFile( imageFile, imageData );
+            } catch (Exception e) {
+                throw new ImageAttachmentException( e );
+            }
+        }
+    }
+
+    private void processUploadedFiles( AssetType assetType, List<FileAttachment> uploadedFiles ) throws FileAttachmentException {
+        File attachmentDirectory = PathHandler.getAssetTypeAttachmentFile(assetType);
+        File tmpDirectory = PathHandler.getTempRoot();
+
+        if( uploadedFiles != null ) {
+            File tmpFile;
+            // move and attach each uploaded file
+            for(FileAttachment uploadedFile: uploadedFiles) {
+
+                try {
+                    // move the file to it's new location, note that it's location is currently relative to the tmpDirectory
+                    tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
+                    FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+
+                    // clean up the temp file
+                    tmpFile.delete();
+
+                    // now we need to set the correct file name for the attachment and set the modifiedBy
+                    uploadedFile.setFileName(tmpFile.getName());
+                    uploadedFile.setTenant(assetType.getTenant());
+                    uploadedFile.setModifiedBy(assetType.getModifiedBy());
+
+                    // attach the attachment
+                    assetType.getAttachments().add(uploadedFile);
+                } catch (IOException e) {
+                    logger.error("failed to copy uploaded file ", e);
+                    throw new FileAttachmentException(e);
+                }
+
+            }
+
+            persistenceService.update(assetType);
+        }
+
+        // Now we need to cleanup any files that are no longer attached to the assettype
+        if(attachmentDirectory.exists()) {
+
+			/*
+			 * We'll start by constructing a list of attached file names which will be used in
+			 * a directory filter
+			 */
+            final List<String> attachedFiles = new ArrayList<String>();
+            for(FileAttachment file: assetType.getAttachments()) {
+                attachedFiles.add(file.getFileName());
+            }
+
+			/*
+			 * This lists all files in the attachment directory
+			 */
+            for(File detachedFile: attachmentDirectory.listFiles(
+                    new FilenameFilter() {
+                        public boolean accept(File dir, String name) {
+                            // accept only files that are not in our attachedFiles list
+                            return !attachedFiles.contains(name);
+                        }
+                    }
+            )) {
+				/*
+				 * any file returned from our fileNotAttachedFilter, is not in our attached file list
+				 * and should be removed
+				 */
+                detachedFile.delete();
+
+            }
+        }
+
+    }
+
 }

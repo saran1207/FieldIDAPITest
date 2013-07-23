@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:panel>
+    <div wicket:id="existingAttributesContainer">
+        <table>
+            <thead>
+                <tr>
+                    <th><wicket:message key="label.name"/></th>
+                    <th><wicket:message key="label.type"/></th>
+                    <th><wicket:message key="label.options"/></th>
+                    <th><wicket:message key="label.required"/></th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr wicket:id="existingAttributes">
+                    <td>
+                        <input type="text" wicket:id="attributeName"/>
+                    </td>
+                    <td>
+                        <select wicket:id="attributeType"/>
+                    </td>
+                    <td>
+                        <input type="text" wicket:id="selectOptions"/>
+                        <input type="checkbox" wicket:id="dateOption"/>
+                        <label wicket:enclosure="dateOption"><wicket:message key="label.include_time"/></label>
+                        <select wicket:id="unitOfMeasureChoice"/>
+                    </td>
+                    <td>
+                        <input type="checkbox" wicket:id="required"/>
+                    </td>
+                    <td>
+                        <a href="javascript:void(0);"><wicket:message key="label.delete"/></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <a wicket:id="add"><wicket:message key="label.add"/></a>
+</wicket:panel>
+</html>
