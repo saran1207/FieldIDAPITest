@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.org.OrgLocationTree;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.components.tree.JsonTreeNode;
 import com.n4systems.fieldid.wicket.components.tree.Tree;
+import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.wicket.Component;
@@ -23,8 +24,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.List;
 import java.util.Set;
 
-@Deprecated  //R&D component to try out JS tree
-public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
+public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponentPanel<T> {
 
     private @SpringBean OrgService orgService;
     private @SpringBean PersistenceService persistenceService;
@@ -39,11 +39,21 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
     private String entityId;
     private String entityType;
 
-    // TODO DD : need to store org & location into resulting model.
-    // .: use OrgLocationTreeNode as underlying model???
-    public OrgLocationPicker(String id, IModel<EntityWithTenant> orgModel) {
+
+    public OrgLocationPicker(String id, IModel<T> orgModel) {
         super(id,orgModel);
-        add(text = new TextField("text", new PropertyModel(this,"input")));
+        T entity = orgModel.getObject();
+        if (entity!=null) {
+            entityId = entity.getId() + "";
+            entityType = OrgLocationTree.NodeType.fromClass(entity.getClass()).name();
+            if (entity instanceof BaseOrg) {
+                input = ((BaseOrg) entity).getName();
+            } else if (entity instanceof PredefinedLocation) {
+                input = ((PredefinedLocation)entity).getName();
+            }
+        }
+
+        add(text = new TextField("text", new PropertyModel(this, "input")));
         add(_type = new HiddenField("type", new PropertyModel(this,"entityType")));
         add(_entityId = new HiddenField("entityId", new PropertyModel(this,"id")));
         add(tree = new Tree("tree") {
@@ -73,6 +83,9 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
         return OrgLocationTree.NodeType.valueOf(type);
     }
 
+    // this feature isn't totally finished yet.  the service stuff is 90% but the storing in the model part isn't.
+    // need to beef up the convertInput method to fetch the proper entity. also need to have a model that contains an Org AND/OR Location in it.
+    @Deprecated
     public OrgLocationPicker withLocations() {
         includeLocations = true;
         return this;
@@ -116,7 +129,7 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
             }
         }
         jsonNode.setChildren(nodes);
-        if (node.matches()) {
+        if (Boolean.TRUE.equals(node.matches())) {
             jsonNode.addAttribute("class", "match");
             setParentsToOpen(parent);
         }
@@ -133,16 +146,16 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
     @Override
     protected void convertInput() {
         // load proper entity...
-        EntityWithTenant entity = null;
+        T entity = null;
         OrgLocationTree.NodeType type = OrgLocationTree.NodeType.valueOf(_type.getRawInput());
         switch (type) {
             case LOCATION:
-                entity = persistenceService.findById(BaseOrg.class,  getEntityId());
+                entity = (T) persistenceService.findById(BaseOrg.class,  getEntityId());
                 break;
             case INTERNAL_ORG:
             case CUSTOMER_ORG:
             case DIVISION_ORG:
-                entity = persistenceService.findById(BaseOrg.class,  getEntityId());
+                entity = (T) persistenceService.findById(BaseOrg.class,  getEntityId());
                 break;
             case VOID:
                 entity = null;
@@ -157,5 +170,7 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
         return Long.parseLong(_entityId.getRawInput());
     }
 
-
+    public String getInput() {
+        return input;
+    }
 }

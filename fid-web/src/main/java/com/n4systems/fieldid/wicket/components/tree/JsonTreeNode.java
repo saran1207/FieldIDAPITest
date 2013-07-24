@@ -25,6 +25,7 @@ public class JsonTreeNode {
         addAttribute("data", node.getType().name());
         addAttribute("class", CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_HYPHEN, node.getType().name()));
         this.parent = parent;
+        this.isLeaf = node.isLeaf();
     }
 
     public void setChildren(List<JsonTreeNode> nodes) {
@@ -67,7 +68,9 @@ public class JsonTreeNode {
 
     public JsonTreeNode setLeafType(OrgLocationTree.NodeType type) {
         if (type!=null) {
-            this.isLeaf = type.equals(getNodeTypeFromData());
+            if (type.equals(getNodeTypeFromData())) {
+                isLeaf = true;
+            }
             if (isLeaf) {
                 children = null;
                 state = null;

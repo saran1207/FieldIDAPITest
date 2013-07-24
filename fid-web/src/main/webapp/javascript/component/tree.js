@@ -38,7 +38,7 @@ var treeFactory = (function() {
 				return;
 			}
 			var newInput=$text.val();
-			if (newInput!=input) { //} && newInput.length>1) {
+			if (newInput!=input && newInput.length>1) {
 				input = newInput;
 				searching = true;
 				lazyInit();

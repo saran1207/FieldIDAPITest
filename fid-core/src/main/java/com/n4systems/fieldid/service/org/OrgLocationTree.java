@@ -132,7 +132,8 @@ public class OrgLocationTree {
     private void filterIfNeeded() {
         if (filter!=null && isFiltered==false) {
             for (OrgLocationTreeNode node:nodes.values()) {
-                if (node.matches) {
+                node.isLeaf = node.getChildren().size()==0;
+                if (node.matches()) {
                     node.included=Boolean.TRUE;
                     includeParents(node);
                 }
@@ -154,7 +155,7 @@ public class OrgLocationTree {
             final String n = name.toLowerCase();
             filter = new Predicate<String>() {
                 @Override public boolean apply(String input) {
-                    return input.toLowerCase().trim().indexOf(n) >= 0;
+                    return input==null ? false : input.toLowerCase().trim().indexOf(n) >= 0;
                 }
             };
         }
@@ -169,8 +170,8 @@ public class OrgLocationTree {
         // TODO DD : do i need to store entity or just id?  entire entity might be way too heavy?
         private Long id;
         private String name;
-        private Boolean matches = null;
         private Boolean included;
+        private Boolean isLeaf = null;
         private NodeType type;
 
         OrgLocationTreeNode() {
@@ -187,13 +188,12 @@ public class OrgLocationTree {
                         entity instanceof PredefinedLocation ? ((PredefinedLocation)entity).getName() :
                         "root";
             children = new TreeSet<OrgLocationTreeNode>(new OrgLocationComparator());
-            matches = (filter!=null) ? filter.apply(name) : null;
             Preconditions.checkArgument(entity!=null,"can't have null entity for tree node");
         }
 
         public boolean isIncluded() {
             // recall : if no matching performed, then ALL nodes are included.
-            return matches==null  || Boolean.TRUE.equals(included);
+            return filter==null || Boolean.TRUE.equals(included) || matches();
         }
 
         public void setParent(OrgLocationTreeNode parent) {
@@ -230,10 +230,12 @@ public class OrgLocationTree {
         }
 
         public boolean matches() {
-            return Boolean.TRUE.equals(matches);
+            return (filter!=null) ? filter.apply(name) : false;
         }
 
-
+        public boolean isLeaf() {
+            return Boolean.TRUE.equals(isLeaf);
+        }
     }
 
     class OrgTreeNode extends OrgLocationTreeNode<BaseOrg> {

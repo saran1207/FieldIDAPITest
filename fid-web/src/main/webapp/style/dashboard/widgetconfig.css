@@ -16,7 +16,6 @@
 .widgetConfiguration form fieldset .row { 
 	clear : both; 
 	padding-top : 10px;
-    overflow: hidden;
 }
 
 .widgetConfiguration .largeInstruction {
@@ -36,7 +35,8 @@
 
 .widgetConfiguration .actionsRow {
     padding-top:22px;
-    padding-left:138px;
+    margin-left:138px;
+    float: left;
 }
 
 .widgetConfiguration form fieldset .row .value {
@@ -95,7 +95,6 @@
 .orgPickerContainer {
     display:block;
     float:left;
-    overflow:hidden;
 }
 
 .orgSelector {
