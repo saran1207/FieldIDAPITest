@@ -13,12 +13,12 @@
         <fieldset>
             <div class="control-group inline">
                 <label><wicket:message key="label.name"/></label>
-                <input type="text" wicket:id="name" class="input-xxlrg" />
+                <input type="text" wicket:id="name" class="width-xxlrg" />
             </div>
 
             <div class="control-group inline">
                 <label><wicket:message key="label.group"/></label>
-                <select wicket:id="group" class="input-med" />
+                <select wicket:id="group" class="width-med" />
             </div>
 
             <div class="control-group">
@@ -28,20 +28,14 @@
         </fieldset>
         
         <!-- Attributes -->
-        <fieldset>
-            <legend><wicket:message key="label.attributes"/></legend>
-            <p>Use Attributes to setup any number of entry fields for this asset type. For example, Manufacturer, Size, Model.</p>
-            <div class="infoSet">
-                <label></label>
-                <div wicket:id="attributes"/>
-            </div>
-        </fieldset>
+        <fieldset wicket:id="attributes"/>
         
         <!-- Description Template -->
-        <div class="infoSet">
+        <fieldset>
             <legend><wicket:message key="label.descriptiontemplate"/></legend>
-            <input type="text" wicket:id="descriptionTemplate" class="input-full" />
-        </div>
+            <p>Using your attributes above you can build a sentence type description that will be used throughout Field ID on the Web and Mobile as a summay for the aseet. <a href="#">See Examples</a>.</p>
+            <input type="text" wicket:id="descriptionTemplate" class="width-full" />
+        </fieldset>
 
         <!-- More information -->
         <fieldset>
@@ -50,32 +44,33 @@
             </legend>
 
             <div wicket:id="moreInfo">
-                <div class="infoSet">
-                    <label><wicket:message key="label.linkable"/></label>
+                <wicket:message key="label.linkable"/>
+                <div class="control-group">
                     <input type="checkbox" wicket:id="linkable"/>
+                    <label><strong>Allow Asset Linking.</strong> This asset type will have the ability to link to other assets if this feature is enabled. This is commonly used when as asset of this type will need to be associated to other assets.</label> 
                 </div>
 
-                <div class="infoSet">
+                <div class="control-group">
                     <label><wicket:message key="label.hasmanufacturercertificate"/></label>
                     <input type="checkbox" wicket:id="hasManufacturerCert"/>
                 </div>
-                <div class="infoSet">
+                <div class="control-group">
                     <label><wicket:message key="label.manufacturercertificatetext"/></label>
                     <textarea wicket:id="manufacturerCertText"/>
                 </div>
-                <div class="infoSet">
+                <div class="control-group">
                     <label><wicket:message key="label.attachments"/></label>
                     <div wicket:id="attachments"/>
                 </div>
-                <div class="infoSet">
+                <div class="control-group">
                     <label><wicket:message key="label.warnings"/></label>
                     <textarea wicket:id="warnings"/>
                 </div>
-                <div class="infoSet">
+                <div class="control-group">
                     <label><wicket:message key="label.more_information"/></label>
                     <textarea  wicket:id="instructions"/>
                 </div>
-                <div class="infoSet">
+                <div class="control-group">
                     <label><wicket:message key="label.cautionsurl"/></label>
                     <input type="text" wicket:id="cautionUrl"/>
                 </div>
