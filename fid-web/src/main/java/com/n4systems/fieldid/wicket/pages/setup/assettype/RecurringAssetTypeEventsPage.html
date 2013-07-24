@@ -20,21 +20,22 @@
                 <span class="chosen" wicket:id="timeContainer"><select class="time" wicket:id="time"/><select class="time" wicket:id="multipleTimes"/></span>
                 <span wicket:id="dateTime"/>
                 <p><wicket:message key="label.for"/></p>
-                <div style="display:inline" wicket:id="org"></div>
+                <div style="display:inline" wicket:id="organization"></div>
                 <a class="blue-submit" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
             </div>
             <div class="affect-all">
-                <input type="checkbox" wicket:id="ownerAndDown"><label><wicket:message key="label.affect_all"/></label>
+                <input type="checkbox" wicket:id="ownerAndDown"><label><wicket:message key="label.affect_all"/></label><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/>
             </div>
         </div>
 
         <div wicket:id="tableContainer">
             <table class="existing-events">
                 <tr>
-                    <th>Event Type</th>
-                    <th>Recurs</th>
-                    <th>At</th>
-                    <th>For</th>
+                    <th><wicket:message key="label.event_type"/></th>
+                    <th><wicket:message key="title.recurs"/></th>
+                    <th><wicket:message key="title.at"/></th>
+                    <th><wicket:message key="title.for"/></th>
+                    <th><wicket:message key="label.affect_all"/></th>
                     <th></th>
                 </tr>
                 <tr wicket:id="eventTypes">
@@ -42,6 +43,7 @@
                     <td><label wicket:id="recurrence"></label></td>
                     <td><label wicket:id="time"></label></td>
                     <td><label wicket:id="org"></label></td>
+                    <td><label wicket:id="affectAll"/></td>
                     <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
                 </tr>
             </table>

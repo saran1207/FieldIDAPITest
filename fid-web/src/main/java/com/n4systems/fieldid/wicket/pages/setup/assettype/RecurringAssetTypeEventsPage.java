@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.task.AsyncService;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
@@ -16,6 +17,7 @@ import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.EnumLabelModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.YesOrNoModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
@@ -36,6 +38,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.validation.FormValidatorAdapter;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.RefreshingView;
@@ -184,9 +187,13 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
             inputContainer.add(timePicker);
 
             //??withAutoUpdate();
-            inputContainer.add(new AutoCompleteOrgPicker("org", new PropertyModel<BaseOrg>(this, "owner")).setRequired(false));
+            inputContainer.add(new AutoCompleteOrgPicker("organization", new PropertyModel<BaseOrg>(this, "owner")).setRequired(false));
 
             inputContainer.add(new CheckBox("ownerAndDown", new PropertyModel<Boolean>(this, "ownerAndDown")));
+
+            ContextImage tooltip;
+            inputContainer.add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
+            tooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_owner_and_down").getObject(), TipsyBehavior.Gravity.N));
 
             recurrenceTypeDropDown.setNullValid(false).setOutputMarkupId(true).add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override protected void onUpdate(AjaxRequestTarget target) {
@@ -220,6 +227,10 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                     item.add(new Label("recurrence", new EnumLabelModel(event.getRecurrence().getType())));
                     item.add(new Label("org", new NullCoverterModel(new PropertyModel<String>(item.getDefaultModelObject(), "owner.name"), "---")));
                     item.add(new Label("time", new DisplayTimeModel(new PropertyModel<Set<RecurrenceTime>>(item.getDefaultModelObject(), "recurrence.times"))));
+                    if(((RecurringAssetTypeEvent) item.getDefaultModelObject()).getOwner() == null)
+                        item.add(new Label("affectAll", "---"));
+                    else
+                        item.add(new Label("affectAll", new YesOrNoModel(new PropertyModel<Boolean>(item.getModelObject(), "ownerAndDown"))));
                     item.add(new IndicatingAjaxLink("remove") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {

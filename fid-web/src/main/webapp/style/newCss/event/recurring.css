@@ -38,6 +38,10 @@
     vertical-align: top;
 }
 
+.new-event .affect-all img {
+    padding-left: 5px;
+}
+
 #contentHeader {
     margin-bottom:0px;
 }
