@@ -8,71 +8,86 @@
 
     <div wicket:id="feedbackPanel"/>
 
+    <form wicket:id="form" class="asset-type">
+        <!-- top section -->
+        <fieldset>
+            <div class="control-group inline">
+                <label><wicket:message key="label.name"/></label>
+                <input type="text" wicket:id="name" class="input-xxlrg" />
+            </div>
 
-    <form wicket:id="form">
+            <div class="control-group inline">
+                <label><wicket:message key="label.group"/></label>
+                <select wicket:id="group" class="input-med" />
+            </div>
 
+            <div class="control-group">
+                <label><wicket:message key="label.defaultprofilepic"/></label>
+                <div wicket:id="image"/>
+            </div>
+        </fieldset>
+        
+        <!-- Attributes -->
+        <fieldset>
+            <legend><wicket:message key="label.attributes"/></legend>
+            <p>Use Attributes to setup any number of entry fields for this asset type. For example, Manufacturer, Size, Model.</p>
+            <div class="infoSet">
+                <label></label>
+                <div wicket:id="attributes"/>
+            </div>
+        </fieldset>
+        
+        <!-- Description Template -->
         <div class="infoSet">
-            <label><wicket:message key="label.name"/></label>
-            <input type="text" wicket:id="name"/>
+            <legend><wicket:message key="label.descriptiontemplate"/></legend>
+            <input type="text" wicket:id="descriptionTemplate" class="input-full" />
         </div>
 
-        <div class="infoSet">
-            <label><wicket:message key="label.asset_type_group"/></label>
-            <select wicket:id="group"/>
-        </div>
+        <!-- More information -->
+        <fieldset>
+            <legend>
+                <a wicket:id="showHide"><wicket:message key="label.more_information"/></a>
+            </legend>
 
-        <div class="infoSet">
-            <label><wicket:message key="label.uploadimage"/></label>
-            <div wicket:id="image"/>
-        </div>
+            <div wicket:id="moreInfo">
+                <div class="infoSet">
+                    <label><wicket:message key="label.linkable"/></label>
+                    <input type="checkbox" wicket:id="linkable"/>
+                </div>
 
-        <div class="infoSet">
-            <label><wicket:message key="label.attributes"/></label>
-            <div wicket:id="attributes"/>
-        </div>
-
-        <div class="infoSet">
-            <label><wicket:message key="label.assetdescription"/></label>
-            <input type="text" wicket:id="descriptionTemplate"/>
-        </div>
-
-        <a wicket:id="showHide"><wicket:message key="label.more_information"/></a>
-
-        <div wicket:id="moreInfo">
-            <div class="infoSet">
-                <label><wicket:message key="label.linkable"/></label>
-                <input type="checkbox" wicket:id="linkable"/>
+                <div class="infoSet">
+                    <label><wicket:message key="label.hasmanufacturercertificate"/></label>
+                    <input type="checkbox" wicket:id="hasManufacturerCert"/>
+                </div>
+                <div class="infoSet">
+                    <label><wicket:message key="label.manufacturercertificatetext"/></label>
+                    <textarea wicket:id="manufacturerCertText"/>
+                </div>
+                <div class="infoSet">
+                    <label><wicket:message key="label.attachments"/></label>
+                    <div wicket:id="attachments"/>
+                </div>
+                <div class="infoSet">
+                    <label><wicket:message key="label.warnings"/></label>
+                    <textarea wicket:id="warnings"/>
+                </div>
+                <div class="infoSet">
+                    <label><wicket:message key="label.more_information"/></label>
+                    <textarea  wicket:id="instructions"/>
+                </div>
+                <div class="infoSet">
+                    <label><wicket:message key="label.cautionsurl"/></label>
+                    <input type="text" wicket:id="cautionUrl"/>
+                </div>
             </div>
-
-            <div class="infoSet">
-                <label><wicket:message key="label.hasmanufacturercertificate"/></label>
-                <input type="checkbox" wicket:id="hasManufacturerCert"/>
-            </div>
-            <div class="infoSet">
-                <label><wicket:message key="label.manufacturercertificatetext"/></label>
-                <textarea wicket:id="manufacturerCertText"/>
-            </div>
-            <div class="infoSet">
-                <label><wicket:message key="label.attachments"/></label>
-                <div wicket:id="attachments"/>
-            </div>
-            <div class="infoSet">
-                <label><wicket:message key="label.warnings"/></label>
-                <textarea wicket:id="warnings"/>
-            </div>
-            <div class="infoSet">
-                <label><wicket:message key="label.more_information"/></label>
-                <textarea  wicket:id="instructions"/>
-            </div>
-            <div class="infoSet">
-                <label><wicket:message key="label.cautionsurl"/></label>
-                <input type="text" wicket:id="cautionUrl"/>
-            </div>
-        </div>
-
+        </fieldset>
+        
+        <!-- actions -->
         <a wicket:id="save"><wicket:message key="label.save"/></a>
         <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
     </form>
 
 </wicket:extend>
+    <script type="javascript">
+    </script>
 </html>

@@ -1,3 +1,158 @@
-#pageContent {
-    overflow: visible;
+#page {
+    padding: 24px;
+    width: 976px;
+}
+
+/* Default form styles */
+fieldset {
+    border: none;
+    margin: 0;
+    padding: 14px 0;
+    *zoom: 1;
+}
+fieldset:before,
+fieldset:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+fieldset:after {
+    clear: both;
+}
+input,
+select,
+textarea {
+    padding-left: 4px;
+    margin: 4px 0 10px;
+}
+form.asset-type input {
+    border: 1px solid #c7c7c9;
+    height: 25px;
+    margin-right: 6px;
+}
+	.input-full { width: 920px; }
+	.input-xxlrg { width: 675px; }
+	.input-xlrg { }
+	.input-lrg { width: 387px; }
+	.input-med  { width: 271px; } /*284px*/
+	.input-sml { width: 225px; }
+	.input-mini { width: 134px; }
+
+label {
+    font-size: 13px;
+    display: block;
+}
+textarea {
+    height: 115px;
+    resize: none;
+    border: 1px solid #c7c7c9;
+    outline: none;
+}
+textarea:focus,
+input:focus {
+    outline: none;
+    border: 1px solid #3a3a3a;
+}
+legend {
+    border-top: 1px solid #c7c7c9;
+    width: 100%;
+    padding-top: 8px;
+    font-weight: bold;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+/* Chosen plugin overrides */
+.chzn-container {
+    margin: 4px 0 10px;
+}
+.chzn-single.chzn-default,
+.chzn-container-single .chzn-single {
+    border-radius: 0;
+    box-shadow: none;
+    background: none;
+    height: 23px;
+    padding-top: 2px;
+    border-color: #c7c7c9;
+}
+/*.chzn-container-active.chzn-with-drop .chzn-single div b {
+    background-position-y: 5px;
+}
+.chzn-container-single .chzn-single div b {
+    background-position-y: 5px;
+}*/
+.chzn-container-single .chzn-single span,
+.chzn-container-single .chzn-default {
+    color: #7a7a7a;
+}
+.chzn-container-single .chzn-single {
+    line-height: 20px;
+}
+/* Used to group and align labels and controls */
+.control-group {
+    margin: 6px 0;
+}
+.control-group label {
+	margin-bottom: 4px;
+}
+.control-group input,
+.control-group select,
+.control-group textarea,
+.chzn-container {
+    margin: 0;
+}
+
+.control-group.inline {
+    display: inline-block;
+    vertical-align: top;
+}
+/* For using multiple controls with one label */
+.control-combo label {
+    padding-top: 4px;
+}
+.control-combo .controls {
+    width: 285px;
+    display: inline-block;
+    vertical-align: top;
+}
+.control-combo .chzn-container {
+    margin-bottom: 3px;
+}
+/* add class to the <fieldset> that contains the primary selection to create more prominence */
+.primary-selection label {
+    font-size: 18px;
+}
+/* For forms with the label on the left and input on the right */
+.form-horizontal label {
+    width: 180px;
+    margin-right: 14px;
+    padding-top: 4px;
+    float: left;
+    text-align: right;
+}
+.form-horizontal .links {
+    font-size: 13px;
+    margin-left: 2px;
+}
+.form-horizontal .text-block {
+    margin-left: 193px;
+}
+
+/* CSS trickery for custom file inputs */
+.uploads {
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+}
+.uploads .file-input {
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.uploads .file-uploaded {
+    position: relative;
 }

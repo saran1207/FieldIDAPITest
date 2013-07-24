@@ -8,29 +8,29 @@
         <table>
             <thead>
                 <tr>
-                    <th><wicket:message key="label.name"/></th>
+                    <th class="attribute-name"><wicket:message key="label.name"/></th>
                     <th><wicket:message key="label.type"/></th>
-                    <th><wicket:message key="label.options"/></th>
                     <th><wicket:message key="label.required"/></th>
-                    <th>&nbsp;</th>
+                    <th><wicket:message key="label.options"/></th>
                 </tr>
             </thead>
             <tbody>
                 <tr wicket:id="existingAttributes">
+                    <td>icon</td>
                     <td>
-                        <input type="text" wicket:id="attributeName"/>
+                        <input type="text" wicket:id="attributeName" class="input-sml" />
                     </td>
                     <td>
-                        <select wicket:id="attributeType"/>
-                    </td>
-                    <td>
-                        <input type="text" wicket:id="selectOptions"/>
-                        <input type="checkbox" wicket:id="dateOption"/>
-                        <label wicket:enclosure="dateOption"><wicket:message key="label.include_time"/></label>
-                        <select wicket:id="unitOfMeasureChoice"/>
+                        <select wicket:id="attributeType" class="input-mini" />
                     </td>
                     <td>
                         <input type="checkbox" wicket:id="required"/>
+                    </td>
+                    <td>
+                        <input type="text" wicket:id="selectOptions" class="input-lrg" />
+                        <input type="checkbox" wicket:id="dateOption"/>
+                        <label wicket:enclosure="dateOption"><wicket:message key="label.include_time"/></label>
+                        <select wicket:id="unitOfMeasureChoice"/>
                     </td>
                     <td>
                         <a href="javascript:void(0);"><wicket:message key="label.delete"/></a>

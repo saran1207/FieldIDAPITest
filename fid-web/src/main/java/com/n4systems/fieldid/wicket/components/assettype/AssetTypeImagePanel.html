@@ -7,19 +7,19 @@
 
     <div wicket:id="imageUploadPanel">
         <form wicket:id="fileUploadForm">
-            <p><wicket:message key="label.assetimageslookbest"/></p>
-
+            <!-- <div class="uploads">
+              <input type="file" class="file-input" wicket:id="assetTypeImageFile">
+              <input type="text" class="file-uploaded">
+              <span class="btn-browse">Browse</span>
+            </div> -->
             <input type="file" wicket:id="assetTypeImageFile">
+            <p class="inline"><wicket:message key="label.assetimageslookbest"/></p>
         </form>
-
     </div>
 
     <div wicket:id="uploadedFileDisplayPanel">
-
         <img src="/fieldid/images/asset-image-icon.png"> <span wicket:id="fileName"></span>
-
         <a wicket:id="removeLink"><wicket:message key="label.remove"/></a>
-
     </div>
 
 </wicket:panel>
