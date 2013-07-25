@@ -1,3 +1,15 @@
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+} 
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
+
 #page {
     padding: 24px;
     width: 976px;
@@ -15,6 +27,9 @@ fieldset {
 }
 input, select, textarea {
     padding-left: 4px;
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
 }
 input {
     border: 1px solid #c7c7c9;
@@ -42,18 +57,12 @@ legend {
     padding-top: 14px;
 }
 
-/* Width variations for inputs and table headers - TODO clean up*/
-.attributes-setup-list span {
-	display: inline-block;
-	font-size: 13px;
-}
+/* Width variations for inputs and headers */
 .width-full { 
 	width: 920px; 
 }
 .width-xxlrg { 
-	width: 675px; 
-}
-.width-xlrg { 
+	width: 688px; 
 }
 .width-lrg { 
 	width: 387px; 
@@ -80,7 +89,7 @@ legend {
     border-radius: 0;
     box-shadow: none;
     background: none;
-    height: 23px;
+    height: 25px;
     padding-top: 2px;
     border-color: #c7c7c9;
 }
@@ -124,7 +133,7 @@ legend {
 }
 
 /* CSS trickery for custom file inputs */
-.uploads {
+/*.uploads {
     cursor: pointer;
     display: inline-block;
     overflow: hidden;
@@ -140,22 +149,7 @@ legend {
 }
 .uploads .file-uploaded {
     position: relative;
-}
-
-/* GENERAL TABLE STYLES */
-table {
-	margin-top: 20px;
-}
-tr {
-	border-bottom: 1px solid #ccc;
-}
-th, td {
-	padding: 10px 5px;
-}
-th {
-	font-size: 13px;
-}
-
+}*/
 
 /* ICONS */
 .entypo-icons {
@@ -207,11 +201,32 @@ th {
 /* PAGE SPECIFIC STYLES */
 .asset-type .required {
 	text-align: center;
-	padding: 0 20px;
+	width: 85px;
 }
 .asset-type .btn-gray {
-	margin: 10px 5px 10px 36px;
+	margin: 10px 6px;
 }
+
+.attributes-setup-list {
+	margin-top: 20px;
+}
+	.attributes-setup-list li {
+		border-bottom: 1px solid #ccc;
+		padding: 10px 5px;
+	}
+	.attributes-setup-list span {
+		font-size: 13px;
+		margin-right: 10px;
+		float: left;
+	}
+	.attributes-setup-list .li-delete {
+		float: right;
+	}
+	.attribute-name {
+		margin-left: 32px;
+	}
+	
+
 
 
 

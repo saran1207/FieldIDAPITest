@@ -33,8 +33,10 @@
         <!-- Description Template -->
         <fieldset>
             <legend><wicket:message key="label.description_template"/></legend>
-            <p><wicket:message key="label.description_instructions"/> <a href="#"><wicket:message key="label.see_examples"/></a>.</p>
-            <input type="text" wicket:id="descriptionTemplate" class="width-full" />
+            <div class="control-group">
+                <label><wicket:message key="label.description_instructions"/> <a href="#"><wicket:message key="label.see_examples"/></a>.</label>
+                <input type="text" wicket:id="descriptionTemplate" class="width-full" />
+            </div>
         </fieldset>
 
         <!-- More information -->

@@ -7,28 +7,28 @@
 
     <legend><wicket:message key="label.attributes"/></legend>
     <p><wicket:message key="label.use_attributes_setup"/></p>
-    
+
     <ul class="attributes-setup-list" wicket:id="existingAttributesContainer">
-        <li class="headings">
-            <span class="width-sml"><wicket:message key="label.attribute_name"/></span>
+        <li class="headings clearfix">
+            <span class="width-sml attribute-name"><wicket:message key="label.attribute_name"/></span>
             <span class="width-xsml"><wicket:message key="label.type"/></span>
             <span class="required"><wicket:message key="label.required"/></span>
             <span class="width-lrg"><wicket:message key="label.attribute_options"/></span>
         </li>
-        <li wicket:id="existingAttributes">
-            <span><span class="entypo-icons entypo-list">reorder</span></span>
+        <li wicket:id="existingAttributes" class="clearfix">
+            <span class="entypo-icons entypo-list">reorder</span>
             <span><input type="text" wicket:id="attributeName" class="width-sml" /></span>
             <span><select wicket:id="attributeType" class="width-xsml" /></span>
             <span class="required"><input type="checkbox" wicket:id="required"/></span>
             <span class="width-lrg">
                 <input type="text" wicket:id="selectOptions" class="width-lrg" />
-                <div class="control-group">
+                <div>
                     <input type="checkbox" wicket:id="dateOption"/>
                     <label wicket:enclosure="dateOption" class="inline"><wicket:message key="label.include_time"/></label>
                 </div>
                 <select wicket:id="unitOfMeasureChoice"/>
             </span>
-            <span><a class="entypo-icons entypo-x" href="javascript:void(0);">x</a></span>
+            <span class="li-delete"><a class="entypo-icons entypo-x" href="javascript:void(0);">x</a></span>
         </li>
     </ul>
     <!-- <table wicket:id="existingAttributesContainer">
