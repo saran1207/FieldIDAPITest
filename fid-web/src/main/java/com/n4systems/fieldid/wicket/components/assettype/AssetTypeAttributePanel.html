@@ -2,12 +2,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
       xml:lang="en"
-      lang="en">
+      lang="en"`>
 <wicket:panel>
 
     <legend><wicket:message key="label.attributes"/></legend>
     <p><wicket:message key="label.use_attributes_setup"/></p>
-    <table wicket:id="existingAttributesContainer">
+    
+    <ul class="attributes-setup-list" wicket:id="existingAttributesContainer">
+        <li class="headings">
+            <span class="width-sml"><wicket:message key="label.attribute_name"/></span>
+            <span class="width-xsml"><wicket:message key="label.type"/></span>
+            <span class="required"><wicket:message key="label.required"/></span>
+            <span class="width-lrg"><wicket:message key="label.attribute_options"/></span>
+        </li>
+        <li wicket:id="existingAttributes">
+            <span><span class="entypo-icons entypo-list">reorder</span></span>
+            <span><input type="text" wicket:id="attributeName" class="width-sml" /></span>
+            <span><select wicket:id="attributeType" class="width-xsml" /></span>
+            <span class="required"><input type="checkbox" wicket:id="required"/></span>
+            <span class="width-lrg">
+                <input type="text" wicket:id="selectOptions" class="width-lrg" />
+                <div class="control-group">
+                    <input type="checkbox" wicket:id="dateOption"/>
+                    <label wicket:enclosure="dateOption" class="inline"><wicket:message key="label.include_time"/></label>
+                </div>
+                <select wicket:id="unitOfMeasureChoice"/>
+            </span>
+            <span><a class="entypo-icons entypo-x" href="javascript:void(0);">x</a></span>
+        </li>
+    </ul>
+    <!-- <table wicket:id="existingAttributesContainer">
         <thead>
             <tr>
                 <th colspan="2" class="width-sml"><wicket:message key="label.attribute_name"/></th>
@@ -18,21 +42,23 @@
         </thead>
         <tbody>
             <tr wicket:id="existingAttributes">
-                <td class="entypo-icons entypo-list">reorder</td>
+                <td><span class="entypo-icons entypo-list">reorder</span></td>
                 <td><input type="text" wicket:id="attributeName" class="width-sml" /></td>
                 <td><select wicket:id="attributeType" class="width-xsml" /></td>
                 <td class="required"><input type="checkbox" wicket:id="required"/></td>
                 <td class="width-lrg">
                     <input type="text" wicket:id="selectOptions" class="width-lrg" />
-                    <input type="checkbox" wicket:id="dateOption"/>
-                    <label wicket:enclosure="dateOption"><wicket:message key="label.include_time"/></label>
+                    <div class="control-group">
+                        <input type="checkbox" wicket:id="dateOption"/>
+                        <label wicket:enclosure="dateOption" class="inline"><wicket:message key="label.include_time"/></label>
+                    </div>
                     <select wicket:id="unitOfMeasureChoice"/>
                 </td>
-                <td class="entypo-icons entypo-x"><a href="javascript:void(0);">x</a></td>
+                <td><a class="entypo-icons entypo-x" href="javascript:void(0);">x</a></td>
             </tr>
         </tbody>
-    </table>
-    <a wicket:id="add"><wicket:message key="label.addattribute"/></a>
+    </table> -->
+    <span wicket:id="add "class="btn-gray"><wicket:message key="label.addattribute"/></span>
     <wicket:message key="label.add_attribute_example"/>
 </wicket:panel>
 </html>
