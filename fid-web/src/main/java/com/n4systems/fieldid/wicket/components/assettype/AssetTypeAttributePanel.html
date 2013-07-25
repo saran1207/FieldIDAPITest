@@ -6,40 +6,33 @@
 <wicket:panel>
 
     <legend><wicket:message key="label.attributes"/></legend>
-    <p>Use Attributes to setup any number of entry fields for this asset type. For example, Manufacturer, Size, Model.</p>
+    <p><wicket:message key="label.use_attributes_setup"/></p>
     <table wicket:id="existingAttributesContainer">
         <thead>
             <tr>
-                <th colspan="2" class="width-sml"><wicket:message key="label.name"/></th>
+                <th colspan="2" class="width-sml"><wicket:message key="label.attribute_name"/></th>
                 <th class="width-xsml"><wicket:message key="label.type"/></th>
                 <th class="required"><wicket:message key="label.required"/></th>
-                <th colspan="2" class="width-lrg"><wicket:message key="label.options"/></th>
+                <th colspan="2" class="width-lrg"><wicket:message key="label.attribute_options"/></th>
             </tr>
         </thead>
         <tbody>
             <tr wicket:id="existingAttributes">
-                <td>icon</td>
-                <td>
-                    <input type="text" wicket:id="attributeName" class="width-sml" />
-                </td>
-                <td>
-                    <select wicket:id="attributeType" class="width-xsml" />
-                </td>
-                <td class="required">
-                    <input type="checkbox" wicket:id="required"/>
-                </td>
+                <td class="entypo-icons entypo-list">reorder</td>
+                <td><input type="text" wicket:id="attributeName" class="width-sml" /></td>
+                <td><select wicket:id="attributeType" class="width-xsml" /></td>
+                <td class="required"><input type="checkbox" wicket:id="required"/></td>
                 <td class="width-lrg">
                     <input type="text" wicket:id="selectOptions" class="width-lrg" />
                     <input type="checkbox" wicket:id="dateOption"/>
                     <label wicket:enclosure="dateOption"><wicket:message key="label.include_time"/></label>
                     <select wicket:id="unitOfMeasureChoice"/>
                 </td>
-                <td>
-                    <a href="javascript:void(0);"><wicket:message key="label.delete"/></a>
-                </td>
+                <td class="entypo-icons entypo-x"><a href="javascript:void(0);">x</a></td>
             </tr>
         </tbody>
     </table>
-    <a wicket:id="add"><wicket:message key="label.add"/></a>
+    <a wicket:id="add"><wicket:message key="label.addattribute"/></a>
+    <wicket:message key="label.add_attribute_example"/>
 </wicket:panel>
 </html>
