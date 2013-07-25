@@ -8,6 +8,7 @@ import com.n4systems.services.search.field.IndexField;
 import org.apache.lucene.document.Document;
 
 import javax.persistence.EntityManager;
+import java.io.IOException;
 
 public class EventIndexWriter extends IndexWriter<Event> {
 
@@ -17,7 +18,7 @@ public class EventIndexWriter extends IndexWriter<Event> {
 
     @Override
     public String getIndexPath(Tenant tenant) {
-        return "/var/fieldid/private/indexes/%s/events";
+        return String.format("/var/fieldid/private/indexes/%s/events", tenant.getName());
     }
 
     @Override
@@ -28,6 +29,11 @@ public class EventIndexWriter extends IndexWriter<Event> {
     @Override
     protected IndexField getField(String fieldName) {
         return EventIndexField.fromString(fieldName);
+    }
+
+    @Override
+    protected void unindex(org.apache.lucene.index.IndexWriter writer, Event event) throws IOException {
+        unindex(writer, event.getId(), EventIndexField.ID.getField());
     }
 
     @Override
@@ -77,6 +83,7 @@ public class EventIndexWriter extends IndexWriter<Event> {
 
         return doc;
     }
+
 
 
 }

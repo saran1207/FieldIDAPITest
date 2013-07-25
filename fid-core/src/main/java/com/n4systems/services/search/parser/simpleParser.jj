@@ -141,7 +141,7 @@ TOKEN : {
     <DOUBLE_QUOTED_STRING: "\"" (~["\""])+ "\"" > |
     <SINGLE_QUOTED_STRING: "'" (~["'"])+ "'" > |
     <NUMBER : (["0"-"9"])+(["."](["0"-"9"])+)?> |
-    <STRING : (["0"-"9","A"-"Z","a"-"z","/","\\","-"])+ >
+    <STRING : (["0"-"9","A"-"Z","a"-"z","/","\\","-","_","#","(",")","[","]"])+ >
 }
 
 SearchQuery _$$parse() : { SearchQuery.Conjunction conjunction=null; }

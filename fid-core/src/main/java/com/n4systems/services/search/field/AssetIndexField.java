@@ -43,7 +43,7 @@ public enum AssetIndexField implements IndexField {
     private static EnumSet<AssetIndexField> nonDisplayedFixedAttributes = EnumSet.of( CREATED, MODIFIED, MODIFIED_BY, REFERENCE_NUMBER, COMMENTS, ORDER, LAST_EVENT_DATE,
             CREATED_BY, MODIFIED_BY, IDENTIFIED_BY, ASSIGNED, TYPE_GROUP, STATUS);
     private static EnumSet<AssetIndexField> internalAttributes = EnumSet.of(ALL, ID, CUSTOMER_ID, DIVISION_ID, SECONDARY_ID);
-    private static final int DEFAULT_BOOST = 1;
+    private static EnumSet<AssetIndexField> longAttributes= EnumSet.of(ID, CUSTOMER_ID, DIVISION_ID, SECONDARY_ID);
 
     private final String field;
     private int boost = DEFAULT_BOOST;
@@ -106,7 +106,13 @@ public enum AssetIndexField implements IndexField {
     }
 
     @Override
+    public boolean isLong() {
+        return longAttributes.contains(this);
+    }
+
+    @Override
     public AnalyzerFactory.Type getAnalyzerType() {
         return analyzerType;
     }
+
 }

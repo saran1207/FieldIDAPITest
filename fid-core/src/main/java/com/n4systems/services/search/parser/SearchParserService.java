@@ -223,7 +223,7 @@ public class SearchParserService extends FieldIdService {
     private Query getSimpleQueryForTerm(String attribute, QueryTerm.Operator operator, SimpleValue value) {
         if (value.isNumber()) {
             NumericRangeInfo rangeInfo = new NumericRangeInfo(value.getNumber(), operator);
-            return NumericRangeQuery.newDoubleRange(attribute, rangeInfo.getMinDouble(), rangeInfo.getMaxDouble(), rangeInfo.includeMin, rangeInfo.includeMax);
+            return getNumericRange(attribute, rangeInfo);
         } else if (value.isDate()) {
             DateRangeInfo rangeInfo = new DateRangeInfo(value.getDateRange(), operator);
             return NumericRangeQuery.newLongRange(attribute, rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
@@ -236,6 +236,16 @@ public class SearchParserService extends FieldIdService {
             }
         }
         return null;
+    }
+
+    private Query getNumericRange(String attribute, NumericRangeInfo rangeInfo) {
+        AssetIndexField field = AssetIndexField.fromString(attribute);
+        if (field!=null && field.isLong()) {
+            return NumericRangeQuery.newLongRange(attribute, rangeInfo.getMinLong(), rangeInfo.getMaxLong(), rangeInfo.includeMin, rangeInfo.includeMax);
+        }
+        // by default, we index all number fields as double.  if we absolutely know it's a long (like for id's) only then will we search.
+        // note that this is relevant because if we do a double search for longs it will return nothing (i.e. no conversions will be done).
+        return NumericRangeQuery.newDoubleRange(attribute, rangeInfo.getMinDouble(), rangeInfo.getMaxDouble(), rangeInfo.includeMin, rangeInfo.includeMax);
     }
 
     private Query getPhraseQueryForTerm(String attribute, SimpleValue value) {

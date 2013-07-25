@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.EntityManager;
+import java.io.IOException;
 import java.util.Date;
 
 public class AssetIndexWriter extends IndexWriter<Asset> {
@@ -24,7 +25,7 @@ public class AssetIndexWriter extends IndexWriter<Asset> {
 
     @Override
     public String getIndexPath(Tenant tenant) {
-        return "/var/fieldid/private/indexes/%s/assets";
+        return String.format("/var/fieldid/private/indexes/%s/assets", tenant.getName());
     }
 
     @Override
@@ -35,6 +36,11 @@ public class AssetIndexWriter extends IndexWriter<Asset> {
     @Override
     protected IndexField getField(String fieldName) {
         return AssetIndexField.fromString(fieldName);
+    }
+
+    @Override
+    protected void unindex(org.apache.lucene.index.IndexWriter writer, Asset asset) throws IOException {
+        unindex(writer, asset.getId(), AssetIndexField.ID.getField());
     }
 
     public Document createDocument(EntityManager em, Asset asset) {

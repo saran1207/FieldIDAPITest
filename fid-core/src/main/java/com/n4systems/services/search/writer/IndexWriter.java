@@ -7,11 +7,16 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.user.User;
 import com.n4systems.services.search.AnalyzerFactory;
 import com.n4systems.services.search.IndexException;
 import com.n4systems.services.search.field.IndexField;
+import com.n4systems.services.search.parser.QueryTerm;
+import com.n4systems.services.search.parser.SearchParserService;
+import com.n4systems.services.search.parser.SearchQuery;
+import com.n4systems.services.search.parser.SimpleValue;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
@@ -20,6 +25,7 @@ import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
@@ -35,6 +41,7 @@ import rfid.ejb.entity.InfoOptionBean;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -45,6 +52,7 @@ public abstract class IndexWriter<T extends BaseEntity> extends FieldIdPersisten
 
     private @Resource PlatformTransactionManager transactionManager;
     protected @Autowired AnalyzerFactory analyzerFactory;
+    protected @Autowired SearchParserService searchParserService;
 
     private static Logger logger = Logger.getLogger(IndexWriter.class);
     private Class<T> itemClass;
@@ -86,6 +94,14 @@ public abstract class IndexWriter<T extends BaseEntity> extends FieldIdPersisten
         }
     }
 
+    protected abstract void unindex(org.apache.lucene.index.IndexWriter writer, T item) throws IOException;
+
+    protected void unindex(org.apache.lucene.index.IndexWriter writer, Long id, String idFieldName) throws IOException {
+        SearchQuery searchQuery = new SearchQuery().add(new QueryTerm(idFieldName, QueryTerm.Operator.EQ, new SimpleValue(id + "")));
+        Query query = searchParserService.convertToLuceneQuery(searchQuery);
+        writer.deleteDocuments(query);
+    }
+
     private void index(EntityManager em, final Tenant tenant, final List<T> items, boolean update) {
         long startTime = System.currentTimeMillis();
         Directory dir = null;
@@ -102,13 +118,18 @@ public abstract class IndexWriter<T extends BaseEntity> extends FieldIdPersisten
             writer = new org.apache.lucene.index.IndexWriter(dir, writerConfig);
 
             for (T item : items) {
-                Document doc = createDocument(em, item);
-                if (update) {
-                    BytesRef bytes = new BytesRef(NumericUtils.BUF_SIZE_LONG);
-                    NumericUtils.longToPrefixCoded(item.getId(), 0, bytes);
-                    writer.updateDocument(new Term("_id", bytes),  doc);
+
+                if (item instanceof Archivable && ((Archivable)item).isArchived()) {
+                    unindex(writer, item);
                 } else {
-                    writer.addDocument(doc);
+                    Document doc = createDocument(em, item);
+                    if (update) {
+                        BytesRef bytes = new BytesRef(NumericUtils.BUF_SIZE_LONG);
+                        NumericUtils.longToPrefixCoded(item.getId(), 0, bytes);
+                        writer.updateDocument(new Term("_id", bytes),  doc);
+                    } else {
+                        writer.addDocument(doc);
+                    }
                 }
             }
         } catch (Exception e) {

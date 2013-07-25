@@ -3,6 +3,8 @@ package com.n4systems.services.search.field;
 import com.google.common.base.Preconditions;
 import com.n4systems.services.search.AnalyzerFactory;
 
+import java.util.EnumSet;
+
 public enum EventIndexField implements IndexField {
     ID("_id", AnalyzerFactory.Type.KEYWORD),
     SECONDARY_ID("_secondaryorgid", AnalyzerFactory.Type.KEYWORD),
@@ -36,9 +38,10 @@ public enum EventIndexField implements IndexField {
     DUE_DATE("due", AnalyzerFactory.Type.KEYWORD, 1),
     COMPLETED_DATE("completed", AnalyzerFactory.Type.KEYWORD, 1),
     SCORE("score", 5),
-    ALL("_all", AnalyzerFactory.Type.WHITESPACE);;
+    ALL("_all", AnalyzerFactory.Type.WHITESPACE);
 
-    private static final int DEFAULT_BOOST = 1;
+    private static EnumSet<EventIndexField> longAttributes= EnumSet.of(ID, CUSTOMER_ID, DIVISION_ID, SECONDARY_ID);
+
 
     private final String field;
     private int boost = DEFAULT_BOOST;
@@ -72,6 +75,11 @@ public enum EventIndexField implements IndexField {
     @Override
     public int getBoost() {
         return boost;
+    }
+
+    @Override
+    public boolean isLong() {
+        return longAttributes.contains(this);
     }
 
     public static EventIndexField fromString(String s) {
