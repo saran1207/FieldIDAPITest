@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.tree.Tree;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -55,7 +56,7 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
 
         add(text = new TextField("text", new PropertyModel(this, "input")));
         add(_type = new HiddenField("type", new PropertyModel(this,"entityType")));
-        add(_entityId = new HiddenField("entityId", new PropertyModel(this,"id")));
+        add(_entityId = new HiddenField("entityId", new PropertyModel(this,"entityId")));
         add(tree = new Tree("tree") {
             @Override protected List<JsonTreeNode> getNodes(String search) {
                 return buildJsonTree(getOrgLocationTree(search));
@@ -120,6 +121,7 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
 
     private JsonTreeNode createNode(OrgLocationTree.OrgLocationTreeNode node, Set<OrgLocationTree.OrgLocationTreeNode> children, JsonTreeNode parent) {
         // arggh.  Gson won't work with inner classes so instead of overriding the "isLeaf" method i have to awkwardly set it here.
+        // TODO DD : refactor and make a OrgJsonTreeNode with this set.
         JsonTreeNode jsonNode = new JsonTreeNode(node, parent).setLeafType(OrgLocationTree.NodeType.DIVISION_ORG);
 
         List<JsonTreeNode> nodes = Lists.newArrayList();
@@ -150,12 +152,12 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
         OrgLocationTree.NodeType type = OrgLocationTree.NodeType.valueOf(_type.getRawInput());
         switch (type) {
             case LOCATION:
-                entity = (T) persistenceService.findById(BaseOrg.class,  getEntityId());
+                entity = (T) persistenceService.findById(BaseOrg.class,  getEntityIdAsLong());
                 break;
             case INTERNAL_ORG:
             case CUSTOMER_ORG:
             case DIVISION_ORG:
-                entity = (T) persistenceService.findById(BaseOrg.class,  getEntityId());
+                entity = (T) persistenceService.findById(BaseOrg.class,  getEntityIdAsLong());
                 break;
             case VOID:
                 entity = null;
@@ -166,8 +168,13 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
         setConvertedInput(entity);
     }
 
-    public Long getEntityId() {
-        return Long.parseLong(_entityId.getRawInput());
+    public String getEntityId() {
+        return entityId;
+    }
+
+    public Long getEntityIdAsLong() {
+        String id = _entityId.getRawInput();
+        return StringUtils.isNotBlank(id) ? Long.parseLong(_entityId.getRawInput()) : null;
     }
 
     public String getInput() {
