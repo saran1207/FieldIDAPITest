@@ -70,6 +70,18 @@ var treeFactory = (function() {
 			});
 		};
 
+		// suggestion : move this into utils pkg.
+		// note that .text() will return text of *all* descendants, not just element.
+		// this is a somewhat inefficient but re-usable way to get around it.  don't use for very elements with many descendants.
+		function getTextExcludingChildren(element) {
+			return element
+					.clone()    //clone the element
+					.children() //select all the children
+					.remove()   //remove all the children
+					.end()  //again go back to selected element
+					.text();
+		}
+
 		function lazyInit() {
 			if (!initialized) {
 				initialized = true;
@@ -97,10 +109,11 @@ var treeFactory = (function() {
 				});
 				$tree.bind("click.jstree", function (event, data) {
 					if (!$(event.currentTarget).is('a')) { return; }
+					var link = $(event.target);
 					var node = $(event.target).closest('li');
 					$entityId.val(node.attr('id'));
 					$type.val(node.attr('data'));
-					$text.val(node.text().trim());
+					$text.val(getTextExcludingChildren(link).trim());
 					$tree.hide();
 				});
 
