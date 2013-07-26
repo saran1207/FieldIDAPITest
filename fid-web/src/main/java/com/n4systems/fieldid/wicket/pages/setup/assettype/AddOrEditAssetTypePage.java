@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeAttachmentsPanel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeAttributePanel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeImagePanel;
+import com.n4systems.fieldid.wicket.components.assettype.AssetTypeTitleLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -68,7 +69,20 @@ public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.asset_type_add"));
+        return new AssetTypeTitleLabel(labelId, assetType);
+    }
+
+    @Override
+    protected boolean useTopTitleLabel() {
+        return true;
+    }
+
+    @Override
+    protected Component createTopTitleLabel(String labelId) {
+        if(assetType.getObject().isNew())
+            return new Label(labelId, new FIDLabelModel("title.asset_type_add"));
+        else
+            return new Label(labelId, new FIDLabelModel("title.asset_type_edit"));
     }
 
     private class AssetTypeForm extends Form<AssetType> {
