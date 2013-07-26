@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
       xml:lang="en"
-      lang="en"`>
+      lang="en">
 <wicket:panel>
 
     <legend><wicket:message key="label.attributes"/></legend>
@@ -28,36 +28,14 @@
                 </div>
                 <select wicket:id="unitOfMeasureChoice"/>
             </span>
-            <span class="li-delete"><a class="entypo-icons entypo-x" href="javascript:void(0);">x</a></span>
+            <span class="li-delete">
+                <a class="entypo-icons entypo-x" href="javascript:void(0);">x</a>
+                <a wicket:id="delete"><wicket:message key="label.delete"/></a>
+                <a wicket:id="retire"><wicket:message key="label.retire"/></a>
+                <a wicket:id="unretire"><wicket:message key="label.unretire"/></a>
+            </span>
         </li>
     </ul>
-    <!-- <table wicket:id="existingAttributesContainer">
-        <thead>
-            <tr>
-                <th colspan="2" class="width-sml"><wicket:message key="label.attribute_name"/></th>
-                <th class="width-xsml"><wicket:message key="label.type"/></th>
-                <th class="required"><wicket:message key="label.required"/></th>
-                <th colspan="2" class="width-lrg"><wicket:message key="label.attribute_options"/></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr wicket:id="existingAttributes">
-                <td><span class="entypo-icons entypo-list">reorder</span></td>
-                <td><input type="text" wicket:id="attributeName" class="width-sml" /></td>
-                <td><select wicket:id="attributeType" class="width-xsml" /></td>
-                <td class="required"><input type="checkbox" wicket:id="required"/></td>
-                <td class="width-lrg">
-                    <input type="text" wicket:id="selectOptions" class="width-lrg" />
-                    <div class="control-group">
-                        <input type="checkbox" wicket:id="dateOption"/>
-                        <label wicket:enclosure="dateOption" class="inline"><wicket:message key="label.include_time"/></label>
-                    </div>
-                    <select wicket:id="unitOfMeasureChoice"/>
-                </td>
-                <td><a class="entypo-icons entypo-x" href="javascript:void(0);">x</a></td>
-            </tr>
-        </tbody>
-    </table> -->
     <span wicket:id="add "class="btn-gray"><wicket:message key="label.addattribute"/></span>
     <wicket:message key="label.add_attribute_example"/>
 </wicket:panel>

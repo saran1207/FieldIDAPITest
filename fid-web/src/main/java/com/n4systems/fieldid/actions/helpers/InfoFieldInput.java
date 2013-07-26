@@ -1,15 +1,15 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.n4systems.util.StringListingPair;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.util.StringListingPair;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class InfoFieldInput {
+public class InfoFieldInput implements Serializable {
 
 	private Long uniqueID;
 	private String name;

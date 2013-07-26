@@ -2,6 +2,8 @@ package com.n4systems.fieldid.wicket.pages.setup.assettype;
 
 import com.google.common.collect.Lists;
 import com.n4systems.exceptions.ImageAttachmentException;
+import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
+import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeAttachmentsPanel;
@@ -26,8 +28,14 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.ValidationError;
+import org.apache.wicket.validation.validator.AbstractValidator;
 import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
@@ -67,7 +75,23 @@ public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
 
         private AssetTypeForm(String id, IModel<AssetType> model) {
             super(id, model);
-            add(new RequiredTextField<String>("name", new PropertyModel<String>(model, "name")));
+
+            setMultiPart(true);
+
+            RequiredTextField nameField;
+
+            add(nameField = new RequiredTextField<String>("name", new PropertyModel<String>(model, "name")));
+            nameField.add(new AbstractValidator() {
+                @Override
+                protected void onValidate(IValidatable validatable) {
+                    String name = (String) validatable.getValue();
+                    if(assetTypeService.isNameExists(name) && assetType.getObject().isNew()) {
+                        ValidationError error = new ValidationError();
+                        error.addMessageKey("error.assettypenameduplicate");
+                        validatable.error(error);
+                    }
+                }
+            });
             add(new FidDropDownChoice<AssetTypeGroup>("group", new PropertyModel<AssetTypeGroup>(model, "group"), assetTypeService.getAssetTypeGroupsByOrder(), new ListableChoiceRenderer<AssetTypeGroup>()));
             add(imagePanel = new AssetTypeImagePanel("image", model));
             add(attributePanel = new AssetTypeAttributePanel("attributes", model));
@@ -112,10 +136,11 @@ public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
                 attachments = attachmentsPanel.getAttachments();
             }
 
-            if(attributePanel.getAttributes().isEmpty()) {
+            if(attributePanel.getInfoFields(assetType).isEmpty()) {
                 assetType.setInfoFields(Lists.<InfoFieldBean>newArrayList());
             } else {
-                assetType.setInfoFields(attributePanel.getAttributes());
+                processInfoFields(attributePanel.getInfoFields(assetType));
+                processInfoOptions(attributePanel.getInfoFields(assetType), attributePanel.getEditInfoOptions(assetType));
             }
 
             try {
@@ -125,6 +150,98 @@ public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
             }
 
             setResponsePage(AssetTypeListPage.class);
+        }
+
+        private void processInfoFields(List<InfoFieldInput> infoFields) {
+            List<InfoFieldBean> deleted = new ArrayList<InfoFieldBean>();
+            for (InfoFieldInput input : infoFields) {
+                if (input.getUniqueID() == null) {
+                    if (!input.isDeleted()) {
+                        InfoFieldBean addedInfoField = new InfoFieldBean();
+                        addedInfoField.setName(input.getName().trim());
+                        addedInfoField.setWeight(input.getWeight());
+                        addedInfoField.setRequired(input.isRequired());
+                        addedInfoField.setIncludeTime(input.isIncludeTime());
+
+                        input.setInfoFieldFieldType(addedInfoField);
+                        addedInfoField.setUnfilteredInfoOptions(new HashSet<InfoOptionBean>());
+                        addedInfoField.setRetired(input.isRetired());
+                        assetType.getObject().getInfoFields().add(addedInfoField);
+                        assetType.getObject().associateFields();
+
+                        if (input.getDefaultUnitOfMeasure() != null) {
+                            addedInfoField.setUnitOfMeasure(assetTypeService.getUnitOfMeasure(input.getDefaultUnitOfMeasure()));
+                        } else {
+                            addedInfoField.setUnitOfMeasure(null);
+                        }
+
+                        input.setInfoField(addedInfoField);
+                    }
+                } else {
+                    for (InfoFieldBean infoField : assetType.getObject().getInfoFields()) {
+                        if (infoField.getUniqueID().equals(input.getUniqueID())) {
+                            if (input.isDeleted()) {
+                                deleted.add(infoField);
+                            } else {
+                                infoField.setName(input.getName().trim());
+                                infoField.setWeight(input.getWeight());
+                                infoField.setRequired(input.isRequired());
+                                infoField.setIncludeTime(input.isIncludeTime());
+                                input.setInfoFieldFieldType(infoField);
+
+                                infoField.setRetired(input.isRetired());
+                                if (input.getDefaultUnitOfMeasure() != null) {
+                                    infoField.setUnitOfMeasure(assetTypeService.getUnitOfMeasure(input.getDefaultUnitOfMeasure()));
+                                } else {
+                                    infoField.setUnitOfMeasure(null);
+                                }
+
+                            }
+                            input.setInfoField(infoField);
+                        }
+                    }
+                }
+            }
+
+            assetType.getObject().getInfoFields().removeAll(deleted);
+        }
+
+        private void processInfoOptions(List<InfoFieldInput> infoFields, List<InfoOptionInput> editInfoOptions) {
+            for (InfoOptionInput input : editInfoOptions) {
+                if (input.getInfoFieldIndex().intValue() < infoFields.size()) {
+                    InfoFieldBean infoField = infoFields.get(input.getInfoFieldIndex().intValue()).getInfoField();
+                    if (infoField != null) {
+                        if (input.getUniqueID() == null) {
+                            if (!input.isDeleted() && infoField.hasStaticInfoOption()) {
+
+                                InfoOptionBean addedInfoOption = new InfoOptionBean();
+                                addedInfoOption.setName(input.getName().trim());
+                                addedInfoOption.setWeight(input.getWeight());
+                                addedInfoOption.setStaticData(true);
+                                infoField.getUnfilteredInfoOptions().add(addedInfoOption);
+                                infoField.associateOptions();
+                            }
+                        } else {
+                            for (InfoOptionBean infoOption : infoField.getUnfilteredInfoOptions()) {
+
+                                if (infoOption.getUniqueID() != null
+                                        && infoOption.getUniqueID().equals(input.getUniqueID())) {
+                                    if (input.isDeleted() || !infoField.hasStaticInfoOption()) {
+                                        infoOption.setStaticData(false);
+                                        infoOption.setWeight(0L);
+                                    } else {
+                                        infoOption.setName(input.getName().trim());
+                                        infoOption.setWeight(input.getWeight());
+                                        infoOption.setStaticData(true);
+                                    }
+
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -175,6 +176,11 @@ public class PersistenceService extends FieldIdService {
 	public <T extends BaseEntity> T update(T entity) {
 		return em.merge(entity);
 	}
+
+    @Transactional
+    public <T extends LegacyBaseEntity> T update(T entity) {
+        return em.merge(entity);
+    }
 
     @Transactional
 	public <T extends BaseEntity> void update(List<T> entities) {

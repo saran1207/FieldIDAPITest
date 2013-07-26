@@ -5,12 +5,13 @@ import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 import rfid.web.helper.SessionUser;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-public class InfoOptionInput {
+public class InfoOptionInput implements Serializable {
 	public static String COMBOBOX_DYNAMIC_VALUE_MARKER = "!";
 		
 	private Long uniqueID;
@@ -230,5 +231,5 @@ public class InfoOptionInput {
 		} else {
 			return new StringListingPair( InfoOptionInput.COMBOBOX_DYNAMIC_VALUE_MARKER + option.getName(), option.getName() );
 		}
-	}
+    }
 }

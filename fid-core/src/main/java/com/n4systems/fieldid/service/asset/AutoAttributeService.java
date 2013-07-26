@@ -88,4 +88,31 @@ public class AutoAttributeService extends FieldIdPersistenceService {
         return filteredOptions;
     }
 
+    public void clearRetiredInfoFields(AssetType assetType) {
+        List<InfoFieldBean> retiredFields = new ArrayList<InfoFieldBean>();
+
+        for (InfoFieldBean infoField : assetType.getInfoFields()) {
+            if (infoField.isRetired()) {
+                retiredFields.add(infoField);
+            }
+        }
+
+        for (InfoFieldBean field : retiredFields) {
+            AutoAttributeCriteria criteria = criteriaUses(assetType, field);
+            if (criteria != null) {
+                persistenceService.remove(criteria);
+                return;
+            }
+        }
+    }
+
+    private AutoAttributeCriteria criteriaUses(AssetType assetType, InfoFieldBean field) {
+        if (assetType.getAutoAttributeCriteria() != null) {
+            AutoAttributeCriteria criteria = persistenceService.find(AutoAttributeCriteria.class, assetType.getAutoAttributeCriteria().getId());
+            if (criteria.getInputs().contains(field) || criteria.getOutputs().contains(field)) {
+                return criteria;
+            }
+        }
+        return null;
+    }
 }

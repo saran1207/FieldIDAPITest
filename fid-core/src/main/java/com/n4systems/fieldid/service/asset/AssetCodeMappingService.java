@@ -9,6 +9,12 @@ import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.AssetCodeMapping;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import javax.persistence.Query;
+import java.util.ArrayList;
+import java.util.List;
 
 public class AssetCodeMappingService extends FieldIdPersistenceService {
 
@@ -58,5 +64,34 @@ public class AssetCodeMappingService extends FieldIdPersistenceService {
         }
 
         return type;
+    }
+
+
+    public void clearRetiredInfoFields( AssetType assetType) {
+        List<Long> retiredFields = new ArrayList<Long>();
+
+        for (InfoFieldBean infoField : assetType.getInfoFields() ) {
+            if( infoField.isRetired() ) {
+                retiredFields.add( infoField.getUniqueID() );
+            }
+        }
+
+        if( ! retiredFields.isEmpty() ) {
+            Query q = persistenceService.createQuery("from "+AssetCodeMapping.class.getName()+" as pcm where pcm.assetInfo.id = :assetTypeId ");
+            q.setParameter( "assetTypeId", assetType.getId() );
+
+            List<AssetCodeMapping> beans = (List<AssetCodeMapping>)q.getResultList();
+
+            for (AssetCodeMapping assetCodeMapping : beans) {
+                List<InfoOptionBean> removedInfoOption = new ArrayList<InfoOptionBean>();
+                for (InfoOptionBean infoOption : assetCodeMapping.getInfoOptions() ) {
+                    if( retiredFields.contains( infoOption.getInfoField().getUniqueID() ) ) {
+                        removedInfoOption.add( infoOption );
+                    }
+                }
+                assetCodeMapping.getInfoOptions().removeAll( removedInfoOption );
+                persistenceService.update(assetCodeMapping);
+            }
+        }
     }
 }

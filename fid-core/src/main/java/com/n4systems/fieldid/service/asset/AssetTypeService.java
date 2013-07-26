@@ -20,6 +20,7 @@ import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -34,9 +35,17 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     private @Autowired AsyncService asyncService;
     private @Autowired RecurringScheduleService recurringScheduleService;
+    private @Autowired AssetCodeMappingService assetCodeMappingService;
+    private @Autowired AutoAttributeService autoAttributeService;
 
     public AssetType getAssetType(Long id) {
         return persistenceService.find(AssetType.class, id);
+    }
+
+    public boolean isNameExists(String name) {
+        QueryBuilder<AssetType> builder = createTenantSecurityBuilder(AssetType.class);
+        builder.addWhere(WhereClauseFactory.create("name", name));
+        return persistenceService.exists(builder);
     }
 
     public List<AssetType> getAssetTypes(Long assetTypeGroupId, String name) {
@@ -180,7 +189,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
             oldPI = persistenceService.find( AssetType.class, assetType.getId() );
         }
         if( oldPI != null ) {
-            //cleanInfoFields(assetType, oldPI );
+            cleanInfoFields(assetType, oldPI );
         }
 
         assetType.touch();
@@ -222,26 +231,27 @@ public class AssetTypeService extends FieldIdPersistenceService {
             // move and attach each uploaded file
             for(FileAttachment uploadedFile: uploadedFiles) {
 
-                try {
-                    // move the file to it's new location, note that it's location is currently relative to the tmpDirectory
-                    tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
-                    FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+                if(uploadedFile.isNew()) {
+                    try {
+                        // move the file to it's new location, note that it's location is currently relative to the tmpDirectory
+                        tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
+                        FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
 
-                    // clean up the temp file
-                    tmpFile.delete();
+                        // clean up the temp file
+                        tmpFile.delete();
 
-                    // now we need to set the correct file name for the attachment and set the modifiedBy
-                    uploadedFile.setFileName(tmpFile.getName());
-                    uploadedFile.setTenant(assetType.getTenant());
-                    uploadedFile.setModifiedBy(assetType.getModifiedBy());
+                        // now we need to set the correct file name for the attachment and set the modifiedBy
+                        uploadedFile.setFileName(tmpFile.getName());
+                        uploadedFile.setTenant(assetType.getTenant());
+                        uploadedFile.setModifiedBy(assetType.getModifiedBy());
 
-                    // attach the attachment
-                    assetType.getAttachments().add(uploadedFile);
-                } catch (IOException e) {
-                    logger.error("failed to copy uploaded file ", e);
-                    throw new FileAttachmentException(e);
+                        // attach the attachment
+                        assetType.getAttachments().add(uploadedFile);
+                    } catch (IOException e) {
+                        logger.error("failed to copy uploaded file ", e);
+                        throw new FileAttachmentException(e);
+                    }
                 }
-
             }
 
             persistenceService.update(assetType);
@@ -275,10 +285,27 @@ public class AssetTypeService extends FieldIdPersistenceService {
 				 * and should be removed
 				 */
                 detachedFile.delete();
-
             }
         }
-
     }
 
+    private void cleanInfoFields( AssetType assetType, AssetType oldPI ) {
+        assetCodeMappingService.clearRetiredInfoFields(assetType);
+        autoAttributeService.clearRetiredInfoFields(assetType);
+
+        // the removal of old infofields needs to be done after the clearing of retired fields otherwise
+        // they will get a persit with deleted entity exception.
+        for( InfoFieldBean field : oldPI.getInfoFields() ) {
+            if (!assetType.getInfoFields().contains( field )) {
+                for (InfoOptionBean infoOpiton : field.getUnfilteredInfoOptions() ) {
+                    persistenceService.remove(infoOpiton);
+                }
+                persistenceService.remove(field);
+            }
+        }
+    }
+
+    public UnitOfMeasure getUnitOfMeasure(Long id) {
+        return persistenceService.findById(UnitOfMeasure.class, id);
+    }
 }
