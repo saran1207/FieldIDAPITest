@@ -45,7 +45,7 @@
                 <a wicket:id="showHide"><wicket:message key="label.more_information"/></a>
             </legend>
 
-            <div wicket:id="moreInfo">
+            <div wicket:id="moreInfo" class="more-info">
                 <h3><wicket:message key="label.asset_linking"/></h3>
                 <div class="control-group">
                     <input type="checkbox" wicket:id="linkable"/>
@@ -60,31 +60,33 @@
                         <textarea wicket:id="manufacturerCertText"/>
                     </div>
                 </div>
-
-                <h3><wicket:message key="label.files"/></h3>
-                <div class="control-group">
-                    <label>
-                        <wicket:message key="label.other_files"/>
-                        <span><wicket:message key="label.example_files"/></span>
-                    </label>
-                    <div class="controls">
-                        <div wicket:id="attachments"/>
-                        <textarea></textarea>
+                
+                <div class="form-horizontal">
+                    <h3><wicket:message key="label.files"/></h3>
+                    <div class="control-group control-combo">
+                        <label>
+                            <wicket:message key="label.other_files"/>
+                            <span><wicket:message key="label.example_files"/></span>
+                        </label>
+                        <div class="controls">
+                            <div wicket:id="attachments"/>
+                            <textarea></textarea>
+                        </div>
                     </div>
-                </div>
 
-                <h3><wicket:message key="label.warnings_more_info"/></h3>
-                <div class="control-group">
-                    <label><wicket:message key="label.warnings"/></label>
-                    <textarea wicket:id="warnings"/>
-                </div>
-                <div class="control-group">
-                    <label><wicket:message key="label.more_information"/></label>
-                    <textarea  wicket:id="instructions"/>
-                </div>
-                <div class="control-group">
-                    <label><wicket:message key="label.cautionsurl"/></label>
-                    <input type="text" wicket:id="cautionUrl"/>
+                    <h3><wicket:message key="label.warnings_more_info"/></h3>
+                    <div class="control-group">
+                        <label><wicket:message key="label.warnings"/></label>
+                        <textarea wicket:id="warnings"/>
+                    </div>
+                    <div class="control-group">
+                        <label><wicket:message key="label.more_information"/></label>
+                        <textarea wicket:id="instructions"/>
+                    </div>
+                    <div class="control-group">
+                        <label><wicket:message key="label.cautionsurl"/></label>
+                        <input type="text" wicket:id="cautionUrl"/>
+                    </div>
                 </div>
             </div>
         </fieldset>

@@ -17,6 +17,12 @@
 #contentHeader {
 	margin-bottom: 0;
 }
+h1 {
+	color: #999;
+}
+	h1 span {
+		color: #666;
+	}
 p {
 	font-size: 12px;
 }
@@ -33,8 +39,12 @@ input, select, textarea {
 }
 input {
     border: 1px solid #c7c7c9;
-    height: 25px;
+    height: 29px;
+    font-size: 13px;
 }
+	input[type=file] {
+		padding-top: 4px;
+	}
 label {
     font-size: 13px;
     display: block;
@@ -56,10 +66,15 @@ legend {
     font-size: 17px;
     padding-top: 14px;
 }
+/*.uploaded-file {
+	font-size: 13px;
+	border: 1px solid #c7c7c9;
+	height: 29px;
+}*/
 
 /* Width variations for inputs and headers */
 .width-full { 
-	width: 920px; 
+	width: 975px; 
 }
 .width-xxlrg { 
 	width: 688px; 
@@ -103,7 +118,7 @@ legend {
 
 /* Used to group and align labels and controls */
 .control-group {
-    margin: 6px 0;
+    margin: 10px 0;
 }
 .control-group label {
 	margin-bottom: 4px;
@@ -123,6 +138,9 @@ legend {
 .control-combo label {
     padding-top: 4px;
 }
+.control-combo input {
+	margin-bottom: 2px;
+}
 .control-combo .controls {
     width: 285px;
     display: inline-block;
@@ -130,6 +148,19 @@ legend {
 }
 .control-combo .chzn-container {
     margin-bottom: 3px;
+}
+
+
+/* For forms with the label on the left and input on the right */
+.form-horizontal label {
+	width: 180px;
+	margin-right: 14px;
+	padding-top: 4px;
+	float: left;
+	text-align: right;
+}
+.form-horizontal .text-block {
+	margin-left: 193px;
 }
 
 /* CSS trickery for custom file inputs */
@@ -158,6 +189,7 @@ legend {
 	height: 20px;
 	text-indent: -9999px;
 	display: block;
+	margin-top: 4px;
 }
 .entypo-checkmark {
 	background-position: 0 0;
@@ -210,9 +242,14 @@ legend {
 .attributes-setup-list {
 	margin-top: 20px;
 }
-	.attributes-setup-list li {
+	.attributes-setup-list > li {
 		border-bottom: 1px solid #ccc;
 		padding: 10px 5px;
+	}
+	.attributes-setup-list li.disabled {
+		opacity: 0.5;
+	   	filter: alpha(opacity=50); /* IE8 and lower */
+	   	zoom: 1; /* set to trigger "hasLayout" in IE 7 and lower */ 
 	}
 	.attributes-setup-list span {
 		font-size: 13px;
@@ -225,6 +262,11 @@ legend {
 	.attribute-name {
 		margin-left: 32px;
 	}
+
+.more-info textarea, 
+.more-info .form-horizontal input {
+	width: 286px;
+}
 	
 
 
