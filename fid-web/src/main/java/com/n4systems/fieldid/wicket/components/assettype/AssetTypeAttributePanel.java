@@ -78,9 +78,6 @@ public class AssetTypeAttributePanel extends Panel {
                         if(editInfoOptions.get(j).getInfoFieldIndex() == oldIndex)
                             editInfoOptions.get(j).setInfoFieldIndex(i);
                     }
-                }
-                //reorder fields
-                for(int i = index-1; i < infoFields.size(); i++) {
                     infoFields.get(i).setWeight(Long.valueOf(i));
                 }
                 listView.removeAll();
