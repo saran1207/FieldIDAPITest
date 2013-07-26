@@ -71,23 +71,33 @@ public class AssetTypeAttributePanel extends Panel {
                 InfoFieldInput movedItem = (InfoFieldInput) sortedComponent.getDefaultModelObject();
                 infoFields.remove(movedItem);
                 infoFields.add(index-1, movedItem);
+                //reorder options
+                for(int i = index-1; i < infoFields.size(); i++) {
+                    int oldIndex = infoFields.get(i).getWeight().intValue();
+                    for (int j = 0; j < editInfoOptions.size(); j++) {
+                        if(editInfoOptions.get(j).getInfoFieldIndex() == oldIndex)
+                            editInfoOptions.get(j).setInfoFieldIndex(i);
+                    }
+                }
+                //reorder fields
                 for(int i = index-1; i < infoFields.size(); i++) {
                     infoFields.get(i).setWeight(Long.valueOf(i));
                 }
+                listView.removeAll();
                 target.add(existingAttributesContainer);
             }
-
         };
         existingAttributesContainer.add(sortableAjaxBehavior);
         existingAttributesContainer.add(listView = new ListView<InfoFieldInput>("existingAttributes", infoFields) {
 
             @Override
-            protected void populateItem(ListItem<InfoFieldInput> item) {
+            protected void populateItem(final ListItem<InfoFieldInput> item) {
 
                 final Long index = new Integer(item.getIndex()).longValue();
 
                 final IModel<InfoFieldInput> infoField = item.getModel();
                 final IModel<String> options = Model.of(getOptionsAsString(index));
+                final IModel<UnitOfMeasure> unitOfMeasure = Model.of(new UnitOfMeasure());
                 boolean isRetired = infoField.getObject().isRetired();
 
                 RequiredTextField name;
@@ -163,9 +173,15 @@ public class AssetTypeAttributePanel extends Panel {
 
                 item.add(dateOption = new CheckBox("dateOption", new PropertyModel<Boolean>(infoField, "includeTime")));
                 dateOption.setEnabled(!isRetired);
-                item.add(unitOfMeasureChoice = new FidDropDownChoice<UnitOfMeasure>("unitOfMeasureChoice", new PropertyModel<UnitOfMeasure>(infoField, "unitOfMeasure"), assetTypeService.getAllUnitOfMeasures(), new ListableChoiceRenderer<UnitOfMeasure>()));
+                item.add(unitOfMeasureChoice = new FidDropDownChoice<UnitOfMeasure>("unitOfMeasureChoice", unitOfMeasure, assetTypeService.getAllUnitOfMeasures(), new ListableChoiceRenderer<UnitOfMeasure>()));
                 unitOfMeasureChoice.setRequired(true);
                 unitOfMeasureChoice.setEnabled(!isRetired);
+                unitOfMeasureChoice.add(new OnChangeAjaxBehavior() {
+                    @Override
+                    protected void onUpdate(AjaxRequestTarget target) {
+                        item.getModelObject().setDefaultUnitOfMeasure(unitOfMeasure.getObject().getId());
+                    }
+                });
 
                 String type = infoField.getObject().getFieldType();
 
