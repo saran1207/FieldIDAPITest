@@ -71,15 +71,21 @@ public class AssetTypeAttributePanel extends Panel {
                 InfoFieldInput movedItem = (InfoFieldInput) sortedComponent.getDefaultModelObject();
                 infoFields.remove(movedItem);
                 infoFields.add(index-1, movedItem);
-                //reorder options
-                for(int i = index-1; i < infoFields.size(); i++) {
+
+                List<InfoOptionInput> updatedOptions = Lists.newArrayList();
+                //Reset all the weights on the fields and corresponding options
+                for(int i = 0; i < infoFields.size(); i++) {
                     int oldIndex = infoFields.get(i).getWeight().intValue();
                     for (int j = 0; j < editInfoOptions.size(); j++) {
-                        if(editInfoOptions.get(j).getInfoFieldIndex() == oldIndex)
-                            editInfoOptions.get(j).setInfoFieldIndex(i);
+                        InfoOptionInput input = editInfoOptions.get(j);
+                        if(input.getInfoFieldIndex() == oldIndex && !updatedOptions.contains(input)) {
+                            input.setInfoFieldIndex(i);
+                            updatedOptions.add(input);
+                        }
                     }
                     infoFields.get(i).setWeight(Long.valueOf(i));
                 }
+                updatedOptions.clear();
                 listView.removeAll();
                 target.add(existingAttributesContainer);
             }
