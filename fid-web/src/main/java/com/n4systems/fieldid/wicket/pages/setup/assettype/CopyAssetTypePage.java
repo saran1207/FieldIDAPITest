@@ -10,7 +10,7 @@ import rfid.ejb.entity.InfoOptionBean;
 import java.util.List;
 import java.util.Set;
 
-public class CopyAssetTypePage extends AddOrEditAssetTypePage{
+public class CopyAssetTypePage extends AddAssetTypePage {
 
     public CopyAssetTypePage(PageParameters params) {
         super(params);

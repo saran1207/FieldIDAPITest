@@ -35,10 +35,7 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
-import com.n4systems.fieldid.wicket.pages.setup.assettype.AddOrEditAssetTypePage;
-import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
-import com.n4systems.fieldid.wicket.pages.setup.assettype.CopyAssetTypePage;
-import com.n4systems.fieldid.wicket.pages.setup.assettype.RecurringAssetTypeEventsPage;
+import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedListPage;
@@ -97,7 +94,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/userGroups", UserGroupsPage.class);
         mountPage("setup/archiveUserGroup", ArchiveUserGroupPage.class);
         mountPage("setup/assetTypes", AssetTypeListPage.class);
-        mountPage("setup/assetTypeForm", AddOrEditAssetTypePage.class);
+        mountPage("setup/assetTypeForm", AddAssetTypePage.class);
+        mountPage("setup/assetTypeEdit", EditAssetTypePage.class);
         mountPage("setup/assetTypeCopy", CopyAssetTypePage.class);
 
         mountPage("dashboard", DashboardPage.class);

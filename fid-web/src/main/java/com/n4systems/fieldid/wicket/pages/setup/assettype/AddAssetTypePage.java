@@ -6,14 +6,17 @@ import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeAttachmentsPanel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeAttributePanel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeImagePanel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeTitleLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.FileAttachment;
@@ -39,7 +42,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
+
+public class AddAssetTypePage extends FieldIDFrontEndPage {
 
     protected IModel<AssetType> assetType;
 
@@ -51,21 +56,14 @@ public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
     private AssetTypeAttributePanel attributePanel;
     private WebMarkupContainer moreInfo;
 
-    public AddOrEditAssetTypePage(PageParameters params) {
+    public AddAssetTypePage(PageParameters params) {
         assetType = Model.of(getAssetType(params));
         add(new AssetTypeForm("form", assetType));
         add(new FIDFeedbackPanel("feedbackPanel"));
     }
 
     protected AssetType getAssetType(PageParameters params) {
-        AssetType assetType;
-        if(params.get("uniqueID").isNull()) {
-            assetType = new AssetType();
-            assetType.setTenant(getTenant());
-        } else {
-            assetType = assetTypeService.getAssetType(params.get("uniqueID").toLong());
-        }
-        return assetType;
+        return new AssetType();
     }
 
     @Override
@@ -84,6 +82,21 @@ public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
             return new Label(labelId, new FIDLabelModel("title.asset_type_add"));
         else
             return new Label(labelId, new FIDLabelModel("title.asset_type_edit"));
+    }
+
+    @Override
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, AssetsAndEventsPage.class);
+        pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
+        return pageLink;
+    }
+
+    @Override
+    protected void addNavBar(String navBarId) {
+        add(new NavigationBar(navBarId,
+                aNavItem().label("nav.view_all").page(AssetTypeListPage.class).build(),
+                aNavItem().label("nav.add").page(AddAssetTypePage.class).onRight().build()
+        ));
     }
 
     private class AssetTypeForm extends Form<AssetType> {

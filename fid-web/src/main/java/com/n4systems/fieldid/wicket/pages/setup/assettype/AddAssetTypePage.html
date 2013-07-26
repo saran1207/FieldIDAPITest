@@ -55,37 +55,37 @@
                 <h3><wicket:message key="label.manufacturer_certificate"/></h3>
                 <div class="control-group checkbox">
                     <input type="checkbox" wicket:id="hasManufacturerCert"/>
-                    <label><strong><wicket:message key="label.manufacturer_certificate_generate"/></strong> <wicket:message key="label.manufacturer_certificate_text"/></label>
+                        <label><strong><wicket:message key="label.manufacturer_certificate_generate"/></strong><wicket:message key="label.manufacturer_certificate_text"/></label>
                     <textarea wicket:id="manufacturerCertText" class="manufacturer-cert-text"/>
-                </div>
-                
-                <div class="form-horizontal">
-                    <h3><wicket:message key="label.files"/></h3>
-                    <div class="control-group control-combo">
-                        <label>
-                            <wicket:message key="label.other_files"/>
-                            <span><wicket:message key="label.example_files"/></span>
-                        </label>
-                        <div class="controls">
-                            <div wicket:id="attachments"/>
-                            <textarea></textarea>
-                        </div>
                     </div>
 
-                    <h3><wicket:message key="label.warnings_more_info"/></h3>
-                    <div class="control-group">
-                        <label><wicket:message key="label.warnings"/></label>
-                        <textarea wicket:id="warnings"/>
-                    </div>
-                    <div class="control-group">
-                        <label><wicket:message key="label.more_information"/></label>
-                        <textarea wicket:id="instructions"/>
-                    </div>
-                    <div class="control-group">
-                        <label><wicket:message key="label.cautionsurl"/></label>
-                        <input type="text" wicket:id="cautionUrl"/>
+                <div class="form-horizontal">
+                <h3><wicket:message key="label.files"/></h3>
+                    <div class="control-group control-combo">
+                    <label>
+                        <wicket:message key="label.other_files"/>
+                        <span><wicket:message key="label.example_files"/></span>
+                    </label>
+                    <div class="controls">
+                        <div wicket:id="attachments"/>
+                        <textarea></textarea>
                     </div>
                 </div>
+
+                <h3><wicket:message key="label.warnings_more_info"/></h3>
+                <div class="control-group">
+                    <label><wicket:message key="label.warnings"/></label>
+                    <textarea wicket:id="warnings"/>
+                </div>
+                <div class="control-group">
+                    <label><wicket:message key="label.more_information"/></label>
+                    <textarea  wicket:id="instructions"/>
+                </div>
+                <div class="control-group">
+                    <label><wicket:message key="label.cautionsurl"/></label>
+                    <input type="text" wicket:id="cautionUrl"/>
+                </div>
+            </div>
             </div>
         </fieldset>
         

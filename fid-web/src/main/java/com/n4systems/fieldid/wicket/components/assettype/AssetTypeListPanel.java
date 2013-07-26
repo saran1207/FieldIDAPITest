@@ -5,8 +5,8 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.setup.assettype.AddOrEditAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.CopyAssetTypePage;
+import com.n4systems.fieldid.wicket.pages.setup.assettype.EditAssetTypePage;
 import com.n4systems.model.AssetType;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -50,7 +50,7 @@ public class AssetTypeListPanel extends Panel {
                 item.add(new Label("createdDate", new DayDisplayModel(new PropertyModel<Date>(assetType, "created"), true, timeZone)));
                 item.add(new Label("modifiedBy", new PropertyModel<String>(assetType, "modifiedBy.displayName")).setVisible(assetType.getModifiedBy() != null));
                 item.add(new Label("modifiedDate", new DayDisplayModel(new PropertyModel<Date>(assetType, "modified"), true, timeZone)));
-                item.add(new BookmarkablePageLink<Void>("edit", AddOrEditAssetTypePage.class, PageParametersBuilder.uniqueId(assetType.getId())));
+                item.add(new BookmarkablePageLink<Void>("edit", EditAssetTypePage.class, PageParametersBuilder.uniqueId(assetType.getId())));
                 item.add(new BookmarkablePageLink<Void>("copy", CopyAssetTypePage.class, PageParametersBuilder.uniqueId(assetType.getId())));
             }
         });
