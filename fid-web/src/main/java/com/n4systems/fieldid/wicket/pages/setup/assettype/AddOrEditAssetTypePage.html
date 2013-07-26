@@ -47,18 +47,16 @@
 
             <div wicket:id="moreInfo" class="more-info">
                 <h3><wicket:message key="label.asset_linking"/></h3>
-                <div class="control-group">
+                <div class="control-group checkbox">
                     <input type="checkbox" wicket:id="linkable"/>
                     <label><strong><wicket:message key="label.allow_asset_linking"/></strong><wicket:message key="label.allow_asset_linking_desc"/></label> 
                 </div>
                 
                 <h3><wicket:message key="label.manufacturer_certificate"/></h3>
-                <div class="control-group control-combo">
+                <div class="control-group checkbox">
                     <input type="checkbox" wicket:id="hasManufacturerCert"/>
-                    <div class="controls">
-                        <label><strong><wicket:message key="label.manufacturer_certificate_generate"/></strong><wicket:message key="label.manufacturer_certificate_text"/></label>
-                        <textarea wicket:id="manufacturerCertText"/>
-                    </div>
+                    <label><strong><wicket:message key="label.manufacturer_certificate_generate"/></strong> <wicket:message key="label.manufacturer_certificate_text"/></label>
+                    <textarea wicket:id="manufacturerCertText" class="manufacturer-cert-text"/>
                 </div>
                 
                 <div class="form-horizontal">
@@ -92,8 +90,8 @@
         </fieldset>
         
         <!-- actions -->
-        <a wicket:id="save"><wicket:message key="label.save"/></a>
-        <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+        <a class="btn-green" wicket:id="save"><wicket:message key="label.save"/></a>
+        <a class="btn-cancel" wicket:id="cancel"><wicket:message key="label.cancel"/></a>
     </form>
 
 </wicket:extend>

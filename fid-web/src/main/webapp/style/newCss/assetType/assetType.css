@@ -23,6 +23,11 @@ h1 {
 	h1 span {
 		color: #666;
 	}
+h3 {
+	font-size: 13px;
+	border-bottom: 1px dashed #ddd;
+	padding-bottom: 2px;
+}
 p {
 	font-size: 12px;
 }
@@ -73,27 +78,12 @@ legend {
 }*/
 
 /* Width variations for inputs and headers */
-.width-full { 
-	width: 975px; 
-}
-.width-xxlrg { 
-	width: 688px; 
-}
-.width-lrg { 
-	width: 387px; 
-}
-	.width-lrg select {
-		width: 393px; 
-	}
-.width-med  { 
-	width: 271px; /*284px*/
-}
-.width-sml { 
-	width: 225px; 
-}
-.width-xsml { 
-	width: 134px; 
-}
+.width-full { width: 975px;}
+.width-xxlrg { width: 688px;}
+.width-lrg { width: 387px;}
+.width-med  { width: 271px; /*284px*/}
+.width-sml { width: 225px;}
+.width-xsml { width: 134px;}
 
 /* Chosen plugin overrides */
 .chzn-container {
@@ -108,10 +98,6 @@ legend {
     padding-top: 2px;
     border-color: #c7c7c9;
 }
-.chzn-container-single .chzn-single span,
-.chzn-container-single .chzn-default {
-    /*color: #7a7a7a;*/
-}
 .chzn-container-single .chzn-single {
     line-height: 20px;
 }
@@ -123,7 +109,8 @@ legend {
 .control-group label {
 	margin-bottom: 4px;
 }
-.control-group input, .control-group select, .control-group textarea, .chzn-container {
+.control-group input, .control-group select, 
+.control-group textarea, .chzn-container {
     margin: 0;
 }
 .control-group.inline {
@@ -133,6 +120,15 @@ legend {
 	.control-group.inline input {
 		margin-right: 6px;
 	}
+
+.checkbox input {
+	float: left;
+	margin-top: 2px;
+	height: auto;
+}
+.checkbox label {
+	margin-left: 20px;
+}
 
 /* For using multiple controls with one label */
 .control-combo label {
@@ -157,7 +153,6 @@ legend {
 	margin-right: 14px;
 	padding-top: 4px;
 	float: left;
-	text-align: right;
 }
 .form-horizontal .text-block {
 	margin-left: 193px;
@@ -191,24 +186,14 @@ legend {
 	display: block;
 	margin-top: 4px;
 }
-.entypo-checkmark {
-	background-position: 0 0;
-}
-.entypo-x {
-	background-position: -20px 0;
-}
-.entypo-list {
-	background-position: -40px 0;
-}
-.entypo-caret-down {
-	background-position: -60px 0;
-}
-.entypo-caret-up {
-	background-position: -80px 0;
-}
+.entypo-checkmark { background-position: 0 0;}
+.entypo-x { background-position: -20px 0;}
+.entypo-list { background-position: -40px 0;}
+.entypo-caret-down { background-position: -60px 0;}
+.entypo-caret-up { background-position: -80px 0;}
 
 /* BUTTON STYLES */
-.btn-gray {
+[class^="btn"] {
 	text-decoration: none;
 	display: inline-block;
 	padding: 8px 16px;
@@ -220,7 +205,8 @@ legend {
 	color: #fff;
 	width: auto;
 	cursor: pointer;
-
+}
+.btn-gray {
 	color: #3a3a3a;
 	background: #eaeaea;
 	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eaeaea), color-stop(1, #ffffff));
@@ -228,6 +214,21 @@ legend {
 	background: -moz-linear-gradient(center bottom, #eaeaea 0%, #ffffff 100%);
 	background: -o-linear-gradient(#ffffff, #eaeaea);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eaeaea', GradientType=0);
+}
+.btn-green {
+  background: #60986b;
+  border-color: #568860;
+}
+.btn-green:hover {
+	color: #000;
+}
+.btn-cancel {
+	border: none;
+	text-decoration: underline;
+}
+.btn-cancel:hover {
+	color: #000;
+	text-decoration: none;
 }
 
 /* PAGE SPECIFIC STYLES */
@@ -246,7 +247,7 @@ legend {
 		border-bottom: 1px solid #ccc;
 		padding: 10px 5px;
 	}
-	.attributes-setup-list li.disabled {
+	.attributes-setup-list input:disabled {
 		opacity: 0.5;
 	   	filter: alpha(opacity=50); /* IE8 and lower */
 	   	zoom: 1; /* set to trigger "hasLayout" in IE 7 and lower */ 
@@ -256,6 +257,7 @@ legend {
 		margin-right: 10px;
 		float: left;
 	}
+	/* list item delete */
 	.attributes-setup-list .li-delete {
 		float: right;
 	}
@@ -267,6 +269,23 @@ legend {
 .more-info .form-horizontal input {
 	width: 286px;
 }
+/* custom select sizing */
+.more-info .manufacturer-cert-text {
+	width: 480px;
+	height: 90px;
+}
+.more-info .control-group {
+	margin-bottom: 30px;
+}
+
+.date-option {
+	display: inline-block;
+	vertical-align: top;
+	margin-top: 7px;
+	margin-left: 4px;
+}
+
+
 	
 
 
