@@ -10,7 +10,7 @@ import org.apache.lucene.document.Document;
 import javax.persistence.EntityManager;
 import java.io.IOException;
 
-public class EventIndexWriter extends IndexWriter<Event> {
+public class EventIndexWriter extends LuceneIndexWriter<Event> {
 
     public EventIndexWriter() {
         super(Event.class);

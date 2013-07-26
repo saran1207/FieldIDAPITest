@@ -32,7 +32,7 @@ public class BarChartManager extends SimpleChartManager<String> {
         return null;
     }
 
-    private Chartable<String> createChartable(String x, Number y, long index, String tooltip) {
+    protected Chartable<String> createChartable(String x, Number y, long index, String tooltip) {
 		return !transpose ? 
 				new StringChartable(x, y, index, tooltip) : 
 				new StringChartable(x, index, y.longValue(), tooltip);		

@@ -104,6 +104,16 @@
 
         </action>
 
+        <action name="rebuildCriteriaTrendsIndex" method="rebuildCriteriaTrendsIndex"
+                class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">organizationEdit</param>
+                <param name="namespace">/admin</param>
+                <param name="id">${tenant.id}</param>
+            </result>
+
+        </action>
+
 		<action name="orderMappingList" method="list"
 			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
 			<result name="success" type="freemarker">/admin/templates/html/ordermapping/list.ftl

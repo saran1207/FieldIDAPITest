@@ -1,0 +1,2 @@
+CREATE TRIGGER trig_after_insert_events AFTER INSERT ON events FOR EACH ROW INSERT IGNORE INTO criteria_trends_index_queue_items (item_id, type) VALUES (NEW.id, 'EVENT_INSERT');
+CREATE TRIGGER trig_after_update_events AFTER UPDATE ON events FOR EACH ROW INSERT IGNORE INTO criteria_trends_index_queue_items (item_id, type) VALUES (NEW.id, 'EVENT_UPDATE');

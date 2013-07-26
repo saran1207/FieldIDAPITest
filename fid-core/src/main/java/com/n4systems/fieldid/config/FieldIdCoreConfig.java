@@ -65,6 +65,7 @@ import com.n4systems.services.search.parser.SearchParserService;
 import com.n4systems.services.search.parser.SimpleParser;
 import com.n4systems.services.search.parser.ValueFactory;
 import com.n4systems.services.search.writer.AssetIndexWriter;
+import com.n4systems.services.search.writer.CriteriaTrendsIndexWriter;
 import com.n4systems.services.search.writer.EventIndexWriter;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ConfigEntry;
@@ -530,6 +531,11 @@ public class FieldIdCoreConfig {
 		return new AssetIndexerService();
 	}
 
+    @Bean
+    public CriteriaTrendsIndexerService criteriaTrendsIndexerService() {
+        return new CriteriaTrendsIndexerService();
+    }
+
 	@Bean
 	public SearchParserService globalSearchService() {
 		return new SearchParserService();
@@ -603,5 +609,14 @@ public class FieldIdCoreConfig {
         return new EventIndexWriter();
     }
 
+    @Bean
+    public CriteriaTrendsIndexWriter trendsIndexWriter() {
+        return new CriteriaTrendsIndexWriter();
+    }
+
+    @Bean
+    public CriteriaTrendsService criteriaTrendsService() {
+        return new CriteriaTrendsService();
+    }
 
 }

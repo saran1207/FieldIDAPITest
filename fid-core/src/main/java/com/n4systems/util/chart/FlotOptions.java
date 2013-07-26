@@ -72,6 +72,7 @@ public class FlotOptions<X> implements Serializable {
 	public static class Axis implements Serializable  {
 		public Long[] panRange;
 		public Long min;
+        public Long max;
 		public String mode;
 		public String timeformat = "%m/%y";
         public Long tickDecimals;

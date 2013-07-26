@@ -11,7 +11,6 @@ import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.search.writer.AssetIndexWriter;
-import com.n4systems.services.search.writer.EventIndexWriter;
 import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause;
@@ -32,7 +31,6 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
 
     @Autowired private AssetIndexWriter assetIndexWriter;
-    @Autowired private EventIndexWriter eventIndexWriter;
 
     private @Autowired AnalyzerFactory analyzerFactory;
     private @Resource PlatformTransactionManager transactionManager;
@@ -92,7 +90,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 		}
 	}
 
-	private TenantOnlySecurityFilter createTenantFilter(HasTenant hasTenantEntity) {
+    private TenantOnlySecurityFilter createTenantFilter(HasTenant hasTenantEntity) {
 		return new TenantOnlySecurityFilter(hasTenantEntity.getTenant());
 	}
 
@@ -143,13 +141,10 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 	private void reindexByAssetStatus(AssetStatus assetStatus) {
         assetIndexWriter.reindexItems(assetStatus.getTenant(), new QueryBuilder<Asset>(Asset.class, createTenantFilter(assetStatus))
                 .addWhere(WhereClauseFactory.create("assetStatus", assetStatus)));
-        eventIndexWriter.reindexItems(assetStatus.getTenant(), new QueryBuilder<Event>(Event.class, createTenantFilter(assetStatus))
-                .addWhere(WhereClauseFactory.create("assetStatus", assetStatus)));
 	}
 
 	private void reindexByTenant(Tenant tenant) {
         assetIndexWriter.reindexItems(tenant, new QueryBuilder<Asset>(Asset.class, new TenantOnlySecurityFilter(tenant)));
-        eventIndexWriter.reindexItems(tenant, new QueryBuilder<Event>(Event.class, new TenantOnlySecurityFilter(tenant)));
 	}
 
     public void indexTenant(String tenantName) {

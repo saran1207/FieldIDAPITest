@@ -29,6 +29,8 @@ public class MultipleSelectClause extends SelectClause {
                 if (subBuilder.getQueryAlias() != null) {
                     builder.append(" as ").append(subBuilder.getQueryAlias());
                 }
+            } else if (clause instanceof SelectClause) {
+                builder.append(((SelectClause) clause).getClauseArgument(table));
             }
             builder.append(",");
         }
@@ -38,6 +40,11 @@ public class MultipleSelectClause extends SelectClause {
 
     public MultipleSelectClause addSimpleSelect(String select) {
         clauses.add(select);
+        return this;
+    }
+
+    public MultipleSelectClause addSelect(SelectClause selectClause) {
+        clauses.add(selectClause);
         return this;
     }
 

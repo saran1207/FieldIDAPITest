@@ -15,7 +15,7 @@ import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.Date;
 
-public class AssetIndexWriter extends IndexWriter<Asset> {
+public class AssetIndexWriter extends LuceneIndexWriter<Asset> {
 
     private @Autowired EventService eventService;
 

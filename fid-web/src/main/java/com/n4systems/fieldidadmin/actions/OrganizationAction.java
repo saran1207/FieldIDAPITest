@@ -23,6 +23,7 @@ import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.services.search.AssetIndexerService;
+import com.n4systems.services.search.CriteriaTrendsIndexerService;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -88,6 +89,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
     private EventService eventService;
     @Autowired
     private AssetIndexerService assetIndexerService;
+    @Autowired
+    private CriteriaTrendsIndexerService criteriaTrendsIndexerService;
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {}
@@ -257,6 +260,12 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
     @SkipValidation
     public String doRebuildIndex() {
         assetIndexerService.indexTenant(tenant.getName());
+        return SUCCESS;
+    }
+
+    @SkipValidation
+    public String doRebuildCriteriaTrendsIndex() {
+        criteriaTrendsIndexerService.placeItemInQueueForTenant(tenant.getId());
         return SUCCESS;
     }
 

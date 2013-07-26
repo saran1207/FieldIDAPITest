@@ -1,0 +1,39 @@
+<wicket:extend>
+
+    <style>
+        .flotChart {
+            height:400px;
+            width:950px;
+        }
+    </style>
+
+    <div wicket:id="feedbackPanel"></div>
+
+    <form wicket:id="form">
+
+        <select wicket:id="eventType"></select>
+        <div wicket:id="datePicker"/>
+
+        <a wicket:id="submitLink">Load</a>
+
+    </form>
+
+    <div wicket:id="trendsByResultContainer">
+        <div wicket:id="trendsByResult">
+            Result: <a wicket:id="selectResultLink"><span wicket:id="resultText"></span></a>
+            Count: <span wicket:id="count"></span>
+        </div>
+    </div>
+
+    <div wicket:id="trendsForResultByCriteriaContainer" style="height:800px;">
+        <!--<div wicket:id="trendsByCriteria">-->
+            <!--Criteria: <span wicket:id="criteriaName"></span>-->
+            <!--Count: <span wicket:id="count"></span>-->
+        <!--</div>-->
+
+        <div wicket:id="chart" style="width:800px;height:400px;">
+            &nbsp;
+        </div>
+    </div>
+
+</wicket:extend>

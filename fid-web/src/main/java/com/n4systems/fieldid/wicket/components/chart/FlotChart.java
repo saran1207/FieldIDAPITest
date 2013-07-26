@@ -22,9 +22,9 @@ public class FlotChart<X extends Comparable> extends Panel {
 	@SpringBean
 	private JsonRenderer jsonRenderer;
 
-	private IModel<FlotOptions<X>> optionsModel;
+	private IModel<? extends FlotOptions<X>> optionsModel;
 	
-    public FlotChart(final String id, IModel<ChartData<X>> model, IModel<FlotOptions<X>> optionsModel, String css) {
+    public FlotChart(final String id, IModel<ChartData<X>> model, IModel<? extends FlotOptions<X>> optionsModel, String css) {
 		super(id, model);
         this.optionsModel = optionsModel;
         add(new ChartMarkup("flot").add(new AttributeAppender("class", new Model<String>(css), " ")));
