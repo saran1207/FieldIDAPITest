@@ -56,9 +56,7 @@ public class AssetTypeAttributePanel extends Panel {
         setOutputMarkupId(true);
 
         final AssetType assetType = assetTypeModel.getObject();
-        if(assetType.isNew()) {
-            assetType.setInfoFields(Lists.<InfoFieldBean>newArrayList());
-        }
+
         getInfoFields(assetType);
         getEditInfoOptions(assetType);
 
@@ -126,6 +124,7 @@ public class AssetTypeAttributePanel extends Panel {
                     }
                 }));
                 typeSelect.setRequired(true);
+                typeSelect.setNullValid(true);
                 typeSelect.add(new OnChangeAjaxBehavior() {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
@@ -134,7 +133,6 @@ public class AssetTypeAttributePanel extends Panel {
                     }
                 });
                 typeSelect.setEnabled(!isRetired);
-
 
                 item.add(selectOptions = new RequiredTextField<String>("selectOptions", options));
                 selectOptions.add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -239,7 +237,7 @@ public class AssetTypeAttributePanel extends Panel {
 
             private String getOptionsAsString(Long infoFieldIndex) {
                 String options;
-                if (!assetType.isNew()) {
+                if (!assetType.getInfoFields().isEmpty()) {
                     List<String> optList = Lists.newArrayList();
                     for (InfoOptionInput opt : editInfoOptions) {
                         if (opt.getInfoFieldIndex().equals(infoFieldIndex) && !opt.isDeleted())

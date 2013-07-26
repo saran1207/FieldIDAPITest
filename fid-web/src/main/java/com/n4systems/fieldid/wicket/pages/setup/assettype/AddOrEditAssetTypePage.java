@@ -41,10 +41,10 @@ import java.util.List;
 
 public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
 
-    private IModel<AssetType> assetType;
+    protected IModel<AssetType> assetType;
 
     @SpringBean
-    private AssetTypeService assetTypeService;
+    protected AssetTypeService assetTypeService;
 
     private AssetTypeImagePanel imagePanel;
     private AssetTypeAttachmentsPanel attachmentsPanel;
@@ -52,18 +52,19 @@ public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
     private WebMarkupContainer moreInfo;
 
     public AddOrEditAssetTypePage(PageParameters params) {
-        if(params.get("uniqueID").isNull()) {
-            assetType = Model.of(getNewAssetType());
-        } else {
-            assetType = Model.of(assetTypeService.getAssetType(params.get("uniqueID").toLong()));
-        }
+        assetType = Model.of(getAssetType(params));
         add(new AssetTypeForm("form", assetType));
         add(new FIDFeedbackPanel("feedbackPanel"));
     }
 
-    private AssetType getNewAssetType() {
-        AssetType assetType = new AssetType();
-        assetType.setTenant(getTenant());
+    protected AssetType getAssetType(PageParameters params) {
+        AssetType assetType;
+        if(params.get("uniqueID").isNull()) {
+            assetType = new AssetType();
+            assetType.setTenant(getTenant());
+        } else {
+            assetType = assetTypeService.getAssetType(params.get("uniqueID").toLong());
+        }
         return assetType;
     }
 
@@ -106,7 +107,8 @@ public class AddOrEditAssetTypePage extends FieldIDFrontEndPage {
                     }
                 }
             });
-            add(new FidDropDownChoice<AssetTypeGroup>("group", new PropertyModel<AssetTypeGroup>(model, "group"), assetTypeService.getAssetTypeGroupsByOrder(), new ListableChoiceRenderer<AssetTypeGroup>()));
+            add(new FidDropDownChoice<AssetTypeGroup>("group", new PropertyModel<AssetTypeGroup>(model, "group"),
+                    assetTypeService.getAssetTypeGroupsByOrder(), new ListableChoiceRenderer<AssetTypeGroup>()).setNullValid(true));
             add(imagePanel = new AssetTypeImagePanel("image", model));
             add(attributePanel = new AssetTypeAttributePanel("attributes", model));
             add(new TextField<String>("descriptionTemplate", new PropertyModel<String>(model, "descriptionTemplate")));
