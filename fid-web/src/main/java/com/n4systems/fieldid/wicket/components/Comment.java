@@ -50,7 +50,6 @@ public class Comment extends Panel implements IEventBehavior {
 		
 		text.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			@Override protected void onUpdate(AjaxRequestTarget target) {
-                fireOnChange(target);
 				target.add(text);
 			}			
 		});
