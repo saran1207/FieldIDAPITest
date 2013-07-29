@@ -5,6 +5,7 @@ import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
+import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeAttachmentsPanel;
@@ -113,13 +114,14 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                 @Override
                 protected void onValidate(IValidatable validatable) {
                     String name = (String) validatable.getValue();
-                    if(assetTypeService.isNameExists(name) && assetType.getObject().isNew()) {
+                    if (assetTypeService.isNameExists(name) && assetType.getObject().isNew()) {
                         ValidationError error = new ValidationError();
                         error.addMessageKey("error.assettypenameduplicate");
                         validatable.error(error);
                     }
                 }
             });
+            nameField.add(new Watermark(new FIDLabelModel("label.asset_type.form.name").getObject()));
             add(new FidDropDownChoice<AssetTypeGroup>("group", new PropertyModel<AssetTypeGroup>(model, "group"),
                     assetTypeService.getAssetTypeGroupsByOrder(), new ListableChoiceRenderer<AssetTypeGroup>()).setNullValid(true));
             add(imagePanel = new AssetTypeImagePanel("image", model));
@@ -129,7 +131,8 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             add(moreInfo = new WebMarkupContainer("moreInfo"));
             moreInfo.add(new CheckBox("linkable", new PropertyModel<Boolean>(model, "linkable")));
             moreInfo.add(new CheckBox("hasManufacturerCert", new PropertyModel<Boolean>(model, "hasManufactureCertificate")));
-            moreInfo.add(new TextArea<String>("manufacturerCertText", new PropertyModel<String>(model, "manufactureCertificateText")));
+            moreInfo.add(new TextArea<String>("manufacturerCertText", new PropertyModel<String>(model, "manufactureCertificateText"))
+                    .add(new Watermark(new FIDLabelModel("label.asset_type.form.manufacturer_cert").getObject())));
             moreInfo.add(attachmentsPanel = new AssetTypeAttachmentsPanel("attachments", model));
             moreInfo.add(new TextArea<String>("warnings", new PropertyModel<String>(model, "warnings")));
             moreInfo.add(new TextArea<String>("instructions", new PropertyModel<String>(model, "instructions")));

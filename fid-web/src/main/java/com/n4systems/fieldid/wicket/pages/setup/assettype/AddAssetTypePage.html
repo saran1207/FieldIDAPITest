@@ -13,7 +13,7 @@
         <fieldset>
             <div class="control-group inline">
                 <label><wicket:message key="label.name"/></label>
-                <input type="text" wicket:id="name" class="width-xxlrg" placeholder="ex. Forklift" />
+                <input type="text" wicket:id="name" class="width-xxlrg"/>
             </div>
 
             <div class="control-group inline">
@@ -56,7 +56,7 @@
                 <div class="control-group checkbox">
                     <input type="checkbox" wicket:id="hasManufacturerCert"/>
                         <label><strong><wicket:message key="label.manufacturer_certificate_generate"/></strong> <wicket:message key="label.manufacturer_certificate_text"/></label>
-                    <textarea wicket:id="manufacturerCertText" class="manufacturer-cert-text" placeholder="Manufacturer Certificate Text..."/>
+                    <textarea wicket:id="manufacturerCertText" class="manufacturer-cert-text"/>
                     </div>
 
                 <div class="form-horizontal">
@@ -68,7 +68,6 @@
                     </label>
                     <div class="controls">
                         <div wicket:id="attachments"/>
-                        <textarea placeholder="Comment..."></textarea>
                     </div>
                 </div>
 

@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.wicket.components.assettype;
 
+import com.n4systems.fieldid.wicket.behavior.Watermark;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.FileAttachment;
@@ -54,6 +56,7 @@ public class AssetTypeAttachmentsPanel extends Panel {
                 comments.add(new AjaxFormComponentUpdatingBehavior("onblur") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) { } });
+                comments.add(new Watermark(new FIDLabelModel("label.asset_type.form.files").getObject()));
                 item.add(new Label("fileName", new NameAfterLastFileSeparatorModel(ProxyModel.of(item.getModel(), on(AssetAttachment.class).getFileName()))));
                 item.add(new AjaxLink("removeLink") {
                     @Override

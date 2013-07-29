@@ -6,8 +6,10 @@ import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.util.StringUtils;
@@ -66,26 +68,28 @@ public class AssetTypeAttributePanel extends Panel {
         sortableAjaxBehavior = new SimpleSortableAjaxBehavior() {
             @Override
             public void onUpdate(Component sortedComponent, int index, AjaxRequestTarget target) {
-                InfoFieldInput movedItem = (InfoFieldInput) sortedComponent.getDefaultModelObject();
-                infoFields.remove(movedItem);
-                infoFields.add(index-1, movedItem);
+                if(infoFields.size() > 1) {
+                    InfoFieldInput movedItem = (InfoFieldInput) sortedComponent.getDefaultModelObject();
+                    infoFields.remove(movedItem);
+                    infoFields.add(index-1, movedItem);
 
-                List<InfoOptionInput> updatedOptions = Lists.newArrayList();
-                //Reset all the weights on the fields and corresponding options
-                for(int i = 0; i < infoFields.size(); i++) {
-                    int oldIndex = infoFields.get(i).getWeight().intValue();
-                    for (int j = 0; j < editInfoOptions.size(); j++) {
-                        InfoOptionInput input = editInfoOptions.get(j);
-                        if(input.getInfoFieldIndex() == oldIndex && !updatedOptions.contains(input)) {
-                            input.setInfoFieldIndex(i);
-                            updatedOptions.add(input);
+                    List<InfoOptionInput> updatedOptions = Lists.newArrayList();
+                    //Reset all the weights on the fields and corresponding options
+                    for(int i = 0; i < infoFields.size(); i++) {
+                        int oldIndex = infoFields.get(i).getWeight().intValue();
+                        for (int j = 0; j < editInfoOptions.size(); j++) {
+                            InfoOptionInput input = editInfoOptions.get(j);
+                            if(input.getInfoFieldIndex() == oldIndex && !updatedOptions.contains(input)) {
+                                input.setInfoFieldIndex(i);
+                                updatedOptions.add(input);
+                            }
                         }
+                        infoFields.get(i).setWeight(Long.valueOf(i));
                     }
-                    infoFields.get(i).setWeight(Long.valueOf(i));
+                    updatedOptions.clear();
+                    listView.removeAll();
+                    target.add(existingAttributesContainer);
                 }
-                updatedOptions.clear();
-                listView.removeAll();
-                target.add(existingAttributesContainer);
             }
         };
         existingAttributesContainer.add(sortableAjaxBehavior);
@@ -171,6 +175,7 @@ public class AssetTypeAttributePanel extends Panel {
                 });
 
                 selectOptions.setEnabled(!isRetired);
+                selectOptions.add(new Watermark(new FIDLabelModel("label.asset_type.form.attribute").getObject()));
 
                 item.add(dateOption = new CheckBox("dateOption", new PropertyModel<Boolean>(infoField, "includeTime")));
                 dateOption.setEnabled(!isRetired);
