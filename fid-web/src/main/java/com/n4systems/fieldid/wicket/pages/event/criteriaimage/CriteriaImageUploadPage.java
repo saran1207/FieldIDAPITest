@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -77,6 +78,7 @@ public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
                         criteriaResultImage.setCriteriaResult(criteriaResult);
                         criteriaResultImage.setFileName(fileUpload.getClientFileName());
                         criteriaResultImage.setContentType(fileUpload.getContentType());
+                        criteriaResultImage.setMd5sum(DigestUtils.md5Hex(imageData));
 
                         criteriaResultImage.setComments(comments);
 

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.event.criteriaimages;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.markup.html.form.Form;
@@ -42,6 +43,8 @@ public class CriteriaImagesPanel extends Panel {
                         criteriaResultImage.setContentType(fileUpload.getContentType());
 
                         byte[] imageData = fileUpload.getBytes();
+
+                        criteriaResultImage.setMd5sum(DigestUtils.md5Hex(imageData));
 
                         String tempFileName = s3Service.uploadTempCriteriaResultImage(criteriaResultImage, imageData);
                         criteriaResultImage.setTempFileName(tempFileName);

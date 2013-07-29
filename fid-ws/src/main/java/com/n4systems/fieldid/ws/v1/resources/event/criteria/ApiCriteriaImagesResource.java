@@ -7,7 +7,7 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
-
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -32,9 +32,20 @@ public class ApiCriteriaImagesResource extends FieldIdPersistenceService {
 		QueryBuilder<CriteriaResult> builder = createTenantSecurityBuilder(CriteriaResult.class, true);
 		builder.addWhere(WhereClauseFactory.create("mobileId", apiCriteriaImage.getCriteriaResultSid()));
 
+        String imageMd5sum = DigestUtils.md5Hex(apiCriteriaImage.getImage());
+
 		CriteriaResult criteriaResult = persistenceService.find(builder);
+
+        for (CriteriaResultImage criteriaResultImage : criteriaResult.getCriteriaImages()) {
+            if (imageMd5sum.equals(criteriaResultImage.getMd5sum())) {
+                logger.warn("Duplicate criteria image detected: " + apiCriteriaImage.getCriteriaResultSid());
+                return;
+            }
+        }
+
 		CriteriaResultImage criteriaResultImage = new CriteriaResultImage();
 		criteriaResultImage.setCriteriaResult(criteriaResult);
+        criteriaResultImage.setMd5sum(imageMd5sum);
 		criteriaResultImage.setFileName(apiCriteriaImage.getFileName());
 		criteriaResultImage.setContentType(FileTypeMap.getDefaultFileTypeMap().getContentType(apiCriteriaImage.getFileName()));
 		criteriaResultImage.setComments(apiCriteriaImage.getComments());

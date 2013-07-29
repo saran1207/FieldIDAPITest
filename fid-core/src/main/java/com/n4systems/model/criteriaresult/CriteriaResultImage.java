@@ -20,6 +20,9 @@ public class CriteriaResultImage extends BaseEntity {
 	@Column(nullable = true)
 	private String comments;
 
+    @Column(name = "md5sum")
+    private String md5sum;
+
 	@Transient
 	private String contentType;
 
@@ -65,4 +68,13 @@ public class CriteriaResultImage extends BaseEntity {
     public void setTempFileName(String tempFileName) {
         this.tempFileName = tempFileName;
     }
+
+    public String getMd5sum() {
+        return md5sum;
+    }
+
+    public void setMd5sum(String md5sum) {
+        this.md5sum = md5sum;
+    }
+
 }

@@ -1,0 +1,1 @@
+alter table criteriaresult_images add column md5sum varchar(35);
