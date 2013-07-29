@@ -2,10 +2,7 @@ package com.n4systems.services.search;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.model.utils.DateRange;
-import com.n4systems.services.search.parser.QueryTerm;
-import com.n4systems.services.search.parser.RangeValue;
-import com.n4systems.services.search.parser.SearchQuery;
-import com.n4systems.services.search.parser.Value;
+import com.n4systems.services.search.parser.*;
 
 import java.math.BigDecimal;
 
@@ -20,9 +17,6 @@ public class NumericAnalyzer {
 
     public boolean matches(String fieldName, Number numberValue) {
          QueryTerm term = searchQuery.getTermForAttribute(fieldName);
-        if (term==null) {
-            return false;
-        }
 
          Value value = term.getValue();
         Preconditions.checkState(value.isNumber() || value.isDate(), " should only be doing this on numeric values");

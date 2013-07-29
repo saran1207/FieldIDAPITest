@@ -205,7 +205,23 @@ public class SearchParserService extends FieldIdService {
     }
 
     private Query getAllQueryForTerm(QueryTerm term) {
-        return getQueryForTerm(AssetIndexField.ALL.getField(), term.getValue(), QueryTerm.Operator.EQ);
+        // if term is a date or number, we'll search all known fields of that type as well as doing a general text search for term.
+        BooleanQuery query = getNonStringAllTerms(term.getValue());
+        query.add(getQueryForTerm(AssetIndexField.ALL.getField(), term.getStringValue(), QueryTerm.Operator.EQ), BooleanClause.Occur.SHOULD);
+        return query;
+    }
+
+    private BooleanQuery getNonStringAllTerms(final Value value) {
+        BooleanQuery query = new BooleanQuery();
+        Iterable<AssetIndexField> filtered = Iterables.filter(Lists.newArrayList(AssetIndexField.values()), new Predicate<AssetIndexField>() {
+            @Override public boolean apply(AssetIndexField input) {
+                return (value.isDate() && input.isDate()) || (value.isLong() && input.isLong());
+            }
+        });
+        for (AssetIndexField field:filtered) {
+            query.add(getQueryForTerm(field.getField(), value, QueryTerm.Operator.EQ), BooleanClause.Occur.SHOULD);
+        }
+        return query;
     }
 
     private Query getQueryForTerm(String attribute, Value value, QueryTerm.Operator operator) {

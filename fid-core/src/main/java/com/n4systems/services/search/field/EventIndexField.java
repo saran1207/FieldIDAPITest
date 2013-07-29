@@ -41,6 +41,7 @@ public enum EventIndexField implements IndexField {
     ALL("_all", AnalyzerFactory.Type.WHITESPACE);
 
     private static EnumSet<EventIndexField> longAttributes= EnumSet.of(ID, CUSTOMER_ID, DIVISION_ID, SECONDARY_ID);
+    private static EnumSet<EventIndexField> dateAttributes= EnumSet.of(CREATED, MODIFIED, DUE_DATE, COMPLETED_DATE);
 
 
     private final String field;
@@ -80,6 +81,11 @@ public enum EventIndexField implements IndexField {
     @Override
     public boolean isLong() {
         return longAttributes.contains(this);
+    }
+
+    @Override
+    public boolean isDate() {
+        return dateAttributes.contains(this);
     }
 
     public static EventIndexField fromString(String s) {

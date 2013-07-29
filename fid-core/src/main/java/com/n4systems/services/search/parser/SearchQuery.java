@@ -90,6 +90,10 @@ public class SearchQuery implements Serializable {
         if (attribute==null) {
             return null;
         }
+        // if user just inputs "foo", then we'll generate a "attribute=foo" term on the fly.
+        if (terms.size()==1 && terms.get(0).getAttribute()==null) {
+            return new QueryTerm(attribute, QueryTerm.Operator.EQ, terms.get(0).getValue());
+        }
         for (QueryTerm term:terms) {
             if (attribute.equals(term.getAttribute())) {
                 return term;

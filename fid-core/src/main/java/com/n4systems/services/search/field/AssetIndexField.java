@@ -11,39 +11,41 @@ public enum AssetIndexField implements IndexField {
     SECONDARY_ID("_secondaryorgid", AnalyzerFactory.Type.KEYWORD),
     CUSTOMER_ID("_customerorgid", AnalyzerFactory.Type.KEYWORD),
     DIVISION_ID("_divisionorgid", AnalyzerFactory.Type.KEYWORD),
-    CREATED("assetcreated", AnalyzerFactory.Type.KEYWORD, 1),
-    MODIFIED("assetmodified", AnalyzerFactory.Type.KEYWORD, 1),
-    IDENTIFIER("id", 10),
-    TYPE("at",9),
-    CUSTOMER("cu",9),
-    DIVISION("div",9),
-    LOCATION("location",5),
-    INTERNAL_ORG("org",9),
-    IDENTIFIED("assetidentified", 5),
-    RFID("rfid", 9),
-    REFERENCE_NUMBER("ref", 9),
-    PURCHASE_ORDER("po", 9),
-    COMMENTS("comments",AnalyzerFactory.Type.STANDARD,1),
-    ORDER("order", 1),
-    LAST_EVENT_DATE("lasteventdate", AnalyzerFactory.Type.KEYWORD,1),
-    CREATED_BY("usercreated",1),
-    MODIFIED_BY("usermodified",1),
-    IDENTIFIED_BY("identifiedby",5),
-    ASSIGNED("assigned",5),
-    OWNER("owner",9),
-    TYPE_GROUP("atg",5),
-    STATUS("assetstatus",5),
+    CREATED("assetcreated", AnalyzerFactory.Type.KEYWORD, LOW_PRIORITY),
+    MODIFIED("assetmodified", AnalyzerFactory.Type.KEYWORD, LOW_PRIORITY),
+    IDENTIFIER("id", TOP_PRIORITY),
+    TYPE("at",HIGH_PRIORITY),
+    CUSTOMER("cu",HIGH_PRIORITY),
+    DIVISION("div",HIGH_PRIORITY),
+    LOCATION("location",MEDIUM_PRIORITY),
+    INTERNAL_ORG("org",HIGH_PRIORITY),
+    IDENTIFIED("assetidentified", MEDIUM_PRIORITY),
+    RFID("rfid", HIGH_PRIORITY),
+    REFERENCE_NUMBER("ref", HIGH_PRIORITY),
+    PURCHASE_ORDER("po", HIGH_PRIORITY),
+    COMMENTS("comments",AnalyzerFactory.Type.STANDARD,LOW_PRIORITY),
+    ORDER("order", LOW_PRIORITY),
+    LAST_EVENT_DATE("lasteventdate", AnalyzerFactory.Type.KEYWORD,LOW_PRIORITY),
+    CREATED_BY("usercreated",LOW_PRIORITY),
+    MODIFIED_BY("usermodified",LOW_PRIORITY),
+    IDENTIFIED_BY("identifiedby",MEDIUM_PRIORITY),
+    ASSIGNED("assigned",MEDIUM_PRIORITY),
+    OWNER("owner",HIGH_PRIORITY),
+    TYPE_GROUP("atg",MEDIUM_PRIORITY),
+    STATUS("assetstatus",MEDIUM_PRIORITY),
     //note that there is a subtle difference here...the ALL field uses WHITESPACE while some of the fields it contains use the STANDARD analyzer;
     // this may lead to inconsistent results.
     //  i.e. search for "blah-blah-blah"  compared to searching for "comments:blah-blah-blah" will yield different results due to different analyzers
     //  different processing of hyphen.
     ALL("_all", AnalyzerFactory.Type.WHITESPACE);
 
+
     private static EnumSet<AssetIndexField> displayedFixedAttributes = EnumSet.of(LOCATION, TYPE, IDENTIFIED, RFID, PURCHASE_ORDER, INTERNAL_ORG, CUSTOMER, DIVISION);
     private static EnumSet<AssetIndexField> nonDisplayedFixedAttributes = EnumSet.of( CREATED, MODIFIED, MODIFIED_BY, REFERENCE_NUMBER, COMMENTS, ORDER, LAST_EVENT_DATE,
             CREATED_BY, MODIFIED_BY, IDENTIFIED_BY, ASSIGNED, TYPE_GROUP, STATUS);
     private static EnumSet<AssetIndexField> internalAttributes = EnumSet.of(ALL, ID, CUSTOMER_ID, DIVISION_ID, SECONDARY_ID);
     private static EnumSet<AssetIndexField> longAttributes= EnumSet.of(ID, CUSTOMER_ID, DIVISION_ID, SECONDARY_ID);
+    private static EnumSet<AssetIndexField> dateAttributes= EnumSet.of(CREATED, MODIFIED, IDENTIFIED, LAST_EVENT_DATE);
 
     private final String field;
     private int boost = DEFAULT_BOOST;
@@ -108,6 +110,11 @@ public enum AssetIndexField implements IndexField {
     @Override
     public boolean isLong() {
         return longAttributes.contains(this);
+    }
+
+    @Override
+    public boolean isDate() {
+        return dateAttributes.contains(this);
     }
 
     @Override

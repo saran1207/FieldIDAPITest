@@ -37,8 +37,8 @@ public class SimpleValue extends Value {
     }
 
     private DateFormatType dateFormatType=DateFormatType.VOID;
-    private DateRange date;
-    private Number number;
+    protected DateRange date;
+    protected Number number;
     protected String stringValue;
     private boolean isQuoted = false;
 

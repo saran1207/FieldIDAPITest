@@ -77,4 +77,8 @@ public class QueryTerm implements Serializable {
         return value;
     }
 
+    public Value getStringValue() {
+        return new StringValue(value.getString());
+    }
+
 }

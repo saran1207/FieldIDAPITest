@@ -25,7 +25,7 @@ class FieldIdHighlighter extends Highlighter  {
     public String getBestNumericFragment(String fieldName, Number numberValue, String text) {
         if (numericAnalyzer.matches(fieldName, numberValue)) {
             // basically, just want the formatter to do it's simple string appending job...  i.e.   hello  -->   <span class="hilite">hello</span>
-            // ...alas need all this workaround mocking stuff because it takes a peek at TokenGroup before doing so. (.: can't pass in null)
+            // ...alas need all this workaround overriding stuff because it takes a peek at TokenGroup before doing so. (.: can't pass in null)
             return formatter.highlightTerm(text,new TokenGroup(new EmptyTokenStream()) {
                 @Override public float getTotalScore() {
                     return 1;
