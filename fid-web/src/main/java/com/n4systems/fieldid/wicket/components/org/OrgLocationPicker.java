@@ -17,7 +17,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -71,7 +70,7 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
             }
 
         });
-        add(new ContextImage("icon","images/search-icon.png") {
+        add(new WebMarkupContainer("icon") {
             @Override protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
                 tag.put("onClick",String.format("%s.toggleTree()",tree.getJsVariableName()));
