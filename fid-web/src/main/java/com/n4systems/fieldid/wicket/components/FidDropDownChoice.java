@@ -58,10 +58,4 @@ public class FidDropDownChoice<T> extends DropDownChoice<T>{
         super.onInitialize();
         addJChosenBehavior();
     }
-
-    public FidDropDownChoice<T> withPlaceholder(String placeholder) {
-        this.placeholder = placeholder;
-        return this;
-    }
-
 }
