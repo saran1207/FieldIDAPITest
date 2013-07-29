@@ -3,8 +3,10 @@ package com.n4systems.fieldid.wicket.pages.trends;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.CriteriaTrendsService;
 import com.n4systems.fieldid.wicket.components.DateRangePicker;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -21,7 +23,6 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -45,7 +46,7 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
 
 
     private EventType eventType;
-    private DateRange dateRange = new DateRange(RangeType.FOREVER);
+    private DateRange dateRange = new DateRange(RangeType.THIS_WEEK);
     private FIDFeedbackPanel feedbackPanel;
     private String selectedResultText;
 
@@ -55,11 +56,10 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
     public CriteriaTrendsPage() {
         feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
         add(feedbackPanel);
-        eventType=persistenceService.find(EventType.class, 204L);
 
         Form form = new Form("form");
         add(form);
-        form.add(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(this, "eventType"), new EventTypesForTenantModel()).setRequired(true));
+        form.add(new FidDropDownChoice<EventType>("eventType", new PropertyModel<EventType>(this, "eventType"), new EventTypesForTenantModel(), new ListableChoiceRenderer<EventType>()).setRequired(true));
         form.add(new DateRangePicker("datePicker", new PropertyModel<DateRange>(this, "dateRange")));
 
         form.add(new AjaxSubmitLink("submitLink") {
@@ -104,13 +104,6 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
             @Override
             protected ChartData<String> load() {
                 ChartSeries<String> series = new ChartSeries<String>(criteriaTrendsService.findCriteriaTrendsByCriteria(eventType, dateRange, selectedResultText));
-//                BarChartManager barChartManager = new BarChartManager() {
-//                    { withNoThreshold(); }
-//                    @Override
-//                    protected Chartable<String> createChartable(String x, Number y, long index, String tooltip) {
-//                        return super.createChartable(x, y, index, tooltip);
-//                    }
-//                };
                 return new ChartData<String>(new CriteriaTrendsChartManager(), series);
             }
         };

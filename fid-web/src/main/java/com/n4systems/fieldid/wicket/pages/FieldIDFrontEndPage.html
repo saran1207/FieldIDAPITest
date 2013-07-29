@@ -97,7 +97,12 @@
 				            </li>
 
                             <li>
-                                <a wicket:id="reportingLink" class="speedLink textLink" id="menuReport"><wicket:message key="speed.reporting"/></a>
+                                <a wicket:id="reportingLink" class="speedLink textLink" id="menuReport"><wicket:message key="speed.reporting"/><img wicket:id="reporting-down-arrow"/></a>
+                                <wicket:enclosure>
+                                    <ul class="sub_menu">
+                                        <li><a wicket:id="criteriaTrendsLink"><wicket:message key="nav.trending"/></a></li>
+                                    </ul>
+                                </wicket:enclosure>
                             </li>
                             <wicket:enclosure>
                                 <li>

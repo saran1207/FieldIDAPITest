@@ -13,7 +13,8 @@ public enum ExtendedFeature {
 	ProofTestIntegration("feature.proof_test_integration"), 
 	OrderDetails("feature.order_details"),
     LotoProcedures("feature.loto_procedures"),
-    GlobalSearch("feature.global_search");
+    GlobalSearch("feature.global_search"),
+    CriteriaTrends("feature.criteria_trends");
 	
 	private String label;
 	

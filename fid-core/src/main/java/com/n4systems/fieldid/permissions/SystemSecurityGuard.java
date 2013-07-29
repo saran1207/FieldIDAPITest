@@ -24,5 +24,6 @@ public interface SystemSecurityGuard {
 	public boolean isOrderDetailsEnabled();
     public boolean isLotoProceduresEnabled();
     public boolean isGlobalSearchEnabled();
+    public boolean isTrendingEnabled();
 
 }

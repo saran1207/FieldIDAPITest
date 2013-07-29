@@ -103,7 +103,19 @@
 
 
                     <li>
-                        <a href="/fieldid/w/wicket/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" /></a>
+                        <a href="/fieldid/w/wicket/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" />
+                            <#if securityGuard.isTrendingEnabled()>
+                                <img src="/fieldid/images/down-arrow.png" />
+                            </#if>
+                        </a>
+
+                        <#if securityGuard.isTrendingEnabled()>
+                            <ul class="sub_menu">
+                                <li>
+                                    <a href="<@s.url value='/w/criteriaTrends'/>" ><@s.text name="nav.trending" /></a>
+                                </li>
+                            </ul>
+                        </#if>
                     </li>
 
                     <#if securityGuard.lotoProceduresEnabled>

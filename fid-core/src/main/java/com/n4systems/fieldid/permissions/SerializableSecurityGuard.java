@@ -117,4 +117,8 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
         return primaryOrg.hasExtendedFeature(ExtendedFeature.GlobalSearch);
     }
 
+    @Override
+    public boolean isTrendingEnabled() {
+        return primaryOrg.hasExtendedFeature(ExtendedFeature.CriteriaTrends);
+    }
 }

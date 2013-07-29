@@ -23,6 +23,7 @@ import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
+import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.columns.ReportType;
@@ -110,26 +111,14 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new WebMarkupContainer(LEFT_PANEL_CONTROLLER_ID).setVisible(false));
         addCssContainers();
 
-        add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class));
+        boolean trendingEnabled = getSecurityGuard().isTrendingEnabled();
+        add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class).add(new Image("reporting-down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(trendingEnabled)));
+        add(new BookmarkablePageLink<Void>("criteriaTrendsLink", CriteriaTrendsPage.class).setVisible(trendingEnabled));
 
+        boolean globalSearchEnabled = getSecurityGuard().isGlobalSearchEnabled();
 
-
-        add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class).add(new Image("down-arrow", new ContextRelativeResource("/images/down-arrow.png")){
-            @Override
-            public boolean isVisible() {
-                return getSecurityGuard().isGlobalSearchEnabled();
-            }
-
-        }));
-
-
-
-        add(new BookmarkablePageLink<Void>("newAssetSearchLink", AdvancedAssetSearchPage.class) {
-            @Override
-            public boolean isVisible() {
-                return getSecurityGuard().isGlobalSearchEnabled();
-            }
-        });
+        add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class).add(new Image("down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(globalSearchEnabled)));
+        add(new BookmarkablePageLink<Void>("newAssetSearchLink", AdvancedAssetSearchPage.class).setVisible(globalSearchEnabled));
 
 
         BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
