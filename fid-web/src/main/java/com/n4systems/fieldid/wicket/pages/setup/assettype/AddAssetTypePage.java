@@ -64,7 +64,9 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
     }
 
     protected AssetType getAssetType(PageParameters params) {
-        return new AssetType();
+        AssetType assetType = new AssetType();
+        assetType.setTenant(getTenant());
+        return assetType;
     }
 
     @Override

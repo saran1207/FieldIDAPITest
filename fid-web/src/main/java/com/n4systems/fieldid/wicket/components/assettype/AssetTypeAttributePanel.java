@@ -102,7 +102,7 @@ public class AssetTypeAttributePanel extends Panel {
 
                 final IModel<InfoFieldInput> infoField = item.getModel();
                 final IModel<String> options = Model.of(getOptionsAsString(index));
-                final IModel<UnitOfMeasure> unitOfMeasure = Model.of(new UnitOfMeasure());
+                final IModel<UnitOfMeasure> unitOfMeasure = Model.of(getUnitofMeasure(item.getModelObject()));
                 boolean isRetired = infoField.getObject().isRetired();
 
                 RequiredTextField name;
@@ -188,6 +188,7 @@ public class AssetTypeAttributePanel extends Panel {
                         item.getModelObject().setDefaultUnitOfMeasure(unitOfMeasure.getObject().getId());
                     }
                 });
+                unitOfMeasureChoice.setNullValid(true);
 
                 String type = infoField.getObject().getFieldType();
 
@@ -238,6 +239,14 @@ public class AssetTypeAttributePanel extends Panel {
                     }
                 }.setVisible(infoField.getObject().getUniqueID() != null && isRetired));
                 item.setOutputMarkupId(true);
+            }
+
+            private UnitOfMeasure getUnitofMeasure(InfoFieldInput input) {
+                if(input.getDefaultUnitOfMeasure() != null) {
+                    return assetTypeService.getUnitOfMeasure(input.getDefaultUnitOfMeasure());
+                } else {
+                    return new UnitOfMeasure();
+                }
             }
 
             private String getOptionsAsString(Long infoFieldIndex) {
