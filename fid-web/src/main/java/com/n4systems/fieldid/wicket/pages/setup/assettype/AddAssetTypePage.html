@@ -57,17 +57,17 @@
                     <input type="checkbox" wicket:id="hasManufacturerCert"/>
                         <label><strong><wicket:message key="label.manufacturer_certificate_generate"/></strong> <wicket:message key="label.manufacturer_certificate_text"/></label>
                     <textarea wicket:id="manufacturerCertText" class="manufacturer-cert-text"/>
-                </div>
+                    </div>
 
                 <div class="form-horizontal">
                     <h3><wicket:message key="label.files"/></h3>
-                    <div class="control-group">
+                    <div class="control-group control-combo">
                         <label>
                             <wicket:message key="label.other_files"/><br />
                             <span class="example-text"><wicket:message key="label.example_files"/></span>
                         </label>
-                        <div class="controls" wicket:id="attachments"/>
-                        <wicket:message key="message.attachment"/>
+
+                        <div class="controls other-files" wicket:id="attachments"/>
                     </div>
 
                     <h3><wicket:message key="label.warnings_more_info"/></h3>
@@ -84,7 +84,7 @@
                         <input type="text" wicket:id="cautionUrl"/>
                     </div>
                 </div><!-- /.form-horizontal -->
-            </div><!-- /.more-info -->
+            </div>
         </fieldset>
         
         <!-- actions -->

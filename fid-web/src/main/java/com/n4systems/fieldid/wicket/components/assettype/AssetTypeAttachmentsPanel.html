@@ -8,8 +8,8 @@
     <div wicket:id="existingAttachmentsContainer">
         <div wicket:id="existingAttachments">
             <img src="/fieldid/images/attachment-icon.png"/> <span wicket:id="fileName"></span>
-            <textarea wicket:id="comments"></textarea>
-            <a wicket:id="removeLink"><wicket:message key="label.remove"/></a>
+            <a wicket:id="removeLink"><wicket:message key="label.remove"/></a><br>
+            <textarea wicket:id="comments"></textarea>       
         </div>
     </div>
 
@@ -17,5 +17,7 @@
         <input type="file" wicket:id="attachmentUpload">
     </form>
 
+    <wicket:message key="message.attachment"/>
+    
 </wicket:panel>
 </html>

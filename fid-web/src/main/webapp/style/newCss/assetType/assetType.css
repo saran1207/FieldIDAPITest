@@ -165,7 +165,7 @@ legend a {
 	margin-bottom: 2px;
 }
 .control-combo .controls {
-    width: 285px;
+    width: 475px;
     display: inline-block;
     vertical-align: top;
 }
@@ -183,9 +183,9 @@ legend a {
 	padding-top: 4px;
 	float: left;
 }
-.form-horizontal .text-block {
+/*.form-horizontal .text-block {
 	margin-left: 193px;
-}
+}*/
 
 
 /* ICONS */
@@ -274,7 +274,7 @@ legend a {
 	}
 	/* list item delete */
 	.attributes-setup-list .li-delete {
-		float: right;
+		/*float: right;*/
 	}
 
 .more-info textarea, 
@@ -292,6 +292,9 @@ legend a {
 .more-info h3:first-child {
 	margin-top: 0;
 }
+.other-files textarea {
+	margin: 4px 0 10px;
+}
 
 .date-option {
 	display: inline-block;
@@ -303,6 +306,7 @@ legend a {
 legend .entypo-icons {
 	margin-bottom: -5px;
 }
+
 
 	
 
