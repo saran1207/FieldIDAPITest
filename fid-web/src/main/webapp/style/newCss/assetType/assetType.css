@@ -1,3 +1,4 @@
+/* force self-clearing of child elements */
 .clearfix:before,
 .clearfix:after {
     content: "";
@@ -10,6 +11,7 @@
     zoom: 1; /* For IE 6/7 (trigger hasLayout) */
 }
 
+/* GENERAL PAGE STYLES */
 #page {
     padding: 24px;
     width: 976px;
@@ -17,8 +19,9 @@
 #contentHeader {
 	margin-bottom: 0;
 }
-h1 {
+#contentHeader h1 {
 	color: #999;
+	float: none;
 }
 	h1 span {
 		color: #666;
@@ -37,6 +40,10 @@ a {
 strong {
 	font-weight: bold;
 }
+.backToLink {
+	margin-left: 0px;
+	margin-top: 4px;
+}
 
 /* GENERAL FORM STYLES */
 fieldset {
@@ -54,7 +61,8 @@ input {
     font-size: 13px;
 }
 	input[type=file] {
-		padding-top: 4px;
+		padding: 4px;
+		height: auto;
 	}
 	input[type=checkbox] {
 		border: none;
@@ -68,6 +76,8 @@ textarea {
     resize: none;
     border: 1px solid #c7c7c9;
     outline: none;
+    font-size: 13px;
+    padding: 6px 8px;
 }
 textarea:focus, input:focus {
     outline: none;
@@ -84,11 +94,11 @@ legend a {
 	text-decoration: none;
 	color: #000;
 }
-/*.uploaded-file {
+
+.example-text {
+	color: #999999;
 	font-size: 13px;
-	border: 1px solid #c7c7c9;
-	height: 29px;
-}*/
+}
 
 /* Width variations for inputs and headers */
 .width-full { width: 975px;}
@@ -98,11 +108,8 @@ legend a {
 .width-sml { width: 225px;}
 .width-xsml { width: 134px;}
 
-.example-text {
-	color: #999999;
-	font-size: 13px;
-}
-/* Chosen plugin overrides */
+
+/* CHOSEN PLUGIN OVERRIDES */
 .chzn-container {
     margin: 4px 0 10px;
 }
@@ -123,20 +130,23 @@ legend a {
 .control-group {
     margin: 10px 0;
 }
-.control-group label {
-	margin-bottom: 4px;
-}
-.control-group input, .control-group select, 
-.control-group textarea, .chzn-container {
-    margin: 0;
-}
-.control-group.inline {
-    display: inline-block;
-    vertical-align: top;
-}
-	.control-group.inline input {
-		margin-right: 6px;
+	.control-group label {
+		margin-bottom: 4px;
 	}
+	.control-group input, .control-group select, 
+	.control-group textarea, .chzn-container {
+	    margin: 0;
+	}
+	.control-group input[type=file] {
+		margin-bottom: 4px;
+	}
+	.control-group.inline {
+	    display: inline-block;
+	    vertical-align: top;
+	}
+		.control-group.inline input {
+			margin-right: 6px;
+		}
 
 .checkbox input {
 	float: left;
@@ -166,7 +176,6 @@ legend a {
 	display: none;
 }
 
-
 /* For forms with the label on the left and input on the right */
 .form-horizontal label {
 	width: 180px;
@@ -178,24 +187,6 @@ legend a {
 	margin-left: 193px;
 }
 
-/* CSS trickery for custom file inputs */
-/*.uploads {
-    cursor: pointer;
-    display: inline-block;
-    overflow: hidden;
-    position: relative;
-}
-.uploads .file-input {
-    filter: alpha(opacity=0);
-    -moz-opacity: 0;
-    opacity: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-}
-.uploads .file-uploaded {
-    position: relative;
-}*/
 
 /* ICONS */
 .entypo-icons {
@@ -220,7 +211,7 @@ legend a {
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
-	border: 1px solid #dfdddd;
+	border: 1px solid #ababab;
 	font-size: 14px;
 	color: #fff;
 	width: auto;
@@ -228,12 +219,11 @@ legend a {
 }
 .btn-gray {
 	color: #3a3a3a;
-	background: #eaeaea;
-	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eaeaea), color-stop(1, #ffffff));
-	background: -ms-linear-gradient(bottom, #eaeaea, #ffffff);
-	background: -moz-linear-gradient(center bottom, #eaeaea 0%, #ffffff 100%);
-	background: -o-linear-gradient(#ffffff, #eaeaea);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eaeaea', GradientType=0);
+	background: #dadada;
+	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #dadada), color-stop(1, #efefef));
+	background: -ms-linear-gradient(bottom, #dadada, #efefef);
+	background: -moz-linear-gradient(center bottom, #dadada 0%, #efefef 100%);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dadada', endColorstr='#eaeaea', GradientType=0);
 }
 .btn-green {
   background: #60986b;
@@ -268,6 +258,7 @@ legend a {
 		border-bottom: 1px solid #ccc;
 		padding: 10px 5px;
 	}
+	/* fades inputs to make it appear to be disabled */
 	.attributes-setup-list input:disabled {
 		opacity: 0.5;
 	   	filter: alpha(opacity=50); /* IE8 and lower */
@@ -278,12 +269,12 @@ legend a {
 		margin-right: 10px;
 		float: left;
 	}
+	.attribute-name {
+		margin-left: 32px;
+	}
 	/* list item delete */
 	.attributes-setup-list .li-delete {
 		float: right;
-	}
-	.attribute-name {
-		margin-left: 32px;
 	}
 
 .more-info textarea, 
