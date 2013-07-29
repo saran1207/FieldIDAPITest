@@ -149,7 +149,7 @@ public class AssetTypeAttributePanel extends Panel {
                         for (String opt : originalOptions) {
                             if (!parsedOptions.contains(opt)) {
                                 InfoOptionInput input = getOption(opt, index);
-                                if (input.getUniqueID() != null)
+                                if (input != null && input.getUniqueID() != null)
                                     input.setDeleted(true);
                                 else
                                     editInfoOptions.remove(input);

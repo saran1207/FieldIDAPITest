@@ -76,7 +76,7 @@
 		</action>
 
 		<action name="assetTypeDelete" method="delete" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
-			<result name="success" type="redirectAction">assetTypes</result>
+            <result name="success" type="redirect">/w/setup/assetTypes</result>
 		</action>
 
 

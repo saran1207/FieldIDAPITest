@@ -8,6 +8,7 @@ import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeAttachmentsPanel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeAttributePanel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeImagePanel;
@@ -152,6 +153,10 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
 
             add(new SubmitLink("save"));
             add(new BookmarkablePageLink("cancel", AssetTypeListPage.class));
+            NonWicketLink deleteLink;
+            add(deleteLink = new NonWicketLink("delete", "assetTypeConfirmDelete.action?uniqueID=" + assetType.getObject().getId()));
+            deleteLink.setVisible(assetType.getObject().getId() != null);
+
         }
 
         @Override
