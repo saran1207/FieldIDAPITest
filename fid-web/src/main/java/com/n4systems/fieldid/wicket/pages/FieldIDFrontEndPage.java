@@ -18,6 +18,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
+import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
@@ -326,6 +327,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 	private Component createAssetEventsSubMenu() {
         WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
         container.add(new BookmarkablePageLink("eventStatusListLink", EventStatusListPage.class));
+        container.add(new BookmarkablePageLink("assetTypesList", AssetTypeListPage.class));
         container.add(new BookmarkablePageLink("priorityCodeListLink", PriorityCodePage.class));
 
         container.setVisible(getSessionUser().hasAccess("managesystemconfig"));
