@@ -195,6 +195,7 @@ legend a {
 	height: 20px;
 	text-indent: -9999px;
 	display: inline-block;
+	*display: block; /* lt IE7 */
 	margin-top: 4px;
 }
 .entypo-checkmark { background-position: 0 0;}
@@ -204,7 +205,7 @@ legend a {
 .entypo-caret-up { background-position: -80px 0;}
 
 /* BUTTON STYLES */
-[class^="btn"] {
+.btn {
 	text-decoration: none;
 	display: inline-block;
 	padding: 8px 16px;
@@ -253,10 +254,12 @@ legend a {
 
 .attributes-setup-list {
 	margin-top: 20px;
+	
 }
 	.attributes-setup-list > li {
 		border-bottom: 1px solid #ccc;
 		padding: 10px 5px;
+		*position: relative;
 	}
 	/* fades inputs to make it appear to be disabled */
 	.attributes-setup-list input:disabled {
@@ -274,7 +277,7 @@ legend a {
 	}
 	/* list item delete */
 	.attributes-setup-list .li-delete {
-		/*float: right;*/
+		float: right;
 	}
 
 .more-info textarea, 
