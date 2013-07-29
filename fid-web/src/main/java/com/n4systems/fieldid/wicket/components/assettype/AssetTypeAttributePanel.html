@@ -21,11 +21,9 @@
             <span><select wicket:id="attributeType" class="width-xsml" /></span>
             <span class="required"><input type="checkbox" wicket:id="required"/></span>
             <span class="width-lrg">
-                <input type="text" wicket:id="selectOptions" class="width-lrg" />
-                
-                    <input type="checkbox" wicket:id="dateOption"/>
-                    <label wicket:enclosure="dateOption" class="date-option"><wicket:message key="label.include_time"/></label>
-               
+                <input type="text" wicket:id="selectOptions" class="width-lrg" placeholder="Enter the options separated by a comma" />
+                <input type="checkbox" wicket:id="dateOption"/>
+                <label wicket:enclosure="dateOption" class="date-option"><wicket:message key="label.include_time"/></label>
                 <select class="width-lrg" wicket:id="unitOfMeasureChoice"/>
             </span>
             <span class="li-delete">
@@ -35,7 +33,7 @@
             </span>
         </li>
     </ul>
-    <span wicket:id="add "class="btn-gray"><wicket:message key="label.addattribute"/></span>
-    <wicket:message key="label.add_attribute_example"/>
+    <span wicket:id="add" class="btn-gray"><wicket:message key="label.addattribute"/></span>
+    <span class="example-text"><wicket:message key="label.add_attribute_example"/></span>
 </wicket:panel>
 </html>

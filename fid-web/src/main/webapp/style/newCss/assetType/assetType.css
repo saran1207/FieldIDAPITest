@@ -34,6 +34,9 @@ p {
 a {
 	outline: none;
 }
+strong {
+	font-weight: bold;
+}
 
 /* GENERAL FORM STYLES */
 fieldset {
@@ -95,6 +98,10 @@ legend a {
 .width-sml { width: 225px;}
 .width-xsml { width: 134px;}
 
+.example-text {
+	color: #999999;
+	font-size: 13px;
+}
 /* Chosen plugin overrides */
 .chzn-container {
     margin: 4px 0 10px;
