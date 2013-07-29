@@ -149,21 +149,24 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
     protected void convertInput() {
         // load proper entity...
         T entity = null;
-        OrgLocationTree.NodeType type = OrgLocationTree.NodeType.valueOf(_type.getRawInput());
-        switch (type) {
-            case LOCATION:
-                entity = (T) persistenceService.findById(BaseOrg.class,  getEntityIdAsLong());
-                break;
-            case INTERNAL_ORG:
-            case CUSTOMER_ORG:
-            case DIVISION_ORG:
-                entity = (T) persistenceService.findById(BaseOrg.class,  getEntityIdAsLong());
-                break;
-            case VOID:
-                entity = null;
-                break;
-            default:
-                throw new IllegalStateException("can't convert input of type " + type + "(" + entityType + ")");
+        String rawInput = _type.getRawInput();
+        if (!StringUtils.isBlank(rawInput)) {
+            OrgLocationTree.NodeType type = OrgLocationTree.NodeType.valueOf(rawInput);
+            switch (type) {
+                case LOCATION:
+                    entity = (T) persistenceService.findById(BaseOrg.class,  getEntityIdAsLong());
+                    break;
+                case INTERNAL_ORG:
+                case CUSTOMER_ORG:
+                case DIVISION_ORG:
+                    entity = (T) persistenceService.findById(BaseOrg.class,  getEntityIdAsLong());
+                    break;
+                case VOID:
+                    entity = null;
+                    break;
+                default:
+                    throw new IllegalStateException("can't convert input of type " + type + "(" + entityType + ")");
+            }
         }
         setConvertedInput(entity);
     }
