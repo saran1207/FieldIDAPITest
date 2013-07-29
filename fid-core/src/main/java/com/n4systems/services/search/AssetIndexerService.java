@@ -29,7 +29,6 @@ import java.util.List;
 public class AssetIndexerService extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(AssetIndexerService.class);
 
-
     @Autowired private AssetIndexWriter assetIndexWriter;
 
     private @Autowired AnalyzerFactory analyzerFactory;
@@ -152,8 +151,8 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 		builder.addSimpleWhere("name", tenantName);
 		Tenant tenant = persistenceService.find(builder);
 
-        if(!queueItemExists(tenant.getId(), IndexQueueItem.IndexQueueItemType.TENANT)) {
-            IndexQueueItem item = new IndexQueueItem();
+        if(!tenantQueueItemExists(tenant.getId())) {
+            IndexQueueItem item = createNewIndexQueueItem();
             item.setType(IndexQueueItem.IndexQueueItemType.TENANT);
             item.setId(tenant.getId());
 
@@ -161,7 +160,12 @@ public class AssetIndexerService extends FieldIdPersistenceService {
         }
 	}
 
-    private boolean queueItemExists(Long id, IndexQueueItem.IndexQueueItemType type){
+    /* pkg protected for testing purposes */
+    IndexQueueItem createNewIndexQueueItem() {
+        return new IndexQueueItem();
+    }
+
+    boolean tenantQueueItemExists(Long id){
         QueryBuilder<IndexQueueItem> builder = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
         builder.addSimpleWhere("item.id", id);
         builder.addSimpleWhere("item.type", IndexQueueItem.IndexQueueItemType.TENANT);

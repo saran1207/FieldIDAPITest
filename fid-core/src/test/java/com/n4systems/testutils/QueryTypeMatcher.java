@@ -4,16 +4,16 @@ import com.n4systems.util.persistence.QueryBuilder;
 import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 
-public class QueryMatcher implements IArgumentMatcher {
+public class QueryTypeMatcher implements IArgumentMatcher {
 
     private Class<?> queryType;
 
-    public QueryMatcher(Class<?> queryType) {
+    public QueryTypeMatcher(Class<?> queryType) {
         this.queryType = queryType;
     }
 
     public static final QueryBuilder eq(Class<?> queryType) {
-        EasyMock.reportMatcher(new QueryMatcher(queryType));
+        EasyMock.reportMatcher(new QueryTypeMatcher(queryType));
         return null;
     }
 

@@ -139,10 +139,6 @@ public abstract class FullTextSearchService extends FieldIdPersistenceService {
 	}
 
     private Filter getSecurityQueryFilter() {
-        // TODO DD : create cacheable filters based on org/tenant.
-        // use spring's @Cahceable annotation for getOwnerFilter(owner);
-        // make sure that method returns a CacheableWrapperFilter!
-        // need to put a @CacheEvict on service call that updates Orgs!
         BooleanQuery securityQuery = new BooleanQuery();
 
         BaseOrg owner = this.securityContext.getUserSecurityFilter().getOwner();

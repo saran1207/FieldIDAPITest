@@ -10,7 +10,7 @@ import com.n4systems.model.builders.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
-import com.n4systems.testutils.QueryMatcher;
+import com.n4systems.testutils.QueryTypeMatcher;
 import org.easymock.EasyMock;
 import org.easymock.IArgumentMatcher;
 import org.joda.time.DateTimeConstants;
@@ -221,8 +221,8 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
                 withOwner(asset.getOwner()).
                 withRecurrence(recurrence).build();
 
-        expect(persistenceService.findAll(QueryMatcher.eq(Asset.class))).andReturn(Lists.newArrayList(asset));
-        expect(persistenceService.count(QueryMatcher.eq(Event.class))).andReturn(0L);
+        expect(persistenceService.findAll(QueryTypeMatcher.eq(Asset.class))).andReturn(Lists.newArrayList(asset));
+        expect(persistenceService.count(QueryTypeMatcher.eq(Event.class))).andReturn(0L);
         replay(persistenceService);
 
         expect(eventScheduleService.createSchedule(EventMatcher.eq(asset, dueDate.toDate(), owner, recurringAssetTypeEvent, tenant, eventType))).andReturn(33L);
@@ -248,8 +248,8 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
                 withOwner(asset.getOwner()).
                 withRecurrence(recurrence).build();
 
-        expect(persistenceService.findAll(QueryMatcher.eq(Asset.class))).andReturn(Lists.newArrayList(asset));
-        expect(persistenceService.count(QueryMatcher.eq(Event.class))).andReturn(1L);  // means event already exists
+        expect(persistenceService.findAll(QueryTypeMatcher.eq(Asset.class))).andReturn(Lists.newArrayList(asset));
+        expect(persistenceService.count(QueryTypeMatcher.eq(Event.class))).andReturn(1L);  // means event already exists
         replay(persistenceService);
 
         // these will NOT be called because event already exists.

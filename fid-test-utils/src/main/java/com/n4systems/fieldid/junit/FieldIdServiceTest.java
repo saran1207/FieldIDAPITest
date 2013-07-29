@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.junit;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.test.TestMock;
@@ -12,13 +13,13 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.verify;
+import static org.junit.Assert.fail;
 
 
 /**
@@ -49,6 +50,7 @@ public class FieldIdServiceTest extends FieldIdUnitTest {
 			ReflectionTestUtils.setField(this, sutField.getName(), sut);						
 			autoWireSut(sut);
 		} catch (Exception e) {
+            fail("can't initialize " + e.getLocalizedMessage());
 			e.printStackTrace();
 		}
 	}
@@ -81,21 +83,23 @@ public class FieldIdServiceTest extends FieldIdUnitTest {
 	}
 
     private List<Class<?>> getMockableFields(Object sut) {
-        List<Class<?>> result = Lists.newArrayList();
-        for (Field field:sut.getClass().getDeclaredFields()) {
-            if (isAutowired(field)) {
-                result.add(field.getType());
+        final List<Class<?>> result = Lists.newArrayList();
+        ReflectionUtils.doWithFields(sut.getClass(), new ReflectionUtils.FieldCallback() {
+            @Override public void doWith(Field field) throws IllegalArgumentException, IllegalAccessException {
+                if (isAutowired(field)) {
+                    result.add(field.getType());
+                }
             }
-        }
+        });
         return result;
     }
 
-    private boolean isAutowired(AccessibleObject field) {
+    private boolean isAutowired(Field field) {
         // in order to avoid dependency to spring in this package, will just do a loose string check.
         // note that we are dealing with proxies here so can't do a direct comparison.
         for (Annotation annotation:field.getAnnotations()) {
             String name = annotation.toString();
-            if (name.contains(".Autowired") || name.contains(".Inject")) {
+            if (name.contains(".Autowired") || name.contains(".Inject") ) {
                 return true;
             }
         }
@@ -124,8 +128,7 @@ public class FieldIdServiceTest extends FieldIdUnitTest {
 			}
 		}
         if (expectedToMock.size()>0) {
-            String expectedMock = expectedToMock.get(0).getSimpleName();
-            System.out.println("WARNING : You haven't mocked out field of type " + expectedMock + ".  This may cause NPE in your tests....did you forget to put '@" + TestMock.class.getSimpleName() + "' annotated field in your test?");
+            System.out.println("WARNING : You haven't mocked out field of type [" + Joiner.on(",").join(expectedToMock) + "].  This may cause NPE in your tests....did you forget to put '@" + TestMock.class.getSimpleName() + "' annotated field in your test?");
         }
         return mocks;
 	}

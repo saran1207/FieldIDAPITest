@@ -66,7 +66,7 @@ public abstract class LuceneIndexWriter<T extends BaseEntity> extends IndexWrite
             writerConfig.setRAMBufferSizeMB(256.0);
 
             dir = FSDirectory.open(new File(getIndexPath(tenant)));
-            writer = new org.apache.lucene.index.IndexWriter(dir, writerConfig);
+            writer = createIndexWriter(dir, writerConfig);
 
             for (T item : items) {
                 if (item instanceof Archivable && ((Archivable)item).isArchived()) {
@@ -91,6 +91,11 @@ public abstract class LuceneIndexWriter<T extends BaseEntity> extends IndexWrite
             } catch (Exception e) {}
             logger.info("Index task completed in " + ((System.currentTimeMillis() - startTime) / 1000.0) + "s");
         }
+    }
+
+    /* pkg protected for testing purposes */
+    org.apache.lucene.index.IndexWriter createIndexWriter(Directory dir, IndexWriterConfig writerConfig) throws IOException {
+        return new org.apache.lucene.index.IndexWriter(dir, writerConfig);
     }
 
     protected void addAllField(IndexField allField, Document doc) {

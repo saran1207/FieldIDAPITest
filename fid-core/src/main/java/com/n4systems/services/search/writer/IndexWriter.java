@@ -7,12 +7,16 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.user.User;
 import com.n4systems.services.search.AnalyzerFactory;
 import com.n4systems.services.search.IndexException;
 import com.n4systems.services.search.field.IndexField;
+import com.n4systems.services.search.parser.QueryTerm;
 import com.n4systems.services.search.parser.SearchParserService;
+import com.n4systems.services.search.parser.SearchQuery;
+import com.n4systems.services.search.parser.SimpleValue;
 import com.n4systems.util.StringUtils;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
@@ -21,6 +25,7 @@ import org.apache.lucene.document.*;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.index.Term;
+import org.apache.lucene.search.Query;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
@@ -36,6 +41,7 @@ import rfid.ejb.entity.InfoOptionBean;
 import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,7 +50,7 @@ public abstract class IndexWriter<T extends BaseEntity> extends FieldIdPersisten
 
     private static final int DEFAULT_BOOST = 1;
 
-    private @Resource PlatformTransactionManager transactionManager;
+    private @Resource PlatformTransactionManager transactionManager;  // is there a reason why this is @Resource, not @Autowired?
     protected @Autowired AnalyzerFactory analyzerFactory;
     protected @Autowired SearchParserService searchParserService;
 
@@ -63,7 +69,7 @@ public abstract class IndexWriter<T extends BaseEntity> extends FieldIdPersisten
         List<T> items;
         do {
 
-            EntityManager em = ((JpaTransactionManager) transactionManager).getEntityManagerFactory().createEntityManager();
+            EntityManager em = getJpaEntityManager();
             begin(em);
 
             try {
@@ -83,12 +89,24 @@ public abstract class IndexWriter<T extends BaseEntity> extends FieldIdPersisten
     protected void begin(EntityManager em) { }
 
     public void index(final Tenant tenant, final List<T> items, boolean update) {
-        EntityManager em = ((JpaTransactionManager) transactionManager).getEntityManagerFactory().createEntityManager();
+        EntityManager em = getJpaEntityManager();
+
         try {
             index(em, tenant, items, update);
         } finally {
             em.close();
         }
+    }
+
+
+    protected Document createNewDocument() {
+        return new Document();
+    }
+
+
+    /* pkg protected for testing purposes */
+    EntityManager getJpaEntityManager() {
+        return ((JpaTransactionManager) transactionManager).getEntityManagerFactory().createEntityManager();
     }
 
     protected void cleanup(EntityManager em) {

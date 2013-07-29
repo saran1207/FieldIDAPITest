@@ -1,5 +1,6 @@
 package com.n4systems.services.search.writer;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
@@ -25,6 +26,7 @@ public class AssetIndexWriter extends LuceneIndexWriter<Asset> {
 
     @Override
     public String getIndexPath(Tenant tenant) {
+        Preconditions.checkNotNull(tenant,"must specify a tenant when indexing");
         return String.format("/var/fieldid/private/indexes/%s/assets", tenant.getName());
     }
 
@@ -44,7 +46,7 @@ public class AssetIndexWriter extends LuceneIndexWriter<Asset> {
     }
 
     public Document createDocument(EntityManager em, Asset asset) {
-        Document doc = new Document();
+        Document doc = createNewDocument();
 
         BaseOrg owner = asset.getOwner();
 
