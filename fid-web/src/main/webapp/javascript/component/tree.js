@@ -38,11 +38,13 @@ var treeFactory = (function() {
 				return;
 			}
 			var newInput=$text.val();
-			if (newInput.length<=1) {
+			var length = newInput.length;
+			if (newInput.length==0) {
 				// clear out values
 				$entityId.val(null);
 				$type.val(null);
-			} else if (newInput!=input ) {
+			}
+			if (newInput!=input) {
 				input = newInput;
 				searching = true;
 				lazyInit();
