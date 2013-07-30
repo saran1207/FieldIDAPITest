@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.AssetTypeGroup;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 
@@ -17,7 +18,8 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 
 public class AssetTypeListPage extends FieldIDFrontEndPage {
 
-    AssetTypeListPanel listPanel;
+    private AssetTypeListPanel listPanel;
+    private WebMarkupContainer noResults;
 
     public AssetTypeListPage() {
 
@@ -26,11 +28,15 @@ public class AssetTypeListPage extends FieldIDFrontEndPage {
             public void onFilter(AjaxRequestTarget target, String name, AssetTypeGroup group) {
                 listPanel.setName(name);
                 listPanel.setAssetTypeGroupId(group !=  null ? group.getId() : null);
-                target.add(listPanel);
+                noResults.setVisible(listPanel.isEmpty());
+                target.add(listPanel, noResults);
             }
         });
         add(listPanel = new AssetTypeListPanel("listPanel"));
         listPanel.setOutputMarkupId(true);
+        add(noResults = new WebMarkupContainer("noResults"));
+        noResults.setOutputMarkupPlaceholderTag(true);
+        noResults.setVisible(listPanel.isEmpty());
 
     }
 

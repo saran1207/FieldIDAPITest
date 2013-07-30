@@ -27,6 +27,8 @@ public class AssetTypeListPanel extends Panel {
 
     private String name;
 
+    private ListView listView;
+
     @SpringBean
     private AssetTypeService assetTypeService;
 
@@ -34,7 +36,7 @@ public class AssetTypeListPanel extends Panel {
     public AssetTypeListPanel(String id) {
         super(id);
 
-        add(new ListView<AssetType>("list", getAssetTypes()) {
+        add(listView = new ListView<AssetType>("list", getAssetTypes()) {
             @Override
             protected void populateItem(ListItem<AssetType> item) {
                 AssetType assetType = item.getModelObject();
@@ -80,5 +82,9 @@ public class AssetTypeListPanel extends Panel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isEmpty() {
+        return listView.getList().isEmpty();
     }
 }
