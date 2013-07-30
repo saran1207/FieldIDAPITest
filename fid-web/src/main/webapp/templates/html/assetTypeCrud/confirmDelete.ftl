@@ -64,7 +64,7 @@ ${action.setPageType('asset_type', 'edit')!}
 		
 	</div>
 	<div class="formAction">
-		<@s.url id="cancelUrl" action="assetTypeEdit" uniqueID="${uniqueID}"/>
+		<@s.url id="cancelUrl" value="/w/setup/assetTypeEdit?uniqueID=${uniqueID}"/>
 		<@s.submit key="label.cancel" onclick="return redirect('${cancelUrl}');" theme="fieldid"/>
 		
 		<@s.url id="deleteUrl" action="assetTypeDelete" uniqueID="${uniqueID}"/>
