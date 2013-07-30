@@ -104,12 +104,12 @@
 
                     <li>
                         <a href="/fieldid/w/wicket/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" />
-                            <#if securityGuard.isTrendingEnabled()>
+                            <#if securityGuard.isCriteriaTrendsEnabled()>
                                 <img src="/fieldid/images/down-arrow.png" />
                             </#if>
                         </a>
 
-                        <#if securityGuard.isTrendingEnabled()>
+                        <#if securityGuard.isCriteriaTrendsEnabled()>
                             <ul class="sub_menu">
                                 <li>
                                     <a href="<@s.url value='/w/criteriaTrends'/>" ><@s.text name="nav.trending" /></a>

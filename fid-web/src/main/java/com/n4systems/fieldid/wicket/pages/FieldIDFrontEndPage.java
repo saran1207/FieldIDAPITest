@@ -111,7 +111,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new WebMarkupContainer(LEFT_PANEL_CONTROLLER_ID).setVisible(false));
         addCssContainers();
 
-        boolean trendingEnabled = getSecurityGuard().isTrendingEnabled();
+        boolean trendingEnabled = getSecurityGuard().isCriteriaTrendsEnabled();
         add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class).add(new Image("reporting-down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(trendingEnabled)));
         add(new BookmarkablePageLink<Void>("criteriaTrendsLink", CriteriaTrendsPage.class).setVisible(trendingEnabled));
 
