@@ -23,9 +23,9 @@
 	color: #999;
 	float: none;
 }
-	h1 span {
-		color: #666;
-	}
+h1 span {
+	color: #666;
+}
 h3 {
 	font-size: 13px;
 	border-bottom: 1px dashed #ddd;
@@ -40,10 +40,25 @@ a {
 strong {
 	font-weight: bold;
 }
+
 .backToLink {
 	margin-left: 0px;
 	margin-top: 4px;
 }
+.example-text {
+	color: #999999;
+	font-size: 13px;
+	margin-left: 2px;
+}
+
+/* Width variations for inputs and headers */
+.width-full { width: 975px;}
+.width-xxlrg { width: 688px;}
+.width-lrg { width: 387px;}
+.width-med  { width: 271px; /*284px*/}
+.width-sml { width: 225px;}
+.width-xsml { width: 134px;}
+
 
 /* GENERAL FORM STYLES */
 fieldset {
@@ -90,25 +105,6 @@ legend {
     font-size: 17px;
     padding-top: 14px;
 }
-legend a {
-	text-decoration: none;
-	color: #000;
-}
-
-.example-text {
-	color: #999999;
-	font-size: 13px;
-	margin-left: 2px;
-}
-
-/* Width variations for inputs and headers */
-.width-full { width: 975px;}
-.width-xxlrg { width: 688px;}
-.width-lrg { width: 387px;}
-.width-med  { width: 271px; /*284px*/}
-.width-sml { width: 225px;}
-.width-xsml { width: 134px;}
-
 
 /* CHOSEN PLUGIN OVERRIDES */
 .chzn-container {
@@ -200,7 +196,6 @@ legend a {
 	width: auto;
 	cursor: pointer;
 }
-
 .btn-gray {
 	color: #3a3a3a;
 	background: #dadada;
@@ -209,36 +204,37 @@ legend a {
 	background: -moz-linear-gradient(center bottom, #dadada 0%, #efefef 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dadada', endColorstr='#eaeaea', GradientType=0);
 }
-.btn-gray:hover {
-	color: #3a3a3a;
-	background: #dadada;
-}
-.btn-gray a {
-	color: #3a3a3a;
-}
+	.btn-gray:hover {
+		color: #3a3a3a;
+		background: #dadada;
+	}
+	.btn-gray a {
+		color: #3a3a3a;
+	}
+
 .btn-green {
   background: #60986b;
   border-color: #568860;
 }
-.btn-green:hover {
-	color: #000;
-}
+	.btn-green:hover {
+		color: #000;
+	}
+
 .btn-cancel {
 	border: none;
 	text-decoration: underline; 
 	color: #356CA2;
 }
-.btn-cancel:hover {
-	color: #000;
-	text-decoration: none;
-}
+	.btn-cancel:hover {
+		color: #000;
+		text-decoration: none;
+	}
 
 /* PAGE SPECIFIC STYLES */
 .asset-type .required {
 	text-align: center;
 	width: 75px;
 }
-
 .attributes-setup-list {
 	margin: 20px 0 10px;
 }
@@ -261,20 +257,34 @@ legend a {
 	.attribute-name {
 		margin-left: 32px;
 	}
-	/* list item delete */
-	.attributes-setup-list .li-delete {
+	.attributes-setup-list .attribute-actions {
 		width: 65px;
 		text-align: center;
+		float: right;
 	}
-	.li-delete .btn {
+	.attribute-actions .btn {
 		padding: 6px;
 		font-size: 12px;
 		height: 29px;
-		 -moz-box-sizing: border-box; 
+		-moz-box-sizing: border-box; 
 	    -webkit-box-sizing: border-box; 
 	    box-sizing: border-box;
 	}
+	.date-option {
+		display: inline-block;
+		vertical-align: top;
+		margin-top: 7px;
+		margin-left: 4px;
+	}
 
+/* more info section */
+.more-info legend a {
+	color: #000;
+	text-decoration: none;
+}
+.more-info .entypo-icons {
+	margin-bottom: -5px;
+}
 .more-info textarea, 
 .more-info .form-horizontal input {
 	width: 286px;
@@ -294,16 +304,7 @@ legend a {
 	margin: 4px 0 10px;
 }
 
-.date-option {
-	display: inline-block;
-	vertical-align: top;
-	margin-top: 7px;
-	margin-left: 4px;
-}
 
-legend .entypo-icons {
-	margin-bottom: -5px;
-}
 
 
 	
