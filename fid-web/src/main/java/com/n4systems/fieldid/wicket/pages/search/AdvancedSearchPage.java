@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
+import com.n4systems.fieldid.wicket.util.OneClickOnlyDecorator;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteriaContainer;
 import com.n4systems.services.search.SearchResult;
@@ -20,6 +21,7 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
 import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -150,6 +152,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
                 });
             }
 
+
             @Override
             public boolean isVisible() {
                 return provider.size() > 0;
@@ -166,13 +169,15 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
                 selectedIds.clear();
                 target.add(listViewContainer, actions, groupSelector);
             }
+            @Override protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new OneClickOnlyDecorator();
+            }
         };
         searchResults.add(clearSelectionLink);
 
         AjaxLink selectAllLink;
         searchResults.add(selectAllLink = new AjaxLink("selectAllLink") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
+            @Override public void onClick(AjaxRequestTarget target) {
                 selectedIds.clear();
 
                 List<Long> idList = provider.getIdList();
@@ -181,6 +186,10 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
                 }
 
                 target.add(listViewContainer, actions, groupSelector);
+            }
+
+            @Override protected IAjaxCallDecorator getAjaxCallDecorator() {
+                return new OneClickOnlyDecorator();
             }
         });
 
