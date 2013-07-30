@@ -7,6 +7,7 @@
 <wicket:extend>
 
     <div wicket:id="feedbackPanel"/>
+    <div wicket:id="modalWindow"/>
 
     <form wicket:id="form" class="asset-type">
         <!-- top section -->
@@ -34,7 +35,7 @@
         <fieldset>
             <legend><wicket:message key="label.description_template"/></legend>
             <div class="control-group">
-                <label><wicket:message key="label.description_instructions"/> <a href="#"><wicket:message key="label.see_examples"/></a>.</label>
+                <label><wicket:message key="label.description_instructions"/> <a wicket:id="templateExample"><wicket:message key="label.see_examples"/></a>.</label>
                 <input type="text" wicket:id="descriptionTemplate" class="width-full" />
             </div>
         </fieldset>

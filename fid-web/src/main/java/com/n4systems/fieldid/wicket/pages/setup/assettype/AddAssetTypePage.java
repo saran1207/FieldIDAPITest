@@ -10,11 +10,9 @@ import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
-import com.n4systems.fieldid.wicket.components.assettype.AssetTypeAttachmentsPanel;
-import com.n4systems.fieldid.wicket.components.assettype.AssetTypeAttributePanel;
-import com.n4systems.fieldid.wicket.components.assettype.AssetTypeImagePanel;
-import com.n4systems.fieldid.wicket.components.assettype.AssetTypeTitleLabel;
+import com.n4systems.fieldid.wicket.components.assettype.*;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -59,11 +57,15 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
     private AssetTypeAttachmentsPanel attachmentsPanel;
     private AssetTypeAttributePanel attributePanel;
     private WebMarkupContainer moreInfo;
+    private DialogModalWindow modalWindow;
 
     public AddAssetTypePage(PageParameters params) {
         assetType = Model.of(getAssetType(params));
         add(new AssetTypeForm("form", assetType));
         add(new FIDFeedbackPanel("feedbackPanel"));
+        add(modalWindow = new DialogModalWindow("modalWindow"));
+        modalWindow.setContent(new DescriptionTemplatePanel(modalWindow.getContentId()));
+        modalWindow.setInitialHeight(450);
     }
 
     protected AssetType getAssetType(PageParameters params) {
@@ -140,6 +142,12 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             add(imagePanel = new AssetTypeImagePanel("image", model));
             add(attributePanel = new AssetTypeAttributePanel("attributes", model));
             add(new TextField<String>("descriptionTemplate", new PropertyModel<String>(model, "descriptionTemplate")));
+            add(new AjaxLink<Void>("templateExample") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    modalWindow.show(target);
+                }
+            });
 
             add(moreInfo = new WebMarkupContainer("moreInfo"));
             moreInfo.add(new CheckBox("linkable", new PropertyModel<Boolean>(model, "linkable")));
