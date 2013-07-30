@@ -227,7 +227,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                     locationPicker.setOwner(getModelObject());
                 }
             };
-            add(ownerPicker);
+            add(ownerPicker.setRequired(true).setLabel(new FIDLabelModel("label.owner")));
 
             ownerPicker.add(new FormComponentPanelUpdatingBehavior("onchange") {
                 @Override
