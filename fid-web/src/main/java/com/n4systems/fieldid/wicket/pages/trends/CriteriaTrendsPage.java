@@ -140,6 +140,7 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        response.renderCSSReference("style/newCss/component/matt_buttons.css");
         response.renderCSSReference("style/newCss/trends/trending.css");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.min.js");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.stack.min.js");
