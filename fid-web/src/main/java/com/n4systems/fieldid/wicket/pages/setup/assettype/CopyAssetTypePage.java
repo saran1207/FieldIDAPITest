@@ -20,6 +20,7 @@ public class CopyAssetTypePage extends AddAssetTypePage {
     protected AssetType getAssetType(PageParameters params) {
         AssetType copy = new AssetType();
         AssetType original = assetTypeService.getAssetType(params.get("uniqueID").toLong());
+        copy.setTenant(original.getTenant());
         copy.setGroup(original.getGroup());
         copy.setDescriptionTemplate(original.getDescriptionTemplate());
         copy.setLinkable(original.isLinkable());
