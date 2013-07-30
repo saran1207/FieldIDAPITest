@@ -40,7 +40,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 		logger.info("ProcessIndexQueue: Running");
 
 		List<IndexQueueItem> items = persistenceService.findAllNonSecure(IndexQueueItem.class);
-		logger.info("Queue length = " + items.size());
+		logger.info(getClass().getSimpleName() + " queue length = " + items.size());
 		for (IndexQueueItem item : items) {
 			try {
 				processIndexQueueItem(item);

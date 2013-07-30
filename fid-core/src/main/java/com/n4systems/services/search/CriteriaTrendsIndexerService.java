@@ -31,7 +31,7 @@ public class CriteriaTrendsIndexerService extends FieldIdPersistenceService {
         logger.info("ProcessIndexQueue: Running");
 
         List<CriteriaTrendsIndexQueueItem> items = persistenceService.findAllNonSecure(CriteriaTrendsIndexQueueItem.class);
-        logger.info("Queue length = " + items.size());
+        logger.info(getClass().getSimpleName() + " queue length = " + items.size());
         for (CriteriaTrendsIndexQueueItem item : items) {
             try {
                 processIndexQueueItem(item);
