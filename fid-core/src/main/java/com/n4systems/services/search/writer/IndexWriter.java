@@ -32,6 +32,7 @@ import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.util.IOUtils;
 import org.apache.lucene.util.NumericUtils;
 import org.apache.lucene.util.Version;
+import org.joda.time.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -71,11 +72,12 @@ public abstract class IndexWriter<T extends BaseEntity> extends FieldIdPersisten
 
             EntityManager em = getJpaEntityManager();
             begin(em);
+            long startTime = System.currentTimeMillis();
 
             try {
                 items = query.createQuery(em).setFirstResult(page*pageSize).setMaxResults(pageSize).getResultList();
                 index(em, tenant, items, true);
-                logger.info(getClass().getSimpleName() + " indexed " + ((page * pageSize) + items.size()) + " items of type " + itemClass.getSimpleName() + " for tenant " + tenant.getName());
+                logger.info(getClass().getSimpleName() + " indexed " + ((page * pageSize) + items.size()) + " items of type " + itemClass.getSimpleName() + " for tenant " + tenant.getName() + " (the last " + items.size() + " in " + ((System.currentTimeMillis() - startTime)/1000) + " sec)");
                 page++;
             } finally {
                 cleanup(em);

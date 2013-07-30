@@ -1,0 +1,1 @@
+create index index_criteria_trends_event_id on criteria_trends (event_id);

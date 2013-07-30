@@ -23,6 +23,8 @@ public class FlotChart<X extends Comparable> extends Panel {
 	private JsonRenderer jsonRenderer;
 
 	private IModel<? extends FlotOptions<X>> optionsModel;
+
+    private String tooltipFunction;
 	
     public FlotChart(final String id, IModel<ChartData<X>> model, IModel<? extends FlotOptions<X>> optionsModel, String css) {
 		super(id, model);
@@ -38,8 +40,11 @@ public class FlotChart<X extends Comparable> extends Panel {
 	protected void updateOptions(ChartData<X> chartData) {
 		chartData.updateOptions(optionsModel.getObject());
 	}
-	
-	
+
+    public void setTooltipFunction(String functionName) {
+        this.tooltipFunction = functionName;
+    }
+
 	class ChartMarkup extends WebMarkupContainer {
 
 		public ChartMarkup(String id) {
@@ -53,10 +58,14 @@ public class FlotChart<X extends Comparable> extends Panel {
             optionsModel.detach();
             updateOptions(getChartData());
             StringBuffer javascriptBuffer = new StringBuffer();
-            javascriptBuffer.append ("chartWidgetFactory.createWithData('"+getMarkupId() + "'," +
+            String widgetName = "widget_" + getMarkupId();
+            javascriptBuffer.append ("var " + widgetName + " = chartWidgetFactory.createWithData('"+getMarkupId() + "'," +
                     jsonRenderer.render(getChartData()) + "," +
                     jsonRenderer.render(optionsModel.getObject()) +
             ");");
+            if (tooltipFunction != null) {
+                javascriptBuffer.append(widgetName).append(".setTooltip(").append(tooltipFunction).append(");");
+            }
             response.renderOnDomReadyJavaScript(javascriptBuffer.toString());
         }
     }
