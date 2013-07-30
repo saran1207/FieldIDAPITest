@@ -3,7 +3,7 @@
  * Supported features: dots/no-dots, icons/no-icons, focused, loading
  * Supported plugins: ui (hovered, clicked), checkbox, contextmenu, search
 
- **** Updating default themes to customize for Field ID ****
+ * REVISED TO INCLUDE CUSTOM FIELDID STYLES. SEE README FOR MORE INFO.
  */
 
 .jstree-default li, 
@@ -74,3 +74,24 @@
 .jstree-default .jstree-checked a .jstree-checkbox { _background-position:-38px -19px; }
 .jstree-default .jstree-unchecked a .jstree-checkbox { _background-position:-2px -19px; }
 /* IE6 END */
+
+
+/* CUSTOM FIELDID STYLES */
+.jstree a {
+    height: auto!important;
+}
+.jstree li.internal-org {
+    font-size: 13px;
+    font-weight: bold;
+}
+.jstree li.customer-org {
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: normal;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+ul li.division-org {
+    text-transform: none;
+    font-size: 11px;
+}
