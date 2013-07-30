@@ -21,6 +21,7 @@ import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.FileAttachment;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -58,6 +59,8 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
     private AssetTypeAttributePanel attributePanel;
     private WebMarkupContainer moreInfo;
     private DialogModalWindow modalWindow;
+    private AjaxLink showHide;
+    private WebMarkupContainer showHideIcon;
 
     public AddAssetTypePage(PageParameters params) {
         assetType = Model.of(getAssetType(params));
@@ -161,13 +164,19 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             moreInfo.setOutputMarkupPlaceholderTag(true);
             moreInfo.setVisible(false);
 
-            add(new AjaxLink("showHide") {
+            add(showHide = new AjaxLink("showHide") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     moreInfo.setVisible(!moreInfo.isVisible());
-                    target.add(moreInfo);
+                    if(moreInfo.isVisible()) {
+                        showHideIcon.add(new AttributeModifier("class", "entypo-icons entypo-caret-up"));
+                    } else {
+                        showHideIcon.add(new AttributeModifier("class", "entypo-icons entypo-caret-down"));
+                    }
+                    target.add(moreInfo, showHide);
                 }
             });
+            showHide.add(showHideIcon = new WebMarkupContainer("showHideIcon"));
 
             add(new SubmitLink("save"));
             add(new BookmarkablePageLink("cancel", AssetTypeListPage.class));
