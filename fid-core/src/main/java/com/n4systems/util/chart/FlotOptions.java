@@ -82,7 +82,7 @@ public class FlotOptions<X> implements Serializable {
 		public String color = "#999999";
 		public Integer labelWidth;
 		public String[] minTickSize;
-		public String[] tickSize;		
+		public String[] tickSize;
 	}
 	
 	public static class Grid implements Serializable  {
