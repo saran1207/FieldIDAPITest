@@ -17,6 +17,11 @@ public class CopyAssetTypePage extends AddAssetTypePage {
     }
 
     @Override
+    public boolean isCopy() {
+        return true;
+    }
+
+    @Override
     protected AssetType getAssetType(PageParameters params) {
         AssetType copy = new AssetType();
         AssetType original = assetTypeService.getAssetType(params.get("uniqueID").toLong());

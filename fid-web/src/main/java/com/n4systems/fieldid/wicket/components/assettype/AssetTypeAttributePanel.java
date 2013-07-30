@@ -69,6 +69,9 @@ public class AssetTypeAttributePanel extends Panel {
             @Override
             public void onUpdate(Component sortedComponent, int index, AjaxRequestTarget target) {
                 if(infoFields.size() > 1) {
+                    if(index == 0) {
+                        index = 1;
+                    }
                     InfoFieldInput movedItem = (InfoFieldInput) sortedComponent.getDefaultModelObject();
                     infoFields.remove(movedItem);
                     infoFields.add(index-1, movedItem);

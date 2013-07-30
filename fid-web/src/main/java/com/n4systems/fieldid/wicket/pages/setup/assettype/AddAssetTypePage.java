@@ -26,6 +26,7 @@ import com.n4systems.model.FileAttachment;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
@@ -108,6 +109,10 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
         return false;
     }
 
+    public boolean isCopy() {
+        return false;
+    }
+
     private class AssetTypeForm extends Form<AssetType> {
 
         private AssetTypeForm(String id, IModel<AssetType> model) {
@@ -159,7 +164,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             add(new SubmitLink("save"));
             add(new BookmarkablePageLink("cancel", AssetTypeListPage.class));
             NonWicketLink deleteLink;
-            add(deleteLink = new NonWicketLink("delete", "assetTypeConfirmDelete.action?uniqueID=" + assetType.getObject().getId()));
+            add(deleteLink = new NonWicketLink("delete", "assetTypeConfirmDelete.action?uniqueID=" + assetType.getObject().getId(), new AttributeAppender("class", "btn btn-gray")));
             deleteLink.setVisible(assetType.getObject().getId() != null);
 
         }
@@ -183,6 +188,9 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             if(attributePanel.getInfoFields(assetType).isEmpty()) {
                 assetType.setInfoFields(Lists.<InfoFieldBean>newArrayList());
             } else {
+                if(isCopy()) {
+                    assetType.getInfoFields().clear();
+                }
                 processInfoFields(attributePanel.getInfoFields(assetType));
                 processInfoOptions(attributePanel.getInfoFields(assetType), attributePanel.getEditInfoOptions(assetType));
             }
