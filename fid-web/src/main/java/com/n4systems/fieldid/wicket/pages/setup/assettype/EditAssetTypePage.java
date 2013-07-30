@@ -35,4 +35,9 @@ public class EditAssetTypePage extends AddAssetTypePage{
                 aNavItem().label("nav.add").page(AddAssetTypePage.class).onRight().build()
         ));
     }
+
+    @Override
+    public boolean isEdit() {
+        return true;
+    }
 }

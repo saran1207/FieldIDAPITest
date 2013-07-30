@@ -251,7 +251,7 @@ public class AssetTypeAttributePanel extends Panel {
 
             private String getOptionsAsString(Long infoFieldIndex) {
                 String options;
-                if (!assetType.getInfoFields().isEmpty()) {
+                if (!infoFields.isEmpty()) {
                     List<String> optList = Lists.newArrayList();
                     for (InfoOptionInput opt : editInfoOptions) {
                         if (opt.getInfoFieldIndex().equals(infoFieldIndex) && !opt.isDeleted())
@@ -269,8 +269,9 @@ public class AssetTypeAttributePanel extends Panel {
         add(new AjaxLink<Void>("add") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                InfoFieldInput infoFieldBean = new InfoFieldInput();
-                infoFields.add(infoFieldBean);
+                InfoFieldInput input = new InfoFieldInput();
+                input.setWeight(Long.valueOf(infoFields.size()));
+                infoFields.add(input);
                 target.add(existingAttributesContainer);
             }
         });

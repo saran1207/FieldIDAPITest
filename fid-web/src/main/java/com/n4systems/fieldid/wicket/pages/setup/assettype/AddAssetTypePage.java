@@ -5,6 +5,7 @@ import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
@@ -103,6 +104,10 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
         ));
     }
 
+    public boolean isEdit() {
+        return false;
+    }
+
     private class AssetTypeForm extends Form<AssetType> {
 
         private AssetTypeForm(String id, IModel<AssetType> model) {
@@ -183,9 +188,15 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             }
 
             try {
-                assetTypeService.saveAssetType(assetType, attachments, imageData);
+               assetType = assetTypeService.saveAssetType(assetType, attachments, imageData);
             } catch (ImageAttachmentException e) {
                 error("Failed to attach files to Asset Type: " + assetType.getDisplayName());
+            }
+
+            if (isEdit()) {
+                FieldIDSession.get().info(new FIDLabelModel("massage.asset_type.edit").getObject());
+            } else {
+                FieldIDSession.get().info(new FIDLabelModel("massage.asset_type.add").getObject());
             }
 
             setResponsePage(AssetTypeListPage.class);
@@ -213,7 +224,6 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                         } else {
                             addedInfoField.setUnitOfMeasure(null);
                         }
-
                         input.setInfoField(addedInfoField);
                     }
                 } else {
@@ -234,14 +244,12 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                                 } else {
                                     infoField.setUnitOfMeasure(null);
                                 }
-
                             }
                             input.setInfoField(infoField);
                         }
                     }
                 }
             }
-
             assetType.getObject().getInfoFields().removeAll(deleted);
         }
 
@@ -273,9 +281,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                                         infoOption.setWeight(input.getWeight());
                                         infoOption.setStaticData(true);
                                     }
-
                                 }
-
                             }
                         }
                     }
