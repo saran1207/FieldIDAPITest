@@ -2444,3 +2444,21 @@ inputsWithLegend .legend span {
     word-wrap:break-word;
 }
 
+
+/* ICONS */
+.entypo-icons {
+    background: url(/fieldid/images/icons/entypo.png) no-repeat;
+    width: 20px;
+    height: 20px;
+    text-indent: -9999px;
+    display: inline-block;
+    *display: block; /* lt IE7 */
+    margin-top: 4px;
+}
+.entypo-checkmark { background-position: 0 0;}
+.entypo-x { background-position: -20px 0;}
+.entypo-list { background-position: -40px 0;}
+.entypo-caret-down { background-position: -60px 0;}
+.entypo-caret-up { background-position: -80px 0;}
+.entypo-search { background-position: -100px 0;}
+
