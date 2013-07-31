@@ -97,16 +97,14 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page("assetTypes.action").build(),
+                aNavItem().label("nav.view_all").page(AssetTypeListPage.class).build(),
                 aNavItem().label("nav.view").page("assetType.action").params(uniqueId(assetTypeId)).build(),
-                aNavItem().label("nav.edit").page("assetTypeEdit.action").params(uniqueId(assetTypeId)).build(),
+                aNavItem().label("nav.edit").page(EditAssetTypePage.class).params(uniqueId(assetTypeId)).build(),
                 aNavItem().label("nav.event_type_associations").page("selectEventTypes.action").params(param("assetTypeId", assetTypeId)).build(),
                 aNavItem().label("nav.event_frequencies").page("eventFrequencies.action").params(param("assetTypeId", assetTypeId)).build(),
                 aNavItem().label("label.recurring_events").page(RecurringAssetTypeEventsPage.class).params(uniqueId(assetTypeId)).build(),
-                aNavItem().label("l" +
-                        "" +
-                        "abel.subassets").page("assetTypeConfiguration.action").params(uniqueId(assetTypeId)).build(),
-                aNavItem().label("nav.add").page("assetTypeEdit.action").onRight().build()
+                aNavItem().label("label.subassets").page("assetTypeConfiguration.action").params(uniqueId(assetTypeId)).build(),
+                aNavItem().label("nav.add").page(AddAssetTypePage.class).onRight().build()
         ));
     }
 
