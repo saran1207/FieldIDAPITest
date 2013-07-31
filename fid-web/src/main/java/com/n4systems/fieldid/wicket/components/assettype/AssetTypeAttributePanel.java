@@ -18,7 +18,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -245,7 +244,7 @@ public class AssetTypeAttributePanel extends Panel {
             }
 
             private UnitOfMeasure getUnitofMeasure(InfoFieldInput input) {
-                if(input.getDefaultUnitOfMeasure() != null) {
+                if (input.getDefaultUnitOfMeasure() != null) {
                     return assetTypeService.getUnitOfMeasure(input.getDefaultUnitOfMeasure());
                 } else {
                     return new UnitOfMeasure();
@@ -318,11 +317,6 @@ public class AssetTypeAttributePanel extends Panel {
             }
         }
         return null;
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/newCss/assetType/assetType.css");
     }
 
     public List<String> getAttributeTypes() {

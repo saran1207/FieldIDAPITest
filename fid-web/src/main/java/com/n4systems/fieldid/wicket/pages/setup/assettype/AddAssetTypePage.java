@@ -26,6 +26,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
@@ -108,6 +109,11 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                 aNavItem().label("nav.view_all").page(AssetTypeListPage.class).build(),
                 aNavItem().label("nav.add").page(AddAssetTypePage.class).onRight().build()
         ));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/newCss/assetType/assetType.css");
     }
 
     public boolean isEdit() {
