@@ -75,20 +75,7 @@ public class AssetTypeAttributePanel extends Panel {
                     infoFields.remove(movedItem);
                     infoFields.add(index-1, movedItem);
 
-                    List<InfoOptionInput> updatedOptions = Lists.newArrayList();
-                    //Reset all the weights on the fields and corresponding options
-                    for(int i = 0; i < infoFields.size(); i++) {
-                        int oldIndex = infoFields.get(i).getWeight().intValue();
-                        for (int j = 0; j < editInfoOptions.size(); j++) {
-                            InfoOptionInput input = editInfoOptions.get(j);
-                            if(input.getInfoFieldIndex() == oldIndex && !updatedOptions.contains(input)) {
-                                input.setInfoFieldIndex(i);
-                                updatedOptions.add(input);
-                            }
-                        }
-                        infoFields.get(i).setWeight(Long.valueOf(i));
-                    }
-                    updatedOptions.clear();
+                    reorderWeights();
                     listView.removeAll();
                     target.add(existingAttributesContainer);
                 }
@@ -223,10 +210,8 @@ public class AssetTypeAttributePanel extends Panel {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         InfoFieldInput deleted = infoFields.remove(index.intValue());
-                        if(deleted.getFieldType().equals(InfoFieldBean.InfoFieldType.SelectBox.getName())
-                                || deleted.getFieldType().equals(InfoFieldBean.InfoFieldType.ComboBox.getName())) {
-                            deleteOptions(deleted.getWeight());
-                        }
+                        deleteOptions(deleted.getWeight());
+                        reorderWeights();
                         listView.removeAll();
                         target.add(existingAttributesContainer);
                     }
@@ -287,6 +272,23 @@ public class AssetTypeAttributePanel extends Panel {
             }
         });
 
+    }
+
+    private void reorderWeights() {
+        List<InfoOptionInput> updatedOptions = Lists.newArrayList();
+        //Reset all the weights on the fields and corresponding options
+        for(int i = 0; i < infoFields.size(); i++) {
+            int oldIndex = infoFields.get(i).getWeight().intValue();
+            for (int j = 0; j < editInfoOptions.size(); j++) {
+                InfoOptionInput input = editInfoOptions.get(j);
+                if(input.getInfoFieldIndex() == oldIndex && !updatedOptions.contains(input)) {
+                    input.setInfoFieldIndex(i);
+                    updatedOptions.add(input);
+                }
+            }
+            infoFields.get(i).setWeight(Long.valueOf(i));
+        }
+        updatedOptions.clear();
     }
 
     public List<InfoFieldInput> getInfoFields(AssetType assetType) {
