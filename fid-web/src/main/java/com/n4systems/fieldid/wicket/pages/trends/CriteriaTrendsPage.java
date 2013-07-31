@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.util.JavascriptPackageResourceIE;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.EventType;
 import com.n4systems.model.utils.DateRange;
@@ -153,6 +154,7 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        JavascriptPackageResourceIE.renderJavaScriptReference(response, "javascript/flot/excanvas.min.js");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
         response.renderCSSReference("style/newCss/trends/trending.css");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.min.js");
