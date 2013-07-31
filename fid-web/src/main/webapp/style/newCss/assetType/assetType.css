@@ -54,10 +54,10 @@ strong {
 /* Width variations for inputs and headers */
 .width-full { width: 975px;}
 .width-xxlrg { width: 688px;}
-.width-lrg { width: 387px;}
+.width-lrg { width: 375px;}
 .width-med  { width: 271px; /*284px*/}
 .width-sml { width: 225px;}
-.width-xsml { width: 134px;}
+.width-xsml { width: 155px;}
 
 
 /* GENERAL FORM STYLES */
@@ -169,9 +169,6 @@ legend {
 .control-combo .chzn-container {
     margin-bottom: 3px;
 }
-.chzn-container-single .chzn-single abbr {
-	display: none;
-}
 
 /* For forms with the label on the left and input on the right */
 .form-horizontal label {
@@ -258,14 +255,16 @@ legend {
 		margin-left: 32px;
 	}
 	.attributes-setup-list .attribute-actions {
-		width: 65px;
+		width: 55px;
 		text-align: center;
 		float: right;
 	}
 	.attribute-actions .btn {
 		padding: 6px;
+		*padding-bottom: 0;
 		font-size: 12px;
 		height: 29px;
+		*height: 23px;
 		-moz-box-sizing: border-box; 
 	    -webkit-box-sizing: border-box; 
 	    box-sizing: border-box;
