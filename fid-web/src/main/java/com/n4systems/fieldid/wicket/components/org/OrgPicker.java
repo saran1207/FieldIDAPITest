@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.wicket.components.org;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.n4systems.fieldid.wicket.components.CloseImagePanel;
+import com.n4systems.fieldid.wicket.components.SimplePanel;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,9 +18,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
-import com.n4systems.fieldid.wicket.components.CloseImagePanel;
-import com.n4systems.fieldid.wicket.components.SimplePanel;
-import com.n4systems.model.orgs.BaseOrg;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrgPicker extends Panel {
 

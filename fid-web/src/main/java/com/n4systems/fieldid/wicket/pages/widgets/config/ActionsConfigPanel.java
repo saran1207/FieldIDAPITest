@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
-import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
 import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
@@ -24,7 +24,7 @@ public class ActionsConfigPanel extends OrgDateWidgetConfigPanel<ActionsWidgetCo
 
     @Override
     protected Component createOrgPicker(String id, IModel<ActionsWidgetConfiguration> configModel) {
-        return new AutoCompleteOrgPicker(id, new PropertyModel<BaseOrg>(configModel, "org"));
+        return new OrgLocationPicker<BaseOrg>(id, new PropertyModel<BaseOrg>(configModel, "org"));
     }
 }
 
