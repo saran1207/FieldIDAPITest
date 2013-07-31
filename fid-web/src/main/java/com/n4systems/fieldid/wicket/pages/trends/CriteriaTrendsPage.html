@@ -1,24 +1,29 @@
 <wicket:extend>
     <div wicket:id="feedbackPanel"></div>
 
-    <form wicket:id="form">
+    <form wicket:id="form" class="trend-options">
         <select wicket:id="eventType"></select>
         <select class="date-picker" wicket:id="datePicker"></select>
         <a wicket:id="submitLink" class="mattButton mattButtonBlue">Generate Trend</a>
     </form>
-
+    
     <p wicket:id="noResultsContainer"><wicket:message key="message.no_trends_data_found"/></p>
-
-    <ul wicket:id="trendsByResultContainer">
-        <li wicket:id="trendsByResult">
-            <a wicket:id="selectResultLink"><span wicket:id="resultText"></span></a>
-            <span wicket:id="count"></span>
-        </li>
-    </ul>
-
-    <div wicket:id="trendsForResultByCriteriaContainer">
-        <div wicket:id="chart">
+    
+    <div wicket:id="trendsByResultContainer">
+        <h2>Event Type/ <span>Date</span></h2>
+        
+        <div class="criteria-results">
+            <h3>Unique Criteria Results</h3>
+            <ul>
+                <li wicket:id="trendsByResult">
+                    <a wicket:id="selectResultLink"><span wicket:id="resultText"></span></a>
+                    <span wicket:id="count"></span>
+                </li>
+            </ul>
         </div>
     </div>
-
+    <div wicket:id="trendsForResultByCriteriaContainer">
+        <div wicket:id="chart"></div>
+    </div>
+    
 </wicket:extend>

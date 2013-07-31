@@ -22,3 +22,8 @@ a.mattButton {
 p {
     margin: 10px 0;
 }
+
+.trend-options {
+border-bottom: 1px solid gray;
+padding: 10px 0 15px;
+}
