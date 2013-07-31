@@ -145,16 +145,17 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
             {
                 setOutputMarkupId(true);
                 add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                    @Override
-                    protected void onUpdate(AjaxRequestTarget target) {
+                    @Override protected void onUpdate(AjaxRequestTarget target) {
                         target.add(searchResults, actions);
+                    }
+
+                    @Override protected IAjaxCallDecorator getAjaxCallDecorator() {
+                        return new OneClickOnlyDecorator();
                     }
                 });
             }
 
-
-            @Override
-            public boolean isVisible() {
+            @Override public boolean isVisible() {
                 return provider.size() > 0;
             }
         };
