@@ -112,6 +112,7 @@ public class AssetTypeAttributePanel extends Panel {
                 final RequiredTextField selectOptions;
                 CheckBox dateOption;
                 FidDropDownChoice<UnitOfMeasure> unitOfMeasureChoice;
+                CheckBox required;
 
                 item.add(name = new RequiredTextField<String>("attributeName", new PropertyModel<String>(infoField, "name")));
                 name.add(new UpdateComponentOnChange());
@@ -181,6 +182,8 @@ public class AssetTypeAttributePanel extends Panel {
 
                 item.add(dateOption = new CheckBox("dateOption", new PropertyModel<Boolean>(infoField, "includeTime")));
                 dateOption.setEnabled(!isRetired);
+                dateOption.add(new UpdateComponentOnChange());
+
                 item.add(unitOfMeasureChoice = new FidDropDownChoice<UnitOfMeasure>("unitOfMeasureChoice", unitOfMeasure, assetTypeService.getAllUnitOfMeasures(), new ListableChoiceRenderer<UnitOfMeasure>()));
                 unitOfMeasureChoice.setRequired(true);
                 unitOfMeasureChoice.setEnabled(!isRetired);
@@ -212,7 +215,9 @@ public class AssetTypeAttributePanel extends Panel {
                     unitOfMeasureChoice.setVisible(false);
                 }
 
-                item.add(new CheckBox("required", new PropertyModel<Boolean>(infoField, "required")).setEnabled(!isRetired));
+                item.add(required = new CheckBox("required", new PropertyModel<Boolean>(infoField, "required")));
+                required.setEnabled(!isRetired);
+                required.add(new UpdateComponentOnChange());
 
                 item.add(new AjaxLink<Void>("delete") {
                     @Override
