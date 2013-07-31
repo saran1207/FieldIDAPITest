@@ -222,7 +222,11 @@ public class AssetTypeAttributePanel extends Panel {
                 item.add(new AjaxLink<Void>("delete") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        infoFields.remove(index.intValue());
+                        InfoFieldInput deleted = infoFields.remove(index.intValue());
+                        if(deleted.getFieldType().equals(InfoFieldBean.InfoFieldType.SelectBox.getName())
+                                || deleted.getFieldType().equals(InfoFieldBean.InfoFieldType.ComboBox.getName())) {
+                            deleteOptions(deleted.getWeight());
+                        }
                         listView.removeAll();
                         target.add(existingAttributesContainer);
                     }
@@ -322,6 +326,16 @@ public class AssetTypeAttributePanel extends Panel {
             }
         }
         return null;
+    }
+
+    private void deleteOptions(Long index) {
+        List<InfoOptionInput> toBeDeleted = Lists.newArrayList();
+        for (InfoOptionInput option: editInfoOptions) {
+            if ( option.getInfoFieldIndex().equals(index)) {
+                toBeDeleted.add(option);
+            }
+        }
+        editInfoOptions.removeAll(toBeDeleted);
     }
 
     public List<String> getAttributeTypes() {
