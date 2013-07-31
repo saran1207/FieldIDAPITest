@@ -27,9 +27,9 @@ public class CriteriaTrendsChartManager extends BarChartManager {
         }
 
         options.bars.align="center";
-        options.bars.barWidth=0.9;
+        options.bars.barWidth=0.85;
         options.xaxis.min = -1L;
-        options.xaxis.max = 24L;
+        options.xaxis.max = 30L;
         options.pan.interactive=true;
         options.xaxis.panRange=new Long[2];
         options.xaxis.panRange[0] = getPanMin(chartSeries);
