@@ -10,27 +10,26 @@ public class CriteriaTrendsChartManager extends BarChartManager {
 
     @Override
     public void updateOptions(ChartSeries<String> chartSeries, FlotOptions<String> options, int seriesIndex, int maxChartSeries, int seriesCount) {
-        if (options.xaxis.ticks==null) {
-            options.xaxis.ticks = new String[maxChartSeries][2];
-        }
-        ArrayList<Chartable<String>> chartables = new ArrayList<Chartable<String>>(chartSeries.values());
-
+        options.legend.show = false;
         options.bars.horizontal = false;
+
+        options.yaxis.show=false;
+        options.xaxis.show=false;
+        options.xaxis.fieldidLabels = new String[maxChartSeries];
+
+        // Though we are not displaying either axis, we have to set some tick data so the tooltips will work.
+
+        ArrayList<Chartable<String>> chartables = new ArrayList<Chartable<String>>(chartSeries.values());
 
         int i = 0;
         for (Chartable<String> value : chartables) {
-            if (seriesIndex==0) {  // only need to set the labels one time.
-                options.xaxis.ticks[i][0] = i+"";
-                options.xaxis.ticks[i][1] = value.getX();
-            }
-            i++;
+            options.xaxis.fieldidLabels[i++] = value.getX();
         }
 
         options.bars.align="center";
-        options.bars.barWidth=0.5;
+        options.bars.barWidth=0.9;
         options.xaxis.min = -1L;
-        options.xaxis.max = 8L;
-        options.xaxis.labelWidth = 105;
+        options.xaxis.max = 24L;
         options.pan.interactive=true;
         options.xaxis.panRange=new Long[2];
         options.xaxis.panRange[0] = getPanMin(chartSeries);

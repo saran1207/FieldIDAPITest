@@ -70,10 +70,14 @@ public class FlotOptions<X> implements Serializable {
 	}
 	
 	public static class Axis implements Serializable  {
+        public Boolean show;
 		public Long[] panRange;
 		public Long min;
         public Long max;
 		public String mode;
+        // Ticks was getting destroyed by the js when xaxis.show is set to false -- need a separate
+        // place to put data not written over by the JS, so we can use it for tooltips
+        public String[] fieldidLabels;
 		public String timeformat = "%m/%y";
         public Long tickDecimals;
 		public String[] monthNames;

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.trends;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.CriteriaTrendsService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.chart.FlotChart;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
@@ -92,6 +93,9 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
         add(noResultsContainer = new WebMarkupContainer("noResultsContainer"));
         noResultsContainer.setVisible(false).setOutputMarkupPlaceholderTag(true);
 
+        trendsByResultContainer.add(new FlatLabel("eventTypeLabel", new PropertyModel<String>(this, "eventType.name")));
+        trendsByResultContainer.add(new Label("dateRangeLabel", new PropertyModel<String>(this, "rangeType.displayName")));
+
         trendsByResultContainer.add(new ListView<CriteriaTrendsResultCountRecord>("trendsByResult", trendsResultModel) {
             @Override
             protected void populateItem(final ListItem<CriteriaTrendsResultCountRecord> item) {
@@ -143,7 +147,7 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.criteria_trends"));
+        return new Label(labelId, new FIDLabelModel("label.trending"));
     }
 
     @Override
