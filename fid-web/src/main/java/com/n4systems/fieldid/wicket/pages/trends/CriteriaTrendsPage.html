@@ -1,7 +1,7 @@
 <wicket:extend>
     <div wicket:id="feedbackPanel"></div>
 
-    <form wicket:id="form" class="trend-options">
+    <form wicket:id="form" class="trend-options clearfix">
         <select wicket:id="eventType"></select>
         <select class="date-picker" wicket:id="datePicker"></select>
         <a wicket:id="submitLink" class="mattButton mattButtonBlue">Generate Trend</a>
@@ -16,7 +16,7 @@
             <h3>Unique Criteria Results</h3>
             <ul>
                 <li wicket:id="trendsByResult">
-                    <a wicket:id="selectResultLink" class=""><span wicket:id="resultText"></span></a>
+                    <a wicket:id="selectResultLink" class="result-text"><span wicket:id="resultText"></span></a>
                     <span wicket:id="count" class="count"></span>
                 </li>
             </ul>

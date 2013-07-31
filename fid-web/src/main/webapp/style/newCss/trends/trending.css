@@ -9,7 +9,12 @@ body {
     box-sizing: border-box;
     padding: 24px;
 }
-#page * {
+.results-container {
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+.results-container * {
     -moz-box-sizing: border-box; 
     -webkit-box-sizing: border-box; 
     box-sizing: border-box;
@@ -21,18 +26,32 @@ body {
 .options {
     border-color: #ccc;
 }
+.chzn-container {
+    float: left;
+    margin-right: 10px;
+}
+
+/* force self-clearing of child elements */
+.clearfix:before,
+.clearfix:after {
+    content: "";
+    display: table;
+} 
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    zoom: 1; /* For IE 6/7 (trigger hasLayout) */
+}
 
 /* FORM - DROPDOWN OPTIONS
 -------------------------------------*/
-.date-picker {
-    width: 200px;
-}
 .trend-options {
     border-bottom: 1px solid #999;
     padding: 10px 0 15px;
 }
-a.mattButton {
-    float: none;
+.date-picker {
+    width: 200px;
 }
 
 /* RESULTS 
@@ -60,7 +79,8 @@ h2 {
 .results-list{
     background: #f3f3f3;
     width: 225px;
-    height: 400px;
+    height: 397px;
+    margin-top: 3px;
     float: left;
     padding: 20px 12px;
     border: 1px solid #ccc;
@@ -91,17 +111,24 @@ h3 {
 
 /* bar chart */
 .flotChart {
-    height: 400px;
+    height: 403px;
     width: 725px;
     float: left;
 }
 .chartTooltip {
     position: absolute;
     display: none;
-    border: 2px solid #777777;
-    text-align: center;
-    padding: 4px;
-    background-color: #fff;
-    opacity: 0.80;
+    padding: 6px 10px 10px;
+    background-color: #68717e;
     z-index: 5;
+    max-width: 185px;
 }
+.chartTooltip .count {
+    color: #fff;
+    display: block;
+    font-size: 30px;
+}
+.chartTooltip .criteriaName {
+    color: #ccc;
+}
+
