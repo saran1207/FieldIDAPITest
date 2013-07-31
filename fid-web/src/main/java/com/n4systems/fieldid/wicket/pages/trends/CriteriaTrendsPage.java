@@ -14,6 +14,7 @@ import com.n4systems.model.EventType;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.reporting.CriteriaTrendsResultCountRecord;
 import com.n4systems.util.chart.*;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -51,7 +52,6 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
     private String selectedResultText;
 
     private WebMarkupContainer trendsByResultContainer;
-    private WebMarkupContainer trendsForResultByCriteriaContainer;
     private WebMarkupContainer noResultsContainer;
 
     public CriteriaTrendsPage() {
@@ -64,7 +64,7 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
         EnumSet<RangeType> rangeTypes = RangeType.allFloatingButFutureTypes();
         rangeTypes.remove(RangeType.CUSTOM);
         RangeType[] rangeTypesArray = new RangeType[rangeTypes.size()];
-        form.add(new FidDropDownChoice<RangeType>("datePicker", new PropertyModel<RangeType>(this, "rangeType"), Arrays.asList(rangeTypes.toArray(rangeTypesArray)), new ListableChoiceRenderer<RangeType>()));
+        form.add(new FidDropDownChoice<RangeType>("datePicker", new PropertyModel<RangeType>(this, "rangeType"), Arrays.asList(rangeTypes.toArray(rangeTypesArray)), new ListableChoiceRenderer<RangeType>()).setRequired(true));
 
         final LoadableDetachableModel<List<CriteriaTrendsResultCountRecord>> trendsResultModel = createTrendsResultModel();
 
@@ -72,15 +72,18 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (trendsResultModel.getObject().isEmpty()) {
-                    target.add(feedbackPanel, trendsByResultContainer.setVisible(false), trendsForResultByCriteriaContainer.setVisible(false), noResultsContainer.setVisible(true));
+                    target.add(feedbackPanel, trendsByResultContainer.setVisible(false), noResultsContainer.setVisible(true));
                 } else {
-                    target.add(feedbackPanel, trendsByResultContainer.setVisible(true), trendsForResultByCriteriaContainer.setVisible(false), noResultsContainer.setVisible(false));
+                    CriteriaTrendsResultCountRecord record = trendsResultModel.getObject().iterator().next();
+                    selectedResultText = record.getResultText();
+                    trendsByResultContainer.addOrReplace(createChart());
+                    target.add(feedbackPanel, trendsByResultContainer.setVisible(true), noResultsContainer.setVisible(false));
                 }
             }
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(feedbackPanel, trendsByResultContainer.setVisible(false), trendsForResultByCriteriaContainer.setVisible(false), noResultsContainer.setVisible(false));
+                target.add(feedbackPanel, trendsByResultContainer.setVisible(false), noResultsContainer.setVisible(false));
             }
         });
 
@@ -92,15 +95,18 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
         trendsByResultContainer.add(new ListView<CriteriaTrendsResultCountRecord>("trendsByResult", trendsResultModel) {
             @Override
             protected void populateItem(final ListItem<CriteriaTrendsResultCountRecord> item) {
+                item.add(new AttributeModifier("class", "active") {
+                    @Override
+                    public boolean isEnabled(Component component) {
+                        return item.getModelObject().getResultText() != null && item.getModelObject().getResultText().equals(selectedResultText);
+                    }
+                });
                 AjaxLink selectResultLink = new AjaxLink("selectResultLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         selectedResultText = item.getModelObject().getResultText();
-                        FlotChart<String> chart = new FlotChart<String>("chart", createChartDataModel(), Model.of(new BarChartOptions<String>()), "");
-                        chart.setTooltipFunction("plainTrendsTooltip");
-                        trendsForResultByCriteriaContainer.addOrReplace(chart);
-                        target.add(trendsForResultByCriteriaContainer.setVisible(true));
-
+                        trendsByResultContainer.addOrReplace(createChart());
+                        target.add(trendsByResultContainer);
                     }
                 };
                 item.add(selectResultLink);
@@ -108,9 +114,12 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
                 item.add(new Label("count", ProxyModel.of(item.getModel(), on(CriteriaTrendsResultCountRecord.class).getCount())));
             }
         });
+    }
 
-        add(trendsForResultByCriteriaContainer = new WebMarkupContainer("trendsForResultByCriteriaContainer"));
-        trendsForResultByCriteriaContainer.setOutputMarkupPlaceholderTag(true).setVisible(false);
+    private FlotChart<String> createChart() {
+        FlotChart<String> chart = new FlotChart<String>("chart", createChartDataModel(), Model.of(new BarChartOptions<String>()), "");
+        chart.setTooltipFunction("plainTrendsTooltip");
+        return chart;
     }
 
     private IModel<ChartData<String>> createChartDataModel() {
