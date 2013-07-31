@@ -9,19 +9,18 @@
     
     <p wicket:id="noResultsContainer"><wicket:message key="message.no_trends_data_found"/></p>
     
-    <div wicket:id="trendsByResultContainer">
-        <h2>Event Type/ <span>Date</span></h2>
+    <div wicket:id="trendsByResultContainer" class="results-container">
+        <h2>Event Type / <span>Date</span></h2>
         
-        <div class="criteria-results">
+        <div class="results-list">
             <h3>Unique Criteria Results</h3>
             <ul>
                 <li wicket:id="trendsByResult">
-                    <a wicket:id="selectResultLink"><span wicket:id="resultText"></span></a>
-                    <span wicket:id="count"></span>
+                    <a wicket:id="selectResultLink" class=""><span wicket:id="resultText"></span></a>
+                    <span wicket:id="count" class="count"></span>
                 </li>
             </ul>
         </div>
         <div wicket:id="chart"></div>
     </div>
-
 </wicket:extend>

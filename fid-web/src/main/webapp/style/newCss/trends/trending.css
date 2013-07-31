@@ -1,4 +1,101 @@
-div.chartTooltip {
+/* OVERRIDES 
+-------------------------------------*/
+body {
+    color: #666;
+}
+#page {
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+    padding: 24px;
+}
+#page * {
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+#contentHeader h1 {
+    font-size: 26px;
+    font-weight: normal;
+}
+.options {
+    border-color: #ccc;
+}
+
+/* FORM - DROPDOWN OPTIONS
+-------------------------------------*/
+.date-picker {
+    width: 200px;
+}
+.trend-options {
+    border-bottom: 1px solid #999;
+    padding: 10px 0 15px;
+}
+a.mattButton {
+    float: none;
+}
+
+/* RESULTS 
+-------------------------------------*/
+.results-container {
+    overflow: hidden;
+}
+h2, h3 {
+    font-weight: normal;
+}
+
+/* no results message */
+p {
+    margin: 10px 0;
+}
+h2 {
+    font-size: 18px;
+    padding: 15px 0 8px;
+}
+    h2 span {
+        color: #999;
+    }
+
+/* unique criteria list */
+.results-list{
+    background: #f3f3f3;
+    width: 225px;
+    height: 400px;
+    float: left;
+    padding: 20px 12px;
+    border: 1px solid #ccc;
+}
+h3 {
+    color: #666;
+    font-size: 16px;
+    margin-left: 10px;
+}
+.results-list ul {
+    margin-top: 10px;
+}
+    .results-list ul li {
+        padding: 6px 10px;
+        border-radius: 6px;
+    }
+    .results-list ul li a {
+        text-decoration: none;
+        font-size: 12px;
+        color: #666;
+    }
+    .results-list .active {
+        background: #dde2e8;
+    }
+    .results-list .count {
+        float: right;
+    }
+
+/* bar chart */
+.flotChart {
+    height: 400px;
+    width: 725px;
+    float: left;
+}
+.chartTooltip {
     position: absolute;
     display: none;
     border: 2px solid #777777;
@@ -7,23 +104,4 @@ div.chartTooltip {
     background-color: #fff;
     opacity: 0.80;
     z-index: 5;
-}
-
-.flotChart {
-    height:400px;
-    width:950px;
-}
-.date-picker {
-	width: 200px;
-}
-a.mattButton {
-	float: none;
-}
-p {
-    margin: 10px 0;
-}
-
-.trend-options {
-border-bottom: 1px solid gray;
-padding: 10px 0 15px;
 }
