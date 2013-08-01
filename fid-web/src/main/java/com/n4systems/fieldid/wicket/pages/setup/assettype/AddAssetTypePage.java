@@ -39,6 +39,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.ValidationError;
 import org.apache.wicket.validation.validator.AbstractValidator;
+import org.apache.wicket.validation.validator.UrlValidator;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -166,7 +167,10 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             moreInfo.add(attachmentsPanel = new AssetTypeAttachmentsPanel("attachments", model));
             moreInfo.add(new TextArea<String>("warnings", new PropertyModel<String>(model, "warnings")));
             moreInfo.add(new TextArea<String>("instructions", new PropertyModel<String>(model, "instructions")));
-            moreInfo.add(new TextField<String>("cautionUrl", new PropertyModel<String>(model, "cautionUrl")));
+
+            TextField cautionUrl;
+            moreInfo.add(cautionUrl = new TextField<String>("cautionUrl", new PropertyModel<String>(model, "cautionUrl")));
+            cautionUrl.add(new UrlValidator());
             moreInfo.setOutputMarkupPlaceholderTag(true);
             moreInfo.setVisible(false);
 
