@@ -99,6 +99,7 @@ public class AssetTypeAttributePanel extends Panel {
                 final RequiredTextField selectOptions;
                 CheckBox dateOption;
                 FidDropDownChoice<UnitOfMeasure> unitOfMeasureChoice;
+                WebMarkupContainer textOption;
                 CheckBox required;
 
                 item.add(name = new RequiredTextField<String>("attributeName", new PropertyModel<String>(infoField, "name")));
@@ -127,6 +128,9 @@ public class AssetTypeAttributePanel extends Panel {
                     }
                 });
                 typeSelect.setEnabled(!isRetired);
+
+                item.add(textOption = new WebMarkupContainer("textOption"));
+                textOption.setOutputMarkupPlaceholderTag(true);
 
                 item.add(selectOptions = new RequiredTextField<String>("selectOptions", options));
                 selectOptions.add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -188,18 +192,27 @@ public class AssetTypeAttributePanel extends Panel {
                     selectOptions.setVisible(true);
                     dateOption.setVisible(false);
                     unitOfMeasureChoice.setVisible(false);
+                    textOption.setVisible(false);
                 } else if (type != null && (type.equals(InfoFieldBean.InfoFieldType.DateField.getName()))) {
                     selectOptions.setVisible(false);
                     dateOption.setVisible(true);
                     unitOfMeasureChoice.setVisible(false);
+                    textOption.setVisible(false);
                 } else if (type != null && (type.equals(InfoFieldBean.InfoFieldType.UnitOfMeasure.getName()))) {
                     selectOptions.setVisible(false);
                     dateOption.setVisible(false);
                     unitOfMeasureChoice.setVisible(true);
-                } else {
+                    textOption.setVisible(false);
+                } else if (type != null && (type.equals(InfoFieldBean.InfoFieldType.TextField.getName()))) {
                     selectOptions.setVisible(false);
                     dateOption.setVisible(false);
                     unitOfMeasureChoice.setVisible(false);
+                    textOption.setVisible(true);
+                }else {
+                    selectOptions.setVisible(false);
+                    dateOption.setVisible(false);
+                    unitOfMeasureChoice.setVisible(false);
+                    textOption.setVisible(false);
                 }
 
                 item.add(required = new CheckBox("required", new PropertyModel<Boolean>(infoField, "required")));
