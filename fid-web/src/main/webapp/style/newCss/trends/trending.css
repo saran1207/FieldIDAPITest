@@ -47,7 +47,7 @@ body {
 /* FORM - DROPDOWN OPTIONS
 -------------------------------------*/
 .trend-options {
-    border-bottom: 1px solid #999;
+    border-bottom: 1px solid #ccc;
     padding: 10px 0 15px;
 }
 .date-picker {
