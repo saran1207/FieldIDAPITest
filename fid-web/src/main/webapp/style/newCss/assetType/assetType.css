@@ -105,6 +105,18 @@ legend {
     font-size: 17px;
     padding-top: 14px;
 }
+input::-webkit-input-placeholder { 
+	font-style: normal; 
+}
+input:-moz-placeholder {
+	font-style: normal; 
+}
+input::-moz-placeholder { /* Firefox 19+ */
+	font-style: normal; 
+}
+input:-ms-input-placeholder {
+	font-style: normal; 
+}
 
 /* CHOSEN PLUGIN OVERRIDES */
 .chzn-container {
@@ -280,6 +292,7 @@ legend {
 .more-info legend a {
 	color: #000;
 	text-decoration: none;
+	*width: 200px;
 }
 .more-info .entypo-icons {
 	margin-bottom: -5px;
@@ -302,19 +315,4 @@ legend {
 .other-files textarea {
 	margin: 4px 0 10px;
 }
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
 
