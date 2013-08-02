@@ -118,22 +118,20 @@
 
                 <div>
 
+
                     <wicket:enclosure>
                         <!-- select options -->
                         <div class="select-options">
-                            <input type="checkbox" wicket:id="groupselector">
+                            <input type="checkbox" class="select-input" wicket:id="groupselector">
                             <label><wicket:message key="label.select_assets_all"/></label>
                             <p><span><wicket:message key="label.select_assets"/></span></p>
-
-
-
                         </div>
                     </wicket:enclosure>
 
 
                     <b><span wicket:id="currentlySelectedItems"></span></b> of <b><span wicket:id="totalAvailableItems"></span></b> items in the results are selected. &nbsp;
-                    <a wicket:id="selectAllLink">Select all <span wicket:id="totalAvailableItems"></span> items</a> <i>or</i>
-                    <a wicket:id="clearSelectionLink">Clear selection</a>
+                    <a wicket:id="selectAllLink" class="select-input">Select all <span wicket:id="totalAvailableItems"></span> items</a> <i>or</i>
+                    <a wicket:id="clearSelectionLink" class="select-input">Clear selection</a>
 
                     <!-- individual results item -->
                     <div wicket:id="results" class="asset-item">
@@ -155,19 +153,18 @@
     </div><!-- /.search-container -->
 
     <script>
+        var lockSearchPage = function() {
+            $('input.select-input').attr('disabled','disabled');
+            $('a.select-input').css('pointer-events','none').css('cursor','default').attr('disabled','disabled');
+        }
+
+        var unlockSearchPage = function() {
+            $('input.select-input').attr('disabled',null);
+            // note : pointer-events doesn't work on ie.
+            $('a.select-input').css('pointer-events','auto').css('cursor','pointer').attr('disabled',null);
+        }
+
         $(function() {
-
-            $(".search-results input[type=checkbox]").live("click", function() {
-                // Highlights selected result(s)
-//                $(this).parent().next().toggleClass("selected");
-
-                // Show/Hide mass actions button
-//                if ($(".search-results input[type=checkbox]").is(':checked')) {
-//                    $(".actions").addClass("show");
-//                } else {
-//                    $(".actions").removeClass("show");
-//                }
-            });
 
             // Show/hide syntax help dropdown
             $(".syntax-help .question").live("click",function(){

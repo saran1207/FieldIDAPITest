@@ -11,7 +11,6 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
-import com.n4systems.fieldid.wicket.util.OneClickOnlyDecorator;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteriaContainer;
 import com.n4systems.services.search.SearchResult;
@@ -56,6 +55,8 @@ import java.util.*;
 public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
     private static final String HIDE_LIST_JS = "$('#%s').hide();";
     private static final String SHOW_LIST_JS = "$('#%s').show();";
+    private static final String DISABLE_INPUTS_JS = "lockSearchPage();";
+    private static final String ENABLE_INPUTS_JS = "unlockSearchPage();";
 
     public static final int ITEMS_PER_PAGE = 10;
 
@@ -79,6 +80,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
     private IndexField idField;
 
     private boolean currentPageSelected = false;
+    private IAjaxCallDecorator lockingDecorator = new PageLockingDecorator();
 
     protected abstract TextSearchDataProvider createDataProvider(IModel<String> searchTextModel);
 
@@ -150,7 +152,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
                     }
 
                     @Override protected IAjaxCallDecorator getAjaxCallDecorator() {
-                        return new OneClickOnlyDecorator();
+                        return lockingDecorator;
                     }
                 });
             }
@@ -171,7 +173,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
                 target.add(listViewContainer, actions, groupSelector);
             }
             @Override protected IAjaxCallDecorator getAjaxCallDecorator() {
-                return new OneClickOnlyDecorator();
+                return lockingDecorator;
             }
         };
         searchResults.add(clearSelectionLink);
@@ -190,7 +192,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
             }
 
             @Override protected IAjaxCallDecorator getAjaxCallDecorator() {
-                return new OneClickOnlyDecorator();
+                return lockingDecorator;
             }
         });
 
@@ -451,4 +453,28 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
     public String getNumSelectedIdsLabel() {
         return String.format("(%d items)", getNumSelectedIds());
     }
+
+
+    class PageLockingDecorator extends AjaxCallDecorator {
+
+        public PageLockingDecorator() {
+            super();
+        }
+
+        @Override
+        public CharSequence decorateOnFailureScript(Component c, CharSequence script) {
+            return ENABLE_INPUTS_JS + script;
+        }
+
+        @Override
+        public CharSequence decorateOnSuccessScript(Component c, CharSequence script) {
+            return ENABLE_INPUTS_JS + script;
+        }
+
+        @Override
+        public CharSequence decorateScript(Component c, CharSequence script) {
+            return DISABLE_INPUTS_JS + script;
+        }
+    }
+
 }
