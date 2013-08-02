@@ -258,6 +258,11 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
         @Override
         protected void onSubmit() {
+            // SUGGESTION DD : put this in a form validator instead of onSubmit.
+            if (event.getObject().getOwner()==null) {
+                error(getString("error.event_owner_null"));
+                return;
+            }
             if (persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getObject().getAsset().getId()).isArchived()) {
                 error(getString("error.asset_has_been_archived"));
                 return;
