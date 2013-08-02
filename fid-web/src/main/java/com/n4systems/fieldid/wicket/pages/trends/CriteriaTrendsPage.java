@@ -14,12 +14,13 @@ import com.n4systems.fieldid.wicket.util.JavascriptPackageResourceIE;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.EventType;
 import com.n4systems.model.utils.DateRange;
+import com.n4systems.services.reporting.CriteriaTrendsResultCountByCriteriaRecord;
 import com.n4systems.services.reporting.CriteriaTrendsResultCountRecord;
 import com.n4systems.util.chart.*;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -106,16 +107,15 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
                         return item.getModelObject().getResultText() != null && item.getModelObject().getResultText().equals(selectedResultText);
                     }
                 });
-                AjaxLink selectResultLink = new AjaxLink("selectResultLink") {
+                item.add(new AjaxEventBehavior("onclick") {
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
+                    protected void onEvent(AjaxRequestTarget target) {
                         selectedResultText = item.getModelObject().getResultText();
                         trendsByResultContainer.addOrReplace(createChart());
                         target.add(trendsByResultContainer);
                     }
-                };
-                item.add(selectResultLink);
-                selectResultLink.add(new Label("resultText", ProxyModel.of(item.getModel(), on(CriteriaTrendsResultCountRecord.class).getResultText())));
+                });
+                item.add(new Label("resultText", ProxyModel.of(item.getModel(), on(CriteriaTrendsResultCountRecord.class).getResultText())));
                 item.add(new Label("count", ProxyModel.of(item.getModel(), on(CriteriaTrendsResultCountRecord.class).getCount())));
             }
         });
@@ -131,7 +131,9 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
         return new LoadableDetachableModel<ChartData<String>>() {
             @Override
             protected ChartData<String> load() {
-                ChartSeries<String> series = new ChartSeries<String>(criteriaTrendsService.findCriteriaTrendsByCriteria(eventType, new DateRange(rangeType), selectedResultText));
+                final List<CriteriaTrendsResultCountByCriteriaRecord> criteriaTrendsByCriteria = criteriaTrendsService.findCriteriaTrendsByCriteria(eventType, new DateRange(rangeType), selectedResultText);
+                ChartSeries<String> series = new ChartSeries<String>(null, null, criteriaTrendsByCriteria, new CriteriaTrendsSortedByCountChartMap(criteriaTrendsByCriteria));
+//                ChartSeries<String> series2 = new ChartSeries<String>(criteriaTrendsByCriteria);
                 return new ChartData<String>(new CriteriaTrendsChartManager(), series);
             }
         };

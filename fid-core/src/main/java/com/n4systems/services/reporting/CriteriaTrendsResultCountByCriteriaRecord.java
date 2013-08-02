@@ -2,7 +2,7 @@ package com.n4systems.services.reporting;
 
 import com.n4systems.util.chart.StringChartable;
 
-public class CriteriaTrendsResultCountByCriteriaRecord extends StringChartable {
+public class CriteriaTrendsResultCountByCriteriaRecord extends StringChartable implements Comparable<CriteriaTrendsResultCountByCriteriaRecord> {
 
     private String criteriaName;
     private Long count;
@@ -37,5 +37,10 @@ public class CriteriaTrendsResultCountByCriteriaRecord extends StringChartable {
 
     public void setResultText(String resultText) {
         this.resultText = resultText;
+    }
+
+    @Override
+    public int compareTo(CriteriaTrendsResultCountByCriteriaRecord o) {
+        return count.compareTo(o.count);
     }
 }

@@ -1,7 +1,7 @@
 package com.n4systems.util.chart;
 
-import com.n4systems.util.chart.FlotOptions.Lines;
 import com.n4systems.util.chart.FlotOptions.Bars;
+import com.n4systems.util.chart.FlotOptions.Lines;
 import org.apache.log4j.Logger;
 
 import java.io.Serializable;
@@ -23,11 +23,15 @@ public class ChartSeries<X extends Comparable> implements Serializable {
     private Bars bars = new Bars();
 	
 	public ChartSeries(Object id, String label, List<? extends Chartable<X>> chartables) {
-        this.data = createChartableMap();
-		this.id = id;
-		this.setLabel(label);
-		add(chartables);
+        this(id,label,chartables, new ChartableMap<X>());
 	}
+
+    public ChartSeries(Object id, String label, List<? extends Chartable<X>> chartables, ChartableMap<X> chartableMap) {
+        this.data = chartableMap;
+        this.id = id;
+        this.setLabel(label);
+        add(chartables);
+    }
 
     public ChartSeries(List<? extends Chartable<X>> data) {
 		this(null, null, data);
@@ -36,11 +40,6 @@ public class ChartSeries<X extends Comparable> implements Serializable {
 	public ChartSeries(String label, List<? extends Chartable<X>> data) {
 		this(null, label, data);
 	}
-
-    protected ChartableMap<X> createChartableMap() {
-        // override if you want to add comparator or different flavour of map.
-        return new ChartableMap<X>();
-    }
 
 	/*pkg protected */ChartSeries<X> add(List<? extends Chartable<X>> data) {
 		for (Chartable<X> chartable:data) {

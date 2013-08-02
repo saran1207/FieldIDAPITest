@@ -1,4 +1,4 @@
-/* OVERRIDES 
+/* OVERRIDES
 -------------------------------------*/
 body {
     color: #666;
@@ -96,11 +96,11 @@ h3 {
     .results-list ul li {
         padding: 6px 10px;
         border-radius: 6px;
-    }
-    .results-list ul li a {
-        text-decoration: none;
         font-size: 12px;
         color: #666;
+    }
+    .results-list ul li:hover {
+        cursor:pointer;
     }
     .results-list .active {
         background: #dde2e8;
@@ -119,9 +119,10 @@ h3 {
     position: absolute;
     display: none;
     padding: 6px 10px 10px;
-    background-color: #68717e;
+    background-color: #7089ad;
     z-index: 5;
     max-width: 185px;
+    margin-left:8px;
 }
 .chartTooltip .count {
     color: #fff;
