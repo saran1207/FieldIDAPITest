@@ -25,6 +25,7 @@ import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.fieldid.utils.StrutsListHelper;
@@ -42,6 +43,7 @@ import com.n4systems.model.eventbook.EventBookSaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
@@ -56,6 +58,7 @@ import com.opensymphony.xwork2.validator.annotations.Validations;
 import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.util.*;
@@ -119,6 +122,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
 	private boolean isEditing;
     private PersistenceService persistenceService;
+
+    @Autowired
+    private UserService userService;
 
     public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
 			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService, PersistenceService persistenceService) {
@@ -1115,4 +1121,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
         return persistenceManager.find(query);
     }
 
+    public List<UserGroup> getUserGroups() {
+        return userGroupService.getVisibleActiveUserGroups();
+    }
+
+    public List<User> getAssignees() {
+        return userService.getExaminers();
+    }
 }

@@ -133,7 +133,6 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
             protected ChartData<String> load() {
                 final List<CriteriaTrendsResultCountByCriteriaRecord> criteriaTrendsByCriteria = criteriaTrendsService.findCriteriaTrendsByCriteria(eventType, new DateRange(rangeType), selectedResultText);
                 ChartSeries<String> series = new ChartSeries<String>(null, null, criteriaTrendsByCriteria, new CriteriaTrendsSortedByCountChartMap(criteriaTrendsByCriteria));
-//                ChartSeries<String> series2 = new ChartSeries<String>(criteriaTrendsByCriteria);
                 return new ChartData<String>(new CriteriaTrendsChartManager(), series);
             }
         };
