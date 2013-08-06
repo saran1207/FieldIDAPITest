@@ -404,11 +404,12 @@ public class EventService extends FieldIdPersistenceService {
         builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
 
 		PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
-		String maxDateSelect = String.format("SELECT MAX(iSub.completedDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId GROUP BY iSub.type", Event.class.getName());
+		String maxDateSelect = String.format("SELECT MAX(iSub.completedDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.type.state = :iSubState AND iSub.asset.id = :iSubAssetId AND iSub.workflowState = :iSubWorkflowState GROUP BY iSub.type", Event.class.getName());
 		latestClause.setClause(String.format("i.completedDate IN (%s)", maxDateSelect));
 		latestClause.getParams().put("iSubAssetId", assetId);
 		latestClause.getParams().put("iSubState", EntityState.ACTIVE);
-		builder.addWhere(latestClause);
+        latestClause.getParams().put("iSubWorkflowState", WorkflowState.COMPLETED);
+        builder.addWhere(latestClause);
 
         return persistenceService.findAll(builder);
 	}
