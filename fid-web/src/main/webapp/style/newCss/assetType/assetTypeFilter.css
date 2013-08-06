@@ -14,19 +14,30 @@
     display: inline-block;
     margin-bottom: 10px;
 }
+.asset-filter-panel form {
+    overflow: hidden;
+}
 .asset-filter-panel label {
     font-weight: bold;
     margin-right: 10px;
+    float: left;
+    line-height: 24px;
 }
 .asset-filter-panel input[type="text"] {
     border: 1px solid #9C9C9C;
     padding: 4px;
     width: 250px;
     margin-right: 10px;
+    float: left;
+}
+input[type=submit] {
+    padding: 0 4px;
 }
 .asset-filter-panel .chzn-container {
     margin-right: 15px;
+    float: left;
 }
 .asset-filter-panel .btn-link {
     margin-left: 5px;
+    line-height: 24px;
 }
