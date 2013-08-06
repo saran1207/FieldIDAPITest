@@ -138,7 +138,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
             PrimaryOrg primaryOrgForTenant = orgService.getPrimaryOrgForTenant(getTenantId());
 
-            IModel<AssetType> assetTypeModel = ProxyModel.of(assetModel, on(Asset.class).getType());
+            final IModel<AssetType> assetTypeModel = ProxyModel.of(assetModel, on(Asset.class).getType());
             GroupedAssetTypesForTenantModel allAssetTypesModel = new GroupedAssetTypesForTenantModel(Model.of((AssetTypeGroup) null));
             if (assetTypeModel.getObject() == null) {
                 assetTypeModel.setObject(allAssetTypesModel.getObject().get(0));
@@ -268,7 +268,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                 protected void onUpdate(AjaxRequestTarget target) {
                     autoSchedule(assetModel);
                     attributesEditPanel.pouplateInfoOptionsFromTypeAndHistory();
-                    target.add(identifierLabel, eventSchedulesPanel, attributesEditPanel);
+                    target.add(identifierLabel, eventSchedulesPanel, attributesEditPanel, actionsContainer);
                 }
             });
 
@@ -308,7 +308,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
                 @Override
                 public boolean isVisible() {
-                    return !multiAssetConfig.isConfigurationComplete();
+                    return !multiAssetConfig.isConfigurationComplete() && assetTypeModel.getObject().isHasManufactureCertificate();
                 }
             });
 
