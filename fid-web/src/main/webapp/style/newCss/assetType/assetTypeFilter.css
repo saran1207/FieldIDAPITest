@@ -1,0 +1,32 @@
+.asset-filter-panel {
+    background-color: #EEEEEE;
+    padding: 10px;
+    border-top: 1px solid #CCCCCC;
+    border-bottom: 1px solid #CCCCCC;
+}
+.asset-filter-panel h2 {
+    padding: 0;
+    display: inline-block;
+    margin-right: 7px;
+}
+.asset-filter-panel p {
+    color: #999;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+.asset-filter-panel label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+.asset-filter-panel input[type="text"] {
+    border: 1px solid #9C9C9C;
+    padding: 4px;
+    width: 250px;
+    margin-right: 10px;
+}
+.asset-filter-panel .chzn-container {
+    margin-right: 15px;
+}
+.asset-filter-panel .btn-link {
+    margin-left: 5px;
+}

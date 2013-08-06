@@ -4,16 +4,15 @@
       xml:lang="en"
       lang="en">
 <wicket:panel>
-    <div class="listFilterHeader">
-        <h2><wicket:message key="label.filter"/></h2>
-        &nbsp;
-        <span class="egColor"><wicket:message key="message.filter_asset_types"/></span>
-    </div>
+
+    <h2><wicket:message key="label.filter"/></h2>
+    <p><wicket:message key="message.filter_asset_types"/></p>
     <form wicket:id="form">
-        <label><wicket:message key="label.name"/><input type="text" wicket:id="name"/></label>
-        <label><wicket:message key="label.asset_type_group"/><select wicket:id="group"/></label>
-        <a wicket:id="submit"><wicket:message key="label.submit"/></a>
-        <a wicket:id="clear"><wicket:message key="label.clear"/></a>
+        <label wicket:for="name"><wicket:message key="label.name"/>:</label><input type="text" wicket:id="name"/>
+        <label wicket:for="group"><wicket:message key="label.asset_type_group"/>:</label><select wicket:id="group"/>
+        <input type="submit" wicket:id="submit"> <!--<wicket:message key="label.submit"/></a>-->
+        <a wicket:id="clear" class="btn-link"><wicket:message key="label.clear"/></a>
     </form>
+
 </wicket:panel>
 </html>

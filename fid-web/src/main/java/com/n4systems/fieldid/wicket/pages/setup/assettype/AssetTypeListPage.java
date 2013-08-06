@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.AssetTypeGroup;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -58,5 +59,9 @@ public class AssetTypeListPage extends FieldIDFrontEndPage {
         BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, AssetsAndEventsPage.class);
         pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
         return pageLink;
+    }
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/newCss/assetType/assetTypeFilter.css");
     }
 }
