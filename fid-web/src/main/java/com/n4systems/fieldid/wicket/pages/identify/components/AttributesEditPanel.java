@@ -102,7 +102,7 @@ public class AttributesEditPanel extends Panel {
 
         // If our add asset history is of a different asset type, we have no "existing options" to populate
         List<InfoOptionBean> existingOptions = new ArrayList<InfoOptionBean>();
-        if (addAssetHistory.getAssetType().equals(assetTypeModel.getObject())) {
+        if (addAssetHistory!=null && addAssetHistory.getAssetType().equals(assetTypeModel.getObject())) {
             existingOptions = addAssetHistory.getInfoOptions();
         }
 
