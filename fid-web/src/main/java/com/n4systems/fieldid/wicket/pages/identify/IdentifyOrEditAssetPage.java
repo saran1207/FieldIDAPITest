@@ -287,6 +287,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             });
 
             actionsContainer.add(new Button("saveAndStartEventButton") {
+                { setVisible(getSessionUser().hasAccess("createevent")); }
                 @Override
                 public void onSubmit() {
                     performSingleOrMultiSave(assetModel);
