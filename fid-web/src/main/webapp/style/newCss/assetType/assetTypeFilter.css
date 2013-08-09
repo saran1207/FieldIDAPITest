@@ -14,9 +14,6 @@
     display: inline-block;
     margin-bottom: 10px;
 }
-.asset-filter-panel form {
-    overflow: hidden;
-}
 .asset-filter-panel label {
     font-weight: bold;
     margin-right: 10px;
