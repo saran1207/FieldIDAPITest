@@ -30,7 +30,7 @@
 		<div class="contentIndentation prominent">
 			<p><@s.text name="label.identify_your_first_asset.description"/></p>
 			<br/>
-			<button onclick="return redirect('<@s.url namespace="/" action="assetAdd"/>');"><@s.text name="label.identify_your_first_asset_now"/></button>
+			<button onclick="return redirect('/fieldid/w/identify');"><@s.text name="label.identify_your_first_asset_now"/></button>
 		</div>
 	</div>
 		<div class="contentIndentation prominent">
