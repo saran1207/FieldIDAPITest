@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.identify.components;
 
+import com.n4systems.fieldid.service.asset.AssetCodeMappingService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.asset.AutoAttributeService;
 import com.n4systems.fieldid.wicket.components.measure.UnitOfMeasureEditor;
@@ -11,6 +12,7 @@ import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeDefinition;
+import com.n4systems.model.LineItem;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -34,6 +36,7 @@ public class AttributesEditPanel extends Panel {
 
     @SpringBean private AssetService assetService;
     @SpringBean private AutoAttributeService autoAttributeService;
+    @SpringBean private AssetCodeMappingService assetCodeMappingService;
 
     private IModel<AssetType> assetTypeModel;
     List<AttributeNameValuePair> infoOptions;
@@ -43,7 +46,7 @@ public class AttributesEditPanel extends Panel {
         this.assetTypeModel = assetTypeModel;
         setOutputMarkupPlaceholderTag(true);
 
-        if (assetModel.getObject().isNew()) {
+        if (assetModel.getObject().isNew() && !hasAssetCodeMapping(assetModel.getObject().getShopOrder())) {
             pouplateInfoOptionsFromTypeAndHistory();
         } else {
             populateInfoOptionsFromExistingValues(assetModel.getObject());
@@ -91,6 +94,12 @@ public class AttributesEditPanel extends Panel {
                 }
             }
         });
+    }
+
+    private boolean hasAssetCodeMapping(LineItem shopOrder) {
+        if (shopOrder == null)
+            return false;
+        return assetCodeMappingService.hasAssetCodeMapping(shopOrder.getAssetCode());
     }
 
     private void populateInfoOptionsFromExistingValues(Asset asset) {

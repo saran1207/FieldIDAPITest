@@ -42,6 +42,14 @@ public class AssetCodeMappingService extends FieldIdPersistenceService {
         return assetMapping;
     }
 
+    @Transactional
+    public Boolean hasAssetCodeMapping(String assetCode) {
+        QueryBuilder<AssetCodeMapping> query = createTenantSecurityBuilder(AssetCodeMapping.class);
+        query.addSimpleWhere("assetCode", assetCode);
+
+        return persistenceService.exists(query);
+    }
+
     private AssetCodeMapping getDefaultMapping() {
         AssetCodeMapping defaultMapping = new AssetCodeMapping();
         defaultMapping.setAssetInfo(defaultAssetType());
