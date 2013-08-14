@@ -236,8 +236,9 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                     target.add(eventSchedulesPanel);
                 }
             });
-
-            add(new TextField<String>("purchaseOrder", ProxyModel.of(assetModel, on(Asset.class).getPurchaseOrder())));
+            TextField purchaseOrder;
+            add(purchaseOrder = new TextField<String>("purchaseOrder", ProxyModel.of(assetModel, on(Asset.class).getPurchaseOrder())));
+            purchaseOrder.setVisible(primaryOrgForTenant.hasExtendedFeature(ExtendedFeature.Integration) || primaryOrgForTenant.hasExtendedFeature(ExtendedFeature.OrderDetails));
 
             WebMarkupContainer nonIntegrationOrderContainer = new WebMarkupContainer("nonIntegrationOrderNumberContainer");
             add(nonIntegrationOrderContainer);
