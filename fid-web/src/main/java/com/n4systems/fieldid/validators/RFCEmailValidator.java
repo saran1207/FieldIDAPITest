@@ -15,7 +15,7 @@ public class RFCEmailValidator extends FieldValidatorSupport {
             // do nothing pass the null to the validator.  this way Longs can also use this validator.
         }
 
-        if(!EmailValidator.EMAIL_REGEX.matcher(value).matches()) {
+        if(!EmailValidator.EMAIL_REGEX.matcher(value).matches() && !value.isEmpty()) {
             addFieldError(fieldName, object);
             return;
         }
