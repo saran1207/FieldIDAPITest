@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.components.IEventBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.location.LocationPicker;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.PublishedStateChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
@@ -162,20 +162,19 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 
             final CheckBox ownerCheck = new CheckBox("ownerCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[owner]"));
             ownerCheck.setOutputMarkupId(true);
+            add(ownerCheck);
+
             final PropertyModel<BaseOrg> orgModel = new PropertyModel<BaseOrg>(massUpdateAssetModel, "asset.owner");
-            OrgPicker ownerPicker = new OrgPicker("owner", orgModel) {
-                @Override
-                protected void onPickerClosed(AjaxRequestTarget target) {
+            add(new OrgLocationPicker("owner", orgModel) {
+                @Override protected void onChanged(AjaxRequestTarget target) {
                     IModel<Boolean> model = (IModel<Boolean>) ownerCheck.getDefaultModel();
                     clearAllCheckboxes();
                     model.setObject(true);
-                    location.setOwner(orgModel.getObject());
+                    location.setOwner(getOwner());
                     target.add(ownerCheck,locationCheck,location);
                 }
-            };
-            add(ownerCheck);
-            add(ownerPicker);
-			
+            }.withAutoUpdate());
+
 			CheckBox identifiedCheck = new CheckBox("identifiedCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[identified]"));
 			DateTimePicker identified = new DateTimePicker("identified", new PropertyModel<Date>(massUpdateAssetModel, "asset.identified")).withNoAllDayCheckbox();
 			identified.getDateTextField().add(createCheckOnChangeEvent(identifiedCheck));			

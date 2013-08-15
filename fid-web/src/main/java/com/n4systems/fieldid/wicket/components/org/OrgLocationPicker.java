@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.org.OrgLocationTree;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.wicket.behavior.FormComponentPanelUpdatingBehavior;
 import com.n4systems.fieldid.wicket.components.tree.JsonTreeNode;
 import com.n4systems.fieldid.wicket.components.tree.Tree;
 import com.n4systems.model.location.PredefinedLocation;
@@ -11,6 +12,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -24,7 +26,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.List;
 import java.util.Set;
 
-public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponentPanel<T> {
+public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
     private @SpringBean OrgService orgService;
     private @SpringBean PersistenceService persistenceService;
@@ -38,18 +40,23 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
     private boolean includeLocations = false;
     private String entityId;
     private String entityType;
+    private final OrgLocationModel model;
 
+    public OrgLocationPicker(String id, IModel<BaseOrg> orgModel) {
+        this(id,new OrgLocationModel(orgModel,null));
+    }
 
-    public OrgLocationPicker(String id, IModel<T> orgModel) {
-        super(id,orgModel);
-        T entity = orgModel.getObject();
+    public OrgLocationPicker(String id, OrgLocationModel model) {
+        super(id,model);
+        this.model = model;
+        EntityWithTenant entity = model.getObject();
         if (entity!=null) {
             entityId = entity.getId() + "";
             entityType = OrgLocationTree.NodeType.fromClass(entity.getClass()).name();
             if (entity instanceof BaseOrg) {
                 input = ((BaseOrg) entity).getName();
             } else if (entity instanceof PredefinedLocation) {
-                input = ((PredefinedLocation)entity).getName();
+                input = ((PredefinedLocation)entity).getFullName();
             }
         }
 
@@ -83,13 +90,24 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
         return OrgLocationTree.NodeType.valueOf(type);
     }
 
-    // this feature isn't totally finished yet.  the service stuff is 90% but the storing in the model part isn't.
-    // need to beef up the convertInput method to fetch the proper entity. also need to have a model that contains an Org AND/OR Location in it.
-    @Deprecated
     public OrgLocationPicker withLocations() {
         includeLocations = true;
         return this;
     }
+
+    public OrgLocationPicker withAutoUpdate() {
+        // update model when change occurs.
+        add(new FormComponentPanelUpdatingBehavior("onchange") {
+            @Override protected void onUpdate(AjaxRequestTarget target) {
+                OrgLocationPicker.this.onChanged(target);
+            }
+        });
+        return this;
+    }
+
+    protected void onError(AjaxRequestTarget target, RuntimeException e) { }
+
+    protected void onChanged(AjaxRequestTarget target) { }
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -132,12 +150,12 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
         jsonNode.setChildren(nodes);
         if (Boolean.TRUE.equals(node.matches())) {
             jsonNode.addAttribute("class", "match");
-            setParentsToOpen(parent);
+            openParents(parent);
         }
         return jsonNode;
     }
 
-    private void setParentsToOpen(JsonTreeNode parent) {
+    private void openParents(JsonTreeNode parent) {
         while (parent!=null) {
             parent.setState("open");
             parent = parent.getParent();
@@ -146,19 +164,18 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
 
     @Override
     protected void convertInput() {
-        // load proper entity...
-        T entity = null;
+        EntityWithTenant entity = null;
         String rawInput = _type.getRawInput();
         if (!StringUtils.isBlank(rawInput)) {
             OrgLocationTree.NodeType type = OrgLocationTree.NodeType.valueOf(rawInput);
             switch (type) {
                 case LOCATION:
-                    entity = (T) persistenceService.findById(BaseOrg.class,  getEntityIdAsLong());
+                    entity = persistenceService.findById(PredefinedLocation.class,  getEntityIdAsLong());
                     break;
                 case INTERNAL_ORG:
                 case CUSTOMER_ORG:
                 case DIVISION_ORG:
-                    entity = (T) persistenceService.findById(BaseOrg.class,  getEntityIdAsLong());
+                    entity = persistenceService.findById(BaseOrg.class,  getEntityIdAsLong());
                     break;
                 case VOID:
                     entity = null;
@@ -181,5 +198,9 @@ public class OrgLocationPicker<T extends EntityWithTenant> extends FormComponent
 
     public String getInput() {
         return input;
+    }
+
+    public BaseOrg getOwner() {
+        return model.getOrg();
     }
 }

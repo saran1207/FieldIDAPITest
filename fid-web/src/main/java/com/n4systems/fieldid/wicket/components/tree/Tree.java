@@ -45,12 +45,10 @@ public abstract class Tree extends Panel {
                 List<JsonTreeNode> data = null;
                 if (!params.getParameterValue("nodeId").isEmpty()) {
                     long nodeId = params.getParameterValue("nodeId").toLong();
-                    String type = params.getParameterValue("type").toString();
-//                    System.out.println("getting children for " + type + " : " + nodeId);
+                    String type = params.getParameterValue("nodeType").toString();
                     data = getChildNodes(nodeId, type);
                 } else {
                     search = params.getParameterValue("search").toString();
-//                    System.out.println("searching for " + search);
                     data = getNodes(search);
                 }
                 TextRequestHandler handler = new TextRequestHandler("application/json","UTF-8", convertToJson(data));

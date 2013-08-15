@@ -24,7 +24,7 @@ public class ActionsConfigPanel extends OrgDateWidgetConfigPanel<ActionsWidgetCo
 
     @Override
     protected Component createOrgPicker(String id, IModel<ActionsWidgetConfiguration> configModel) {
-        return new OrgLocationPicker<BaseOrg>(id, new PropertyModel<BaseOrg>(configModel, "org"));
+        return new OrgLocationPicker(id, new PropertyModel<BaseOrg>(configModel, "org"));
     }
 }
 

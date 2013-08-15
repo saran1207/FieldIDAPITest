@@ -153,9 +153,6 @@ public class OrgService extends FieldIdPersistenceService {
         }
     }
 
-    // TODO DD : make this @Cacheable with user's org being key.
-    // something like @Cacheable(value="orgs", key="securityContext.user.owner")
-    // in order to do this, refactor the "findAll" parts out into a cacheable method in another spring bean.  (wish we had DAO layer here for this).
     public OrgLocationTree getOrgLocationTree(String search) {
         OrgLocationTree result = getOrgTree(search);
         QueryBuilder locQuery = createUserSecurityBuilder(PredefinedLocation.class);
@@ -193,9 +190,9 @@ public class OrgService extends FieldIdPersistenceService {
                 return new OrgLocationTree(persistenceService.findAll(divisionQuery));
             case DIVISION_ORG:
             case LOCATION:
-                return new OrgLocationTree(); /*no results ever for these cases...no need to search DB */
+                return new OrgLocationTree(); /*no results ever for this case...locations optionally filled in by caller. */
             default:
-            throw new IllegalStateException("illegal type " + type);
+                throw new IllegalStateException("illegal type " + type);
         }
     }
 

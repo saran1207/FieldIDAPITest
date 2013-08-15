@@ -23,7 +23,7 @@ public class WorkConfigPanel extends WidgetConfigPanel<WorkWidgetConfiguration> 
     public WorkConfigPanel(String id, final IModel<WorkWidgetConfiguration> configModel) {
         super(id, configModel);
 
-        addConfigElement(new OrgLocationPicker<BaseOrg>("org", new PropertyModel<BaseOrg>(configModel, "org")));
+        addConfigElement(new OrgLocationPicker("org", new PropertyModel<BaseOrg>(configModel, "org")));
         addConfigElement(new GroupedUserPicker("user", new PropertyModel<User>(configModel, "user"), new GroupedVisibleUsersModel(), false).setNullValid(true));
         addConfigElement(new GroupedAssetTypePicker("assetType", new PropertyModel<AssetType>(configModel, "assetType"), new GroupedAssetTypesForTenantModel(new Model<AssetTypeGroup>()), false).setNullValid(true));
         addConfigElement(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(configModel,"eventType"), new EventTypesForTenantModel(), new EventTypeChoiceRenderer()).setNullValid(true));

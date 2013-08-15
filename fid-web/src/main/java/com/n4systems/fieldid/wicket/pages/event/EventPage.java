@@ -17,7 +17,7 @@ import com.n4systems.fieldid.wicket.components.event.prooftest.ProofTestEditPane
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.fileupload.AttachmentsPanel;
 import com.n4systems.fieldid.wicket.components.location.LocationPicker;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
@@ -146,9 +146,9 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             groupedUserPicker.setNullValid(true);
             groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
-            add(new OrgPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
+            add(new OrgLocationPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
                 @Override
-                protected void onOrgSelected(AjaxRequestTarget target) {
+                protected void onChanged(AjaxRequestTarget target) {
                     doAutoSchedule();
                     target.add(schedulesContainer);
                     BaseOrg selectedOrg = (BaseOrg) getDefaultModel().getObject();
@@ -156,7 +156,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 					newOrExistingEventBook.setOwner(selectedOrg);
 					target.add(newOrExistingEventBook);
                 }
-            });
+            }.withAutoUpdate());
 
             schedulesContainer = new WebMarkupContainer("schedulesContainer");
             schedulesContainer.setOutputMarkupPlaceholderTag(true);

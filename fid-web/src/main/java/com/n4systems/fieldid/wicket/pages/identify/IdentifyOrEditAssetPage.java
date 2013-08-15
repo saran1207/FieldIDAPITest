@@ -17,7 +17,7 @@ import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.feedback.classy.AssetCreatedFeedbackMessage;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
-import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
@@ -220,13 +220,14 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             setChildFormsToMultipart(locationPicker);
             add(locationPicker);
 
-            AutoCompleteOrgPicker ownerPicker = new AutoCompleteOrgPicker("ownerPicker", ProxyModel.of(assetModel, on(Asset.class).getOwner())) {
-                { withAutoUpdate(true); }
-                @Override
-                protected void onUpdate(AjaxRequestTarget target, String hiddenInput, String fieldInput) {
-                    locationPicker.setOwner(getModelObject());
+            OrgLocationPicker ownerPicker = new OrgLocationPicker("ownerPicker", new PropertyModel(assetModel,"owner")) {
+                @Override protected void onChanged(AjaxRequestTarget target) {
+                    locationPicker.setOwner(getOwner());
+                    target.add(locationPicker);
                 }
-            };
+
+                @Override protected void onError(AjaxRequestTarget target, RuntimeException e) { }
+            }.withAutoUpdate();
             add(ownerPicker.setRequired(true).setLabel(new FIDLabelModel("label.owner")));
 
             ownerPicker.add(new FormComponentPanelUpdatingBehavior("onchange") {

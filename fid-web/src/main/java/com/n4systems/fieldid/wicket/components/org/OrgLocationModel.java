@@ -2,11 +2,13 @@ package com.n4systems.fieldid.wicket.components.org;
 
 
 import com.google.common.base.Preconditions;
+import com.n4systems.model.Asset;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.PropertyModel;
 
 public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> {
 
@@ -14,10 +16,14 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
     private IModel<PredefinedLocation> locationModel;
     private EntityWithTenant obj;
 
+    public OrgLocationModel(IModel<Asset> assetModel) {
+        this(new PropertyModel(assetModel,"owner"), new PropertyModel(assetModel,"advancedLocation.predefinedLocation"));
+    }
+
     public OrgLocationModel(IModel<BaseOrg> orgModel, IModel<PredefinedLocation> locationModel) {
         Preconditions.checkNotNull(orgModel,"you must supply valid BaseOrg model");
         this.orgModel = orgModel;
-        this.setLocationModel(locationModel);
+        this.locationModel = locationModel;
         setInitialValue();
     }
 
@@ -30,6 +36,7 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
             setObject(null);
         }
     }
+
     @Override
     public void detach() {
         orgModel.detach();
@@ -54,7 +61,8 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
         return obj;
     }
 
-    @Override public void setObject(EntityWithTenant object) {
+    @Override
+    public void setObject(EntityWithTenant object) {
         this.obj = object;
         PredefinedLocation location = null;
         BaseOrg org = null;
@@ -85,5 +93,13 @@ public class OrgLocationModel extends LoadableDetachableModel<EntityWithTenant> 
 
     public void setLocationModel(IModel<PredefinedLocation> locationModel) {
         this.locationModel = locationModel;
+    }
+
+    public BaseOrg getOrg() {
+        return orgModel.getObject();
+    }
+
+    public PredefinedLocation getPredefinedLocation() {
+        return locationModel!=null ? locationModel.getObject() : null;
     }
 }

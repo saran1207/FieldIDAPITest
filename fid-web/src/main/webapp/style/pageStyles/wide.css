@@ -426,3 +426,24 @@
 	margin-top:7px;
 	margin-bottom:7px;
 }
+
+/*-----overrides for org picker.------*/
+.field.owner .org-location .tree {
+    width:245px;
+    margin-left:-247px;
+    margin-top:-7px;
+}
+
+.field.owner .org-location .entypo-icons.entypo-search {
+    margin-left:-24px;
+}
+
+.field.owner .org-location .text {
+    float:left;
+    width:148px;
+}
+
+.field .location input {
+    width:156px;
+}
+/*------------*/

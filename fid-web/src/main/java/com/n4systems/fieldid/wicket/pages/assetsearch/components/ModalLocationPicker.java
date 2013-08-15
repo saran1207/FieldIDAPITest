@@ -16,8 +16,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.model.StringResourceModel;
 
-@Deprecated // to be replaced by AutoCompleteLocationPicker.
-@SuppressWarnings("serial")
+@Deprecated // to be replaced by OrgLocationPicker
 public class ModalLocationPicker extends Panel {
 
     private FIDModalWindow modal;

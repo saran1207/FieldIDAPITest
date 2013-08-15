@@ -128,7 +128,6 @@ public class OrgLocationTree {
         return rootNode.getChildren();
     }
 
-    // TODO DD : optimize this...
     private void filterIfNeeded() {
         if (filter!=null && isFiltered==false) {
             for (OrgLocationTreeNode node:nodes.values()) {
@@ -140,6 +139,10 @@ public class OrgLocationTree {
             }
         }
         isFiltered = true;
+    }
+
+    public int size() {
+        return nodes.size();
     }
 
     private void includeParents(OrgLocationTreeNode node) {

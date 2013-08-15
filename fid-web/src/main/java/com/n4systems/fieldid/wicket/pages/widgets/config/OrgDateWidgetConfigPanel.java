@@ -26,7 +26,7 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
     }
 
 	protected Component createOrgPicker(String id, final IModel<T> configModel) {
-        return new OrgLocationPicker<BaseOrg>(id, new PropertyModel<BaseOrg>(configModel, "org"));
+        return new OrgLocationPicker(id, new PropertyModel<BaseOrg>(configModel, "org"));
 	}
 
 	protected DropDownChoice<RangeType> createDateRangeSelect() {

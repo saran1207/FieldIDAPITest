@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.model.location.Location;
@@ -22,11 +22,12 @@ public class OwnershipCriteriaPanel extends Panel {
     public OwnershipCriteriaPanel(String id, IModel<?> model) {
         super(id, model);
         PropertyModel<BaseOrg> ownerModel = new PropertyModel<BaseOrg>(getDefaultModel(), "owner");
-        add(new AutoCompleteOrgPicker("owner", ownerModel) {
-            @Override protected void onUpdate(AjaxRequestTarget target, String hiddenInput, String fieldInput) {
-                updateOwner(target, (BaseOrg) getDefaultModelObject());
+
+        add(new OrgLocationPicker("owner", ownerModel) {
+            @Override protected void onChanged(AjaxRequestTarget target) {
+                locationPicker.setOwner(getOwner());
             }
-        }.withAutoUpdate(true).inScrollableContainers("#left-panel .form"));
+        }.withAutoUpdate());
         locationModel = new PropertyModel<Location>(getDefaultModel(), "location");
         add(locationPicker = new ModalLocationPicker("location", locationModel).setOwner(ownerModel.getObject()));
 
@@ -38,10 +39,6 @@ public class OwnershipCriteriaPanel extends Panel {
         assignedUserContainer.setVisible(FieldIDSession.get().getSecurityGuard().isAssignedToEnabled());
         
         add(assignedUserContainer);
-    }
-
-    private void updateOwner(AjaxRequestTarget target, BaseOrg owner) {
-        locationPicker.setOwner(owner);
     }
 
 }

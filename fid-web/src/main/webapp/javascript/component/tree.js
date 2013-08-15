@@ -100,7 +100,7 @@ var treeFactory = (function() {
 							url : function(node) {
 								if (node!=-1) {
 									// search for a particular branch under the specified node.
-									return new String(callback)+'&nodeId='+node.attr('id')+'&type='+node.attr('data');
+									return new String(callback)+'&nodeId='+node.attr('id')+'&nodeType='+node.attr('data');
 								} else {
 									return new String(callback)+'&search='+input;
 								}
@@ -121,6 +121,7 @@ var treeFactory = (function() {
 					$type.val(node.attr('data'));
 					$text.val(getTextExcludingChildren(link).trim());
 					$tree.hide();
+					$('#'+id).change();
 				});
 
 			}
