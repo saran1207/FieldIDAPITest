@@ -23,7 +23,6 @@ import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPri
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
-import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
@@ -48,6 +47,7 @@ import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
+import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.user.AddPersonPage;
 import com.n4systems.fieldid.wicket.pages.user.AddUsageBasedUserPage;
 import com.n4systems.fieldid.wicket.pages.user.EditPersonPage;
@@ -98,6 +98,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/assetTypeForm", AddAssetTypePage.class);
         mountPage("setup/assetTypeEdit", EditAssetTypePage.class);
         mountPage("setup/assetTypeCopy", CopyAssetTypePage.class);
+        mountPage("setup/viewAssetType", ViewAssetTypePage.class);
 
         mountPage("dashboard", DashboardPage.class);
 
