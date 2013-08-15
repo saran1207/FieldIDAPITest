@@ -110,6 +110,20 @@ public class ChartSeries<X extends Comparable> implements Serializable {
 		return sum;
 	}
 
+    public Double maxY() {
+        Double result = 0.0;
+        for (Chartable<X> chartable:data.getChartables()) {
+
+            if (chartable.getY().doubleValue() > result) {
+                result = chartable.getY().doubleValue();
+            }
+
+        }
+        return result;
+    }
+
+
+
 	public void removeAll(List<Chartable<X>> values) {
 		for (Chartable<X> chartable:values) {
 			data.remove(chartable.getX());

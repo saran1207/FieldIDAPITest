@@ -70,7 +70,8 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 		return series;
 	}
 
-	@Override
+
+    @Override
 	public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index, int size, int maxChartSeries) {
 		super.updateOptions(chartSeries, options, index, size, maxChartSeries);
 		updateTimeFormat(chartSeries, options);
@@ -80,7 +81,12 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
             // when daily is selected. This will probably involve refactoring elsewhere too.
 //			updateForDaily(chartSeries, options);
 		}
-		options.tooltipFormat = getTooltipFormat(granularity);
+                //options.yaxis.max = Math.max(1000, options.yaxis.max);
+                Double total = chartSeries.maxY() * .15;
+                Double result = chartSeries.maxY()+ total;
+
+                options.yaxis.max = result.longValue();
+                options.tooltipFormat = getTooltipFormat(granularity);
 	}
 
     @Override
