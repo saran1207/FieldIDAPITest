@@ -21,6 +21,10 @@ public class EventTypeService extends FieldIdPersistenceService {
         return getEventTypesIncludingActions(eventTypeGroupId, null);
     }
 
+    public List<EventType> getAllEventTypesExcludingActions() {
+        return getEventTypesExcludingActions(null, null);
+    }
+
     public List<EventType> getEventTypesExcludingActions(Long eventTypeGroupId, String nameFilter) {
         QueryBuilder<EventType> query = createEventTypeQuery(eventTypeGroupId, nameFilter);
         query.addSimpleWhere("group.action", false);

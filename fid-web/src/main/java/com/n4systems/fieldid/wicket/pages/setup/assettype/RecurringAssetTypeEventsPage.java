@@ -18,6 +18,7 @@ import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.EnumLabelModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.YesOrNoModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
@@ -100,7 +101,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 aNavItem().label("nav.view_all").page(AssetTypeListPage.class).build(),
                 aNavItem().label("nav.view").page("assetType.action").params(uniqueId(assetTypeId)).build(),
                 aNavItem().label("nav.edit").page(EditAssetTypePage.class).params(uniqueId(assetTypeId)).build(),
-                aNavItem().label("nav.event_type_associations").page("selectEventTypes.action").params(param("assetTypeId", assetTypeId)).build(),
+                aNavItem().label("nav.event_type_associations").page(EventTypeAssociationsPage.class).params(PageParametersBuilder.uniqueId(assetTypeId)).build(),
                 aNavItem().label("nav.event_frequencies").page("eventFrequencies.action").params(param("assetTypeId", assetTypeId)).build(),
                 aNavItem().label("label.recurring_events").page(RecurringAssetTypeEventsPage.class).params(uniqueId(assetTypeId)).build(),
                 aNavItem().label("label.subassets").page("assetTypeConfiguration.action").params(uniqueId(assetTypeId)).build(),
