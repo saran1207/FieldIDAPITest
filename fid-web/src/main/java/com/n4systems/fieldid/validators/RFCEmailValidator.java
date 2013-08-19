@@ -35,7 +35,7 @@ public class RFCEmailValidator extends FieldValidatorSupport {
     }
 
     private void validateMatch(String value, String fieldName, Object object) {
-        if((!EmailValidator.EMAIL_REGEX.matcher(value).matches() && !value.isEmpty())) {
+        if((value!=null && !EmailValidator.EMAIL_REGEX.matcher(value).matches() && !value.isEmpty())) {
             addFieldError(fieldName, object);
             return;
         }
@@ -43,7 +43,7 @@ public class RFCEmailValidator extends FieldValidatorSupport {
 
     private void validateMatch(List<String> values, String fieldName, Object object) {
         for (String value: values) {
-            if((!EmailValidator.EMAIL_REGEX.matcher(value).matches() && !value.isEmpty())) {
+            if((value!=null && !EmailValidator.EMAIL_REGEX.matcher(value).matches() && !value.isEmpty())) {
                 addFieldError(fieldName, object);
                 return;
             }
