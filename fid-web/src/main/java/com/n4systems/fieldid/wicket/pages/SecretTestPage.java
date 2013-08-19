@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.persistence.localization.TestEntity;
 import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.services.search.SearchResult;
@@ -22,8 +23,11 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.Locale;
 
 public class SecretTestPage extends FieldIDAuthenticatedPage {
 
@@ -38,11 +42,15 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 
 	private String text = null;
 	private String tenant = "n4";
+    private String language = "fr";
     private BaseOrg org;
 
     private List<SearchResult> docs = Lists.newArrayList();
+    private List<TestEntity> testEntities = Lists.newArrayList();
     private final ListView<SearchResult> list;
     private final WebMarkupContainer container;
+    private final ListView<TestEntity> localizedList;
+    private final WebMarkupContainer testEntitiesContainer;
 
     public SecretTestPage() {
 		Form form = new Form("form");
@@ -70,15 +78,31 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 
         );
 
-		add(new Form("showAllDocs") {
-				@Override
-				protected void onSubmit() {
-					assetFullTextSearchService.findAll(tenant);
-				}
-			}
-			.add(new TextField("tenant", new PropertyModel<String>(this, "tenant")))
-			.add(new SubmitLink("submitShowAllDocs"))
-		);
+        add(new Form("showAllDocs") {
+            @Override
+            protected void onSubmit() {
+                assetFullTextSearchService.findAll(tenant);
+            }
+        }
+                .add(new TextField("tenant", new PropertyModel<String>(this, "tenant")))
+                .add(new SubmitLink("submitShowAllDocs"))
+        );
+
+        add(new Form("localize") {
+            @Override
+            protected void onSubmit() {
+                LocaleContextHolder.setLocale(getLocaleFromForm());
+                testEntities = persistenceService.findAllNonSecure(TestEntity.class);
+            }
+        }
+                .add(new TextField("language", new PropertyModel<String>(this, "language")))
+                .add(new AjaxSubmitLink("submit") {
+                    @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                        target.add(testEntitiesContainer);
+                    }
+                    @Override protected void onError(AjaxRequestTarget target, Form<?> form) { }
+                })
+        );
 
 
         add(container=new WebMarkupContainer("container"));
@@ -95,9 +119,27 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         };
         container.add(list).setOutputMarkupId(true);
 
-	}
+        add(testEntitiesContainer =new WebMarkupContainer("testEntities"));
+        localizedList = new ListView<TestEntity>("list", new PropertyModel(this,"testEntities")) {
+            @Override
+            protected void populateItem(ListItem<TestEntity > item) {
+                TestEntity result = item.getModelObject();
+                String text = result.getName().getText();
+                String defaultText = result.getName().getDefaultText();
+                item.add(new Label("text", Model.of(text)));
+                item.add(new Label("defaultText", Model.of(defaultText)));
+                item.add(new Label("translated", Model.of(defaultText.equals(text) ? "no"  : "yes")));
+            }
+        };
+        testEntitiesContainer.add(localizedList).setOutputMarkupId(true);
 
-	@Override
+    }
+
+    private Locale getLocaleFromForm() {
+        return StringUtils.parseLocaleString(language);
+    }
+
+    @Override
 	public void renderHead(IHeaderResponse response) {
 		super.renderHead(response);
 		response.renderJavaScriptReference(CoreJavaScriptResourceReference.get());

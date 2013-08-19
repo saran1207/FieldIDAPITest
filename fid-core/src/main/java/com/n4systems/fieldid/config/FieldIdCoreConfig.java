@@ -53,6 +53,7 @@ import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
+import com.n4systems.persistence.localization.LocalizedTextCache;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
@@ -617,6 +618,11 @@ public class FieldIdCoreConfig {
     @Bean
     public CriteriaTrendsService criteriaTrendsService() {
         return new CriteriaTrendsService();
+    }
+
+    @Bean
+    public LocalizedTextCache localizedTextCache() {
+        return new LocalizedTextCache();
     }
 
 }
