@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.TestEntity;
-import com.n4systems.persistence.localization2.LocalizedText;
+import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.services.search.SearchResult;

@@ -59,7 +59,7 @@ import com.n4systems.fieldid.wicket.util.LocalizedTextConverter;
 import com.n4systems.fieldid.wicket.util.PagePerformanceListener;
 import com.n4systems.fieldid.wicket.util.PlainDateConverter;
 import com.n4systems.model.utils.PlainDate;
-import com.n4systems.persistence.localization2.LocalizedText;
+import com.n4systems.persistence.localization.LocalizedText;
 import org.apache.wicket.*;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;

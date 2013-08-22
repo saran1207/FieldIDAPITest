@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.persistence.localization.LocalizedTextCache;
-import com.n4systems.persistence.localization2.LocalizedText;
+import com.n4systems.persistence.localization.LocalizedText;
 import org.apache.log4j.Logger;
 import org.hibernate.EntityMode;
 import org.hibernate.event.*;

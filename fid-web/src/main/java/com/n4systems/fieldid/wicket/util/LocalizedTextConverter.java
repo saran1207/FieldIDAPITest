@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.util;
 
-import com.n4systems.persistence.localization2.LocalizedText;
+import com.n4systems.persistence.localization.LocalizedText;
 import org.apache.wicket.util.convert.converter.AbstractConverter;
 
 import java.util.Locale;

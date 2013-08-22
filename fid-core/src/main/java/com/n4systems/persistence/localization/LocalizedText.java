@@ -1,4 +1,4 @@
-package com.n4systems.persistence.localization2;
+package com.n4systems.persistence.localization;
 
 import java.io.Serializable;
 import java.util.Locale;

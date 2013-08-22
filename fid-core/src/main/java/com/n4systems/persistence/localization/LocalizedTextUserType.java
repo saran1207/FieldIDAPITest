@@ -1,4 +1,4 @@
-package com.n4systems.persistence.localization2;
+package com.n4systems.persistence.localization;
 
 import org.hibernate.HibernateException;
 import org.hibernate.type.StandardBasicTypes;

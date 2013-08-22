@@ -7,8 +7,8 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
-import com.n4systems.persistence.localization2.LocalizedText;
-import com.n4systems.persistence.localization2.LocalizedTextUserType;
+import com.n4systems.persistence.localization.LocalizedText;
+import com.n4systems.persistence.localization.LocalizedTextUserType;
 import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;

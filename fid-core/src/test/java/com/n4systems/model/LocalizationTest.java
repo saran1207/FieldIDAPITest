@@ -2,7 +2,7 @@ package com.n4systems.model;
 
 import com.google.common.collect.Maps;
 import com.n4systems.persistence.localization.Localized;
-import com.n4systems.persistence.localization2.LocalizedText;
+import com.n4systems.persistence.localization.LocalizedText;
 import org.junit.Before;
 import org.junit.Test;
 import org.reflections.Reflections;

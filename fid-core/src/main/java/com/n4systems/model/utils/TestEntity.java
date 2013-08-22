@@ -2,7 +2,7 @@ package com.n4systems.model.utils;
 
 import com.n4systems.model.BaseEntity;
 import com.n4systems.persistence.localization.Localized;
-import com.n4systems.persistence.localization2.LocalizedText;
+import com.n4systems.persistence.localization.LocalizedText;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -19,7 +19,7 @@ public class TestEntity extends BaseEntity {
         return text;
     }
 
-    public void setText(com.n4systems.persistence.localization2.LocalizedText text) {
+    public void setText(LocalizedText text) {
         this.text = text;
     }
 }
