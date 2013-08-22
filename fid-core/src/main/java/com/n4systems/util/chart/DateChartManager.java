@@ -82,7 +82,7 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 //			updateForDaily(chartSeries, options);
 		}
                 //options.yaxis.max = Math.max(1000, options.yaxis.max);
-                Double total = chartSeries.maxY() * .15;
+                Double total = chartSeries.maxY() * .30;
                 Double result = chartSeries.maxY()+ total;
 
                 options.yaxis.max = result.longValue();
