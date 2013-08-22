@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.BaseEntity;
+import com.n4systems.model.localization.Translation;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,8 @@ import org.springframework.util.StringUtils;
 import java.lang.reflect.Field;
 import java.util.*;
 
-import static org.reflections.ReflectionUtils.*;
+import static org.reflections.ReflectionUtils.getAllFields;
+import static org.reflections.ReflectionUtils.withAnnotation;
 
 public class LocalizedTextCache implements InitializingBean {
 

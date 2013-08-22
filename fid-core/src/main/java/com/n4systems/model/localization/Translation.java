@@ -1,4 +1,4 @@
-package com.n4systems.persistence.localization;
+package com.n4systems.model.localization;
 
 import com.n4systems.model.api.UnsecuredEntity;
 
