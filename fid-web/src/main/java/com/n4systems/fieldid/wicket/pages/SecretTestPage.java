@@ -4,7 +4,8 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.persistence.localization.TestEntity;
+import com.n4systems.model.utils.TestEntity;
+import com.n4systems.persistence.localization2.LocalizedText;
 import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.services.search.SearchResult;
@@ -51,6 +52,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     private final WebMarkupContainer container;
     private final ListView<TestEntity> localizedList;
     private final WebMarkupContainer testEntitiesContainer;
+    private final LocalizedText test = new LocalizedText("blah blah balh");
 
     public SecretTestPage() {
 		Form form = new Form("form");
@@ -88,19 +90,23 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
                 .add(new SubmitLink("submitShowAllDocs"))
         );
 
-        add(new Form("localize") {
-            @Override
-            protected void onSubmit() {
-                LocaleContextHolder.setLocale(getLocaleFromForm());
-                testEntities = persistenceService.findAllNonSecure(TestEntity.class);
-            }
-        }
+        add(new Form("localize")
                 .add(new TextField("language", new PropertyModel<String>(this, "language")))
+                .add(new TextField("testText", new PropertyModel<LocalizedText>(this,"test")))
                 .add(new AjaxSubmitLink("submit") {
-                    @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    @Override
+                    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                        LocaleContextHolder.setLocale(getLocaleFromForm());
+                        testEntities = persistenceService.findAllNonSecure(TestEntity.class);
+//                        TestEntity testEntity = testEntities.get(0);
+//                        testEntity.setText(new LocalizedString(testEntity.getText().getValue()));
+//                        persistenceService.update(testEntity);
                         target.add(testEntitiesContainer);
                     }
-                    @Override protected void onError(AjaxRequestTarget target, Form<?> form) { }
+
+                    @Override
+                    protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    }
                 })
         );
 
@@ -124,15 +130,13 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
             @Override
             protected void populateItem(ListItem<TestEntity > item) {
                 TestEntity result = item.getModelObject();
-                String text = result.getName().getText();
-                String defaultText = result.getName().getDefaultText();
-                item.add(new Label("text", Model.of(text)));
-                item.add(new Label("defaultText", Model.of(defaultText)));
-                item.add(new Label("translated", Model.of(defaultText.equals(text) ? "no"  : "yes")));
+                String text = result.getText().getText();
+                String translation = result.getText().getTranslatedValue();
+                item.add(new Label("text", new PropertyModel(result,"text.text")));
+                item.add(new Label("translation", new PropertyModel(result, "text")));
             }
         };
         testEntitiesContainer.add(localizedList).setOutputMarkupId(true);
-
     }
 
     private Locale getLocaleFromForm() {

@@ -2,10 +2,7 @@ package com.n4systems.persistence.localization;
 
 import com.n4systems.model.api.UnsecuredEntity;
 
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
@@ -20,7 +17,7 @@ public class Translation implements Serializable, UnsecuredEntity {
     }
 
     public Long getTranslationId() {
-        return id.getId();
+        return id.getEntityId();
     }
 
     public void setId(CompoundKey id) {
@@ -37,8 +34,10 @@ public class Translation implements Serializable, UnsecuredEntity {
 
     @Embeddable
     public static class CompoundKey implements Serializable {
-        private Long id;
-        private String language;
+
+        private @Column(name="entity_id") Long entityId;
+        private @Column(name="ognl") String ognl;
+        private @Column(name="language") String language;
 
         @Override
         public boolean equals(Object o) {
@@ -47,26 +46,33 @@ public class Translation implements Serializable, UnsecuredEntity {
 
             CompoundKey that = (CompoundKey) o;
 
-            if (id != null ? !id.equals(that.id) : that.id != null) return false;
+            if (entityId != null ? !entityId.equals(that.entityId) : that.entityId != null) return false;
             if (language != null ? !language.equals(that.language) : that.language != null) return false;
+            if (ognl != null ? !ognl.equals(that.ognl) : that.ognl != null) return false;
 
             return true;
         }
 
         @Override
         public int hashCode() {
-            int result = id != null ? id.hashCode() : 0;
+            int result = entityId != null ? entityId.hashCode() : 0;
+            result = 31 * result + (ognl != null ? ognl.hashCode() : 0);
             result = 31 * result + (language != null ? language.hashCode() : 0);
             return result;
         }
 
-        public Long getId() {
-            return id;
+        public Long getEntityId() {
+            return entityId;
         }
 
         public String getLanguage() {
             return language;
         }
+
+        public String getOgnl() {
+            return ognl;
+        }
     }
+
 
 }

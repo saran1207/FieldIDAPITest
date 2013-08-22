@@ -1,27 +1,25 @@
-package com.n4systems.persistence.localization;
+package com.n4systems.persistence.localization2;
 
 import org.hibernate.HibernateException;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.usertype.UserType;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.io.Serializable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Locale;
 
 public class LocalizedTextUserType implements UserType {
 
     @Override
     public int[] sqlTypes() {
-        return new int[]{Types.BIGINT};
+        return new int[]{Types.VARCHAR};
     }
 
     @Override
     public Class returnedClass() {
-        return String.class;
+        return LocalizedText.class;
     }
 
     @Override
@@ -51,20 +49,14 @@ public class LocalizedTextUserType implements UserType {
 
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
-        // e.g. code = 1254
-        //      language = FRENCH
-        //      value = COULEUR
-        Long code = StandardBasicTypes.LONG.nullSafeGet(rs, names[0]);
-        // TODO DD : add spring filter to set this variable.
-        Locale locale = LocaleContextHolder.getLocale();
-        // this MUST be cached!!!
-//        return LocalizedTextCache.getText(code, locale);
-        return "NOT IMPLEMENTED";
+        String value = StandardBasicTypes.STRING.nullSafeGet(rs, names[0]);
+        return new LocalizedText(value);
     }
 
     @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
-        System.out.println(value);
+        LocalizedText localizedString = (LocalizedText) value;
+        StandardBasicTypes.STRING.nullSafeSet(st, localizedString.getText(), index);
     }
 
     public Object deepCopy(Object value) throws HibernateException {

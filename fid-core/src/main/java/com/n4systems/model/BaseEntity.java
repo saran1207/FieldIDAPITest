@@ -1,15 +1,5 @@
 package com.n4systems.model;
 
-import java.io.Serializable;
-
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PostLoad;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-
 import com.n4systems.model.api.Copyable;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
@@ -17,9 +7,16 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.persistence.localization2.LocalizedText;
+import com.n4systems.persistence.localization2.LocalizedTextUserType;
+import org.hibernate.annotations.TypeDef;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
+@TypeDef(name="localizedString", defaultForType=LocalizedText.class, typeClass= LocalizedTextUserType.class)
 abstract public class BaseEntity implements Saveable, Serializable, Copyable {
 
 	public static SecurityDefiner createSecurityDefiner() {
