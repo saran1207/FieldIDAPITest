@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.localization.Translation;
+import com.n4systems.model.parents.EntityWithTenant;
 import org.reflections.Reflections;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,7 @@ import static org.reflections.ReflectionUtils.withAnnotation;
 
 public class LocalizedTextCache implements InitializingBean {
 
-    private static Map<Locale, Map<TranslationKey,String>> cache = Maps.newHashMap();
-    private static Set<String> ognl = Sets.newHashSet();
+    private static Map<Long, Map<TranslationKey, Map<Locale,String>>> cache = Maps.newHashMap();
 
     private @Autowired PersistenceService persistenceService;
 
@@ -49,8 +49,8 @@ public class LocalizedTextCache implements InitializingBean {
         Set<String> errors = Sets.newHashSet();
         // now test that all of current values are in the expected/defined list of valid translation ognls.
         // i.e. if the DB contains a translation ognl of "assetType.name" and it isn't in the class meta-data/annotations then somethings screwed up.
-        for (Map<TranslationKey,String> languageMap:cache.values()) {
-            for (TranslationKey key:languageMap.keySet()) {
+        for (Map<TranslationKey, Map<Locale,String>> tenantMap:cache.values()) {
+            for (TranslationKey key:tenantMap.keySet()) {
                 if (!expected.contains(key.ognl)) {
                     errors.add(key.ognl);
                 }
@@ -75,20 +75,45 @@ public class LocalizedTextCache implements InitializingBean {
     }
 
     private void add(Translation translation) {
-        Locale language = StringUtils.parseLocaleString(translation.getId().getLanguage());
-        Map<TranslationKey, String> languageMap = cache.get(language);
-        if (languageMap==null) {
-            languageMap = new TreeMap<TranslationKey,String>();
-            cache.put(language,languageMap);
+        Long tenantId = translation.getId().getTenantId();
+        Map<TranslationKey, Map<Locale, String>> tenantMap = cache.get(tenantId);
+        if (tenantMap==null) {
+            tenantMap=Maps.newHashMap();
+            cache.put(tenantId, tenantMap);
         }
-        languageMap.put(new TranslationKey(translation), translation.getValue());
+        add(translation, tenantMap);
     }
 
-    public static String getText(BaseEntity entity, String ognl, Locale locale) {
+    private void add(Translation translation, Map<TranslationKey, Map<Locale, String>> map) {
+        TranslationKey translationKey = new TranslationKey(translation);
+        Map<Locale, String> keyMap = map.get(translationKey);
+        if (keyMap==null) {
+            keyMap = Maps.newHashMap();
+            map.put(translationKey,keyMap);
+        }
+        Locale locale = StringUtils.parseLocaleString(translation.getId().getLanguage());
+        keyMap.put(locale, translation.getValue());
+    }
+
+    public static String getText(EntityWithTenant entity, String ognl, Locale locale) {
         Preconditions.checkArgument(locale != null && entity != null, "must supply non-null args");
-        Map<TranslationKey, String> map = cache.get(locale);
-        TranslationKey key = new TranslationKey(entity, ognl);
-        return map == null ? null : map.get(key);
+        Long tenantId = entity.getTenant().getId();
+        Map<TranslationKey, Map<Locale, String>> tenantMap = cache.get(tenantId);
+        if (tenantMap!=null) {
+            Map<Locale, String> map = tenantMap.get(new TranslationKey(entity, ognl));
+            return map==null ? null : map.get(locale);
+        }
+        return null;
+    }
+
+    public static Map<Locale, String> getTranslations(EntityWithTenant entity, String ognl) {
+        Long tenantId = entity.getTenant().getId();
+        Map<TranslationKey, Map<Locale, String>> tenantMap = cache.get(tenantId);
+        if (tenantMap!=null) {
+            Map<Locale, String> map = tenantMap.get(new TranslationKey(entity, ognl));
+            return map;
+        }
+        return null;
     }
 
     // -----------------------------------------------------------------------------------------------
@@ -97,7 +122,7 @@ public class LocalizedTextCache implements InitializingBean {
         String ognl;
         Long entityId;
 
-        TranslationKey(BaseEntity entity, String ognl) {
+        TranslationKey(EntityWithTenant entity, String ognl) {
             this.entityId = entity.getId();
             this.ognl = ognl;
         }
@@ -115,6 +140,26 @@ public class LocalizedTextCache implements InitializingBean {
                 return (int)(entityId-key.entityId);
             }
             return -1;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof TranslationKey)) return false;
+
+            TranslationKey that = (TranslationKey) o;
+
+            if (entityId != null ? !entityId.equals(that.entityId) : that.entityId != null) return false;
+            if (ognl != null ? !ognl.equals(that.ognl) : that.ognl != null) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = ognl != null ? ognl.hashCode() : 0;
+            result = 31 * result + (entityId != null ? entityId.hashCode() : 0);
+            return result;
         }
     }
 

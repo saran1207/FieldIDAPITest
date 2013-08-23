@@ -43,4 +43,9 @@ public class LocalizedText implements Serializable {
     public void setTranslations(Map<Locale, String> translations) {
         this.translations = translations;
     }
+
+    public void setTranslatedValue(Map<Locale, String> translations, Locale locale) {
+        setTranslations(translations);
+        setTranslatedValue(translations!=null?translations.get(locale):null);
+    }
 }

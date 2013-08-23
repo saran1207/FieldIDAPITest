@@ -9,8 +9,6 @@ import java.io.Serializable;
 @Table(name = "translations")
 public class Translation implements Serializable, UnsecuredEntity {
 
-    // TODO DD: add tenant id.
-
     private @EmbeddedId CompoundKey id = new CompoundKey();
     private String value;
 
@@ -37,6 +35,7 @@ public class Translation implements Serializable, UnsecuredEntity {
     @Embeddable
     public static class CompoundKey implements Serializable {
 
+        private @Column(name="tenant_id") Long tenantId;
         private @Column(name="entity_id") Long entityId;
         private @Column(name="ognl") String ognl;
         private @Column(name="language") String language;
@@ -51,13 +50,15 @@ public class Translation implements Serializable, UnsecuredEntity {
             if (entityId != null ? !entityId.equals(that.entityId) : that.entityId != null) return false;
             if (language != null ? !language.equals(that.language) : that.language != null) return false;
             if (ognl != null ? !ognl.equals(that.ognl) : that.ognl != null) return false;
+            if (tenantId != null ? !tenantId.equals(that.tenantId) : that.tenantId != null) return false;
 
             return true;
         }
 
         @Override
         public int hashCode() {
-            int result = entityId != null ? entityId.hashCode() : 0;
+            int result = tenantId != null ? tenantId.hashCode() : 0;
+            result = 31 * result + (entityId != null ? entityId.hashCode() : 0);
             result = 31 * result + (ognl != null ? ognl.hashCode() : 0);
             result = 31 * result + (language != null ? language.hashCode() : 0);
             return result;
@@ -73,6 +74,10 @@ public class Translation implements Serializable, UnsecuredEntity {
 
         public String getOgnl() {
             return ognl;
+        }
+
+        public Long getTenantId() {
+            return tenantId;
         }
     }
 
