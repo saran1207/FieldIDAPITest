@@ -9,6 +9,8 @@ import java.io.Serializable;
 @Table(name = "translations")
 public class Translation implements Serializable, UnsecuredEntity {
 
+    // TODO DD: add tenant id.
+
     private @EmbeddedId CompoundKey id = new CompoundKey();
     private String value;
 

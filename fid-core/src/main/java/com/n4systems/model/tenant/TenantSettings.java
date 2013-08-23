@@ -1,13 +1,17 @@
 package com.n4systems.model.tenant;
 
+import com.google.common.collect.Lists;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AccountPolicy;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Locale;
 
 @SuppressWarnings("serial")
 @Entity
@@ -37,6 +41,12 @@ public class TenantSettings extends EntityWithTenant {
     @ManyToOne
     @JoinColumn(name = "approval_user_group_id")
     private UserGroup approvalUserGroup;
+
+    @Column(name="language", nullable=false)
+    @ElementCollection(fetch= FetchType.EAGER)
+    @CollectionTable(name="tenant_languages", joinColumns = @JoinColumn(name = "tenant_settings_id"))
+    @IndexColumn(name="orderidx")
+    private List<Locale> languages = Lists.newArrayList();
 
     public boolean isSecondaryOrgsEnabled() {
 		return secondaryOrgsEnabled;
@@ -127,4 +137,13 @@ public class TenantSettings extends EntityWithTenant {
             this.approvalUserGroup = null;
         }
     }
+
+    public List<Locale> getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(List<Locale> languages) {
+        this.languages = languages;
+    }
+
 }
