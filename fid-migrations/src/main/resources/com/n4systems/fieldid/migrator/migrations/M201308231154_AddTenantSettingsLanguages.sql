@@ -1,3 +1,4 @@
+drop table if exists tenant_languages;
 create table tenant_languages (
   tenant_settings_id bigint,
   language varchar(10),
