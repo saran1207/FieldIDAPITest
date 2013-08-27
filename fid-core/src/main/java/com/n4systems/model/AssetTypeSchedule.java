@@ -1,13 +1,5 @@
 package com.n4systems.model;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.EntityWithOwner;
@@ -15,6 +7,9 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.DateHelper;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "assettypeschedules")
@@ -29,9 +24,9 @@ public class AssetTypeSchedule extends EntityWithOwner implements Saveable, Secu
     @JoinColumn(name = "eventtype_id")
 	private EventType eventType;
 	
-
 	@Column(name="frequency")
 	private Long frequencyInDays;
+
 	private boolean autoSchedule = true;
 	
 	public AssetTypeSchedule() {}

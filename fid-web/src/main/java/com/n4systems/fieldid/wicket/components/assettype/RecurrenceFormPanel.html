@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:panel>
+
+    <form wicket:id="form">
+
+        <div wicket:id="feedbackPanel"></div>
+
+        <div wicket:id="createContainer" class="new-event">
+            <div>
+                <p><wicket:message key="label.capital_schedule_a"/></p>
+                <select wicket:id="eventType" style="width: 150px"></select>
+                <p><wicket:message key="label.every"/></p>
+                <select wicket:id="recurrence" style="width: 150px"></select>
+                <p><wicket:message key="label.at"/></p>
+                <span wicket:id="timeContainer"><select class="time" wicket:id="time" style="width: 150px"/><select class="time" wicket:id="multipleTimes" style="width: 150px"/></span>
+                <span wicket:id="dateTime"/>
+                <p><wicket:message key="label.for"/></p>
+                <div style="display:inline" wicket:id="organization"></div>
+                <a class="blue-submit" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
+            </div>
+            <div class="affect-all">
+                <input type="checkbox" wicket:id="ownerAndDown"><label><wicket:message key="label.affect_all"/></label><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/>
+            </div>
+        </div>
+
+    </form>
+
+</wicket:panel>
+</html>

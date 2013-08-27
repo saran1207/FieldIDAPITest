@@ -624,5 +624,4 @@ public class FieldIdCoreConfig {
     public LocalizedTextCache localizedTextCache() {
         return new LocalizedTextCache();
     }
-
 }

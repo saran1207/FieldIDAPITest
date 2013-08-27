@@ -22,4 +22,16 @@ public class AssetTypeScheduleService extends FieldIdPersistenceService {
 		return persistenceService.findAll(builder);
     }
 
+    public AssetTypeSchedule getSchedule(Long id) {
+        return persistenceService.find(AssetTypeSchedule.class, id);
+    }
+
+    public void createSchedule(AssetTypeSchedule schedule) {
+        persistenceService.save(schedule);
+    }
+
+    public void delete(AssetTypeSchedule schedule) {
+        persistenceService.remove(schedule);
+    }
+
 }

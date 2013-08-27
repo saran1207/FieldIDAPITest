@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+
+    <span wicket:id="filters">
+        <a wicket:id="showAll"><wicket:message key="label.all_rules"/> <label wicket:id="total"/></a>
+        <a wicket:id="showRecurring"><wicket:message key="label.recurring"/> <label wicket:id="totalRecurring"/></a>
+        <a wicket:id="showFrequency"><wicket:message key="label.event_triggered"/> <label wicket:id="totalFrequency"/></a>
+    </span>
+
+    <span wicket:id="scheduleActions" class="actions">
+        <ul>
+            <li class="menu">
+                <a href="javascript:void(0);">
+                    <wicket:message key="label.create_new_rule"/>
+                </a>
+                <ul class="menu-items">
+                    <li>
+                        <a wicket:id="scheduleRecurrence"><wicket:message key="label.recurring"/></a>
+                    </li>
+                    <li>
+                        <a wicket:id="scheduleFrequency"><wicket:message key="label.event_triggered"/></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </span>
+
+    <div wicket:id="addFrequency"/>
+    <div wicket:id="addRecurrence"/>
+
+    <div wicket:id="schedules" >
+        <table class="list">
+            <thead>
+                <tr>
+                    <th><wicket:message key="label.event_type"/></th>
+                    <th><wicket:message key="title.recurs"/></th>
+                    <th><wicket:message key="title.at"/></th>
+                    <th><wicket:message key="title.for"/></th>
+                    <th><wicket:message key="label.affect_all"/></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr wicket:id="frequency">
+                    <td><label wicket:id="type"/></td>
+                    <td><label wicket:id="recurrence"/></td>
+                    <td>&nbsp;</td>
+                    <td><label wicket:id="owner"/></td>
+                    <td>&nbsp;</td>
+                    <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
+                </tr>
+                <tr wicket:id="recurringEvent">
+                    <td><label wicket:id="eventType"></label></td>
+                    <td><label wicket:id="recurrence"></label></td>
+                    <td><label wicket:id="time"></label></td>
+                    <td><label wicket:id="org"></label></td>
+                    <td><label wicket:id="affectAll"/></td>
+                    <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <wicket:fragment wicket:id="title"><label wicket:id="name"/> <span class="bold"><wicket:message key="label.schedule_rules"/></span></wicket:fragment>
+
+</wicket:extend>
+</html>

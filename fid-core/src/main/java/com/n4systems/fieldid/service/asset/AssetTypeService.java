@@ -187,6 +187,10 @@ public class AssetTypeService extends FieldIdPersistenceService {
         return persistenceService.findNonSecure(UnitOfMeasure.class, id);
     }
 
+    public AssetType update(AssetType assetType) {
+        return persistenceService.update(assetType);
+    }
+
     public AssetType saveAssetType(AssetType assetType, List<FileAttachment> uploadedFiles, byte[] imageData ) throws FileAttachmentException, ImageAttachmentException {
         AssetType oldPI = null;
         if( assetType.getId() != null ) {

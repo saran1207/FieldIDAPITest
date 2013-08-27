@@ -1,0 +1,28 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:panel>
+
+    <div wicket:id="feedbackPanel"/>
+    <form wicket:id="form">
+        <fieldset>
+            <div>
+                <label><wicket:message key="label.schedule_a.uppercase"/></label><select wicket:id="eventType" style="width:150px"/>
+            </div>
+            <div>
+                <label><wicket:message key="label.every"/></label><input wicket:id="frequencyInDays" type="text"/>
+            </div>
+            <div>
+                <label><wicket:message key="label.for"/></label><div wicket:id="owner"/>
+            </div>
+            <div>
+                <input wicket:id="autoSchedule" type="checkbox"/><label wicket:id="autoScheduleMessage"/>
+            </div>
+        </fieldset>
+        <a wicket:id="submit"><wicket:message key="label.create_event_frequency"/></a>
+    </form>
+
+</wicket:panel>
+</html>
