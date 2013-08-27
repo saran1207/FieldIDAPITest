@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.pages.setup.assettype.EditAssetTypePage;
 import com.n4systems.model.AssetType;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -41,10 +42,10 @@ public class AssetTypeListPanel extends Panel {
             protected void populateItem(ListItem<AssetType> item) {
                 AssetType assetType = item.getModelObject();
                 TimeZone timeZone = FieldIDSession.get().getSessionUser().getTimeZone();
-                NonWicketLink nameLink;
+                Link nameLink;
                 NonWicketLink groupLink;
 
-                item.add(nameLink = new NonWicketLink("nameLink", "assetType.action?uniqueID=" + assetType.getId()));
+                item.add(nameLink = new BookmarkablePageLink<EditAssetTypePage>("nameLink", EditAssetTypePage.class, PageParametersBuilder.uniqueId(assetType.getId())));
                 nameLink.add(new Label("name", new PropertyModel<String>(assetType, "displayName")));
                 item.add(groupLink = new NonWicketLink("groupLink", "assetTypeGroup.action?uniqueID=" + (assetType.getGroup() != null ? assetType.getGroup().getId() : "")));
                 groupLink.add(new Label("group", new PropertyModel<String>(assetType, "group.displayName")));

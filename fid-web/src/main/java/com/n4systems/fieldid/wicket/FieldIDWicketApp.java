@@ -100,7 +100,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/assetTypeForm", AddAssetTypePage.class);
         mountPage("setup/assetTypeEdit", EditAssetTypePage.class);
         mountPage("setup/assetTypeCopy", CopyAssetTypePage.class);
-        mountPage("setup/viewAssetType", ViewAssetTypePage.class);
         mountPage("setup/selectEventTypes", EventTypeAssociationsPage.class);
         mountPage("setup/assetTypeSchedules", AssetTypeSchedulesPage.class);
 

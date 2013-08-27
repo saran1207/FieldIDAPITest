@@ -26,7 +26,6 @@ public class EditAssetTypePage extends AddAssetTypePage{
         assetTypeId = assetType.getObject().getId();
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view_all").page(AssetTypeListPage.class).build(),
-                aNavItem().label("nav.view").page("assetType.action").params(PageParametersBuilder.uniqueId(assetTypeId)).build(),
                 aNavItem().label("nav.edit").page(EditAssetTypePage.class).params(PageParametersBuilder.uniqueId(assetTypeId)).build(),
                 aNavItem().label("nav.event_type_associations").page(EventTypeAssociationsPage.class).params(PageParametersBuilder.uniqueId(assetTypeId)).build(),
                 aNavItem().label("nav.schedules").page(AssetTypeSchedulesPage.class).params(PageParametersBuilder.uniqueId(assetTypeId)).build(),
