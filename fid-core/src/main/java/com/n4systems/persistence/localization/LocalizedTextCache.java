@@ -48,7 +48,12 @@ public class LocalizedTextCache implements InitializingBean {
 
         Set<String> errors = Sets.newHashSet();
         // now test that all of current values are in the expected/defined list of valid translation ognls.
-        // i.e. if the DB contains a translation ognl of "assetType.name" and it isn't in the class meta-data/annotations then somethings screwed up.
+        // i.e. if the DB contains a translation ognl of "assetType.name" but that isn't in expected list (which is say, {at.name, at.desc} or {assetType.displayName, assetType.desc})
+        //  then something is screwed up.   either the class/field was unlocalized or it was renamed. (i.e. given a different @Localized value.
+        // possible fixes (depending on your assessment could be
+        // 1: migrate the value.   assetType.name --> at.name
+        // 2: delete the values    assetType.*    DELETE
+        // 3: change the @Localized values       @Localize("at")    -->    @Localized("assetType")
         for (Map<TranslationKey, Map<Locale,String>> tenantMap:cache.values()) {
             for (TranslationKey key:tenantMap.keySet()) {
                 if (!expected.contains(key.ognl)) {
@@ -63,6 +68,7 @@ public class LocalizedTextCache implements InitializingBean {
 
     private Set<String> getExpectedFor(Class<?> clazz) {
         // recall : ognl = class + "." + field      e.g. "assetType.name"
+        // class/field values are taken from @Localized annotation values.
         Set<String> expected = Sets.newHashSet();
         String prefix = clazz.getAnnotation(Localized.class).value();
         Set<Field> localizedFields = getAllFields(clazz, withAnnotation(Localized.class));

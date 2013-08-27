@@ -59,6 +59,7 @@ import com.n4systems.services.SecurityContext;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.services.date.DateService;
+import com.n4systems.services.localization.LocalizationService;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.search.*;
 import com.n4systems.services.search.parser.DateParser;
@@ -624,4 +625,10 @@ public class FieldIdCoreConfig {
     public LocalizedTextCache localizedTextCache() {
         return new LocalizedTextCache();
     }
+
+    @Bean
+    public LocalizationService localizationService() {
+        return new LocalizationService();
+    }
+
 }

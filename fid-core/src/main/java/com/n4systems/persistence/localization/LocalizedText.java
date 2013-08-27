@@ -12,7 +12,7 @@ public class LocalizedText implements Serializable {
     private transient Map<Locale,String> translations;
 
     public LocalizedText(String value) {
-        this.text = value;
+        this.text = value!=null ? value.trim() : null;
     }
 
     public String getTranslatedValue() {
@@ -20,7 +20,7 @@ public class LocalizedText implements Serializable {
     }
 
     public void setTranslatedValue(String translatedValue) {
-        this.translatedValue = translatedValue;
+        this.translatedValue = translatedValue!=null ? translatedValue.trim() : null;
     }
 
     public String getText() {
@@ -30,6 +30,7 @@ public class LocalizedText implements Serializable {
     public void setText(String text) {
         this.text = text;
     }
+
 
     @Override
     public String toString() {
@@ -48,4 +49,14 @@ public class LocalizedText implements Serializable {
         setTranslations(translations);
         setTranslatedValue(translations!=null?translations.get(locale):null);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof LocalizedText)) return false;
+        LocalizedText that = (LocalizedText) o;
+        if (text != null ? !text.equals(that.text) : that.text != null) return false;
+        return true;
+    }
+
 }

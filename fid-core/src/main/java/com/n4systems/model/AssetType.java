@@ -11,6 +11,8 @@ import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
+import com.n4systems.persistence.localization.Localized;
+import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.util.time.DateUtil;
 import org.apache.log4j.Logger;
 import rfid.ejb.entity.InfoFieldBean;
@@ -25,6 +27,7 @@ import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "assettypes")
+@Localized("at")
 public class AssetType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<AssetType> {
 
 	private static final Logger logger = Logger.getLogger(AssetType.class);
@@ -45,7 +48,8 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private static Collection<? extends String> reservedFieldNames = Lists.newArrayList(PO_NUMBER, RFID, REF_NUMBER, ORDER_NUMBER, IDENTIFIER );
 	
 	@Column(nullable=false)
-	private String name;
+    @Localized("name")
+	private LocalizedText name;
 	
 	@Column(length=2047)
 	private String warnings;
@@ -99,23 +103,17 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	
 	public AssetType(String name) {
 		super();
-		this.name = name;
+		setName(name);
 	}
-	
-	private void trimName() {
-		this.name = (name != null) ? name.trim() : null;
-	}
-	
+
 	@Override
 	protected void onCreate() {
 		super.onCreate();
-		trimName();
 	}
 	
 	@Override
 	protected void onUpdate() {
 		super.onUpdate();
-		trimName();
 	}
 	
 	@Deprecated
@@ -133,18 +131,29 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		this.descriptionTemplate = descriptionTemplate;
 	}
 
-	@Override
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(LocalizedText name) {
+        this.name = name;
+    }
 
-	@Override
+    @Override
 	@AllowSafetyNetworkAccess
 	public String getName() {
-		return name;
+		return name.getText();
 	}
-	
-	@Deprecated
+
+    public LocalizedText getLocalizedName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        LocalizedText newName = new LocalizedText(name);
+        if (!newName.equals(this.name)) {
+            setName(newName);
+        }
+    }
+
+    @Deprecated
 	@AllowSafetyNetworkAccess
 	public String getAssetType() {
 		return getName();
@@ -492,7 +501,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	@Override
 	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
-		return name;
+		return name.getText();
 	}
 	
 	@AllowSafetyNetworkAccess
@@ -501,11 +510,9 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	}
 	
 	public void archivedName(String prefix) {
-		archivedName = name;
-		if (prefix != null) {
-			name = prefix + " ";
-		}
-		name += UUID.randomUUID().toString();
+		archivedName = name.getText();
+        String value = prefix!=null ? prefix.trim() + " " : "";
+        setName(prefix+UUID.randomUUID().toString());
 	}
 
 	@AllowSafetyNetworkAccess

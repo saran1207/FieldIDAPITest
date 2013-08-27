@@ -14,7 +14,7 @@ public class WebAppTest {
 
     private static final Logger logger= Logger.getLogger(WebAppTest.class);
 
-    private File webAppDirectory = new File("fid-web/src/main/webapp");
+    private File webAppDirectory = new File("web/fid-web/src/main/webapp");
 
 
     @Before

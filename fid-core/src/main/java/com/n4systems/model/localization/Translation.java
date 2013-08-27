@@ -1,16 +1,20 @@
 package com.n4systems.model.localization;
 
-import com.n4systems.model.api.UnsecuredEntity;
+import com.n4systems.model.security.SecurityDefiner;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "translations")
-public class Translation implements Serializable, UnsecuredEntity {
+public class Translation implements Serializable {
 
     private @EmbeddedId CompoundKey id = new CompoundKey();
     private String value;
+
+    public static SecurityDefiner createSecurityDefiner() {
+        return new SecurityDefiner("id.tenantId", null, null, null);
+    }
 
     public CompoundKey getId() {
         return id;
@@ -79,7 +83,26 @@ public class Translation implements Serializable, UnsecuredEntity {
         public Long getTenantId() {
             return tenantId;
         }
+
+        public String getFieldOgnl() {
+            // assumes format of "classPrefix.fieldSuffix"
+            // .:  "widget.name"   -->  "name"
+            return ognl.substring(ognl.indexOf('.')+1);
+        }
+
+        @Override
+        public String toString() {
+            return tenantId +
+                    "|" + entityId +
+                    ":" + ognl +
+                    "(" + language + ')';
+        }
     }
 
-
+    @Override
+    public String toString() {
+        return "Translation :" +
+                id +
+                " --> '" + value + "'";
+    }
 }

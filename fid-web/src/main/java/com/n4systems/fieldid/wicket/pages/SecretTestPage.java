@@ -2,15 +2,17 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.components.localization.LocalizationPanel;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.utils.TestEntity;
 import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.services.search.SearchResult;
 import com.n4systems.util.SearchRecord;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -20,6 +22,7 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -32,32 +35,34 @@ import java.util.Locale;
 
 public class SecretTestPage extends FieldIDAuthenticatedPage {
 
-	private @SpringBean PersistenceService persistenceService;
-	private @SpringBean AssetFullTextSearchService assetFullTextSearchService;
-	private @SpringBean AssetIndexerService assetIndexerService;
+    private @SpringBean PersistenceService persistenceService;
+    private @SpringBean AssetFullTextSearchService assetFullTextSearchService;
+    private @SpringBean AssetIndexerService assetIndexerService;
 
-	private WebMarkupContainer selectedDeviceList;
-	private WebMarkupContainer selectedLockList;
+    private WebMarkupContainer selectedDeviceList;
+    private WebMarkupContainer selectedLockList;
 
-	private SearchRecord mySearch;
+    private SearchRecord mySearch;
 
-	private String text = null;
-	private String tenant = "n4";
+    private String text = null;
+    private String tenant = "n4";
     private String language = "fr";
     private BaseOrg org;
 
     private List<SearchResult> docs = Lists.newArrayList();
-    private List<TestEntity> testEntities = Lists.newArrayList();
+    private List<AssetType> testEntities = Lists.newArrayList();
     private final ListView<SearchResult> list;
     private final WebMarkupContainer container;
-    private final ListView<TestEntity> localizedList;
+    private final ListView<AssetType> localizedList;
     private final WebMarkupContainer testEntitiesContainer;
     private final LocalizedText test = new LocalizedText("blah blah balh");
+    private IModel<AssetType> assetTypeModel = Model.of(new AssetType());
+    private final LocalizationPanel localizationPanel;
 
     public SecretTestPage() {
-		Form form = new Form("form");
-		form.add(new TextField("text", new PropertyModel<String>(this, "text")));
-		form.add(new AjaxSubmitLink("submit") {
+        Form form = new Form("form");
+        form.add(new TextField("text", new PropertyModel<String>(this, "text")));
+        form.add(new AjaxSubmitLink("submit") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 docs = assetFullTextSearchService.search(text).getResults();
                 target.add(container);
@@ -67,16 +72,16 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
             }
         });
         form.add(new OrgLocationPicker("tree", new PropertyModel(this,"org")));
-		add(form);
+        add(form);
 
-		add(new Form("indexForm") {
-				@Override
-				protected void onSubmit() {
-					assetIndexerService.indexTenant(tenant);
-				}
-			}
-			.add(new TextField("tenant", new PropertyModel<String>(this, "tenant")))
-			.add(new SubmitLink("submitIndex"))
+        add(new Form("indexForm") {
+            @Override
+            protected void onSubmit() {
+                assetIndexerService.indexTenant(tenant);
+            }
+        }
+                .add(new TextField("tenant", new PropertyModel<String>(this, "tenant")))
+                .add(new SubmitLink("submitIndex"))
 
         );
 
@@ -97,10 +102,8 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
                     @Override
                     protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         LocaleContextHolder.setLocale(getLocaleFromForm());
-                        testEntities = persistenceService.findAllNonSecure(TestEntity.class);
-//                        TestEntity testEntity = testEntities.get(0);
-//                        testEntity.setText(new LocalizedString(testEntity.getText().getValue()));
-//                        persistenceService.update(testEntity);
+                        testEntities = persistenceService.findAll(AssetType.class);
+                        target.add(testEntitiesContainer);
                         target.add(testEntitiesContainer);
                     }
 
@@ -126,17 +129,25 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         container.add(list).setOutputMarkupId(true);
 
         add(testEntitiesContainer =new WebMarkupContainer("testEntities"));
-        localizedList = new ListView<TestEntity>("list", new PropertyModel(this,"testEntities")) {
+        localizedList = new ListView<AssetType>("list", new PropertyModel(this,"testEntities")) {
             @Override
-            protected void populateItem(ListItem<TestEntity > item) {
-                TestEntity result = item.getModelObject();
-                String text = result.getText().getText();
-                String translation = result.getText().getTranslatedValue();
-                item.add(new Label("text", new PropertyModel(result,"text.text")));
-                item.add(new Label("translation", new PropertyModel(result, "text")));
+            protected void populateItem(final ListItem<AssetType > item) {
+                AssetType result = item.getModelObject();
+                item.add(new Label("text", new PropertyModel(result,"name")));
+                item.add(new Label("translation", new PropertyModel(result, "localizedName")));
+                item.add(new AjaxLink("edit") {
+                    @Override public void onClick(AjaxRequestTarget target) {
+                        assetTypeModel.setObject(item.getModelObject());
+                        target.add(localizationPanel);
+                    }
+                });
             }
         };
         testEntitiesContainer.add(localizedList).setOutputMarkupId(true);
+
+        add(localizationPanel = new LocalizationPanel("translation", assetTypeModel));
+        localizationPanel.setOutputMarkupId(true);
+
     }
 
     private Locale getLocaleFromForm() {
@@ -144,12 +155,12 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     }
 
     @Override
-	public void renderHead(IHeaderResponse response) {
-		super.renderHead(response);
-		response.renderJavaScriptReference(CoreJavaScriptResourceReference.get());
-		response.renderCSSReference("style/reset.css");
-		response.renderCSSReference("style/site_wide.css");
-		response.renderCSSReference("style/fieldid.css");
-	}
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderJavaScriptReference(CoreJavaScriptResourceReference.get());
+        response.renderCSSReference("style/reset.css");
+        response.renderCSSReference("style/site_wide.css");
+        response.renderCSSReference("style/fieldid.css");
+    }
 
 }
