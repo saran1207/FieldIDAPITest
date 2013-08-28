@@ -104,7 +104,6 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                 aNavItem().label("nav.event_type_associations").page(EventTypeAssociationsPage.class).params(PageParametersBuilder.uniqueId(assetTypeId)).build(),
                 aNavItem().label("nav.event_frequencies").page("eventFrequencies.action").params(param("assetTypeId", assetTypeId)).build(),
                 aNavItem().label("label.recurring_events").page(RecurringAssetTypeEventsPage.class).params(uniqueId(assetTypeId)).build(),
-                aNavItem().label("label.subassets").page("assetTypeConfiguration.action").params(uniqueId(assetTypeId)).build(),
                 aNavItem().label("nav.add").page(AddAssetTypePage.class).onRight().build()
         ));
     }
