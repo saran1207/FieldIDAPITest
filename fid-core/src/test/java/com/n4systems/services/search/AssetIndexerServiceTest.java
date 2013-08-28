@@ -10,30 +10,36 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.builders.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.search.writer.AssetIndexWriter;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import com.n4systems.testutils.QueryBuilderMatcher;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.junit.Test;
 
 import java.lang.reflect.Field;
 import java.util.List;
 
+import static com.n4systems.testutils.QueryTypeMatcher.eq;
+import static org.easymock.EasyMock.anyObject;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
+import static org.hamcrest.CoreMatchers.any;
 
 public class AssetIndexerServiceTest extends FieldIdServiceTest {
     
     private @TestTarget AssetIndexerService assetIndexerService;
 
-    private @TestMock AnalyzerFactory analyzerFactory;
     private @TestMock PersistenceService persistenceService;
+    private @TestMock ConfigService configService;
     private @TestMock AssetIndexWriter assetIndexWriter;
     private @TestMock SecurityContext securityContext;
 
     private Asset asset;
+    private QueryBuilder<IndexQueueItem> query;
     private IndexQueueItem indexQueueItem;
     private boolean tenantQueueItemExists = false;
 
@@ -139,12 +145,16 @@ public class AssetIndexerServiceTest extends FieldIdServiceTest {
         item.setType(itemType);
         item.setId(id);
 
+        query = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
+
+        expect(configService.getBoolean(ConfigEntry.ASSET_INDEX_ENABLED)).andReturn(true);
+        expect(configService.getInteger(ConfigEntry.ASSET_INDEX_SIZE)).andReturn(50);
+
         List<IndexQueueItem> items = Lists.newArrayList(item);
-        expect(persistenceService.findAllNonSecure(IndexQueueItem.class)).andReturn(items);
+        expect(persistenceService.findAll(anyObject(QueryBuilder.class))).andReturn(items);
         expect(persistenceService.findNonSecure(Asset.class,id)).andReturn(asset);
         persistenceService.deleteAny(item);
-        replay(persistenceService);
-
+        replay(persistenceService, configService);
     }
 
 }

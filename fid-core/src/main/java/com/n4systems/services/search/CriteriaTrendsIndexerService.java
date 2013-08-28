@@ -7,7 +7,9 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.services.ConfigService;
 import com.n4systems.services.search.writer.CriteriaTrendsIndexWriter;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,30 +20,41 @@ import java.util.Arrays;
 import java.util.List;
 
 @Transactional
-public class CriteriaTrendsIndexerService extends FieldIdPersistenceService {
+public abstract class CriteriaTrendsIndexerService extends FieldIdPersistenceService {
 
     private static final Logger logger = Logger.getLogger(CriteriaTrendsIndexerService.class);
 
     @Autowired private CriteriaTrendsIndexWriter criteriaTrendsIndexWriter;
     @Autowired private PersistenceService persistenceService;
+    @Autowired private ConfigService configService;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 2000)
     public void processIndexQueue() {
+        Boolean trendsIndexEnabled = configService.getBoolean(ConfigEntry.TRENDS_INDEX_ENABLED);
+        if (!trendsIndexEnabled) {
+            logger.info(getClass().getSimpleName()+": Disabled");
+            return;
+        }
         long startTime = System.currentTimeMillis();
-        logger.info("ProcessIndexQueue: Running");
+        logger.info(getClass().getSimpleName() + ": Running");
 
-        List<CriteriaTrendsIndexQueueItem> items = persistenceService.findAllNonSecure(CriteriaTrendsIndexQueueItem.class);
+        QueryBuilder<CriteriaTrendsIndexQueueItem> query = createQueryBuilder();
+        query.setLimit(configService.getInteger(ConfigEntry.TRENDS_INDEX_SIZE));
+
+        List<CriteriaTrendsIndexQueueItem> items = persistenceService.findAll(query);
         logger.info(getClass().getSimpleName() + " queue length = " + items.size());
         for (CriteriaTrendsIndexQueueItem item : items) {
             try {
                 processIndexQueueItem(item);
                 persistenceService.deleteAny(item);
             } catch (Exception e) {
-                logger.warn("ProcessIndexQueue: Failed for " + item.getType() + ":" + item.getId(), e);
+                logger.warn(getClass().getSimpleName()+": Failed for " + item.getType() + ":" + item.getId(), e);
             }
         }
-        logger.info("ProcessIndexQueue: Completed " + (System.currentTimeMillis() - startTime) + "ms");
+        logger.info(getClass().getSimpleName()+": Completed " + (System.currentTimeMillis() - startTime) + "ms");
     }
+
+    protected abstract QueryBuilder<CriteriaTrendsIndexQueueItem> createQueryBuilder();
 
     public void processIndexQueueItem(CriteriaTrendsIndexQueueItem item) {
         switch(item.getType()) {

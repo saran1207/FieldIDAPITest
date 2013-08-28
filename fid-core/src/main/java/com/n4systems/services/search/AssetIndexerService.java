@@ -10,7 +10,9 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.services.ConfigService;
 import com.n4systems.services.search.writer.AssetIndexWriter;
+import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause;
@@ -31,25 +33,32 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 
     @Autowired private AssetIndexWriter assetIndexWriter;
 
-    private @Autowired AnalyzerFactory analyzerFactory;
+    private @Autowired ConfigService configService;
     private @Resource PlatformTransactionManager transactionManager;
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 2000)
 	public void processIndexQueue() {
+        if (!configService.getBoolean(ConfigEntry.ASSET_INDEX_ENABLED)) {
+            logger.info(getClass().getSimpleName() +": Disabled");
+            return;
+        }
         long startTime = System.currentTimeMillis();
-		logger.info("ProcessIndexQueue: Running");
+		logger.info(getClass().getSimpleName() +": Running");
 
-		List<IndexQueueItem> items = persistenceService.findAllNonSecure(IndexQueueItem.class);
+        QueryBuilder<IndexQueueItem> query = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class);
+        query.setLimit(configService.getInteger(ConfigEntry.ASSET_INDEX_SIZE));
+
+        List<IndexQueueItem> items = persistenceService.findAll(query);
 		logger.info(getClass().getSimpleName() + " queue length = " + items.size());
 		for (IndexQueueItem item : items) {
 			try {
 				processIndexQueueItem(item);
 				persistenceService.deleteAny(item);
 			} catch (Exception e) {
-				logger.warn("ProcessIndexQueue: Failed for " + item.getType() + ":" + item.getId(), e);
+				logger.warn(getClass().getSimpleName() +": Failed for " + item.getType() + ":" + item.getId(), e);
 			}
 		}
-		logger.info("ProcessIndexQueue: Completed " + (System.currentTimeMillis() - startTime) + "ms");
+		logger.info(getClass().getSimpleName() +": Completed " + (System.currentTimeMillis() - startTime) + "ms");
 	}
 
 	private void processIndexQueueItem(IndexQueueItem item) {

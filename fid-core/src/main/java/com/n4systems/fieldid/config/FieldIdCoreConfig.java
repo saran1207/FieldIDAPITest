@@ -527,15 +527,19 @@ public class FieldIdCoreConfig {
         return new EventFullTextSearchService();
     }
 
-	@Bean
-	@Scope("singleton")
-	public AssetIndexerService assetIndexerService() {
-		return new AssetIndexerService();
-	}
+    @Bean
+    public CriteriaTrendsIndexerServiceForOther criteriaTrendsIndexerService() {
+        return new CriteriaTrendsIndexerServiceForOther();
+    }
 
     @Bean
-    public CriteriaTrendsIndexerService criteriaTrendsIndexerService() {
-        return new CriteriaTrendsIndexerService();
+    public CriteriaTrendsIndexerServiceForTenants criteriaTrendsIndexerServiceTenants() {
+        return new CriteriaTrendsIndexerServiceForTenants();
+    }
+
+    @Bean
+    public AssetIndexerService assetIndexerService() {
+        return new AssetIndexerService();
     }
 
 	@Bean

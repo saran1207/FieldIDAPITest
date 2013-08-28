@@ -83,7 +83,13 @@ public enum ConfigEntry {
     AMAZON_ACCESS_KEY_ID                        (   "AKIAJYAZBOFFRZAZSIGA"),
     AMAZON_SECRET_ACCESS_KEY                    (   "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"),
     FIELDID_SALES_MANAGERS_EMAIL                (   "salesmanagers@fieldid.com"),
-    CUSTOM_JS                                   (   "");
+    CUSTOM_JS                                   (   ""),
+
+    ASSET_INDEX_ENABLED                         (   "true"),
+    ASSET_INDEX_SIZE                            (   "50"),
+
+    TRENDS_INDEX_ENABLED                         (   "true"),
+    TRENDS_INDEX_SIZE                            (   "50");
 	
 	private String defaultValue;
 	
