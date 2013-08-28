@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.sendsearch;
 
 import com.n4systems.ejb.PageHolder;
+import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetExcelExportService;
 import com.n4systems.fieldid.service.download.StringRowPopulator;
@@ -121,19 +122,20 @@ public class SendSearchService extends FieldIdPersistenceService {
 
     private void sendSearchExcel(SearchCriteria criteria, SendSavedItemSchedule schedule) throws MessagingException {
         File temporaryAttachmentFile = null;
-        int totalResults = criteria.getSelection().getNumSelectedIds();
 
-        if ((totalResults <= 0 && !schedule.isSendBlankReport())) {
-            return;
-        }
+        boolean exceptionOnEmptyReport = !schedule.isSendBlankReport();
 
         try {
             temporaryAttachmentFile = File.createTempFile("excel-export-attachment", getCurrentUser().getTenant().getName()+"."+getCurrentUser().getUserID());
 
-            if (criteria instanceof AssetSearchCriteria) {
-                assetExcelExportService.generateFile((AssetSearchCriteria)criteria, temporaryAttachmentFile, false, MAX_RESULTS_FOR_SENT_SEARCH, MAX_RESULTS_FOR_SENT_SEARCH);
-            } else if (criteria instanceof EventReportCriteria) {
-                eventExcelExportService.generateFile((EventReportCriteria)criteria, temporaryAttachmentFile, false, MAX_RESULTS_FOR_SENT_SEARCH, MAX_RESULTS_FOR_SENT_SEARCH);
+            try {
+                if (criteria instanceof AssetSearchCriteria) {
+                    assetExcelExportService.generateFile((AssetSearchCriteria)criteria, temporaryAttachmentFile, false, MAX_RESULTS_FOR_SENT_SEARCH, MAX_RESULTS_FOR_SENT_SEARCH, exceptionOnEmptyReport);
+                } else if (criteria instanceof EventReportCriteria) {
+                    eventExcelExportService.generateFile((EventReportCriteria)criteria, temporaryAttachmentFile, false, MAX_RESULTS_FOR_SENT_SEARCH, MAX_RESULTS_FOR_SENT_SEARCH, exceptionOnEmptyReport);
+                }
+            } catch(EmptyReportException ere) {
+                return;
             }
 
             TemplateMailMessage message = createBasicHtmlMessage("sendSavedItemExcel", criteria, schedule);

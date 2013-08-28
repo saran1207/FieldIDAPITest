@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.export;
 
 import com.n4systems.ejb.PageHolder;
+import com.n4systems.exceptions.EmptyReportException;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.service.download.CellHandlerFactory;
 import com.n4systems.fieldid.service.download.DownloadService;
@@ -33,6 +34,11 @@ public abstract class ExcelExportService<T extends SearchCriteria> extends Downl
     @Override
     @Transactional
     public void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize) throws ReportException {
+        generateFile(criteria, file, useSelection, resultLimit, pageSize, false);
+    }
+
+    @Transactional
+    public void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize, boolean exceptionOnEmptyReport) throws ReportException {
         User user = getCurrentUser();
 
         TableGenerationContext exportContextProvider = new TableGenerationContextImpl(user.getTimeZone(), user.getOwner().getPrimaryOrg().getDateFormat(), user.getOwner().getPrimaryOrg().getDateFormat() + " h:mm a", user.getOwner());
@@ -45,6 +51,10 @@ public abstract class ExcelExportService<T extends SearchCriteria> extends Downl
             totalResults = criteria.getSelection().getNumSelectedIds();
         } else {
             totalResults = countTotalResults(criteria, resultLimit);
+        }
+
+        if (exceptionOnEmptyReport && totalResults == 0) {
+            throw new EmptyReportException();
         }
 
         int totalPages = (int)Math.ceil(totalResults / (double)pageSize);
