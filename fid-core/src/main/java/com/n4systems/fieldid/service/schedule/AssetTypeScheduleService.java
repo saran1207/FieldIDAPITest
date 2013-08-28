@@ -22,6 +22,19 @@ public class AssetTypeScheduleService extends FieldIdPersistenceService {
 		return persistenceService.findAll(builder);
     }
 
+    public boolean scheduleExists(AssetTypeSchedule schedule) {
+        QueryBuilder<AssetTypeSchedule> builder = createTenantSecurityBuilder(AssetTypeSchedule.class);
+
+        builder.addSimpleWhere("tenant", schedule.getTenant());
+        builder.addSimpleWhere("eventType", schedule.getEventType());
+        builder.addSimpleWhere("assetType", schedule.getAssetType());
+        builder.addSimpleWhere("frequencyInDays", schedule.getFrequency());
+        if(schedule.getOwner() != null) {
+            builder.addSimpleWhere("owner", schedule.getOwner());
+        }
+        return persistenceService.exists(builder);
+    }
+
     public AssetTypeSchedule getSchedule(Long id) {
         return persistenceService.find(AssetTypeSchedule.class, id);
     }

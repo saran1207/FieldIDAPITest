@@ -54,6 +54,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
     private AssetTypeScheduleService assetTypeScheduleService;
 
     private WebMarkupContainer schedules;
+    private WebMarkupContainer filterActions;
     private ListView frequencyList;
     private ListView recurringEventList;
 
@@ -73,7 +74,10 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 final IModel<AssetTypeSchedule> schedule = item.getModel();
                 item.add(new Label("type", new PropertyModel<String>(schedule, "eventType.displayName")));
                 item.add(new Label("recurrence", new FIDLabelModel("label.every_x_days", schedule.getObject().getFrequency())));
-                item.add(new Label("owner", new PropertyModel<String>(schedule, "owner.displayName")));
+                if(schedule.getObject().isOverride())
+                    item.add(new Label("owner", new PropertyModel<String>(schedule, "owner.displayName")));
+                else
+                    item.add(new Label("owner", "--"));
                 item.add(new AjaxLink<Void>("remove") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -81,7 +85,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                         assetTypeService.update(assetType.getObject());
                         assetTypeScheduleService.delete(assetTypeScheduleService.getSchedule(schedule.getObject().getId()));
                         frequencyList.detachModels();
-                        target.add(schedules);
+                        target.add(schedules, filterActions);
                     }
                 });
             }
@@ -105,31 +109,17 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                     public void onClick(AjaxRequestTarget target) {
                         assetTypeService.purgeRecurringEvent(item.getModelObject());
                         recurringEventList.detachModels();
-                        target.add(schedules);
+                        target.add(schedules, filterActions);
                     }
                 });
             }
         });
 
         add(frequencyModalWindow = new DialogModalWindow("addFrequency").setInitialWidth(400).setInitialHeight(200));
-        frequencyModalWindow.setContent(new FrequencyFormPanel(frequencyModalWindow.getContentId(), assetType) {
-            @Override
-            protected void onSaveSchedule(AjaxRequestTarget target, AssetTypeSchedule schedule) {
-                assetTypeScheduleService.createSchedule(schedule);
-                assetType.getObject().getSchedules().add(schedule);
-                assetTypeService.update(assetType.getObject());
-                target.add(schedules);
-                frequencyModalWindow.close(target);
-            }
-        });
+        frequencyModalWindow.setContent(getFrequencyForm());
+
         add(recurrenceModalWindow = new DialogModalWindow("addRecurrence").setInitialWidth(400).setInitialHeight(200));
-        recurrenceModalWindow.setContent(new RecurrenceFormPanel(recurrenceModalWindow.getContentId(), assetType){
-            @Override
-            protected void onCreateRecurrence(AjaxRequestTarget target) {
-                target.add(schedules);
-                frequencyModalWindow.close(target);
-            }
-        });
+        recurrenceModalWindow.setContent(getRecurrenceForm());
         WebMarkupContainer scheduleActions;
         add(scheduleActions = new WebMarkupContainer("scheduleActions"));
 
@@ -147,8 +137,8 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
             }
         });
 
-        WebMarkupContainer filterActions;
         add(filterActions = new WebMarkupContainer("filters"));
+        filterActions.setOutputMarkupId(true);
 
         filterActions.add(new AjaxLink<Void>("showAll") {
             @Override
@@ -157,7 +147,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 recurringEventList.setVisible(true);
                 target.add(schedules);
             }
-        }.add(new Label("total", String.valueOf(frequencyList.getList().size() + recurringEventList.getList().size()))));
+        }.add(new Label("total", getTotal())));
 
         filterActions.add(new AjaxLink<Void>("showRecurring") {
             @Override
@@ -166,7 +156,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 recurringEventList.setVisible(true);
                 target.add(schedules);
             }
-        }.add(new Label("totalRecurring", String.valueOf(recurringEventList.getList().size()))));
+        }.add(new Label("totalRecurring", getTotalRecurring())));
 
         filterActions.add(new AjaxLink<Void>("showFrequency") {
             @Override
@@ -175,7 +165,32 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 recurringEventList.setVisible(false);
                 target.add(schedules);
             }
-        }.add(new Label("totalFrequency", String.valueOf(frequencyList.getList().size()))));
+        }.add(new Label("totalFrequency", getTotalFrequency())));
+    }
+
+    private RecurrenceFormPanel getRecurrenceForm() {
+        return new RecurrenceFormPanel(recurrenceModalWindow.getContentId(), assetType){
+            @Override
+            protected void onCreateRecurrence(AjaxRequestTarget target) {
+                target.add(schedules, filterActions);
+                recurrenceModalWindow.close(target);
+                recurrenceModalWindow.setContent(getRecurrenceForm());
+            }
+        };
+    }
+
+    private FrequencyFormPanel getFrequencyForm() {
+        return new FrequencyFormPanel(frequencyModalWindow.getContentId(), assetType) {
+            @Override
+            protected void onSaveSchedule(AjaxRequestTarget target, AssetTypeSchedule schedule) {
+                assetTypeScheduleService.createSchedule(schedule);
+                assetType.getObject().getSchedules().add(schedule);
+                assetTypeService.update(assetType.getObject());
+                target.add(schedules, filterActions);
+                frequencyModalWindow.close(target);
+                frequencyModalWindow.setContent(getFrequencyForm());
+            }
+        };
     }
 
     private LoadableDetachableModel<List<AssetTypeSchedule>> getFrequencies() {
@@ -192,6 +207,33 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
             @Override
             protected List<RecurringAssetTypeEvent> load() {
                 return assetTypeService.getRecurringEvents(assetType.getObject());
+            }
+        };
+    }
+
+    private LoadableDetachableModel<Long> getTotal() {
+        return new LoadableDetachableModel<Long>() {
+            @Override
+            protected Long load() {
+                return new Integer(frequencyList.getList().size() + recurringEventList.getList().size()).longValue();
+            }
+        };
+    }
+
+    private LoadableDetachableModel<Long> getTotalRecurring() {
+        return new LoadableDetachableModel<Long>() {
+            @Override
+            protected Long load() {
+                return new Integer(recurringEventList.getList().size()).longValue();
+            }
+        };
+    }
+
+    private LoadableDetachableModel<Long> getTotalFrequency() {
+        return new LoadableDetachableModel<Long>() {
+            @Override
+            protected Long load() {
+                return new Integer(frequencyList.getList().size()).longValue();
             }
         };
     }
