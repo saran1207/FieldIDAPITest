@@ -5,8 +5,10 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.org.OrgLocationTree;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.behavior.FormComponentPanelUpdatingBehavior;
+import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.tree.JsonTreeNode;
 import com.n4systems.fieldid.wicket.components.tree.Tree;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -61,7 +63,8 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
         }
 
         add(text = new TextField("text", new PropertyModel(this, "input")));
-        add(_type = new HiddenField("type", new PropertyModel(this,"entityType")));
+        text.add(new Watermark(getWatermarkText()));
+        add(_type = new HiddenField("type", new PropertyModel(this, "entityType")));
         add(_entityId = new HiddenField("entityId", new PropertyModel(this,"entityId")));
         add(tree = new Tree("tree") {
             @Override protected List<JsonTreeNode> getNodes(String search) {
@@ -202,5 +205,9 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
     public BaseOrg getOwner() {
         return model.getOrg();
+    }
+
+    public String getWatermarkText() {
+        return new FIDLabelModel("message.ownerpicker_watermark").getObject();
     }
 }

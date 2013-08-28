@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
 import com.n4systems.model.*;
@@ -102,7 +103,7 @@ public class RecurrenceFormPanel extends Panel {
             inputContainer.add(dateTimepicker.setOutputMarkupPlaceholderTag(true));
             inputContainer.add(timePicker);
 
-            inputContainer.add(new AutoCompleteOrgPicker("organization", new PropertyModel<BaseOrg>(this, "owner")).setRequired(false));
+            inputContainer.add(new OrgLocationPicker("organization", new PropertyModel<BaseOrg>(this, "owner")));
 
             inputContainer.add(new CheckBox("ownerAndDown", new PropertyModel<Boolean>(this, "ownerAndDown")));
 
