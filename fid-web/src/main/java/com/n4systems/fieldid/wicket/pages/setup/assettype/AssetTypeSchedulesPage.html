@@ -6,34 +6,30 @@
 
 <wicket:extend>
 
-    <span wicket:id="filters">
-        <a wicket:id="showAll"><wicket:message key="label.all_rules"/> <label wicket:id="total"/></a>
-        <a wicket:id="showRecurring"><wicket:message key="label.recurring"/> <label wicket:id="totalRecurring"/></a>
-        <a wicket:id="showFrequency"><wicket:message key="label.event_triggered"/> <label wicket:id="totalFrequency"/></a>
-    </span>
+    <h3>Filter by:</h3>
+    <ul wicket:id="filters" class="filters">
+        <li wicket:id="showAll" class="active">
+            <span class="filter-type"><wicket:message key="label.all_rules"/></span> (<span wicket:id="total"/>)
+        </li>
+        <li wicket:id="showRecurring">
+            <span class="filter-type"><wicket:message key="label.recurring"/></span> (<span wicket:id="totalRecurring"/>)</li>
+        <li wicket:id="showFrequency">
+            <span class="filter-type"><wicket:message key="label.event_triggered"/></span> (<span wicket:id="totalFrequency"/>)
+        </li>
+    </ul>
 
-    <span wicket:id="scheduleActions" class="actions">
+    <div wicket:id="scheduleActions" class="dropdown-btn">
+        <a href="javascript:void(0);" class="btn btn-blue"><wicket:message key="label.create_new_rule"/></a>
         <ul>
-            <li class="menu">
-                <a href="javascript:void(0);">
-                    <wicket:message key="label.create_new_rule"/>
-                </a>
-                <ul class="menu-items">
-                    <li>
-                        <a wicket:id="scheduleRecurrence"><wicket:message key="label.recurring"/></a>
-                    </li>
-                    <li>
-                        <a wicket:id="scheduleFrequency"><wicket:message key="label.event_triggered"/></a>
-                    </li>
-                </ul>
-            </li>
+            <li><a wicket:id="scheduleRecurrence"><wicket:message key="label.recurring"/></a></li>
+            <li><a wicket:id="scheduleFrequency"><wicket:message key="label.event_triggered"/></a></li>
         </ul>
-    </span>
+    </div>
 
     <div wicket:id="addFrequency"/>
     <div wicket:id="addRecurrence"/>
 
-    <div wicket:id="schedules" >
+    <div wicket:id="schedules">
         <table class="list">
             <thead>
                 <tr>

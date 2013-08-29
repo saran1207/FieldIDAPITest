@@ -1,7 +1,50 @@
-.list {
-    float: left;
+#pageContent {
+	width: 98%;
+	padding: 15px 1%;
+}
+h3 {
+	font-size: 14px;
+	font-weight: bold;
+	display: inline;
+	margin-right: 10px;
 }
 
-.actions {
-    float: right;
+/* Filter options */
+.filters {
+	display: inline-block;
+    *display: inline;
+}
+.filters li {
+    color: #333333;
+    display: inline-block;
+    *display: inline;
+    padding: 0 5px 0 10px;
+    cursor: pointer;
+    font-size: 13px;
+    border-left: 1px solid #666;
+}
+.filters li:first-child {
+	border-left: none;
+	padding-left: 0;
+}
+.filters .filter-type {
+	color: #0093FF;
+	text-decoration: underline;
+}
+.filters .filter-type:hover {
+	text-decoration: none;
+}
+.filters li.active .filter-type {
+    text-decoration: none;
+}
+
+/* Create New Rule button */
+.dropdown-btn {
+	float: right;
+	text-align: right;
+	font-size: 13px;
+	margin-bottom: 6px;
+}
+.btn {
+	font-size: 13px;
 }

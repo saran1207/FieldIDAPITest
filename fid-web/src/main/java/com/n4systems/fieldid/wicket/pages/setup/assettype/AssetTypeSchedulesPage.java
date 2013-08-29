@@ -284,12 +284,12 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/asset/actions-menu.css");
+        //response.renderCSSReference("style/newCss/asset/actions-menu.css");
+        response.renderCSSReference("style/newCss/component/buttons.css");
         response.renderCSSReference("style/newCss/assetType/assetTypeSchedules.css");
 
-        response.renderJavaScriptReference("javascript/subMenu.js");
-        response.renderOnDomReadyJavaScript("subMenu.init();");
-
+        //response.renderJavaScriptReference("javascript/subMenu.js");
+        //response.renderOnDomReadyJavaScript("subMenu.init();");
     }
 
     @Override
