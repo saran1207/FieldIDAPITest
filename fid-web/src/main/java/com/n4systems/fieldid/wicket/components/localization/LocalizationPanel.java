@@ -5,6 +5,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.model.Criteria;
+import com.n4systems.model.OneClickCriteria;
+import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
@@ -13,6 +16,7 @@ import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.services.localization.LocalizationService;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -55,21 +59,52 @@ public class LocalizationPanel extends Panel {
                 .add(new ListView<LocalizedField>("values", localizedFields = new LocalizedFieldsModel()) {
                     @Override
                     protected void populateItem(ListItem<LocalizedField> item) {
-                        LocalizedField field = item.getModelObject();
+                        final LocalizedField field = item.getModelObject();
                         item.add(new Label("label", Model.of(field.getName())));
                         item.add(new Label("defaultValue", Model.of(field.getDefaultValue())));
                         item.add(new TranslationsListView("translations", new PropertyModel(item.getModel(), "values")));
+                        item.add(new AjaxLink("scoreGroups") {
+                            @Override public void onClick(AjaxRequestTarget target) {
+
+                            }
+                            @Override public boolean isVisible() {
+                                return field.entity instanceof ScoreCriteria;
+                            }
+                        });
+                        item.add(new AjaxLink("buttonGroups") {
+                            @Override public void onClick(AjaxRequestTarget target) {
+
+                            }
+                            @Override public boolean isVisible() {
+                                return field.entity instanceof OneClickCriteria;
+                            }
+                        });
+                        item.add(new AjaxLink("observations") {
+                            @Override public void onClick(AjaxRequestTarget target) {
+
+                            }
+                            @Override public boolean isVisible() {
+                                if (field.entity instanceof Criteria) {
+                                    Criteria criteria  = (Criteria) field.entity;
+                                    return !criteria.getRecommendations().isEmpty() || !criteria.getDeficiencies().isEmpty();
+                                }
+                                return false;
+                            }
+                        });
                     }
                 })
                 .add(new FidDropDownChoice<String>("language", new PropertyModel(this, "language"), languages).setNullValid(false).setRequired(true))
                 .add(new AjaxSubmitLink("submit") {
-                    @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    @Override
+                    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         List<LocalizedField> fields = localizedFields.getObject();
-                        for (LocalizedField field:fields) {
+                        for (LocalizedField field : fields) {
                             System.out.println(field);
                         }
                     }
-                    @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+
+                    @Override
+                    protected void onError(AjaxRequestTarget target, Form<?> form) {
 
                     }
                 })
@@ -138,7 +173,7 @@ public class LocalizationPanel extends Panel {
             for (Field field:fields) {
                 String ognl = localizationService.getOgnlFor(entity.getClass(), field);
                 LocalizedText text = getLocalizedTextValue(entity, field);
-                localizedFields.put(ognl+id, new LocalizedField(field.getName(), text.getText(), ognl));
+                localizedFields.put(ognl+id, new LocalizedField(entity, field.getName(), text.getText()));
             }
 
             // ...now add translations (if they are there)
@@ -209,7 +244,6 @@ public class LocalizationPanel extends Panel {
             throw new IllegalStateException("trying to get " + LocalizedText.class.getSimpleName() + " when field returns " + value==null?" <null>" : value.getClass().getSimpleName());
         }
 
-
         private Object getValue(Object entity, final Field field) {
             try {
                 field.setAccessible(true);
@@ -224,15 +258,15 @@ public class LocalizationPanel extends Panel {
 
 
     class LocalizedField implements Serializable {
-        private String ognl;
         private String defaultValue;
         private String name;
+        private final Object entity;
         private List<String> values = new ArrayList<String>(Collections.nCopies(languages.size(),(String)null));
 
-        public LocalizedField(String name, String defaultValue, String ognl) {
+        public LocalizedField(Object entity, String name, String defaultValue) {
             this.name = name;
             this.defaultValue = defaultValue;
-            this.ognl = ognl;
+            this.entity = entity;
         }
 
         public LocalizedField addTranslation(Translation translation) {
