@@ -1,6 +1,9 @@
 package com.n4systems.fieldid.wicket.components.assettype;
 
+import com.n4systems.fieldid.wicket.components.ExternalImage;
+import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.model.AssetType;
+import com.n4systems.reporting.PathHandler;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -12,6 +15,8 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+
+import java.io.File;
 
 public class AssetTypeImagePanel extends Panel {
 
@@ -54,6 +59,22 @@ public class AssetTypeImagePanel extends Panel {
         });
 
         fileUploadForm.add(fileUploadField);
+
+
+        boolean imageExists;
+        String imageUrl = "";
+        if(assetTypeModel.getObject().getImageName() != null) {
+            imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("/file/downloadAssetTypeImage.action?uniqueID=" + assetTypeModel.getObject().getId());
+            if(assetTypeModel.getObject().getImageName() != null)
+                imageExists = new File(PathHandler.getAssetTypeImageFile(assetTypeModel.getObject()), assetTypeModel.getObject().getImageName()).exists();
+            else
+                imageExists = false;
+        } else
+            imageExists = false;
+
+        ExternalImage assetImage;
+        uploadedFileDisplayPanel.add(assetImage = new ExternalImage("image", imageUrl));
+        assetImage.setVisible(imageExists);
 
         uploadedFileDisplayPanel.add(new Label("fileName", new PropertyModel<String>(this, "clientFileName")));
         uploadedFileDisplayPanel.add(new AjaxLink("removeLink") {

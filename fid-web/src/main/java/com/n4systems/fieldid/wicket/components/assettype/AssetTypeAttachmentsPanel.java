@@ -1,27 +1,33 @@
 package com.n4systems.fieldid.wicket.components.assettype;
 
 import com.n4systems.fieldid.wicket.behavior.Watermark;
+import com.n4systems.fieldid.wicket.components.ExternalImage;
+import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
@@ -37,7 +43,7 @@ public class AssetTypeAttachmentsPanel extends Panel {
     List<FileAttachment> attachments = new ArrayList<FileAttachment>();
     private WebMarkupContainer existingAttachmentsContainer;
 
-    public AssetTypeAttachmentsPanel(String id, IModel<AssetType> assetTypeModel) {
+    public AssetTypeAttachmentsPanel(String id, final IModel<AssetType> assetTypeModel) {
         super(id);
 
         if (!assetTypeModel.getObject().isNew()) {
@@ -51,12 +57,24 @@ public class AssetTypeAttachmentsPanel extends Panel {
         existingAttachmentsContainer.add(new ListView<FileAttachment>("existingAttachments", attachments) {
             @Override
             protected void populateItem(final ListItem<FileAttachment> item) {
+
                 TextArea<String> comments = new TextArea<String>("comments", ProxyModel.of(item.getModel(), on(AssetAttachment.class).getComments()));
                 item.add(comments);
                 comments.add(new AjaxFormComponentUpdatingBehavior("onblur") {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) { } });
                 comments.add(new Watermark(new FIDLabelModel("label.asset_type.form.files").getObject()));
+
+                WebComponent image;
+                if (item.getModelObject().isImage()) {
+                    String imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetTypeAttachedFile.action?fileName=" + item.getModelObject().getFileName().replace(" ", "+") + "&uniqueID=" + assetTypeModel.getObject().getId() + "&attachmentID=" + item.getModelObject().getId());
+                    item.add(image = new ExternalImage("attachmentImage", imageUrl));
+                    image.add(new AttributeModifier("class", "attachmentImage"));
+                } else {
+                    item.add(image = new Image("attachmentImage", new ContextRelativeResource("images/file-icon.png")));
+                    image.add(new AttributeModifier("class", "attachmentIcon"));
+                }
+
                 item.add(new Label("fileName", new NameAfterLastFileSeparatorModel(ProxyModel.of(item.getModel(), on(AssetAttachment.class).getFileName()))));
                 item.add(new AjaxLink("removeLink") {
                     @Override
@@ -71,7 +89,6 @@ public class AssetTypeAttachmentsPanel extends Panel {
         add(existingAttachmentsContainer);
         add(new UploadAttachmentForm("uploadAttachmentForm"));
     }
-
 
     class UploadAttachmentForm extends Form {
         public UploadAttachmentForm(String id) {
