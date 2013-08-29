@@ -18,7 +18,6 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
-import com.n4systems.fieldid.wicket.pages.identify.LimitedEditAsset;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;

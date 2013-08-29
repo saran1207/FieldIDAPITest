@@ -1,12 +1,15 @@
 package com.n4systems.fieldid.wicket.components.localization;
 
-import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.persistence.localization.Localized;
+import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.services.localization.LocalizationService;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -26,6 +29,9 @@ import org.reflections.ReflectionUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.*;
 
 import static org.reflections.ReflectionUtils.withAnnotation;
@@ -42,12 +48,11 @@ public class LocalizationPanel extends Panel {
     private String language = languages.get(0);
 
 
-    public LocalizationPanel(String id, IModel<? extends EntityWithTenant> model) {
+    public LocalizationPanel(String id, IModel<?> model) {
         super(id, model);
-        Preconditions.checkArgument(model.getObject().getClass().isAnnotationPresent(Localized.class));
 
         add(new Form("form")
-                .add(new ListView<LocalizedField>("values", localizedFields = new LocalizedFieldsModel(model)) {
+                .add(new ListView<LocalizedField>("values", localizedFields = new LocalizedFieldsModel()) {
                     @Override
                     protected void populateItem(ListItem<LocalizedField> item) {
                         LocalizedField field = item.getModelObject();
@@ -85,24 +90,55 @@ public class LocalizationPanel extends Panel {
 
     class LocalizedFieldsModel extends LoadableDetachableModel<List<LocalizedField>> {
 
-        private final IModel<? extends EntityWithTenant> model;
+        Set<Object> loaded;
 
-        LocalizedFieldsModel(IModel<? extends EntityWithTenant> model) {
+        LocalizedFieldsModel() {
             super();
-            this.model = model;
         }
 
         @Override
         protected List<LocalizedField> load() {
-            Map<String,LocalizedField> localizedFields = Maps.newHashMap();
+            loaded = Sets.newHashSet();
+            IModel<?> model = LocalizationPanel.this.getDefaultModel();
+            if (model==null||model.getObject()==null) {
+                return Lists.newArrayList();
+            }
+            model.detach();
+            Map<String,LocalizedField> localizedFields = loadForEntity(model.getObject());
+            return Lists.newArrayList(localizedFields.values());
+        }
 
-            List<Translation> translations = localizationService.getTranslations(model.getObject());
+        private Map<String, LocalizedField> loadForEntities(Collection<?> entities) {
+            Map<String,LocalizedField> localizedFields = Maps.newTreeMap();
+            for (Object entity:entities) {
+                localizedFields.putAll(loadForEntity(entity));
+            }
+            return localizedFields;
+        }
 
-            Set<Field> fields = ReflectionUtils.getAllFields(model.getObject().getClass(), withAnnotation(Localized.class));
-            // stick in default values....
+        private Map<String, LocalizedField> loadForEntity(Object entity) {
+            Map<String,LocalizedField> localizedFields = Maps.newTreeMap();
+            if (loaded.contains(entity)) {
+                return localizedFields;    //already done?
+            }
+            loaded.add(entity);
+
+            Long id = null;
+            if (entity instanceof EntityWithTenant) {
+                id = ((EntityWithTenant)entity).getId();
+            } else if (entity instanceof LegacyBaseEntity) {
+                id = ((LegacyBaseEntity)entity).getUniqueID();
+            }
+
+            // TODO DD : refactor this all into service??
+            List<Translation> translations = localizationService.getTranslations(entity);
+            Set<Field> fields = ReflectionUtils.getAllFields(entity.getClass(), withAnnotation(Localized.class));
+
+            // stick in default values...
             for (Field field:fields) {
-                String ognl = localizationService.getOgnlFor(model.getObject().getClass(), field);
-                localizedFields.put(ognl, new LocalizedField(field.getName(), new PropertyModel<String>(model, field.getName()).getObject()));
+                String ognl = localizationService.getOgnlFor(entity.getClass(), field);
+                LocalizedText text = getLocalizedTextValue(entity, field);
+                localizedFields.put(ognl+id, new LocalizedField(field.getName(), text.getText(), ognl));
             }
 
             // ...now add translations (if they are there)
@@ -114,19 +150,89 @@ public class LocalizationPanel extends Panel {
                     localizedField.addTranslation(translation);
                 }
             }
-            return Lists.newArrayList(localizedFields.values());
+
+            // .. now scan for embedded LocalizedText fields.
+            fields = ReflectionUtils.getAllFields(entity.getClass(), new Predicate() {
+                @Override public boolean apply(Object input) {
+                    Field field = (Field) input;
+                    return !Modifier.isStatic(field.getModifiers()) && field.getType().isAnnotationPresent(Localized.class);
+                }
+            });
+            for (Field field : fields) {
+                localizedFields.putAll(loadForEntity(getValue(entity, field)));
+            }
+
+            // ...now handle all collections that might have embedded LocalizedText.
+            fields = ReflectionUtils.getAllFields(entity.getClass(), new Predicate() {
+                @Override public boolean apply(Object input) {
+                    Field field = (Field) input;
+                    if (Modifier.isStatic(field.getModifiers())) return false;
+                    return isCollectionOfLocalizedEntities(field.getGenericType());
+                }
+            });
+            for (Field field : fields) {
+                localizedFields.putAll(loadForEntities(getValues(entity, field)));
+            }
+            return localizedFields;
         }
+
+        private boolean isCollectionOfLocalizedEntities(Type type) {
+            if (type instanceof ParameterizedType ) {
+                Type rawType = ((ParameterizedType) type).getRawType();
+                if (rawType instanceof Class && ((Class) rawType).isAssignableFrom(Collection.class)) {
+                    ParameterizedType pt = (ParameterizedType) type;
+                    Type[] fieldArgTypes = pt.getActualTypeArguments();
+                    for(Type fieldArgType : fieldArgTypes) {
+                        if (fieldArgType instanceof Class<?>) {
+                            Class<?> fieldClass = (Class<?>) fieldArgType;
+                            return fieldClass.isAnnotationPresent(Localized.class);
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        private Collection<?> getValues(Object entity, final Field field) {
+            Object value = getValue(entity, field);
+            if (value instanceof Collection) {
+                return (Collection)value;
+            }
+            throw new IllegalStateException("trying to get collection when field returns " + value==null?" <null>" : value.getClass().getSimpleName());
+        }
+
+        private LocalizedText getLocalizedTextValue(Object entity, final Field field) {
+            Object value = getValue(entity, field);
+            if (value instanceof LocalizedText) {
+                return (LocalizedText)value;
+            }
+            throw new IllegalStateException("trying to get " + LocalizedText.class.getSimpleName() + " when field returns " + value==null?" <null>" : value.getClass().getSimpleName());
+        }
+
+
+        private Object getValue(Object entity, final Field field) {
+            try {
+                field.setAccessible(true);
+                Object value = field.get(entity);
+                return value;
+            } catch (IllegalAccessException e) {
+                throw new IllegalStateException("can't get value for " + field.getName() + " in class " + entity.getClass().getSimpleName());
+            }
+        }
+
     }
 
 
     class LocalizedField implements Serializable {
+        private String ognl;
         private String defaultValue;
         private String name;
         private List<String> values = new ArrayList<String>(Collections.nCopies(languages.size(),(String)null));
 
-        public LocalizedField(String name, String defaultValue) {
+        public LocalizedField(String name, String defaultValue, String ognl) {
             this.name = name;
             this.defaultValue = defaultValue;
+            this.ognl = ognl;
         }
 
         public LocalizedField addTranslation(Translation translation) {
@@ -160,7 +266,6 @@ public class LocalizationPanel extends Panel {
             return defaultValue;
         }
     }
-
 
 
 }

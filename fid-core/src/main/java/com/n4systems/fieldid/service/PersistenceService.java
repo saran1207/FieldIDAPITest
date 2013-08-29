@@ -56,7 +56,7 @@ public class PersistenceService extends FieldIdService {
         return entity;
     }
 
-    private Session getHibernateSession() {
+    protected Session getHibernateSession() {
         return (Session) em.getDelegate();
     }
 

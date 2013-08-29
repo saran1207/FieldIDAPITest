@@ -1,14 +1,10 @@
 package com.n4systems.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.reporting.PathHandler;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "printouts")

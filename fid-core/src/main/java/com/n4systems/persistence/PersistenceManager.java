@@ -1,20 +1,5 @@
 package com.n4systems.persistence;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import org.apache.log4j.Logger;
-import org.hibernate.FlushMode;
-import org.hibernate.LockMode;
-import org.hibernate.Session;
-import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.stat.Statistics;
-
 import com.n4systems.exceptions.EntityStillReferencedException;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.deleters.Deleter;
@@ -22,6 +7,19 @@ import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.ExceptionHelper;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
+import org.hibernate.FlushMode;
+import org.hibernate.LockMode;
+import org.hibernate.Session;
+import org.hibernate.exception.ConstraintViolationException;
+import org.hibernate.stat.Statistics;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class PersistenceManager {
     public static final String PRODUCTION_PERSISTENCE_UNIT = "fieldid";

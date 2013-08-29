@@ -4,6 +4,7 @@ import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.HasModifiedBy;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.user.User;
+import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.persistence.utils.DefaultEntityModifiedCreatedHandler;
 import com.n4systems.persistence.utils.EntityModifiedCreatedHandler;
 
@@ -102,5 +103,17 @@ abstract public class AbstractEntity extends BaseEntity implements Serializable,
 		createdBy = null;
 		modifiedBy = null;
 	}
-    
+
+    @Deprecated  // just use new LocalizedText().
+    protected LocalizedText updateLocalizedText(LocalizedText currentText, String text) {
+        // this would be better done if a aspect for
+        if (currentText==null) {
+            return new LocalizedText(text);
+        } else if (currentText.getText().equals(text)) {
+            return currentText;
+        } else {
+            return new LocalizedText(text);
+        }
+    }
+
 }

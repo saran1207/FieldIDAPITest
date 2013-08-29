@@ -131,4 +131,5 @@ public class EventTypeGroup extends ArchivableEntityWithTenant implements NamedE
     public void setAction(boolean action) {
         this.action = action;
     }
+
 }

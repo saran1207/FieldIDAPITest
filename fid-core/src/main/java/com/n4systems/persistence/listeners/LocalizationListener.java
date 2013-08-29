@@ -12,7 +12,6 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.event.*;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.type.Type;
-import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -45,7 +44,8 @@ public class LocalizationListener implements PostLoadEventListener, PostUpdateEv
         try {
             for (LocalizedProperty property:getLocalizedProperties(entity,persister)) {
                 EntityWithTenant baseEntity = (EntityWithTenant) entity;
-                Locale locale = LocaleContextHolder.getLocaleContext().getLocale();
+                // TODO DD/SU : put the locale in thread local and get it from there.
+                Locale locale = Locale.getDefault();
                 int index = property.getIndex();
                 Map<Locale, String> translations = LocalizedTextCache.getTranslations(baseEntity, property.getOgnl());
 //                System.out.println(config.getClassMapping(entity.getClass().getName()).getProperty("text").getColumnIterator().next());

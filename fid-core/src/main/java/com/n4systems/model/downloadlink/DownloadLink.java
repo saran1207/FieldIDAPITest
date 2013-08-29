@@ -1,17 +1,5 @@
 package com.n4systems.model.downloadlink;
 
-import java.io.File;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
@@ -19,6 +7,10 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.User;
 import com.n4systems.util.mail.MailMessage;
+
+import javax.persistence.*;
+import java.io.File;
+import java.util.UUID;
 
 @Entity
 @Table(name = "downloads")
@@ -71,12 +63,10 @@ public class DownloadLink extends EntityWithTenant implements HasUser, Saveable,
 		return String.format("%s (%d) {%s}", name, getId(), user);
 	}
 	
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}

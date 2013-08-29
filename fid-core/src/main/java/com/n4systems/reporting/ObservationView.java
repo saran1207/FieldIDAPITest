@@ -1,13 +1,8 @@
 package com.n4systems.reporting;
 
-import java.io.Serializable;
+import com.n4systems.model.*;
 
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.Event;
-import com.n4systems.model.Observation;
-import com.n4systems.model.SubEvent;
+import java.io.Serializable;
 
 public class ObservationView implements Serializable {
 		private static final long serialVersionUID = 1L;

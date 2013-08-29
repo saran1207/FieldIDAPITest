@@ -74,4 +74,5 @@ public class UnitOfMeasure extends AbstractEntity implements NamedEntity, CrossT
     public String getDisplayName() {
         return getName();
     }
+
 }

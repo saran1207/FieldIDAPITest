@@ -1,15 +1,11 @@
 package com.n4systems.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.EntityWithTenant;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "buttons")
@@ -128,4 +124,5 @@ public class Button extends EntityWithTenant implements Listable<Long>, Retirabl
 				getEventResult().equals(button.getEventResult()) &&
 				getButtonName().equals(button.getButtonName()));
 	}
+
 }

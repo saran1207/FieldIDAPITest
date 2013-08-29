@@ -255,4 +255,5 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
     public void setDisplayScorePercentage(boolean displayScorePercentage) {
         this.displayScorePercentage = displayScorePercentage;
     }
+
 }

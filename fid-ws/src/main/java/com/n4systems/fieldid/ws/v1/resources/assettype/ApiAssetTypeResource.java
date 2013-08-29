@@ -1,30 +1,21 @@
 package com.n4systems.fieldid.ws.v1.resources.assettype;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.Path;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
-import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiAttribute;
-import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiAttributeOption;
-import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiComboBoxAttribute;
-import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiDateTimeAttribute;
-import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiSelectBoxAttribute;
-import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiTextBoxAttribute;
-import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.ApiUnitAttribute;
+import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.*;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.reporting.PathHandler;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import javax.ws.rs.Path;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Path("assetType")

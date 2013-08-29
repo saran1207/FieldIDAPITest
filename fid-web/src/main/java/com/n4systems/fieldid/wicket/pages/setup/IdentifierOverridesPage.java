@@ -1,9 +1,15 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
-import java.util.List;
-
+import com.n4systems.fieldid.service.tenant.SystemSettingsService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.model.AssetTypesForTenantModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.AssetType;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -16,16 +22,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import com.n4systems.fieldid.service.tenant.SystemSettingsService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.model.AssetTypesForTenantModel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.AssetType;
 import org.apache.wicket.validation.validator.StringValidator;
+
+import java.util.List;
 
 @SuppressWarnings("serial")
 public class IdentifierOverridesPage extends FieldIDFrontEndPage {

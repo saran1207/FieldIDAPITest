@@ -1,10 +1,10 @@
 package com.n4systems.services.safetyNetwork.catalog.summary;
 
+import com.n4systems.model.AssetType;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.n4systems.model.AssetType;
 
 public class AssetTypeImportSummary extends BaseImportSummary {
 

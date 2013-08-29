@@ -1,29 +1,19 @@
 package com.n4systems.fieldid.ws.v1.resources.smartsearch;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
-import com.n4systems.util.persistence.NewObjectSelect;
-import com.n4systems.util.persistence.OrderClause;
-import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Component
 @Path("smartSearch")

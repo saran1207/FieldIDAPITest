@@ -67,4 +67,5 @@ public class SecondaryOrg extends InternalOrg {
 		enhanced.setPrimaryOrg((PrimaryOrg)enhance(primaryOrg, level));
 		return enhanced;
 	}
+
 }

@@ -1,21 +1,15 @@
 package com.n4systems.model.infooption;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-
+import com.n4systems.model.builders.InfoFieldBeanBuilder;
+import com.n4systems.model.builders.InfoOptionBeanBuilder;
 import org.junit.Before;
 import org.junit.Test;
-
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import com.n4systems.model.builders.InfoFieldBeanBuilder;
-import com.n4systems.model.builders.InfoOptionBeanBuilder;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 public class InfoOptionMapConverterTest {
 	private InfoOptionMapConverter converter = new InfoOptionMapConverter();

@@ -1,31 +1,13 @@
 package com.n4systems.reporting;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.service.event.LastEventDateService;
-import com.n4systems.model.*;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.engine.util.JRLoader;
-
-import org.apache.log4j.Logger;
-
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ReportException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.certificate.ReportCompiler;
-import com.n4systems.model.EventResult;
+import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.model.*;
 import com.n4systems.model.assettype.AssetTypeLoader;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -34,6 +16,20 @@ import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StringListingPair;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
+import org.apache.log4j.Logger;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EventSummaryGenerator {
 	private static final String n4LogoFileName = "n4_logo.gif";

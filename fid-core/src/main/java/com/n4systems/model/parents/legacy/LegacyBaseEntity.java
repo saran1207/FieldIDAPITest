@@ -1,17 +1,16 @@
 package com.n4systems.model.parents.legacy;
 
-import java.io.Serializable;
+import com.n4systems.model.api.SecurityEnhanced;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.security.SecurityLevel;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-
-import com.n4systems.model.api.SecurityEnhanced;
-import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.model.security.SecurityLevel;
+import java.io.Serializable;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -64,4 +63,5 @@ abstract public class LegacyBaseEntity implements Serializable {
 	protected <T> T enhance(SecurityEnhanced<T> entity, SecurityLevel level) {
 		return EntitySecurityEnhancer.enhance(entity, level);
 	}
+
 }

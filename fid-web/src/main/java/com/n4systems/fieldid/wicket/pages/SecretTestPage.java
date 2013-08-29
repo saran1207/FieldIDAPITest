@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.localization.LocalizationPanel;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
+import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.persistence.localization.LocalizedText;
@@ -22,7 +23,6 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -56,7 +56,6 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     private final ListView<AssetType> localizedList;
     private final WebMarkupContainer testEntitiesContainer;
     private final LocalizedText test = new LocalizedText("blah blah balh");
-    private IModel<AssetType> assetTypeModel = Model.of(new AssetType());
     private final LocalizationPanel localizationPanel;
 
     public SecretTestPage() {
@@ -104,7 +103,6 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
                         LocaleContextHolder.setLocale(getLocaleFromForm());
                         testEntities = persistenceService.findAll(AssetType.class);
                         target.add(testEntitiesContainer);
-                        target.add(testEntitiesContainer);
                     }
 
                     @Override
@@ -132,12 +130,12 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         localizedList = new ListView<AssetType>("list", new PropertyModel(this,"testEntities")) {
             @Override
             protected void populateItem(final ListItem<AssetType > item) {
-                AssetType result = item.getModelObject();
+                final AssetType result = item.getModelObject();
                 item.add(new Label("text", new PropertyModel(result,"name")));
-                item.add(new Label("translation", new PropertyModel(result, "localizedName")));
+                item.add(new Label("translation", new PropertyModel(result, "name")));
                 item.add(new AjaxLink("edit") {
                     @Override public void onClick(AjaxRequestTarget target) {
-                        assetTypeModel.setObject(item.getModelObject());
+                        localizationPanel.setDefaultModel(new EntityModel(AssetType.class, result));
                         target.add(localizationPanel);
                     }
                 });
@@ -145,7 +143,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         };
         testEntitiesContainer.add(localizedList).setOutputMarkupId(true);
 
-        add(localizationPanel = new LocalizationPanel("translation", assetTypeModel));
+        add(localizationPanel = new LocalizationPanel("translation", null));
         localizationPanel.setOutputMarkupId(true);
 
     }

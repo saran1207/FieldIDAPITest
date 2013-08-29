@@ -1,29 +1,18 @@
 package com.n4systems.model.savedreports;
 
+import com.n4systems.model.api.HasUser;
+import com.n4systems.model.api.Listable;
+import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.model.user.User;
+import org.hibernate.annotations.IndexColumn;
+
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapKeyColumn;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.IndexColumn;
-
-import com.n4systems.model.api.HasUser;
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.NamedEntity;
-
-import com.n4systems.model.parents.EntityWithTenant;
-import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.model.user.User;
 
 @Entity
 @Table(name="savedreports")
@@ -128,12 +117,10 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
 		return value;
 	}
 	
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -201,4 +188,5 @@ public class SavedReport extends EntityWithTenant implements NamedEntity, Listab
     public void setSortColumnId(Long sortColumnId) {
         this.sortColumnId = sortColumnId;
     }
+
 }

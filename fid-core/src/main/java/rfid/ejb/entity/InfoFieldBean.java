@@ -3,6 +3,8 @@ package rfid.ejb.entity;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
+import com.n4systems.persistence.localization.Localized;
+import com.n4systems.persistence.localization.LocalizedText;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -12,6 +14,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "infofield")
+@Localized("attr")
 public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFieldBean> {
 	private static final long serialVersionUID = 1L;
 	private static final Long DEFUALT_WEIGHT = 0L;
@@ -44,7 +47,7 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	public final static String DATEFIELD_FIELD_TYPE = "datefield";
 
 	@Column( nullable=false )
-	private String name;
+	private @Localized("name") LocalizedText name;
 	
 	@Column( nullable=false )
 	private String fieldType;
@@ -94,15 +97,19 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 		}
 	}
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name.getTranslatedValue();
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(LocalizedText name) {
+        this.name = name;
+    }
 
-	public boolean isRequired() {
+    public void setName(String name) {
+        this.name = new LocalizedText(name);
+    }
+
+    public boolean isRequired() {
 		return required;
 	}
 

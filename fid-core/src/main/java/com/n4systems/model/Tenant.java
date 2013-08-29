@@ -117,4 +117,5 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
     public void setLastLoginTime(Date lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
+
 }

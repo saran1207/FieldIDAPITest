@@ -1,31 +1,26 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import com.n4systems.ejb.legacy.LegacyAssetType;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.user.User;
-import com.n4systems.model.utils.CleanAssetTypeFactory;
-import com.n4systems.services.safetyNetwork.catalog.summary.AssetTypeImportSummary;
-import org.apache.commons.io.FileUtils;
-import org.apache.log4j.Logger;
-
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.user.User;
+import com.n4systems.model.utils.CleanAssetTypeFactory;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.safetyNetwork.CatalogService;
+import com.n4systems.services.safetyNetwork.catalog.summary.AssetTypeImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.util.ListingPair;
+import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 

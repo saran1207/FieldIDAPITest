@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.actions.helpers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.model.Asset;
 import com.n4systems.model.SubAsset;
 import com.n4systems.model.api.NamedEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubAssetHelper implements NamedEntity {
 
@@ -61,5 +61,6 @@ public class SubAssetHelper implements NamedEntity {
 		}
 		return subComponents;
 	}
+
 
 }

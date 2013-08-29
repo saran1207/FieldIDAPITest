@@ -32,4 +32,6 @@ public class AssetStatus extends ArchivableEntityWithTenant implements Listable<
     public String toString() {
         return name;
     }
+
+
 }

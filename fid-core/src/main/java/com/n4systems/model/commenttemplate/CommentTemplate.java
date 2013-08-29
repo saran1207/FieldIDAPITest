@@ -1,12 +1,12 @@
 package com.n4systems.model.commenttemplate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 @SuppressWarnings("serial")
 @Entity
@@ -27,12 +27,10 @@ public class CommentTemplate extends EntityWithTenant implements Listable<Long>,
 		this.comment = comment;
 	}
 
-	@Override
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}

@@ -1,16 +1,16 @@
 package com.n4systems.fieldid.actions;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.security.Permissions;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class SetupAction extends SimpleAction {
 	

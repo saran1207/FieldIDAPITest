@@ -1,11 +1,11 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.NamedEntity;
+import com.n4systems.model.parents.EntityWithTenant;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-
-import com.n4systems.model.api.NamedEntity;
-import com.n4systems.model.parents.EntityWithTenant;
 
 @Entity
 @Table(name = "requesttransactions")
@@ -35,7 +35,5 @@ public class RequestTransaction extends EntityWithTenant implements NamedEntity 
 	public void setName( String name ) {
 		this.name = name;
 	}
-
-
 
 }

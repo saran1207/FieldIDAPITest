@@ -43,13 +43,11 @@ public abstract class SavedItem<T extends SearchCriteria> extends EntityWithTena
         setSharedByName(savedItem.getSharedByName());
         setTenant(savedItem.getTenant());
     }
-    
-    @Override
+
 	public String getName() {
         return name;
     }
 
-    @Override
 	public void setName(String name) {
         this.name = name;
     }

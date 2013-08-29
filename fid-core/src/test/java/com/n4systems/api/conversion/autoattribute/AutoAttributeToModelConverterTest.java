@@ -1,16 +1,5 @@
 package com.n4systems.api.conversion.autoattribute;
 
-import static org.junit.Assert.*;
-
-import java.util.Arrays;
-import java.util.TreeSet;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.api.model.AutoAttributeView;
 import com.n4systems.model.AutoAttributeCriteria;
@@ -18,6 +7,15 @@ import com.n4systems.model.AutoAttributeDefinition;
 import com.n4systems.model.builders.InfoFieldBeanBuilder;
 import com.n4systems.model.builders.InfoOptionBeanBuilder;
 import com.n4systems.model.builders.TenantBuilder;
+import org.junit.Before;
+import org.junit.Test;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+
+import java.util.Arrays;
+import java.util.TreeSet;
+
+import static org.junit.Assert.*;
 
 public class AutoAttributeToModelConverterTest {
 	private AutoAttributeCriteria crit;	
@@ -41,7 +39,7 @@ public class AutoAttributeToModelConverterTest {
 		AutoAttributeDefinition def = converter.toModel(view, null);
 		assertEquals(2, def.getInputs().size());
 		assertEquals(3, def.getOutputs().size());
-	
+
 		for (InfoOptionBean opt: def.getInputs()) {
 			assertEquals(view.getInputs().get(opt.getInfoField().getName()), opt.getName());
 		}

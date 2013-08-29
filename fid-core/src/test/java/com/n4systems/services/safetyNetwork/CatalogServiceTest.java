@@ -1,27 +1,27 @@
 package com.n4systems.services.safetyNetwork;
 
 
-import static com.n4systems.model.builders.CatalogBuilder.*;
-import static com.n4systems.model.builders.AssetTypeBuilder.*;
-import static com.n4systems.model.builders.TenantBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.Tenant;
+import com.n4systems.model.catalog.Catalog;
+import com.n4systems.test.helpers.BasicAnswer;
+import com.n4systems.util.ListingPair;
+import com.n4systems.util.persistence.QueryBuilder;
+import org.easymock.Capture;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.model.AssetType;
-import org.easymock.Capture;
-import org.junit.Test;
-
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.catalog.Catalog;
-import com.n4systems.test.helpers.BasicAnswer;
-import com.n4systems.util.ListingPair;
-import com.n4systems.util.persistence.QueryBuilder;
+import static com.n4systems.model.builders.AssetTypeBuilder.anAssetType;
+import static com.n4systems.model.builders.CatalogBuilder.aCatalog;
+import static com.n4systems.model.builders.TenantBuilder.aTenant;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class CatalogServiceTest {
 

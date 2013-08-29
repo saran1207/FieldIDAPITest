@@ -109,14 +109,12 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
         return getPrimaryOrg().getName();
     }
 
-	@Override
 	@AllowSafetyNetworkAccess
     @DenyReadOnlyUsersAccess
 	public String getName() {
 		return name;
 	}
 
-	@Override
 	public void setName(String displayName) {
 		this.name = (displayName != null) ? displayName.trim() : null;
 	}
@@ -280,4 +278,5 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
         }
         return false;
     }
+
 }

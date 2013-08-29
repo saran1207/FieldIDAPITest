@@ -1,16 +1,14 @@
 package com.n4systems.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.*;
-
-import org.hibernate.annotations.IndexColumn;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
+import org.hibernate.annotations.IndexColumn;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "button_groups")
@@ -47,12 +45,10 @@ public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listab
 		name = (name != null) ? name.trim() : null;
 	}
 	
-	@Override
 	public String getName() {
 		return name;
 	}
 	
-	@Override
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -128,5 +124,6 @@ public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listab
 		}
 		return null;
 	}
+
 }
 

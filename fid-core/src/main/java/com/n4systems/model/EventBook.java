@@ -1,15 +1,5 @@
 package com.n4systems.model;
 
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.SecurityEnhanced;
@@ -17,6 +7,11 @@ import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+
+import javax.persistence.*;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.UUID;
 
 @Entity
 @Table(name = "eventbooks")
@@ -117,5 +112,5 @@ public class EventBook extends ArchivableEntityWithOwner implements NamedEntity,
 	public EventBook enhance(SecurityLevel level) {
 		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
-	
+
 }

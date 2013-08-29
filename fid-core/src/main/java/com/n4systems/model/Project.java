@@ -241,4 +241,6 @@ public class Project extends EntityWithOwner implements NamedEntity, Listable<Lo
     public void setEvents(Set<Event> events) {
         this.events = events;
     }
+
+
 }

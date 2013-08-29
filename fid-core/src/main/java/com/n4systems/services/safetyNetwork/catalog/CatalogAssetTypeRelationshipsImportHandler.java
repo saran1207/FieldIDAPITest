@@ -1,22 +1,22 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
-import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.assettype.AssetTypeScheduleSaver;
+import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.services.safetyNetwork.CatalogService;
 import com.n4systems.services.safetyNetwork.catalog.summary.AssetTypeRelationshipsImportSummary;
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import org.apache.log4j.Logger;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHandler {
 

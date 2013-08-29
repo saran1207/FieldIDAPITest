@@ -1,11 +1,10 @@
 package com.n4systems.model.orgs;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.security.SecurityLevel;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 public class ExternalOrgTest {
 	@SuppressWarnings("serial")
@@ -42,7 +41,8 @@ public class ExternalOrgTest {
 			super.updateFieldsFromOrg(org);
 			updateFieldsFromOrgCalled = true;
 		}
-	}
+
+    }
 	
 	@Test
 	public void update_address_info_handles_null() {

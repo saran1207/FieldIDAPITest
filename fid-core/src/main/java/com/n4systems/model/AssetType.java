@@ -48,21 +48,20 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private static Collection<? extends String> reservedFieldNames = Lists.newArrayList(PO_NUMBER, RFID, REF_NUMBER, ORDER_NUMBER, IDENTIFIER );
 	
 	@Column(nullable=false)
-    @Localized("name")
-	private LocalizedText name;
+	private @Localized("name") LocalizedText name;
 	
 	@Column(length=2047)
-	private String warnings;
+	private @Localized("warnings") LocalizedText warnings;
 	
 	@Column(length=2047)
 	private String instructions;
 
 	private String cautionUrl;
 	private String imageName;
-	private String descriptionTemplate;
+	private @Localized("descTemplate") LocalizedText descriptionTemplate;
 	
-	@Column(length=2000)
-	private String manufactureCertificateText;	
+    @Column(length=2000)
+    private @Localized("certText") LocalizedText manufactureCertificateText;
 	private boolean hasManufactureCertificate;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")
@@ -124,33 +123,23 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	
 	@AllowSafetyNetworkAccess
 	public String getDescriptionTemplate() {
-		return descriptionTemplate;
+		return descriptionTemplate.getTranslatedValue();
 	}
 
 	public void setDescriptionTemplate(String descriptionTemplate) {
-		this.descriptionTemplate = descriptionTemplate;
+		this.descriptionTemplate = new LocalizedText(descriptionTemplate);
 	}
 
     public void setName(LocalizedText name) {
         this.name = name;
     }
 
-    @Override
-	@AllowSafetyNetworkAccess
 	public String getName() {
-		return name.getText();
+		return name.getTranslatedValue();
 	}
 
-    public LocalizedText getLocalizedName() {
-        return name;
-    }
-
-    @Override
     public void setName(String name) {
-        LocalizedText newName = new LocalizedText(name);
-        if (!newName.equals(this.name)) {
-            setName(newName);
-        }
+        this.name = new LocalizedText(name);
     }
 
     @Deprecated
@@ -164,13 +153,17 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		setName(name);
 	}
 
-	public void setWarnings(String safetyLocationPath) {
-		this.warnings = safetyLocationPath;
-	}
+    public void setWarnings(String safetyLocationPath) {
+        this.warnings = updateLocalizedText(this.warnings, safetyLocationPath);
+    }
 
-	@AllowSafetyNetworkAccess
+    public void setWarnings(LocalizedText warnings) {
+        this.warnings = warnings;
+    }
+
+    @AllowSafetyNetworkAccess
 	public String getWarnings() {
-		return warnings;
+		return warnings.getTranslatedValue();
 	}
 
 	public void setCautionUrl(String externalURL) {
@@ -240,11 +233,11 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 
 	@AllowSafetyNetworkAccess
 	public String getManufactureCertificateText() {
-		return manufactureCertificateText;
+		return manufactureCertificateText.getTranslatedValue();
 	}
 
 	public void setManufactureCertificateText(String manufactureCertificateText) {
-		this.manufactureCertificateText = manufactureCertificateText;
+		this.manufactureCertificateText = new LocalizedText(manufactureCertificateText);
 	}
 
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
@@ -284,9 +277,10 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		if( descriptionTemplate == null ) { 
 			return "";
 		}
+        String templateText = this.descriptionTemplate.getTranslatedValue()==null ? "" : this.descriptionTemplate.getTranslatedValue();
 		// if the template does not have a starting bracket, then it has no variables.  Just return the unmodified template
-		if(descriptionTemplate.indexOf(descVariableStart) == -1) {
-			return descriptionTemplate;
+		if(templateText.indexOf(descVariableStart) == -1) {
+			return templateText;
 		}
 		
 		// now we can create a HashMap of info field names to info option names.
@@ -294,19 +288,19 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		Map<String, String> valueMap = createValueMap(asset, infoOptions);
 		
 		// index of the last closing bracket in the template 
-		int lastBracket = descriptionTemplate.lastIndexOf(descVariableEnd);
+		int lastBracket = templateText.lastIndexOf(descVariableEnd);
 		int currentIdx = 0;
 		
 		String part, field;
 		StringBuilder desc = new StringBuilder();
 		while(currentIdx < lastBracket) {
 			//this isolates the current non-variable part
-			part = descriptionTemplate.substring(currentIdx, descriptionTemplate.indexOf(descVariableStart, currentIdx));
+			part = templateText.substring(currentIdx, templateText.indexOf(descVariableStart, currentIdx));
 			currentIdx += part.length() + 1;
 			desc.append(part);
 
 			//this isolates the field name
-			field = descriptionTemplate.substring(currentIdx, descriptionTemplate.indexOf(descVariableEnd, currentIdx));
+			field = templateText.substring(currentIdx, templateText.indexOf(descVariableEnd, currentIdx));
 			currentIdx += field.length() + 1;
 			
 			// if the field name exists in our map, then substitute it in, otherwise use the default
@@ -320,7 +314,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 			}
 		}
 		// get the final part after the last closing bracket
-		desc.append(descriptionTemplate.substring(lastBracket + 1));
+		desc.append(templateText.substring(lastBracket + 1));
 		
 		return desc.toString();
 	}
@@ -372,7 +366,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		for(InfoFieldBean field: infoFields) {
 			fieldNames.add(field.getName());
 		}		
-		return isDescriptionTemplateValid(descriptionTemplate, fieldNames);
+		return isDescriptionTemplateValid(descriptionTemplate.getTranslatedValue(), fieldNames);
 	}
 	
 	// XXX - we should pull this to a util/handler class at some point
@@ -581,5 +575,6 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
         }
         return allEventTypes;
     }
+
 
 }

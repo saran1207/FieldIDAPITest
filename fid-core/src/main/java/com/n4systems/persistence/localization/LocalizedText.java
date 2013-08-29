@@ -5,7 +5,7 @@ import java.util.Locale;
 import java.util.Map;
 
 
-public class LocalizedText implements Serializable {
+public final class LocalizedText implements Serializable {
 
     private String text;
     private transient String translatedValue;
@@ -16,7 +16,7 @@ public class LocalizedText implements Serializable {
     }
 
     public String getTranslatedValue() {
-        return translatedValue;
+        return translatedValue!=null ? translatedValue : text;
     }
 
     public void setTranslatedValue(String translatedValue) {
@@ -34,7 +34,7 @@ public class LocalizedText implements Serializable {
 
     @Override
     public String toString() {
-        return translatedValue!=null ? translatedValue : text;
+        return getTranslatedValue();
     }
 
     public Map<Locale, String> getTranslations() {

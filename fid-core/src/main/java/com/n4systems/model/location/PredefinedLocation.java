@@ -124,4 +124,5 @@ public class PredefinedLocation extends ArchivableEntityWithOwner implements Nam
     public String toString() {
         return getFullName();
     }
+
 }

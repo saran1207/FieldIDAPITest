@@ -44,6 +44,6 @@ public class InstructionalVideo extends AbstractEntity implements NamedEntity, U
 	public void setUrl( String url ) {
 		this.url = url;
 	}
-	
+
 
 }
