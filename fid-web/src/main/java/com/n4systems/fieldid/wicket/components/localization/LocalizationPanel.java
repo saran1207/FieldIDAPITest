@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.OneClickCriteria;
@@ -30,6 +31,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.reflections.ReflectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -46,13 +48,11 @@ public class LocalizationPanel extends Panel {
 
     private @SpringBean LocalizationService localizationService;
 
-    // TODO DD : get these values from proper source.
-    private List<String> languages = Lists.newArrayList("fr", "de", "it");
-    private final LocalizedFieldsModel localizedFields;
-    private String language = languages.get(0);
+    private LocalizedFieldsModel localizedFields;
+    private Locale language;
 
 
-    public LocalizationPanel(String id, IModel<?> model) {
+    public LocalizationPanel(String id, IModel<? extends EntityWithTenant> model) {
         super(id, model);
 
         add(new Form("form")
@@ -67,6 +67,7 @@ public class LocalizationPanel extends Panel {
                             @Override public void onClick(AjaxRequestTarget target) {
 
                             }
+
                             @Override public boolean isVisible() {
                                 return field.entity instanceof ScoreCriteria;
                             }
@@ -75,6 +76,7 @@ public class LocalizationPanel extends Panel {
                             @Override public void onClick(AjaxRequestTarget target) {
 
                             }
+
                             @Override public boolean isVisible() {
                                 return field.entity instanceof OneClickCriteria;
                             }
@@ -83,9 +85,10 @@ public class LocalizationPanel extends Panel {
                             @Override public void onClick(AjaxRequestTarget target) {
 
                             }
+
                             @Override public boolean isVisible() {
                                 if (field.entity instanceof Criteria) {
-                                    Criteria criteria  = (Criteria) field.entity;
+                                    Criteria criteria = (Criteria) field.entity;
                                     return !criteria.getRecommendations().isEmpty() || !criteria.getDeficiencies().isEmpty();
                                 }
                                 return false;
@@ -93,7 +96,7 @@ public class LocalizationPanel extends Panel {
                         });
                     }
                 })
-                .add(new FidDropDownChoice<String>("language", new PropertyModel(this, "language"), languages).setNullValid(false).setRequired(true))
+                .add(new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
                 .add(new AjaxSubmitLink("submit") {
                     @Override
                     protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -109,6 +112,11 @@ public class LocalizationPanel extends Panel {
                     }
                 })
         );
+
+    }
+
+    private List<Locale> getLanguages() {
+        return FieldIDSession.get().getTenant().getSettings().getLanguages();
     }
 
 
@@ -261,7 +269,7 @@ public class LocalizationPanel extends Panel {
         private String defaultValue;
         private String name;
         private final Object entity;
-        private List<String> values = new ArrayList<String>(Collections.nCopies(languages.size(),(String)null));
+        private List<String> values = new ArrayList<String>(Collections.nCopies(getLanguages().size(),(String)null));
 
         public LocalizedField(Object entity, String name, String defaultValue) {
             this.name = name;
@@ -270,9 +278,10 @@ public class LocalizationPanel extends Panel {
         }
 
         public LocalizedField addTranslation(Translation translation) {
-            int index = languages.indexOf(translation.getId().getLanguage());
+            Locale locale = StringUtils.parseLocaleString(translation.getId().getLanguage());
+            int index = getLanguages().indexOf(locale);
             if (index<0) {
-                logger.error("language of translation " + translation + " is not supported in list " + languages);
+                logger.error("language of translation " + translation + " is not supported in list " + getLanguages());
             } else {
                 values.set(index, translation.getValue());
             }
