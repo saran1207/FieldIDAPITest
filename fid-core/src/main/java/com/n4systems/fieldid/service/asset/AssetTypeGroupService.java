@@ -58,4 +58,8 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         persistenceService.delete(groupToDelete);
 	}
 
+    public AssetTypeGroup getGroupById(Long id) {
+        return persistenceService.find(AssetTypeGroup.class, id);
+    }
+
 }

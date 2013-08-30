@@ -25,7 +25,9 @@ ${action.setPageType('asset_type_group', 'show')!}
 		
 		<#list assetTypes as assetType>
 			<div class="infoSet">
-				<label class="line" ><a href="<@s.url action="assetType" uniqueID="${assetType.id}"/>">${(assetType.name?html) !}</a></label>
+                <label class="line" >
+                    <a href="<@s.url value='w/setup/assetTypeEdit?uniqueID=${assetType.id}'/>">${(assetType.name?html)!}</a>
+                </label>
 			</div>
 		</#list>
 		<#if assetTypes.empty >
@@ -34,9 +36,10 @@ ${action.setPageType('asset_type_group', 'show')!}
 			</div>
 		</#if>	
 		<div class="infoSet">
-			<label class="line"><a href="<@s.url action="assetTypeEdit" group="${group.id}"/>"><@s.text name="label.addnewassettype"/></a></label>
+			<label class="line">
+                <a href="<@s.url value='w/setup/assetTypeForm?group=${group.id}'/>"><@s.text name="label.addnewassettype"/></a>
+            </label>
 		</div>
-		 
 	</div>
 </div>
 

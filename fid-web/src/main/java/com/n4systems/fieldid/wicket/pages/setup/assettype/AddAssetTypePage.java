@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.fieldid.actions.helpers.InfoFieldInput;
 import com.n4systems.fieldid.actions.helpers.InfoOptionInput;
+import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
@@ -56,6 +57,9 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
     @SpringBean
     protected AssetTypeService assetTypeService;
 
+    @SpringBean
+    private AssetTypeGroupService assetTypeGroupService;
+
     private AssetTypeImagePanel imagePanel;
     private AssetTypeAttachmentsPanel attachmentsPanel;
     private AssetTypeAttributePanel attributePanel;
@@ -76,6 +80,10 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
     protected AssetType getAssetType(PageParameters params) {
         AssetType assetType = new AssetType();
         assetType.setTenant(getTenant());
+        if(!params.get("group").isNull()) {
+            AssetTypeGroup group = assetTypeGroupService.getGroupById(params.get("group").toLong());
+            assetType.setGroup(group);
+        }
         return assetType;
     }
 
