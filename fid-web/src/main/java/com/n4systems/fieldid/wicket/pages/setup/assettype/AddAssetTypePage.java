@@ -263,7 +263,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                     }
                 } else {
                     for (InfoFieldBean infoField : assetType.getObject().getInfoFields()) {
-                        if (infoField.getUniqueID().equals(input.getUniqueID())) {
+                        if (infoField.getUniqueID() != null && infoField.getUniqueID().equals(input.getUniqueID())) {
                             if (input.isDeleted()) {
                                 deleted.add(infoField);
                             } else {
