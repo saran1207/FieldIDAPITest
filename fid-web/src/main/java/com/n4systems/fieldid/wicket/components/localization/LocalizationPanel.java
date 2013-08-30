@@ -17,16 +17,17 @@ import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.services.localization.LocalizationService;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -48,15 +49,16 @@ public class LocalizationPanel extends Panel {
 
     private @SpringBean LocalizationService localizationService;
 
-    private LocalizedFieldsModel localizedFields;
     private Locale language;
+    private final FormComponent<Locale> chooseLanguage;
+    private final ListView<LocalizedField> listView;
 
 
     public LocalizationPanel(String id, IModel<? extends EntityWithTenant> model) {
         super(id, model);
 
         add(new Form("form")
-                .add(new ListView<LocalizedField>("values", localizedFields = new LocalizedFieldsModel()) {
+                .add(listView = new ListView<LocalizedField>("values", new LocalizedFieldsModel()) {
                     @Override
                     protected void populateItem(ListItem<LocalizedField> item) {
                         final LocalizedField field = item.getModelObject();
@@ -64,29 +66,35 @@ public class LocalizationPanel extends Panel {
                         item.add(new Label("defaultValue", Model.of(field.getDefaultValue())));
                         item.add(new TranslationsListView("translations", new PropertyModel(item.getModel(), "values")));
                         item.add(new AjaxLink("scoreGroups") {
-                            @Override public void onClick(AjaxRequestTarget target) {
+                            @Override
+                            public void onClick(AjaxRequestTarget target) {
 
                             }
 
-                            @Override public boolean isVisible() {
+                            @Override
+                            public boolean isVisible() {
                                 return field.entity instanceof ScoreCriteria;
                             }
                         });
                         item.add(new AjaxLink("buttonGroups") {
-                            @Override public void onClick(AjaxRequestTarget target) {
+                            @Override
+                            public void onClick(AjaxRequestTarget target) {
 
                             }
 
-                            @Override public boolean isVisible() {
+                            @Override
+                            public boolean isVisible() {
                                 return field.entity instanceof OneClickCriteria;
                             }
                         });
                         item.add(new AjaxLink("observations") {
-                            @Override public void onClick(AjaxRequestTarget target) {
+                            @Override
+                            public void onClick(AjaxRequestTarget target) {
 
                             }
 
-                            @Override public boolean isVisible() {
+                            @Override
+                            public boolean isVisible() {
                                 if (field.entity instanceof Criteria) {
                                     Criteria criteria = (Criteria) field.entity;
                                     return !criteria.getRecommendations().isEmpty() || !criteria.getDeficiencies().isEmpty();
@@ -95,12 +103,12 @@ public class LocalizationPanel extends Panel {
                             }
                         });
                     }
-                })
-                .add(new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
+                }.setReuseItems(true))
+                .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
                 .add(new AjaxSubmitLink("submit") {
                     @Override
                     protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                        List<LocalizedField> fields = localizedFields.getObject();
+                        List<LocalizedField> fields = (List<LocalizedField>) getDefaultModel().getObject();
                         for (LocalizedField field : fields) {
                             System.out.println(field);
                         }
@@ -112,7 +120,21 @@ public class LocalizationPanel extends Panel {
                     }
                 })
         );
+        chooseLanguage.add(new AjaxFormSubmitBehavior("onchange") {
+            @Override protected void onSubmit(AjaxRequestTarget target) {
+                target.add(LocalizationPanel.this);
+            }
+            @Override protected void onError(AjaxRequestTarget target) {
 
+            }
+        });
+
+    }
+
+    @Override
+    protected void onModelChanged() {
+        super.onModelChanged();
+        listView.setDefaultModel(new LocalizedFieldsModel());
     }
 
     private List<Locale> getLanguages() {
@@ -123,23 +145,29 @@ public class LocalizationPanel extends Panel {
     class TranslationsListView extends ListView<String> {
         TranslationsListView(String id, IModel<List<? extends String>> list) {
             super(id, list);
+            setReuseItems(true);
         }
 
         @Override protected void populateItem(ListItem<String> item) {
             String translation = item.getModelObject();
-            item.add(new TextField("translation", item.getModel() ));
+            final Locale itemLanguage = getLanguages().get(item.getIndex());
+            item.add(new TextField("translation", item.getModel()) {
+                @Override public boolean isVisible() {
+                    return itemLanguage.equals(language);
+                }
+            });
         }
     }
 
-    class LocalizedFieldsModel extends LoadableDetachableModel<List<LocalizedField>> {
+    class LocalizedFieldsModel implements IModel<List<LocalizedField>> {
 
-        Set<Object> loaded;
+        private Set<Object> loaded;
+        private List<LocalizedField> fields;
 
         LocalizedFieldsModel() {
             super();
         }
 
-        @Override
         protected List<LocalizedField> load() {
             loaded = Sets.newHashSet();
             IModel<?> model = LocalizationPanel.this.getDefaultModel();
@@ -147,6 +175,7 @@ public class LocalizationPanel extends Panel {
                 return Lists.newArrayList();
             }
             model.detach();
+
             Map<String,LocalizedField> localizedFields = loadForEntity(model.getObject());
             return Lists.newArrayList(localizedFields.values());
         }
@@ -262,6 +291,26 @@ public class LocalizationPanel extends Panel {
             }
         }
 
+        @Override
+        public List<LocalizedField> getObject() {
+            if (fields==null) {
+                fields = load();
+            }
+            return fields;
+        }
+
+        @Override
+        public void setObject(List<LocalizedField> object) {
+            System.out.println("this shouldn't be called");
+        }
+
+        @Override
+        public void detach() {
+//            IModel<?> model = LocalizationPanel.this.getDefaultModel();
+//            if (model!=null) {
+//                model.detach();
+//            }
+        }
     }
 
 
