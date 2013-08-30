@@ -6,7 +6,6 @@ import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
-import com.n4systems.fieldidadmin.utils.Constants;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
@@ -126,7 +125,7 @@ public class FieldIDSession extends WebSession {
     }
     
     public boolean isAdminConsoleAuthenticated() {
-    	return (getHttpSession().getAttribute(Constants.SESSION_USER) != null);
+    	return (getHttpSession().getAttribute(WebSessionMap.ADMIN_AUTHENTICATED) != null);
     }
 
     public String getPreviouslyStoredTempFileId() {

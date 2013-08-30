@@ -1,26 +1,23 @@
 package com.n4systems.fieldidadmin.actions;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.opensymphony.xwork2.ActionSupport;
-import org.apache.struts2.interceptor.SessionAware;
+import org.apache.struts2.ServletActionContext;
 
-import java.util.Map;
-
-public class AbstractAdminAction extends ActionSupport implements SessionAware {
+public class AbstractAdminAction extends ActionSupport {
 
 	private static final long serialVersionUID = 1L;
 	
 	protected  PersistenceManager persistenceEJBContainer;
-	
-	private Map<String, Object> session;
+
+	private WebSessionMap session;
     private String pageName;
 
-	@SuppressWarnings("unchecked")
-	public void setSession(Map session) {
-		this.session = session;
-	}
-
-	protected Map<String, Object> getSession() {
+	public WebSessionMap getSession() {
+		if( session == null ) {
+			session = new WebSessionMap(ServletActionContext.getRequest().getSession(false));
+		}
 		return session;
 	}
 

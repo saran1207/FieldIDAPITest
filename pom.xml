@@ -13,7 +13,8 @@
 		<module>fid-exporter</module>
 		<module>fid-ws</module>
         <module>fid-migrations</module>
-	</modules>
+        <module>fid-connection-monitor</module>
+    </modules>
 	<repositories>
 		<repository>
 			<snapshots>

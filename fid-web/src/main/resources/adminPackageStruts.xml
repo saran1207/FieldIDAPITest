@@ -61,7 +61,6 @@
 			</result>
 		</action>
 
-
 		<action name="organizationEdit" method="edit"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="input" type="freemarker">/admin/templates/html/organization/edit.ftl
@@ -507,6 +506,14 @@
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/updateSecondaryOrgsButton.ftl</result>
 		</action>
+
+        <action name="assets30Day" method="ajax" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+            <result name="success" type="freemarker">/admin/templates/ajax/organization/assets30Day.ftl</result>
+        </action>
+
+        <action name="events30Day" method="ajax" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+            <result name="success" type="freemarker">/admin/templates/ajax/organization/events30Day.ftl</result>
+        </action>
 		
 	</package>
 </struts>

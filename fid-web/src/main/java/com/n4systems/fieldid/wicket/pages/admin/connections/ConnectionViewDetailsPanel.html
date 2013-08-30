@@ -1,0 +1,19 @@
+<wicket:panel>
+    <div wicket:id="feedbackPanel"></div>
+    <table class="list">
+        <thead>
+            <tr>
+                <th style="min-width: 80px;">Timestamp</th>
+                <th style="min-width: 350px;">Executed SQL</th>
+                <th>Stack Trace</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr wicket:id="statementList">
+                <td><span wicket:id="timestamp"></span></td>
+                <td><pre wicket:id="sql"></pre></td>
+                <td><pre wicket:id="stackTrace"></pre></td>
+            </tr>
+        </tbody>
+    </table>
+</wicket:panel>

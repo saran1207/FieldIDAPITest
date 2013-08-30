@@ -1,0 +1,26 @@
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"></div>
+    <div wicket:id="detailsPanel"/>
+
+    <input type="button" wicket:id="autoRefresh"/>
+    <table class="list" wicket:id="tableContainer">
+        <thead>
+            <th style="min-width: 60px;">MySQL ID</th>
+            <th style="min-width: 80px;">Runtime (s)</th>
+            <th style="min-width: 150px;">Thread</th>
+            <th style="min-width: 350px;">Last Executed SQL</th>
+            <th>Current Stack Trace</th>
+        </thead>
+        <tbody>
+            <tr wicket:id="connectionViewTable">
+                <td><a wicket:id="details"><wicket:container wicket:id="mysqlId" /></a></td>
+                <td><span wicket:id="runtime"></span></td>
+                <td><span wicket:id="thread"></span></td>
+                <td><pre wicket:id="lastSql"></pre></td>
+                <td><pre wicket:id="currentStack"></pre></td>
+            </tr>
+        </tbody>
+    </table>
+
+</wicket:extend>

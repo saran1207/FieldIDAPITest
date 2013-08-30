@@ -5,6 +5,7 @@ import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.exceptions.LoginException;
 import com.n4systems.exceptions.LoginFailureInfo;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.handler.password.PasswordHelper;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
@@ -202,13 +203,17 @@ public class LoginAction extends AbstractAction {
 	}
 
 	private void clearSession() {
-		// grab SecuirtyGuard
-		SystemSecurityGuard securityGuard = getSecurityGuard();
-		getSession().clear();
-		// if the security guard gets cleared here we will no longer know the tenant context.
+		WebSessionMap session = getSession();
 
-		// restore securityGuard
-		getSession().setSecurityGuard(securityGuard);
+		// The following items need to be preserved when clearing the session
+		SystemSecurityGuard securityGuard = getSecurityGuard();
+		boolean adminAuthenticated = session.isAdminAuthenticated();
+
+		session.clear();
+
+		// restore items
+		session.setSecurityGuard(securityGuard);
+		session.setAdminAuthenticated(adminAuthenticated);
 	}
 
 	protected void logUserIn(User loginUser) {

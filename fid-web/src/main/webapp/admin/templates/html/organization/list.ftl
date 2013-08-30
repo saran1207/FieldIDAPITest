@@ -7,7 +7,6 @@
             $('inactiveSince').selectedIndex = 0;
             $('listFilterForm').submit();
 		}
-	
 	</script>
 </head>
 
@@ -54,13 +53,19 @@
 		<th></th>
 	</tr>
 	<#list page.list as primaryOrg>
+        <#assign tenantId = primaryOrg.tenant.id>
 		<tr>
 			<td <#if primaryOrg.tenant.disabled> class='offIcon' <#else> class='onIcon'</#if>></td>
-			<td><a href="<@s.url namespace="/admin" action="organizationEdit"/>?id=${primaryOrg.tenant.id}">${primaryOrg.displayName?html}</a></td>
+			<td><a href="<@s.url namespace="/admin" action="organizationEdit"/>?id=${tenantId}">${primaryOrg.displayName?html}</a></td>
 			<td>${primaryOrg.tenant.name!}</td>
 
-			<td>${action.getTotal30DayAssets(primaryOrg)?string.number}</td>
-			<td>${action.getTotal30DayEvents(primaryOrg)?string.number}</td>
+            <td id="assets_${tenantId}">--</td>
+            <td id="events_${tenantId}">--</td>
+            <script type="text/javascript">
+                new Ajax.Updater('assets_${tenantId}', '<@s.url namespace="/adminAjax" action="assets30Day"/>?id=${tenantId}');
+                new Ajax.Updater('events_${tenantId}', '<@s.url namespace="/adminAjax" action="events30Day"/>?id=${tenantId}');
+            </script>
+
 			<#if primaryOrg.tenant.lastLoginUser?exists && primaryOrg.tenant.lastLoginUser.userID?exists && primaryOrg.tenant.lastLoginUser.userID != 'n4systems'>
 				<td>${action.convertDateTime(primaryOrg.tenant.lastLoginTime)}</td>
 				<td>${primaryOrg.tenant.lastLoginUser.userID}</td>

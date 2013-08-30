@@ -40,7 +40,7 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
     public static final String SEARCH_CRITERIA = "searchCriteria";
 
     public static final String LOGIN_FAILURE_INFO = "loginFailureInfo";
-	
+	public static final String ADMIN_AUTHENTICATED = "adminAuthenticated";
 	
 	public WebSessionMap() {
 		this(ServletActionContext.getRequest().getSession(false));
@@ -390,4 +390,15 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
         put(LOGIN_FAILURE_INFO, info);
     }
 
+	public void setAdminAuthenticated(boolean adminAuthenticated) {
+		if (adminAuthenticated) {
+			put(ADMIN_AUTHENTICATED, true);
+		} else {
+			remove(ADMIN_AUTHENTICATED);
+		}
+	}
+
+	public boolean isAdminAuthenticated() {
+		return containsKey(ADMIN_AUTHENTICATED);
+	}
 }

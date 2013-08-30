@@ -55,4 +55,8 @@
             <a href="/fieldid/admin/changeAdminPass.action">System Pass</a>
         </#if>
     </li>
+    <li>
+        <a href="/fieldid/w/admin/connections">Connections</a>
+    </li>
+
 </ul>

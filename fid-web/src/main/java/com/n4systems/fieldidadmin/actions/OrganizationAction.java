@@ -1,9 +1,6 @@
 package com.n4systems.fieldidadmin.actions;
 
-import com.google.common.collect.Maps;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
-import com.n4systems.fieldid.service.asset.AssetService;
-import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
@@ -59,16 +56,11 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
 	private String title;
 	private String note;
-	private Map<String, Boolean> extendedFeatures = new HashMap<String, Boolean>();
+	private Map<String, Boolean> extendedFeatures;
 
 	private AssetCountLoader assetCountLoader = new AssetCountLoader();
 	private EventCountLoader eventCountLoader = new EventCountLoader();
 	private LastActiveSessionLoader lastActiveSessionLoader = new LastActiveSessionLoader();
-
-	Collection<PrimaryOrg> primaryOrgs = null;
-	private Map<Long, Long> total30DayAssets = new HashMap<Long, Long>();
-	private Map<Long, Long> total30DayEvents = new HashMap<Long, Long>();
-	private Map<Long, ActiveSession> lastActiveSessions = new HashMap<Long, ActiveSession>();
 
 	private String nameFilter;
 	private String sortColumn;
@@ -84,10 +76,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
     @Autowired
     private ExtendedFeatureService extendedFeatureService;
     @Autowired
-    private AssetService assetService;
-    @Autowired
-    private EventService eventService;
-    @Autowired
     private AssetIndexerService assetIndexerService;
     @Autowired
     private CriteriaTrendsIndexerService criteriaTrendsIndexerService;
@@ -101,31 +89,18 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public void prepare() throws Exception {
 		if (id != null) {
 			tenant = TenantFinder.getInstance().findTenant(id);
-
 			getSecurityContext().setTenantSecurityFilter(new TenantOnlySecurityFilter(id));
-
-            loadExtendedFeatures();
-		} else {
-            Map<Tenant, PrimaryOrg> tenants = Maps.newHashMap();
-			for (PrimaryOrg org : getPage().getList()) {
-				lastActiveSessions.put(org.getId(), loadLastActiveSession(org.getTenant().getId()));
-                tenants.put(org.getTenant(), org);
-			}
-            total30DayAssets.putAll(assetService.getTenantsLast30DaysCount(tenants));
-            total30DayEvents.putAll(eventService.getTenantsLast30DaysCount(tenants));
+			primaryOrg = TenantFinder.getInstance().findPrimaryOrg(id);
 		}
 	}
 
-    private void loadExtendedFeatures() {
-        extendedFeatures.clear();
-        primaryOrg = TenantFinder.getInstance().findPrimaryOrg(id);
-        for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
-            extendedFeatures.put(feature.name(), true);
-        }
-    }
-
     @SkipValidation
 	public String doList() {
+		return SUCCESS;
+	}
+
+	@SkipValidation
+	public String doAjax() {
 		return SUCCESS;
 	}
 
@@ -151,7 +126,6 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public String doUpdateExtendedFeature() throws Exception {
         ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
         extendedFeatureService.setExtendedFeatureEnabled(primaryOrg.getTenant().getId(), feature, featureOn);
-        loadExtendedFeatures();
 
 		return SUCCESS;
 	}
@@ -340,6 +314,12 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	}
 
 	public Map<String, Boolean> getExtendedFeatures() {
+		if (extendedFeatures == null) {
+			extendedFeatures = new HashMap<String, Boolean>();
+			for (ExtendedFeature feature : primaryOrg.getExtendedFeatures()) {
+				extendedFeatures.put(feature.name(), true);
+			}
+		}
 		return extendedFeatures;
 	}
 
@@ -348,7 +328,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	}
 
 	public Boolean getExtendedFeatureState(String key) {
-		return extendedFeatures.get(key) == null ? false : extendedFeatures.get(key);
+		Map<String, Boolean> extFeatures = getExtendedFeatures();
+		return extFeatures.get(key) == null ? false : extFeatures.get(key);
 	}
 
 	public void setExtendedFeatures(Map<String, Boolean> extendedFeatures) {
@@ -379,20 +360,16 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		return eventCountLoader.setTenantId(tenantId).setLimit30Days(limit30Days).load();
 	}
 
-	private ActiveSession loadLastActiveSession(Long tenantId) {
-		return lastActiveSessionLoader.setTenant(tenantId).excludeN4User().load();
-	}
-
 	public Long getTotalAssets(PrimaryOrg org) {
 		return loadTotalAssets(org.getTenant().getId(), false);
 	}
 
 	public Long getTotal30DayAssets(PrimaryOrg org) {
-		Long total = total30DayAssets.get(org.getId());
-		if (total == null)
-			return loadTotalAssets(org.getTenant().getId(), true);
-		else
-			return total;
+		return loadTotalAssets(org.getTenant().getId(), true);
+	}
+
+	public Long getTotal30DayAssets() {
+		return loadTotalAssets(id, true);
 	}
 
 	public Long getTotalEvents(PrimaryOrg org) {
@@ -400,19 +377,15 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	}
 
 	public Long getTotal30DayEvents(PrimaryOrg org) {
-		Long total = total30DayEvents.get(org.getId());
-		if (total == null)
-			return loadTotalEvents(org.getTenant().getId(), true);
-        else
-			return total;
+		return loadTotalEvents(org.getTenant().getId(), true);
+	}
+
+	public Long getTotal30DayEvents() {
+		return loadTotalEvents(id, true);
 	}
 
 	public ActiveSession getLastActiveSession(PrimaryOrg org) {
-		ActiveSession activeSession = lastActiveSessions.get(org.getId());
-		if (activeSession == null)
-			return loadLastActiveSession(org.getTenant().getId());
-		else
-			return activeSession;
+		return lastActiveSessionLoader.setTenant(org.getTenant().getId()).excludeN4User().load();
 	}
 
 	public void setSortColumn(String sortColumn) {

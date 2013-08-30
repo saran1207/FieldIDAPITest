@@ -1,7 +1,6 @@
 package com.n4systems.fieldidadmin.actions;
 
 import com.n4systems.fieldidadmin.managers.UserSecurityManager;
-import com.n4systems.fieldidadmin.utils.Constants;
 
 public class AuthenticationAction extends AbstractAdminAction {
 
@@ -21,14 +20,14 @@ public class AuthenticationAction extends AbstractAdminAction {
 	public String doCreate() {
 		
 		if (userSecurityManager.login(username, password)) {
-			getSession().put(Constants.SESSION_USER, "signed in");
+			getSession().setAdminAuthenticated(true);
 		}
 		
 		return SUCCESS;
 	}
 	
 	public String doDelete() {
-		getSession().clear();
+		getSession().setAdminAuthenticated(false);
 		return SUCCESS;
 	}
 

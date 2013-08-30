@@ -77,9 +77,16 @@ a:hover, a:active {
 
 .list td {
 	background-color: #e8e8e8;
+    vertical-align: top;
 }
+
 .list th {
 	background-color: #e0e0e0;
+}
+
+.list td pre {
+    max-height: 300px;
+    overflow: scroll;
 }
 
 #loginForm .label {
@@ -227,3 +234,4 @@ ul.options {
 floatRight {
 	float: right;
 }
+
