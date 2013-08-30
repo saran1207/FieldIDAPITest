@@ -7,6 +7,7 @@ import java.util.Date;
 
 public enum SimpleFrequency implements Listable<String> {
 	DAILY				(	"label.daily",		"label.daily", 				null				),
+    WEEKDAYS			(	"label.daily",      "label.weekdays",			null				),
 	WEEKLY_SUNDAY		(	"label.weekly",		"label.sun.long", 			Calendar.SUNDAY		),
 	WEEKLY_MONDAY		(	"label.weekly",		"label.mon.long", 			Calendar.MONDAY		),
 	WEEKLY_TUESDAY		(	"label.weekly", 	"label.tues.long", 			Calendar.TUESDAY	),
@@ -59,8 +60,10 @@ public enum SimpleFrequency implements Listable<String> {
 		Integer targetDayValue = null;
 		switch(this) {
 			case DAILY:
-				// we will let targetDayValue remain null
-				break;
+                return true;
+            case WEEKDAYS:
+                int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+                return dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY;
 			case WEEKLY_SUNDAY:
 			case WEEKLY_MONDAY:
 			case WEEKLY_TUESDAY:
@@ -79,8 +82,10 @@ public enum SimpleFrequency implements Listable<String> {
 				targetDayValue = cal.get(Calendar.DAY_OF_MONTH);
 				dayValue = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
 				break;
+            default:
+                return false;
 		}
 		
-		return (targetDayValue == dayValue);
+		return targetDayValue.equals(dayValue);
 	}
 }
