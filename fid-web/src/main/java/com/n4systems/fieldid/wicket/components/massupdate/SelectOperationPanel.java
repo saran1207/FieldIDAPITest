@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -43,7 +43,7 @@ public class SelectOperationPanel extends AbstractMassUpdatePanel {
                 onCancel();
 			}
 		});
-        optType.add(new AjaxFormComponentUpdatingBehavior("onclick") {
+        optType.add(new AjaxFormChoiceComponentUpdatingBehavior() {
             @Override protected void onUpdate(AjaxRequestTarget target) {
                 submit.setEnabled(true);
                 target.add(submit);

@@ -89,6 +89,7 @@ public class Comment extends Panel implements IEventBehavior {
 		CommentTemplate comment = select.getModel().getObject();
 		if (comment!=null) { 
 			addComment(comment);
+            text.setDefaultModel(model);
 			target.add(text);
 		}		
 	}
