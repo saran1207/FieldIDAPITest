@@ -26,6 +26,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.web.helper.SessionUser;
 
 import java.util.Collection;
+import java.util.Locale;
 
 public class FieldIDRequestCycleListener implements IRequestCycleListener {
 
@@ -51,6 +52,17 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
             Collection<User> visibleUsers = userGroupService.findUsersVisibleTo(user);
             ThreadLocalInteractionContext.getInstance().setVisibleUsers(visibleUsers);
             ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
+
+            //get User language - set language in ThreadLocalInteractionContext
+           // if session has one - use session else if user has one - use user locale else default to english
+           if (null != fieldidSession.getUserLocale()) {
+               ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(fieldidSession.getUserLocale());
+           } else if (null != user.getLanguage()) {
+               ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(user.getLanguage());
+           } else {
+               ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(Locale.getDefault());
+           }
+
             ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(PlatformType.WEB);
             ThreadLocalInteractionContext.getInstance().setCurrentPlatform( FieldIdVersion.getWebVersionDescription());
 

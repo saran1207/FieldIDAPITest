@@ -21,10 +21,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import rfid.web.helper.SessionUser;
 
 import javax.servlet.http.HttpSession;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @SuppressWarnings({ "unchecked", "serial" })
@@ -37,6 +34,10 @@ public class FieldIDSession extends WebSession {
     private boolean concurrentSessionDetected;
     private CriteriaResult previouslyStoredCriteriaResult;
     private Event previouslyStoredEventSchedule;
+
+
+
+    private Locale userLocale;
 
     public FieldIDSession(Request request) {
         super(request);
@@ -171,5 +172,13 @@ public class FieldIDSession extends WebSession {
 
     public void setPreviouslyStoredEventSchedule(Event previouslyStoredEventSchedule) {
         this.previouslyStoredEventSchedule = previouslyStoredEventSchedule;
+    }
+
+    public Locale getUserLocale() {
+        return userLocale;
+    }
+
+    public void setUserLocale(Locale userLocale) {
+        this.userLocale = userLocale;
     }
 }

@@ -51,6 +51,9 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private Date passwordChanged;
     private boolean displayLastRunSearches = true;
 
+
+    private Locale language;
+
     @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "lastRunReportId")
     private EventReportCriteria lastRunReport;
@@ -568,5 +571,13 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
     public void setGroups(Set<UserGroup> groups) {
         this.groups = groups;
+    }
+
+    public Locale getLanguage() {
+        return language;
+    }
+
+    public void setLanguage(Locale language) {
+        this.language = language;
     }
 }

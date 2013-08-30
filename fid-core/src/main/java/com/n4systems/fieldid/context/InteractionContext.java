@@ -5,6 +5,7 @@ import com.n4systems.model.user.User;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 public interface InteractionContext {
 
@@ -19,6 +20,9 @@ public interface InteractionContext {
 
     public Collection<User> getVisibleUsers();
     public void setVisibleUsers(Collection<User> visibleUsers);
+
+    public Locale getUserThreadLanguage();
+    public void setUserThreadLanguage(Locale userLang);
 
     public void clear();
 

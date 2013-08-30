@@ -53,7 +53,7 @@ public class LocaleUserType implements UserType {
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
         String value = StandardBasicTypes.STRING.nullSafeGet(rs, names[0]);
-        return StringUtils.parseLocaleString(value);
+        return value== null ? null : StringUtils.parseLocaleString(value);
     }
 
     @Override
