@@ -8,8 +8,6 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.persistence.localization.LocaleUserType;
-import com.n4systems.persistence.localization.LocalizedText;
-import com.n4systems.persistence.localization.LocalizedTextUserType;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 
@@ -20,8 +18,7 @@ import java.util.Locale;
 @SuppressWarnings("serial")
 @MappedSuperclass
 @TypeDefs({
-        @TypeDef(name="localize", defaultForType=Locale.class, typeClass=LocaleUserType.class),
-        @TypeDef(name="localizedString", defaultForType=LocalizedText.class, typeClass=LocalizedTextUserType.class)
+        @TypeDef(name="localize", defaultForType=Locale.class, typeClass=LocaleUserType.class)
         })
 abstract public class BaseEntity implements Saveable, Serializable, Copyable {
 

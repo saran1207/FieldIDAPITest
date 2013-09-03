@@ -2,27 +2,27 @@ package com.n4systems.persistence.localization;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.model.BaseEntity;
+import com.n4systems.model.api.HasTenant;
+import com.n4systems.model.api.Saveable;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
-import org.reflections.Reflections;
+import com.n4systems.services.localization.LocalizationService;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 
-import java.lang.reflect.Field;
-import java.util.*;
-
-import static org.reflections.ReflectionUtils.getAllFields;
-import static org.reflections.ReflectionUtils.withAnnotation;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class LocalizedTextCache implements InitializingBean {
 
+
+    // TODO DD : merge this with localizationService.
+
     private static Map<Long, Map<TranslationKey, Map<Locale,String>>> cache = Maps.newHashMap();
 
-    private @Autowired PersistenceService persistenceService;
+    private @Autowired LocalizationService localizationService;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -32,7 +32,7 @@ public class LocalizedTextCache implements InitializingBean {
     private void initializeCache() {
         // TODO DD : make this use EHCACHE instead of simple map.
         // that way cache can be configured dynamically (in memory, disk spill over, LRU etc...)
-        List<Translation> translations = persistenceService.findAllNonSecure(Translation.class);
+        List<Translation> translations = localizationService.getAllTranslations();
         for (Translation translation:translations) {
             add(translation);
         }
@@ -40,45 +40,45 @@ public class LocalizedTextCache implements InitializingBean {
     }
 
     private void validate() {
-        Set<Class<?>> localizedEntities = new Reflections(BaseEntity.class.getPackage().getName()).getTypesAnnotatedWith(Localized.class);
-        Set<String> expected = Sets.newHashSet();
-        for (Class<?> clazz:localizedEntities) {
-            expected.addAll(getExpectedFor(clazz));
-        }
-
-        Set<String> errors = Sets.newHashSet();
-        // now test that all of current values are in the expected/defined list of valid translation ognls.
-        // i.e. if the DB contains a translation ognl of "assetType.name" but that isn't in expected list (which is say, {at.name, at.desc} or {assetType.displayName, assetType.desc})
-        //  then something is screwed up.   either the class/field was unlocalized or it was renamed. (i.e. given a different @Localized value.
-        // possible fixes (depending on your assessment could be
-        // 1: migrate the value.   assetType.name --> at.name
-        // 2: delete the values    assetType.*    DELETE
-        // 3: change the @Localized values       @Localize("at")    -->    @Localized("assetType")
-        for (Map<TranslationKey, Map<Locale,String>> tenantMap:cache.values()) {
-            for (TranslationKey key:tenantMap.keySet()) {
-                if (!expected.contains(key.ognl)) {
-                    errors.add(key.ognl);
-                }
-            }
-        }
-        if (errors.size()>0) {
-            throw new IllegalStateException("the DB currently has invalid translation ognl(s) :  " + errors + "\n Their ognl doesn't match current meta-data.  did you recently change the values of any " + Localized.class.getSimpleName() + " values?");
-        }
+//        Set<Class<?>> localizedEntities = new Reflections(BaseEntity.class.getPackage().getName()).getTypesAnnotatedWith(Localized.class);
+//        Set<String> expected = Sets.newHashSet();
+//        for (Class<?> clazz:localizedEntities) {
+//            expected.addAll(getExpectedFor(clazz));
+//        }
+//
+//        Set<String> errors = Sets.newHashSet();
+//        // now test that all of current values are in the expected/defined list of valid translation ognls.
+//        // i.e. if the DB contains a translation ognl of "assetType.name" but that isn't in expected list (which is say, {at.name, at.desc} or {assetType.displayName, assetType.desc})
+//        //  then something is screwed up.   either the class/field was unlocalized or it was renamed. (i.e. given a different @Localized value.
+//        // possible fixes (depending on your assessment could be
+//        // 1: migrate the value.   assetType.name --> at.name
+//        // 2: delete the values    assetType.*    DELETE
+//        // 3: change the @Localized values       @Localize("at")    -->    @Localized("assetType")
+//        for (Map<TranslationKey, Map<Locale,String>> tenantMap:cache.values()) {
+//            for (TranslationKey key:tenantMap.keySet()) {
+//                if (!expected.contains(key.ognl)) {
+//                    errors.add(key.ognl);
+//                }
+//            }
+//        }
+//        if (errors.size()>0) {
+//            throw new IllegalStateException("the DB currently has invalid translation ognl(s) :  " + errors + "\n Their ognl doesn't match current meta-data.  did you recently change the values of any " + Localized.class.getSimpleName() + " values?");
+//        }
     }
 
-    private Set<String> getExpectedFor(Class<?> clazz) {
-        // recall : ognl = class + "." + field      e.g. "assetType.name"
-        // class/field values are taken from @Localized annotation values.
-        Set<String> expected = Sets.newHashSet();
-        String prefix = clazz.getAnnotation(Localized.class).value();
-        Set<Field> localizedFields = getAllFields(clazz, withAnnotation(Localized.class));
-        for (Field localizedField:localizedFields) {
-            String suffix = localizedField.getAnnotation(Localized.class).value();
-            String ognl = prefix + "." + suffix;
-            expected.add(ognl);
-        }
-        return expected;
-    }
+//    private Set<String> getExpectedFor(Class<?> clazz) {
+//        // recall : ognl = class + "." + field      e.g. "assetType.name"
+//        // class/field values are taken from @Localized annotation values.
+//        Set<String> expected = Sets.newHashSet();
+//        String prefix = clazz.getAnnotation(Localized.class).value();
+//        Set<Field> localizedFields = getAllFields(clazz, withAnnotation(Localized.class));
+//        for (Field localizedField:localizedFields) {
+//            String suffix = localizedField.getAnnotation(Localized.class).value();
+//            String ognl = prefix + "." + suffix;
+//            expected.add(ognl);
+//        }
+//        return expected;
+//    }
 
     private void add(Translation translation) {
         Long tenantId = translation.getId().getTenantId();
@@ -112,7 +112,7 @@ public class LocalizedTextCache implements InitializingBean {
         return null;
     }
 
-    public static Map<Locale, String> getTranslations(EntityWithTenant entity, String ognl) {
+    public static <T extends Saveable & HasTenant> Map<Locale, String> getTranslations(T entity, String ognl) {
         Long tenantId = entity.getTenant().getId();
         Map<TranslationKey, Map<Locale, String>> tenantMap = cache.get(tenantId);
         if (tenantMap!=null) {
@@ -122,14 +122,20 @@ public class LocalizedTextCache implements InitializingBean {
         return null;
     }
 
+    public static <T extends Saveable & HasTenant> String getTranslation(T entity, String ognl, Locale locale) {
+        Map<Locale, String> translations = getTranslations(entity, ognl);
+        return translations==null ? null : translations.get(locale);
+    }
+
+
     // -----------------------------------------------------------------------------------------------
 
     static class TranslationKey implements Comparable<TranslationKey> {
         String ognl;
         Long entityId;
 
-        TranslationKey(EntityWithTenant entity, String ognl) {
-            this.entityId = entity.getId();
+        <T extends Saveable & HasTenant> TranslationKey(T entity, String ognl) {
+            this.entityId = (Long)entity.getEntityId();
             this.ognl = ognl;
         }
 

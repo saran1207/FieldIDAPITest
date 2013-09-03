@@ -1,5 +1,6 @@
 package com.n4systems.model.parents.legacy;
 
+import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
-abstract public class LegacyBaseEntity implements Serializable {
+abstract public class LegacyBaseEntity implements Serializable, Saveable {
     
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner(LegacyBaseEntity.class);

@@ -12,7 +12,6 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.localization.Localized;
-import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.util.time.DateUtil;
 import org.apache.log4j.Logger;
 import rfid.ejb.entity.InfoFieldBean;
@@ -27,7 +26,6 @@ import java.util.regex.Pattern;
 
 @Entity
 @Table(name = "assettypes")
-@Localized("at")
 public class AssetType extends ArchivableEntityWithTenant implements NamedEntity, HasFileAttachments, Listable<Long>, Saveable, SecurityEnhanced<AssetType> {
 
 	private static final Logger logger = Logger.getLogger(AssetType.class);
@@ -48,20 +46,24 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private static Collection<? extends String> reservedFieldNames = Lists.newArrayList(PO_NUMBER, RFID, REF_NUMBER, ORDER_NUMBER, IDENTIFIER );
 	
 	@Column(nullable=false)
-	private @Localized("name") LocalizedText name;
+    @Localized
+    private String  name;
 	
 	@Column(length=2047)
-	private @Localized("warnings") LocalizedText warnings;
+    @Localized
+    private String  warnings;
 	
 	@Column(length=2047)
 	private String instructions;
 
 	private String cautionUrl;
 	private String imageName;
-	private @Localized("descTemplate") LocalizedText descriptionTemplate;
+	@Localized
+    private String  descriptionTemplate;
 	
     @Column(length=2000)
-    private @Localized("certText") LocalizedText manufactureCertificateText;
+    @Localized
+    private String  manufactureCertificateText;
 	private boolean hasManufactureCertificate;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")
@@ -123,23 +125,19 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	
 	@AllowSafetyNetworkAccess
 	public String getDescriptionTemplate() {
-		return descriptionTemplate.getTranslatedValue();
+		return descriptionTemplate;
 	}
 
 	public void setDescriptionTemplate(String descriptionTemplate) {
-		this.descriptionTemplate = new LocalizedText(descriptionTemplate);
+		this.descriptionTemplate = descriptionTemplate;
 	}
 
-    public void setName(LocalizedText name) {
-        this.name = name;
-    }
-
 	public String getName() {
-		return name.getTranslatedValue();
+		return name;
 	}
 
     public void setName(String name) {
-        this.name = new LocalizedText(name);
+        this.name = name;
     }
 
     @Deprecated
@@ -153,17 +151,13 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		setName(name);
 	}
 
-    public void setWarnings(String safetyLocationPath) {
-        this.warnings = updateLocalizedText(this.warnings, safetyLocationPath);
-    }
-
-    public void setWarnings(LocalizedText warnings) {
+    public void setWarnings(String warnings) {
         this.warnings = warnings;
     }
 
     @AllowSafetyNetworkAccess
 	public String getWarnings() {
-		return warnings.getTranslatedValue();
+		return warnings;
 	}
 
 	public void setCautionUrl(String externalURL) {
@@ -233,11 +227,11 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 
 	@AllowSafetyNetworkAccess
 	public String getManufactureCertificateText() {
-		return manufactureCertificateText.getTranslatedValue();
+		return manufactureCertificateText;
 	}
 
 	public void setManufactureCertificateText(String manufactureCertificateText) {
-		this.manufactureCertificateText = new LocalizedText(manufactureCertificateText);
+		this.manufactureCertificateText = manufactureCertificateText;
 	}
 
 	public AutoAttributeCriteria getAutoAttributeCriteria() {
@@ -277,7 +271,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		if( descriptionTemplate == null ) { 
 			return "";
 		}
-        String templateText = this.descriptionTemplate.getTranslatedValue()==null ? "" : this.descriptionTemplate.getTranslatedValue();
+        String templateText = this.descriptionTemplate==null ? "" : this.descriptionTemplate;
 		// if the template does not have a starting bracket, then it has no variables.  Just return the unmodified template
 		if(templateText.indexOf(descVariableStart) == -1) {
 			return templateText;
@@ -366,7 +360,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		for(InfoFieldBean field: infoFields) {
 			fieldNames.add(field.getName());
 		}		
-		return isDescriptionTemplateValid(descriptionTemplate.getTranslatedValue(), fieldNames);
+		return isDescriptionTemplateValid(descriptionTemplate, fieldNames);
 	}
 	
 	// XXX - we should pull this to a util/handler class at some point
@@ -495,7 +489,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	@Override
 	@AllowSafetyNetworkAccess
 	public String getDisplayName() {
-		return name.getText();
+		return name;
 	}
 	
 	@AllowSafetyNetworkAccess
@@ -504,7 +498,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	}
 	
 	public void archivedName(String prefix) {
-		archivedName = name.getText();
+		archivedName = name;
         String value = prefix!=null ? prefix.trim() + " " : "";
         setName(prefix+UUID.randomUUID().toString());
 	}

@@ -9,7 +9,6 @@ import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -45,7 +44,7 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     public boolean isNameExists(String name) {
         QueryBuilder<AssetType> builder = createTenantSecurityBuilder(AssetType.class);
-        builder.addWhere(WhereClauseFactory.create("name", new LocalizedText(name)));
+        builder.addWhere(WhereClauseFactory.create("name", name));
         return persistenceService.exists(builder);
     }
 

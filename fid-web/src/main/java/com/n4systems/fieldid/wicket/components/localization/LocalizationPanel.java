@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.localization;
 
-import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -12,8 +11,6 @@ import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
-import com.n4systems.persistence.localization.Localized;
-import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.services.localization.LocalizationService;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -31,17 +28,11 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.reflections.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.*;
-
-import static org.reflections.ReflectionUtils.withAnnotation;
 
 public class LocalizationPanel extends Panel {
 
@@ -202,68 +193,68 @@ public class LocalizationPanel extends Panel {
                 id = ((LegacyBaseEntity)entity).getUniqueID();
             }
 
-            // TODO DD : refactor this all into service??
-            List<Translation> translations = localizationService.getTranslations(entity);
-            Set<Field> fields = ReflectionUtils.getAllFields(entity.getClass(), withAnnotation(Localized.class));
-
-            // stick in default values...
-            for (Field field:fields) {
-                String ognl = localizationService.getOgnlFor(entity.getClass(), field);
-                LocalizedText text = getLocalizedTextValue(entity, field);
-                localizedFields.put(ognl+id, new LocalizedField(entity, field.getName(), text.getText()));
-            }
-
-            // ...now add translations (if they are there)
-            for (Translation translation:translations) {
-                LocalizedField localizedField = localizedFields.get(translation.getId().getOgnl());
-                if (localizedField==null) {   // doesn't apply..? this is a weird state.  there is a translation for a field that isn't marked as translatable?
-                    logger.warn("the translation " + translation + " exists but it doesn't seem to map to any current entity/field");
-                } else {
-                    localizedField.addTranslation(translation);
-                }
-            }
-
-            // .. now scan for embedded LocalizedText fields.
-            fields = ReflectionUtils.getAllFields(entity.getClass(), new Predicate() {
-                @Override public boolean apply(Object input) {
-                    Field field = (Field) input;
-                    return !Modifier.isStatic(field.getModifiers()) && field.getType().isAnnotationPresent(Localized.class);
-                }
-            });
-            for (Field field : fields) {
-                localizedFields.putAll(loadForEntity(getValue(entity, field)));
-            }
-
-            // ...now handle all collections that might have embedded LocalizedText.
-            fields = ReflectionUtils.getAllFields(entity.getClass(), new Predicate() {
-                @Override public boolean apply(Object input) {
-                    Field field = (Field) input;
-                    if (Modifier.isStatic(field.getModifiers())) return false;
-                    return isCollectionOfLocalizedEntities(field.getGenericType());
-                }
-            });
-            for (Field field : fields) {
-                localizedFields.putAll(loadForEntities(getValues(entity, field)));
-            }
+//            // TODO DD : refactor this all into service??
+//            List<Translation> translations = localizationService.getTranslations(entity);
+//            Set<Field> fields = ReflectionUtils.getAllFields(entity.getClass(), withAnnotation(Localized.class));
+//
+//            // stick in default values...
+//            for (Field field:fields) {
+//                String ognl = localizationService.getOgnlFor(entity.getClass(), field);
+//                LocalizedText text = getLocalizedTextValue(entity, field);
+//                localizedFields.put(ognl+id, new LocalizedField(entity, field.getName(), text.getText()));
+//            }
+//
+//            // ...now add translations (if they are there)
+//            for (Translation translation:translations) {
+//                LocalizedField localizedField = localizedFields.get(translation.getId().getOgnl());
+//                if (localizedField==null) {   // doesn't apply..? this is a weird state.  there is a translation for a field that isn't marked as translatable?
+//                    logger.warn("the translation " + translation + " exists but it doesn't seem to map to any current entity/field");
+//                } else {
+//                    localizedField.addTranslation(translation);
+//                }
+//            }
+//
+//            // .. now scan for embedded LocalizedText fields.
+//            fields = ReflectionUtils.getAllFields(entity.getClass(), new Predicate() {
+//                @Override public boolean apply(Object input) {
+//                    Field field = (Field) input;
+//                    return !Modifier.isStatic(field.getModifiers()) && field.getType().isAnnotationPresent(Localized.class);
+//                }
+//            });
+//            for (Field field : fields) {
+//                localizedFields.putAll(loadForEntity(getValue(entity, field)));
+//            }
+//
+//            // ...now handle all collections that might have embedded LocalizedText.
+//            fields = ReflectionUtils.getAllFields(entity.getClass(), new Predicate() {
+//                @Override public boolean apply(Object input) {
+//                    Field field = (Field) input;
+//                    if (Modifier.isStatic(field.getModifiers())) return false;
+//                    return isCollectionOfLocalizedEntities(field.getGenericType());
+//                }
+//            });
+//            for (Field field : fields) {
+//                localizedFields.putAll(loadForEntities(getValues(entity, field)));
+//            }
             return localizedFields;
         }
 
-        private boolean isCollectionOfLocalizedEntities(Type type) {
-            if (type instanceof ParameterizedType ) {
-                Type rawType = ((ParameterizedType) type).getRawType();
-                if (rawType instanceof Class && ((Class) rawType).isAssignableFrom(Collection.class)) {
-                    ParameterizedType pt = (ParameterizedType) type;
-                    Type[] fieldArgTypes = pt.getActualTypeArguments();
-                    for(Type fieldArgType : fieldArgTypes) {
-                        if (fieldArgType instanceof Class<?>) {
-                            Class<?> fieldClass = (Class<?>) fieldArgType;
-                            return fieldClass.isAnnotationPresent(Localized.class);
-                        }
-                    }
-                }
-            }
-            return false;
-        }
+//        private boolean isCollectionOfLocalizedEntities(Type type) {
+//            if (type instanceof ParameterizedType ) {
+//                Type rawType = ((ParameterizedType) type).getRawType();
+//                if (rawType instanceof Class && ((Class) rawType).isAssignableFrom(Collection.class)) {
+//                    ParameterizedType pt = (ParameterizedType) type;
+//                    Type[] fieldArgTypes = pt.getActualTypeArguments();
+//                    for(Type fieldArgType : fieldArgTypes) {
+//                        if (fieldArgType instanceof Class<?>) {
+//                            Class<?> fieldClass = (Class<?>) fieldArgType;
+//                            return fieldClass.isAnnotationPresent(Localized.class);
+//                        }
+//                    }
+//                }
+//            }
+//            return false;
+//        }
 
         private Collection<?> getValues(Object entity, final Field field) {
             Object value = getValue(entity, field);
@@ -273,13 +264,13 @@ public class LocalizationPanel extends Panel {
             throw new IllegalStateException("trying to get collection when field returns " + value==null?" <null>" : value.getClass().getSimpleName());
         }
 
-        private LocalizedText getLocalizedTextValue(Object entity, final Field field) {
-            Object value = getValue(entity, field);
-            if (value instanceof LocalizedText) {
-                return (LocalizedText)value;
-            }
-            throw new IllegalStateException("trying to get " + LocalizedText.class.getSimpleName() + " when field returns " + value==null?" <null>" : value.getClass().getSimpleName());
-        }
+//        private LocalizedText getLocalizedTextValue(Object entity, final Field field) {
+//            Object value = getValue(entity, field);
+//            if (value instanceof LocalizedText) {
+//                return (LocalizedText)value;
+//            }
+//            throw new IllegalStateException("trying to get " + LocalizedText.class.getSimpleName() + " when field returns " + value==null?" <null>" : value.getClass().getSimpleName());
+//        }
 
         private Object getValue(Object entity, final Field field) {
             try {
@@ -361,3 +352,13 @@ public class LocalizationPanel extends Panel {
 
 
 }
+
+
+/**
+ *  use @Type for strings.
+ *  will set the localized view.
+ *  optional getLocalizedName() methods can be added.
+ *  remove @TypeDef, use explicit.
+ *  editor needs to search for @typedef's, not @localized
+ *  use hibernate columns for creating keys.
+ */

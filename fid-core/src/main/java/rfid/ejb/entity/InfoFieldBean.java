@@ -1,10 +1,11 @@
 package rfid.ejb.entity;
 
 import com.n4systems.model.AssetType;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.UnitOfMeasure;
+import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.persistence.localization.Localized;
-import com.n4systems.persistence.localization.LocalizedText;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -14,11 +15,21 @@ import java.util.Set;
 
 @Entity
 @Table(name = "infofield")
-@Localized("attr")
-public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFieldBean> {
+public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFieldBean>, HasTenant {
 	private static final long serialVersionUID = 1L;
-	private static final Long DEFUALT_WEIGHT = 0L;
-	public enum InfoFieldType { 
+	private static final Long DEFAULT_WEIGHT = 0L;
+
+    @Override
+    public Tenant getTenant() {
+       return null;
+    }
+
+    @Override
+    public void setTenant(Tenant tenant) {
+
+    }
+
+    public enum InfoFieldType {
 		TextField( "Text Field" ), 
 		SelectBox( "Select Box" ), 
 		ComboBox( "Combo Box" ),	
@@ -47,12 +58,13 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	public final static String DATEFIELD_FIELD_TYPE = "datefield";
 
 	@Column( nullable=false )
-	private @Localized("name") LocalizedText name;
+    @Localized
+	private String name;
 	
 	@Column( nullable=false )
 	private String fieldType;
 	
-	private Long weight = DEFUALT_WEIGHT;
+	private Long weight = DEFAULT_WEIGHT;
 	private boolean required;
 	private boolean usingUnitOfMeasure;
 	private boolean retired;
@@ -98,15 +110,11 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	}
 
     public String getName() {
-        return name.getTranslatedValue();
-    }
-
-    public void setName(LocalizedText name) {
-        this.name = name;
+        return name;
     }
 
     public void setName(String name) {
-        this.name = new LocalizedText(name);
+        this.name = name;
     }
 
     public boolean isRequired() {

@@ -53,6 +53,9 @@ import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
+import com.n4systems.persistence.listeners.LocalizationListener;
+import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
+import com.n4systems.persistence.localization.HibernatePersistenceProvider;
 import com.n4systems.persistence.localization.LocalizedTextCache;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
@@ -347,13 +350,28 @@ public class FieldIdCoreConfig {
 		return new TenantSettingsService();
 	}
 
+    @Bean
+    public LocalizationListener localizationListener() {
+        return new LocalizationListener();
+    }
+
+    @Bean
+    public SetupDataUpdateEventListener setupDataUpdateEventListener() {
+        return new SetupDataUpdateEventListener();
+    }
+
 	@Bean
     public AbstractEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setPersistenceUnitName("fieldid");
+        factoryBean.setPersistenceProvider(hibernatePersistenceProvider());
         return factoryBean;
     }
-	
+
+    @Bean HibernatePersistenceProvider hibernatePersistenceProvider() {
+        return new HibernatePersistenceProvider();
+    }
+
     @Bean
     public PlatformTransactionManager txManager() {
         return new JpaTransactionManager(entityManagerFactory().getObject());

@@ -19,7 +19,7 @@ public class LocalizedTextUserType implements UserType {
 
     @Override
     public Class returnedClass() {
-        return LocalizedText.class;
+        return String.class;
     }
 
     @Override
@@ -50,13 +50,12 @@ public class LocalizedTextUserType implements UserType {
     @Override
     public Object nullSafeGet(ResultSet rs, String[] names, Object owner) throws HibernateException, SQLException {
         String value = StandardBasicTypes.STRING.nullSafeGet(rs, names[0]);
-        return new LocalizedText(value);
+        return value;
     }
 
     @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
-        LocalizedText localizedString = (LocalizedText) value;
-        StandardBasicTypes.STRING.nullSafeSet(st, localizedString.getText(), index);
+        StandardBasicTypes.STRING.nullSafeSet(st, (String) value, index);
     }
 
     public Object deepCopy(Object value) throws HibernateException {
