@@ -8,7 +8,6 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.localization.Localized;
-import com.n4systems.persistence.localization.LocalizedTextCache;
 import com.n4systems.services.localization.LocalizationService;
 import org.apache.log4j.Logger;
 import org.hibernate.EntityMode;
@@ -61,7 +60,7 @@ public class LocalizationListener implements PostLoadEventListener, PostUpdateEv
                 // TODO DD/SU : put the locale in thread local and get it from there.
                 Locale locale = Locale.GERMAN;
                 int index = property.getIndex();
-                String translation = LocalizedTextCache.getTranslation(translatableEntity, property.getOgnl(), locale);
+                String translation = getLocalizationService().getTranslation(translatableEntity, property.getOgnl(), locale);
                 if (translation!=null) {
                     persister.setPropertyValue(translatableEntity.getEntity(), index, translation, EntityMode.POJO);
                 }
