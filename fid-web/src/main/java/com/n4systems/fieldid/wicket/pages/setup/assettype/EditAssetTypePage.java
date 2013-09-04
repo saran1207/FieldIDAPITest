@@ -7,7 +7,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
-public class EditAssetTypePage extends AddAssetTypePage{
+public class EditAssetTypePage extends AddAssetTypePage {
 
     private Long assetTypeId;
 

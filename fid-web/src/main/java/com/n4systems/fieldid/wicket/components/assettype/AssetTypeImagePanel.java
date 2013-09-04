@@ -82,6 +82,7 @@ public class AssetTypeImagePanel extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 uploadedBytes = null;
                 tempFileName = null;
+                clientFileName = null;
                 uploadContainer.setVisible(true);
                 uploadedFileDisplayPanel.setVisible(false);
                 target.add(uploadContainer, uploadedFileDisplayPanel);
