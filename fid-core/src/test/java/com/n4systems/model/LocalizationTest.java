@@ -1,7 +1,9 @@
 package com.n4systems.model;
 
 import org.junit.Before;
+import org.junit.Ignore;
 
+@Ignore
 public class LocalizationTest {
 
     @Before
