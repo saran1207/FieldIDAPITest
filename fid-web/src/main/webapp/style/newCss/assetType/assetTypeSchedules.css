@@ -87,6 +87,9 @@ form .row {
 select {
 	width: 175px;
 }
+select.time {
+	width: 100px;
+}
 
 
 /* hack */
