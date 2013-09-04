@@ -22,6 +22,7 @@ import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
+import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.model.ExtendedFeature;
@@ -284,6 +285,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(createTemplatesSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("securityLink", SecurityPage.class));
+        subMenuContainer.add(new BookmarkablePageLink<WebPage>("translationsLink", AssetTypeGroupTranslationsPage.class));
         createSecuritySubMenu(subMenuContainer);
         
         container.add(subMenuContainer);

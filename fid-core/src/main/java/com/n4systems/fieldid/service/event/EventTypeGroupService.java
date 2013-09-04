@@ -28,6 +28,12 @@ public class EventTypeGroupService extends FieldIdPersistenceService {
         query.addOrder("name");
         return persistenceService.findAll(query);
     }
+
+    public List<EventTypeGroup> getAllEventTypeGroups() {
+        QueryBuilder<EventTypeGroup> query = createUserSecurityBuilder(EventTypeGroup.class);
+        query.addOrder("name");
+        return persistenceService.findAll(query);
+    }
     
     public Long getNumberOfAssociatedEventTypes(EventTypeGroup group) {
         QueryBuilder<EventType> eventTypeCountQuery = createUserSecurityBuilder(EventType.class);

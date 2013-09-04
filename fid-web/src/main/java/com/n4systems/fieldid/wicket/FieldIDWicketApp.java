@@ -46,6 +46,7 @@ import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.ReassignEventType
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
+import com.n4systems.fieldid.wicket.pages.setup.translations.*;
 import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
@@ -103,6 +104,12 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/assetTypeCopy", CopyAssetTypePage.class);
         mountPage("setup/selectEventTypes", EventTypeAssociationsPage.class);
         mountPage("setup/assetTypeSchedules", AssetTypeSchedulesPage.class);
+        mountPage("setup/assetTypeGroupTranslations", AssetTypeGroupTranslationsPage.class);
+        mountPage("setup/assetTypeTranslations", AssetTypeTranslationsPage.class);
+        mountPage("setup/eventTypeTranslations", EventTypeTranslationsPage.class);
+        mountPage("setup/eventTypeGroupTranslations", EventTypeGroupTranslationsPage.class);
+        mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
+
 
         mountPage("dashboard", DashboardPage.class);
 

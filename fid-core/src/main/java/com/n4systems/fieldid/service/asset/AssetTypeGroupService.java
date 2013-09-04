@@ -62,4 +62,10 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         return persistenceService.find(AssetTypeGroup.class, id);
     }
 
+    public List<AssetTypeGroup> getAllAssetTypeGroups() {
+        QueryBuilder<AssetTypeGroup> query = createTenantSecurityBuilder(AssetTypeGroup.class);
+        query.addOrder("orderIdx");
+        return persistenceService.findAll(query);
+    }
+
 }

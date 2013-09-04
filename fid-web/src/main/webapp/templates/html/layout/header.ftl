@@ -216,8 +216,10 @@
 											<li><a href="<@s.url value='/w/setup/passwordPolicy'/>"><@s.text name="title.password_policy"/></a></li>
 											<li><a href="<@s.url value='/w/setup/accountPolicy'/>"><@s.text name="title.account_lockout_policy"/></a></li>
 										</ul>
-										
 									</li>
+                                    <li>
+                                        <a href="<@s.url value="/w/setup/assetTypeGroupTranslations" />" ><@s.text name="title.translations"/></a>
+                                    </li>
 								</ul>
 								
 							</li>

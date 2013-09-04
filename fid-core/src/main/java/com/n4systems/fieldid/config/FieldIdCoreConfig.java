@@ -647,4 +647,9 @@ public class FieldIdCoreConfig {
         return new LocalizationService();
     }
 
+    @Bean
+    public EventBookService eventBookService() {
+        return new EventBookService();
+    }
+
 }
