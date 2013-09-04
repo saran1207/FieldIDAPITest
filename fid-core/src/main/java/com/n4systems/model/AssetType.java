@@ -46,24 +46,20 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private static Collection<? extends String> reservedFieldNames = Lists.newArrayList(PO_NUMBER, RFID, REF_NUMBER, ORDER_NUMBER, IDENTIFIER );
 	
 	@Column(nullable=false)
-    @Localized
-    private String  name;
+    private @Localized String name;
 	
 	@Column(length=2047)
-    @Localized
-    private String  warnings;
+    private @Localized String warnings;
 	
 	@Column(length=2047)
 	private String instructions;
 
 	private String cautionUrl;
 	private String imageName;
-	@Localized
-    private String  descriptionTemplate;
+    private @Localized String descriptionTemplate;
 	
     @Column(length=2000)
-    @Localized
-    private String  manufactureCertificateText;
+    private @Localized String manufactureCertificateText;
 	private boolean hasManufactureCertificate;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "assetType")
