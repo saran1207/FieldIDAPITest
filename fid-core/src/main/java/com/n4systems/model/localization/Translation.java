@@ -1,19 +1,35 @@
 package com.n4systems.model.localization;
 
+import com.n4systems.model.api.Saveable;
 import com.n4systems.model.security.SecurityDefiner;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Locale;
 
 @Entity
 @Table(name = "translations")
-public class Translation implements Serializable {
+public class Translation implements Serializable, Saveable {
 
     private @EmbeddedId CompoundKey id = new CompoundKey();
     private String value;
 
+    private @Transient boolean isNew = false;
+
     public static SecurityDefiner createSecurityDefiner() {
         return new SecurityDefiner("id.tenantId", null, null, null);
+    }
+
+    public static Translation makeNew(Long tenantId, Long entityId, String ognl, Locale language) {
+        return new Translation(tenantId,entityId,ognl,language);
+    }
+
+    private Translation(Long tenantId, Long entityId, String ognl, Locale language) {
+        id = new CompoundKey(tenantId,entityId, ognl, language);
+        isNew = true;
+    }
+
+    public Translation() {
     }
 
     public CompoundKey getId() {
@@ -36,13 +52,50 @@ public class Translation implements Serializable {
         this.value = value;
     }
 
+    public Translation withId(Long tenantId, Long entityId, String ognl, Locale language) {
+        setId(new CompoundKey(tenantId, entityId, ognl, language));
+        return this;
+    }
+    
+    public Translation withValue(String value) {
+        setValue(value);
+        return this;
+    }
+
+    public boolean isNew() {
+        return isNew;
+    }
+
+    @Override
+    public Object getEntityId() {
+        return id.entityId;
+    }
+
+    @Override
+    public String toString() {
+        return "Translation{" +
+                "value='" + value + '\'' +
+                ", id=" + id +
+                '}';
+    }
+
     @Embeddable
     public static class CompoundKey implements Serializable {
 
-        private @Column(name="tenant_id") Long tenantId;
-        private @Column(name="entity_id") Long entityId;
-        private @Column(name="ognl") String ognl;
-        private @Column(name="language") String language;
+        @Column(name="tenant_id") Long tenantId;
+        @Column(name="entity_id") Long entityId;
+        @Column(name="ognl") String ognl;
+        @Column(name="language") String language;
+
+        public CompoundKey() {
+        }
+
+        public CompoundKey(Long tenantId, Long entityId, String ognl, Locale language) {
+            this.entityId = entityId;
+            this.language = language.toString();
+            this.ognl = ognl;
+            this.tenantId = tenantId;
+        }
 
         @Override
         public boolean equals(Object o) {
@@ -99,10 +152,4 @@ public class Translation implements Serializable {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Translation :" +
-                id +
-                " --> '" + value + "'";
-    }
 }

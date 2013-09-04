@@ -3,7 +3,6 @@ package com.n4systems.services.localization;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -106,7 +105,7 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         keyMap.put(locale, translation.getValue());
     }
 
-    public static String getText(EntityWithTenant entity, String ognl, Locale locale) {
+    public String getText(EntityWithTenant entity, String ognl, Locale locale) {
         Preconditions.checkArgument(locale != null && entity != null, "must supply non-null args");
         Long tenantId = entity.getTenant().getId();
         Map<TranslationKey, Map<Locale, String>> tenantMap = cache.get(tenantId);
@@ -117,8 +116,8 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         return null;
     }
 
-    public static <T extends Saveable & HasTenant> Map<Locale, String> getTranslations(T entity, String ognl) {
-        Long tenantId = entity.getTenant().getId();
+    public <T extends Saveable> Map<Locale, String> getTranslations(T entity, String ognl) {
+        Long tenantId = securityContext.getTenantSecurityFilter().getTenantId();
         Map<TranslationKey, Map<Locale, String>> tenantMap = cache.get(tenantId);
         if (tenantMap!=null) {
             Map<Locale, String> map = tenantMap.get(new TranslationKey(entity, ognl));
@@ -127,7 +126,7 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         return null;
     }
 
-    public static <T extends Saveable & HasTenant> String getTranslation(T entity, String ognl, Locale locale) {
+    public <T extends Saveable> String getTranslation(T entity, String ognl, Locale locale) {
         Map<Locale, String> translations = getTranslations(entity, ognl);
         return translations==null ? null : translations.get(locale);
     }
@@ -147,10 +146,6 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     private final Session getHibernateSession() {
         return (Session) getEntityManager().getDelegate();
     }
-
-//    private final ClassMetadata getClassMetaData(String className) {
-//        return getHibernateSession().getSessionFactory().getClassMetadata(className);
-//    }
 
     private final ClassMetadata getClassMetaData(Class clazz) {
         return getHibernateSession().getSessionFactory().getClassMetadata(clazz);
@@ -176,6 +171,12 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         }
     }
 
+    public void save(List<Translation> translations) {
+        for (Translation translation : translations) {
+            persistenceService.saveOrUpdate(translations);
+        }
+    }
+
 
     // -----------------------------------------------------------------------------------------------
 
@@ -183,7 +184,7 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         String ognl;
         Long entityId;
 
-        <T extends Saveable & HasTenant> TranslationKey(T entity, String ognl) {
+        <T extends Saveable> TranslationKey(T entity, String ognl) {
             this.entityId = (Long)entity.getEntityId();
             this.ognl = ognl;
         }

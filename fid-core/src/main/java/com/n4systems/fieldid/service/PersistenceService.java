@@ -173,9 +173,14 @@ public class PersistenceService extends FieldIdService {
     }
 
     @Transactional
-	public <T extends BaseEntity> T update(T entity) {
-		return em.merge(entity);
-	}
+    public <T extends BaseEntity> T update(T entity) {
+        return em.merge(entity);
+    }
+
+    @Transactional
+    public  Saveable update(Saveable entity) {
+        return em.merge(entity);
+    }
 
     @Transactional
     public <T extends LegacyBaseEntity> T update(T entity) {
@@ -183,11 +188,22 @@ public class PersistenceService extends FieldIdService {
     }
 
     @Transactional
-	public <T extends BaseEntity> void update(List<T> entities) {
+    public <T extends BaseEntity> void update(List<T> entities) {
         for (T entity : entities) {
             update(entity);
         }
-	}
+    }
+
+    @Transactional
+    public <T extends Saveable> void saveOrUpdate(List<T> entities) {
+        for (T entity : entities) {
+            if (entity.isNew()) {
+                save(entity);
+            } else {
+                update(entity);
+            }
+        }
+    }
 
     @Transactional
     public void remove(Object entity) {
@@ -284,10 +300,3 @@ public class PersistenceService extends FieldIdService {
 	}
 
 }
-
-
-
-//b.bool().
-//        must(b.keyword().onField("identifier").matching(text).createQuery()).
-//        must(b.keyword().onField("attributes.attribute").matching("type").createQuery()).
-//        must(b.keyword().onField("attributes.textValue").matching("Multi Leg Bridle").createQuery()).createQuery();

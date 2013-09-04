@@ -1,9 +1,7 @@
 package rfid.ejb.entity;
 
 import com.n4systems.model.AssetType;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.UnitOfMeasure;
-import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.persistence.localization.Localized;
 import org.hibernate.annotations.Where;
@@ -15,19 +13,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "infofield")
-public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFieldBean>, HasTenant {
+public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFieldBean> {
 	private static final long serialVersionUID = 1L;
 	private static final Long DEFAULT_WEIGHT = 0L;
-
-    @Override
-    public Tenant getTenant() {
-       return null;
-    }
-
-    @Override
-    public void setTenant(Tenant tenant) {
-
-    }
 
     public enum InfoFieldType {
 		TextField( "Text Field" ), 

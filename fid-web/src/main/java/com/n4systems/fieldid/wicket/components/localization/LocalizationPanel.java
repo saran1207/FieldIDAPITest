@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.localization;
 
+import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -29,12 +30,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
 import org.reflections.ReflectionUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.*;
@@ -49,18 +52,17 @@ public class LocalizationPanel extends Panel {
     private final FormComponent<Locale> chooseLanguage;
     private final ListView<LocalizedField> listView;
 
-
     public LocalizationPanel(String id, IModel<? extends EntityWithTenant> model) {
         super(id, model);
 
         add(new Form("form")
-                .add(listView = new ListView<LocalizedField>("values", new LocalizedFieldsModel()) {
+                .add(listView = new ListView<LocalizedField>("translations", new LocalizedFieldsModel()) {
                     @Override
                     protected void populateItem(ListItem<LocalizedField> item) {
                         final LocalizedField field = item.getModelObject();
                         item.add(new Label("label", Model.of(field.getName())));
                         item.add(new Label("defaultValue", Model.of(field.getDefaultValue())));
-                        item.add(new TranslationsListView("translations", new PropertyModel(item.getModel(), "values")));
+                        item.add(new TranslationsListView("translations", new PropertyModel(item.getModel(), "translations")));
                         item.add(new AjaxLink("scoreGroups") {
                             @Override
                             public void onClick(AjaxRequestTarget target) {
@@ -102,16 +104,11 @@ public class LocalizationPanel extends Panel {
                 }.setReuseItems(true))
                 .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
                 .add(new AjaxSubmitLink("submit") {
-                    @Override
-                    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                        List<LocalizedField> fields = (List<LocalizedField>) getDefaultModel().getObject();
-                        for (LocalizedField field : fields) {
-                            System.out.println(field);
-                        }
+                    @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                        localizationService.save(convertToTranslations());
                     }
 
-                    @Override
-                    protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
 
                     }
                 })
@@ -127,6 +124,20 @@ public class LocalizationPanel extends Panel {
 
     }
 
+    private List<Translation> convertToTranslations() {
+        LocalizedFieldsModel model = (LocalizedFieldsModel) listView.getDefaultModel();
+        return model.getAsTranslations();
+    }
+
+//    public LocalizationPanel withFieldFilter(Predicate<Field> filter) {
+//        this.fieldFilter = filter;
+//        return this;
+//    }
+//
+//    public Predicate<Field> getFieldFilter() {
+//        return fieldFilter;
+//    }
+
     @Override
     protected void onModelChanged() {
         super.onModelChanged();
@@ -138,16 +149,16 @@ public class LocalizationPanel extends Panel {
     }
 
 
-    class TranslationsListView extends ListView<String> {
-        TranslationsListView(String id, IModel<List<? extends String>> list) {
+    class TranslationsListView extends ListView<Translation> {
+        TranslationsListView(String id, IModel<List<Translation>> list) {
             super(id, list);
             setReuseItems(true);
         }
 
-        @Override protected void populateItem(ListItem<String> item) {
-            String translation = item.getModelObject();
+        @Override protected void populateItem(ListItem<Translation> item) {
+            Translation translation = item.getModelObject();
             final Locale itemLanguage = getLanguages().get(item.getIndex());
-            item.add(new TextField("translation", item.getModel()) {
+            item.add(new TextField("translation", new PropertyModel(item.getModel(),"value")) {
                 @Override public boolean isVisible() {
                     return itemLanguage.equals(language);
                 }
@@ -159,6 +170,7 @@ public class LocalizationPanel extends Panel {
 
         private Set<Object> loaded;
         private List<LocalizedField> fields;
+        private transient Map<Class<?>, Set<Field>> cache = Maps.newHashMap();
 
         LocalizedFieldsModel() {
             super();
@@ -172,23 +184,23 @@ public class LocalizationPanel extends Panel {
             }
             model.detach();
 
-            Map<String,LocalizedField> localizedFields = loadForEntity(model.getObject());
-            return Lists.newArrayList(localizedFields.values());
+            List<LocalizedField> localizedFields = loadForEntity(model.getObject());
+            return localizedFields;
         }
 
-        private Map<String, LocalizedField> loadForEntities(Collection<Object> entities) {
-            Map<String,LocalizedField> localizedFields = Maps.newTreeMap();
+        private List<LocalizedField> loadForEntities(Collection<Object> entities) {
+            List<LocalizedField> localizedFields = Lists.newArrayList();
             if (entities==null) {
                 return localizedFields;
             }
             for (Object entity:entities) {
-                localizedFields.putAll(loadForEntity(entity));
+                localizedFields.addAll(loadForEntity(entity));
             }
             return localizedFields;
         }
 
-        private Map<String, LocalizedField> loadForEntity(Object entity) {
-            Map<String,LocalizedField> localizedFields = Maps.newTreeMap();
+        private List<LocalizedField> loadForEntity(Object entity) {
+            List<LocalizedField> localizedFields = Lists.newArrayList();
             if (!(entity instanceof Saveable)) {
                 return localizedFields;
             }
@@ -201,34 +213,50 @@ public class LocalizationPanel extends Panel {
 
             Long id = (Long) ((Saveable) entity).getEntityId();
 
-            Set<Field> fields = ReflectionUtils.getAllFields(entity.getClass());
+            Set<Field> fields = getAllFields(entity.getClass());
 
             List<Translation> translations = localizationService.getTranslations(id);
 
-            // stick in default values...
             for (Field field:fields) {
 //                System.out.println("scanning field " + field.getName() + " in class " + field.getDeclaringClass().getSimpleName());
                 if (field.isAnnotationPresent(Localized.class) && field.getType().equals(String.class)) {
                     String ognl = localizationService.getOgnlFor(field);
-                    localizedFields.put(ognl, new LocalizedField(entity, field.getName(), (String) getValue(entity, field)));
+                    // create empty translation for all languages here....override later if other ones exist.
+                    localizedFields.add(new LocalizedField(entity, field.getName(), (String) getValue(entity, field), ognl));
                 } else if (isCollection(field)){
-                    localizedFields.putAll(loadForEntities(getValues(entity,field)));
+                    localizedFields.addAll(loadForEntities(getValues(entity, field)));
                 } else if (!ClassUtils.isPrimitiveOrWrapper(field.getType())) {
-                    localizedFields.putAll(loadForEntity(getValue(entity,field)));
+                    localizedFields.addAll(loadForEntity(getValue(entity, field)));
                 }
             }
 
-            // ...now add translations (if they are there)
+            // ...now populate translations (if they exist)
             for (Translation translation:translations) {
-                LocalizedField localizedField = localizedFields.get(translation.getId().getOgnl());
-                if (localizedField==null) {   // doesn't apply..? this is a weird state.  there is a translation for a field that isn't marked as translatable?
-                    logger.warn("the translation " + translation + " exists but it doesn't seem to map to any current entity/field");
-                } else {
-                    localizedField.addTranslation(translation);
+                boolean translationFound = false;
+                for (LocalizedField localizedField:localizedFields) {
+                    if (localizedField.getOgnl().equals(translation.getId().getOgnl())) {
+                        translationFound = true;
+                        localizedField.addTranslation(translation);
+                        break;
+                    }
+                }
+                if (!translationFound) {
+                    logger.error("a translation exists but its not referenced ==> " + translation );
                 }
             }
-
             return localizedFields;
+        }
+
+        private Set<Field> getAllFields(Class<?> clazz) {
+            Set<Field> fields = cache.get(clazz);
+            if (fields==null) {
+               cache.put(clazz, fields = ReflectionUtils.getAllFields(clazz, new Predicate<Field>() {
+                   @Override public boolean apply(Field field) {
+                       return !(Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()));
+                   }
+               }));
+            }
+            return fields;
         }
 
         private boolean isCollection(Field field) {
@@ -292,63 +320,87 @@ public class LocalizationPanel extends Panel {
         @Override
         public void detach() {
         }
+
+        public List<Translation> getAsTranslations() {
+            List<Translation> result = Lists.newArrayList();
+            for (LocalizedField localizedField:fields) {
+                result.addAll(localizedField.getTranslationsToSave());
+            }
+            return result;
+        }
     }
 
 
     class LocalizedField implements Serializable {
+        private List<Translation> translations = new ArrayList<Translation>(Collections.nCopies(getLanguages().size(),(Translation)null));
         private String defaultValue;
         private String name;
         private final Object entity;
-        private List<String> values = new ArrayList<String>(Collections.nCopies(getLanguages().size(),(String)null));
+        private final String ognl;
 
-        public LocalizedField(Object entity, String name, String defaultValue) {
+        public LocalizedField(Object entity, String name, String defaultValue, String ognl) {
             this.name = name;
             this.defaultValue = defaultValue;
             this.entity = entity;
+            this.ognl = ognl;
+
+            Long tenantId = FieldIDSession.get().getTenant().getId();
+            Long entityId = (Long) ((Saveable) entity).getEntityId();
+            for (Locale language:getLanguages()) {
+                addTranslation(Translation.makeNew(tenantId, entityId, ognl, language));
+            }
         }
 
         public LocalizedField addTranslation(Translation translation) {
+            // all tenantid, entityid, ognl should be same in this list. just the language should be different.
             Locale locale = StringUtils.parseLocaleString(translation.getId().getLanguage());
             int index = getLanguages().indexOf(locale);
             if (index<0) {
                 logger.error("language of translation " + translation + " is not supported in list " + getLanguages());
             } else {
-                values.set(index, translation.getValue());
+                translations.set(index, translation);
             }
             return this;
         }
 
-        public List<String> getValues() {
-            return values;
+        public List<Translation> getTranslationsToSave() {
+            List<Translation> result = Lists.newArrayList();
+            for (Translation translation:translations) {
+                if (!translation.isNew() || org.apache.commons.lang.StringUtils.isNotBlank(translation.getValue())) {
+                    result.add(translation);
+                }
+            }
+            return result;
         }
 
-        public void setValues(List<String> values) {
-            this.values = values;
+        public List<Translation> getTranslations() {
+            return translations;
+        }
+
+        public void setTranslations(List<Translation> translations) {
+            this.translations = translations;
         }
 
         @Override
         public String toString() {
-            return defaultValue + ':' + values;
+            return defaultValue + ':' + translations;
         }
 
         public String getName() {
             return name;
         }
 
+        public String getOgnl() {
+            return ognl;
+        }
+
         public String getDefaultValue() {
             return defaultValue;
         }
+
+        public Object getEntity() {
+            return entity;
+        }
     }
 
-
 }
-
-
-/**
- *  use @Type for strings.
- *  will set the localized view.
- *  optional getLocalizedName() methods can be added.
- *  remove @TypeDef, use explicit.
- *  editor needs to search for @typedef's, not @localized
- *  use hibernate columns for creating keys.
- */
