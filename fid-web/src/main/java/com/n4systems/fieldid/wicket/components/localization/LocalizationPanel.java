@@ -19,18 +19,19 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
 import org.reflections.ReflectionUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
@@ -59,47 +60,13 @@ public class LocalizationPanel extends Panel {
                 .add(listView = new ListView<LocalizedField>("translations", new LocalizedFieldsModel()) {
                     @Override
                     protected void populateItem(ListItem<LocalizedField> item) {
+                        item.add(new AttributeAppender("class",Model.of(getCssFor(item))));
                         final LocalizedField field = item.getModelObject();
                         item.add(new Label("label", Model.of(field.getName())));
                         item.add(new Label("defaultValue", Model.of(field.getDefaultValue())));
                         item.add(new TranslationsListView("translations", new PropertyModel(item.getModel(), "translations")));
-                        item.add(new AjaxLink("scoreGroups") {
-                            @Override
-                            public void onClick(AjaxRequestTarget target) {
-
-                            }
-
-                            @Override
-                            public boolean isVisible() {
-                                return field.entity instanceof ScoreCriteria;
-                            }
-                        });
-                        item.add(new AjaxLink("buttonGroups") {
-                            @Override
-                            public void onClick(AjaxRequestTarget target) {
-
-                            }
-
-                            @Override
-                            public boolean isVisible() {
-                                return field.entity instanceof OneClickCriteria;
-                            }
-                        });
-                        item.add(new AjaxLink("observations") {
-                            @Override
-                            public void onClick(AjaxRequestTarget target) {
-
-                            }
-
-                            @Override
-                            public boolean isVisible() {
-                                if (field.entity instanceof Criteria) {
-                                    Criteria criteria = (Criteria) field.entity;
-                                    return !criteria.getRecommendations().isEmpty() || !criteria.getDeficiencies().isEmpty();
-                                }
-                                return false;
-                            }
-                        });
+                        // TODO DD : refactor this into generic templated method..... createLinksForEntity("misc", item.getModel);
+                        item.add(new EventLinks("misc", item.getModel()));
                     }
                 }.setReuseItems(true))
                 .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
@@ -124,19 +91,14 @@ public class LocalizationPanel extends Panel {
 
     }
 
+    protected String getCssFor(ListItem<LocalizedField> item) {
+        return item.getModelObject().getEntity().getClass().getSimpleName();
+    }
+
     private List<Translation> convertToTranslations() {
         LocalizedFieldsModel model = (LocalizedFieldsModel) listView.getDefaultModel();
         return model.getAsTranslations();
     }
-
-//    public LocalizationPanel withFieldFilter(Predicate<Field> filter) {
-//        this.fieldFilter = filter;
-//        return this;
-//    }
-//
-//    public Predicate<Field> getFieldFilter() {
-//        return fieldFilter;
-//    }
 
     @Override
     protected void onModelChanged() {
@@ -217,18 +179,21 @@ public class LocalizationPanel extends Panel {
 
             List<Translation> translations = localizationService.getTranslations(id);
 
+            List<LocalizedField> embeddedFields = Lists.newArrayList();
+
             for (Field field:fields) {
-//                System.out.println("scanning field " + field.getName() + " in class " + field.getDeclaringClass().getSimpleName());
                 if (field.isAnnotationPresent(Localized.class) && field.getType().equals(String.class)) {
                     String ognl = localizationService.getOgnlFor(field);
                     // create empty translation for all languages here....override later if other ones exist.
                     localizedFields.add(new LocalizedField(entity, field.getName(), (String) getValue(entity, field), ognl));
                 } else if (isCollection(field)){
-                    localizedFields.addAll(loadForEntities(getValues(entity, field)));
+                    embeddedFields.addAll(loadForEntities(getValues(entity, field)));
                 } else if (!ClassUtils.isPrimitiveOrWrapper(field.getType())) {
-                    localizedFields.addAll(loadForEntity(getValue(entity, field)));
+                    embeddedFields.addAll(loadForEntity(getValue(entity, field)));
                 }
             }
+
+            localizedFields.addAll(embeddedFields);
 
             // ...now populate translations (if they exist)
             for (Translation translation:translations) {
@@ -330,6 +295,47 @@ public class LocalizationPanel extends Panel {
         }
     }
 
+    class EventLinks extends Fragment {
+
+        private final IModel<LocalizedField> model;
+
+        public EventLinks(String id, IModel<LocalizedField> model) {
+            super(id, "eventLinks", LocalizationPanel.this);
+            this.model = model;
+            final Object entity = model.getObject().getEntity();
+
+            add(new AjaxLink("scoreGroups") {
+                @Override public void onClick(AjaxRequestTarget target) {
+
+                }
+                @Override public boolean isVisible() {
+                    return entity instanceof ScoreCriteria;
+                }
+            });
+            add(new AjaxLink("buttonGroups") {
+                @Override public void onClick(AjaxRequestTarget target) {
+
+                }
+
+                @Override public boolean isVisible() {
+                    return entity instanceof OneClickCriteria;
+                }
+            });
+            add(new AjaxLink("observations") {
+                @Override public void onClick(AjaxRequestTarget target) {
+
+                }
+
+                @Override public boolean isVisible() {
+                    if (entity instanceof Criteria) {
+                        Criteria criteria = (Criteria) entity;
+                        return !criteria.getRecommendations().isEmpty() || !criteria.getDeficiencies().isEmpty();
+                    }
+                    return false;
+                }
+            });
+        }
+    }
 
     class LocalizedField implements Serializable {
         private List<Translation> translations = new ArrayList<Translation>(Collections.nCopies(getLanguages().size(),(Translation)null));

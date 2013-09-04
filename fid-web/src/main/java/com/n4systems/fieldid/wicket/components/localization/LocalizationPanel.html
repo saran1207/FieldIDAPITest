@@ -1,22 +1,26 @@
-<wicket:panel>
+<wicket:panel xmlns:wicket="http://www.w3.org/1999/html">
 
     <form wicket:id="form" class="translation">
         <div><select wicket:id="language"/></div>
         <table>
-            <!-- add class depending on class.   e.g. Sections will have different than criteria. -->
+            <!-- add cssClass depending on class.   e.g. Sections will have different than criteria. -->
             <tr wicket:id="translations">
                 <td wicket:id="label" class="title"></td>
                 <td wicket:id="defaultValue" class=""></td>
                 <td wicket:id="translations">
                     <input wicket:id="translation" class="translation" type="text"/>
                 </td>
-                <td><a wicket:id="scoreGroups" class=""><wicket:message key="label.score_group"/></a>
-                    <a wicket:id="buttonGroups" class=""><wicket:message key="label.buttongroup"/></a>
-                    <a wicket:id="observations" class=""><wicket:message key="label.observations"/></a>
-                </td>
+                <td><span wicket:id="misc"/></td>
             </tr>
         </table>
         <div><a wicket:id="submit"><wicket:message key="hbutton.submit"></wicket:message></a></div>
     </form>
+
+
+    <wicket:fragment wicket:id="eventLinks">
+        <a wicket:id="scoreGroups" class=""><wicket:message key="label.score_group"/></a>
+        <a wicket:id="buttonGroups" class=""><wicket:message key="label.buttongroup"/></a>
+        <a wicket:id="observations" class=""><wicket:message key="label.observations"/></a>
+    </wicket:fragment>
 
 </wicket:panel>
