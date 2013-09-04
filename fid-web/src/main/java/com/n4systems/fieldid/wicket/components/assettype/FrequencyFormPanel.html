@@ -6,22 +6,25 @@
 <wicket:panel>
 
     <div wicket:id="feedbackPanel"/>
-    <form wicket:id="form">
-        <fieldset>
-            <div>
-                <label><wicket:message key="label.schedule_a.uppercase"/></label><select wicket:id="eventType" style="width:150px"/>
-            </div>
-            <div>
-                <label><wicket:message key="label.every"/></label><input wicket:id="frequencyInDays" type="text"/>
-            </div>
-            <div>
-                <label><wicket:message key="label.for"/></label><div wicket:id="owner"/>
-            </div>
-            <div>
-                <input wicket:id="autoSchedule" type="checkbox"/><label wicket:id="autoScheduleMessage"/>
-            </div>
-        </fieldset>
-        <a wicket:id="submit"><wicket:message key="label.create_event_frequency"/></a>
+    <form wicket:id="form" class="event-triggered">
+        <div class="row">
+            <label class="left"><wicket:message key="label.schedule_a.uppercase"/></label>
+            <span class="right"><select wicket:id="eventType"/></span>
+        </div>
+        <div class="row">
+            <label class="left"><wicket:message key="label.every"/></label>
+            <span class="right"><input class="days" wicket:id="frequencyInDays" type="text"/><wicket:message key="label.days_lowercase"/></span>
+        </div>
+        <div class="row">
+            <label class="left"><wicket:message key="label.for"/></label>
+            <span class="right" wicket:id="owner"/>
+        </div>
+        <div class="row">
+            <span class="left"><input wicket:id="autoSchedule" type="checkbox"></span>
+            <label class="right" wicket:id="autoScheduleMessage" />
+        </div>
+        
+        <a wicket:id="submit" class="btn btn-blue"><wicket:message key="label.create_event_frequency"/></a>
     </form>
 
 </wicket:panel>
