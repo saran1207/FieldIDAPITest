@@ -30,9 +30,8 @@ public class EventDetailsPanel extends Panel {
     private String getIdentifier(SearchResult result) {
         String type = result.get(EventIndexField.EVENT_TYPE.getField());
         String id = result.get(EventIndexField.IDENTIFIER.getField());
-        String workflowState = result.get(EventIndexField.WORKFLOW_STATE.getField());
         String eventResult = result.get(EventIndexField.RESULT.getField());
-        return Joiner.on(" / ").skipNulls().join(type, id, workflowState, eventResult);
+        return Joiner.on(" / ").skipNulls().join(type, id, eventResult);
     }
 
 }

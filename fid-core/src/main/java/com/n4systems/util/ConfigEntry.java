@@ -89,7 +89,10 @@ public enum ConfigEntry {
     ASSET_INDEX_SIZE                            (   "50"),
 
     TRENDS_INDEX_ENABLED                         (   "true"),
-    TRENDS_INDEX_SIZE                            (   "50");
+    TRENDS_INDEX_SIZE                            (   "50"),
+
+    EVENT_INDEX_ENABLED                         (   "true"),
+    EVENT_INDEX_SIZE                            (   "50");
 	
 	private String defaultValue;
 	

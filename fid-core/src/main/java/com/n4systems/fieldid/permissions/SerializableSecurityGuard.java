@@ -118,6 +118,11 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
     }
 
     @Override
+    public boolean isAdvancedEventSearchEnabled() {
+        return primaryOrg.hasExtendedFeature(ExtendedFeature.AdvancedEventSearch);
+    }
+
+    @Override
     public boolean isCriteriaTrendsEnabled() {
         return primaryOrg.hasExtendedFeature(ExtendedFeature.CriteriaTrends);
     }

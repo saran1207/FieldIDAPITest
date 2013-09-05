@@ -17,6 +17,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
+import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
@@ -113,8 +114,18 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         addCssContainers();
 
         boolean trendingEnabled = getSecurityGuard().isCriteriaTrendsEnabled();
-        add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class).add(new Image("reporting-down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(trendingEnabled)));
-        add(new BookmarkablePageLink<Void>("criteriaTrendsLink", CriteriaTrendsPage.class).setVisible(trendingEnabled));
+        boolean advancedEventSearchEnabled = getSecurityGuard().isAdvancedEventSearchEnabled();
+
+        boolean extraEventLinksAvailable = trendingEnabled || advancedEventSearchEnabled;
+
+        add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class).add(new Image("reporting-down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(extraEventLinksAvailable)));
+
+        WebMarkupContainer extraEventLinksContainer = new WebMarkupContainer("extraReportingLinksContainer");
+        extraEventLinksContainer.setVisible(extraEventLinksAvailable);
+        add(extraEventLinksContainer);
+
+        extraEventLinksContainer.add(new BookmarkablePageLink<Void>("advancedEventSearchLink", AdvancedEventSearchPage.class).setVisible(advancedEventSearchEnabled));
+        extraEventLinksContainer.add(new BookmarkablePageLink<Void>("criteriaTrendsLink", CriteriaTrendsPage.class).setVisible(trendingEnabled));
 
         boolean globalSearchEnabled = getSecurityGuard().isGlobalSearchEnabled();
 

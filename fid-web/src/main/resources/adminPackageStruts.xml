@@ -100,7 +100,6 @@
                 <param name="namespace">/admin</param>
                 <param name="id">${tenant.id}</param>
             </result>
-
         </action>
 
         <action name="rebuildCriteriaTrendsIndex" method="rebuildCriteriaTrendsIndex"
@@ -110,7 +109,15 @@
                 <param name="namespace">/admin</param>
                 <param name="id">${tenant.id}</param>
             </result>
+        </action>
 
+        <action name="rebuildEventIndex" method="rebuildEventIndex"
+                class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+            <result name="success" type="redirectAction">
+                <param name="actionName">organizationEdit</param>
+                <param name="namespace">/admin</param>
+                <param name="id">${tenant.id}</param>
+            </result>
         </action>
 
 		<action name="orderMappingList" method="list"

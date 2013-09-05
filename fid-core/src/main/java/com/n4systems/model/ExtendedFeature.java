@@ -14,6 +14,7 @@ public enum ExtendedFeature {
 	OrderDetails("feature.order_details"),
     LotoProcedures("feature.loto_procedures"),
     GlobalSearch("feature.global_search"),
+    AdvancedEventSearch("feature.advanced_event_search"),
     CriteriaTrends("feature.criteria_trends");
 	
 	private String label;

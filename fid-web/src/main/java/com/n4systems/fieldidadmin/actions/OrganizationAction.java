@@ -21,6 +21,7 @@ import com.n4systems.model.tenant.UserLimits;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.services.search.CriteriaTrendsIndexerService;
+import com.n4systems.services.search.EventIndexerService;
 import com.n4systems.tools.Pager;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.DateHelper;
@@ -78,6 +79,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
     @Autowired
     private AssetIndexerService assetIndexerService;
     @Autowired
+    private EventIndexerService eventIndexerService;
+    @Autowired
     private CriteriaTrendsIndexerService criteriaTrendsIndexerService;
 
 	@Override
@@ -126,6 +129,9 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 	public String doUpdateExtendedFeature() throws Exception {
         ExtendedFeature feature = ExtendedFeature.valueOf(featureName);
         extendedFeatureService.setExtendedFeatureEnabled(primaryOrg.getTenant().getId(), feature, featureOn);
+
+        // Must reload the primary org to display properly updated extended feature status.
+        prepare();
 
 		return SUCCESS;
 	}
@@ -240,6 +246,12 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
     @SkipValidation
     public String doRebuildCriteriaTrendsIndex() {
         criteriaTrendsIndexerService.placeItemInQueueForTenant(tenant.getId());
+        return SUCCESS;
+    }
+
+    @SkipValidation
+    public String doRebuildEventIndex() {
+        eventIndexerService.placeItemInQueueForTenant(tenant.getId());
         return SUCCESS;
     }
 

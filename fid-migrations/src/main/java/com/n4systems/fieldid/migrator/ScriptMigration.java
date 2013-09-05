@@ -24,7 +24,14 @@ public class ScriptMigration extends Migration {
 	protected void up(Connection conn) throws Exception {
 		String script = loadScript();
 
-		String[] statements = script.split(";");
+        String[] statements;
+        if (script.contains("//")) {
+            // Special case: In the case where multiline statements with semicolons are required, use an alternate delimiter: //
+            statements = script.split("//");
+        } else {
+            statements = script.split(";");
+        }
+
 		Statement stmt = null;
 		for (String sql: statements) {
 			sql = sql.trim();

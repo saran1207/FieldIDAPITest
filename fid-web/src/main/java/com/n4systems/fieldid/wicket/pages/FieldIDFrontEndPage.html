@@ -98,11 +98,14 @@
 
                             <li>
                                 <a wicket:id="reportingLink" class="speedLink textLink" id="menuReport"><wicket:message key="speed.reporting"/><img wicket:id="reporting-down-arrow"/></a>
-                                <wicket:enclosure>
-                                    <ul class="sub_menu">
+                                <ul wicket:id="extraReportingLinksContainer" class="sub_menu">
+                                    <wicket:enclosure>
+                                        <li><a wicket:id="advancedEventSearchLink"><wicket:message key="nav.advanced_event_search"/></a></li>
+                                    </wicket:enclosure>
+                                    <wicket:enclosure>
                                         <li><a wicket:id="criteriaTrendsLink"><wicket:message key="nav.trending"/></a></li>
-                                    </ul>
-                                </wicket:enclosure>
+                                    </wicket:enclosure>
+                                </ul>
                             </li>
                             <wicket:enclosure>
                                 <li>

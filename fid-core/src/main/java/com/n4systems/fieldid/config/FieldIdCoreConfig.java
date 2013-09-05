@@ -555,6 +555,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public EventIndexerService eventIndexerService() {
+        return new EventIndexerService();
+    }
+
+    @Bean
     public AssetIndexerService assetIndexerService() {
         return new AssetIndexerService();
     }

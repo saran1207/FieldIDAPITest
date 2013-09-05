@@ -92,6 +92,12 @@
     <tr>
         <td colspan="2">&nbsp;</td>
         <td>
+            <a href='<@s.url namespace="/admin" action="rebuildEventIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_event_index"/></a>
+        </td>
+    </tr>
+    <tr>
+        <td colspan="2">&nbsp;</td>
+        <td>
             <a href='<@s.url namespace="/admin" action="rebuildCriteriaTrendsIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_criteria_trends_index"/></a>
         </td>
     </tr>

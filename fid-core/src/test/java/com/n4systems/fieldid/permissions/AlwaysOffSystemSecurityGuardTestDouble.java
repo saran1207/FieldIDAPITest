@@ -137,4 +137,9 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
     public boolean isCriteriaTrendsEnabled() {
         return false;
     }
+
+    @Override
+    public boolean isAdvancedEventSearchEnabled() {
+        return false;
+    }
 }
