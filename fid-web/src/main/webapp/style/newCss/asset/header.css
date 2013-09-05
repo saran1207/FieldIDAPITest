@@ -83,6 +83,7 @@
 
 .actionButtons .actions ul{
     width: 100px;
+    width: auto;
 }
 
 .greyText{

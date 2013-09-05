@@ -9,6 +9,7 @@
 .actions > ul > li {
     float: left;
     position:relative;
+    *z-index: 123;
 }
 
 .actions ul {
