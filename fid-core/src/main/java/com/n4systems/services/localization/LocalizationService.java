@@ -1,8 +1,10 @@
 package com.n4systems.services.localization;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.Saveable;
@@ -21,10 +23,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static org.reflections.ReflectionUtils.withAnnotation;
 
@@ -32,9 +31,10 @@ public class LocalizationService extends FieldIdPersistenceService implements In
 
     private static final Logger logger=Logger.getLogger(LocalizationService.class);
 
-    private static Map<Long, Map<TranslationKey, Map<Locale,String>>> cache = Maps.newHashMap();
+    private static Map<Long, Map<TranslationKey, Map<Locale,Object>>> translationCache = Maps.newHashMap();
 
-    private String translationFormat = "%s.%s";
+    private static final String translationFormat = "%s.%s";
+    private static final String collectionTranslationSuffix="@";
 
 
     @Override
@@ -43,6 +43,8 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     private void initializeCache() {
+
+        try {
         // TODO DD : make this use EHCACHE instead of simple map.
         // that way cache can be configured dynamically (in memory, disk spill over, LRU etc...)
         List<Translation> translations = getAllTranslations();
@@ -50,9 +52,13 @@ public class LocalizationService extends FieldIdPersistenceService implements In
             add(translation);
         }
         validate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
+private void validate() {
+        // TODO : further validation could do a foreign key check to make sure entity_id column is valid.
 
-    private void validate() {
         Set<Class> entities = Sets.newHashSet();
         entities.addAll(new Reflections(BaseEntity.class.getPackage().getName()).getSubTypesOf(BaseEntity.class));
         entities.addAll(new Reflections(LegacyBaseEntity.class.getPackage().getName()).getSubTypesOf(LegacyBaseEntity.class));
@@ -73,7 +79,7 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         // 1: migrate the value.   types.name --> assettypes.name
         // 2: delete the translated values  types.*    because they aren't relevant anymore.   (not likely)
         // 3: rename the table so the translation matches.    rename assettypes to types;
-        for (Map<TranslationKey, Map<Locale,String>> tenantMap:cache.values()) {
+        for (Map<TranslationKey, Map<Locale,Object>> tenantMap: translationCache.values()) {
             for (TranslationKey key:tenantMap.keySet()) {
                 if (!expected.contains(key.ognl)) {
                     errors.add(key.ognl);
@@ -86,61 +92,73 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     private void add(Translation translation) {
+        // TODO DD : remove translation tenant id stuff.   will break everything.  or maybe just save tenant but not required for reading.  more for dealing with security and caching.
+
         Long tenantId = translation.getId().getTenantId();
-        Map<TranslationKey, Map<Locale, String>> tenantMap = cache.get(tenantId);
+        Map<TranslationKey, Map<Locale, Object>> tenantMap = translationCache.get(tenantId);
         if (tenantMap==null) {
             tenantMap=Maps.newHashMap();
-            cache.put(tenantId, tenantMap);
+            translationCache.put(tenantId, tenantMap);
         }
         add(translation, tenantMap);
     }
 
-    private void add(Translation translation, Map<TranslationKey, Map<Locale, String>> map) {
+    private void add(Translation translation, Map<TranslationKey, Map<Locale, Object>> map) {
         TranslationKey translationKey = new TranslationKey(translation);
-        Map<Locale, String> keyMap = map.get(translationKey);
+        Map<Locale, Object> keyMap = map.get(translationKey);
         if (keyMap==null) {
             keyMap = Maps.newHashMap();
             map.put(translationKey,keyMap);
         }
         Locale locale = StringUtils.parseLocaleString(translation.getId().getLanguage());
-        keyMap.put(locale, translation.getValue());
+        // currently doesn't support sets. must have order.
+        if (translationKey.isCollection()) {
+            List<String> list = (List<String>) keyMap.get(locale);
+            if (list==null) {
+                list = Lists.newArrayList();
+                keyMap.put(locale, list);
+            }
+            addToList(translationKey, list, translation.getValue());
+        } else {
+            keyMap.put(locale, translation.getValue());
+        }
     }
 
-    public String getText(EntityWithTenant entity, String ognl, Locale locale) {
+    private void addToList(TranslationKey translationKey, List<String> list, String value) {
+        while (list.size()<=translationKey.getIndex()) {
+            list.add(null);
+        }
+        list.set(translationKey.getIndex(), value);
+    }
+
+    // handle event form saving.  google translate API.
+
+    public Object getText(EntityWithTenant entity, String ognl, Locale locale) {
         Preconditions.checkArgument(locale != null && entity != null, "must supply non-null args");
         Long tenantId = entity.getTenant().getId();
-        Map<TranslationKey, Map<Locale, String>> tenantMap = cache.get(tenantId);
+        Map<TranslationKey, Map<Locale, Object>> tenantMap = translationCache.get(tenantId);
         if (tenantMap!=null) {
-            Map<Locale, String> map = tenantMap.get(new TranslationKey(entity, ognl));
+            Map<Locale, Object> map = tenantMap.get(new TranslationKey(entity, ognl));
             return map==null ? null : map.get(locale);
         }
         return null;
     }
 
-    public <T extends Saveable> Map<Locale, String> getTranslations(T entity, String ognl) {
-        Long tenantId = securityContext.getTenantSecurityFilter().getTenantId();
-        Map<TranslationKey, Map<Locale, String>> tenantMap = cache.get(tenantId);
-        if (tenantMap!=null) {
-            Map<Locale, String> map = tenantMap.get(new TranslationKey(entity, ognl));
-            return map;
-        }
-        return null;
-    }
-
-    public <T extends Saveable> String getTranslation(T entity, String ognl, Locale locale) {
-        Map<Locale, String> translations = getTranslations(entity, ognl);
+    public Object getTranslation(Saveable entity, String ognl, Locale locale) {
+        Map<Locale, Object> translations = getTranslations(entity, ognl);
         return translations==null ? null :
                 locale==null ? null : translations.get(locale);
     }
 
-    public List<Translation> getTranslations(Long entityId) {
-        QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
-        query.addSimpleWhere("id.entityId", entityId);
-        return persistenceService.findAll(query);
-    }
-
-    public <T extends Saveable> List<Translation> getTranslations(T entity) {
-        return getTranslations((Long) entity.getEntityId());
+    public Map<Locale, Object> getTranslations(Saveable entity, String ognl) {
+        Long tenantId = ThreadLocalInteractionContext.getInstance().getCurrentUser().getTenant().getId();
+        // what to do if not a tenant to be found??
+        Map<TranslationKey, Map<Locale, Object>> tenantMap = translationCache.get(tenantId);
+        if (tenantMap!=null) {
+            Map<Locale, Object> map = tenantMap.get(new TranslationKey(entity, ognl));
+            return map;
+        }
+        return null;
     }
 
     private final Session getHibernateSession() {
@@ -163,9 +181,11 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         try {
             if (metadata instanceof AbstractEntityPersister) {   // assumes we are using hibernate.
                 AbstractEntityPersister persister = (AbstractEntityPersister) metadata;
-                String tableName = persister.getTableName();
-                String columnName = persister.getPropertyColumnNames(field.getName())[0];
-                return String.format(translationFormat, tableName, columnName);
+                if (Collection.class.isAssignableFrom(field.getType())) {
+                    return getCollectionOgnlFor(field,persister);
+                } else {
+                    return getOgnlFor(field,persister);
+                }
             } else {
                 throw new Exception("can't get ORM meta data...if using something other than hibernate need to refactor this.");
             }
@@ -174,11 +194,29 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         }
     }
 
+    private String getOgnlFor(Field field, AbstractEntityPersister persister) {
+        String tableName = persister.getTableName();
+        String columnName = persister.getPropertyColumnNames(field.getName())[0];
+        return String.format(translationFormat, tableName, columnName);
+    }
+
+    private String getCollectionOgnlFor(Field field, AbstractEntityPersister persister) {
+        String tableName = persister.getTableName();
+        return String.format(translationFormat, tableName, field.getName()) + collectionTranslationSuffix;
+    }
+
     public void save(List<Translation> translations) {
         for (Translation translation : translations) {
             persistenceService.saveOrUpdate(translations);
         }
     }
+
+    public List<Translation> getTranslations(Long entityId) {
+        QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
+        query.addSimpleWhere("id.entityId", entityId);
+        return persistenceService.findAll(query);
+    }
+
 
 
     // -----------------------------------------------------------------------------------------------
@@ -186,15 +224,39 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     static class TranslationKey implements Comparable<TranslationKey> {
         String ognl;
         Long entityId;
+        transient Integer index;
 
-        <T extends Saveable> TranslationKey(T entity, String ognl) {
-            this.entityId = (Long)entity.getEntityId();
-            this.ognl = ognl;
+        TranslationKey(Translation translation) {
+            this(translation.getId().getEntityId(),translation.getId().getOgnl());
         }
 
-        public TranslationKey(Translation translation) {
-            this.entityId = translation.getId().getEntityId();
-            this.ognl = translation.getId().getOgnl();
+        TranslationKey(Saveable entity, String ognl) {
+            this((Long)entity.getEntityId(), ognl);
+        }
+
+        public TranslationKey(Long entityId, String ognl) {
+            this.entityId = entityId;
+            this.ognl = ognl;
+            if (isCollection()) {
+                normalizeForCollection(); // strip off collection suffix.   recommendations@0 = recommendations@
+            }
+        }
+
+        public boolean isCollection() {
+            return ognl.indexOf(collectionTranslationSuffix)!=-1;
+        }
+
+        public Integer getIndex() {
+            return index;
+        }
+
+        private void normalizeForCollection() {
+            int i = ognl.indexOf(collectionTranslationSuffix);
+            String suffix = ognl.substring(i + 1);
+            if (org.apache.commons.lang.StringUtils.isNotBlank(suffix)) {
+                this.index = Integer.parseInt(suffix);
+            }
+            this.ognl = ognl.substring(0, i + 1);
         }
 
         @Override
@@ -226,6 +288,7 @@ public class LocalizationService extends FieldIdPersistenceService implements In
             result = 31 * result + (entityId != null ? entityId.hashCode() : 0);
             return result;
         }
+
     }
 
 }

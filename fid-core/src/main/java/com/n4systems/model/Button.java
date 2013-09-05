@@ -4,6 +4,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.persistence.localization.Localized;
 
 import javax.persistence.*;
 
@@ -13,7 +14,7 @@ public class Button extends EntityWithTenant implements Listable<Long>, Retirabl
 	private static final long serialVersionUID = 1L;
 		
 	@Column(nullable=false)
-	private String displayText;
+	private @Localized String displayText;
 
 	@Column(name="event_result", nullable = false)
 	@Enumerated(EnumType.STRING)

@@ -182,9 +182,10 @@ public class LocalizationPanel extends Panel {
             List<LocalizedField> embeddedFields = Lists.newArrayList();
 
             for (Field field:fields) {
-                if (field.isAnnotationPresent(Localized.class) && field.getType().equals(String.class)) {
+                if (field.isAnnotationPresent(Localized.class)) {
                     String ognl = localizationService.getOgnlFor(field);
                     // create empty translation for all languages here....override later if other ones exist.
+                    // TODO DD : handle List<String> values.   // add multiple fields.  loop through and add index suffix to ognl
                     localizedFields.add(new LocalizedField(entity, field.getName(), (String) getValue(entity, field), ognl));
                 } else if (isCollection(field)){
                     embeddedFields.addAll(loadForEntities(getValues(entity, field)));

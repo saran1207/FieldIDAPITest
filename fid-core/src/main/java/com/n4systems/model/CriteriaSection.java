@@ -4,6 +4,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Retirable;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.persistence.localization.Localized;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 	private static final long serialVersionUID = 1L;
 
 	@Column(nullable=false)
-	private String title;
+	private @Localized String title;
 	
 	@Column(nullable=false)
 	private boolean retired = false;

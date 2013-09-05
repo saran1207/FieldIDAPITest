@@ -59,7 +59,8 @@ public class LocaleUserType implements UserType {
     @Override
     public void nullSafeSet(PreparedStatement st, Object value, int index) throws HibernateException, SQLException {
         Locale locale = (Locale) value;
-        StandardBasicTypes.STRING.nullSafeSet(st, locale.toString(), index);
+        String localeString = locale!=null ? locale.toString() : null;
+        StandardBasicTypes.STRING.nullSafeSet(st, localeString, index);
     }
 
     public Object deepCopy(Object value) throws HibernateException {

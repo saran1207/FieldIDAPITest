@@ -9,6 +9,7 @@ import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.persistence.localization.Localized;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
@@ -24,7 +25,7 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	public static final long DEFAULT_FORM_VERSION = 1;
 	
 	@Column(nullable=false)
-	private String name;
+	private @Localized String name;
 	
 	private String archivedName;
 	

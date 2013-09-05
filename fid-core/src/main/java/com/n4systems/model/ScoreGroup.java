@@ -1,22 +1,13 @@
 package com.n4systems.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.IndexColumn;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.persistence.localization.Localized;
+import org.hibernate.annotations.IndexColumn;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings("serial")
 @Entity
@@ -25,7 +16,8 @@ import com.n4systems.model.parents.ArchivableEntityWithTenant;
 public class ScoreGroup extends ArchivableEntityWithTenant implements Listable {
 
     @Column(nullable=false)
-    private String name;
+    private @Localized
+    String name;
 
     @OneToMany(fetch= FetchType.EAGER, cascade= CascadeType.ALL)
     @JoinTable(name="score_groups_scores", joinColumns = @JoinColumn(name="score_group_id"), inverseJoinColumns = @JoinColumn(name="score_id"))

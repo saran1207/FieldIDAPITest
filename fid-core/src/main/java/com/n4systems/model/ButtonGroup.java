@@ -4,6 +4,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.persistence.localization.Localized;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ public class ButtonGroup extends EntityWithTenant implements NamedEntity, Listab
 	private static final long serialVersionUID = 1L;
 
 	@Column(nullable=false)
-	private String name;
+	private @Localized String name;
 	
 	@Column(nullable=false)
 	private boolean retired = false;

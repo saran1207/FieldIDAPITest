@@ -2,6 +2,7 @@ package com.n4systems.model;
 
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.persistence.localization.Localized;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.IndexColumn;
 import org.jsoup.Jsoup;
@@ -18,18 +19,20 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	private static final long serialVersionUID = 1L;
 
 	@Column(nullable=false)
-	private String displayText;
+	private @Localized String displayText;
 	
 	@Column(nullable=false)
 	private boolean retired = false;
 
     @Column(nullable = true, length=5000)
-    private String instructions;
+    private @Localized String instructions;
 	
 	@Column(name="text", nullable=false, length=511)
 	@ElementCollection(fetch= FetchType.EAGER)
 	@IndexColumn(name="orderidx")
-	private List<String> recommendations = new ArrayList<String>();
+    // TODO DD : need to figure out way to @Localize list of strings!!!
+
+	private @Localized List<String> recommendations = new ArrayList<String>();
 	
 	@Column(name="text", nullable=false, length=511)
 	@ElementCollection(fetch= FetchType.EAGER)

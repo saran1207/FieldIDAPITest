@@ -1,12 +1,8 @@
 package com.n4systems.persistence.listeners;
 
-import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.localization.LocalizationService;
@@ -45,8 +41,8 @@ public class LocalizationListener implements PostLoadEventListener, PostUpdateEv
     }
 
     private void localize(Object entity, EntityPersister persister) {
-        if (entity instanceof Saveable && entity instanceof HasTenant) {
-            localize(new TranslatableEntity(entity), persister);
+        if (entity instanceof Saveable) {
+            localize((Saveable)entity, persister);
         }
     }
 
@@ -55,19 +51,19 @@ public class LocalizationListener implements PostLoadEventListener, PostUpdateEv
         localize(event.getEntity(), event.getPersister());
     }
 
-    private void localize(TranslatableEntity translatableEntity, EntityPersister persister) {
+    private void localize(Saveable entity, EntityPersister persister) {
         try {
-            for (LocalizedProperty property:getLocalizedProperties(translatableEntity.getEntity(),persister)) {
+            for (LocalizedProperty property:getLocalizedProperties(entity,persister)) {
                 // TODO DD/SU : put the locale in thread local and get it from there.
-                Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+                Locale locale = Locale.GERMAN;
                 int index = property.getIndex();
-                String translation = getLocalizationService().getTranslation(translatableEntity, property.getOgnl(), locale);
+                Object translation = getLocalizationService().getTranslation(entity, property.getOgnl(), locale);
                 if (translation!=null) {
-                    persister.setPropertyValue(translatableEntity.getEntity(), index, translation, EntityMode.POJO);
+                    persister.setPropertyValue(entity, index, translation, EntityMode.POJO);
                 }
             }
         } catch (Exception e) {
-            logger.error("can't localize entity " + translatableEntity.getEntityClass().getSimpleName() + " : " + translatableEntity.getEntity() , e);
+            logger.error("can't localize entity " + entity.getClass().getSimpleName() + " : " + entity , e);
         }
     }
 
@@ -81,11 +77,13 @@ public class LocalizationListener implements PostLoadEventListener, PostUpdateEv
                 public boolean apply(Object input) {
                     Field field = (Field) input;
                     Localized annotation = field.getAnnotation(Localized.class);
-                    return annotation != null &&
-                            field.getType().equals(String.class);
+                    return annotation != null;
                 }
             });
             for (Field field:fields) {
+                if (field.getName().equals("recommendations")) {
+                    System.out.println("huh");
+                }
                 LocalizedProperty localizedProperty = createLocalizedProperty(field, persister);
                 if (localizedProperty!=null) {
                     properties.add(localizedProperty);
@@ -100,10 +98,12 @@ public class LocalizationListener implements PostLoadEventListener, PostUpdateEv
         Type[] types = persister.getPropertyTypes();
         String[] names = persister.getPropertyNames();
         for (int i=0; i< types.length; i++) {
-            if (types[i].getReturnedClass().equals(String.class) && names[i].equals(field.getName())) {
+            if (names[i].equals(field.getName())) {
                 return new LocalizedProperty(getLocalizationService().getOgnlFor(field),i);
             }
         }
+        // this should never happen? duplicate property names?
+        logger.error("can't find localized property " + field.getName() + " in " + persister.getEntityName());
         return null;
     }
 
@@ -117,49 +117,11 @@ public class LocalizationListener implements PostLoadEventListener, PostUpdateEv
     }
 
 
-    class TranslatableEntity implements Saveable, HasTenant {
-
-        private Object entity;
-
-        TranslatableEntity(Object entity) {
-            Preconditions.checkArgument(entity instanceof HasTenant && entity instanceof Saveable);
-            this.entity = entity;
-        }
-
-        @Override
-        public boolean isNew() {
-            return ((Saveable)entity).isNew();
-        }
-
-        @Override
-        public Long getEntityId() {
-            return (Long)((Saveable)entity).getEntityId();
-        }
-
-        @Override
-        public Tenant getTenant() {
-            return ((HasTenant)entity).getTenant();
-        }
-
-        @Override
-        public void setTenant(Tenant tenant) {
-            ((HasTenant)entity).setTenant(tenant);
-        }
-
-        public Object getEntity() {
-            return entity;
-        }
-
-        public Class<?> getEntityClass() {
-            return entity.getClass();
-        }
-    }
-
     class LocalizedProperty {
         String ognl;
         Integer index;
 
-        <T extends HasTenant & Saveable> LocalizedProperty(String ognl, Integer index) {
+        LocalizedProperty(String ognl, Integer index) {
             this.index = index;
             this.ognl = ognl;
         }

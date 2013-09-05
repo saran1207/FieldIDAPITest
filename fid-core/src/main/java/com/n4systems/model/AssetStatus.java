@@ -4,6 +4,7 @@ import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.persistence.localization.Localized;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -13,7 +14,7 @@ import javax.persistence.Table;
 public class AssetStatus extends ArchivableEntityWithTenant implements Listable<Long>, Saveable, NamedEntity {
 	private static final long serialVersionUID = 1L;
 	
-	private String name;
+	private @Localized String name;
 
 	public String getName() {
 		return name;

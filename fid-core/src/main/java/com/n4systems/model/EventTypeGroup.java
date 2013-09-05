@@ -5,6 +5,7 @@ import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import com.n4systems.persistence.localization.Localized;
 import com.n4systems.reporting.EventReportType;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ public class EventTypeGroup extends ArchivableEntityWithTenant implements NamedE
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false)
-	private String name;
+	private @Localized String name;
 
     @Column(nullable=false)
     private boolean action;
