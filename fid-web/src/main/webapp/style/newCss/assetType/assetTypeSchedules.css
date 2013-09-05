@@ -9,7 +9,8 @@ h3 {
 	margin-right: 10px;
 }
 
-/* Filter options */
+
+/* FILTER LINKS */
 .filters {
 	display: inline-block;
     *display: inline;
@@ -23,22 +24,26 @@ h3 {
     font-size: 13px;
     border-left: 1px solid #666;
 }
-.filters li:first-child {
-	border-left: none;
-	padding-left: 0;
-}
+	.filters li:first-child {
+		border-left: none;
+		padding-left: 0;
+	}
+
 .filters .filter-type {
 	color: #0093FF;
 	text-decoration: underline;
 }
-.filters .filter-type:hover {
-	text-decoration: none;
-}
+	.filters .filter-type:hover {
+		text-decoration: none;
+	}
+
+/* active state */
 .filters li.active .filter-type {
     text-decoration: none;
 }
 
-/* Create New Rule button */
+
+/* BUTTON DROPDOWN */
 .dropdown-btn {
 	float: right;
 	text-align: right;
@@ -47,4 +52,53 @@ h3 {
 }
 .btn {
 	font-size: 13px;
+}
+
+/* MODALS */
+form .row {
+	margin-bottom: 10px;
+}
+.wicket-modal .left {
+	width: 65px;
+	margin-right: 6px;
+	text-align: right;
+	display: inline-block;
+}
+.wicket-modal .right {
+	width: 270px;
+	display: inline-block;
+}
+	.wicket-modal label.right {
+		vertical-align: middle;
+	}
+.wicket-modal input {
+	padding: 4px;
+}
+	.wicket-modal input.days {
+		width: 40px;
+		margin-right: 6px;
+	}
+
+.wicket-modal .btn {
+	float: right;
+	margin: 10px 10px 0 0;
+}	
+.chzn-container, 
+select {
+	width: 175px;
+}
+select.time {
+	width: 100px;
+}
+
+
+/* hack */
+.entypo-search {
+	float: right;
+	padding-right: 70px;
+	cursor: pointer;
+}
+
+.formErrors {
+	margin-top: 0;
 }

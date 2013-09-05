@@ -2,15 +2,21 @@ package com.n4systems.services.localization;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.parents.legacy.LegacyBaseEntity;
+import com.n4systems.persistence.localization.Localized;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.metadata.ClassMetadata;
 import org.hibernate.persister.entity.AbstractEntityPersister;
+import org.reflections.ReflectionUtils;
+import org.reflections.Reflections;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +24,9 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+
+import static org.reflections.ReflectionUtils.withAnnotation;
 
 public class LocalizationService extends FieldIdPersistenceService implements InitializingBean {
 
@@ -44,45 +53,37 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     private void validate() {
-//        Set<Class<?>> localizedEntities = new Reflections(BaseEntity.class.getPackage().getName()).getTypesAnnotatedWith(Localized.class);
-//        Set<String> expected = Sets.newHashSet();
-//        for (Class<?> clazz:localizedEntities) {
-//            expected.addAll(getExpectedFor(clazz));
-//        }
-//
-//        Set<String> errors = Sets.newHashSet();
-//        // now test that all of current values are in the expected/defined list of valid translation ognls.
-//        // i.e. if the DB contains a translation ognl of "assetType.name" but that isn't in expected list (which is say, {at.name, at.desc} or {assetType.displayName, assetType.desc})
-//        //  then something is screwed up.   either the class/field was unlocalized or it was renamed. (i.e. given a different @Localized value.
-//        // possible fixes (depending on your assessment could be
-//        // 1: migrate the value.   assetType.name --> at.name
-//        // 2: delete the values    assetType.*    DELETE
-//        // 3: change the @Localized values       @Localize("at")    -->    @Localized("assetType")
-//        for (Map<TranslationKey, Map<Locale,String>> tenantMap:cache.values()) {
-//            for (TranslationKey key:tenantMap.keySet()) {
-//                if (!expected.contains(key.ognl)) {
-//                    errors.add(key.ognl);
-//                }
-//            }
-//        }
-//        if (errors.size()>0) {
-//            throw new IllegalStateException("the DB currently has invalid translation ognl(s) :  " + errors + "\n Their ognl doesn't match current meta-data.  did you recently change the values of any " + Localized.class.getSimpleName() + " values?");
-//        }
-    }
+        Set<Class> entities = Sets.newHashSet();
+        entities.addAll(new Reflections(BaseEntity.class.getPackage().getName()).getSubTypesOf(BaseEntity.class));
+        entities.addAll(new Reflections(LegacyBaseEntity.class.getPackage().getName()).getSubTypesOf(LegacyBaseEntity.class));
+        entities.addAll(new Reflections("rfid.ejb").getSubTypesOf(LegacyBaseEntity.class));
+        Set<String> expected = Sets.newHashSet();
+        for (Class<?> clazz:entities) {
+            Set<Field> fields = ReflectionUtils.getAllFields(clazz, withAnnotation(Localized.class));
+            for (Field field : fields) {
+                expected.add(getOgnlFor(field));
+            }
+        }
 
-//    private Set<String> getExpectedFor(Class<?> clazz) {
-//        // recall : ognl = class + "." + field      e.g. "assetType.name"
-//        // class/field values are taken from @Localized annotation values.
-//        Set<String> expected = Sets.newHashSet();
-//        String prefix = clazz.getAnnotation(Localized.class).value();
-//        Set<Field> localizedFields = getAllFields(clazz, withAnnotation(Localized.class));
-//        for (Field localizedField:localizedFields) {
-//            String suffix = localizedField.getAnnotation(Localized.class).value();
-//            String ognl = prefix + "." + suffix;
-//            expected.add(ognl);
-//        }
-//        return expected;
-//    }
+        Set<String> errors = Sets.newHashSet();
+        // now test that all of current values are in the expected/defined list of valid translation ognl.
+        // i.e. if the DB contains a translation ognl of "types.name" but that isn't in expected list which is say, {assettypes.name, assettypes.desc}
+        //  then something is screwed up.
+        // possible fixes (depending on your assessment) could be
+        // 1: migrate the value.   types.name --> assettypes.name
+        // 2: delete the translated values  types.*    because they aren't relevant anymore.   (not likely)
+        // 3: rename the table so the translation matches.    rename assettypes to types;
+        for (Map<TranslationKey, Map<Locale,String>> tenantMap:cache.values()) {
+            for (TranslationKey key:tenantMap.keySet()) {
+                if (!expected.contains(key.ognl)) {
+                    errors.add(key.ognl);
+                }
+            }
+        }
+        if (errors.size()>0) {
+            logger.error("The DB currently has invalid translation ognl(s) :  " + errors + "\n This doesn't match current meta-data.  did you recently rename/delete any tables or columns?");
+        }
+    }
 
     private void add(Translation translation) {
         Long tenantId = translation.getId().getTenantId();
@@ -128,10 +129,9 @@ public class LocalizationService extends FieldIdPersistenceService implements In
 
     public <T extends Saveable> String getTranslation(T entity, String ognl, Locale locale) {
         Map<Locale, String> translations = getTranslations(entity, ognl);
-        return translations==null ? null : translations.get(locale);
+        return translations==null ? null :
+                locale==null ? null : translations.get(locale);
     }
-
-
 
     public List<Translation> getTranslations(Long entityId) {
         QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
@@ -155,7 +155,10 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         return persistenceService.findAllNonSecure(Translation.class);
     }
 
+    // TODO DD : cache this.  should only do this once!
+    //@Cacheable("localizationOgnl")
     public String getOgnlFor(Field field) {
+        // recall : ognl = table + "." + column      e.g. "assettypes.name"
         ClassMetadata metadata = getClassMetaData(field.getDeclaringClass());
         try {
             if (metadata instanceof AbstractEntityPersister) {   // assumes we are using hibernate.
@@ -224,6 +227,5 @@ public class LocalizationService extends FieldIdPersistenceService implements In
             return result;
         }
     }
-
 
 }

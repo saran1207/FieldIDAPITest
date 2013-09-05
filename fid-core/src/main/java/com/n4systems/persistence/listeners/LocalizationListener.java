@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.api.Saveable;
@@ -58,7 +59,7 @@ public class LocalizationListener implements PostLoadEventListener, PostUpdateEv
         try {
             for (LocalizedProperty property:getLocalizedProperties(translatableEntity.getEntity(),persister)) {
                 // TODO DD/SU : put the locale in thread local and get it from there.
-                Locale locale = Locale.GERMAN;
+                Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
                 int index = property.getIndex();
                 String translation = getLocalizationService().getTranslation(translatableEntity, property.getOgnl(), locale);
                 if (translation!=null) {
@@ -76,7 +77,8 @@ public class LocalizationListener implements PostLoadEventListener, PostUpdateEv
         if (properties==null) {
             properties = Lists.newArrayList();
             Set<Field> fields = ReflectionUtils.getAllFields(entity.getClass(), new Predicate() {
-                @Override public boolean apply(Object input) {
+                @Override
+                public boolean apply(Object input) {
                     Field field = (Field) input;
                     Localized annotation = field.getAnnotation(Localized.class);
                     return annotation != null &&

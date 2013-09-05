@@ -53,11 +53,9 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
             ThreadLocalInteractionContext.getInstance().setVisibleUsers(visibleUsers);
             ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
 
-            //get User language - set language in ThreadLocalInteractionContext
-           // if session has one - use session else if user has one - use user locale else default to english
-           if (null != fieldidSession.getUserLocale()) {
+           if (fieldidSession.getUserLocale()!=null) {
                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(fieldidSession.getUserLocale());
-           } else if (null != user.getLanguage()) {
+           } else if (user.getLanguage()!=null) {
                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(user.getLanguage());
            } else {
                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(Locale.getDefault());
