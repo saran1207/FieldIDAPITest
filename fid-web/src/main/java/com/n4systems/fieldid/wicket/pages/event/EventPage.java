@@ -200,6 +200,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             DropDownChoice<User> performedBy = new DropDownChoice<User>("performedBy", performedByModel, new ExaminersModel(performedByModel), new ListableChoiceRenderer<User>());
             DateTimePicker datePerformedPicker = new DateTimePicker("datePerformed", new UserToUTCDateModel(new PropertyModel<Date>(event, "date")), true).withNoAllDayCheckbox();
             datePerformedPicker.addToDateField(createUpdateAutoschedulesOnChangeBehavior());
+
+
             DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "dueDate"), true).withNoAllDayCheckbox();
 			newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
             newOrExistingEventBook.setOwner(event.getObject().getOwner());
@@ -263,6 +265,13 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                 error(getString("error.event_owner_null"));
                 return;
             }
+
+            if (event.getObject().getDate()==null) {
+                error(getString("error.event_date_null"));
+                return;
+            }
+
+
             if (persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getObject().getAsset().getId()).isArchived()) {
                 error(getString("error.asset_has_been_archived"));
                 return;
@@ -351,6 +360,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
                 error(new FIDLabelModel("error.event_book_title_required").getObject());
                 return false;
             }
+
+
         }
 
         if (event.getObject().containsUnfilledScoreCriteria()) {
