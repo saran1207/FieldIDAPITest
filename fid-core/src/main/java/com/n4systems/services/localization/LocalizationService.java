@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.Saveable;
@@ -151,7 +150,7 @@ private void validate() {
     }
 
     public Map<Locale, Object> getTranslations(Saveable entity, String ognl) {
-        Long tenantId = ThreadLocalInteractionContext.getInstance().getCurrentUser().getTenant().getId();
+        Long tenantId = 0L;
         // what to do if not a tenant to be found??
         Map<TranslationKey, Map<Locale, Object>> tenantMap = translationCache.get(tenantId);
         if (tenantMap!=null) {
