@@ -17,6 +17,7 @@ import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.AssetType;
@@ -198,8 +199,8 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
 
             add(new SubmitLink("save"));
             add(new BookmarkablePageLink("cancel", AssetTypeListPage.class));
-            NonWicketLink deleteLink;
-            add(deleteLink = new NonWicketLink("delete", "assetTypeConfirmDelete.action?uniqueID=" + assetType.getObject().getId(), new AttributeAppender("class", "btn btn-gray")));
+            BookmarkablePageLink deleteLink;
+            add(deleteLink = new BookmarkablePageLink("delete", ConfirmDeleteAssetTypePage.class, PageParametersBuilder.uniqueId(assetType.getObject().getId())));
             deleteLink.setVisible(assetType.getObject().getId() != null);
 
         }

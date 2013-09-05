@@ -102,6 +102,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/assetTypeForm", AddAssetTypePage.class);
         mountPage("setup/assetTypeEdit", EditAssetTypePage.class);
         mountPage("setup/assetTypeCopy", CopyAssetTypePage.class);
+        mountPage("setup/assetTypeDelete", ConfirmDeleteAssetTypePage.class);
         mountPage("setup/selectEventTypes", EventTypeAssociationsPage.class);
         mountPage("setup/assetTypeSchedules", AssetTypeSchedulesPage.class);
         mountPage("setup/assetTypeGroupTranslations", AssetTypeGroupTranslationsPage.class);
@@ -109,7 +110,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventTypeTranslations", EventTypeTranslationsPage.class);
         mountPage("setup/eventTypeGroupTranslations", EventTypeGroupTranslationsPage.class);
         mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
-
 
         mountPage("dashboard", DashboardPage.class);
 

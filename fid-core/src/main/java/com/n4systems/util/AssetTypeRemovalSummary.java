@@ -2,7 +2,9 @@ package com.n4systems.util;
 
 import com.n4systems.model.AssetType;
 
-public class AssetTypeRemovalSummary {
+import java.io.Serializable;
+
+public class AssetTypeRemovalSummary implements Serializable {
 
 	private AssetType assetType;
 

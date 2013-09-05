@@ -3,13 +3,18 @@ package com.n4systems.fieldid.service.asset;
 import com.google.common.collect.Lists;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
+import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.taskscheduling.TaskExecutor;
+import com.n4systems.taskscheduling.task.ArchiveAssetTypeTask;
+import com.n4systems.util.AssetTypeRemovalSummary;
 import com.n4systems.util.persistence.NewObjectSelect;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -19,9 +24,11 @@ import org.apache.log4j.Logger;
 import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import rfid.ejb.entity.AssetCodeMapping;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
+import javax.persistence.Query;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -315,5 +322,82 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     public UnitOfMeasure getUnitOfMeasure(Long id) {
         return persistenceService.findById(UnitOfMeasure.class, id);
+    }
+
+    public AssetTypeRemovalSummary testArchive(AssetType assetType) {
+        AssetTypeRemovalSummary summary = new AssetTypeRemovalSummary(assetType);
+        try {
+            QueryBuilder<Asset> assetCount = createTenantSecurityBuilder(Asset.class);
+            assetCount.setCountSelect().addSimpleWhere("type", assetType).addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+            summary.setAssetsToDelete(persistenceService.count(assetCount));
+
+            QueryBuilder<Event> eventCount = createTenantSecurityBuilder(Event.class);
+            eventCount.setCountSelect().addSimpleWhere("asset.type", assetType).addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+            summary.setEventsToDelete(persistenceService.count(eventCount));
+
+            QueryBuilder<Event> scheduleCount = createTenantSecurityBuilder(Event.class);
+            scheduleCount.setCountSelect().addSimpleWhere("asset.type", assetType).addSimpleWhere("workflowState", WorkflowState.OPEN);
+            summary.setSchedulesToDelete(persistenceService.count(scheduleCount));
+
+            String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset.type = :assetType AND event.state = :activeState ";
+            Query subEventCount = persistenceService.createQuery(subEventQuery);
+            subEventCount.setParameter("assetType", assetType).setParameter("activeState", Archivable.EntityState.ACTIVE);
+            summary.setAssetsUsedInMasterEvent((Long) subEventCount.getSingleResult());
+
+            String subAssetQuery = "select count(DISTINCT s.masterAsset) From "+SubAsset.class.getName()+" s WHERE s.asset.type = :assetType ";
+            Query subAssetCount = persistenceService.createQuery(subAssetQuery);
+            subAssetCount.setParameter("assetType", assetType);
+            summary.setSubAssetsToDetach((Long) subAssetCount.getSingleResult());
+
+            String subMasterAssetQuery = "select count(s) From "+SubAsset.class.getName()+" s WHERE s.masterAsset.type = :assetType ";
+            Query subMasterAssetCount = persistenceService.createQuery(subMasterAssetQuery);
+            subMasterAssetCount.setParameter("assetType", assetType);
+            summary.setMasterAssetsToDetach((Long) subMasterAssetCount.getSingleResult());
+
+            String partOfProjectQuery = "select count(p) From Project p, IN( p.assets ) s WHERE s.type = :assetType";
+            Query partOfProjectCount = persistenceService.createQuery(partOfProjectQuery);
+            partOfProjectCount.setParameter("assetType", assetType);
+            summary.setAssetsToDetachFromProjects((Long) partOfProjectCount.getSingleResult());
+
+            String subAssetTypeQuery = "select count(a) From "+AssetType.class.getName()+" a, IN( a.subTypes ) s WHERE s = :assetType ";
+            Query subAssetTypeCount = persistenceService.createQuery(subAssetTypeQuery);
+            subAssetTypeCount.setParameter("assetType", assetType);
+            summary.setAssetTypesToDetachFrom((Long) subAssetTypeCount.getSingleResult());
+
+            QueryBuilder<AssetCodeMapping> assetCodeMappingCount = createTenantSecurityBuilder(AssetCodeMapping.class);
+            assetCodeMappingCount.setCountSelect().addSimpleWhere("assetInfo", assetType);
+            summary.setAssetCodeMappingsToDelete(persistenceService.count(assetCodeMappingCount));
+
+        } catch (InvalidQueryException e) {
+            logger.error("bad summary query", e);
+            summary = null;
+        }
+        return summary;
+    }
+
+    public AssetType archive(AssetType assetType, Long archivedBy, String deletingPrefix) {
+        if (testArchive(assetType).validToDelete()) {
+
+            assetType.archiveEntity();
+            assetType.archivedName(deletingPrefix);
+
+            assetType.getSubTypes().clear();
+            AssetType type = persistenceService.update(assetType);
+
+            ArchiveAssetTypeTask archiveTask = new ArchiveAssetTypeTask();
+
+            archiveTask.setArchivedById(archivedBy);
+            archiveTask.setAssetTypeId(assetType.getId());
+            archiveTask.setAssetTypeName(assetType.getArchivedName());
+
+            // WEB-2844  : what happens if this task fails?  we have deleted the asset type but not the assets?
+            // why can't we do everything in an atomic task?   DD
+            TaskExecutor.getInstance().execute(archiveTask);
+
+            return type;
+        } else {
+            throw new RuntimeException("asset type can not be validated.");
+        }
+
     }
 }
