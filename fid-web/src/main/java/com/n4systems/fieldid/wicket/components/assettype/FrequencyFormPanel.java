@@ -28,6 +28,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.validation.validator.MinimumValidator;
 
 import java.util.List;
 
@@ -66,7 +67,8 @@ public class FrequencyFormPanel extends Panel {
             add(eventTypeChoice = new FidDropDownChoice<EventType>("eventType", new PropertyModel<EventType>(model, "eventType"), getEventTypes(), new EventTypeChoiceRenderer()));
             eventTypeChoice.setRequired(true);
             eventTypeChoice.add(new UpdateComponentOnChange());
-            add(frequencyField = new RequiredTextField<Long>("frequencyInDays", new PropertyModel<Long>(model, "frequencyInDays")));
+            add(frequencyField = new RequiredTextField<Long>("frequencyInDays", new PropertyModel<Long>(model, "frequencyInDays"), Long.class));
+            frequencyField.add(new MinimumValidator<Long>(1L));
             frequencyField.add(new UpdateComponentOnChange());
             add(orgLocationPicker = new OrgLocationPicker("owner", new PropertyModel<BaseOrg>(model, "owner")).withAutoUpdate());
             add(autoScheduleCheck = new CheckBox("autoSchedule", new PropertyModel<Boolean>(model, "autoSchedule")));
