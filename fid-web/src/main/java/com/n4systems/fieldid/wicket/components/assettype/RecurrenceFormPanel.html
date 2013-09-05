@@ -5,7 +5,7 @@
       lang="en">
 <wicket:panel>
 
-    <form wicket:id="form">
+    <form wicket:id="form" class="new-rules">
 
         <div wicket:id="feedbackPanel"></div>
 
@@ -19,23 +19,23 @@
                 <span class="right">
                     <select wicket:id="recurrence" class="recurrence"></select>
                     <label><wicket:message key="label.at"/></label>
-                    <span wicket:id="timeContainer">
+                    <span wicket:id="timeContainer" class="time-container">
                         <select class="time" wicket:id="time"/>
                         <select class="time" wicket:id="multipleTimes"/>
                     </span>
-                    <span wicket:id="dateTime"/>  
-                </span>                    
+                    <span wicket:id="dateTime" class="date-time"/>
+                </span>
             </div>
             <div class="row">
                 <label class="left"><wicket:message key="label.for"/></label>
-                <span class="right"> <div style="display:inline" wicket:id="organization"></div></span>
+                <span class="right">
+                    <div wicket:id="organization" class="organization"></div>
+                    <div class="checkbox">
+                        <input type="checkbox" wicket:id="ownerAndDown"><label><wicket:message key="label.affect_all"/></label><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/>
+                    </div>
+                </span>
             </div>
-
-            <a class="btn btn-blue" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
-         
-            <div class="affect-all">
-                <input type="checkbox" wicket:id="ownerAndDown"><label><wicket:message key="label.affect_all"/></label><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/>
-            </div>
+            <a class="btn btn-blue btn-sml" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
         </div>
     </form>
 

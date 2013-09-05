@@ -115,10 +115,10 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
             }
         });
 
-        add(frequencyModalWindow = new DialogModalWindow("addFrequency").setInitialWidth(400).setInitialHeight(200));
+        add(frequencyModalWindow = new DialogModalWindow("addFrequency").setInitialWidth(475).setInitialHeight(200));
         frequencyModalWindow.setContent(getFrequencyForm());
 
-        add(recurrenceModalWindow = new DialogModalWindow("addRecurrence").setInitialWidth(400).setInitialHeight(200));
+        add(recurrenceModalWindow = new DialogModalWindow("addRecurrence").setInitialWidth(475).setInitialHeight(200));
         recurrenceModalWindow.setContent(getRecurrenceForm());
         WebMarkupContainer scheduleActions;
         add(scheduleActions = new WebMarkupContainer("scheduleActions"));

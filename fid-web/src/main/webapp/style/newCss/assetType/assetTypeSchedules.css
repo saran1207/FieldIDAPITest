@@ -1,3 +1,4 @@
+/* overrides */
 #pageContent {
 	width: 98%;
 	padding: 15px 1%;
@@ -8,7 +9,9 @@ h3 {
 	display: inline;
 	margin-right: 10px;
 }
-
+.formErrors {
+	margin-top: 0;
+}
 
 /* FILTER LINKS */
 .filters {
@@ -51,38 +54,57 @@ h3 {
 	margin-bottom: 6px;
 }
 .btn {
-	font-size: 13px;
+	font-size: 13px;	
+	/*padding: 5px 10px;*/
+}
+.dropdown-btn.dropdown-sml ul li a {
+	padding-left: 12px;
+	padding-right: 12px;
 }
 
+
 /* MODALS */
-form .row {
+.new-rules .row {
 	margin-bottom: 10px;
+	font-size: 13px;
 }
-.wicket-modal .left {
-	width: 65px;
+.new-rules .left {
+	width: 80px;
 	margin-right: 6px;
 	text-align: right;
 	display: inline-block;
+	vertical-align: top;
+	margin-top: 6px;
 }
-.wicket-modal .right {
-	width: 270px;
+.new-rules .right {
+	width: 320px;
 	display: inline-block;
 }
-	.wicket-modal label.right {
+	.new-rules label.right {
 		vertical-align: middle;
 	}
-.wicket-modal input {
+	.new-rules .right .organization {
+		height: 25px;
+		margin-bottom: 5px;
+	}
+	.new-rules .right .checkbox label {
+		padding: 0 5px;
+	}
+	.new-rules .right .checkbox img {
+		margin-top: 2px;
+	}
+.new-rules input {
 	padding: 4px;
 }
-	.wicket-modal input.days {
+	.new-rules input.days {
 		width: 40px;
 		margin-right: 6px;
 	}
-
-.wicket-modal .btn {
+.new-rules .btn {
 	float: right;
-	margin: 10px 10px 0 0;
-}	
+	margin: 10px 20px 0 0;
+}
+
 .chzn-container, 
 select {
 	width: 175px;
@@ -90,15 +112,20 @@ select {
 select.time {
 	width: 100px;
 }
-
-
-/* hack */
-.entypo-search {
-	float: right;
-	padding-right: 70px;
-	cursor: pointer;
+.time-container {
+	display: inline-block;
 }
 
-.formErrors {
-	margin-top: 0;
+
+/* hacks */
+.org-location .text {
+	float: left;
+}
+.entypo-search {
+	float: left;
+	cursor: pointer;
+	margin-left: 4px;
+}
+.jstree-default.jstree-focused {
+	margin-top: 11px!important;
 }
