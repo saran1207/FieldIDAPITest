@@ -2462,3 +2462,20 @@ inputsWithLegend .legend span {
 .entypo-caret-up { background-position: -80px 0;}
 .entypo-search { background-position: -100px 0;}
 
+/* http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.clearfix {
+    *zoom: 1;
+}
+

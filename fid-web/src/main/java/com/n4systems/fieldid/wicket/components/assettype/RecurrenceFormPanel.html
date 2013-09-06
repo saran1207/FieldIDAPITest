@@ -12,13 +12,13 @@
         <p>Schedules will automatically be created in the future at the predetermined interval.</p>
 
         <div wicket:id="createContainer" class="new-event">
-            <div class="row">
+            <div class="clearfix">
                 <label class="left"><wicket:message key="label.capital_schedule_a"/></label>
-                <span class="right"><select wicket:id="eventType"></select></span>
+                <div class="right"><select wicket:id="eventType"></select></div>
             </div>  
-            <div class="row">
+            <div class="clearfix">
                 <label class="left"><wicket:message key="label.every"/></label>
-                <span class="right">
+                <div class="right">
                     <select wicket:id="recurrence" class="recurrence"></select>
                     <label><wicket:message key="label.at"/></label>
                     <span wicket:id="timeContainer" class="time-container">
@@ -26,16 +26,16 @@
                         <select class="time" wicket:id="multipleTimes"/>
                     </span>
                     <span wicket:id="dateTime" class="date-time"/>
-                </span>
+                </div>
             </div>
-            <div class="row">
+            <div class="clearfix">
                 <label class="left"><wicket:message key="label.for"/></label>
-                <span class="right">
-                    <div wicket:id="organization" class="organization"></div>
+                <div class="right">
+                    <div wicket:id="organization" class="organization clearfix"></div>
                     <div class="checkbox">
                         <input type="checkbox" wicket:id="ownerAndDown"><label><wicket:message key="label.affect_all"/></label><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/>
                     </div>
-                </span>
+                </div>
             </div>
             <a class="btn btn-blue btn-sml" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
         </div>

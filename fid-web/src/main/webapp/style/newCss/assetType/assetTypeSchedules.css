@@ -43,6 +43,7 @@ h3 {
 /* active state */
 .filters li.active .filter-type {
     text-decoration: none;
+    font-weight: bold;
 }
 
 
@@ -55,7 +56,6 @@ h3 {
 }
 .btn {
 	font-size: 13px;	
-	/*padding: 5px 10px;*/
 }
 .dropdown-btn.dropdown-sml ul li a {
 	padding-left: 12px;
@@ -76,27 +76,21 @@ h3 {
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 8px;
 }
-.new-rules .row {
+.new-rules .clearfix {
 	margin-bottom: 10px;
 }
 .new-rules .left {
-	width: 76px;
-	margin-right: 6px;
+	width: 85px;
 	text-align: right;
-	display: inline-block;
-	vertical-align: top;
-	margin-top: 6px;
+	float: left;
+	line-height: 24px;
 }
 .new-rules .right {
-	width: 320px;
-	display: inline-block;
+	width: 340px;
+	float: right;
 }
 	.new-rules label.right {
 		vertical-align: middle;
-	}
-	.new-rules .right .organization {
-		height: 25px;
-		margin-bottom: 5px;
 	}
 	.new-rules .right .checkbox label {
 		padding: 0 5px;
@@ -117,8 +111,12 @@ h3 {
 }
 
 .chzn-container, 
-select {
+select{
 	width: 200px;
+}
+.org-location .text {
+	width: 188px;
+	*float: left;
 }
 select.time {
 	width: 100px;
@@ -126,28 +124,18 @@ select.time {
 .time-container {
 	display: inline-block;
 }
-
+.entypo-search {
+	float: right;
+	cursor: pointer;
+	margin-right: 115px;
+}
 
 /* hacks */
-.org-location .text {
-	float: left;
-}
-.entypo-search {
-	float: left;
-	cursor: pointer;
-	margin-left: 4px;
-}
-.jstree-default.jstree-focused {
-	margin-top: 11px!important;
+.w_content_container {
+	overflow: visible!important;
 }
 
 /* modal.css overrides */
 div.dialog-modal div.w_caption {
 	padding: 0;
-}
-div.wicket-modal div.w_right_1 {
-	margin-left: 15px;
-}
-div.wicket-modal div.w_content_1 {
-	margin-right: 15px;
 }
