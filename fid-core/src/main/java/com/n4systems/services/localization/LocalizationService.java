@@ -1,6 +1,5 @@
 package com.n4systems.services.localization;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -8,7 +7,6 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.localization.Translation;
-import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -30,7 +28,7 @@ public class LocalizationService extends FieldIdPersistenceService implements In
 
     private static final Logger logger=Logger.getLogger(LocalizationService.class);
 
-    private static Map<Long, Map<TranslationKey, Map<Locale,Object>>> translationCache = Maps.newHashMap();
+    private static Map<TranslationKey, Map<Locale,Object>> translationCache = Maps.newHashMap();
 
     private static final String translationFormat = "%s.%s";
     private static final String collectionTranslationSuffix="@";
@@ -42,21 +40,23 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     private void initializeCache() {
-
         try {
-        // TODO DD : make this use EHCACHE instead of simple map.
-        // that way cache can be configured dynamically (in memory, disk spill over, LRU etc...)
-        List<Translation> translations = getAllTranslations();
-        for (Translation translation:translations) {
-            add(translation);
-        }
-        validate();
+            // TODO DD : make this use EHCACHE instead of simple map.
+            // that way cache can be configured dynamically (in memory, disk spill over, LRU etc...)
+            List<Translation> translations = getAllTranslations();
+            for (Translation translation:translations) {
+                add(translation);
+            }
+            validate();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.error("couldn't initialize localization cache : " + e.getMessage());
+            throw new IllegalStateException("couldn't initialize localization cache ",e );
         }
     }
-private void validate() {
-        // TODO : further validation could do a foreign key check to make sure entity_id column is valid.
+
+    private void validate() {
+        // TODO : further validation could do a foreign key check to make sure entity_id column is valid. if entity points to an archived or unused (like event_form)
+        //  entity then fire out warnings!
 
         Set<Class> entities = Sets.newHashSet();
         entities.addAll(new Reflections(BaseEntity.class.getPackage().getName()).getSubTypesOf(BaseEntity.class));
@@ -78,11 +78,9 @@ private void validate() {
         // 1: migrate the value.   types.name --> assettypes.name
         // 2: delete the translated values  types.*    because they aren't relevant anymore.   (not likely)
         // 3: rename the table so the translation matches.    rename assettypes to types;
-        for (Map<TranslationKey, Map<Locale,Object>> tenantMap: translationCache.values()) {
-            for (TranslationKey key:tenantMap.keySet()) {
-                if (!expected.contains(key.ognl)) {
-                    errors.add(key.ognl);
-                }
+        for (TranslationKey key:translationCache.keySet()) {
+            if (!expected.contains(key.ognl)) {
+                errors.add(key.ognl);
             }
         }
         if (errors.size()>0) {
@@ -91,23 +89,11 @@ private void validate() {
     }
 
     private void add(Translation translation) {
-        // TODO DD : remove translation tenant id stuff.   will break everything.  or maybe just save tenant but not required for reading.  more for dealing with security and caching.
-
-        Long tenantId = translation.getId().getTenantId();
-        Map<TranslationKey, Map<Locale, Object>> tenantMap = translationCache.get(tenantId);
-        if (tenantMap==null) {
-            tenantMap=Maps.newHashMap();
-            translationCache.put(tenantId, tenantMap);
-        }
-        add(translation, tenantMap);
-    }
-
-    private void add(Translation translation, Map<TranslationKey, Map<Locale, Object>> map) {
         TranslationKey translationKey = new TranslationKey(translation);
-        Map<Locale, Object> keyMap = map.get(translationKey);
+        Map<Locale, Object> keyMap = translationCache.get(translationKey);
         if (keyMap==null) {
             keyMap = Maps.newHashMap();
-            map.put(translationKey,keyMap);
+            translationCache.put(translationKey,keyMap);
         }
         Locale locale = StringUtils.parseLocaleString(translation.getId().getLanguage());
         // currently doesn't support sets. must have order.
@@ -119,7 +105,7 @@ private void validate() {
             }
             addToList(translationKey, list, translation.getValue());
         } else {
-            keyMap.put(locale, translation.getValue());
+             keyMap.put(locale, translation.getValue());
         }
     }
 
@@ -132,16 +118,11 @@ private void validate() {
 
     // handle event form saving.  google translate API.
 
-    public Object getText(EntityWithTenant entity, String ognl, Locale locale) {
-        Preconditions.checkArgument(locale != null && entity != null, "must supply non-null args");
-        Long tenantId = entity.getTenant().getId();
-        Map<TranslationKey, Map<Locale, Object>> tenantMap = translationCache.get(tenantId);
-        if (tenantMap!=null) {
-            Map<Locale, Object> map = tenantMap.get(new TranslationKey(entity, ognl));
-            return map==null ? null : map.get(locale);
-        }
-        return null;
-    }
+//    public Object getText(EntityWithTenant entity, String ognl, Locale locale) {
+//        Preconditions.checkArgument(locale != null && entity != null, "must supply non-null args");
+//        Map<Locale, Object> map = translationCache.get(new TranslationKey(entity, ognl));
+//        return map==null ? null : map.get(locale);
+//    }
 
     public Object getTranslation(Saveable entity, String ognl, Locale locale) {
         Map<Locale, Object> translations = getTranslations(entity, ognl);
@@ -150,14 +131,8 @@ private void validate() {
     }
 
     public Map<Locale, Object> getTranslations(Saveable entity, String ognl) {
-        Long tenantId = 0L;
-        // what to do if not a tenant to be found??
-        Map<TranslationKey, Map<Locale, Object>> tenantMap = translationCache.get(tenantId);
-        if (tenantMap!=null) {
-            Map<Locale, Object> map = tenantMap.get(new TranslationKey(entity, ognl));
-            return map;
-        }
-        return null;
+        Map<Locale, Object> map = translationCache.get(new TranslationKey(entity, ognl));
+        return map;
     }
 
     private final Session getHibernateSession() {
