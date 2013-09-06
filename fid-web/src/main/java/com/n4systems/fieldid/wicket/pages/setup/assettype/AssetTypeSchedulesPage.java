@@ -18,6 +18,7 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.RecurrenceTime;
 import com.n4systems.model.RecurringAssetTypeEvent;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -57,6 +58,10 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
     private WebMarkupContainer filterActions;
     private ListView frequencyList;
     private ListView recurringEventList;
+
+    private AjaxLink<Void> showAllLink;
+    private AjaxLink<Void> showRecurringLink;
+    private AjaxLink<Void> showFrequencyLink;
 
     private ModalWindow frequencyModalWindow;
     private ModalWindow recurrenceModalWindow;
@@ -140,32 +145,44 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
         add(filterActions = new WebMarkupContainer("filters"));
         filterActions.setOutputMarkupId(true);
 
-        filterActions.add(new AjaxLink<Void>("showAll") {
+        filterActions.add(showAllLink = new AjaxLink<Void>("showAll") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 frequencyList.setVisible(true);
                 recurringEventList.setVisible(true);
-                target.add(schedules);
+                showAllLink.add(new AttributeModifier("class", "active"));
+                showFrequencyLink.add(AttributeModifier.remove("class"));
+                showRecurringLink.add(AttributeModifier.remove("class"));
+                target.add(schedules ,filterActions);
             }
-        }.add(new Label("total", getTotal())));
+        });
+        showAllLink.add(new Label("total", getTotal()));
 
-        filterActions.add(new AjaxLink<Void>("showRecurring") {
+        filterActions.add(showRecurringLink = new AjaxLink<Void>("showRecurring") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 frequencyList.setVisible(false);
                 recurringEventList.setVisible(true);
-                target.add(schedules);
+                showRecurringLink.add(new AttributeModifier("class", "active"));
+                showFrequencyLink.add(AttributeModifier.remove("class"));
+                showAllLink.add(AttributeModifier.remove("class"));
+                target.add(schedules ,filterActions);
             }
-        }.add(new Label("totalRecurring", getTotalRecurring())));
+        });
+        showRecurringLink.add(new Label("totalRecurring", getTotalRecurring()));
 
-        filterActions.add(new AjaxLink<Void>("showFrequency") {
+        filterActions.add(showFrequencyLink = new AjaxLink<Void>("showFrequency") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 frequencyList.setVisible(true);
                 recurringEventList.setVisible(false);
-                target.add(schedules);
+                showFrequencyLink.add(new AttributeModifier("class", "active"));
+                showAllLink.add(AttributeModifier.remove("class"));
+                showRecurringLink.add(AttributeModifier.remove("class"));
+                target.add(schedules ,filterActions);
             }
-        }.add(new Label("totalFrequency", getTotalFrequency())));
+        });
+        showFrequencyLink.add(new Label("totalFrequency", getTotalFrequency()));
     }
 
     private RecurrenceFormPanel getRecurrenceForm() {
