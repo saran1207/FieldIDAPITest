@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeTitleLabel;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -15,10 +16,13 @@ import com.n4systems.util.AssetTypeRemovalSummary;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -37,11 +41,16 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
     private String confirmation;
     private Button submitButton;
 
+    private FeedbackPanel feedbackPanel;
+
     @SpringBean
     protected AssetTypeService assetTypeService;
 
     public ConfirmDeleteAssetTypePage(PageParameters params) {
         super(params);
+
+        add(new FIDFeedbackPanel("feedbackPanel"));
+
         assetType = Model.of(getAssetType(params));
 
         AssetTypeRemovalSummary summary = assetTypeService.testArchive(assetType.getObject());
@@ -61,8 +70,11 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
         add(form = new Form<Void>("form") {
             @Override
             protected void onSubmit() {
-                assetTypeService.archive(assetType.getObject(), getCurrentUser().getId(), new FIDLabelModel("label.beingdeleted").getObject());
-                setResponsePage(AssetTypeListPage.class);
+                if (checkDelete()) {
+                    assetTypeService.archive(assetType.getObject(), getCurrentUser().getId(), new FIDLabelModel("label.beingdeleted").getObject());
+                    FieldIDSession.get().info(new FIDLabelModel("message.assettypedeleted").getObject());
+                    setResponsePage(AssetTypeListPage.class);
+                }
             }
         });
         form.add(input = new RequiredTextField<String>("confirmationField", new PropertyModel<String>(this, "confirmation")));
@@ -73,16 +85,17 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
         input.add(new AjaxFormComponentUpdatingBehavior("onkeyup") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                Matcher matcher = Pattern.compile("delete", Pattern.CASE_INSENSITIVE).matcher(ConfirmDeleteAssetTypePage.this.confirmation);
-                if(matcher.matches()) {
+                if (checkDelete()) {
                     submitButton.setEnabled(true);
                     target.add(submitButton);
-                }else {
+                } else {
                     submitButton.setEnabled(false);
                     target.add(submitButton);
                 }
             }
         });
+
+        input.add(new AttributeAppender("class", "confirmText"));
 
         form.add(new Link("cancelLink") {
             @Override
@@ -92,10 +105,24 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
         });
     }
 
+    private boolean checkDelete() {
+        Matcher matcher = Pattern.compile("delete", Pattern.CASE_INSENSITIVE).matcher(ConfirmDeleteAssetTypePage.this.confirmation);
+        return matcher.matches();
+    }
+
     private AssetType getAssetType(PageParameters params) {
         AssetType assetType = assetTypeService.getAssetType(params.get("uniqueID").toLong());
         PostFetcher.postFetchFields(assetType, "subTypes");
         return assetType;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderOnDomReadyJavaScript("$('.confirmText').bind('keypress', function (e) {" +
+                                            "    if (e.which == 13) { " +
+                                            "        e.preventDefault(); " +
+                                            "    } " +
+                                            "});");
     }
 
     @Override

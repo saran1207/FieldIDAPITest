@@ -238,9 +238,9 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             }
 
             if (isEdit()) {
-                FieldIDSession.get().info(new FIDLabelModel("massage.asset_type.edit").getObject());
+                FieldIDSession.get().info(new FIDLabelModel("message.asset_type.edit").getObject());
             } else {
-                FieldIDSession.get().info(new FIDLabelModel("massage.asset_type.add").getObject());
+                FieldIDSession.get().info(new FIDLabelModel("message.asset_type.add").getObject());
             }
 
             setResponsePage(AssetTypeListPage.class);
