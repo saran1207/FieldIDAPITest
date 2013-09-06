@@ -63,8 +63,11 @@ public class FrequencyFormPanel extends Panel {
             super(id, model);
 
             model.getObject().setTenant(FieldIDSession.get().getTenant());
+            List<EventType> eventTypes = getEventTypes();
+            if(!getEventTypes().isEmpty())
+                model.getObject().setEventType(eventTypes.get(0));
 
-            add(eventTypeChoice = new FidDropDownChoice<EventType>("eventType", new PropertyModel<EventType>(model, "eventType"), getEventTypes(), new EventTypeChoiceRenderer()));
+            add(eventTypeChoice = new FidDropDownChoice<EventType>("eventType", new PropertyModel<EventType>(model, "eventType"), eventTypes, new EventTypeChoiceRenderer()));
             eventTypeChoice.setRequired(true);
             eventTypeChoice.add(new UpdateComponentOnChange());
             add(frequencyField = new RequiredTextField<Long>("frequencyInDays", new PropertyModel<Long>(model, "frequencyInDays"), Long.class));
