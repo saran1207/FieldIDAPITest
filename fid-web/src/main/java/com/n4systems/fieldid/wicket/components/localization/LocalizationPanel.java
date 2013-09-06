@@ -103,7 +103,9 @@ public class LocalizationPanel extends Panel {
     @Override
     protected void onModelChanged() {
         super.onModelChanged();
+        detachModel();
         listView.setDefaultModel(new LocalizedFieldsModel());
+        listView.detach();
     }
 
     private List<Locale> getLanguages() {
@@ -299,6 +301,7 @@ public class LocalizationPanel extends Panel {
 
         @Override
         public void detach() {
+            fields=null;
         }
 
         public List<Translation> getAsTranslations() {

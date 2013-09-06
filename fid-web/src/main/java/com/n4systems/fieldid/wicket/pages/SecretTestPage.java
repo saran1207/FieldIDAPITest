@@ -27,7 +27,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -100,7 +99,6 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
                 .add(new AjaxSubmitLink("submit") {
                     @Override
                     protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                        LocaleContextHolder.setLocale(getLocaleFromForm());
                         testEntities = persistenceService.findAll(EventType.class);
                         target.add(testEntitiesContainer);
                     }

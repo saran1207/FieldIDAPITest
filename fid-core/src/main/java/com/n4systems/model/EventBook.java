@@ -7,6 +7,7 @@ import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.persistence.localization.Localized;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -19,7 +20,7 @@ public class EventBook extends ArchivableEntityWithOwner implements NamedEntity,
 	private static final long serialVersionUID = 1L;
 	
 	@Column(nullable=false)
-	private String name;
+	private @Localized String name;
 	
 	@Column(nullable=false)
 	private boolean open = true;
