@@ -81,9 +81,6 @@ public class LocalizationListener implements PostLoadEventListener, PostUpdateEv
                 }
             });
             for (Field field:fields) {
-                if (field.getName().equals("recommendations")) {
-                    System.out.println("huh");
-                }
                 LocalizedProperty localizedProperty = createLocalizedProperty(field, persister);
                 if (localizedProperty!=null) {
                     properties.add(localizedProperty);

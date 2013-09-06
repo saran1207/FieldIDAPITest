@@ -30,8 +30,6 @@ public class LocalizationTest {
 
     private void assertClass(Class<?> entity) {
         Set<Field> localizedFields = getAllFields(entity, withAnnotation(Localized.class));
-
-        // TODO : make sure that it either returns String or List<String>
         for (Field localizedField:localizedFields) {
             assertTrue("class " + entity.getName() + " field '" + localizedField.getName() + "' with @" + Localized.class.getSimpleName() + " annotation must return String or List<String>", isStringReturnType(localizedField));
         }

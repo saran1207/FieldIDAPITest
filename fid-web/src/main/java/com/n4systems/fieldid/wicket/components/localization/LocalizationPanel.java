@@ -183,10 +183,7 @@ public class LocalizationPanel extends Panel {
 
             for (Field field:fields) {
                 if (field.isAnnotationPresent(Localized.class)) {
-                    String ognl = localizationService.getOgnlFor(field);
-                    // create empty translation for all languages here....override later if other ones exist.
-                    // TODO DD : handle List<String> values.   // add multiple fields.  loop through and add index suffix to ognl
-                    localizedFields.add(new LocalizedField(entity, field.getName(), (String) getValue(entity, field), ognl));
+                    localizedFields.addAll(createLocalizedFields(entity, field));
                 } else if (isCollection(field)){
                     embeddedFields.addAll(loadForEntities(getValues(entity, field)));
                 } else if (!ClassUtils.isPrimitiveOrWrapper(field.getType())) {
@@ -211,6 +208,23 @@ public class LocalizationPanel extends Panel {
                 }
             }
             return localizedFields;
+        }
+
+        private List<LocalizedField> createLocalizedFields(Object entity, Field field) {
+            List<LocalizedField> result = Lists.newArrayList();
+            String ognl = localizationService.getOgnlFor(field);
+            Object value = getValue(entity,field);
+            if (value instanceof List) {  // && list is of generic type <String>?
+                List<String> values = (List<String>) value;
+                for (int i=0;i<values.size();i++) {
+                    result.add(new LocalizedField(entity, field.getName(), values.get(i), ognl+i));
+                }
+            } else if (value instanceof String) {
+                result.add(new LocalizedField(entity, field.getName(), (String)value, ognl));
+            } else if (value!=null) {
+                throw new IllegalStateException("the field '" + field.getName() + "' is not of expected type <String> or List<String>");
+            }
+            return result;
         }
 
         private Set<Field> getAllFields(Class<?> clazz) {

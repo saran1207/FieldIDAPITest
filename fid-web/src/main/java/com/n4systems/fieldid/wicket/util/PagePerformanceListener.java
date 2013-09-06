@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.util;
 
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import org.apache.wicket.Component;
 import org.apache.wicket.MetaDataKey;
@@ -8,6 +9,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.request.cycle.RequestCycle;
 
 import java.io.Serializable;
+import java.util.Locale;
 
 public class PagePerformanceListener implements IComponentInitializationListener, Serializable {
 
@@ -59,8 +61,9 @@ public class PagePerformanceListener implements IComponentInitializationListener
         private String getDebugString(Component component, boolean debugModeEnabled) {
             long start = component.getMetaData(RENDER_TIME);
             long duration = System.currentTimeMillis() - start;
+            Locale language = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
             String css = debugModeEnabled ? "debug-info" : "hide";
-            return String.format("<div class='%s'> %s : %f seconds", css, component.getClass().getSimpleName(), duration / 1000.0);
+            return String.format("<div class='%s'> %s : %f seconds.   <br> language : %s </div>", css, component.getClass().getSimpleName(), duration / 1000.0, language==null ? "none" : language.toString());
         }
     }
 }

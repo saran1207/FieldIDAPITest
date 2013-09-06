@@ -30,8 +30,6 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	@Column(name="text", nullable=false, length=511)
 	@ElementCollection(fetch= FetchType.EAGER)
 	@IndexColumn(name="orderidx")
-    // TODO DD : need to figure out way to @Localize list of strings!!!
-
 	private @Localized List<String> recommendations = new ArrayList<String>();
 	
 	@Column(name="text", nullable=false, length=511)

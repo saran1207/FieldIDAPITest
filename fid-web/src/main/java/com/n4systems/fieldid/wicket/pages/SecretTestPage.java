@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.localization.LocalizationPanel;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.EntityModel;
-import com.n4systems.model.AssetType;
+import com.n4systems.model.EventType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.persistence.localization.LocalizedText;
 import com.n4systems.services.search.AssetFullTextSearchService;
@@ -50,10 +50,10 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     private BaseOrg org;
 
     private List<SearchResult> docs = Lists.newArrayList();
-    private List<AssetType> testEntities = Lists.newArrayList();
+    private List<EventType> testEntities = Lists.newArrayList();
     private final ListView<SearchResult> list;
     private final WebMarkupContainer container;
-    private final ListView<AssetType> localizedList;
+    private final ListView<EventType> localizedList;
     private final WebMarkupContainer testEntitiesContainer;
     private final LocalizedText test = new LocalizedText("blah blah balh");
     private final LocalizationPanel localizationPanel;
@@ -101,7 +101,7 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
                     @Override
                     protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         LocaleContextHolder.setLocale(getLocaleFromForm());
-                        testEntities = persistenceService.findAll(AssetType.class);
+                        testEntities = persistenceService.findAll(EventType.class);
                         target.add(testEntitiesContainer);
                     }
 
@@ -127,15 +127,15 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
         container.add(list).setOutputMarkupId(true);
 
         add(testEntitiesContainer =new WebMarkupContainer("testEntities"));
-        localizedList = new ListView<AssetType>("list", new PropertyModel(this,"testEntities")) {
+        localizedList = new ListView<EventType>("list", new PropertyModel(this,"testEntities")) {
             @Override
-            protected void populateItem(final ListItem<AssetType > item) {
-                final AssetType result = item.getModelObject();
+            protected void populateItem(final ListItem<EventType > item) {
+                final EventType result = item.getModelObject();
                 item.add(new Label("text", new PropertyModel(result,"name")));
                 item.add(new Label("translation", new PropertyModel(result, "name")));
                 item.add(new AjaxLink("edit") {
                     @Override public void onClick(AjaxRequestTarget target) {
-                        localizationPanel.setDefaultModel(new EntityModel(AssetType.class, result));
+                        localizationPanel.setDefaultModel(new EntityModel(EventType.class, result));
                         target.add(localizationPanel);
                     }
                 });
