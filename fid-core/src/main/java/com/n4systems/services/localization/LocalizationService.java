@@ -192,7 +192,6 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
 
-
     // -----------------------------------------------------------------------------------------------
 
     static class TranslationKey implements Comparable<TranslationKey> {

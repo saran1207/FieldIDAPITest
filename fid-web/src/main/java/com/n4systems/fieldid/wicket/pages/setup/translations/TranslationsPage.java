@@ -9,6 +9,7 @@ import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -18,7 +19,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 abstract public class TranslationsPage<T extends EntityWithTenant> extends FieldIDFrontEndPage {
 
     private final Component choice;
-    private final LocalizationPanel localizationPanel;
+    private Component localizationPanel;
 
     protected TranslationsPage() {
         super();
@@ -30,9 +31,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                 })
                 ));
         choice.setOutputMarkupPlaceholderTag(true);
-        add(localizationPanel = new LocalizationPanel("localization",null));
-        localizationPanel.setVisible(false);
-        localizationPanel.setOutputMarkupPlaceholderTag(true);
+        add(localizationPanel = new WebMarkupContainer("localization").setOutputMarkupId(true));
     }
 
     protected abstract DropDownChoice<T> createChoice(String choice);
@@ -56,8 +55,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
     protected void selected(AjaxRequestTarget target) {
         Object modelObject = choice.getDefaultModelObject();
         EntityWithTenant entity = (EntityWithTenant) modelObject;
-        localizationPanel.setVisible(true);
-        localizationPanel.setDefaultModel(new EntityModel(entity.getClass(), entity));
+        replace(localizationPanel=new LocalizationPanel("localization",new EntityModel(entity.getClass(), entity)).setOutputMarkupId(true));
         target.add(localizationPanel);
     }
 
