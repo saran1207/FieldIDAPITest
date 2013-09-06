@@ -83,6 +83,10 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                     item.add(new Label("owner", new PropertyModel<String>(schedule, "owner.displayName")));
                 else
                     item.add(new Label("owner", "--"));
+                if(schedule.getObject().isAutoSchedule())
+                    item.add(new Label("addOnIdentify", new FIDLabelModel("label.add_on_identify")));
+                else
+                    item.add(new Label("addOnIdentify", "--"));
                 item.add(new AjaxLink<Void>("remove") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -108,7 +112,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 if (((RecurringAssetTypeEvent) item.getDefaultModelObject()).getOwner() == null)
                     item.add(new Label("affectAll", "---"));
                 else
-                    item.add(new Label("affectAll", new YesOrNoModel(new PropertyModel<Boolean>(item.getModelObject(), "ownerAndDown"))));
+                    item.add(new Label("affectAll", new FIDLabelModel("label.affect_all")));
                 item.add(new AjaxLink("remove") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {

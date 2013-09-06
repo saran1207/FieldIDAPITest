@@ -33,27 +33,27 @@
         <table class="list">
             <thead>
                 <tr>
+                    <th><wicket:message key="label.schedule_type"/></th>
                     <th><wicket:message key="label.event_type"/></th>
-                    <th><wicket:message key="title.recurs"/></th>
-                    <th><wicket:message key="title.at"/></th>
+                    <th><wicket:message key="label.frequency"/></th>
                     <th><wicket:message key="title.for"/></th>
-                    <th><wicket:message key="label.affect_all"/></th>
+                    <th><wicket:message key="label.options"/></th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr wicket:id="frequency">
+                    <td><label><wicket:message key="label.event_triggered"/></label></td>
                     <td><label wicket:id="type"/></td>
                     <td><label wicket:id="recurrence"/></td>
-                    <td>&nbsp;</td>
                     <td><label wicket:id="owner"/></td>
-                    <td>&nbsp;</td>
+                    <td><label wicket:id="addOnIdentify"/></td>
                     <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
                 </tr>
                 <tr wicket:id="recurringEvent">
+                    <td><label><wicket:message key="label.recurring"/></label></td>
                     <td><label wicket:id="eventType"></label></td>
-                    <td><label wicket:id="recurrence"></label></td>
-                    <td><label wicket:id="time"></label></td>
+                    <td><label wicket:id="recurrence"></label> @ <label wicket:id="time"></label></td>
                     <td><label wicket:id="org"></label></td>
                     <td><label wicket:id="affectAll"/></td>
                     <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
