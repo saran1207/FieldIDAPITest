@@ -186,6 +186,7 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     public List<Translation> getTranslations(Long entityId) {
+        // TODO DD : need to filter by type/class too!
         QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
         query.addSimpleWhere("id.entityId", entityId);
         return persistenceService.findAll(query);

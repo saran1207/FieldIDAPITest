@@ -5,7 +5,6 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.model.EventTypeGroup;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -16,6 +15,7 @@ public class EventTypeGroupTranslationsPage extends TranslationsPage<EventTypeGr
 
     public EventTypeGroupTranslationsPage() {
         super();
+        add(new RenderHint("eventtypegroups.name","Name", "title"));
     }
 
     @Override

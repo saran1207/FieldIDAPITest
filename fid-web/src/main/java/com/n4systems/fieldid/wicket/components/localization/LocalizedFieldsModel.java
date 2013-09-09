@@ -68,13 +68,13 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
             return localizedFields;
         }
 
-        Saveable saveable = (Saveable) entity;
         if (loaded.contains(entity)) {
             return localizedFields;    //already done?
         }
         loaded.add(entity);
 
-        Long id = (Long) ((Saveable) entity).getEntityId();
+        Saveable saveable = (Saveable) entity;
+        Long id = (Long) saveable.getEntityId();
 
         Set<Field> fields = getAllFields(entity.getClass());
 
@@ -122,14 +122,18 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
         List<LocalizedField> result = Lists.newArrayList();
         String ognl = localizationService.getOgnlFor(field);
         Object value = getValue(entity,field);
-        if (value instanceof List) {  // && list is of generic type <String>?
+        if (value==null) {
+            return result;
+        } else if (value instanceof List) {  // && list is of generic type <String>?
             List<String> values = (List<String>) value;
             for (int i=0;i<values.size();i++) {
                 result.add(new LocalizedField(entity, field.getName(), values.get(i), ognl+i, languages));
             }
         } else if (value instanceof String) {
-            result.add(new LocalizedField(entity, field.getName(), (String)value, ognl, languages));
-        } else if (value!=null) {
+           // if (StringUtils.isNotEmpty((String) value)) {   // TODO DD : put this back in later.   leave in to help debugging.
+                result.add(new LocalizedField(entity, field.getName(), (String)value, ognl, languages));
+           //}
+        } else {
             throw new IllegalStateException("the field '" + field.getName() + "' is not of expected type <String> or List<String>");
         }
         return result;

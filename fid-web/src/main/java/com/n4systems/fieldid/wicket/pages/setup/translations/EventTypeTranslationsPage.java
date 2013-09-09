@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup.translations;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.components.eventtype.GroupedEventTypePicker;
 import com.n4systems.fieldid.wicket.components.localization.LocalizedField;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
@@ -14,11 +15,17 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
+import java.util.List;
 
+public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
 
     public EventTypeTranslationsPage() {
         super();
+    }
+
+    @Override
+    protected List<String> initExcludedFields() {
+        return Lists.newArrayList("supportedProofTests","infoFieldNames", "supportedProofTests", "group", "eventTypes");
     }
 
     @Override
