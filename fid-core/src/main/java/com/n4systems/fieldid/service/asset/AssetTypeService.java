@@ -269,6 +269,16 @@ public class AssetTypeService extends FieldIdPersistenceService {
                 }
             }
 
+            //remove deleted attachments
+            List<FileAttachment> removedAttachments = Lists.newArrayList();
+
+            for (FileAttachment attachment: assetType.getAttachments()) {
+                if(!uploadedFiles.contains(attachment)) {
+                    removedAttachments.add(attachment);
+                }
+            }
+            assetType.getAttachments().removeAll(removedAttachments);
+
             persistenceService.update(assetType);
         }
 

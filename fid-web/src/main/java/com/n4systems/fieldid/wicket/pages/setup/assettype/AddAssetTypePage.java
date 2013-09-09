@@ -210,16 +210,11 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
         protected void onSubmit() {
             AssetType assetType = getModelObject();
 
-            List<FileAttachment> attachments = null;
             byte [] imageData = null;
 
             if(imagePanel.isImageUpdated()) {
                 imageData = imagePanel.getAssetTypeImageBytes();
                 assetType.setImageName(imagePanel.getClientFileName());
-            }
-
-            if(!attachmentsPanel.getAttachments().isEmpty()) {
-                attachments = attachmentsPanel.getAttachments();
             }
 
             if(attributePanel.getInfoFields(assetType).isEmpty()) {
@@ -233,7 +228,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             }
 
             try {
-               assetType = assetTypeService.saveAssetType(assetType, attachments, imageData);
+               assetType = assetTypeService.saveAssetType(assetType, attachmentsPanel.getAttachments(), imageData);
             } catch (ImageAttachmentException e) {
                 error("Failed to attach files to Asset Type: " + assetType.getDisplayName());
             }
