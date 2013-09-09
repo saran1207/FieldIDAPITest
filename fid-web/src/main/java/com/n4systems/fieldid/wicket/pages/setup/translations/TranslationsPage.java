@@ -23,6 +23,8 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 
 abstract public class TranslationsPage<T extends EntityWithTenant> extends FieldIDFrontEndPage {
 
+    public static final String LOCALIZATION_PANEL_ID = "localization";
+
     private final DropDownChoice<T> choice;
     private Component localizationPanel;
 
@@ -40,7 +42,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                     }
                 });
         add(new Form("form").add(choice));
-        add(localizationPanel = new WebMarkupContainer("localization").setOutputMarkupId(true));
+        add(localizationPanel = new WebMarkupContainer(LOCALIZATION_PANEL_ID).setOutputMarkupId(true));
     }
 
     protected List<String> initExcludedFields() {
@@ -67,18 +69,22 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
 
     protected void selected(AjaxRequestTarget target) {
         Object modelObject = choice.getDefaultModelObject();
-        EntityWithTenant entity = (EntityWithTenant) modelObject;
-        replace(localizationPanel = new LocalizationPanel("localization", new EntityModel(entity.getClass(), entity)) {
-            @Override
-            protected boolean ignoreField(Field field) {
-                return TranslationsPage.this.isFiltered(field);
-            }
-        }.setOutputMarkupId(true));
-        target.add(localizationPanel);
+        if (modelObject==null) {
+            replace(localizationPanel = new WebMarkupContainer(LOCALIZATION_PANEL_ID).setOutputMarkupId(true));
+        } else {
+            EntityWithTenant entity = (EntityWithTenant) modelObject;
+            replace(localizationPanel = new LocalizationPanel(LOCALIZATION_PANEL_ID, new EntityModel(entity.getClass(), entity)) {
+                @Override
+                protected boolean ignoreField(Field field) {
+                    return TranslationsPage.this.isFiltered(field);
+                }
+            }.setOutputMarkupId(true));
+        }
+        target.add(get(LOCALIZATION_PANEL_ID));
     }
 
     protected boolean isFiltered(Field field) {
-        System.out.println("checking field " + field.getName() + " --> " + excludedNames.contains(field.getName()));
+//        System.out.println("checking field " + field.getName() + " --> " + excludedNames.contains(field.getName()));
         return excludedNames.contains(field.getName());
     }
 
