@@ -2,31 +2,31 @@ package com.n4systems.fieldid.wicket.components.localization;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.ScoreCriteria;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.localization.LocalizationService;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.lang.reflect.Field;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -44,7 +44,7 @@ public class LocalizationPanel extends Panel {
         super(id, model);
 
         add(new Form("form")
-                .add(listView = new ListView<LocalizedField>("translations", new LocalizedFieldsModel(LocalizationPanel.this.getDefaultModel(), getLanguages())) {
+                .add(listView = new ListView<LocalizedField>("translations", createLocalizedFieldsModel()) {
                     @Override
                     protected void populateItem(ListItem<LocalizedField> item) {
                         item.add(new AttributeAppender("class",Model.of(getCssFor(item))));
@@ -52,7 +52,6 @@ public class LocalizationPanel extends Panel {
                         item.add(new Label("label", Model.of(field.getName())));
                         item.add(new Label("defaultValue", Model.of(field.getDefaultValue())));
                         item.add(new TranslationsListView("translations", new PropertyModel(item.getModel(), "translations")));
-                        // TODO DD : refactor this into generic templated method..... createLinksForEntity("misc", item.getModel);
                         item.add(createLinksForItem(item));
                     }
                 }.setReuseItems(true))
@@ -78,8 +77,23 @@ public class LocalizationPanel extends Panel {
 
     }
 
-    protected EventLinks createLinksForItem(ListItem<LocalizedField> item) {
-        return new EventLinks("misc", item.getModel());
+    private LocalizedFieldsModel createLocalizedFieldsModel() {
+        return new LocalizedFieldsModel(LocalizationPanel.this.getDefaultModel(), getLanguages()) {
+            @Override protected boolean isFiltered(Field field) {
+                Class<?> type = field.getType();
+                if (type.equals(String.class)) {
+                    return !field.isAnnotationPresent(Localized.class);
+                }
+                if (Date.class.isAssignableFrom(type) || Number.class.isAssignableFrom(type) || type.isPrimitive()) {
+                    return true;
+                }
+                return LocalizationPanel.this.ignoreField(field);
+            }
+        };
+    }
+
+    protected Component createLinksForItem(ListItem<LocalizedField> item) {
+        return new WebMarkupContainer("misc");
     }
 
     protected String getCssFor(ListItem<LocalizedField> item) {
@@ -91,11 +105,15 @@ public class LocalizationPanel extends Panel {
         return model.getAsTranslations();
     }
 
+    protected boolean ignoreField(Field field) {
+        return false;
+    }
+
     @Override
     protected void onModelChanged() {
         super.onModelChanged();
         detachModel();
-        listView.setDefaultModel(new LocalizedFieldsModel(getDefaultModel(), getLanguages()));
+        listView.setDefaultModel(createLocalizedFieldsModel());
         listView.detach();
     }
 
@@ -122,46 +140,5 @@ public class LocalizationPanel extends Panel {
     }
 
 
-    class EventLinks extends Fragment {
-
-        private final IModel<LocalizedField> model;
-
-        public EventLinks(String id, IModel<LocalizedField> model) {
-            super(id, "eventLinks", LocalizationPanel.this);
-            this.model = model;
-            final Object entity = model.getObject().getEntity();
-
-            add(new AjaxLink("scoreGroups") {
-                @Override public void onClick(AjaxRequestTarget target) {
-
-                }
-                @Override public boolean isVisible() {
-                    return entity instanceof ScoreCriteria;
-                }
-            });
-            add(new AjaxLink("buttonGroups") {
-                @Override public void onClick(AjaxRequestTarget target) {
-
-                }
-
-                @Override public boolean isVisible() {
-                    return entity instanceof OneClickCriteria;
-                }
-            });
-            add(new AjaxLink("observations") {
-                @Override public void onClick(AjaxRequestTarget target) {
-
-                }
-
-                @Override public boolean isVisible() {
-                    if (entity instanceof Criteria) {
-                        Criteria criteria = (Criteria) entity;
-                        return !criteria.getRecommendations().isEmpty() || !criteria.getDeficiencies().isEmpty();
-                    }
-                    return false;
-                }
-            });
-        }
-    }
 
 }

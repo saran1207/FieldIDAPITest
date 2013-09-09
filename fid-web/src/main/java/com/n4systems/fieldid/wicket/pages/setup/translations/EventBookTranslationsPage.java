@@ -1,21 +1,27 @@
 package com.n4systems.fieldid.wicket.pages.setup.translations;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.EventBookService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.model.EventBook;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class EventBookTranslationsPage extends TranslationsPage{
+import java.util.List;
+
+public class EventBookTranslationsPage extends TranslationsPage {
 
     @SpringBean
-    EventBookService eventBookService;
+    private EventBookService eventBookService;
 
     public EventBookTranslationsPage() {
         super();
+    }
+
+    protected List<String> initExcludedFields() {
+        return Lists.newArrayList("events");
     }
 
     @Override
@@ -36,4 +42,6 @@ public class EventBookTranslationsPage extends TranslationsPage{
             }
         };
     }
+
+
 }

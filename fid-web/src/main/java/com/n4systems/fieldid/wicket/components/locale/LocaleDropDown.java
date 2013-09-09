@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.locale;
 
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;

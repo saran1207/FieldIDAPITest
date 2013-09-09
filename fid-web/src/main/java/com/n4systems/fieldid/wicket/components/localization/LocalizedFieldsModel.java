@@ -83,6 +83,9 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
         List<LocalizedField> embeddedFields = Lists.newArrayList();
 
         for (Field field:fields) {
+            if (isFiltered(field)) {
+                continue;
+            }
             if (field.isAnnotationPresent(Localized.class)) {
                 localizedFields.addAll(createLocalizedFields(entity, field));
             } else if (isCollection(field)){
@@ -109,6 +112,10 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
             }
         }
         return localizedFields;
+    }
+
+    protected boolean isFiltered(Field field) {
+        return false;
     }
 
     private List<LocalizedField> createLocalizedFields(Object entity, Field field) {
