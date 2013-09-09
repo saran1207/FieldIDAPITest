@@ -1,16 +1,3 @@
-/* force self-clearing of child elements */
-.clearfix:before,
-.clearfix:after {
-    content: "";
-    display: table;
-} 
-.clearfix:after {
-    clear: both;
-}
-.clearfix {
-    zoom: 1; /* For IE 6/7 (trigger hasLayout) */
-}
-
 /* GENERAL PAGE STYLES */
 #page {
     padding: 24px;
@@ -149,6 +136,9 @@ input:-ms-input-placeholder {
 	.control-group input[type=file] {
 		margin-bottom: 4px;
 	}
+		.uploaded-file img {
+			max-width: 300px;
+		}
 	.control-group.inline {
 	    display: inline-block;
 	    vertical-align: top;
@@ -189,55 +179,6 @@ input:-ms-input-placeholder {
 	padding-top: 4px;
 	float: left;
 }
-
-
-/* BUTTON STYLES */
-.btn {
-	text-decoration: none;
-	display: inline-block;
-	padding: 8px 16px;
-	-webkit-border-radius: 2px;
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-	border: 1px solid #ababab;
-	font-size: 14px;
-	color: #fff;
-	width: auto;
-	cursor: pointer;
-}
-.btn-gray {
-	color: #3a3a3a;
-	background: #dadada;
-	background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #dadada), color-stop(1, #efefef));
-	background: -ms-linear-gradient(bottom, #dadada, #efefef);
-	background: -moz-linear-gradient(center bottom, #dadada 0%, #efefef 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dadada', endColorstr='#eaeaea', GradientType=0);
-}
-	.btn-gray:hover {
-		color: #3a3a3a;
-		background: #dadada;
-	}
-	.btn-gray a {
-		color: #3a3a3a;
-	}
-
-.btn-green {
-  background: #60986b;
-  border-color: #568860;
-}
-	.btn-green:hover {
-		color: #000;
-	}
-
-.btn-cancel {
-	border: none;
-	text-decoration: underline; 
-	color: #356CA2;
-}
-	.btn-cancel:hover {
-		color: #000;
-		text-decoration: none;
-	}
 
 /* PAGE SPECIFIC STYLES */
 .asset-type .required {

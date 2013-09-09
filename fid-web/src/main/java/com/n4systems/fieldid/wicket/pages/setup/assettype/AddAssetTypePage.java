@@ -123,6 +123,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/newCss/component/buttons.css");
         response.renderCSSReference("style/newCss/assetType/assetType.css");
     }
 
