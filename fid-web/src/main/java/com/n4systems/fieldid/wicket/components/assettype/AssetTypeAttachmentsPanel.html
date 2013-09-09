@@ -6,11 +6,12 @@
 <wicket:panel>
 
     <div wicket:id="existingAttachmentsContainer">
-        <div wicket:id="existingAttachments">
-            <img wicket:id="attachmentImage"/> <span wicket:id="fileName"></span>
-            <a wicket:id="removeLink"><wicket:message key="label.remove"/></a><br>
-            <textarea wicket:id="comments"></textarea>       
-        </div>
+        <div wicket:id="existingAttachments" class="existing">
+            <img wicket:id="attachmentImage"/> 
+            <p><span wicket:id="fileName"></span>
+            <a wicket:id="removeLink"><wicket:message key="label.remove"/></a></p>
+            <textarea wicket:id="comments"></textarea>     
+        </div> 
     </div>
 
     <form wicket:id="uploadAttachmentForm">

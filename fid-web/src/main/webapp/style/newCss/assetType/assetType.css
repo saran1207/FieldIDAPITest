@@ -20,6 +20,7 @@ h3 {
 }
 p {
 	font-size: 12px;
+	margin-bottom: 5px;
 }
 a {
 	outline: none;
@@ -136,7 +137,8 @@ input:-ms-input-placeholder {
 	.control-group input[type=file] {
 		margin-bottom: 4px;
 	}
-		.uploaded-file img {
+		.uploaded-file img,
+		.other-files img {
 			max-width: 300px;
 		}
 	.control-group.inline {
@@ -190,7 +192,7 @@ input:-ms-input-placeholder {
 }
 	.attributes-setup-list > li {
 		border-bottom: 1px solid #ccc;
-		padding: 10px 5px;
+		padding: 8px 5px;
 		*position: relative;
 	}
 	/* fades inputs to make it appear to be disabled */
@@ -203,6 +205,9 @@ input:-ms-input-placeholder {
 		font-size: 13px;
 		margin-right: 10px;
 		float: left;
+	}
+	.attributes-setup-list .headings {
+		font-weight: bold;
 	}
 	.attribute-name {
 		margin-left: 32px;
@@ -253,7 +258,13 @@ input:-ms-input-placeholder {
 .more-info h3:first-child {
 	margin-top: 0;
 }
-.other-files textarea {
-	margin: 4px 0 10px;
+.existing {
+	border-bottom: 1px dashed #ddd;
+	padding-bottom: 10px;
+	margin-bottom: 15px;
+}
+.existing p {
+	width: 300px;
+	padding: 5px 0;
 }
 
