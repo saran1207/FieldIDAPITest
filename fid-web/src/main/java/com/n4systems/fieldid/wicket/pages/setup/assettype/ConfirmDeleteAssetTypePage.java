@@ -40,6 +40,7 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
 
     private String confirmation;
     private Button submitButton;
+    private TextField<String> confirmInput;
 
     private FeedbackPanel feedbackPanel;
 
@@ -66,7 +67,6 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
         add(new Label("assetsToDetachFromProjects", new PropertyModel<Long>(summary, "assetsToDetachFromProjects")).setVisible(getSecurityGuard().isProjectsEnabled()));
 
         Form form;
-        TextField<String> input;
         add(form = new Form<Void>("form") {
             @Override
             protected void onSubmit() {
@@ -77,12 +77,12 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
                 }
             }
         });
-        form.add(input = new RequiredTextField<String>("confirmationField", new PropertyModel<String>(this, "confirmation")));
+        form.add(confirmInput = new RequiredTextField<String>("confirmationField", new PropertyModel<String>(this, "confirmation")));
         form.add(submitButton = new Button("submitButton"));
         submitButton.setEnabled(false);
         submitButton.setOutputMarkupId(true);
 
-        input.add(new AjaxFormComponentUpdatingBehavior("onkeyup") {
+        confirmInput.add(new AjaxFormComponentUpdatingBehavior("onkeyup") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (checkDelete()) {
@@ -94,8 +94,6 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
                 }
             }
         });
-
-        input.add(new AttributeAppender("class", "confirmText"));
 
         form.add(new Link("cancelLink") {
             @Override
@@ -118,8 +116,8 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderOnDomReadyJavaScript("$('.confirmText').bind('keypress', function (e) {" +
-                                            "    if (e.which == 13) { " +
+        response.renderOnDomReadyJavaScript("$('#" + confirmInput.getMarkupId() + "').bind('keypress', function (e) {" +
+                                            "    if (e.which == 13 && $('#" + confirmInput.getMarkupId() + "').val().trim().toLowerCase() != 'delete';) { " +
                                             "        e.preventDefault(); " +
                                             "    } " +
                                             "});");
