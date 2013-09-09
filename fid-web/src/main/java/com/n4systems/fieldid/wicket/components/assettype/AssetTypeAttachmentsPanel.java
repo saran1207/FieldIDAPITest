@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.assettype;
 
+import com.google.common.io.Files;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
@@ -21,18 +22,24 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.image.resource.BlobImageResource;
+import org.apache.wicket.markup.html.image.resource.BufferedDynamicImageResource;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.resource.ContextRelativeResource;
+import org.apache.wicket.request.resource.DynamicImageResource;
+import org.apache.wicket.request.resource.IResource;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,8 +74,21 @@ public class AssetTypeAttachmentsPanel extends Panel {
 
                 WebComponent image;
                 if (item.getModelObject().isImage()) {
-                    String imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetTypeAttachedFile.action?fileName=" + item.getModelObject().getFileName().replace(" ", "+") + "&uniqueID=" + assetTypeModel.getObject().getId() + "&attachmentID=" + item.getModelObject().getId());
-                    item.add(image = new ExternalImage("attachmentImage", imageUrl));
+                    if(item.getModelObject().isNew()) {
+                        item.add(image = new Image("attachmentImage",new DynamicImageResource() {
+                            @Override
+                            protected byte[] getImageData(Attributes attributes) {
+                                try {
+                                    return Files.toByteArray(PathHandler.getTempFileInRoot(item.getModelObject().getFileName()));
+                                } catch (IOException e) {
+                                    return new byte[0];
+                                }
+                            }
+                        }));
+                    }else {
+                        String imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetTypeAttachedFile.action?fileName=" + item.getModelObject().getFileName().replace(" ", "+") + "&uniqueID=" + assetTypeModel.getObject().getId() + "&attachmentID=" + item.getModelObject().getId());
+                        item.add(image = new ExternalImage("attachmentImage", imageUrl));
+                    }
                     image.add(new AttributeModifier("class", "attachmentImage"));
                 } else {
                     item.add(image = new Image("attachmentImage", new ContextRelativeResource("images/file-icon.png")));
