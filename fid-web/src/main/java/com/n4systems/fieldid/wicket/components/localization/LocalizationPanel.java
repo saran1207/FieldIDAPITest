@@ -83,6 +83,11 @@ public class LocalizationPanel extends Panel {
     protected String getLabelFor(LocalizedField field) {
         String className = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL,field.getEntity().getClass().getSimpleName());
         String label = String.format("label.%s.%s", className,field.getName());
+        if (field.getOgnl().contains("@")) {
+            int i = field.getOgnl().lastIndexOf(".");    // e.g. criteria.recommendations@    -->    label.recommendations.
+            int j = field.getOgnl().lastIndexOf("@");
+            label = "label."+field.getOgnl().substring(i+1,j);
+        }
         return new FIDLabelModel(label).getObject();
     }
 

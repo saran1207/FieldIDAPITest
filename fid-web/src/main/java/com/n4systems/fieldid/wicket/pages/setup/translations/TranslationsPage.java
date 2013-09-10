@@ -103,11 +103,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
 
     protected String getCssFor(LocalizedField field) {
         RenderHint renderHint = renderingHintMap.get(field.getOgnl());
-        if (renderHint==null) {
-            logger.warn("can't find rendering hint for " + field.getName() + ".  Using default values for css class");
-            return field.getOgnl().replace('.','-');
-        }
-        return renderHint.css;
+        return renderHint==null ? "" : renderHint.css;
     }
 
     @Override
@@ -116,6 +112,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
         response.renderCSSReference("pages/new/localization.css");
     }
 
+    // TODO DD : change this to inclusion based??  use ognl instead of Field as parameter?
     protected boolean isFiltered(Field field) {
         return excludedNames.contains(field.getName());
     }
