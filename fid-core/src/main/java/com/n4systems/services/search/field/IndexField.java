@@ -21,4 +21,8 @@ public interface IndexField {
 
     boolean isDate();
 
+    boolean isInternal();
+
+    boolean isNonDisplayedFixedAttribute();
+
 }
