@@ -89,7 +89,7 @@ table .schedule-options {
 	font-size: 16px;
 }
 .new-rules p {
-	margin: 4px 0 20px;
+	margin: 4px 0 15px;
 	border-bottom: 1px solid #ccc;
 	padding-bottom: 8px;
 }
@@ -124,7 +124,7 @@ table .schedule-options {
 	}
 .new-rules .btn {
 	float: right;
-	margin: 10px 20px 0 0;
+	margin: 10px 5px 0 0;
 }
 
 .chzn-container, 
@@ -170,7 +170,7 @@ div.dialog-modal div.w_caption {
 
 /* errors in modal window */
 #formErrors .formErrors {
-	padding: 5px;
+	padding: 0px;
 	margin-top: 5px;
 }
 .formErrors h2 {
