@@ -60,6 +60,9 @@ public abstract class AbstractUserResource extends SetupDataResource<ApiUser, Us
 		apiUser.setTenant(apiTenantResource.convertEntityToApiModel(user.getOwner().getPrimaryOrg()));
 		apiUser.setIdentifier(user.getIdentifier());
 		apiUser.setGroupIds(convertGroups(user.getGroups()));
+		apiUser.getLockoutPolicy().setLockoutDuration(user.getTenant().getSettings().getAccountPolicy().getLockoutDuration());
+		apiUser.getLockoutPolicy().setMaxAttempts(user.getTenant().getSettings().getAccountPolicy().getMaxAttempts());
+		apiUser.getLockoutPolicy().setLockoutOnMobile(user.getTenant().getSettings().getAccountPolicy().isLockoutOnMobile());
 		
 		OfflineProfile offlineProfile = offlineProfileService.find(user);
 		if (offlineProfile != null) {
