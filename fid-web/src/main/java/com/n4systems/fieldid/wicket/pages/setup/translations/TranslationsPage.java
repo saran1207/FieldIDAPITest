@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.wicket.components.localization.LocalizationPanel;
 import com.n4systems.fieldid.wicket.components.localization.LocalizedField;
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -13,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -43,6 +45,8 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
             "instructions"
             );
 
+    protected final ModalWindow dialog;
+
     protected TranslationsPage() {
         super();
         excludedNames.addAll(initExcludedFields());
@@ -55,6 +59,13 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                     }
                 });
         add(new Form("form").add(choice));
+        add(dialog = new FIDModalWindow("dialog").setInitialHeight(600).setInitialWidth(400));
+        dialog.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
+            @Override public void onClose(AjaxRequestTarget target) {
+
+            }
+        });
+
         add(localizationPanel = new WebMarkupContainer(LOCALIZATION_PANEL_ID).setOutputMarkupId(true));
     }
 
@@ -89,16 +100,25 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
         } else {
             EntityWithTenant entity = (EntityWithTenant) modelObject;
             replace(localizationPanel = new LocalizationPanel(LOCALIZATION_PANEL_ID, new EntityModel(entity.getClass(), entity)) {
-                @Override protected boolean ignoreField(Field field) {
+                @Override protected boolean isFieldIgnored(Field field) {
                     return TranslationsPage.this.isFiltered(field);
                 }
 
                 @Override protected String getCssFor(ListItem<LocalizedField> item) {
                     return TranslationsPage.this.getCssFor(item.getModelObject());
                 }
+
+                @Override protected Component createLinksForItem(String id, ListItem<LocalizedField> item) {
+                    Component component = TranslationsPage.this.createLinksForItem(id, item);
+                    return component!=null ? component : super.createLinksForItem(id, item);
+                }
             }.setOutputMarkupId(true));
         }
         target.add(get(LOCALIZATION_PANEL_ID));
+    }
+
+    protected Component createLinksForItem(String id, ListItem<LocalizedField> item) {
+        return null;
     }
 
     protected String getCssFor(LocalizedField field) {
