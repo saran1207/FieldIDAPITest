@@ -50,7 +50,8 @@ public class AssetTypeAttributePanel extends Panel {
     private SortableAjaxBehavior sortableAjaxBehavior;
 
     private final List<String> attributeTypes = getAttributeTypes();
-    private final static String DELIMITER = ",";
+    private final static String DELIMITER = "|";
+
 
     public AssetTypeAttributePanel(String id, IModel<AssetType> assetTypeModel) {
         super(id, assetTypeModel);
