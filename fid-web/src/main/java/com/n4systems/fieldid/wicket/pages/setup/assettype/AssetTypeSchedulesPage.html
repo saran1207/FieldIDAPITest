@@ -65,14 +65,12 @@
         </div>
     </div>
 
-    <div wicket:id="blankSlate">
-        <p>
-            <label wicket:id="message"/>
-            <a wicket:id="associateLink"><wicket:message key="message.asset_type_schedule.blank_slate.link"/></a>
-        </p>
+    <div wicket:id="blankSlate" class="blank-slate">
+        <p wicket:id="message"></p>
+        <a wicket:id="associateLink"><wicket:message key="message.asset_type_schedule.blank_slate.link"/></a>
     </div>
 
-    <wicket:fragment wicket:id="title"><label wicket:id="name"/> <span class="bold"><wicket:message key="label.schedule_rules"/></span></wicket:fragment>
+    <wicket:fragment wicket:id="title"><label style="font-weight:normal;" wicket:id="name"/> <span><wicket:message key="label.schedule_rules"/></span></wicket:fragment>
 
 </wicket:extend>
 </html>

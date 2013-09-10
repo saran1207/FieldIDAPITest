@@ -156,3 +156,13 @@ select.time {
 div.dialog-modal div.w_caption {
 	padding: 0;
 }
+
+.blank-slate {
+	font-size: 14px;
+	background-color: #e3e3e3;
+	text-align: center;
+	margin: 20px 0px;
+	border: 2px solid #666;
+	padding: 10px;
+	line-height: 20px;
+}
