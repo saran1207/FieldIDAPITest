@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.setup.assettype;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
+import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.wicket.components.assettype.FrequencyFormPanel;
 import com.n4systems.fieldid.wicket.components.assettype.RecurrenceFormPanel;
@@ -26,6 +27,7 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -54,6 +56,9 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
     @SpringBean
     private AssetTypeScheduleService assetTypeScheduleService;
 
+    @SpringBean
+    private AssociatedEventTypesService associatedEventTypesService;
+
     private WebMarkupContainer schedules;
     private WebMarkupContainer filterActions;
     private ListView frequencyList;
@@ -70,7 +75,11 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
         super(params);
         assetType = Model.of(assetTypeService.getAssetType(params.get("uniqueID").toLong()));
 
-        add(schedules = new WebMarkupContainer("schedules"));
+        WebMarkupContainer scheduleContent = new WebMarkupContainer("scheduleContent");
+
+        add(scheduleContent);
+
+        scheduleContent.add(schedules = new WebMarkupContainer("schedules"));
         schedules.setOutputMarkupId(true);
         schedules.add(frequencyList = new ListView<AssetTypeSchedule>("frequency", getFrequencies()) {
 
@@ -124,13 +133,13 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
             }
         });
 
-        add(frequencyModalWindow = new DialogModalWindow("addFrequency").setInitialWidth(480).setInitialHeight(280));
+        scheduleContent.add(frequencyModalWindow = new DialogModalWindow("addFrequency").setInitialWidth(480).setInitialHeight(280));
         frequencyModalWindow.setContent(getFrequencyForm());
 
-        add(recurrenceModalWindow = new DialogModalWindow("addRecurrence").setInitialWidth(480).setInitialHeight(280));
+        scheduleContent.add(recurrenceModalWindow = new DialogModalWindow("addRecurrence").setInitialWidth(480).setInitialHeight(280));
         recurrenceModalWindow.setContent(getRecurrenceForm());
         WebMarkupContainer scheduleActions;
-        add(scheduleActions = new WebMarkupContainer("scheduleActions"));
+        scheduleContent.add(scheduleActions = new WebMarkupContainer("scheduleActions"));
 
         scheduleActions.add(new AjaxLink<Void>("scheduleFrequency") {
             @Override
@@ -146,7 +155,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
             }
         });
 
-        add(filterActions = new WebMarkupContainer("filters"));
+        scheduleContent.add(filterActions = new WebMarkupContainer("filters"));
         filterActions.setOutputMarkupId(true);
 
         filterActions.add(showAllLink = new AjaxLink<Void>("showAll") {
@@ -187,6 +196,18 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
             }
         });
         showFrequencyLink.add(new Label("totalFrequency", getTotalFrequency()));
+
+        WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
+        add(blankSlate);
+        blankSlate.add(new Label("message", new FIDLabelModel("message.asset_type_schedule.blank_slate", assetType.getObject().getDisplayName())));
+        blankSlate.add(new BookmarkablePageLink("associateLink", EventTypeAssociationsPage.class, PageParametersBuilder.uniqueId(assetType.getObject().getId())));
+
+        scheduleContent.setVisible(hasAssociatedEvents());
+        blankSlate.setVisible(!hasAssociatedEvents());
+    }
+
+    private boolean hasAssociatedEvents() {
+        return !associatedEventTypesService.getAssociatedEventTypes(assetType.getObject(), null).isEmpty();
     }
 
     private RecurrenceFormPanel getRecurrenceForm() {
@@ -305,12 +326,8 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        //response.renderCSSReference("style/newCss/asset/actions-menu.css");
         response.renderCSSReference("style/newCss/component/buttons.css");
         response.renderCSSReference("style/newCss/assetType/assetTypeSchedules.css");
-
-        //response.renderJavaScriptReference("javascript/subMenu.js");
-        //response.renderOnDomReadyJavaScript("subMenu.init();");
     }
 
     @Override
