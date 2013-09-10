@@ -1,0 +1,156 @@
+/* Tabbed navigation */
+.options {
+	border-color: #c7c7c9;
+	margin-bottom: 15px;
+}
+.options li {
+	-webkit-border-radius: 2px;
+	-moz-border-radius: 2px;
+	border-radius: 2px;
+	border-color: #fff;
+	background: none;
+	margin-left: 0;
+}
+	.options li.selected {
+		border-color: #c7c7c9;
+		/*padding: 6px 16px;*/
+	}
+	.options li.selected,
+	.options li a {
+		padding: 8px 18px;
+		bottom: -2px;
+	}
+
+
+/* Chosen plugin overrides */
+.chzn-container {
+  margin: 4px 0 10px;
+}
+select {
+	 width: 285px;
+}
+.chzn-single.chzn-default,
+.chzn-container-single .chzn-single {
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  height: 25px;
+  padding-top: 2px;
+  border-color: #c7c7c9;
+}
+.chzn-container-single .chzn-single span,
+.chzn-container-single .chzn-default {
+  color: #7a7a7a;
+}
+.chzn-container-single .chzn-single {
+  line-height: 20px;
+}
+.chzn-container .chzn-results .highlighted {
+  background-color: #dddddd;
+  background-image: none;
+  color: #7a7a7a;
+}
+
+/* Translation form */
+.translation table {
+	width: 100%;
+	margin-top: 30px;
+	font-size: 13px;
+}
+.translation td {
+  padding: 0 10px;
+  width: 25%;
+  display: inline-block;
+}
+.translation tr {
+  border-bottom: 1px solid #eee;
+}
+.translation .title {
+  font-weight: bold;
+  color: #444;
+  font-weight: 600;
+}
+input {
+	border: 1px solid #c7c7c9;
+	height: 25px;
+	color: #3a3a3a;
+}
+
+/*
+.localization td {
+  padding: 0 10px;
+  width: 25%;
+  display: inline-block;
+}
+.localization .language-select {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+.localization .language-select select {
+  width: 140px;
+}
+.localization form {
+  margin-top: 20px;
+}
+.localization form input,
+.localization form textarea {
+  margin: 4px 0 8px;
+}
+.localization form .chzn-container {
+  width: 284px!important;
+}
+.localization .form-horizontal {
+  margin-left: 5px;
+}
+.localization .form-horizontal label {
+  text-align: left;
+  padding-left: 12px;
+  font-weight: bold;
+}
+.localization table {
+  margin-top: 25px;
+}
+.localization .title {
+  font-weight: bold;
+  color: #444;
+  font-weight: 600;
+}
+.localization .top-level {
+  border-top: 1px solid #eee;
+}
+.localization .top-level input {
+  margin-top: 10px;
+}
+.localization .top-level:first-child {
+  border: none;
+}
+.localization .top-level .title {
+  color: #000;
+  font-weight: bold;
+}
+.localization .modal {
+  display: none;
+  border: 2px solid #ddd;
+  padding: 20px;
+  width: 326px;
+  position: absolute;
+  top: 30%;
+  left: 40%;
+  background: #fff;
+}
+.localization .modal ul {
+  margin: 0;
+  padding: 0;
+}
+.localization .modal ul li {
+  list-style-type: none;
+}
+.localization .modal.observations {
+  width: 400px;
+}
+.localization .modal textarea {
+  width: 360px;
+  height: 55px;
+}
+*/
