@@ -76,7 +76,9 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                 aNavItem().label("title.asset_type").page(AssetTypeTranslationsPage.class).build(),
                 aNavItem().label("label.eventtypegroup").page(EventTypeGroupTranslationsPage.class).build(),
                 aNavItem().label("label.event_type").page(EventTypeTranslationsPage.class).build(),
-                aNavItem().label("label.eventbook").page(EventBookTranslationsPage.class).build()
+                aNavItem().label("label.eventbook").page(EventBookTranslationsPage.class).build(),
+                aNavItem().label("label.assetstatus").page(AssetStatusTranslationsPage.class).build(),
+                aNavItem().label("label.event_status").page(EventStatusTranslationsPage.class).build()
         ));
     }
 
@@ -94,7 +96,6 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                 @Override protected String getCssFor(ListItem<LocalizedField> item) {
                     return TranslationsPage.this.getCssFor(item.getModelObject());
                 }
-
             }.setOutputMarkupId(true));
         }
         target.add(get(LOCALIZATION_PANEL_ID));
@@ -134,8 +135,5 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
         }
 
     }
-
-
-
 
 }
