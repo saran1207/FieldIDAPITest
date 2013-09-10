@@ -6,10 +6,25 @@
 
     <div wicket:id="localization"/>
 
+    <div wicket:id="dialog"/>
+
     <wicket:fragment wicket:id="eventLinks">
         <a wicket:id="scoreGroups" class=""><wicket:message key="label.score_group"/></a>
         <a wicket:id="buttonGroups" class=""><wicket:message key="label.buttongroup"/></a>
         <a wicket:id="observations" class=""><wicket:message key="label.observations"/></a>
+    </wicket:fragment>
+
+
+    <wicket:fragment wicket:id="scoreGroup">
+        <div wicket:id="content"/>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="buttonGroup">
+        <div wicket:id="content"/>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="observations">
+        <div wicket:id="content"/>
     </wicket:fragment>
 
 </wicket:extend>

@@ -43,5 +43,4 @@ public class EventBookTranslationsPage extends TranslationsPage {
         };
     }
 
-
 }

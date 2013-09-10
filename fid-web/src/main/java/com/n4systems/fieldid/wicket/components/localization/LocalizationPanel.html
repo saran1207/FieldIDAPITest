@@ -3,8 +3,7 @@
     <form wicket:id="form" class="translation">
         <div><select wicket:id="language"/></div>
         <table>
-            <!-- add cssClass depending on class.   e.g. Sections will have different than criteria. -->
-            <tr wicket:id="translations">
+            <tr wicket:id="localization">
                 <td wicket:id="label" class="title"></td>
                 <td wicket:id="defaultValue" class=""></td>
                 <td wicket:id="translations">
@@ -13,7 +12,7 @@
                 <td><span wicket:id="misc"/></td>
             </tr>
         </table>
-        <div><a wicket:id="submit"><wicket:message key="hbutton.submit"></wicket:message></a></div>
+        <div><a wicket:id="submit"><wicket:message key="label.save"></wicket:message></a></div>
     </form>
 
 </wicket:panel>

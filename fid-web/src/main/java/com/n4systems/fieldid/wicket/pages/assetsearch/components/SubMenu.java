@@ -112,7 +112,7 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderOnLoadJavaScript("subMenu.init();");
         if (!lightBoxLinks.isEmpty()) {
-            response.renderOnLoadJavaScript("jQuery('."+COLORBOX_CLASS+"').colorbox({maxHeight: '600px', width: '600px', ajax:true});");
+            response.renderOnLoadJavaScript("jQuery('."+COLORBOX_CLASS+"').colorbox({maxHeight: '600px', width: '600px', height:'360px', ajax: true, iframe: true});");
         }
         super.renderHead(response);
     }

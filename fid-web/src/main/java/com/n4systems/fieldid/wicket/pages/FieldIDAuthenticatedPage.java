@@ -60,6 +60,5 @@ public class FieldIDAuthenticatedPage extends FieldIDWicketPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-
     }
 }

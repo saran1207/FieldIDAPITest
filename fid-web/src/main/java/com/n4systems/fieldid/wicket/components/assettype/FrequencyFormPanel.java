@@ -49,7 +49,6 @@ public class FrequencyFormPanel extends Panel {
         super(id, model);
         this.assetType = model;
         assetTypeSchedule = Model.of(new AssetTypeSchedule());
-        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
         add(new FrequencyForm("form", assetTypeSchedule));
     }
 
@@ -61,6 +60,8 @@ public class FrequencyFormPanel extends Panel {
         CheckBox autoScheduleCheck;
         public FrequencyForm(String id, final IModel<AssetTypeSchedule> model) {
             super(id, model);
+
+            add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
             model.getObject().setTenant(FieldIDSession.get().getTenant());
             List<EventType> eventTypes = getEventTypes();

@@ -5,11 +5,13 @@
       lang="en">
 <wicket:panel>
 
-    <div wicket:id="feedbackPanel"/>
+
     <form wicket:id="form" class="new-rules">
+        <div wicket:id="feedbackPanel" />
+        
         <h3>Event Triggered</h3>
         <p>Schedules will be created at the specified interval from the date the last event is completed.</p>
-
+    
         <div class="clearfix">
             <div class="left"><label><wicket:message key="label.schedule_a.uppercase"/></label></div>
             <div class="right"><select wicket:id="eventType"/></div>
@@ -26,7 +28,7 @@
             <div class="left"><input wicket:id="autoSchedule" type="checkbox"></div>
             <div class="right"><label wicket:id="autoScheduleMessage"/></div>
         </div>
-        
+    
         <a wicket:id="submit" class="btn btn-blue btn-sml"><wicket:message key="label.create_event_frequency"/></a>
     </form>
 

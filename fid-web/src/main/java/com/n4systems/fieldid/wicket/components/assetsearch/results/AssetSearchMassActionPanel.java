@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.assetsearch.results;
 
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
-import com.n4systems.fieldid.wicket.pages.print.ExportReportToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.ExportSearchToExcelPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;

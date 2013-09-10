@@ -5,65 +5,72 @@
       lang="en">
 
 <wicket:extend>
-    <div class="clearfix">
-        <h3>Filter by:</h3>
-        <ul wicket:id="filters" class="filters">
-            <li wicket:id="showAll" class="active">
-                <span class="filter-type"><wicket:message key="label.all_rules"/></span> (<span wicket:id="total"/>)
-            </li>
-            <li wicket:id="showRecurring">
-                <span class="filter-type"><wicket:message key="label.recurring"/></span> (<span wicket:id="totalRecurring"/>)</li>
-            <li wicket:id="showFrequency">
-                <span class="filter-type"><wicket:message key="label.event_triggered"/></span> (<span wicket:id="totalFrequency"/>)
-            </li>
-        </ul>
-
-        <div wicket:id="scheduleActions" class="dropdown-btn dropdown-sml">
-            <a href="javascript:void(0);" class="btn btn-blue btn-sml"><wicket:message key="label.create_new_rule"/></a>
-            <ul>
-                <li><a wicket:id="scheduleRecurrence"><wicket:message key="label.recurring"/></a></li>
-                <li><a wicket:id="scheduleFrequency"><wicket:message key="label.event_triggered"/></a></li>
+    <div wicket:id="scheduleContent">
+        <div class="clearfix">
+            <h3>Filter by:</h3>
+            <ul wicket:id="filters" class="filters">
+                <li wicket:id="showAll" class="active">
+                    <span class="filter-type"><wicket:message key="label.all_rules"/></span> (<span wicket:id="total"/>)
+                </li>
+                <li wicket:id="showRecurring">
+                    <span class="filter-type"><wicket:message key="label.recurring"/></span> (<span wicket:id="totalRecurring"/>)</li>
+                <li wicket:id="showFrequency">
+                    <span class="filter-type"><wicket:message key="label.event_triggered"/></span> (<span wicket:id="totalFrequency"/>)
+                </li>
             </ul>
+
+            <div wicket:id="scheduleActions" class="dropdown-btn dropdown-sml">
+                <a href="javascript:void(0);" class="btn btn-blue btn-sml"><wicket:message key="label.create_new_rule"/></a>
+                <ul>
+                    <li><a wicket:id="scheduleRecurrence"><wicket:message key="label.recurring"/></a></li>
+                    <li><a wicket:id="scheduleFrequency"><wicket:message key="label.event_triggered"/></a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div wicket:id="addFrequency"/>
+        <div wicket:id="addRecurrence"/>
+
+        <div wicket:id="schedules">
+            <table class="list">
+                <thead>
+                    <tr>
+                        <th class="schedule"><wicket:message key="label.schedule_type"/></th>
+                        <th class="event"><wicket:message key="label.event_type"/></th>
+                        <th class="frequency"><wicket:message key="label.frequency"/></th>
+                        <th class="for"><wicket:message key="title.for"/></th>
+                        <th class="schedule-options"><wicket:message key="label.options"/></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr wicket:id="frequency">
+                        <td class="schedule"><wicket:message key="label.event_triggered"/></td>
+                        <td class="event" wicket:id="type"></td>
+                        <td class="frequency" wicket:id="recurrence"></td>
+                        <td class="for" wicket:id="owner"></td>
+                        <td class="schedule-options" wicket:id="addOnIdentify"></td>
+                        <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
+                    </tr>
+                    <tr wicket:id="recurringEvent">
+                        <td class="schedule"><wicket:message key="label.recurring"/></td>
+                        <td class="event" wicket:id="eventType"></td>
+                        <td class="frequency"><span wicket:id="recurrence"/> @ <span wicket:id="time"/></td>
+                        <td class="for" wicket:id="org"></td>
+                        <td class="schedule-options" wicket:id="affectAll"></td>
+                        <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div wicket:id="addFrequency"/>
-    <div wicket:id="addRecurrence"/>
-
-    <div wicket:id="schedules">
-        <table class="list">
-            <thead>
-                <tr>
-                    <th class="schedule"><wicket:message key="label.schedule_type"/></th>
-                    <th class="event"><wicket:message key="label.event_type"/></th>
-                    <th class="frequency"><wicket:message key="label.frequency"/></th>
-                    <th class="for"><wicket:message key="title.for"/></th>
-                    <th class="schedule-options"><wicket:message key="label.options"/></th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr wicket:id="frequency">
-                    <td class="schedule"><wicket:message key="label.event_triggered"/></td>
-                    <td class="event" wicket:id="type"></td>
-                    <td class="frequency" wicket:id="recurrence"></td>
-                    <td class="for" wicket:id="owner"></td>
-                    <td class="schedule-options" wicket:id="addOnIdentify"></td>
-                    <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
-                </tr>
-                <tr wicket:id="recurringEvent">
-                    <td class="schedule"><wicket:message key="label.recurring"/></td>
-                    <td class="event" wicket:id="eventType"></td>
-                    <td class="frequency"><span wicket:id="recurrence"/> @ <span wicket:id="time"/></td>
-                    <td class="for" wicket:id="org"></td>
-                    <td class="schedule-options" wicket:id="affectAll"></td>
-                    <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
-                </tr>
-            </tbody>
-        </table>
+    <div wicket:id="blankSlate" class="blank-slate">
+        <p wicket:id="message"></p>
+        <a wicket:id="associateLink"><wicket:message key="message.asset_type_schedule.blank_slate.link"/></a>
     </div>
 
-    <wicket:fragment wicket:id="title"><label wicket:id="name"/> <span class="bold"><wicket:message key="label.schedule_rules"/></span></wicket:fragment>
+    <wicket:fragment wicket:id="title"><label style="font-weight:normal;" wicket:id="name"/> <span><wicket:message key="label.schedule_rules"/></span></wicket:fragment>
 
 </wicket:extend>
 </html>

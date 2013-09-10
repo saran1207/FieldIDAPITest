@@ -1,7 +1,8 @@
 package com.n4systems.fieldid.wicket.components.localization;
 
+import com.google.common.base.CaseFormat;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
@@ -12,8 +13,10 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
@@ -25,6 +28,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import javax.persistence.Transient;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
@@ -43,19 +47,19 @@ public class LocalizationPanel extends Panel {
     public LocalizationPanel(String id, IModel<? extends EntityWithTenant> model) {
         super(id, model);
 
-        add(new Form("form")
-                .add(listView = new ListView<LocalizedField>("translations", createLocalizedFieldsModel()) {
+        add(new ModalWindowForm("form")
+                .add(listView = new ListView<LocalizedField>("localization", createLocalizedFieldsModel()) {
                     @Override
                     protected void populateItem(ListItem<LocalizedField> item) {
-                        item.add(new AttributeAppender("class",Model.of(getCssFor(item))));
+                        item.add(new AttributeAppender("class", Model.of(getCssFor(item))));
                         final LocalizedField field = item.getModelObject();
-                        item.add(new Label("label", Model.of(field.getName())));
+                        item.add(new Label("label", Model.of(getLabelFor(field))));
                         item.add(new Label("defaultValue", Model.of(field.getDefaultValue())));
                         item.add(new TranslationsListView("translations", new PropertyModel(item.getModel(), "translations")));
-                        item.add(createLinksForItem(item));
+                        item.add(createLinksForItem("misc", item));
                     }
                 }.setReuseItems(true))
-                .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
+                .add(chooseLanguage = new DropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
                 .add(new AjaxSubmitLink("submit") {
                     @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         localizationService.save(convertToTranslations());
@@ -65,6 +69,7 @@ public class LocalizationPanel extends Panel {
 
                     }
                 })
+
         );
         chooseLanguage.add(new AjaxFormSubmitBehavior("onchange") {
             @Override protected void onSubmit(AjaxRequestTarget target) {
@@ -77,27 +82,39 @@ public class LocalizationPanel extends Panel {
 
     }
 
+    protected String getLabelFor(LocalizedField field) {
+        String className = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_CAMEL,field.getEntity().getClass().getSimpleName());
+        String label = String.format("label.%s.%s", className,field.getName());
+        if (field.getOgnl().contains("@")) {
+            int i = field.getOgnl().lastIndexOf(".");    // e.g. criteria.recommendations@    -->    label.recommendations.
+            int j = field.getOgnl().lastIndexOf("@");
+            label = "label."+field.getOgnl().substring(i+1,j);
+        }
+        return new FIDLabelModel(label).getObject();
+    }
+
     private LocalizedFieldsModel createLocalizedFieldsModel() {
         return new LocalizedFieldsModel(LocalizationPanel.this.getDefaultModel(), getLanguages()) {
             @Override protected boolean isFiltered(Field field) {
+                boolean result = LocalizationPanel.this.isFieldIgnored(field);
                 Class<?> type = field.getType();
-                if (type.equals(String.class)) {
-                    return !field.isAnnotationPresent(Localized.class);
-                }
-                if (Date.class.isAssignableFrom(type) || Number.class.isAssignableFrom(type) || type.isPrimitive()) {
+                if (field.isAnnotationPresent(Transient.class) || Date.class.isAssignableFrom(type) || Number.class.isAssignableFrom(type) || type.isPrimitive()) {
                     return true;
                 }
-                return LocalizationPanel.this.ignoreField(field);
+                if (type.equals(String.class)) {
+                    result = result || !field.isAnnotationPresent(Localized.class);
+                }
+                return result;
             }
         };
     }
 
-    protected Component createLinksForItem(ListItem<LocalizedField> item) {
+    protected Component createLinksForItem(String misc, ListItem<LocalizedField> item) {
         return new WebMarkupContainer("misc");
     }
 
     protected String getCssFor(ListItem<LocalizedField> item) {
-        return item.getModelObject().getOgnl();
+        return item.getModelObject().getOgnl().replace('.', '-');
     }
 
     private List<Translation> convertToTranslations() {
@@ -105,7 +122,7 @@ public class LocalizationPanel extends Panel {
         return model.getAsTranslations();
     }
 
-    protected boolean ignoreField(Field field) {
+    protected boolean isFieldIgnored(Field field) {
         return false;
     }
 
@@ -129,7 +146,6 @@ public class LocalizationPanel extends Panel {
         }
 
         @Override protected void populateItem(ListItem<Translation> item) {
-            Translation translation = item.getModelObject();
             final Locale itemLanguage = getLanguages().get(item.getIndex());
             item.add(new TextField("translation", new PropertyModel(item.getModel(),"value")) {
                 @Override public boolean isVisible() {
@@ -140,5 +156,21 @@ public class LocalizationPanel extends Panel {
     }
 
 
+    class ModalWindowForm extends Form {
+        public ModalWindowForm(String form) {
+            super(form);
+        }
+
+        @Override
+        public Form<?> getRootForm() {
+            Form<?> form = super.getRootForm();
+
+            if ((findParent(ModalWindow.class) != null) &&
+                    (form.findParent(ModalWindow.class) == null))
+                return this;
+            else
+                return form;
+        }
+    }
 
 }

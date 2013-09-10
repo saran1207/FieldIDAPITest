@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.search;
 
-import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
@@ -8,16 +7,8 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.form.IndicatingAjaxSubmitLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
-import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
-import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
-import com.n4systems.model.search.AssetSearchCriteria;
-import com.n4systems.model.search.SearchCriteriaContainer;
 import com.n4systems.services.search.SearchResult;
 import com.n4systems.services.search.field.IndexField;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
@@ -32,9 +23,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.list.PageableListView;
@@ -44,13 +33,12 @@ import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
-import org.apache.wicket.request.http.handler.RedirectRequestHandler;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
     private static final String HIDE_LIST_JS = "$('#%s').hide();";
@@ -206,51 +194,20 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
         });
         listViewContainer.add(resultForm);
 
-        actions = new WebMarkupContainer("actions") {
+        actions = new WebMarkupContainer("actionsContainer") {
             { setOutputMarkupPlaceholderTag(true); }
             @Override public boolean isVisible() {
                 return !selectedIds.isEmpty();
             }
         };
 
-        actions.add(new SubmitLink("massEventLink") {
-            @Override
-            public void onSubmit() {
-
-                AssetSearchCriteria assetSearchCriteria = createAssetSearchCriteria();
-
-                HttpServletRequest httpServletRequest = ((ServletWebRequest) getRequest()).getContainerRequest();
-                HttpSession session = httpServletRequest.getSession();
-
-                SearchCriteriaContainer<AssetSearchCriteria> container = new LegacyReportCriteriaStorage().storeCriteria(assetSearchCriteria, session);
-
-                String formattedUrl = String.format("/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", container.getSearchId());
-                String destination = ConfigContext.getCurrentContext().getString(ConfigEntry.SYSTEM_PROTOCOL) + "://" + httpServletRequest.getServerName() + httpServletRequest.getContextPath() + formattedUrl;
-
-                getRequestCycle().replaceAllRequestHandlers(new RedirectRequestHandler(destination));
-            }
-        });
-
-        actions.add(new Link("massUpdateLink") {
-            @Override
-            public void onClick() {
-                AssetSearchCriteria assetSearchCriteria = createAssetSearchCriteria();
-                setResponsePage(new MassUpdateAssetsPage(new Model(assetSearchCriteria), AdvancedSearchPage.this));
-            }
-        });
-
-        actions.add(new Link("massScheduleLink") {
-            @Override
-            public void onClick() {
-                AssetSearchCriteria assetSearchCriteria = createAssetSearchCriteria();
-                setResponsePage(new MassSchedulePage(new Model(assetSearchCriteria)));
-            }
-        });
+        actions.add(createActionsPanel("actions", new PropertyModel<Set<String>>(this, "selectedIds")));
 
         resultForm.add(actions);
     }
 
     protected abstract Component createDetailsPanel(String id, IModel<SearchResult> resultModel);
+    protected abstract Component createActionsPanel(String id, IModel<Set<String>> selectedItemsModel);
 
     @Override
     protected Component createTitleLabel(String labelId) {
@@ -318,24 +275,6 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
         @Override
         public void detach() {
         }
-    }
-
-    private AssetSearchCriteria createAssetSearchCriteria() {
-
-        List<Long> ids = new ArrayList<Long>();
-
-        for (String selectedId : selectedIds) {
-            ids.add(Long.parseLong(selectedId));
-        }
-
-        AssetSearchCriteria assetSearchCriteria = new AssetSearchCriteria();
-
-        MultiIdSelection multiIdSelection = new MultiIdSelection();
-        multiIdSelection.addAllIds(ids);
-
-        assetSearchCriteria.setSelection(multiIdSelection);
-
-        return assetSearchCriteria;
     }
 
     class NewSearchForm extends Form {
@@ -426,11 +365,11 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
         }
 
         @Override public void setObject(List<String> object) {
-            ; // do nothing.
+            // do nothing.
         }
 
         @Override public void detach() {
-            ; // do nothing.
+            // do nothing.
         }
     }
 
@@ -454,13 +393,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
         return String.format("(%d items)", getNumSelectedIds());
     }
 
-
     class PageLockingDecorator extends AjaxCallDecorator {
-
-        public PageLockingDecorator() {
-            super();
-        }
-
         @Override
         public CharSequence decorateOnFailureScript(Component c, CharSequence script) {
             return ENABLE_INPUTS_JS + script;
