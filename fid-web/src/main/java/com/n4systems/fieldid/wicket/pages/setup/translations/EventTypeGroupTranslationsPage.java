@@ -15,7 +15,6 @@ public class EventTypeGroupTranslationsPage extends TranslationsPage<EventTypeGr
 
     public EventTypeGroupTranslationsPage() {
         super();
-        add(new RenderHint("eventtypegroups.name","Name", "title"));
     }
 
     @Override

@@ -15,11 +15,7 @@ public class AssetTypeTranslationsPage  extends TranslationsPage<AssetType> {
     public AssetTypeTranslationsPage() {
         super();
         // TODO DD : need to add sorting so name is first field.
-        add(new RenderHint("assettypes.manufactureCertificateText", "Manufacturer Certificate Text", ""));
-        add(new RenderHint("assettypes.warnings", "Warnings", ""));
-        add(new RenderHint("assettypes.name", "Name", "top-level"));
-        add(new RenderHint("assettypes.descriptionTemplate", "Description Template", "top-level"));
-        add(new RenderHint("infofield.name", "Attribute Name", "top-level"));
+        add(new RenderHint("assettypes.descriptionTemplate", "top-level"));
     }
 
     @Override

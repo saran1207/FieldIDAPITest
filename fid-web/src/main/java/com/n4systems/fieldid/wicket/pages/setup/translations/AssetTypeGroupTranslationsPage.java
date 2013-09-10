@@ -15,7 +15,6 @@ public class AssetTypeGroupTranslationsPage extends TranslationsPage<AssetTypeGr
 
     public AssetTypeGroupTranslationsPage() {
         super();
-        add(new RenderHint("assettypegroups.name","Name", ""));
     }
 
     @Override

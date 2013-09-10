@@ -47,7 +47,7 @@ public class LocalizationPanel extends Panel {
         super(id, model);
 
         add(new Form("form")
-                .add(listView = new ListView<LocalizedField>("translations", createLocalizedFieldsModel()) {
+                .add(listView = new ListView<LocalizedField>("localization", createLocalizedFieldsModel()) {
                     @Override
                     protected void populateItem(ListItem<LocalizedField> item) {
                         item.add(new AttributeAppender("class",Model.of(getCssFor(item))));

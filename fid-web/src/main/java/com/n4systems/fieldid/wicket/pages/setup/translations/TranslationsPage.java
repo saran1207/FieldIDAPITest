@@ -128,7 +128,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
         String css;
         String ognl;
 
-        public RenderHint(String ognl, String label, String css) {
+        public RenderHint(String ognl, String css) {
             this.ognl = ognl;
             this.css = css;
         }

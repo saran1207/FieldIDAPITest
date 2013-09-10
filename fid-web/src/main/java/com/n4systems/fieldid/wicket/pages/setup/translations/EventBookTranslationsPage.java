@@ -18,7 +18,6 @@ public class EventBookTranslationsPage extends TranslationsPage {
 
     public EventBookTranslationsPage() {
         super();
-        add(new RenderHint("eventbooks.name","Name", ""));
     }
 
     protected List<String> initExcludedFields() {
