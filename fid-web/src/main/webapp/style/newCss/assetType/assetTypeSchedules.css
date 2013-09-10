@@ -94,7 +94,7 @@ table .schedule-options {
 	padding-bottom: 8px;
 }
 .new-rules .clearfix {
-	margin-bottom: 10px;
+	margin-bottom: 8px;
 }
 .new-rules .left {
 	width: 85px;
@@ -147,7 +147,7 @@ select.time {
 	margin-right: 115px;
 }
 
-/* hacks */
+/* hack */
 .w_content_container {
 	overflow: visible!important;
 }
@@ -157,6 +157,7 @@ div.dialog-modal div.w_caption {
 	padding: 0;
 }
 
+/* message for no event type associations */
 .blank-slate {
 	font-size: 14px;
 	background-color: #e3e3e3;
@@ -166,3 +167,17 @@ div.dialog-modal div.w_caption {
 	padding: 10px;
 	line-height: 20px;
 }
+
+/* errors in modal window */
+#formErrors .formErrors {
+	padding: 5px;
+	margin-top: 5px;
+}
+.formErrors h2 {
+	display: none;
+}
+.formErrors .feedbackPanel {
+	margin-left: 0;
+}
+
+
