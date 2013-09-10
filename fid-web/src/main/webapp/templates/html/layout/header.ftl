@@ -85,7 +85,7 @@
 					</#if>
 
 					<li>
-						<a href="/fieldid/w/wicket/search" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" />
+						<a href="/fieldid/w/search" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" />
                             <#if securityGuard.isGlobalSearchEnabled()>
                                 <img src="/fieldid/images/down-arrow.png" />
                             </#if>
@@ -103,8 +103,8 @@
 
 
                     <li>
-                        <a href="/fieldid/w/wicket/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" />
-                            <#if securityGuard.isCriteriaTrendsEnabled()>
+                        <a href="/fieldid/w/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" />
+                            <#if securityGuard.isCriteriaTrendsEnabled() || securityGuard.isAdvancedEventSearchEnabled()>
                                 <img src="/fieldid/images/down-arrow.png" />
                             </#if>
                         </a>
@@ -116,11 +116,19 @@
                                 </li>
                             </ul>
                         </#if>
+                    <#if securityGuard.isAdvancedEventSearchEnabled()>
+                        <ul class="sub_menu">
+                            <li>
+                                <a href="<@s.url value='/w/advancedEventSearch'/>" ><@s.text name="nav.advanced_event_search" /></a>
+                            </li>
+                        </ul>
+                    </#if>
+
                     </li>
 
                     <#if securityGuard.lotoProceduresEnabled>
                         <li>
-                            <a href="/fieldid/w/wicket/procedure" class="speedLink textLink" id="menuProcedure"><@s.text name="speed.procedures" /></a>
+                            <a href="/fieldid/w/procedure" class="speedLink textLink" id="menuProcedure"><@s.text name="speed.procedures" /></a>
                         </li>
                     </#if>
 

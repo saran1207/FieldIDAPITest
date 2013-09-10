@@ -91,23 +91,9 @@
         <form wicket:id="resultForm">
 
             <!-- mass actions button -->
-            <div class="actions show">
-                <ul>
-                    <li wicket:id="actions" class="menu">
-                        <a href="javascript:void(0);" class="mattButton"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
-                        <ul class="menu-items">
-                            <wicket:enclosure>
-                                <li><a wicket:id="massUpdateLink"><wicket:message key="label.massupdate2"/></a></li>
-                            </wicket:enclosure>
-                            <wicket:enclosure>
-                                <li><a wicket:id="massScheduleLink"><wicket:message key="label.massschedule" /></a></li>
-                            </wicket:enclosure>
-                            <wicket:enclosure>
-                                <li><a wicket:id="massEventLink"><wicket:message key="label.perform_event" /></a></li>
-                            </wicket:enclosure>
-                        </ul>
-                    </li>
-                </ul>
+            <div class="actions show" wicket:id="actionsContainer">
+                <div wicket:id="actions">
+                </div>
             </div>
 
             <!-- blank slate -->

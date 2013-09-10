@@ -79,7 +79,7 @@ public class MassUpdateEventsPanel extends Panel {
         return new DeleteDetailsPanel("massUpdatePanel", eventSearchCriteria, previousPanel) {
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportPage((EventReportCriteria)eventSearchCriteria.getObject()));
+                setResponsePage(new ReportPage(eventSearchCriteria.getObject()));
             }
 
             @Override
@@ -94,7 +94,7 @@ public class MassUpdateEventsPanel extends Panel {
         return new EditDetailsPanel("massUpdatePanel", eventSearchCriteria, previousPanel) {
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportPage((EventReportCriteria)eventSearchCriteria.getObject()));
+                setResponsePage(new ReportPage(eventSearchCriteria.getObject()));
             }
             
             @Override
@@ -109,7 +109,7 @@ public class MassUpdateEventsPanel extends Panel {
 		return new ConfirmEditPanel("massUpdatePanel", eventSearchCriteria, currentPanel, massUpdateEventModel) {
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportPage((EventReportCriteria)eventSearchCriteria.getObject()));
+                setResponsePage(new ReportPage(eventSearchCriteria.getObject()));
             }
 		};
 	}
@@ -118,7 +118,7 @@ public class MassUpdateEventsPanel extends Panel {
         return new ConfirmDeletePanel("massUpdatePanel", eventSearchCriteria, previousPanel) {
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportPage((EventReportCriteria)eventSearchCriteria.getObject()));
+                setResponsePage(new ReportPage(eventSearchCriteria.getObject()));
             }
         };
     }

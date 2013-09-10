@@ -6,6 +6,12 @@
 	box-sizing: border-box;         /* Opera/IE 8+ */
 	*behavior: url(/fieldid/javascript/boxsizing.htc); /* IE 6 & 7 */
 }
+/* need to reset this border box stuff so colorbox keeps working */
+#colorbox {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+}
 body {
 	background: #fff;
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 

@@ -8,7 +8,9 @@ import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.SearchCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -29,7 +31,6 @@ public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthent
 
         FieldIDSession.get().getSessionUser();
 
-
         storeLocalizedNamesInColumns(criteria.getObject());
         final DownloadLink downloadLink = createDownloadLink();
         add(new RenameDownloadForm("renameForm", new Model<DownloadLink>(downloadLink)));
@@ -42,15 +43,24 @@ public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthent
             super(id, downloadLink);
 
             add(new TextField<String>("name", new PropertyModel<String>(downloadLink, "name")));
-            add(new Button("saveAndGoToDownloadsButton"));
+            add(new AjaxButton("saveAndGoToDownloadsButton") {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    target.appendJavaScript("window.parent.location = '/fieldid/showDownloads.action';");
+                }
+
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                }
+            });
             add(new AjaxSubmitLink("saveAndCloseLink") {
                 @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    target.appendJavaScript("jQuery.colorbox.close();");
+                    target.appendJavaScript("window.parent.jQuery.colorbox.close();");
                     gotoDownloads = false;
                 }
 
                 @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    target.appendJavaScript("jQuery.colorbox.close();");
+                    target.appendJavaScript("window.parent.jQuery.colorbox.close();");
                     gotoDownloads = false;
                 }
             });
@@ -60,9 +70,6 @@ public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthent
         @Override
         protected void onSubmit() {
             persistenceService.update(getModelObject());
-            if (gotoDownloads) {
-                throw new RedirectToUrlException("/showDownloads.action");
-            }
         }
 
     }
@@ -78,4 +85,10 @@ public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthent
 
     protected abstract DownloadLink createDownloadLink();
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/pageStyles/downloads.css");
+        response.renderCSSReference("style/fieldid.css");
+    }
 }

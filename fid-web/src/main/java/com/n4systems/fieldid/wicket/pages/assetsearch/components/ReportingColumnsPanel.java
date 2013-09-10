@@ -31,7 +31,6 @@ public class ReportingColumnsPanel extends AbstractColumnsPanel<EventReportCrite
     protected void updateColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel) {
         super.updateColumns(dynamicAssetColumnsModel, dynamicEventColumnsModel);
         final IModel<EventTypeGroup> eventTypeGroupModel = new PropertyModel<EventTypeGroup>(getDefaultModel(), "eventTypeGroup");
-        final IModel<EventType> eventTypeModel = new PropertyModel<EventType>(getDefaultModel(), "eventType");
         EventTypesForTenantModel availableEventTypesModel  = new EventTypesForTenantModel(eventTypeGroupModel);
         if (!model.getObject().isReportAlreadyRun()) {
             updateDynamicEventColumns(null, availableEventTypesModel.getObject());
