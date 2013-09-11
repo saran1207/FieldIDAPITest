@@ -16,8 +16,7 @@ import java.util.List;
 public class ScoreGroup extends ArchivableEntityWithTenant implements Listable {
 
     @Column(nullable=false)
-    private @Localized
-    String name;
+    private @Localized String name;
 
     @OneToMany(fetch= FetchType.EAGER, cascade= CascadeType.ALL)
     @JoinTable(name="score_groups_scores", joinColumns = @JoinColumn(name="score_group_id"), inverseJoinColumns = @JoinColumn(name="score_id"))

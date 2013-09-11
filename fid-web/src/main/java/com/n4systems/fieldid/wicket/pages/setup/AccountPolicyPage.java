@@ -5,6 +5,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -41,6 +42,7 @@ public class AccountPolicyPage extends SetupPage {
 
             add(addIntegerRangeTextField("maxAttempts",1,10));
             add(addTextField("lockoutDuration",0));
+			add(new CheckBox("lockoutOnMobile"));
             
             add(new AjaxButton("saveButton") {
 				private static final long serialVersionUID = 1L;

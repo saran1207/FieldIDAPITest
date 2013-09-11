@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.wicket.components.localization.LocalizationPanel;
 import com.n4systems.fieldid.wicket.components.localization.LocalizedField;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -40,11 +39,8 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
     protected Map<String, RenderHint> renderingHintMap = Maps.newHashMap();
 
     protected List<String> excludedNames= Lists.newArrayList("owner", "tenant", "createdBy", "modifiedBy", "state",
-            "allInfoOptionsForCasadeDeleteOnlyDoNotInteractWithThisSet", "unitOfMeasure",
-            /* DD sept 2013 : we are not handling criteria instructions yet... .: they are in the ignore list */
-            "instructions"
+            "allInfoOptionsForCasadeDeleteOnlyDoNotInteractWithThisSet", "unitOfMeasure"
             );
-
     protected final ModalWindow dialog;
 
     protected TranslationsPage() {
@@ -59,12 +55,9 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                     }
                 });
         add(new Form("form").add(choice));
-        add(dialog = new FIDModalWindow("dialog").setInitialHeight(600).setInitialWidth(400));
-        dialog.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
-            @Override public void onClose(AjaxRequestTarget target) {
 
-            }
-        });
+        dialog = new ModalWindow("dialog");
+        add(new Form("dialogForm").add(dialog));
 
         add(localizationPanel = new WebMarkupContainer(LOCALIZATION_PANEL_ID).setOutputMarkupId(true));
     }
@@ -100,8 +93,8 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
         } else {
             EntityWithTenant entity = (EntityWithTenant) modelObject;
             replace(localizationPanel = new LocalizationPanel(LOCALIZATION_PANEL_ID, new EntityModel(entity.getClass(), entity)) {
-                @Override protected boolean isFieldIgnored(Field field) {
-                    return TranslationsPage.this.isFiltered(field);
+                @Override protected boolean isFieldIgnored(Object entity, Field field) {
+                    return TranslationsPage.this.isFiltered(entity,field);
                 }
 
                 @Override protected String getCssFor(ListItem<LocalizedField> item) {
@@ -129,11 +122,13 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("pages/new/localization.css");
+        //response.renderCSSReference("pages/new/localization.css");
+        response.renderCSSReference("style/newCss/component/buttons.css");
+        response.renderCSSReference("style/pageStyles/localization.css");
     }
 
     // TODO DD : change this to inclusion based??  use ognl instead of Field as parameter?
-    protected boolean isFiltered(Field field) {
+    protected boolean isFiltered(Object entity, Field field) {
         return excludedNames.contains(field.getName());
     }
 
@@ -150,7 +145,6 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
             this.ognl = ognl;
             this.css = css;
         }
-
     }
 
 }

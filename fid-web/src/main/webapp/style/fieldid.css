@@ -2478,4 +2478,8 @@ inputsWithLegend .legend span {
 .clearfix {
     *zoom: 1;
 }
+ /* UTILITY CLASSES */
+.pull-right {
+	float: right;
+}
 

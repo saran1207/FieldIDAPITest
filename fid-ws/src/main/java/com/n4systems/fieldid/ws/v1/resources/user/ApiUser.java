@@ -21,6 +21,8 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
 	private ApiTenant tenant;
 	private String identifier;
 	private List<Long> groupIds;
+	private ApiUserLockoutPolicy lockoutPolicy = new ApiUserLockoutPolicy();
+
 	
 	public String getUserId() {
 		return userId;
@@ -137,4 +139,11 @@ public class ApiUser extends ApiReadonlyModelWithOwner {
         return groupIds.get(0);
     }
 
+	public ApiUserLockoutPolicy getLockoutPolicy() {
+		return lockoutPolicy;
+	}
+
+	public void setLockoutPolicy(ApiUserLockoutPolicy lockoutPolicy) {
+		this.lockoutPolicy = lockoutPolicy;
+	}
 }

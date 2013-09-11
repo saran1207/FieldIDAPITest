@@ -1,0 +1,100 @@
+#contentHeader {
+	margin-bottom: -1px;
+}
+
+/* Tabbed navigation */
+.options {
+	border: none;
+}
+.options li {
+	margin-left: 0;
+	background: none;
+	border: 1px solid transparent;
+}
+
+	.options li.selected {
+		border-color: #c7c7c9;
+		border-bottom-color: transparent;
+		background: #fff;
+		-webkit-border-radius: 2px;
+		-moz-border-radius: 2px;
+		border-radius: 2px;
+	}
+	.options li.selected,
+	.options li a {
+		padding: 8px 18px;
+	}
+
+	.options li:hover {
+		background-color: transparent;
+	}
+	.options li.selected:hover {
+		background-color: #fff;
+	}
+
+/* Adds border to bottom of tabbed navigation */
+hr {
+	margin: 0 0 20px;
+	border: none;
+	border-top: 1px solid #c7c7c9;
+}
+
+/* Chosen plugin overrides */
+.chzn-container {
+	margin: 4px 0 10px;
+}
+select {
+	width: 285px;
+	float: left;
+}
+.chzn-single.chzn-default,
+.chzn-container-single .chzn-single {
+	border-radius: 0;
+	box-shadow: none;
+	background: none;
+	height: 25px;
+	padding-top: 2px;
+	border-color: #c7c7c9;
+}
+.chzn-container-single .chzn-single span,
+.chzn-container-single .chzn-default {
+	color: #7a7a7a;
+}
+.chzn-container-single .chzn-single {
+	line-height: 20px;
+}
+.chzn-container .chzn-results .highlighted {
+	background-color: #dddddd;
+	background-image: none;
+	color: #7a7a7a;
+}
+
+/* Translation form table */
+.translation-table table {
+	width: 100%;
+	margin-top: 30px;
+	font-size: 13px;
+}
+.translation-table td {
+	padding: 10px;
+	display: inline-block;
+}
+.translation-table tr {
+	border-bottom: 1px solid #eee;
+}
+.translation-table .title {
+	font-weight: bold;
+	color: #444;
+	font-weight: 600;
+	width: 150px;
+}
+.translation-table .default-value {
+	width: 225px;
+}
+.translation-table input {
+	border: 1px solid #c7c7c9;
+	height: 25px;
+	color: #3a3a3a;
+	width: 250px;
+	padding: 0 4px;
+}

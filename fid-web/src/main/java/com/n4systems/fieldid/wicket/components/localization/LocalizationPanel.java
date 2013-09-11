@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.localization;
 
 import com.google.common.base.CaseFormat;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -16,9 +17,9 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -46,7 +47,7 @@ public class LocalizationPanel extends Panel {
 
     public LocalizationPanel(String id, IModel<? extends EntityWithTenant> model) {
         super(id, model);
-
+        setOutputMarkupId(true);
         add(new ModalWindowForm("form")
                 .add(listView = new ListView<LocalizedField>("localization", createLocalizedFieldsModel()) {
                     @Override
@@ -59,7 +60,15 @@ public class LocalizationPanel extends Panel {
                         item.add(createLinksForItem("misc", item));
                     }
                 }.setReuseItems(true))
-                .add(chooseLanguage = new DropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
+                .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages(), new IChoiceRenderer<Locale>() {
+                    @Override public Object getDisplayValue(Locale object) {
+                        return object.getDisplayLanguage();
+                    }
+
+                    @Override public String getIdValue(Locale object, int index) {
+                        return object.toString();
+                    }
+                }).setNullValid(false).setRequired(true))
                 .add(new AjaxSubmitLink("submit") {
                     @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         localizationService.save(convertToTranslations());
@@ -79,7 +88,7 @@ public class LocalizationPanel extends Panel {
 
             }
         });
-
+        language = getLanguages().get(0);
     }
 
     protected String getLabelFor(LocalizedField field) {
@@ -95,8 +104,8 @@ public class LocalizationPanel extends Panel {
 
     private LocalizedFieldsModel createLocalizedFieldsModel() {
         return new LocalizedFieldsModel(LocalizationPanel.this.getDefaultModel(), getLanguages()) {
-            @Override protected boolean isFiltered(Field field) {
-                boolean result = LocalizationPanel.this.isFieldIgnored(field);
+            @Override protected boolean isFiltered(Object entity, Field field) {
+                boolean result = LocalizationPanel.this.isFieldIgnored(entity,field);
                 Class<?> type = field.getType();
                 if (field.isAnnotationPresent(Transient.class) || Date.class.isAssignableFrom(type) || Number.class.isAssignableFrom(type) || type.isPrimitive()) {
                     return true;
@@ -122,7 +131,7 @@ public class LocalizationPanel extends Panel {
         return model.getAsTranslations();
     }
 
-    protected boolean isFieldIgnored(Field field) {
+    protected boolean isFieldIgnored(Object entity, Field field) {
         return false;
     }
 
@@ -156,6 +165,7 @@ public class LocalizationPanel extends Panel {
     }
 
 
+    // TODO DD : is this needed???
     class ModalWindowForm extends Form {
         public ModalWindowForm(String form) {
             super(form);

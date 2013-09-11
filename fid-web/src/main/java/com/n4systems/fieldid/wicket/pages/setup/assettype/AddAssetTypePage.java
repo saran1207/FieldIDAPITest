@@ -201,8 +201,11 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
             add(new SubmitLink("save"));
             add(new BookmarkablePageLink("cancel", AssetTypeListPage.class));
             BookmarkablePageLink deleteLink;
-            add(deleteLink = new BookmarkablePageLink("delete", ConfirmDeleteAssetTypePage.class, PageParametersBuilder.uniqueId(assetType.getObject().getId())));
-            deleteLink.setVisible(assetType.getObject().getId() != null);
+            if(assetType.getObject().isNew())
+                add(deleteLink = new BookmarkablePageLink("delete", ConfirmDeleteAssetTypePage.class));
+            else
+                add(deleteLink = new BookmarkablePageLink("delete", ConfirmDeleteAssetTypePage.class, PageParametersBuilder.uniqueId(assetType.getObject().getId())));
+            deleteLink.setVisible(!assetType.getObject().isNew());
 
         }
 

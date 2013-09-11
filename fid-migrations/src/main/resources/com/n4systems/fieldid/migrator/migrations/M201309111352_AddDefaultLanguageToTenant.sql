@@ -1,0 +1,1 @@
+alter table tenant_settings add column default_language varchar(10) not null default 'en';

@@ -40,8 +40,12 @@ public enum EventIndexField implements IndexField {
     SCORE("score", 5),
     ALL("_all", AnalyzerFactory.Type.WHITESPACE);
 
+    private static EnumSet<EventIndexField> displayedFixedAttributes = EnumSet.of(LOCATION, RFID, PURCHASE_ORDER, INTERNAL_ORG, CUSTOMER, DIVISION, COMPLETED_DATE);
+    private static EnumSet<EventIndexField> nonDisplayedFixedAttributes = EnumSet.of( CREATED, MODIFIED, MODIFIED_BY, REFERENCE_NUMBER, COMMENTS, ORDER,
+            CREATED_BY, MODIFIED_BY);
     private static EnumSet<EventIndexField> longAttributes= EnumSet.of(ID, CUSTOMER_ID, DIVISION_ID, SECONDARY_ID);
     private static EnumSet<EventIndexField> dateAttributes= EnumSet.of(CREATED, MODIFIED, DUE_DATE, COMPLETED_DATE);
+    private static EnumSet<EventIndexField> internalAttributes = EnumSet.of(ALL, ID, CUSTOMER_ID, DIVISION_ID, SECONDARY_ID);
 
 
     private final String field;
@@ -61,6 +65,10 @@ public enum EventIndexField implements IndexField {
 
     EventIndexField(String field, int boost) {
         this(field,AnalyzerFactory.Type.STANDARD,boost);
+    }
+
+    public static EnumSet<EventIndexField> getDisplayedFixedAttributes() {
+        return displayedFixedAttributes;
     }
 
     @Override
@@ -88,6 +96,15 @@ public enum EventIndexField implements IndexField {
         return dateAttributes.contains(this);
     }
 
+    @Override
+    public boolean isInternal() {
+        return internalAttributes.contains(this);
+    }
+
+    public boolean isNonDisplayedFixedAttribute() {
+        return nonDisplayedFixedAttributes.contains(this);
+    }
+
     public static EventIndexField fromString(String s) {
         if (s!=null) {
             s = s.toLowerCase().trim();
@@ -99,5 +116,7 @@ public enum EventIndexField implements IndexField {
         }
         return null;
     }
+
+
 
 }

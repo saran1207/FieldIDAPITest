@@ -69,7 +69,9 @@ public abstract class CriteriaTrendsIndexerService extends FieldIdPersistenceSer
     }
 
     private void updateIndex(Event event) {
-        criteriaTrendsIndexWriter.index(event.getTenant(), Arrays.asList(event), /*ignored*/false);
+        if (event != null && event.getWorkflowState() == WorkflowState.COMPLETED) {
+            criteriaTrendsIndexWriter.index(event.getTenant(), Arrays.asList(event), /*ignored*/false);
+        }
     }
 
     private void updateTenant(Tenant tenant) {

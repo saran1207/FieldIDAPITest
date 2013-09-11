@@ -70,7 +70,9 @@ public class EventIndexerService extends FieldIdPersistenceService {
     }
 
     private void updateIndex(Event event, boolean update) {
-        eventIndexWriter.index(event.getTenant(), Arrays.asList(event), update);
+        if (event != null && event.getWorkflowState() == WorkflowState.COMPLETED) {
+            eventIndexWriter.index(event.getTenant(), Arrays.asList(event), update);
+        }
     }
 
     private void updateTenant(Tenant tenant) {
