@@ -81,7 +81,7 @@
                 ${event.type.name}
                 <br/>
                 <br/>
-                <#if event.type.group.action && event.priorty?exists>
+                <#if event.type.group.action && event.priority?exists>
                     ${event.priority.name}
                     <br/>
                     <p>
