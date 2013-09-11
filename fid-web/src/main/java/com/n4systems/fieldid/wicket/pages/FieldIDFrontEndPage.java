@@ -10,6 +10,8 @@ import com.n4systems.fieldid.wicket.components.CachingStrategyLink;
 import com.n4systems.fieldid.wicket.components.CustomJavascriptPanel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.localization.SelectLanguagePanel;
+import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
@@ -35,8 +37,11 @@ import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.devutils.debugbar.DebugBar;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
@@ -82,6 +87,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 	private Component topTitleLabel;
     private ConfigurationProvider configurationProvider;
     private TopFeedbackPanel topFeedbackPanel;
+    private ModalWindow languageSelectionModalWindow;
 
 
     public FieldIDFrontEndPage() {
@@ -146,9 +152,25 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         storePageParameters(params);
 
+        add(languageSelectionModalWindow = new DialogModalWindow("languageSelectionModalWindow").setInitialWidth(480).setInitialHeight(280));
+        languageSelectionModalWindow.setContent(new SelectLanguagePanel(languageSelectionModalWindow.getContentId()) {
+            @Override
+            public void onLanguageSelection(AjaxRequestTarget target) {
+                languageSelectionModalWindow.close(target);
+                setResponsePage(getPage().getPageClass());
+            }
+        });
+
         add(createHeaderLink("headerLink", "headerLinkLabel"));
         add(createBackToLink("backToLink", "backToLinkLabel"));
         add(new Label("loggedInUsernameLabel", sessionUser.getName()));
+        add(new AjaxLink<Void>("languageSelection") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                languageSelectionModalWindow.show(target);
+            }
+        }.setVisible(getTenant().getSettings().getLanguages().size() > 1));
+
         add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent")));
         add(createSetupLinkContainer(sessionUser));
         add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));
