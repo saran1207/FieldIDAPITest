@@ -19,6 +19,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -59,7 +60,15 @@ public class LocalizationPanel extends Panel {
                         item.add(createLinksForItem("misc", item));
                     }
                 }.setReuseItems(true))
-                .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
+                .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages(), new IChoiceRenderer<Locale>() {
+                    @Override public Object getDisplayValue(Locale object) {
+                        return object.getDisplayLanguage();
+                    }
+
+                    @Override public String getIdValue(Locale object, int index) {
+                        return object.toString();
+                    }
+                }).setNullValid(false).setRequired(true))
                 .add(new AjaxSubmitLink("submit") {
                     @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         localizationService.save(convertToTranslations());
@@ -80,7 +89,6 @@ public class LocalizationPanel extends Panel {
             }
         });
         language = getLanguages().get(0);
-
     }
 
     protected String getLabelFor(LocalizedField field) {

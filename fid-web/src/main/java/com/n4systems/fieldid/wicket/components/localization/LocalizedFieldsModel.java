@@ -211,11 +211,6 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
         System.out.println("this shouldn't be called");
     }
 
-    @Override
-    public void detach() {
-        fields=null;
-    }
-
     public List<Translation> getAsTranslations() {
         List<Translation> result = Lists.newArrayList();
         for (LocalizedField localizedField:fields) {
