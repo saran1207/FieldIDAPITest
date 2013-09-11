@@ -1,18 +1,22 @@
 <wicket:panel xmlns:wicket="http://www.w3.org/1999/html">
 
-    <form wicket:id="form" class="translation">
+    <form wicket:id="form" class="translation-table">
         <div><select wicket:id="language"/></div>
+        <div class="pull-right">
+            <a wicket:id="submit" class="btn btn-green btn-sml"><wicket:message key="label.save"></wicket:message></a>
+            <a class="btn btn-gray btn-sml">Clear all</a>
+        </div>
         <table>
             <tr wicket:id="localization">
                 <td wicket:id="label" class="title"></td>
-                <td wicket:id="defaultValue" class=""></td>
-                <td wicket:id="translations">
-                    <input wicket:id="translation" class="translation" type="text"/>
+                <td wicket:id="defaultValue" class="default-value"></td>
+                <td wicket:id="translations" class="">
+                    <input wicket:id="translation" type="text"/>
                 </td>
-                <td><span wicket:id="misc"/></td>
+                <td class="misc"><span wicket:id="misc"/></td>
             </tr>
         </table>
-        <div><a wicket:id="submit" class="btn btn-green btn-sml"><wicket:message key="label.save"></wicket:message></a></div>
+        
     </form>
 
 </wicket:panel>
