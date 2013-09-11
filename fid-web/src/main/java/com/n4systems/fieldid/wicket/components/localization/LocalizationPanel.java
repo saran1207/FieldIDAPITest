@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.localization;
 
 import com.google.common.base.CaseFormat;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -16,7 +17,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.TextField;
@@ -59,7 +59,7 @@ public class LocalizationPanel extends Panel {
                         item.add(createLinksForItem("misc", item));
                     }
                 }.setReuseItems(true))
-                .add(chooseLanguage = new DropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
+                .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true))
                 .add(new AjaxSubmitLink("submit") {
                     @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         localizationService.save(convertToTranslations());
@@ -79,6 +79,7 @@ public class LocalizationPanel extends Panel {
 
             }
         });
+        language = getLanguages().get(0);
 
     }
 
