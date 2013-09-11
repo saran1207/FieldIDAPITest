@@ -48,6 +48,9 @@ public class TenantSettings extends EntityWithTenant {
     @IndexColumn(name="orderidx")
     private List<Locale> languages = Lists.newArrayList();
 
+    @Column(name="default_language")
+    private Locale defaultLanguage;
+
     public boolean isSecondaryOrgsEnabled() {
 		return secondaryOrgsEnabled;
 	}
@@ -146,4 +149,11 @@ public class TenantSettings extends EntityWithTenant {
         this.languages = languages;
     }
 
+    public Locale getDefaultLanguage() {
+        return defaultLanguage;
+    }
+
+    public void setDefaultLanguage(Locale defaultLanguage) {
+        this.defaultLanguage = defaultLanguage;
+    }
 }
