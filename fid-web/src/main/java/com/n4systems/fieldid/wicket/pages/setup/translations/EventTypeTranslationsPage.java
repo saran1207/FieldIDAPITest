@@ -32,7 +32,7 @@ public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
     @Override
     protected List<String> initExcludedFields() {
         return Lists.newArrayList("supportedProofTests","infoFieldNames", "supportedProofTests", "group", "eventTypes",
-                "recommendations", "deficiencies", "scoreGroup");
+                "recommendations", "deficiencies", "scoreGroup", "buttonGroup");
     }
 
     @Override
