@@ -1,10 +1,18 @@
 <wicket:panel xmlns:wicket="http://www.w3.org/1999/html">
 
+    <script type="text/javascript">
+        var clearAllLocalizations = function(e) {
+            var target= (e.target) ? e.target : e.srcElement;
+            $(target).closest('form').find("input[type=text], textarea").val("");
+        }
+    </script>
+
+
     <form wicket:id="form" class="translation-table">
         <div><select wicket:id="language"/></div>
         <div class="pull-right">
             <a wicket:id="submit" class="btn btn-green btn-sml"><wicket:message key="label.save"></wicket:message></a>
-            <a class="btn btn-gray btn-sml">Clear all</a>
+            <a onclick="clearAllLocalizations(event);" class="btn btn-gray btn-sml"><wicket:message key="label.clear_all"/></a>
         </div>
         <table>
             <tr wicket:id="localization">
