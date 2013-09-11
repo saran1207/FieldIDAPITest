@@ -46,7 +46,7 @@ public class LocalizationPanel extends Panel {
 
     public LocalizationPanel(String id, IModel<? extends EntityWithTenant> model) {
         super(id, model);
-
+        setOutputMarkupId(true);
         add(new ModalWindowForm("form")
                 .add(listView = new ListView<LocalizedField>("localization", createLocalizedFieldsModel()) {
                     @Override
@@ -95,8 +95,8 @@ public class LocalizationPanel extends Panel {
 
     private LocalizedFieldsModel createLocalizedFieldsModel() {
         return new LocalizedFieldsModel(LocalizationPanel.this.getDefaultModel(), getLanguages()) {
-            @Override protected boolean isFiltered(Field field) {
-                boolean result = LocalizationPanel.this.isFieldIgnored(field);
+            @Override protected boolean isFiltered(Object entity, Field field) {
+                boolean result = LocalizationPanel.this.isFieldIgnored(entity,field);
                 Class<?> type = field.getType();
                 if (field.isAnnotationPresent(Transient.class) || Date.class.isAssignableFrom(type) || Number.class.isAssignableFrom(type) || type.isPrimitive()) {
                     return true;
@@ -122,7 +122,7 @@ public class LocalizationPanel extends Panel {
         return model.getAsTranslations();
     }
 
-    protected boolean isFieldIgnored(Field field) {
+    protected boolean isFieldIgnored(Object entity, Field field) {
         return false;
     }
 
@@ -156,6 +156,7 @@ public class LocalizationPanel extends Panel {
     }
 
 
+    // TODO DD : is this needed???
     class ModalWindowForm extends Form {
         public ModalWindowForm(String form) {
             super(form);

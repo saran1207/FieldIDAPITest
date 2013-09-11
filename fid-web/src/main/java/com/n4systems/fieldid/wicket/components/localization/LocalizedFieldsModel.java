@@ -83,7 +83,7 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
         List<LocalizedField> embeddedFields = Lists.newArrayList();
 
         for (Field field:fields) {
-            if (isFiltered(field)) {
+            if (isFiltered(entity, field)) {
                 continue;
             }
             if (field.isAnnotationPresent(Localized.class)) {
@@ -95,6 +95,7 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
             }
         }
 
+        // TODO DD : sort localized fields with class->comparator map.  sort by last bit of ognl.
         localizedFields.addAll(embeddedFields);
 
         // ...now populate translations (if they exist)
@@ -114,7 +115,7 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
         return localizedFields;
     }
 
-    protected boolean isFiltered(Field field) {
+    protected boolean isFiltered(Object entity, Field field) {
         return false;
     }
 

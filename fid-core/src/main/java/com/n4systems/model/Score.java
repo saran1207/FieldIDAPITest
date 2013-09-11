@@ -1,12 +1,13 @@
 package com.n4systems.model;
 
 
+import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.persistence.localization.Localized;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-
-import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
 @SuppressWarnings("serial")
 @Entity
@@ -15,7 +16,7 @@ import com.n4systems.model.parents.ArchivableEntityWithTenant;
 public class Score extends ArchivableEntityWithTenant {
 
     @Column(name="name")
-    private String name;
+    private @Localized String name;
 
     @Column(name="value")
     private Double value;

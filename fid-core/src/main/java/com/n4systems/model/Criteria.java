@@ -25,7 +25,7 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	private boolean retired = false;
 
     @Column(nullable = true, length=5000)
-    private @Localized String instructions;
+    private /** DD : sept 2013.  TO BE DONE LATER. @Localized **/ String instructions;
 	
 	@Column(name="text", nullable=false, length=511)
 	@ElementCollection(fetch= FetchType.EAGER)
@@ -35,7 +35,7 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	@Column(name="text", nullable=false, length=511)
 	@ElementCollection(fetch= FetchType.EAGER)
 	@IndexColumn(name="orderidx")
-	private List<String> deficiencies = new ArrayList<String>();
+	private @Localized List<String> deficiencies = new ArrayList<String>();
 	
 	public Criteria() {}
 
