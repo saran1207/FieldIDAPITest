@@ -53,13 +53,14 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
             ThreadLocalInteractionContext.getInstance().setVisibleUsers(visibleUsers);
             ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
 
-           if (fieldidSession.getUserLocale()!=null) {
-               ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(fieldidSession.getUserLocale());
-           } else if (user.getLanguage()!=null) {
-               ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(user.getLanguage());
+           Locale language;
+           if (user.getLanguage()!=null) {
+               language = user.getLanguage();
            } else {
-               ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(Locale.getDefault());
+               language = user.getTenant().getSettings().getDefaultLanguage();
            }
+           ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
+           fieldidSession.setUserLocale(language);
 
             ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(PlatformType.WEB);
             ThreadLocalInteractionContext.getInstance().setCurrentPlatform( FieldIdVersion.getWebVersionDescription());

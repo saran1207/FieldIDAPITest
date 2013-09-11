@@ -1,6 +1,14 @@
 <wicket:panel xmlns:wicket="http://www.w3.org/1999/html">
 
     <form wicket:id="form">
+        <h1>
+            <wicket:message key="title.language_preference"/>
+        </h1>
+        <p>
+            <wicket:message key="message.language_prefrence1"/>
+            <br/>
+            <wicket:message key="message.language_prefrence2"/>
+        </p>
         <div><select wicket:id="language" style="width: 200px"/></div>
         <div><a class="mattButton" wicket:id="submit"><wicket:message key="label.save"></wicket:message></a></div>
     </form>

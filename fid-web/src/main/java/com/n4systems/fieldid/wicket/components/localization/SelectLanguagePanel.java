@@ -1,14 +1,18 @@
 package com.n4systems.fieldid.wicket.components.localization;
 
+import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 import java.util.Locale;
@@ -17,20 +21,44 @@ public class SelectLanguagePanel extends Panel {
 
     private Locale language;
     private Form form;
-    private FormComponent<Locale> chooseLanguage;
+    private FidDropDownChoice<Locale> chooseLanguage;
+
+    @SpringBean
+    UserService userService;
 
     public SelectLanguagePanel(String id) {
         super(id);
 
         add(form = new Form<Void>("form"));
         language = FieldIDSession.get().getUserLocale();
-        form.add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages()).setNullValid(false).setRequired(true));
+        form.add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel<Locale>(this, "language"), getLanguages(), new IChoiceRenderer<Locale>() {
+            @Override
+            public Object getDisplayValue(Locale locale) {
+                Locale userLocale = FieldIDSession.get().getUserLocale();
+                if(userLocale != null)
+                    return locale.getDisplayLanguage(userLocale);
+                else
+                    return locale.getDisplayLanguage();
+            }
+
+            @Override
+            public String getIdValue(Locale locale, int index) {
+                return index+"";
+            }
+        }));
+        chooseLanguage.setNullValid(false);
+        chooseLanguage.setRequired(true);
         chooseLanguage.add(new UpdateComponentOnChange());
 
         form.add(new AjaxSubmitLink("submit") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 FieldIDSession.get().setUserLocale(language);
+
+                User currentUser = userService.getUser(FieldIDSession.get().getSessionUser().getId());
+                currentUser.setLanguage(language);
+                userService.update(currentUser);
+
                 onLanguageSelection(target);
             }
 
