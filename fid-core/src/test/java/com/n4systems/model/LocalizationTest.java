@@ -20,12 +20,17 @@ public class LocalizationTest {
 
     @Test
     public void test_localized_entities() {
-        Set<Class> entities = Sets.newHashSet();
-        entities.addAll(new Reflections(BaseEntity.class.getPackage().getName()).getSubTypesOf(BaseEntity.class));
-        entities.addAll(new Reflections("rfid.ejb").getSubTypesOf(LegacyBaseEntity.class));
+        Set<Class> entities = getAllEntities();
         for (Class<?> entity:entities) {
             assertClass(entity);
         }
+    }
+
+    private Set<Class> getAllEntities() {
+        Set<Class> entities = Sets.newHashSet();
+        entities.addAll(new Reflections(BaseEntity.class.getPackage().getName()).getSubTypesOf(BaseEntity.class));
+        entities.addAll(new Reflections("rfid.ejb").getSubTypesOf(LegacyBaseEntity.class));
+        return entities;
     }
 
     private void assertClass(Class<?> entity) {

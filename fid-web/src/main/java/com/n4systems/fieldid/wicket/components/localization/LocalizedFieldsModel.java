@@ -75,9 +75,9 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
             localizedFields = Lists.newArrayList();
         }
 
-        Long id = (Long) ((Saveable) entity).getEntityId();
+        Saveable saveable = (Saveable) entity;
         Set<Field> fields = getAllFields(entity.getClass());
-        List<Translation> translations = localizationService.getTranslations(id);
+        List<Translation> translations = localizationService.getTranslations(saveable);
         List<LocalizedField> embeddedFields = Lists.newArrayList();
 
         for (Field field:fields) {
