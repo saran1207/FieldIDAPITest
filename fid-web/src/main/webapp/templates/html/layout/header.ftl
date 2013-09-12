@@ -28,8 +28,22 @@
 			<ul class="listOfLinks">				
 				<li class="first">
 					<span class="welcome"><@s.text name="label.welcome"/>,</span> <a href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a>
-					<span class="separator">|</span>
-				</li>
+                    <span class="separator">|</span>
+                </li>
+                <#if action.isMultiLanguage()>
+                    <li>
+                        <a id="selectLanguageLink" href="javascript:void(0);"><@s.text name="label.language"/></a>
+                        <span class="separator">|</span>
+
+                        <script type="text/javascript">
+
+                            jQuery(document).ready(function(){
+                                jQuery("#selectLanguageLink").colorbox({iframe: true, href: '<@s.url value="w/selectLanguage" />', width: '500px', height:'380px'});
+                            });
+
+                        </script>
+                    </li>
+                </#if>
 				<li>
 		  			<a href="${action.supportUrl}" target="_blank"><@s.text name="label.support"/></a>
 		  			<span class="separator">|</span>

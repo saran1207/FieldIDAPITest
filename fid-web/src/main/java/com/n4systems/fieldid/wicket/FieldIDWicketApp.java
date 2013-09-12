@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
+import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
@@ -183,6 +184,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("limitedEditAsset", LimitedEditAsset.class);
 
         mountPage("criteriaTrends", CriteriaTrendsPage.class);
+
+        mountPage("selectLanguage", SelectLanguagePage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
