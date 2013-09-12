@@ -4,6 +4,7 @@ import com.n4systems.model.api.CrossTenantEntity;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.AbstractEntity;
+import com.n4systems.persistence.localization.Localized;
 
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -12,6 +13,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "unitofmeasures")
+@Localized(ignore =true)
 public class UnitOfMeasure extends AbstractEntity implements NamedEntity, CrossTenantEntity, Listable<Long> {
 	private static final long serialVersionUID = 1L;
 	

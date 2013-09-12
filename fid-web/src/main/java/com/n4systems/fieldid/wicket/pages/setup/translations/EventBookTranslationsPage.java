@@ -11,7 +11,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 
-public class EventBookTranslationsPage extends TranslationsPage {
+public class EventBookTranslationsPage extends TranslationsPage<EventBook> {
 
     @SpringBean
     private EventBookService eventBookService;
@@ -25,7 +25,7 @@ public class EventBookTranslationsPage extends TranslationsPage {
     }
 
     @Override
-    protected DropDownChoice createChoice(String id) {
+    protected DropDownChoice<EventBook> createChoice(String id) {
         return new FidDropDownChoice<EventBook>(id, Model.of(new EventBook()), eventBookService.getAllEventBooks(), getChoiceRenderer());
     }
 

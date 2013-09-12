@@ -1,25 +1,21 @@
 package com.n4systems.model;
 
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
+import com.n4systems.persistence.localization.Localized;
 import com.n4systems.util.HashCode;
 
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name="tenants")
+@Localized(ignore =true)
 public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, Saveable, Comparable<Tenant> {
 	private static final long serialVersionUID = 1L;
 	

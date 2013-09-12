@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.setup.translations;
 
-import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.model.AssetStatus;
@@ -9,8 +8,6 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.List;
-
 public class AssetStatusTranslationsPage extends TranslationsPage<AssetStatus> {
 
     @SpringBean
@@ -18,10 +15,6 @@ public class AssetStatusTranslationsPage extends TranslationsPage<AssetStatus> {
 
     public AssetStatusTranslationsPage() {
         super();
-    }
-
-    protected List<String> initExcludedFields() {
-        return Lists.newArrayList("events");
     }
 
     @Override

@@ -55,8 +55,8 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     private void validate() {
-        // TODO : further validation could do a foreign key check to make sure entity_id column is valid. if entity points to an archived or unused (like event_form)
-        //  entity then fire out warnings!
+        // TODO : further validation could do a foreign key check to make sure entity_id column is valid.
+        // if entity points to an archived or unused (like event_form) entity then fire out warnings!
 
         Set<Class> entities = Sets.newHashSet();
         entities.addAll(new Reflections(BaseEntity.class.getPackage().getName()).getSubTypesOf(BaseEntity.class));
@@ -115,14 +115,6 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         }
         list.set(translationKey.getIndex(), value);
     }
-
-    // handle event form saving.  google translate API.
-
-//    public Object getText(EntityWithTenant entity, String ognl, Locale locale) {
-//        Preconditions.checkArgument(locale != null && entity != null, "must supply non-null args");
-//        Map<Locale, Object> map = translationCache.get(new TranslationKey(entity, ognl));
-//        return map==null ? null : map.get(locale);
-//    }
 
     public Object getTranslation(Saveable entity, String ognl, Locale locale) {
         Map<Locale, Object> translations = getTranslations(entity, ognl);

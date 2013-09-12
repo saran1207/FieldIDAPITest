@@ -107,7 +107,7 @@ public class LocalizationPanel extends Panel {
             @Override protected boolean isFiltered(Object entity, Field field) {
                 boolean result = LocalizationPanel.this.isFieldIgnored(entity,field);
                 Class<?> type = field.getType();
-                if (field.isAnnotationPresent(Transient.class) || Date.class.isAssignableFrom(type) || Number.class.isAssignableFrom(type) || type.isPrimitive()) {
+                if (field.isAnnotationPresent(Transient.class) || Date.class.isAssignableFrom(type) || Number.class.isAssignableFrom(type) || type.isPrimitive() || type.isEnum()) {
                     return true;
                 }
                 if (type.equals(String.class)) {

@@ -12,6 +12,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="eventtypegroups")
+@Localized
 public class EventTypeGroup extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
 	private static final long serialVersionUID = 1L;
 	

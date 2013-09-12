@@ -8,6 +8,7 @@ import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.fieldid.service.search.columns.ProcedureColumnsService;
 import com.n4systems.fieldid.servlets.ImageDownloadHandler;
 import com.n4systems.fieldid.servlets.ImageUploadHandler;
+import com.n4systems.fieldid.wicket.components.localization.LocalizedFieldSorter;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgDateRangeSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgPeriodSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper;
@@ -90,5 +91,9 @@ public class FieldIdAppConfig {
         return new StoreWsClientInformationAspect();
     }
 
+    @Bean
+    public LocalizedFieldSorter localizedFieldFilter() {
+        return new LocalizedFieldSorter();
+    }
 
 }

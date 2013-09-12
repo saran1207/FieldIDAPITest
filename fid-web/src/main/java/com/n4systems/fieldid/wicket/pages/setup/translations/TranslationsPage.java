@@ -34,13 +34,12 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
 
     public static final String LOCALIZATION_PANEL_ID = "localization";
 
+    protected Map<String, RenderHint> renderingHintMap = Maps.newHashMap();
     private final DropDownChoice<T> choice;
     private Component localizationPanel;
-    protected Map<String, RenderHint> renderingHintMap = Maps.newHashMap();
 
-    protected List<String> excludedNames= Lists.newArrayList("owner", "tenant", "createdBy", "modifiedBy", "state",
-            "allInfoOptionsForCasadeDeleteOnlyDoNotInteractWithThisSet", "unitOfMeasure"
-            );
+    protected List<String> excludedNames= Lists.newArrayList("allInfoOptionsForCasadeDeleteOnlyDoNotInteractWithThisSet");
+
     protected final ModalWindow dialog;
 
     protected TranslationsPage() {
@@ -122,12 +121,10 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        //response.renderCSSReference("pages/new/localization.css");
         response.renderCSSReference("style/newCss/component/buttons.css");
         response.renderCSSReference("style/pageStyles/localization.css");
     }
 
-    // TODO DD : change this to inclusion based??  use ognl instead of Field as parameter?
     protected boolean isFiltered(Object entity, Field field) {
         return excludedNames.contains(field.getName());
     }
