@@ -9,8 +9,8 @@
 
 
     <form wicket:id="form" class="translation-table">
-        <div><select wicket:id="language"/></div>
-        <div class="pull-right">
+        <div class="language-select"><select wicket:id="language"/></div>
+        <div class="btn-wrap">
             <a wicket:id="submit" class="btn btn-green btn-sml"><wicket:message key="label.save"></wicket:message></a>
             <a onclick="clearAllLocalizations(event);" class="btn btn-gray btn-sml"><wicket:message key="label.clear_all"/></a>
         </div>
@@ -18,13 +18,12 @@
             <tr wicket:id="localization">
                 <td wicket:id="label" class="title"></td>
                 <td wicket:id="defaultValue" class="default-value"></td>
-                <td wicket:id="translations" class="">
-                    <input wicket:id="translation" type="text"/>
+                <td class="languages">
+                    <span wicket:id="translations"><input wicket:id="translation" type="text"/></span>
                 </td>
-                <td class="misc"><span wicket:id="misc"/></td>
+                <td wicket:id="misc" class="misc"></td>
             </tr>
-        </table>
-        
+        </table>   
     </form>
 
 </wicket:panel>
