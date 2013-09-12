@@ -4,7 +4,6 @@ import com.n4systems.fieldid.wicket.components.localization.SelectLanguagePanel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
 
-//This page is ju
 public class SelectLanguagePage extends FieldIDAuthenticatedPage {
 
     public SelectLanguagePage() {
