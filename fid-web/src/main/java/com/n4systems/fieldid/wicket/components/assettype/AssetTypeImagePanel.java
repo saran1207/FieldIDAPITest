@@ -24,6 +24,8 @@ public class AssetTypeImagePanel extends Panel {
     String clientFileName;
     private byte[] uploadedBytes;
     private boolean imageUpdated = false;
+    private ExternalImage assetImage;
+
 
     public AssetTypeImagePanel(String id, IModel<AssetType> assetTypeModel) {
         super(id);
@@ -49,7 +51,11 @@ public class AssetTypeImagePanel extends Panel {
                 clientFileName = uploadedFile.getClientFileName();
                 uploadContainer.setVisible(false);
                 uploadedFileDisplayPanel.setVisible(true);
-                target.add(uploadContainer, uploadedFileDisplayPanel);
+               target.add(uploadContainer, uploadedFileDisplayPanel);
+                if(assetImage.isVisible()) {
+                    assetImage.setVisible(false);
+                }
+                target.add(assetImage);
                 imageUpdated = true;
             }
 
@@ -65,16 +71,13 @@ public class AssetTypeImagePanel extends Panel {
         String imageUrl = "";
         if(assetTypeModel.getObject().getImageName() != null) {
             imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("/file/downloadAssetTypeImage.action?uniqueID=" + assetTypeModel.getObject().getId());
-            if(assetTypeModel.getObject().getImageName() != null)
-                imageExists = new File(PathHandler.getAssetTypeImageFile(assetTypeModel.getObject()), assetTypeModel.getObject().getImageName()).exists();
-            else
-                imageExists = false;
+            imageExists = new File(PathHandler.getAssetTypeImageFile(assetTypeModel.getObject()), assetTypeModel.getObject().getImageName()).exists();
         } else
             imageExists = false;
 
-        ExternalImage assetImage;
         uploadedFileDisplayPanel.add(assetImage = new ExternalImage("image", imageUrl));
-        assetImage.setVisible(imageExists);
+        assetImage.setVisible(imageExists && !imageUpdated);
+        assetImage.setOutputMarkupId(true);
 
         uploadedFileDisplayPanel.add(new Label("fileName", new PropertyModel<String>(this, "clientFileName")));
         uploadedFileDisplayPanel.add(new AjaxLink("removeLink") {
