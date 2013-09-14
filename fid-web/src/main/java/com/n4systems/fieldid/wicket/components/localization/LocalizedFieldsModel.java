@@ -74,6 +74,7 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
         } else {
             localizedFields = Lists.newArrayList();
         }
+        loaded.put(entity, localizedFields);
 
         Saveable saveable = (Saveable) entity;
         Set<Field> fields = getAllFields(entity.getClass());
@@ -110,7 +111,6 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
             }
         }
 
-        loaded.put(entity, localizedFields);
         return localizedFields;
     }
 
@@ -185,7 +185,7 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
                 for(Type fieldArgType : fieldArgTypes) {
                     if (fieldArgType instanceof Class<?>) {
                         Class<?> fieldClass = (Class<?>) fieldArgType;
-                        return fieldClass.isAnnotationPresent(Entity.class);
+                        return fieldClass.isAnnotationPresent(Entity.class) || fieldClass.equals(String.class);
                     }
                 }
             }

@@ -37,17 +37,18 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     @Override
     public void afterPropertiesSet() throws Exception {
         initializeCache();
+        validate();
     }
 
     private void initializeCache() {
         try {
             // TODO DD : make this use EHCACHE instead of simple map.
             // that way cache can be configured dynamically (in memory, disk spill over, LRU etc...)
+            translationCache = Maps.newHashMap();
             List<Translation> translations = getAllTranslations();
             for (Translation translation:translations) {
                 add(translation);
             }
-            validate();
         } catch (Exception e) {
             logger.error("couldn't initialize localization cache : " + e.getMessage());
             throw new IllegalStateException("couldn't initialize localization cache ",e );
@@ -178,9 +179,10 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     public List<Translation> getTranslations(Long entityId) {
-        // TODO DD : need to filter by type/class too!
+        // TODO DD : need to filter by type/class too!  if i don't, could get collisions with entities with same id!
         QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
         query.addSimpleWhere("id.entityId", entityId);
+        /// ------arghhh!
         return persistenceService.findAll(query);
     }
 

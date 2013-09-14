@@ -26,6 +26,8 @@ public class HibernatePersistenceProvider extends HibernatePersistence {
     private List<PostInsertEventListener> postInsertEventListeners = Lists.newArrayList();
     private List<PostUpdateEventListener> postUpdateEventListeners = Lists.newArrayList();
     private List<PostDeleteEventListener> postDeleteEventListeners = Lists.newArrayList();
+    private List<PreLoadEventListener> preLoadEventListeners = Lists.newArrayList();
+    private List<FlushEntityEventListener> flushEntityEventListeners = Lists.newArrayList();
 
     private @Autowired LocalizationListener localizationListener;
     private @Autowired SetupDataUpdateEventListener setupDataUpdateEventListener;
@@ -46,29 +48,33 @@ public class HibernatePersistenceProvider extends HibernatePersistence {
     }
 
     private void addListener(Object listener) {
-            if (listener instanceof PostInsertEventListener) {
-                postInsertEventListeners.add((PostInsertEventListener) listener);
-            }
-            if (listener instanceof PostLoadEventListener) {
-                postLoadEventListeners.add((PostLoadEventListener) listener);
-            }
-            if (listener instanceof PreUpdateEventListener) {
-                preUpdateEventListeners.add((PreUpdateEventListener) listener);
-            }
-            if (listener instanceof PreDeleteEventListener) {
-                preDeleteEventListeners.add((PreDeleteEventListener) listener);
-            }
-            if (listener instanceof PostUpdateEventListener) {
-                postUpdateEventListeners.add((PostUpdateEventListener) listener);
-            }
-            if (listener instanceof PostDeleteEventListener) {
-                postDeleteEventListeners.add((PostDeleteEventListener) listener);
-            }
-            // TODO DD : support all other types of listeners...
+        if (listener instanceof PreLoadEventListener) {
+            preLoadEventListeners.add((PreLoadEventListener) listener);
+        }
+        if (listener instanceof PreUpdateEventListener) {
+            preUpdateEventListeners.add((PreUpdateEventListener) listener);
+        }
+        if (listener instanceof PreDeleteEventListener) {
+            preDeleteEventListeners.add((PreDeleteEventListener) listener);
+        }
+        if (listener instanceof PostInsertEventListener) {
+            postInsertEventListeners.add((PostInsertEventListener) listener);
+        }
+        if (listener instanceof PostLoadEventListener) {
+            postLoadEventListeners.add((PostLoadEventListener) listener);
+        }
+        if (listener instanceof PostUpdateEventListener) {
+            postUpdateEventListeners.add((PostUpdateEventListener) listener);
+        }
+        if (listener instanceof PostDeleteEventListener) {
+            postDeleteEventListeners.add((PostDeleteEventListener) listener);
+        }
+        if (listener instanceof FlushEntityEventListener) {
+            flushEntityEventListeners.add((FlushEntityEventListener)listener);
+        }
+
+        // CAVEAT : not all types supported. add others as needed.
     }
-
-
-
 
     @SuppressWarnings("rawtypes")
     @Override
@@ -90,10 +96,14 @@ public class HibernatePersistenceProvider extends HibernatePersistence {
 
     private void setupConfiguration(Ejb3Configuration cfg) {
         addListeners();
+
         cfg.getEventListeners().setPostInsertEventListeners(postInsertEventListeners.toArray(new PostInsertEventListener[]{}));
-        cfg.getEventListeners().setPreDeleteEventListeners(preDeleteEventListeners.toArray(new PreDeleteEventListener[]{}));
-        cfg.getEventListeners().setPreUpdateEventListeners(preUpdateEventListeners.toArray(new PreUpdateEventListener[]{}));
+//        cfg.getEventListeners().setPreDeleteEventListeners(preDeleteEventListeners.toArray(new PreDeleteEventListener[]{}));
+//        cfg.getEventListeners().setPreUpdateEventListeners(preUpdateEventListeners.toArray(new PreUpdateEventListener[]{}));
         cfg.getEventListeners().setPostLoadEventListeners(postLoadEventListeners.toArray(new PostLoadEventListener[]{}));
+//        cfg.getEventListeners().setPreLoadEventListeners(preLoadEventListeners.toArray(new PreLoadEventListener[]{}));
+        cfg.getEventListeners().setPostUpdateEventListeners(postUpdateEventListeners.toArray(new PostUpdateEventListener[]{}));
+//        cfg.getEventListeners().setFlushEntityEventListeners(flushEntityEventListeners.toArray(new FlushEntityEventListener[]{}));
     }
 
 }
