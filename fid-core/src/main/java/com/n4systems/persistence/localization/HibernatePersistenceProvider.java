@@ -103,7 +103,7 @@ public class HibernatePersistenceProvider extends HibernatePersistence {
         cfg.getEventListeners().setPostLoadEventListeners(postLoadEventListeners.toArray(new PostLoadEventListener[]{}));
 //        cfg.getEventListeners().setPreLoadEventListeners(preLoadEventListeners.toArray(new PreLoadEventListener[]{}));
         cfg.getEventListeners().setPostUpdateEventListeners(postUpdateEventListeners.toArray(new PostUpdateEventListener[]{}));
-//        cfg.getEventListeners().setFlushEntityEventListeners(flushEntityEventListeners.toArray(new FlushEntityEventListener[]{}));
+        cfg.getEventListeners().setFlushEntityEventListeners(flushEntityEventListeners.toArray(new FlushEntityEventListener[]{}));
     }
 
 }
