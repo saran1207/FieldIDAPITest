@@ -14,7 +14,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -48,7 +47,7 @@ public class LocalizationPanel extends Panel {
     public LocalizationPanel(String id, IModel<? extends EntityWithTenant> model) {
         super(id, model);
         setOutputMarkupId(true);
-        add(new ModalWindowForm("form")
+        add(new Form("form")
                 .add(listView = new ListView<LocalizedField>("localization", createLocalizedFieldsModel()) {
                     @Override
                     protected void populateItem(ListItem<LocalizedField> item) {
@@ -164,23 +163,5 @@ public class LocalizationPanel extends Panel {
         }
     }
 
-
-    // TODO DD : is this needed???
-    class ModalWindowForm extends Form {
-        public ModalWindowForm(String form) {
-            super(form);
-        }
-
-        @Override
-        public Form<?> getRootForm() {
-            Form<?> form = super.getRootForm();
-
-            if ((findParent(ModalWindow.class) != null) &&
-                    (form.findParent(ModalWindow.class) == null))
-                return this;
-            else
-                return form;
-        }
-    }
 
 }

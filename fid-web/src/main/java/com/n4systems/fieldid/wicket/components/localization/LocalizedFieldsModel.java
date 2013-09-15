@@ -70,7 +70,7 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
 
         List<LocalizedField> localizedFields = loaded.get(entity);
         if (localizedFields !=null) {
-            return localizedFields;
+            return Lists.newArrayList();
         } else {
             localizedFields = Lists.newArrayList();
         }

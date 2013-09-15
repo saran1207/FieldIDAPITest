@@ -64,7 +64,6 @@ public class LocalizationListener implements FlushEntityEventListener, PostLoadE
         }
     }
 
-
     @Override
     public void onPostInsert(PostInsertEvent event) {
         // not needed...new entities will never be translated.
@@ -73,7 +72,7 @@ public class LocalizationListener implements FlushEntityEventListener, PostLoadE
 
     private void localize(Saveable entity, EntityPersister persister, EventSource eventSource) {
         try {
-            System.out.println("localizing " + entity.getClass().getSimpleName());
+            //System.out.println("localizing " + entity.getClass().getSimpleName());
             for (LocalizedProperty property:getLocalizedProperties(entity,persister)) {
                 int index = property.getIndex();
                 Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
