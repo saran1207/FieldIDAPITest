@@ -113,6 +113,11 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
         return null;
     }
 
+    @Override
+    protected boolean forceDefaultLanguage() {
+        return true;
+    }
+
     protected String getCssFor(LocalizedField field) {
         RenderHint renderHint = renderingHintMap.get(field.getOgnl());
         return renderHint==null ? "" : renderHint.css;

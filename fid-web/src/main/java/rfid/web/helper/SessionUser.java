@@ -11,6 +11,7 @@ import com.n4systems.util.BitField;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
 
+import javax.persistence.Transient;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -38,6 +39,8 @@ public class SessionUser implements DateTimeDefinition {
 	private boolean readOnly;
 	private boolean systemUser;
 	private boolean liteUser;
+    private boolean isDefaultLanguageMode = false;
+
     private String userTypeLabel;
 	
 	public SessionUser( User user ) {
@@ -305,4 +308,13 @@ public class SessionUser implements DateTimeDefinition {
     public String getAccountType() {
         return "Paid";
     }
+
+    public void setIsDefaultLanguageMode(boolean isDefaultLanguageMode) {
+        this.isDefaultLanguageMode = isDefaultLanguageMode;
+    }
+
+    public boolean isDefaultLanguageMode() {
+        return isDefaultLanguageMode;
+    }
+
 }

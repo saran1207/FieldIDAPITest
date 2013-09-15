@@ -197,6 +197,11 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
 
+        getSessionUser().setIsDefaultLanguageMode(forceDefaultLanguage());
+    }
+
+    protected boolean forceDefaultLanguage() {
+        return false;
     }
 
     private String getSupportUrl() {
