@@ -1,28 +1,24 @@
 <wicket:panel>
 
-    <ul>
-        <li class="menu">
-            <a href="javascript:void(0);" class="mattButton"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
-            <ul class="menu-items">
-                <li>
-                    <a wicket:id="massUpdateLink"><wicket:message key="label.update"/></a>
-                </li>
-            </ul>
-        </li>
-        <li class="menu">
-            <a href="javascript:void(0);" class="mattButton"><wicket:message key="label.print"/><img src="/fieldid/images/menu-down.png"></a>
-            <ul class="menu-items">
-                <li>
-                    <a wicket:id="printReportLink"><wicket:message key="label.print_report" /></a>
-                </li>
-                <li>
-                    <a wicket:id="printSelectedPdfReportsLink"><wicket:message key="label.printselectedpdfreports"/></a>
-                </li>
-                <li>
-                    <a wicket:id="printSelectedObservationReportsLink" ><wicket:message key="label.printselectedobservationcertificate"/></a>
-                </li>
-            </ul>
-        </li>
-    </ul>
+    <div class="dropdown-btn">
+        <a class="btn btn-gray btn-sml" href="javascript:void(0);"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
+        <ul class="pull-right">
+            <li><a wicket:id="massUpdateLink"><wicket:message key="label.update"/></a></li>
+        </ul>
+    </div>
+    <div class="dropdown-btn">
+        <a class="btn btn-gray btn-sml" href="javascript:void(0);"><wicket:message key="label.print"/><img src="/fieldid/images/menu-down.png"></a>
+        <ul class="pull-right">
+            <li>
+                <a wicket:id="printReportLink"><wicket:message key="label.print_report" /></a>
+            </li>
+            <li>
+                <a wicket:id="printSelectedPdfReportsLink"><wicket:message key="label.printselectedpdfreports"/></a>
+            </li>
+            <li>
+                <a wicket:id="printSelectedObservationReportsLink" ><wicket:message key="label.printselectedobservationcertificate"/></a>
+            </li>
+        </ul>
+    </div>
 
 </wicket:panel>

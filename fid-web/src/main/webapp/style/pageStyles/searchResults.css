@@ -13,8 +13,7 @@
     box-sizing: content-box;
 }
 body {
-	background: #fff;
-	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+	background: #fff; 
 }
 #page {
 	border: none;
@@ -54,7 +53,7 @@ a {
 /* NEW SEARCH BAR
 -----------------------------------------*/
 .search-bar {
-	margin: 40px auto;
+	margin: 40px auto 0;
 	position: relative;
 	z-index: 100;
 }
@@ -77,6 +76,7 @@ a.search {
 	color: #fff;
 	text-decoration: none;
 	text-align: center;
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 }
 .syntax-help {
 	position: absolute;
@@ -159,6 +159,10 @@ a.search {
 
 /* SEARCH RESULTS LIST
 -----------------------------------------*/
+.action-items {
+	margin-bottom: 4px;
+	margin-left: 39px;
+}
 .select-options {
 	height: 40px;
 }
@@ -175,6 +179,11 @@ a.search {
 	color: #8F8F8F;
 }
 
+.asset-item {
+	overflow: hidden;
+	*position: relative;
+	*z-index: 1;
+}
 .asset-item .select {
 	width: 35px;
 	float: left;
@@ -292,3 +301,5 @@ a.search {
     .suggestion a {
         color: #0000ff;
     }
+
+
