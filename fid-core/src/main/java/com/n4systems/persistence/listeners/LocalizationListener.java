@@ -16,7 +16,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.ejb.event.EJB3FlushEntityEventListener;
 import org.hibernate.event.*;
-import org.hibernate.event.def.DefaultFlushEntityEventListener;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.type.Type;
 import org.reflections.ReflectionUtils;
@@ -26,26 +25,19 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 
-public class LocalizationListener implements FlushEntityEventListener, PostLoadEventListener, PostUpdateEventListener {
+public class LocalizationListener extends EJB3FlushEntityEventListener implements PostLoadEventListener, PostUpdateEventListener {
 
     private static final Logger logger=Logger.getLogger(LocalizationListener.class);
 
     private Map<Class<?>, List<LocalizedProperty>> cache = Maps.newHashMap();
-    private DefaultFlushEntityEventListener flushEntityEventListener;
-    private Map<Session,Map<Object,List<DirtyLocalizedProperty>>> translated = Maps.newHashMap();
+    private Map<Object,List<DirtyLocalizedProperty>> translated = Maps.newHashMap();
 
     public LocalizationListener() {
-        flushEntityEventListener = new EJB3FlushEntityEventListener() {
-            @Override protected void dirtyCheck(FlushEntityEvent event) throws HibernateException {
-                super.dirtyCheck(event);
-                removeDirtCausedByLocalizationProperties(event);
-            }
+    }
 
-            @Override
-            public void onFlushEntity(FlushEntityEvent event) throws HibernateException {
-                super.onFlushEntity(event);
-            }
-        };
+    @Override protected void dirtyCheck(FlushEntityEvent event) throws HibernateException {
+        super.dirtyCheck(event);
+        removeDirtCausedByLocalizationProperties(event);
     }
 
     @Override
@@ -84,13 +76,9 @@ public class LocalizationListener implements FlushEntityEventListener, PostLoadE
     private void setTranslatedValue(EntityPersister persister, Saveable entity, Session session, int index, Object translation) {
         Object originalValue = persister.getPropertyValue(entity, index, EntityMode.POJO);
         persister.setPropertyValue(entity, index, translation, EntityMode.POJO);
-        Map<Object, List<DirtyLocalizedProperty>> entityMap = translated.get(session);
-        if (entityMap==null) {
-            translated.put(session,entityMap = new HashMap<Object,List<DirtyLocalizedProperty>>());
-        }
-        List<DirtyLocalizedProperty> dirtyProperties = entityMap.get(entity);
+        List<DirtyLocalizedProperty> dirtyProperties = translated.get(entity);
         if (dirtyProperties==null) {
-            entityMap.put(entity, dirtyProperties = new ArrayList<DirtyLocalizedProperty>());
+            translated.put(entity, dirtyProperties = new ArrayList<DirtyLocalizedProperty>());
         }
         dirtyProperties.add(new DirtyLocalizedProperty(index, translation, originalValue));
         // add to list of fields that need to be ignored when hibernate goes to update this object.
@@ -135,17 +123,12 @@ public class LocalizationListener implements FlushEntityEventListener, PostLoadE
 
     @Override
     public void onFlushEntity(FlushEntityEvent event) throws HibernateException {
-        flushEntityEventListener.onFlushEntity(event);
-        removeOldSessionsFromDirtyPropertyMap();
+        super.onFlushEntity(event);
     }
 
     private void removeDirtCausedByLocalizationProperties(FlushEntityEvent event) {
-        // check for MODIFIED.  exclude this one if others are removed.
-        Map<Object,List<DirtyLocalizedProperty>> entityMap = translated.get(event.getSession());
-        if (entityMap==null) {
-            return;
-        }
-        List<DirtyLocalizedProperty> dirtyProperties = entityMap.get(event.getEntity());
+        // TODO DD: check for MODIFIED.  exclude this one if others are removed.
+        List<DirtyLocalizedProperty> dirtyProperties = translated.get(event.getEntity());
         if (dirtyProperties==null) {
             return;
         }
@@ -163,6 +146,7 @@ public class LocalizationListener implements FlushEntityEventListener, PostLoadE
             }
         }
         event.setDirtyProperties(Ints.toArray(newDirty));
+        //***not null or empty??
     }
 
     private boolean isDirtyBecauseOfLocalization(List<DirtyLocalizedProperty> dirtyProperties, Object propertyValue, int i) {
@@ -172,18 +156,6 @@ public class LocalizationListener implements FlushEntityEventListener, PostLoadE
             }
         }
         return false;
-    }
-
-    private void removeOldSessionsFromDirtyPropertyMap() {
-        List<Session> oldSessions = Lists.newArrayList();
-        for (Session s:translated.keySet()) {
-            if (!s.isOpen()) {
-                oldSessions.add(s);
-            }
-        }
-        for (Session s:oldSessions) {
-            translated.remove(s);
-        }
     }
 
     private LocalizationService getLocalizationService() {
