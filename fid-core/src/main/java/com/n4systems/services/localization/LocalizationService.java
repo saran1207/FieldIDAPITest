@@ -176,6 +176,7 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         for (Translation translation : translations) {
             persistenceService.saveOrUpdate(translations);
         }
+        initializeCache();
     }
 
     public List<Translation> getTranslations(Long entityId) {
