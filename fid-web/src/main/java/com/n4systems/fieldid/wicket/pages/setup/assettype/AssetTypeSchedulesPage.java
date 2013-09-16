@@ -136,7 +136,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
         scheduleContent.add(frequencyModalWindow = new DialogModalWindow("addFrequency").setInitialWidth(480).setInitialHeight(280));
         frequencyModalWindow.setContent(getFrequencyForm());
 
-        scheduleContent.add(recurrenceModalWindow = new DialogModalWindow("addRecurrence").setInitialWidth(480).setInitialHeight(280));
+        scheduleContent.add(recurrenceModalWindow = new DialogModalWindow("addRecurrence").setInitialWidth(480));
         recurrenceModalWindow.setContent(getRecurrenceForm());
         WebMarkupContainer scheduleActions;
         scheduleContent.add(scheduleActions = new WebMarkupContainer("scheduleActions"));

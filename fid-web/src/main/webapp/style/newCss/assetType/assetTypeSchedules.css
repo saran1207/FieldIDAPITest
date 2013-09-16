@@ -81,6 +81,9 @@ table .schedule-options {
 
 
 /* MODALS */
+.wicket-modal {
+	min-height: 280px;
+}
 .new-rules {
 	font-size: 13px;
 }
@@ -135,9 +138,6 @@ select{
 	width: 188px;
 	*float: left;
 }
-select.time {
-	width: 100px;
-}
 .time-container {
 	display: inline-block;
 }
@@ -150,6 +150,7 @@ select.time {
 /* hack */
 .w_content_container {
 	overflow: visible!important;
+	height: auto!important;
 }
 
 /* modal.css overrides */
