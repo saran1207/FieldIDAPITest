@@ -14,9 +14,4 @@ public class SelectLanguagePage extends FieldIDAuthenticatedPage {
             }
         });
     }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
-    }
 }

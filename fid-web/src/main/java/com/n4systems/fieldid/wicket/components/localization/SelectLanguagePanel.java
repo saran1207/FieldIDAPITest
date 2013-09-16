@@ -14,6 +14,7 @@ import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.markup.html.IHeaderResponse;
 
 import java.util.List;
 import java.util.Locale;
@@ -76,5 +77,11 @@ public class SelectLanguagePanel extends Panel {
         List<Locale> languages = tenantSettings.getLanguages();
         languages.add(0, tenantSettings.getDefaultLanguage());
         return languages;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/newCss/component/buttons.css");
+        response.renderCSSReference("style/modal/select-language.css");
     }
 }
