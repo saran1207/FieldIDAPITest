@@ -46,7 +46,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private static Collection<? extends String> reservedFieldNames = Lists.newArrayList(PO_NUMBER, RFID, REF_NUMBER, ORDER_NUMBER, IDENTIFIER );
 	
 	@Column(nullable=false)
-    private @Localized String name;
+    private String name;
 	
 	@Column(length=2047)
     private @Localized String warnings;
@@ -95,13 +95,13 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
     private boolean linkable = false;
 
     public AssetType() {
-		this(null);
-	}
-	
-	public AssetType(String name) {
-		super();
-		setName(name);
-	}
+        this(null);
+    }
+
+    public AssetType(String name) {
+        super();
+        this.name = name;
+    }
 
 	@Override
 	protected void onCreate() {
@@ -128,6 +128,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		this.descriptionTemplate = descriptionTemplate;
 	}
 
+    @AllowSafetyNetworkAccess
 	public String getName() {
 		return name;
 	}
