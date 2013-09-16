@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -71,6 +72,9 @@ public class SelectLanguagePanel extends Panel {
     public void onLanguageSelection(AjaxRequestTarget target) {}
 
     private List<Locale> getLanguages() {
-        return FieldIDSession.get().getTenant().getSettings().getLanguages();
+        TenantSettings tenantSettings = FieldIDSession.get().getTenant().getSettings();
+        List<Locale> languages = tenantSettings.getLanguages();
+        languages.add(0, tenantSettings.getDefaultLanguage());
+        return languages;
     }
 }
