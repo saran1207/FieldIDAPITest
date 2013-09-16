@@ -8,41 +8,42 @@ import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.localization.LocalizationService;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.lang.ObjectUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.EntityMode;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.ejb.event.EJB3FlushEntityEventListener;
 import org.hibernate.event.*;
 import org.hibernate.event.def.DefaultFlushEntityEventListener;
-import org.hibernate.event.def.DefaultInitializeCollectionEventListener;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.type.Type;
 import org.reflections.ReflectionUtils;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 
 import javax.persistence.Entity;
 import java.lang.reflect.Field;
 import java.util.*;
 
 
-public class LocalizationListener implements FlushEntityEventListener, PostLoadEventListener, PostUpdateEventListener, PostInsertEventListener, ApplicationContextAware {
+public class LocalizationListener implements FlushEntityEventListener, PostLoadEventListener, PostUpdateEventListener {
 
     private static final Logger logger=Logger.getLogger(LocalizationListener.class);
 
     private Map<Class<?>, List<LocalizedProperty>> cache = Maps.newHashMap();
-    private ApplicationContext applicationContext;
     private DefaultFlushEntityEventListener flushEntityEventListener;
     private Map<Session,Map<Object,List<DirtyLocalizedProperty>>> translated = Maps.newHashMap();
-    private DefaultInitializeCollectionEventListener intializeCollectionEventListener = new DefaultInitializeCollectionEventListener();
 
     public LocalizationListener() {
-        flushEntityEventListener = new DefaultFlushEntityEventListener() {
+        flushEntityEventListener = new EJB3FlushEntityEventListener() {
             @Override protected void dirtyCheck(FlushEntityEvent event) throws HibernateException {
                 super.dirtyCheck(event);
                 removeDirtCausedByLocalizationProperties(event);
+            }
+
+            @Override
+            public void onFlushEntity(FlushEntityEvent event) throws HibernateException {
+                super.onFlushEntity(event);
             }
         };
     }
@@ -55,19 +56,12 @@ public class LocalizationListener implements FlushEntityEventListener, PostLoadE
     @Override
     public void onPostLoad(PostLoadEvent event) {
         localize(event.getEntity(), event.getPersister(), event.getSession());
-        event.getSession();
     }
 
     private void localize(Object entity, EntityPersister persister, EventSource eventSource) {
         if (entity.getClass().isAnnotationPresent(Entity.class) && entity instanceof Saveable) {
             localize((Saveable)entity, persister, eventSource);
         }
-    }
-
-    @Override
-    public void onPostInsert(PostInsertEvent event) {
-        // not needed...new entities will never be translated.
-        //localize(event.getEntity(), event.getPersister(), event.getSession());
     }
 
     private void localize(Saveable entity, EntityPersister persister, EventSource eventSource) {
@@ -183,7 +177,6 @@ public class LocalizationListener implements FlushEntityEventListener, PostLoadE
     private void removeOldSessionsFromDirtyPropertyMap() {
         List<Session> oldSessions = Lists.newArrayList();
         for (Session s:translated.keySet()) {
-            System.out.println("checking session : open " + s.isOpen() + " , connected " + s.isConnected());
             if (!s.isOpen()) {
                 oldSessions.add(s);
             }
@@ -194,14 +187,8 @@ public class LocalizationListener implements FlushEntityEventListener, PostLoadE
     }
 
     private LocalizationService getLocalizationService() {
-        return applicationContext.getBean(LocalizationService.class);
+        return ServiceLocator.getLocalizationService();
     }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
-
 
     class DirtyLocalizedProperty {
         int index;

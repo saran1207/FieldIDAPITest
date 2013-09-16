@@ -671,4 +671,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
     public boolean isMultiLanguage() {
         return getTenant().getSettings().getLanguages().size() > 1;
     }
+
+    public Locale getLanguage(String methodName) {
+        return getTenant().getSettings().getDefaultLanguage();
+    }
 }

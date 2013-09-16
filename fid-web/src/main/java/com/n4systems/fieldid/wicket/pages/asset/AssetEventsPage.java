@@ -159,6 +159,12 @@ public class AssetEventsPage extends AssetPage{
     public FIDFeedbackPanel getFeedbackPanel() {
         return feedbackPanel;
     }
+
+
+    @Override
+    protected boolean forceDefaultLanguage() {
+        return false;
+    }
 }
 
 

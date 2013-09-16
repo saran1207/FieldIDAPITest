@@ -25,6 +25,7 @@ import com.n4systems.notifiers.Notifier;
 import com.n4systems.services.EventScheduleService;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.services.SecurityContext;
+import com.n4systems.services.localization.LocalizationService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -159,6 +160,10 @@ public class ServiceLocator implements ApplicationContextAware {
 
     public static AssetIdentifierService getAssetIdentifierService() {
         return getBean(AssetIdentifierService.class);
+    }
+
+    public static LocalizationService getLocalizationService() {
+        return getBean(LocalizationService.class);
     }
 
 	@SuppressWarnings("unchecked")

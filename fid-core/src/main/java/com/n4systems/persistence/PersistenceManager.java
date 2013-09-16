@@ -34,6 +34,7 @@ public class PersistenceManager {
 		if (entityManagerFactory == null) {
 			logger.debug("Creating EntityManagerFactory");
 			entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit, testProperties);
+
 		}
 		return entityManagerFactory;
 	}

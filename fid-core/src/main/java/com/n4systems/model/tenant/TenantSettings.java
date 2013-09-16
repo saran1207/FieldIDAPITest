@@ -46,6 +46,7 @@ public class TenantSettings extends EntityWithTenant {
     @ElementCollection(fetch= FetchType.EAGER)
     @CollectionTable(name="tenant_languages", joinColumns = @JoinColumn(name = "tenant_settings_id"))
     @IndexColumn(name="orderidx")
+    // TODO DD : rename this to make it clearer.  this is a list of "other" or non-default langauges that the tenant supports.
     private List<Locale> languages = Lists.newArrayList();
 
     @Column(name="default_language")

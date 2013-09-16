@@ -27,12 +27,11 @@
 			<property name="hibernate.generate_statistics" value="true" />
 			-->
 
-            <!-- moved to HibernatePersister.java -->
-			<!--<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>-->
-			<!--<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>-->
-			<!--<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>-->
-
-            <!--<property name="hibernate.ejb.event.post-load" value="com.n4systems.persistence.listeners.LocalizationListener"/>-->
+			<property name="hibernate.ejb.event.post-insert" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
+			<property name="hibernate.ejb.event.post-update" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener,com.n4systems.persistence.listeners.LocalizationListener"/>
+			<property name="hibernate.ejb.event.post-delete" value="com.n4systems.persistence.listeners.SetupDataUpdateEventListener"/>
+            <property name="hibernate.ejb.event.post-load" value="com.n4systems.persistence.listeners.LocalizationListener"/>
+            <!--<property name="hibernate.ejb.event.flush-entity" value="com.n4systems.persistence.listeners.LocalizationListener"/>-->
 
             <!-- HIBERNATE SEARCH -->
             <!--property name="hibernate.search.default.directory_provider" value="filesystem"/-->  <!--NOTE: may want to switch providers to optimize performance later.   DD:may, 2013-->

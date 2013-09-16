@@ -6,13 +6,12 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.security.Permissions;
-import com.n4systems.security.UserType;
 import com.n4systems.util.BitField;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
 
-import javax.persistence.Transient;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class SessionUser implements DateTimeDefinition {
@@ -40,10 +39,11 @@ public class SessionUser implements DateTimeDefinition {
 	private boolean systemUser;
 	private boolean liteUser;
     private boolean isDefaultLanguageMode = false;
+    private final Locale language;
 
     private String userTypeLabel;
-	
-	public SessionUser( User user ) {
+
+    public SessionUser( User user ) {
 		this.tenant = user.getTenant();
 		this.owner = user.getOwner();
 		this.userID = user.getUserID();
@@ -62,6 +62,7 @@ public class SessionUser implements DateTimeDefinition {
 		this.readOnly= user.isReadOnly();
 		this.systemUser=user.isSystem();
 		this.liteUser=user.isLiteUser();
+        this.language = user.getLanguage();
         this.userTypeLabel = user.getUserType().getLabel();
 	}
 
@@ -317,4 +318,7 @@ public class SessionUser implements DateTimeDefinition {
         return isDefaultLanguageMode;
     }
 
+    public Locale getLanguage() {
+        return language;
+    }
 }

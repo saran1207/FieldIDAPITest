@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.localization;
 
 import com.google.common.base.CaseFormat;
+import com.google.common.collect.ImmutableList;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -143,7 +144,7 @@ public class LocalizationPanel extends Panel {
     }
 
     private List<Locale> getLanguages() {
-        return FieldIDSession.get().getTenant().getSettings().getLanguages();
+        return ImmutableList.copyOf(FieldIDSession.get().getTenant().getSettings().getLanguages());
     }
 
 

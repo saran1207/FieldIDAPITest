@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.event;
 
+import com.google.common.collect.Sets;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
@@ -1128,4 +1129,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
     public List<User> getAssignees() {
         return userService.getExaminers();
     }
+
+    public Locale getLanguage(String methodName) {
+        Set<String> localizedMethods = Sets.newHashSet("doShow");
+        Locale language = null;
+        if (localizedMethods.contains(methodName)) {
+            language = getSessionUser().getLanguage();
+        }
+        return language!=null ? language : getTenant().getSettings().getDefaultLanguage();
+    }
+
 }

@@ -40,10 +40,12 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         validate();
     }
 
+
     private void initializeCache() {
         try {
             // TODO DD : make this use EHCACHE instead of simple map.
             // that way cache can be configured dynamically (in memory, disk spill over, LRU etc...)
+            // also, lots of optimization can be done here...initialize on tenant by tenant basis. or even tenant/entity type(s) granularity....
             translationCache = Maps.newHashMap();
             List<Translation> translations = getAllTranslations();
             for (Translation translation:translations) {

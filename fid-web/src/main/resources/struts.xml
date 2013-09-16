@@ -29,7 +29,8 @@
 			<interceptor name="setupWizard" class="com.n4systems.fieldid.utils.SetupWizardFirstTimeInterceptor"/>
 			<interceptor name="concurrentSession" class="com.n4systems.fieldid.utils.ConcurrentSessionInterceptor"/>
             <interceptor name="noRobots" class="com.n4systems.fieldid.utils.AntiRobotInterceptor"/>
-			
+            <interceptor name="language" class="com.n4systems.fieldid.utils.LanguageInterceptor"/>
+
 			<interceptor-stack name="publicStack">
 				<interceptor-ref name="paramsPrepareParamsStack" />
 				<interceptor-ref name="missingEntity" />
@@ -44,6 +45,7 @@
 			<interceptor-stack name="loggedInStack">
 				<interceptor-ref name="tenatRequired" />
 				<interceptor-ref name="login" />
+                <interceptor-ref name="language"/>
 				<interceptor-ref name="concurrentSession"/>
                 <interceptor-ref name="setCurrentUser" />
 				<interceptor-ref name="security" />
