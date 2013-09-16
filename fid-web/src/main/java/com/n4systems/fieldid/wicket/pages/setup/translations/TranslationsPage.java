@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.wicket.components.localization.LocalizationPanel;
 import com.n4systems.fieldid.wicket.components.localization.LocalizedField;
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -55,7 +56,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                 });
         add(new Form("form").add(choice));
 
-        dialog = new ModalWindow("dialog");
+        dialog = new FIDModalWindow("dialog");
         add(new Form("dialogForm").add(dialog));
 
         add(localizationPanel = new WebMarkupContainer(LOCALIZATION_PANEL_ID).setOutputMarkupId(true));
