@@ -46,13 +46,13 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 	private static Collection<? extends String> reservedFieldNames = Lists.newArrayList(PO_NUMBER, RFID, REF_NUMBER, ORDER_NUMBER, IDENTIFIER );
 	
 	@Column(nullable=false)
-    private String name;
+    private @Localized String name;
 	
 	@Column(length=2047)
     private @Localized String warnings;
 	
 	@Column(length=2047)
-	private String instructions;
+	private /**@Localized - to be done later */ String instructions;
 
 	private String cautionUrl;
 	private String imageName;

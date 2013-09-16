@@ -29,15 +29,16 @@ public class LocalizationListener extends EJB3FlushEntityEventListener implement
 
     private static final Logger logger=Logger.getLogger(LocalizationListener.class);
 
-    private Map<Class<?>, List<LocalizedProperty>> cache = Maps.newHashMap();
-    private Map<Object,List<DirtyLocalizedProperty>> translated = Maps.newHashMap();
+    private static Map<Class<?>, List<LocalizedProperty>> cache = Maps.newHashMap();
+    private static Map<Object,List<DirtyLocalizedProperty>> dirtyPropertyMap = Maps.newHashMap();
 
     public LocalizationListener() {
+        dirtyPropertyMap = Maps.newHashMap();
     }
 
     @Override protected void dirtyCheck(FlushEntityEvent event) throws HibernateException {
         super.dirtyCheck(event);
-        removeDirtCausedByLocalizationProperties(event);
+        removeDirtCausedByLocalization(event);
     }
 
     @Override
@@ -58,11 +59,9 @@ public class LocalizationListener extends EJB3FlushEntityEventListener implement
 
     private void localize(Saveable entity, EntityPersister persister, EventSource eventSource) {
         try {
-            //System.out.println("localizing " + entity.getClass().getSimpleName());
             for (LocalizedProperty property:getLocalizedProperties(entity,persister)) {
                 int index = property.getIndex();
                 Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
-//                locale = Locale.GERMAN;   // for testing only- force to german.
                 Object translation = getLocalizationService().getTranslation(entity, property.getOgnl(), locale);
                 if (translation!=null) {
                     setTranslatedValue(persister, entity, eventSource.getSession(EntityMode.POJO), index, translation);
@@ -76,9 +75,9 @@ public class LocalizationListener extends EJB3FlushEntityEventListener implement
     private void setTranslatedValue(EntityPersister persister, Saveable entity, Session session, int index, Object translation) {
         Object originalValue = persister.getPropertyValue(entity, index, EntityMode.POJO);
         persister.setPropertyValue(entity, index, translation, EntityMode.POJO);
-        List<DirtyLocalizedProperty> dirtyProperties = translated.get(entity);
+        List<DirtyLocalizedProperty> dirtyProperties = dirtyPropertyMap.get(entity);
         if (dirtyProperties==null) {
-            translated.put(entity, dirtyProperties = new ArrayList<DirtyLocalizedProperty>());
+            dirtyPropertyMap.put(entity, dirtyProperties = new ArrayList<DirtyLocalizedProperty>());
         }
         dirtyProperties.add(new DirtyLocalizedProperty(index, translation, originalValue));
         // add to list of fields that need to be ignored when hibernate goes to update this object.
@@ -126,9 +125,9 @@ public class LocalizationListener extends EJB3FlushEntityEventListener implement
         super.onFlushEntity(event);
     }
 
-    private void removeDirtCausedByLocalizationProperties(FlushEntityEvent event) {
+    private void removeDirtCausedByLocalization(FlushEntityEvent event) {
         // TODO DD: check for MODIFIED.  exclude this one if others are removed.
-        List<DirtyLocalizedProperty> dirtyProperties = translated.get(event.getEntity());
+        List<DirtyLocalizedProperty> dirtyProperties = dirtyPropertyMap.get(event.getEntity());
         if (dirtyProperties==null) {
             return;
         }
@@ -146,7 +145,6 @@ public class LocalizationListener extends EJB3FlushEntityEventListener implement
             }
         }
         event.setDirtyProperties(Ints.toArray(newDirty));
-        //***not null or empty??
     }
 
     private boolean isDirtyBecauseOfLocalization(List<DirtyLocalizedProperty> dirtyProperties, Object propertyValue, int i) {
