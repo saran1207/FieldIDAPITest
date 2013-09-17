@@ -4,6 +4,7 @@ import com.google.common.base.CaseFormat;
 import com.google.common.collect.ImmutableList;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.fieldid.wicket.components.form.IndicatingAjaxSubmitLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -13,7 +14,6 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -69,16 +69,14 @@ public class LocalizationPanel extends Panel {
                         return object.toString();
                     }
                 }).setNullValid(false).setRequired(true))
-                .add(new AjaxSubmitLink("submit") {
+                .add(new IndicatingAjaxSubmitLink("submit") {
                     @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         localizationService.save(convertToTranslations());
+                        forceReload();
                     }
-
                     @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
-
                     }
                 })
-
         );
         chooseLanguage.add(new AjaxFormSubmitBehavior("onchange") {
             @Override protected void onSubmit(AjaxRequestTarget target) {
@@ -89,6 +87,11 @@ public class LocalizationPanel extends Panel {
             }
         });
         language = getLanguages().get(0);
+    }
+
+    private void forceReload() {
+        LocalizedFieldsModel model = (LocalizedFieldsModel) listView.getModel();
+        model.forceReload();
     }
 
     protected String getLabelFor(LocalizedField field) {

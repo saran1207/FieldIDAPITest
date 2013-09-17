@@ -8,6 +8,7 @@ import com.n4systems.model.api.Saveable;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.localization.LocalizationService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -152,10 +153,9 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
                 result.add(new LocalizedField(entity, field.getName(), values.get(i), ognl+i, languages));
             }
         } else if (value instanceof String) {
-            System.out.println("ERROR - shouldn't display empty strings when translating.");
-           //if (StringUtils.isNotEmpty((String) value)) {   // TODO DD : put this back in later.   leave in to help debugging.
+           if (StringUtils.isNotEmpty((String) value)) {
                 result.add(new LocalizedField(entity, field.getName(), (String)value, ognl, languages));
-           //}
+           }
         } else {
             throw new IllegalStateException("the field '" + field.getName() + "' is not of expected type <String> or List<String>");
         }
@@ -226,6 +226,16 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
             fields = load();
         }
         return fields;
+    }
+
+    @Override
+    public void detach() {
+        super.detach();
+        System.out.println("detaching localized fields model.");
+    }
+
+    public void forceReload() {
+        fields=null;
     }
 
     @Override
