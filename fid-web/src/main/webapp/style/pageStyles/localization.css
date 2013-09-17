@@ -60,6 +60,9 @@ hr {
 	*margin-left: 0;
 	*padding: 10px 0;
 }
+.language-select select {
+	width: 175px;
+}
 .btn-wrap {
 	position: absolute;
 	top: 21px;
@@ -110,13 +113,15 @@ select {
 .translation-table tr {
 	border-top: 1px solid #eee;
 }
-.translation-table input {
+.translation-table textarea {
 	border: 1px solid #c7c7c9;
 	height: 25px;
 	color: #3a3a3a;
-	width: 250px;
+	width: 260px;
 	padding: 0 4px;
+	resize: vertical;
 }
+
 /* column specific styles */
 .translation-table .title {
 	font-weight: bold;
@@ -128,7 +133,11 @@ select {
 	width: 25%;
 }
 .translation-table .languages {
-	width: 260px;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+.translation-table .languages textarea {
+	margin: 10px 0 8px;
 }
 .translation-table .misc {
 	text-align: left;
@@ -139,4 +148,29 @@ select {
 }
 
 
-
+/* MODAL STYLES */
+.wicket-modal .translation-table {
+	width: 600px;
+	padding: 0 10px 40px;
+}
+.wicket-modal .language-select {
+	margin-left: 0;
+}
+.wicket-modal .btn-wrap {
+	top: 2px;
+	right: 8px;
+}
+.wicket-modal .translation-table td {
+	padding: 0;
+	float: none;
+}
+.wicket-modal .title {
+	width: 150px;
+}
+.wicket-modal .default-value {
+	width: 170px;
+	margin-top: 5px;
+}
+.wicket-modal .misc {
+	display: none;
+}

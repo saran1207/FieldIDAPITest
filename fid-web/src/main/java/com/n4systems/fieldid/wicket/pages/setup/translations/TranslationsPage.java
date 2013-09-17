@@ -56,7 +56,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                 });
         add(new Form("form").add(choice));
 
-        dialog = new FIDModalWindow("dialog");
+        dialog = new FIDModalWindow("dialog").setAutoSize(true);
         add(new Form("dialogForm").add(dialog));
 
         add(localizationPanel = new WebMarkupContainer(LOCALIZATION_PANEL_ID).setOutputMarkupId(true));
