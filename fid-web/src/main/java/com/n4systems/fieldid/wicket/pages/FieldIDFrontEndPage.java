@@ -160,10 +160,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             @Override
             public void onLanguageSelection(AjaxRequestTarget target) {
                 languageSelectionModalWindow.close(target);
-                FieldIDSession.get().clear();
-                String url = RequestCycle.get().getUrlRenderer().renderFullUrl(
-                        Url.parse(urlFor(getPage().getClass(), getPageParameters()).toString() + "&noise="+System.currentTimeMillis()));
-                redirect(url);
+                setResponsePage(getPageClass(), getPageParameters());
             }
         });
 
