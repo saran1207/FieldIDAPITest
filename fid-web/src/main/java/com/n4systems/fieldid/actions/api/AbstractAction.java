@@ -669,7 +669,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
     }
 
     public boolean isMultiLanguage() {
-        return getTenant().getSettings().getLanguages().size() > 1;
+        return getTenant().getSettings().getTranslatedLanguages().size() > 0;
     }
 
     public Locale getLanguage(String methodName) {

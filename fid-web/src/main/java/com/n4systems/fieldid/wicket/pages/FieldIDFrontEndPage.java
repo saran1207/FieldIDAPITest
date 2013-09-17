@@ -173,7 +173,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             public void onClick(AjaxRequestTarget target) {
                 languageSelectionModalWindow.show(target);
             }
-        }.setVisible(getTenant().getSettings().getLanguages().size() > 1));
+        }.setVisible(getTenant().getSettings().getTranslatedLanguages().size() > 0));
 
         add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent")));
         add(createSetupLinkContainer(sessionUser));

@@ -144,7 +144,7 @@ public class LocalizationPanel extends Panel {
     }
 
     private List<Locale> getLanguages() {
-        return ImmutableList.copyOf(FieldIDSession.get().getTenant().getSettings().getLanguages());
+        return ImmutableList.copyOf(FieldIDSession.get().getTenant().getSettings().getTranslatedLanguages());
     }
 
 

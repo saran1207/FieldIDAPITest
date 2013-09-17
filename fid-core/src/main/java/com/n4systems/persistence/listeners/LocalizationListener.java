@@ -79,8 +79,8 @@ public class LocalizationListener extends EJB3FlushEntityEventListener implement
         if (dirtyProperties==null) {
             dirtyPropertyMap.put(entity, dirtyProperties = new ArrayList<DirtyLocalizedProperty>());
         }
-        dirtyProperties.add(new DirtyLocalizedProperty(index, translation, originalValue));
         // add to list of fields that need to be ignored when hibernate goes to update this object.
+        dirtyProperties.add(new DirtyLocalizedProperty(index, translation, originalValue));
     }
 
     private List<LocalizedProperty> getLocalizedProperties(Object entity, EntityPersister persister) throws Exception {
