@@ -141,19 +141,14 @@ a.search {
 	top: 0;
 	right: 0;
 	display: none;
+	*z-index: 1000;
 }
 	.actions.show {
 		display: block
 	}
-.actions ul {
-	width: auto;
-}
-.menu-items {
-	left: 0;
-}
-.mattButton img {
-	margin-left: 10px;
-	vertical-align: middle;
+
+.ie-print {
+	*width: 190px;
 }
 
 
@@ -162,6 +157,10 @@ a.search {
 .action-items {
 	margin-bottom: 4px;
 	margin-left: 39px;
+}
+.search-results {
+	*position: relative;
+	*z-index: 1;
 }
 .select-options {
 	height: 40px;
@@ -181,8 +180,6 @@ a.search {
 
 .asset-item {
 	overflow: hidden;
-	*position: relative;
-	*z-index: 1;
 }
 .asset-item .select {
 	width: 35px;
@@ -269,9 +266,6 @@ a.search {
 }
 #pageFooter {
 	padding-bottom: 100px;
-}
-
-.message {
 }
 
 
