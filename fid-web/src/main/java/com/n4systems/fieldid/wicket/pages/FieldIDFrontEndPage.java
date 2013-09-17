@@ -53,6 +53,8 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -138,7 +140,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class).add(new Image("down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(globalSearchEnabled)));
         add(new BookmarkablePageLink<Void>("newAssetSearchLink", AdvancedAssetSearchPage.class).setVisible(globalSearchEnabled));
 
-
         BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
         procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
         add(procedureLink);
@@ -157,7 +158,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             @Override
             public void onLanguageSelection(AjaxRequestTarget target) {
                 languageSelectionModalWindow.close(target);
-                setResponsePage(getPage().getPageClass());
+                FieldIDSession.get().clear();
+                String url = RequestCycle.get().getUrlRenderer().renderFullUrl(
+                        Url.parse(urlFor(getPage().getClass(), getPageParameters()).toString() + "&noise="+System.currentTimeMillis()));
+                redirect(url);
             }
         });
 
@@ -169,7 +173,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             public void onClick(AjaxRequestTarget target) {
                 languageSelectionModalWindow.show(target);
             }
-        }.setVisible(getTenant().getSettings().getLanguages().size() > 1));
+        }.setVisible(getTenant().getSettings().getTranslatedLanguages().size() > 0));
 
         add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent")));
         add(createSetupLinkContainer(sessionUser));
@@ -196,6 +200,12 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
+
+        getSessionUser().setIsDefaultLanguageMode(forceDefaultLanguage());
+    }
+
+    protected boolean forceDefaultLanguage() {
+        return true;
     }
 
     private String getSupportUrl() {

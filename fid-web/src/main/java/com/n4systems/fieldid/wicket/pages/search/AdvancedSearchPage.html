@@ -6,8 +6,6 @@
 
 <wicket:extend>
 
-    <!-- <h2>New Search Page</h2> -->
-
     <div wicket:id="feedback" class="feedback"></div>
 
     <form wicket:id="form" class="search-bar">
@@ -92,44 +90,34 @@
 
             <!-- mass actions button -->
             <div class="actions show" wicket:id="actionsContainer">
-                <div wicket:id="actions">
-                </div>
+                <div wicket:id="actions"/>
             </div>
 
             <!-- blank slate -->
-             <div wicket:id="blankSlate" class="message"><wicket:message key="message.no_search_results"/></div>
+            <div wicket:id="blankSlate" class="message"><wicket:message key="message.no_search_results"/></div>
 
             <!-- search results list -->
             <div class="search-results" wicket:id="searchResults">
+                <wicket:enclosure>
+                    <!-- select options -->
+                    <div class="select-options">
+                        <input type="checkbox" class="select-input" wicket:id="groupselector">
+                        <label><wicket:message key="label.select_assets_all"/></label>
+                        <p><span><wicket:message key="label.select_assets"/></span></p>
+                    </div>
+                </wicket:enclosure>
 
-                <div>
+                <p class="action-items"><b><span wicket:id="currentlySelectedItems"></span></b> of <b><span wicket:id="totalAvailableItems"></span></b> items in the results are selected. &nbsp;
+                <a wicket:id="selectAllLink" class="select-input">Select all <span wicket:id="totalAvailableItems"></span> items</a> <i>or</i>&nbsp; <a wicket:id="clearSelectionLink" class="select-input">Clear selection</a></p>
 
-
-                    <wicket:enclosure>
-                        <!-- select options -->
-                        <div class="select-options">
-                            <input type="checkbox" class="select-input" wicket:id="groupselector">
-                            <label><wicket:message key="label.select_assets_all"/></label>
-                            <p><span><wicket:message key="label.select_assets"/></span></p>
-                        </div>
-                    </wicket:enclosure>
-
-
-                    <b><span wicket:id="currentlySelectedItems"></span></b> of <b><span wicket:id="totalAvailableItems"></span></b> items in the results are selected. &nbsp;
-                    <a wicket:id="selectAllLink" class="select-input">Select all <span wicket:id="totalAvailableItems"></span> items</a> <i>or</i>
-                    <a wicket:id="clearSelectionLink" class="select-input">Clear selection</a>
-
-                    <!-- individual results item -->
-                    <div wicket:id="results" class="asset-item">
-                        <!-- checkbox -->
-                        <div class="select"><input type="checkbox" wicket:id="check"/></div>
-
-                        <!-- individual asset info -->
-                        <div class="details" wicket:id="detailsContainer">
-
-                        </div>
-                    </div><!-- /.asset-item -->
-                </div>
+                <!-- individual results item -->
+                <div wicket:id="results" class="asset-item">
+                    <!-- checkbox -->
+                    <div class="select"><input type="checkbox" wicket:id="check"/></div>
+                    <!-- individual asset info -->
+                    <div class="details" wicket:id="detailsContainer">
+                    </div>
+                </div><!-- /.asset-item -->
             </div><!-- /.search-results -->
 
             <!-- pagination -->

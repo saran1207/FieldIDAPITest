@@ -667,4 +667,12 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
         MapVariableInterpolator interpolator = new MapVariableInterpolator(js, variableMap);
         return interpolator.toString();
     }
+
+    public boolean isMultiLanguage() {
+        return getTenant().getSettings().getTranslatedLanguages().size() > 0;
+    }
+
+    public Locale getLanguage(String methodName) {
+        return getTenant().getSettings().getDefaultLanguage();
+    }
 }

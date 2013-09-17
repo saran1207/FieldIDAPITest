@@ -67,6 +67,7 @@ public class CriteriaCopyUtil {
     }
 
     private void copyCommonFields(Criteria criteria, Criteria newCriteria, List<Criteria> existingCriteria) {
+        newCriteria.setOldId(criteria.getId());
         newCriteria.setRetired(criteria.isRetired());
         newCriteria.setTenant(criteria.getTenant());
         newCriteria.setInstructions(criteria.getInstructions());

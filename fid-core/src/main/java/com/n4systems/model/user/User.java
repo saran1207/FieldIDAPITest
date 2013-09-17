@@ -10,6 +10,7 @@ import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.security.*;
 import com.n4systems.model.utils.GlobalID;
+import com.n4systems.persistence.localization.Localized;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
@@ -25,6 +26,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "users")
+@Localized(ignore = true)
 public class User extends ArchivableEntityWithOwner implements Listable<Long>, Saveable, SecurityEnhanced<User>, Exportable, DateTimeDefinition, Assignable {
 	private static final long serialVersionUID = 1L;
 	public static final int REFERRAL_KEY_LENGTH = 10;

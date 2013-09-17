@@ -1,14 +1,16 @@
 package com.n4systems.fieldid.wicket.components.localization;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.PropertyModel;
@@ -71,6 +73,15 @@ public class SelectLanguagePanel extends Panel {
     public void onLanguageSelection(AjaxRequestTarget target) {}
 
     private List<Locale> getLanguages() {
-        return FieldIDSession.get().getTenant().getSettings().getLanguages();
+        TenantSettings tenantSettings = FieldIDSession.get().getTenant().getSettings();
+        List<Locale> languages = Lists.newArrayList(tenantSettings.getTranslatedLanguages());
+        languages.add(0, tenantSettings.getDefaultLanguage());
+        return languages;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/newCss/component/buttons.css");
+        response.renderCSSReference("style/modal/select-language.css");
     }
 }

@@ -8,12 +8,14 @@ import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.GlobalID;
+import com.n4systems.persistence.localization.Localized;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
+@Localized(ignore =true)
 public abstract class BaseOrg extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable {
 
 	private static final long serialVersionUID = 1L;

@@ -20,18 +20,25 @@ public class LocalizationTest {
 
     @Test
     public void test_localized_entities() {
-        Set<Class> entities = Sets.newHashSet();
-        entities.addAll(new Reflections(BaseEntity.class.getPackage().getName()).getSubTypesOf(BaseEntity.class));
-        entities.addAll(new Reflections("rfid.ejb").getSubTypesOf(LegacyBaseEntity.class));
+        Set<Class> entities = getAllEntities();
         for (Class<?> entity:entities) {
             assertClass(entity);
         }
     }
 
+    private Set<Class> getAllEntities() {
+        Set<Class> entities = Sets.newHashSet();
+        entities.addAll(new Reflections(BaseEntity.class.getPackage().getName()).getSubTypesOf(BaseEntity.class));
+        entities.addAll(new Reflections("rfid.ejb").getSubTypesOf(LegacyBaseEntity.class));
+        return entities;
+    }
+
     private void assertClass(Class<?> entity) {
         Set<Field> localizedFields = getAllFields(entity, withAnnotation(Localized.class));
         for (Field localizedField:localizedFields) {
-            assertTrue("class " + entity.getName() + " field '" + localizedField.getName() + "' with @" + Localized.class.getSimpleName() + " annotation must return String or List<String>", isStringReturnType(localizedField));
+            if (!localizedField.getAnnotation(Localized.class).ignore()) {
+                assertTrue("class " + entity.getName() + " field '" + localizedField.getName() + "' with @" + Localized.class.getSimpleName() + " annotation must return String or List<String>", isStringReturnType(localizedField));
+            }
         }
     }
 

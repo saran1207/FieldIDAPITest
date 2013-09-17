@@ -36,6 +36,9 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
 	@ElementCollection(fetch= FetchType.EAGER)
 	@IndexColumn(name="orderidx")
 	private @Localized List<String> deficiencies = new ArrayList<String>();
+
+    @Transient
+    private Long oldId;
 	
 	public Criteria() {}
 
@@ -108,4 +111,11 @@ public abstract class Criteria extends EntityWithTenant implements Listable<Long
         return !StringUtils.isBlank(doc.text());
     }
 
+    public Long getOldId() {
+        return oldId;
+    }
+
+    public void setOldId(Long oldId) {
+        this.oldId = oldId;
+    }
 }

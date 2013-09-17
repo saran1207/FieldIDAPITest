@@ -34,6 +34,7 @@ public class PersistenceManager {
 		if (entityManagerFactory == null) {
 			logger.debug("Creating EntityManagerFactory");
 			entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnit, testProperties);
+
 		}
 		return entityManagerFactory;
 	}
@@ -44,8 +45,8 @@ public class PersistenceManager {
 
 	protected static EntityManager getEntityManager() {
 		logger.debug("Creating EntityManager");
-		EntityManager createEntityManager = getEntityManagerFactory().createEntityManager();
-		return createEntityManager;
+		EntityManager entityManager = getEntityManagerFactory().createEntityManager();
+        return entityManager;
 	}
 
 	public static void shutdown() {
@@ -61,6 +62,7 @@ public class PersistenceManager {
 	public static Transaction startTransaction() {
 		return new FieldIdTransaction(getEntityManager());
 	}
+
 	
 	public static void rollbackTransaction(Transaction transaction) {
 		if (transaction != null) {

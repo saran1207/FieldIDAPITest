@@ -22,6 +22,9 @@ public class ApiTenantResource extends ApiResource<ApiTenant, PrimaryOrg> {
 		apiTenant.setUsingOrderDetails(primaryOrg.hasExtendedFeature(ExtendedFeature.OrderDetails));
         apiTenant.setUsingLoto(primaryOrg.hasExtendedFeature(ExtendedFeature.LotoProcedures));
 		apiTenant.setUsingGpsCapture(primaryOrg.getTenant().getSettings().isGpsCapture());
+		apiTenant.setLockoutDuration(primaryOrg.getTenant().getSettings().getAccountPolicy().getLockoutDuration());
+		apiTenant.setMaxAttempts(primaryOrg.getTenant().getSettings().getAccountPolicy().getMaxAttempts());
+		apiTenant.setLockoutOnMobile(primaryOrg.getTenant().getSettings().getAccountPolicy().isLockoutOnMobile());
 		return apiTenant;
 	}
 }

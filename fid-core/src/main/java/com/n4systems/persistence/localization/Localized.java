@@ -6,5 +6,5 @@ import java.lang.annotation.*;
 @Target({ElementType.TYPE,ElementType.FIELD})
 @Inherited
 public @interface Localized {
-
+    boolean ignore() default false;
 }

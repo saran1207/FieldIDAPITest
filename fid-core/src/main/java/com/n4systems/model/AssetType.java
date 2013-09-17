@@ -52,7 +52,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
     private @Localized String warnings;
 	
 	@Column(length=2047)
-	private String instructions;
+	private /**@Localized - to be done later */ String instructions;
 
 	private String cautionUrl;
 	private String imageName;
@@ -95,13 +95,13 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
     private boolean linkable = false;
 
     public AssetType() {
-		this(null);
-	}
-	
-	public AssetType(String name) {
-		super();
-		setName(name);
-	}
+        this(null);
+    }
+
+    public AssetType(String name) {
+        super();
+        this.name = name;
+    }
 
 	@Override
 	protected void onCreate() {
@@ -128,6 +128,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 		this.descriptionTemplate = descriptionTemplate;
 	}
 
+    @AllowSafetyNetworkAccess
 	public String getName() {
 		return name;
 	}

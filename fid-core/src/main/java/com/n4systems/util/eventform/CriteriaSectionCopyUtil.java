@@ -13,6 +13,7 @@ public class CriteriaSectionCopyUtil {
 
     public CriteriaSection copySection(CriteriaSection section, List<CriteriaSection> existingSections) {
         CriteriaSection copiedSection = new CriteriaSection();
+        copiedSection.setOldId(section.getId());
         if (existingSections != null) {
             copiedSection.setTitle(findUnusedNameBasedOn(section.getName(), existingSections));
         } else {
@@ -28,8 +29,10 @@ public class CriteriaSectionCopyUtil {
 
     private void copyCriteriaInto(CriteriaSection section, CriteriaSection copiedSection) {
         CriteriaCopyUtil criteriaCopyUtil = new CriteriaCopyUtil();
-        for (Criteria criteria : section.getCriteria()) {
-            copiedSection.getCriteria().add(criteriaCopyUtil.copyCriteria(criteria));
+        for (Criteria oldCriteria : section.getCriteria()) {
+            Criteria newCriteria = criteriaCopyUtil.copyCriteria(oldCriteria);
+
+            copiedSection.getCriteria().add(newCriteria);
         }
     }
 

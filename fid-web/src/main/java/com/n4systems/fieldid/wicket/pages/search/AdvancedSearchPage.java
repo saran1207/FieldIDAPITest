@@ -349,13 +349,14 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/asset/actions-menu.css");
+        //response.renderCSSReference("style/newCss/asset/actions-menu.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/newCss/component/buttons.css");
         response.renderCSSReference("style/pageStyles/searchResults.css");
 
-        response.renderJavaScriptReference("javascript/subMenu.js");
+        //response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
-        response.renderOnDomReadyJavaScript("subMenu.init();");
+        //response.renderOnDomReadyJavaScript("subMenu.init();");
     }
 
     class SuggestionsModel implements IModel<List<String>> {

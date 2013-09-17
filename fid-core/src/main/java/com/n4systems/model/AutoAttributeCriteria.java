@@ -1,22 +1,12 @@
 package com.n4systems.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Table;
-
+import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.persistence.localization.Localized;
 import rfid.ejb.entity.InfoFieldBean;
 
-import com.n4systems.model.parents.EntityWithTenant;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 /**
  * This defines the set of input info fields and output info fields for an asset type.
  * These fields are used to help fill in values when tagging an asset in all user interfaces.
@@ -25,6 +15,7 @@ import com.n4systems.model.parents.EntityWithTenant;
  */
 @Entity
 @Table ( name="autoattributecriteria" )
+@Localized(ignore = true)   // for now, we are currently not supporting this localization.
 public class AutoAttributeCriteria extends EntityWithTenant {
 	private static final long serialVersionUID = 1L;
 	

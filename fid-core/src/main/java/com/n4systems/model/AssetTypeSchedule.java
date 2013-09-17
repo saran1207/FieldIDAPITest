@@ -6,6 +6,7 @@ import com.n4systems.model.parents.EntityWithOwner;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.persistence.localization.Localized;
 import com.n4systems.util.DateHelper;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "assettypeschedules")
+@Localized(ignore =true)
 public class AssetTypeSchedule extends EntityWithOwner implements Saveable, SecurityEnhanced<AssetTypeSchedule> {
 	private static final long serialVersionUID = 1L;
 	

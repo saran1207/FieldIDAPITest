@@ -91,8 +91,12 @@ public class Translation implements Serializable, Saveable {
         }
 
         public CompoundKey(Long tenantId, Long entityId, String ognl, Locale language) {
+            this(tenantId, entityId, ognl, language.toString());
+        }
+
+        public CompoundKey(Long tenantId, Long entityId, String ognl, String language) {
             this.entityId = entityId;
-            this.language = language.toString();
+            this.language = language;
             this.ognl = ognl;
             this.tenantId = tenantId;
         }
@@ -141,6 +145,10 @@ public class Translation implements Serializable, Saveable {
             // assumes format of "classPrefix.fieldSuffix"
             // .:  "widget.name"   -->  "name"
             return ognl.substring(ognl.indexOf('.')+1);
+        }
+
+        public void setEntityId(Long entityId) {
+            this.entityId = entityId;
         }
 
         @Override

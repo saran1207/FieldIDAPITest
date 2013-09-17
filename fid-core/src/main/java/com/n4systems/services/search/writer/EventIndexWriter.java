@@ -6,6 +6,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.search.field.EventIndexField;
 import com.n4systems.services.search.field.IndexField;
 import org.apache.lucene.document.Document;
+import org.apache.lucene.index.IndexableField;
 
 import javax.persistence.EntityManager;
 import java.io.IOException;
@@ -77,6 +78,10 @@ public class EventIndexWriter extends LuceneIndexWriter<Event> {
         addField(doc, EventIndexField.DUE_DATE.getField(), event.getDueDate());
         addField(doc, EventIndexField.COMPLETED_DATE.getField(), event.getCompletedDate());
         addField(doc, EventIndexField.SCORE.getField(), event.getScore());
+
+        for (String attributeName : event.getInfoOptionMap().keySet()) {
+            addCustomField(doc, attributeName, event.getInfoOptionMap().get(attributeName));
+        }
 
         // CAVEAT : always do this LAST!! after all other fields have been added 'cause it depends on existence of doc's fields.
         addAllField(EventIndexField.ALL, doc);

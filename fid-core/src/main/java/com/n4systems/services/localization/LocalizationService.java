@@ -37,17 +37,20 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     @Override
     public void afterPropertiesSet() throws Exception {
         initializeCache();
+        validate();
     }
+
 
     private void initializeCache() {
         try {
             // TODO DD : make this use EHCACHE instead of simple map.
             // that way cache can be configured dynamically (in memory, disk spill over, LRU etc...)
+            // also, lots of optimization can be done here...initialize on tenant by tenant basis. or even tenant/entity type(s) granularity....
+            translationCache = Maps.newHashMap();
             List<Translation> translations = getAllTranslations();
             for (Translation translation:translations) {
                 add(translation);
             }
-            validate();
         } catch (Exception e) {
             logger.error("couldn't initialize localization cache : " + e.getMessage());
             throw new IllegalStateException("couldn't initialize localization cache ",e );
@@ -55,8 +58,8 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     private void validate() {
-        // TODO : further validation could do a foreign key check to make sure entity_id column is valid. if entity points to an archived or unused (like event_form)
-        //  entity then fire out warnings!
+        // TODO : further validation could do a foreign key check to make sure entity_id column is valid.
+        // if entity points to an archived or unused (like event_form) entity then fire out warnings!
 
         Set<Class> entities = Sets.newHashSet();
         entities.addAll(new Reflections(BaseEntity.class.getPackage().getName()).getSubTypesOf(BaseEntity.class));
@@ -115,14 +118,6 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         }
         list.set(translationKey.getIndex(), value);
     }
-
-    // handle event form saving.  google translate API.
-
-//    public Object getText(EntityWithTenant entity, String ognl, Locale locale) {
-//        Preconditions.checkArgument(locale != null && entity != null, "must supply non-null args");
-//        Map<Locale, Object> map = translationCache.get(new TranslationKey(entity, ognl));
-//        return map==null ? null : map.get(locale);
-//    }
 
     public Object getTranslation(Saveable entity, String ognl, Locale locale) {
         Map<Locale, Object> translations = getTranslations(entity, ognl);
@@ -183,12 +178,14 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         for (Translation translation : translations) {
             persistenceService.saveOrUpdate(translations);
         }
+        initializeCache();
     }
 
     public List<Translation> getTranslations(Long entityId) {
-        // TODO DD : need to filter by type/class too!
+        // TODO DD : need to filter by type/class too!  if i don't, could get collisions with entities with same id!
         QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
         query.addSimpleWhere("id.entityId", entityId);
+        /// ------arghhh!
         return persistenceService.findAll(query);
     }
 

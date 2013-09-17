@@ -1,21 +1,20 @@
 <wicket:extend>
 
 	<hr />
-    <form wicket:id="form">
+    <form wicket:id="form" class="main-selection">
         <select wicket:id="choice"/>
     </form>
 
-    <div wicket:id="localization"/>
-
+    <div wicket:id="localization" class="clearfix"/>
 
     <form wicket:id="dialogForm">
         <div wicket:id="dialog"></div>
     </form>
 
     <wicket:fragment wicket:id="eventLinks">
-        <a wicket:id="scoreGroups" class=""><wicket:message key="label.score_group"/></a>
-        <a wicket:id="buttonGroups" class=""><wicket:message key="label.buttongroup"/></a>
-        <a wicket:id="observations" class=""><wicket:message key="label.observations"/></a>
+        <a wicket:id="scoreGroups"><wicket:message key="label.score_group"/></a>
+        <a wicket:id="buttonGroups"><wicket:message key="label.buttongroup"/></a>
+        <a wicket:id="observations"><wicket:message key="label.observations"/></a>
     </wicket:fragment>
 
 </wicket:extend>

@@ -14,7 +14,6 @@ public class AssetTypeTranslationsPage  extends TranslationsPage<AssetType> {
 
     public AssetTypeTranslationsPage() {
         super();
-        // TODO DD : need to add sorting so name is first field.
         add(new RenderHint("assettypes.descriptionTemplate", "top-level"));
     }
 
@@ -25,6 +24,7 @@ public class AssetTypeTranslationsPage  extends TranslationsPage<AssetType> {
 
     @Override
     protected List<String> initExcludedFields() {
-        return Lists.newArrayList("group", "eventTypes", "schedules");
+        return Lists.newArrayList("schedules", "group", "eventTypes", "subTypes", "autoAttributeCriteria" );
     }
+
 }

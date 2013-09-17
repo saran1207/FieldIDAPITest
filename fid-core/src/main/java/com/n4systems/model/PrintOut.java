@@ -2,12 +2,14 @@ package com.n4systems.model;
 
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.persistence.localization.Localized;
 import com.n4systems.reporting.PathHandler;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "printouts")
+@Localized(ignore =true)
 public class PrintOut extends EntityWithTenant implements NamedEntity {
 
 	private static final long serialVersionUID = 1L;

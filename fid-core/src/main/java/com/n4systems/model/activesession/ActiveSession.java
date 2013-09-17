@@ -1,23 +1,13 @@
 package com.n4systems.model.activesession;
 
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-
-
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.time.Clock;
+
+import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name="activesessions")
@@ -37,7 +27,7 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
 	@Column(nullable=false, length=64)
 	private String sessionId;
 	
-	@Column(nullable=false)
+	@Column
 	protected Date lastTouched;
 	
 	

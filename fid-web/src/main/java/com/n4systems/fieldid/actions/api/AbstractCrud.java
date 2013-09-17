@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.actions.api;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-
 import com.n4systems.ejb.PersistenceManager;
 import com.opensymphony.xwork2.Preparable;
 import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 @SuppressWarnings("serial")
 abstract public class AbstractCrud extends AbstractAction implements Preparable {
@@ -43,8 +43,8 @@ abstract public class AbstractCrud extends AbstractAction implements Preparable 
             throw e;
         }
 	}
-	
-	/**
+
+    /**
 	 * This should load the main class that will be edited with this CRUD
 	 * @param uniqueId
 	 */

@@ -3,18 +3,19 @@ package com.n4systems.fieldid.wicket.components.localization;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.n4systems.fieldid.wicket.model.FieldIDSpringModel;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.localization.LocalizationService;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.reflections.ReflectionUtils;
 import org.springframework.util.ClassUtils;
 
+import javax.persistence.Entity;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
@@ -26,8 +27,10 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
     private static final Logger logger= Logger.getLogger(LocalizedFieldsModel.class);
 
     private @SpringBean LocalizationService localizationService;
+    private @SpringBean LocalizedFieldSorter localizedFieldSorter;
 
-    private Set<Object> loaded;
+
+    private Map<Object, List<LocalizedField>> loaded;
     private List<LocalizedField> fields;
     private transient Map<Class<?>, Set<Field>> cache = Maps.newHashMap();
     private final IModel<?> model;
@@ -40,13 +43,12 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
     }
 
     protected List<LocalizedField> load() {
-        loaded = Sets.newHashSet();
+        loaded = Maps.newHashMap();
 
         if (model==null||model.getObject()==null) {
             return Lists.newArrayList();
         }
         model.detach();
-
         List<LocalizedField> localizedFields = loadForEntity(model.getObject());
         return localizedFields;
     }
@@ -63,40 +65,37 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
     }
 
     private List<LocalizedField> loadForEntity(Object entity) {
-        List<LocalizedField> localizedFields = Lists.newArrayList();
-        if (!(entity instanceof Saveable)) {
-            return localizedFields;
+        if (isNotApplicableFor(entity)) {
+            return Lists.newArrayList();
         }
 
-        if (loaded.contains(entity)) {
-            return localizedFields;    //already done?
+        List<LocalizedField> localizedFields = loaded.get(entity);
+        if (localizedFields !=null) {
+            return Lists.newArrayList();
+        } else {
+            localizedFields = Lists.newArrayList();
         }
-        loaded.add(entity);
+        loaded.put(entity, localizedFields);
 
         Saveable saveable = (Saveable) entity;
-        Long id = (Long) saveable.getEntityId();
-
         Set<Field> fields = getAllFields(entity.getClass());
-
-        List<Translation> translations = localizationService.getTranslations(id);
-
+        List<Translation> translations = localizationService.getTranslations((Long)((Saveable) entity).getEntityId());
         List<LocalizedField> embeddedFields = Lists.newArrayList();
 
         for (Field field:fields) {
-            if (isFiltered(entity, field)) {
+            if (ignoreField(entity, field)) {
                 continue;
             }
             if (field.isAnnotationPresent(Localized.class)) {
                 localizedFields.addAll(createLocalizedFields(entity, field));
-            } else if (isCollection(field)){
+            } else if (isCollection(field)) {
                 embeddedFields.addAll(loadForEntities(getValues(entity, field)));
             } else if (!ClassUtils.isPrimitiveOrWrapper(field.getType())) {
                 embeddedFields.addAll(loadForEntity(getValue(entity, field)));
             }
         }
 
-        // TODO DD : sort localized fields with class->comparator map.  sort by last bit of ognl.
-        localizedFields.addAll(embeddedFields);
+        localizedFieldSorter.sort(localizedFields).addAll(embeddedFields);
 
         // ...now populate translations (if they exist)
         for (Translation translation:translations) {
@@ -112,7 +111,30 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
                 logger.error("a translation exists but its not referenced ==> " + translation );
             }
         }
+
         return localizedFields;
+    }
+
+    private final boolean ignoreField(Object entity, Field field) {
+        Localized localized = field.getAnnotation(Localized.class);
+        if (localized!=null && localized.ignore()) {
+            return true;
+        }
+        return isFiltered(entity,field);
+    }
+
+    private boolean isNotApplicableFor(Object entity) {
+        if (!(entity instanceof Saveable)) {
+            return true;
+        }
+        if (!entity.getClass().isAnnotationPresent(Entity.class)) {   // might be redundant with Saveable but safer for refactoring.
+            return true;
+        }
+        Localized localized = entity.getClass().getAnnotation(Localized.class);
+        if (localized!=null && localized.ignore()) {
+            return true;
+        }
+        return false;
     }
 
     protected boolean isFiltered(Object entity, Field field) {
@@ -131,9 +153,9 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
                 result.add(new LocalizedField(entity, field.getName(), values.get(i), ognl+i, languages));
             }
         } else if (value instanceof String) {
-           // if (StringUtils.isNotEmpty((String) value)) {   // TODO DD : put this back in later.   leave in to help debugging.
+           if (StringUtils.isNotEmpty((String) value)) {
                 result.add(new LocalizedField(entity, field.getName(), (String)value, ognl, languages));
-           //}
+           }
         } else {
             throw new IllegalStateException("the field '" + field.getName() + "' is not of expected type <String> or List<String>");
         }
@@ -163,13 +185,13 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
                 for(Type fieldArgType : fieldArgTypes) {
                     if (fieldArgType instanceof Class<?>) {
                         Class<?> fieldClass = (Class<?>) fieldArgType;
-                        return Saveable.class.isAssignableFrom(fieldClass);
+                        return fieldClass.isAnnotationPresent(Entity.class) || fieldClass.equals(String.class);
                     }
                 }
             }
         }
         if (field.getType().isArray()) {
-            return Saveable.class.isAssignableFrom(field.getType().getComponentType());
+            return field.getType().getComponentType().isAnnotationPresent(Entity.class);
         }
         return false;
     }
@@ -204,6 +226,16 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
             fields = load();
         }
         return fields;
+    }
+
+    @Override
+    public void detach() {
+        super.detach();
+        System.out.println("detaching localized fields model.");
+    }
+
+    public void forceReload() {
+        fields=null;
     }
 
     @Override

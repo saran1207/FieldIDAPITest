@@ -1,5 +1,16 @@
+#page {
+	width: 95%;
+	min-width: 960px;
+	max-width: 1260px;
+}
+#pageContent {
+	position: relative;
+}
 #contentHeader {
 	margin-bottom: -1px;
+	*margin-bottom: -8px;
+	position: relative;
+	z-index: 100;
 }
 
 /* Tabbed navigation */
@@ -37,6 +48,22 @@ hr {
 	margin: 0 0 20px;
 	border: none;
 	border-top: 1px solid #c7c7c9;
+}
+
+
+.main-selection {
+	position: absolute;
+	top: 21px;
+}
+.language-select {
+	margin-left: 295px;
+	*margin-left: 0;
+	*padding: 10px 0;
+}
+.btn-wrap {
+	position: absolute;
+	top: 21px;
+	right: 0;
 }
 
 /* Chosen plugin overrides */
@@ -77,19 +104,11 @@ select {
 }
 .translation-table td {
 	padding: 10px;
-	display: inline-block;
+	float: left;
+	*border-top: 1px solid #eee;
 }
 .translation-table tr {
-	border-bottom: 1px solid #eee;
-}
-.translation-table .title {
-	font-weight: bold;
-	color: #444;
-	font-weight: 600;
-	width: 150px;
-}
-.translation-table .default-value {
-	width: 225px;
+	border-top: 1px solid #eee;
 }
 .translation-table input {
 	border: 1px solid #c7c7c9;
@@ -98,3 +117,26 @@ select {
 	width: 250px;
 	padding: 0 4px;
 }
+/* column specific styles */
+.translation-table .title {
+	font-weight: bold;
+	color: #444;
+	font-weight: 600;
+	width: 18%;
+}
+.translation-table .default-value {
+	width: 25%;
+}
+.translation-table .languages {
+	width: 260px;
+}
+.translation-table .misc {
+	text-align: left;
+	width: 20%;
+}
+.translation-table .misc a {
+	margin-right: 6px;
+}
+
+
+

@@ -46,8 +46,7 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	public final static String DATEFIELD_FIELD_TYPE = "datefield";
 
 	@Column( nullable=false )
-    @Localized
-	private String name;
+    private @Localized String name;
 	
 	@Column( nullable=false )
 	private String fieldType;
@@ -69,11 +68,13 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	@OneToMany(mappedBy = "infoField", targetEntity = InfoOptionBean.class, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@OrderBy( "weight" )
 	@Where(clause="staticData = 1")
+    @Localized(ignore =true)
 	private Set<InfoOptionBean> unfilteredInfoOptions;
 	
 
 	@SuppressWarnings("unused")
 	@OneToMany(mappedBy = "infoField", targetEntity=InfoOptionBean.class, fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
+    @Localized(ignore = true)
 	private Set<InfoOptionBean> allInfoOptionsForCasadeDeleteOnlyDoNotInteractWithThisSet;
 	
 	@Transient

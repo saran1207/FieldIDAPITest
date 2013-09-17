@@ -26,6 +26,9 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 	@IndexColumn(name="orderIdx")
     @JoinTable(name="criteriasections_criteria", joinColumns = @JoinColumn(name="criteriasections_id"), inverseJoinColumns = @JoinColumn(name="criteria_id"))
 	private List<Criteria> criteria = new ArrayList<Criteria>();
+
+    @Transient
+    private Long oldId;
 	
 	public CriteriaSection() {}
 	
@@ -105,4 +108,11 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
         return availableCriteria;
     }
 
+    public Long getOldId() {
+        return oldId;
+    }
+
+    public void setOldId(Long oldId) {
+        this.oldId = oldId;
+    }
 }

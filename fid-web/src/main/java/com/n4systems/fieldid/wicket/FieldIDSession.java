@@ -34,9 +34,6 @@ public class FieldIDSession extends WebSession {
     private boolean concurrentSessionDetected;
     private CriteriaResult previouslyStoredCriteriaResult;
     private Event previouslyStoredEventSchedule;
-
-
-
     private Locale userLocale;
 
     public FieldIDSession(Request request) {

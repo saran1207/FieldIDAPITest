@@ -231,4 +231,9 @@ public class AssetSummaryPage extends AssetPage {
     private File getFile(String filename) {
         return new File(getCurrentUser().getPrivateDir(), filename);
     }
+
+    @Override
+    protected boolean forceDefaultLanguage() {
+        return false;
+    }
 }

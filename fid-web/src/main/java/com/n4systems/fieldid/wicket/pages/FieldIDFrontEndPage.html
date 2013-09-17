@@ -54,7 +54,10 @@
 		            <ul class="listOfLinks">
 		                <li class="first">
 		                    <span class="welcome">Welcome, </span><a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
-                            <a wicket:id="languageSelection"><img src="/fieldid/images/www.png" style="vertical-align: middle"/></a>
+                            <span class="separator">|</span>
+                        </li>
+                        <li wicket:enclosure="languageSelection">
+                            <a wicket:id="languageSelection"><wicket:message key="label.language"/></a>
 		                    <span class="separator">|</span>
 		                </li>
 		                <li>
