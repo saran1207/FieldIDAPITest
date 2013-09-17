@@ -98,6 +98,10 @@ select {
 	background-image: none;
 	color: #7a7a7a;
 }
+/* overrides dropdown color for chosen plugin in IE */
+.chzn-container .chzn-results .highlighted {
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
 
 /* Translation form table */
 .translation-table table {
