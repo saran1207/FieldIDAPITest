@@ -387,6 +387,11 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
     protected void doAutoSchedule() {
         Event e = event.getObject();
+
+        if (null == e.getDate()) {
+            return;
+        }
+
         AssetTypeSchedule schedule = e.getAsset().getType().getSchedule(e.getType(), e.getOwner());
         schedules.clear();
         if (schedule != null) {
