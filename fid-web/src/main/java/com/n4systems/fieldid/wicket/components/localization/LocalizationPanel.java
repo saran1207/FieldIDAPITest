@@ -20,7 +20,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -159,7 +159,7 @@ public class LocalizationPanel extends Panel {
 
         @Override protected void populateItem(ListItem<Translation> item) {
             final Locale itemLanguage = getLanguages().get(item.getIndex());
-            item.add(new TextField("translation", new PropertyModel(item.getModel(),"value")) {
+            item.add(new TextArea("translation", new PropertyModel(item.getModel(),"value")) {
                 @Override public boolean isVisible() {
                     return itemLanguage.equals(language);
                 }
