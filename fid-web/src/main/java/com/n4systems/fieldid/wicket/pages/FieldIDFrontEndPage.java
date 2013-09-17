@@ -154,7 +154,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         storePageParameters(params);
 
         add(languageSelectionModalWindow = new DialogModalWindow("languageSelectionModalWindow").setInitialWidth(480).setInitialHeight(280));
-        languageSelectionModalWindow.setContent(new SelectLanguagePanel(languageSelectionModalWindow.getContentId()) {
+
+        SelectLanguagePanel selectLanguagePanel;
+        languageSelectionModalWindow.setContent(selectLanguagePanel = new SelectLanguagePanel(languageSelectionModalWindow.getContentId()) {
             @Override
             public void onLanguageSelection(AjaxRequestTarget target) {
                 languageSelectionModalWindow.close(target);
@@ -173,7 +175,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             public void onClick(AjaxRequestTarget target) {
                 languageSelectionModalWindow.show(target);
             }
-        }.setVisible(getTenant().getSettings().getTranslatedLanguages().size() > 0));
+        }.setVisible(selectLanguagePanel.getAvailableLanguages().size() > 1));
 
         add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent")));
         add(createSetupLinkContainer(sessionUser));
