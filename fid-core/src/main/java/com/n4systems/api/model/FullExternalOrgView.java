@@ -10,7 +10,7 @@ import com.n4systems.exporting.beanutils.SerializableField;
 
 public class FullExternalOrgView extends ExternalModelView {
 	private static final long serialVersionUID = 1L;
-	
+
 	public static FullExternalOrgView newCustomer() {
 		FullExternalOrgView view = new FullExternalOrgView();
 		view.setTypeToCustomer();
@@ -69,7 +69,10 @@ public class FullExternalOrgView extends ExternalModelView {
 	private String notes;
 	
 	@SerializableField(title="System ID", order = 9999999, validators = {ExternalOrgGlobalIdValidator.class})
-	private String globalId; 
+	private String globalId;
+
+    @SerializableField(title="Archive", order = 1200, validators = {})
+    private String archive;
 	
 	public FullExternalOrgView() {}
 	
@@ -219,4 +222,11 @@ public class FullExternalOrgView extends ExternalModelView {
 		this.notes = notes;
 	}
 
+    public String getArchive() {
+        return archive;
+    }
+
+    public void setArchive(String archive) {
+        this.archive = archive;
+    }
 }

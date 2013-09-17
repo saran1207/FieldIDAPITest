@@ -10,7 +10,14 @@ import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.OrgSaver;
+import com.n4systems.model.orgs.customer.CustomerOrgArchiver;
+import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
+import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserSaver;
 import com.n4systems.persistence.Transaction;
+import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.persistence.savers.Saver;
 
 public class CustomerImporter extends AbstractImporter<FullExternalOrgView> {
@@ -37,12 +44,30 @@ public class CustomerImporter extends AbstractImporter<FullExternalOrgView> {
 
 	private void importCustomer(Transaction transaction, FullExternalOrgView view) throws ConversionException {
 		CustomerOrg customer = customerConverter.toModel(view, transaction);
-		
+
+
+
 		customer = (CustomerOrg)orgSaver.saveOrUpdate(transaction, customer);
-		
+
+
 		// very important: the division converter needs to be updated when the customer changes otherwise
 		// it won't know what customer to set (or will be setting the wrong customer)
 		divisionConverter.setParentCustomer(customer);
+
+
+        if (null != view.getArchive() && view.getArchive().equals("Y")) {
+
+            OrgSaver saver = new OrgSaver();
+            SecurityFilter securityFilter = new TenantOnlySecurityFilter(customer.getTenant());
+            boolean active = false;
+
+            try {
+                CustomerOrgArchiver archiver = new CustomerOrgArchiver();
+                archiver.doArchive(customer, saver, new UserSaver(), securityFilter, active, transaction);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 	}
 	
 	private void importDivision(Transaction transaction, FullExternalOrgView view) throws ConversionException {
