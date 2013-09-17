@@ -10,6 +10,9 @@ public class ApiTenant {
 	private boolean usingOrderDetails;
 	private boolean usingGpsCapture;
     private boolean usingLoto;
+	private int maxAttempts;
+	private int lockoutDuration;
+	private boolean lockoutOnMobile;
 	
 	public void setSerialNumberLabel(String serialNumberLabel) {
 		this.serialNumberLabel = serialNumberLabel;
@@ -82,4 +85,28 @@ public class ApiTenant {
     public void setUsingLoto(boolean usingLoto) {
         this.usingLoto = usingLoto;
     }
+
+	public int getMaxAttempts() {
+		return maxAttempts;
+	}
+
+	public void setMaxAttempts(int maxAttempts) {
+		this.maxAttempts = maxAttempts;
+	}
+
+	public int getLockoutDuration() {
+		return lockoutDuration;
+	}
+
+	public void setLockoutDuration(int lockoutDuration) {
+		this.lockoutDuration = lockoutDuration;
+	}
+
+	public boolean isLockoutOnMobile() {
+		return lockoutOnMobile;
+	}
+
+	public void setLockoutOnMobile(boolean lockoutOnMobile) {
+		this.lockoutOnMobile = lockoutOnMobile;
+	}
 }
