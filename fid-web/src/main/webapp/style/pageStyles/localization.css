@@ -1,3 +1,4 @@
+/* fieldid.css overrides */
 #page {
 	width: 95%;
 	min-width: 960px;
@@ -5,12 +6,16 @@
 }
 #pageContent {
 	position: relative;
+	font-size: 13px;
 }
 #contentHeader {
 	margin-bottom: -1px;
 	*margin-bottom: -8px;
 	position: relative;
 	z-index: 100;
+}
+#contentHeader h1 {
+	margin-left: 14px;
 }
 
 /* Tabbed navigation */
@@ -21,8 +26,8 @@
 	margin-left: 0;
 	background: none;
 	border: 1px solid transparent;
+	/*font-size: 12px;*/
 }
-
 	.options li.selected {
 		border-color: #c7c7c9;
 		border-bottom-color: transparent;
@@ -33,7 +38,7 @@
 	}
 	.options li.selected,
 	.options li a {
-		padding: 8px 18px;
+		padding: 8px 13px;
 	}
 
 	.options li:hover {
@@ -71,7 +76,7 @@ hr {
 
 /* Chosen plugin overrides */
 .chzn-container {
-	margin: 4px 0 10px;
+	margin: 4px 0 10px 12px;
 }
 select {
 	width: 285px;
@@ -107,7 +112,6 @@ select {
 .translation-table table {
 	width: 100%;
 	margin-top: 30px;
-	font-size: 13px;
 }
 .translation-table td {
 	padding: 10px;
@@ -151,6 +155,24 @@ select {
 	margin-right: 6px;
 }
 
+/* Config languages */
+p {
+	margin: 12px 0 0px 14px;
+}
+.add-remove-languages {
+	margin-top: 5px;	
+}
+.add-remove-languages select {
+	width: 455px;
+}
+.add-remove-languages .chzn-container {
+	float: left;
+	margin-right: 6px;
+	margin-top: 1px;
+}
+.add-remove-languages .btn {
+	float: left;
+}
 
 /* MODAL STYLES */
 .wicket-modal .translation-table {

@@ -4,14 +4,14 @@
       xml:lang="en"
       lang="en">
 <wicket:extend>
+    
+    <hr>
+    <p><wicket:message key="message.configure_languages"/></p>
+    <p><wicket:message key="message.configure_languages_addremove"/></p>
 
-    <p>
-        <wicket:message key="message.configure_languages"/>
-    </p>
-
-    <form wicket:id="form">
-        <select wicket:id="languages" style="width: 800px"/>
-        <a wicket:id="save" class="btn btn-green btn-sml"><wicket:message key="label.save"/></a>
+    <form wicket:id="form" class="add-remove-languages">
+        <select wicket:id="languages"/>
+        <span wicket:id="save" class="btn btn-green btn-sml"><wicket:message key="label.save"/></span>
     </form>
 
 </wicket:extend>
