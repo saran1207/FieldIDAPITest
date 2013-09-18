@@ -111,6 +111,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventTypeTranslations", EventTypeTranslationsPage.class);
         mountPage("setup/eventTypeGroupTranslations", EventTypeGroupTranslationsPage.class);
         mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
+        mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 

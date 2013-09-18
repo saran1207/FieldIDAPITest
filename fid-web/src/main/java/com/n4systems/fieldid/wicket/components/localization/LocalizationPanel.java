@@ -60,7 +60,7 @@ public class LocalizationPanel extends Panel {
                         item.add(createLinksForItem("misc", item));
                     }
                 }.setReuseItems(true))
-                .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages(), new IChoiceRenderer<Locale>() {
+                .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), new PropertyModel(model,"tenant.settings.translatedLanguages") , new IChoiceRenderer<Locale>() {
                     @Override public Object getDisplayValue(Locale object) {
                         return object.getDisplayLanguage();
                     }

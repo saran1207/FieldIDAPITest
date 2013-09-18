@@ -82,7 +82,8 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                 aNavItem().label("label.event_type").page(EventTypeTranslationsPage.class).build(),
                 aNavItem().label("label.eventbook").page(EventBookTranslationsPage.class).build(),
                 aNavItem().label("label.assetstatus").page(AssetStatusTranslationsPage.class).build(),
-                aNavItem().label("label.event_status").page(EventStatusTranslationsPage.class).build()
+                aNavItem().label("label.event_status").page(EventStatusTranslationsPage.class).build(),
+                aNavItem().label("label.configure_languages").page(LanguageConfigurationPage.class).onRight().build()
         ));
     }
 
