@@ -63,13 +63,14 @@ public class LanguageConfigurationPage extends FieldIDFrontEndPage {
     }
 
     public List<Locale> getAvailableLanguages() {
-        return Lists.newArrayList(Locale.FRENCH,
+        return Lists.newArrayList(
+                new Locale("da"), //Danish
+                Locale.FRENCH,
                 Locale.GERMAN,
                 Locale.ITALIAN,
+                new Locale("lv"),  //Latvian
                 new Locale("es"), //Spanish
-                new Locale("da"), //Danish
-                new Locale("sv"), //Swedish
-                new Locale("lv")  //Latvian
+                new Locale("sv") //Swedish
         );
     }
 
