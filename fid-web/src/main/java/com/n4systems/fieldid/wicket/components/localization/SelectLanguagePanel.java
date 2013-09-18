@@ -66,6 +66,7 @@ public class SelectLanguagePanel extends Panel {
                 User currentUser = userService.getUser(FieldIDSession.get().getSessionUser().getId());
                 currentUser.setLanguage(language);
                 userService.update(currentUser);
+                FieldIDSession.get().getSessionUser().setLanguage(language);
 
                 onLanguageSelection(target);
             }

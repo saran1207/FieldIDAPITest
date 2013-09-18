@@ -54,11 +54,12 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
             ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
 
             Locale language = user.getTenant().getSettings().getDefaultLanguage();
-            if (!sessionUser.isDefaultLanguageMode() && user.getLanguage()!=null) {
+            if (user.getLanguage()!=null) {
                language = user.getLanguage();
             }
             ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
             fieldidSession.setUserLocale(language);
+            sessionUser.setLanguage(language);
 
             ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(PlatformType.WEB);
             ThreadLocalInteractionContext.getInstance().setCurrentPlatform( FieldIdVersion.getWebVersionDescription());
@@ -81,6 +82,7 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
             FieldIDSession.get().setConcurrentSessionDetectedInRequestCycle();
         }
     }
+
 
     @Override
     public void onEndRequest(RequestCycle cycle) {

@@ -5,7 +5,6 @@ import com.n4systems.model.user.User;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 public class ThreadLocalInteractionContext implements InteractionContext, Serializable {
@@ -13,10 +12,7 @@ public class ThreadLocalInteractionContext implements InteractionContext, Serial
     private ThreadLocal<User> userThreadLocal = new ThreadLocal<User>();
     private ThreadLocal<Collection<User>> visibleUsersThreadLocal = new ThreadLocal<Collection<User>>();
     private ThreadLocal<String> platformThreadLocal = new ThreadLocal<String>();
-
     private ThreadLocal<Locale> userThreadLanguage = new ThreadLocal<Locale>();
-
-
     private ThreadLocal<PlatformType> platformTypeThreadLocal = new ThreadLocal<PlatformType>();
 
     private static final ThreadLocalInteractionContext instance = new ThreadLocalInteractionContext();

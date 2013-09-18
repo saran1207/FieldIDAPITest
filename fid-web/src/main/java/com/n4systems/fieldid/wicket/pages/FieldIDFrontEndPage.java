@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.UIConstants;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
@@ -53,8 +54,6 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -106,6 +105,11 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     
     public FieldIDFrontEndPage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
+
+        if (forceDefaultLanguage()) {
+            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getTenant().getSettings().getDefaultLanguage());
+        }
+
         setConfigurationProvider(configurationProvider);
         
         add(new DebugBar("debugBar"));
@@ -199,12 +203,12 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
-
-        getSessionUser().setIsDefaultLanguageMode(forceDefaultLanguage());
     }
 
     protected boolean forceDefaultLanguage() {
-        return true;
+        // for now, all setup pages will be forced to english.
+        boolean isSetupPage = getPageClass().getPackage().getName().startsWith("com.n4systems.fieldid.wicket.pages.setup");
+        return isSetupPage;
     }
 
     private String getSupportUrl() {

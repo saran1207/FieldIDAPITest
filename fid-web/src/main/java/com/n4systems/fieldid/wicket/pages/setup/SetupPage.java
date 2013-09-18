@@ -1,17 +1,14 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
-import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.*;
-
-import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
-import org.apache.wicket.request.resource.CssPackageResource;
-import org.apache.wicket.markup.html.basic.Label;
-
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 public abstract class SetupPage extends FieldIDFrontEndPage {
 
@@ -49,4 +46,9 @@ public abstract class SetupPage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/pageStyles/settings.css");
     }
 
+
+    @Override
+    protected boolean forceDefaultLanguage() {
+        return true;
+    }
 }

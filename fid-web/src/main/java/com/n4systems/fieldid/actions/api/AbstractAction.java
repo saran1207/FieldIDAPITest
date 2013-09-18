@@ -673,6 +673,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
     }
 
     public Locale getLanguage(String methodName) {
-        return getTenant().getSettings().getDefaultLanguage();
+        // override this to return a non-default language.
+        return null;
     }
 }

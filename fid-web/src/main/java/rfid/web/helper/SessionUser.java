@@ -38,8 +38,7 @@ public class SessionUser implements DateTimeDefinition {
 	private boolean readOnly;
 	private boolean systemUser;
 	private boolean liteUser;
-    private boolean isDefaultLanguageMode = false;
-    private final Locale language;
+    private Locale language;
 
     private String userTypeLabel;
 
@@ -310,15 +309,11 @@ public class SessionUser implements DateTimeDefinition {
         return "Paid";
     }
 
-    public void setIsDefaultLanguageMode(boolean isDefaultLanguageMode) {
-        this.isDefaultLanguageMode = isDefaultLanguageMode;
-    }
-
-    public boolean isDefaultLanguageMode() {
-        return isDefaultLanguageMode;
-    }
-
     public Locale getLanguage() {
         return language;
+    }
+
+    public void setLanguage(Locale language) {
+        this.language = language;
     }
 }
