@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.localization;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
@@ -25,21 +26,22 @@ public class SelectLanguagePanel extends Panel {
     private Locale language;
     private Form form;
     private FidDropDownChoice<Locale> chooseLanguage;
-    private List<Locale> availableLanguages;
 
     @SpringBean
-    UserService userService;
+    private UserService userService;
 
     @SpringBean
-    LocalizationService localizationService;
+    private LocalizationService localizationService;
+
+    @SpringBean
+    private TenantSettingsService tenantSettingsService;
 
     public SelectLanguagePanel(String id) {
         super(id);
 
         add(form = new Form<Void>("form"));
         language = FieldIDSession.get().getUserLocale();
-        availableLanguages = createAvailableLanguagesList();
-        form.add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel<Locale>(this, "language"), availableLanguages, new IChoiceRenderer<Locale>() {
+        form.add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel<Locale>(this, "language"), getAvailableLanguages(), new IChoiceRenderer<Locale>() {
             @Override
             public Object getDisplayValue(Locale locale) {
                 Locale userLocale = FieldIDSession.get().getUserLocale();
@@ -79,8 +81,8 @@ public class SelectLanguagePanel extends Panel {
 
     public void onLanguageSelection(AjaxRequestTarget target) {}
 
-    private List<Locale> createAvailableLanguagesList() {
-        TenantSettings tenantSettings = FieldIDSession.get().getTenant().getSettings();
+    private List<Locale> getAvailableLanguages() {
+        TenantSettings tenantSettings = tenantSettingsService.getTenantSettings();
         List<Locale> languages = Lists.newArrayList();
         languages.add(tenantSettings.getDefaultLanguage());
         for (Locale language: tenantSettings.getTranslatedLanguages()) {
@@ -90,8 +92,8 @@ public class SelectLanguagePanel extends Panel {
         return languages;
     }
 
-    public List<Locale> getAvailableLanguages() {
-        return availableLanguages;
+    public boolean hasLanguagesToDisplay() {
+        return chooseLanguage.getChoices().size() > 1;
     }
 
     @Override
