@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
@@ -38,6 +39,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
     protected Map<String, RenderHint> renderingHintMap = Maps.newHashMap();
     private final DropDownChoice<T> choice;
     private Component localizationPanel;
+    private final FeedbackPanel feedback;
 
     protected List<String> excludedNames= Lists.newArrayList("allInfoOptionsForCasadeDeleteOnlyDoNotInteractWithThisSet");
 
@@ -45,9 +47,13 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
 
     protected TranslationsPage() {
         super();
+
         if(getTenant().getSettings().getTranslatedLanguages().isEmpty()) {
             setResponsePage(LanguageConfigurationPage.class);
         }
+
+        add(feedback = new FeedbackPanel("feedback"));
+        feedback.setOutputMarkupPlaceholderTag(true);
 
         excludedNames.addAll(initExcludedFields());
         choice = createChoice("choice");
@@ -110,6 +116,11 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                 @Override protected Component createLinksForItem(String id, ListItem<LocalizedField> item) {
                     Component component = TranslationsPage.this.createLinksForItem(id, item);
                     return component!=null ? component : super.createLinksForItem(id, item);
+                }
+
+                @Override protected void onLocalizationsSaved(AjaxRequestTarget target) {
+                    info(new FIDLabelModel("label.translations_saved").getObject());
+                    target.add(feedback);
                 }
             }.setOutputMarkupId(true));
         }

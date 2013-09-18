@@ -103,6 +103,14 @@ select {
 	background-image: none;
 	color: #7a7a7a;
 }
+
+/** DD : added feedback panel.   CT - adjust this as you see fit...color, italics, etc... **/
+.feedbackPanel {
+    position:absolute;
+    right: 160px;
+    font-weight: bold;
+}
+
 /* overrides dropdown color for chosen plugin in IE */
 .chzn-container .chzn-results .highlighted {
 	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
@@ -200,3 +208,4 @@ p {
 .wicket-modal .misc {
 	display: none;
 }
+

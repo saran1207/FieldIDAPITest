@@ -1,10 +1,7 @@
 package com.n4systems.fieldid.wicket.components.localization;
 
 import com.google.common.base.CaseFormat;
-import com.google.common.collect.ImmutableList;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
-import com.n4systems.fieldid.wicket.components.form.IndicatingAjaxSubmitLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -14,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -73,8 +71,9 @@ public class LocalizationPanel extends Panel {
                         return object.toString();
                     }
                 }).setNullValid(false).setRequired(true))
-                .add(new IndicatingAjaxSubmitLink("submit") {
+                .add(new AjaxSubmitLink("submit") {
                     @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                        onLocalizationsSaved(target);
                         localizationService.save(convertToTranslations());
                         forceReload();
                     }
@@ -92,6 +91,9 @@ public class LocalizationPanel extends Panel {
         });
         if(!getLanguages().getObject().isEmpty())
             language = getLanguages().getObject().get(0);
+    }
+
+    protected void onLocalizationsSaved(AjaxRequestTarget target) {
     }
 
     private void forceReload() {

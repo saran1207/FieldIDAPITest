@@ -182,10 +182,10 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     public List<Translation> getTranslations(Long entityId) {
-        // TODO DD : need to filter by type/class too!  if i don't, could get collisions with entities with same id!
+        // SUGGESTION : i don't think there is any more value in storing it as an OGNL string field.
+        // separating into  tableName | fieldName | index  columns make it easier to query.
         QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
         query.addSimpleWhere("id.entityId", entityId);
-        /// ------arghhh!
         return persistenceService.findAll(query);
     }
 

@@ -102,6 +102,11 @@ public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
                 }
                 return false;
             }
+
+            @Override protected void onLocalizationsSaved(AjaxRequestTarget target) {
+                dialog.close(target);
+                target.add(dialog);
+            }
         };
         dialog.setContent(content);
         dialog.show(target);
