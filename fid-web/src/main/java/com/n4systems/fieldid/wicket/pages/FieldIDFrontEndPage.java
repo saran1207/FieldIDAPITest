@@ -106,9 +106,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     public FieldIDFrontEndPage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
 
-        if (forceDefaultLanguage()) {
-            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getTenant().getSettings().getDefaultLanguage());
-        }
+        ThreadLocalInteractionContext.getInstance().setForceDefaultLanguage(forceDefaultLanguage());
 
         setConfigurationProvider(configurationProvider);
         

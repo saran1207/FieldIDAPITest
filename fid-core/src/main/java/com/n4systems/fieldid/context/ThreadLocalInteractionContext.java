@@ -14,6 +14,7 @@ public class ThreadLocalInteractionContext implements InteractionContext, Serial
     private ThreadLocal<String> platformThreadLocal = new ThreadLocal<String>();
     private ThreadLocal<Locale> userThreadLanguage = new ThreadLocal<Locale>();
     private ThreadLocal<PlatformType> platformTypeThreadLocal = new ThreadLocal<PlatformType>();
+    private ThreadLocal<Boolean> isForceDefaultLanguage = new ThreadLocal<Boolean>();
 
     private static final ThreadLocalInteractionContext instance = new ThreadLocalInteractionContext();
 
@@ -78,4 +79,14 @@ public class ThreadLocalInteractionContext implements InteractionContext, Serial
         userThreadLanguage.remove();
     }
 
+    @Override
+    public void setForceDefaultLanguage(boolean forceDefaultLanguage) {
+        this.isForceDefaultLanguage.set(forceDefaultLanguage);
+    }
+
+    @Override
+    public Boolean isForceDefaultLanguage() {
+        Boolean result = isForceDefaultLanguage.get();
+        return result==null ? false : result;
+    }
 }

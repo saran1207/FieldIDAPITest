@@ -4,7 +4,6 @@ import com.n4systems.model.PlatformType;
 import com.n4systems.model.user.User;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 
 public interface InteractionContext {
@@ -26,4 +25,6 @@ public interface InteractionContext {
 
     public void clear();
 
+    public void setForceDefaultLanguage(boolean forceDefaultLanguage);
+    public Boolean isForceDefaultLanguage();
 }

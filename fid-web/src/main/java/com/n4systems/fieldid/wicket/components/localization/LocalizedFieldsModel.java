@@ -231,7 +231,6 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
     @Override
     public void detach() {
         super.detach();
-        System.out.println("detaching localized fields model.");
     }
 
     public void forceReload() {
