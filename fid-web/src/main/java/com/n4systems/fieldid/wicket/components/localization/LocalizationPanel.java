@@ -45,8 +45,12 @@ public class LocalizationPanel extends Panel {
     private final FormComponent<Locale> chooseLanguage;
     private final ListView<LocalizedField> listView;
 
+    private IModel<? extends EntityWithTenant> model;
+
     public LocalizationPanel(String id, IModel<? extends EntityWithTenant> model) {
         super(id, model);
+
+        this.model = model;
         setOutputMarkupId(true);
         add(new Form("form")
                 .add(listView = new ListView<LocalizedField>("localization", createLocalizedFieldsModel()) {
@@ -60,7 +64,7 @@ public class LocalizationPanel extends Panel {
                         item.add(createLinksForItem("misc", item));
                     }
                 }.setReuseItems(true))
-                .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), new PropertyModel(model,"tenant.settings.translatedLanguages") , new IChoiceRenderer<Locale>() {
+                .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages() , new IChoiceRenderer<Locale>() {
                     @Override public Object getDisplayValue(Locale object) {
                         return object.getDisplayLanguage();
                     }
@@ -86,7 +90,8 @@ public class LocalizationPanel extends Panel {
 
             }
         });
-        language = getLanguages().get(0);
+        if(!getLanguages().getObject().isEmpty())
+            language = getLanguages().getObject().get(0);
     }
 
     private void forceReload() {
@@ -106,7 +111,7 @@ public class LocalizationPanel extends Panel {
     }
 
     private LocalizedFieldsModel createLocalizedFieldsModel() {
-        return new LocalizedFieldsModel(LocalizationPanel.this.getDefaultModel(), getLanguages()) {
+        return new LocalizedFieldsModel(LocalizationPanel.this.getDefaultModel(), getLanguages().getObject()) {
             @Override protected boolean isFiltered(Object entity, Field field) {
                 boolean result = LocalizationPanel.this.isFieldIgnored(entity,field);
                 Class<?> type = field.getType();
@@ -146,8 +151,8 @@ public class LocalizationPanel extends Panel {
         listView.detach();
     }
 
-    private List<Locale> getLanguages() {
-        return ImmutableList.copyOf(FieldIDSession.get().getTenant().getSettings().getTranslatedLanguages());
+    private IModel<List<Locale>> getLanguages() {
+        return new PropertyModel(model,"tenant.settings.translatedLanguages");
     }
 
 
@@ -158,7 +163,7 @@ public class LocalizationPanel extends Panel {
         }
 
         @Override protected void populateItem(ListItem<Translation> item) {
-            final Locale itemLanguage = getLanguages().get(item.getIndex());
+            final Locale itemLanguage = getLanguages().getObject().get(item.getIndex());
             item.add(new TextArea("translation", new PropertyModel(item.getModel(),"value")) {
                 @Override public boolean isVisible() {
                     return itemLanguage.equals(language);

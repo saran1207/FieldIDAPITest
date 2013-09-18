@@ -5,9 +5,12 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.tenant.TenantSettings;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -36,7 +39,7 @@ public class LanguageConfigurationPage extends FieldIDFrontEndPage {
             @Override
             protected void onSubmit() {
                 tenantSettingsService.update(tenantSettingsModel.getObject());
-                FieldIDSession.get().info("Updated languages");
+                FieldIDSession.get().info(new FIDLabelModel("mesasge.updated_configured_languages").getObject());
                 setResponsePage(getPageClass());
             }
         });
@@ -60,19 +63,27 @@ public class LanguageConfigurationPage extends FieldIDFrontEndPage {
     }
 
     public List<Locale> getAvailableLanguages() {
-        return Lists.newArrayList(Locale.FRENCH, Locale.GERMAN, Locale.ITALIAN, new Locale("es"), new Locale("da"), new Locale("sv"));
+        return Lists.newArrayList(Locale.FRENCH,
+                Locale.GERMAN,
+                Locale.ITALIAN,
+                new Locale("es"), //Spanish
+                new Locale("da"), //Danish
+                new Locale("sv"), //Swedish
+                new Locale("lv")  //Latvian
+        );
     }
 
     @Override
     protected void addNavBar(String navBarId) {
+        boolean hasTranslatedLanguages = !getTenant().getSettings().getTranslatedLanguages().isEmpty();
         add(new NavigationBar(navBarId,
-                aNavItem().label("title.manage_asset_type_groups.singular").page(AssetTypeGroupTranslationsPage.class).build(),
-                aNavItem().label("title.asset_type").page(AssetTypeTranslationsPage.class).build(),
-                aNavItem().label("label.eventtypegroup").page(EventTypeGroupTranslationsPage.class).build(),
-                aNavItem().label("label.event_type").page(EventTypeTranslationsPage.class).build(),
-                aNavItem().label("label.eventbook").page(EventBookTranslationsPage.class).build(),
-                aNavItem().label("label.assetstatus").page(AssetStatusTranslationsPage.class).build(),
-                aNavItem().label("label.event_status").page(EventStatusTranslationsPage.class).build(),
+                aNavItem().label("title.manage_asset_type_groups.singular").cond(hasTranslatedLanguages).page(AssetTypeGroupTranslationsPage.class).build(),
+                aNavItem().label("title.asset_type").cond(hasTranslatedLanguages).page(AssetTypeTranslationsPage.class).build(),
+                aNavItem().label("label.eventtypegroup").cond(hasTranslatedLanguages).page(EventTypeGroupTranslationsPage.class).build(),
+                aNavItem().label("label.event_type").cond(hasTranslatedLanguages).page(EventTypeTranslationsPage.class).build(),
+                aNavItem().label("label.eventbook").cond(hasTranslatedLanguages).page(EventBookTranslationsPage.class).build(),
+                aNavItem().label("label.assetstatus").cond(hasTranslatedLanguages).page(AssetStatusTranslationsPage.class).build(),
+                aNavItem().label("label.event_status").cond(hasTranslatedLanguages).page(EventStatusTranslationsPage.class).build(),
                 aNavItem().label("label.configure_languages").page(LanguageConfigurationPage.class).onRight().build()
         ));
     }
@@ -82,5 +93,10 @@ public class LanguageConfigurationPage extends FieldIDFrontEndPage {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/buttons.css");
         response.renderCSSReference("style/pageStyles/localization.css");
+    }
+
+    @Override
+    protected Component createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.translations"));
     }
 }

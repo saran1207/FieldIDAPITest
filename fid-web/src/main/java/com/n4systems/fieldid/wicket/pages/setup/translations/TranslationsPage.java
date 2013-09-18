@@ -45,6 +45,10 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
 
     protected TranslationsPage() {
         super();
+        if(getTenant().getSettings().getTranslatedLanguages().isEmpty()) {
+            setResponsePage(LanguageConfigurationPage.class);
+        }
+
         excludedNames.addAll(initExcludedFields());
         choice = createChoice("choice");
         choice.setNullValid(true).
@@ -75,14 +79,15 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
 
     @Override
     protected void addNavBar(String navBarId) {
+        boolean hasTranslatedLanguages = !getTenant().getSettings().getTranslatedLanguages().isEmpty();
         add(new NavigationBar(navBarId,
-                aNavItem().label("title.manage_asset_type_groups.singular").page(AssetTypeGroupTranslationsPage.class).build(),
-                aNavItem().label("title.asset_type").page(AssetTypeTranslationsPage.class).build(),
-                aNavItem().label("label.eventtypegroup").page(EventTypeGroupTranslationsPage.class).build(),
-                aNavItem().label("label.event_type").page(EventTypeTranslationsPage.class).build(),
-                aNavItem().label("label.eventbook").page(EventBookTranslationsPage.class).build(),
-                aNavItem().label("label.assetstatus").page(AssetStatusTranslationsPage.class).build(),
-                aNavItem().label("label.event_status").page(EventStatusTranslationsPage.class).build(),
+                aNavItem().label("title.manage_asset_type_groups.singular").cond(hasTranslatedLanguages).page(AssetTypeGroupTranslationsPage.class).build(),
+                aNavItem().label("title.asset_type").cond(hasTranslatedLanguages).page(AssetTypeTranslationsPage.class).build(),
+                aNavItem().label("label.eventtypegroup").cond(hasTranslatedLanguages).page(EventTypeGroupTranslationsPage.class).build(),
+                aNavItem().label("label.event_type").cond(hasTranslatedLanguages).page(EventTypeTranslationsPage.class).build(),
+                aNavItem().label("label.eventbook").cond(hasTranslatedLanguages).page(EventBookTranslationsPage.class).build(),
+                aNavItem().label("label.assetstatus").cond(hasTranslatedLanguages).page(AssetStatusTranslationsPage.class).build(),
+                aNavItem().label("label.event_status").cond(hasTranslatedLanguages).page(EventStatusTranslationsPage.class).build(),
                 aNavItem().label("label.configure_languages").page(LanguageConfigurationPage.class).onRight().build()
         ));
     }
