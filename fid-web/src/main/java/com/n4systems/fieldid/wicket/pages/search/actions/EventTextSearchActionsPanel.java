@@ -1,11 +1,15 @@
 package com.n4systems.fieldid.wicket.pages.search.actions;
 
+import com.n4systems.fieldid.service.search.columns.EventColumnsService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
 import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.search.ReportConfiguration;
+import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.util.persistence.search.SortDirection;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -51,11 +55,14 @@ public class EventTextSearchActionsPanel extends Panel {
     private IModel<EventReportCriteria> createEventSearchCriteria() {
         EventReportCriteria criteria = new EventReportCriteria();
 
+        ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
+
         criteria.setSortDirection(SortDirection.DESC);
         for (String id : selectedIds.getObject()) {
             criteria.getSelection().addId(Long.parseLong(id));
         }
 
+        criteria.setColumnGroups(reportConfiguration.getColumnGroups());
         return Model.of(criteria);
     }
 
