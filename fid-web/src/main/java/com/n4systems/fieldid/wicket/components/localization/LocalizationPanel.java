@@ -37,6 +37,8 @@ public class LocalizationPanel extends Panel {
 
     private static final Logger logger= Logger.getLogger(LocalizationPanel.class);
 
+    public static final int ONE_LINE_OF_CHARACTERS = 100;
+
     private @SpringBean LocalizationService localizationService;
 
     private Locale language;
@@ -157,7 +159,6 @@ public class LocalizationPanel extends Panel {
         return new PropertyModel(model,"tenant.settings.translatedLanguages");
     }
 
-
     class TranslationsListView extends ListView<Translation> {
         TranslationsListView(String id, IModel<List<Translation>> list) {
             super(id, list);
@@ -166,11 +167,16 @@ public class LocalizationPanel extends Panel {
 
         @Override protected void populateItem(ListItem<Translation> item) {
             final Locale itemLanguage = getLanguages().getObject().get(item.getIndex());
-            item.add(new TextArea("translation", new PropertyModel(item.getModel(),"value")) {
+            TextArea text;
+            item.add(text = new TextArea("translation", new PropertyModel(item.getModel(),"value")) {
                 @Override public boolean isVisible() {
                     return itemLanguage.equals(language);
                 }
             });
+            String value = text.getDefaultModelObjectAsString();
+            if (value!=null&&value.length()> ONE_LINE_OF_CHARACTERS) {
+                text.add(new AttributeAppender("class", "large"));
+            }
         }
     }
 

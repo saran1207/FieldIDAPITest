@@ -1,5 +1,7 @@
 package com.n4systems.services.localization;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -142,24 +144,32 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         return persistenceService.findAllNonSecure(Translation.class);
     }
 
-    // TODO DD : cache this.  should only do this once!
-    //@Cacheable("localizationOgnl")
-    public String getOgnlFor(Field field) {
-        // recall : ognl = table + "." + column      e.g. "assettypes.name"
-        ClassMetadata metadata = getClassMetaData(field.getDeclaringClass());
+    public AbstractEntityPersister getPersister(Class clazz) {
+        ClassMetadata metadata = getClassMetaData(clazz);
         try {
             if (metadata instanceof AbstractEntityPersister) {   // assumes we are using hibernate.
-                AbstractEntityPersister persister = (AbstractEntityPersister) metadata;
-                if (Collection.class.isAssignableFrom(field.getType())) {
-                    return getCollectionOgnlFor(field,persister);
-                } else {
-                    return getOgnlFor(field,persister);
-                }
+                return (AbstractEntityPersister) metadata;
             } else {
                 throw new Exception("can't get ORM meta data...if using something other than hibernate need to refactor this.");
             }
         } catch (Exception e) {
-            throw new IllegalStateException("can't create translation ognl for " + field.getName() + " in class " + field.getDeclaringClass().getSimpleName());
+            throw new IllegalStateException("can't get persister for class " + clazz.getSimpleName());
+        }
+    }
+
+    private String getTableNameFor(Class clazz) {
+        return getPersister(clazz).getTableName();
+    }
+
+
+    // TODO DD : cache this.  should only do this once!
+    //@Cacheable("localizationOgnl")
+    public String getOgnlFor(Field field) {
+        AbstractEntityPersister persister = getPersister(field.getDeclaringClass());
+        if (Collection.class.isAssignableFrom(field.getType())) {
+            return getCollectionOgnlFor(field,persister);
+        } else {
+            return getOgnlFor(field,persister);
         }
     }
 
@@ -181,12 +191,17 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         initializeCache();
     }
 
-    public List<Translation> getTranslations(Long entityId) {
-        // SUGGESTION : i don't think there is any more value in storing it as an OGNL string field.
-        // separating into  tableName | fieldName | index  columns make it easier to query.
+    public List<Translation> getTranslations(Saveable entity) {
         QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
-        query.addSimpleWhere("id.entityId", entityId);
-        return persistenceService.findAll(query);
+        query.addSimpleWhere("id.entityId", entity.getEntityId());
+        final String tableName = getTableNameFor(entity.getClass());
+        List<Translation> result = persistenceService.findAll(query);
+        return Lists.newArrayList(Iterables.filter(result, new Predicate<Translation>() {
+            @Override
+            public boolean apply(Translation translation) {
+                return translation.getId().getOgnl().startsWith(tableName);
+            }
+        }));
     }
 
     public boolean hasTranslations(Locale language) {
