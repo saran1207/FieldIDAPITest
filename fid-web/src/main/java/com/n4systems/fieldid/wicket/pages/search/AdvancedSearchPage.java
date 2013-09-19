@@ -77,6 +77,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
         IModel<String> searchTextModel = new PropertyModel<String>(AdvancedSearchPage.this, "searchText");
         provider = createDataProvider(searchTextModel);
         add(form = new NewSearchForm("form", searchTextModel));
+        form.add(createHelpPanel("helpPanel"));
 
         listViewContainer = new WebMarkupContainer("listViewContainer");
         listViewContainer.setOutputMarkupId(true);
@@ -89,6 +90,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
                 return provider.size() > 0;
             }
         };
+        searchResults.add(createSelectItemsLabel("selectItemsLabel"));
         searchResults.setOutputMarkupPlaceholderTag(true);
         resultForm.add(searchResults);
 
@@ -208,11 +210,8 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
 
     protected abstract Component createDetailsPanel(String id, IModel<SearchResult> resultModel);
     protected abstract Component createActionsPanel(String id, IModel<Set<String>> selectedItemsModel);
-
-    @Override
-    protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.assetsearch"));
-    }
+    protected abstract Component createHelpPanel(String id);
+    protected abstract Component createSelectItemsLabel(String id);
 
     private IModel<Boolean> createMultiSelectModel(final DataView<SearchResult> dataView) {
         return new IModel<Boolean>() {

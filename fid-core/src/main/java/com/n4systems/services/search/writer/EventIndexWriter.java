@@ -55,6 +55,8 @@ public class EventIndexWriter extends LuceneIndexWriter<Event> {
         addField(doc, EventIndexField.NOTES, event.getNotes());
         addField(doc, EventIndexField.LOCATION, event.getAdvancedLocation().getFullName());
         addField(doc, EventIndexField.IDENTIFIER, event.getAsset().getIdentifier());
+        addField(doc, EventIndexField.RFID, event.getAsset().getRfidNumber());
+        addField(doc, EventIndexField.REFERENCE_NUMBER, event.getAsset().getCustomerRefNumber());
 
         addUserField(doc, EventIndexField.CREATED_BY.getField(), event.getCreatedBy());
         addUserField(doc, EventIndexField.MODIFIED_BY.getField(), event.getModifiedBy());

@@ -7,10 +7,11 @@ import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
+import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.ReportConfiguration;
-import com.n4systems.model.security.UserSecurityFilter;
 import com.n4systems.util.persistence.search.SortDirection;
+import org.apache.wicket.Page;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.link.Link;
@@ -35,7 +36,12 @@ public class EventTextSearchActionsPanel extends Panel {
         add(new Link("massUpdateLink") {
             @Override
             public void onClick() {
-                setResponsePage(new MassUpdateEventsPage(createEventSearchCriteria()));
+                setResponsePage(new MassUpdateEventsPage(createEventSearchCriteria()) {
+                    @Override
+                    protected void returnToPage(IModel<EventReportCriteria> criteriaModel) {
+                        setResponsePage(EventTextSearchActionsPanel.this.getPage());
+                    }
+                });
             }
         });
 

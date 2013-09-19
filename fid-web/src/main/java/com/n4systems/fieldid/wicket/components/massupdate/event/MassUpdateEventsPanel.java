@@ -16,7 +16,7 @@ import org.apache.wicket.model.IModel;
 import java.util.Arrays;
 import java.util.List;
 
-public class MassUpdateEventsPanel extends Panel {
+public abstract class MassUpdateEventsPanel extends Panel {
 
     private AbstractMassUpdatePanel currentPanel;
     private MassUpdateNavigationPanel navPanel;
@@ -38,7 +38,7 @@ public class MassUpdateEventsPanel extends Panel {
             }  
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportPage(eventSearchCriteria.getObject()));
+                returnToPage(eventSearchCriteria);
             }
         };
         add(currentPanel);
@@ -56,7 +56,7 @@ public class MassUpdateEventsPanel extends Panel {
 		return new MassUpdateNavigationPanel("navPanel", eventSearchCriteria.getObject(), panel){
 			@Override
 			protected void onBackToSearch(SearchCriteria searchCriteria) {
-				setResponsePage(new ReportPage((EventReportCriteria)searchCriteria));		
+                returnToPage(eventSearchCriteria);
 			}
 			
 			@Override
@@ -79,7 +79,7 @@ public class MassUpdateEventsPanel extends Panel {
         return new DeleteDetailsPanel("massUpdatePanel", eventSearchCriteria, previousPanel) {
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportPage(eventSearchCriteria.getObject()));
+                returnToPage(eventSearchCriteria);
             }
 
             @Override
@@ -94,7 +94,7 @@ public class MassUpdateEventsPanel extends Panel {
         return new EditDetailsPanel("massUpdatePanel", eventSearchCriteria, previousPanel) {
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportPage(eventSearchCriteria.getObject()));
+                returnToPage(eventSearchCriteria);
             }
             
             @Override
@@ -109,7 +109,7 @@ public class MassUpdateEventsPanel extends Panel {
 		return new ConfirmEditPanel("massUpdatePanel", eventSearchCriteria, currentPanel, massUpdateEventModel) {
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportPage(eventSearchCriteria.getObject()));
+                returnToPage(eventSearchCriteria);
             }
 		};
 	}
@@ -118,7 +118,7 @@ public class MassUpdateEventsPanel extends Panel {
         return new ConfirmDeletePanel("massUpdatePanel", eventSearchCriteria, previousPanel) {
             @Override
             protected void onCancel() {
-                setResponsePage(new ReportPage(eventSearchCriteria.getObject()));
+                returnToPage(eventSearchCriteria);
             }
         };
     }
@@ -127,4 +127,6 @@ public class MassUpdateEventsPanel extends Panel {
 	public void setCurrentPanel(AbstractMassUpdatePanel panel) {
 		this.currentPanel = panel;
 	}
+
+    protected abstract void returnToPage(IModel<EventReportCriteria> criteria);
 }
