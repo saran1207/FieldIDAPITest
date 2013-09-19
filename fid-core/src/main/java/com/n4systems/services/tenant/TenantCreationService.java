@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
+import java.util.Locale;
 
 public class TenantCreationService extends FieldIdPersistenceService {
 	
@@ -89,6 +90,7 @@ public class TenantCreationService extends FieldIdPersistenceService {
 		
 		TenantSettings settings = tenant.getSettings();
 		settings.setTenant(tenant);
+        settings.setDefaultLanguage(Locale.ENGLISH);
 		persistenceService.save(settings);
 	}
 	
