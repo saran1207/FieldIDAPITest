@@ -5,6 +5,7 @@ import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.*;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.wicket.model.EmptyListModel;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -38,12 +39,14 @@ public class SystemSettingsPageTest extends FieldIdPageTest<SystemsSettingsPageH
 	private SystemSettingsService systemSettingsService;
 	private UserLimitService userLimitService;
     private S3Service s3Service;
+    private TenantSettingsService tenantSettingsService;
 		
 	@Override
 	@Before
 	public void setUp() throws Exception { 
 		super.setUp();
 		expectingConfig();
+        expectingTenantSettingsService();
 		systemSettingsService = wire(SystemSettingsService.class, "systemSettingsService");
 		userLimitService = wire(UserLimitService.class);
         s3Service = wire(S3Service.class);
