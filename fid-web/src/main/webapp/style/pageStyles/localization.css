@@ -6,7 +6,7 @@
 }
 #pageContent {
 	position: relative;
-	font-size: 13px;
+	font-size: 12px;
 }
 #contentHeader {
 	margin-bottom: -1px;
@@ -26,7 +26,6 @@
 	margin-left: 0;
 	background: none;
 	border: 1px solid transparent;
-	/*font-size: 12px;*/
 }
 	.options li.selected {
 		border-color: #c7c7c9;
@@ -55,6 +54,15 @@ hr {
 	border-top: 1px solid #c7c7c9;
 }
 
+/* Saved message */
+.feedbackPanel {
+   	position: absolute;
+   	background-color: #EBF8CD;
+   	padding: 10px 20px;
+   	right: 160px;
+   	top: 20px;
+    font-weight: bold;
+}
 
 .main-selection {
 	position: absolute;
@@ -71,7 +79,7 @@ hr {
 .btn-wrap {
 	position: absolute;
 	top: 21px;
-	right: 0;
+	right: 22px;
 }
 
 /* Chosen plugin overrides */
@@ -104,12 +112,6 @@ select {
 	color: #7a7a7a;
 }
 
-/** DD : added feedback panel.   CT - adjust this as you see fit...color, italics, etc... **/
-.feedbackPanel {
-    position:absolute;
-    right: 160px;
-    font-weight: bold;
-}
 
 /* overrides dropdown color for chosen plugin in IE */
 .chzn-container .chzn-results .highlighted {
@@ -134,7 +136,7 @@ select {
 	height: 25px;
 	color: #3a3a3a;
 	width: 260px;
-	padding: 0 4px;
+	padding: 2px 4px;
 	resize: vertical;
 }
 
@@ -183,11 +185,17 @@ p {
 }
 
 /* MODAL STYLES */
+.wicket-modal {
+	font-size: 12px;
+}
 .wicket-modal .translation-table {
 	width: 600px;
 	padding: 0 10px 40px;
 }
 .wicket-modal .language-select {
+	margin-left: 0;
+}
+.wicket-modal .language-select .chzn-container {
 	margin-left: 0;
 }
 .wicket-modal .btn-wrap {
@@ -201,9 +209,10 @@ p {
 .wicket-modal .title {
 	width: 150px;
 }
-.wicket-modal .default-value {
-	width: 170px;
+.wicket-modal td.default-value {
+	width: 174px;
 	margin-top: 5px;
+	padding-right: 6px;
 }
 .wicket-modal .misc {
 	display: none;
