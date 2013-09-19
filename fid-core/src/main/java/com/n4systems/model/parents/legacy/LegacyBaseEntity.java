@@ -7,10 +7,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @SuppressWarnings("serial")
@@ -24,6 +21,8 @@ abstract public class LegacyBaseEntity implements Serializable, Saveable {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uniqueID;
+
+    private @Transient boolean translated = false;
 
 	@AllowSafetyNetworkAccess
 	public Long getUniqueID() {
@@ -65,4 +64,14 @@ abstract public class LegacyBaseEntity implements Serializable, Saveable {
 		return EntitySecurityEnhancer.enhance(entity, level);
 	}
 
+
+    @Override
+    public boolean isTranslated() {
+        return translated;
+    }
+
+    @Override
+    public void setTranslated(boolean translated) {
+        this.translated = translated;
+    }
 }

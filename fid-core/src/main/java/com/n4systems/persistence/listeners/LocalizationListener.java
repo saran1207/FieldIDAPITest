@@ -2,7 +2,6 @@ package com.n4systems.persistence.listeners;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
-import com.google.common.collect.MapMaker;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.model.api.Saveable;
@@ -11,7 +10,6 @@ import com.n4systems.services.localization.LocalizationService;
 import com.n4systems.util.ServiceLocator;
 import org.apache.log4j.Logger;
 import org.hibernate.EntityMode;
-import org.hibernate.Session;
 import org.hibernate.event.*;
 import org.hibernate.persister.entity.EntityPersister;
 import org.hibernate.type.Type;
@@ -23,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 
 public class LocalizationListener implements PostLoadEventListener, PreUpdateEventListener {
@@ -31,29 +28,18 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
     private static final Logger logger=Logger.getLogger(LocalizationListener.class);
 
     private static Map<Class<?>, List<LocalizedProperty>> cache = Maps.newHashMap();
-    private static Map<Object,Object> dirtyEntityMap = new MapMaker().concurrencyLevel(4).softKeys().weakValues().maximumSize(10000).expireAfterAccess(10, TimeUnit.MINUTES).makeMap();
 
 
     public LocalizationListener() {
     }
 
-//    @Override protected void dirtyCheck(FlushEntityEvent event) throws HibernateException {
-//        super.dirtyCheck(event);
-//        removeDirtCausedByLocalization(event);
-//    }
-
     @Override
     public boolean onPreUpdate(PreUpdateEvent event) {
-        if (dirtyEntityMap.containsKey(event.getEntity())) {
-            return true;
+        if (event.getEntity() instanceof Saveable) {
+            return ((Saveable)event.getEntity()).isTranslated();
         }
         return false;
     }
-
-//    @Override
-//    public void onPostUpdate(PostUpdateEvent event) {
-//        localize(event.getEntity(), event.getPersister(), event.getSession());
-    //}
 
     @Override
     public void onPostLoad(PostLoadEvent event) {
@@ -73,7 +59,7 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
                 Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
                 Object translation = getLocalizationService().getTranslation(entity, property.getOgnl(), locale);
                 if (translation!=null) {
-                    setTranslatedValue(persister, entity, eventSource.getSession(EntityMode.POJO), index, translation);
+                    setTranslatedValue(persister, entity, index, translation);
                 }
             }
         } catch (Exception e) {
@@ -81,9 +67,9 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
         }
     }
 
-    private void setTranslatedValue(EntityPersister persister, Saveable entity, Session session, int index, Object translation) {
-        dirtyEntityMap.put(entity, entity.getEntityId());
+    private void setTranslatedValue(EntityPersister persister, Saveable entity, int index, Object translation) {
         persister.setPropertyValue(entity, index, translation, EntityMode.POJO);
+        entity.setTranslated(true);
     }
 
     private List<LocalizedProperty> getLocalizedProperties(Object entity, EntityPersister persister) throws Exception {
@@ -123,41 +109,9 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
         return null;
     }
 
-//    @Override
-//    public void onFlushEntity(FlushEntityEvent event) throws HibernateException {
-//        super.onFlushEntity(event);
-//    }
-
-    private void removeDirtCausedByLocalization(FlushEntityEvent event) {
-//        Saveable entity = (Saveable) event.getEntity();
-//        String key = entity.getClass().getName() + entity.getEntityId();
-//        EnitySnapshot snapshot = dirtyEntityMap.get(key);
-//        if (snapshot==null) {
-//            return;
-//        }
-//        event.setDirtyProperties(null);  // reject ALL changes if entity was translated.  they are considered read only! you must edit them in defaultLanguage state.
-//        for (int i = 0; i< snapshot.originalValues.length;i++) {
-//            event.getPropertyValues()[i] = snapshot.originalValues[i];
-//        }
-//        System.out.println("removing " + key + " from session # : " + event.getSession().hashCode());
-//        dirtyEntityMap.remove(event.getEntity());
-   }
-
-//    private void cleanProperty(EnitySnapshot dirtyProperty, FlushEntityEvent event) {
-//    }
-
     private LocalizationService getLocalizationService() {
         return ServiceLocator.getLocalizationService();
     }
-
-//    class EnitySnapshot {
-//        Object[] originalValues;  // i.e. the translated value.   "rouge" will be the dirty value for the originally loaded "red" value.
-//
-//        EnitySnapshot(Object[] values) {
-//            this.originalValues = values;
-//        }
-//    }
-//
 
     class LocalizedProperty {
         String ognl;

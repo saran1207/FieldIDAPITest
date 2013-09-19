@@ -15,7 +15,7 @@ public class LanguageInterceptor extends AbstractInterceptor {
         Tenant tenant = invocationWrapper.getAction().getTenant();
         Locale language = invocationWrapper.getAction().getLanguage(invocationWrapper.getMethodName());
         Locale originalLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
-        if (tenant != null && language!=null) {
+        if (tenant != null) {
             ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
         }
         String result = invocation.invoke();

@@ -72,6 +72,16 @@ public class Translation implements Serializable, Saveable {
     }
 
     @Override
+    public boolean isTranslated() {
+        return false;
+    }
+
+    @Override
+    public void setTranslated(boolean translated) {
+        ;   // do nothing. N/A
+    }
+
+    @Override
     public String toString() {
         return "Translation{" +
                 "value='" + value + '\'' +

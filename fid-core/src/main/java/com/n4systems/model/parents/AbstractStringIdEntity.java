@@ -2,16 +2,10 @@ package com.n4systems.model.parents;
 
 import com.n4systems.model.api.Saveable;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
-
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -56,6 +50,16 @@ public class AbstractStringIdEntity implements Serializable, Saveable {
     @Override
     public Object getEntityId() {
         return getId();
+    }
+
+    @Override
+    public boolean isTranslated() {
+        return false;
+    }
+
+    @Override
+    public void setTranslated(boolean translated) {
+        ;   // do nothing.   N/A.
     }
 
     public void setId(String id) {

@@ -29,6 +29,8 @@ abstract public class BaseEntity implements Saveable, Serializable, Copyable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
+
+    private @Transient boolean isTranslated = false;
 	
 	public BaseEntity() {}
 	
@@ -127,5 +129,13 @@ abstract public class BaseEntity implements Saveable, Serializable, Copyable {
     
     public void reset() {
     	id = null;
+    }
+
+    public boolean isTranslated() {
+        return isTranslated;
+    }
+
+    public void setTranslated(boolean translated) {
+        isTranslated = translated;
     }
 }

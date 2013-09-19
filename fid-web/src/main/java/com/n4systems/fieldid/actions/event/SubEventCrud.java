@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static com.n4systems.fieldid.utils.CopyEventFactory.copyEvent;
 
@@ -430,4 +431,8 @@ public class SubEventCrud extends EventCrud {
         return userGroupService.getVisibleActiveUserGroups();
     }
 
+    @Override
+    public Locale getLanguage(String methodName) {
+        return getCurrentUser().getLanguage();
+    }
 }

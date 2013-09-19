@@ -1,26 +1,19 @@
 package com.n4systems.model.tenant;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import com.n4systems.model.Tenant;
 import com.n4systems.model.api.HasTenantId;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.security.SecurityDefiner;
+import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.SetupDataGroup;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "setupdatalastmoddates")
+@Localized(ignore=true)
 public class SetupDataLastModDates implements HasTenantId, Saveable, Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -97,8 +90,18 @@ public class SetupDataLastModDates implements HasTenantId, Saveable, Serializabl
 	public Object getEntityId() {
 		return getTenantId();
 	}
-	
-	public Long getTenantId() {
+
+    @Override
+    public boolean isTranslated() {
+        return false;
+    }
+
+    @Override
+    public void setTranslated(boolean translated) {
+        ;   // do nothing   N/A
+    }
+
+    public Long getTenantId() {
 		return tenantId;
 	}
 

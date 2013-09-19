@@ -75,6 +75,16 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
     }
 
     @Override
+    public boolean isTranslated() {
+        return false;
+    }
+
+    @Override
+    public void setTranslated(boolean translated) {
+        ; // do nothing   N/A
+    }
+
+    @Override
 	public boolean isNew() {
 		return true;
 	}

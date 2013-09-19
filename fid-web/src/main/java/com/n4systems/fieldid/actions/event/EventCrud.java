@@ -1131,11 +1131,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
     }
 
     public Locale getLanguage(String methodName) {
-        Set<String> localizedMethods = Sets.newHashSet("doShow");
-        Locale language = null;
-        if (localizedMethods.contains(methodName)) {
-            language = getSessionUser().getLanguage();
-        }
+        Locale language = getSessionUser().getLanguage();
         return language!=null ? language : getTenant().getSettings().getDefaultLanguage();
     }
 
