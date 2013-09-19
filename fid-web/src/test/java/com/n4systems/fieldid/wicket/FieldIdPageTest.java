@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
@@ -22,6 +24,7 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
     protected UserLimitService userLimitService;
     protected S3Service s3Service;
     private ConfigData configData;
+    private TenantSettingsService tenantSettingsService;
 
 
     @Override
@@ -31,6 +34,7 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 		configService = wire(ConfigService.class);
         userLimitService = wire(UserLimitService.class);
         s3Service = wire(S3Service.class);
+        tenantSettingsService = wire(TenantSettingsService.class);
         configData = new ConfigData();
     }
 	
@@ -83,6 +87,11 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
     protected void expectingUserService() {
         expect(userLimitService.isReadOnlyUsersEnabled()).andReturn(true);
         replay(userLimitService);
+    }
+
+    protected void expectingTenantSettingsService() {
+        expect(tenantSettingsService.getTenantSettings()).andReturn(new TenantSettings());
+        replay(tenantSettingsService);
     }
 
     protected ConfigData withRssFeed(String rssFeed) {

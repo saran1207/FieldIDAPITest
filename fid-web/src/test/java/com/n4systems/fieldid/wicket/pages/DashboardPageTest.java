@@ -84,6 +84,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	@WithUsers({TestUser.ALL_PERMISSIONS_USER, TestUser.NO_PERMISSIONS_USER, TestUser.JOBS_USER})
 	public void testRender() throws MalformedURLException {
         expectingConfig();
+        expectingTenantSettingsService();
         expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(3);	//extra invocation for assertion using getList().
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
@@ -110,6 +111,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	@Test
 	public void testAddWidget() throws MalformedURLException {
         expectingConfig();
+        expectingTenantSettingsService();
         expect(eventService.hasEvents()).andReturn(true);
         replay(eventService);
 		expect(dashboardService.findLayout()).andReturn(layout);
@@ -187,6 +189,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	@Test
 	public void testRemoveWidget() throws MalformedURLException {
         expectingConfig();
+        expectingTenantSettingsService();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(3);
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
@@ -215,6 +218,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 	public void test_BlankSlate() throws MalformedURLException {
 		layout = createNewDashboardLayout();
 		expectingConfig();
+        expectingTenantSettingsService();
 		expect(dashboardService.findLayout()).andReturn(layout);
 		expectLastCall().times(4);
         expect(dashboardService.findDashboardLayouts(true)).andReturn(Collections.singletonList(layout));
