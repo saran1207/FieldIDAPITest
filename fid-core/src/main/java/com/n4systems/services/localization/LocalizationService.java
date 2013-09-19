@@ -191,17 +191,31 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         initializeCache();
     }
 
-    public List<Translation> getTranslations(Saveable entity) {
+    public List<Translation> getTranslations(Saveable saveable) {
         QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
-        query.addSimpleWhere("id.entityId", entity.getEntityId());
-        final String tableName = getTableNameFor(entity.getClass());
-        List<Translation> result = persistenceService.findAll(query);
-        return Lists.newArrayList(Iterables.filter(result, new Predicate<Translation>() {
-            @Override
-            public boolean apply(Translation translation) {
-                return translation.getId().getOgnl().startsWith(tableName);
-            }
-        }));
+        query.addSimpleWhere("id.entityId", saveable.getEntityId());
+
+        final Set<String> possiblePrefixes = Sets.newHashSet();
+        Set<Field> fields = ReflectionUtils.getAllFields(saveable.getClass(), withAnnotation(Localized.class));
+        for (Field field : fields) {
+            String ognlFor = getOgnlFor(field);
+            // strip down to prefix. add to possiblePrefixes.
+            String prefix = ognlFor.substring(0, ognlFor.indexOf("."));
+            possiblePrefixes.add(prefix);
+        }
+
+        final List<Translation> result = persistenceService.findAll(query);
+            return Lists.newArrayList(Iterables.filter(result, new Predicate<Translation>() {
+                @Override
+                public boolean apply(Translation translation) {
+                    for (String prefix:possiblePrefixes) {
+                        if (translation.getId().getOgnl().startsWith(prefix)) {
+                            return true;
+                        }
+                    }
+                    return false;
+                }
+            }));
     }
 
     public boolean hasTranslations(Locale language) {
