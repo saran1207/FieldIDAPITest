@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.actions.event;
 
-import com.google.common.collect.Sets;
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.EventScheduleManager;
@@ -1107,7 +1106,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
         return getEvent().getProject();
     }
 
-
     public Long getProjectId() {
         return getProject().getId();
     }
@@ -1130,9 +1128,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
         return userService.getExaminers();
     }
 
-    public Locale getLanguage(String methodName) {
-        Locale language = getSessionUser().getLanguage();
-        return language!=null ? language : getTenant().getSettings().getDefaultLanguage();
+    @Override
+    public boolean isOverrideLanguage(String methodName) {
+        return false;
     }
-
 }

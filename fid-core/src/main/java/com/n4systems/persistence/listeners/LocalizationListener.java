@@ -56,7 +56,7 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
         try {
             for (LocalizedProperty property:getLocalizedProperties(entity,persister)) {
                 int index = property.getIndex();
-                Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+                Locale locale = ThreadLocalInteractionContext.getInstance().getLanguageToUse();
                 Object translation = getLocalizationService().getTranslation(entity, property.getOgnl(), locale);
                 if (translation!=null) {
                     setTranslatedValue(persister, entity, index, translation);

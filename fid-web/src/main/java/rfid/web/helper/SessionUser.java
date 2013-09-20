@@ -39,6 +39,7 @@ public class SessionUser implements DateTimeDefinition {
 	private boolean systemUser;
 	private boolean liteUser;
     private Locale language;
+    private Locale defaultLanguage;
 
     private String userTypeLabel;
 
@@ -63,6 +64,7 @@ public class SessionUser implements DateTimeDefinition {
 		this.liteUser=user.isLiteUser();
         this.language = user.getLanguage();
         this.userTypeLabel = user.getUserType().getLabel();
+        this.defaultLanguage = user.getTenant().getSettings().getDefaultLanguage();
 	}
 
 	public Tenant getTenant() {
@@ -290,7 +292,7 @@ public class SessionUser implements DateTimeDefinition {
 	public boolean isSystemUser() {
 		return systemUser;
 	}
-	
+
 	
 	public SessionUserDateConverter createUserDateConverter() {
 		return new SessionUserDateConverter(this);
@@ -316,4 +318,9 @@ public class SessionUser implements DateTimeDefinition {
     public void setLanguage(Locale language) {
         this.language = language;
     }
+
+    public Locale getDefaultLanguage() {
+        return defaultLanguage;
+    }
+
 }

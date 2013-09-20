@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.utils;
 
+import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import com.n4systems.model.Tenant;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.interceptor.AbstractInterceptor;
 
@@ -12,14 +12,19 @@ public class LanguageInterceptor extends AbstractInterceptor {
     @Override
     public String intercept(ActionInvocation invocation) throws Exception {
         ActionInvocationWrapper invocationWrapper = new ActionInvocationWrapper(invocation);
-        Tenant tenant = invocationWrapper.getAction().getTenant();
-        Locale language = invocationWrapper.getAction().getLanguage(invocationWrapper.getMethodName());
+        AbstractAction action = invocationWrapper.getAction();
+
+        boolean override = action.isOverrideLanguage(invocationWrapper.getMethodName());
         Locale originalLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
-        if (tenant != null) {
-            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
-        }
+        boolean originalOverride = ThreadLocalInteractionContext.getInstance().isForceDefaultLanguage();
+
+        ThreadLocalInteractionContext.getInstance().setForceDefaultLanguage(override);
+        ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(action.getSessionUser().getLanguage());
+
         String result = invocation.invoke();
+
         ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(originalLanguage);
+        ThreadLocalInteractionContext.getInstance().setForceDefaultLanguage(originalOverride);
         return result;
     }
 }

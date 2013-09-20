@@ -77,6 +77,7 @@ public class ThreadLocalInteractionContext implements InteractionContext, Serial
         userThreadLocal.remove();
         visibleUsersThreadLocal.remove();
         userThreadLanguage.remove();
+        isForceDefaultLanguage.remove();
     }
 
     @Override
@@ -88,5 +89,10 @@ public class ThreadLocalInteractionContext implements InteractionContext, Serial
     public Boolean isForceDefaultLanguage() {
         Boolean result = isForceDefaultLanguage.get();
         return result==null ? false : result;
+    }
+
+    @Override
+    public Locale getLanguageToUse() {
+        return isForceDefaultLanguage() ? getCurrentUser().getTenant().getSettings().getDefaultLanguage() : getUserThreadLanguage();
     }
 }
