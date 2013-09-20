@@ -121,10 +121,15 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                 @Override protected void onLocalizationsSaved(AjaxRequestTarget target) {
                     info(new FIDLabelModel("label.translations_saved").getObject());
                     target.add(feedback);
+                    target.appendJavaScript(fadeFeedback());
                 }
             }.setOutputMarkupId(true));
         }
         target.add(get(LOCALIZATION_PANEL_ID));
+    }
+
+    private String fadeFeedback() {
+        return String.format("setTimeout(function() { $('#%s').effect('fade','slow');},2000);", feedback.getMarkupId());
     }
 
     protected Component createLinksForItem(String id, ListItem<LocalizedField> item) {
@@ -146,6 +151,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/buttons.css");
         response.renderCSSReference("style/pageStyles/localization.css");
+        response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
     }
 
     protected boolean isFiltered(Object entity, Field field) {
