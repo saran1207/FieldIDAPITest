@@ -133,7 +133,7 @@ select {
 }
 .translation-table textarea {
 	border: 1px solid #c7c7c9;
-	height: 25px;
+	height: 20px;
 	color: #3a3a3a;
 	width: 260px;
 	padding: 2px 4px;
@@ -155,7 +155,7 @@ select {
 	padding-bottom: 0;
 }
 .translation-table .languages textarea {
-	margin: 10px 0 8px;
+	margin: 6px 0 4px;
 }
 .translation-table .misc {
 	text-align: left;
