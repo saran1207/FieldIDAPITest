@@ -76,7 +76,9 @@ public class EventFormService extends FieldIdPersistenceService {
         String deficienciesTextOgnl = localizationService.getOgnlFor(deficienciesField);
 
         for (CriteriaSection sect : eventForm.getSections()) {
-            findAndCopyTranslation(sectionTextOgnl, sect.getOldId(), sect.getId());
+            if (sect.getOldId() != null) {
+                findAndCopyTranslation(sectionTextOgnl, sect.getOldId(), sect.getId());
+            }
             for (Criteria criteria : sect.getCriteria()) {
                 if (criteria.getOldId() != null) {
                     findAndCopyTranslation(criteriaTextOgnl, criteria.getOldId(), criteria.getId());
