@@ -93,6 +93,13 @@ public class ThreadLocalInteractionContext implements InteractionContext, Serial
 
     @Override
     public Locale getLanguageToUse() {
-        return isForceDefaultLanguage() ? getCurrentUser().getTenant().getSettings().getDefaultLanguage() : getUserThreadLanguage();
+        return isForceDefaultLanguage() ? getUserLanguage() : getUserThreadLanguage();
+    }
+
+    private Locale getUserLanguage() {
+        if (getCurrentUser() == null) {
+            return null;
+        }
+        return getCurrentUser().getTenant().getSettings().getDefaultLanguage();
     }
 }
