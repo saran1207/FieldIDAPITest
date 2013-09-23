@@ -58,7 +58,8 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
             if (user.getLanguage()!=null  && !ThreadLocalInteractionContext.getInstance().isForceDefaultLanguage()) {
                language = user.getLanguage();
             }
-            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
+            // We clear this out in case one of the localization models/methods hasn't done so..
+            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(null);
             fieldidSession.setUserLocale(language);
             sessionUser.setLanguage(language);
 

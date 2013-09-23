@@ -22,6 +22,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -40,7 +41,7 @@ public class UpcomingEventsPanel extends Panel {
 
     private Asset asset;
 
-    public UpcomingEventsPanel(String id, UpcomingEventsListModel model, final Asset asset) {
+    public UpcomingEventsPanel(String id, IModel<List<Event>> model, final Asset asset) {
         super(id, model);
         this.asset = asset;
 

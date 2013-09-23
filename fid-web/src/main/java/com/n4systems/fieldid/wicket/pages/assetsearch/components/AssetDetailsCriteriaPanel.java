@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
 import com.n4systems.fieldid.wicket.model.assettype.AssetTypeGroupsForTenantModel;
 import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
@@ -21,7 +22,7 @@ import java.util.List;
 public class AssetDetailsCriteriaPanel extends Panel {
 
     private GroupedAssetTypePicker groupedAssetTypePicker;
-    private GroupedAssetTypesForTenantModel availableAssetTypesModel;
+    private IModel<List<AssetType>> availableAssetTypesModel;
 
     public AssetDetailsCriteriaPanel(String id,  IModel<?> model) {
         super(id, model);
@@ -30,7 +31,7 @@ public class AssetDetailsCriteriaPanel extends Panel {
         add(new FidDropDownChoice<AssetStatus>("assetStatus", new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));
         final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getDefaultModel(), "assetTypeGroup");
         final IModel<AssetType> assetTypeModel = new PropertyModel<AssetType>(getDefaultModel(), "assetType");
-        availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
+        availableAssetTypesModel = new LocalizeModel<List<AssetType>>(new GroupedAssetTypesForTenantModel(assetTypeGroupModel));
         add(createAssetTypeGroupChoice(assetTypeGroupModel, assetTypeModel, availableAssetTypesModel));
         add(groupedAssetTypePicker = new GroupedAssetTypePicker("assetType", new PropertyModel<AssetType>(getDefaultModel(), "assetType"), availableAssetTypesModel));
         groupedAssetTypePicker.add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -44,9 +45,9 @@ public class AssetDetailsCriteriaPanel extends Panel {
 
     }
 
-    private FidDropDownChoice<AssetTypeGroup> createAssetTypeGroupChoice(IModel<AssetTypeGroup> assetTypeGroupModel, final IModel<AssetType> assetTypeModel, final GroupedAssetTypesForTenantModel availableAssetTypesModel) {
+    private FidDropDownChoice<AssetTypeGroup> createAssetTypeGroupChoice(IModel<AssetTypeGroup> assetTypeGroupModel, final IModel<AssetType> assetTypeModel, final IModel<List<AssetType>> availableAssetTypesModel) {
         FidDropDownChoice<AssetTypeGroup> assetTypeGroupDropDownChoice = new FidDropDownChoice<AssetTypeGroup>("assetTypeGroup",
-                assetTypeGroupModel, new AssetTypeGroupsForTenantModel(), new ListableChoiceRenderer<AssetTypeGroup>());
+                assetTypeGroupModel, new LocalizeModel<List<AssetTypeGroup>>(new AssetTypeGroupsForTenantModel()), new ListableChoiceRenderer<AssetTypeGroup>());
         assetTypeGroupDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

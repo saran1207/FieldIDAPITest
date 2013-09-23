@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
@@ -51,7 +52,7 @@ public class SchedulePickerPanel extends Panel {
         this.scheduleModel = scheduleModel;
         setOutputMarkupId(true);
 
-        add(scheduleForm = new ScheduleForm("scheduleForm", scheduleModel, eventTypeOptions, jobsOptions));
+        add(scheduleForm = new ScheduleForm("scheduleForm", scheduleModel, new LocalizeModel<List<EventType>>(eventTypeOptions), jobsOptions));
     }
 
     class ScheduleForm extends Form<Event> {

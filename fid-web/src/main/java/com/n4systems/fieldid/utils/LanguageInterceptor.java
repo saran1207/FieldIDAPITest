@@ -18,13 +18,13 @@ public class LanguageInterceptor extends AbstractInterceptor {
         Locale originalLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
         boolean originalOverride = ThreadLocalInteractionContext.getInstance().isForceDefaultLanguage();
 
-        ThreadLocalInteractionContext.getInstance().setForceDefaultLanguage(override);
-        ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(action.getSessionUser().getLanguage());
+//        ThreadLocalInteractionContext.getInstance().setForceDefaultLanguage(override);
+        ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(null);
 
         String result = invocation.invoke();
 
-        ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(originalLanguage);
-        ThreadLocalInteractionContext.getInstance().setForceDefaultLanguage(originalOverride);
+//        ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(originalLanguage);
+//        ThreadLocalInteractionContext.getInstance().setForceDefaultLanguage(originalOverride);
         return result;
     }
 }
