@@ -428,22 +428,28 @@
 }
 
 /*-----overrides for org picker.------*/
+.field.owner .org-location {
+    display: block;
+}
 .field.owner .org-location .tree {
-    width:245px;
-    margin-left:-247px;
-    margin-top:-7px;
+    width: 245px;
+    right: 2px;
+    top: 22px;
+    background: white;
 }
-
-.field.owner .org-location .entypo-icons.entypo-search {
-    margin-left:-24px;
-}
-
 .field.owner .org-location .text {
-    float:left;
-    width:148px;
+    float: left;
+    padding-right: 0;
 }
-
-.field .location input {
-    width:156px;
+.field.owner .org-location .entypo-icons.entypo-search {
+    float: left;
+    margin-left: -22px;
+    cursor: pointer;
+}
+@-moz-document url-prefix() { 
+    .field.owner .org-location .tree {
+        top: 25px;
+        right: 0px;
+    }
 }
 /*------------*/
