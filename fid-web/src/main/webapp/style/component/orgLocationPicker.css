@@ -1,5 +1,6 @@
 .org-location {
     position: relative;
+    display: block;
 }
     .org-location .tree {
         display: block;
@@ -17,10 +18,17 @@
     }
     .org-location .text {
         padding: 4px;
+
+        float: left;
     }
     .org-location img {
         width:24px;
         vertical-align: bottom;
+    }
+    .entypo-search {
+        float: left;
+        margin-left: 3px;
+        cursor: pointer;
     }
 
 
