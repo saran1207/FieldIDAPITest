@@ -428,9 +428,6 @@
 }
 
 /*-----overrides for org picker.------*/
-.field.owner .org-location {
-    display: block;
-}
 .field.owner .org-location .tree {
     width: 245px;
     right: 2px;

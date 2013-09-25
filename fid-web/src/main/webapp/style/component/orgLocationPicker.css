@@ -1,6 +1,6 @@
 .org-location {
     position: relative;
-    display: block;
+    float: left;
 }
     .org-location .tree {
         display: block;

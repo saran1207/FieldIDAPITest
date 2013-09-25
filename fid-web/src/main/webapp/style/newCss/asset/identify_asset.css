@@ -59,6 +59,7 @@
 .form-horizontal .control-group {
 	margin-bottom: 20px;
 	position: relative;
+	clear: both;
 }	
 	.form-horizontal .control-group input,
 	.form-horizontal .control-group select,
@@ -88,7 +89,6 @@
         top:100%;
         left:28%;
 	}
-
 
 
 /* Identify Multiple Assets modal window */
