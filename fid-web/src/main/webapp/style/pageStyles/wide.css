@@ -430,7 +430,7 @@
 /*-----overrides for org picker.------*/
 .field.owner .org-location .tree {
     width: 245px;
-    right: 2px;
+    right: 0;
     top: 18px;
     background: white;
 }
