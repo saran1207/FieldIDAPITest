@@ -118,7 +118,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 item.add(new Label("recurrence", new EnumLabelModel(event.getRecurrence().getType())));
                 item.add(new Label("org", new NullCoverterModel(new PropertyModel<String>(item.getDefaultModelObject(), "owner.name"), "---")));
                 item.add(new Label("time", new DisplayTimeModel(new PropertyModel<Set<RecurrenceTime>>(item.getDefaultModelObject(), "recurrence.times"))));
-                if (((RecurringAssetTypeEvent) item.getDefaultModelObject()).getOwner() == null)
+                if (((RecurringAssetTypeEvent) item.getDefaultModelObject()).getOwner() == null || !((RecurringAssetTypeEvent) item.getDefaultModelObject()).getOwnerAndDown())
                     item.add(new Label("affectAll", "---"));
                 else
                     item.add(new Label("affectAll", new FIDLabelModel("label.affect_all")));
