@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.components.table.JumpableNavigationBar;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
@@ -15,6 +16,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.servlet.ServletWebRequest;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public abstract class AbstractSearchPage<T extends SearchCriteria> extends FieldIDFrontEndPage {
 
@@ -35,6 +37,9 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
     protected T searchCriteria;
     protected Component searchMenu;
     protected boolean showLeftPanel;
+
+    @SpringBean
+    private PersistenceService persistenceService;
 
     public AbstractSearchPage(PageParameters params) {
         this(params, null, null);  // will create default criteria & savedItems.
@@ -95,6 +100,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
             searchCriteria = createCriteria();
         } else {
             saveLastSearch(searchCriteria);
+            persistenceService.clearSession();
         }
     }
 
