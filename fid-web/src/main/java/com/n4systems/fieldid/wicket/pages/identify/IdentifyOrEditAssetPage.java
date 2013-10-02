@@ -7,7 +7,6 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.behavior.FormComponentPanelUpdatingBehavior;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
@@ -223,24 +222,18 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             OrgLocationPicker ownerPicker = new OrgLocationPicker("ownerPicker", new PropertyModel(assetModel,"owner")) {
                 @Override protected void onChanged(AjaxRequestTarget target) {
                     locationPicker.setOwner(getOwner());
-                    target.add(locationPicker);
+                    autoSchedule(assetModel);
+                    target.add(locationPicker,eventSchedulesPanel);
                 }
 
                 @Override protected void onError(AjaxRequestTarget target, RuntimeException e) { }
             }.withAutoUpdate();
             add(ownerPicker.setRequired(true).setLabel(new FIDLabelModel("label.owner")));
 
-            ownerPicker.add(new FormComponentPanelUpdatingBehavior("onchange") {
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    autoSchedule(assetModel);
-                    target.add(eventSchedulesPanel);
-                }
-            });
             TextField purchaseOrder;
             add(purchaseOrder = new TextField<String>("purchaseOrder", ProxyModel.of(assetModel, on(Asset.class).getPurchaseOrder())));
             purchaseOrder.setVisible(primaryOrgForTenant.hasExtendedFeature(ExtendedFeature.Integration) || primaryOrgForTenant.hasExtendedFeature(ExtendedFeature.OrderDetails));
-
+            
             WebMarkupContainer nonIntegrationOrderContainer = new WebMarkupContainer("nonIntegrationOrderNumberContainer");
             add(nonIntegrationOrderContainer);
             nonIntegrationOrderContainer.setVisible(!primaryOrgForTenant.hasExtendedFeature(ExtendedFeature.Integration));
