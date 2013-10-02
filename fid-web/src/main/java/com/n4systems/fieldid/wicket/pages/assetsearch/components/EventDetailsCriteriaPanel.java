@@ -57,7 +57,7 @@ public class EventDetailsCriteriaPanel extends Panel {
 
         add(createEventTypeGroupChoice(eventTypeGroupModel, eventTypeModel, availableEventTypesModel));
 
-        add(new FidDropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
+        add(new FidDropDownChoice<EventBook>("eventBook", new LocalizeModel<List<EventBook>>(new EventBooksForTenantModel().addNullOption(true)), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
 
         jobContainer.add(new FidDropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 

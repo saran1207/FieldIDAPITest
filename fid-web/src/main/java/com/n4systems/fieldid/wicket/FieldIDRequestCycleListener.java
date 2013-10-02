@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
 import com.n4systems.fieldid.utils.SessionUserInUse;
@@ -36,6 +37,9 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
 
     @SpringBean
     private UserGroupService userGroupService;
+
+    @SpringBean
+    private PersistenceService persistenceService;
 	
     public FieldIDRequestCycleListener() {
         Injector.get().inject(this);
@@ -48,6 +52,7 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
         SessionUser sessionUser = fieldidSession.getSessionUser();
         if (sessionUser != null) {
             storeFlagIfConcurrentUser(fieldidSession.getId(), sessionUser);
+            persistenceService.clearSession();
             FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
             User user = userLoader.setId(sessionUser.getId()).load();
             Collection<User> visibleUsers = userGroupService.findUsersVisibleTo(user);

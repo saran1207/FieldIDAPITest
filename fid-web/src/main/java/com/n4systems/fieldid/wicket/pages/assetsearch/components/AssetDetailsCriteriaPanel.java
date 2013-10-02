@@ -27,8 +27,7 @@ public class AssetDetailsCriteriaPanel extends Panel {
     public AssetDetailsCriteriaPanel(String id,  IModel<?> model) {
         super(id, model);
 
-        
-        add(new FidDropDownChoice<AssetStatus>("assetStatus", new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));
+        add(new FidDropDownChoice<AssetStatus>("assetStatus", new LocalizeModel<List<AssetStatus>>(new AssetStatusesForTenantModel()), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));
         final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getDefaultModel(), "assetTypeGroup");
         final IModel<AssetType> assetTypeModel = new PropertyModel<AssetType>(getDefaultModel(), "assetType");
         availableAssetTypesModel = new LocalizeModel<List<AssetType>>(new GroupedAssetTypesForTenantModel(assetTypeGroupModel));
