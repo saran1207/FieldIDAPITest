@@ -32,7 +32,7 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
 
     private Map<Object, List<LocalizedField>> loaded;
     private List<LocalizedField> fields;
-    private transient Map<Class<?>, Set<Field>> cache = Maps.newHashMap();
+    private transient Map<Class<?>, Set<Field>> cache;
     private final IModel<?> model;
     private final List<Locale> languages;
 
@@ -145,7 +145,7 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
     private List<LocalizedField> createLocalizedFields(Object entity, Field field) {
         List<LocalizedField> result = Lists.newArrayList();
         String ognl = localizationService.getOgnlFor(field);
-        Object value = getValue(entity,field);
+        Object value = getValue(entity, field);
         if (value==null) {
             return result;
         } else if (value instanceof List) {  // && list is of generic type <String>?
@@ -164,9 +164,9 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
     }
 
     private Set<Field> getAllFields(Class<?> clazz) {
-        Set<Field> fields = cache.get(clazz);
-        if (fields==null) {
-            cache.put(clazz, fields = ReflectionUtils.getAllFields(clazz, new Predicate<Field>() {
+        Set<Field> fields = getCache().get(clazz);
+        if (fields == null) {
+            getCache().put(clazz, fields = ReflectionUtils.getAllFields(clazz, new Predicate<Field>() {
                 @Override
                 public boolean apply(Field field) {
                     return !(Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()));
@@ -251,4 +251,10 @@ public class LocalizedFieldsModel extends FieldIDSpringModel<List<LocalizedField
         return result;
     }
 
+    public Map<Class<?>,Set<Field>> getCache() {
+        if (cache == null) {
+            cache = Maps.newHashMap();
+        }
+        return cache;
+    }
 }
