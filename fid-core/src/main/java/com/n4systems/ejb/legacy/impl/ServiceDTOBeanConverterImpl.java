@@ -696,6 +696,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		ProductTypeServiceDTO productTypeDTO = new ProductTypeServiceDTO();
 		productTypeDTO.setDtoVersion(ProductTypeServiceDTO.CURRENT_DTO_VERSION);
 		productTypeDTO.setId(assetType.getId());
+		productTypeDTO.setName(assetType.getName());
 		productTypeDTO.setIdentifierFormat(assetType.getIdentifierFormat());
 		productTypeDTO.setIdentifierLabel(assetType.getIdentifierLabel());
 		productTypeDTO.setIdentifierOverridden(assetType.isIdentifierOverridden());

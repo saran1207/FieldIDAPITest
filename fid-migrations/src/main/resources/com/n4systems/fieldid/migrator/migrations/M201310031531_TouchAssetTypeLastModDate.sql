@@ -1,0 +1,1 @@
+UPDATE setupdatalastmoddates SET assettypes = now() WHERE assettypes > '2013-10-01';
