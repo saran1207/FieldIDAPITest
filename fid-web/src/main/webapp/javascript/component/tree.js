@@ -28,28 +28,25 @@ var treeFactory = (function() {
 		var $tree;
 		var $type;
 		var initialized = false;
-		var searching = false;
 		var callback = options.url;
 		var input = '';
 		var options = options;
 
 		function search(e,d) {
-			if (searching) {
-				return;
-			}
 			var newInput=$text.val();
-			var length = newInput.length;
 			if (newInput.length==0) {
 				// clear out values
 				$entityId.val(null);
 				$type.val(null);
-			}
-			if (newInput!=input) {
-				input = newInput;
-				searching = true;
-				lazyInit();
-				jQuery.jstree._reference($tree).refresh(-1);
-			}
+                $tree.hide();
+			} else if (newInput.length >= 3 && newInput != input) {
+                input = newInput;
+                lazyInit();
+                jQuery.jstree._reference($tree).refresh(-1);
+            } else {
+                input = newInput;
+                $tree.hide();
+            }
 		}
 
 		var toggleTree = function() {
@@ -70,8 +67,16 @@ var treeFactory = (function() {
 			} else {
 				$tree.hide();
 			}
+
+            var keyTimer;
 			$text.bind('keyup', function(e,d) {
-				search(e,d);
+                if (keyTimer) {
+                    window.clearTimeout(keyTimer);
+                }
+                keyTimer = window.setTimeout(function () {
+                    search(e, d);
+                    keyTimer = null;
+                }, 500);
 				return true;
 			});
 		};
