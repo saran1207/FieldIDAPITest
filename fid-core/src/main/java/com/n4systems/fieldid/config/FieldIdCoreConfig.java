@@ -593,6 +593,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public MassUpdateAssetService massUpdateAssetService() {
+        return new MassUpdateAssetService();
+    }
+
+    @Bean
     public AssetCodeMappingService assetCodeMappingService() {
         return new AssetCodeMappingService();
     }

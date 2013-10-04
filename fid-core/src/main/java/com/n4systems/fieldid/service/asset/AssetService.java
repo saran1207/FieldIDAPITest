@@ -157,6 +157,15 @@ public class AssetService extends FieldIdPersistenceService {
         return persistenceService.find(Asset.class, assetId);
     }
 
+    public Asset getAsset(Long id, String... postFetchFields) {
+        QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class);
+        query.addSimpleWhere("id", id);
+        if(postFetchFields != null && postFetchFields.length > 0) {
+            query.addPostFetchPaths(postFetchFields);
+        }
+        return persistenceService.find(query);
+    }
+
 	public Asset fillInSubAssetsOnAsset(Asset asset) {
 		if (asset != null) {
 			asset.setSubAssets(findSubAssets(asset));

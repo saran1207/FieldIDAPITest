@@ -129,18 +129,17 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 			
 			CheckBox purchaseOrderCheck = new CheckBox("purchaseOrderCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[purchaseOrder]"));
 			TextField<String> purchaseOrder = new TextField<String>("purchaseOrder", new PropertyModel<String>(massUpdateAssetModel, "asset.purchaseOrder"));
+            purchaseOrder.setVisible(FieldIDSession.get().getSecurityGuard().isIntegrationEnabled() || FieldIDSession.get().getSecurityGuard().isOrderDetailsEnabled());
 			purchaseOrder.add(createCheckOnChangeEvent(purchaseOrderCheck));
 			add(purchaseOrderCheck);
 			add(purchaseOrder);
-			
-			CheckBox nonIntegrationOrderNumberCheck = new CheckBox("nonIntegrationOrderNumberCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[nonIntegrationOrderNumber]"));
+
+            CheckBox nonIntegrationOrderNumberCheck = new CheckBox("nonIntegrationOrderNumberCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[nonIntegrationOrderNumber]"));
 			TextField<String> nonIntergrationOrderNumber = new TextField<String>("nonIntergrationOrderNumber", new PropertyModel<String>(massUpdateAssetModel, "asset.nonIntergrationOrderNumber"));
 			nonIntergrationOrderNumber.add(createCheckOnChangeEvent(nonIntegrationOrderNumberCheck));
-			WebMarkupContainer nonIntergrationOrderNumberContainer = new WebMarkupContainer("nonIntergrationOrderNumberContainer");
-			nonIntergrationOrderNumberContainer.setVisible(!FieldIDSession.get().getSecurityGuard().isIntegrationEnabled());
-			nonIntergrationOrderNumberContainer.add(nonIntegrationOrderNumberCheck);
-			nonIntergrationOrderNumberContainer.add(nonIntergrationOrderNumber);
-			add(nonIntergrationOrderNumberContainer);
+            nonIntergrationOrderNumber.setVisible(!FieldIDSession.get().getSecurityGuard().isIntegrationEnabled() && FieldIDSession.get().getSecurityGuard().isOrderDetailsEnabled());
+			add(nonIntegrationOrderNumberCheck);
+			add(nonIntergrationOrderNumber);
 
 			final CheckBox locationCheck = new CheckBox("locationCheck", new PropertyModel<Boolean>(massUpdateAssetModel, "select[location]"));
 			locationCheck.setOutputMarkupId(true);
