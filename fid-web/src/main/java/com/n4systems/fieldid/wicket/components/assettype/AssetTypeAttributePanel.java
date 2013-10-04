@@ -68,6 +68,12 @@ public class AssetTypeAttributePanel extends Panel {
         sortableAjaxBehavior = new SimpleSortableAjaxBehavior() {
             @Override
             public void onUpdate(Component sortedComponent, int index, AjaxRequestTarget target) {
+
+               if (null ==  sortedComponent) {
+                   target.add(existingAttributesContainer);
+                   return;
+               }
+
                 if(infoFields.size() > 1) {
                     if(index == 0) {
                         index = 1;
