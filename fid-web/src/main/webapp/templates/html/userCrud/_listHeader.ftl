@@ -18,7 +18,7 @@
 
 <th class="${sortDisplay}">
     <#if sortables[x]>
-        <a href='<@s.url action="${sortAction}" sortColumn="${column}" sortDirection="${direction}"/>'>
+        <a href='<@s.url action="${sortAction}" sortColumn="${column}" sortDirection="${direction}" includeParams="get"/>'>
             ${labels[x]}
         </a>
     <#else>
