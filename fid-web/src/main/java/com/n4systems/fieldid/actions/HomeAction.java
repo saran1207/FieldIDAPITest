@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions;
 
 import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 
@@ -28,6 +29,8 @@ public class HomeAction extends AbstractAction {
 	
 	private ReleaseNotes currentReleaseNotes;
 	private ReleaseNoteLoader loader;
+
+    private int errorTicket;
 
 	public HomeAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -72,6 +75,8 @@ public class HomeAction extends AbstractAction {
 	}
 	
 	public String doError() {
+        this.errorTicket = generateTicketNumber();
+        logger.error("Error Ticket #: " + errorTicket);
 		return ERROR;
 	}
 	
@@ -82,4 +87,13 @@ public class HomeAction extends AbstractAction {
 	public String doRestricted() {
 		return ERROR;
 	}
+
+    public int getErrorTicket() {
+        return errorTicket;
+    }
+
+    private int generateTicketNumber() {
+        Random rnd = new Random();
+        return 10000 + rnd.nextInt(90000);
+    }
 }
