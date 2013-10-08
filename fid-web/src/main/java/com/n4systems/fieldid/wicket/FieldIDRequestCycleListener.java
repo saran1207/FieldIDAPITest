@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
-import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.utils.FlashScopeMarshaller;
 import com.n4systems.fieldid.utils.SessionUserInUse;
@@ -37,9 +36,6 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
 
     @SpringBean
     private UserGroupService userGroupService;
-
-    @SpringBean
-    private PersistenceService persistenceService;
 	
     public FieldIDRequestCycleListener() {
         Injector.get().inject(this);
@@ -52,21 +48,15 @@ public class FieldIDRequestCycleListener implements IRequestCycleListener {
         SessionUser sessionUser = fieldidSession.getSessionUser();
         if (sessionUser != null) {
             storeFlagIfConcurrentUser(fieldidSession.getId(), sessionUser);
-            persistenceService.clearSession();
+            // DD : hmmm...can't we do this once? every request seems expensive?
             FilteredIdLoader<User> userLoader = new FilteredIdLoader<User>(new OpenSecurityFilter(), User.class);
             User user = userLoader.setId(sessionUser.getId()).load();
             Collection<User> visibleUsers = userGroupService.findUsersVisibleTo(user);
             ThreadLocalInteractionContext.getInstance().setVisibleUsers(visibleUsers);
             ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
 
-            Locale language = user.getTenant().getSettings().getDefaultLanguage();
-            if (user.getLanguage()!=null  && !ThreadLocalInteractionContext.getInstance().isForceDefaultLanguage()) {
-               language = user.getLanguage();
-            }
-            // We clear this out in case one of the localization models/methods hasn't done so..
-            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(null);
-            fieldidSession.setUserLocale(language);
-            sessionUser.setLanguage(language);
+            Locale language = sessionUser.getLanguage();
+            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
 
             ThreadLocalInteractionContext.getInstance().setCurrentPlatformType(PlatformType.WEB);
             ThreadLocalInteractionContext.getInstance().setCurrentPlatform( FieldIdVersion.getWebVersionDescription());

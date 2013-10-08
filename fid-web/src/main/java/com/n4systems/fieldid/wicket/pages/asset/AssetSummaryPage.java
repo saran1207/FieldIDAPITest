@@ -9,10 +9,12 @@ import com.n4systems.fieldid.wicket.components.asset.summary.*;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
 import com.n4systems.fieldid.wicket.util.ZipFileUtil;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.IOUtils;
@@ -122,7 +124,7 @@ public class AssetSummaryPage extends AssetPage {
         add(orderDetails = new OrderDetailsPanel("orderDetailsPanel", assetModel));
         orderDetails.setVisible(orderDetailsEnabled || integrationEnabled);
     
-        add(upcomingEventsPanel = new UpcomingEventsPanel("upcomingEventsPanel", new LocalizeModel<List<Event>>(new UpcomingEventsListModel().setAsset(asset)), asset));
+        add(upcomingEventsPanel = new UpcomingEventsPanel("upcomingEventsPanel", new UpcomingEventsListModel().setAsset(asset), asset));
         upcomingEventsPanel.setOutputMarkupPlaceholderTag(true);
         add(upcomingEventsMessage = new Label("upcomingEventsMessage", new FIDLabelModel("label.empty_schedule_list").getObject()));
         upcomingEventsMessage.setOutputMarkupPlaceholderTag(true);

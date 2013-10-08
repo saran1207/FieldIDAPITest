@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.wicket.components.search.results.ColumnGroupPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
@@ -74,7 +73,7 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
     protected void updateColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel) {
         final IModel<AssetTypeGroup> assetTypeGroupModel = new PropertyModel<AssetTypeGroup>(getDefaultModel(), "assetTypeGroup");
         final IModel<AssetType> assetTypeModel = new PropertyModel<AssetType>(getDefaultModel(), "assetType");
-        IModel<List<AssetType>> availableAssetTypesModel = new LocalizeModel<List<AssetType>>(new GroupedAssetTypesForTenantModel(assetTypeGroupModel));
+        GroupedAssetTypesForTenantModel availableAssetTypesModel = new GroupedAssetTypesForTenantModel(assetTypeGroupModel);
         if (!model.getObject().isReportAlreadyRun()) {
             updateDynamicAssetColumns(null, availableAssetTypesModel.getObject());
         }

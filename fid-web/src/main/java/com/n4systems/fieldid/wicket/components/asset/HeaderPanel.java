@@ -11,8 +11,6 @@ import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.schedule.ProcedurePicker;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
-import com.n4systems.fieldid.wicket.model.LocalizeAround;
-import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -41,7 +39,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 public class HeaderPanel extends Panel {
 
@@ -109,14 +106,7 @@ public class HeaderPanel extends Panel {
             // TODO: replace with LimitedEditAsset wicket page link when that page is working
             add(new NonWicketLink("editAssetLink", "customerInformationEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
 
-        // Necessary for localization stuff to not break on this page.
-        final IModel<Set<EventType>> assocEventTypesModel = new LocalizeModel<Set<EventType>>(new PropertyModel<Set<EventType>>(asset.getType(), "associatedEventTypes"));
-        boolean hasAssociatedEventTypes = new LocalizeAround<Boolean>(new Callable<Boolean>() {
-            @Override
-            public Boolean call() throws Exception {
-                return !assocEventTypesModel.getObject().isEmpty();
-            }
-        }).call();
+        boolean hasAssociatedEventTypes = !asset.getType().getAssociatedEventTypes().isEmpty();
         boolean isLotoEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures);
         boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
 

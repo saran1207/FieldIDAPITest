@@ -5,7 +5,6 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantModel;
@@ -26,7 +25,7 @@ import java.util.List;
 public class EventDetailsCriteriaPanel extends Panel {
 
     private FidDropDownChoice<EventType> eventTypeSelect;
-    private IModel<List<EventType>> availableEventTypesModel;
+    private EventTypesForTenantModel availableEventTypesModel;
 
     public EventDetailsCriteriaPanel(String id, IModel<?> model) {
         super(id, model);
@@ -42,7 +41,7 @@ public class EventDetailsCriteriaPanel extends Panel {
 
         final IModel<EventTypeGroup> eventTypeGroupModel = new PropertyModel<EventTypeGroup>(getDefaultModel(), "eventTypeGroup");
         final IModel<EventType> eventTypeModel = new PropertyModel<EventType>(getDefaultModel(), "eventType");
-        availableEventTypesModel = new LocalizeModel<List<EventType>>(new EventTypesForTenantModel(eventTypeGroupModel));
+        availableEventTypesModel = new EventTypesForTenantModel(eventTypeGroupModel);
         add(eventTypeSelect = new FidDropDownChoice<EventType>("eventType", availableEventTypesModel, new EventTypeChoiceRenderer()));
         eventTypeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override protected void onUpdate(AjaxRequestTarget target) {
@@ -57,7 +56,7 @@ public class EventDetailsCriteriaPanel extends Panel {
 
         add(createEventTypeGroupChoice(eventTypeGroupModel, eventTypeModel, availableEventTypesModel));
 
-        add(new FidDropDownChoice<EventBook>("eventBook", new LocalizeModel<List<EventBook>>(new EventBooksForTenantModel().addNullOption(true)), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
+        add(new FidDropDownChoice<EventBook>("eventBook", new EventBooksForTenantModel().addNullOption(true), new ListableChoiceRenderer<EventBook>()).setNullValid(true));
 
         jobContainer.add(new FidDropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 
@@ -66,7 +65,7 @@ public class EventDetailsCriteriaPanel extends Panel {
 
     private FidDropDownChoice<EventTypeGroup> createEventTypeGroupChoice(IModel<EventTypeGroup> eventTypeGroupModel, final IModel<EventType> eventTypeModel, final IModel<List<EventType>> availableEventTypesModel) {
         FidDropDownChoice<EventTypeGroup> eventTypeGroupDropDownChoice = new FidDropDownChoice<EventTypeGroup>("eventTypeGroup",
-                eventTypeGroupModel, new LocalizeModel<List<EventTypeGroup>>(new EventTypeGroupsForTenantModel()), new ListableChoiceRenderer<EventTypeGroup>());
+                eventTypeGroupModel, new EventTypeGroupsForTenantModel(), new ListableChoiceRenderer<EventTypeGroup>());
         eventTypeGroupDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {

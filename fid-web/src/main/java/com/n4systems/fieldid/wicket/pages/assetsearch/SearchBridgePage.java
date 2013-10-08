@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.assetsearch;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
-import com.n4systems.fieldid.wicket.model.LocalizeAround;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.PageFactory;
 import com.n4systems.model.saveditem.SavedItem;
@@ -11,8 +10,6 @@ import com.n4systems.services.reporting.DashboardReportingService;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.string.StringValue;
-
-import java.util.concurrent.Callable;
 
 // used as a bridge to redirect to search/report pages.
 // basically reponsible for creating criteria based on the input.
@@ -57,13 +54,8 @@ public abstract class SearchBridgePage<P extends FieldIDFrontEndPage, T extends 
         }
 
         @Override public P createPage() {
-            final Long id = params.get("id").toLong();
-            S savedItem = new LocalizeAround<S>(new Callable<S>() {
-                @Override
-                public S call() throws Exception {
-                    return getSavedItem(id);
-                }
-            }).call();
+            Long id = params.get("id").toLong();
+            S savedItem = getSavedItem(id);
             savedItem.getSearchCriteria().setSavedReportId(id);
             savedItem.getSearchCriteria().setSavedReportName(savedItem.getName());
             return SearchBridgePage.this.createPage((T) savedItem.getSearchCriteria(), savedItem);

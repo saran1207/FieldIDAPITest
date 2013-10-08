@@ -4,7 +4,6 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.InfoOptionBeanPropertyModel;
-import com.n4systems.fieldid.wicket.model.LocalizeAround;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.services.date.DateService;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 
 
 public class AssetAttributeDetailsPanel extends Panel {
@@ -34,7 +32,7 @@ public class AssetAttributeDetailsPanel extends Panel {
 
         Asset asset = model.getObject();
 
-        final Set<InfoOptionBean> infoOptions = asset.getInfoOptions();
+        Set<InfoOptionBean> infoOptions = asset.getInfoOptions();
 
         boolean assignToEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.AssignedTo);
         Label assignedTo;
@@ -51,12 +49,7 @@ public class AssetAttributeDetailsPanel extends Panel {
         add(manufactureCertificateLink = new NonWicketLink("manufactureCertificateLink", "/file/downloadManufacturerCert.action?uniqueID=" + asset.getId(), new AttributeModifier("target", "_blank")));
         manufactureCertificateLink.setVisible(manufacturerCertificateEnabled && asset.getType().isHasManufactureCertificate());
 
-        List<InfoOptionBean> infoOptionList = new LocalizeAround<List<InfoOptionBean>>(new Callable<List<InfoOptionBean>>() {
-            @Override
-            public List<InfoOptionBean> call() throws Exception {
-                return new ArrayList<InfoOptionBean>(infoOptions);
-            }
-        }).call();
+        List<InfoOptionBean> infoOptionList = new ArrayList<InfoOptionBean>(infoOptions);
         Collections.sort(infoOptionList);
 
         add(new ListView<InfoOptionBean>("attributeListView", infoOptionList) {

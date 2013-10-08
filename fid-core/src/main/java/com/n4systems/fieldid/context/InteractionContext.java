@@ -25,9 +25,4 @@ public interface InteractionContext {
 
     public void clear();
 
-    public void setForceDefaultLanguage(boolean forceDefaultLanguage);
-    public Boolean isForceDefaultLanguage();
-
-    public Locale getLanguageToUse();
-
 }
