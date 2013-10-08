@@ -8,6 +8,7 @@
 	<p>
 		<@s.text name="message.help_fix_issue">
 			<@s.param>${helpUrl}</@s.param>
+            <@s.param>${errorTicket}</@s.param>
 		</@s.text>
 	</p>
 </div>
