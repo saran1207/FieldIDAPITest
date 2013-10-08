@@ -37,7 +37,7 @@ public abstract class AssetPage extends FieldIDFrontEndPage {
     @Override
     protected void storePageParameters(PageParameters params) {
         assetId = params.get("uniqueID").toLong();
-        assetModel = new EntityModel<Asset>(Asset.class, assetId);
+        assetModel = new EntityModel<Asset>(Asset.class, assetId).withLocalization(true);
         useContext = params.get("useContext").toBoolean();
         assetService.fillInSubAssetsOnAsset(assetModel.getObject());
     }

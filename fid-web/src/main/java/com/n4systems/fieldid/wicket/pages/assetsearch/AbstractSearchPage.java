@@ -100,6 +100,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
             searchCriteria = createCriteria();
         } else {
             saveLastSearch(searchCriteria);
+            persistenceService.clearSession();
         }
     }
 

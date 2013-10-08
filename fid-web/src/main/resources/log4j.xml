@@ -126,16 +126,6 @@
         </layout>
     </appender>
 
-    <appender name="LOCALIZATION_LOG" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="/var/fieldid/logs/fieldid-localization.log" />
-        <param name="Append" value="true" />
-        <param name="MaxFileSize" value="500MB" />
-        <param name="MaxBackupIndex" value="10" />
-        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
-            <param name="ConversionPattern" value="%D: %c: %m%n" />
-        </layout>
-    </appender>
-
 
     <category name="org.springframework">
         <priority value="INFO" />
@@ -175,10 +165,6 @@
     <category name="SearchLog" additivity="false">
         <priority value="INFO" />
         <appender-ref ref="SEARCH_LOG" />
-    </category>
-    <category name="LocalizationLog" additivity="false">
-        <priority value="INFO" />
-        <appender-ref ref="LOCALIZATION_LOG" />
     </category>
 	<category name="MobileErrorLogger" additivity="false">
 		<priority value="INFO" />

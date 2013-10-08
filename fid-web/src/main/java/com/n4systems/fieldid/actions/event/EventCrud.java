@@ -20,6 +20,7 @@ import com.n4systems.fieldid.actions.helpers.AssignedToUserGrouper;
 import com.n4systems.fieldid.actions.helpers.EventCrudHelper;
 import com.n4systems.fieldid.actions.helpers.UploadFileSupport;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
@@ -156,7 +157,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		try {
+        Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+        try {
+            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getCurrentUser().getLanguage());
 			if (allowNetworkResults) {
 				
 				// if we're in a vendor context we need to look events for assigned assets rather than registered assets
@@ -172,7 +175,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		} catch(RuntimeException e) {
 			logger.error("Failed to load event", e);
 			
-		}
+		} finally {
+            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(previousLanguage);
+        }
 	}
 	
 	@Override

@@ -78,11 +78,11 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         Set<String> errors = Sets.newHashSet();
         // now test that all of current values are in the expected/defined list of valid translation ognl.
         // i.e. if the DB contains a translation ognl of "types.name" but that isn't in expected list which is say, {assettypes.name, assettypes.desc}
-        //  then something is screwed up.  Meaning there isn't a table named type and/or a field called name in this example.
+        //  then something is screwed up.
         // possible fixes (depending on your assessment) could be
         // 1: migrate the value.   types.name --> assettypes.name
         // 2: delete the translated values  types.*    because they aren't relevant anymore.   (not likely)
-        // 3: rename the table so the translation matches.    rename db table assettypes to types;
+        // 3: rename the table so the translation matches.    rename assettypes to types;
         for (TranslationKey key:translationCache.keySet()) {
             if (!expected.contains(key.ognl)) {
                 errors.add(key.ognl);
@@ -101,7 +101,7 @@ public class LocalizationService extends FieldIdPersistenceService implements In
             translationCache.put(translationKey,keyMap);
         }
         Locale locale = StringUtils.parseLocaleString(translation.getId().getLanguage());
-        // currently doesn't support Sets collections. must have order.
+        // currently doesn't support sets. must have order.
         if (translationKey.isCollection()) {
             List<String> list = (List<String>) keyMap.get(locale);
             if (list==null) {
@@ -157,6 +157,11 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         }
     }
 
+    private String getTableNameFor(Class clazz) {
+        return getPersister(clazz).getTableName();
+    }
+
+
     // TODO DD : cache this.  should only do this once!
     //@Cacheable("localizationOgnl")
     public String getOgnlFor(Field field) {
@@ -180,7 +185,9 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     }
 
     public void save(List<Translation> translations) {
-        persistenceService.saveOrUpdate(translations);
+        for (Translation translation : translations) {
+            persistenceService.saveOrUpdate(translations);
+        }
         initializeCache();
     }
 

@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.asset.events.table.EventActionsCell;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
+import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
@@ -11,6 +12,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -30,7 +32,7 @@ public class LastEventPanel extends Panel {
         
         Asset asset = model.getObject();
 
-        Event lastEvent = assetService.findLastEvents(asset, FieldIDSession.get().getSessionUser().getSecurityFilter());
+        Event lastEvent =  new LocalizeModel<Event>(new LastEventModel(asset)).getObject();
 
         if(lastEvent != null) {
             EventResult eventResult = lastEvent.getEventResult();
@@ -48,6 +50,19 @@ public class LastEventPanel extends Panel {
             add(new Label("performedBy", lastEvent.getPerformedBy().getDisplayName()));
             add(new EventActionsCell("actions", Model.of(lastEvent)));
 
+        }
+    }
+
+    class LastEventModel extends LoadableDetachableModel<Event> {
+        private Asset asset;
+
+        LastEventModel(Asset asset) {
+            this.asset = asset;
+        }
+
+        @Override
+        protected Event load() {
+            return assetService.findLastEvents(asset, FieldIDSession.get().getSessionUser().getSecurityFilter());
         }
     }
 }

@@ -4,7 +4,6 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
-import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.localization.LocalizationService;
@@ -26,7 +25,7 @@ import java.util.Set;
 
 public class LocalizationListener implements PostLoadEventListener, PreUpdateEventListener {
 
-    private static final Logger logger=Logger.getLogger("LocalizationLog");
+    private static final Logger logger=Logger.getLogger(LocalizationListener.class);
 
     private static Map<Class<?>, List<LocalizedProperty>> cache = Maps.newHashMap();
 
@@ -37,38 +36,9 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
     @Override
     public boolean onPreUpdate(PreUpdateEvent event) {
         if (event.getEntity() instanceof Saveable) {
-            // TODO DD : determine which fields were changed....if translated & auditing fields were only ones then reject.
-            boolean translated = ((Saveable) event.getEntity()).isTranslated();
-            logger.error(!translated ? "accepting update for " + describe((Saveable) event.getEntity()) : "rejecting changes for " + describe((Saveable) event.getEntity()));
-            return translated;
+            return ((Saveable)event.getEntity()).isTranslated();
         }
         return false;
-    }
-
-    private void localize(Saveable entity, EntityPersister persister, EventSource eventSource) {
-        Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
-
-        try {
-            StringBuilder builder = new StringBuilder("looking for localizations in " + describe(entity));
-            boolean needsNewLine = true;
-            for (LocalizedProperty property:getLocalizedProperties(entity,persister)) {
-                int index = property.getIndex();
-                builder.append(needsNewLine ? "\n" : "");
-                needsNewLine = false;
-                Object translation = getLocalizationService().getTranslation(entity, property.getOgnl(), locale);
-                if (translation!=null) {
-                    builder.append("     ***translating " + property.getOgnl() + " : " + persister.getPropertyValue(entity, property.getIndex(), EntityMode.POJO) + " --> " + translation + "\n");
-                    setTranslatedValue(persister, entity, index, translation);
-                } else {
-                    builder.append("      no translations found for " + property.getOgnl() + "\n");
-                }
-            }
-            if (getLocalizedProperties(entity,persister).size()>0) {
-                logger.error(builder.toString());
-            }
-        } catch (Exception e) {
-            logger.error("can't localize entity " + entity.getClass().getSimpleName() + " : " + entity , e);
-        }
     }
 
     @Override
@@ -79,6 +49,21 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
     private void localize(Object entity, EntityPersister persister, EventSource eventSource) {
         if (entity.getClass().isAnnotationPresent(Entity.class) && entity instanceof Saveable) {
             localize((Saveable)entity, persister, eventSource);
+        }
+    }
+
+    private void localize(Saveable entity, EntityPersister persister, EventSource eventSource) {
+        try {
+            for (LocalizedProperty property:getLocalizedProperties(entity,persister)) {
+                int index = property.getIndex();
+                Locale locale = ThreadLocalInteractionContext.getInstance().getLanguageToUse();
+                Object translation = getLocalizationService().getTranslation(entity, property.getOgnl(), locale);
+                if (translation!=null) {
+                    setTranslatedValue(persister, entity, index, translation);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("can't localize entity " + entity.getClass().getSimpleName() + " : " + entity , e);
         }
     }
 
@@ -97,7 +82,7 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
                 public boolean apply(Object input) {
                     Field field = (Field) input;
                     Localized annotation = field.getAnnotation(Localized.class);
-                    return annotation != null && !annotation.ignore();
+                    return annotation != null;
                 }
             });
             for (Field field:fields) {
@@ -127,17 +112,6 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
     private LocalizationService getLocalizationService() {
         return ServiceLocator.getLocalizationService();
     }
-
-    private String describe(Saveable entity) {
-        String className = entity.getClass().getSimpleName();
-        String name = entity.getEntityId()+"";
-        String thread = Thread.currentThread().getName();
-        if (entity instanceof NamedEntity) {
-            name=((NamedEntity) entity).getName();
-        }
-        return String.format("%s : %s - #%d (%s)", className, name, entity.hashCode(), thread);
-    }
-
 
     class LocalizedProperty {
         String ognl;

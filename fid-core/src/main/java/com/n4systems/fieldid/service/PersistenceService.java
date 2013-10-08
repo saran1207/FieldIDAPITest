@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service;
 import com.google.common.base.Preconditions;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
@@ -298,5 +299,10 @@ public class PersistenceService extends FieldIdService {
         }
         return find(queryBuilder)==null;
 	}
+
+    @Transactional
+    public void clearSession() {
+        getHibernateSession().clear();
+    }
 
 }
