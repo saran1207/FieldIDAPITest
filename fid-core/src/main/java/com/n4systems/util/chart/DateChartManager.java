@@ -75,18 +75,14 @@ public class DateChartManager extends SimpleChartManager<LocalDate> {
 	public void updateOptions(ChartSeries<LocalDate> chartSeries, FlotOptions<LocalDate> options, int index, int size, int maxChartSeries) {
 		super.updateOptions(chartSeries, options, index, size, maxChartSeries);
 		updateTimeFormat(chartSeries, options);
-		if (dateRange.getRangeType().isDaily()) {
-            // WEB-3720 Seems updateForDaily has stopped producing reasonable graphs.
-            // Need to update this to determine what expected graph should look like for the different widgets
-            // when daily is selected. This will probably involve refactoring elsewhere too.
-//			updateForDaily(chartSeries, options);
-		}
-                //options.yaxis.max = Math.max(1000, options.yaxis.max);
-                Double total = chartSeries.maxY() * .30;
-                Double result = chartSeries.maxY()+ total;
 
-                options.yaxis.max = result.longValue();
-                options.tooltipFormat = getTooltipFormat(granularity);
+        Double total = chartSeries.maxY() * .30;
+        Double result = chartSeries.maxY()+ total;
+        if(options.yaxis.max == null)
+            options.yaxis.max = 0L;
+        options.yaxis.max += result.longValue();
+
+        options.tooltipFormat = getTooltipFormat(granularity);
 	}
 
     @Override
