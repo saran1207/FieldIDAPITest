@@ -284,7 +284,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             final boolean isNew = assetModel.getObject().isNew();
 
             actionsContainer.add(new Button("saveAndStartEventButton") {
-                { setVisible(getSessionUser().hasAccess("createevent") && isNew); }
+                { setVisible(getSessionUser().hasAccess("createevent")); }
                 @Override
                 public void onSubmit() {
                     performSingleOrMultiSave(assetModel);
@@ -307,8 +307,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                 @Override
                 public boolean isVisible() {
                     return !multiAssetConfig.isConfigurationComplete()
-                            && assetTypeModel.getObject().isHasManufactureCertificate()
-                            && isNew;
+                            && assetTypeModel.getObject().isHasManufactureCertificate();
                 }
             });
 
