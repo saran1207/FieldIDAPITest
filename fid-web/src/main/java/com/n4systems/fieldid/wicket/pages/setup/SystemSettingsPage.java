@@ -109,6 +109,9 @@ public class SystemSettingsPage extends FieldIDFrontEndPage {
             systemSettingsService.saveSystemSettings(getModelObject());
             FieldIDSession.get().info(new FIDLabelModel("message.system_settings_updated").getObject());
             setResponsePage(SystemSettingsPage.class);
+
+            FieldIDSession.get().getPrimaryOrg().setIdentifierLabel(getModelObject().getIdentifierLabel());
+
         }
     }
 
