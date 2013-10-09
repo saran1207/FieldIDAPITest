@@ -6,6 +6,7 @@ import com.n4systems.model.security.SecurityDefiner;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.Map;
 
 @Entity
 @Table(name = "translations")
@@ -77,8 +78,13 @@ public class Translation implements Serializable, Saveable {
     }
 
     @Override
-    public void setTranslated(boolean translated) {
-        ;   // do nothing. N/A
+    public void setUntranslatedValue(String name, Object value) {
+
+    }
+
+    @Override
+    public Map<String, Object> getTranslatedValues() {
+        return null;
     }
 
     @Override

@@ -75,9 +75,9 @@ public class SearchParserService extends FieldIdService {
         if ((suggestion = multiWordNoAttribute(search))!=null) {
             suggestions.add(suggestion);
         }
-        if (suggestions.size()==0) {
-            suggestions.addAll(incorrectAttributes(search, searchQuery));
-        }
+//        if (suggestions.size()==0) {
+//            suggestions.addAll(incorrectAttributes(search, searchQuery));
+//        }
         return suggestions;
     }
 

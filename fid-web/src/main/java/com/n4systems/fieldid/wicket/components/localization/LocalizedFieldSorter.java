@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.model.*;
 import com.n4systems.model.utils.ClassMap;
 import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,8 +23,6 @@ public class LocalizedFieldSorter {
         add(AssetTypeGroup.class, Lists.newArrayList("name"));
         add(Button.class, "displayText");
         add(ButtonGroup.class, "name");
-        add(Criteria.class, Lists.newArrayList("displayText", "recommendations", "deficiencies"));
-        add(CriteriaSection.class, "title");
         add(EventBook.class, "name");
         add(EventStatus.class, "name");
         add(EventType.class,"name");
@@ -31,6 +30,11 @@ public class LocalizedFieldSorter {
         add(Score.class, "name");
         add(ScoreGroup.class, "name");
         add(InfoFieldBean.class, "name");
+        add(CriteriaSection.class, "title");
+        add(ComboBoxCriteria.class, Lists.newArrayList("displayText","recommendations", "deficiencies", "options"));
+        add(SelectCriteria.class, Lists.newArrayList("displayText", "recommendations", "deficiencies", "options"));
+        add(Criteria.class, Lists.newArrayList("displayText", "recommendations", "deficiencies"));
+        add(InfoOptionBean.class, Lists.newArrayList("name"));
     }
 
     private void add(Class<?> clazz, String fieldName) {
@@ -55,7 +59,7 @@ public class LocalizedFieldSorter {
                 }
             }
         }
-        throw new IllegalStateException("can't find translatable fields for class " + clazz.getSimpleName() + " & field " + fieldName);
+        throw new IllegalStateException("can't find translatable fields for class " + clazz.getSimpleName() + " & field " + fieldName + ". Make sure you put all the possible fields included in the map at construction time");
     }
 
     public List<LocalizedField> sort(List<LocalizedField> localizedFields) {

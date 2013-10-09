@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="select_criteriaresults")
 @PrimaryKeyJoinColumn(name="id")
-public class SelectCriteriaResult extends CriteriaResult {
+public class SelectCriteriaResult extends CriteriaResult implements ValueResult {
 
 	@Column
 	private String value;

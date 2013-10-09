@@ -1,5 +1,6 @@
 package com.n4systems.model.parents.legacy;
 
+import com.google.common.collect.Maps;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
@@ -9,6 +10,7 @@ import com.n4systems.model.security.SecurityLevel;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -22,7 +24,8 @@ abstract public class LegacyBaseEntity implements Serializable, Saveable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long uniqueID;
 
-    private @Transient boolean translated = false;
+    private @Transient
+    Map<String,Object> translations = null;
 
 	@AllowSafetyNetworkAccess
 	public Long getUniqueID() {
@@ -67,11 +70,19 @@ abstract public class LegacyBaseEntity implements Serializable, Saveable {
 
     @Override
     public boolean isTranslated() {
-        return translated;
+        return translations!=null;
     }
 
     @Override
-    public void setTranslated(boolean translated) {
-        this.translated = translated;
+    public void setUntranslatedValue(String name, Object value) {
+        if (translations==null) {
+            translations = Maps.newHashMap();
+        }
+        translations.put(name,value);
+    }
+
+    @Override
+    public Map<String, Object> getTranslatedValues() {
+        return translations;
     }
 }

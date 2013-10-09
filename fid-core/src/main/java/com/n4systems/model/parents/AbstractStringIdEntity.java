@@ -5,6 +5,7 @@ import com.n4systems.model.api.Saveable;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("serial")
@@ -58,8 +59,13 @@ public class AbstractStringIdEntity implements Serializable, Saveable {
     }
 
     @Override
-    public void setTranslated(boolean translated) {
-        ;   // do nothing.   N/A.
+    public void setUntranslatedValue(String name, Object value) {
+        ; //
+    }
+
+    @Override
+    public Map<String, Object> getTranslatedValues() {
+        return null;
     }
 
     public void setId(String id) {

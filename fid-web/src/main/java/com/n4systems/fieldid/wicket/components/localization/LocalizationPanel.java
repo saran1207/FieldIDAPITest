@@ -3,8 +3,8 @@ package com.n4systems.fieldid.wicket.components.localization;
 import com.google.common.base.CaseFormat;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.localization.Translation;
-import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.localization.LocalizationService;
 import org.apache.log4j.Logger;
@@ -37,17 +37,26 @@ public class LocalizationPanel extends Panel {
 
     private static final Logger logger= Logger.getLogger(LocalizationPanel.class);
 
+    public static final int ONE_LINE_OF_CHARACTERS = 100;
+
     private @SpringBean LocalizationService localizationService;
 
     private Locale language;
     private final FormComponent<Locale> chooseLanguage;
     private final ListView<LocalizedField> listView;
+    private IModel<List<Locale>> languages = null;
 
-    private IModel<? extends EntityWithTenant> model;
+    private IModel<?> model;
 
-    public LocalizationPanel(String id, IModel<? extends EntityWithTenant> model) {
+
+    public LocalizationPanel(String id, final IModel<? extends HasTenant> model) {
+        this(id,model,new PropertyModel(model,"tenant.settings.translatedLanguages"));
+    }
+
+
+    public LocalizationPanel(String id, final IModel<?> model, final IModel<List<Locale>> languages) {
         super(id, model);
-
+        this.languages = languages;
         this.model = model;
         setOutputMarkupId(true);
         add(new Form("form")
@@ -59,7 +68,7 @@ public class LocalizationPanel extends Panel {
                         item.add(new Label("label", Model.of(getLabelFor(field))));
                         item.add(new Label("defaultValue", Model.of(field.getDefaultValue())));
                         item.add(new TranslationsListView("translations", new PropertyModel(item.getModel(), "translations")));
-                        item.add(createLinksForItem("misc", item));
+                        item.add(createLinksForItem("misc", item, languages));
                     }
                 }.setReuseItems(true))
                 .add(chooseLanguage = new FidDropDownChoice<Locale>("language", new PropertyModel(this, "language"), getLanguages() , new IChoiceRenderer<Locale>() {
@@ -128,7 +137,7 @@ public class LocalizationPanel extends Panel {
         };
     }
 
-    protected Component createLinksForItem(String misc, ListItem<LocalizedField> item) {
+    protected Component createLinksForItem(String misc, ListItem<LocalizedField> item, IModel<List<Locale>> languages ) {
         return new WebMarkupContainer("misc");
     }
 
@@ -153,8 +162,8 @@ public class LocalizationPanel extends Panel {
         listView.detach();
     }
 
-    private IModel<List<Locale>> getLanguages() {
-        return new PropertyModel(model,"tenant.settings.translatedLanguages");
+    protected IModel<List<Locale>> getLanguages() {
+        return languages;
     }
 
     class TranslationsListView extends ListView<Translation> {
@@ -165,11 +174,16 @@ public class LocalizationPanel extends Panel {
 
         @Override protected void populateItem(ListItem<Translation> item) {
             final Locale itemLanguage = getLanguages().getObject().get(item.getIndex());
-            item.add(new TextArea("translation", new PropertyModel(item.getModel(),"value")) {
+            TextArea text;
+            item.add(text = new TextArea("translation", new PropertyModel(item.getModel(),"value")) {
                 @Override public boolean isVisible() {
                     return itemLanguage.equals(language);
                 }
             });
+            String value = text.getDefaultModelObjectAsString();
+            if (value!=null&&value.length()> ONE_LINE_OF_CHARACTERS) {
+                text.add(new AttributeAppender("class", "large"));
+            }
         }
     }
 
