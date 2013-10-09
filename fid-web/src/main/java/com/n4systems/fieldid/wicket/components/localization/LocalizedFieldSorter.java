@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.model.*;
 import com.n4systems.model.utils.ClassMap;
 import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -33,6 +34,7 @@ public class LocalizedFieldSorter {
         add(ComboBoxCriteria.class, Lists.newArrayList("displayText","recommendations", "deficiencies", "options"));
         add(SelectCriteria.class, Lists.newArrayList("displayText", "recommendations", "deficiencies", "options"));
         add(Criteria.class, Lists.newArrayList("displayText", "recommendations", "deficiencies"));
+        add(InfoOptionBean.class, Lists.newArrayList("name"));
     }
 
     private void add(Class<?> clazz, String fieldName) {
