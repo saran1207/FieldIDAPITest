@@ -1,19 +1,9 @@
 package rfid.ejb.entity;
 
-import java.util.Collection;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
-import javax.persistence.Table;
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
+import com.n4systems.persistence.localization.Localized;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "infooption")
@@ -30,7 +20,7 @@ public class InfoOptionBean extends LegacyBaseEntity implements Comparable<InfoO
 	}
 
 	@Column( nullable=false )
-	private String name;
+	private @Localized String name;
 
 	private Long weight = DEFAULT_WEIGHT;
 	private boolean staticData = false;

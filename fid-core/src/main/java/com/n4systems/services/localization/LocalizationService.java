@@ -167,21 +167,30 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     public String getOgnlFor(Field field) {
         AbstractEntityPersister persister = getPersister(field.getDeclaringClass());
         if (Collection.class.isAssignableFrom(field.getType())) {
-            return getCollectionOgnlFor(field,persister);
+            return getCollectionOgnlFor(field.getName(),persister);
         } else {
-            return getOgnlFor(field,persister);
+            return getOgnlFor(field.getName(),persister);
         }
     }
 
-    private String getOgnlFor(Field field, AbstractEntityPersister persister) {
+    public String getOgnlFor(Class declaringClass, Class fieldClass, String fieldName) {
+        AbstractEntityPersister persister = getPersister(declaringClass);
+        if (Collection.class.isAssignableFrom(fieldClass)) {
+            return getCollectionOgnlFor(fieldName,persister);
+        } else {
+            return getOgnlFor(fieldName,persister);
+        }
+    }
+
+    private String getOgnlFor(String fieldName, AbstractEntityPersister persister) {
         String tableName = persister.getTableName();
-        String columnName = persister.getPropertyColumnNames(field.getName())[0];
+        String columnName = persister.getPropertyColumnNames(fieldName)[0];
         return String.format(translationFormat, tableName, columnName);
     }
 
-    private String getCollectionOgnlFor(Field field, AbstractEntityPersister persister) {
+    private String getCollectionOgnlFor(String fieldName, AbstractEntityPersister persister) {
         String tableName = persister.getTableName();
-        return String.format(translationFormat, tableName, field.getName()) + collectionTranslationSuffix;
+        return String.format(translationFormat, tableName, fieldName) + collectionTranslationSuffix;
     }
 
     public void save(List<Translation> translations) {

@@ -169,7 +169,8 @@
 
     <!-- TODO DD : this cache should be purged every time asset type is changed. -->
     <cache name="assetTypes"
-           timeToLiveSeconds="9000"
+           maxElementsInMemory="500"
+           timeToLiveSeconds="30"
            overflowToDisk="true">
     </cache>
 

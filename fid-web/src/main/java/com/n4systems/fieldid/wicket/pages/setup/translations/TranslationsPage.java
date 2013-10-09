@@ -22,10 +22,13 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
@@ -113,26 +116,21 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
                     return TranslationsPage.this.getCssFor(item.getModelObject());
                 }
 
-                @Override protected Component createLinksForItem(String id, ListItem<LocalizedField> item) {
-                    Component component = TranslationsPage.this.createLinksForItem(id, item);
-                    return component!=null ? component : super.createLinksForItem(id, item);
+                @Override protected Component createLinksForItem(String id, ListItem<LocalizedField> item, IModel<List<Locale>> languages) {
+                    Component component = TranslationsPage.this.createLinksForItem(id, item, languages);
+                    return component!=null ? component : super.createLinksForItem(id, item, languages);
                 }
 
                 @Override protected void onLocalizationsSaved(AjaxRequestTarget target) {
                     info(new FIDLabelModel("label.translations_saved").getObject());
                     target.add(feedback);
-                    target.appendJavaScript(fadeFeedback());
                 }
             }.setOutputMarkupId(true));
         }
         target.add(get(LOCALIZATION_PANEL_ID));
     }
 
-    private String fadeFeedback() {
-        return String.format("setTimeout(function() { $('#%s').effect('fade','slow');},2000);", feedback.getMarkupId());
-    }
-
-    protected Component createLinksForItem(String id, ListItem<LocalizedField> item) {
+    protected Component createLinksForItem(String id, ListItem<LocalizedField> item, IModel<List<Locale>> languages) {
         return null;
     }
 
@@ -151,7 +149,6 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/buttons.css");
         response.renderCSSReference("style/pageStyles/localization.css");
-        response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
     }
 
     protected boolean isFiltered(Object entity, Field field) {
@@ -162,6 +159,30 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
         renderingHintMap.put(renderHint.ognl, renderHint);
         return this;
     }
+
+    protected void showLocalizationDialogFor(final EntityWithTenant entity, final List<String> fieldsToInclude, AjaxRequestTarget target) {
+        EntityModel entityModel = new EntityModel(entity.getClass(), entity);
+        showLocalizationDialogFor(entityModel, fieldsToInclude, target, new PropertyModel(entityModel,"tenant.settings.translatedLanguages"));
+    }
+
+    protected void showLocalizationDialogFor(final IModel<?> model, final List<String> fieldsToInclude, AjaxRequestTarget target, IModel<List<Locale>> languages) {
+        LocalizationPanel content = new LocalizationPanel(FIDModalWindow.CONTENT_ID, model, languages) {
+            @Override protected boolean isFieldIgnored(Object e, Field field) {
+                if (model.getObject().equals(e)) {
+                    return !fieldsToInclude.contains(field.getName());
+                }
+                return false;
+            }
+
+            @Override protected void onLocalizationsSaved(AjaxRequestTarget target) {
+                dialog.close(target);
+                target.add(dialog);
+            }
+        };
+        dialog.setContent(content);
+        dialog.show(target);
+    }
+
 
     class RenderHint implements Serializable {
         String css;

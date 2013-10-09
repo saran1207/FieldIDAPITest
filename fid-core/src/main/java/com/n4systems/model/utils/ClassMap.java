@@ -1,8 +1,10 @@
 package com.n4systems.model.utils;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
-public class ClassMap<T> extends HashMap<Class<?>,T> {
+
+// usage note : this maintains the insertion order so when you traverse keys/values it will be in order of how they are added.
+public class ClassMap<T> extends LinkedHashMap<Class<?>,T> {
 
     public ClassMap() {
     }

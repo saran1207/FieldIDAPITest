@@ -4,6 +4,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.persistence.localization.Localized;
 import com.n4systems.services.localization.LocalizationService;
@@ -47,9 +48,26 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
     }
 
     private void localize(Object entity, EntityPersister persister, EventSource eventSource) {
-        if (entity.getClass().isAnnotationPresent(Entity.class) && entity instanceof Saveable) {
+        // hack...workaround to translate only these type of result entities.
+        LocalizeableCriteriaResult translatedCriteriaResult = getCriteriaResultToTranslate(entity);
+        if (translatedCriteriaResult!=null) {   //combo, recommendations(prefab), deficiencies, combobox.
+            translatedCriteriaResult.localize();
+        } else if (entity.getClass().isAnnotationPresent(Entity.class) && entity instanceof Saveable) {
             localize((Saveable)entity, persister, eventSource);
         }
+    }
+
+    private LocalizeableCriteriaResult getCriteriaResultToTranslate(Object entity) {
+        if (entity instanceof SelectCriteriaResult) {
+            SelectCriteriaResult result = (SelectCriteriaResult) entity;
+            SelectCriteria criteria = (SelectCriteria) result.getCriteria();
+            return new LocalizeableCriteriaResult(result, criteria, result.getValue(), ((SelectCriteria)result.getCriteria()).getOptions());
+        } else if (entity instanceof ComboBoxCriteriaResult) {
+            ComboBoxCriteriaResult result = (ComboBoxCriteriaResult) entity;
+            ComboBoxCriteria criteria = (ComboBoxCriteria) result.getCriteria();
+            return new LocalizeableCriteriaResult(result, criteria, result.getValue(), criteria.getOptions());
+        }
+        return null;
     }
 
     private void localize(Saveable entity, EntityPersister persister, EventSource eventSource) {
@@ -68,8 +86,8 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
     }
 
     private void setTranslatedValue(EntityPersister persister, Saveable entity, int index, Object translation) {
+        entity.setUntranslatedValue(persister.getPropertyNames()[index], persister.getPropertyValue(entity, index, EntityMode.POJO));
         persister.setPropertyValue(entity, index, translation, EntityMode.POJO);
-        entity.setTranslated(true);
     }
 
     private List<LocalizedProperty> getLocalizedProperties(Object entity, EntityPersister persister) throws Exception {
@@ -131,4 +149,55 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
         }
     }
 
+    class LocalizeableCriteriaResult {
+        private final String optionsFieldName = "options";
+        private final String valueFieldName = "value";
+        private final CriteriaResult result;
+        private final Criteria criteria;
+
+        public LocalizeableCriteriaResult(CriteriaResult result, Criteria criteria, String value, List<String> values) {
+            this.result = result;
+            this.criteria = criteria;
+        }
+
+        public Saveable getResult() {
+            return result;
+        }
+
+        public Criteria getCriteria() {
+            return criteria;
+        }
+
+        public void localize() {
+            localizeOption();
+//                translate(criteria, "recommendations", result, "recommendations");
+//                translate(criteria, "deficiencies", result, "deficiencies");
+        }
+
+        private void localizeOption() {
+
+            List<String> options = (List<String>) criteria.getTranslatedValues().get(optionsFieldName);
+
+            if (options==null) {
+                return;
+            }
+            if (result instanceof ValueResult) {
+                String value = ((ValueResult)result).getValue();
+                for (int i=0;i<options.size();i++) {
+                    if (value.equals(options.get(i))) {
+                        String ognl = getLocalizationService().getOgnlFor(criteria.getClass(), List.class, "options");
+                        Locale language = ThreadLocalInteractionContext.getInstance().getLanguageToUse();
+                        Object translation = getLocalizationService().getTranslation(criteria, ognl, language );
+                        result.setUntranslatedValue(valueFieldName, value);
+                        if (translation!=null && translation instanceof List) {
+                            ((ValueResult) result).setValue( ((List<String>)translation).get(i) );
+                        }
+                        return;
+                    }
+                }
+            }
+
+        }
+
+    }
 }

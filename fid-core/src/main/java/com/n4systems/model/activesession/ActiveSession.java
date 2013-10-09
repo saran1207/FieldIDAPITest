@@ -8,6 +8,7 @@ import com.n4systems.util.time.Clock;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Map;
 
 @Entity
 @Table(name="activesessions")
@@ -80,8 +81,13 @@ public class ActiveSession implements UnsecuredEntity, Saveable {
     }
 
     @Override
-    public void setTranslated(boolean translated) {
-        ; // do nothing   N/A
+    public void setUntranslatedValue(String name, Object value) {
+
+    }
+
+    @Override
+    public Map<String, Object> getTranslatedValues() {
+        return null;
     }
 
     @Override

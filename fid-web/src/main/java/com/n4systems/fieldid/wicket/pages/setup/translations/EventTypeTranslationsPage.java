@@ -2,10 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.translations;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.components.eventtype.GroupedEventTypePicker;
-import com.n4systems.fieldid.wicket.components.localization.LocalizationPanel;
 import com.n4systems.fieldid.wicket.components.localization.LocalizedField;
-import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
-import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.model.*;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -18,8 +15,8 @@ import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Locale;
 
 public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
 
@@ -31,7 +28,7 @@ public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
 
     @Override
     protected List<String> initExcludedFields() {
-        return Lists.newArrayList("group", "eventTypes", "recommendations", "deficiencies", "scoreGroup", "buttonGroup");
+        return Lists.newArrayList("group", "eventTypes", "recommendations", "deficiencies", "scoreGroup", "buttonGroup", "options");
     }
 
     @Override
@@ -40,12 +37,12 @@ public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
     }
 
     @Override
-    protected Component createLinksForItem(String id, ListItem<LocalizedField> item) {
+    protected Component createLinksForItem(String id, ListItem<LocalizedField> item, IModel<List<Locale>> languages) {
         LocalizedField field = item.getModelObject();
         if (field!=null && field.getEntity() instanceof Criteria) {
             return new EventLinks(id, item.getModel());
         }
-        return super.createLinksForItem(id, item);
+        return super.createLinksForItem(id, item, languages);
     }
 
 
@@ -91,25 +88,16 @@ public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
                     return false;
                 }
             });
-        }
-    }
-
-    private void showLocalizationDialogFor(final EntityWithTenant entity, final List<String> fieldsToInclude, AjaxRequestTarget target) {
-        LocalizationPanel content = new LocalizationPanel(FIDModalWindow.CONTENT_ID, new EntityModel(entity.getClass(), entity)) {
-            @Override protected boolean isFieldIgnored(Object e, Field field) {
-                if (entity.equals(e)) {
-                    return !fieldsToInclude.contains(field.getName());
+            add(new AjaxLink("options") {
+                @Override public void onClick(AjaxRequestTarget target) {
+                    showLocalizationDialogFor(e, Lists.newArrayList("options"), target);
                 }
-                return false;
-            }
 
-            @Override protected void onLocalizationsSaved(AjaxRequestTarget target) {
-                dialog.close(target);
-                target.add(dialog);
-            }
-        };
-        dialog.setContent(content);
-        dialog.show(target);
+                @Override public boolean isVisible() {
+                    return entity instanceof SelectCriteria || entity instanceof ComboBoxCriteria;
+                }
+            });
+        }
     }
 
 }

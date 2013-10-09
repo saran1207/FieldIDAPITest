@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+import com.google.common.collect.Maps;
 import com.n4systems.model.api.Copyable;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.TypeDefs;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Locale;
+import java.util.Map;
 
 @SuppressWarnings("serial")
 @MappedSuperclass
@@ -30,8 +32,8 @@ abstract public class BaseEntity implements Saveable, Serializable, Copyable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Long id;
 
-    private @Transient boolean isTranslated = false;
-	
+    private @Transient Map<String,Object> translations;
+
 	public BaseEntity() {}
 	
 	public BaseEntity(Long id) {
@@ -132,10 +134,20 @@ abstract public class BaseEntity implements Saveable, Serializable, Copyable {
     }
 
     public boolean isTranslated() {
-        return isTranslated;
+        return translations!=null;
     }
 
-    public void setTranslated(boolean translated) {
-        isTranslated = translated;
+    @Override
+    // good god, what a hack...only done to make select & combo criteria work.
+    public void setUntranslatedValue(String fieldName, Object value) {
+        if (translations==null) {
+            translations = Maps.newHashMap();
+        }
+        translations.put(fieldName,value);
+    }
+
+    @Override
+    public Map<String, Object> getTranslatedValues() {
+        return translations;
     }
 }

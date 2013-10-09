@@ -68,7 +68,6 @@ public class InfoFieldBean extends LegacyBaseEntity implements Comparable<InfoFi
 	@OneToMany(mappedBy = "infoField", targetEntity = InfoOptionBean.class, fetch = FetchType.EAGER, cascade=CascadeType.ALL)
 	@OrderBy( "weight" )
 	@Where(clause="staticData = 1")
-    @Localized(ignore =true)
 	private Set<InfoOptionBean> unfilteredInfoOptions;
 	
 

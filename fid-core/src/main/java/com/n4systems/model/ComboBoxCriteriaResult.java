@@ -8,7 +8,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="combobox_criteriaresults")
 @PrimaryKeyJoinColumn(name="id")
-public class ComboBoxCriteriaResult extends CriteriaResult {
+public class ComboBoxCriteriaResult extends CriteriaResult implements ValueResult {
 
 	@Column
 	private String value;
