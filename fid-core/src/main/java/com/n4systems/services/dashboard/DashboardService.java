@@ -31,6 +31,10 @@ public class DashboardService extends FieldIdPersistenceService {
             persistenceService.update(layout);
         } else {
             layout.setUser(findCurrentUser());
+            if (null == layout.getTenant()) {
+                layout.setTenant(this.getCurrentTenant());
+            }
+
             persistenceService.save(layout);
         }
     }
