@@ -173,15 +173,6 @@ public class LocalizationService extends FieldIdPersistenceService implements In
         }
     }
 
-    public String getOgnlFor(Class declaringClass, Class fieldClass, String fieldName) {
-        AbstractEntityPersister persister = getPersister(declaringClass);
-        if (Collection.class.isAssignableFrom(fieldClass)) {
-            return getCollectionOgnlFor(fieldName,persister);
-        } else {
-            return getOgnlFor(fieldName,persister);
-        }
-    }
-
     private String getOgnlFor(String fieldName, AbstractEntityPersister persister) {
         String tableName = persister.getTableName();
         String columnName = persister.getPropertyColumnNames(fieldName)[0];

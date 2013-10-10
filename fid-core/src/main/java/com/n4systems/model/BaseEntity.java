@@ -150,4 +150,10 @@ abstract public class BaseEntity implements Saveable, Serializable, Copyable {
     public Map<String, Object> getTranslatedValues() {
         return translations;
     }
+
+    public void markDirty() {
+        // just a placeholder so we know something has changed. we don't care what field or what value.
+        setUntranslatedValue("VOID","PLACEHOLDER-VALUE");
+    }
+
 }

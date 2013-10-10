@@ -49,35 +49,30 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
 
     private void localize(Object entity, EntityPersister persister, EventSource eventSource) {
         // hack...workaround to translate only these type of result entities.
-        LocalizeableCriteriaResult translatedCriteriaResult = getCriteriaResultToTranslate(entity);
-        if (translatedCriteriaResult!=null) {   //combo, recommendations(prefab), deficiencies, combobox.
+        LocalizeableCriteriaResult translatedCriteriaResult = getCriteriaResultToLocalize(entity);
+        if (translatedCriteriaResult!=null) {
             translatedCriteriaResult.localize();
         } else if (entity.getClass().isAnnotationPresent(Entity.class) && entity instanceof Saveable) {
-            localize((Saveable)entity, persister, eventSource);
+            localize((Saveable)entity, persister);
         }
     }
 
-    private LocalizeableCriteriaResult getCriteriaResultToTranslate(Object entity) {
-        if (entity instanceof SelectCriteriaResult) {
-            SelectCriteriaResult result = (SelectCriteriaResult) entity;
-            SelectCriteria criteria = (SelectCriteria) result.getCriteria();
-            return new LocalizeableCriteriaResult(result, criteria, result.getValue(), ((SelectCriteria)result.getCriteria()).getOptions());
-        } else if (entity instanceof ComboBoxCriteriaResult) {
-            ComboBoxCriteriaResult result = (ComboBoxCriteriaResult) entity;
-            ComboBoxCriteria criteria = (ComboBoxCriteria) result.getCriteria();
-            return new LocalizeableCriteriaResult(result, criteria, result.getValue(), criteria.getOptions());
+    private LocalizeableCriteriaResult getCriteriaResultToLocalize(Object entity) {
+        if (entity instanceof CriteriaResult) {
+            CriteriaResult result = (CriteriaResult) entity;
+            Criteria criteria = result.getCriteria();
+            return new LocalizeableCriteriaResult(result, criteria);
         }
         return null;
     }
 
-    private void localize(Saveable entity, EntityPersister persister, EventSource eventSource) {
+    private void localize(Saveable entity, EntityPersister persister) {
         try {
+            Locale locale = ThreadLocalInteractionContext.getInstance().getLanguageToUse();
             for (LocalizedProperty property:getLocalizedProperties(entity,persister)) {
-                int index = property.getIndex();
-                Locale locale = ThreadLocalInteractionContext.getInstance().getLanguageToUse();
                 Object translation = getLocalizationService().getTranslation(entity, property.getOgnl(), locale);
                 if (translation!=null) {
-                    setTranslatedValue(persister, entity, index, translation);
+                    setTranslatedValue(persister, entity, property.getIndex(), translation);
                 }
             }
         } catch (Exception e) {
@@ -100,7 +95,7 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
                 public boolean apply(Object input) {
                     Field field = (Field) input;
                     Localized annotation = field.getAnnotation(Localized.class);
-                    return annotation != null;
+                    return annotation != null && !annotation.ignore();
                 }
             });
             for (Field field:fields) {
@@ -131,6 +126,7 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
         return ServiceLocator.getLocalizationService();
     }
 
+
     class LocalizedProperty {
         String ognl;
         Integer index;
@@ -149,13 +145,36 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
         }
     }
 
+
+    /**
+     * Blargh : this is all a complete hack. god forgive my sins.
+     * here's the reason.
+     * Select/ComboCriteriaResults currently store a string instead of a reference to a localized Criteria option.
+     * for example, a criteria colour could have localizeable options {Red,Green,Blue} but when you perform an event it will store the string Green instead of a reference to the
+     * localzied CriteriaOptions array.  .: it has lost all ability to be translated thru the default mechanism.
+     *
+     * to get around this, we hack our way thru select/combo results.
+     * 1: store the untranslated value when performing the event (Green, NOT Vert)
+     * 2: when viewing the event in another language, we lookup the associated criteria for the criteriaResult.
+     * 3: from that entity we get the "untranslatedValues" (the values that were nuked by this LocalizationListener but stashed away before doing do so we could have them later.   e.g. save Red,Green,Blue... in a safe place before we overwrite it with Rouge,Vert,Bleu....
+     * 4: try to find the matching value.  from that we know the index.  i.e. if the value is Green we know index is 2.
+     * 5: lookup the translated value via the localization service.   ie. with the parameters Green, criteria {NOT criteriaResult}, select_criteria@options, 2, FRENCH we will get back Vert.
+     * 6: set this value in the criteria result entity.
+     * this really sucks.  really, really sucks.  alternatives are A: store reference to value instead of literal string.   B: all of the above.
+     */
+
     class LocalizeableCriteriaResult {
         private final String optionsFieldName = "options";
         private final String valueFieldName = "value";
+        private final String recommendationsFieldName = "recommendations";
+        private final String deficienciesFieldName = "deficiencies";
+        private final String textFieldName = "text";
+
+
         private final CriteriaResult result;
         private final Criteria criteria;
 
-        public LocalizeableCriteriaResult(CriteriaResult result, Criteria criteria, String value, List<String> values) {
+        public LocalizeableCriteriaResult(CriteriaResult result, Criteria criteria) {
             this.result = result;
             this.criteria = criteria;
         }
@@ -169,29 +188,69 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
         }
 
         public void localize() {
+            if (criteria.getTranslatedValues()==null) {
+                return;
+            }
             localizeOption();
-//                translate(criteria, "recommendations", result, "recommendations");
-//                translate(criteria, "deficiencies", result, "deficiencies");
+            localizeRecommendations();
+            localizeDeficiencies();
+        }
+
+        private void localizeRecommendations() {
+            List<String> untranslatedRecommendations = (List<String>) criteria.getTranslatedValues().get(recommendationsFieldName);
+
+            if (untranslatedRecommendations==null) {
+                return;
+            }
+            List<Recommendation> recommendations = result.getRecommendations();
+            for (Recommendation recommendation:recommendations) {
+                for (int i=0;i<untranslatedRecommendations.size();i++) {
+                    String text = recommendation.getText();
+                    if (text!=null && text.equals(untranslatedRecommendations.get(i))) {
+                        recommendation.setText(criteria.getRecommendations().get(i));
+                        recommendation.markDirty();
+                        result.markDirty();
+                    }
+                }
+            }
+
+        }
+
+        private void localizeDeficiencies() {
+            List<String> untranslatedDeficiencies = (List<String>) criteria.getTranslatedValues().get(deficienciesFieldName);
+
+            if (untranslatedDeficiencies==null) {
+                return;
+            }
+            List<Deficiency> deficiencies= result.getDeficiencies();
+            for (Deficiency deficiency:deficiencies) {
+                for (int i=0;i<untranslatedDeficiencies.size();i++) {
+                    String text = deficiency.getText();
+                    if (text!=null && text.equals(untranslatedDeficiencies.get(i))) {
+                        deficiency.setText(criteria.getDeficiencies().get(i));
+                        deficiency.markDirty();
+                        result.markDirty();
+                    }
+                }
+            }
+
         }
 
         private void localizeOption() {
-
+            List<String> translatedOptions = criteria instanceof SelectCriteria ? ((SelectCriteria) criteria).getOptions() :
+                                                criteria instanceof ComboBoxCriteria ? ((ComboBoxCriteria)criteria).getOptions() : null;
             List<String> options = (List<String>) criteria.getTranslatedValues().get(optionsFieldName);
 
-            if (options==null) {
+            if (options==null || translatedOptions==null) {
                 return;
             }
             if (result instanceof ValueResult) {
                 String value = ((ValueResult)result).getValue();
+                if (value==null) return;
                 for (int i=0;i<options.size();i++) {
                     if (value.equals(options.get(i))) {
-                        String ognl = getLocalizationService().getOgnlFor(criteria.getClass(), List.class, "options");
-                        Locale language = ThreadLocalInteractionContext.getInstance().getLanguageToUse();
-                        Object translation = getLocalizationService().getTranslation(criteria, ognl, language );
                         result.setUntranslatedValue(valueFieldName, value);
-                        if (translation!=null && translation instanceof List) {
-                            ((ValueResult) result).setValue( ((List<String>)translation).get(i) );
-                        }
+                        ((ValueResult) result).setValue( translatedOptions.get(i) );
                         return;
                     }
                 }
