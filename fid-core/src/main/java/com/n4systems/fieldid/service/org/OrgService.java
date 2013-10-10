@@ -166,6 +166,7 @@ public class OrgService extends FieldIdPersistenceService {
         }
         OrgLocationTree result = new OrgLocationTree().withFilter(search);
         QueryBuilder<BaseOrg> orgQuery = createUserSecurityBuilder(BaseOrg.class);
+        orgQuery.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LIKE,"name", search.trim(), WhereParameter.WILDCARD_RIGHT, WhereClause.ChainOp.AND));
         result.addOrgs(persistenceService.findAll(orgQuery));
         return result;
     }
