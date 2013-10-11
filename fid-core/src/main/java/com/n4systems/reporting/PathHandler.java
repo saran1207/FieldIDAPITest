@@ -2,6 +2,7 @@ package com.n4systems.reporting;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.UUID;
 
 import com.n4systems.model.Asset;
@@ -26,8 +27,11 @@ public class PathHandler {
 	private static final String PROPERTIES_FILE_EXT = ".properties";
 	private static final String PACKAGE_PROPERTIES_FILE = "package.properties";
 	private static final String COMPILED_SUMMARY_REPORT_FILE_NAME = "inspection_summary_report" + COMPILED_REPORT_FILE_EXT;
+    private static final String COMPILED_SUMMARY_REPORT_FILE_NAME_LOCALIZED = "inspection_summary_report_%s" + COMPILED_REPORT_FILE_EXT;
 	private static final String ASSET_REPORT_FILE_NAME = "product" + REPORT_FILE_EXT;
+    private static final String ASSET_REPORT_FILE_NAME_LOCALIZED = "product_%s" + REPORT_FILE_EXT;
     private static final String COMPILED_ASSET_REPORT_FILE_NAME = "product" + COMPILED_REPORT_FILE_EXT;
+    private static final String COMPILED_ASSET_REPORT_FILE_NAME_LOCALIZED = "product_%s" + COMPILED_REPORT_FILE_EXT;
 	private static final String CHART_FILE_NAME = "proof_test_chart.png";
 	private static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
 	private static final String SIGNATURE_IMAGE_FILE_NAME = "signature.gif";
@@ -74,6 +78,10 @@ public class PathHandler {
 		}
 		return mergedPath.toString();
 	}
+
+    private static String getReportFileName(Locale locale) {
+        return "product_"+locale.getLanguage() +COMPILED_REPORT_FILE_EXT;
+    }
 	
 	/**
 	 * Returns a new file object with the path parented by parent
@@ -157,7 +165,7 @@ public class PathHandler {
 		return parentize(getTempDir(), fileName);
 	}
 
-	public static File getAllTenantReportFile(String reportName) {
+	public static File getAllTenantReportFile(String reportName, Locale locale) {
 		return absolutize(mergePaths(ALL_TENANT_REPORT_PATH, reportName));
 	}
 	
@@ -192,34 +200,77 @@ public class PathHandler {
 		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), ASSET_REPORT_FILE_NAME);
 	}
 
+    private static String getReportPath(Asset asset, Locale locale) {
+        return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), getReportFileName(locale));
+    }
+
 	private static String getCompiledReportPath(Asset asset) {
 		return mergePaths(REPORT_PATH_BASE, getTenantPathPart(asset.getTenant()), COMPILED_ASSET_REPORT_FILE_NAME);
 	}
 
-	public static File getReportFile(Asset asset) {
-		File tenantReport = absolutize(getReportPath(asset));
-		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(ASSET_REPORT_FILE_NAME);
+    private static String localizeReportPath(Tenant tenant, String localizedPathFormat, String defaultPath, Locale locale) {
+        String localizedPath;
+        if (locale != null) {
+            localizedPath = String.format(localizedPathFormat, locale.getLanguage());
+        } else {
+            localizedPath = defaultPath;
+        }
+        if (tenant != null) {
+            return mergePaths(REPORT_PATH_BASE, getTenantPathPart(tenant), localizedPath);
+        } else {
+            return mergePaths(REPORT_PATH_BASE, localizedPath);
+        }
+    }
+
+    private static File getPossiblyLocalizedReport(Tenant tenant, Locale locale, String localizedPathFormat, String defaultPath) {
+        File localizedFile = null;
+        if (locale != null) {
+            localizedFile = absolutize(localizeReportPath(tenant, localizedPathFormat, defaultPath, locale));
+        }
+        File tenantReport;
+        if (localizedFile != null && localizedFile.exists()) {
+            tenantReport = localizedFile;
+        } else {
+            tenantReport = absolutize(localizeReportPath(tenant, localizedPathFormat, defaultPath, null));
+        }
+
+        if (tenantReport.exists()) {
+            return tenantReport;
+        }
+
+        return (tenantReport.exists()) ? tenantReport : absolutize(localizeReportPath(null, localizedPathFormat, defaultPath, locale));
+    }
+
+	public static File getReportFile(Asset asset, Locale locale) {
+        return getPossiblyLocalizedReport(asset.getTenant(), locale, ASSET_REPORT_FILE_NAME_LOCALIZED, ASSET_REPORT_FILE_NAME);
 	}
 
-	public static File getCompiledReportFile(Asset asset) {
-		File tenantReport = absolutize(getCompiledReportPath(asset));
-		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(COMPILED_ASSET_REPORT_FILE_NAME);
+	public static File getCompiledReportFile(Asset asset, Locale locale) {
+        return getPossiblyLocalizedReport(asset.getTenant(), locale, COMPILED_ASSET_REPORT_FILE_NAME_LOCALIZED, COMPILED_ASSET_REPORT_FILE_NAME);
 	}
 
-	private static String getReportFileName(PrintOut printOut) {
-		return printOut.getPdfTemplate() + REPORT_FILE_EXT;
+	private static String getReportFileName(PrintOut printOut, Locale locale) {
+        String pdfTemplate = printOut.getPdfTemplate();
+        if (locale != null) {
+            pdfTemplate += "_"+ locale.getLanguage();
+        }
+        return pdfTemplate + REPORT_FILE_EXT;
 	}
 	
-	private static String getCompiledReportFileName(PrintOut printOut) {
-		return printOut.getPdfTemplate() + COMPILED_REPORT_FILE_EXT;
+	private static String getCompiledReportFileName(PrintOut printOut, Locale locale) {
+        String pdfTemplate = printOut.getPdfTemplate();
+        if (locale != null) {
+            pdfTemplate += "_"+ locale.getLanguage();
+        }
+        return pdfTemplate + COMPILED_REPORT_FILE_EXT;
 	}
 
-	private static String getReportPath(PrintOut printOut) {
-		return mergePaths(getReportPathBase(printOut), getReportFileName(printOut));
+	private static String getReportPath(PrintOut printOut, Locale locale) {
+		return mergePaths(getReportPathBase(printOut), getReportFileName(printOut, locale));
 	}
 	
-	private static String getCompiledReportPath(PrintOut printOut) {
-		return mergePaths(getReportPathBase(printOut), getCompiledReportFileName(printOut));
+	private static String getCompiledReportPath(PrintOut printOut, Locale locale) {
+		return mergePaths(getReportPathBase(printOut), getCompiledReportFileName(printOut, locale));
 	}
 	
 	private static String getPrintOutPreveiwPath(PrintOut printOut) {
@@ -237,12 +288,12 @@ public class PathHandler {
 		return printOutPath;
 	}
 
-	public static File getPrintOutFile(PrintOut printOut) {
-		return absolutize(getReportPath(printOut));
+	public static File getPrintOutFile(PrintOut printOut, Locale locale) {
+		return absolutize(getReportPath(printOut, locale));
 	}
 
-	public static File getCompiledPrintOutFile(PrintOut printOut) {
-		return absolutize(getCompiledReportPath(printOut));
+	public static File getCompiledPrintOutFile(PrintOut printOut, Locale locale) {
+		return absolutize(getCompiledReportPath(printOut, locale));
 	}
 	
 	public static File getPreviewImage(PrintOut printOut) {
@@ -253,9 +304,8 @@ public class PathHandler {
 		return absolutize(getPrintOutPreveiwThumbPath(printOut));
 	}
 	
-	public static File getCompiledSummaryReportFile(Tenant tenant) {
-		File tenantReport = absolutize(mergePaths(REPORT_PATH_BASE, getTenantPathPart(tenant), COMPILED_SUMMARY_REPORT_FILE_NAME));
-		return (tenantReport.exists()) ? tenantReport : getAllTenantReportFile(COMPILED_SUMMARY_REPORT_FILE_NAME);
+	public static File getCompiledSummaryReportFile(Tenant tenant, Locale locale) {
+        return getPossiblyLocalizedReport(tenant, locale, COMPILED_SUMMARY_REPORT_FILE_NAME_LOCALIZED, COMPILED_ASSET_REPORT_FILE_NAME);
 	}
 	
 	private static String getEventPath(Event event) {

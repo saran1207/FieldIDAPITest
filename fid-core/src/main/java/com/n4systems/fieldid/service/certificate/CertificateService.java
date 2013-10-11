@@ -4,6 +4,7 @@ import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.exceptions.NonPrintableManufacturerCert;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.certificate.model.Job;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventScheduleService;
@@ -59,7 +60,8 @@ public class CertificateService extends FieldIdPersistenceService {
         }
 
         try {
-            File jrxmlFile = PathHandler.getReportFile(asset);
+            Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+            File jrxmlFile = PathHandler.getReportFile(asset, locale);
             reportCompiler.compileReports(jrxmlFile.getParentFile());
 
             Map<String, Object> reportMap = new HashMap<String, Object>();
@@ -75,7 +77,7 @@ public class CertificateService extends FieldIdPersistenceService {
             List<Asset> reportCollection = new ArrayList<Asset>();
             reportCollection.add(asset);
 
-JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledReportFile(asset));
+JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledReportFile(asset, locale));
 JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JRBeanCollectionDataSource(reportCollection));
             return jasperPrint;
         } catch (JRException e) {
@@ -89,7 +91,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 
 	public JasperPrint generateEventCertificate(EventReportType type, Long eventId) throws NonPrintableEventType, ReportException {
 		Event event = eventService.getEventFromSafetyNetwork(eventId);
-		
+
 		DateTimeDefiner dateDefiner = new DateTimeDefiner(getCurrentUser());
 		
 		if (!event.isPrintableForReportType(type)) {
@@ -112,7 +114,8 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 	}
 
 	private JasperPrint generateEventCertificateWithSubEvents(Event event, PrintOut printOut, DateTimeDefiner dateDefiner) throws JRException {
-		File jasperFile = PathHandler.getPrintOutFile(printOut);
+        Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+		File jasperFile = PathHandler.getPrintOutFile(printOut, locale);
 		reportCompiler.compileReports(jasperFile.getParentFile());
 		
 		Map<String, Object> reportMap = new HashMap<String, Object>();
@@ -137,13 +140,15 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		}
 		reportMap.put("allInspections", eventResultMaps);
 
-		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledPrintOutFile(printOut));
+        File compiledPrintOutFile = PathHandler.getCompiledPrintOutFile(printOut, locale);
+        JasperReport jasperReport = (JasperReport) JRLoader.loadObject(compiledPrintOutFile);
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JRMapCollectionDataSource(eventResultMaps));
 		return jasperPrint;
 	}
 
 	private JasperPrint generateEventCertificateWithoutSubEvents(Event event, PrintOut printOut, DateTimeDefiner dateDefiner) throws NonPrintableEventType, ReportException, JRException {
-		File jasperFile = PathHandler.getPrintOutFile(printOut);
+        Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+		File jasperFile = PathHandler.getPrintOutFile(printOut, locale);
 		reportCompiler.compileReports(jasperFile.getParentFile());
 		
 		Map<String, Object> reportMap = new HashMap<String, Object>();
@@ -164,7 +169,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		Map<String, Object> eventMap = new EventReportMapProducer(event, dateDefiner, s3service, eventService, lastEventDateService).produceMap();
 		reportMap.putAll(eventMap);
 
-		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledPrintOutFile(printOut));
+		JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledPrintOutFile(printOut, locale));
 		JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, (JRDataSource) eventMap.get("results"));
 		return jasperPrint;
 	}

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.sendsearch;
 
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.exceptions.EmptyReportException;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetExcelExportService;
 import com.n4systems.fieldid.service.download.StringRowPopulator;
@@ -48,10 +49,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public class SendSearchService extends FieldIdPersistenceService {
     
@@ -85,12 +83,17 @@ public class SendSearchService extends FieldIdPersistenceService {
     }
 
     private void sendSavedItemInsideUserContext(Long savedItemId, SendSavedItemSchedule schedule) throws MessagingException {
+        Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
         try {
+            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(schedule.getUser().getLanguage());
             securityContext.setUserSecurityFilter(new UserSecurityFilter(schedule.getUser()));
             securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(schedule.getTenant()));
             sendSavedItem(savedItemId, schedule);
         } finally {
+            // Must clear the session to nuke any translated entities
+            persistenceService.clearSession();
             securityContext.reset();
+            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(previousLanguage);
         }
     }
 

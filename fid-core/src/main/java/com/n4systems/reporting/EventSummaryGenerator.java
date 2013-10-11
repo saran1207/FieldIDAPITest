@@ -3,6 +3,7 @@ package com.n4systems.reporting;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ReportException;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.certificate.ReportCompiler;
 import com.n4systems.fieldid.service.event.EventService;
@@ -26,10 +27,7 @@ import org.apache.log4j.Logger;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EventSummaryGenerator {
 	private static final String n4LogoFileName = "n4_logo.gif";
@@ -55,7 +53,8 @@ public class EventSummaryGenerator {
 	}
 	
 	public JasperPrint generate(ReportDefiner reportDefiner, List<Long> eventIds, User user) throws ReportException {
-		File jasperFile = PathHandler.getCompiledSummaryReportFile(user.getTenant());
+        Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+		File jasperFile = PathHandler.getCompiledSummaryReportFile(user.getTenant(), locale);
 		try {
 			new ReportCompiler().compileReports(jasperFile.getParentFile());
 		} catch (JRException e) {
@@ -161,7 +160,7 @@ public class EventSummaryGenerator {
 		JasperPrint jasperPrint = null;
 		try {
 			JRBeanCollectionDataSource jrDataSource = new JRBeanCollectionDataSource(collection);				
-			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledSummaryReportFile(user.getTenant()));
+			JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledSummaryReportFile(user.getTenant(), locale));
 			jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, jrDataSource);
 
 		} catch (JRException e) {

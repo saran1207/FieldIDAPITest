@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.exceptions.ReportException;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.certificate.ReportCompiler;
@@ -30,10 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
 
@@ -50,8 +48,9 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
     private S3Service s3service;
 
     @Transactional
-    public JasperPrint generate(EventReportCriteria criteria, List<Long> sortedIdList) throws ReportException {
-        File jasperFile = PathHandler.getCompiledSummaryReportFile(getCurrentTenant());
+    public JasperPrint generate(EventReportCriteria criteria, List<Long> sortedIdList) throws ReportException  {
+        Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+        File jasperFile = PathHandler.getCompiledSummaryReportFile(getCurrentTenant(), locale);
         try {
             new ReportCompiler().compileReports(jasperFile.getParentFile());
         } catch (JRException e) {
@@ -157,7 +156,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
         JasperPrint jasperPrint = null;
         try {
             JRBeanCollectionDataSource jrDataSource = new JRBeanCollectionDataSource(collection);
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledSummaryReportFile(getCurrentTenant()));
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledSummaryReportFile(getCurrentTenant(), locale));
             jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, jrDataSource);
 
         } catch (JRException e) {

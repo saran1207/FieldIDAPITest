@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.download;
 
 import com.n4systems.exceptions.ReportException;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.mail.MailManager;
@@ -65,7 +66,7 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
 		logger.info(String.format("Download Task Started [%s]", downloadLink));
 
 		updateDownloadLinkState(downloadLink, DownloadState.INPROGRESS);
-
+        ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getCurrentUser().getLanguage());
 		try {
 			generateFile(criteria, downloadLink.getFile(), true, 0, PAGE_SIZE);
 
