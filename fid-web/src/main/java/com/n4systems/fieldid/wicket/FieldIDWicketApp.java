@@ -59,11 +59,9 @@ import com.n4systems.fieldid.wicket.pages.user.EditUsageBasedUserPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
-import com.n4systems.fieldid.wicket.util.LocalizedTextConverter;
 import com.n4systems.fieldid.wicket.util.PagePerformanceListener;
 import com.n4systems.fieldid.wicket.util.PlainDateConverter;
 import com.n4systems.model.utils.PlainDate;
-import com.n4systems.persistence.localization.LocalizedText;
 import org.apache.wicket.*;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
@@ -242,7 +240,6 @@ public class FieldIDWicketApp extends WebApplication {
     protected IConverterLocator newConverterLocator() {
     	ConverterLocator converterLocator = new ConverterLocator();
     	converterLocator.set(PlainDate.class, new PlainDateConverter());
-        converterLocator.set(LocalizedText.class, new LocalizedTextConverter());
     	return converterLocator;
     }
 
