@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
+import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
@@ -155,6 +156,7 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("admin/addTenant", AddTenantPage.class);
 		mountPage("admin/connections", ConnectionViewPage.class);
+        mountPage("admin/configureLanguages", ConfigureLanguagesPage.class);
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);

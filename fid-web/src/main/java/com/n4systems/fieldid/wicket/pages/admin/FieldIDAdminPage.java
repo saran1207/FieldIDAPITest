@@ -35,7 +35,8 @@ public class FieldIDAdminPage extends FieldIDWicketPage {
 			navItemBuilder.page("/admin/certSelection.action").label("Certs").build(),
 			navItemBuilder.page("/admin/taskCrud.action").label("Tasks").build(),
 			navItemBuilder.page("/admin/changeAdminPass.action").label("System Pass").build(),
-			navItemBuilder.page("/w/admin/connections").label("Connections").build()
+			navItemBuilder.page("/w/admin/connections").label("Connections").build(),
+            navItemBuilder.page("/w/admin/configureLanguages").label("Languages").build()
 		));
 	}
 
