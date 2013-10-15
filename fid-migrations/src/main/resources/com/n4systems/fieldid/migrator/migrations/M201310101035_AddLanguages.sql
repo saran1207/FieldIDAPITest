@@ -4,7 +4,7 @@ CREATE TABLE languages (
   PRIMARY KEY (id)
 );
 
-INSERT INTO languages (language) VALUES
+INSERT INTO languages (locale) VALUES
 ('da'),
 ('fr'),
 ('de'),
