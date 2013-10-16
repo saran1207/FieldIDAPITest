@@ -109,7 +109,8 @@ public class AssetTypeService extends FieldIdPersistenceService {
             }
         });
         asyncService.run(task);
-
+        assetType.touch();
+        update(assetType);
     }
 
     public void purgeRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
