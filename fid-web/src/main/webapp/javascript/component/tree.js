@@ -22,6 +22,7 @@ var treeFactory = (function() {
 	}
 
 	function tree(id, options) {
+		var $widget = $('#'+id);
 		var id = id;
 		var $entityId;
 		var $text;
@@ -31,42 +32,68 @@ var treeFactory = (function() {
 		var callback = options.url;
 		var input = '';
 		var options = options;
+		var threshold = 3;
+
+
+		function getTree() {
+			return lazyInit();
+		}
+
+		function updateTreeWithNewInput(newInput,showTreeForEmptyString) {
+			if (newInput.length==0) {
+				$entityId.val(null); 	// clear out values
+				$type.val(null);
+				return showTreeForEmptyString==true;
+			} else if (newInput != input) {
+				if (newInput.length >= threshold) {
+					return true;
+				}
+				return false;
+			}
+			return false;
+		}
+
+		function update(newInput,showTreeForEmptyString) {
+			if (updateTreeWithNewInput(newInput,showTreeForEmptyString)) {
+				input = newInput;
+				$tree.find("li.jstree-open").each(function(index) {
+					$(this).removeClass('jstree-open');}   // forces tree to forget about currently selected nodes.
+				);
+				jQuery.jstree._reference(getTree()).refresh(-1);
+				getTree().show();
+			}
+		}
+
+		function getCurrentText() {
+			return $text.val().replace(/^\s+/,"");
+		}
 
 		function search(e,d) {
-			var newInput=$text.val();
-			if (newInput.length==0) {
-				// clear out values
-				$entityId.val(null);
-				$type.val(null);
-                $tree.hide();
-			} else if (newInput.length >= 3 && newInput != input) {
-                input = newInput;
-                lazyInit();
-                jQuery.jstree._reference($tree).refresh(-1);
-            } else {
-                input = newInput;
-                $tree.hide();
-            }
+			var newInput= getCurrentText();
+			if (newInput.length<threshold) {
+				getTree().hide();
+				return;
+			}
+			update(newInput);
 		}
 
 		var toggleTree = function() {
-			lazyInit();
-			$tree.toggle();
+			if (getTree().is(':visible')) {
+				getTree().hide();
+			} else {
+				update(getCurrentText(),true);
+				getTree().show();
+			}
 		}
 
 		var init = function() {
-			var $widget = $('#'+id);
 			$tree = $widget.find('.tree');
 			$text = $widget.find('.text');
 			$entityId = $widget.find('.entityId-input');
 			$type = $widget.find('.type-input');
 			$text = $widget.find('.text');
 
-			if (options.show) {
-				$tree.show();
-			} else {
-				$tree.hide();
-			}
+			$tree.hide();
 
             var keyTimer;
 			$text.bind('keyup', function(e,d) {
@@ -89,14 +116,15 @@ var treeFactory = (function() {
 					.clone()    //clone the element
 					.children() //select all the children
 					.remove()   //remove all the children
-					.end()  //again go back to selected element
-					.text();
+					.end()  	//again go back to selected element
+					.text();  	// and get its text (children excluded at this point)
 		}
 
 		function lazyInit() {
 			if (!initialized) {
 				initialized = true;
 				$tree.jstree({
+					ui : { initially_select:[] },
 					core:{animation:100},
 					themes :  { dots:false },
 					json_data : {
@@ -109,27 +137,39 @@ var treeFactory = (function() {
 								} else {
 									return new String(callback)+'&search='+input;
 								}
-							},
+						},
 							success : function(n) {
-								searching = false;
-								$tree.show();
+								if (n && n.length>0) {
+									$tree.show();
+								} else {
+									$tree.hide();
+								}
 							}
 						}
 					},
 					plugins : [ 'themes', 'json_data', 'ui', 'hotkeys' ]
 				});
+
+				$('body').click(function(e) {
+					if ($(e.toElement).parents().index($widget)==-1) {    // hide popup when you click somewhere else.
+						$tree.hide();
+					}
+				});
+
 				$tree.bind("click.jstree", function (event, data) {
 					if (!$(event.currentTarget).is('a')) { return; }
-					var link = $(event.target);
-					var node = $(event.target).closest('li');
+					var $link = $(event.target);
+					if ($link.hasClass('jstree-loading')) {return;}
+					var node = $link.closest('li');
 					$entityId.val(node.attr('id'));
 					$type.val(node.attr('data'));
-					$text.val(getTextExcludingChildren(link).trim());
+					$text.val(getTextExcludingChildren($link).trim());
 					$tree.hide();
 					$('#'+id).change();
 				});
 
 			}
+			return $tree;
 		}
 
 

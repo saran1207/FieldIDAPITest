@@ -63,7 +63,7 @@ public abstract class Tree extends Panel {
         return String.format(INIT_TREE_JS,
                 getJsVariableName(),
                 getParentMarkupId(),
-                convertToJson(new TreeOptions(url).withData(getInitialNodes())));
+                convertToJson(new TreeOptions(url)));
     }
 
     private String getParentMarkupId() {
@@ -82,34 +82,14 @@ public abstract class Tree extends Panel {
 
     protected abstract List<JsonTreeNode> getChildNodes(Long parentNodeId,String type);
 
-    protected List<JsonTreeNode> getInitialNodes() {
-        return null;
-    }
-
-
     // ----------------------------------------------------------------------------------------
 
     class TreeOptions {
         String url;
         List<JsonTreeNode> data;
-//        List<String> selected;
 
         TreeOptions(String url) {
             this.url = url;
-        }
-
-//        TreeOptions withSelectedNodes(List<JsonTreeNode> data) {
-//            List<String> result = Lists.newArrayList();
-//            for (JsonTreeNode node:data) {
-//                result.add(node.getId());
-//            }
-//            selected = result;
-//            return this;
-//        }
-//
-        TreeOptions withData(List<JsonTreeNode> data) {
-            this.data = data;
-            return this;
         }
 
     }
