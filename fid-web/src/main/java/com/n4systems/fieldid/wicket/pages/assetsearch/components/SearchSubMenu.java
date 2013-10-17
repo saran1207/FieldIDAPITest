@@ -9,12 +9,18 @@ import com.n4systems.fieldid.wicket.pages.print.ExportSearchToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintAllCertificatesPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import rfid.web.helper.SessionUser;
+
+import static ch.lambdaj.Lambda.on;
 
 
 public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
@@ -28,6 +34,18 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
     public SearchSubMenu(String id, final Model<AssetSearchCriteria> model) {
         super(id,model);
+
+        Form queryForm = new Form("queryForm") {
+            @Override
+            protected void onSubmit() {
+                model.getObject().setReportAlreadyRun(true);
+                model.getObject().getSelection().clear();
+                onSearchSubmit();
+            }
+        };
+        queryForm.add(new TextField<String>("query", ProxyModel.of(model, on(AssetSearchCriteria.class).getQuery())));
+        queryForm.add(new Button("submitQueryButton"));
+        add(queryForm);
 
         add(printLink = makeLinkLightBoxed(new MassActionLink<PrintAllCertificatesPage>("printAllCertsLink", PrintAllCertificatesPage.class, model)));
         add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportSearchToExcelPage>("exportToExcelLink", ExportSearchToExcelPage.class, model)));
@@ -89,6 +107,9 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         massScheduleLink.setVisible(sessionUser.hasAccess("createevent"));
         
         actions.setVisible(rowsSelected && (selected < maxUpdate) && (massEventLink.isVisible() || massUpdateLink.isVisible() || massScheduleLink.isVisible()));
+    }
+
+    protected void onSearchSubmit() {
     }
 
 

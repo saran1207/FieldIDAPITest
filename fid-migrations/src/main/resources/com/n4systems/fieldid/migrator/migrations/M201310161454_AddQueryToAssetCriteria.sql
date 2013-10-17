@@ -1,0 +1,1 @@
+alter table saved_searches add column query varchar(1024) default null;
