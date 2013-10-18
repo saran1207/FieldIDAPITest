@@ -68,6 +68,7 @@ public class RecurrenceFormPanel extends Panel {
         private final FIDFeedbackPanel feedback;
         private Object x;
         private Boolean ownerAndDown;
+        private Boolean autoassign;
 
         public RecurringEventsForm(String id) {
             super(id);
@@ -107,9 +108,16 @@ public class RecurrenceFormPanel extends Panel {
 
             inputContainer.add(new CheckBox("ownerAndDown", new PropertyModel<Boolean>(this, "ownerAndDown")));
 
+            inputContainer.add(new CheckBox("autoassign", new PropertyModel<Boolean>(this, "autoassign")));
+
             ContextImage tooltip;
             inputContainer.add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
             tooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_owner_and_down").getObject(), TipsyBehavior.Gravity.N));
+
+
+            ContextImage autotooltip;
+            inputContainer.add(autotooltip = new ContextImage("autotooltip", "images/tooltip-icon.png"));
+            autotooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_auto_assign").getObject(), TipsyBehavior.Gravity.N));
 
             recurrenceTypeDropDown.setNullValid(false).setOutputMarkupId(true).add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override protected void onUpdate(AjaxRequestTarget target) {
@@ -141,6 +149,7 @@ public class RecurrenceFormPanel extends Panel {
             RecurringAssetTypeEvent newEvent = new RecurringAssetTypeEvent(getAssetType(), eventType, createRecurrence());
             newEvent.setOwner(owner);
             newEvent.setOwnerAndDown(ownerAndDown);
+            newEvent.setAutoAssign(autoassign);
             newEvent.setTenant(assetType.getObject().getTenant());
             return newEvent;
         }

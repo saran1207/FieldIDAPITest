@@ -1,13 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
+import com.n4systems.ejb.impl.EventScheduleManagerImpl;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
+import com.n4systems.model.*;
+import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
@@ -18,11 +18,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PerformEventPage extends EventPage {
 
     @SpringBean private EventService eventService;
     @SpringBean private PersistenceService persistenceService;
+    @SpringBean private EventScheduleService eventScheduleService;
 
     private PerformEventPage(Long scheduleId, Long assetId, Long typeId) {
         try {
@@ -76,7 +78,28 @@ public class PerformEventPage extends EventPage {
 
         Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, fileAttachments, createEventScheduleBundles());
 
+        updateRecurringAssetTypeEvent();
+
         return savedEvent;
+    }
+
+    private void updateRecurringAssetTypeEvent() {
+        RecurringAssetTypeEvent recurringEvent = event.getObject().getRecurringEvent();
+
+        List<Event> openEvents = null;
+        Event uevent = null;
+
+        if (null != recurringEvent && recurringEvent.getAutoAssign()) {
+
+            openEvents = eventScheduleService.getAvailableSchedulesFor(event.getObject().getAsset());
+
+            if (null != openEvents && openEvents.size() > 0) {
+                AssignedToUpdate assignedToUpdate= AssignedToUpdate.assignAssetToUser(event.getObject().getPerformedBy());
+                openEvents.get(0).setAssignedTo(assignedToUpdate);
+                uevent = persistenceService.update(openEvents.get(0));
+            }
+
+        }
     }
 
     @Override
