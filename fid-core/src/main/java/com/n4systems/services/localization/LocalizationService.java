@@ -8,6 +8,7 @@ import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.api.Saveable;
+import com.n4systems.model.localization.Language;
 import com.n4systems.model.localization.Translation;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
 import com.n4systems.persistence.localization.Localized;
@@ -221,6 +222,24 @@ public class LocalizationService extends FieldIdPersistenceService implements In
     public boolean hasTranslations(Locale language) {
         QueryBuilder<Translation> query = createTenantSecurityBuilder(Translation.class);
         query.addSimpleWhere("id.language", language.getLanguage());
+        return persistenceService.exists(query);
+    }
+
+    public List<Language> getSystemLanguages() {
+        return persistenceService.findAllNonSecure(Language.class);
+    }
+
+    public void addSystemLanguage(Language language) {
+        persistenceService.save(language);
+    }
+
+    public void removeSystemLanguage(Language language) {
+        persistenceService.remove(language);
+    }
+
+    public boolean hasSystemLanguage(Locale locale) {
+        QueryBuilder<Language> query = new QueryBuilder<Language>(Language.class);
+        query.addSimpleWhere("locale", locale);
         return persistenceService.exists(query);
     }
 

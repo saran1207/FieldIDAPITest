@@ -91,6 +91,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/dashboard/widgetconfig.css");
         response.renderCSSReference("style/chosen/chosen.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/newCss/component/buttons.css");
     }
 
     private WebMarkupContainer addContent(String id) {
@@ -177,9 +178,9 @@ public class DashboardPage extends FieldIDFrontEndPage {
 	private WebMarkupContainer createBlankSlate(String id) {
 		WebMarkupContainer panel = new WebMarkupContainer(id);
 		panel.setOutputMarkupId(true);
-		panel.add(new ContextImage("step1", "images/dashboard/step1.png"));
-		panel.add(new ContextImage("step2", "images/dashboard/step2.png"));
-		panel.add(new ContextImage("step3", "images/dashboard/step3.png"));
+		//panel.add(new ContextImage("step1", "images/dashboard/step1.png"));
+		//panel.add(new ContextImage("step2", "images/dashboard/step2.png"));
+		//panel.add(new ContextImage("step3", "images/dashboard/step3.png"));
 		return panel;
 	}
 

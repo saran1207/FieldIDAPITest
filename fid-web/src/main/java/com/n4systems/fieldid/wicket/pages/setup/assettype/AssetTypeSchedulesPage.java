@@ -11,7 +11,6 @@ import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EnumLabelModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.YesOrNoModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.util.NullCoverterModel;
@@ -48,7 +47,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 
 public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
 
-    private IModel<AssetType> assetType;
+    private IModel<AssetType> assetTypeModel;
 
     @SpringBean
     private AssetTypeService assetTypeService;
@@ -73,7 +72,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
 
     public AssetTypeSchedulesPage(PageParameters params) {
         super(params);
-        assetType = Model.of(assetTypeService.getAssetType(params.get("uniqueID").toLong()));
+        assetTypeModel = Model.of(assetTypeService.getAssetType(params.get("uniqueID").toLong()));
 
         WebMarkupContainer scheduleContent = new WebMarkupContainer("scheduleContent");
 
@@ -99,8 +98,10 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 item.add(new AjaxLink<Void>("remove") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        assetType.getObject().getSchedules().remove(schedule.getObject());
-                        assetTypeService.update(assetType.getObject());
+                        AssetType assetType = assetTypeModel.getObject();
+                        assetType.getSchedules().remove(schedule.getObject());
+                        assetType.touch();
+                        assetTypeService.update(assetType);
                         assetTypeScheduleService.delete(assetTypeScheduleService.getSchedule(schedule.getObject().getId()));
                         frequencyList.detachModels();
                         target.add(schedules, filterActions);
@@ -126,6 +127,9 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         assetTypeService.purgeRecurringEvent(item.getModelObject());
+                        AssetType assetType = assetTypeModel.getObject();
+                        assetType.touch();
+                        assetTypeService.update(assetType);
                         recurringEventList.detachModels();
                         target.add(schedules, filterActions);
                     }
@@ -199,19 +203,19 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
 
         WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
         add(blankSlate);
-        blankSlate.add(new Label("message", new FIDLabelModel("message.asset_type_schedule.blank_slate", assetType.getObject().getDisplayName())));
-        blankSlate.add(new BookmarkablePageLink("associateLink", EventTypeAssociationsPage.class, PageParametersBuilder.uniqueId(assetType.getObject().getId())));
+        blankSlate.add(new Label("message", new FIDLabelModel("message.asset_type_schedule.blank_slate", assetTypeModel.getObject().getDisplayName())));
+        blankSlate.add(new BookmarkablePageLink("associateLink", EventTypeAssociationsPage.class, PageParametersBuilder.uniqueId(assetTypeModel.getObject().getId())));
 
         scheduleContent.setVisible(hasAssociatedEvents());
         blankSlate.setVisible(!hasAssociatedEvents());
     }
 
     private boolean hasAssociatedEvents() {
-        return !associatedEventTypesService.getAssociatedEventTypes(assetType.getObject(), null).isEmpty();
+        return !associatedEventTypesService.getAssociatedEventTypes(assetTypeModel.getObject(), null).isEmpty();
     }
 
     private RecurrenceFormPanel getRecurrenceForm() {
-        return new RecurrenceFormPanel(recurrenceModalWindow.getContentId(), assetType){
+        return new RecurrenceFormPanel(recurrenceModalWindow.getContentId(), assetTypeModel){
             @Override
             protected void onCreateRecurrence(AjaxRequestTarget target) {
                 target.add(schedules, filterActions);
@@ -222,12 +226,14 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
     }
 
     private FrequencyFormPanel getFrequencyForm() {
-        return new FrequencyFormPanel(frequencyModalWindow.getContentId(), assetType) {
+        return new FrequencyFormPanel(frequencyModalWindow.getContentId(), assetTypeModel) {
             @Override
             protected void onSaveSchedule(AjaxRequestTarget target, AssetTypeSchedule schedule) {
                 assetTypeScheduleService.createSchedule(schedule);
-                assetType.getObject().getSchedules().add(schedule);
-                assetTypeService.update(assetType.getObject());
+                AssetType assetType = assetTypeModel.getObject();
+                assetType.getSchedules().add(schedule);
+                assetType.touch();
+                assetTypeService.update(assetType);
                 target.add(schedules, filterActions);
                 frequencyModalWindow.close(target);
                 frequencyModalWindow.setContent(getFrequencyForm());
@@ -239,7 +245,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
         return new LoadableDetachableModel<List<AssetTypeSchedule>>() {
             @Override
             protected List<AssetTypeSchedule> load() {
-                return Lists.newArrayList(assetType.getObject().getSchedules());
+                return Lists.newArrayList(assetTypeModel.getObject().getSchedules());
             }
         };
     }
@@ -248,7 +254,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
         return new LoadableDetachableModel<List<RecurringAssetTypeEvent>>() {
             @Override
             protected List<RecurringAssetTypeEvent> load() {
-                return assetTypeService.getRecurringEvents(assetType.getObject());
+                return assetTypeService.getRecurringEvents(assetTypeModel.getObject());
             }
         };
     }
@@ -313,7 +319,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
 
     @Override
     protected void addNavBar(String navBarId) {
-        Long assetTypeId = assetType.getObject().getId();
+        Long assetTypeId = assetTypeModel.getObject().getId();
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view_all").page(AssetTypeListPage.class).build(),
                 aNavItem().label("nav.edit").page(EditAssetTypePage.class).params(PageParametersBuilder.uniqueId(assetTypeId)).build(),
@@ -332,7 +338,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new TitleLabel(labelId, assetType);
+        return new TitleLabel(labelId, assetTypeModel);
     }
 
     @Override

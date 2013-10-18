@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:extend>
+
+    <div wicket:id="languageList">
+        <table class="list" style="width: 400px">
+            <thead>
+                <tr>
+                    <th><wicket:message key="label.language_code"/></th>
+                    <th><wicket:message key="label.language"/></th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr wicket:id="language">
+                    <td><label wicket:id="code"/></td>
+                    <td><label wicket:id="displayName"/></td>
+                    <td><a wicket:id="remove"><wicket:message key="label.remove"/></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div wicket:id="feedbackPanel"/>
+    <form wicket:id="form">
+        <input wicket:id="code" type="text">
+        <a wicket:id="add" type="submit"><wicket:message key="label.add"/></a>
+    </form>
+
+</wicket:extend>
+</html>

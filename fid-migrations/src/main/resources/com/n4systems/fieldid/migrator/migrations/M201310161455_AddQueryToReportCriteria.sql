@@ -1,0 +1,1 @@
+alter table saved_reports add column query varchar(1024) default null;

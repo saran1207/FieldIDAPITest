@@ -2,7 +2,9 @@ package com.n4systems.fieldid.actions.downloaders;
 
 import java.io.ByteArrayInputStream;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -40,7 +42,9 @@ public class DownloadEventCert extends DownloadAction {
             return MISSING;
         }
 
+        Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
         try {
+            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getCurrentUser().getLanguage());
             byte[] pdf = certificateService.generateEventCertificatePdf(reportType, event.getId());
 
             fileName = constructReportFileName(event);
@@ -53,6 +57,8 @@ public class DownloadEventCert extends DownloadAction {
         } catch(Exception e) {
             logger.error("Unable to download event cert", e);
             return ERROR;
+        } finally {
+            ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(previousLanguage);
         }
     }
 

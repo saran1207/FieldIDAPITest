@@ -54,6 +54,9 @@ public abstract class SearchCriteria extends AbstractEntity {
     @JoinColumn(name="assetTypeGroup")
     private AssetTypeGroup assetTypeGroup;
 
+    @Column(name="query")
+    private String query;
+
     public abstract List<String> getColumns();
     public abstract void setColumns(List<String> columns);
 
@@ -194,4 +197,11 @@ public abstract class SearchCriteria extends AbstractEntity {
         this.assetTypeGroup = assetTypeGroup;
     }
 
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
 }

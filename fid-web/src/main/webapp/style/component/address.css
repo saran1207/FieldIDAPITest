@@ -1,0 +1,9 @@
+
+.address .map {
+    width:500px;
+    height:300px;
+    position:relative;
+    display:inline-block;
+    position:absolute;
+    left:300px;
+}

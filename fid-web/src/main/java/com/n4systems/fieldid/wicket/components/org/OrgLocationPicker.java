@@ -75,10 +75,6 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
                 return buildJsonTree(getOrgLocationTree(parentNodeId,getNodeType(type)));
             }
 
-            @Override protected List<JsonTreeNode> getInitialNodes() {
-                return buildJsonTree(getInitialOrgTree());
-            }
-
         });
         add(new WebMarkupContainer("icon") {
             @Override protected void onComponentTag(ComponentTag tag) {

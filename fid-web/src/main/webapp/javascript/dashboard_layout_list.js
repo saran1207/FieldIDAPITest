@@ -23,9 +23,11 @@ function toggleList() {
 function listenForLayoutListClick() {
     jQuery('#layoutListLink').click(toggleList);
     jQuery('#layoutList').mouseleave(hideList);
-    if ($('#layoutCount').val() == 1) {
+    if ($('#layoutCount').val() <= 1) {
         $('#downArrow').hide();
     }
 }
 
-jQuery(document).ready(function() { listenForLayoutListClick(); });
+jQuery(document).ready(function() {
+    listenForLayoutListClick();
+});

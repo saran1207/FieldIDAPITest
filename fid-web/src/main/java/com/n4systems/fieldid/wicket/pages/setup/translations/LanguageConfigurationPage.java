@@ -7,7 +7,9 @@ import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.model.localization.Language;
 import com.n4systems.model.tenant.TenantSettings;
+import com.n4systems.services.localization.LocalizationService;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
@@ -19,6 +21,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -30,6 +33,9 @@ public class LanguageConfigurationPage extends FieldIDFrontEndPage {
     private TenantSettingsService tenantSettingsService;
 
     private IModel<TenantSettings> tenantSettingsModel;
+
+    @SpringBean
+    private LocalizationService localizationService;
 
     public LanguageConfigurationPage() {
 
@@ -63,15 +69,16 @@ public class LanguageConfigurationPage extends FieldIDFrontEndPage {
     }
 
     public List<Locale> getAvailableLanguages() {
-        return Lists.newArrayList(
-                new Locale("da"), //Danish
-                Locale.FRENCH,
-                Locale.GERMAN,
-                Locale.ITALIAN,
-                new Locale("lv"),  //Latvian
-                new Locale("es"), //Spanish
-                new Locale("sv") //Swedish
-        );
+        List <Language> languagesList = localizationService.getSystemLanguages();
+        Collections.sort(languagesList);
+
+        List<Locale> locales = Lists.newArrayList();
+
+        for(Language lang: languagesList) {
+            locales.add(lang.getLocale());
+        }
+
+        return locales;
     }
 
     @Override

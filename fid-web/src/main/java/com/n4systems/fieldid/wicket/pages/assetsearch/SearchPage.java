@@ -51,16 +51,19 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     }
 
     @Override
-    protected Component createSubMenu(String id, Model<AssetSearchCriteria> criteriaModel) {
+    protected Component createSubMenu(String id, final Model<AssetSearchCriteria> criteriaModel) {
         return new SearchSubMenu(id, criteriaModel) {
             @Override protected Link createSaveLink(String id) {
                 return SearchPage.this.createSaveLink(id, true);
-            };
+            }
             @Override protected Link createSaveAsLink(String id) {
                 return SearchPage.this.createSaveLink(id,false);
             }
             @Override protected IModel<String> getHeaderModel() {
                 return new PropertyModel<String>(savedItem,"name");
+            }
+            @Override protected void onSearchSubmit() {
+                gotoResultsPage(criteriaModel);
             }
         };
     }
@@ -69,12 +72,16 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     protected Component createCriteriaPanel(String id, final Model<AssetSearchCriteria> model) {
         return new SearchCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
-                setResponsePage(new SearchPage(model.getObject(), savedItem));
+                gotoResultsPage(model);
             }
             @Override protected void onSearchError() {
                 resetPageOnError();
             }
         };
+    }
+
+    private void gotoResultsPage(final Model<AssetSearchCriteria> model) {
+        setResponsePage(new SearchPage(model.getObject(), savedItem));
     }
 
     @Override

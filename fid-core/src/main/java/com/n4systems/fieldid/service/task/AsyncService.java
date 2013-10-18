@@ -1,9 +1,11 @@
 package com.n4systems.fieldid.service.task;
 
 import com.google.common.base.Preconditions;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdService;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
+import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.util.CollectionUtils;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
 
@@ -89,6 +92,7 @@ public class AsyncService extends FieldIdService {
 		private final Callable<T> callable;
 		private final SecurityFilter tenantSecurityFilter;
 		private final UserSecurityFilter userSecurityFilter;
+        private final Locale locale;
 
 		private AsyncTask(Callable<T> callable) {
 			this(callable, securityContext);
@@ -98,19 +102,24 @@ public class AsyncService extends FieldIdService {
 			this.callable = callable;
 			this.tenantSecurityFilter = securityContext.getTenantSecurityFilter();
 			this.userSecurityFilter = securityContext.getUserSecurityFilter();
+            User user = entityManagerFactory.getObject().createEntityManager().find(User.class, userSecurityFilter.getUserId());
+            locale = user == null ? null : user.getLanguage();
 		}
 
 		@Override
 		public T call() {
-			try {
+            Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+            try {
 				securityContext.setTenantSecurityFilter(tenantSecurityFilter);
 				securityContext.setUserSecurityFilter(userSecurityFilter);
+                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(locale);
 				return callable.call();
 			} catch (Exception e) {
 				logger.error("Asynchronous task failed", e);
 				return null;
 			} finally {
 				securityContext.reset();
+                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(previousLanguage);
 			}
 		}
 	}

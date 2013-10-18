@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
+import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
@@ -58,11 +59,9 @@ import com.n4systems.fieldid.wicket.pages.user.EditUsageBasedUserPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
-import com.n4systems.fieldid.wicket.util.LocalizedTextConverter;
 import com.n4systems.fieldid.wicket.util.PagePerformanceListener;
 import com.n4systems.fieldid.wicket.util.PlainDateConverter;
 import com.n4systems.model.utils.PlainDate;
-import com.n4systems.persistence.localization.LocalizedText;
 import org.apache.wicket.*;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.Request;
@@ -155,6 +154,7 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("admin/addTenant", AddTenantPage.class);
 		mountPage("admin/connections", ConnectionViewPage.class);
+        mountPage("admin/configureLanguages", ConfigureLanguagesPage.class);
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);
@@ -240,7 +240,6 @@ public class FieldIDWicketApp extends WebApplication {
     protected IConverterLocator newConverterLocator() {
     	ConverterLocator converterLocator = new ConverterLocator();
     	converterLocator.set(PlainDate.class, new PlainDateConverter());
-        converterLocator.set(LocalizedText.class, new LocalizedTextConverter());
     	return converterLocator;
     }
 

@@ -36,6 +36,7 @@ var googleMapFactory = (function() {
 	 var createAndShow = function(id, lat, lng, zoom) {
 		 var map = googleMap(id, {zoom:zoom, mapTypeId:google.maps.MapTypeId.ROADMAP, center:new google.maps.LatLng(lat,lng)});
 		 map.show();
+		 return map;
 	 };
 
 	 var createAndShowWithLocation = function(id) {
@@ -48,7 +49,84 @@ var googleMapFactory = (function() {
 		    map.addLocation(arguments[i], arguments[i+1]);
         }
 		map.show();
+		return map;
 	};
+
+	var createAutoCompleteAddress = function($address) {
+		var widget = autoCompleteAddress($address);
+		widget.updateContentWithAddress = false;
+		return widget;
+	 }
+
+
+	 /**
+	  * autocomplete text field with built in map returned by factory.
+	  */
+	 function autoCompleteAddress($address) {
+		 var $text = $address.children('.txt');
+		 var $lat = $address.children('.lat');
+		 var $lng = $address.children('.lng');
+		 var $map = createAndShowWithLocation($address.children('.map').attr('id'), 44, -77);
+
+		 function getAddresses(request,response) {
+			 new google.maps.Geocoder().geocode( {'address': request.term}, function(results, status) {
+				 if (status== google.maps.GeocoderStatus.OK) {
+					 if (results.length==0) {
+						 response($.map(results,function(value,i) {return value.formatted_address;}));
+					 } else if (results.length>1) {
+						 //alert('multiple address found - just taking the first one for now.');   // TODO : create a menu with list of all possibilities.   "did you mean....A/B/C...?"
+						 response(results);
+						 //response($.map(results,function(value,i) {return value.formatted_address;}));
+					 }
+					 else {
+						 response(results);
+						 //response($.map(results,function(value,i) {return value.formatted_address;}));
+					 }
+				 } else {
+					 response([]);
+				 }
+			 });
+
+		 };
+
+		 function update(item) {
+			$text.val(item.formatted_address);
+			var latLng = item.geometry.location;
+			$lat.val(latLng.lat());
+			$lng.val(latLng.lng());
+			$map.setLocation(latLng.lat(), latLng.lng(), item.formatted_address);
+		 }
+
+
+		 var options = {
+			 delay:500,
+			 minLength:1,
+			 source: function(request,response) { getAddresses(request,response); },
+			 focus: function(event,ui) {
+				 update(ui.item);
+				 return false;
+			 },
+			 select: function(event,ui) {
+				 update(ui.item);
+				 return false;
+			 }
+
+		 };
+
+		 $text.autocomplete(options).data('autocomplete')._renderItem =
+			 function(ul,item) {
+				 return $("<li></li>")
+					 .data("item.autocomplete", item)
+					 .append("<a>" + item.formatted_address + "</a>")
+					 .appendTo(ul);
+			 };
+
+
+		 return {
+
+		 };
+
+	 }
 
 
 	/**
@@ -59,12 +137,13 @@ var googleMapFactory = (function() {
 		/* private methods and properties */
 		var id = mapId;
 		var map = '';
-		var locations = [];		
+		var locations = [];
+		var markers = [];
 		var options = opt;
-		var updateContentWithAddress = true; 
+		var infowindow;
 		
 		function showInfoWindow(marker, map) {
-			if (updateContentWithAddress && !marker.address) {
+			if (this.updateContentWithAddress && !marker.address) {
 				new google.maps.Geocoder().geocode( {'latLng': marker.position}, function(results, status) {
 					if (status== google.maps.GeocoderStatus.OK) {
 						marker.address = formatAddressString(results[0]);						
@@ -78,8 +157,9 @@ var googleMapFactory = (function() {
 			}			
 		}
 
-		function showInfoWindowImpl(marker, map) {			
-			var infowindow =  new google.maps.InfoWindow();					
+		function showInfoWindowImpl(marker, map) {
+			if (infowindow) infowindow.close();
+			infowindow =  new google.maps.InfoWindow();
 			infowindow.setContent(marker.content);	
 			infowindow.open(map,marker);
 		}
@@ -97,7 +177,7 @@ var googleMapFactory = (function() {
 			}
 			return result;   
 		}
-		
+
 		/* public methods exposed */
 		return { 		
 			
@@ -108,14 +188,34 @@ var googleMapFactory = (function() {
 					map: map
 				});
 			},
-			
+
 			addLocation : function(latitude,longitude) {
 				var loc = new google.maps.LatLng(latitude,longitude);
 				locations.push(loc);  				
 				loc.args =  [].slice.call(arguments, 2); /* attach any additional args possibly passed to location. may be used by makeMarker() */
+				if (infowindow) infowindow.close();
 				return loc;
 			},
-			
+
+			setLocation : function(latitude, longitude, title) {
+				locations = [];
+				var loc = new google.maps.LatLng(latitude,longitude);
+				locations.push(loc);
+				loc.args =  [].slice.call(arguments, 2);
+				map.setCenter(loc);
+				if (markers.length==1) {
+					markers[0].setPosition(loc);
+					if (title) {
+						markers[0].address = 'hello';
+						markers[0].content = title;
+					}
+				}
+				if (infowindow) infowindow.close();
+				return loc;
+			},
+
+			updateContentWithAddress : true,
+
 			show : function() {
 				if (map) {
 					return;
@@ -132,8 +232,9 @@ var googleMapFactory = (function() {
 				for (var i=0; i<count; i++) {
 					var loc = locations[i];
 					var marker = this.makeMarker(loc);
+					markers.push(marker);
 					marker.setMap(map);
-					if (marker.content || updateContentWithAddress) { 
+					if (marker.content || this.updateContentWithAddress) {
 						google.maps.event.addListener(marker, 'click', function() {
 							showInfoWindow(this, map);
 						});						
@@ -149,7 +250,7 @@ var googleMapFactory = (function() {
 			
 		};
 		
-	};
+	}
 	
 	function prefixed(prefix,url) {
 		return prefix ? prefix+url : url;
@@ -207,6 +308,7 @@ var googleMapFactory = (function() {
 	return { 
 		create : create,
 		createAndShow : createAndShow,
+		createAutoCompleteAddress : createAutoCompleteAddress,
 		createAndShowWithLocation : createAndShowWithLocation,
 		makeMarkerForStatus : makeMarkerForStatus	
 	};

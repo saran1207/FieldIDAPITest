@@ -90,6 +90,7 @@ public class OrgLocationTree {
         return node;
     }
 
+    @Deprecated // locations not tested yet.  not required for functionality. consider implementation incomplete.
     public OrgLocationTree addPredefinedLocations(Iterable<PredefinedLocation> locations) {
         for (PredefinedLocation location:locations) {
             addPredefinedLocation(location);
@@ -97,11 +98,13 @@ public class OrgLocationTree {
         return this;
     }
 
+    @Deprecated // locations not tested yet.  not required for functionality. consider implementation incomplete.
     public OrgLocationTree addPredefinedLocation(PredefinedLocation location) {
         getPredefinedLocationNode(location);
         return this;
     }
 
+    @Deprecated // locations not tested yet.  not required for functionality. consider implementation incomplete.
     private OrgLocationTreeNode getPredefinedLocationNode(PredefinedLocation location) {
         OrgLocationTreeNode node = nodes.get(location);
         if (node==null) {
@@ -113,6 +116,7 @@ public class OrgLocationTree {
         return node;
     }
 
+    @Deprecated // locations not tested yet.  not required for functionality. consider implementation incomplete.
     private OrgLocationTreeNode getPredefinedLocationParentNode(PredefinedLocation location) {
         EntityWithTenant parent = location.getParent() == null ? location.getOwner() : location.getParent();
         if (parent instanceof BaseOrg) {
@@ -131,7 +135,14 @@ public class OrgLocationTree {
     private void filterIfNeeded() {
         if (filter!=null && isFiltered==false) {
             for (OrgLocationTreeNode node:nodes.values()) {
-                node.isLeaf = node.getChildren().size()==0;
+                switch (node.getType()) {
+                    case DIVISION_ORG:
+                        node.isLeaf = true;
+                        break;
+                    default:
+                        node.isLeaf = false;
+                        break;
+                }
                 if (node.matches()) {
                     node.included=Boolean.TRUE;
                     includeParents(node);
