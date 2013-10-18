@@ -39,7 +39,8 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
         final T reportCriteria = criteriaModel.getObject();
         ReportFormatConverter converter = new ReportFormatConverter(getSecurityGuard());
 
-        List<IColumn<RowView>> convertedColumns = converter.convertColumns(reportCriteria);
+        boolean isTextSearch = criteriaModel.getObject().getQuery() != null;
+        List<IColumn<RowView>> convertedColumns = converter.convertColumns(reportCriteria, isTextSearch);
 
         SelectUnselectRowColumn selectUnselectRowColumn = new SelectUnselectRowColumn(selectedRows, new PropertyModel<Boolean>(this, "currentPageSelected")) {
             @Override
