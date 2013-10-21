@@ -21,7 +21,11 @@ public class ReportFormatConverter {
     	this.securityGuard = securityGuard;
     }
 
-	public List<IColumn<RowView>> convertColumns(SearchCriteria criteriaModel) {
+    public List<IColumn<RowView>> convertColumns(SearchCriteria criteriaModel) {
+        return convertColumns(criteriaModel, false);
+    }
+
+	public List<IColumn<RowView>> convertColumns(SearchCriteria criteriaModel, boolean disableSorting) {
         List<IColumn<RowView>> convertedColumns = new ArrayList<IColumn<RowView>>();
         List<ColumnMappingView> enabledColumns = criteriaModel.getSortedStaticAndDynamicColumns();
 
@@ -29,7 +33,7 @@ public class ReportFormatConverter {
         for (ColumnMappingView enabledColumn : enabledColumns) {
             FIDLabelModel columnLabelModel = new FIDLabelModel(enabledColumn.getLabel());
 
-            if (enabledColumn.isSortable()) {
+            if (!disableSorting && enabledColumn.isSortable()) {
                 convertedColumns.add(new FieldIdPropertyColumn(columnLabelModel, enabledColumn, index, true));
             } else {
                 convertedColumns.add(new FieldIdPropertyColumn(columnLabelModel, enabledColumn, index));

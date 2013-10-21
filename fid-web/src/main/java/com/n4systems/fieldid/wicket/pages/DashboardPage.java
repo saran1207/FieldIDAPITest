@@ -23,6 +23,7 @@ import com.n4systems.util.ConfigurationProvider;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -120,20 +121,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
             @Override
             protected void onAddWidgets(AjaxRequestTarget target) {
-                configurationWindow.setContent(new AddWidgetPanel(configurationWindow.getContentId(), currentLayoutModel){
-                    @Override
-                    protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) {
-                        WidgetDefinition definition = dashboardService.createWidgetDefinition(type);
-                        currentLayoutModel.getObject().getColumns().get(0).getWidgets().add(0, definition);
-                        saveAndRepaintDashboard(target);
-                    }
-
-                    @Override
-                    protected void onCloseWindow(AjaxRequestTarget target) {
-                        configurationWindow.close(target);
-                    }
-                });
-                configurationWindow.show(target);
+                DashboardPage.this.onAddWidgets(target);
             }
         });
         headerPanel.setMarkupId("dashboardHeaderPanel");
@@ -162,14 +150,37 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
         columnsContainer.setOutputMarkupId(true);
         content.add(columnsContainer);
-        content.add(blankSlatePanel = createBlankSlate("blankSlate"));   
+        content.add(blankSlatePanel = createBlankSlate("blankSlate"));
+        blankSlatePanel.add(new AjaxLink<Void>("selectWidgets") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onAddWidgets(target);
+            }
+        });
         
         setContentVisibility();
         
         return content;
 	}
 
-	private void setContentVisibility() {
+    private void onAddWidgets(AjaxRequestTarget target) {
+        configurationWindow.setContent(new AddWidgetPanel(configurationWindow.getContentId(), currentLayoutModel){
+            @Override
+            protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) {
+                WidgetDefinition definition = dashboardService.createWidgetDefinition(type);
+                currentLayoutModel.getObject().getColumns().get(0).getWidgets().add(0, definition);
+                saveAndRepaintDashboard(target);
+            }
+
+            @Override
+            protected void onCloseWindow(AjaxRequestTarget target) {
+                configurationWindow.close(target);
+            }
+        });
+        configurationWindow.show(target);
+    }
+
+    private void setContentVisibility() {
 		boolean noWidgets = currentLayoutModel.getObject().getWidgetCount()==0; 
 		blankSlatePanel.setVisible(noWidgets);
 		columnsContainer.setVisible(!noWidgets);

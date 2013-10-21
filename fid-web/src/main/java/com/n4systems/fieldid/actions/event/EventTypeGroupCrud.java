@@ -44,6 +44,7 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 	@Override
 	protected void initMemberFields() {
 		eventTypeGroup = new EventTypeGroup();
+        eventTypeGroup.setPrintOut(getDefaultCertPrintOut());
 	}
 
 	@Override
@@ -302,5 +303,12 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 		
 		return printOuts;
 	}
+
+    private PrintOut getDefaultCertPrintOut() {
+		QueryBuilder<PrintOut> queryBuilder = new QueryBuilder<PrintOut>(PrintOut.class, new OpenSecurityFilter());
+		queryBuilder.addSimpleWhere("name", "2 Column with Observations");
+        queryBuilder.addSimpleWhere("custom", false);
+		return persistenceManager.find(queryBuilder);
+    }
 
 }
