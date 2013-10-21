@@ -27,7 +27,9 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class CloseEventPage extends FieldIDFrontEndPage {
@@ -141,18 +143,57 @@ public class CloseEventPage extends FieldIDFrontEndPage {
         RecurringAssetTypeEvent recurringEvent = event.getRecurringEvent();
 
         List<Event> openEvents = null;
-        Event uevent = null;
+        Event uevent = event;
 
         if (null != recurringEvent && recurringEvent.getAutoAssign()) {
 
             openEvents = eventScheduleService.getAvailableSchedulesFor(event.getAsset());
 
             if (null != openEvents && openEvents.size() > 0) {
-                openEvents.get(0).setAssignee(event.getPerformedBy());
-                uevent = persistenceService.update(openEvents.get(0));
-            }
 
-        }
+                Event nextSched = null;
+
+                if (recurringEvent.getRecurrence().getType() == RecurrenceType.DAILY) {
+
+                    for (Event sched : openEvents) {
+
+                        GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
+                        cal.setTime(sched.getDueDate());
+
+                        GregorianCalendar ical = (GregorianCalendar) Calendar.getInstance();
+                        ical.setTime(uevent.getDueDate());
+
+                        boolean sameDay = cal.get(Calendar.YEAR) == ical.get(Calendar.YEAR) &&
+                                cal.get(Calendar.DAY_OF_YEAR) == ical.get(Calendar.DAY_OF_YEAR);
+
+                        boolean sameHour = cal.get(Calendar.HOUR_OF_DAY) == ical.get(Calendar.HOUR_OF_DAY);
+
+
+                        if (sched.getDueDate().after(uevent.getDueDate()) && !sameDay && sameHour) {
+
+                            nextSched = sched;
+                            nextSched.setAssignee(event.getPerformedBy());
+                            break;
+
+                        }
+
+                    }  // end for
+
+                } else {
+                    nextSched = openEvents.get(0);
+                    nextSched.setAssignee(event.getPerformedBy());
+
+                } // if DAILY
+
+                if (null != nextSched) {
+                    uevent = persistenceService.update(nextSched);
+                }
+
+            }  // if open events
+
+        } // if recurring event
+
+
 
     }
 
