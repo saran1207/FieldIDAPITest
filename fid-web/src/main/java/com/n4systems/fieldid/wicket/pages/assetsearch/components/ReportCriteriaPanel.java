@@ -27,18 +27,12 @@ public class ReportCriteriaPanel extends AbstractCriteriaPanel<EventReportCriter
             @Override
             protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {
                 getReportingColumnsPanel().onEventTypeOrGroupUpdated(target, selectedEventType, availableEventTypes);
-                updateDisplay();
             }
 
             @Override
             protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {
                 getReportingColumnsPanel().updateAssetTypeOrGroup(target, selectedAssetType, availableAssetTypes);
-                updateDisplay();
             }
-
-            private void updateDisplay() {
-            }
-
         };
     }
 

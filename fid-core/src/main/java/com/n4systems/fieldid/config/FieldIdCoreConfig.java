@@ -63,10 +63,7 @@ import com.n4systems.services.date.DateService;
 import com.n4systems.services.localization.LocalizationService;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.search.*;
-import com.n4systems.services.search.parser.DateParser;
-import com.n4systems.services.search.parser.SearchParserService;
-import com.n4systems.services.search.parser.SimpleParser;
-import com.n4systems.services.search.parser.ValueFactory;
+import com.n4systems.services.search.parser.*;
 import com.n4systems.services.search.writer.AssetIndexWriter;
 import com.n4systems.services.search.writer.CriteriaTrendsIndexWriter;
 import com.n4systems.services.search.writer.EventIndexWriter;
@@ -663,5 +660,9 @@ public class FieldIdCoreConfig {
         return new EventBookService();
     }
 
+    @Bean
+    public DynamicAssetColumnsFromTextSearchService dynamicAssetColumnsFromTextSearchService() {
+        return new DynamicAssetColumnsFromTextSearchService();
+    }
 
 }
