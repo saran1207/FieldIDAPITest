@@ -94,8 +94,7 @@ public class PerformEventPage extends EventPage {
             openEvents = eventScheduleService.getAvailableSchedulesFor(event.getObject().getAsset());
 
             if (null != openEvents && openEvents.size() > 0) {
-                AssignedToUpdate assignedToUpdate= AssignedToUpdate.assignAssetToUser(event.getObject().getPerformedBy());
-                openEvents.get(0).setAssignedTo(assignedToUpdate);
+                openEvents.get(0).setAssignee(event.getObject().getPerformedBy());
                 uevent = persistenceService.update(openEvents.get(0));
             }
 

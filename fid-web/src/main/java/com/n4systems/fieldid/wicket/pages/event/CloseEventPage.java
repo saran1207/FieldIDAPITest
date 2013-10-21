@@ -148,8 +148,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
             openEvents = eventScheduleService.getAvailableSchedulesFor(event.getAsset());
 
             if (null != openEvents && openEvents.size() > 0) {
-                AssignedToUpdate assignedToUpdate= AssignedToUpdate.assignAssetToUser(event.getPerformedBy());
-                openEvents.get(0).setAssignedTo(assignedToUpdate);
+                openEvents.get(0).setAssignee(event.getPerformedBy());
                 uevent = persistenceService.update(openEvents.get(0));
             }
 

@@ -47,6 +47,9 @@ public class MassUpdateService extends FieldIdPersistenceService {
 			Query subEventCount = persistenceService.createQuery(subEventQuery, params);
 			summary.setAssetUsedInMasterEvent((Long) subEventCount.getSingleResult());
 			asset = assetService.fillInSubAssetsOnAsset(asset);
+
+
+
 			summary.setSubAssetsToDetach((long) asset.getSubAssets().size());
 
 			summary.setDetachFromMaster(assetService.parentAsset(asset) != null);
