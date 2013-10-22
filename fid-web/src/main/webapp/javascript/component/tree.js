@@ -28,6 +28,7 @@ var treeFactory = (function() {
 		var $text;
 		var $tree;
 		var $type;
+		var $node;
 		var initialized = false;
 		var callback = options.url;
 		var input = '';
@@ -61,6 +62,15 @@ var treeFactory = (function() {
 				);
 				jQuery.jstree._reference(getTree()).refresh(-1);
 				getTree().show();
+			}
+		}
+
+		function getNoResults() {
+			var noResults = $tree.siblings('.no-results');
+			if (noResults.length==0) {
+				return $tree.after($('<div>No Results</div>').addClass('no-results'));
+			} else {
+				return $(noResults[0]);
 			}
 		}
 
@@ -131,6 +141,7 @@ var treeFactory = (function() {
 						ajax: {
 							type : 'GET',
 							url : function(node) {
+								$node = node;
 								if (node!=-1) {
 									// search for a particular branch under the specified node.
 									return new String(callback)+'&nodeId='+node.attr('id')+'&nodeType='+node.attr('data');
@@ -140,9 +151,12 @@ var treeFactory = (function() {
 						},
 							success : function(n) {
 								if (n && n.length>0) {
+									getNoResults().hide();
 									$tree.show();
-								} else {
+								} else if ($node==-1) {
 									$tree.hide();
+									getNoResults().show();
+									setTimeout(function() { getNoResults().fadeOut(1000);},1200);
 								}
 							}
 						}
@@ -150,11 +164,13 @@ var treeFactory = (function() {
 					plugins : [ 'themes', 'json_data', 'ui', 'hotkeys' ]
 				});
 
+
 				$('body').click(function(e) {
 					if ($(e.toElement).parents().index($widget)==-1) {    // hide popup when you click somewhere else.
 						$tree.hide();
 					}
 				});
+
 
 				$tree.bind("click.jstree", function (event, data) {
 					if (!$(event.currentTarget).is('a')) { return; }

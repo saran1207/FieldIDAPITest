@@ -16,6 +16,15 @@
         background: #fefee8;
         line-height: 1;
     }
+
+    .org-location .no-results {
+        display: block;
+        position:absolute;
+        top:23px;
+        background:#add8e6;
+        opacity: .8;
+    }
+
     .org-location .text {
         padding: 4px;
 
