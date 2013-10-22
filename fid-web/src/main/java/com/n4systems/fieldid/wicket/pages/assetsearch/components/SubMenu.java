@@ -42,6 +42,8 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
     private Link saveAsLink;
     private Link saveLink;
     private WebMarkupContainer saveAsMenu;
+    protected boolean filtersDisabled;
+    private WebMarkupContainer buttonsContainer;
 
 
     public SubMenu(String id, final Model<T> model) {
@@ -49,18 +51,34 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
 		this.model = model;
 		
         add(createHeader());
-        
-        MattBar mattBar = createMattBar();
-        add(mattBar);
-        mattBar.addLink(new Model<String>(""), COLUMNS_ID, "images/col.png", "label.tooltip_columns");
-        mattBar.addLink(new Model<String>(""), FILTERS_ID, "images/filter.png", "label.tooltip_filters");
-        mattBar.setCurrentState(FILTERS_ID);
+
+        add(buttonsContainer = new WebMarkupContainer("buttonsContainer"));
+        buttonsContainer.setOutputMarkupPlaceholderTag(true);
+        addMattBar();
 
         add(msg = new Label("msg", new StringResourceModel(getNoneSelectedMsgKey(), this, null)));
 		add(new AttributeAppender("class", "sub-menu"));
 
         setOutputMarkupId(true);
 	}
+
+    protected void addMattBar() {
+        MattBar mattBar = createMattBar();
+        buttonsContainer.addOrReplace(mattBar);
+        mattBar.addLink(new Model<String>(""), COLUMNS_ID, "images/col.png", "label.tooltip_columns");
+        if (!filtersDisabled) {
+            mattBar.addLink(new Model<String>(""), FILTERS_ID, "images/filter.png", "label.tooltip_filters");
+            mattBar.setCurrentState(COLUMNS_ID);
+        } else {
+            mattBar.setCurrentState(FILTERS_ID);
+        }
+    }
+
+    protected void setFiltersDisabled(AjaxRequestTarget target, boolean disabled) {
+        filtersDisabled = disabled;
+        addMattBar();
+        target.add(buttonsContainer);
+    }
 
     private Label createHeader() {
         return new Label("header", getHeaderModel());

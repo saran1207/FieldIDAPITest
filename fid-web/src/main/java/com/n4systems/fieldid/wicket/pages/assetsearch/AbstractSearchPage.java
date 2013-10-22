@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.components.table.JumpableNavigationBar;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.components.AbstractCriteriaPanel;
 import com.n4systems.fieldid.wicket.util.LegacyReportCriteriaStorage;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
@@ -153,7 +154,7 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
 
     protected abstract Component createSubMenu(String contentId, Model<T> criteriaModel);
 
-    protected abstract Component createCriteriaPanel(String id, Model<T> criteriaModel);
+    protected abstract AbstractCriteriaPanel<T> createCriteriaPanel(String id, Model<T> criteriaModel);
 
     protected boolean isEmptyResults() {
         return false;

@@ -19,17 +19,21 @@ var fieldIdWidePage = (function() {
 		}
 	};
 
-	var showConfig = function(showFilters) {
-		if (showFilters) {
+    var updateConfig = function(showFilters) {
+        if (showFilters) {
             //suggestion : would $(..).attr('css','filters') be more efficient?
             $('#left-panel').removeClass('columns').addClass('filters');
-		} else {
+        } else {
             $('#left-panel').removeClass('filters').addClass('columns');
-		}
+        }
+    };
+
+	var showConfig = function(showFilters) {
+        updateConfig(showFilters);
 		showLeftPanel();
 	};
 
-	function showLeftPanel() {
+	var showLeftPanel = function() {
         $('#page').removeClass('without-left-panel').addClass('with-left-panel');
         // restore state of toggle button.
         if (lastShownPanel) {
@@ -37,7 +41,7 @@ var fieldIdWidePage = (function() {
         }
     };
 
-    function hideLeftPanel() {
+    var hideLeftPanel = function() {
         $('#page').removeClass('with-left-panel').addClass('without-left-panel');
         // remove the pressed state from toggle buttons.
         lastShownPanel = $('.sub-menu .config .mattButtonPressed');
@@ -57,7 +61,9 @@ var fieldIdWidePage = (function() {
 	return { 
 		init : init,
         toggleLeftPanel : toggleLeftPanel,
-    	showConfig : showConfig
+        updateConfig: updateConfig,
+    	showConfig : showConfig,
+        hideLeftPanel: hideLeftPanel
 	};
 	
 })();

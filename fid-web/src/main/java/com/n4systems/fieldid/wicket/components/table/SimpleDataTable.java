@@ -59,6 +59,7 @@ public class SimpleDataTable<T> extends Panel {
                 Item<T> rowItem = super.newRowItem(id, index, rowModel);
                 rowItem.setOutputMarkupId(true);
                 rowItem.add(new HighlightIfSelectedBehavior(rowModel, multiIdSelection));
+                rowItem.add(new EvenOddStylingBehavior(index));
                 onRowItemCreated(rowItem, rowModel);
                 return rowItem;
             }

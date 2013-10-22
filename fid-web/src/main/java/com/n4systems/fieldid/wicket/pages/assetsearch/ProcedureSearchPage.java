@@ -59,7 +59,7 @@ public class ProcedureSearchPage extends AbstractSearchPage<ProcedureCriteria> {
     }
 
     @Override
-    protected Component createCriteriaPanel(String id, final Model<ProcedureCriteria> model) {
+    protected ProcedureCriteriaPanel createCriteriaPanel(String id, final Model<ProcedureCriteria> model) {
         return new ProcedureCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
                 setResponsePage(new ProcedureSearchPage(model.getObject()));

@@ -209,6 +209,7 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/manage_saved_items.css");
+        response.renderCSSReference("style/newCss/component/header_reorder_link_button.css");
         response.renderOnDomReadyJavaScript(HIGHLIGHT_REORDER_JS);
         response.renderOnDomReadyJavaScript(UNHIGHLIGHT_REORDER_JS);
     }

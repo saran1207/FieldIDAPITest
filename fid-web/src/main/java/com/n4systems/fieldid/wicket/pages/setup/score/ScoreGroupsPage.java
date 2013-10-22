@@ -80,6 +80,7 @@ public class ScoreGroupsPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/scoreGroups.css");
+        response.renderCSSReference("style/newCss/component/header_reorder_link_button.css");
     }
 
     @Override

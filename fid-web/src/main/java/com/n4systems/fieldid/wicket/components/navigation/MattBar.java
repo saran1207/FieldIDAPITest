@@ -34,7 +34,7 @@ public class MattBar extends Panel {
     public MattBar(String id) {
         super(id);
 
-        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
 
         add(links = new ListView<IModel<String>>("links",new PropertyModel<List<IModel<String>>>(this, "linkTitles")) {
             @Override

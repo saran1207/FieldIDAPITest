@@ -75,7 +75,7 @@ public class ReportPage extends AbstractSearchPage<EventReportCriteria> {
     }
 
     @Override
-    protected Component createCriteriaPanel(String id, final Model<EventReportCriteria> model) {
+    protected ReportCriteriaPanel createCriteriaPanel(String id, final Model<EventReportCriteria> model) {
         return new ReportCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
                 setResponsePage(new ReportPage(model.getObject(), savedItem));

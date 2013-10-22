@@ -12,8 +12,6 @@ import com.n4systems.model.saveditem.SavedSearchItem;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.services.reporting.DashboardReportingService;
 import com.n4systems.services.search.parser.DynamicAssetColumnsFromTextSearchService;
-import com.n4systems.services.search.parser.QueryTerm;
-import com.n4systems.services.search.parser.SearchQuery;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -73,7 +71,7 @@ public class SearchPage extends AbstractSearchPage<AssetSearchCriteria> {
     }
 
     @Override
-    protected Component createCriteriaPanel(String id, final Model<AssetSearchCriteria> model) {
+    protected SearchCriteriaPanel createCriteriaPanel(String id, final Model<AssetSearchCriteria> model) {
         return new SearchCriteriaPanel(id, model) {
             @Override protected void onSearchSubmit() {
                 gotoResultsPage(model);

@@ -2,8 +2,10 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.print.ExportSearchToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintAllCertificatesPage;
@@ -12,6 +14,8 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.search.AssetSearchCriteria;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -26,6 +30,7 @@ import static ch.lambdaj.Lambda.on;
 public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
     private WebMarkupContainer actions;
+    private Form queryForm;
     private Link printLink;
     private Link exportLink;
     private Link massEventLink;
@@ -35,7 +40,11 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
     public SearchSubMenu(String id, final Model<AssetSearchCriteria> model) {
         super(id,model);
 
-        Form queryForm = new Form("queryForm") {
+        // Ideally this should be done more generically one level up but text search needs to be supported on all the search screens first..
+        filtersDisabled =  model.getObject().getQuery() != null;
+        addMattBar();
+
+        queryForm = new Form("queryForm") {
             @Override
             protected void onSubmit() {
                 model.getObject().setReportAlreadyRun(true);
@@ -43,8 +52,11 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
                 onSearchSubmit();
             }
         };
+        queryForm.setOutputMarkupPlaceholderTag(true);
+        queryForm.setVisible(filtersDisabled);
         queryForm.add(new TextField<String>("query", ProxyModel.of(model, on(AssetSearchCriteria.class).getQuery())));
         queryForm.add(new Button("submitQueryButton"));
+        add(createToggleSearchLink(filtersDisabled));
         add(queryForm);
 
         add(printLink = makeLinkLightBoxed(new MassActionLink<PrintAllCertificatesPage>("printAllCertsLink", PrintAllCertificatesPage.class, model)));
@@ -84,9 +96,37 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         initializeLimits();
     }
 
+    private TwoStateAjaxLink createToggleSearchLink(final boolean startingInQueryMode) {
+        return new TwoStateAjaxLink("toggleSearchTypeLink", new FIDLabelModel("label.advanced_search"), new FIDLabelModel("label.filter")) {
+            {
+                setInitialState(!startingInQueryMode);
+            }
+            @Override
+            protected void onEnterInitialState(AjaxRequestTarget target) {
+                target.add(queryForm.setVisible(false));
+                setFiltersDisabled(target, false);
+            }
+
+            @Override
+            protected void onEnterSecondaryState(AjaxRequestTarget target) {
+                target.add(queryForm.setVisible(true));
+                setFiltersDisabled(target, true);
+                target.appendJavaScript("fieldIdWidePage.updateConfig(false);");
+            }
+        };
+    }
+
     @Override
     protected String getNoneSelectedMsgKey() {
         return "label.select_assets";
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if (filtersDisabled) {
+            response.renderOnDomReadyJavaScript("fieldIdWidePage.updateConfig(false);");
+        }
     }
 
     protected void updateMenuBeforeRender(AssetSearchCriteria criteria) {
@@ -109,8 +149,6 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         actions.setVisible(rowsSelected && (selected < maxUpdate) && (massEventLink.isVisible() || massUpdateLink.isVisible() || massScheduleLink.isVisible()));
     }
 
-    protected void onSearchSubmit() {
-    }
-
+    protected void onSearchSubmit() { }
 
 }

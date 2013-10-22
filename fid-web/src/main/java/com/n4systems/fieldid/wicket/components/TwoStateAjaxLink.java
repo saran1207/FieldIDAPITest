@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 
 public class TwoStateAjaxLink extends Panel {
 
@@ -51,6 +50,11 @@ public class TwoStateAjaxLink extends Panel {
         } else {
             onEnterSecondaryState(target);
         }
+    }
+
+    public void setInitialState(boolean initialState) {
+        this.inInitialState = initialState;
+        setCorrectStateLabel();
     }
 
     protected void onEnterInitialState(AjaxRequestTarget target) { }

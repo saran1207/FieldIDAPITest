@@ -150,6 +150,7 @@ public class EventFormEditPage extends EventTypePage {
         super.renderHead(response);
         response.renderCSSReference("style/fieldid.css");
         response.renderCSSReference("style/eventFormEdit.css");
+        response.renderCSSReference("style/newCss/component/header_reorder_link_button.css");
     }
 
     private SavePanel createSavePanel(String panelID) {
