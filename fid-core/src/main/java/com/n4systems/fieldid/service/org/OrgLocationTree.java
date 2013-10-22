@@ -277,7 +277,7 @@ public class OrgLocationTree {
                 return -1;
             }
             if (o1.getType().equals(o2.getType())) {
-                return o1.getName().compareTo(o2.getName());
+                return o1.getName().compareToIgnoreCase(o2.getName());
             }
             return NodeType.INTERNAL_ORG.equals(o1.getType()) ? -1 : 1;
         }
