@@ -57,7 +57,7 @@ public abstract class SubMenu<T extends SearchCriteria> extends Panel {
         addMattBar();
 
         add(msg = new Label("msg", new StringResourceModel(getNoneSelectedMsgKey(), this, null)));
-		add(new AttributeAppender("class", "sub-menu"));
+		add(new AttributeAppender("class", "sub-menu clearfix"));
 
         setOutputMarkupId(true);
 	}

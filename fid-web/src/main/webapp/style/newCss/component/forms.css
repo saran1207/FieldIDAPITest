@@ -1,0 +1,91 @@
+/*--------------------------------------- 
+  FORMS
+-----------------------------------------*/
+/* Default form styles */
+fieldset {
+  border: 1px solid #dddddd;
+  margin: 0 0 -1px;
+  padding: 35px 10px 10px;
+  position: relative;
+}
+fieldset:last-child {
+  margin-bottom: 5px;
+}
+legend {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  position: absolute;
+  top: 8px;
+}
+input[type="text"],
+select,
+textarea {
+  width: 295px;
+  padding-left: 4px;
+  margin: 4px 0 10px;
+  font-size: 13px;
+  font-family: "proxima-nova", Helvetica, Arial, sans-serif;
+  border: 1px solid #c7c7c9;
+}
+input[type="text"] {
+  height: 25px;
+  color: #3a3a3a;
+}
+label {
+  display: block;
+}
+textarea {
+  height: 115px;
+  resize: none;
+  outline: none;
+  padding-top: 4px;
+}
+textarea:focus,
+input:focus {
+  outline: none;
+  border-color: #666666;
+}
+/* checkboxes & radio boxes
+-----------------------------------------*/
+label input[type="radio"],
+label input[type="checkbox"] {
+  float: left;
+  margin-left: -15px;
+}
+.checkbox {
+  overflow: hidden;
+}
+.checkbox label {
+  padding-left: 15px;
+  margin: 5px 0;
+  line-height: 1;
+}
+
+
+
+.input-combo {
+	display: inline-block;
+}
+
+
+/* Compact form controls - shorter widths */
+.form-horizontal.compact input[type="text"],
+.form-horizontal.compact select,
+.form-horizontal.compact textarea {
+	width: 55%;
+	width: 180px;
+}
+/*.form-horizontal.compact .chzn-search input {
+	width: 100%;
+}
+.form-horizontal.compact label {
+	width: 44%;
+	padding-right: 3%;
+}*/
+
+
+/* GLOBAL NAV SEARCH BAR */
+#smartSearchContainer input[type="text"] {
+	height: auto;
+}
+

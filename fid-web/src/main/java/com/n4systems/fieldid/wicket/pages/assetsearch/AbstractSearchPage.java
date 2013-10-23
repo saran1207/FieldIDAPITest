@@ -118,6 +118,10 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/fieldIdWide.js");
         response.renderCSSReference("style/pageStyles/wide.css");
+        response.renderCSSReference("style/newCss/assetsearch/search-filter.css");
+        response.renderCSSReference("style/newCss/component/forms.css");
+        response.renderCSSReference("style/newCss/component/buttons.css");
+
         response.renderOnDomReadyJavaScript("fieldIdWidePage.init(" + showLeftPanel + ")");
     }
 

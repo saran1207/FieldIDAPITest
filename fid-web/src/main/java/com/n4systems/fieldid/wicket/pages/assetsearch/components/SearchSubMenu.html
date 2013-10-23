@@ -1,48 +1,54 @@
 <wicket:extend>
+	<!-- search bar -->
+	<form wicket:id="queryForm" class="advanced-search-form">
+		<div class="input-combo">
+			<input type="text" wicket:id="query" style="">
+			<input type="submit" wicket:id="submitQueryButton" wicket:message="value:label.search">
+			<!-- <div class="syntax-help">
+				<span class="fontello-help"></span>
+			</div> -->
+		</div>
+	</form>
 
-    <form wicket:id="queryForm" style="width:300px;display:block;float:left">
-        <input type="text" wicket:id="query" style="">
-        <input type="submit" wicket:id="submitQueryButton" wicket:message="value:label.search">
-    </form>
+	<div wicket:id="toggleSearchTypeLink" class="search-switch"></div>
 
-    <div style="display:block;float:left">
-        <div wicket:id="toggleSearchTypeLink"></div>
-    </div>
+    <div class="action-group">
+	
+    	<!-- NEED TO MOVE THESE TWO ITEMS TO ACTIONS DROPDOWN-->
+		<li style="display:none;">
+			<a class="mattButton" wicket:id="printAllCertsLink"><wicket:message key="label.printselectedmanufacturercertificate"/></a>
+		</li>
+		<li style="display:none;">
+			<a class="mattButton" wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a>
+		</li>
+		<!-- -->
 
-    <span class="actions">
-    	<ul>
-		    <li>
-		        <a class="mattButton" wicket:id="printAllCertsLink"><wicket:message key="label.printselectedmanufacturercertificate"/></a>
-		    </li>
-		    <li>
-		        <a class="mattButton" wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a>
-		    </li>
-		    <li wicket:id="actions" class="menu">
-		        <a href="javascript:void(0);" class="mattButton"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
-		        <ul class="menu-items">
-					<wicket:enclosure>                   
-	                    <li>
-					        <a wicket:id="massUpdateLink"><wicket:message key="label.massupdate2"/></a>
-					    </li>
-				    </wicket:enclosure>
-					<wicket:enclosure>
-					    <li>
-					        <a wicket:id="massScheduleLink"><wicket:message key="label.massschedule" /></a>
-					    </li>
-					</wicket:enclosure>
-					<wicket:enclosure>
-					    <li>
-					        <a wicket:id="massEventLink"><wicket:message key="label.perform_event" /></a>
-					    </li>
-					</wicket:enclosure>
-			    </ul>
-		    </li>
-            <li>
-                <a wicket:id="emailLink" class="mattButton"><wicket:message key="label.email"/></a>
-            </li>
-            <div wicket:id="saveMenu"class="menu-wide"/>
-		</ul>
-	</span>
-   	<span wicket:id="msg" class="msg"/>
+		<div wicket:id="actions" class="dropdown-btn mass-actions">
+			<a href="javascript:void(0);" class="btn btn-secondary"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
+			
+			<ul class="pull-right">
+				<wicket:enclosure>
+				<li><a wicket:id="massUpdateLink"><wicket:message key="label.massupdate2"/></a></li>
+				</wicket:enclosure>
+
+				<wicket:enclosure>
+				<li><a wicket:id="massScheduleLink"><wicket:message key="label.massschedule" /></a></li>
+				</wicket:enclosure>
+
+				<wicket:enclosure>
+				<li><a wicket:id="massEventLink"><wicket:message key="label.perform_event" /></a></li>
+				</wicket:enclosure>
+				
+				<!-- MOVED FROM MAIN BAR AND ADDED TO DROPDOWN -->
+				<li><a><wicket:message key="label.printselectedmanufacturercertificate"/></a></li>
+				<li><a><wicket:message key="label.exporttoexcel"/></a></li>
+			</ul>
+		</div>
+		<a wicket:id="emailLink" class="btn btn-secondary"><wicket:message key="label.email"/></a>
+		<div wicket:id="saveMenu"/>
+	</div>
+
+	<!-- TO BE MOVED TO RESULTS TABLE -->
+   	<span wicket:id="msg" class="msg" style="display: none;"/>
 </wicket:extend>
 		

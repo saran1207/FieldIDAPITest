@@ -1,0 +1,82 @@
+/* 
+Shared styles between Search, Reporting and Procedures
+Search specific styles are located in style/newCss/component/search-filter.css 
+-------------------------------------------------------------------------------*/
+/* temp */
+#wicketDebugLink {
+	display: none;
+}
+
+/* fieldid.css OVERRIDES */
+#headerPadding {
+	display: none;
+}
+
+/* wide.css OVERRIDES */
+#page .centre {
+	border-radius: 0;
+	left: 27px;
+}
+#left-panel {
+	width: 400px;
+	border-radius: 0;
+}
+#bottom-panel {
+	border-radius: 0;
+	height: 41px;
+	bottom: 8px;
+}
+#page.with-left-panel .centre,
+#page.with-left-panel #bottom-panel {
+	left: 425px;
+}
+
+
+
+/* ACTION BUTTONS BAR */ 
+.sub-menu {
+	position: relative;
+	padding: 0;
+}
+.search-options {
+	max-width: 74px;
+	margin-right: 5px;
+	float: left;
+	padding-left: 27px;
+	margin-top: 6px;
+}
+.sub-menu .action-group {
+	position: absolute;
+	top: 0;
+	right: 11px;
+	/*width: 262px; specific to search */
+}
+
+/* FILTER CRITERIA - SIDEBAR */
+#left-panel {
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+/* BLANK SLATE RESULTS PANEL */
+.no-results h2 {
+	font-size: 22px;
+	font-weight: normal;
+	padding-left: 0;
+}
+
+
+/* PAGINATION */
+.pagination input[type="text"] {
+	height: auto;
+	width: auto;
+	margin: 0;
+}
+.pagination label {
+	display: inline-block;
+}
+
+
+
+
+
