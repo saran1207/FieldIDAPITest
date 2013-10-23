@@ -3,7 +3,7 @@
 -----------------------------------------*/
 /* Default form styles */
 fieldset {
-  border: 1px solid #dddddd;
+  /*border: 1px solid #dddddd;*/
   margin: 0 0 -1px;
   padding: 35px 10px 10px;
   position: relative;
@@ -20,12 +20,16 @@ legend {
 input[type="text"],
 select,
 textarea {
-  width: 295px;
-  padding-left: 4px;
-  margin: 4px 0 10px;
-  font-size: 13px;
-  font-family: "proxima-nova", Helvetica, Arial, sans-serif;
-  border: 1px solid #c7c7c9;
+	width: 295px;
+	padding-left: 4px;
+	margin: 4px 0 10px;
+	font-size: 13px;
+	/*font-family: "proxima-nova", Helvetica, Arial, sans-serif;*/
+	border: 1px solid #c7c7c9;
+
+	-moz-box-sizing: border-box; 
+	-webkit-box-sizing: border-box; 
+	box-sizing: border-box;
 }
 input[type="text"] {
   height: 25px;
@@ -45,6 +49,7 @@ input:focus {
   outline: none;
   border-color: #666666;
 }
+
 /* checkboxes & radio boxes
 -----------------------------------------*/
 label input[type="radio"],
@@ -62,29 +67,141 @@ label input[type="checkbox"] {
 }
 
 
-
+/* text input with button combo 
+-----------------------------------------*/
 .input-combo {
-	display: inline-block;
+  border: 1px solid #c7c7c9;
+  display: inline-block;
+}
+.input-combo input[type="text"] {
+  border: none;
+  margin-bottom: 0;
+  height: auto;
+}
+.input-combo [class^="btn"] {
+  border-width: 0 0 0 1px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+
+/* Used for adding a block of text under a form control.
+Can be a warning or error message, or help text. */
+.text-block {
+  display: block;
+  padding-bottom: 6px;
+  margin: 4px 0;
+}
+
+/* Chosen plugin overrides
+-----------------------------------------*/
+.chzn-container {
+  margin: 4px 0 10px;
+}
+.chzn-single.chzn-default,
+.chzn-container-single .chzn-single {
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  height: 25px;
+  padding-top: 2px;
+  border-color: #c7c7c9;
+}
+.chzn-container-single .chzn-single span,
+.chzn-container-single .chzn-default {
+  color: #7a7a7a;
+}
+.chzn-container-single .chzn-single {
+  line-height: 20px;
+}
+.chzn-container .chzn-results .highlighted {
+  background-color: #dddddd;
+  background-image: none;
+  color: #7a7a7a;
+}
+
+.form-horizontal .chzn-container {
+  display: inline-block;
+}
+
+/* Used to group and align labels and controls
+-----------------------------------------*/
+.control-group {
+  margin: 6px 0;
+}
+.control-group input,
+.control-group select,
+.control-group textarea,
+.control-group .chzn-container {
+  margin: 0;
+}
+.control-group.inline {
+  vertical-align: top;
 }
 
 
-/* Compact form controls - shorter widths */
+
+/* For forms with the label on the left and input on the right
+-----------------------------------------*/
+.form-horizontal fieldset {
+  clear: both;
+}
+.form-horizontal label {
+  width: 190px;
+  text-align: right;
+  display: inline-block;
+ /* vertical-align: middle;*/
+  padding-right: 10px;
+}
+.form-horizontal .link {
+  font-size: 13px;
+}
+.form-horizontal .text-block {
+  margin-left: 194px;
+}
+.form-horizontal .checkbox label {
+  width: auto;
+}
+
+
+
+/* compact form
+-----------------------------------------*/
+.form-horizontal.compact fieldset {
+  border: none;
+  padding: 26px 10px 0;
+  margin-bottom: 5px;
+}
+.form-horizontal.compact .control-group {
+  font-size: 0;
+}
+.form-horizontal.compact .control-group * {
+  font-size: 13px;
+}
 .form-horizontal.compact input[type="text"],
 .form-horizontal.compact select,
 .form-horizontal.compact textarea {
-	width: 55%;
-	width: 180px;
+  width: 190px;
 }
-/*.form-horizontal.compact .chzn-search input {
-	width: 100%;
+.form-horizontal.compact .chzn-search input {
+  width: 100%;
 }
 .form-horizontal.compact label {
-	width: 44%;
-	padding-right: 3%;
-}*/
+  width: 155px;
+}
+.form-horizontal.compact .checkbox label {
+  width: auto;
+  text-align: left;
+  margin-left: 45%;
+}
+.form-horizontal.compact .text-block {
+  margin-left: 45%;
+}
 
 
-/* GLOBAL NAV SEARCH BAR */
+
+/* GLOBAL NAV SEARCH BAR
+-----------------------------------------*/
 #smartSearchContainer input[type="text"] {
 	height: auto;
 }

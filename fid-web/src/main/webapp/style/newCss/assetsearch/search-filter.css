@@ -57,6 +57,35 @@ Search specific styles are located in style/newCss/component/search-filter.css
 	overflow-y: auto;
 	overflow-x: hidden;
 }
+#left-panel h2 {
+	position: fixed;
+	background: white;
+	z-index: 1;
+	width: 370px;
+}
+form.search-config {
+	margin-top: 40px;
+}
+
+#left-panel.filters .content.filters {
+	display: block;
+}
+#left-panel.filters .content.columns {
+	display: none;
+}
+
+/* Popups & Location picker within forms */
+.control-group .popup {
+	display: inline-block;
+}
+.org-location .text { 
+	padding: 0;
+}
+.entypo-search {
+	margin-left: -24px;
+}
+
+
 
 /* BLANK SLATE RESULTS PANEL */
 .no-results h2 {
