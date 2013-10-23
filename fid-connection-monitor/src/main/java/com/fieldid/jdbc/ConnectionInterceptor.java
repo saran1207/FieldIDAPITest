@@ -71,6 +71,7 @@ public class ConnectionInterceptor extends JdbcInterceptor {
 		if (con == null || con.getConnection() == null) return;
 
 		ActiveConnection activeConn = new ActiveConnection(((JDBC4Connection) con.getConnection()).getId(), Thread.currentThread().getName(), System.currentTimeMillis());
+		activeConn.getStatements().add(new ExecutedStatement(0, "", Thread.currentThread().getStackTrace()));
 		if (connectionsInUse.put(activeConn.getId(), activeConn) != null) {
 			logger.warn("reset called on borrowed connection [" + activeConn.getId() + "]");
 		}
