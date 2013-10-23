@@ -9,6 +9,7 @@ import com.n4systems.fieldid.actions.helpers.AbstractActionTenantContextInitiali
 import com.n4systems.fieldid.permissions.SessionUserSecurityGuard;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserLimitService;
@@ -27,6 +28,7 @@ import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.notifiers.Notifier;
@@ -90,6 +92,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
     @Autowired
     protected ConfigService configService;
+
+    @Autowired
+    private OfflineProfileService offlineProfileService;
 
 	public AbstractAction(PersistenceManager persistenceManager) {
 		this.persistenceManager = persistenceManager;
@@ -674,5 +679,10 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 
     public boolean isOverrideLanguage(String methodName) {
         return true;
+    }
+
+    public boolean isOfflineProfileAvailable() {
+        securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(getTenantId()));
+        return offlineProfileService.hasOfflineProfile(getCurrentUser());
     }
 }

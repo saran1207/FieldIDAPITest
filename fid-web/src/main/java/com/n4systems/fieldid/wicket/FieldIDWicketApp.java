@@ -56,6 +56,7 @@ import com.n4systems.fieldid.wicket.pages.user.AddPersonPage;
 import com.n4systems.fieldid.wicket.pages.user.AddUsageBasedUserPage;
 import com.n4systems.fieldid.wicket.pages.user.EditPersonPage;
 import com.n4systems.fieldid.wicket.pages.user.EditUsageBasedUserPage;
+import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
@@ -187,6 +188,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("criteriaTrends", CriteriaTrendsPage.class);
 
         mountPage("selectLanguage", SelectLanguagePage.class);
+
+        mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

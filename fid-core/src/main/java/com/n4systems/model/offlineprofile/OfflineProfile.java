@@ -13,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.n4systems.model.PlatformType;
 import com.n4systems.model.api.HasUser;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
@@ -45,6 +46,13 @@ public class OfflineProfile extends EntityWithTenant implements HasUser {
 	@Enumerated(EnumType.STRING)
     @Column(name="sync_duration", nullable=false)
 	private SyncDuration syncDuration = SyncDuration.YEAR;
+
+    @Column(name="current_platform", length = 200)
+    private String currentPlatform;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="current_platform_type")
+    private PlatformType currentPlatformType;
 
 	@Override
 	public User getUser() {
@@ -79,4 +87,20 @@ public class OfflineProfile extends EntityWithTenant implements HasUser {
 	public void setSyncDuration(SyncDuration syncDuration) {
 		this.syncDuration = syncDuration;
 	}
+
+    public String getCurrentPlatform() {
+        return currentPlatform;
+    }
+
+    public void setCurrentPlatform(String currentPlatform) {
+        this.currentPlatform = currentPlatform;
+    }
+
+    public PlatformType getCurrentPlatformType() {
+        return currentPlatformType;
+    }
+
+    public void setCurrentPlatformType(PlatformType currentPlatformType) {
+        this.currentPlatformType = currentPlatformType;
+    }
 }
