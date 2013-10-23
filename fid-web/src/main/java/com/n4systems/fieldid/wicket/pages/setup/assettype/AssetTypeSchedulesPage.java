@@ -120,16 +120,18 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 item.add(new Label("org", new NullCoverterModel(new PropertyModel<String>(item.getDefaultModelObject(), "owner.name"), "---")));
                 item.add(new Label("time", new DisplayTimeModel(new PropertyModel<Set<RecurrenceTime>>(item.getDefaultModelObject(), "recurrence.times"))));
 
-                boolean hasAffectAll = ((RecurringAssetTypeEvent) item.getDefaultModelObject()).getOwner() == null || !((RecurringAssetTypeEvent) item.getDefaultModelObject()).getOwnerAndDown();
-                boolean hasAutoAssign = ((RecurringAssetTypeEvent) item.getDefaultModelObject()).getAutoAssign();
+                boolean hasAffectAll = false;
+                if (event.getOwner() != null && (event.getOwnerAndDown())) {
+                    hasAffectAll = true;
+                }
 
-
-                if (hasAffectAll) {
+                if (!hasAffectAll) {
                     item.add(new Label("affectAll", "---"));
                 } else {
                     item.add(new Label("affectAll", new FIDLabelModel("label.affect_all")));
                 }
 
+                boolean hasAutoAssign = event.getAutoAssign();
 
                 if (hasAutoAssign) {
                     item.add(new Label("autoAssign", new FIDLabelModel("label.auto_assign_short")));
@@ -137,6 +139,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                     item.add(new Label("autoAssign", ", ---"));
 
                 }
+
 
                 item.add(new AjaxLink("remove") {
                     @Override

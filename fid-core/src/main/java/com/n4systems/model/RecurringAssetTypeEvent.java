@@ -26,7 +26,7 @@ public class RecurringAssetTypeEvent extends ArchivableEntityWithOwner implement
     private Recurrence recurrence;
 
     private Boolean ownerAndDown;
-    private Boolean autoAssign;
+    private boolean autoAssign;
 
     public RecurringAssetTypeEvent() {
         this(null, null, new Recurrence());
