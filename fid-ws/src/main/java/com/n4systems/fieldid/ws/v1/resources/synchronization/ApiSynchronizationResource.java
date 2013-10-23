@@ -8,6 +8,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.procedure.Procedure;
@@ -52,6 +53,11 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	@Transactional(readOnly = true)
 	public ListResponse<ApiSynchronizationAsset> synchronize() {
 		OfflineProfile profile = offlineProfileService.find(getCurrentUser());
+
+        profile.setCurrentPlatform(ThreadLocalInteractionContext.getInstance().getCurrentPlatform());
+        profile.setCurrentPlatformType(ThreadLocalInteractionContext.getInstance().getCurrentPlatformType());
+
+        offlineProfileService.update(profile);
 		
 		Set<ApiSynchronizationAsset> assets = new HashSet<ApiSynchronizationAsset>();		
 		if (profile != null) {		

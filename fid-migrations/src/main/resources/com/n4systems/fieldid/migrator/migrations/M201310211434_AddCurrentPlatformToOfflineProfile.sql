@@ -1,0 +1,1 @@
+ALTER TABLE offline_profiles ADD COLUMN current_platform_type VARCHAR(30), ADD COLUMN current_platform VARCHAR(200);
