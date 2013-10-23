@@ -1,16 +1,19 @@
 <wicket:panel>
-    <div wicket:id="assignedToContainer">
-	    <div class="field assignTo">
-	    	<label for="assignedUser"><wicket:message key="label.assignedto"/></label>
-	        <select wicket:id="assignedTo" class="popup"></select>
-	    </div>
-    </div>
-    <div class="field owner">
-        <label for="owner"><wicket:message key="label.owner"/></label>
-        <div wicket:id="owner" class="popup"></div>
-    </div>
-    <div class="field location">
-        <label for="location" ><wicket:message key="label.location"/></label>
-        <div wicket:id="location" class="popup"></div>
-    </div>
+	<div wicket:id="assignedToContainer">
+		<!-- <div class="field assignTo"> -->
+		<div class="control-group">
+			<label for="assignedUser"><wicket:message key="label.assignedto"/></label>
+			<select wicket:id="assignedTo" class="popup"></select>
+		</div>
+	</div>
+	<!-- <div class="field owner"> -->
+	<div class="control-group">
+		<label for="owner"><wicket:message key="label.owner"/></label>
+		<div wicket:id="owner" class="popup"></div>
+	</div>
+	<!-- <div class="field location"> -->
+	<div class="control-group">
+		<label for="location" ><wicket:message key="label.location"/></label>
+		<div wicket:id="location" class="popup"></div>
+	</div>
 </wicket:panel>
