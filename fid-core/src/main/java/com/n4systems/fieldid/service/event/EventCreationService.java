@@ -45,6 +45,9 @@ public class EventCreationService extends FieldIdPersistenceService {
     @Autowired
     private TenantSettingsService tenantSettingsService;
 
+    @Autowired
+    private EventScheduleService eventScheduleService;
+
     @Transactional
     public Event createEventWithSchedules(Event event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
         Event savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles);
@@ -131,8 +134,73 @@ public class EventCreationService extends FieldIdPersistenceService {
             tenantSettingsService.decrementUsageBasedEventCount(eventCount);
         }
 
+        updateRecurringAssetTypeEvent(event);
+
+
         return event;
     }
+
+    public void updateRecurringAssetTypeEvent(Event event) {
+        RecurringAssetTypeEvent recurringEvent = event.getRecurringEvent();
+
+        List<Event> openEvents = null;
+        Event uevent = event;
+
+        if (null != recurringEvent && recurringEvent.getAutoAssign()) {
+
+            openEvents = eventScheduleService.getAvailableSchedulesFor(event.getAsset());
+
+            if (null != openEvents && openEvents.size() > 0) {
+
+                Event nextSched = null;
+
+                // if DAILY - if same day - continue
+                // if DAILY - not same day - same time
+                // find next schedule at same time next day - if same day check the next one
+                if (recurringEvent.getRecurrence().getType() == RecurrenceType.DAILY) {
+
+                    for (Event sched : openEvents) {
+
+                        GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
+                        cal.setTime(sched.getDueDate());
+
+                        GregorianCalendar ical = (GregorianCalendar) Calendar.getInstance();
+                        ical.setTime(uevent.getDueDate());
+
+                        boolean sameDay = cal.get(Calendar.YEAR) == ical.get(Calendar.YEAR) &&
+                                cal.get(Calendar.DAY_OF_YEAR) == ical.get(Calendar.DAY_OF_YEAR);
+
+                        boolean sameHour = cal.get(Calendar.HOUR_OF_DAY) == ical.get(Calendar.HOUR_OF_DAY);
+
+
+                        if (sched.getDueDate().after(uevent.getDueDate()) && !sameDay && sameHour) {
+
+                            nextSched = sched;
+                            nextSched.setAssignee(event.getPerformedBy());
+                            break;
+
+                        }  else {
+                            continue;
+                        }
+
+                    }  // end for
+
+                } else {
+                    nextSched = openEvents.get(0);
+                    nextSched.setAssignee(event.getPerformedBy());
+
+                } // if DAILY
+
+                if (null != nextSched) {
+                    uevent = persistenceService.update(nextSched);
+                }
+
+            }
+
+        }
+    }
+
+
 
     private void setAllTriggersForActions(Event event) {
         event.setTriggersIntoResultingActions(event);
