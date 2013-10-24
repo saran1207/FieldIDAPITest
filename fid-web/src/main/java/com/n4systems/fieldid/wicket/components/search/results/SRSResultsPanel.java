@@ -102,8 +102,9 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
     }
 
     public boolean isCurrentPageSelected() {
-        for (Long id : provider.getCurrentPageIdList()) {
-            if (!selectedRows.containsId(id)) {
+        int startingIndexOnThisPage = dataTable.getTable().getCurrentPage()*dataTable.getTable().getItemsPerPage();
+        for (int i = 0; i < dataTable.getTable().getItemsPerPage(); i++) {
+            if (!selectedRows.containsIndex(startingIndexOnThisPage + i)) {
                 return false;
             }
         }
@@ -115,10 +116,17 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
     protected void onRowItemCreated(Item<RowView> rowItem, IModel<RowView> rowModel) {}
 
     public void setCurrentPageSelected(boolean selected) {
-        if (selected) {
-            selectedRows.addAllIds(provider.getCurrentPageIdList());
-        } else {
-            selectedRows.removeAllIds(provider.getCurrentPageIdList());
+        List<Long> currentPageIdList = provider.getCurrentPageIdList();
+        int startingIndexOnThisPage = dataTable.getTable().getCurrentPage()*dataTable.getTable().getItemsPerPage();
+        int offset = 0;
+
+        for (Long id : currentPageIdList) {
+            if (selected) {
+                selectedRows.addId(startingIndexOnThisPage + offset, id);
+            } else {
+                selectedRows.removeIndex(startingIndexOnThisPage + offset);
+            }
+            offset++;
         }
     }
 

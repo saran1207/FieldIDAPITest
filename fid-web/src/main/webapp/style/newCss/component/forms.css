@@ -5,7 +5,7 @@
 fieldset {
   /*border: 1px solid #dddddd;*/
   margin: 0 0 -1px;
-  padding: 35px 10px 10px;
+  padding-top: 35px;
   position: relative;
 }
 fieldset:last-child {
@@ -16,6 +16,7 @@ legend {
   font-weight: 600;
   position: absolute;
   top: 8px;
+  font-size: 14px;
 }
 input[type="text"],
 select,
@@ -104,7 +105,7 @@ Can be a warning or error message, or help text. */
   box-shadow: none;
   background: none;
   height: 25px;
-  padding-top: 2px;
+ /* padding-top: 2px;*/
   border-color: #c7c7c9;
 }
 .chzn-container-single .chzn-single span,
@@ -112,7 +113,8 @@ Can be a warning or error message, or help text. */
   color: #7a7a7a;
 }
 .chzn-container-single .chzn-single {
-  line-height: 20px;
+  /*line-height: 20px;*/
+  padding-left: 4px;
 }
 .chzn-container .chzn-results .highlighted {
   background-color: #dddddd;
@@ -128,6 +130,7 @@ Can be a warning or error message, or help text. */
 -----------------------------------------*/
 .control-group {
   margin: 6px 0;
+  position: relative;
 }
 .control-group input,
 .control-group select,
@@ -149,7 +152,9 @@ Can be a warning or error message, or help text. */
 .form-horizontal label {
   width: 190px;
   text-align: right;
-  display: inline-block;
+  /*display: inline-block;*/
+  float: left;
+  line-height: 25px; /* same as height of input */
  /* vertical-align: middle;*/
   padding-right: 10px;
 }
@@ -169,7 +174,7 @@ Can be a warning or error message, or help text. */
 -----------------------------------------*/
 .form-horizontal.compact fieldset {
   border: none;
-  padding: 26px 10px 0;
+  padding-top: 26px;
   margin-bottom: 5px;
 }
 .form-horizontal.compact .control-group {
@@ -181,22 +186,22 @@ Can be a warning or error message, or help text. */
 .form-horizontal.compact input[type="text"],
 .form-horizontal.compact select,
 .form-horizontal.compact textarea {
-  width: 190px;
+  width: 202px;
 }
 .form-horizontal.compact .chzn-search input {
-  width: 100%;
+  width: 100%!important;
 }
 .form-horizontal.compact label {
   width: 155px;
 }
-.form-horizontal.compact .checkbox label {
+/*.form-horizontal.compact .checkbox label {
   width: auto;
   text-align: left;
   margin-left: 45%;
 }
 .form-horizontal.compact .text-block {
   margin-left: 45%;
-}
+}*/
 
 
 

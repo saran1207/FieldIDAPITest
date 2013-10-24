@@ -14,15 +14,6 @@
 
     <div class="action-group">
 	
-    	<!-- NEED TO MOVE THESE TWO ITEMS TO ACTIONS DROPDOWN-->
-		<li style="display:none;">
-			<a class="mattButton" wicket:id="printAllCertsLink"><wicket:message key="label.printselectedmanufacturercertificate"/></a>
-		</li>
-		<li style="display:none;">
-			<a class="mattButton" wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a>
-		</li>
-		<!-- -->
-
 		<div wicket:id="actions" class="dropdown-btn mass-actions">
 			<a href="javascript:void(0);" class="btn btn-secondary"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
 			
@@ -40,12 +31,14 @@
 				</wicket:enclosure>
 				
 				<!-- MOVED FROM MAIN BAR AND ADDED TO DROPDOWN -->
-				<li><a><wicket:message key="label.printselectedmanufacturercertificate"/></a></li>
-				<li><a><wicket:message key="label.exporttoexcel"/></a></li>
+				<li><a wicket:id="printAllCertsLink"><wicket:message key="label.printselectedmanufacturercertificate"/></a></li>
+				<li><a wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a></li>
 			</ul>
 		</div>
-		<a wicket:id="emailLink" class="btn btn-secondary"><wicket:message key="label.email"/></a>
-		<div wicket:id="saveMenu"/>
+		<div class="button-group">
+			<a wicket:id="emailLink" class="btn btn-secondary"><wicket:message key="label.email"/></a>
+			<div wicket:id="saveMenu"/>
+		</div>
 	</div>
 
 	<!-- TO BE MOVED TO RESULTS TABLE -->

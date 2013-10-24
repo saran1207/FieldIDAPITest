@@ -75,7 +75,6 @@ public class AssetTextSearchActionsPanel extends Panel {
         AssetSearchCriteria assetSearchCriteria = new AssetSearchCriteria();
 
         MultiIdSelection multiIdSelection = new MultiIdSelection();
-        multiIdSelection.addAllIds(ids);
 
         assetSearchCriteria.setSelection(multiIdSelection);
 

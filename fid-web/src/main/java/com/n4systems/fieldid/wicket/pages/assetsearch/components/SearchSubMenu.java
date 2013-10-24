@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import rfid.web.helper.SessionUser;
 
@@ -37,42 +38,42 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
     private Link massUpdateLink;
     private Link massScheduleLink;
 
-    public SearchSubMenu(String id, final Model<AssetSearchCriteria> model) {
-        super(id,model);
+    public SearchSubMenu(String id, final Model<AssetSearchCriteria> searchCriteria) {
+        super(id,searchCriteria);
 
         // Ideally this should be done more generically one level up but text search needs to be supported on all the search screens first..
-        filtersDisabled =  model.getObject().getQuery() != null;
+        filtersDisabled =  searchCriteria.getObject().getQuery() != null;
         addMattBar();
 
         queryForm = new Form("queryForm") {
             @Override
             protected void onSubmit() {
-                model.getObject().setReportAlreadyRun(true);
-                model.getObject().getSelection().clear();
+                searchCriteria.getObject().setReportAlreadyRun(true);
+                searchCriteria.getObject().getSelection().clear();
                 onSearchSubmit();
             }
         };
         queryForm.setOutputMarkupPlaceholderTag(true);
         queryForm.setVisible(filtersDisabled);
-        queryForm.add(new TextField<String>("query", ProxyModel.of(model, on(AssetSearchCriteria.class).getQuery())));
+        queryForm.add(new TextField<String>("query", ProxyModel.of(searchCriteria, on(AssetSearchCriteria.class).getQuery())));
         queryForm.add(new Button("submitQueryButton"));
-        add(createToggleSearchLink(filtersDisabled));
+        add(createToggleSearchLink(filtersDisabled, searchCriteria));
         add(queryForm);
 
-        add(printLink = makeLinkLightBoxed(new MassActionLink<PrintAllCertificatesPage>("printAllCertsLink", PrintAllCertificatesPage.class, model)));
-        add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportSearchToExcelPage>("exportToExcelLink", ExportSearchToExcelPage.class, model)));
+        actions = new WebMarkupContainer("actions");
 
-        actions=new WebMarkupContainer("actions");
-        
-        actions.add(massEventLink = new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", model));
+        actions.add(printLink = makeLinkLightBoxed(new MassActionLink<PrintAllCertificatesPage>("printAllCertsLink", PrintAllCertificatesPage.class, searchCriteria)));
+        actions.add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportSearchToExcelPage>("exportToExcelLink", ExportSearchToExcelPage.class, searchCriteria)));
+
+        actions.add(massEventLink = new AssetSearchMassActionLink("massEventLink", "/multiEvent/selectEventType.action?searchContainerKey="+ WebSessionMap.SEARCH_CRITERIA+"&searchId=%s", searchCriteria));
         actions.add(massUpdateLink = new Link("massUpdateLink") {
             @Override public void onClick() {
-                setResponsePage(new MassUpdateAssetsPage(model));
+                setResponsePage(new MassUpdateAssetsPage(searchCriteria));
             }
         });
         actions.add(massScheduleLink = new Link("massScheduleLink") {
             @Override public void onClick() {
-                setResponsePage(new MassSchedulePage(model));
+                setResponsePage(new MassSchedulePage(searchCriteria));
             }
         });
 
@@ -81,7 +82,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         add(new Link("emailLink") {
             @Override
             public void onClick() {
-                setResponsePage(new SendSavedItemPage(model, getPage()));
+                setResponsePage(new SendSavedItemPage(searchCriteria, getPage()));
             }
         });
         add(new SaveMenu("saveMenu") {
@@ -96,13 +97,14 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         initializeLimits();
     }
 
-    private TwoStateAjaxLink createToggleSearchLink(final boolean startingInQueryMode) {
+    private TwoStateAjaxLink createToggleSearchLink(final boolean startingInQueryMode, final IModel<AssetSearchCriteria> criteria) {
         return new TwoStateAjaxLink("toggleSearchTypeLink", new FIDLabelModel("label.advanced_search"), new FIDLabelModel("label.filter")) {
             {
                 setInitialState(!startingInQueryMode);
             }
             @Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
+                criteria.getObject().setQuery(null);
                 target.add(queryForm.setVisible(false));
                 setFiltersDisabled(target, false);
             }

@@ -1,65 +1,27 @@
 /* Search page specific */
 .sub-menu .advanced-search-form {
-  margin-left: 5px;
-  width: auto;
-  overflow: auto;
-  float: none;
-  margin-right: 325px;
+	margin-left: 5px;
+	width: auto;
+	overflow: auto;
+	/*float: none;
+	margin-right: 325px;*/
+	float: left;	
 }
 .search-switch {
 	float: left;
+	font-size: 13px;
+	margin-left: 5px;
+	padding-top: 12px;
+}
+.sub-menu .input-combo { /* temp */
+	margin-top: 9px;
 }
 .action-group {
 	width: 280px;
 }
-.action-group .dropdown-btn,
-.action-group .btn {
+.action-group .button-group {
 	float: right;
 }
 .mass-actions {
 	margin-left: 5px;
-}
-
-
-/* old css */
-
-.field input[type='checkbox'] {
-    width:10px;
-}
-
-.field .date { 
-	display:inline;
-}
-
-
-.infoSet .fieldHolder div  {
-	display:inline;	
-}
-
-.dateTo .dateFrom .dateRange { 
-	min-height:30px;
-}
-
-.due-date-range label {
-    margin-right:0px;
-}
-
-
-.dateFrom, .dateTo {
-	padding-top:8px;
-    min-height:0;
-}
-
-.dateRange select/*, .field select, .popup*/  { 
-	width:160px;
-}
-
-.fieldHolder input {
-	width:150px;
-}
-
-.eventState {
-    margin-bottom: 8px;
-    margin-left: 22px;
-    margin-top: 15px;
 }

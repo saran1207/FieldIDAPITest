@@ -58,7 +58,8 @@ public class SimpleDataTable<T> extends Panel {
             protected Item<T> newRowItem(String id, int index, IModel<T> rowModel) {
                 Item<T> rowItem = super.newRowItem(id, index, rowModel);
                 rowItem.setOutputMarkupId(true);
-                rowItem.add(new HighlightIfSelectedBehavior(rowModel, multiIdSelection));
+                int resultSetIndex = getCurrentPage()*getItemsPerPage()+index;
+                rowItem.add(new HighlightIfSelectedBehavior(multiIdSelection, resultSetIndex));
                 rowItem.add(new EvenOddStylingBehavior(index));
                 onRowItemCreated(rowItem, rowModel);
                 return rowItem;
