@@ -171,3 +171,36 @@
 	*right: auto;
 	*text-align: left;
 }
+
+/* Groups buttons together into a nav bar
+-----------------------------------------*/
+.button-group > .btn {
+  margin-right: -1px;
+  float: left;
+}
+.button-group .dropdown-btn {
+  font-size: 14px;
+}
+.button-group > .btn:not(:last-child),
+.button-group .dropdown-btn:not(:last-child) .btn,
+.button-group .split-btn:not(:last-child) .btn {
+  -webkit-border-top-right-radius: 0px;
+  -moz-border-radius-topright: 0px;
+  border-top-right-radius: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  -moz-border-radius-bottomright: 0px;
+  border-bottom-right-radius: 0px;
+}
+.button-group > .btn:not(:first-child),
+.button-group .dropdown-btn:not(:first-child) .btn,
+.button-group .split-btn:not(:first-child) .btn {
+  -webkit-border-top-left-radius: 0px;
+  -moz-border-radius-topleft: 0px;
+  border-top-left-radius: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  -moz-border-radius-bottomleft: 0px;
+  border-bottom-left-radius: 0px;
+}
+.button-group .input-combo {
+  display: inline-block;
+}

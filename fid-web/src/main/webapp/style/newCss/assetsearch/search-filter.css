@@ -8,14 +8,24 @@ Search specific styles are located in style/newCss/component/search-filter.css
 }
 
 /* fieldid.css OVERRIDES */
+html {
+	background-color: #fff;
+}
 #headerPadding {
 	display: none;
+}
+a {
+	color: #008bd3;
 }
 
 /* wide.css OVERRIDES */
 #page .centre {
 	border-radius: 0;
 	left: 27px;
+	padding: 0;
+}
+#left-panel-controller {
+	bottom: 8px;
 }
 #left-panel {
 	width: 400px;
@@ -37,6 +47,7 @@ Search specific styles are located in style/newCss/component/search-filter.css
 .sub-menu {
 	position: relative;
 	padding: 0;
+	background-color: #ffffff;
 }
 .search-options {
 	max-width: 74px;
@@ -79,9 +90,9 @@ form.search-config {
 	display: none;
 }
 .search-config .btn-primary {
-	position: absolute;
-	right: 10px;
-	top: -39px;
+	position: fixed; /* temp */
+	left: 340px;
+	top: 176px;
 	z-index: 1;
 }
 
@@ -103,6 +114,14 @@ form.search-config {
 	padding-top: 0;
 	min-height: inherit
 }
+.infoSet.control-group input[type="text"],
+.infoSet.control-group select,
+.infoSet.control-group textarea { 
+	border: 1px solid #c7c7c9;
+}
+.infoSet.control-group label {
+	margin-right: 0;
+}
 .infoSet.control-group .ui-datepicker-trigger {
 	margin-left: -20px;
 	padding-left: 0;
@@ -117,6 +136,31 @@ form.search-config {
 	font-size: 22px;
 	font-weight: normal;
 	padding-left: 0;
+}
+
+
+/* RESULTS TABLE */
+.list {
+	font-size: 12px;
+	border-bottom: none;
+}
+.list th {
+	background-color: #ddd;
+	border-bottom: 1px solid #c7c7c9;
+	border-top: 1px solid #c7c7c9;
+}
+.list td {
+	border: none;
+}
+.list .row-odd {
+	background-color: #f5f5f5;
+}
+.list tr:hover {
+	background-color: #ddd;
+}
+th.wicket_orderUp,
+th.wicket_orderDown {
+	background-color: #c7c7c9;
 }
 
 

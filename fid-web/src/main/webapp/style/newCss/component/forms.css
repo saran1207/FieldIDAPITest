@@ -26,7 +26,7 @@ textarea {
 	margin: 4px 0 10px;
 	font-size: 13px;
 	/*font-family: "proxima-nova", Helvetica, Arial, sans-serif;*/
-	border: 1px solid #9C9C9C;
+	border: 1px solid #c7c7c9;
 
 	-moz-box-sizing: border-box; 
 	-webkit-box-sizing: border-box; 
@@ -71,7 +71,7 @@ label input[type="checkbox"] {
 /* text input with button combo 
 -----------------------------------------*/
 .input-combo {
-  border: 1px solid #9C9C9C;
+  border: 1px solid #c7c7c9;
   display: inline-block;
 }
 .input-combo input[type="text"] {
@@ -106,7 +106,7 @@ Can be a warning or error message, or help text. */
   background: none;
   height: 25px;
  /* padding-top: 2px;*/
- /* border-color: #9C9C9C;*/
+  border-color: #c7c7c9;
 }
 .chzn-container-single .chzn-single span,
 .chzn-container-single .chzn-default {
