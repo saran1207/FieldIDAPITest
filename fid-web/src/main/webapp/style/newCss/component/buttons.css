@@ -74,21 +74,21 @@
 		box-shadow: inset 0 0 18px #42694a;
 	}
 .btn-blue {
-	background: #205d93;
-	border-color: #1b507e;
+	background: #008bd3;
+	border-color: #007aba;
 }
 	.btn-blue:hover {
-		-webkit-box-shadow: inset 0 0 18px #123554;
-		box-shadow: inset 0 0 18px #123554;
+		-webkit-box-shadow: inset 0 0 18px #00486d;
+		box-shadow: inset 0 0 18px #00486d;
 	}
 /* To replace .btn-blue */
 .btn-primary {
-	background: #205d93;
-	border-color: #1b507e;
+	background: #008bd3;
+	border-color: #007aba;
 }
 	.btn-primary:hover {
-		-webkit-box-shadow: inset 0 0 18px #123554;
-		box-shadow: inset 0 0 18px #123554;
+		-webkit-box-shadow: inset 0 0 18px #00486d;
+		box-shadow: inset 0 0 18px #00486d;
 	}
 
 /* Button styled as link */

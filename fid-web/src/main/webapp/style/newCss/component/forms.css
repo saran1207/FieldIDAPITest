@@ -16,6 +16,7 @@ legend {
   font-weight: 600;
   position: absolute;
   top: 8px;
+  font-size: 14px;
 }
 input[type="text"],
 select,
@@ -104,7 +105,7 @@ Can be a warning or error message, or help text. */
   box-shadow: none;
   background: none;
   height: 25px;
-  padding-top: 2px;
+ /* padding-top: 2px;*/
   border-color: #c7c7c9;
 }
 .chzn-container-single .chzn-single span,
@@ -112,7 +113,7 @@ Can be a warning or error message, or help text. */
   color: #7a7a7a;
 }
 .chzn-container-single .chzn-single {
-  line-height: 20px;
+  /*line-height: 20px*/;
 }
 .chzn-container .chzn-results .highlighted {
   background-color: #dddddd;
@@ -149,7 +150,9 @@ Can be a warning or error message, or help text. */
 .form-horizontal label {
   width: 190px;
   text-align: right;
-  display: inline-block;
+  /*display: inline-block;*/
+  float: left;
+  line-height: 25px; /* same as height of input */
  /* vertical-align: middle;*/
   padding-right: 10px;
 }
@@ -184,7 +187,7 @@ Can be a warning or error message, or help text. */
   width: 190px;
 }
 .form-horizontal.compact .chzn-search input {
-  width: 100%;
+  width: 100%!important;
 }
 .form-horizontal.compact label {
   width: 155px;

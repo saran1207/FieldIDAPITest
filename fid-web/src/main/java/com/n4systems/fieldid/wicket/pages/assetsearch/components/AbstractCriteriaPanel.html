@@ -1,19 +1,14 @@
 <wicket:panel>
-    <!-- <h2 class="title filters-title"><wicket:message key="label.filters"/></h2>
-    <h2 class="title columns-title"><wicket:message key="label.columns"/></h2> -->
     <h2 class="filters-title"><wicket:message key="label.filters"/></h2>
     <h2 class="columns-title"><wicket:message key="label.columns"/></h2>
-    <!-- <div class="form"> -->
-        <form wicket:id="form" class="search-config form-horizontal compact content">
-            <div wicket:id="feedback"/>
-            <!-- <div class="content"> -->
-                <div wicket:id="filters" class="filters"/>
-                <div wicket:id="columns" class="columns"/>
-            <!-- </div> -->
-           <!--  <span class="button-panel mattBar"> -->
-                <a wicket:id="submit" class="blue-submit"><wicket:message key="label.search"/></a>
-            <!-- </span> -->
-        </form>
-   <!--  </div> -->
+    
+    <form wicket:id="form" class="search-config form-horizontal compact content">
+        <div wicket:id="feedback"/>
+
+        <div wicket:id="filters" class="filters"/>
+        <div wicket:id="columns" class="columns"/>
+
+        <a wicket:id="submit" class="btn btn-blue btn-sml"><wicket:message key="label.search"/></a>
+    </form>
 </wicket:panel>	
 		

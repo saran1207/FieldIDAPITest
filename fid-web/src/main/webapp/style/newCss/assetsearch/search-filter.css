@@ -4,7 +4,7 @@ Search specific styles are located in style/newCss/component/search-filter.css
 -------------------------------------------------------------------------------*/
 /* temp */
 #wicketDebugLink {
-	display: none;
+	/*display: none;*/
 }
 
 /* fieldid.css OVERRIDES */
@@ -62,6 +62,8 @@ Search specific styles are located in style/newCss/component/search-filter.css
 	background: white;
 	z-index: 1;
 	width: 370px;
+	font-size: 18px;
+	border-bottom: 1px solid #c7c7c9;
 }
 form.search-config {
 	margin-top: 40px;
