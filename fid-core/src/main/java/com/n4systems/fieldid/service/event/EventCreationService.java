@@ -154,26 +154,39 @@ public class EventCreationService extends FieldIdPersistenceService {
 
                 Event nextSched = null;
 
-                // if DAILY - if same day - continue
-                // if DAILY - not same day - same time
-                // find next schedule at same time next day - if same day check the next one
-                if (recurringEvent.getRecurrence().getType() == RecurrenceType.DAILY) {
-
                     for (Event sched : openEvents) {
 
+
+                        if (!(recurringEvent.getRecurrence().getType() == sched.getRecurringEvent().getRecurrence().getType())) {
+                            continue;
+                        }
+
                         GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
+                        cal.clear();
                         cal.setTime(sched.getDueDate());
 
                         GregorianCalendar ical = (GregorianCalendar) Calendar.getInstance();
+                        ical.clear();
                         ical.setTime(uevent.getDueDate());
 
                         boolean sameDay = cal.get(Calendar.YEAR) == ical.get(Calendar.YEAR) &&
                                 cal.get(Calendar.DAY_OF_YEAR) == ical.get(Calendar.DAY_OF_YEAR);
 
-                        boolean sameHour = cal.get(Calendar.HOUR_OF_DAY) == ical.get(Calendar.HOUR_OF_DAY);
+                        int hour = cal.get(Calendar.HOUR);
+                        int minute = cal.get(Calendar.MINUTE);
+                        int second = cal.get(Calendar.SECOND);
+
+                        int ihour = ical.get(Calendar.HOUR);
+                        int iminute = ical.get(Calendar.MINUTE);
+                        int isecond = ical.get(Calendar.SECOND);
+
+                        boolean sameHour = (hour == ihour);
+                        boolean sameMinute = (minute == iminute);
+                        boolean sameSecond = (second == isecond);
+                        boolean sameTime = (sameHour && sameMinute && sameSecond);
 
 
-                        if (sched.getDueDate().after(uevent.getDueDate()) && !sameDay && sameHour) {
+                        if (sched.getDueDate().after(uevent.getDueDate()) && !sameDay && sameTime) {
 
                             nextSched = sched;
                             nextSched.setAssignee(event.getPerformedBy());
@@ -185,11 +198,6 @@ public class EventCreationService extends FieldIdPersistenceService {
 
                     }  // end for
 
-                } else {
-                    nextSched = openEvents.get(0);
-                    nextSched.setAssignee(event.getPerformedBy());
-
-                } // if DAILY
 
                 if (null != nextSched) {
                     uevent = persistenceService.update(nextSched);
@@ -514,6 +522,9 @@ public class EventCreationService extends FieldIdPersistenceService {
         
         event = persistenceService.update(event);
         processUploadedFiles(event, attachments);
+
+        updateRecurringAssetTypeEvent(event);
+
         return event;
     }
 
