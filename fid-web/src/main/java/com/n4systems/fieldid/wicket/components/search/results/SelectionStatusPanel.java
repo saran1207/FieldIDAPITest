@@ -52,8 +52,13 @@ public class SelectionStatusPanel extends Panel {
                 selection.clear();
                 target.appendJavaScript("setTableSelected('"+dataTable.getMarkupId()+"', true);");
                 List<Long> idList = dataProvider.getIdList();
+
+                int currentPage = dataTable.getCurrentPage();
+                int itemsPerPage = dataTable.getItemsPerPage();
+                int indexInPage = 0;
+
                 for (Long id : idList) {
-                    selection.addId(id);
+                    selection.addId((currentPage*itemsPerPage)+(indexInPage++), id);
                 }
                 target.add(SelectionStatusPanel.this);
                 onSelectionChanged(target);

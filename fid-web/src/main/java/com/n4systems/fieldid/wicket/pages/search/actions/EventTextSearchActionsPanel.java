@@ -64,8 +64,9 @@ public class EventTextSearchActionsPanel extends Panel {
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
 
         criteria.setSortDirection(SortDirection.DESC);
+        int i = 0;
         for (String id : selectedIds.getObject()) {
-            criteria.getSelection().addId(Long.parseLong(id));
+            criteria.getSelection().addId(i++, Long.parseLong(id));
         }
 
         criteria.setColumnGroups(reportConfiguration.getColumnGroups());

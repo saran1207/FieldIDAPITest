@@ -13,8 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 public class EventResolutionService extends FieldIdPersistenceService {
 
-    @Autowired
-    private ReportService reportService;
+    @Autowired private ReportService reportService;
 
     @Transactional(readOnly = true)
     public EventResolutionSummary getEventResolutionSummary(EventReportCriteria criteria) {
@@ -25,7 +24,7 @@ public class EventResolutionService extends FieldIdPersistenceService {
         EventResolutionSummary eventResolutionSummary = new EventResolutionSummary();
 
         for (int currentPage = 0; currentPage < totalPages; currentPage++) {
-            SearchResult<Event> pageResult = reportService.performSearch(criteria, currentPage, summaryPageSize, false);
+            SearchResult<Event> pageResult = reportService.performRegularSearch(criteria, currentPage, summaryPageSize);
             addResultsToSummary(eventResolutionSummary, pageResult);
         }
 

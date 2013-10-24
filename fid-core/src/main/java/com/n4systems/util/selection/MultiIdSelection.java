@@ -1,47 +1,36 @@
 package com.n4systems.util.selection;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class MultiIdSelection implements Serializable {
 
     private Set<Long> ids = new HashSet<Long>();
+    private Map<Integer,Long> indexIdSelectionMap = new TreeMap<Integer, Long>();
 
-    public void addId(Long id) {
-        ids.add(id);
+    public void addId(int index, Long id) {
+        indexIdSelectionMap.put(index, id);
     }
 
-    public void addAllIds(Collection<Long> idsToAdd) {
-        ids.addAll(idsToAdd);
+    public void removeIndex(int index) {
+        indexIdSelectionMap.remove(index);
     }
 
-    public void removeAllIds(Collection<Long> idsToRemove) {
-        ids.removeAll(idsToRemove);
-    }
-
-    public void removeId(Long id) {
-        ids.remove(id);
-    }
-
-    public boolean containsId(Long id) {
-        return ids.contains(id);
+    public boolean containsIndex(int index) {
+        return indexIdSelectionMap.keySet().contains(index);
     }
 
     public int getNumSelectedIds() {
-        return ids.size();
+        return indexIdSelectionMap.size();
     }
 
     public List<Long> getSelectedIds() {
-        return new ArrayList<Long>(ids);
+        return new ArrayList<Long>(indexIdSelectionMap.values());
     }
 
     public void clear() {
         ids.clear();
+        indexIdSelectionMap.clear();
     }
 
 }

@@ -39,6 +39,7 @@ import com.n4systems.fieldid.service.schedule.MassScheduleService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.schedule.ScheduleService;
 import com.n4systems.fieldid.service.search.*;
+import com.n4systems.fieldid.service.search.columns.AssetTextOrFilterSearchService;
 import com.n4systems.fieldid.service.search.columns.DynamicColumnsService;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.fieldid.service.task.AsyncService;
@@ -665,4 +666,13 @@ public class FieldIdCoreConfig {
         return new DynamicAssetColumnsFromTextSearchService();
     }
 
+    @Bean
+    public AssetSearchTableAdapterService assetSearchTableAdapterService() {
+        return new AssetSearchTableAdapterService();
+    }
+
+    @Bean
+    public AssetTextOrFilterSearchService assetTextOrFilterSearchService() {
+        return new AssetTextOrFilterSearchService();
+    }
 }

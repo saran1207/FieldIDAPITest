@@ -19,6 +19,7 @@ public class SelectUnselectRowColumn extends AbstractColumn<RowView> {
     private MultiIdSelection multiIdSelection;
     private PropertyModel<Boolean> pageSelectedModel;
     private DataTable dataTable;
+    int index = 0;
 
     public SelectUnselectRowColumn(MultiIdSelection multiIdSelection, PropertyModel<Boolean> pageSelectedModel) {
         super(new Model<String>(""));
@@ -30,7 +31,12 @@ public class SelectUnselectRowColumn extends AbstractColumn<RowView> {
     public void populateItem(final Item<ICellPopulator<RowView>> item, String componentId, final IModel<RowView> rowModel) {
         final String rowId = item.getParent().getParent().getMarkupId();
         item.add(new AttributeAppender("class", " select-column"));
-        SelectUnselectCell selectUnselectCell = new SelectUnselectCell(componentId, new ItemIsSelectedModel(rowModel)) {
+
+        int currentPage = dataTable.getCurrentPage();
+        int itemsPerPage = dataTable.getItemsPerPage();
+        int currentResultIndex = (currentPage * itemsPerPage) + (index++);
+
+        SelectUnselectCell selectUnselectCell = new SelectUnselectCell(componentId, new ItemIsSelectedModel(rowModel, currentResultIndex)) {
             @Override
             protected void onSelectUnselect(AjaxRequestTarget target) {
                 onSelectUnselectRow(target);
@@ -59,27 +65,35 @@ public class SelectUnselectRowColumn extends AbstractColumn<RowView> {
         this.dataTable = dataTable;
     }
 
+    @Override
+    public void detach() {
+        super.detach();
+        index = 0;
+    }
+
     protected void onSelectUnselectRow(AjaxRequestTarget target) { }
     protected void onSelectUnselectPage(AjaxRequestTarget target) { }
 
     class ItemIsSelectedModel implements IModel<Boolean> {
         private IModel<RowView> model;
-    
-        public ItemIsSelectedModel(IModel<RowView> model) {
+        private int index;
+
+        public ItemIsSelectedModel(IModel<RowView> model, int index) {
             this.model = model;
+            this.index = index;
         }
 
         @Override
         public Boolean getObject() {
-            return multiIdSelection.containsId(model.getObject().getId());
+            return multiIdSelection.containsIndex(index);
         }
 
         @Override
         public void setObject(Boolean selected) {
             if (selected) {
-                multiIdSelection.addId(model.getObject().getId());
+                multiIdSelection.addId(index, model.getObject().getId());
             } else {
-                multiIdSelection.removeId(model.getObject().getId());
+                multiIdSelection.removeIndex(index);
             }
         }
 

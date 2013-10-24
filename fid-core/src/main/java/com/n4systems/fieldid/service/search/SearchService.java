@@ -7,12 +7,15 @@ import com.n4systems.model.BaseEntity;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.services.date.DateService;
-import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.QueryFilter;
+import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import com.n4systems.util.persistence.search.SortDirection;
@@ -25,12 +28,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public abstract class SearchService<T extends SearchCriteria, M extends BaseEntity & NetworkEntity> extends FieldIdPersistenceService {
+public abstract class SearchService<T extends SearchCriteria, M extends EntityWithTenant & NetworkEntity> extends FieldIdPersistenceService {
 
 	public @Autowired OrgService orgService;
-
     protected @Autowired DateService dateService;
-
 
     private Class<M> searchClass;
 
@@ -64,25 +65,42 @@ public abstract class SearchService<T extends SearchCriteria, M extends BaseEnti
 	
     @Transactional(readOnly = true)
     public <K> PageHolder<K> performSearch(T criteriaModel, ResultTransformer<K> transformer, Integer pageNumber, Integer pageSize, boolean selectedOnly) {
-        SearchResult<M> eventSearchResult = performSearch(criteriaModel, pageNumber, pageSize, selectedOnly);
-
-        List<M> entities = eventSearchResult.getResults();
+        List<M> entities;
+        Integer totalResultCount;
+        if (selectedOnly) {
+            entities = findItemsInSelection(criteriaModel);
+            totalResultCount = criteriaModel.getSelection().getNumSelectedIds();
+        } else {
+            SearchResult<M> eventSearchResult = performRegularSearch(criteriaModel, pageNumber, pageSize);
+            entities = eventSearchResult.getResults();
+            totalResultCount = eventSearchResult.getTotalResultCount();
+        }
 
         entities = EntitySecurityEnhancer.enhanceList(entities, securityContext.getUserSecurityFilter());
 
         K pageResults = transformer.transform(entities);
 
-        return new PageHolder<K>(pageResults, eventSearchResult.getTotalResultCount());
+        return new PageHolder<K>(pageResults, totalResultCount);
+    }
+
+    private List<M> findItemsInSelection(T criteriaModel) {
+        List<M> items = new ArrayList<M>(criteriaModel.getSelection().getNumSelectedIds());
+        for (Long id : criteriaModel.getSelection().getSelectedIds()) {
+            items.add(persistenceService.find(searchClass, id));
+        }
+
+        return items;
     }
 
     @Transactional(readOnly = true)
-    public SearchResult<M> performSearch(T criteriaModel, Integer pageNumber, Integer pageSize, boolean selectedOnly) {
+    public SearchResult<M> performRegularSearch(T criteriaModel, Integer pageNumber, Integer pageSize) {
+        return performFilterSearch(criteriaModel, pageNumber, pageSize);
+    }
+
+    @Transactional(readOnly = true)
+    private SearchResult<M> performFilterSearch(T criteriaModel, Integer pageNumber, Integer pageSize) {
 		// create our base query builder (no sort terms yet)
 		QueryBuilder<M> searchBuilder = createBaseSearchQueryBuilder(criteriaModel);
-
-        if (selectedOnly) {
-            searchBuilder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "id", criteriaModel.getSelection().getSelectedIds()));
-        }
 
 		// get/set the total result count now before the sort terms get added
 		int totalResultCount = findCount(searchBuilder).intValue();
