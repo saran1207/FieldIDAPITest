@@ -64,9 +64,12 @@ Search specific styles are located in style/newCss/component/search-filter.css
 	width: 370px;
 	font-size: 18px;
 	border-bottom: 1px solid #c7c7c9;
+	padding: 12px 15px;
 }
 form.search-config {
-	margin-top: 40px;
+	margin-top: 46px;
+	padding-left: 12px;
+	position: relative;
 }
 
 #left-panel.filters .content.filters {
@@ -75,16 +78,36 @@ form.search-config {
 #left-panel.filters .content.columns {
 	display: none;
 }
+.search-config .btn-primary {
+	position: absolute;
+	right: 10px;
+	top: -39px;
+	z-index: 1;
+}
+
+
 
 /* Popups & Location picker within forms */
 .control-group .popup {
 	display: inline-block;
 }
 .org-location .text { 
-	padding: 0;
+	/*padding: 0;*/
 }
 .entypo-search {
 	margin-left: -24px;
+}
+
+/* previous CSS form overrides */
+.infoSet.control-group {
+	padding-top: 0;
+	min-height: inherit
+}
+.infoSet.control-group .ui-datepicker-trigger {
+	margin-left: -20px;
+	padding-left: 0;
+	vertical-align: top;
+	padding-top: 5px;
 }
 
 
