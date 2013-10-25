@@ -51,20 +51,18 @@ a {
 	position: relative;
 	padding: 0;
 	background-color: #ffffff;
+	margin-top: 14px;
 }
 .search-options {
 	max-width: 74px;
-	margin-right: 5px;
 	float: left;
 	padding-left: 27px;
-	margin-top: 6px;
 }
 .sub-menu .action-group {
 	position: absolute;
 	top: 0;
 	right: 11px;
 }
-
 
 /* FILTER CRITERIA - SIDEBAR 
 -----------------------------*/

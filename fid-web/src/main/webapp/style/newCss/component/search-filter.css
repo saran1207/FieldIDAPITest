@@ -10,14 +10,11 @@
 .search-switch {
 	float: left;
 	font-size: 13px;
-	margin-left: 5px;
-	padding-top: 12px;
-}
-.sub-menu .input-combo { /* temp */
-	margin-top: 9px;
+	margin-left: 8px;
+	padding-top: 5px;
 }
 .action-group {
-	width: 280px;
+	width: 233px;
 }
 .action-group .button-group {
 	float: right;
