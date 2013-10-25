@@ -1,24 +1,5 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
-import java.io.ByteArrayInputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-
-import com.n4systems.model.*;
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
@@ -27,6 +8,7 @@ import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
+import com.n4systems.model.*;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
@@ -36,6 +18,18 @@ import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.io.ByteArrayInputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Path("event")
@@ -281,8 +275,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	private void convertApiEventForAbstractEvent(ApiEvent apiEvent, AbstractEvent event, boolean isUpdate) {
 		event.setTenant(getCurrentTenant());
 		event.setMobileGUID(apiEvent.getSid());
-		event.setCreated(apiEvent.getModified());
-		event.setModified(apiEvent.getModified());		
+		event.setModified(apiEvent.getModified());
 		event.setComments(apiEvent.getComments());		
 		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));		
 		event.setModifiedBy(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getModifiedById()));
