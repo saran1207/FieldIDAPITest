@@ -100,6 +100,12 @@ a {
 #left-panel .control-group.checkbox {
 	margin-left: 14px;
 }
+#left-panel .filters .control-group.checkbox {
+	margin-left: 145px;
+}
+#left-panel .filters .control-group.checkbox input {
+	margin-bottom: 18px; /*temp */
+}
 #left-panel .column-group .collapsible span {
 	margin-left: 14px;
 }

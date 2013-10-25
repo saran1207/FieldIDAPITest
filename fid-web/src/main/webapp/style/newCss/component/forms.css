@@ -172,7 +172,7 @@ Can be a warning or error message, or help text. */
 .form-horizontal.compact fieldset {
 	border: none;
 	padding-top: 26px;
-	margin-bottom: 5px;
+	margin-bottom: 10px;
 }
 .form-horizontal.compact .control-group {
 	font-size: 0;
@@ -183,13 +183,13 @@ Can be a warning or error message, or help text. */
 .form-horizontal.compact input[type="text"],
 .form-horizontal.compact select,
 .form-horizontal.compact textarea {
-	width: 202px;
+	width: 222px;
 }
 .form-horizontal.compact .chzn-search input {
 	width: 100%!important;
 }
 .form-horizontal.compact label {
-	width: 155px;
+	width: 135px;
 }
 
 
