@@ -52,10 +52,7 @@ import com.n4systems.fieldid.wicket.pages.setup.translations.*;
 import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
-import com.n4systems.fieldid.wicket.pages.user.AddPersonPage;
-import com.n4systems.fieldid.wicket.pages.user.AddUsageBasedUserPage;
-import com.n4systems.fieldid.wicket.pages.user.EditPersonPage;
-import com.n4systems.fieldid.wicket.pages.user.EditUsageBasedUserPage;
+import com.n4systems.fieldid.wicket.pages.user.*;
 import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
@@ -79,7 +76,6 @@ public class FieldIDWicketApp extends WebApplication {
     protected void init() {
         mountPage("setup/eventFormEdit", EventFormEditPage.class);
         mountPage("setup/columnsLayout", ColumnsLayoutPage.class);
-
 
         mountPage("setup/settings", SettingsPage.class);
         mountPage("setup/ownersUsersLocations", OwnersUsersLocationsPage.class);
@@ -190,6 +186,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("selectLanguage", SelectLanguagePage.class);
 
         mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
+        mountPage("userOfflineProfile", UserOfflineProfilePage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
