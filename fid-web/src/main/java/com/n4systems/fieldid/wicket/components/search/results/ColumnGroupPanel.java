@@ -37,12 +37,4 @@ public class ColumnGroupPanel extends Panel {
 
 		add(new Label("noColumns", new Model<String>("no columns available")).setVisible(noColumns));	    
 	}
-	
-	@Override	
-    public void renderHead(IHeaderResponse response) {
-    	response.renderCSSReference("style/component/columnGroupPanel.css");    	
-    	super.renderHead(response);
-    }
-	
-
 }

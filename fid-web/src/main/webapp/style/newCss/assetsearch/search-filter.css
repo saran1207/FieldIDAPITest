@@ -7,7 +7,8 @@ Search specific styles are located in style/newCss/component/search-filter.css
 	/*display: none;*/
 }
 
-/* fieldid.css OVERRIDES */
+/* fieldid.css OVERRIDES 
+-------------------------*/
 html {
 	background-color: #fff;
 }
@@ -18,7 +19,9 @@ a {
 	color: #008bd3;
 }
 
-/* wide.css OVERRIDES */
+
+/* wide.css OVERRIDES 
+----------------------*/
 #page .centre {
 	border-radius: 0;
 	left: 27px;
@@ -42,28 +45,27 @@ a {
 }
 
 
-
-/* ACTION BUTTONS BAR */ 
+/* ACTION BUTTONS BAR 
+----------------------*/ 
 .sub-menu {
 	position: relative;
 	padding: 0;
 	background-color: #ffffff;
+	margin-top: 14px;
 }
 .search-options {
 	max-width: 74px;
-	margin-right: 5px;
 	float: left;
 	padding-left: 27px;
-	margin-top: 6px;
 }
 .sub-menu .action-group {
 	position: absolute;
 	top: 0;
 	right: 11px;
-	/*width: 262px; specific to search */
 }
 
-/* FILTER CRITERIA - SIDEBAR */
+/* FILTER CRITERIA - SIDEBAR 
+-----------------------------*/
 #left-panel {
 	overflow-y: auto;
 	overflow-x: hidden;
@@ -77,28 +79,40 @@ a {
 	border-bottom: 1px solid #c7c7c9;
 	padding: 12px 15px;
 }
-form.search-config {
+/* form */
+.search-config {
 	margin-top: 46px;
 	padding-left: 12px;
 	position: relative;
 }
-
+	.search-config .btn-primary {
+		position: fixed; /* temp */
+		left: 340px;
+		top: 176px;
+		z-index: 1;
+	}
 #left-panel.filters .content.filters {
 	display: block;
 }
 #left-panel.filters .content.columns {
 	display: none;
 }
-.search-config .btn-primary {
-	position: fixed; /* temp */
-	left: 340px;
-	top: 176px;
-	z-index: 1;
+#left-panel .control-group.checkbox {
+	margin-left: 14px;
+}
+#left-panel .filters .control-group.checkbox {
+	margin-left: 145px;
+}
+#left-panel .filters .control-group.checkbox input {
+	margin-bottom: 18px; /*temp */
+}
+#left-panel .column-group .collapsible span {
+	margin-left: 14px;
 }
 
 
-
-/* Popups & Location picker within forms */
+/* Popups & Location picker within forms 
+-----------------------------------------*/
 .control-group .popup {
 	display: inline-block;
 }
@@ -109,7 +123,9 @@ form.search-config {
 	margin-left: -24px;
 }
 
-/* previous CSS form overrides */
+
+/* previous CSS form overrides
+-------------------------------*/
 .infoSet.control-group {
 	padding-top: 0;
 	min-height: inherit
@@ -130,8 +146,8 @@ form.search-config {
 }
 
 
-
-/* BLANK SLATE RESULTS PANEL */
+/* BLANK SLATE RESULTS PANEL 
+-----------------------------*/
 .no-results h2 {
 	font-size: 22px;
 	font-weight: normal;
@@ -139,7 +155,8 @@ form.search-config {
 }
 
 
-/* RESULTS TABLE */
+/* RESULTS TABLE 
+-----------------*/
 .list {
 	font-size: 12px;
 	border-bottom: none;
@@ -164,7 +181,8 @@ th.wicket_orderDown {
 }
 
 
-/* PAGINATION */
+/* PAGINATION 
+--------------*/
 .pagination input[type="text"] {
 	height: auto;
 	width: auto;

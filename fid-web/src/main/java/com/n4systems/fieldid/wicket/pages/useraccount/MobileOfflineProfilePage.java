@@ -40,85 +40,8 @@ public class MobileOfflineProfilePage extends FieldIDFrontEndPage {
     @SpringBean
     private OfflineProfileService offlineProfileService;
 
-    @SpringBean
-    private AssetService assetService;
-
-    private IModel<OfflineProfile> offlineProfileModel;
-
-    private DataTable<Asset> dataTable;
-
-    private WebMarkupContainer displayContainer;
-
     public MobileOfflineProfilePage() {
-        offlineProfileModel = Model.of(offlineProfileService.find(getCurrentUser()));
-
-        add(displayContainer = new WebMarkupContainer("displayContainer"));
-        displayContainer.setOutputMarkupId(true);
-
-        displayContainer.add(new Label("totalAssets", new PropertyModel<String>(offlineProfileModel, "assets.size")));
-        displayContainer.add(new AjaxLink<Void>("clearAll") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                offlineProfileModel.getObject().getAssets().clear();
-                offlineProfileModel.getObject().getOrganizations().clear();
-                offlineProfileService.update(offlineProfileModel.getObject());
-                target.add(displayContainer);
-            }
-        });
-
-        FieldIDDataProvider<Asset> dataProvider = new FieldIDDataProvider<Asset>() {
-            @Override
-            public Iterator<? extends Asset> iterator(int first, int count) {
-                List<Asset> assetList = Lists.newArrayList();
-                List<String> assetIds = new ArrayList(offlineProfileModel.getObject().getAssets());
-                for(int i = first; i < first + count; i++) {
-                    assetList.add(assetService.findByMobileId(assetIds.get(i)));
-                }
-                return assetList.iterator();
-            }
-
-            @Override
-            public int size() {
-                return offlineProfileModel.getObject().getAssets().size();
-            }
-
-            @Override
-            public IModel<Asset> model(Asset object) {
-                return Model.of(object);
-            }
-        };
-
-        displayContainer.add(dataTable = new SimpleDefaultDataTable<Asset>("assetsTable", getTableColumns(), dataProvider, 10));
-        dataTable.setOutputMarkupId(true);
-
-    }
-
-    private List<IColumn<Asset>> getTableColumns() {
-        List<IColumn<Asset>> columns = Lists.newArrayList();
-
-        columns.add(new AbstractColumn<Asset>(new FIDLabelModel("label.identifier")) {
-            @Override
-            public void populateItem(Item<ICellPopulator<Asset>> cellItem, String componentId, IModel<Asset> rowModel) {
-                cellItem.add(new AssetProfileLinkCell(componentId, rowModel));
-            }
-        });
-        columns.add(new PropertyColumn<Asset>(new FIDLabelModel("label.assettype"),"type.displayName" ));
-        columns.add(new PropertyColumn<Asset>(new FIDLabelModel("label.organization"),"owner.rootOrgName" ));
-        columns.add(new PropertyColumn<Asset>(new FIDLabelModel("label.customer"),"owner.customerOrg.name" ));
-        columns.add(new PropertyColumn<Asset>(new FIDLabelModel("label.division"),"owner.divisionOrg.name" ));
-        columns.add(new AbstractColumn<Asset>(new FIDLabelModel("label.remove")) {
-            @Override
-            public void populateItem(Item<ICellPopulator<Asset>> cellItem, String componentId, IModel<Asset> rowModel) {
-                cellItem.add(new RemoveActionCell(componentId, rowModel, offlineProfileModel.getObject()) {
-                    @Override
-                    public void onRemoveAsset(AjaxRequestTarget target) {
-                        target.add(dataTable);
-                    }
-                });
-            }
-        });
-
-        return columns;
+        add(new OfflineProfilePanel("offlineProfilePanel", getCurrentUser()));
     }
 
     @Override

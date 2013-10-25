@@ -3,7 +3,7 @@
 	<form wicket:id="queryForm" class="advanced-search-form">
 		<div class="input-combo">
 			<input type="text" wicket:id="query" style="">
-			<input type="submit" wicket:id="submitQueryButton" wicket:message="value:label.search">
+			<input type="submit" wicket:id="submitQueryButton" wicket:message="value:label.search" class="btn btn-secondary btn-search btn-sml">
 			<!-- <div class="syntax-help">
 				<span class="fontello-help"></span>
 			</div> -->
@@ -13,30 +13,25 @@
 	<div wicket:id="toggleSearchTypeLink" class="search-switch"></div>
 
     <div class="action-group">
-	
 		<div wicket:id="actions" class="dropdown-btn mass-actions">
-			<a href="javascript:void(0);" class="btn btn-secondary"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
+			<a href="javascript:void(0);" class="btn btn-secondary btn-sml"><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
 			
 			<ul class="pull-right">
-				<wicket:enclosure>
+			<wicket:enclosure>
 				<li><a wicket:id="massUpdateLink"><wicket:message key="label.massupdate2"/></a></li>
-				</wicket:enclosure>
-
-				<wicket:enclosure>
+			</wicket:enclosure>
+			<wicket:enclosure>
 				<li><a wicket:id="massScheduleLink"><wicket:message key="label.massschedule" /></a></li>
-				</wicket:enclosure>
-
-				<wicket:enclosure>
+			</wicket:enclosure>
+			<wicket:enclosure>
 				<li><a wicket:id="massEventLink"><wicket:message key="label.perform_event" /></a></li>
-				</wicket:enclosure>
-				
-				<!-- MOVED FROM MAIN BAR AND ADDED TO DROPDOWN -->
+			</wicket:enclosure>
 				<li><a wicket:id="printAllCertsLink"><wicket:message key="label.printselectedmanufacturercertificate"/></a></li>
 				<li><a wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a></li>
 			</ul>
 		</div>
 		<div class="button-group">
-			<a wicket:id="emailLink" class="btn btn-secondary"><wicket:message key="label.email"/></a>
+			<a wicket:id="emailLink" class="btn btn-secondary btn-sml"><wicket:message key="label.email"/></a>
 			<div wicket:id="saveMenu"/>
 		</div>
 	</div>

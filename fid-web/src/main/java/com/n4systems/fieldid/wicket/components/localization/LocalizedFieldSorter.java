@@ -59,7 +59,7 @@ public class LocalizedFieldSorter {
                 }
             }
         }
-        throw new IllegalStateException("can't find translatable fields for class " + clazz.getSimpleName() + " & field " + fieldName + ". Make sure you put all the possible fields included in the map at construction time");
+        throw new IllegalStateException("can't find translatable fields for class " + clazz.getSimpleName() + " & field '" + fieldName + "'. Make sure you put all the possible fields included in the map at construction time");
     }
 
     public List<LocalizedField> sort(List<LocalizedField> localizedFields) {
