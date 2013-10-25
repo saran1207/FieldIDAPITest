@@ -1,22 +1,22 @@
 /*--------------------------------------- 
-  FORMS
+	FORMS
 -----------------------------------------*/
 /* Default form styles */
 fieldset {
-  /*border: 1px solid #dddddd;*/
-  margin: 0 0 -1px;
-  padding-top: 35px;
-  position: relative;
+	/*border: 1px solid #dddddd;*/
+	margin: 0 0 -1px;
+	padding-top: 35px;
+	position: relative;
 }
 fieldset:last-child {
-  margin-bottom: 5px;
+	margin-bottom: 5px;
 }
 legend {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-weight: 600;
-  position: absolute;
-  top: 8px;
-  font-size: 14px;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-weight: 600;
+	position: absolute;
+	top: 8px;
+	font-size: 14px;
 }
 input[type="text"],
 select,
@@ -33,176 +33,163 @@ textarea {
 	box-sizing: border-box;
 }
 input[type="text"] {
-  height: 25px;
-  color: #3a3a3a;
+	height: 25px;
+	color: #3a3a3a;
 }
 label {
-  display: block;
+	display: block;
 }
 textarea {
-  height: 115px;
-  resize: none;
-  outline: none;
-  padding-top: 4px;
+	height: 115px;
+	resize: none;
+	outline: none;
+	padding-top: 4px;
 }
 textarea:focus,
 input:focus {
-  outline: none;
-  border-color: #666666;
+	outline: none;
+	border-color: #666666;
 }
 
 /* checkboxes & radio boxes
 -----------------------------------------*/
-label input[type="radio"],
-label input[type="checkbox"] {
-  float: left;
-  margin-left: -15px;
+.control-group.checkbox label {
+	text-align: left;
+	float: none;
+	line-height: 1;
+	width: auto;
 }
-.checkbox {
-  overflow: hidden;
+	.form-horizontal.compact .control-group.checkbox label {
+		width: auto;
+	}
+.control-group.checkbox input {
+	float: left;
+	margin-right: 6px;
 }
-.checkbox label {
-  padding-left: 15px;
-  margin: 5px 0;
-  line-height: 1;
-}
+
 
 
 /* text input with button combo 
 -----------------------------------------*/
 .input-combo {
-  border: 1px solid #c7c7c9;
-  display: inline-block;
+	border: 1px solid #c7c7c9;
+	display: inline-block;
 }
 .input-combo input[type="text"] {
-  border: none;
-  margin-bottom: 0;
-  height: auto;
+	border: none;
+	margin-bottom: 0;
+	height: auto;
 }
 .input-combo [class^="btn"] {
-  border-width: 0 0 0 1px;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
+	border-width: 0 0 0 1px;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
 }
 
 /* Used for adding a block of text under a form control.
 Can be a warning or error message, or help text. */
 .text-block {
-  display: block;
-  padding-bottom: 6px;
-  margin: 4px 0;
+	display: block;
+	padding-bottom: 6px;
+	margin: 4px 0;
 }
 
 /* Chosen plugin overrides
 -----------------------------------------*/
 .chzn-container {
-  margin: 4px 0 10px;
+	margin: 4px 0 10px;
 }
 .chzn-single.chzn-default,
 .chzn-container-single .chzn-single {
-  border-radius: 0;
-  box-shadow: none;
-  background: none;
-  height: 25px;
+	border-radius: 0;
+	box-shadow: none;
+	background: none;
+	height: 25px;
  /* padding-top: 2px;*/
-  border-color: #c7c7c9;
+	border-color: #c7c7c9;
 }
 .chzn-container-single .chzn-single span,
 .chzn-container-single .chzn-default {
-  color: #7a7a7a;
+	color: #7a7a7a;
 }
 .chzn-container-single .chzn-single {
-  /*line-height: 20px;*/
-  padding-left: 4px;
+	/*line-height: 20px;*/
+	padding-left: 4px;
 }
 .chzn-container .chzn-results .highlighted {
-  background-color: #dddddd;
-  background-image: none;
-  color: #7a7a7a;
+	background-color: #dddddd;
+	background-image: none;
+	color: #7a7a7a;
 }
 
 .form-horizontal .chzn-container {
-  display: inline-block;
+	display: inline-block;
 }
 
 /* Used to group and align labels and controls
 -----------------------------------------*/
 .control-group {
-  margin: 6px 0;
-  position: relative;
+	margin: 6px 0;
+	position: relative;
 }
 .control-group input,
 .control-group select,
 .control-group textarea,
 .control-group .chzn-container {
-  margin: 0;
+	margin: 0;
 }
 .control-group.inline {
-  vertical-align: top;
+	vertical-align: top;
 }
-
 
 
 /* For forms with the label on the left and input on the right
 -----------------------------------------*/
 .form-horizontal fieldset {
-  clear: both;
+	clear: both;
 }
 .form-horizontal label {
-  width: 190px;
-  text-align: right;
-  /*display: inline-block;*/
-  float: left;
-  line-height: 25px; /* same as height of input */
+	width: 190px;
+	text-align: right;
+	/*display: inline-block;*/
+	float: left;
+	line-height: 25px; /* same as height of input */
  /* vertical-align: middle;*/
-  padding-right: 10px;
+	padding-right: 10px;
 }
 .form-horizontal .link {
-  font-size: 13px;
+	font-size: 13px;
 }
 .form-horizontal .text-block {
-  margin-left: 194px;
+	margin-left: 194px;
 }
-.form-horizontal .checkbox label {
-  width: auto;
-}
-
 
 
 /* compact form
 -----------------------------------------*/
 .form-horizontal.compact fieldset {
-  border: none;
-  padding-top: 26px;
-  margin-bottom: 5px;
+	border: none;
+	padding-top: 26px;
+	margin-bottom: 5px;
 }
 .form-horizontal.compact .control-group {
-  font-size: 0;
+	font-size: 0;
 }
 .form-horizontal.compact .control-group * {
-  font-size: 13px;
+	font-size: 13px;
 }
 .form-horizontal.compact input[type="text"],
 .form-horizontal.compact select,
 .form-horizontal.compact textarea {
-  width: 202px;
+	width: 202px;
 }
 .form-horizontal.compact .chzn-search input {
-  width: 100%!important;
+	width: 100%!important;
 }
 .form-horizontal.compact label {
-  width: 155px;
+	width: 155px;
 }
-/*.form-horizontal.compact .checkbox label {
-  width: auto;
-  text-align: left;
-  margin-left: 45%;
-}
-.form-horizontal.compact .text-block {
-  margin-left: 45%;
-}*/
-
 
 
 /* GLOBAL NAV SEARCH BAR
