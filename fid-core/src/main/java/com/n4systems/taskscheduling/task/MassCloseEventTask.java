@@ -37,6 +37,7 @@ public class MassCloseEventTask implements Runnable{
             executeMassUpdate();
             logger.info("Completed mass close events: " + getClass());
             sendSuccessEmailResponse();
+			transaction.commit();
         } catch (Exception e) {
             failure(e);
         }
