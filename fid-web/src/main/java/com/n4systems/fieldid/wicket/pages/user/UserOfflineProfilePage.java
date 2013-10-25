@@ -2,12 +2,18 @@ package com.n4systems.fieldid.wicket.pages.user;
 
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.OfflineProfilePanel;
 import com.n4systems.model.user.User;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -32,13 +38,18 @@ public class UserOfflineProfilePage extends FieldIDFrontEndPage {
         if(offlineProfileService.hasOfflineProfile(user))
             add(new OfflineProfilePanel("offlineProfilePanel", user));
         else
-            add(new WebMarkupContainer("offlineProfilePanel"));
+            add(new Label("offlineProfilePanel", new FIDLabelModel("message.no_offline_profile")));
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
+    }
+
+    @Override
+    protected Component createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.my_account_offline_profile"));
     }
 
     @Override
@@ -57,5 +68,12 @@ public class UserOfflineProfilePage extends FieldIDFrontEndPage {
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
 
         ));
+    }
+
+    @Override
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, OwnersUsersLocationsPage.class);
+        pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
+        return pageLink;
     }
 }
