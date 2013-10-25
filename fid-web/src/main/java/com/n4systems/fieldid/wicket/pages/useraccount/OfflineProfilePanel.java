@@ -71,9 +71,15 @@ public class OfflineProfilePanel extends Panel{
             public Iterator<? extends Asset> iterator(int first, int count) {
                 List<Asset> assetList = Lists.newArrayList();
                 List<String> assetIds = new ArrayList(offlineProfileModel.getObject().getAssets());
+                List<String> archivedAssetIds = Lists.newArrayList();
                 for(int i = first; i < first + count; i++) {
-                    assetList.add(assetService.findByMobileId(assetIds.get(i)));
+                    Asset asset = assetService.findByMobileId(assetIds.get(i));
+                    if(asset != null)
+                        assetList.add(asset);
+                    else
+                        archivedAssetIds.add(assetIds.get(i));
                 }
+                offlineProfileModel.getObject().getAssets().removeAll(archivedAssetIds);
                 return assetList.iterator();
             }
 
