@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.behavior.ChangeThenClickComponentWhenEnterPressed;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.pages.identify.components.attributes.ValidateIfRequiredValidator;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.UnitOfMeasure;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -66,7 +67,10 @@ public class UnitOfMeasureEditor extends FormComponentPanel<InfoOptionBean> {
         displayContainer.setOutputMarkupPlaceholderTag(true);
 
         final PropertyModel<String> infoOptionName = ProxyModel.of(infoOption, on(InfoOptionBean.class).getName());
-        displayContainer.add(new WebMarkupContainer("uomTextField").add(new AttributeModifier("value", infoOptionName)));
+        TextField<String> unitStr = new TextField<String>("uomTextField",infoOptionName);
+        unitStr.add(new ValidateIfRequiredValidator<String>(infoField));
+
+        displayContainer.add(unitStr);
 
         DropDownChoice<UnitOfMeasure> unitOfMeasureSelect = new DropDownChoice<UnitOfMeasure>("unitOfMeasureSelect", new PropertyModel<UnitOfMeasure>(this, "primaryUnit"), unitOfMeasuresModel, new ListableChoiceRenderer<UnitOfMeasure>());
         editorContainer.add(unitOfMeasureSelect);
