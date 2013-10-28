@@ -14,11 +14,15 @@
 	padding-top: 5px;
 }
 .action-group {
-	width: 233px;
+	width: 236px;
 }
-.action-group .button-group {
+/*.action-group .button-group {
 	float: right;
-}
+}*/
 .mass-actions {
-	margin-left: 5px;
+	/*margin-left: 5px;*/
 }
+/*.dropdown-btn ul li.print-certs a {
+	white-space: normal;
+	width: 141px;
+}*/

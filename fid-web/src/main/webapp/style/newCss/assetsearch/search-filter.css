@@ -24,20 +24,23 @@ a {
 ----------------------*/
 #page .centre {
 	border-radius: 0;
-	left: 27px;
+	left: 30px;
 	padding: 0;
 }
 #left-panel-controller {
 	bottom: 8px;
+	left: 13px;
 }
 #left-panel {
-	width: 400px;
+	left: 26px;
+	width: 387px;
 	border-radius: 0;
 }
 #bottom-panel {
 	border-radius: 0;
 	height: 41px;
 	bottom: 8px;
+	left: 30px;
 }
 #page.with-left-panel .centre,
 #page.with-left-panel #bottom-panel {
@@ -56,12 +59,21 @@ a {
 .search-options {
 	max-width: 74px;
 	float: left;
-	padding-left: 27px;
+	padding-left: 14px;
 }
 .sub-menu .action-group {
 	position: absolute;
 	top: 0;
 	right: 11px;
+}
+/*.action-group .button-group {
+	display: inline;
+}
+.action-group .dropdown-btn {
+	display: inline;
+}*/
+.action-group .button-group {
+	float: right;
 }
 
 /* FILTER CRITERIA - SIDEBAR 
@@ -74,7 +86,7 @@ a {
 	position: fixed;
 	background: white;
 	z-index: 1;
-	width: 370px;
+	width: 357px;
 	font-size: 18px;
 	border-bottom: 1px solid #c7c7c9;
 	padding: 12px 15px;
@@ -102,6 +114,7 @@ a {
 }
 #left-panel .filters .control-group.checkbox {
 	margin-left: 145px;
+	width: 208px;
 }
 #left-panel .filters .control-group.checkbox input {
 	margin-bottom: 18px; /*temp */

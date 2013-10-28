@@ -29,6 +29,9 @@
 		box-shadow: none;
 		cursor: not-allowed;
 	}
+	.btn.hide {
+		display: none;
+	}
 
 /* Button colours */
 .btn-gray {
@@ -138,7 +141,7 @@
 .dropdown-btn ul {
 	display: none;
 	list-style-type: none;
-	border: 1px solid #dfdddd;
+	border: 1px solid #c7c7c9;
 	position: absolute;
 	top: 100%;
 	left: 0;
@@ -146,6 +149,9 @@
 	z-index: 10;
 	background: #fff;
 	min-width: 100%;
+	font-size: 12px;
+	-webkit-box-shadow: 0px 6px 20px -10px #666666;
+	box-shadow: 0px 6px 20px -10px #666666;
 }
 	.dropdown-btn ul li a {
 		padding: 8px 16px;
@@ -170,6 +176,19 @@
 	*left: 0;
 	*right: auto;
 	*text-align: left;
+}
+
+/* Split button
+-----------------------------------------*/
+.split-btn {
+	display: inline-block;
+}
+.split-btn .dropdown-btn {
+	margin-left: -5px;
+}
+.split-btn .btn.icon {
+	padding-left: 2px;
+	padding-right: 8px;
 }
 
 /* Groups buttons together into a nav bar
