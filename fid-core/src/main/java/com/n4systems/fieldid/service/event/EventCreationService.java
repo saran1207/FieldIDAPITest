@@ -189,7 +189,14 @@ public class EventCreationService extends FieldIdPersistenceService {
                         if (sched.getDueDate().after(uevent.getDueDate()) && !sameDay && sameTime) {
 
                             nextSched = sched;
-                            nextSched.setAssignee(event.getPerformedBy());
+
+                            // if assigned to UserGroup - use UserGroup to assign
+                            if (null != event.getAssignedGroup()) {
+                                nextSched.setAssignedGroup(event.getAssignedGroup());
+                            } else {
+                                nextSched.setAssignee(event.getPerformedBy());
+                            }
+
                             break;
 
                         }  else {
