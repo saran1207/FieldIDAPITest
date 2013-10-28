@@ -157,7 +157,7 @@ public class EventCreationService extends FieldIdPersistenceService {
                     for (Event sched : openEvents) {
 
 
-                        if (!(recurringEvent.getRecurrence().getType() == sched.getRecurringEvent().getRecurrence().getType())) {
+                        if ( (sched.getRecurringEvent() == null) || (sched.getRecurringEvent().getRecurrence() == null) || (!(recurringEvent.getRecurrence().getType() == sched.getRecurringEvent().getRecurrence().getType())) ) {
                             continue;
                         }
 

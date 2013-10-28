@@ -19,8 +19,11 @@
 			<property name="hibernate.cache.region.factory_class" value="net.sf.ehcache.hibernate.SingletonEhCacheRegionFactory"/>
 			<property name="hibernate.generate_statistics" value="true" /-->
 
-			<!--
+
             <property name="hibernate.show_sql" value="true" />
+
+
+            <!--
             <property name="hibernate.format_sql" value="true" />
 
 			<property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JDBCTransactionFactory"/>
@@ -58,7 +61,8 @@
 			<property name="hibernate.max_fetch_depth" value="1" />
 
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver" />
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost/fieldid" />
+            <property name="hibernate.connection.url" value="jdbc:mysql://dev.n4systems.net:3306/fieldid" />
+            <!--<property name="hibernate.connection.url" value="jdbc:mysql://localhost/fieldid" /> -->
             <property name="hibernate.connection.username" value="root" />
             <property name="hibernate.connection.password" value="" />
 
