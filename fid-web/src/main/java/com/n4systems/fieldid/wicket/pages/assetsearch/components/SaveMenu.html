@@ -1,13 +1,15 @@
 <wicket:panel>
-   
-    <a wicket:id="save" class="btn btn-secondary btn-sml"><wicket:message key="label.save"/></a>
-    
-    <a wicket:id="saveAsMenu" class="mattButton mattButtonRight imageButton"><img src="/fieldid/images/menu-down.png"></a>
-    <ul class="menu-items">
-        <li>
-            <a wicket:id="saveAs"><wicket:message key="label.save_search_as"/></a>
-        </li>
-    </ul>
-    
+	<div class="split-btn">
+		<a wicket:id="save" class="btn btn-secondary btn-sml"><wicket:message key="label.save"/></a>
+		
+		<div class="dropdown-btn">
+			<a wicket:id="saveAsMenu" class="btn btn-secondary btn-sml icon"><img src="/fieldid/images/menu-down.png"></a>
+			<ul class="pull-right">
+				<li>
+					<a wicket:id="saveAs"><wicket:message key="label.save_search_as"/></a>
+				</li>
+			</ul>
+		</div>
+	</div>	
 </wicket:panel>
 

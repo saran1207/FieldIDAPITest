@@ -26,14 +26,13 @@
 			<wicket:enclosure>
 				<li><a wicket:id="massEventLink"><wicket:message key="label.perform_event" /></a></li>
 			</wicket:enclosure>
-				<li><a wicket:id="printAllCertsLink"><wicket:message key="label.printselectedmanufacturercertificate"/></a></li>
+				<li class="print-certs"><a wicket:id="printAllCertsLink"><wicket:message key="label.printselectedmanufacturercertificate"/></a></li>
 				<li><a wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a></li>
 			</ul>
 		</div>
-		<div class="button-group">
-			<a wicket:id="emailLink" class="btn btn-secondary btn-sml"><wicket:message key="label.email"/></a>
-			<div wicket:id="saveMenu"/>
-		</div>
+		
+		<a wicket:id="emailLink" class="btn btn-secondary btn-sml"><wicket:message key="label.email"/></a>
+		<div wicket:id="saveMenu"/>
 	</div>
 
 	<!-- TO BE MOVED TO RESULTS TABLE -->
