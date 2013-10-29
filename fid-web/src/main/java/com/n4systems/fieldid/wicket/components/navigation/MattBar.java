@@ -88,19 +88,21 @@ public class MattBar extends Panel {
         };
     }
 
-    public void addLink(IModel<String> linkTitle, Serializable linkState) {
+    public MattBar addLink(IModel<String> linkTitle, Serializable linkState) {
         linkTitles.add(linkTitle);
         linkStates.add(linkState);
         linkImages.add(null);
         linkTooltips.add(null);
+        return this;
     }
 
 
-    public void addLink(IModel<String> linkTitle, Serializable linkState, String url, String tooltip) {
+    public MattBar addLink(IModel<String> linkTitle, Serializable linkState, String url, String tooltip) {
         linkTitles.add(linkTitle);
         linkStates.add(linkState);
         linkImages.add(url);
         linkTooltips.add(tooltip);
+        return this;
     }
 
 

@@ -172,7 +172,7 @@ public class OrgService extends FieldIdPersistenceService {
     }
 
     public OrgLocationTree getOrgLocationTree(Long parentNodeId, OrgLocationTree.NodeType type) {
-        OrgLocationTree result = getOrgTree(parentNodeId,type);
+        OrgLocationTree result = getOrgTree(parentNodeId, type);
         QueryBuilder locQuery = createUserSecurityBuilder(PredefinedLocation.class);
         locQuery.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner_id", "owner.id", parentNodeId, 0, WhereClause.ChainOp.AND));
         result.addPredefinedLocations(persistenceService.findAll(locQuery));
@@ -201,6 +201,22 @@ public class OrgService extends FieldIdPersistenceService {
         QueryBuilder<InternalOrg> query = createUserSecurityBuilder(InternalOrg.class);
         OrgLocationTree result = new OrgLocationTree(persistenceService.findAll(query));
         return result;
+    }
+
+    public List<BaseOrg> search(String filter, int page, int pageSize) {
+        QueryBuilder<BaseOrg> builder = createSearchQueryBuilder(filter);
+        return persistenceService.findAll(builder, page, pageSize);
+    }
+
+    public Long getSearchCount(String filter) {
+        QueryBuilder<BaseOrg> builder = createSearchQueryBuilder(filter);
+        return persistenceService.count(builder);
+    }
+
+    private QueryBuilder<BaseOrg> createSearchQueryBuilder(String filter) {
+        QueryBuilder<BaseOrg> builder = createUserSecurityBuilder(BaseOrg.class);
+        builder.addWhere(WhereParameter.Comparator.LIKE, "name", "name", filter, WhereParameter.WILDCARD_BOTH | WhereParameter.TRIM);
+        return builder;
     }
 }
 

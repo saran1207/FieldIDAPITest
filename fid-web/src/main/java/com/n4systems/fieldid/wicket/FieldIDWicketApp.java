@@ -45,6 +45,7 @@ import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedL
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.ReassignEventTypeGroupPage;
+import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
@@ -108,6 +109,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventTypeGroupTranslations", EventTypeGroupTranslationsPage.class);
         mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
+        mountPage("setup/orgView", OrgViewPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 
