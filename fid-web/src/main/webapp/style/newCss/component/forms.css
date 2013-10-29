@@ -11,6 +11,9 @@ fieldset {
 fieldset:last-child {
 	margin-bottom: 5px;
 }
+fieldset img {
+	vertical-align: middle;
+}
 legend {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	font-weight: 600;
@@ -115,14 +118,18 @@ Can be a warning or error message, or help text. */
 	color: #7a7a7a;
 }
 .chzn-container-single .chzn-single {
-	/*line-height: 20px;*/
 	padding-left: 4px;
+}
+.chzn-container .chzn-drop {
+	border-color: #c7c7c9;
+	border-top: 1px solid #c7c7c9;
 }
 .chzn-container .chzn-results .highlighted {
 	background-color: #dddddd;
 	background-image: none;
 	color: #7a7a7a;
 }
+
 
 .form-horizontal .chzn-container {
 	display: inline-block;
