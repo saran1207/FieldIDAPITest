@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.setup.org;
 
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.data.OrgsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -12,6 +14,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.Item;
@@ -19,7 +23,9 @@ import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 
+import java.util.List;
 import java.util.Map;
 
 public class OrgViewPage extends FieldIDFrontEndPage {
@@ -38,17 +44,19 @@ public class OrgViewPage extends FieldIDFrontEndPage {
 
 
     private OrgViewPanel panel;
-    private String search = null;
+    private String filter = null;
+    private Class<? extends BaseOrg> filterClass = null;
     private Component tree;
     private PageState pageState = PageState.LIST;
 
 
     public OrgViewPage() {
         add(new MattBar("buttons") {
-                    @Override protected void onEnterState(AjaxRequestTarget target, Object state) {
-                        buttonClicked(target,state);
-                    }
-                }
+            @Override
+            protected void onEnterState(AjaxRequestTarget target, Object state) {
+                buttonClicked(target, state);
+            }
+        }
                 .setCurrentState(PageState.LIST)
                 .addLink(new FIDLabelModel("label.tree"), PageState.TREE)
                 .addLink(new FIDLabelModel("label.list"), PageState.LIST)
@@ -70,11 +78,18 @@ public class OrgViewPage extends FieldIDFrontEndPage {
             super(id, "orgViewFragment", OrgViewPage.this);
             setOutputMarkupId(true);
             add(new AttributeAppender("class","org-view"));
-            add(tree = new WebMarkupContainer("tree") {
+            addTree();
+            addList();
+        }
+
+        private void addList() {
+            WebMarkupContainer list = new WebMarkupContainer("list") {
                 @Override public boolean isVisible() {
-                    return PageState.TREE.equals(pageState);
+                    return PageState.LIST.equals(pageState);
                 }
-            });
+            };
+            list.setOutputMarkupId(true);
+
             add(dataTable = new DataView<BaseOrg>("table", provider, ITEMS_PER_PAGE) {
                 @Override protected void populateItem(Item<BaseOrg> item) {
                     BaseOrg org = item.getModelObject();
@@ -85,15 +100,33 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                     item.add(new Label("created", org.getCreated().toString()));
                     item.add(new Label("modified", org.getModified().toString() ));
                 }
+            });
+            dataTable.setCurrentPage(0);
+
+            list.add(new PagingNavigator("navigator", dataTable) {
                 @Override public boolean isVisible() {
                     return PageState.LIST.equals(pageState);
                 }
             });
-            dataTable.setCurrentPage(0);
+            list.add(dataTable);
+            list.add(new TextField<String>("filter", new PropertyModel(OrgViewPage.this, "filter")));
+            List<Class<? extends BaseOrg>> filterTypes = Lists.newArrayList(PrimaryOrg.class,SecondaryOrg.class, CustomerOrg.class, DivisionOrg.class);
+            IChoiceRenderer<Class<? extends BaseOrg>> filterTypeRenderer = new IChoiceRenderer<Class<? extends BaseOrg>>() {
+                @Override public Object getDisplayValue(Class<? extends BaseOrg> clazz) {
+                    return labelMap.get(clazz).getObject();
+                }
+                @Override public String getIdValue(Class<? extends BaseOrg> clazz, int index) {
+                    return clazz.getSimpleName();
+                }
+            };
+            list.add(new FidDropDownChoice<Class<? extends BaseOrg>>("orgType", new PropertyModel<Class<? extends BaseOrg>>(OrgViewPage.this, "filterClass"), filterTypes, filterTypeRenderer));
+            add(list);
+        }
 
-            add(new PagingNavigator("navigator", dataTable) {
+        private void addTree() {
+            add(tree = new WebMarkupContainer("tree") {
                 @Override public boolean isVisible() {
-                    return PageState.LIST.equals(pageState);
+                    return PageState.TREE.equals(pageState);
                 }
             });
         }

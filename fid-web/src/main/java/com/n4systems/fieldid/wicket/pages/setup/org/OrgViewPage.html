@@ -6,17 +6,23 @@
 
     <wicket:fragment wicket:id="orgViewFragment">
         <div wicket:id="tree" class="org-tree"/>
-        <table class="org-table">
-            <tr wicket:id="table">
-                <td><span wicket:id="name"/></td>
-                <td><span wicket:id="id"/></td>
-                <td><span wicket:id="type"/></td>
-                <td><span wicket:id="parent"/></td>
-                <td><span wicket:id="created"/></td>
-                <td><span wicket:id="modified"/></td>
-            </tr>
-        </table>
-        <div wicket:id="navigator" class="navigator"/>
+        <!--<input wicket:id="tree-filter" type="text"/>-->
+
+        <div wicket:id="list">
+            <input wicket:id="filter" type="text"/>
+            <select wicket:id="orgType"/>
+            <table class="org-table">
+                <tr wicket:id="table">
+                    <td><span wicket:id="name"/></td>
+                    <td><span wicket:id="id"/></td>
+                    <td><span wicket:id="type"/></td>
+                    <td><span wicket:id="parent"/></td>
+                    <td><span wicket:id="created"/></td>
+                    <td><span wicket:id="modified"/></td>
+                </tr>
+            </table>
+            <div wicket:id="navigator" class="navigator"/>
+        </div>
     </wicket:fragment>
 
 </wicket:extend>
