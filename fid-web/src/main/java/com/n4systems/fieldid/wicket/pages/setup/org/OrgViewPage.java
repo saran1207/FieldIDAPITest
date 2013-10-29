@@ -7,6 +7,8 @@ import com.n4systems.fieldid.wicket.data.OrgsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.orgs.*;
+import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -22,6 +24,9 @@ import java.util.Map;
 
 public class OrgViewPage extends FieldIDFrontEndPage {
 
+    enum PageState { TREE, LIST };
+
+    public static final int ITEMS_PER_PAGE = 20;
     private static final Map<Class<? extends BaseOrg>,IModel<String>> labelMap = Maps.newHashMap();
 
     static {
@@ -31,13 +36,29 @@ public class OrgViewPage extends FieldIDFrontEndPage {
         labelMap.put(CustomerOrg.class, new FIDLabelModel("label.customer_type"));
     }
 
-    public static final int ITEMS_PER_PAGE = 20;
 
+    private OrgViewPanel panel;
     private String search = null;
+    private Component tree;
+    private PageState pageState = PageState.LIST;
 
 
     public OrgViewPage() {
-        add(new OrgViewPanel("orgView"));
+        add(new MattBar("buttons") {
+                    @Override protected void onEnterState(AjaxRequestTarget target, Object state) {
+                        buttonClicked(target,state);
+                    }
+                }
+                .setCurrentState(PageState.LIST)
+                .addLink(new FIDLabelModel("label.tree"), PageState.TREE)
+                .addLink(new FIDLabelModel("label.list"), PageState.LIST)
+        );
+        add(panel=new OrgViewPanel("orgView"));
+    }
+
+    private void buttonClicked(AjaxRequestTarget target, Object state) {
+        pageState = (PageState) state;
+        target.add(panel);
     }
 
 
@@ -47,12 +68,13 @@ public class OrgViewPage extends FieldIDFrontEndPage {
 
         public OrgViewPanel(String id) {
             super(id, "orgViewFragment", OrgViewPage.this);
+            setOutputMarkupId(true);
             add(new AttributeAppender("class","org-view"));
-            add(new WebMarkupContainer("tree"));
-            add(new MattBar("buttons")
-                    .addLink(new FIDLabelModel("label.tree"), 1)
-                    .addLink(new FIDLabelModel("label.list"), 2)
-            );
+            add(tree = new WebMarkupContainer("tree") {
+                @Override public boolean isVisible() {
+                    return PageState.TREE.equals(pageState);
+                }
+            });
             add(dataTable = new DataView<BaseOrg>("table", provider, ITEMS_PER_PAGE) {
                 @Override protected void populateItem(Item<BaseOrg> item) {
                     BaseOrg org = item.getModelObject();
@@ -63,11 +85,19 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                     item.add(new Label("created", org.getCreated().toString()));
                     item.add(new Label("modified", org.getModified().toString() ));
                 }
+                @Override public boolean isVisible() {
+                    return PageState.LIST.equals(pageState);
+                }
             });
             dataTable.setCurrentPage(0);
 
-            add(new PagingNavigator("navigator", dataTable));
+            add(new PagingNavigator("navigator", dataTable) {
+                @Override public boolean isVisible() {
+                    return PageState.LIST.equals(pageState);
+                }
+            });
         }
+
     }
 
     private IModel<String> getTypeString(BaseOrg org) {
