@@ -1,10 +1,6 @@
 <wicket:extend>
 	<div class="action-group">
 
-		<!--   MOVED TO MASS ACTIONS DROPDOWN.  NEED TO UPDATE IN JAVA -->
-		<a style="display:none;" wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a>
-		<a style="display:none;" wicket:id="summaryReportLink"><wicket:message key="label.summary_report" /></a>
-		   
 		<div wicket:id="print" class="dropdown-btn">
 			<a class="btn btn-secondary btn-sml" href="javascript:void(0);" ><wicket:message key="label.print"/><img src="/fieldid/images/menu-down.png"></a>
 			<ul>
@@ -26,8 +22,8 @@
 				<li><a wicket:id="massScheduleUpdateLink"><wicket:message key="label.massupdate"/></a></li>
 			</wicket:enclosure>
 				<!--   MOVED TO MASS ACTIONS DROPDOWN.  NEED TO UPDATE IN JAVA -->
-				<li><a><wicket:message key="label.exporttoexcel"/></a></li>
-				<li><a><wicket:message key="label.summary_report" /></a></li>
+				<li><a wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a></li>
+				<li><a wicket:id="summaryReportLink"><wicket:message key="label.summary_report" /></a></li>
 			</ul>
 		</div>
 

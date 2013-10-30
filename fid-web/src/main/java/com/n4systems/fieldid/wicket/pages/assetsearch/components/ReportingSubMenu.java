@@ -28,14 +28,15 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
     private Link updateSchedulesLink;
     private WebMarkupContainer actions;
     private WebMarkupContainer print;
-    private Link summaryReportLink;
 
     public ReportingSubMenu(String id, final Model<EventReportCriteria> model) {
 		super(id, model);
 
-        add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportReportToExcelPage>("exportToExcelLink", ExportReportToExcelPage.class, model)));
 
         actions = new WebMarkupContainer("actions");
+
+        actions.add(exportLink = makeLinkLightBoxed(new MassActionLink<ExportReportToExcelPage>("exportToExcelLink", ExportReportToExcelPage.class, model)));
+
         // note that only one of these mass update links will be shown at a time - depends on the context.
         actions.add(assignJobLink = new MassActionLink<AssignEventsToJobPage>("assignJobLink", AssignEventsToJobPage.class, model));
 
@@ -52,7 +53,13 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
                 setResponsePage(new MassUpdateOpenEventsPage(model));
             }
         });
-        
+
+        actions.add(new Link("summaryReportLink") {
+            @Override public void onClick() {
+                setResponsePage(new EventResolutionPage(model));
+            }
+        });
+
         add(actions);
 
         print = new WebMarkupContainer("print");
@@ -60,13 +67,6 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         print.add(makeLinkLightBoxed(new MassActionLink<PrintInspectionCertPage>("printSelectedPdfReportsLink", PrintInspectionCertPage.class, model)));
         print.add(makeLinkLightBoxed(new MassActionLink<PrintObservationCertReportPage>("printSelectedObservationReportsLink", PrintObservationCertReportPage.class, model)));
         add(print);
-
-        add(summaryReportLink = new Link("summaryReportLink") {
-            @Override public void onClick() {
-                setResponsePage(new EventResolutionPage(model));
-            }
-        });
-
         add(new Link("emailLink") {
             @Override public void onClick() {
                 setResponsePage(new SendSavedItemPage(model, getPage()));
