@@ -5,11 +5,15 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.data.OrgsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.org.OrgSummaryPage;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.orgs.*;
+import com.n4systems.services.date.DateService;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -20,6 +24,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.Item;
@@ -30,9 +35,12 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 import java.util.Map;
+
+import static ch.lambdaj.Lambda.on;
 
 public class OrgViewPage extends FieldIDFrontEndPage {
 
@@ -53,6 +61,8 @@ public class OrgViewPage extends FieldIDFrontEndPage {
         labelMap.put(CustomerOrg.class, new FIDLabelModel("label.customer_type"));
     }
 
+    private @SpringBean
+    DateService dateService;
 
     private OrgViewPanel panel;
     private String textFilter = null;
@@ -129,13 +139,22 @@ public class OrgViewPage extends FieldIDFrontEndPage {
             add(dataTable = new DataView<BaseOrg>("table", provider, ITEMS_PER_PAGE) {
                 @Override
                 protected void populateItem(Item<BaseOrg> item) {
-                    BaseOrg org = item.getModelObject();
-                    item.add(new Label("name", org.getName()));
-                    item.add(new Label("id", org instanceof ExternalOrg ? ((ExternalOrg) org).getCode() : org.getName()));
+                    final BaseOrg org = item.getModelObject();
+                    item.add(createLink("name",org).add(new Label("label", ProxyModel.of(item.getModelObject(), on(BaseOrg.class).getName()))));
+                    String id = org instanceof ExternalOrg ? ((ExternalOrg) org).getCode() : org.getName();
+                    item.add(createLink("id",org).add(new Label("label", Model.of(id))));
                     item.add(new Label("type", getTypeString(org)));
                     item.add(new Label("parent", org.getParent() == null ? "-" : org.getParent().getName()));
-                    item.add(new Label("created", org.getCreated().toString()));
-                    item.add(new Label("modified", org.getModified().toString()));
+                    item.add(new TimeAgoLabel("created", Model.of(org.getCreated()),dateService.getUserTimeZone()));
+                    item.add(new TimeAgoLabel("modified", Model.of(org.getModified()),dateService.getUserTimeZone()));
+                }
+
+                private Link createLink(String id, final BaseOrg org) {
+                    return new Link(id) {
+                        @Override public void onClick() {
+                            setResponsePage(new OrgSummaryPage(org));
+                        }
+                    };
                 }
             });
             dataTable.setCurrentPage(0);
@@ -168,7 +187,8 @@ public class OrgViewPage extends FieldIDFrontEndPage {
             };
             final FidDropDownChoice<Class<? extends BaseOrg>> dropDown = new FidDropDownChoice<Class<? extends BaseOrg>>("orgType", new PropertyModel<Class<? extends BaseOrg>>(OrgViewPage.this, "filterClass"), filterTypes, filterTypeRenderer);
             dropDown.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                @Override protected void onUpdate(AjaxRequestTarget target) {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
                     typeFilter = (Class<BaseOrg>) dropDown.getDefaultModelObject();
                     dataTable.setCurrentPage(0);
                     target.add(list);
