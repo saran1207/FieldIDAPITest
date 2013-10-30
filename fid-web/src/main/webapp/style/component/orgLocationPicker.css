@@ -4,37 +4,39 @@
 }
     .org-location .tree {
         display: block;
-        height:200px;
+        height: 200px;
         overflow-y: auto;
-        width:300px;
-        position:absolute;
-        z-index:1234;
+        width: 300px;
+        *left: 0px;
+        position: absolute;
+        z-index: 1234;
         border: 1px solid #aaa;
-        top:18px;
+        top: 18px;
     }
     .org-location .tree .match > a {
         background: #fefee8;
         line-height: 1;
     }
-
     .org-location .no-results {
+        position: absolute;
         display: block;
-        position:absolute;
-        top:23px;
-        background:#add8e6;
-        opacity: .8;
+        top: 26px;
+        border: 1px solid #aaa;
+        padding: 5px;
+        width: 178px;
+        background: #ffffb2;
+        font-weight: bold;
+        z-index: 1;
     }
-
     .org-location .text {
         padding: 4px;
-
         float: left;
     }
     .org-location img {
-        width:24px;
+        width: 24px;
         vertical-align: bottom;
     }
-    .entypo-search {
+    .org-location .entypo-search {
         float: left;
         margin-left: 3px;
         cursor: pointer;

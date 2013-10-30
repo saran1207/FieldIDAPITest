@@ -2,10 +2,7 @@
 Shared styles between Search, Reporting and Procedures
 Search specific styles are located in style/newCss/component/search-filter.css 
 -------------------------------------------------------------------------------*/
-/* temp */
-#wicketDebugLink {
-	/*display: none;*/
-}
+
 
 /* fieldid.css OVERRIDES 
 -------------------------*/
@@ -19,6 +16,40 @@ a {
 	color: #008bd3;
 }
 
+/* results table action button */
+.dropDownLink img {
+	padding: 0;
+	vertical-align: middle;
+}
+ul.floatingDropdown ul {
+	right: 11px;
+	left: auto;
+	text-align: right;
+	background-color: white;
+	border: 1px solid #c7c7c9;
+	width: auto;
+}
+ul.floatingDropdown ul li {
+	background-color: transparent;
+	width: 100%;
+	white-space: nowrap;
+}
+ul.floatingDropdown li ul li.hover, 
+ul.floatingDropdown li ul li:hover {
+	background: #f5f5f5;
+}
+ul.floatingDropdown ul li a,
+ul.floatingDropdown ul li a:visited {
+	color: #008bd3;
+	width: auto;
+}
+#floatingDropdownStartEventLink a {
+	padding: 7px 10px;
+}
+/*ul.floatingDropdown li:hover > ul {
+visibility: visible;
+}*/
+
 
 /* wide.css OVERRIDES 
 ----------------------*/
@@ -30,6 +61,7 @@ a {
 #left-panel-controller {
 	bottom: 8px;
 	left: 13px;
+	cursor: pointer;
 }
 #left-panel {
 	left: 26px;
@@ -62,19 +94,16 @@ a {
 	padding-left: 14px;
 }
 .sub-menu .action-group {
-	position: absolute;
+	/*position: absolute;
 	top: 0;
-	right: 11px;
+	right: 11px;*/
+	text-align: right;
+	margin-right: 11px;
 }
-/*.action-group .button-group {
-	display: inline;
-}
-.action-group .dropdown-btn {
-	display: inline;
-}*/
 .action-group .button-group {
 	float: right;
 }
+
 
 /* FILTER CRITERIA - SIDEBAR 
 -----------------------------*/
@@ -90,7 +119,9 @@ a {
 	font-size: 18px;
 	border-bottom: 1px solid #c7c7c9;
 	padding: 12px 15px;
+	height: 20px;
 }
+
 /* form */
 .search-config {
 	margin-top: 46px;
@@ -98,7 +129,7 @@ a {
 	position: relative;
 }
 	.search-config .btn-primary {
-		position: fixed; /* temp */
+		position: fixed;
 		left: 340px;
 		top: 176px;
 		z-index: 1;
@@ -129,11 +160,27 @@ a {
 .control-group .popup {
 	display: inline-block;
 }
-.org-location .text { 
-	/*padding: 0;*/
+/* Org location dropdown search */
+.form-horizontal.compact .org-location {
+	border: 1px solid #c7c7c9;
 }
-.entypo-search {
-	margin-left: -24px;
+.form-horizontal.compact .org-location input[type="text"] {
+	width: 183px;
+	border: none;
+}
+.form-horizontal.compact .org-location .entypo-search {
+	margin-left: 0;
+	margin-right: 3px;
+}
+.form-horizontal.compact .org-location .tree {
+	right: -1px;
+	*left: auto;
+	top: 19px;
+}
+.form-horizontal.compact .org-location .no-results {
+	width: 196px;
+	margin-left: -1px;
+	top: 27px;
 }
 
 
@@ -156,6 +203,7 @@ a {
 	padding-left: 0;
 	vertical-align: top;
 	padding-top: 5px;
+	cursor: pointer;
 }
 
 
@@ -170,9 +218,22 @@ a {
 
 /* RESULTS TABLE 
 -----------------*/
+#pageContent .status {
+	height: 26px;
+	padding: 9px 2px;
+}
+p.mass-actions-msg em {
+	font-style: italic;
+	text-decoration: none;
+	color: #666666;
+}
 .list {
 	font-size: 12px;
 	border-bottom: none;
+}
+.list th, 
+.list td {
+	padding: 6px 5px;
 }
 .list th {
 	background-color: #ddd;
@@ -182,11 +243,11 @@ a {
 .list td {
 	border: none;
 }
-.list .row-odd {
-	background-color: #f5f5f5;
-}
 .list tr:hover {
 	background-color: #ddd;
+}
+.list .row-odd {
+	background-color: #f5f5f5;
 }
 th.wicket_orderUp,
 th.wicket_orderDown {

@@ -36,6 +36,8 @@ public class AssetIndexerService extends FieldIdPersistenceService {
     private @Autowired ConfigService configService;
     private @Resource PlatformTransactionManager transactionManager;
 
+    private static final int PAGE_SIZE_FOR_TENANT_INSERTING = 512;
+
     @Scheduled(fixedDelay = 2000)
 	public void processIndexQueue() {
         if (!configService.getBoolean(ConfigEntry.ASSET_INDEX_ENABLED)) {
@@ -55,7 +57,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 				processIndexQueueItem(item);
 				persistenceService.deleteAny(item);
 			} catch (Exception e) {
-				logger.warn(getClass().getSimpleName() +": Failed for " + item.getType() + ":" + item.getId(), e);
+				logger.warn(getClass().getSimpleName() +": Failed for " + item.getType() + ":" + item.getItemId(), e);
 			}
 		}
 		logger.info(getClass().getSimpleName() +": Completed " + (System.currentTimeMillis() - startTime) + "ms");
@@ -64,34 +66,34 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 	private void processIndexQueueItem(IndexQueueItem item) {
 		switch (item.getType()) {
 			case ASSET_INSERT:
-				indexAsset(persistenceService.findNonSecure(Asset.class, item.getId()));
+				indexAsset(persistenceService.findNonSecure(Asset.class, item.getItemId()));
 				break;
 			case ASSET_UPDATE:
-				reindexAsset(persistenceService.findNonSecure(Asset.class, item.getId()));
+				reindexAsset(persistenceService.findNonSecure(Asset.class, item.getItemId()));
 				break;
 			case USER:
-				reindexAssetsByUser(persistenceService.findNonSecure(User.class, item.getId()));
+				reindexAssetsByUser(persistenceService.findNonSecure(User.class, item.getItemId()));
 				break;
 			case ORG:
-				reindexAssetsByOrg(persistenceService.findNonSecure(BaseOrg.class, item.getId()));
+				reindexAssetsByOrg(persistenceService.findNonSecure(BaseOrg.class, item.getItemId()));
 				break;
 			case ORDER:
-				reindexAssetsByOrder(persistenceService.findNonSecure(Order.class, item.getId()));
+				reindexAssetsByOrder(persistenceService.findNonSecure(Order.class, item.getItemId()));
 				break;
 			case PREDEFINEDLOCATION:
-				reindexAssetsByPredefinedLocation(persistenceService.findNonSecure(PredefinedLocation.class, item.getId()));
+				reindexAssetsByPredefinedLocation(persistenceService.findNonSecure(PredefinedLocation.class, item.getItemId()));
 				break;
 			case ASSETTYPE:
-				reindexAssetsByAssetType(persistenceService.findNonSecure(AssetType.class, item.getId()));
+				reindexAssetsByAssetType(persistenceService.findNonSecure(AssetType.class, item.getItemId()));
 				break;
 			case ASSETTYPEGROUP:
-				reindexByAssetTypeGroup(persistenceService.findNonSecure(AssetTypeGroup.class, item.getId()));
+				reindexByAssetTypeGroup(persistenceService.findNonSecure(AssetTypeGroup.class, item.getItemId()));
 				break;
 			case ASSETSTATUS:
-				reindexByAssetStatus(persistenceService.findNonSecure(AssetStatus.class, item.getId()));
+				reindexByAssetStatus(persistenceService.findNonSecure(AssetStatus.class, item.getItemId()));
 				break;
 			case TENANT:
-				reindexByTenant(persistenceService.findNonSecure(Tenant.class, item.getId()));
+				reindexByTenant(persistenceService.findNonSecure(Tenant.class, item.getItemId()));
 				break;
 			default:
 				throw new IllegalArgumentException("Unhandled type: " + item.getType());
@@ -156,30 +158,52 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 	}
 
     public void indexTenant(String tenantName) {
+
 		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("name", tenantName);
 		Tenant tenant = persistenceService.find(builder);
 
-        if(!tenantQueueItemExists(tenant.getId())) {
-            IndexQueueItem item = createNewIndexQueueItem();
-            item.setType(IndexQueueItem.IndexQueueItemType.TENANT);
-            item.setId(tenant.getId());
-
-            persistenceService.saveAny(item);
-        }
+        indexTenantsPerAssets(tenant);
 	}
+
+    private void indexTenantsPerAssets(Tenant tenant) {
+        // I believe we need to include archived here, but maybe not?
+        // the triggers for sure will dump records with archived assets into the queue table
+        TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(tenant).setShowArchived(true);
+        QueryBuilder<Asset> assetQueryBuilder = new QueryBuilder<Asset>(Asset.class, filter);
+
+        Long count = persistenceService.count(assetQueryBuilder);
+        int numPages = (int) Math.ceil(count / PAGE_SIZE_FOR_TENANT_INSERTING);
+
+        for (int i = 0; i < numPages; i++) {
+            List<Asset> assets = persistenceService.findAll(assetQueryBuilder, i, PAGE_SIZE_FOR_TENANT_INSERTING);
+
+            for (Asset asset : assets) {
+                if (!creationIndexItemAlreadyExists(asset.getId())) {
+                    IndexQueueItem item = new IndexQueueItem();
+                    item.setTenant(tenant);
+                    item.setType(IndexQueueItem.IndexQueueItemType.ASSET_INSERT);
+                    item.setItemId(asset.getId());
+                    persistenceService.save(item);
+                }
+            }
+
+            persistenceService.clearSession();
+        }
+
+    }
+
+    private boolean creationIndexItemAlreadyExists(Long assetId) {
+        QueryBuilder<IndexQueueItem> existsBuilder = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
+
+        existsBuilder.addSimpleWhere("type", IndexQueueItem.IndexQueueItemType.ASSET_INSERT);
+        existsBuilder.addSimpleWhere("id", assetId);
+        return persistenceService.exists(existsBuilder);
+    }
 
     /* pkg protected for testing purposes */
     IndexQueueItem createNewIndexQueueItem() {
         return new IndexQueueItem();
-    }
-
-    boolean tenantQueueItemExists(Long id){
-        QueryBuilder<IndexQueueItem> builder = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
-        builder.addSimpleWhere("item.id", id);
-        builder.addSimpleWhere("item.type", IndexQueueItem.IndexQueueItemType.TENANT);
-
-        return persistenceService.exists(builder);
     }
 
 }

@@ -1,0 +1,28 @@
+<wicket:extend>
+
+    <div wicket:id="buttons"/>
+    <div wicket:id="orgView"/>
+
+
+    <wicket:fragment wicket:id="orgViewFragment">
+        <div wicket:id="tree" class="org-tree"/>
+        <!--<input wicket:id="tree-filter" type="text"/>-->
+
+        <div wicket:id="list" class="org-list">
+            <input wicket:id="filter" type="text"/>
+            <select wicket:id="orgType"/>
+            <table>
+                <tr wicket:id="table">
+                    <td><a wicket:id="name"><span wicket:id="label"/></a></td>
+                    <td><a wicket:id="id"><span wicket:id="label"/></a></td>
+                    <td><span wicket:id="type"/></td>
+                    <td><span wicket:id="parent"/></td>
+                    <td><span wicket:id="created"/></td>
+                    <td><span wicket:id="modified"/></td>
+                </tr>
+            </table>
+            <div wicket:id="navigator" class="navigator"/>
+        </div>
+    </wicket:fragment>
+
+</wicket:extend>

@@ -172,7 +172,7 @@ public class OrgService extends FieldIdPersistenceService {
     }
 
     public OrgLocationTree getOrgLocationTree(Long parentNodeId, OrgLocationTree.NodeType type) {
-        OrgLocationTree result = getOrgTree(parentNodeId,type);
+        OrgLocationTree result = getOrgTree(parentNodeId, type);
         QueryBuilder locQuery = createUserSecurityBuilder(PredefinedLocation.class);
         locQuery.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner_id", "owner.id", parentNodeId, 0, WhereClause.ChainOp.AND));
         result.addPredefinedLocations(persistenceService.findAll(locQuery));
@@ -201,6 +201,24 @@ public class OrgService extends FieldIdPersistenceService {
         QueryBuilder<InternalOrg> query = createUserSecurityBuilder(InternalOrg.class);
         OrgLocationTree result = new OrgLocationTree(persistenceService.findAll(query));
         return result;
+    }
+
+    public List<? extends BaseOrg> search(String textFilter, Class<? extends BaseOrg> typeFilter, int page, int pageSize) {
+        QueryBuilder<? extends BaseOrg> builder = createSearchQueryBuilder(textFilter, typeFilter);
+        return persistenceService.findAll(builder, page, pageSize);
+    }
+
+    public Long getSearchCount(String textFilter, Class<? extends BaseOrg> typeFilter) {
+        QueryBuilder<? extends BaseOrg> builder = createSearchQueryBuilder(textFilter,typeFilter);
+        return persistenceService.count(builder);
+    }
+
+    private QueryBuilder<? extends BaseOrg> createSearchQueryBuilder(String textFilter,Class<? extends BaseOrg> typeFilter) {
+        Class<? extends BaseOrg> type = typeFilter==null ? BaseOrg.class : typeFilter;
+        QueryBuilder<? extends BaseOrg> builder = createUserSecurityBuilder(type);
+        builder.addWhere(WhereParameter.Comparator.LIKE, "name", "name", textFilter, WhereParameter.WILDCARD_BOTH | WhereParameter.TRIM);
+        builder.setOrder("name",true);
+        return builder;
     }
 }
 

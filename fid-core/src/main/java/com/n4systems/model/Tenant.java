@@ -39,6 +39,9 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
 
     @Column(name="last_login_time")
     private Date lastLoginTime;
+
+    @Column(name="asset_indexer_started")
+    private boolean assetIndexerStarted;
 	
 	public Tenant() {}
 	
@@ -114,4 +117,11 @@ public class Tenant extends BaseEntity implements Listable<Long>, NamedEntity, S
         this.lastLoginTime = lastLoginTime;
     }
 
+    public boolean isAssetIndexerStarted() {
+        return assetIndexerStarted;
+    }
+
+    public void setAssetIndexerStarted(boolean assetIndexerStarted) {
+        this.assetIndexerStarted = assetIndexerStarted;
+    }
 }

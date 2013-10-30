@@ -98,7 +98,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
     }
 
     private TwoStateAjaxLink createToggleSearchLink(final boolean startingInQueryMode, final IModel<AssetSearchCriteria> criteria) {
-        return new TwoStateAjaxLink("toggleSearchTypeLink", new FIDLabelModel("label.advanced_search"), new FIDLabelModel("label.filter")) {
+        return new TwoStateAjaxLink("toggleSearchTypeLink", new FIDLabelModel("label.advanced_search"), new FIDLabelModel("label.simple_search")) {
             {
                 setInitialState(!startingInQueryMode);
             }
