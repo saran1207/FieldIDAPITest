@@ -54,7 +54,7 @@ public class ProcedureFilterPanel extends Panel {
 
     @Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderCSSReference("style/component/searchFilter.css");
+		//response.renderCSSReference("style/component/searchFilter.css");
 		super.renderHead(response);
 	}
 
