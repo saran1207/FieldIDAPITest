@@ -154,6 +154,12 @@ visibility: visible;
 	margin-left: 14px;
 }
 
+
+/* Popups & Location picker within forms 
+-----------------------------------------*/
+.control-group .popup {
+	display: inline-block;
+}
 /* Org location dropdown search */
 .form-horizontal.compact .org-location {
 	border: 1px solid #c7c7c9;
@@ -168,22 +174,13 @@ visibility: visible;
 }
 .form-horizontal.compact .org-location .tree {
 	right: -1px;
+	*left: auto;
 	top: 19px;
 }
 .form-horizontal.compact .org-location .no-results {
 	width: 196px;
 	margin-left: -1px;
 	top: 27px;
-}
-
-
-/* Popups & Location picker within forms 
------------------------------------------*/
-.control-group .popup {
-	display: inline-block;
-}
-.org-location .entypo-search {
-	/*margin-left: -24px;*/
 }
 
 

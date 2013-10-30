@@ -7,6 +7,7 @@
         height: 200px;
         overflow-y: auto;
         width: 300px;
+        *left: 0px;
         position: absolute;
         z-index: 1234;
         border: 1px solid #aaa;
@@ -16,7 +17,6 @@
         background: #fefee8;
         line-height: 1;
     }
-
     .org-location .no-results {
         position: absolute;
         display: block;
@@ -28,7 +28,6 @@
         font-weight: bold;
         z-index: 1;
     }
-
     .org-location .text {
         padding: 4px;
         float: left;
