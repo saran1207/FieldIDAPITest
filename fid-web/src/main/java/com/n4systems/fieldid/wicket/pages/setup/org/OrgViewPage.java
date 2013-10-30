@@ -143,6 +143,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                 protected void respond(final AjaxRequestTarget target) {
                     IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
                     textFilter = params.getParameterValue("text").toString();
+                    dataTable.setCurrentPage(0);
                     target.add(list);
                 }
             };
@@ -150,7 +151,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
 
             list.add(new PagingNavigator("navigator", dataTable) {
                 @Override public boolean isVisible() {
-                    return PageState.LIST.equals(pageState) && dataTable.getRowCount()>1;
+                    return PageState.LIST.equals(pageState) && dataTable.getRowCount()>ITEMS_PER_PAGE; // if only one page, don't need this.
                 }
             });
             list.add(dataTable);
@@ -169,6 +170,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
             dropDown.add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override protected void onUpdate(AjaxRequestTarget target) {
                     typeFilter = (Class<BaseOrg>) dropDown.getDefaultModelObject();
+                    dataTable.setCurrentPage(0);
                     target.add(list);
                 }
             });

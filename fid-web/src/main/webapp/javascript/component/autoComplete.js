@@ -50,17 +50,26 @@ var autoCompleter = (function() {
 		var text;
 
 		var defaults = {
-			delay:500
+			delay:500,
+			minLength:0
 		};
 		var options = $.extend(defaults, options);
 
 		var keyTimer;
 		$parent.delegate(options.selector, 'keyup', function(e) {
+			var newInput = e.target.value;
+			if (newInput==text) {
+				return;
+			}
+			if (newInput && newInput.length<options.minLength) {
+				return;
+			}
+			text = newInput;
 			if (keyTimer) {
 				window.clearTimeout(keyTimer);
 			}
 			keyTimer = window.setTimeout(function () {
-				var url = new String(options.callback)+'&text='+ e.target.value;
+				var url = new String(options.callback)+'&text='+ newInput;
 				var wcall = wicketAjaxGet(url, function() {}, function() {});  // note currently don't do anything on success/failure.  could be a future option.
 				keyTimer = null;
 			}, options.delay);
