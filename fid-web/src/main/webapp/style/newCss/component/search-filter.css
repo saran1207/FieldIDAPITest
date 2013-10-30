@@ -3,26 +3,21 @@
 	margin-left: 5px;
 	width: auto;
 	overflow: auto;
-	/*float: none;
-	margin-right: 325px;*/
-	float: left;	
+	float: none;
+	margin-right: 325px;	
+}
+.input-combo {
+	width: 99%;
+}
+.input-combo [class^="btn"] {
+	float: right;
 }
 .search-switch {
-	float: left;
 	font-size: 13px;
+	float: left;
 	margin-left: 8px;
 	padding-top: 5px;
 }
 .action-group {
-	width: 236px;
+	/*width: 236px;*/
 }
-/*.action-group .button-group {
-	float: right;
-}*/
-.mass-actions {
-	/*margin-left: 5px;*/
-}
-/*.dropdown-btn ul li.print-certs a {
-	white-space: normal;
-	width: 141px;
-}*/

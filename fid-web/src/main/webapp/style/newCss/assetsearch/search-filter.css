@@ -94,9 +94,11 @@ visibility: visible;
 	padding-left: 14px;
 }
 .sub-menu .action-group {
-	position: absolute;
+	/*position: absolute;
 	top: 0;
-	right: 11px;
+	right: 11px;*/
+	text-align: right;
+	margin-right: 11px;
 }
 .action-group .button-group {
 	float: right;
@@ -207,7 +209,7 @@ visibility: visible;
 	height: 26px;
 	padding: 9px 2px;
 }
-.mass-actions-msg em {
+p.mass-actions-msg em {
 	font-style: italic;
 	text-decoration: none;
 	color: #666666;

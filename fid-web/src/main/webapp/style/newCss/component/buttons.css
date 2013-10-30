@@ -181,7 +181,7 @@
 /* Split button
 -----------------------------------------*/
 .split-btn {
-	display: inline-block;
+	display: inline;
 }
 .split-btn .dropdown-btn {
 	margin-left: -5px;
