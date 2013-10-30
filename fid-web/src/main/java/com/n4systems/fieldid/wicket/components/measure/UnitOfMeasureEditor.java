@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.components.measure;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.ChangeThenClickComponentWhenEnterPressed;
+import com.n4systems.fieldid.wicket.behavior.DisplayNoneIfCondition;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.pages.identify.components.attributes.ValidateIfRequiredValidator;
@@ -44,6 +46,7 @@ public class UnitOfMeasureEditor extends FormComponentPanel<InfoOptionBean> {
 
     private String primaryValue;
     private String secondaryValue;
+    private boolean editMode;
 
     public UnitOfMeasureEditor(String id, final IModel<InfoOptionBean> infoOption) {
         super(id, infoOption);
@@ -60,6 +63,12 @@ public class UnitOfMeasureEditor extends FormComponentPanel<InfoOptionBean> {
 
         add(editorContainer = new WebMarkupContainer("editorContainer"));
         add(displayContainer = new WebMarkupContainer("displayContainer"));
+        displayContainer.add(new DisplayNoneIfCondition(new Predicate() {
+            @Override
+            public boolean evaluate() {
+                return editMode;
+            }
+        }));
 
         editorContainer.setVisible(false);
 
@@ -137,8 +146,8 @@ public class UnitOfMeasureEditor extends FormComponentPanel<InfoOptionBean> {
     }
 
     private void setEditMode(boolean editMode, AjaxRequestTarget target) {
+        this.editMode = editMode;
         editorContainer.setVisible(editMode);
-        displayContainer.setVisible(!editMode);
         target.add(editorContainer, displayContainer);
     }
 
