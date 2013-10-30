@@ -16,7 +16,6 @@ public class OrgsDataProvider implements IDataProvider<BaseOrg> {
     private @SpringBean OrgService orgService;
     private int pageSize = 20;
     private List<BaseOrg> results;
-    private String filter;
     private Long size;
 
     public OrgsDataProvider() {
@@ -32,18 +31,13 @@ public class OrgsDataProvider implements IDataProvider<BaseOrg> {
     private List<BaseOrg> getResults(int first) {
         if (results == null) {
             int page = first / pageSize;
-            results = orgService.search(filter, page, pageSize);
+            results = orgService.search(getFilter(), page, pageSize);
         }
         return results;
     }
 
     public OrgsDataProvider withPageSize(int pageSize) {
         this.pageSize = pageSize;
-        return this;
-    }
-
-    public OrgsDataProvider withFilter(String filter) {
-        this.filter = filter;
         return this;
     }
 
@@ -56,12 +50,16 @@ public class OrgsDataProvider implements IDataProvider<BaseOrg> {
     }
 
     private Long getResultSize() {
-        return orgService.getSearchCount(filter);
+        return orgService.getSearchCount(getFilter());
     }
 
     @Override
     public IModel<BaseOrg> model(BaseOrg object) {
         return new EntityModel(BaseOrg.class,object.getId());
+    }
+
+    protected String getFilter() {
+        return null;
     }
 
     @Override
