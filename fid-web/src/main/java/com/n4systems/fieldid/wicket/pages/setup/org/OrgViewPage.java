@@ -13,6 +13,7 @@ import com.n4systems.model.orgs.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -38,6 +39,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
     // TODO : refactor ajaxTextField into separate component.
     private static final String INIT_TEXT_FIELD_JS = "var %s = autoCompleter.createAjaxTextField(%s)";
     private TextField<String> listText;
+    private Class<BaseOrg> typeFilter;
 
     enum PageState { TREE, LIST };
 
@@ -53,7 +55,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
 
 
     private OrgViewPanel panel;
-    private String filter = null;
+    private String textFilter = null;
     private Class<? extends BaseOrg> filterClass = null;
     private Component tree;
     private AbstractDefaultAjaxBehavior behaviour;
@@ -86,7 +88,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
-        AutoCompleteOptions options = new AutoCompleteOptions(panel.getMarkupId(), behaviour.getCallbackUrl().toString());
+        AjaxTextFieldOptions options = new AjaxTextFieldOptions(panel.getMarkupId(), behaviour.getCallbackUrl().toString());
         response.renderOnDomReadyJavaScript(String.format(INIT_TEXT_FIELD_JS, getJsVariableName(), new Gson().toJson(options)));
     }
 
@@ -99,8 +101,12 @@ public class OrgViewPage extends FieldIDFrontEndPage {
     class OrgViewPanel extends Fragment {
         private DataView<BaseOrg> dataTable;
         private IDataProvider provider = new OrgsDataProvider() {
-            @Override protected String getFilter() {
-                return filter;
+            @Override protected String getTextFilter() {
+                return textFilter;
+            }
+
+            @Override protected Class<? extends BaseOrg> getTypeFilter() {
+                return typeFilter;
             }
         };
 
@@ -136,7 +142,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
             behaviour = new AbstractDefaultAjaxBehavior() {
                 protected void respond(final AjaxRequestTarget target) {
                     IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-                    filter = params.getParameterValue("text").toString();
+                    textFilter = params.getParameterValue("text").toString();
                     target.add(list);
                 }
             };
@@ -144,11 +150,11 @@ public class OrgViewPage extends FieldIDFrontEndPage {
 
             list.add(new PagingNavigator("navigator", dataTable) {
                 @Override public boolean isVisible() {
-                    return PageState.LIST.equals(pageState);
+                    return PageState.LIST.equals(pageState) && dataTable.getRowCount()>1;
                 }
             });
             list.add(dataTable);
-            list.add(listText = new TextField<String>("filter", new PropertyModel(OrgViewPage.this, "filter")));
+            list.add(listText = new TextField<String>("filter", new PropertyModel(OrgViewPage.this, "textFilter")));
             listText.setOutputMarkupId(true);
             List<Class<? extends BaseOrg>> filterTypes = Lists.newArrayList(PrimaryOrg.class,SecondaryOrg.class, CustomerOrg.class, DivisionOrg.class);
             IChoiceRenderer<Class<? extends BaseOrg>> filterTypeRenderer = new IChoiceRenderer<Class<? extends BaseOrg>>() {
@@ -159,7 +165,14 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                     return clazz.getSimpleName();
                 }
             };
-            list.add(new FidDropDownChoice<Class<? extends BaseOrg>>("orgType", new PropertyModel<Class<? extends BaseOrg>>(OrgViewPage.this, "filterClass"), filterTypes, filterTypeRenderer));
+            final FidDropDownChoice<Class<? extends BaseOrg>> dropDown = new FidDropDownChoice<Class<? extends BaseOrg>>("orgType", new PropertyModel<Class<? extends BaseOrg>>(OrgViewPage.this, "filterClass"), filterTypes, filterTypeRenderer);
+            dropDown.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+                @Override protected void onUpdate(AjaxRequestTarget target) {
+                    typeFilter = (Class<BaseOrg>) dropDown.getDefaultModelObject();
+                    target.add(list);
+                }
+            });
+            list.add(dropDown.setNullValid(true));
             add(list);
         }
 
@@ -173,13 +186,13 @@ public class OrgViewPage extends FieldIDFrontEndPage {
 
     }
 
-    class AutoCompleteOptions {
+    class AjaxTextFieldOptions {
         String callback;
         Integer delay = 500;
         String id;
         String selector = ".org-list input[type=text]";
         
-        public AutoCompleteOptions(String id, String url) {
+        public AjaxTextFieldOptions(String id, String url) {
             this.id = id;
             this.callback = url;
         }

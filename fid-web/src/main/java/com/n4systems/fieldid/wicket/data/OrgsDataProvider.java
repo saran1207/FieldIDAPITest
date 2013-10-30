@@ -15,7 +15,7 @@ public class OrgsDataProvider implements IDataProvider<BaseOrg> {
 
     private @SpringBean OrgService orgService;
     private int pageSize = 20;
-    private List<BaseOrg> results;
+    private List<? extends BaseOrg> results;
     private Long size;
 
     public OrgsDataProvider() {
@@ -28,10 +28,10 @@ public class OrgsDataProvider implements IDataProvider<BaseOrg> {
         return getResults(first).iterator();
     }
 
-    private List<BaseOrg> getResults(int first) {
+    private List<? extends BaseOrg> getResults(int first) {
         if (results == null) {
             int page = first / pageSize;
-            results = orgService.search(getFilter(), page, pageSize);
+            results = orgService.search(getTextFilter(), getTypeFilter(), page, pageSize);
         }
         return results;
     }
@@ -50,7 +50,7 @@ public class OrgsDataProvider implements IDataProvider<BaseOrg> {
     }
 
     private Long getResultSize() {
-        return orgService.getSearchCount(getFilter());
+        return orgService.getSearchCount(getTextFilter(), getTypeFilter());
     }
 
     @Override
@@ -58,22 +58,19 @@ public class OrgsDataProvider implements IDataProvider<BaseOrg> {
         return new EntityModel(BaseOrg.class,object.getId());
     }
 
-    protected String getFilter() {
+    protected String getTextFilter() {
+        return null;
+    }
+
+    protected Class<? extends BaseOrg> getTypeFilter() {
         return null;
     }
 
     @Override
     public void detach() {
         results = null;
+        size = null;
     }
 
-//    protected PageHolder<TableView> runSearch(final int page) {
-//        return orgService.performSearch(search, page, pageSize);
-//    }
-
-//    private void fillInStringValues(RowView row) {
-//        SessionUser user = FieldIDSession.get().getSessionUser();
-//        TableGenerationContext exportContextProvider = new TableGenerationContextImpl(user.getTimeZone(), user.getOwner().getPrimaryOrg().getDateFormat(), user.getOwner().getPrimaryOrg().getDateFormat() + " h:mm a", user.getOwner());
-//        StringRowPopulator.populateRowWithConvertedStrings(row, searchCriteria, exportContextProvider);
-//    }
 }
+
