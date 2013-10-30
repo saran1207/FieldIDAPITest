@@ -1,56 +1,49 @@
 package com.n4systems.services.search;
 
+import com.n4systems.model.BaseEntity;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.UnsecuredEntity;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "index_queue_items")
-public class IndexQueueItem implements Serializable, UnsecuredEntity {
+public class IndexQueueItem extends BaseEntity implements UnsecuredEntity {
 
-	public enum IndexQueueItemType { ASSET_INSERT, ASSET_UPDATE, USER, ORG, ORDER, PREDEFINEDLOCATION, ASSETTYPE, ASSETTYPEGROUP, ASSETSTATUS, TENANT }
+    public enum IndexQueueItemType { ASSET_INSERT, ASSET_UPDATE, USER, ORG, ORDER, PREDEFINEDLOCATION, ASSETTYPE, ASSETTYPEGROUP, ASSETSTATUS, TENANT }
 
-	@EmbeddedId
-	private IndexQueueItemPK item = new IndexQueueItemPK();
+    @ManyToOne
+    @JoinColumn(name="tenant_id")
+    private Tenant tenant;
 
-	public Long getId() {
-		return item.id;
-	}
+    @Enumerated(EnumType.STRING)
+    @Column
+    private IndexQueueItemType type;
 
-	public void setId(Long id) {
-		this.item.id = id;
-	}
+    @Column(name="item_id")
+    private Long itemId;
 
 	public IndexQueueItemType getType() {
-		return item.type;
+		return type;
 	}
 
 	public void setType(IndexQueueItemType type) {
-		this.item.type = type;
+		this.type = type;
 	}
 
-	@Embeddable
-	public static class IndexQueueItemPK implements Serializable {
-		private Long id;
+    public Tenant getTenant() {
+        return tenant;
+    }
 
-		@Enumerated(EnumType.STRING)
-		private IndexQueueItemType type;
+    public void setTenant(Tenant tenant) {
+        this.tenant = tenant;
+    }
 
-		@Override
-		public boolean equals(Object o) {
-			if (this == o) return true;
-			if (o == null || getClass() != o.getClass()) return false;
-			IndexQueueItemPK that = (IndexQueueItemPK) o;
-			if (!id.equals(that.id)) return false;
-			if (type != that.type) return false;
-			return true;
-		}
+    public Long getItemId() {
+        return itemId;
+    }
 
-		@Override
-		public int hashCode() {
-			return 31 * id.hashCode() + type.hashCode();
-		}
-	}
-
+    public void setItemId(Long itemId) {
+        this.itemId = itemId;
+    }
 }

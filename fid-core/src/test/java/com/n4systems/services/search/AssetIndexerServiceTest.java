@@ -23,11 +23,7 @@ import org.junit.Test;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import static com.n4systems.testutils.QueryTypeMatcher.eq;
-import static org.easymock.EasyMock.anyObject;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
-import static org.hamcrest.CoreMatchers.any;
+import static org.easymock.EasyMock.*;
 
 public class AssetIndexerServiceTest extends FieldIdServiceTest {
     
@@ -48,11 +44,6 @@ public class AssetIndexerServiceTest extends FieldIdServiceTest {
         return new AssetIndexerService() {
             @Override IndexQueueItem createNewIndexQueueItem() {
                 return indexQueueItem;
-            }
-
-            @Override
-            boolean tenantQueueItemExists(Long id) {
-                return tenantQueueItemExists;
             }
         };
 
@@ -90,41 +81,6 @@ public class AssetIndexerServiceTest extends FieldIdServiceTest {
         verifyTestMocks();
     }
 
-    @Test
-    public void testIndexTenant() throws Exception {
-        String name  = "foo";
-
-        Tenant tenant = TenantBuilder.n4();
-        QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
-        builder.addSimpleWhere("name", name);
-
-        expect(persistenceService.find(QueryBuilderMatcher.eq(builder))).andReturn(tenant);
-        persistenceService.saveAny(indexQueueItem);
-        replay(persistenceService);
-
-        assetIndexerService.indexTenant(name);
-
-        verifyTestMocks();
-    }
-
-    @Test
-    public void testIndexTenant_already_exists() throws Exception {
-        tenantQueueItemExists = true;  //
-
-        String name  = "foo";
-        Tenant tenant = TenantBuilder.n4();
-        QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
-        builder.addSimpleWhere("name", name);
-
-        expect(persistenceService.find(QueryBuilderMatcher.eq(builder))).andReturn(tenant);
-        // persistenceService.saveAny(indexQueueItem);    <--- this will NOT be called because item already exists.
-        replay(persistenceService);
-
-        assetIndexerService.indexTenant(name);
-
-        verifyTestMocks();
-    }
-
     private void expectingProcessIndexQueueItem(IndexQueueItem.IndexQueueItemType itemType) {
         AssetType type = AssetTypeBuilder.anAssetType().named("type").build();
         AssetStatus status = AssetStatusBuilder.anAssetStatus().named("status").build();
@@ -143,7 +99,7 @@ public class AssetIndexerServiceTest extends FieldIdServiceTest {
         Long id = 123L;
         IndexQueueItem item = new IndexQueueItem();
         item.setType(itemType);
-        item.setId(id);
+        item.setItemId(id);
 
         query = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
 
