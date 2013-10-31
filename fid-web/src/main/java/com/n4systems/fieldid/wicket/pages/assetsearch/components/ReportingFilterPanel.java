@@ -117,12 +117,6 @@ public class ReportingFilterPanel extends Panel {
 
     protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {}
 
-    @Override
-	public void renderHead(IHeaderResponse response) {
-		//response.renderCSSReference("style/component/searchFilter.css");
-		super.renderHead(response);
-	}
-
     protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {}
 
 }

@@ -120,7 +120,6 @@ public abstract class AbstractSearchPage<T extends SearchCriteria> extends Field
         response.renderCSSReference("style/pageStyles/wide.css");
         response.renderCSSReference("style/newCss/component/forms.css");
         response.renderCSSReference("style/newCss/component/buttons.css");
-        response.renderCSSReference("style/newCss/icons/icons.css");
         response.renderCSSReference("style/newCss/assetsearch/search-filter.css");
 
         response.renderOnDomReadyJavaScript("fieldIdWidePage.init(" + showLeftPanel + ")");
