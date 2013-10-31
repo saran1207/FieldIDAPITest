@@ -91,23 +91,15 @@ public class OrgTree extends Tree {
     }
 
     protected String getInitTreeJs() {
-        String url = ajaxBehavior.getCallbackUrl().toString();
-        return String.format(INIT_ORGTREE_JS,convertToJson(new TreeOptions(url, "foobar", getMarkupId())));
+        return String.format(INIT_ORGTREE_JS,convertToJson(new TreeOptions()));
     }
 
     // ------------------------------------------------------------
 
     class TreeOptions {
-        String updateCallback;
-        String id;
-        String clickCallback;
-
-        TreeOptions(String updateCallback, String clickCallback, String id) {
-            this.updateCallback = updateCallback;
-            this.clickCallback = clickCallback;
-            this.id = id;
-        }
-
+        String updateCallback = ajaxBehavior.getCallbackUrl().toString();
+        String id = OrgTree.this.getMarkupId();
+        String clickCallback = getWebRequest().getContextPath() + "/w/orgSummary";
     }
 
 

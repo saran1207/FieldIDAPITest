@@ -80,11 +80,11 @@ var orgTreeFactory = (function() {
 					var $link = $(event.target);
 					if ($link.hasClass('jstree-loading')) {return;}
 					var node = $link.closest('li');
-					// TODO DD: fire ajax nodeClick event with id of node in url.
+					var url = options.clickCallback + '?id=' + node.attr('id') + '&type=' + node.attr('data');
+					window.location = url;
 				});
 
 				$tree.show();
-
 			}
 			return $tree;
 		}
