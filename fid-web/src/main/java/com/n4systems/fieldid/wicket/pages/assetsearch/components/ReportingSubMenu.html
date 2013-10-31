@@ -3,7 +3,7 @@
 
 		<div wicket:id="print" class="dropdown-btn">
 			<a class="btn btn-secondary btn-sml" href="javascript:void(0);" ><wicket:message key="label.print"/><img src="/fieldid/images/menu-down.png"></a>
-			<ul>
+			<ul class="pull-right">
 				<li><a wicket:id="printThisReportLink"><wicket:message key="label.printreport"/></a></li>
 				<li><a wicket:id="printSelectedPdfReportsLink"><wicket:message key="label.printselectedpdfreports"/></a></li>
 				<li><a wicket:id="printSelectedObservationReportsLink" ><wicket:message key="label.printselectedobservationcertificate"/></a></li>
@@ -11,7 +11,7 @@
 		</div>
 		<div wicket:id="actions" class="dropdown-btn">
 			<a class="btn btn-secondary btn-sml" href="javascript:void(0);" ><wicket:message key="label.mass_actions"/><img src="/fieldid/images/menu-down.png"></a>
-			<ul>
+			<ul class="pull-right">
 			<wicket:enclosure> 
 				<li><a wicket:id="assignJobLink"><wicket:message key="label.assign_to_a_job" /></a></li>
 			</wicket:enclosure>
@@ -21,7 +21,6 @@
 			<wicket:enclosure>
 				<li><a wicket:id="massScheduleUpdateLink"><wicket:message key="label.massupdate"/></a></li>
 			</wicket:enclosure>
-				<!--   MOVED TO MASS ACTIONS DROPDOWN.  NEED TO UPDATE IN JAVA -->
 				<li><a wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a></li>
 				<li><a wicket:id="summaryReportLink"><wicket:message key="label.summary_report" /></a></li>
 			</ul>
