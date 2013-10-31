@@ -5,7 +5,10 @@
 
 
     <wicket:fragment wicket:id="orgViewFragment">
-        <div wicket:id="tree" class="org-tree"/>
+        <div wicket:id="tree" class="org-tree">
+            <input wicket:id="filter" type="text"/>
+            <div wicket:id="orgTree"/>
+        </div>
         <!--<input wicket:id="tree-filter" type="text"/>-->
 
         <div wicket:id="list" class="org-list">

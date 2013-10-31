@@ -15,7 +15,7 @@ import java.util.List;
 
 public abstract class Tree extends Panel {
 
-    private static final String INIT_TREE_JS = "%s = treeFactory.create('%s',%s);";
+    private static final String INIT_TREE_JS = "var %s = treeFactory.create('%s',%s);";
 
     protected final AbstractDefaultAjaxBehavior ajaxBehavior;
     private String search = null;

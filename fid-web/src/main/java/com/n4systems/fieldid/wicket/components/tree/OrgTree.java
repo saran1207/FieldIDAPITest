@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class OrgTree extends Tree {
 
-    private static final String INIT_ORGTREE_JS = "orgTreeFactory.create(%s);";
+    private static final String INIT_ORGTREE_JS = "var %s = orgTreeFactory.create(%s);";
     public static final String NODE_HTML = "<a href='www.google.com'>%s</a>" +
             "<span>%s</span>" +
             "<span class='timeago' title='%s'>xx</span>" +
@@ -91,7 +91,7 @@ public class OrgTree extends Tree {
     }
 
     protected String getInitTreeJs() {
-        return String.format(INIT_ORGTREE_JS,convertToJson(new TreeOptions()));
+        return String.format(INIT_ORGTREE_JS,getJsVariableName(),convertToJson(new TreeOptions()));
     }
 
     // ------------------------------------------------------------

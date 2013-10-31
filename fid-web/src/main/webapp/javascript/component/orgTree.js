@@ -16,14 +16,19 @@ var orgTreeFactory = (function() {
 		return t;
 	}
 
-	function tree(options) {
-		var id = options.id;
+	function tree(opts) {
+		var id = opts.id;
 		var $tree;
 		var $node;
 		var initialized = false;
 		var input = '';
-		// TODO DD : add default options here...
-		var options = options;
+		var $text;
+
+		var defaults = {
+			delay:500,
+			minLength:0
+		};
+		var options = $.extend(defaults, opts);
 
 		function getTree() {
 			return lazyInit();
@@ -43,7 +48,7 @@ var orgTreeFactory = (function() {
 			if (!initialized) {
 				initialized = true;
 				$tree = $('#'+options.id);
-
+				$text = $tree.prev('input[type=text]');
 				$tree.jstree({
 					core:{animation:100, html_titles:true},
 					themes :  { dots:false },
@@ -85,6 +90,20 @@ var orgTreeFactory = (function() {
 				});
 
 				$tree.show();
+
+				var keyTimer;
+				if (!$text) return;
+				$text.bind('keyup', function(e,d) {
+					if (keyTimer) {
+						window.clearTimeout(keyTimer);
+					}
+					keyTimer = window.setTimeout(function () {
+						update($text.val());
+						keyTimer = null;
+					}, options.delay);
+					return true;
+				});
+
 			}
 			return $tree;
 		}

@@ -15,7 +15,6 @@ import com.n4systems.fieldid.wicket.pages.org.OrgSummaryPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.orgs.*;
 import com.n4systems.services.date.DateService;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -46,10 +45,7 @@ import static ch.lambdaj.Lambda.on;
 public class OrgViewPage extends FieldIDFrontEndPage {
 
     // TODO : refactor ajaxTextField into separate component.
-    private static final String INIT_TEXT_FIELD_JS = "var %s = autoCompleter.createAjaxTextField(%s)";
-    private TextField<String> listText;
-    private Class<BaseOrg> typeFilter;
-    private BaseOrg org;
+    private static final String INIT_TEXT_FIELD_JS = "autoCompleter.createAjaxTextField(%s)";
 
     enum PageState { TREE, LIST };
 
@@ -63,15 +59,20 @@ public class OrgViewPage extends FieldIDFrontEndPage {
         labelMap.put(CustomerOrg.class, new FIDLabelModel("label.customer_type"));
     }
 
-    private @SpringBean
-    DateService dateService;
+    private @SpringBean DateService dateService;
 
     private OrgViewPanel panel;
-    private String textFilter = null;
     private Class<? extends BaseOrg> filterClass = null;
-    private Component tree;
-    private AbstractDefaultAjaxBehavior behaviour;
+    private OrgTree orgTree;
+    private AbstractDefaultAjaxBehavior listBehavior;
+    private AbstractDefaultAjaxBehavior treeBehavior;
     private PageState pageState = PageState.LIST;
+    private WebMarkupContainer tree;
+    private TextField<String> listText;
+    private TextField<String> treeText;
+    private Class<BaseOrg> typeFilter;
+    private String textFilter = null;
+    private BaseOrg org;
 
 
     public OrgViewPage() {
@@ -100,14 +101,9 @@ public class OrgViewPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
-        AjaxTextFieldOptions options = new AjaxTextFieldOptions(panel.getMarkupId(), behaviour.getCallbackUrl().toString());
-        response.renderOnDomReadyJavaScript(String.format(INIT_TEXT_FIELD_JS, getJsVariableName(), new Gson().toJson(options)));
+        AjaxTextFieldOptions options = new AjaxTextFieldOptions(panel.getMarkupId(), listBehavior.getCallbackUrl().toString(), ".org-list input[type=text]");
+        response.renderOnDomReadyJavaScript(String.format(INIT_TEXT_FIELD_JS, new Gson().toJson(options)));
     }
-
-    private String getJsVariableName() {
-        return getMarkupId()+"_text";
-    }
-
 
 
     class OrgViewPanel extends Fragment {
@@ -160,7 +156,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                 }
             });
             dataTable.setCurrentPage(0);
-            behaviour = new AbstractDefaultAjaxBehavior() {
+            listBehavior = new AbstractDefaultAjaxBehavior() {
                 protected void respond(final AjaxRequestTarget target) {
                     IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
                     textFilter = params.getParameterValue("text").toString();
@@ -168,7 +164,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                     target.add(list);
                 }
             };
-            dataTable.add(behaviour);
+            dataTable.add(listBehavior);
 
             list.add(new PagingNavigator("navigator", dataTable) {
                 @Override public boolean isVisible() {
@@ -200,11 +196,13 @@ public class OrgViewPage extends FieldIDFrontEndPage {
         }
 
         private void addTree() {
-            add(tree = new OrgTree("tree") {
+            add(tree = new WebMarkupContainer("tree") {
                 @Override public boolean isVisible() {
                     return PageState.TREE.equals(pageState);
                 }
             });
+            tree.add(orgTree = new OrgTree("orgTree"));
+            tree.add(treeText = new TextField<String>("filter", new PropertyModel(OrgViewPage.this, "textFilter"))).setOutputMarkupId(true);
         }
 
     }
@@ -213,11 +211,12 @@ public class OrgViewPage extends FieldIDFrontEndPage {
         String callback;
         Integer delay = 500;
         String id;
-        String selector = ".org-list input[type=text]";
+        String selector;
         
-        public AjaxTextFieldOptions(String id, String url) {
+        public AjaxTextFieldOptions(String id, String url, String selector) {
             this.id = id;
             this.callback = url;
+            this.selector = selector;
         }
     }
 
