@@ -187,6 +187,9 @@ public class OrgLocationTree {
         private Boolean included;
         private Boolean isLeaf = null;
         private NodeType type;
+        private Date created;
+        private Date modified;
+        private String identifier;
 
         OrgLocationTreeNode() {
             this.id = -1L;
@@ -202,6 +205,9 @@ public class OrgLocationTree {
                         entity instanceof PredefinedLocation ? ((PredefinedLocation)entity).getName() :
                         "root";
             children = new TreeSet<OrgLocationTreeNode>(new OrgLocationComparator());
+            this.created = entity.getCreated();
+            this.modified = entity.getModified();
+            this.identifier = entity instanceof ExternalOrg ? ((ExternalOrg)entity).getCode() : this.name;
             Preconditions.checkArgument(entity!=null,"can't have null entity for tree node");
         }
 
@@ -249,6 +255,18 @@ public class OrgLocationTree {
 
         public boolean isLeaf() {
             return Boolean.TRUE.equals(isLeaf);
+        }
+
+        public Date getCreated() {
+            return created;
+        }
+
+        public Date getModified() {
+            return modified;
+        }
+
+        public String getIdentifier() {
+            return identifier;
         }
     }
 

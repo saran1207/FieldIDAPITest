@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
+import com.n4systems.fieldid.wicket.components.tree.OrgTree;
 import com.n4systems.fieldid.wicket.data.OrgsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -48,6 +49,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
     private static final String INIT_TEXT_FIELD_JS = "var %s = autoCompleter.createAjaxTextField(%s)";
     private TextField<String> listText;
     private Class<BaseOrg> typeFilter;
+    private BaseOrg org;
 
     enum PageState { TREE, LIST };
 
@@ -187,8 +189,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
             };
             final FidDropDownChoice<Class<? extends BaseOrg>> dropDown = new FidDropDownChoice<Class<? extends BaseOrg>>("orgType", new PropertyModel<Class<? extends BaseOrg>>(OrgViewPage.this, "filterClass"), filterTypes, filterTypeRenderer);
             dropDown.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
+                @Override protected void onUpdate(AjaxRequestTarget target) {
                     typeFilter = (Class<BaseOrg>) dropDown.getDefaultModelObject();
                     dataTable.setCurrentPage(0);
                     target.add(list);
@@ -199,7 +200,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
         }
 
         private void addTree() {
-            add(tree = new WebMarkupContainer("tree") {
+            add(tree = new OrgTree("tree") {
                 @Override public boolean isVisible() {
                     return PageState.TREE.equals(pageState);
                 }
