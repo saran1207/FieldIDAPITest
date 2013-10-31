@@ -12,7 +12,7 @@ import java.util.Set;
 public class OrgTree extends Tree {
 
     private static final String INIT_ORGTREE_JS = "var %s = orgTreeFactory.create(%s);";
-    public static final String NODE_HTML = "<a href='www.google.com'>%s</a>" +
+    public static final String NODE_HTML = "<a href='www.google.com' class='%s'>%s</a>" +
             "<span>%s</span>" +
             "<span class='timeago' title='%s'>xx</span>" +
             "<span class='timeago' title='%s'>xx</span>";
@@ -64,10 +64,9 @@ public class OrgTree extends Tree {
     }
 
     private JsonTreeNode createNode(OrgLocationTree.OrgLocationTreeNode node, Set<OrgLocationTree.OrgLocationTreeNode> children, JsonTreeNode parent) {
-        // arggh.  Gson won't work with inner classes so instead of overriding the "isLeaf" method i have to awkwardly set it here.
-        // TODO DD : refactor and make a OrgJsonTreeNode with this set.
-        JsonTreeNode jsonNode = new JsonTreeNode(node, parent).withName(String.format(NODE_HTML, node.getName(), node.getIdentifier(), node.getCreated(), node.getModified())).setLeafType(OrgLocationTree.NodeType.DIVISION_ORG);
-
+        // NOTE :  Gson won't work with inner classes so instead of overriding the "isLeaf" method i have to awkwardly set it here.
+        String cssClass = node.isLinked() ? "linked" : "";
+        JsonTreeNode jsonNode = new JsonTreeNode(node, parent).withName(String.format(NODE_HTML, cssClass, node.getName(), node.getIdentifier(), node.getCreated(), node.getModified())).setLeafType(OrgLocationTree.NodeType.DIVISION_ORG);
 
         List<JsonTreeNode> nodes = Lists.newArrayList();
         for (OrgLocationTree.OrgLocationTreeNode child:children) {

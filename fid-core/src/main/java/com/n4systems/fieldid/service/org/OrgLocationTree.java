@@ -190,6 +190,7 @@ public class OrgLocationTree {
         private Date created;
         private Date modified;
         private String identifier;
+        private boolean isLinked;
 
         OrgLocationTreeNode() {
             this.id = -1L;
@@ -208,6 +209,7 @@ public class OrgLocationTree {
             this.created = entity.getCreated();
             this.modified = entity.getModified();
             this.identifier = entity instanceof ExternalOrg ? ((ExternalOrg)entity).getCode() : this.name;
+            this.isLinked = entity instanceof ExternalOrg && ((ExternalOrg)entity).isLinked();
             Preconditions.checkArgument(entity!=null,"can't have null entity for tree node");
         }
 
@@ -267,6 +269,10 @@ public class OrgLocationTree {
 
         public String getIdentifier() {
             return identifier;
+        }
+
+        public boolean isLinked() {
+            return isLinked;
         }
     }
 
