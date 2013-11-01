@@ -12,9 +12,9 @@ import com.n4systems.fieldid.wicket.data.OrgsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgSummaryPage;
-import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.orgs.*;
 import com.n4systems.services.date.DateService;
+import com.n4systems.util.StringUtils;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -29,7 +29,6 @@ import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
-import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
@@ -39,8 +38,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 import java.util.Map;
-
-import static ch.lambdaj.Lambda.on;
 
 public class OrgViewPage extends FieldIDFrontEndPage {
 
@@ -112,7 +109,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
 
     class OrgViewPanel extends Fragment {
         private DataView<BaseOrg> dataTable;
-        private IDataProvider provider = new OrgsDataProvider() {
+        private OrgsDataProvider provider = new OrgsDataProvider() {
             @Override protected String getTextFilter() {
                 return textFilter;
             }
@@ -141,7 +138,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                 @Override
                 protected void populateItem(Item<BaseOrg> item) {
                     final BaseOrg org = item.getModelObject();
-                    item.add(createLink("name",org).add(new Label("label", ProxyModel.of(item.getModelObject(), on(BaseOrg.class).getName()))));
+                    item.add(createLink("name", org).add(new Label("label", getMatchingNameText(org.getName(), textFilter)).setEscapeModelStrings(false)));
                     String id = org instanceof ExternalOrg ? ((ExternalOrg) org).getCode() : org.getName();
                     item.add(createLink("id",org).add(new Label("label", Model.of(id))));
                     item.add(new Label("type", getTypeString(org)));
@@ -203,6 +200,16 @@ public class OrgViewPage extends FieldIDFrontEndPage {
             add(list);
         }
 
+        private String getMatchingNameText(String name, String textFilter) {
+            int index = StringUtils.indexOfIgnoreCase(name, textFilter);
+            if (index==-1) {
+                return name;
+            }
+            String highlightedMatchFormat = "%s<span class='match'>%s</span>%s";
+            return String.format(highlightedMatchFormat, name.substring(0,index), name.substring(index,index+textFilter.length()), name.substring(index+textFilter.length()));
+        }
+
+
         private void addTree() {
             add(tree = new WebMarkupContainer("tree") {
                 @Override public boolean isVisible() {
@@ -214,6 +221,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
         }
 
     }
+
 
     class AjaxTextFieldOptions {
         String parent = "#"+container.getMarkupId();

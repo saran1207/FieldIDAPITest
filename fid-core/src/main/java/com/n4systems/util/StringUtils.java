@@ -1,11 +1,11 @@
 package com.n4systems.util;
 
 import java.util.Collection;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class
-        StringUtils {
+public class StringUtils {
     
     private static final String copyFilePrefix = "Copy of ";
 	private static final Pattern numericPattern = Pattern.compile("[0-9]+");
@@ -154,5 +154,11 @@ public class
     }
 
 
+    public static int indexOfIgnoreCase(String source,String fragment) {
+        if (fragment==null || fragment.length()==0) {
+            return -1;
+        }
+        return source.toUpperCase(Locale.US).indexOf(fragment.toUpperCase(Locale.US));
+    }
 
 }

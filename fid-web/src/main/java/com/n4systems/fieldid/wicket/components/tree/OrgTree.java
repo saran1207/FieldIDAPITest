@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.tree;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.OrgLocationTree;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.util.StringUtils;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -12,12 +13,15 @@ import java.util.Set;
 public class OrgTree extends Tree {
 
     private static final String INIT_ORGTREE_JS = "var %s = orgTreeFactory.create(%s);";
+    public static final String NODE_NAME_HTML = "<span>%s</span>";
+    public static final String NODE_NAME_HIGHTLIGHTED_HTML = "%s<span class='match'>%s</span>%s";
     public static final String NODE_HTML = "<a href='www.google.com' class='%s'>%s</a>" +
-            "<span>%s</span>" +
+            "%s" +
             "<span class='timeago' title='%s'>xx</span>" +
             "<span class='timeago' title='%s'>xx</span>";
 
     private @SpringBean OrgService orgService;
+    private String lastSearch = null;
 
     public OrgTree(String id) {
         super(id);
@@ -25,7 +29,7 @@ public class OrgTree extends Tree {
 
     @Override
     protected List<JsonTreeNode> getNodes(String search) {
-        return buildJsonTree(getOrgTree(search));
+        return buildJsonTree(getOrgTree(lastSearch = search));
     }
 
     @Override
@@ -65,8 +69,7 @@ public class OrgTree extends Tree {
 
     private JsonTreeNode createNode(OrgLocationTree.OrgLocationTreeNode node, Set<OrgLocationTree.OrgLocationTreeNode> children, JsonTreeNode parent) {
         // NOTE :  Gson won't work with inner classes so instead of overriding the "isLeaf" method i have to awkwardly set it here.
-        String cssClass = node.isLinked() ? "linked" : "";
-        JsonTreeNode jsonNode = new JsonTreeNode(node, parent).withName(String.format(NODE_HTML, cssClass, node.getName(), node.getIdentifier(), node.getCreated(), node.getModified())).setLeafType(OrgLocationTree.NodeType.DIVISION_ORG);
+        JsonTreeNode jsonNode = new JsonTreeNode(node, parent).withName(getHighlightedNodeName(node)).setLeafType(OrgLocationTree.NodeType.DIVISION_ORG);
 
         List<JsonTreeNode> nodes = Lists.newArrayList();
         for (OrgLocationTree.OrgLocationTreeNode child:children) {
@@ -76,10 +79,21 @@ public class OrgTree extends Tree {
         }
         jsonNode.setChildren(nodes);
         if (Boolean.TRUE.equals(node.matches())) {
-            jsonNode.addAttribute("class", "match");
             openParents(parent);
         }
         return jsonNode;
+    }
+
+    private String getHighlightedNodeName(OrgLocationTree.OrgLocationTreeNode node) {
+        String name = node.getName();
+        int index = StringUtils.indexOfIgnoreCase(name, lastSearch);
+        if (index==-1) {
+            name = String.format(NODE_NAME_HTML,name);
+        } else {
+            name = String.format(NODE_NAME_HIGHTLIGHTED_HTML, name.substring(0, index), name.substring(index, index + lastSearch.length()), name.substring(index + lastSearch.length()));
+        }
+        String cssClass = node.isLinked() ? "linked" : "";
+        return String.format(NODE_HTML, cssClass, name, node.getIdentifier(), node.getCreated(), node.getModified());
     }
 
     private void openParents(JsonTreeNode parent) {
