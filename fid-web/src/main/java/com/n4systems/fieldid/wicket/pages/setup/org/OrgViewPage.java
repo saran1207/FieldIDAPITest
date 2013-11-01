@@ -64,6 +64,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
     private OrgViewPanel panel;
     private Class<? extends BaseOrg> filterClass = null;
     private OrgTree orgTree;
+    private WebMarkupContainer container;
     private AbstractDefaultAjaxBehavior listBehavior;
     private AbstractDefaultAjaxBehavior treeBehavior;
     private PageState pageState = PageState.LIST;
@@ -76,7 +77,10 @@ public class OrgViewPage extends FieldIDFrontEndPage {
 
 
     public OrgViewPage() {
-        add(new MattBar("buttons") {
+        container = new WebMarkupContainer("container");
+        add(container.setOutputMarkupId(true));
+
+        container.add(new MattBar("buttons") {
                     @Override protected void onEnterState(AjaxRequestTarget target, Object state) {
                         buttonClicked(target, state);
                     }
@@ -85,7 +89,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                 .addLink(new FIDLabelModel("label.tree"), PageState.TREE)
                 .addLink(new FIDLabelModel("label.list"), PageState.LIST)
         );
-        add(panel=new OrgViewPanel("orgView"));
+        container.add(panel=new OrgViewPanel("orgView"));
     }
 
     private void buttonClicked(AjaxRequestTarget target, Object state) {
@@ -101,8 +105,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
-        AjaxTextFieldOptions options = new AjaxTextFieldOptions(panel.getMarkupId(), listBehavior.getCallbackUrl().toString(), ".org-list input[type=text]");
-        response.renderOnDomReadyJavaScript(String.format(INIT_TEXT_FIELD_JS, new Gson().toJson(options)));
+        response.renderOnDomReadyJavaScript(String.format(INIT_TEXT_FIELD_JS, new Gson().toJson(new AjaxTextFieldOptions())));
     }
 
 
@@ -213,16 +216,10 @@ public class OrgViewPage extends FieldIDFrontEndPage {
     }
 
     class AjaxTextFieldOptions {
-        String callback;
+        String parent = "#"+container.getMarkupId();
+        String callback = listBehavior.getCallbackUrl().toString();
+        String child = ".org-list input[type=text]";
         Integer delay = 500;
-        String id;
-        String selector;
-        
-        public AjaxTextFieldOptions(String id, String url, String selector) {
-            this.id = id;
-            this.callback = url;
-            this.selector = selector;
-        }
     }
 
 }

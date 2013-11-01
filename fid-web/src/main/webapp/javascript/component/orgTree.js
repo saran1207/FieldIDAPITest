@@ -35,7 +35,7 @@ var orgTreeFactory = (function() {
 		}
 
 		var update = function(newInput,force) {
-			if (force || (newInput!=input && newInput.length>options.minLength)) {
+			if (force || (newInput!=input)) {
 				input = newInput;
 				getTree().find("li.jstree-open").each(function(index) {
 						$(this).removeClass('jstree-open');}   // forces tree to forget about currently selected nodes.
@@ -91,6 +91,7 @@ var orgTreeFactory = (function() {
 
 				$tree.show();
 
+				// may need to use delegate here???
 				var keyTimer;
 				if (!$text) return;
 				$text.bind('keyup', function(e,d) {
