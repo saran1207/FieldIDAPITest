@@ -93,6 +93,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
     }
 
     private void buttonClicked(AjaxRequestTarget target, Object state) {
+        textFilter = "";
         pageState = (PageState) state;
         target.add(panel);
     }
@@ -115,7 +116,6 @@ public class OrgViewPage extends FieldIDFrontEndPage {
             @Override protected String getTextFilter() {
                 return textFilter;
             }
-
             @Override protected Class<? extends BaseOrg> getTypeFilter() {
                 return typeFilter;
             }

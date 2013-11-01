@@ -44,6 +44,24 @@ var orgTreeFactory = (function() {
 			}
 		}
 
+		function showNoResultsMsg() {
+			var noResults = $tree.siblings('.no-results');
+			if (noResults.length==0) {
+				$tree.after($('<div>No Results</div>').addClass('no-results'));
+			} else {
+				$(noResults[0]).show();
+			}
+			$tree.hide();
+		}
+
+		function showResults() {
+			$tree.show();
+			var noResults = $tree.siblings('.no-results');
+			if (noResults.length>0) {
+				$(noResults[0]).hide();
+			}
+		}
+
 		function lazyInit() {
 			if (!initialized) {
 				initialized = true;
@@ -66,6 +84,11 @@ var orgTreeFactory = (function() {
 								}
 							},
 							success : function(n) {
+								if (n && n.length==0 && $node==-1) {
+									showNoResultsMsg();
+								} else {
+									showResults();
+								}
 							}
 						}
 					},
