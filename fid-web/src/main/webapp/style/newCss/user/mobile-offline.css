@@ -1,3 +1,6 @@
+#pageContent {
+	position: relative;
+}
 .mobile-offline {
 	position: relative;
 	padding-top: 15px;
@@ -10,15 +13,20 @@
 .mobile-offline .meta label {
 	font-weight: bold;
 }
-.mobile-offline .btn.clear {
-	position: absolute;
-	margin: 0;
-}
 a {
 	color: #008bd3;
 }
 
+
+/* TABLE
+---------*/
+
 /* pagination */
+.list tr.navigation {
+	position: absolute;
+	right: 0;
+	top: 58px;
+}
 .list tr.navigation:hover {
 	background-color: #fff;
 }
@@ -49,10 +57,9 @@ a {
 	display: inline-block;
 }
 
-/* Table */
+/* results */
 .list {
 	border-bottom: none;
-	margin-top: -3px;
 }
 .list .odd {
 	background-color: #f5f5f5;
