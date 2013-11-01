@@ -172,6 +172,11 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                 }
             });
             list.add(dataTable);
+            list.add(new WebMarkupContainer("noResults")  {
+                @Override public boolean isVisible() {
+                    return dataTable.getRowCount()==0;
+                }
+            });
             list.add(listText = new TextField<String>("filter", new PropertyModel(OrgViewPage.this, "textFilter")));
             listText.setOutputMarkupId(true);
             List<Class<? extends BaseOrg>> filterTypes = Lists.newArrayList(PrimaryOrg.class,SecondaryOrg.class, CustomerOrg.class, DivisionOrg.class);
