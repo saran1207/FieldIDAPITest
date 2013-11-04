@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.event.EventEnum;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.service.user.UserService;
@@ -126,7 +127,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
             persistenceService.update(openEvent);
             FieldIDSession.get().info(getString("message.event_closed"));
 
-            eventCreationService.updateRecurringAssetTypeEvent(openEvent);
+            eventCreationService.updateRecurringAssetTypeEvent(openEvent, EventEnum.CLOSE);
 
             if (returnPage!=null) {
                 setResponsePage(returnPage);

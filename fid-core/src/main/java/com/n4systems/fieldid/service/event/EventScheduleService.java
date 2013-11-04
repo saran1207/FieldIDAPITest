@@ -5,8 +5,8 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.model.api.Archivable;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +61,34 @@ public class EventScheduleService extends FieldIdPersistenceService {
 
         return persistenceService.findAll(query);
     }
+
+    @Transactional
+    public Event getNextAvailableSchedule(Event event) {
+
+        QueryBuilder<Event> builder = createTenantSecurityBuilder(Event.class);
+        builder.addSimpleWhere("recurringEvent", event.getRecurringEvent());
+        builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
+
+        builder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", event.getId()));
+        builder.addWhere(WhereClauseFactory.create("asset.id", event.getAsset().getId()));
+        builder.addWhere(WhereClauseFactory.create("type.id", event.getType().getId()));
+        builder.addOrder("dueDate");
+
+//        PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
+//        String minDateSelect = String.format("SELECT MIN(iSub.dueDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.asset.id = :iSubAssetId AND iSub.type.id = :iSubTypeId AND iSub.dueDate > :iSubCompletedDate ", Event.class.getName());
+//         minDateSelect += " AND iSub.workflowState = :iSubEventWorkflowState";
+//         latestClause.getParams().put("iSubEventWorkflowState", WorkflowState.OPEN);
+//        latestClause.setClause(String.format("i.dueDate = (%s)", minDateSelect));
+//        latestClause.getParams().put("iSubAssetId", event.getAsset().getId());
+//        latestClause.getParams().put("iSubTypeId", event.getType().getId());
+//        latestClause.getParams().put("iSubCompletedDate", event.getCompletedDate());
+//        latestClause.getParams().put("iSubState", Archivable.EntityState.ACTIVE);
+//        builder.addWhere(latestClause);
+        builder.setLimit(1);
+
+        return persistenceService.find(builder);
+    }
+
 
     @Transactional
     public Event updateSchedule(Event schedule) {

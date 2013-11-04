@@ -16,6 +16,9 @@ import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.persistence.MaxSelect;
+import com.n4systems.util.persistence.MinSelect;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,9 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     @Autowired
     private EventScheduleService eventScheduleService;
+
+    @Autowired
+    private EventService eventService;
 
     @Transactional
     public Event createEventWithSchedules(Event event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
@@ -134,85 +140,42 @@ public class EventCreationService extends FieldIdPersistenceService {
             tenantSettingsService.decrementUsageBasedEventCount(eventCount);
         }
 
-        updateRecurringAssetTypeEvent(event);
+        updateRecurringAssetTypeEvent(event, EventEnum.PERFORM);
 
 
         return event;
     }
 
-    public void updateRecurringAssetTypeEvent(Event event) {
+    public void updateRecurringAssetTypeEvent(Event event, EventEnum eventEnum) {
+
+        Event nextEvent = null;
+        Event uEvent = null;
         RecurringAssetTypeEvent recurringEvent = event.getRecurringEvent();
+        nextEvent = eventScheduleService.getNextAvailableSchedule(event);
 
-        List<Event> openEvents = null;
-        Event uevent = event;
+       if (eventEnum == EventEnum.PERFORM) {
 
-        if (null != recurringEvent && recurringEvent.getAutoAssign()) {
+            if (null != event.getAssignedGroup()) {
+                nextEvent.setAssignedGroup(event.getAssignedGroup());
+            } else {
+                nextEvent.setAssignee(event.getPerformedBy());
+            }
 
-            openEvents = eventScheduleService.getAvailableSchedulesFor(event.getAsset());
+        } else if (eventEnum == EventEnum.CLOSE) {
 
-            if (null != openEvents && openEvents.size() > 0) {
-
-                Event nextSched = null;
-
-                    for (Event sched : openEvents) {
-
-
-                        if ( (sched.getRecurringEvent() == null) || (sched.getRecurringEvent().getRecurrence() == null) || (!(recurringEvent.getRecurrence().getType() == sched.getRecurringEvent().getRecurrence().getType())) ) {
-                            continue;
-                        }
-
-                        GregorianCalendar cal = (GregorianCalendar) Calendar.getInstance();
-                        cal.clear();
-                        cal.setTime(sched.getDueDate());
-
-                        GregorianCalendar ical = (GregorianCalendar) Calendar.getInstance();
-                        ical.clear();
-                        ical.setTime(uevent.getDueDate());
-
-                        boolean sameDay = cal.get(Calendar.YEAR) == ical.get(Calendar.YEAR) &&
-                                cal.get(Calendar.DAY_OF_YEAR) == ical.get(Calendar.DAY_OF_YEAR);
-
-                        int hour = cal.get(Calendar.HOUR);
-                        int minute = cal.get(Calendar.MINUTE);
-                        int second = cal.get(Calendar.SECOND);
-
-                        int ihour = ical.get(Calendar.HOUR);
-                        int iminute = ical.get(Calendar.MINUTE);
-                        int isecond = ical.get(Calendar.SECOND);
-
-                        boolean sameHour = (hour == ihour);
-                        boolean sameMinute = (minute == iminute);
-                        boolean sameSecond = (second == isecond);
-                        boolean sameTime = (sameHour && sameMinute && sameSecond);
-
-
-                        if (sched.getDueDate().after(uevent.getDueDate()) && !sameDay && sameTime) {
-
-                            nextSched = sched;
-
-                            // if assigned to UserGroup - use UserGroup to assign
-                            if (null != event.getAssignedGroup()) {
-                                nextSched.setAssignedGroup(event.getAssignedGroup());
-                            } else {
-                                nextSched.setAssignee(event.getPerformedBy());
-                            }
-
-                            break;
-
-                        }  else {
-                            continue;
-                        }
-
-                    }  // end for
-
-
-                if (null != nextSched) {
-                    uevent = persistenceService.update(nextSched);
-                }
-
+            if (null != event.getAssignedGroup()) {
+                nextEvent.setAssignedGroup(event.getAssignedGroup());
+            } else {
+                nextEvent.setAssignee(event.getAssignee());
             }
 
         }
+
+
+        if (null != nextEvent) {
+            uEvent = persistenceService.update(nextEvent);
+        }
+
     }
 
 
@@ -530,7 +493,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         event = persistenceService.update(event);
         processUploadedFiles(event, attachments);
 
-        updateRecurringAssetTypeEvent(event);
+        updateRecurringAssetTypeEvent(event, EventEnum.PERFORM);
 
         return event;
     }
