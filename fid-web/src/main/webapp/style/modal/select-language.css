@@ -13,7 +13,7 @@ body {
     color: #888;
     margin: 0;
 }
-.wicket-modal select {
+.languageSelect {
     width: 200px;
 }
 .wicket-modal .chzn-container {
