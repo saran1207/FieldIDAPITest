@@ -1,6 +1,21 @@
 <wicket:extend>
 
     <div wicket:id="header" style="font-size:30px;" class="header"/>
+    <span wicket:id="configure" class="actions">
+        <ul>
+            <li class="menu">
+                <a class="mattButton" href="javascript:void(0);">
+                    <img src="/fieldid/images/setup.png"/><wicket:message key="label.configure"/><img src="/fieldid/images/menu-down.png"/>
+                </a>
+                <ul class="menu-items">
+                    <li><a wicket:id="eventTypes"> <wicket:message key="label.event_types"/></a></li>
+                    <li><a wicket:id="recurring"> <wicket:message key="label.recurring_events"/></a></li>
+                </ul>
+            </li>
+        </ul>
+    </span>
+
+
     <div class="colmask">
 
         <div class="colright">

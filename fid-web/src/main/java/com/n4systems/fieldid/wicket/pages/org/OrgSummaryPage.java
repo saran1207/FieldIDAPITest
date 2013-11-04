@@ -6,7 +6,10 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.orgs.BaseOrg;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -25,10 +28,27 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
 
     public OrgSummaryPage(Long id) {
         super();
-        EntityModel model = new EntityModel(BaseOrg.class, id);
+        final EntityModel<BaseOrg> model = new EntityModel(BaseOrg.class, id);
         add(new Label("header", ProxyModel.of(model, on(BaseOrg.class).getName())));
-//        add(new GoogleMap("map",ProxyModel.of(new EntityModel(BaseOrg.class, id), on(BaseOrg.class).getGpsLocation())));
-        add(new GoogleMap("map", Model.of(new GpsLocation(43.70263,-79.46654))));
+
+        WebMarkupContainer configureMenu = new WebMarkupContainer("configure");
+
+        configureMenu.add(new AjaxLink("recurring") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                setResponsePage(new OrgConfigurePage(model, OrgConfigurePage.PageState.RECURRING_EVENTS));
+            }
+        });
+
+        configureMenu.add(new AjaxLink("eventTypes") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                setResponsePage(new OrgConfigurePage(model, OrgConfigurePage.PageState.EVENT_TYPES));
+            }
+        });
+        add(configureMenu);
+
+        // TODO DD : change this to baseOrg.getGpsLocation() when that refactoring is done.
+//        add(new GoogleMap("map",ProxyModel.of(new EntityModel(BaseOrg.class, id), on(BaseaOrg.class).getGpsLocation())));
+        add(new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
         add(new OrgDetailsPanel("orgDetails", model));
         add(new TextArea("comments",Model.of("comments go here")));
     }
