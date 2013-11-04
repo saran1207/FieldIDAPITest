@@ -1,5 +1,57 @@
 <wicket:extend>
 
-    <span wicket:id="name" style="font-size:30px;"/>
+    <div wicket:id="header" style="font-size:30px;" class="header"/>
+    <div class="colmask">
+
+        <div class="colright">
+
+            <div class="colwrap">
+                <!--<div class="rightColumn">-->
+                    <!--<h1>-->
+                        <!--<label> <wicket:message key="label.uc_schedules"/></label>-->
+                    <!--</h1>-->
+                    <!--<div class="rightPanel" wicket:id="upcomingEventsPanel" />-->
+                    <!--<div class="rightPanel" wicket:id="upcomingEventsMessage" />-->
+                    <!--<h1>-->
+                        <!--<label> <wicket:message key="label.lasteventperformed"/></label>-->
+                    <!--</h1>-->
+                    <!--<div class="rightPanel" wicket:id="lastEventsPanel" />-->
+                    <!--<h1>-->
+                        <!--<label> <wicket:message key="label.attachments"/></label> <span wicket:enclosure="downloadAllLink" style="font-weight: normal;"> | <a wicket:id="downloadAllLink"><wicket:message key="label.download_all"/></a></span>-->
+                    <!--</h1>-->
+                    <!--<div class="rightPanel" wicket:id="attachmentsPanel"/>-->
+                    <!--<h1>-->
+                        <!--<label><wicket:message key="label.more_uc"/></label>-->
+                    <!--</h1>-->
+                    <!--<div class="rightPanel morePanel" wicket:id="warningsAndInstructionsPanel"/>-->
+                    <!--<h1>-->
+                        <!--<label><wicket:message key="label.comments"/></label>-->
+                    <!--</h1>-->
+                    <!--<div class="rightPanel morePanel">-->
+                        <!--<p wicket:id="comments"/>-->
+                    <!--</div>-->
+                <!--</div>-->
+            </div>
+            <div class="leftColumn">
+                <div wicket:id="map" class="googleMap" style="width:300px;height:300px;"></div>
+                <div wicket:id="orgDetails" class="details"/>
+                <textarea wicket:id="comments" class="comments"/>
+            </div>
+        </div>
+
+    </div>
+
+
+    <wicket:fragment wicket:id="details">
+        <div>
+            <div>name</div>
+            <div>email</div>
+            <div>phone</div>
+            <div>fax</div>
+        </div>
+    </wicket:fragment>
+
+
+
 
 </wicket:extend>

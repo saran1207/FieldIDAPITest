@@ -76,7 +76,7 @@ public class OrgLocationTree {
     }
 
     private OrgLocationTreeNode getOrgNode(BaseOrg org) {
-        if (org==null) {  // TODO DD : or if org=rootNode?
+        if (org==null) {
             return rootNode;
         }
         OrgLocationTreeNode node = nodes.get(org);
@@ -181,7 +181,6 @@ public class OrgLocationTree {
     public class OrgLocationTreeNode<T extends EntityWithTenant> {
         private OrgLocationTreeNode parent;
         private Set<OrgLocationTreeNode> children;
-        // TODO DD : do i need to store entity or just id?  entire entity might be way too heavy?
         private Long id;
         private String name;
         private Boolean included;

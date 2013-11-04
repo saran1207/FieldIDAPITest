@@ -53,7 +53,6 @@ public class SearchQuery implements Serializable {
     }
 
     public SearchQuery add(String conjunction) {
-        // TODO : assert that you have n-1 conjuctions where n is # of terms.
         conjunctions.add(Conjunction.fromString(conjunction));
         return this;
     }

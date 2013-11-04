@@ -55,14 +55,12 @@ public class SearchParserService extends FieldIdService {
     }
 
     private List<String> makeSimpleSuggestion(String search) {
-        // TODO DD : should actually look for a spot to add matching quote instead of removing one.
         if (StringUtils.countMatches(search,"'")%2!=0) {
             return Lists.newArrayList(search.replace("'",""));
         }
         if (StringUtils.countMatches(search,"\"")%2!=0) {
             return Lists.newArrayList(search.replace("\"",""));
         }
-        // TODO : look for unbalanced quotes, invalid dates, and whatever else might be common...called only if parser throws exception?
         return Lists.newArrayList();
     }
 
@@ -115,8 +113,6 @@ public class SearchParserService extends FieldIdService {
                 }
             }
         ));
-
-        // TODO DD : this should all be replaced with a lucene analyzed index of attribute names.
 
         return new PrioritizedList<String>(filteredList,5, new Comparator<String>() {
             public @Override int compare(String o1, String o2) {
@@ -235,7 +231,6 @@ public class SearchParserService extends FieldIdService {
         }
     }
 
-    // TODO DD : add custom scoring for date/numeric fields.
     private Query getSimpleQueryForTerm(String attribute, QueryTerm.Operator operator, SimpleValue value) {
         if (value.isNumber()) {
             NumericRangeInfo rangeInfo = new NumericRangeInfo(value.getNumber(), operator);
@@ -265,7 +260,6 @@ public class SearchParserService extends FieldIdService {
     }
 
     private Query getPhraseQueryForTerm(String attribute, SimpleValue value) {
-        // TODO DD : is it better to return a single termQuery if there is only one string value??
         PhraseQuery query = new PhraseQuery();
         StringTokenizer stringTokenizer = new StringTokenizer(value.getString());
         while (stringTokenizer.hasMoreTokens()) {

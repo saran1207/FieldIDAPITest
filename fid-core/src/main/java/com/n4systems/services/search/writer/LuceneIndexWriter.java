@@ -179,7 +179,6 @@ public abstract class LuceneIndexWriter<T extends BaseEntity> extends IndexWrite
             } else {
                 throw new RuntimeException("Unhandled Field Type: " + value.getClass());
             }
-            // TODO DD : we may want to control which fields omitNorms() instead of just using defaults.??
             if (!field.fieldType().omitNorms()) {
                 field.setBoost(boost);
             }

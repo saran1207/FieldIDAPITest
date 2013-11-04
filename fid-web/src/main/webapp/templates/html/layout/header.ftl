@@ -140,6 +140,10 @@
 
                     </li>
 
+                    <li>
+                        <a href="/fieldid/w/places" class="speedLink textLink" id="menuPlaces"><@s.text name="speed.places" /></a>
+                    </li>
+
                     <#if securityGuard.lotoProceduresEnabled>
                         <li>
                             <a href="/fieldid/w/procedure" class="speedLink textLink" id="menuProcedure"><@s.text name="speed.procedures" /></a>

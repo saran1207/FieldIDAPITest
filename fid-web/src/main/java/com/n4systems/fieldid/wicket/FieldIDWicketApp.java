@@ -110,7 +110,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventTypeGroupTranslations", EventTypeGroupTranslationsPage.class);
         mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
-        mountPage("setup/orgView", OrgViewPage.class);
+        mountPage("places", OrgViewPage.class);
         mountPage("orgSummary", OrgSummaryPage.class);
 
         mountPage("dashboard", DashboardPage.class);

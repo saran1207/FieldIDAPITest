@@ -14,7 +14,6 @@ import java.util.UUID;
 public class EditableImage extends EntityWithTenant implements S3Image {
 
     @OneToMany(mappedBy = "image", fetch = FetchType.EAGER)
-    // TODO DD : change this to a Set.
     private List<ImageAnnotation> annotations = Lists.newArrayList();
     
     @Column(name = "filename", nullable = false)

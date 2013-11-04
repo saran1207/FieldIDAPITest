@@ -92,14 +92,14 @@
 				            <li wicket:id="startEventLinkContainer">
 				                <a href="/fieldid/startEvent.action" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
 				            </li>
-				            <li>
-				                <a wicket:id="assetSearchLink" class="speedLink textLink" id="menuAssets"><wicket:message key="speed.search"/><img wicket:id="down-arrow"/></a>
+                            <li>
+                                <a wicket:id="assetSearchLink" class="speedLink textLink" id="menuAssets"><wicket:message key="speed.search"/><img wicket:id="down-arrow"/></a>
                                 <wicket:enclosure child="newAssetSearchLink">
-                                <ul class="sub_menu">
-                                    <li><a wicket:id="newAssetSearchLink"><wicket:message key="nav.new_search"/></a></li>
-                                </ul>
+                                    <ul class="sub_menu">
+                                        <li><a wicket:id="newAssetSearchLink"><wicket:message key="nav.new_search"/></a></li>
+                                    </ul>
                                 </wicket:enclosure>
-				            </li>
+                            </li>
 
                             <li>
                                 <a wicket:id="reportingLink" class="speedLink textLink" id="menuReport"><wicket:message key="speed.reporting"/><img wicket:id="reporting-down-arrow"/></a>
@@ -112,6 +112,11 @@
                                     </wicket:enclosure>
                                 </ul>
                             </li>
+
+                            <li>
+                                <a wicket:id="placesLink" class="speedLink textLink" id="menuPlaces"><wicket:message key="speed.places"/></a>
+                            </li>
+
                             <wicket:enclosure>
                                 <li>
                                     <a wicket:id="procedureLink" class="speedLink textLink" id="menuProcedure"><wicket:message key="speed.procedures"/></a>

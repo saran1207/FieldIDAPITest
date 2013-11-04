@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.UIConstants;
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.version.FieldIdVersion;
@@ -25,6 +24,7 @@ import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
@@ -141,6 +141,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
         add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class).add(new Image("down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(globalSearchEnabled)));
         add(new BookmarkablePageLink<Void>("newAssetSearchLink", AdvancedAssetSearchPage.class).setVisible(globalSearchEnabled));
+
+        add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class));
 
         BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
         procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
