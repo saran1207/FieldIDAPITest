@@ -1,7 +1,7 @@
 /* 
 Shared styles between Search, Reporting and Procedures
-Search specific styles are located in style/newCss/component/search-filter.css 
--------------------------------------------------------------------------------*/
+Search specific styles are in newCss/component/simple-advanced-search.css 
+--------------------------------------------------------------------------*/
 
 
 /* fieldid.css OVERRIDES 
@@ -15,8 +15,12 @@ html {
 a {
 	color: #008bd3;
 }
+.speedLink img {
+	width: 12px;
+	height: 6px;
+}
 
-/* results table action button */
+/* results table action dropdown button */
 .dropDownLink img {
 	padding: 0;
 	vertical-align: middle;
@@ -46,9 +50,6 @@ ul.floatingDropdown ul li a:visited {
 #floatingDropdownStartEventLink a {
 	padding: 7px 10px;
 }
-/*ul.floatingDropdown li:hover > ul {
-visibility: visible;
-}*/
 
 
 /* wide.css OVERRIDES 
@@ -94,14 +95,14 @@ visibility: visible;
 	padding-left: 14px;
 }
 .sub-menu .action-group {
-	/*position: absolute;
-	top: 0;
-	right: 11px;*/
 	text-align: right;
 	margin-right: 11px;
 }
 .action-group .button-group {
 	float: right;
+}
+.dropdown-btn ul li a {
+	padding: 8px 12px;
 }
 
 

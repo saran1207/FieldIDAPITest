@@ -20,7 +20,6 @@ public enum ImageAnnotationType {
     // i.e. a P type will be rendered as <span class="pneumatic ..."/>
     private String cssClass;
 
-    // TODO DD : i don't think fontColor, backgroundColor etc... are currently used.  remove these?.
     private String fontColor;
     private String backgroundColor;
     private String borderColor;

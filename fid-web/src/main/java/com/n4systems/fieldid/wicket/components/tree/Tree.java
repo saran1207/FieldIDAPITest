@@ -17,7 +17,7 @@ public abstract class Tree extends Panel {
 
     private static final String INIT_TREE_JS = "%s = treeFactory.create('%s',%s);";
 
-    private final AbstractDefaultAjaxBehavior ajaxBehavior;
+    protected final AbstractDefaultAjaxBehavior ajaxBehavior;
     private String search = null;
 
 
@@ -58,7 +58,7 @@ public abstract class Tree extends Panel {
         };
     }
 
-    private String getInitTreeJs() {
+    protected String getInitTreeJs() {
         String url = ajaxBehavior.getCallbackUrl().toString();
         return String.format(INIT_TREE_JS,
                 getJsVariableName(),
@@ -70,7 +70,7 @@ public abstract class Tree extends Panel {
         return getParent().getMarkupId();
     }
 
-    private final String convertToJson(Object o) {
+    protected final String convertToJson(Object o) {
         return new GsonBuilder().create().toJson(o);
     }
 
@@ -84,9 +84,8 @@ public abstract class Tree extends Panel {
 
     // ----------------------------------------------------------------------------------------
 
-    class TreeOptions {
+    public class TreeOptions {
         String url;
-        List<JsonTreeNode> data;
 
         TreeOptions(String url) {
             this.url = url;

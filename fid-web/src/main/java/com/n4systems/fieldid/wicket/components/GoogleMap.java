@@ -2,8 +2,10 @@ package com.n4systems.fieldid.wicket.components;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.n4systems.model.GpsLocation;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -32,6 +34,13 @@ public class GoogleMap extends Panel {
             addLocation(points[i], points[i+1]);
         }
     }
+
+    public GoogleMap(String id, IModel<GpsLocation> model) {
+        this(id);
+        GpsLocation location = model.getObject();
+        addLocation(location.getLatitude().doubleValue(), location.getLongitude().doubleValue());
+    }
+
 
     public GoogleMap addLocation(Double latitude, Double longitude) {
         coords.add(new Coord(latitude,longitude));

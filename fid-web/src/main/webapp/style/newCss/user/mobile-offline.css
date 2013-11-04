@@ -1,0 +1,88 @@
+#pageContent {
+	position: relative;
+}
+.mobile-offline {
+	position: relative;
+	padding-top: 15px;
+}
+.mobile-offline .meta {
+	font-size: 13px;
+	padding-left: 6px;
+	margin-bottom: 10px;
+}
+.mobile-offline .meta label {
+	font-weight: bold;
+}
+a {
+	color: #008bd3;
+}
+
+
+/* TABLE
+---------*/
+
+/* pagination */
+.list tr.navigation {
+	position: absolute;
+	right: 0;
+	top: 58px;
+}
+.list tr.navigation:hover {
+	background-color: #fff;
+}
+.list tr.navigation td {	
+	font-size: 12px;
+}
+.navigatorLabel {
+	float: right;
+	padding-top: 4px;
+	margin-left: 10px;
+}
+.navigator {
+	float: right;
+	margin-left: 10px;
+}
+.navigator a,
+.navigator .goto em {	
+	text-decoration: none;
+	padding: 4px 7px;
+}
+.navigator a {
+	border: 1px solid #c7c7c9;
+}
+.navigator em {
+	display: none;
+}
+.navigator .goto em {
+	display: inline-block;
+}
+
+/* results */
+.list {
+	border-bottom: none;
+}
+.list .odd {
+	background-color: #f5f5f5;
+}
+.list tr:hover {
+	background-color: #ddd;
+}
+.list th {	
+	border-bottom: 1px solid #c7c7c9;
+	border-top: 1px solid #c7c7c9;
+	padding: 6px;
+}
+	.list th:last-child span {
+		display: none;
+	}
+.list td {
+	border: none;
+	padding: 6px;
+}
+	.list td:last-child {
+		text-align: right;
+	}
+
+
+
+

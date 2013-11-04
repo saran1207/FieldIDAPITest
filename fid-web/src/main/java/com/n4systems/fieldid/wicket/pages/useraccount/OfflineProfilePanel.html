@@ -5,17 +5,15 @@
       lang="en">
 
 <wicket:panel>
-    <div>
-        <label><wicket:message key="label.platform_version"/></label>
-        <span wicket:id="platform"/>
-    </div>
-    <div>
-        <label><wicket:message key="label.total_offline_assets"/></label>
-        <span wicket:id="totalAssets"/>
-    </div>
 
-    <a wicket:id="clearAll"><wicket:message key="label.clear_offline_profile"/></a>
+  <div class="meta">
+    <label><wicket:message key="label.platform_version"/>:</label> <span wicket:id="platform"/><br>
+    <label><wicket:message key="label.total_offline_assets"/>:</label> <span wicket:id="totalAssets"/>
+  </div>
 
-    <table wicket:id="assetsTable" class="list"/>
+  <a class="clear btn btn-secondary btn-sml" wicket:id="clearAll"><wicket:message key="label.clear_offline_profile"/></a>
+
+  <table wicket:id="assetsTable" class="list"/>
+
 </wicket:panel>
 </html>

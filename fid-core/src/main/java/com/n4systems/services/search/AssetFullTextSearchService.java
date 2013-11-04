@@ -28,7 +28,6 @@ public class AssetFullTextSearchService extends FullTextSearchService {
     protected void addSecondaryOrgSecurity(BaseOrg owner, BooleanQuery securityQuery) {
         Long id = owner.getId();  // secondary can see primary, and this secondary
         securityQuery.add(new BooleanClause(NumericRangeQuery.newLongRange("_secondaryOrgId", id, id, true, true), BooleanClause.Occur.SHOULD));
-        // TODO DD : might be better to just assume secondary org will be -1 if doesn't exist.  will have to change indexer to do this.
         securityQuery.add(NumericRangeQuery.newLongRange(AssetIndexField.SECONDARY_ID.getField(), 0L, null, true, true), BooleanClause.Occur.MUST_NOT);  // tricky way of saying "should be null"
     }
 

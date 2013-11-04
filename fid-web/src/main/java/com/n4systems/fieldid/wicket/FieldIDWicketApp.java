@@ -26,6 +26,8 @@ import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPri
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
+import com.n4systems.fieldid.wicket.pages.org.OrgConfigurePage;
+import com.n4systems.fieldid.wicket.pages.org.OrgSummaryPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
@@ -109,7 +111,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventTypeGroupTranslations", EventTypeGroupTranslationsPage.class);
         mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
-        mountPage("setup/orgView", OrgViewPage.class);
+        mountPage("places", OrgViewPage.class);
+        mountPage("places/configure", OrgConfigurePage.class);
+        mountPage("orgSummary", OrgSummaryPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 

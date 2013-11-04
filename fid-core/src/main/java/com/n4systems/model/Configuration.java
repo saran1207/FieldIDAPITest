@@ -12,6 +12,7 @@ import com.n4systems.util.ConfigEntry;
 
 @Entity
 @Table( name = "configurations" )
+// TODO : why isn't there a unique index on identifier column?  migration required?
 public class Configuration extends AbstractEntity implements UnsecuredEntity {
 	private static final long serialVersionUID = 1L;
 	

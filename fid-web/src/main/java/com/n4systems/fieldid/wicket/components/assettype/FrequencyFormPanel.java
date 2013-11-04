@@ -49,6 +49,7 @@ public class FrequencyFormPanel extends Panel {
         super(id, model);
         this.assetType = model;
         assetTypeSchedule = Model.of(new AssetTypeSchedule());
+        assetTypeSchedule.getObject().setAssetType(model.getObject());
         add(new FrequencyForm("form", assetTypeSchedule));
     }
 
@@ -101,7 +102,6 @@ public class FrequencyFormPanel extends Panel {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     AssetTypeSchedule schedule = assetTypeSchedule.getObject();
-                    schedule.setAssetType(assetType.getObject());
                     if(schedule.getOwner() == null) {
                         //we need to revisit this logic since it makes it impossible to create an override for the primary org
                         //@see AssetType.getSchedule

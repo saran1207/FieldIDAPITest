@@ -1,16 +1,43 @@
 <wicket:extend>
 
-    <div wicket:id="buttons"/>
-    <div wicket:id="orgView"/>
+
+    <!-- TEMPORARY - just here to give christina idea of what to look for.   derek. -->
+    <style type="text/css">
+        .org-list table td a span {
+            color:#333333;
+        }
+        .match {
+            color:#00008b;
+            background: #FDFD88;
+            outline: 1px solid #A7B412;
+        }
+        .org-list table td {
+            padding-right:20px;
+        }
+        .org-list table td a {
+            text-decoration:none;
+        }
+
+    </style>
+
+
+    <div wicket:id="container">
+        <div wicket:id="buttons"/>
+        <div wicket:id="orgView"/>
+    </div>
 
 
     <wicket:fragment wicket:id="orgViewFragment">
-        <div wicket:id="tree" class="org-tree"/>
+        <div wicket:id="tree" class="tree-container">
+            <input wicket:id="filter" type="text"/>
+            <div wicket:id="orgTree"/>
+        </div>
         <!--<input wicket:id="tree-filter" type="text"/>-->
 
         <div wicket:id="list" class="org-list">
             <input wicket:id="filter" type="text"/>
             <select wicket:id="orgType"/>
+            <div wicket:id="noResults"><wicket:message key="label.no_results"/></div>
             <table>
                 <tr wicket:id="table">
                     <td><a wicket:id="name"><span wicket:id="label"/></a></td>

@@ -18,7 +18,6 @@ public class JsonTreeNode {
     String state = "closed";
     JsonTreeNode[] children = null;
 
-
     public JsonTreeNode(OrgLocationTree.OrgLocationTreeNode node, JsonTreeNode parent) {
         this.data = node.getName();
         addAttribute("id", node.getId() + "");
@@ -81,5 +80,10 @@ public class JsonTreeNode {
 
     public String getId() {
         return attr.get("id");
+    }
+
+    public JsonTreeNode withName(String name) {
+        this.data = name;
+        return this;
     }
 }

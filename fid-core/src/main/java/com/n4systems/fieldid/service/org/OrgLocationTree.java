@@ -76,7 +76,7 @@ public class OrgLocationTree {
     }
 
     private OrgLocationTreeNode getOrgNode(BaseOrg org) {
-        if (org==null) {  // TODO DD : or if org=rootNode?
+        if (org==null) {
             return rootNode;
         }
         OrgLocationTreeNode node = nodes.get(org);
@@ -181,12 +181,15 @@ public class OrgLocationTree {
     public class OrgLocationTreeNode<T extends EntityWithTenant> {
         private OrgLocationTreeNode parent;
         private Set<OrgLocationTreeNode> children;
-        // TODO DD : do i need to store entity or just id?  entire entity might be way too heavy?
         private Long id;
         private String name;
         private Boolean included;
         private Boolean isLeaf = null;
         private NodeType type;
+        private Date created;
+        private Date modified;
+        private String identifier;
+        private boolean isLinked;
 
         OrgLocationTreeNode() {
             this.id = -1L;
@@ -202,6 +205,10 @@ public class OrgLocationTree {
                         entity instanceof PredefinedLocation ? ((PredefinedLocation)entity).getName() :
                         "root";
             children = new TreeSet<OrgLocationTreeNode>(new OrgLocationComparator());
+            this.created = entity.getCreated();
+            this.modified = entity.getModified();
+            this.identifier = entity instanceof ExternalOrg ? ((ExternalOrg)entity).getCode() : this.name;
+            this.isLinked = entity instanceof ExternalOrg && ((ExternalOrg)entity).isLinked();
             Preconditions.checkArgument(entity!=null,"can't have null entity for tree node");
         }
 
@@ -249,6 +256,22 @@ public class OrgLocationTree {
 
         public boolean isLeaf() {
             return Boolean.TRUE.equals(isLeaf);
+        }
+
+        public Date getCreated() {
+            return created;
+        }
+
+        public Date getModified() {
+            return modified;
+        }
+
+        public String getIdentifier() {
+            return identifier;
+        }
+
+        public boolean isLinked() {
+            return isLinked;
         }
     }
 

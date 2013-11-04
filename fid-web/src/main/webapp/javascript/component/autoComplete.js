@@ -41,12 +41,12 @@ var autoCompleter = (function() {
     }
 
 	function ajaxTextField(options) {
-		if (!options.selector || !options.id) {
+		if (!options.parent || !options.child) {
 			// usage note : pass in id of parent element and selector to text field we are binding to.
 			// note that text field could be updated via ajax so we need to use "delegate".
-			throw('autocomplete must specify id and selector.');
+			throw('autocomplete must specify parent and child selector.');
 		}
-		var $parent = $('#'+options.id);
+		var $parent = $(options.parent);
 		var text;
 
 		var defaults = {
@@ -56,7 +56,7 @@ var autoCompleter = (function() {
 		var options = $.extend(defaults, options);
 
 		var keyTimer;
-		$parent.delegate(options.selector, 'keyup', function(e) {
+		$parent.delegate(options.child, 'keyup', function(e) {
 			var newInput = e.target.value;
 			if (newInput==text) {
 				return;

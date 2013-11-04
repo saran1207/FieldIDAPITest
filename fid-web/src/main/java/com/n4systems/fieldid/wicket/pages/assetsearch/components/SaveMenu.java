@@ -38,8 +38,7 @@ public abstract class SaveMenu extends Panel {
     }
 
     public String getSaveLinkCssClass() {
-        //return saveAsDownArrow.isVisible() ? " mattButtonLeft" : " ";
-        return saveAsDownArrow.isVisible() ? " test" : " ";
+        return saveAsDownArrow.isVisible() ? " " : " ";
     }
     
 }

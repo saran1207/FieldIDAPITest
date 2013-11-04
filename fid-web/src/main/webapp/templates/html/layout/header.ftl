@@ -100,7 +100,7 @@
 
 					<li>
 						<a href="/fieldid/w/search" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" />
-                            <#if securityGuard.isGlobalSearchEnabled()>
+                        <#if securityGuard.isGlobalSearchEnabled()>
                                 <img src="/fieldid/images/down-arrow.png" />
                             </#if>
                         </a>
@@ -138,6 +138,12 @@
                         </ul>
                     </#if>
 
+                    </li>
+
+                    <li>
+                        <#if action.isPlacesEnabled()>
+                            <a href="/fieldid/w/places" class="speedLink textLink" id="menuPlaces"><@s.text name="speed.places" /></a>
+                        </#if>
                     </li>
 
                     <#if securityGuard.lotoProceduresEnabled>
