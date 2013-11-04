@@ -1,0 +1,1 @@
+insert into configurations (id,created,modified,identifier,value) values (null, now(), now(), "PLACES_ENABLED", "false");

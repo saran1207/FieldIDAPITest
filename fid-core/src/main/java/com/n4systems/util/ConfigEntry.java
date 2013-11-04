@@ -91,8 +91,10 @@ public enum ConfigEntry {
     TRENDS_INDEX_ENABLED                         (   "true"),
     TRENDS_INDEX_SIZE                            (   "50"),
 
+    PLACES_ENABLED                               ( "false" ),
     EVENT_INDEX_ENABLED                         (   "true"),
     EVENT_INDEX_SIZE                            (   "50");
+
 	
 	private String defaultValue;
 	
