@@ -121,7 +121,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             }
         });
 
-        add(new Header("header"));
+        add(new Header("mainHeader"));
         add(new DebugBar("debugBar"));
         add(new CustomJavascriptPanel("customJsPanel"));
         add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
