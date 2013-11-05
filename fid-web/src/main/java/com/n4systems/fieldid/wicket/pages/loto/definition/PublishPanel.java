@@ -59,7 +59,7 @@ public class PublishPanel extends Panel {
                 public void onError() {
                     doCancel(null);
                 }
-            }.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.save").getObject(), TipsyBehavior.Gravity.N)));
+            }.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.save"), TipsyBehavior.Gravity.N)));
 
             SubmitLink submitLink = new SubmitLink("publish") {
                 @Override
@@ -79,7 +79,7 @@ public class PublishPanel extends Panel {
                 }
             };
 
-            submitLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.publish").getObject(), TipsyBehavior.Gravity.N));
+            submitLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.publish"), TipsyBehavior.Gravity.N));
 
             if (procedureDefinitionService.isProcedureApprovalRequiredForCurrentUser()) {
                 submitLink.add(new FlatLabel("submitLabel", new FIDLabelModel("label.submit_for_approval")));

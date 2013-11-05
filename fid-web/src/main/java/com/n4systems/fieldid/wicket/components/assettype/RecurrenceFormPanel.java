@@ -9,7 +9,6 @@ import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
@@ -112,12 +111,12 @@ public class RecurrenceFormPanel extends Panel {
 
             ContextImage tooltip;
             inputContainer.add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
-            tooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_owner_and_down").getObject(), TipsyBehavior.Gravity.N));
+            tooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_owner_and_down"), TipsyBehavior.Gravity.N));
 
 
             ContextImage autotooltip;
             inputContainer.add(autotooltip = new ContextImage("autotooltip", "images/tooltip-icon.png"));
-            autotooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_auto_assign").getObject(), TipsyBehavior.Gravity.N));
+            autotooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_auto_assign"), TipsyBehavior.Gravity.N));
 
             recurrenceTypeDropDown.setNullValid(false).setOutputMarkupId(true).add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override protected void onUpdate(AjaxRequestTarget target) {

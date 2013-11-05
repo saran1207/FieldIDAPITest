@@ -52,7 +52,7 @@ public class IsolationPointImagePanel extends Panel {
             }
         });
 
-        annotatedImage.add(new WebMarkupContainer("labelButton").add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.label_image").getObject(), TipsyBehavior.Gravity.N)));
+        annotatedImage.add(new WebMarkupContainer("labelButton").add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.label_image"), TipsyBehavior.Gravity.N)));
     }
 
     protected Model<String> getImageUrl() {
