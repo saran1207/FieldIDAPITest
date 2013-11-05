@@ -40,178 +40,12 @@
 
         <div wicket:id="debugBar"/>
         <div wicket:id="languageSelectionModalWindow"/>
+        <div wicket:id="header"/>
 
         <div id="systemNotices">
         </div>
 		       
-        <div id="pageHeader" class="frontPageHeader">
-
-			<div id="pageActions">
-				<div id="companyLogo">
-					<img width="215" height="61" wicket:id="tenantLogo" />
-				</div>
-		        <div id="listContainer">
-		            <ul class="listOfLinks">
-		                <li class="first">
-		                    <span class="welcome">Welcome, </span><a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
-                            <span class="separator">|</span>
-                        </li>
-                        <li wicket:enclosure="languageSelection">
-                            <a wicket:id="languageSelection"><wicket:message key="label.language"/></a>
-		                    <span class="separator">|</span>
-		                </li>
-		                <li>
-		                    <a wicket:id="support" target="_blank"></a>
-		                    <span class="separator">|</span>
-		                </li>
-		                <li>
-		                    <a href="/fieldid/logout.action" ><wicket:message key="label.logout"/></a>
-		                    <span class="darkseparator">|</span>
-		                </li>
-		                <li class="last">
-		                    <span wicket:id="savedItemsDropdown"></span>
-		                </li>
-					</ul>
-				</div>
-			</div>
-
-
-		    <div id="pageNavigation">
-		    	<div id="navigationContent">
-			    	<div id="navigationLinks">
-				        <ul class="dropdown">
-				            <li>
-				                <a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"></a>
-				            </li>
-							<li wicket:id="identifyMenuContainer">
-								<a wicket:id="identifyLink" class="speedLink textLink" id="menuIdentify">
-									<wicket:message key="speed.identify"/>
-								</a>
-							</li>
-
-				            <li wicket:id="startEventLinkContainer">
-				                <a href="/fieldid/startEvent.action" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
-				            </li>
-                            <li>
-                                <a wicket:id="assetSearchLink" class="speedLink textLink" id="menuAssets"><wicket:message key="speed.search"/><img wicket:id="down-arrow"/></a>
-                                <wicket:enclosure child="newAssetSearchLink">
-                                    <ul class="sub_menu">
-                                        <li><a wicket:id="newAssetSearchLink"><wicket:message key="nav.new_search"/></a></li>
-                                    </ul>
-                                </wicket:enclosure>
-                            </li>
-
-                            <li>
-                                <a wicket:id="reportingLink" class="speedLink textLink" id="menuReport"><wicket:message key="speed.reporting"/><img wicket:id="reporting-down-arrow"/></a>
-                                <ul wicket:id="extraReportingLinksContainer" class="sub_menu">
-                                    <wicket:enclosure>
-                                        <li><a wicket:id="advancedEventSearchLink"><wicket:message key="nav.advanced_event_search"/></a></li>
-                                    </wicket:enclosure>
-                                    <wicket:enclosure>
-                                        <li><a wicket:id="criteriaTrendsLink"><wicket:message key="nav.trending"/></a></li>
-                                    </wicket:enclosure>
-                                </ul>
-                            </li>
-
-                            <li>
-                                <a wicket:id="placesLink" class="speedLink textLink" id="menuPlaces"><wicket:message key="speed.places"/></a>
-                            </li>
-
-                            <wicket:enclosure>
-                                <li>
-                                    <a wicket:id="procedureLink" class="speedLink textLink" id="menuProcedure"><wicket:message key="speed.procedures"/></a>
-                                </li>
-                            </wicket:enclosure>
-				            <li wicket:id="safetyNetworkLinkContainer">
-				                <a href="/fieldid/safetyNetwork.action" class="speedLink textLink" id="menuSafetyNetwork"><wicket:message key="speed.safety_network"/></a>
-				            </li>
-				            <li wicket:id="jobsLinkContainer">
-				                <a href="/fieldid/jobs.action" class="speedLink textLink" id="menuProject"><wicket:message key="speed.projects"/></a>
-				            </li>
-				            <li wicket:id="setupLinkContainer">
-				                <a wicket:id="setupLink" class="speedLink textLink" id="menuSetup">
-				                	<wicket:message key="label.setup"/>
-				                	<img src="/fieldid/images/down-arrow.png" />
-				                </a>
-
-				                <ul wicket:id="setupSubMenuContainer" class="">
-									<li>
-										<a wicket:id="settingsLink"><wicket:message key="nav.settings"/></a>
-										<ul wicket:id="settingsSubMenuContainer" class="">
-											<li><a href="/fieldid/organizations.action" ><wicket:message key="title.manage_organizational_units.plural"/></a></li>
-											<li><a wicket:id="systemSettingsLink"><wicket:message key="label.system_settings"/></a></li>
-											<li><a href="/fieldid/quickSetupWizard/startWizard.action"><wicket:message key="label.quick_setup_wizard"/></a></li>
-											<li><a href="/fieldid/branding.action" ><wicket:message key="title.manage_branding.plural"/></a></li>
-											<li><a wicket:id="yourPlanLink" ><wicket:message key="title.manage_field_id_plan.plural"/></a></li>
-										</ul>
-									</li>
-									<li><a wicket:id="ownersUsersLocLink"><wicket:message key="nav.owners_users_loc"/></a>
-										<ul wicket:id="ownersSubMenuContainer" class="sub_menu">
-											<li wicket:id="manageCustomersContainer"><a href="/fieldid/customerList.action" ><wicket:message key="label.customers"/></a></li>
-                                            <li wicket:id="manageUsersContainer"><a href="/fieldid/userList.action" ><wicket:message key="label.users"/></a></li>
-                                            <wicket:enclosure>
-											    <li><a wicket:id="userGroupsLink"><wicket:message key="label.user_groups"/></a></li>
-                                            </wicket:enclosure>
-									        <li wicket:id="manageUserRegistrationsContainer"><a href="/fieldid/userRequestList.action" ><wicket:message key="title.manage_user_registrations.plural"/></a></li>
-									        <li wicket:id="managePredefinedLocationsContainer"><a href="/fieldid/predefinedLocations.action" ><wicket:message key="title.manage_predefined_locations.plural"/></a></li>
-										</ul>
-									</li>
-									<li><a wicket:id="assetsEventsLink"><wicket:message key="nav.assets_and_events"/></a>
-									    <ul wicket:id="assetsEventsSubMenuContainer">
-											<li><a href="/fieldid/eventTypeGroups.action" ><wicket:message key="title.manage_event_type_groups.plural"/></a></li>
-											<li><a href="/fieldid/eventTypes.action" ><wicket:message key="title.manage_event_types.plural"/></a></li>
-                                            <li><a wicket:id="eventStatusListLink" ><wicket:message key="title.manage_event_status.plural"/></a></li>
-											<li><a href="/fieldid/eventBooks.action" ><wicket:message key="title.manage_event_books.plural"/></a></li>
-											<li><a href="/fieldid/assetTypeGroups.action" ><wicket:message key="title.manage_asset_type_groups.plural"/></a></li>
-											<li><a wicket:id="assetTypesList" ><wicket:message key="title.asset_types.plural"/></a></li>
-											<li><a href="/fieldid/assetStatusList.action" ><wicket:message key="title.manage_asset_statuses.plural"/></a></li>
-                                            <li><a wicket:id="priorityCodeListLink" ><wicket:message key="title.manage_priority_code.plural"/></a></li>
-									    </ul>
-									</li>
-									<li><a wicket:id="importLink"><wicket:message key="nav.import"/></a>
-								        <ul class="sub_menu">
-								           <li><a href="/fieldid/customerImportExport.action"><wicket:message key="label.import_owners"/></a></li>
-								           <li><a href="/fieldid/assetImportExport.action"><wicket:message key="label.import_assets"/></a></li>
-								           <li><a href="/fieldid/eventImportExport.action"><wicket:message key="label.import_events"/></a></li>
-								           <li><a href="/fieldid/autoAttributeImportExport.action"><wicket:message key="label.import_auto_attributes"/></a></li>
-								           <li><a href="/fieldid/userImportExport.action"><wicket:message key="label.import_users"/></a></li>
-								        </ul>
-									</li>
-									<li><a wicket:id="templatesLink"><wicket:message key="nav.templates"/></a>
-										<ul wicket:id="templatesSubMenuContainer" class="sub_menu">
-											<li><a href="/fieldid/autoAttributeCriteriaList.action"><wicket:message key="title.auto_attribute_wizard.plural" /></a></li>
-											<li><a href="/fieldid/commentTemplateList.action"><wicket:message key="title.manage_comment_templates.plural" /></a></li>
-											<li><a wicket:id="assetLayoutLink"><wicket:message key="title.column_layout_asset" /></a></li>
-											<li><a wicket:id="eventLayoutLink"><wicket:message key="title.column_layout_event" /></a></li>
-											<li wicket:id="assetCodeMappingContainer"><a href="/fieldid/assetCodeMappingList.action"><wicket:message key="title.manage_asset_code_mappings.plural" /></a></li>
-										</ul>					
-									</li>
-									<li><a wicket:id="widgetsLink"><wicket:message key="nav.widgets"/></a></li>
-									<li><a wicket:id="securityLink"><wicket:message key="nav.security"/></a>
-										<ul class="sub_menu">
-											<li><a wicket:id="passwordPolicyLink"><wicket:message key="title.password_policy"/></a></li>
-											<li><a wicket:id="accountPolicyLink"><wicket:message key="title.account_lockout_policy" /></a></li>
-										</ul>
-									</li>
-                                    <li><a wicket:id="translationsLink"><wicket:message key="title.translations"/></a></li>
-								</ul>
-				            </li>
-				        </ul>
-					</div>
-			        <div id="smartSearchContainer">
-			
-						<form id="smartSearch" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
-							<input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/><input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>		
-							<input type="text" name="search" wicket:message="value:label.search" id="searchText" class="description"/></span>
-							
-						</form>
-			        </div>
-			    </div>
-			</div>		
-		</div>
-		
-		<div id="headerPadding"></div>
-
+        <!-- note to christina : this only appears on search/reporting pages. might need to include this in header??   dd. -->
         <div id="subMenu" wicket:id="subMenu"/>
 
         <div id="page">
@@ -277,4 +111,179 @@
 			</script>
         </div>
     </body>
+
+
+    <!--FRAMGMENT FOR HEADER-->
+    <wicket:fragment wicket:id="legacyHeader">
+        <div id="pageHeader" class="frontPageHeader">
+
+            <div id="pageActions">
+                <div id="companyLogo">
+                    <img width="215" height="61" wicket:id="tenantLogo" />
+                </div>
+                <div id="listContainer">
+                    <ul class="listOfLinks">
+                        <li class="first">
+                            <span class="welcome">Welcome, </span><a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
+                            <span class="separator">|</span>
+                        </li>
+                        <li wicket:enclosure="languageSelection">
+                            <a wicket:id="languageSelection"><wicket:message key="label.language"/></a>
+                            <span class="separator">|</span>
+                        </li>
+                        <li>
+                            <a wicket:id="support" target="_blank"></a>
+                            <span class="separator">|</span>
+                        </li>
+                        <li>
+                            <a href="/fieldid/logout.action" ><wicket:message key="label.logout"/></a>
+                            <span class="darkseparator">|</span>
+                        </li>
+                        <li class="last">
+                            <span wicket:id="savedItemsDropdown"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div id="pageNavigation">
+                <div id="navigationContent">
+                    <div id="navigationLinks">
+                        <ul class="dropdown">
+                            <li>
+                                <a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"></a>
+                            </li>
+                            <li wicket:id="identifyMenuContainer">
+                                <a wicket:id="identifyLink" class="speedLink textLink" id="menuIdentify">
+                                    <wicket:message key="speed.identify"/>
+                                </a>
+                            </li>
+
+                            <li wicket:id="startEventLinkContainer">
+                                <a href="/fieldid/startEvent.action" class="speedLink textLink" id="menuEvent"><wicket:message key="speed.event"/></a>
+                            </li>
+                            <li>
+                                <a wicket:id="assetSearchLink" class="speedLink textLink" id="menuAssets"><wicket:message key="speed.search"/><img wicket:id="down-arrow"/></a>
+                                <wicket:enclosure child="newAssetSearchLink">
+                                    <ul class="sub_menu">
+                                        <li><a wicket:id="newAssetSearchLink"><wicket:message key="nav.new_search"/></a></li>
+                                    </ul>
+                                </wicket:enclosure>
+                            </li>
+
+                            <li>
+                                <a wicket:id="reportingLink" class="speedLink textLink" id="menuReport"><wicket:message key="speed.reporting"/><img wicket:id="reporting-down-arrow"/></a>
+                                <ul wicket:id="extraReportingLinksContainer" class="sub_menu">
+                                    <wicket:enclosure>
+                                        <li><a wicket:id="advancedEventSearchLink"><wicket:message key="nav.advanced_event_search"/></a></li>
+                                    </wicket:enclosure>
+                                    <wicket:enclosure>
+                                        <li><a wicket:id="criteriaTrendsLink"><wicket:message key="nav.trending"/></a></li>
+                                    </wicket:enclosure>
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a wicket:id="placesLink" class="speedLink textLink" id="menuPlaces"><wicket:message key="speed.places"/></a>
+                            </li>
+
+                            <wicket:enclosure>
+                                <li>
+                                    <a wicket:id="procedureLink" class="speedLink textLink" id="menuProcedure"><wicket:message key="speed.procedures"/></a>
+                                </li>
+                            </wicket:enclosure>
+                            <li wicket:id="safetyNetworkLinkContainer">
+                                <a href="/fieldid/safetyNetwork.action" class="speedLink textLink" id="menuSafetyNetwork"><wicket:message key="speed.safety_network"/></a>
+                            </li>
+                            <li wicket:id="jobsLinkContainer">
+                                <a href="/fieldid/jobs.action" class="speedLink textLink" id="menuProject"><wicket:message key="speed.projects"/></a>
+                            </li>
+                            <li wicket:id="setupLinkContainer">
+                                <a wicket:id="setupLink" class="speedLink textLink" id="menuSetup">
+                                    <wicket:message key="label.setup"/>
+                                    <img src="/fieldid/images/down-arrow.png" />
+                                </a>
+
+                                <ul wicket:id="setupSubMenuContainer" class="">
+                                    <li>
+                                        <a wicket:id="settingsLink"><wicket:message key="nav.settings"/></a>
+                                        <ul wicket:id="settingsSubMenuContainer" class="">
+                                            <li><a href="/fieldid/organizations.action" ><wicket:message key="title.manage_organizational_units.plural"/></a></li>
+                                            <li><a wicket:id="systemSettingsLink"><wicket:message key="label.system_settings"/></a></li>
+                                            <li><a href="/fieldid/quickSetupWizard/startWizard.action"><wicket:message key="label.quick_setup_wizard"/></a></li>
+                                            <li><a href="/fieldid/branding.action" ><wicket:message key="title.manage_branding.plural"/></a></li>
+                                            <li><a wicket:id="yourPlanLink" ><wicket:message key="title.manage_field_id_plan.plural"/></a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a wicket:id="ownersUsersLocLink"><wicket:message key="nav.owners_users_loc"/></a>
+                                        <ul wicket:id="ownersSubMenuContainer" class="sub_menu">
+                                            <li wicket:id="manageCustomersContainer"><a href="/fieldid/customerList.action" ><wicket:message key="label.customers"/></a></li>
+                                            <li wicket:id="manageUsersContainer"><a href="/fieldid/userList.action" ><wicket:message key="label.users"/></a></li>
+                                            <wicket:enclosure>
+                                                <li><a wicket:id="userGroupsLink"><wicket:message key="label.user_groups"/></a></li>
+                                            </wicket:enclosure>
+                                            <li wicket:id="manageUserRegistrationsContainer"><a href="/fieldid/userRequestList.action" ><wicket:message key="title.manage_user_registrations.plural"/></a></li>
+                                            <li wicket:id="managePredefinedLocationsContainer"><a href="/fieldid/predefinedLocations.action" ><wicket:message key="title.manage_predefined_locations.plural"/></a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a wicket:id="assetsEventsLink"><wicket:message key="nav.assets_and_events"/></a>
+                                        <ul wicket:id="assetsEventsSubMenuContainer">
+                                            <li><a href="/fieldid/eventTypeGroups.action" ><wicket:message key="title.manage_event_type_groups.plural"/></a></li>
+                                            <li><a href="/fieldid/eventTypes.action" ><wicket:message key="title.manage_event_types.plural"/></a></li>
+                                            <li><a wicket:id="eventStatusListLink" ><wicket:message key="title.manage_event_status.plural"/></a></li>
+                                            <li><a href="/fieldid/eventBooks.action" ><wicket:message key="title.manage_event_books.plural"/></a></li>
+                                            <li><a href="/fieldid/assetTypeGroups.action" ><wicket:message key="title.manage_asset_type_groups.plural"/></a></li>
+                                            <li><a wicket:id="assetTypesList" ><wicket:message key="title.asset_types.plural"/></a></li>
+                                            <li><a href="/fieldid/assetStatusList.action" ><wicket:message key="title.manage_asset_statuses.plural"/></a></li>
+                                            <li><a wicket:id="priorityCodeListLink" ><wicket:message key="title.manage_priority_code.plural"/></a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a wicket:id="importLink"><wicket:message key="nav.import"/></a>
+                                        <ul class="sub_menu">
+                                            <li><a href="/fieldid/customerImportExport.action"><wicket:message key="label.import_owners"/></a></li>
+                                            <li><a href="/fieldid/assetImportExport.action"><wicket:message key="label.import_assets"/></a></li>
+                                            <li><a href="/fieldid/eventImportExport.action"><wicket:message key="label.import_events"/></a></li>
+                                            <li><a href="/fieldid/autoAttributeImportExport.action"><wicket:message key="label.import_auto_attributes"/></a></li>
+                                            <li><a href="/fieldid/userImportExport.action"><wicket:message key="label.import_users"/></a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a wicket:id="templatesLink"><wicket:message key="nav.templates"/></a>
+                                        <ul wicket:id="templatesSubMenuContainer" class="sub_menu">
+                                            <li><a href="/fieldid/autoAttributeCriteriaList.action"><wicket:message key="title.auto_attribute_wizard.plural" /></a></li>
+                                            <li><a href="/fieldid/commentTemplateList.action"><wicket:message key="title.manage_comment_templates.plural" /></a></li>
+                                            <li><a wicket:id="assetLayoutLink"><wicket:message key="title.column_layout_asset" /></a></li>
+                                            <li><a wicket:id="eventLayoutLink"><wicket:message key="title.column_layout_event" /></a></li>
+                                            <li wicket:id="assetCodeMappingContainer"><a href="/fieldid/assetCodeMappingList.action"><wicket:message key="title.manage_asset_code_mappings.plural" /></a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a wicket:id="widgetsLink"><wicket:message key="nav.widgets"/></a></li>
+                                    <li><a wicket:id="securityLink"><wicket:message key="nav.security"/></a>
+                                        <ul class="sub_menu">
+                                            <li><a wicket:id="passwordPolicyLink"><wicket:message key="title.password_policy"/></a></li>
+                                            <li><a wicket:id="accountPolicyLink"><wicket:message key="title.account_lockout_policy" /></a></li>
+                                        </ul>
+                                    </li>
+                                    <li><a wicket:id="translationsLink"><wicket:message key="title.translations"/></a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                    <div id="smartSearchContainer">
+
+                        <form id="smartSearch" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
+                            <input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/><input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>
+                        <input type="text" name="search" wicket:message="value:label.search" id="searchText" class="description"/></span>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="headerPadding"></div>
+    </wicket:fragment>
+
+
+
+
 </html>
