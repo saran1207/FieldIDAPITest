@@ -103,7 +103,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
 
     public boolean isCurrentPageSelected() {
         int startingIndexOnThisPage = dataTable.getTable().getCurrentPage()*dataTable.getTable().getItemsPerPage();
-        for (int i = 0; i < dataTable.getTable().getItemsPerPage(); i++) {
+        for (int i = 0; i < countItemsOnCurrentPage(); i++) {
             if (!selectedRows.containsIndex(startingIndexOnThisPage + i)) {
                 return false;
             }
