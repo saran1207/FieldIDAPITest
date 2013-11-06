@@ -154,23 +154,10 @@ public class EventCreationService extends FieldIdPersistenceService {
         nextEvent = eventScheduleService.getNextAvailableSchedule(event);
 
        if (eventEnum == EventEnum.PERFORM) {
-
-            if (null != event.getAssignedGroup()) {
-                nextEvent.setAssignedGroup(event.getAssignedGroup());
-            } else {
-                nextEvent.setAssignee(event.getPerformedBy());
-            }
-
+           nextEvent.setAssignee(event.getPerformedBy());
         } else if (eventEnum == EventEnum.CLOSE) {
-
-            if (null != event.getAssignedGroup()) {
-                nextEvent.setAssignedGroup(event.getAssignedGroup());
-            } else {
-                nextEvent.setAssignee(event.getAssignee());
-            }
-
+           nextEvent.setAssignee(event.getAssignee());
         }
-
 
         if (null != nextEvent) {
             uEvent = persistenceService.update(nextEvent);
