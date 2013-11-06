@@ -199,8 +199,10 @@ public class OrgService extends FieldIdPersistenceService {
 
     public OrgLocationTree getTopLevelOrgTree() {
         QueryBuilder<InternalOrg> query = createUserSecurityBuilder(InternalOrg.class);
-        OrgLocationTree result = new OrgLocationTree(persistenceService.findAll(query));
-        return result;
+        List<InternalOrg> orgs = persistenceService.findAll(query);
+        return orgs.isEmpty() ?
+            new OrgLocationTree(Lists.newArrayList(getCurrentUser().getOwner())) :
+            new OrgLocationTree(orgs);
     }
 
     public List<? extends BaseOrg> search(String textFilter, Class<? extends BaseOrg> typeFilter, int page, int pageSize) {
