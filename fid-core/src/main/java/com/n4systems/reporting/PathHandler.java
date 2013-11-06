@@ -1,22 +1,14 @@
 package com.n4systems.reporting;
 
+import com.n4systems.model.*;
+import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.user.User;
+import com.n4systems.util.ConfigContext;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.UUID;
-
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.PrintOut;
-import com.n4systems.model.Project;
-import com.n4systems.model.Button;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.model.user.User;
-import com.n4systems.util.ConfigContext;
 
 public class PathHandler {
 	private static final String PRIVATE_PATH_BASE = "private";
@@ -289,11 +281,19 @@ public class PathHandler {
 	}
 
 	public static File getPrintOutFile(PrintOut printOut, Locale locale) {
-		return absolutize(getReportPath(printOut, locale));
+        File localizedFile = absolutize(getReportPath(printOut, locale));
+        if (localizedFile.exists()) {
+            return localizedFile;
+        }
+        return absolutize(getReportPath(printOut, null));
 	}
 
 	public static File getCompiledPrintOutFile(PrintOut printOut, Locale locale) {
-		return absolutize(getCompiledReportPath(printOut, locale));
+        File localizedCompiledFile = absolutize(getCompiledReportPath(printOut, locale));
+        if (localizedCompiledFile.exists()) {
+            return localizedCompiledFile;
+        }
+        return absolutize(getCompiledReportPath(printOut, null));
 	}
 	
 	public static File getPreviewImage(PrintOut printOut) {
