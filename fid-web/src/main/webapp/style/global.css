@@ -1,0 +1,1284 @@
+/*--------------------------------------- 
+  UTILITY AND HELPER CLASSES
+-----------------------------------------*/
+.pull-right {
+  float: right;
+}
+.pull-left {
+  float: left;
+}
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}
+.border {
+  border: 1px solid #c7c7c9;
+}
+.no-border {
+  border: none;
+}
+.inline {
+  display: inline-block;
+}
+.block {
+  display: block;
+}
+.error {
+  background: #ffc4b3;
+}
+.warning {
+  background: #ffffb2;
+  border: 1px solid #efef00;
+  font-size: 13px;
+}
+.instructions {
+  display: inline-block;
+  font-style: italic;
+  color: #666666;
+  font-size: 12px;
+}
+label + .instructions {
+  margin-left: 12px;
+}
+/*--------------------------------------- 
+  FOOTER
+-----------------------------------------*/
+.footer-global {
+  background: #f5f5f5;
+  padding-top: 20px;
+}
+.footer-global img {
+  float: right;
+}
+/*
+Sticky Footer based on:
+Ryan Fait http://ryanfait.com/
+Chris Coyier http://css-tricks.com/snippets/css/sticky-footer/
+*/
+html,
+body {
+  height: 100%;
+}
+.wrapper {
+  min-height: 100%;
+  *height: auto !important;
+  *height: 100%;
+  margin: 0 auto -125px;
+}
+.wrapper:after {
+  content: "";
+  display: block;
+}
+.footer-global,
+.wrapper:after {
+  height: 125px;
+}
+/*--------------------------------------- 
+  THUMBNAILS
+-----------------------------------------*/
+/* Thumbnails with a description - don't know where to put this yet */
+figure {
+  overflow: hidden;
+}
+figure img {
+  float: left;
+  margin-right: 10px;
+}
+figure p {
+  margin: 0;
+}
+/*--------------------------------------- 
+  ORG LOCATION WITH DROPDOWN
+-----------------------------------------*/
+.org-location .fontello-search:before {
+  font-size: 16px;
+  padding: 0;
+}
+.form-horizontal.compact input + [class^="icon-"],
+.form-horizontal.compact input + [class^="fontello-"] {
+  margin-left: -20px;
+}
+/*--------------------------------------- 
+  TYPOGRAPHY
+-----------------------------------------*
+
+/* BODY TEXT */
+body {
+  color: #3a3a3a;
+  font-size: 14px;
+  font-family: "proxima-nova", Helvetica, Arial, sans-serif;
+  font-style: normal;
+  font-weight: 400;
+}
+a {
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+  outline: none;
+}
+a:hover {
+  color: #3a3a3a;
+  text-decoration: none;
+}
+main a {
+  color: #008bd3;
+}
+/* HEADINGS */
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-bottom: 0;
+}
+h1 {
+  font-size: 24px;
+  font-weight: normal;
+  margin-bottom: 10px;
+}
+h1.no-border {
+  margin-bottom: 0;
+}
+h2 {
+  font-size: 18px;
+  font-weight: normal;
+}
+h3,
+h4 {
+  margin: 0;
+  font-size: 14px;
+}
+h3 {
+  background: #f5f5f5;
+  padding: 4px 6px;
+  margin-bottom: 4px;
+}
+/*--------------------------------------- 
+  PAGE LAYOUT
+-----------------------------------------*/
+/* Applies a natural box layout model to all elements. 
+Padding and border won't affect the width of the box. */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  *behavior: url(../scripts/boxsizing.htc);
+  /* IE 6 & 7 */
+
+}
+/* Separates sections of the page or component. ex. Page title and page content */
+hr {
+  border: 0;
+  border-top: 1px solid #c7c7c9;
+  margin: 0;
+  clear: both;
+}
+header {
+  *zoom: 1;
+}
+header:before,
+header:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+header:after {
+  clear: both;
+}
+header hr {
+  margin-bottom: 15px;
+}
+main,
+.content-wrap {
+  max-width: 1400px;
+  padding: 0 20px;
+  margin: 0 auto;
+  *zoom: 1;
+  position: relative;
+}
+main:before,
+.content-wrap:before,
+main:after,
+.content-wrap:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+main:after,
+.content-wrap:after {
+  clear: both;
+}
+main {
+  margin-top: 15px;
+  margin-bottom: 40px;
+}
+section {
+  margin-bottom: 25px;
+}
+/* Used to group action items, such as buttons, together */
+.action-group {
+  clear: both;
+}
+.container {
+  padding: 0 6px;
+}
+/* Main page heading */
+.page-header {
+  position: relative;
+}
+.page-header .action,
+.page-header .action-group {
+  margin-bottom: 4px;
+  *zoom: 1;
+}
+.page-header .action:before,
+.page-header .action-group:before,
+.page-header .action:after,
+.page-header .action-group:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.page-header .action:after,
+.page-header .action-group:after {
+  clear: both;
+}
+.page-header .action.pull-right,
+.page-header .action-group.pull-right {
+  position: absolute;
+  bottom: 4px;
+  right: 0;
+  margin-bottom: 0;
+}
+.page-header + hr {
+  margin-bottom: 15px;
+}
+/* Headings within the page */
+/* Used to create columns, a main section and a sidebar section. Sidebar can be on the left or right side. */
+.column-wide {
+  width: 66.129032%;
+  float: left;
+}
+.column-narrow-left,
+.column-narrow-right {
+  width: 32.2580644%;
+  float: left;
+}
+.column-narrow-left {
+  margin-right: 1.6129032%;
+}
+.column-narrow-right {
+  margin-left: 1.6129032%;
+}
+/* Spans 100% width */
+.column-full {
+  width: 99.9999996%;
+  clear: both;
+}
+/*--------------------------------------- 
+  MEDIA QUERIES
+-----------------------------------------*/
+@media all and (max-width: 1100px) {
+  main,
+  .content-wrap {
+    padding: 0 12px;
+  }
+}
+/*--------------------------------------- 
+  DROPDOWNS - for buttons and nav lists
+-----------------------------------------*/
+/* Defaults as a horizontal dropdown */
+.dropdown,
+.dropup {
+  position: relative;
+  display: inline-block;
+}
+.dropdown a,
+.dropup a {
+  text-decoration: none;
+}
+.dropdown:hover > ul,
+.dropup:hover > ul {
+  display: block;
+}
+.dropdown ul,
+.dropup ul {
+  display: none;
+  list-style-type: none;
+  border: 1px solid #c7c7c9;
+  position: absolute;
+  left: 0;
+  z-index: 10;
+  background: #fff;
+  min-width: 100%;
+  -webkit-box-shadow: 0px 6px 20px -10px #666666;
+  box-shadow: 0px 6px 20px -10px #666666;
+}
+.dropdown ul li a,
+.dropup ul li a {
+  padding: 8px 16px;
+  display: inline-block;
+  white-space: nowrap;
+  width: 100%;
+}
+.dropdown ul li a:hover,
+.dropup ul li a:hover {
+  background: #f5f5f5;
+}
+.dropdown ul .divider,
+.dropup ul .divider {
+  border-top: 1px solid #dddddd;
+}
+.dropdown ul.pull-right,
+.dropup ul.pull-right {
+  left: auto;
+  right: 0;
+  text-align: right;
+}
+.dropdown .btn-sml + ul li a,
+.dropup .btn-sml + ul li a {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+.dropdown.hide,
+.dropup.hide {
+  display: none;
+}
+.dropdown ul {
+  top: 100%;
+}
+.dropdown [class^="btn"] {
+  margin-bottom: 1px;
+}
+.dropup ul {
+  bottom: 100%;
+  -webkit-box-shadow: 0px -4px 20px -10px #666666;
+  box-shadow: 0px -4px 20px -10px #666666;
+}
+.dropup [class^="btn"] {
+  margin-top: 1px;
+}
+.secondary-dropdown {
+  position: relative;
+}
+.secondary-dropdown ul {
+  top: 0px;
+  left: 100%;
+  min-width: inherit;
+}
+.secondary-dropdown:hover ul {
+  display: block;
+}
+.secondary-dropdown > a:after {
+  font-family: "fontello", sans-serif;
+  content: '\e80d';
+  vertical-align: middle;
+  padding: 0 4px;
+}
+/*--------------------------------------- 
+  NAVIGATION
+-----------------------------------------*/
+nav a {
+  text-decoration: none;
+}
+/* HORIZONTAL NAVIGATION */
+.nav-horizontal {
+  font-size: 0;
+  /* Removes default space from between list items (caused by line break) when using display: inline-block; font-size to be redeclared in <li>. */
+
+}
+.nav-horizontal > li {
+  display: inline-block;
+  position: relative;
+  font-size: 15px;
+}
+.nav-horizontal > li > a {
+  padding: 8px 0 6px;
+  margin: 0 16px;
+  display: inline-block;
+  display: block;
+}
+/* BREAD CRUMBS */
+.bread-crumb {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.bread-crumb a {
+  text-decoration: underline;
+}
+.bread-crumb a:hover {
+  text-decoration: none;
+}
+.bread-crumb ol {
+  margin: 8px 0 0;
+  font-size: 0;
+}
+.bread-crumb ol li {
+  display: inline;
+  font-size: 12px;
+}
+.bread-crumb ol li + li:before {
+  font-family: "fontello", sans-serif;
+  content: '\e82f';
+  vertical-align: middle;
+  padding: 0 4px;
+}
+/* TABBED NAVIGATION */
+.nav-tabs {
+  position: relative;
+  border-bottom: 1px solid #dddddd;
+  margin-bottom: 15px;
+}
+.nav-tabs > ul {
+  overflow: hidden;
+  margin-bottom: -2px;
+}
+.nav-tabs > ul > li {
+  float: left;
+  padding: 10px 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.nav-tabs > ul > li.active {
+  border-color: #dddddd;
+  border-bottom-color: transparent;
+  background: #fff;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+}
+.nav-tabs > ul > li a {
+  color: #3a3a3a;
+}
+.nav-tabs > ul > li a:hover {
+  color: #666666;
+}
+[class$="-tab"] {
+  display: none;
+}
+[class$="-tab"].active {
+  display: block;
+}
+/*--------------------------------------- 
+  BUTTONS
+-----------------------------------------*/
+[class^="btn"] {
+  text-decoration: none;
+  display: inline-block;
+  padding: 8px 16px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  border: 1px solid #c7c7c9;
+  font-size: 14px;
+  color: #fff;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
+  width: auto;
+  cursor: pointer;
+  margin: 0;
+  white-space: nowrap;
+}
+[class^="btn"]:hover {
+  color: #fff;
+}
+[class^="btn"].disabled {
+  zoom: 1;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+}
+[class^="btn"].disabled:hover {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+[class^="btn"].hide {
+  display: none;
+}
+/* Button colours
+------------------*/
+.btn-primary {
+  background: #008bd3;
+  border-color: #007aba;
+}
+.dropdown:hover .btn-primary,
+.btn-primary:hover {
+  -webkit-box-shadow: inset 0 0 18px #00486d;
+  box-shadow: inset 0 0 18px #00486d;
+}
+.btn-secondary {
+  background: #eeeeee;
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #eeeeee), color-stop(1, #ffffff));
+  background: -ms-linear-gradient(bottom, #eeeeee, #ffffff);
+  background: -moz-linear-gradient(center bottom, #eeeeee 0%, #ffffff 100%);
+  background: -o-linear-gradient(#ffffff, #eeeeee);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#eeeeee', GradientType=0);
+  color: #3a3a3a;
+}
+.dropdown:hover .btn-secondary,
+.btn-secondary:hover {
+  background: #ffffff;
+  color: #3a3a3a;
+}
+.btn-save {
+  background: #5fb336;
+  border-color: #559f30;
+}
+.dropdown:hover .btn-save,
+.btn-save:hover {
+  -webkit-box-shadow: inset 0 0 18px #4a8c2a;
+  box-shadow: inset 0 0 18px #4a8c2a;
+}
+.btn-info {
+  background: #0065a6;
+  border-color: #00558d;
+}
+.dropdown:hover .btn-info,
+.btn-info:hover {
+  -webkit-box-shadow: inset 0 0 18px #002740;
+  box-shadow: inset 0 0 18px #002740;
+}
+.btn-warning {
+  background: #ffff7f;
+  border-color: #e5e500;
+  color: #666666;
+}
+.dropdown:hover .btn-warning,
+.btn-warning:hover {
+  -webkit-box-shadow: inset 0 0 18px #e5e500;
+  box-shadow: inset 0 0 18px #e5e500;
+  color: #3a3a3a;
+}
+.btn-danger {
+  background: #e63300;
+  border-color: #cd2d00;
+}
+.dropdown:hover .btn-danger,
+.btn-danger:hover {
+  -webkit-box-shadow: inset 0 0 18px #801c00;
+  box-shadow: inset 0 0 18px #801c00;
+}
+/* Button styled as link */
+.btn-link {
+  border: 0;
+  color: #008bd3;
+  text-decoration: underline;
+}
+.btn-link:hover {
+  color: #008bd3;
+  text-decoration: none;
+}
+/* Form buttons
+-----------------------------------------*/
+input[class^="btn"],
+button[class^="btn"] {
+  height: 35px;
+}
+/* Different button sizes
+--------------------------*/
+.btn-lrg {
+  padding: 8px 25px;
+  font-size: 18px;
+}
+.btn-sml {
+  padding: 5px 12px;
+}
+.btn-xsml {
+  padding: 4px 8px;
+  font-size: 12px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+/* Icon buttons
+----------------*/
+.btn-icon {
+  padding: 7px 8px 8px;
+}
+.btn-icon.btn-sml {
+  padding: 5px 4px 4px;
+}
+/* Dropdown buttons
+--------------------*/
+.dropdown > [class^="btn"]:after {
+  font-family: "fontello", sans-serif;
+  content: '\e811';
+  vertical-align: middle;
+  padding: 0 4px;
+  padding-right: 0;
+}
+.dropdown:hover [class^="btn"]:after {
+  content: '\e813';
+}
+.dropup > [class^="btn"]:after {
+  font-family: "fontello", sans-serif;
+  content: '\e813';
+  vertical-align: middle;
+  padding: 0 4px;
+  padding-right: 0px;
+}
+.dropup:hover [class^="btn"]:after {
+  content: '\e811';
+}
+.dropdown .btn-link,
+.dropup .btn-link {
+  text-decoration: none;
+  color: #3a3a3a;
+  padding-right: 12px;
+  padding-left: 12px;
+  margin-bottom: 2px;
+}
+.dropdown .btn-link + ul a,
+.dropup .btn-link + ul a {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+/* Groups buttons together into a nav bar
+------------------------------------------*/
+.button-group {
+  font-size: 0;
+  display: inline-block;
+}
+.button-group > [class^="btn"],
+.button-group > .split-btn,
+.button-group > .dropdown {
+  margin-right: -1px;
+}
+.button-group .dropdown {
+  font-size: 14px;
+}
+.button-group > [class^="btn"]:not(:last-child),
+.button-group .dropdown:not(:last-child) [class^="btn"],
+.button-group .split-btn:not(:last-child) [class^="btn"] {
+  -webkit-border-top-right-radius: 0px;
+  -moz-border-radius-topright: 0px;
+  border-top-right-radius: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  -moz-border-radius-bottomright: 0px;
+  border-bottom-right-radius: 0px;
+}
+.button-group > [class^="btn"]:not(:first-child),
+.button-group .dropdown:not(:first-child) [class^="btn"],
+.button-group .split-btn:not(:first-child) [class^="btn"] {
+  -webkit-border-top-left-radius: 0px;
+  -moz-border-radius-topleft: 0px;
+  border-top-left-radius: 0px;
+  -webkit-border-bottom-left-radius: 0px;
+  -moz-border-radius-bottomleft: 0px;
+  border-bottom-left-radius: 0px;
+}
+.button-group .input-combo {
+  display: inline-block;
+}
+/* Split button with dropdowns
+-----------------------------------------*/
+.split-btn {
+  display: inline-block;
+  position: relative;
+  white-space: nowrap;
+  font-size: 0;
+}
+.split-btn > [class^="btn"] {
+  margin-bottom: 1px;
+  margin-right: -1px;
+  -webkit-border-top-right-radius: 0px;
+  -moz-border-radius-topright: 0px;
+  border-top-right-radius: 0px;
+  -webkit-border-bottom-right-radius: 0px;
+  -moz-border-radius-bottomright: 0px;
+  border-bottom-right-radius: 0px;
+}
+.split-btn .dropdown {
+  position: static;
+  font-size: 14px;
+}
+.split-btn .dropdown [class^="btn"] {
+  padding-left: 5px;
+  padding-right: 10px;
+}
+.split-btn.btn-sml {
+  padding: 0;
+}
+.split-btn.btn-sml [class^="btn"] {
+  padding: 5px 10px;
+}
+.split-btn.btn-sml .dropdown [class^="btn"] {
+  padding-left: 6px;
+}
+.split-btn.btn-sml .dropdown ul li a {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+/*--------------------------------------- 
+  FORMS
+-----------------------------------------*/
+/* Default form styles */
+fieldset {
+  border: 1px solid #dddddd;
+  margin: 0 0 -1px;
+  padding: 35px 10px 10px;
+  position: relative;
+}
+fieldset:last-child {
+  margin-bottom: 5px;
+}
+legend {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  position: absolute;
+  top: 8px;
+}
+input[type="text"],
+select,
+textarea {
+  width: 295px;
+  padding-left: 4px;
+  margin: 4px 0 10px;
+  font-size: 13px;
+  font-family: "proxima-nova", Helvetica, Arial, sans-serif;
+  border: 1px solid #c7c7c9;
+}
+input[type="text"] {
+  height: 25px;
+  color: #3a3a3a;
+}
+label {
+  display: block;
+}
+textarea {
+  height: 115px;
+  resize: none;
+  outline: none;
+  padding-top: 4px;
+}
+textarea:focus,
+input:focus {
+  outline: none;
+  border-color: #666666;
+}
+/* checkboxes & radio boxes
+-----------------------------------------*/
+label input[type="radio"],
+label input[type="checkbox"] {
+  float: left;
+  margin-left: -15px;
+}
+.checkbox {
+  overflow: hidden;
+}
+.checkbox label {
+  padding-left: 15px;
+  margin: 5px 0;
+  line-height: 1;
+}
+.checkbox.inline label {
+  display: inline-block;
+  margin-right: 12px;
+}
+/* text input with button combo 
+-----------------------------------------*/
+.input-combo {
+  border: 1px solid #c7c7c9;
+  display: inline-block;
+}
+.input-combo input[type="text"] {
+  border: none;
+  margin-bottom: 0;
+  height: auto;
+}
+.input-combo [class^="btn"] {
+  border-width: 0 0 0 1px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+.input-combo.hide {
+  display: none;
+}
+/* Used for adding a block of text under a form control.
+Can be a warning or error message, or help text. */
+.text-block {
+  display: block;
+  padding-bottom: 6px;
+  margin: 4px 0;
+}
+/* Chosen plugin overrides */
+.chzn-container {
+  margin: 4px 0 10px;
+}
+.chzn-single.chzn-default,
+.chzn-container-single .chzn-single {
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  height: 25px;
+  padding-top: 2px;
+  border-color: #c7c7c9;
+}
+.chzn-container-single .chzn-single span,
+.chzn-container-single .chzn-default {
+  color: #7a7a7a;
+}
+.chzn-container-single .chzn-single {
+  line-height: 20px;
+}
+.chzn-container .chzn-results .highlighted {
+  background-color: #dddddd;
+  background-image: none;
+  color: #7a7a7a;
+}
+/* Used to group and align labels and controls */
+.control-group {
+  margin: 6px 0;
+}
+.control-group input,
+.control-group select,
+.control-group textarea,
+.control-group .chzn-container {
+  margin: 0;
+}
+.control-group.inline {
+  vertical-align: top;
+}
+/* For using multiple controls with one label */
+.control-combo label {
+  padding-top: 4px;
+}
+.control-combo .controls {
+  width: 285px;
+  display: inline-block;
+  vertical-align: top;
+}
+.control-combo .chzn-container {
+  margin-bottom: 2px;
+}
+/* add class to the <fieldset> that contains the primary selection to create more prominence */
+.primary-selection {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 10px;
+}
+.primary-selection label {
+  font-size: 18px;
+}
+/* For forms with the label on the left and input on the right */
+.form-horizontal fieldset {
+  clear: both;
+}
+.form-horizontal label {
+  width: 190px;
+  text-align: right;
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 10px;
+}
+.form-horizontal .link {
+  font-size: 13px;
+}
+.form-horizontal .text-block {
+  margin-left: 194px;
+}
+.form-horizontal .checkbox label {
+  width: auto;
+}
+/* Compact form controls - shorter widths */
+.form-horizontal.compact fieldset {
+  border: none;
+  padding: 26px 10px 0;
+  margin-bottom: 5px;
+}
+.form-horizontal.compact .control-group {
+  font-size: 0;
+}
+.form-horizontal.compact .control-group * {
+  font-size: 13px;
+}
+.form-horizontal.compact input[type="text"],
+.form-horizontal.compact select,
+.form-horizontal.compact textarea {
+  width: 55%;
+}
+.form-horizontal.compact .chzn-search input {
+  width: 100%;
+}
+.form-horizontal.compact label {
+  width: 44%;
+  padding-right: 3%;
+}
+.form-horizontal.compact .checkbox label {
+  width: auto;
+  text-align: left;
+  margin-left: 45%;
+}
+.form-horizontal.compact .text-block {
+  margin-left: 45%;
+}
+/* Custom file inputs */
+.uploads {
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #dddddd;
+}
+.uploads input[type="text"] {
+  width: 216px;
+  border: none;
+  margin: 0;
+  height: auto;
+}
+.uploads .file-input {
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.uploads .file-uploaded {
+  position: relative;
+}
+.uploads [class^="btn"] {
+  border-width: 0 0 0 1px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+/*--------------------------------------- 
+  TABLE STYLES
+-----------------------------------------*/
+table {
+  width: 100%;
+}
+th,
+td {
+  padding: 4px 6px;
+}
+th {
+  text-align: left;
+  background: #dddddd;
+  border-bottom: 1px solid #c7c7c9;
+}
+td {
+  font-size: 13px;
+}
+tr {
+  margin-left: 5px;
+}
+/* Table headings that contain sortable links */
+th a {
+  color: #3a3a3a;
+  display: inline-block;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+th.active {
+  background: #c7c7c9;
+}
+th.active a {
+  text-decoration: none;
+}
+/* Each row has a bottom border */
+table.borders tr {
+  border-bottom: 1px solid #f5f5f5;
+}
+/* Every other row has a bg color */
+table.striped tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+table.striped th,
+table.striped td {
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+/* Two column table, 2nd column is right text aligned */
+table.two-columns td {
+  text-align: right;
+}
+table.two-columns td:first-child {
+  text-align: left;
+}
+/* A list that displays data in a table style */
+.list-table {
+  list-style-type: none;
+  margin: 0;
+}
+.list-table > li {
+  position: relative;
+  padding: 5px 6px;
+  *zoom: 1;
+}
+.list-table > li:before,
+.list-table > li:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.list-table > li:after {
+  clear: both;
+}
+.list-table.borders > li {
+  border-bottom: 1px solid #f5f5f5;
+}
+.list-table .action,
+.list-table .action-group {
+  position: absolute;
+  bottom: 4px;
+  right: 0;
+}
+.list-table.comfortable .action,
+.list-table.comfortable .action-group {
+  bottom: 10px;
+}
+/* More spacing/padding than default layout */
+.list-table.comfortable > li {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+.pagination {
+  padding: 8px;
+  overflow: hidden;
+  text-align: right;
+}
+.pagination ul {
+  display: inline-block;
+}
+.pagination ul li {
+  display: inline-block;
+}
+.pagination ul li a {
+  padding: 5px 8px;
+  text-decoration: none;
+  border: 1px solid #dddddd;
+  display: block;
+  color: #008bd3;
+}
+.pagination ul li a:hover {
+  text-decoration: underline;
+}
+.pagination form {
+  display: inline-block;
+  margin-left: 5px;
+  padding-bottom: 0;
+}
+.pagination form label {
+  display: inline-block;
+}
+.pagination form input[type="text"] {
+  width: 50px;
+  margin: 0;
+}
+.modal.fade {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: 1000;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal.fade.in {
+  display: block;
+}
+.modal .icon-cancel {
+  cursor: pointer;
+}
+.modal .icon-cancel:before {
+  border: 1px solid #666666;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+.modal h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+}
+.modal.modal-lrg .modal-dialog {
+  width: 850px;
+}
+.modal .list-table > li {
+  padding-right: 0;
+  padding-left: 0;
+}
+.modal-dialog {
+  position: relative;
+  background: #ffffff;
+  width: 650px;
+  min-height: 400px;
+  margin: 150px auto 0;
+  padding: 25px 20px;
+  border: 1px solid #666666;
+}
+.modal-header,
+.modal-body,
+.modal-footer {
+  *zoom: 1;
+}
+.modal-header:before,
+.modal-body:before,
+.modal-footer:before,
+.modal-header:after,
+.modal-body:after,
+.modal-footer:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.modal-header:after,
+.modal-body:after,
+.modal-footer:after {
+  clear: both;
+}
+.modal-body {
+  border-top: 1px solid #dddddd;
+  padding: 10px 0;
+  margin-bottom: 30px;
+}
+.modal-footer {
+  position: absolute;
+  bottom: 25px;
+}
+/*--------------------------------------- 
+  GLOBAL HEADER STYLES
+-----------------------------------------*/
+header.main {
+  position: relative;
+  width: 100%;
+  z-index: 50;
+  background: #fff;
+}
+header.main .tenant-logo {
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+header.main .nav-list {
+  font-size: 0;
+  /* Removes default space from between list items (caused by line break) when using display: inline-block; font-size to be redeclared in <li>. */
+
+}
+header.main .nav-list > li {
+  display: inline-block;
+  font-size: 14px;
+}
+header.main .nav-list > li > a {
+  padding: 10px 16px;
+  display: inline-block;
+}
+header.main .nav-list .dropdown > a:after,
+header.main .nav-list .dropdown > span:after {
+  font-family: "fontello", sans-serif;
+  content: '\e82d';
+  vertical-align: middle;
+  padding: 0 4px;
+  font-size: 13px;
+}
+header.main .nav-list .dropdown:hover > a:after,
+header.main .nav-list .dropdown:hover > span:after {
+  content: '\e830';
+}
+header.main .nav-list .dropdown ul li {
+  border-top: 1px solid #f5f5f5;
+}
+header.main .nav-list .dropdown ul li a {
+  color: #3a3a3a;
+}
+header.main .nav-list .dropdown ul li:hover > a {
+  color: #e63300;
+}
+header.main .nav-user {
+  text-align: right;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+}
+header.main .nav-user .nav-list {
+  margin: 6px auto;
+}
+header.main .nav-user .nav-list > li {
+  border-left: 1px solid #c7c7c9;
+}
+header.main .nav-user .nav-list > li:first-child {
+  border: none;
+}
+header.main .nav-user .nav-list > li > span {
+  display: inline-block;
+  padding: 4px 0 6px 16px;
+  margin-right: 10px;
+  color: #e63300;
+}
+header.main .nav-user .nav-list > li > span:after {
+  color: #666666;
+}
+header.main .nav-user li.username > span {
+  padding-left: 0;
+}
+header.main .nav-user li.username ul {
+  min-width: inherit;
+  right: 2px;
+  left: auto;
+}
+header.main .nav-main {
+  background: #666666;
+  -webkit-box-shadow: 0px 4px 8px -4px #666666;
+  box-shadow: 0px 4px 8px -4px #666666;
+}
+header.main .nav-main .nav-list {
+  float: left;
+}
+header.main .nav-main .nav-list > li > a {
+  border-top: 2px solid transparent;
+  color: #ffffff;
+}
+header.main .nav-main .nav-list > li:hover > a {
+  border-top: 2px solid #e63300;
+  background: #e2e2e2;
+  color: #3a3a3a;
+}
+header.main .nav-main .search {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  float: right;
+  border: 1px solid #c7c7c9;
+  height: 28px;
+  background: #fff;
+  margin-top: 6px;
+}
+header.main .nav-main .search input {
+  border: none;
+  background: transparent;
+  margin: 0;
+  width: 225px;
+}
+header.main .nav-main .fontello-home:before {
+  vertical-align: baseline;
+}
+header.main .nav-main .fontello-search:before {
+  font-size: 16px;
+}
+header.main .nav-main.js-sticky {
+  position: fixed;
+  top: 38px;
+  width: 100%;
+}
+/*--------------------------------------- 
+  MEDIA QUERIES
+-----------------------------------------*/
+@media all and (max-width: 1100px) {
+  header.main .nav-list > li > a {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+/* Media queries/ responsive styles */
+@media (max-width: 1024px) {
+  .content-wrap {
+    width: 1024px;
+  }
+}

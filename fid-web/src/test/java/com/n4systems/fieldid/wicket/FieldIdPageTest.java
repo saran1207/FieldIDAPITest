@@ -61,6 +61,7 @@ public abstract class FieldIdPageTest<T extends WicketHarness, F extends FieldID
 	protected void expectingConfig() {
 		expect(configurationProvider.getString(ConfigEntry.SYSTEM_DOMAIN)).andReturn("localhost");
 		expect(configurationProvider.getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT)).andReturn(new Integer(20));
+        expect(configurationProvider.getBoolean(ConfigEntry.PLACES_ENABLED)).andReturn(false);
 		replay(configurationProvider);
 		expect(configService.getBoolean(ConfigEntry.GOOGLE_ANALYTICS_ENABLED)).andReturn(configData.googleAnalytics);
 		expect(configService.getString(ConfigEntry.RSS_FEED)).andReturn(configData.rssFeed);

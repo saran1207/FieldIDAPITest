@@ -52,6 +52,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -89,6 +90,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     private ConfigurationProvider configurationProvider;
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
+    private final SelectLanguagePanel selectLanguagePanel;
 
 
     public FieldIDFrontEndPage() {
@@ -102,64 +104,15 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     public FieldIDFrontEndPage(PageParameters params) {
     	this(params,null);
     }
-    
+
     public FieldIDFrontEndPage(PageParameters params, ConfigurationProvider configurationProvider) {
         super(params);
-
-//        ThreadLocalInteractionContext.getInstance().setForceDefaultLanguage(forceDefaultLanguage());
+        storePageParameters(params);
 
         setConfigurationProvider(configurationProvider);
-        
-        add(new DebugBar("debugBar"));
-
-        add(new CustomJavascriptPanel("customJsPanel"));
-        add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
-
-        SessionUser sessionUser = getSessionUser();
-
-        add(new WebMarkupContainer(LEFT_PANEL_ID).setVisible(false));
-        add(new WebMarkupContainer(SUB_MENU_ID).setVisible(false));
-        add(new WebMarkupContainer(BOTTOM_PANEL_ID).setVisible(false));
-        add(new WebMarkupContainer(LEFT_PANEL_CONTROLLER_ID).setVisible(false));
-        addCssContainers();
-
-        boolean trendingEnabled = getSecurityGuard().isCriteriaTrendsEnabled();
-        boolean advancedEventSearchEnabled = getSecurityGuard().isAdvancedEventSearchEnabled();
-
-        boolean extraEventLinksAvailable = trendingEnabled || advancedEventSearchEnabled;
-
-        add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class).add(new Image("reporting-down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(extraEventLinksAvailable)));
-
-        WebMarkupContainer extraEventLinksContainer = new WebMarkupContainer("extraReportingLinksContainer");
-        extraEventLinksContainer.setVisible(extraEventLinksAvailable);
-        add(extraEventLinksContainer);
-
-        extraEventLinksContainer.add(new BookmarkablePageLink<Void>("advancedEventSearchLink", AdvancedEventSearchPage.class).setVisible(advancedEventSearchEnabled));
-        extraEventLinksContainer.add(new BookmarkablePageLink<Void>("criteriaTrendsLink", CriteriaTrendsPage.class).setVisible(trendingEnabled));
-
-        boolean globalSearchEnabled = getSecurityGuard().isGlobalSearchEnabled();
-
-        add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class).add(new Image("down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(globalSearchEnabled)));
-        add(new BookmarkablePageLink<Void>("newAssetSearchLink", AdvancedAssetSearchPage.class).setVisible(globalSearchEnabled));
-
-        add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class).setVisible(getConfigurationProvider().getBoolean(ConfigEntry.PLACES_ENABLED)));
-
-        BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
-        procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
-        add(procedureLink);
-
-        add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
-        add(new Label("versionLabel", FieldIdVersion.getVersion()));
-
-        add(new ExternalLink("support", getSupportUrl(), getString("label.support") ));
-
-        addSpeedIdentifyLinks(sessionUser);
-
-        storePageParameters(params);
 
         add(languageSelectionModalWindow = new DialogModalWindow("languageSelectionModalWindow").setInitialWidth(480).setInitialHeight(280));
 
-        SelectLanguagePanel selectLanguagePanel;
         languageSelectionModalWindow.setContent(selectLanguagePanel = new SelectLanguagePanel(languageSelectionModalWindow.getContentId()) {
             @Override
             public void onLanguageSelection(AjaxRequestTarget target) {
@@ -168,25 +121,23 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             }
         });
 
+        add(new Header("mainHeader"));
+        add(new DebugBar("debugBar"));
+        add(new CustomJavascriptPanel("customJsPanel"));
+        add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
+        add(new WebMarkupContainer(LEFT_PANEL_ID).setVisible(false));
+        add(new WebMarkupContainer(SUB_MENU_ID).setVisible(false));
+        add(new WebMarkupContainer(BOTTOM_PANEL_ID).setVisible(false));
+        add(new WebMarkupContainer(LEFT_PANEL_CONTROLLER_ID).setVisible(false));
+
+        // TODO DD : refactor this...override
+        addCssContainers();
+
+        add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
+        add(new Label("versionLabel", FieldIdVersion.getVersion()));
+
         add(createHeaderLink("headerLink", "headerLinkLabel"));
         add(createBackToLink("backToLink", "backToLinkLabel"));
-        add(new Label("loggedInUsernameLabel", sessionUser.getName()));
-        add(new AjaxLink<Void>("languageSelection") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                languageSelectionModalWindow.show(target);
-            }
-        }.setVisible(selectLanguagePanel.hasLanguagesToDisplay()));
-
-        add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent")));
-        add(createSetupLinkContainer(sessionUser));
-        add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));
-        add(new WebMarkupContainer("safetyNetworkLinkContainer").setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork()));
-
-        add(new SavedItemsDropdown("savedItemsDropdown"));
-
-        add(new StaticImage("tenantLogo", new Model<String>(s3Service.getBrandingLogoURL().toString())).setEscapeModelStrings(false));
-
         add(createRelogLink());
     }
 
@@ -293,19 +244,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 		return new WebMarkupContainer(id).setVisible(false);
 	}
 
-    private void addSpeedIdentifyLinks(SessionUser sessionUser) {
-        WebMarkupContainer identifyMenuContainer = new WebMarkupContainer("identifyMenuContainer");
-        identifyMenuContainer.setVisible(sessionUser.hasAccess("tag"));
-
-        if (getSecurityGuard().isIntegrationEnabled()) {
-            identifyMenuContainer.add(new ExternalLink("identifyLink", "/fieldid/identify.action"));
-        } else {
-            identifyMenuContainer.add(new BookmarkablePageLink("identifyLink", IdentifyOrEditAssetPage.class));
-        }
-
-        add(identifyMenuContainer);
-    }
-    
     private Component createSetupLinkContainer(SessionUser sessionUser) {
         boolean hasSetupAccess = sessionUser.hasSetupAccess();
         boolean manageSystemConfig = sessionUser.hasAccess("managesystemconfig");
@@ -366,7 +304,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         container.add(new BookmarkablePageLink("eventStatusListLink", EventStatusListPage.class));
         container.add(new BookmarkablePageLink("assetTypesList", AssetTypeListPage.class));
         container.add(new BookmarkablePageLink("priorityCodeListLink", PriorityCodePage.class));
-
         container.setVisible(getSessionUser().hasAccess("managesystemconfig"));
         
         return container;
@@ -480,20 +417,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         }
     	
     }
-    
-    static class StaticImage extends WebComponent {        
-        public StaticImage(String id, IModel<String> urlModel) {
-            super( id, urlModel );
-        }
 
-        @Override
-		protected void onComponentTag(ComponentTag tag) {
-            super.onComponentTag( tag );
-            checkComponentTag( tag, "img" );
-            tag.put( "src", getDefaultModelObjectAsString() );
-        }
-    }    
-    
     // Ideally these will both be unneeded by all pages, After we convert to layout.css from site_wide.css and fieldid.css
     // (both site_wide and fieldid have accumulated a ton of irrelevant stuff that may be used only on one page and breaks new pages).
     protected boolean useLegacyCss() {
@@ -530,5 +454,96 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     public TopFeedbackPanel getTopFeedbackPanel() {
         return topFeedbackPanel;
     }
+
+
+    class Header extends Fragment {
+
+        public Header(String id) {
+            super(id, "legacyHeader", FieldIDFrontEndPage.this);
+
+            SessionUser sessionUser = getSessionUser();
+
+            boolean trendingEnabled = getSecurityGuard().isCriteriaTrendsEnabled();
+            boolean advancedEventSearchEnabled = getSecurityGuard().isAdvancedEventSearchEnabled();
+            boolean extraEventLinksAvailable = trendingEnabled || advancedEventSearchEnabled;
+
+            add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class).add(new Image("reporting-down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(extraEventLinksAvailable)));
+
+            WebMarkupContainer extraEventLinksContainer = new WebMarkupContainer("extraReportingLinksContainer");
+            extraEventLinksContainer.setVisible(extraEventLinksAvailable);
+            add(extraEventLinksContainer);
+
+            extraEventLinksContainer.add(new BookmarkablePageLink<Void>("advancedEventSearchLink", AdvancedEventSearchPage.class).setVisible(advancedEventSearchEnabled));
+            extraEventLinksContainer.add(new BookmarkablePageLink<Void>("criteriaTrendsLink", CriteriaTrendsPage.class).setVisible(trendingEnabled));
+
+            boolean globalSearchEnabled = getSecurityGuard().isGlobalSearchEnabled();
+
+            add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class).add(new Image("down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(globalSearchEnabled)));
+            add(new BookmarkablePageLink<Void>("newAssetSearchLink", AdvancedAssetSearchPage.class).setVisible(globalSearchEnabled));
+
+            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class).setVisible(getConfigurationProvider().getBoolean(ConfigEntry.PLACES_ENABLED)));
+
+            BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
+            procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
+            add(procedureLink);
+
+            add(new ExternalLink("support", getSupportUrl(), getString("label.support") ));
+
+            addSpeedIdentifyLinks(sessionUser);
+
+            add(createHeaderLink("headerLink", "headerLinkLabel"));
+            add(createBackToLink("backToLink", "backToLinkLabel"));
+            add(new Label("loggedInUsernameLabel", sessionUser.getName()));
+            add(new AjaxLink<Void>("languageSelection") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    languageSelectionModalWindow.show(target);
+                }
+            }.setVisible(selectLanguagePanel.hasLanguagesToDisplay()));
+
+            add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent")));
+            add(createSetupLinkContainer(sessionUser));
+            add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));
+            add(new WebMarkupContainer("safetyNetworkLinkContainer").setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork()));
+
+            add(new SavedItemsDropdown("savedItemsDropdown"));
+
+            add(new StaticImage("tenantLogo", new Model<String>(s3Service.getBrandingLogoURL().toString())).setEscapeModelStrings(false));
+        }
+
+
+        private void addSpeedIdentifyLinks(SessionUser sessionUser) {
+            WebMarkupContainer identifyMenuContainer = new WebMarkupContainer("identifyMenuContainer");
+            identifyMenuContainer.setVisible(sessionUser.hasAccess("tag"));
+
+            if (getSecurityGuard().isIntegrationEnabled()) {
+                identifyMenuContainer.add(new ExternalLink("identifyLink", "/fieldid/identify.action"));
+            } else {
+                identifyMenuContainer.add(new BookmarkablePageLink("identifyLink", IdentifyOrEditAssetPage.class));
+            }
+
+            add(identifyMenuContainer);
+        }
+
+
+
+    }
+
+
+    static class StaticImage extends WebComponent {
+        public StaticImage(String id, IModel<String> urlModel) {
+            super( id, urlModel );
+        }
+
+        @Override
+        protected void onComponentTag(ComponentTag tag) {
+            super.onComponentTag( tag );
+            checkComponentTag( tag, "img" );
+            tag.put( "src", getDefaultModelObjectAsString() );
+        }
+    }
+
+
+
 
 }

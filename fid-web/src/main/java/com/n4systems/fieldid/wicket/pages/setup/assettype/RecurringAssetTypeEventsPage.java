@@ -191,7 +191,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
             ContextImage tooltip;
             inputContainer.add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
-            tooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_owner_and_down").getObject(), TipsyBehavior.Gravity.N));
+            tooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_owner_and_down"), TipsyBehavior.Gravity.N));
 
             recurrenceTypeDropDown.setNullValid(false).setOutputMarkupId(true).add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override protected void onUpdate(AjaxRequestTarget target) {

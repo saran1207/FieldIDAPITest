@@ -69,7 +69,7 @@ public class IsolationPointEditor extends Panel {
         form.add(sourceID = new RequiredTextField("identifier"));
         sourceID.setOutputMarkupId(true);
         form.add(new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<String>(getDefaultModel(), "electronicIdentifier"))
-                .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id").getObject(), TipsyBehavior.Gravity.N)));
+                .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id"), TipsyBehavior.Gravity.N)));
         form.add(new TextField("sourceText"));
 
         form.add(deviceComboBox = new LabelledComboBox<String>("device", "label.device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription")){
@@ -79,7 +79,7 @@ public class IsolationPointEditor extends Panel {
             }
         });
         deviceComboBox.addBehavior(new UpdateComponentOnChange());
-        deviceComboBox.add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.device").getObject(), TipsyBehavior.Gravity.N));
+        deviceComboBox.add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.device"), TipsyBehavior.Gravity.N));
 
         form.add(new TextField("lock", new PropertyModel(getDefaultModel(),"lockDefinition.freeformDescription")));
 

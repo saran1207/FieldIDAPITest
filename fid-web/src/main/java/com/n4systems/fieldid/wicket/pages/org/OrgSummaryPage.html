@@ -1,72 +1,107 @@
-<wicket:extend>
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/html">
 
     <div wicket:id="header" style="font-size:30px;" class="header"/>
-    <span wicket:id="configure" class="actions">
-        <ul>
-            <li class="menu">
-                <a class="mattButton" href="javascript:void(0);">
-                    <img src="/fieldid/images/setup.png"/><wicket:message key="label.configure"/><img src="/fieldid/images/menu-down.png"/>
-                </a>
-                <ul class="menu-items">
-                    <li><a wicket:id="eventTypes"> <wicket:message key="label.event_types"/></a></li>
-                    <li><a wicket:id="recurring"> <wicket:message key="label.recurring_events"/></a></li>
-                </ul>
-            </li>
-        </ul>
-    </span>
 
+    <div wicket:id="actions" class="actions" style="width:100%;height:30px;display:inline-block;">
+        <span wicket:id="edit">
+            <ul class="dropdown">
+                <li class="menu">
+                    <a class="mattButton" href="javascript:void(0);">
+                        <wicket:message key="label.edit"/><img src="/fieldid/images/menu-down.png"/>
+                    </a>
+                    <ul class="menu-items">
+                        <li><a wicket:id="details"> <wicket:message key="label.details"/></a></li>
+                        <li><a wicket:id="recurring"> <wicket:message key="label.recurring_events"/></a></li>
+                        <li><a wicket:id="eventTypes"> <wicket:message key="label.event_types"/></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </span>
+        <span wicket:id="schedule">
+            <ul class="dropdown">
+                <li class="menu">
+                    <a class="mattButton" href="javascript:void(0);">
+                        <wicket:message key="label.uc_schedule"/><img src="/fieldid/images/menu-down.png"/>
+                    </a>
+                    <ul class="menu-items">
+                        <li><a wicket:id="oneTime"> <wicket:message key="label.events"/></a></li>
+                        <li><a wicket:id="recurring"> <wicket:message key="label.create_recurring_event"/></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </span>
 
-    <div class="colmask">
-
-        <div class="colright">
-
-            <div class="colwrap">
-                <!--<div class="rightColumn">-->
-                    <!--<h1>-->
-                        <!--<label> <wicket:message key="label.uc_schedules"/></label>-->
-                    <!--</h1>-->
-                    <!--<div class="rightPanel" wicket:id="upcomingEventsPanel" />-->
-                    <!--<div class="rightPanel" wicket:id="upcomingEventsMessage" />-->
-                    <!--<h1>-->
-                        <!--<label> <wicket:message key="label.lasteventperformed"/></label>-->
-                    <!--</h1>-->
-                    <!--<div class="rightPanel" wicket:id="lastEventsPanel" />-->
-                    <!--<h1>-->
-                        <!--<label> <wicket:message key="label.attachments"/></label> <span wicket:enclosure="downloadAllLink" style="font-weight: normal;"> | <a wicket:id="downloadAllLink"><wicket:message key="label.download_all"/></a></span>-->
-                    <!--</h1>-->
-                    <!--<div class="rightPanel" wicket:id="attachmentsPanel"/>-->
-                    <!--<h1>-->
-                        <!--<label><wicket:message key="label.more_uc"/></label>-->
-                    <!--</h1>-->
-                    <!--<div class="rightPanel morePanel" wicket:id="warningsAndInstructionsPanel"/>-->
-                    <!--<h1>-->
-                        <!--<label><wicket:message key="label.comments"/></label>-->
-                    <!--</h1>-->
-                    <!--<div class="rightPanel morePanel">-->
-                        <!--<p wicket:id="comments"/>-->
-                    <!--</div>-->
-                <!--</div>-->
-            </div>
-            <div class="leftColumn">
-                <div wicket:id="map" class="googleMap" style="width:300px;height:300px;"></div>
-                <div wicket:id="orgDetails" class="details"/>
-                <textarea wicket:id="comments" class="comments"/>
-            </div>
-        </div>
-
+        <span wicket:id="start">
+            <ul class="dropdown">
+                <li class="menu">
+                    <a class="mattButton" href="javascript:void(0);">
+                        <wicket:message key="label.start"/><img src="/fieldid/images/menu-down.png"/>
+                    </a>
+                    <ul wicket:id="types" class="menu-items">
+                        <li><a wicket:id="type"><span wicket:id="name"/></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </span>
     </div>
 
 
-    <wicket:fragment wicket:id="details">
-        <div>
-            <div>name</div>
-            <div>email</div>
-            <div>phone</div>
-            <div>fax</div>
-        </div>
+    <div wicket:id="left" style="float:left;padding-right:15px;border-right:2px solid #808080;">
+        <!--DEPENDS ON PAGE STATE, MIGHT BE EDITDETAILS PANEL, VIEW DETAILSPANEL, NOTHING, ETC.... -->
+    </div>
+
+    <div wicket:id="right" style="float:left;padding-left:15px;" >
+        <!--DEPENDS ON PAGE STATE, MIGHT BE EDITDETAILS PANEL, VIEW EVENTS PANEL, ETC.... -->
+    </div>
+
+
+
+    <!--                                         -->
+    <!--FRAGMENTS USED IN PAGE -->
+    <!--MOSTLY FOR ASSORTED LEFT AND RIGHT PANELS THAT SWITCH DEPENDING ON PAGE STATE-->
+    <!--                                         -->
+
+
+    <wicket:fragment wicket:id="viewDetails">
+        <div wicket:id="map" class="googleMap" style="width:300px;height:300px;"></div>
+        <span>name</span>joe smith<br>
+        <span>email</span>jsmith@foo.com<br>
+        <span>phone</span>123 453 1233<br>
+        <span>fax</span>947 485 0138<br>
+        <textarea wicket:id="comments" class="comments"/>
     </wicket:fragment>
 
 
+    <wicket:fragment wicket:id="summary">
+        <h2>Events</h2><p>1235 events performed. <br> 6 event types....<br> event performed last tuesday by joe.   pass.<br>5 recurring events scheduled.  <br> 3 events upcoming in the next week.</br></p>
+        <h2>Assets</h2><p>05745 assets<br> 43 asset event types....<br> </p>
+        <h2>Users</h2><p>63 users. <br> 12 admin, 44 read only, 3 r/w etc...</p>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="edit">
+        <h2><wicket:message key="label.details"/></h2>
+        <wicket:message key="label.address"/><input wicket:id="address" type="text"/>
+        <wicket:message key="label.type"/><input wicket:id="type" type="text"/>
+        <wicket:message key="label.status"/><input wicket:id="status" type="text"/>
+        <wicket:message key="label.name"/><input wicket:id="name" type="text"/>
+        <wicket:message key="label.email"/><input wicket:id="email" type="text"/>
+        <wicket:message key="label.phone"/><input wicket:id="phone" type="text"/>
+        <wicket:message key="label.fax"/><input wicket:id="fax" type="text"/>
+
+        <h2><wicket:message key="label.recurring_events"/></h2>
+        <a wicket:id="recurring"><span wicket:id="details"/></a>
+
+        <h2><wicket:message key="label.event_types"/></h2>
+        <a wicket:id="eventTypes"><span wicket:id="details"/></a>
+
+    </wicket:fragment>
+
+
+    <wicket:fragment wicket:id="editDetails">
+        <div wicket:id="map" class="googleMap" style="width:300px;height:300px;"></div>
+        <div wicket:id="orgDetails" class="details"/>
+        <textarea wicket:id="comments" class="comments"/>
+    </wicket:fragment>
 
 
 </wicket:extend>

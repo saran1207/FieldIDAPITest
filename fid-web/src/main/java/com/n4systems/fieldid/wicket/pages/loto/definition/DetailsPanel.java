@@ -44,7 +44,7 @@ public class DetailsPanel extends Panel {
             add(new LabelledRequiredTextField<String>("procedureCode", "label.procedure_code", new PropertyModel<String>(model, "procedureCode")));
 
             add(new LabelledTextField<String>("identifier", "label.electronic_id", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier()))
-                    .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.electronic_id").getObject(), TipsyBehavior.Gravity.N)));
+                    .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.electronic_id"), TipsyBehavior.Gravity.N)));
 
             add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())));
 
@@ -79,12 +79,8 @@ public class DetailsPanel extends Panel {
         }
     }
 
-    protected void doContinue(AjaxRequestTarget target) {
+    protected void doContinue(AjaxRequestTarget target) { }
 
-    }
-
-    protected void doCancel(AjaxRequestTarget target) {
-
-    }
+    protected void doCancel(AjaxRequestTarget target) { }
 
 }

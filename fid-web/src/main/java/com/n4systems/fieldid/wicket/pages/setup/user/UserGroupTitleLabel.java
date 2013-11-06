@@ -11,7 +11,7 @@ public class UserGroupTitleLabel extends Panel {
 
         ContextImage tooltip;
         add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
-        tooltip.add(new TipsyBehavior(new FIDLabelModel("label.manage_user_groups_msg").getObject(), TipsyBehavior.Gravity.NW));
+        tooltip.add(new TipsyBehavior(new FIDLabelModel("label.manage_user_groups_msg"), TipsyBehavior.Gravity.NW));
     }
 
 

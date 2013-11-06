@@ -13,9 +13,12 @@
     </wicket:fragment>
 
     <wicket:fragment wicket:id="configureEventTypes">
-        <div>
-            EVENT TYPES
-        </div>
+        <form wicket:id="form">
+            <p>EVENT TYPES</p>
+            <select wicket:id="types"/>
+            <a wicket:id="submit"><wicket:message key="label.save"/></a>
+            <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+        </form>
     </wicket:fragment>
 
 </wicket:extend>

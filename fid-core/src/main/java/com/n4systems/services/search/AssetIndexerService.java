@@ -17,13 +17,19 @@ import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -176,19 +182,29 @@ public class AssetIndexerService extends FieldIdPersistenceService {
         int numPages = (int) Math.ceil(count / PAGE_SIZE_FOR_TENANT_INSERTING);
 
         for (int i = 0; i < numPages; i++) {
-            List<Asset> assets = persistenceService.findAll(assetQueryBuilder, i, PAGE_SIZE_FOR_TENANT_INSERTING);
+            EntityManager em = ((JpaTransactionManager) transactionManager).getEntityManagerFactory().createEntityManager();
+            try {
+                em.getTransaction().begin();
+                Query query = assetQueryBuilder.createQuery(em);
+                query.setFirstResult(i*PAGE_SIZE_FOR_TENANT_INSERTING);
+                query.setMaxResults(PAGE_SIZE_FOR_TENANT_INSERTING);
+                List<Asset> assets = query.getResultList();
 
-            for (Asset asset : assets) {
-                if (!creationIndexItemAlreadyExists(asset.getId())) {
-                    IndexQueueItem item = new IndexQueueItem();
-                    item.setTenant(tenant);
-                    item.setType(IndexQueueItem.IndexQueueItemType.ASSET_INSERT);
-                    item.setItemId(asset.getId());
-                    persistenceService.save(item);
+                for (Asset asset : assets) {
+                    if (!creationIndexItemAlreadyExists(asset.getId())) {
+                        IndexQueueItem item = new IndexQueueItem();
+                        item.setTenant(tenant);
+                        item.setType(IndexQueueItem.IndexQueueItemType.ASSET_INSERT);
+                        item.setItemId(asset.getId());
+                        persistenceService.save(item);
+                    }
                 }
+            } finally {
+                if (em.getTransaction().isActive()) {
+                    em.getTransaction().commit();
+                }
+                em.close();
             }
-
-            persistenceService.clearSession();
         }
 
     }
@@ -204,6 +220,41 @@ public class AssetIndexerService extends FieldIdPersistenceService {
     /* pkg protected for testing purposes */
     IndexQueueItem createNewIndexQueueItem() {
         return new IndexQueueItem();
+    }
+
+    public void reindexTenantIfNotStartedAlready() {
+        Tenant tenant = getCurrentTenant();
+        if (tenant.isAssetIndexerStarted()) {
+            logger.debug("Indexer already started for tenant " + tenant.getDisplayName() + ", not starting");
+            return;
+        }
+
+        deleteExistingIndexIfExists(tenant);
+
+        tenant.setAssetIndexerStarted(true);
+        persistenceService.update(tenant);
+
+        indexTenantsPerAssets(tenant);
+    }
+
+    private void deleteExistingIndexIfExists(Tenant tenant) {
+        File file = new File(assetIndexWriter.getIndexPath(tenant));
+
+        if (file.exists()) {
+            try {
+                FileUtils.deleteDirectory(file);
+            } catch(IOException e) {
+                logger.error("Could not delete existing index for tenant: " + tenant.getDisplayName());
+                throw new RuntimeException("Error deleting existing index for " + tenant.getDisplayName(), e);
+            }
+        }
+    }
+
+
+    public Long countRemainingIndexItemsForTenant() {
+        QueryBuilder<IndexQueueItem> query = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
+        query.addSimpleWhere("tenant", getCurrentTenant());
+        return persistenceService.count(query);
     }
 
 }

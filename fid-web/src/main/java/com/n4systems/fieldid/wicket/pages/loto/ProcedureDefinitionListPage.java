@@ -45,11 +45,11 @@ public class ProcedureDefinitionListPage extends LotoPage {
         super(params);
 
         add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(getString("message.procedure_definitions.active"), TipsyBehavior.Gravity.N)));
+                .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.active"), TipsyBehavior.Gravity.N)));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(getString("message.procedure_definitions.previously_published"), TipsyBehavior.Gravity.N)));
+                .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.previously_published"), TipsyBehavior.Gravity.N)));
         add(new BookmarkablePageLink<ProceduresListPage>("proceduresListLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(getString("message.procedures.completed_inprogress"), TipsyBehavior.Gravity.N)));
+                .add(new TipsyBehavior(new FIDLabelModel("message.procedures.completed_inprogress"), TipsyBehavior.Gravity.N)));
 
         listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupPlaceholderTag(true);
@@ -100,7 +100,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 });
                 copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())
                         && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
-                copyLink.add(new TipsyBehavior(getString("message.procedure_definitions.copy"), TipsyBehavior.Gravity.N));
+                copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.copy"), TipsyBehavior.Gravity.N));
 
 
 
@@ -110,7 +110,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                         setResponsePage(new ProcedureDefinitionPrintPage(PageParametersBuilder.id(procedureDefinition.getObject().getId())));
                     }
                 });
-                printLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print").getObject(), TipsyBehavior.Gravity.W));
+                printLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print"), TipsyBehavior.Gravity.W));
                 printLink.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
                 PopupSettings popupSettings = new PopupSettings("popupWindow", PopupSettings.SCROLLBARS).setWidth(1000).setTop(1);
                 printLink.setPopupSettings(popupSettings);

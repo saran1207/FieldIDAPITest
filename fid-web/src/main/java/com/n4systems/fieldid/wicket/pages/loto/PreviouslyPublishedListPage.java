@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.loto.ViewPrintProcedureDefMenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -29,11 +30,11 @@ public class PreviouslyPublishedListPage extends LotoPage{
         super(params);
 
         add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(getString("message.procedure_definitions.active"), TipsyBehavior.Gravity.N)));
+                .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.active"), TipsyBehavior.Gravity.N)));
         add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(getString("message.procedure_definitions.previously_published"), TipsyBehavior.Gravity.N)));
+                .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.previously_published"), TipsyBehavior.Gravity.N)));
         add(new BookmarkablePageLink<ProceduresListPage>("proceduresListLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(getString("message.procedures.completed_inprogress"), TipsyBehavior.Gravity.N)));
+                .add(new TipsyBehavior(new FIDLabelModel("message.procedures.completed_inprogress"), TipsyBehavior.Gravity.N)));
 
         WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
         WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");

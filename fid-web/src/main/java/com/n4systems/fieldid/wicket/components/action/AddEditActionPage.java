@@ -137,7 +137,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 submitLink.add(new FlatLabel("saveLabel", new FIDLabelModel("label.create")));
             }
 
-            Link cancelLink = new Link("cancelLink") {
+            Link cancelLink = new  Link("cancelLink") {
                 @Override public void onClick() {
                     setResponsePage(new ActionsListPage(criteriaResultModel));
                 }

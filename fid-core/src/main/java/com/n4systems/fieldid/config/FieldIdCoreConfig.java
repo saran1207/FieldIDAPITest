@@ -31,6 +31,7 @@ import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
@@ -303,6 +304,11 @@ public class FieldIdCoreConfig {
     @Bean
     public OrgService orgService() {
         return new OrgService();
+    }
+
+    @Bean
+    public PlaceService placeService() {
+        return new PlaceService();
     }
 
     @Bean
@@ -675,4 +681,6 @@ public class FieldIdCoreConfig {
     public AssetTextOrFilterSearchService assetTextOrFilterSearchService() {
         return new AssetTextOrFilterSearchService();
     }
+
+
 }

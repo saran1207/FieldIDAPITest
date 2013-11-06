@@ -45,7 +45,7 @@ public abstract class CriteriaActionButton extends Panel {
         }
         String tooltip = getTooltip(label, count);
         if (tooltip!=null) {
-            link.add(new TipsyBehavior(tooltip, TipsyBehavior.Gravity.N));
+            link.add(new TipsyBehavior(Model.of(tooltip), TipsyBehavior.Gravity.N));
         }
 
     }

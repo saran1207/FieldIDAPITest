@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
@@ -14,7 +15,10 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.search.AssetSearchCriteria;
+import com.n4systems.services.search.AssetIndexerService;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Button;
@@ -22,7 +26,10 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.StringResourceModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.web.helper.SessionUser;
 
 import static ch.lambdaj.Lambda.on;
@@ -30,13 +37,18 @@ import static ch.lambdaj.Lambda.on;
 
 public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
+    @SpringBean AssetIndexerService assetIndexerService;
+
     private WebMarkupContainer actions;
     private Form queryForm;
+
     private Link printLink;
     private Link exportLink;
     private Link massEventLink;
     private Link massUpdateLink;
     private Link massScheduleLink;
+
+    private WebMarkupContainer remainingAssetsWarning;
 
     public SearchSubMenu(String id, final Model<AssetSearchCriteria> searchCriteria) {
         super(id,searchCriteria);
@@ -57,6 +69,17 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         queryForm.setVisible(filtersDisabled);
         queryForm.add(new TextField<String>("query", ProxyModel.of(searchCriteria, on(AssetSearchCriteria.class).getQuery())));
         queryForm.add(new Button("submitQueryButton"));
+        final LoadableDetachableModel<Long> remainingAssetsIndexModel = remainingAssetsIndexModel();
+        queryForm.add(remainingAssetsWarning = new WebMarkupContainer("remainingAssetsWarning") {
+            @Override
+            public boolean isVisible() {
+                // TODO: Change after styling.
+                return true;
+//                return remainingAssetsIndexModel.getObject() > 0L;
+            }
+        });
+        remainingAssetsWarning.add(new TipsyBehavior(new StringResourceModel("assets_remaining_to_be_index", this, Model.of("ignored-awful-api"), remainingAssetsIndexModel), TipsyBehavior.Gravity.W));
+        remainingAssetsWarning.setOutputMarkupPlaceholderTag(true);
         add(createToggleSearchLink(filtersDisabled, searchCriteria));
         add(queryForm);
 
@@ -78,7 +101,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         });
 
         add(actions);
-        
+
         add(new Link("emailLink") {
             @Override
             public void onClick() {
@@ -101,9 +124,16 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         return new TwoStateAjaxLink("toggleSearchTypeLink", new FIDLabelModel("label.advanced_search"), new FIDLabelModel("label.simple_search")) {
             {
                 setInitialState(!startingInQueryMode);
+                linkContainer.add(new AttributeAppender("class", Model.of("simple-search"), " ") {
+                    @Override
+                    public boolean isEnabled(Component component) {
+                        return queryForm.isVisible();
+                    }
+                });
             }
             @Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
+                // Entering simple search
                 criteria.getObject().setQuery(null);
                 target.add(queryForm.setVisible(false));
                 setFiltersDisabled(target, false);
@@ -111,9 +141,13 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
 
             @Override
             protected void onEnterSecondaryState(AjaxRequestTarget target) {
+                // Entering advanced search
+                assetIndexerService.reindexTenantIfNotStartedAlready();
                 target.add(queryForm.setVisible(true));
                 setFiltersDisabled(target, true);
                 target.appendJavaScript("fieldIdWidePage.updateConfig(false);");
+                // The following works when typed into the console and doesn't work when used as an appendJavaScript from wicket. wtf...
+//                target.appendJavaScript("jQuery('#"+remainingAssetsWarning.getMarkupId()+"').tipsy('show');");
             }
         };
     }
@@ -152,5 +186,15 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
     }
 
     protected void onSearchSubmit() { }
+
+    protected LoadableDetachableModel<Long> remainingAssetsIndexModel() {
+        return new LoadableDetachableModel<Long>() {
+            @Override
+            protected Long load() {
+                return assetIndexerService.countRemainingIndexItemsForTenant();
+            }
+        };
+    }
+
 
 }
