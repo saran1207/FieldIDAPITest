@@ -1,4 +1,15 @@
+
+<wicket:head>
+    <style type="text/css">
+        .pageContent input {
+            display:block;
+        }
+    </style>
+</wicket:head>
+
 <wicket:extend xmlns:wicket="http://www.w3.org/1999/html">
+
+    <!-- --------------------------------------------------------------------------------------------------------- -->
 
     <div wicket:id="header" style="font-size:30px;" class="header"/>
 
@@ -50,9 +61,11 @@
         <!--DEPENDS ON PAGE STATE, MIGHT BE EDITDETAILS PANEL, VIEW DETAILSPANEL, NOTHING, ETC.... -->
     </div>
 
-    <div wicket:id="right" style="float:left;padding-left:15px;" >
+    <div wicket:id="right" style="" >
         <!--DEPENDS ON PAGE STATE, MIGHT BE EDITDETAILS PANEL, VIEW EVENTS PANEL, ETC.... -->
     </div>
+
+    <!-- --------------------------------------------------------------------------------------------------------- -->
 
 
 
@@ -62,7 +75,7 @@
     <!--                                         -->
 
 
-    <wicket:fragment wicket:id="viewDetails">
+    <wicket:fragment wicket:id="viewDetails" class="viewDetails">
         <div wicket:id="map" class="googleMap" style="width:300px;height:300px;"></div>
         <span>name</span>joe smith<br>
         <span>email</span>jsmith@foo.com<br>
@@ -101,7 +114,23 @@
         <div wicket:id="map" class="googleMap" style="width:300px;height:300px;"></div>
         <div wicket:id="orgDetails" class="details"/>
         <textarea wicket:id="comments" class="comments"/>
+        <a wicket:id="submit"><wicket:message key="label.save"/></a>
+        <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
     </wicket:fragment>
 
+    <wicket:fragment wicket:id="editEventTypes">
+        <form wicket:id="form">
+            <wicket:message key="label.event_types"/>
+            <select wicket:id="types"/>
+            <a wicket:id="submit"><wicket:message key="label.save"/></a>
+            <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="editRecurringEvents">
+        <form wicket:id="form">
+            <p>Recurring Events</p>
+        </form>
+    </wicket:fragment>
 
 </wicket:extend>
