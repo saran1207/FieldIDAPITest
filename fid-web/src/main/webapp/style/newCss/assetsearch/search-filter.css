@@ -125,9 +125,11 @@ ul.floatingDropdown ul li a:visited {
 
 /* form */
 .search-config {
-	margin-top: 46px;
-	padding-left: 12px;
 	position: relative;
+	top: 46px;
+	padding-left: 12px;
+	padding-bottom: 50px;
+	*z-index: 5;
 }
 	.search-config .btn-primary {
 		position: fixed;

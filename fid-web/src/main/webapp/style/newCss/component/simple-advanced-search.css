@@ -1,7 +1,17 @@
 /* Search page specific */
+.sub-menu {
+	*height: 25px;
+}
+.filters-title {
+	/**width: 275px!important;*/
+}
 .search-options-wrap {
 	position: relative;
 	margin-right: 250px;
+
+	*position: absolute;
+	*top: 0;
+	*left: 90px;
 }
 
 /* text search */

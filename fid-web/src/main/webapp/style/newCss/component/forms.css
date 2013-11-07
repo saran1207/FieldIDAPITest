@@ -191,6 +191,7 @@ Can be a warning or error message, or help text. */
 .form-horizontal.compact select,
 .form-horizontal.compact textarea {
 	width: 208px;
+	*width: 200px;
 }
 .form-horizontal.compact .chzn-search input {
 	width: 100%!important;
