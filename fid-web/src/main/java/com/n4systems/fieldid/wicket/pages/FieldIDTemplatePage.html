@@ -22,37 +22,9 @@
 	<link rel="stylesheet" href="/fieldid/style/plugins/chosen/chosen.css">
 	<link rel="stylesheet" href="/fieldid/style/global.css">
 
-	<!-- REMOVE ALL LEGACY CSS -->
-	<!-- <link wicket:id="resetCss" type="text/css" href="/fieldid/style/reset.css" rel="stylesheet" media="all"/>
-		<span wicket:id="legacyCss">
-			<link wicket:id="fieldIdCss" type="text/css" href="/fieldid/style/fieldid.css" rel="stylesheet" media="all"/><!--[if IE 6]>
-			<link wicket:id="fieldIdIE6Css" type="text/css" href="/fieldid/style/fieldid-ie6.css" rel="stylesheet" media="all"/><![endif]-->
-			<!--[if IE 7]>
-			<link wicket:id="fieldIdIE7Css" type="text/css" href="/fieldid/style/fieldid-ie7.css" rel="stylesheet" media="all"/><![endif]-->
-		<!-- </span>
-		<span wicket:id="newCss">
-			<link wicket:id="layoutCss" type="text/css" href="/fieldid/style/newCss/layout/layout.css" rel="stylesheet" media="all"/>
-			<link wicket:id="feedbackErrorsCss" type="text/css" href="/fieldid/style/newCss/layout/feedback_errors.css" rel="stylesheet" media="all"/>
-		</span>
-		<span wicket:id="siteWideCss">
-			<link wicket:id="siteWideCss" type="text/css" href="/fieldid/style/site_wide.css" rel="stylesheet" media="all"/>
-		</span>
-	<link wicket:id="defaultCss" type="text/css" href="/fieldid/style/branding/default.css" rel="stylesheet" media="all"/> -->
-
-	
-	<!--[if IE 6]>
-	<script wicket:id="commonIEJs" type="text/javascript" src="/fieldid/javascript/common-ie6-jquery.js"></script>
-	<![endif]-->
-
-	<!-- <link wicket:id="dropDownCss" type="text/css" href="/fieldid/style/dropdown/style.css" rel="stylesheet" media="all"/> -->
-	<!--[if lte IE 7]>
-	<link wicket:id="dropDownIECss" type="text/css" href="/fieldid/style/dropdown/ie.css" rel="stylesheet" media="all"/>
-	<![endif]-->
-
 	<span wicket:id="customJsPanel"></span><!-- WHAT IS THIS USED FOR? -->
 </head>
 
-<!-- <body id="fieldidBody"> -->
 <body>
 	<div class="wrapper">
 		
@@ -65,8 +37,8 @@
 
 		<!-- <div id="page"> -->
 		<main class="page-specific" role="main"><!-- Should have the ability to add a specific class here to add page specific styles. -->
-
-			<header class="page-header">
+<!--TODO : REFACTOR OUT A COUPLE OF PAGE HEADERS.   -->
+			<header wicket class="page-header">
 				<!-- NEW: BREAD CRUMBS - optional? Not all pages can have a breadcrumb? -->
 				<nav class="bread-crumb">
 					<ol>
@@ -74,79 +46,32 @@
 						<li>Current Page</li>
 					</ol>
 				</nav>
-			
+
+                <!--mandatory.-->
 				<h1 wicket:id="titleLabel">Page specific heading</h1>
+                <!--optional-->
 				<h2><!-- Optional subheading --></h2>
 
 				<!-- Optional: Page specific tabbed navigation -->
 				<nav class="nav-tabs">
+                    <!--optional : either hide whole thing or add UL's li content dynamically.-->
 					<ul>
 						<li class="active"><a href="javascript:;">Tab 1</a></li>
 						<li><a href="javascript:;">Tab 2</a></li>
 					</ul>
 				</nav>
 				<div class="action-group">
+                    <!-- each page has an optional createActions() method??? -->
 					<!-- Optional: This div content should be customizable for each page to add action buttons or page specific navigation -->
 				</div>
 			</header>
 
-			<!-- note to christina : this only appears on search/reporting pages. might need to include this in header??   dd.  The only thing that should be in the header is the main navigation. The rest can be included as subheadings within the page content container. -->
-			<div id="subMenu" wicket:id="subMenu"/>
-			
-			<!-- Used for pages with collapsible panels only. -->
-			<div id="left-panel-controller" wicket:id="leftPanelController"/>
-			<div id="left-panel" wicket:id="leftPanel"/>
-			<div class="centre">
-			<!--  -->
-				
-				<!-- All of this kind of content should be moved to the <header class="page-header"> above but will be using different tags and class names.
-				<div id="contentHeader">
-					<div wicket:id="topFeedbackPanel"></div>
+            <div class="page-content">
+                <wicket:child></wicket:child>
+            </div>
 
-					<div id="contentTitle">
-						<h1><span wicket:id="titleLabel"/></h1>
-
-						<div class="backToLink">
-							<a wicket:id="backToLink">&#171; <span wicket:id="backToLinkLabel"></span></a>
-						</div>
-
-						<div class="header-right">
-							<a wicket:id="headerLink"><span wicket:id="headerLinkLabel"></span></a>
-						</div>
-					</div>
-
-					<div wicket:id="navBar"></div>
-				</div>
-				-->
-
-				<script type="text/javascript">/* REMOVE ALL JAVASCRIPT TO START AND ADD FILES AS NECESSARY */
-					// $(document).ready(function() {
-					//     $('#searchText').bind('focus', clearDescription);
-					//     $('#searchText').bind('blur', replaceDescription);
-					//     $('#smartSearch').bind('submit', submitSmartSearch);
-					// });
-				</script>
-
-				<!-- <div id="pageContent" class="pageContent"> -->
-				<div class="page-content">
-					<wicket:child></wicket:child>
-				</div>
-			
-			<!-- Used for pages with collapsible panels only. -->
-			</div><!-- /.centre -->
-			
-			<!-- This only appears on the search/reporting pages (pagination) -->
-			<div id="bottom-panel" wicket:id="bottomPanel"/>
-	
 	</div><!-- /.wrapper-->
 
-	<!-- 
-	<div id="pageFooter">
-		<div>
-			<p><span wicket:id="versionLabel"></span></p>
-		</div>
-		<div class="poweredBy"><a href="http://www.fieldid.com/" target="_blank"><img src="/fieldid/images/poweredByFieldID.png" border="0"/></a></div>	</div>
-	</div> -->
 	<footer>
 		<div>
 			<p><span wicket:id="versionLabel"></span></p>
@@ -185,7 +110,7 @@
 		<nav class="nav-user js-nav-user">
 			<ul class="content-wrap nav-list">
 				<li class="dropdown username">
-					Welcome, <span wicket:id="loggedInUsernameLabel">N4 Systems</span>
+					<wicket:message key="label.welcome"/>, <span wicket:id="loggedInUsernameLabel">N4 Systems</span>
 					<ul>
 						<li><a href="/fieldid/myAccount.action">My Account</a></li>
 						<li wicket:enclosure="languageSelection"><a wicket:id="languageSelection"><wicket:message key="label.language"/></a></li>
