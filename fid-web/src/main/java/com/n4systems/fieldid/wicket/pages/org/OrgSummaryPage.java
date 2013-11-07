@@ -4,10 +4,12 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
+import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.Address;
 import com.n4systems.model.EventType;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.builders.EventTypeBuilder;
@@ -53,6 +55,7 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
     private Component viewDetailsLeftPanel;
     private Component left;
     private Component right;
+    private GoogleMap map;
 
     public OrgSummaryPage(PageParameters params) {
         init(params.get("id").toLong());
@@ -208,7 +211,7 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         ViewDetailsLeftPanel() {
             super(LEFT_PANEL_ID,"viewDetails",OrgSummaryPage.this);
             //add(new GoogleMap("map",ProxyModel.of(model, on(BaseOrg.class).getGpsLocation())));
-            add(new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
+            add(map = new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
             // add name, email, phone, fax, etc... here..
             add(new TextArea("comments",Model.of("comments go here")));
         }
@@ -217,21 +220,23 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
 
     class EditPanel extends Fragment {
         IModel<BaseOrg> model;
+        Address address = new Address("111 queen st east, toronto");
 
         EditPanel() {
             super(RIGHT_PANEL_ID, "edit", OrgSummaryPage.this);
             add(new Form("form")
 //            add(new TextField("address", ProxyModel.of(model,on(BaseOrg.getLocation().getAddress()))));
                  .add(createSubmitCancelButtons())
-                .add(new TextField("address", Model.of("111 queen street east")))
                 .add(new TextField("type", Model.of("commercial")))
                 .add(new TextField("status", Model.of("sold")))
                 .add(new TextField("name", Model.of("joe smith")))
                 .add(new TextField("email", Model.of("jsmith@foo.com")))
                 .add(new TextField("phone", Model.of("123 456 7894")))
                 .add(new TextField("fax", Model.of("964 745 3528")))
+                .add(new AddressPanel("address", new PropertyModel(this,"address")).withExternalMap(map.getJsVar()))
                 .add(new AjaxLink("recurring") {
-                    @Override public void onClick(AjaxRequestTarget target) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
                         // goto recurring events panel.
                         // switchRightPanel(new EditRecurringPanel(),target);
                     }

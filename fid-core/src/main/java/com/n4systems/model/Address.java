@@ -8,11 +8,17 @@ import java.io.Serializable;
 public class Address implements Serializable {
 
     private String text;
-
     private String description;
 
     @Embedded
     private GpsLocation gpsLocation;
+
+    public Address() {
+    }
+
+    public Address(String text) {
+        setText(text);
+    }
 
     public GpsLocation getGpsLocation() {
         return gpsLocation;

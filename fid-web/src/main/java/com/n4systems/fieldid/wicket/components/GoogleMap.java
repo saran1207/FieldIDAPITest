@@ -14,8 +14,8 @@ import java.util.List;
 public class GoogleMap extends Panel {
     public static final String GOOGLE_MAPS_JS_ID = "googleMaps";
     public static final String GOOGLE_MAP_API_ID = "google-map-api";
-    private static final String GOOGLE_MAP_WITH_LOCATION_JS = "googleMapFactory.createAndShowWithLocation('%s',%s );";
-    private static final String GOOGLE_MAP_NO_LOCATION_JS = "googleMapFactory.createAndShow('%s',%s, %d);";
+    private static final String GOOGLE_MAP_WITH_LOCATION_JS = "%s = googleMapFactory.createAndShowWithLocation('%s',%s );";
+    private static final String GOOGLE_MAP_NO_LOCATION_JS = "%s = googleMapFactory.createAndShow('%s',%s, %d);";
 
     private List<Coord> coords = new ArrayList<Coord>();
     // centre of north america is default location.
@@ -53,10 +53,14 @@ public class GoogleMap extends Panel {
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS_ID);
         if (coords.isEmpty()) {
-            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_NO_LOCATION_JS, getMarkupId(), centre.toString(), defaultZoom));
+            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_NO_LOCATION_JS, getJsVar(), getMarkupId(), centre.toString(), defaultZoom));
         } else {
-            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_WITH_LOCATION_JS,getMarkupId(),getCoordsAsJsParams()));
+            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_WITH_LOCATION_JS,getJsVar(), getMarkupId(),getCoordsAsJsParams()));
         }
+    }
+
+    public String getJsVar() {
+        return "map_"+getMarkupId();
     }
 
     public String getCoordsAsJsParams() {

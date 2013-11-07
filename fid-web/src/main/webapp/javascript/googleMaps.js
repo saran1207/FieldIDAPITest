@@ -52,21 +52,26 @@ var googleMapFactory = (function() {
 		return map;
 	};
 
-	var createAutoCompleteAddress = function($address) {
-		var widget = autoCompleteAddress($address);
-		widget.updateContentWithAddress = false;
-		return widget;
+	 var createAutoCompleteAddress = function($address,options) {
+		 var widget = autoCompleteAddress($address,options);
+		 widget.updateContentWithAddress = false;
+		 return widget;
 	 }
 
 
 	 /**
 	  * autocomplete text field with built in map returned by factory.
 	  */
-	 function autoCompleteAddress($address) {
+	 function autoCompleteAddress($address,opts) {
+		 var defaults = {
+			lat : 44,
+			lng : -77
+		 };
+		 var options = $.extend(defaults, opts);
 		 var $text = $address.children('.txt');
 		 var $lat = $address.children('.lat');
 		 var $lng = $address.children('.lng');
-		 var $map = createAndShowWithLocation($address.children('.map').attr('id'), 44, -77);
+		 var $map = (options.mapVar) ? window[options.mapVar] : createAndShowWithLocation($address.children('.map').attr('id'), options.lat, options.lng);
 
 		 function getAddresses(request,response) {
 			 new google.maps.Geocoder().geocode( {'address': request.term}, function(results, status) {
@@ -98,7 +103,7 @@ var googleMapFactory = (function() {
 		 }
 
 
-		 var options = {
+		 var textOptions = {
 			 delay:500,
 			 minLength:1,
 			 source: function(request,response) { getAddresses(request,response); },
@@ -113,7 +118,7 @@ var googleMapFactory = (function() {
 
 		 };
 
-		 $text.autocomplete(options).data('autocomplete')._renderItem =
+		 $text.autocomplete(textOptions).data('autocomplete')._renderItem =
 			 function(ul,item) {
 				 return $("<li></li>")
 					 .data("item.autocomplete", item)
@@ -201,7 +206,7 @@ var googleMapFactory = (function() {
 				locations = [];
 				var loc = new google.maps.LatLng(latitude,longitude);
 				locations.push(loc);
-				loc.args =  [].slice.call(arguments, 2);
+				loc.args = [].slice.call(arguments, 2);
 				map.setCenter(loc);
 				if (markers.length==1) {
 					markers[0].setPosition(loc);
