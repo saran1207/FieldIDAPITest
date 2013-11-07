@@ -1,15 +1,18 @@
 <wicket:extend>
-	<!-- search bar -->
-	<form wicket:id="queryForm" class="advanced-search-form">
-		<div class="input-combo">
-			<input type="text" wicket:id="query" style="">
-			<input type="submit" wicket:id="submitQueryButton" wicket:message="value:label.search" class="btn btn-secondary btn-search btn-sml">
-		</div>
 
-        <img wicket:id="remainingAssetsWarning" src="/fieldid/images/warning-icon.png"/>
-	</form>
+	<div class="search-options-wrap">
+		<!-- search bar -->
+		<form wicket:id="queryForm" class="advanced-search-form">
+			<div class="input-combo">
+				<input type="text" wicket:id="query" style="">
+				<input type="submit" wicket:id="submitQueryButton" wicket:message="value:label.search" class="btn btn-secondary btn-search btn-sml">
+			</div>
 
-	<div wicket:id="toggleSearchTypeLink" class="search-switch"></div>
+	        <img class="remaining-assets" wicket:id="remainingAssetsWarning" src="/fieldid/images/icons/database.png"/>
+		</form>
+
+		<div wicket:id="toggleSearchTypeLink" class="search-switch"></div>
+	</div>
 
     <div class="action-group">
 		<div wicket:id="actions" class="dropdown-btn mass-actions">

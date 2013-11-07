@@ -81,7 +81,7 @@ input:focus {
 .input-combo input[type="text"] {
 	border: none;
 	margin-bottom: 0;
-	height: auto;
+	/*height: auto;*/
 }
 .input-combo [class^="btn"] {
 	border-width: 0 0 0 1px;
