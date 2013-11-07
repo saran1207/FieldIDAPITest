@@ -45,7 +45,7 @@ public class CertificateService extends FieldIdPersistenceService {
     @Autowired private LastEventDateService lastEventDateService;
 
 	public byte[] generateAssetCertificatePdf(Asset asset) throws ReportException, NonPrintableManufacturerCert {
-		return printer.printToPDF(generateAssetCertificate(asset));
+		return printer.printToPDF(generateAssetCertificate(persistenceService.find(Asset.class, asset.getId())));
 	}
 	
 	public JasperPrint generateAssetCertificate(Long assetId) throws ReportException, NonPrintableManufacturerCert {
