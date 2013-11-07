@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.DisableOnClick;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.assetsearch.AssetSearchMassActionLink;
@@ -130,6 +131,8 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
                         return queryForm.isVisible();
                     }
                 });
+                // Prevent double click that might mess with indexing.
+                link.add(new DisableOnClick());
             }
             @Override
             protected void onEnterInitialState(AjaxRequestTarget target) {
@@ -142,6 +145,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
             @Override
             protected void onEnterSecondaryState(AjaxRequestTarget target) {
                 // Entering advanced search
+                assetIndexerService.markAssetIndexerStarted();
                 assetIndexerService.reindexTenantIfNotStartedAlready();
                 target.add(queryForm.setVisible(true));
                 setFiltersDisabled(target, true);

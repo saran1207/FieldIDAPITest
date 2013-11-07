@@ -16,7 +16,7 @@ public class TwoStateAjaxLink extends Panel {
     private IModel<String> stateTwoLabel;
 
     private Label linkLabel;
-    private AjaxLink link;
+    protected AjaxLink link;
     protected WebMarkupContainer linkContainer;
 
     public TwoStateAjaxLink(String id, String stateOneLabel, String stateTwoLabel) {
