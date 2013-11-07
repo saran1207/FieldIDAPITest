@@ -18,7 +18,6 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
-import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
@@ -476,10 +475,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             extraEventLinksContainer.add(new BookmarkablePageLink<Void>("advancedEventSearchLink", AdvancedEventSearchPage.class).setVisible(advancedEventSearchEnabled));
             extraEventLinksContainer.add(new BookmarkablePageLink<Void>("criteriaTrendsLink", CriteriaTrendsPage.class).setVisible(trendingEnabled));
 
-            boolean globalSearchEnabled = getSecurityGuard().isGlobalSearchEnabled();
-
-            add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class).add(new Image("down-arrow", new ContextRelativeResource("/images/down-arrow.png")).setVisible(globalSearchEnabled)));
-            add(new BookmarkablePageLink<Void>("newAssetSearchLink", AdvancedAssetSearchPage.class).setVisible(globalSearchEnabled));
+            add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
 
             add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class).setVisible(getConfigurationProvider().getBoolean(ConfigEntry.PLACES_ENABLED)));
 
