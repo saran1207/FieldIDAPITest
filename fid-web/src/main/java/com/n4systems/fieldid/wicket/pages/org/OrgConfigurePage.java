@@ -90,7 +90,7 @@ public class OrgConfigurePage extends FieldIDFrontEndPage {
                         @Override
                         protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                             // do saving stuff here...
-                            setResponsePage(new OrgSummaryPage(model.getObject().getId()));
+                            setResponsePage(new OrgSummaryPage(model.getObject()));
                         }
 
                         @Override
@@ -101,7 +101,7 @@ public class OrgConfigurePage extends FieldIDFrontEndPage {
                     .add(new Link("cancel") {
                         @Override
                         public void onClick() {
-                            setResponsePage(new OrgSummaryPage(model.getObject().getId()));
+                            setResponsePage(new OrgSummaryPage(model.getObject()));
                         }
                     }));
         }

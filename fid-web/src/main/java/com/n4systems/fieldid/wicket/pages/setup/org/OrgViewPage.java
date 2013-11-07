@@ -34,6 +34,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
@@ -150,7 +151,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                 private Link createLink(String id, final BaseOrg org) {
                     return new Link(id) {
                         @Override public void onClick() {
-                            setResponsePage(new OrgSummaryPage(org));
+                            setResponsePage(OrgSummaryPage.class, new PageParameters().add("id",org.getId()));
                         }
                     };
                 }

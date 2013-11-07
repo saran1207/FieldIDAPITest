@@ -93,29 +93,24 @@
 
     <wicket:fragment wicket:id="edit">
         <h2><wicket:message key="label.details"/></h2>
-        <wicket:message key="label.address"/><input wicket:id="address" type="text"/>
-        <wicket:message key="label.type"/><input wicket:id="type" type="text"/>
-        <wicket:message key="label.status"/><input wicket:id="status" type="text"/>
-        <wicket:message key="label.name"/><input wicket:id="name" type="text"/>
-        <wicket:message key="label.email"/><input wicket:id="email" type="text"/>
-        <wicket:message key="label.phone"/><input wicket:id="phone" type="text"/>
-        <wicket:message key="label.fax"/><input wicket:id="fax" type="text"/>
+        <form wicket:id="form">
+            <wicket:message key="label.address"/><input wicket:id="address" type="text"/>
+            <wicket:message key="label.type"/><input wicket:id="type" type="text"/>
+            <wicket:message key="label.status"/><input wicket:id="status" type="text"/>
+            <wicket:message key="label.name"/><input wicket:id="name" type="text"/>
+            <wicket:message key="label.email"/><input wicket:id="email" type="text"/>
+            <wicket:message key="label.phone"/><input wicket:id="phone" type="text"/>
+            <wicket:message key="label.fax"/><input wicket:id="fax" type="text"/>
 
-        <h2><wicket:message key="label.recurring_events"/></h2>
-        <a wicket:id="recurring"><span wicket:id="details"/></a>
+            <h2><wicket:message key="label.recurring_events"/></h2>
+            <a wicket:id="recurring"><span wicket:id="details"/></a>
 
-        <h2><wicket:message key="label.event_types"/></h2>
-        <a wicket:id="eventTypes"><span wicket:id="details"/></a>
+            <h2><wicket:message key="label.event_types"/></h2>
+            <a wicket:id="eventTypes"><span wicket:id="details"/></a>
 
-    </wicket:fragment>
-
-
-    <wicket:fragment wicket:id="editDetails">
-        <div wicket:id="map" class="googleMap" style="width:300px;height:300px;"></div>
-        <div wicket:id="orgDetails" class="details"/>
-        <textarea wicket:id="comments" class="comments"/>
-        <a wicket:id="submit"><wicket:message key="label.save"/></a>
-        <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+            <a wicket:id="submit"><wicket:message key="label.save"/></a>
+            <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+        </form>
     </wicket:fragment>
 
     <wicket:fragment wicket:id="editEventTypes">
@@ -130,6 +125,8 @@
     <wicket:fragment wicket:id="editRecurringEvents">
         <form wicket:id="form">
             <p>Recurring Events</p>
+            <a wicket:id="submit"><wicket:message key="label.save"/></a>
+            <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
         </form>
     </wicket:fragment>
 
