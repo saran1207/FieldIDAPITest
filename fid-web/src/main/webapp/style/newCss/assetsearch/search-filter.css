@@ -87,7 +87,15 @@ ul.floatingDropdown ul li a:visited {
 	position: relative;
 	padding: 0;
 	background-color: #ffffff;
-	margin-top: 14px;
+	/*margin-top: 14px;*/
+	margin-top: 42px;
+}
+.sub-menu .header {
+	/* header is between the filter buttons and search bar.
+	this will place it above so to remove it from the action bar */
+	position: absolute;
+	top: -30px;
+	left: 0;
 }
 .search-options {
 	max-width: 74px;
@@ -105,6 +113,12 @@ ul.floatingDropdown ul li a:visited {
 	padding: 8px 12px;
 }
 
+/* moves the results panel down to make space for header */
+#left-panel,
+#left-panel-controller,
+#page .centre {
+	top: 197px;
+}
 
 /* FILTER CRITERIA - SIDEBAR 
 -----------------------------*/
@@ -134,7 +148,7 @@ ul.floatingDropdown ul li a:visited {
 	.search-config .btn-primary {
 		position: fixed;
 		left: 340px;
-		top: 176px;
+		top: 206px;
 		z-index: 1;
 	}
 #left-panel.filters .content.filters {
@@ -251,6 +265,9 @@ p.mass-actions-msg em {
 }
 .list .row-odd {
 	background-color: #f5f5f5;
+}
+.list .row-odd.pastDue {
+	background-color: #ffebeb;
 }
 th.wicket_orderUp,
 th.wicket_orderDown {
