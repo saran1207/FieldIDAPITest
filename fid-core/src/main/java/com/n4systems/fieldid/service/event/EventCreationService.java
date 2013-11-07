@@ -150,17 +150,23 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         Event nextEvent = null;
         Event uEvent = null;
+
         RecurringAssetTypeEvent recurringEvent = event.getRecurringEvent();
-        nextEvent = eventScheduleService.getNextAvailableSchedule(event);
 
-       if (eventEnum == EventEnum.PERFORM) {
-           nextEvent.setAssignee(event.getPerformedBy());
-        } else if (eventEnum == EventEnum.CLOSE) {
-           nextEvent.setAssignee(event.getAssignee());
-        }
+        if (null != recurringEvent && recurringEvent.getAutoAssign()) {
 
-        if (null != nextEvent) {
-            uEvent = persistenceService.update(nextEvent);
+            nextEvent = eventScheduleService.getNextAvailableSchedule(event);
+
+            if (eventEnum == EventEnum.PERFORM) {
+                nextEvent.setAssignee(event.getPerformedBy());
+            } else if (eventEnum == EventEnum.CLOSE) {
+                nextEvent.setAssignee(event.getAssignee());
+            }
+
+            if (null != nextEvent) {
+                uEvent = persistenceService.update(nextEvent);
+            }
+
         }
 
     }
