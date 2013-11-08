@@ -11,7 +11,12 @@
 
     <!-- --------------------------------------------------------------------------------------------------------- -->
 
-    <div wicket:id="header" style="font-size:30px;" class="header"/>
+    <div wicket:id="header" style="font-size:22px;" class="header">
+        <span wicket:id="hierarchy">
+            <a wicket:id="org"><span wicket:id="name"/></a>
+            <span wicket:id="separator"/>
+        </span>
+    </div>
 
     <div wicket:id="actions" class="actions" style="width:100%;height:30px;display:inline-block;">
         <span wicket:id="edit">

@@ -18,8 +18,10 @@ import com.n4systems.model.GpsLocation;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -29,6 +31,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -55,7 +58,7 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
 
     private @SpringBean PlaceService placeService;
 
-    private EntityModel<BaseOrg> model;
+    private EntityModel<? extends BaseOrg> model;
     private MarkupContainer actions;
     private Component editPanel;
     private Component editEventTypesPanel;
@@ -79,10 +82,45 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
 
     private void init(Long id) {
         model = new EntityModel(BaseOrg.class, id);
-        add(new Label("header", ProxyModel.of(model, on(BaseOrg.class).getName())));
+        add(createHeader("header"));
         add(actions = createActions("actions"));
         add(left=getViewDetailsLeftPanel());
         add(right=getSummaryPanel());
+    }
+
+    private Component createHeader(String id) {
+        List<BaseOrg> hierarchy = Lists.newArrayList(model.getObject());
+        BaseOrg parent = model.getObject().getParent();
+        while (parent!=null) {
+            hierarchy.add(0,parent);
+            parent = parent.getParent();
+        }
+
+        WebMarkupContainer container = new WebMarkupContainer(id);
+        container.add(new ListView<BaseOrg>("hierarchy", hierarchy) {
+            @Override protected void populateItem(final ListItem<BaseOrg> item) {
+                final BaseOrg org = item.getModelObject();
+                item.add(new Link("org") {
+                    @Override public void onClick() {
+                        setResponsePage(OrgSummaryPage.class,new PageParameters().add("id",org.getId()));
+                    }
+                }.add(new Label("name", ProxyModel.of(item.getModel(),on(BaseOrg.class).getName()))));
+                Label label = new Label("separator",Model.of(" > "));
+                item.add(label);
+                if (org==model.getObject() && !(org instanceof DivisionOrg)) {
+                    label.add(new AjaxEventBehavior("onclick") {
+                        @Override protected void onEvent(AjaxRequestTarget target) {
+                            addChild();
+                        }
+                    });
+                }
+            }
+        });
+        return container;
+    }
+
+    private void addChild() {
+        //switchRightPanel(getNewChildPanel());
     }
 
     private MarkupContainer createActions(String id) {
@@ -95,7 +133,8 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
 
         MarkupContainer editMenu = new WebMarkupContainer("edit")
                 .add(new AjaxLink("details") {
-                    @Override public void onClick(AjaxRequestTarget target) {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
                         switchRightPanel(getEditPanel(), target);
                     }
                 })
@@ -253,14 +292,14 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
             super(RIGHT_PANEL_ID, "edit", OrgSummaryPage.this);
             add(new Form("form")
 //            add(new TextField("address", ProxyModel.of(model,on(BaseOrg.getLocation().getAddress()))));
-                .add(createSubmitCancelButtons("buttons",this))
-                .add(new TextField("type", Model.of("commercial")))
-                .add(new TextField("status", Model.of("sold")))
-                .add(new TextField("name", Model.of("joe smith")))
-                .add(new TextField("email", Model.of("jsmith@foo.com")))
-                .add(new TextField("phone", Model.of("123 456 7894")))
-                .add(new TextField("fax", Model.of("964 745 3528")))
-                .add(new AddressPanel("address", new PropertyModel(this,"address")).withExternalMap(map.getJsVar())));
+                    .add(createSubmitCancelButtons("buttons", this))
+                    .add(new TextField("type", Model.of("commercial")))
+                    .add(new TextField("status", Model.of("sold")))
+                    .add(new TextField("name", Model.of("joe smith")))
+                    .add(new TextField("email", Model.of("jsmith@foo.com")))
+                    .add(new TextField("phone", Model.of("123 456 7894")))
+                    .add(new TextField("fax", Model.of("964 745 3528")))
+                    .add(new AddressPanel("address", new PropertyModel(this, "address")).withExternalMap(map.getJsVar())));
         }
 
         @Override public Component submit(AjaxRequestTarget target) {
@@ -318,11 +357,11 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
             super(RIGHT_PANEL_ID, "editRecurringEvents", OrgSummaryPage.this);
             setOutputMarkupId(true);
             add(new Form("form")
-                    .add(createSubmitCancelButtons("buttons",this)));
+                    .add(createSubmitCancelButtons("buttons", this)));
         }
         @Override public Component submit(AjaxRequestTarget target) {
             // TODO : save recurring events stuff
-            switchRightPanel(getSummaryPanel(),target);
+            switchRightPanel(getSummaryPanel(), target);
             return this;
         }
 
@@ -350,5 +389,6 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         }
 
     }
+
 
 }
