@@ -2,10 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.synchronization;
 
 import java.util.*;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
@@ -54,12 +51,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	public ListResponse<ApiSynchronizationAsset> synchronize() {
 		OfflineProfile profile = offlineProfileService.find(getCurrentUser());
 
-        profile.setCurrentPlatform(ThreadLocalInteractionContext.getInstance().getCurrentPlatform());
-        profile.setCurrentPlatformType(ThreadLocalInteractionContext.getInstance().getCurrentPlatformType());
-
-        offlineProfileService.update(profile);
-		
-		Set<ApiSynchronizationAsset> assets = new HashSet<ApiSynchronizationAsset>();		
+		Set<ApiSynchronizationAsset> assets = new HashSet<ApiSynchronizationAsset>();
 		if (profile != null) {		
 			assets.addAll(getOfflineProfileAssets(profile));
 			assets.addAll(getOfflineProfileOrgs(profile));
@@ -73,6 +65,18 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 		response.setTotal(response.getList().size());
 		return response;
 	}
+
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Transactional
+    public void storePlatform() {
+        OfflineProfile profile = offlineProfileService.find(getCurrentUser());
+
+        profile.setCurrentPlatform(ThreadLocalInteractionContext.getInstance().getCurrentPlatform());
+        profile.setCurrentPlatformType(ThreadLocalInteractionContext.getInstance().getCurrentPlatformType());
+
+        offlineProfileService.update(profile);
+    }
 
     private List<ApiSynchronizationAsset> getAssignedOpenProcedureAssets(OfflineProfile profile) {
         Date startDate = new LocalDate().toDate();
