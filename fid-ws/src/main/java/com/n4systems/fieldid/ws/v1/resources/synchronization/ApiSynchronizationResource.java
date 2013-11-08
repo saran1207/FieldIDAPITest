@@ -67,6 +67,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 	}
 
     @PUT
+    @Path("storePlatform")
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public void storePlatform() {
