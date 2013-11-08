@@ -185,22 +185,21 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
     }
 
 
-    private Component[] createSubmitCancelButtons() {
-        List<? extends Component> result = Lists.newArrayList(
-                new AjaxSubmitLink("submit") {
+    private Component createSubmitCancelButtons(String id) {
+        return new Fragment(id,"saveCancelButtons",OrgSummaryPage.this)
+                .add(new AjaxSubmitLink("submit") {
                     @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         switchRightPanel(getSummaryPanel(),target);
                     }
                     @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
                         switchRightPanel(getSummaryPanel(),target);
                     }
-                },
-                new AjaxLink("cancel") {
+                })
+                .add(new AjaxLink("cancel") {
                     @Override public void onClick(AjaxRequestTarget target) {
                         switchRightPanel(getSummaryPanel(), target);
                     }
                 });
-        return result.toArray(new Component[result.size()]);
     }
 
 
@@ -226,32 +225,16 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
             super(RIGHT_PANEL_ID, "edit", OrgSummaryPage.this);
             add(new Form("form")
 //            add(new TextField("address", ProxyModel.of(model,on(BaseOrg.getLocation().getAddress()))));
-                 .add(createSubmitCancelButtons())
+                .add(createSubmitCancelButtons("buttons"))
                 .add(new TextField("type", Model.of("commercial")))
                 .add(new TextField("status", Model.of("sold")))
                 .add(new TextField("name", Model.of("joe smith")))
                 .add(new TextField("email", Model.of("jsmith@foo.com")))
                 .add(new TextField("phone", Model.of("123 456 7894")))
                 .add(new TextField("fax", Model.of("964 745 3528")))
-                .add(new AddressPanel("address", new PropertyModel(this,"address")).withExternalMap(map.getJsVar()))
-                .add(new AjaxLink("recurring") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        // goto recurring events panel.
-                        // switchRightPanel(new EditRecurringPanel(),target);
-                    }
-                }.add(new Label("details", Model.of("4 recurring events scheduled"))))
-                .add(new AjaxLink("eventTypes") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        // goto recurring events panel.
-                        // switchRightPanel(new EditEventTypePanel(),target);
-                    }
-                }.add(new Label("details", Model.of("13 event types can be performed on this place.")))));
+                .add(new AddressPanel("address", new PropertyModel(this,"address")).withExternalMap(map.getJsVar())));
         }
     }
-
-
 
     class SummaryPanel extends Fragment {
         public SummaryPanel() {
@@ -269,7 +252,7 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
             add(new Form("form")
 // TODO DD                    .add(new MultiSelectDropDownChoice<EventType>("types", ProxyModel.of(model, on(BaseOrg.class).getEventTypes()), getEventTypes(), new EventTypeChoiceRenderer()))
                     .add(new MultiSelectDropDownChoice<EventType>("types", new PropertyModel<List<EventType>>(this, "types"), getEventTypes(), new EventTypeChoiceRenderer()))
-                    .add(createSubmitCancelButtons()));
+                    .add(createSubmitCancelButtons("buttons")));
         }
 
         private List<EventType> getEventTypes() {
@@ -282,7 +265,7 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
             super(RIGHT_PANEL_ID, "editRecurringEvents", OrgSummaryPage.this);
             setOutputMarkupId(true);
             add(new Form("form")
-                    .add(createSubmitCancelButtons()));
+                    .add(createSubmitCancelButtons("buttons")));
         }
     }
 

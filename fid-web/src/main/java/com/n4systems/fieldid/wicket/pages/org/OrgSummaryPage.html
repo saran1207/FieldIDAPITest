@@ -84,7 +84,6 @@
         <textarea wicket:id="comments" class="comments"/>
     </wicket:fragment>
 
-
     <wicket:fragment wicket:id="summary">
         <h2>Events</h2><p>1235 events performed. <br> 6 event types....<br> event performed last tuesday by joe.   pass.<br>5 recurring events scheduled.  <br> 3 events upcoming in the next week.</br></p>
         <h2>Assets</h2><p>05745 assets<br> 43 asset event types....<br> </p>
@@ -101,15 +100,7 @@
             <wicket:message key="label.email"/><input wicket:id="email" type="text"/>
             <wicket:message key="label.phone"/><input wicket:id="phone" type="text"/>
             <wicket:message key="label.fax"/><input wicket:id="fax" type="text"/>
-
-            <h2><wicket:message key="label.recurring_events"/></h2>
-            <a wicket:id="recurring"><span wicket:id="details"/></a>
-
-            <h2><wicket:message key="label.event_types"/></h2>
-            <a wicket:id="eventTypes"><span wicket:id="details"/></a>
-
-            <a wicket:id="submit"><wicket:message key="label.save"/></a>
-            <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+            <div wicket:id="buttons"/>
         </form>
     </wicket:fragment>
 
@@ -117,17 +108,22 @@
         <form wicket:id="form">
             <wicket:message key="label.event_types"/>
             <select wicket:id="types"/>
-            <a wicket:id="submit"><wicket:message key="label.save"/></a>
-            <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+            <div wicket:id="buttons"/>
         </form>
     </wicket:fragment>
 
     <wicket:fragment wicket:id="editRecurringEvents">
         <form wicket:id="form">
             <p>Recurring Events</p>
+            <div wicket:id="buttons"/>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="saveCancelButtons">
+        <div class="buttons">
             <a wicket:id="submit"><wicket:message key="label.save"/></a>
             <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
-        </form>
+        </div>
     </wicket:fragment>
 
 </wicket:extend>
