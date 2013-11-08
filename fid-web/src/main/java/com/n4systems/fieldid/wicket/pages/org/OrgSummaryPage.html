@@ -18,12 +18,14 @@
             <ul class="dropdown">
                 <li class="menu">
                     <a class="mattButton" href="javascript:void(0);">
-                        <wicket:message key="label.edit"/><img src="/fieldid/images/menu-down.png"/>
+                        <wicket:message key="label.options"/><img src="/fieldid/images/menu-down.png"/>
                     </a>
                     <ul class="menu-items">
                         <li><a wicket:id="details"> <wicket:message key="label.details"/></a></li>
                         <li><a wicket:id="recurring"> <wicket:message key="label.recurring_events"/></a></li>
                         <li><a wicket:id="eventTypes"> <wicket:message key="label.event_types"/></a></li>
+                        <li><a wicket:id="archive"> <wicket:message key="label.archive"/></a></li>
+                        <li><a wicket:id="merge"> <wicket:message key="label.merge"/></a></li>
                     </ul>
                 </li>
             </ul>
@@ -119,11 +121,28 @@
         </form>
     </wicket:fragment>
 
+    <wicket:fragment wicket:id="deletePanel">
+        <form wicket:id="form">
+            <div wicket:id="confirm"/>
+            <div wicket:id="buttons"/>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="archivePanel">
+        <form wicket:id="form">
+            <div wicket:id="confirm"/>
+            <div wicket:id="buttons"/>
+        </form>
+    </wicket:fragment>
+
+
     <wicket:fragment wicket:id="saveCancelButtons">
         <div class="buttons">
             <a wicket:id="submit"><wicket:message key="label.save"/></a>
             <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
         </div>
     </wicket:fragment>
+
+
 
 </wicket:extend>
