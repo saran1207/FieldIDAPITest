@@ -45,7 +45,7 @@ ul.floatingDropdown li ul li:hover {
 ul.floatingDropdown ul li a,
 ul.floatingDropdown ul li a:visited {
 	color: #008bd3;
-	width: auto;
+	width: 82%;
 }
 #floatingDropdownStartEventLink a {
 	padding: 7px 10px;
