@@ -105,8 +105,9 @@ public class NavigationBar extends Panel {
         return queryString.toString();
     }
 
+    //TODO "selected" is for the old css, remove it when we move to template
     private AttributeModifier createSelectedAttributeModifier(final NavigationItem navItem) {
-        return new AttributeModifier("class", "selected") {
+        return new AttributeModifier("class", "selected active") {
             @Override
             public boolean isEnabled(Component component) {
                 return component.getPage().getClass() == navItem.getPageClass()
@@ -115,8 +116,9 @@ public class NavigationBar extends Panel {
         };
     }
 
+    //TODO "selected" is for the old css, remove it when we move to template
     private AttributeModifier createRightSelectedAttributeModifier(final NavigationItem navItem) {
-            return new AttributeModifier("class", "selected add") {
+            return new AttributeModifier("class", "selected active add") {
                 @Override
                 public boolean isEnabled(Component component) {
                     return component.getPage().getClass() == navItem.getPageClass()

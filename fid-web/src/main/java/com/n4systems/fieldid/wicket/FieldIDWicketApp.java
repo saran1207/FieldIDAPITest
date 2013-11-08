@@ -3,10 +3,7 @@ package com.n4systems.fieldid.wicket;
 import com.n4systems.fieldid.wicket.components.action.ViewActionsListPage;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.SignatureResourceReference;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.TemporarySignatureResourceReference;
-import com.n4systems.fieldid.wicket.pages.DashboardPage;
-import com.n4systems.fieldid.wicket.pages.OopsPage;
-import com.n4systems.fieldid.wicket.pages.SecretTestPage;
-import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
+import com.n4systems.fieldid.wicket.pages.*;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
@@ -194,6 +191,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
         mountPage("userOfflineProfile", UserOfflineProfilePage.class);
 
+
+        mountPage("template", FieldIDTemplatePage.class);
+
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
 
@@ -220,6 +220,7 @@ public class FieldIDWicketApp extends WebApplication {
         }
 
         getResourceSettings().setCachingStrategy(new QueryStringWithVersionResourceCachingStrategy(new MessageDigestResourceVersion()));
+
     }
 
     private String getTemplateFolder() {
