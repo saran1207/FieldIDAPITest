@@ -12,7 +12,7 @@ public class LabelledRequiredTextField<M> extends LabelledComponent<TextField,M>
     }
 
     @Override
-    protected TextField createLabelledComponent(String id, IModel<M> model) {
+    protected TextField<M> createLabelledComponent(String id, IModel<M> model) {
         return new RequiredTextField(id, model);
     }
 

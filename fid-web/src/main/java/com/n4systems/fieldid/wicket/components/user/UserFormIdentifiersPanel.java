@@ -12,6 +12,7 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -45,7 +46,7 @@ public class UserFormIdentifiersPanel extends Panel {
     public UserFormIdentifiersPanel(String id, IModel<User> user, UploadedImage signatureImage) {
         super(id, user);
         this.uploadedImage = signatureImage;
-        add(new OrgPicker("orgPicker", new PropertyModel<BaseOrg>(user, "owner")));
+        add(createOrgPicker("orgPicker", new PropertyModel<BaseOrg>(user, "owner")));
         add(new MultiSelectDropDownChoice<UserGroup>("group",
                 new PropertyModel<List<UserGroup>>(user, "groups"),
                 userGroupService.getActiveUserGroups(),
@@ -60,6 +61,10 @@ public class UserFormIdentifiersPanel extends Panel {
         add(uploadForm = new UploadForm("uploadForm"));
         uploadForm.setMultiPart(true);
         uploadForm.setVisible(!user.getObject().isPerson());
+    }
+
+    protected Component createOrgPicker(String id, IModel<BaseOrg> org) {
+        return new OrgPicker("orgPicker", org);
     }
 
     class UploadForm extends Form<FileAttachment> {

@@ -39,4 +39,9 @@ public abstract class LabelledComponent<T extends FormComponent, M > extends Pan
 
     protected abstract T createLabelledComponent(String id, IModel<M> model);
 
+    public <T extends LabelledComponent> T required() {
+        component.setRequired(true);
+        return (T) this;
+    }
+
 }

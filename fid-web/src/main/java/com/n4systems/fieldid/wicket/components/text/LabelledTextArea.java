@@ -10,7 +10,7 @@ public class LabelledTextArea<M> extends LabelledComponent<TextArea,M> {
     }
 
     @Override
-    protected TextArea createLabelledComponent(String id, IModel<M> model) {
+    protected TextArea<M> createLabelledComponent(String id, IModel<M> model) {
         return new TextArea(id, model);
     }
 
