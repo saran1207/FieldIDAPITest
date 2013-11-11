@@ -35,12 +35,7 @@
 <!--TODO : REFACTOR OUT A COUPLE OF PAGE HEADERS.   -->
 			<header class="page-header">
 				<!-- NEW: BREAD CRUMBS - optional? Not all pages can have a breadcrumb? -->
-				<nav class="bread-crumb">
-					<ol>
-						<li><a href="#">Parent page</a></li>
-						<li>Current Page</li>
-					</ol>
-				</nav>
+				<nav wicket:id="breadCrumbBar" class="bread-crumb"/>
 
                 <!--mandatory.-->
 				<h1 wicket:id="titleLabel">Page specific heading</h1>
@@ -48,7 +43,7 @@
 				<h2><!-- Optional subheading --></h2>
 
 				<!-- Optional: Page specific tabbed navigation -->
-				<nav wicket:id="navBar" class="nav-tabs"></nav>
+				<nav wicket:id="navBar" class="nav-tabs"/>
 				<div class="action-group">
                     <!-- each page has an optional createActions() method??? -->
 					<!-- Optional: This div content should be customizable for each page to add action buttons or page specific navigation -->

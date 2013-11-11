@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.localization.SelectLanguagePanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
+import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
@@ -49,16 +50,12 @@ import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.protocol.http.ClientProperties;
-import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.template.PackageTextTemplate;
 import org.apache.wicket.util.template.TextTemplate;
@@ -112,20 +109,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
         setConfigurationProvider(configurationProvider);
 
-        ClientProperties clientProperties = WebSession.get().getClientInfo().getProperties();
-        if(clientProperties.isBrowserInternetExplorer()) {
-            int browserVersion = clientProperties.getBrowserVersionMajor();
-            if (browserVersion < 7) {
-                add(new AttributeAppender("class", "no-js lt-ie9 lt-ie8 lt-ie7").setSeparator(" "));
-            }else if (browserVersion == 7) {
-                add(new AttributeAppender("class", "no-js lt-ie9 lt-ie8 ").setSeparator(" "));
-            }if (browserVersion == 8) {
-                add(new AttributeAppender("class", "no-js lt-ie9 lt-ie8 ").setSeparator(" "));
-            }if (browserVersion > 8) {
-                add(new AttributeAppender("class", "no-js ").setSeparator(" "));
-            }
-        }
-
         add(languageSelectionModalWindow = new DialogModalWindow("languageSelectionModalWindow").setInitialWidth(480).setInitialHeight(280));
 
         languageSelectionModalWindow.setContent(selectLanguagePanel = new SelectLanguagePanel(languageSelectionModalWindow.getContentId()) {
@@ -162,6 +145,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         // So subclasses that need to override them can finish their constructors before doing so
         // eg. Labels may require details of entities to be loaded.
         addNavBar("navBar");
+        addBreadCrumbBar("breadCrumbBar");
 
         add(titleLabel = createTitleLabel("titleLabel"));
         titleLabel.setRenderBodyOnly(true);
@@ -321,6 +305,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId));
+    }
+
+    protected void addBreadCrumbBar(String breadCrumbBarId) {
+        add(new BreadCrumbBar(breadCrumbBarId));
     }
 
     protected ConfigurationProvider getConfigurationProvider() {
@@ -517,7 +505,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
 
     }
-
 
     static class StaticImage extends WebComponent {
         public StaticImage(String id, IModel<String> urlModel) {
