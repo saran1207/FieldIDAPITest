@@ -8,6 +8,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.handler.password.PasswordHelper;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.utils.UrlArchive;
@@ -38,6 +39,9 @@ public class LoginAction extends AbstractAction {
 	
 	@Autowired
 	private TenantSettingsService tenantSettingsService;
+
+    @Autowired
+    private MixpanelService mixpanelService;
 	
 	public LoginAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -223,10 +227,15 @@ public class LoginAction extends AbstractAction {
 		loadEULAInformation();
 		rememberMe();
 		registerActiveSession(loginUser, getSession().getId());
+        recordLoginOnMixPanel(loginUser);
 		logger.info(getLogLinePrefix() + "Login: " + signIn.getUserName() + " of " + getSecurityGuard().getTenantName());
 	}
 
-	private void registerActiveSession(User loginUser, String sessionId) {
+    private void recordLoginOnMixPanel(User user) {
+        mixpanelService.sendEvent(MixpanelService.LOGGED_IN, user);
+    }
+
+    private void registerActiveSession(User loginUser, String sessionId) {
 		new ActiveSessionSaver().save(new ActiveSession(loginUser, sessionId));
 	}
 

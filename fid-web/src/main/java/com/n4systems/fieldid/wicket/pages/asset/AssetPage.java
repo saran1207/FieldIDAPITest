@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.asset;
 
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
+import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.model.EntityModel;
@@ -25,6 +26,9 @@ public abstract class AssetPage extends FieldIDFrontEndPage {
 
     @SpringBean
     protected ProcedureService procedureService;
+
+    @SpringBean
+    protected MixpanelService mixpanelService;
 
     protected Long assetId;
     protected IModel<Asset> assetModel;

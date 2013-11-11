@@ -29,6 +29,7 @@ import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.job.JobService;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.massupdate.MassUpdateService;
+import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
@@ -682,5 +683,9 @@ public class FieldIdCoreConfig {
         return new AssetTextOrFilterSearchService();
     }
 
+    @Bean
+    public MixpanelService mixpanelService() {
+        return new MixpanelService();
+    }
 
 }

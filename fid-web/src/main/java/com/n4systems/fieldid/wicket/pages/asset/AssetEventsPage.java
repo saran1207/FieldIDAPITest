@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.asset;
 
+import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
@@ -18,6 +19,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +31,9 @@ public class AssetEventsPage extends AssetPage{
     private WebMarkupContainer filters;
     private FIDFeedbackPanel feedbackPanel;
 
+    @SpringBean
+    private MixpanelService mixpanelService;
+
     private boolean open = true;
     private boolean completed = true;
     private boolean closed = true;
@@ -37,6 +42,7 @@ public class AssetEventsPage extends AssetPage{
         super(params);
 
         final Asset asset = assetModel.getObject();
+        mixpanelService.sendEvent(MixpanelService.VIEWED_ASSET_EVENTS_LIST);
 
         add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
@@ -66,6 +72,7 @@ public class AssetEventsPage extends AssetPage{
         add(mapLink = new AjaxLink<Void>("mapLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
+                mixpanelService.sendEvent(MixpanelService.VIEWED_ASSET_EVENTS_MAP);
                 eventPanel.setVisible(false);
                 mapPanel.setVisible(true);
                 filters.setVisible(false);

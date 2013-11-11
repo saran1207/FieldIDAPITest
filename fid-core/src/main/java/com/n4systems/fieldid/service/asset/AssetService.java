@@ -10,6 +10,7 @@ import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.model.*;
@@ -56,6 +57,7 @@ public class AssetService extends FieldIdPersistenceService {
     @Autowired private AssetCodeMappingService assetCodeMappingService;
     @Autowired private AssetTypeService assetTypeService;
     @Autowired private OrgService orgService;
+    @Autowired private MixpanelService mixpanelService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -258,6 +260,8 @@ public class AssetService extends FieldIdPersistenceService {
         saveSubAssets(asset);
 
         asset.setSubAssets(findSubAssets(asset));
+
+        mixpanelService.sendEvent(MixpanelService.NEW_ASSET_CREATED);
 
         return asset;
     }

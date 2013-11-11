@@ -26,6 +26,7 @@ import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ui.OptionLists;
 import com.n4systems.fieldid.util.EventFormHelper;
@@ -126,6 +127,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MixpanelService mixpanelService;
 
     public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
 			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService, PersistenceService persistenceService) {
@@ -296,6 +300,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	public String doShow() {
 		asset = event != null ? event.getAsset() : null;
 		testDependencies();
+        mixpanelService.sendEvent(MixpanelService.VIEWED_COMPLETED_EVENT);
 		return SUCCESS;
 	}
 	

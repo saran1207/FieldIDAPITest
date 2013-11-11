@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.asset;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
@@ -28,6 +29,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -54,6 +56,8 @@ public class AssetSummaryPage extends AssetPage {
 
     public AssetSummaryPage(PageParameters params) {
         super(params);
+
+        mixpanelService.sendEvent(MixpanelService.VIEWED_ASSET);
            
         final Asset asset = assetModel.getObject();
 
