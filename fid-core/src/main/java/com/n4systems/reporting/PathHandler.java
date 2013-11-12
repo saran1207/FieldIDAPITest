@@ -43,7 +43,8 @@ public class PathHandler {
 	private static final String CHART_IMAGE_PATH_BASE = EVENT_PATH_BASE + "/chartimages";
     private static final String EVENT_SIGNATURE_PATH_BASE = EVENT_PATH_BASE + "/signatures";
 	private static final String REPORT_PATH_BASE = PRIVATE_PATH_BASE + "/reports";
-	private static final String ALL_TENANT_REPORT_PATH = REPORT_PATH_BASE + "/all_tenants";
+    private static final String ALL_TENANT_REPORT_PART = "all_tenants";
+	private static final String ALL_TENANT_REPORT_PATH = REPORT_PATH_BASE + "/" + ALL_TENANT_REPORT_PART;
 	private static final String COMMON_IMAGE_PATH_BASE = COMMON_PATH_BASE + "/images";
 	private static final String COMMON_TEMPLATE_BASE = COMMON_PATH_BASE + "/templates";
 	private static final String COMMON_CONFIG_BASE = COMMON_PATH_BASE + "/conf";
@@ -210,19 +211,21 @@ public class PathHandler {
         if (tenant != null) {
             return mergePaths(REPORT_PATH_BASE, getTenantPathPart(tenant), localizedPath);
         } else {
-            return mergePaths(REPORT_PATH_BASE, localizedPath);
+            return mergePaths(REPORT_PATH_BASE, ALL_TENANT_REPORT_PART, localizedPath);
         }
     }
 
     private static File getPossiblyLocalizedReport(Tenant tenant, Locale locale, String localizedPathFormat, String defaultPath) {
         File localizedFile = null;
         if (locale != null) {
+            // Current tenant - selected locale
             localizedFile = absolutize(localizeReportPath(tenant, localizedPathFormat, defaultPath, locale));
         }
         File tenantReport;
         if (localizedFile != null && localizedFile.exists()) {
             tenantReport = localizedFile;
         } else {
+            // Current tenant - no locale
             tenantReport = absolutize(localizeReportPath(tenant, localizedPathFormat, defaultPath, null));
         }
 
@@ -230,7 +233,15 @@ public class PathHandler {
             return tenantReport;
         }
 
-        return (tenantReport.exists()) ? tenantReport : absolutize(localizeReportPath(null, localizedPathFormat, defaultPath, locale));
+        // No tenant - selected locale
+        localizedFile = absolutize(localizeReportPath(null, localizedPathFormat, defaultPath, locale));
+
+        if (localizedFile.exists()) {
+            return localizedFile;
+        }
+
+        // No tenant - no locale
+        return absolutize(localizeReportPath(null, localizedPathFormat, defaultPath, null));
     }
 
 	public static File getReportFile(Asset asset, Locale locale) {
@@ -305,7 +316,7 @@ public class PathHandler {
 	}
 	
 	public static File getCompiledSummaryReportFile(Tenant tenant, Locale locale) {
-        return getPossiblyLocalizedReport(tenant, locale, COMPILED_SUMMARY_REPORT_FILE_NAME_LOCALIZED, COMPILED_ASSET_REPORT_FILE_NAME);
+        return getPossiblyLocalizedReport(tenant, locale, COMPILED_SUMMARY_REPORT_FILE_NAME_LOCALIZED, COMPILED_SUMMARY_REPORT_FILE_NAME);
 	}
 	
 	private static String getEventPath(Event event) {
