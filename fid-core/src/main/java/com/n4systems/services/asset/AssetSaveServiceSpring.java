@@ -8,7 +8,9 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.AssetAttachmentSaver;
 import com.n4systems.model.asset.AssetImageFileSaver;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -55,12 +58,30 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
         addAssetHistory.setAssetStatus(asset.getAssetStatus());
         addAssetHistory.setPurchaseOrder(asset.getPurchaseOrder());
         addAssetHistory.setLocation(asset.getAdvancedLocation());
-        addAssetHistory.setInfoOptions(new ArrayList<InfoOptionBean>(asset.getInfoOptions()));
+        addAssetHistory.setInfoOptions(reconcileInfoOptions(asset.getInfoOptions()));
         addAssetHistory.setAssignedUser(asset.getAssignedUser());
 
         persistenceService.saveOrUpdate(addAssetHistory);
 
         return createdAsset;
+    }
+
+    private List<InfoOptionBean> reconcileInfoOptions(Collection<InfoOptionBean> options) {
+        //WEB-3944 -- We need to reattach selected static info options in order to avoid a detached entity exception
+        List<InfoOptionBean> reconciledOptions = new ArrayList<InfoOptionBean>();
+
+        for (InfoOptionBean option : options) {
+            if (option.isStaticData()) {
+                QueryBuilder<InfoOptionBean> query = new QueryBuilder<InfoOptionBean>(InfoOptionBean.class, new OpenSecurityFilter());
+                query.addSimpleWhere("uniqueID", option.getUniqueID());
+                InfoOptionBean foundOption = persistenceService.find(query);
+                reconciledOptions.add(foundOption);
+            } else {
+                reconciledOptions.add(option);
+            }
+        }
+        return reconciledOptions;
+
     }
 
 	public Asset create(Asset asset, List<AssetAttachment> uploadedAttachments, byte[] imageData, String imageFileName) {
