@@ -145,8 +145,9 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
             @Override
             protected void onEnterSecondaryState(AjaxRequestTarget target) {
                 // Entering advanced search
-                assetIndexerService.markAssetIndexerStarted();
-                assetIndexerService.reindexTenantIfNotStartedAlready();
+                if (!assetIndexerService.checkAndMarkStarted()) {
+                    assetIndexerService.reindexTenant();
+                }
                 target.add(queryForm.setVisible(true));
                 setFiltersDisabled(target, true);
                 target.appendJavaScript("fieldIdWidePage.updateConfig(false);");

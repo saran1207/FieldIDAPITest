@@ -222,20 +222,18 @@ public class AssetIndexerService extends FieldIdPersistenceService {
         return new IndexQueueItem();
     }
 
-    // Needs to be done in a separate transaction from reindexTenantIfNotStartedAlready
+    // Needs to be done in a separate transaction from reindexTenant
     // since we can't have multiple users kicking off indexes at the same time.
-    public void markAssetIndexerStarted() {
+    public boolean checkAndMarkStarted() {
         Tenant tenant = getCurrentTenant();
+        boolean previouslyStarted = tenant.isAssetIndexerStarted();
         tenant.setAssetIndexerStarted(true);
         persistenceService.update(tenant);
+        return previouslyStarted;
     }
 
-    public void reindexTenantIfNotStartedAlready() {
+    public void reindexTenant() {
         Tenant tenant = getCurrentTenant();
-        if (tenant.isAssetIndexerStarted()) {
-            logger.debug("Indexer already started for tenant " + tenant.getDisplayName() + ", not starting");
-            return;
-        }
 
         deleteExistingIndexIfExists(tenant);
 
