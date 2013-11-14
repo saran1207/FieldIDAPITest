@@ -1,6 +1,8 @@
 <wicket:extend>
 	<div class="action-group">
 
+        <a class="btn btn-secondary btn-sml" wicket:id="summaryReportLink"><wicket:message key="label.summary_report" /></a>
+
 		<div wicket:id="print" class="dropdown-btn">
 			<a class="btn btn-secondary btn-sml" href="javascript:void(0);" ><wicket:message key="label.print"/><img src="/fieldid/images/menu-down.png"></a>
 			<ul class="pull-right">
@@ -22,7 +24,6 @@
 				<li><a wicket:id="massScheduleUpdateLink"><wicket:message key="label.massupdate"/></a></li>
 			</wicket:enclosure>
 				<li><a wicket:id="exportToExcelLink"><wicket:message key="label.exporttoexcel"/></a></li>
-				<li><a wicket:id="summaryReportLink"><wicket:message key="label.summary_report" /></a></li>
 			</ul>
 		</div>
 

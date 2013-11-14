@@ -54,7 +54,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
             }
         });
 
-        actions.add(new Link("summaryReportLink") {
+        add(new Link("summaryReportLink") {
             @Override public void onClick() {
                 setResponsePage(new EventResolutionPage(model));
             }

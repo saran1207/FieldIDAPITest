@@ -33,6 +33,9 @@ public class EventResolutionService extends FieldIdPersistenceService {
 
     private void addResultsToSummary(EventResolutionSummary eventResolutionSummary, SearchResult<Event> pageResult) {
         for (Event event : pageResult.getResults()) {
+            if (event.getRelevantDate() == null) {
+                continue;
+            }
             addResultToSet(eventResolutionSummary.getBaseSummary(), event);
             addResultToSet(eventResolutionSummary.getOrCreateSummary(event.getAsset().getType()), event);
             addResultToSet(eventResolutionSummary.getOrCreateSummary(event.getType()), event);
