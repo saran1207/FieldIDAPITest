@@ -40,7 +40,7 @@ public class MassScheduleService extends FieldIdPersistenceService {
                 newSchedule.setAsset(asset);
                 newSchedule.setTenant(getCurrentTenant());
                 newSchedule.setOwner(asset.getOwner());
-                newSchedule.setAssignee(eventSchedule.getAssignee());
+                newSchedule.setAssignedUserOrGroup(eventSchedule.getAssignedUserOrGroup());
                 persistenceService.save(newSchedule);
             }
         }
