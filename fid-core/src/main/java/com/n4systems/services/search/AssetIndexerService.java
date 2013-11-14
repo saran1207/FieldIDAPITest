@@ -1,6 +1,7 @@
 package com.n4systems.services.search;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.HasTenant;
 import com.n4systems.model.location.PredefinedLocation;
@@ -32,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 @Transactional
 public class AssetIndexerService extends FieldIdPersistenceService {
@@ -40,6 +42,7 @@ public class AssetIndexerService extends FieldIdPersistenceService {
     @Autowired private AssetIndexWriter assetIndexWriter;
 
     private @Autowired ConfigService configService;
+    private @Autowired AsyncService asyncService;
     private @Resource PlatformTransactionManager transactionManager;
 
     private static final int PAGE_SIZE_FOR_TENANT_INSERTING = 512;
@@ -164,21 +167,36 @@ public class AssetIndexerService extends FieldIdPersistenceService {
 	}
 
     public void indexTenant(String tenantName) {
-
 		QueryBuilder<Tenant> builder = new QueryBuilder<Tenant>(Tenant.class, new OpenSecurityFilter());
 		builder.addSimpleWhere("name", tenantName);
 		Tenant tenant = persistenceService.find(builder);
 
-        indexTenantsPerAssets(tenant);
+        asynchronouslyIndexAssets(tenant);
 	}
 
-    private void indexTenantsPerAssets(Tenant tenant) {
+    public long asynchronouslyIndexAssets(final Tenant tenant) {
+        TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(tenant).setShowArchived(true);
+        final QueryBuilder<Asset> assetQueryBuilder = new QueryBuilder<Asset>(Asset.class, filter);
+
+        final Long count = persistenceService.count(assetQueryBuilder);
+
+        AsyncService.AsyncTask<Void> task = asyncService.createTaskNoUserContext(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                indexTenantsPerAssets(tenant, assetQueryBuilder, count);
+                return null;
+            }
+        });
+
+        asyncService.run(task);
+
+        return count;
+    }
+
+    private void indexTenantsPerAssets(Tenant tenant, QueryBuilder<Asset> assetQueryBuilder, Long count) {
         // I believe we need to include archived here, but maybe not?
         // the triggers for sure will dump records with archived assets into the queue table
-        TenantOnlySecurityFilter filter = new TenantOnlySecurityFilter(tenant).setShowArchived(true);
-        QueryBuilder<Asset> assetQueryBuilder = new QueryBuilder<Asset>(Asset.class, filter);
 
-        Long count = persistenceService.count(assetQueryBuilder);
         int numPages = (int) Math.ceil(count / PAGE_SIZE_FOR_TENANT_INSERTING);
 
         for (int i = 0; i < numPages; i++) {
@@ -191,30 +209,27 @@ public class AssetIndexerService extends FieldIdPersistenceService {
                 List<Asset> assets = query.getResultList();
 
                 for (Asset asset : assets) {
-                    if (!creationIndexItemAlreadyExists(asset.getId())) {
+                    if (!creationIndexItemAlreadyExists(em, asset.getId())) {
                         IndexQueueItem item = new IndexQueueItem();
                         item.setTenant(tenant);
                         item.setType(IndexQueueItem.IndexQueueItemType.ASSET_INSERT);
                         item.setItemId(asset.getId());
-                        persistenceService.save(item);
+                        em.persist(item);
                     }
                 }
             } finally {
-                if (em.getTransaction().isActive()) {
-                    em.getTransaction().commit();
-                }
+                em.getTransaction().commit();
                 em.close();
             }
         }
-
     }
 
-    private boolean creationIndexItemAlreadyExists(Long assetId) {
+    private boolean creationIndexItemAlreadyExists(EntityManager em, Long assetId) {
         QueryBuilder<IndexQueueItem> existsBuilder = new QueryBuilder<IndexQueueItem>(IndexQueueItem.class, new OpenSecurityFilter());
 
         existsBuilder.addSimpleWhere("type", IndexQueueItem.IndexQueueItemType.ASSET_INSERT);
         existsBuilder.addSimpleWhere("id", assetId);
-        return persistenceService.exists(existsBuilder);
+        return existsBuilder.entityExists(em);
     }
 
     /* pkg protected for testing purposes */
@@ -233,11 +248,13 @@ public class AssetIndexerService extends FieldIdPersistenceService {
     }
 
     public void reindexTenant() {
-        Tenant tenant = getCurrentTenant();
+        reindexTenant(getCurrentTenant());
+    }
 
+    public void reindexTenant(Tenant tenant) {
         deleteExistingIndexIfExists(tenant);
 
-        indexTenantsPerAssets(tenant);
+        asynchronouslyIndexAssets(tenant);
     }
 
     private void deleteExistingIndexIfExists(Tenant tenant) {
