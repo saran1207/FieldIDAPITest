@@ -24,6 +24,8 @@ import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Address;
 import com.n4systems.model.EventType;
 import com.n4systems.model.GpsLocation;
+import com.n4systems.model.builders.CustomerOrgBuilder;
+import com.n4systems.model.builders.DivisionOrgBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.orgs.*;
 import com.n4systems.model.user.User;
@@ -70,26 +72,24 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
     private @SpringBean PlaceService placeService;
     private @SpringBean UserGroupService userGroupService;
     private @SpringBean UserService userService;
-    private @SpringBean
-    OrgService orgService;
+    private @SpringBean OrgService orgService;
 
-    private EntityModel<? extends BaseOrg> model;
+    private IModel<? extends BaseOrg> model;
     private MarkupContainer actions;
     private GoogleMap map;
     private Component left,right;
     private Component summaryPanel,archivePanel,newUserPanel,viewDetailsLeftPanel,editEventTypesPanel,editPanel,editRecurringPanel;
 
     public OrgSummaryPage(PageParameters params) {
-        init(params.get("id").toLong());
+        this(new EntityModel(BaseOrg.class, params.get("id").toLong()));
     }
 
-    public <T extends BaseOrg> OrgSummaryPage(T org) {
-        super(new PageParameters().add("id",org.getId()));
+    public OrgSummaryPage(IModel<? extends BaseOrg> model) {
+        init(model);
     }
 
-
-    private void init(Long id) {
-        model = new EntityModel(BaseOrg.class, id);
+    private void init(IModel<? extends BaseOrg>  model) {
+        this.model = model;
         add(createHeader("header"));
         add(actions = createActions("actions"));
         add(left=getViewDetailsLeftPanel());
@@ -119,11 +119,10 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         return container;
     }
 
-    private Component createChildrenMenu(String id, BaseOrg org) {
-        List<? extends BaseOrg> children = getOrgChildren(org);
+    private  Component createChildrenMenu(String id, final BaseOrg parentOrg) {
+        List<? extends BaseOrg> children = getOrgChildren(parentOrg);
         final boolean hasChildren = children.size()>0;
         children.add(null);
-
 
         MarkupContainer container = new WebMarkupContainer("separator") {
             @Override public boolean isVisible() {
@@ -135,7 +134,14 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
             @Override protected void populateItem(ListItem<BaseOrg> item) {
                 final BaseOrg org = item.getModelObject();
                 if (org == null) {
-                    item.add(new Label("name", Model.of("create new division")));
+                    // TODO : make this dynamic = create new division/customer/secondary??? depending on org.
+                    String key = getChildLabelKey(parentOrg);
+                    FIDLabelModel createNewLabel = new FIDLabelModel("label.create_new", new FIDLabelModel(key).getObject());
+                    item.add(new Label("name", createNewLabel).add(new AjaxEventBehavior("onclick") {
+                        @Override protected void onEvent(AjaxRequestTarget target) {
+                            setResponsePage(new OrgSummaryPage(createNewOrg(parentOrg)));
+                        }
+                    }));
                 } else {
                     item.add(new Label("name", Model.of(org.getDisplayName())).add(new AjaxEventBehavior("onclick") {
                         @Override protected void onEvent(AjaxRequestTarget target) {
@@ -147,6 +153,26 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
 
         });
         return container;
+    }
+
+    private String getChildLabelKey(BaseOrg parentOrg) {
+        if (parentOrg instanceof PrimaryOrg) {
+            return "label.customer_type";
+        } else if (parentOrg instanceof CustomerOrg) {
+            return "label.division_type";
+        } else {
+            throw new IllegalStateException("can't create child org for " + parentOrg.getClass().getSimpleName());
+        }
+    }
+
+    private IModel<? extends BaseOrg> createNewOrg(BaseOrg parentOrg) {
+        // TODO : set proper defaults for new children orgs.
+        if (parentOrg instanceof PrimaryOrg) {
+            return Model.of(CustomerOrgBuilder.aCustomerOrg().withParent((InternalOrg)parentOrg).withName("New Customer").build());
+        } else if (parentOrg instanceof CustomerOrg) {
+            return Model.of(DivisionOrgBuilder.aDivisionOrg().withCustomerOrg((CustomerOrg)parentOrg).withName("New Division").build());
+        }
+        return null;
     }
 
     private List<? extends BaseOrg> getOrgChildren(BaseOrg org) {

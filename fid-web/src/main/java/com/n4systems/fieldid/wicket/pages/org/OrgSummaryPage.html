@@ -6,11 +6,21 @@
         .pageContent input {
             display:block;
         }
+        .children-menu ul>li:hover {
+            background: yellow;
+        }
+
         .children-menu ul {
-            display:none;
+            /*display:none;*/
+            font-size:12px;
+            font-weight: normal;
+            color: #898989;
         }
         .children-menu p {
             display:inline;
+        }
+        .children-menu p:hover {
+            background: #fafad2;
         }
     </style>
 </wicket:head>
@@ -19,7 +29,9 @@
 
     <!-- --------------------------------------------------------------------------------------------------------- -->
 
-    <div wicket:id="header" style="font-size:22px;" class="header">
+    <!--PAGE HEADER-->
+    <!--TITLE LABEL-->
+    <h1 wicket:id="header" style="font-size:22px;" class="header">
         <span wicket:id="hierarchy">
             <a wicket:id="org"><span wicket:id="name"/></a>
             <span wicket:id="separator" class="children-menu"><p>&gt;</p>
@@ -28,8 +40,9 @@
                 </ul>
             </span>
         </span>
-    </div>
+    </h1>
 
+    <!--ACTION GROUP-->
     <div wicket:id="actions" class="actions" style="width:100%;height:30px;display:inline-block;">
         <span wicket:id="edit">
             <ul class="dropdown">
@@ -77,13 +90,13 @@
     </div>
 
 
-    <div wicket:id="left" style="float:left;padding-right:15px;border-right:2px solid #808080;">
-        <!--DEPENDS ON PAGE STATE, MIGHT BE EDITDETAILS PANEL, VIEW DETAILSPANEL, NOTHING, ETC.... -->
-    </div>
+        <div wicket:id="left" style="float:left;padding-right:15px;border-right:2px solid #808080;">
+            <!--DEPENDS ON PAGE STATE, MIGHT BE EDITDETAILS PANEL, VIEW DETAILSPANEL, NOTHING, ETC.... -->
+        </div>
 
-    <div wicket:id="right" style="float:left;" >
-        <!--DEPENDS ON PAGE STATE, MIGHT BE EDITDETAILS PANEL, VIEW EVENTS PANEL, ETC.... -->
-    </div>
+        <div wicket:id="right" style="float:left;" >
+            <!--DEPENDS ON PAGE STATE, MIGHT BE EDITDETAILS PANEL, VIEW EVENTS PANEL, ETC.... -->
+        </div>
 
     <!-- --------------------------------------------------------------------------------------------------------- -->
 
