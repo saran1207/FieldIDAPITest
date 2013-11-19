@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
@@ -12,7 +13,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
-public abstract class SetupPage extends FieldIDTemplatePage {
+public abstract class SetupPage extends FieldIDFrontEndPage {
 
     protected SetupPage(PageParameters params) {
         super(params);
@@ -37,14 +38,6 @@ public abstract class SetupPage extends FieldIDTemplatePage {
                 aNavItem().label("nav.templates").page(TemplatesPage.class).cond(hasManageSystemConfig()).build(),
                 aNavItem().label("nav.widgets").page(WidgetsPage.class).cond(hasManageSystemConfig()).build(),
                 aNavItem().label("nav.security").page(SecurityPage.class).cond(hasManageSystemConfig()).build()));
-    }
-
-    @Override
-    protected void addBreadCrumbBar(String breadCrumbBarId) {
-        add(new BreadCrumbBar(breadCrumbBarId,
-                aNavItem().label("label.dashboard").page(DashboardPage.class).build(),
-                aNavItem().label("label.setup").page(this.getClass()).build()
-        ));
     }
 
     protected boolean hasManageSystemConfig() {
