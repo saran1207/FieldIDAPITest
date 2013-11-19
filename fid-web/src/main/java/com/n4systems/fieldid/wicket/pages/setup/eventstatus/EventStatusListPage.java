@@ -25,7 +25,7 @@ public class EventStatusListPage extends EventStatusPage {
     public EventStatusListPage(PageParameters params) {
         super(params);
         
-        List<EventStatus> eventStatusList = eventStatusService.getActiveStatuses();
+        final List<EventStatus> eventStatusList = eventStatusService.getActiveStatuses();
         
         add(new ListView<EventStatus>("eventStatusList", eventStatusList) {
             @Override
@@ -46,13 +46,24 @@ public class EventStatusListPage extends EventStatusPage {
                 item.add(new DateTimeLabel("lastModified", new PropertyModel<Date>(status, "modified")));
 
                 item.add(new BookmarkablePageLink("edit", EventStatusFormPage.class, uniqueId(status.getId())));
+
+
                 item.add(new Link("archive") {
-                    @Override
-                    public void onClick() {
-                        eventStatusService.archive(status);
-                        setResponsePage(EventStatusListPage.class);
-                    }
-                });
+                        @Override
+                        public void onClick() {
+
+                            List<EventStatus> evntStatusList = eventStatusService.getActiveStatuses();
+                            if (evntStatusList.size() > 1) {
+                                eventStatusService.archive(status);
+                                setResponsePage(EventStatusListPage.class);
+                            }
+                        }
+
+                        @Override public boolean isVisible() {
+                            return eventStatusList.size() > 1;
+                        }
+                    });
+
             }
         }); 
         
