@@ -25,12 +25,15 @@
 .block {
   display: block;
 }
+.clear {
+  clear: both;
+}
 .error {
   background: #ffc4b3;
 }
 .warning {
   background: #ffffb2;
-  border: 1px solid #efef00;
+  border: 1px solid #e5e500;
   font-size: 13px;
 }
 .instructions {
@@ -41,64 +44,6 @@
 }
 label + .instructions {
   margin-left: 12px;
-}
-/*--------------------------------------- 
-  FOOTER
------------------------------------------*/
-.footer-global {
-  background: #f5f5f5;
-  padding-top: 20px;
-}
-.footer-global img {
-  float: right;
-}
-/*
-Sticky Footer based on:
-Ryan Fait http://ryanfait.com/
-Chris Coyier http://css-tricks.com/snippets/css/sticky-footer/
-*/
-html,
-body {
-  height: 100%;
-}
-.wrapper {
-  min-height: 100%;
-  *height: auto !important;
-  *height: 100%;
-  margin: 0 auto -125px;
-}
-.wrapper:after {
-  content: "";
-  display: block;
-}
-.footer-global,
-.wrapper:after {
-  height: 125px;
-}
-/*--------------------------------------- 
-  THUMBNAILS
------------------------------------------*/
-/* Thumbnails with a description - don't know where to put this yet */
-figure {
-  overflow: hidden;
-}
-figure img {
-  float: left;
-  margin-right: 10px;
-}
-figure p {
-  margin: 0;
-}
-/*--------------------------------------- 
-  ORG LOCATION WITH DROPDOWN
------------------------------------------*/
-.org-location .fontello-search:before {
-  font-size: 16px;
-  padding: 0;
-}
-.form-horizontal.compact input + [class^="icon-"],
-.form-horizontal.compact input + [class^="fontello-"] {
-  margin-left: -20px;
 }
 /*--------------------------------------- 
   TYPOGRAPHY
@@ -123,6 +68,9 @@ a:hover {
   color: #3a3a3a;
   text-decoration: none;
 }
+a:active {
+  outline: none;
+}
 main a {
   color: #008bd3;
 }
@@ -132,12 +80,12 @@ h2,
 h3,
 h4 {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  margin-bottom: 0;
+  margin: 0;
 }
 h1 {
   font-size: 24px;
   font-weight: normal;
-  margin-bottom: 10px;
+  margin: 15px 0;
 }
 h1.no-border {
   margin-bottom: 0;
@@ -148,28 +96,17 @@ h2 {
 }
 h3,
 h4 {
-  margin: 0;
   font-size: 14px;
-}
-h3 {
-  background: #f5f5f5;
-  padding: 4px 6px;
-  margin-bottom: 4px;
 }
 /*--------------------------------------- 
   PAGE LAYOUT
 -----------------------------------------*/
-/* Applies a natural box layout model to all elements. 
-Padding and border won't affect the width of the box. */
 * {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   *behavior: url(../scripts/boxsizing.htc);
-  /* IE 6 & 7 */
-
 }
-/* Separates sections of the page or component. ex. Page title and page content */
 hr {
   border: 0;
   border-top: 1px solid #c7c7c9;
@@ -212,52 +149,54 @@ main:after,
   clear: both;
 }
 main {
-  margin-top: 15px;
   margin-bottom: 40px;
 }
 section {
   margin-bottom: 25px;
 }
-/* Used to group action items, such as buttons, together */
-.action-group {
-  clear: both;
-}
-.container {
-  padding: 0 6px;
-}
-/* Main page heading */
-.page-header {
-  position: relative;
-}
-.page-header .action,
-.page-header .action-group {
+section h3 {
+  background: #f5f5f5;
+  padding: 2px 4px;
   margin-bottom: 4px;
+}
+section .container {
+  padding: 0 4px;
+}
+.action-group {
   *zoom: 1;
 }
-.page-header .action:before,
-.page-header .action-group:before,
-.page-header .action:after,
-.page-header .action-group:after {
+.action-group:before,
+.action-group:after {
   display: table;
   content: "";
   line-height: 0;
 }
-.page-header .action:after,
-.page-header .action-group:after {
+.action-group:after {
   clear: both;
 }
-.page-header .action.pull-right,
-.page-header .action-group.pull-right {
+.page-header {
+  position: relative;
+}
+.page-header .action-group {
   position: absolute;
   bottom: 4px;
   right: 0;
-  margin-bottom: 0;
 }
-.page-header + hr {
+.page-content {
+  *zoom: 1;
+}
+.page-content:before,
+.page-content:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.page-content:after {
+  clear: both;
+}
+.page-content hr {
   margin-bottom: 15px;
 }
-/* Headings within the page */
-/* Used to create columns, a main section and a sidebar section. Sidebar can be on the left or right side. */
 .column-wide {
   width: 66.129032%;
   float: left;
@@ -273,24 +212,302 @@ section {
 .column-narrow-right {
   margin-left: 1.6129032%;
 }
-/* Spans 100% width */
 .column-full {
   width: 99.9999996%;
   clear: both;
 }
 /*--------------------------------------- 
-  MEDIA QUERIES
+  MEDIA QUERIES for page layout
 -----------------------------------------*/
-@media all and (max-width: 1100px) {
+@media all and (max-width: 1280px) {
+  [class^="column-narrow-"] .input-combo input[type="text"] {
+    width: 215px;
+  }
+}
+@media (max-width: 1024px) {
   main,
   .content-wrap {
     padding: 0 12px;
   }
+  .content-wrap {
+    width: 1024px;
+  }
+}
+/*--------------------------------------- 
+	FONTELLO ICON FONTS
+-----------------------------------------*/
+/* 
+	Generated from http://fontello.com (all available icons listed here)
+	Icons are from the Entypo and Font Awesome icon set.
+	http://www.entypo.com/
+	http://fortawesome.github.io/Font-Awesome/
+*/
+@font-face {
+  font-family: 'fontello';
+  src: url('/fonts/fontello.eot?84755376');
+  src: url('/fonts/fontello.eot?84755376#iefix') format('embedded-opentype'), url('/fonts/fontello.woff?84755376') format('woff'), url('/fonts/fontello.ttf?84755376') format('truetype'), url('/fonts/fontello.svg?84755376#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+[class^="fontello-"] {
+  cursor: pointer;
+  font-size: 0;
+}
+[class^="fontello-"]:before {
+  font-size: 14px;
+  font-family: "fontello", sans-serif;
+  speak: none;
+  text-decoration: inherit;
+  padding-right: 4px;
+  line-height: 1;
+  font-variant: normal;
+  text-transform: none;
+}
+.fontello-plus-squared:before {
+  content: '\e835';
+}
+.fontello-target:before {
+  content: '\e848';
+}
+.fontello-calendar:before {
+  content: '\e81d';
+}
+.fontello-calendar-empty:before {
+  content: '\e820';
+}
+.fontello-down-dir:before {
+  content: '\e811';
+}
+.fontello-up-dir:before {
+  content: '\e813';
+}
+.fontello-left-dir:before {
+  content: '\e814';
+}
+.fontello-right-dir:before {
+  content: '\e817';
+}
+.fontello-angle-double-left:before {
+  content: '\e821';
+}
+.fontello-angle-double-right:before {
+  content: '\e822';
+}
+.fontello-angle-double-up:before {
+  content: '\e827';
+}
+.fontello-angle-double-down:before {
+  content: '\e829';
+}
+.fontello-table:before {
+  content: '\e82c';
+}
+.fontello-columns:before {
+  content: '\e82b';
+}
+.fontello-filter:before {
+  content: '\e831';
+}
+.fontello-sort:before {
+  content: '\e832';
+}
+.fontello-sort-down:before {
+  content: '\e833';
+}
+.fontello-sort-up:before {
+  content: '\e834';
+}
+.fontello-search:before {
+  content: '\e801';
+}
+.fontello-mail:before {
+  content: '\e800';
+}
+.fontello-user:before {
+  content: '\e812';
+}
+.fontello-picture:before {
+  content: '\e816';
+}
+.fontello-camera:before {
+  content: '\e815';
+}
+.fontello-layout:before {
+  content: '\e802';
+}
+.fontello-menu:before {
+  content: '\e803';
+}
+.fontello-check:before {
+  content: '\e804';
+}
+.fontello-cancel:before {
+  content: '\e805';
+}
+.fontello-plus:before {
+  content: '\e808';
+}
+.fontello-minus:before {
+  content: '\e80b';
+}
+.fontello-help:before {
+  content: '\e80e';
+}
+.fontello-info:before {
+  content: '\e810';
+}
+.fontello-minus-squared:before {
+  content: '\e836';
+}
+.fontello-link:before {
+  content: '\e819';
+}
+.fontello-attach:before {
+  content: '\e81a';
+}
+.fontello-lock:before {
+  content: '\e81b';
+}
+.fontello-lock-open:before {
+  content: '\e81c';
+}
+.fontello-download:before {
+  content: '\e81e';
+}
+.fontello-upload:before {
+  content: '\e81f';
+}
+.fontello-export:before {
+  content: '\e823';
+}
+.fontello-pencil:before {
+  content: '\e824';
+}
+.fontello-print:before {
+  content: '\e825';
+}
+.fontello-comment:before {
+  content: '\e826';
+}
+.fontello-attention:before {
+  content: '\e828';
+}
+.fontello-location:before {
+  content: '\e82a';
+}
+.fontello-map:before {
+  content: '\e837';
+}
+.fontello-trash:before {
+  content: '\e806';
+}
+.fontello-cog:before {
+  content: '\e807';
+}
+.fontello-arrow-combo:before {
+  content: '\e809';
+}
+.fontello-down-open:before {
+  content: '\e82d';
+}
+.fontello-left-open:before {
+  content: '\e82e';
+}
+.fontello-right-open:before {
+  content: '\e82f';
+}
+.fontello-up-open:before {
+  content: '\e830';
+}
+.fontello-down-open-mini:before {
+  content: '\e80a';
+}
+.fontello-left-open-mini:before {
+  content: '\e80c';
+}
+.fontello-right-open-mini:before {
+  content: '\e80d';
+}
+.fontello-up-open-mini:before {
+  content: '\e80f';
+}
+.fontello-down-thin:before {
+  content: '\e841';
+}
+.fontello-left-thin:before {
+  content: '\e842';
+}
+.fontello-right-thin:before {
+  content: '\e843';
+}
+.fontello-up-thin:before {
+  content: '\e844';
+}
+.fontello-ccw:before {
+  content: '\e845';
+}
+.fontello-cw:before {
+  content: '\e846';
+}
+.fontello-arrows-ccw:before {
+  content: '\e847';
+}
+.fontello-home:before {
+  content: '\e818';
+}
+[class^="icon-"] {
+  vertical-align: middle;
+  cursor: pointer;
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  background-repeat: no-repeat;
+}
+[class^="icon-"] {
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+[class^="icon-"]:before {
+  color: #3a3a3a;
+  font-size: 14px;
+}
+.icon-lrg,
+[class^="fontello-"].icon-lrg:before {
+  font-size: 18px;
+}
+.icon-lrg {
+  height: 24px;
+  width: 24px;
+}
+.icon-calendar {
+  background-image: url(/img/icon-calendar.png);
+}
+.icon-database {
+  background-image: url(/img/icon-database.png);
+}
+[class^="icon-event"] {
+  width: 26px;
+  height: 28px;
+  background-image: url(/img/sprite-event-status.png);
+}
+.icon-event-open {
+  background-position: 0 0;
+}
+.icon-event-open-overdue {
+  background-position: -26px 0;
+}
+.icon-event-completed-pass {
+  background-position: -52px 0;
+}
+.icon-event-completed-fail {
+  background-position: -78px 0;
 }
 /*--------------------------------------- 
   DROPDOWNS - for buttons and nav lists
 -----------------------------------------*/
-/* Defaults as a horizontal dropdown */
 .dropdown,
 .dropup {
   position: relative;
@@ -365,7 +582,7 @@ section {
   position: relative;
 }
 .secondary-dropdown ul {
-  top: 0px;
+  top: -1px;
   left: 100%;
   min-width: inherit;
 }
@@ -375,7 +592,6 @@ section {
 .secondary-dropdown > a:after {
   font-family: "fontello", sans-serif;
   content: '\e80d';
-  vertical-align: middle;
   padding: 0 4px;
 }
 /*--------------------------------------- 
@@ -404,6 +620,7 @@ nav a {
 /* BREAD CRUMBS */
 .bread-crumb {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin: 10px 0 0;
 }
 .bread-crumb a {
   text-decoration: underline;
@@ -412,7 +629,6 @@ nav a {
   text-decoration: none;
 }
 .bread-crumb ol {
-  margin: 8px 0 0;
   font-size: 0;
 }
 .bread-crumb ol li {
@@ -422,14 +638,13 @@ nav a {
 .bread-crumb ol li + li:before {
   font-family: "fontello", sans-serif;
   content: '\e82f';
-  vertical-align: middle;
   padding: 0 4px;
 }
 /* TABBED NAVIGATION */
 .nav-tabs {
   position: relative;
   border-bottom: 1px solid #dddddd;
-  margin-bottom: 15px;
+  margin: 15px 0;
 }
 .nav-tabs > ul {
   overflow: hidden;
@@ -454,6 +669,9 @@ nav a {
 }
 .nav-tabs > ul > li a:hover {
   color: #666666;
+}
+.nav-tabs + .action-group {
+  bottom: 20px;
 }
 [class$="-tab"] {
   display: none;
@@ -499,8 +717,6 @@ nav a {
 [class^="btn"].hide {
   display: none;
 }
-/* Button colours
-------------------*/
 .btn-primary {
   background: #008bd3;
   border-color: #007aba;
@@ -562,7 +778,6 @@ nav a {
   -webkit-box-shadow: inset 0 0 18px #801c00;
   box-shadow: inset 0 0 18px #801c00;
 }
-/* Button styled as link */
 .btn-link {
   border: 0;
   color: #008bd3;
@@ -572,14 +787,14 @@ nav a {
   color: #008bd3;
   text-decoration: none;
 }
-/* Form buttons
------------------------------------------*/
 input[class^="btn"],
 button[class^="btn"] {
   height: 35px;
 }
-/* Different button sizes
---------------------------*/
+input[class^="btn"].btn-sml,
+button[class^="btn"].btn-sml {
+  height: 29px;
+}
 .btn-lrg {
   padding: 8px 25px;
   font-size: 18px;
@@ -594,20 +809,18 @@ button[class^="btn"] {
   -moz-border-radius: 3px;
   border-radius: 3px;
 }
-/* Icon buttons
-----------------*/
 .btn-icon {
-  padding: 7px 8px 8px;
+  padding: 8px;
 }
 .btn-icon.btn-sml {
-  padding: 5px 4px 4px;
+  padding: 5px;
 }
-/* Dropdown buttons
---------------------*/
+.btn-icon [class^="fontello-"] {
+  padding-left: 4px;
+}
 .dropdown > [class^="btn"]:after {
   font-family: "fontello", sans-serif;
   content: '\e811';
-  vertical-align: middle;
   padding: 0 4px;
   padding-right: 0;
 }
@@ -617,7 +830,6 @@ button[class^="btn"] {
 .dropup > [class^="btn"]:after {
   font-family: "fontello", sans-serif;
   content: '\e813';
-  vertical-align: middle;
   padding: 0 4px;
   padding-right: 0px;
 }
@@ -637,8 +849,6 @@ button[class^="btn"] {
   padding-left: 12px;
   padding-right: 12px;
 }
-/* Groups buttons together into a nav bar
-------------------------------------------*/
 .button-group {
   font-size: 0;
   display: inline-block;
@@ -674,8 +884,6 @@ button[class^="btn"] {
 .button-group .input-combo {
   display: inline-block;
 }
-/* Split button with dropdowns
------------------------------------------*/
 .split-btn {
   display: inline-block;
   position: relative;
@@ -716,41 +924,36 @@ button[class^="btn"] {
 /*--------------------------------------- 
   FORMS
 -----------------------------------------*/
-/* Default form styles */
 fieldset {
   border: 1px solid #dddddd;
   margin: 0 0 -1px;
-  padding: 35px 10px 10px;
+  padding: 15px 12px;
   position: relative;
-}
-fieldset:last-child {
-  margin-bottom: 5px;
 }
 legend {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 600;
   position: absolute;
-  top: 8px;
+  top: 10px;
 }
 input[type="text"],
 select,
 textarea {
   width: 295px;
   padding-left: 4px;
-  margin: 4px 0 10px;
   font-size: 13px;
   font-family: "proxima-nova", Helvetica, Arial, sans-serif;
   border: 1px solid #c7c7c9;
 }
 input[type="text"] {
-  height: 25px;
-  color: #3a3a3a;
+  height: 29px;
+  margin: 4px 0 10px;
 }
 label {
   display: block;
 }
 textarea {
-  height: 115px;
+  height: 100px;
   resize: none;
   outline: none;
   padding-top: 4px;
@@ -760,12 +963,23 @@ input:focus {
   outline: none;
   border-color: #666666;
 }
-/* checkboxes & radio boxes
------------------------------------------*/
+form .action-group {
+  padding-top: 5px;
+}
+.label {
+  font-weight: 600;
+}
+.label.inline {
+  margin-right: 8px;
+}
+.inline .label {
+  margin-right: 8px;
+  display: inline-block;
+}
 label input[type="radio"],
 label input[type="checkbox"] {
   float: left;
-  margin-left: -15px;
+  margin: 0 4px 0 -14px;
 }
 .checkbox {
   overflow: hidden;
@@ -779,16 +993,25 @@ label input[type="checkbox"] {
   display: inline-block;
   margin-right: 12px;
 }
-/* text input with button combo 
------------------------------------------*/
+input[type="radio"],
+input[type="checkbox"] {
+  float: left;
+  margin: 1px 4px 1px 1px;
+  line-height: 1;
+}
 .input-combo {
   border: 1px solid #c7c7c9;
   display: inline-block;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  position: relative;
 }
 .input-combo input[type="text"] {
   border: none;
-  margin-bottom: 0;
-  height: auto;
+  margin: 0;
+  height: 25px;
+  width: 289px;
 }
 .input-combo [class^="btn"] {
   border-width: 0 0 0 1px;
@@ -799,14 +1022,22 @@ label input[type="checkbox"] {
 .input-combo.hide {
   display: none;
 }
-/* Used for adding a block of text under a form control.
-Can be a warning or error message, or help text. */
+.input-combo .file-input {
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.input-combo .file-uploaded {
+  position: relative;
+}
 .text-block {
   display: block;
-  padding-bottom: 6px;
-  margin: 4px 0;
+  padding: 6px;
+  margin: 4px 0 6px;
 }
-/* Chosen plugin overrides */
 .chzn-container {
   margin: 4px 0 10px;
 }
@@ -815,23 +1046,27 @@ Can be a warning or error message, or help text. */
   border-radius: 0;
   box-shadow: none;
   background: none;
-  height: 25px;
-  padding-top: 2px;
+  height: 29px;
+  padding-left: 4px;
   border-color: #c7c7c9;
 }
 .chzn-container-single .chzn-single span,
 .chzn-container-single .chzn-default {
   color: #7a7a7a;
 }
-.chzn-container-single .chzn-single {
-  line-height: 20px;
+.chzn-container-single .chzn-single div b {
+  background-position-y: 3px;
 }
 .chzn-container .chzn-results .highlighted {
   background-color: #dddddd;
   background-image: none;
   color: #7a7a7a;
 }
-/* Used to group and align labels and controls */
+.chzn-container-single .chzn-drop {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
 .control-group {
   margin: 6px 0;
 }
@@ -841,10 +1076,16 @@ Can be a warning or error message, or help text. */
 .control-group .chzn-container {
   margin: 0;
 }
-.control-group.inline {
-  vertical-align: top;
+.control-group input + [class^="fontello-"]:before {
+  padding-left: 0;
 }
-/* For using multiple controls with one label */
+legend + .control-group {
+  margin: 15px 0 6px;
+}
+legend + label,
+legend + p {
+  margin-top: 20px;
+}
 .control-combo label {
   padding-top: 4px;
 }
@@ -856,16 +1097,12 @@ Can be a warning or error message, or help text. */
 .control-combo .chzn-container {
   margin-bottom: 2px;
 }
-/* add class to the <fieldset> that contains the primary selection to create more prominence */
 .primary-selection {
-  padding-top: 15px;
-  padding-bottom: 15px;
   margin-bottom: 10px;
 }
 .primary-selection label {
   font-size: 18px;
 }
-/* For forms with the label on the left and input on the right */
 .form-horizontal fieldset {
   clear: both;
 }
@@ -885,17 +1122,36 @@ Can be a warning or error message, or help text. */
 .form-horizontal .checkbox label {
   width: auto;
 }
-/* Compact form controls - shorter widths */
+.form-horizontal [class^="fontello-"]:before {
+  font-size: 16px;
+}
+.form-horizontal.compact {
+  padding: 0 15px;
+}
 .form-horizontal.compact fieldset {
   border: none;
-  padding: 26px 10px 0;
-  margin-bottom: 5px;
+  padding: 25px 0 0;
 }
 .form-horizontal.compact .control-group {
   font-size: 0;
+  position: relative;
+  *zoom: 1;
 }
-.form-horizontal.compact .control-group * {
+.form-horizontal.compact .control-group:before,
+.form-horizontal.compact .control-group:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.form-horizontal.compact .control-group:after {
+  clear: both;
+}
+.form-horizontal.compact .control-group label,
+.form-horizontal.compact .control-group .text-block {
   font-size: 13px;
+}
+.form-horizontal.compact .control-group .text-block {
+  margin-top: 0;
 }
 .form-horizontal.compact input[type="text"],
 .form-horizontal.compact select,
@@ -906,53 +1162,34 @@ Can be a warning or error message, or help text. */
   width: 100%;
 }
 .form-horizontal.compact label {
-  width: 44%;
-  padding-right: 3%;
+  width: 44.5%;
 }
 .form-horizontal.compact .checkbox label {
   width: auto;
   text-align: left;
-  margin-left: 45%;
+  margin-left: 44%;
+}
+.form-horizontal.compact input + [class^="icon-"],
+.form-horizontal.compact input + [class^="fontello-"] {
+  position: absolute;
+  right: 6px;
+  top: 5px;
 }
 .form-horizontal.compact .text-block {
   margin-left: 45%;
 }
-/* Custom file inputs */
-.uploads {
-  cursor: pointer;
-  display: inline-block;
-  overflow: hidden;
-  position: relative;
-  border: 1px solid #dddddd;
-}
-.uploads input[type="text"] {
-  width: 216px;
-  border: none;
-  margin: 0;
-  height: auto;
-}
-.uploads .file-input {
-  filter: alpha(opacity=0);
-  -moz-opacity: 0;
-  opacity: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-}
-.uploads .file-uploaded {
-  position: relative;
-}
-.uploads [class^="btn"] {
-  border-width: 0 0 0 1px;
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
+.form-horizontal.compact .primary-selection label {
+  font-size: 14px;
+  font-weight: 600;
 }
 /*--------------------------------------- 
   TABLE STYLES
 -----------------------------------------*/
 table {
   width: 100%;
+}
+table p {
+  margin: 0;
 }
 th,
 td {
@@ -963,7 +1200,15 @@ th {
   background: #dddddd;
   border-bottom: 1px solid #c7c7c9;
 }
-td {
+th:first-child {
+  border-left: 1px solid #dddddd;
+}
+th:last-child {
+  border-right: 1px solid #dddddd;
+}
+td,
+td p,
+td h4 {
   font-size: 13px;
 }
 tr {
@@ -982,9 +1227,15 @@ th.active {
 th.active a {
   text-decoration: none;
 }
+th.active [class^="fontello-"] {
+  padding-left: 3px;
+}
 /* Each row has a bottom border */
 table.borders tr {
   border-bottom: 1px solid #f5f5f5;
+}
+table.borders tr:last-child {
+  border-bottom: none;
 }
 /* Every other row has a bg color */
 table.striped tr:nth-child(odd) {
@@ -998,6 +1249,7 @@ table.striped td {
 /* Two column table, 2nd column is right text aligned */
 table.two-columns td {
   text-align: right;
+  padding: 2px 4px;
 }
 table.two-columns td:first-child {
   text-align: left;
@@ -1005,7 +1257,6 @@ table.two-columns td:first-child {
 /* A list that displays data in a table style */
 .list-table {
   list-style-type: none;
-  margin: 0;
 }
 .list-table > li {
   position: relative;
@@ -1024,20 +1275,18 @@ table.two-columns td:first-child {
 .list-table.borders > li {
   border-bottom: 1px solid #f5f5f5;
 }
-.list-table .action,
 .list-table .action-group {
   position: absolute;
   bottom: 4px;
   right: 0;
 }
-.list-table.comfortable .action,
-.list-table.comfortable .action-group {
-  bottom: 10px;
-}
 /* More spacing/padding than default layout */
 .list-table.comfortable > li {
   padding-top: 10px;
   padding-bottom: 10px;
+}
+.list-table.comfortable .action-group {
+  bottom: 10px;
 }
 .pagination {
   padding: 8px;
@@ -1072,6 +1321,12 @@ table.two-columns td:first-child {
   width: 50px;
   margin: 0;
 }
+.pagination-compact {
+  display: inline-block;
+}
+.pagination-compact .count {
+  margin-right: 5px;
+}
 .modal.fade {
   display: none;
   position: fixed;
@@ -1085,18 +1340,17 @@ table.two-columns td:first-child {
 .modal.fade.in {
   display: block;
 }
-.modal .icon-cancel {
-  cursor: pointer;
-}
-.modal .icon-cancel:before {
+.modal .fontello-cancel:before {
   border: 1px solid #666666;
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 8px;
+  top: 8px;
+  padding-left: 4px;
+  font-size: 18px;
 }
 .modal h2 {
-  margin: 0 0 10px;
-  font-size: 20px;
+  font-size: 24px;
+  padding-bottom: 10px;
 }
 .modal.modal-lrg .modal-dialog {
   width: 850px;
@@ -1136,12 +1390,28 @@ table.two-columns td:first-child {
 }
 .modal-body {
   border-top: 1px solid #dddddd;
-  padding: 10px 0;
-  margin-bottom: 30px;
 }
 .modal-footer {
-  position: absolute;
-  bottom: 25px;
+  padding-top: 20px;
+}
+/*--------------------------------------- 
+  IMAGES, VIDEO AND OTHER MEDIA FILES
+-----------------------------------------*/
+/* THUMBNAILS with description
+---------------------------------*/
+figure {
+  overflow: hidden;
+}
+figure img {
+  float: left;
+  margin-right: 10px;
+}
+figure p {
+  margin: 0;
+}
+/* expands feature image to the width of the column */
+[class^="column-narrow-"] .feature-img {
+  width: 100%;
 }
 /*--------------------------------------- 
   GLOBAL HEADER STYLES
@@ -1158,28 +1428,27 @@ header.main .tenant-logo {
 }
 header.main .nav-list {
   font-size: 0;
-  /* Removes default space from between list items (caused by line break) when using display: inline-block; font-size to be redeclared in <li>. */
-
 }
 header.main .nav-list > li {
   display: inline-block;
   font-size: 14px;
 }
 header.main .nav-list > li > a {
-  padding: 10px 16px;
+  padding: 10px 14px;
   display: inline-block;
 }
 header.main .nav-list .dropdown > a:after,
 header.main .nav-list .dropdown > span:after {
   font-family: "fontello", sans-serif;
   content: '\e82d';
-  vertical-align: middle;
   padding: 0 4px;
   font-size: 13px;
+  padding-right: 0;
 }
 header.main .nav-list .dropdown:hover > a:after,
 header.main .nav-list .dropdown:hover > span:after {
   content: '\e830';
+  padding-right: 0;
 }
 header.main .nav-list .dropdown ul li {
   border-top: 1px solid #f5f5f5;
@@ -1240,6 +1509,9 @@ header.main .nav-main .nav-list > li:hover > a {
   background: #e2e2e2;
   color: #3a3a3a;
 }
+header.main .nav-main .nav-list .dropdown > ul {
+  left: -1px;
+}
 header.main .nav-main .search {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -1258,6 +1530,7 @@ header.main .nav-main .search input {
 }
 header.main .nav-main .fontello-home:before {
   vertical-align: baseline;
+  padding-right: 0;
 }
 header.main .nav-main .fontello-search:before {
   font-size: 16px;
@@ -1268,7 +1541,7 @@ header.main .nav-main.js-sticky {
   width: 100%;
 }
 /*--------------------------------------- 
-  MEDIA QUERIES
+  MEDIA QUERIES for the global header
 -----------------------------------------*/
 @media all and (max-width: 1100px) {
   header.main .nav-list > li > a {
@@ -1276,9 +1549,36 @@ header.main .nav-main.js-sticky {
     padding-right: 12px;
   }
 }
-/* Media queries/ responsive styles */
-@media (max-width: 1024px) {
-  .content-wrap {
-    width: 1024px;
-  }
+/*--------------------------------------- 
+  FOOTER
+-----------------------------------------*/
+.footer-global {
+  background: #f5f5f5;
+  padding-top: 20px;
+}
+.footer-global img {
+  float: right;
+}
+/*
+Sticky Footer based on:
+Ryan Fait http://ryanfait.com/
+Chris Coyier http://css-tricks.com/snippets/css/sticky-footer/
+*/
+html,
+body {
+  height: 100%;
+}
+.wrapper {
+  min-height: 100%;
+  *height: auto !important;
+  *height: 100%;
+  margin: 0 auto -125px;
+}
+.wrapper:after {
+  content: "";
+  display: block;
+}
+.footer-global,
+.wrapper:after {
+  height: 125px;
 }
