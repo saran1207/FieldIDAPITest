@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
+import com.n4systems.fieldid.wicket.components.assettype.AssetTypeRecurrenceFormPanel;
 import com.n4systems.fieldid.wicket.components.assettype.FrequencyFormPanel;
 import com.n4systems.fieldid.wicket.components.assettype.RecurrenceFormPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
@@ -233,9 +234,9 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
     }
 
     private RecurrenceFormPanel getRecurrenceForm() {
-        return new RecurrenceFormPanel(recurrenceModalWindow.getContentId(), assetTypeModel){
-            @Override
-            protected void onCreateRecurrence(AjaxRequestTarget target) {
+        return new AssetTypeRecurrenceFormPanel(recurrenceModalWindow.getContentId(), assetTypeModel){
+            @Override protected void onCreateRecurrence(AjaxRequestTarget target, RecurringEventsForm form) {
+                super.onCreateRecurrence(target,form);
                 target.add(schedules, filterActions);
                 recurrenceModalWindow.close(target);
                 recurrenceModalWindow.setContent(getRecurrenceForm());

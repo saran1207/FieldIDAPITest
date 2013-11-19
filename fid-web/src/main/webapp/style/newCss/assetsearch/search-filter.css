@@ -222,6 +222,12 @@ ul.floatingDropdown ul li a:visited {
 	padding-top: 5px;
 	cursor: pointer;
 }
+#formErrors h2 {
+	display: none;
+}
+.formErrors {
+	margin-right: 11px;
+}
 
 
 /* BLANK SLATE RESULTS PANEL 

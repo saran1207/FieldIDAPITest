@@ -51,6 +51,10 @@ public class AsyncService extends FieldIdService {
 		return new AsyncTask<X>(callable);
 	}
 
+    public <X> AsyncTask<X> createTaskNoUserContext(Callable<X> callable) {
+        return new AsyncTask<X>(callable, null);
+    }
+
     /**
 	 * local class that does all the task work. the idea is that it gets the current
 	 * thread's context at construction time (recall, SecurityContext is thread
@@ -100,9 +104,9 @@ public class AsyncService extends FieldIdService {
 
 		private AsyncTask(Callable<T> callable, SecurityContext securityContext) {
 			this.callable = callable;
-			this.tenantSecurityFilter = securityContext.getTenantSecurityFilter();
-			this.userSecurityFilter = securityContext.getUserSecurityFilter();
-            User user = entityManagerFactory.getObject().createEntityManager().find(User.class, userSecurityFilter.getUserId());
+			this.tenantSecurityFilter = securityContext== null ? null : securityContext.getTenantSecurityFilter();
+			this.userSecurityFilter = securityContext == null ? null : securityContext.getUserSecurityFilter();
+            User user = userSecurityFilter == null ? null :entityManagerFactory.getObject().createEntityManager().find(User.class, userSecurityFilter.getUserId());
             locale = user == null ? null : user.getLanguage();
 		}
 

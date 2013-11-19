@@ -14,6 +14,7 @@
 		<module>fid-ws</module>
         <module>fid-migrations</module>
         <module>fid-connection-monitor</module>
+        <module>fid-index-validator</module>
     </modules>
 	<repositories>
 		<repository>

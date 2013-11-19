@@ -101,7 +101,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
         assignJobLink.setVisible(FieldIDSession.get().getSecurityGuard().isProjectsEnabled() && sessionUser.hasAccess("createevent") && !searchIncludesSafetyNetwork);
 
-        actions.setVisible(selected > 0 && selected < maxUpdate && (updateLink.isVisible() || updateSchedulesLink.isVisible() || assignJobLink.isVisible()));
+        actions.setVisible(selected > 0 && selected < maxUpdate && (updateLink.isVisible() || updateSchedulesLink.isVisible() || assignJobLink.isVisible() || exportLink.isVisible()));
     }
 
     private boolean isSearchForClosed(EventReportCriteria criteria) {

@@ -1,8 +1,16 @@
-
 <wicket:head>
+
+    <!--NOTE TO CHRISTINA : all of this inline style stuff should be moved to appropriate .css file...wherever that is.   - derek -->
+
     <style type="text/css">
         .pageContent input {
             display:block;
+        }
+        .children-menu ul {
+            display:none;
+        }
+        .children-menu p {
+            display:inline;
         }
     </style>
 </wicket:head>
@@ -14,7 +22,11 @@
     <div wicket:id="header" style="font-size:22px;" class="header">
         <span wicket:id="hierarchy">
             <a wicket:id="org"><span wicket:id="name"/></a>
-            <span wicket:id="separator"/>
+            <span wicket:id="separator" class="children-menu"><p>&gt;</p>
+                <ul>
+                    <li wicket:id="children"><span wicket:id="name"/></li>
+                </ul>
+            </span>
         </span>
     </div>
 
@@ -96,6 +108,7 @@
         <h2>Events</h2><p>1235 events performed. <br> 6 event types....<br> event performed last tuesday by joe.   pass.<br>5 recurring events scheduled.  <br> 3 events upcoming in the next week.</br></p>
         <h2>Assets</h2><p>05745 assets<br> 43 asset event types....<br> </p>
         <h2>Users</h2><p>63 users. <br> 12 admin, 44 read only, 3 r/w etc...</p>
+        <h2>Divisions/Secondary/Job Sites</h2><p>4 divisions (foo, bar, blah, etc...)</p>
     </wicket:fragment>
 
     <wicket:fragment wicket:id="edit">
@@ -122,7 +135,8 @@
 
     <wicket:fragment wicket:id="editRecurringEvents">
         <form wicket:id="form">
-            <p>Recurring Events</p>
+            <h2><wicket:message key="label.recurring_events"/></h2>
+            <div wicket:id="recurring"/>
             <div wicket:id="buttons"/>
         </form>
     </wicket:fragment>

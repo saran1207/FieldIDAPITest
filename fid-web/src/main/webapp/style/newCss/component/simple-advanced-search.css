@@ -8,6 +8,7 @@
 .search-options-wrap {
 	position: relative;
 	margin-right: 250px;
+    margin-left: 55px;
 
 	*position: absolute;
 	*top: 0;
@@ -18,7 +19,6 @@
 .advanced-search-form {
 	margin-right: 110px;
 	position: relative;
-	margin-left: 55px
 }
 .advanced-search-form .remaining-assets {
 	position: absolute;

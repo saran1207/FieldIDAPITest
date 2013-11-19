@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.org;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.actions.users.UploadedImage;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
@@ -24,9 +25,7 @@ import com.n4systems.model.Address;
 import com.n4systems.model.EventType;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import org.apache.wicket.Component;
@@ -57,14 +56,12 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
-//import com.n4systems.fieldid.wicket.components.org.Component;
-
 // terminology note : you might also think of this as "places" page.  we might want to refactor code to have common words at some point.
 public class OrgSummaryPage extends FieldIDFrontEndPage {
 
     interface FormPanel {
-        org.apache.wicket.Component submit(AjaxRequestTarget target);
-        org.apache.wicket.Component error(AjaxRequestTarget target);
+        Component submit(AjaxRequestTarget target);
+        Component error(AjaxRequestTarget target);
     }
 
     private static final String RIGHT_PANEL_ID = "right";
@@ -73,20 +70,14 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
     private @SpringBean PlaceService placeService;
     private @SpringBean UserGroupService userGroupService;
     private @SpringBean UserService userService;
+    private @SpringBean
+    OrgService orgService;
 
     private EntityModel<? extends BaseOrg> model;
     private MarkupContainer actions;
-    private org.apache.wicket.Component editPanel;
-    private org.apache.wicket.Component editEventTypesPanel;
-    private org.apache.wicket.Component editRecurringPanel;
-    private org.apache.wicket.Component summaryPanel;
-    private org.apache.wicket.Component viewDetailsLeftPanel;
-    private org.apache.wicket.Component left;
-    private org.apache.wicket.Component right;
     private GoogleMap map;
-    private org.apache.wicket.Component deletePanel;
-    private org.apache.wicket.Component archivePanel;
-    private org.apache.wicket.Component newUserPanel;
+    private Component left,right;
+    private Component summaryPanel,archivePanel,newUserPanel,viewDetailsLeftPanel,editEventTypesPanel,editPanel,editRecurringPanel;
 
     public OrgSummaryPage(PageParameters params) {
         init(params.get("id").toLong());
@@ -105,7 +96,7 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         add(right=getSummaryPanel());
     }
 
-    private org.apache.wicket.Component createHeader(String id) {
+    private Component createHeader(String id) {
         List<BaseOrg> hierarchy = Lists.newArrayList(model.getObject());
         BaseOrg parent = model.getObject().getParent();
         while (parent!=null) {
@@ -121,23 +112,53 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
                     @Override public void onClick() {
                         setResponsePage(OrgSummaryPage.class,new PageParameters().add("id",org.getId()));
                     }
-                }.add(new Label("name", ProxyModel.of(item.getModel(),on(BaseOrg.class).getName()))));
-                Label label = new Label("separator",Model.of(" > "));
-                item.add(label);
-                if (org==model.getObject() && !(org instanceof DivisionOrg)) {
-                    label.add(new AjaxEventBehavior("onclick") {
-                        @Override protected void onEvent(AjaxRequestTarget target) {
-                            addChild();
-                        }
-                    });
-                }
+                }.add(new Label("name", ProxyModel.of(item.getModel(), on(BaseOrg.class).getName()))));
+                item.add(createChildrenMenu("children",org));
             }
         });
         return container;
     }
 
-    private void addChild() {
-        //switchRightPanel(getNewChildPanel());
+    private Component createChildrenMenu(String id, BaseOrg org) {
+        List<? extends BaseOrg> children = getOrgChildren(org);
+        final boolean hasChildren = children.size()>0;
+        children.add(null);
+
+
+        MarkupContainer container = new WebMarkupContainer("separator") {
+            @Override public boolean isVisible() {
+                return hasChildren;
+            }
+        };
+
+        container.add(new ListView<BaseOrg>(id, children) {
+            @Override protected void populateItem(ListItem<BaseOrg> item) {
+                final BaseOrg org = item.getModelObject();
+                if (org == null) {
+                    item.add(new Label("name", Model.of("create new division")));
+                } else {
+                    item.add(new Label("name", Model.of(org.getDisplayName())).add(new AjaxEventBehavior("onclick") {
+                        @Override protected void onEvent(AjaxRequestTarget target) {
+                            setResponsePage(OrgSummaryPage.class, new PageParameters().add("id", org.getId()));
+                        }
+                    }));
+                }
+            }
+
+        });
+        return container;
+    }
+
+    private List<? extends BaseOrg> getOrgChildren(BaseOrg org) {
+        // TODO DD : make this ajax so only updated when user clicks on it...not during initial render.
+        // i.e. replace("children", new ChildrenMenu(org))???   OR set item's model to org.
+        if (org instanceof PrimaryOrg || org instanceof SecondaryOrg) {
+            return orgService.getCustomersUnder(org);
+        } else if (org instanceof CustomerOrg) {
+            return orgService.getDivisionsUnder(org);
+        } else {
+            return Lists.newArrayList();
+        }
     }
 
     private MarkupContainer createActions(String id) {
@@ -213,63 +234,63 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         return actions.add(startMenu.setRenderBodyOnly(true),editMenu.setRenderBodyOnly(true),scheduleMenu.setRenderBodyOnly(true));
     }
 
-    private org.apache.wicket.Component getNewUserPanel() {
+    private Component getNewUserPanel() {
         if (newUserPanel==null) {
             newUserPanel = new NewUserPanel();
         }
         return newUserPanel;
     }
 
-    private org.apache.wicket.Component getArhcivePanel() {
+    private Component getArhcivePanel() {
         if (archivePanel==null) {
             archivePanel = new ArchivePanel();
         }
         return archivePanel;
     }
 
-    private org.apache.wicket.Component getSummaryPanel() {
+    private Component getSummaryPanel() {
         if (summaryPanel==null) {
             summaryPanel = new SummaryPanel();
         }
         return summaryPanel;
     }
 
-    private org.apache.wicket.Component getViewDetailsLeftPanel() {
+    private Component getViewDetailsLeftPanel() {
         if (viewDetailsLeftPanel==null) {
             viewDetailsLeftPanel = new ViewDetailsLeftPanel();
         }
         return viewDetailsLeftPanel;
     }
 
-    private org.apache.wicket.Component getEditPanel() {
+    private Component getEditPanel() {
         if (editPanel==null) {
             editPanel = new EditPanel();
         }
         return editPanel;
     }
 
-    private org.apache.wicket.Component getEditEventTypesPanel() {
+    private Component getEditEventTypesPanel() {
         if (editEventTypesPanel==null) {
             editEventTypesPanel = new EditEventTypesPanel();
         }
         return editEventTypesPanel;
     }
 
-    private org.apache.wicket.Component getEditRecurringPanel() {
+    private Component getEditRecurringPanel() {
         if (editRecurringPanel==null) {
             editRecurringPanel = new EditRecurringPanel();
         }
         return editRecurringPanel;
     }
 
-    private org.apache.wicket.Component switchRightPanel(org.apache.wicket.Component component, AjaxRequestTarget target) {
+    private Component switchRightPanel(Component component, AjaxRequestTarget target) {
         right.replaceWith(component);
         right = component;
         target.add(right,actions);
         return right;
     }
 
-    private org.apache.wicket.Component switchLeftPanel(org.apache.wicket.Component component, AjaxRequestTarget target) {
+    private Component switchLeftPanel(Component component, AjaxRequestTarget target) {
         left.replaceWith(component);
         left = component;
         target.add(left);
@@ -283,7 +304,7 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/newCss/asset/asset.css");
     }
 
-    private org.apache.wicket.Component createSubmitCancelButtons(String id, final FormPanel formPanel) {
+    private Component createSubmitCancelButtons(String id, final FormPanel formPanel) {
         return new Fragment(id,"saveCancelButtons",OrgSummaryPage.this)
                 .add(new AjaxSubmitLink("submit") {
                     @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -333,11 +354,11 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
                     .add(new AddressPanel("address", new PropertyModel(this, "address")).withExternalMap(map.getJsVar())));
         }
 
-        @Override public org.apache.wicket.Component submit(AjaxRequestTarget target) {
+        @Override public Component submit(AjaxRequestTarget target) {
             return this;
         }
 
-        @Override public org.apache.wicket.Component error(AjaxRequestTarget target) {
+        @Override public Component error(AjaxRequestTarget target) {
             return this;
         }
     }
@@ -348,11 +369,11 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
             setOutputMarkupId(true);
         }
 
-        @Override public org.apache.wicket.Component submit(AjaxRequestTarget target) {
+        @Override public Component submit(AjaxRequestTarget target) {
             return this;
         }
 
-        @Override public org.apache.wicket.Component error(AjaxRequestTarget target) {
+        @Override public Component error(AjaxRequestTarget target) {
             return this;
         }
     }
@@ -372,13 +393,13 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         private List<EventType> getEventTypes() {
             return placeService.getEventTypesFor(model.getObject());
         }
-        @Override public org.apache.wicket.Component submit(AjaxRequestTarget target) {
+        @Override public Component submit(AjaxRequestTarget target) {
             // TODO DD : save event types
             switchRightPanel(getSummaryPanel(),target);
             return this;
         }
 
-        @Override public org.apache.wicket.Component error(AjaxRequestTarget target) {
+        @Override public Component error(AjaxRequestTarget target) {
             return this;
         }
     }
@@ -388,15 +409,16 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
             super(RIGHT_PANEL_ID, "editRecurringEvents", OrgSummaryPage.this);
             setOutputMarkupId(true);
             add(new Form("form")
+                    .add(new OrgRecurringEventPanel("recurring",model))
                     .add(createSubmitCancelButtons("buttons", this)));
         }
-        @Override public org.apache.wicket.Component submit(AjaxRequestTarget target) {
+        @Override public Component submit(AjaxRequestTarget target) {
             // TODO : save recurring events stuff
             switchRightPanel(getSummaryPanel(), target);
             return this;
         }
 
-        @Override public org.apache.wicket.Component error(AjaxRequestTarget target) {
+        @Override public Component error(AjaxRequestTarget target) {
             return this;
         }
     }
@@ -409,13 +431,13 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
                     .add(new Label("confirm", new FIDLabelModel("message.confirm_archive_place",model.getObject().getName())))
                     .add(createSubmitCancelButtons("buttons",this)));
         }
-        @Override public org.apache.wicket.Component submit(AjaxRequestTarget target) {
+        @Override public Component submit(AjaxRequestTarget target) {
             // TODO DD: archive it.
             setResponsePage(OrgViewPage.class);
             return this;
         }
 
-        @Override public org.apache.wicket.Component error(AjaxRequestTarget target) {
+        @Override public Component error(AjaxRequestTarget target) {
             return this;
         }
     }

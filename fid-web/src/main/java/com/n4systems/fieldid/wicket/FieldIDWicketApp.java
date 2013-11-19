@@ -23,7 +23,6 @@ import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPri
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
-import com.n4systems.fieldid.wicket.pages.org.OrgConfigurePage;
 import com.n4systems.fieldid.wicket.pages.org.OrgSummaryPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
@@ -51,6 +50,7 @@ import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigur
 import com.n4systems.fieldid.wicket.pages.setup.translations.*;
 import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
+import com.n4systems.fieldid.wicket.pages.template.TemplateAssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.user.*;
 import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
@@ -109,7 +109,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
         mountPage("places", OrgViewPage.class);
-        mountPage("places/configure", OrgConfigurePage.class);
         mountPage("orgSummary", OrgSummaryPage.class);
 
         mountPage("dashboard", DashboardPage.class);
@@ -192,7 +191,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("userOfflineProfile", UserOfflineProfilePage.class);
 
 
-        mountPage("template", FieldIDTemplatePage.class);
+        mountPage("template/assetSummary", TemplateAssetSummaryPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

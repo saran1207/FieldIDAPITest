@@ -239,7 +239,10 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
     @SkipValidation
     public String doRebuildIndex() {
-        assetIndexerService.indexTenant(tenant.getName());
+        Tenant t = persistenceManager.find(Tenant.class, getTenantId());
+        t.setAssetIndexerStarted(true);
+        persistenceManager.update(t);
+        assetIndexerService.reindexTenant(getTenant());
         return SUCCESS;
     }
 
