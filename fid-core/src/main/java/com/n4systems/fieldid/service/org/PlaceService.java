@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.org;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.EventType;
+import com.n4systems.model.OrgRecurringEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,5 +25,13 @@ public class PlaceService extends FieldIdPersistenceService {
         query.addOrder("name");
         query.addSimpleWhere("group.action", false);
         return persistenceService.findAll(query);
+    }
+
+    public void removeRecurringEvent(OrgRecurringEvent event) {
+        throw new UnsupportedOperationException("removing recurring events not implemented yet");
+    }
+
+    public void addRecurringEvent() {
+        throw new UnsupportedOperationException("adding recurring events not implemented yet");
     }
 }

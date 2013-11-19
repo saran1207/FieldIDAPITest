@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.wicket.components.assettype;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.asset.AssetTypeService;
-import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
@@ -34,25 +32,19 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class RecurrenceFormPanel extends Panel {
+public abstract class RecurrenceFormPanel<T> extends Panel {
 
-    @SpringBean
-    private AssociatedEventTypesService associatedEventTypesService;
     @SpringBean
     private DateService dateService;
-    @SpringBean
-    private AssetTypeService assetTypeService;
 
-    private IModel<AssetType> assetType;
+    private IModel<T> model;
 
-    public RecurrenceFormPanel(String id, IModel<AssetType> model) {
+    public RecurrenceFormPanel(String id, IModel<T> model) {
         super(id, model);
-        this.assetType = model;
-
         add(new RecurringEventsForm("form"));
     }
 
-    private class RecurringEventsForm extends Form implements IFormValidator {
+    protected class RecurringEventsForm extends Form implements IFormValidator {
 
         // private fields used to back form components.
         private RecurrenceTimeOfDay time = RecurrenceTimeOfDay.NINE_AM;
@@ -65,7 +57,6 @@ public class RecurrenceFormPanel extends Panel {
         private DateTimePicker dateTimepicker;
         private DropDownChoice<RecurrenceType> recurrenceTypeDropDown;
         private final FIDFeedbackPanel feedback;
-        private Object x;
         private Boolean ownerAndDown;
         private Boolean autoassign;
 
@@ -73,8 +64,6 @@ public class RecurrenceFormPanel extends Panel {
             super(id);
 
             add(feedback = new FIDFeedbackPanel("feedbackPanel"));
-
-            final AssetType assetType = getAssetType();
 
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
 
@@ -103,11 +92,23 @@ public class RecurrenceFormPanel extends Panel {
             inputContainer.add(dateTimepicker.setOutputMarkupPlaceholderTag(true));
             inputContainer.add(timePicker);
 
-            inputContainer.add(new OrgLocationPicker("organization", new PropertyModel<BaseOrg>(this, "owner")));
+            inputContainer.add(new OrgLocationPicker("organization", new PropertyModel<BaseOrg>(this, "owner")) {
+                @Override public boolean isVisible() {
+                    return isOrgPickerVisible();
+                }
+            });
 
-            inputContainer.add(new CheckBox("ownerAndDown", new PropertyModel<Boolean>(this, "ownerAndDown")));
+            inputContainer.add(new CheckBox("ownerAndDown", new PropertyModel<Boolean>(this, "ownerAndDown")) {
+                @Override public boolean isVisible() {
+                    return isOwnerDownOptionVisible();
+                }
+            });
 
-            inputContainer.add(new CheckBox("autoassign", new PropertyModel<Boolean>(this, "autoassign")));
+            inputContainer.add(new CheckBox("autoassign", new PropertyModel<Boolean>(this, "autoassign")) {
+                @Override public boolean isVisible() {
+                    return isAutoAssignVisible();
+                }
+            });
 
             ContextImage tooltip;
             inputContainer.add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
@@ -126,10 +127,8 @@ public class RecurrenceFormPanel extends Panel {
             });
 
             inputContainer.add(new AjaxSubmitLink("create") {
-                @Override
-                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    addRecurringEvent(assetType, createNewEventFromForm());
-                    onCreateRecurrence(target);
+                @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    onCreate(target, RecurringEventsForm.this);
                 }
 
                 @Override
@@ -144,16 +143,13 @@ public class RecurrenceFormPanel extends Panel {
             updateTimeComponents(type);
         }
 
-        private RecurringAssetTypeEvent createNewEventFromForm() {
-            RecurringAssetTypeEvent newEvent = new RecurringAssetTypeEvent(getAssetType(), eventType, createRecurrence());
-            newEvent.setOwner(owner);
-            newEvent.setOwnerAndDown(ownerAndDown);
-            newEvent.setAutoAssign(autoassign);
-            newEvent.setTenant(assetType.getObject().getTenant());
-            return newEvent;
+        protected void onCreate(AjaxRequestTarget target, RecurringEventsForm form) {
+            RecurrenceFormPanel.this.onCreateRecurrence(target, form);
         }
 
-        private Recurrence createRecurrence() {
+
+
+        protected Recurrence createRecurrence() {
             if ( type.requiresDate() ) {
                 return new Recurrence(type).withDayAndTime(dateTime);
             } else if (type.canHaveMultipleTimes()) {
@@ -265,24 +261,50 @@ public class RecurrenceFormPanel extends Panel {
             }
         }
 
-    }
-
-    protected void onCreateRecurrence(AjaxRequestTarget target) {}
-
-    private void addRecurringEvent(final AssetType assetType, final RecurringAssetTypeEvent event) {
-        assetTypeService.addRecurringEvent(assetType, event);
-    }
-
-    private AssetType getAssetType() {
-        return assetType.getObject();
-    }
-
-    private List<EventType> getEventTypes() {
-        List<EventType> eventTypes = Lists.newArrayList();
-        List<AssociatedEventType> associatedEventTypes = associatedEventTypesService.getAssociatedEventTypes(assetType.getObject(), null);
-        for (AssociatedEventType type: associatedEventTypes) {
-            eventTypes.add(type.getEventType());
+        public Boolean getAutoassign() {
+            return autoassign;
         }
-        return eventTypes;
+
+        public EventType getEventType() {
+            return eventType;
+        }
+
+        public BaseOrg getOwner() {
+            return owner;
+        }
+
+        public Boolean getOwnerAndDown() {
+            return ownerAndDown;
+        }
+
+        public RecurrenceTimeOfDay getTime() {
+            return time;
+        }
+
+        public List<RecurrenceTimeOfDay> getTimes() {
+            return times;
+        }
+
+        public RecurrenceType getType() {
+            return type;
+        }
     }
+
+    protected boolean isAutoAssignVisible() {
+        return true;
+    }
+
+    protected boolean isOwnerDownOptionVisible() {
+        return true;
+    }
+
+    protected boolean isOrgPickerVisible() {
+        return true;
+    }
+
+    protected abstract List<EventType> getEventTypes();
+
+    protected abstract void onCreateRecurrence(AjaxRequestTarget target, RecurringEventsForm form);
+
+
 }

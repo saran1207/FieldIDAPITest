@@ -419,6 +419,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     }
 
 
+    @Deprecated // should use refactored out common class RecurrenceTimeModel.   now that this functionality is used more than once it has been extracted out.
     class DisplayTimeModel extends Model<String> {
 
         private PropertyModel<Set<RecurrenceTime>> model;

@@ -7,7 +7,7 @@
 
     <form wicket:id="form" class="new-rules">
         <div wicket:id="feedbackPanel"></div>
-        
+
         <h3>Recurring</h3>
         <p>Schedules will automatically be created in the future at the predetermined interval.</p>
 
@@ -15,7 +15,7 @@
             <div class="clearfix">
                 <label class="left"><wicket:message key="label.capital_schedule_a"/></label>
                 <div class="right"><select wicket:id="eventType"></select></div>
-            </div>  
+            </div>
             <div class="clearfix">
                 <label class="left"><wicket:message key="label.every"/></label>
                 <div class="right">
@@ -24,7 +24,7 @@
             </div>
             <div class="clearfix">
                 <label class="left"><wicket:message key="label.at"/></label>
-                <div class="right">  
+                <div class="right">
                     <span wicket:id="timeContainer" class="time-container">
                         <select class="time" wicket:id="time"/>
                         <select class="time" wicket:id="multipleTimes"/>
@@ -37,14 +37,11 @@
                 <div class="right">
                     <div wicket:id="organization" class="organization clearfix"></div>
                     <div class="checkbox">
-                        <input type="checkbox" wicket:id="ownerAndDown"><label><wicket:message key="label.affect_all"/></label><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/>
+                        <label><wicket:message key="label.affect_all"/><input type="checkbox" wicket:id="ownerAndDown"><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/></label>
                     </div>
-
                     <div class="checkbox">
-                        <input type="checkbox" wicket:id="autoassign"><label><wicket:message key="label.auto_assign"/></label><img class="tooltip tipsy-tooltip" wicket:id="autotooltip"/>
+                        <label><wicket:message key="label.auto_assign"/><input type="checkbox" wicket:id="autoassign"><img class="tooltip tipsy-tooltip" wicket:id="autotooltip"/></label>
                     </div>
-
-
                 </div>
             </div>
             <a class="btn btn-blue btn-sml" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
