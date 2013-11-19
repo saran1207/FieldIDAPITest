@@ -70,6 +70,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 @SuppressWarnings("serial")
 public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIConstants {
 
+    // IS THIS STILL NEEDED?
     public static final String SUB_MENU_ID = "subMenu";
     public static final String LEFT_PANEL_ID = "leftPanel";
     private static final String LEFT_PANEL_CONTROLLER_ID = "leftPanelController";
@@ -90,6 +91,8 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
+
+    private String mainCss;
 
     public FieldIDTemplatePage() {
         this(null, null);
@@ -360,6 +363,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             TextTemplate apptegicTemplate = new PackageTextTemplate(FieldIDTemplatePage.class, "apptegic.js");
             response.renderJavaScript(apptegicTemplate.asString(apptegicParams), null);
         }
+
+        if(getMainCss() != null)
+            response.renderOnDomReadyJavaScript("$('main[role=\"main\"]').addClass('"+getMainCss()+"');");
+
     }
 
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {
@@ -398,10 +405,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         return true;
     }
 
-    protected boolean useSiteWideCss() {
-        return true;
-    }
-    
     protected Component setLeftPanelContent(Component c) {
         Preconditions.checkArgument(LEFT_PANEL_ID.equals(c.getId()), " you must use '" + LEFT_PANEL_ID + "' as your left panel id");
     	replace(c.setVisible(true));
@@ -519,7 +522,11 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         }
     }
 
+    public String getMainCss() {
+        return mainCss;
+    }
 
-
-
+    public void setMainCss(String mainCss) {
+        this.mainCss = mainCss;
+    }
 }
