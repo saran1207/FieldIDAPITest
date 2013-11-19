@@ -3,6 +3,8 @@
 <head>
 	<@n4.includeStyle href="../newCss/user/user_select" type="page"/>
     <@n4.includeStyle href="../newCss/component/matt_buttons" type="page"/>
+    <@n4.includeStyle href="../plugins/tipsy/tipsy.css" type="page"/>
+    <@n4.includeScript src="tipsy/jquery.tipsy.js"/>
 	<title><@s.text name="label.add_user" /></title>
 </head>
 
@@ -18,6 +20,10 @@
     <a class="mattButton padLeft" href="<@s.url action='userImportExport'/>"><@s.text name="nav.import"/></a>
 </div>
 
+<script>
+    jQuery(document).ready(function() { jQuery('.limitIcon').tipsy({gravity:'e', fade:true, delayIn:250})});
+</script>
+
 <div class="horizontalGrouping">
 	<div class="horizontalGroup">
 		<div class="groupContents ">
@@ -31,15 +37,13 @@
 				<li><label><@s.text name="label.run_searches" /></label></li>
 			</ul>
 		</div>
-		<#if userLimitService.employeeUsersAtMax>
-			<div class="userLimitWarning">
-				<@s.text name="label.full_user_limit_reached" />	
-			</div>	
-		<#else>
 			<div class="addUserAction">
-				<input id="addFullUser" type="button" value="<@s.text name="label.add_new_full_user" />" onclick="return redirect('${addFullUserUrl}');" />
+                <#if userLimitService.employeeUsersAtMax>
+                    <img class="limitIcon" src="/fieldid/images/warning-icon.png" title="<@s.text name="label.full_user_limit_reached" />	">
+                <#else>
+                    <input id="addFullUser" type="button" value="<@s.text name="label.add_new_full_user" />" onclick="return redirect('${addFullUserUrl}');" />
+                </#if>
 			</div>
-		</#if>
 	</div>
 	
     <div class="horizontalGroup">
@@ -53,15 +57,13 @@
             </ul>
         </div>
 
-        <#if userLimitService.liteUsersAtMax>
-            <div class="userLimitWarning">
-                <@s.text name="label.lite_user_limit_reached"/>
-            </div>
-        <#else>
             <div class="addUserAction">
-                <input id="addLiteUser"  type="button" value="<@s.text name="label.add_new_lite_user" />" onclick="return redirect('${addLiteUserUrl}');" />
+                <#if userLimitService.liteUsersAtMax>
+                    <img class="limitIcon" src="/fieldid/images/warning-icon.png" title="<@s.text name="label.lite_user_limit_reached" />	">
+                <#else>
+                    <input id="addLiteUser"  type="button" value="<@s.text name="label.add_new_lite_user" />" onclick="return redirect('${addLiteUserUrl}');" />
+                </#if>
             </div>
-        </#if>
     </div>
 
     <div class="horizontalGroup">
@@ -74,15 +76,14 @@
                 <li><label><@s.text name="label.run_searches" /></label></li>
             </ul>
         </div>
-        <#if userLimitService.readOnlyUsersAtMax>
-            <div class="userLimitWarning">
-                <@s.text name="label.readonly_user_limit_reached"/>
-            </div>
-        <#else>
             <div class="addUserAction">
-                <input id="addReadOnlyUser" type="button" value="<@s.text name="label.add_new_read_only_user" />" onclick="return redirect('${addReadOnlyUserUrl}');"/>
+                <#if userLimitService.readOnlyUsersAtMax>
+                    <img class="limitIcon" src="/fieldid/images/warning-icon.png" title="<@s.text name="label.readonly_user_limit_reached" />	">
+                <#else>
+                    <input id="addReadOnlyUser" type="button" value="<@s.text name="label.add_new_read_only_user" />" onclick="return redirect('${addReadOnlyUserUrl}');"/>
+                </#if>
             </div>
-        </#if>
+
     </div>
 
     <div class="horizontalGroup">
