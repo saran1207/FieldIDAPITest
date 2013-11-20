@@ -51,6 +51,7 @@ import com.n4systems.fieldid.wicket.pages.setup.translations.*;
 import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.pages.template.TemplateAssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.template.TwoColumnLeft;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.user.*;
 import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
@@ -192,6 +193,7 @@ public class FieldIDWicketApp extends WebApplication {
 
 
         mountPage("template/assetSummary", TemplateAssetSummaryPage.class);
+        mountPage("template/twoColumnLeft", TwoColumnLeft.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

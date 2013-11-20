@@ -10,7 +10,7 @@ public class NavigationItem implements Serializable {
 
     private IModel labelModel;
     private Class<? extends WebPage> pageClass;
-    private PageParameters parameters;
+    private PageParameters parameters = new PageParameters();
     private String nonWicketUrl;
     private boolean display = true;
     private boolean onRight = false;
