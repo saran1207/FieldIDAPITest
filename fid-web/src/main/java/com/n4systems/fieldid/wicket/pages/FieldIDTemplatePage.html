@@ -28,7 +28,6 @@
 
 	<!-- Feature detection library -->
 	<script src="/fieldid/javascript/vendors/modernizr-2.6.2.js"></script>
-	
 	<!-- Custom javascript configured by tenant -->
 	<span wicket:id="customJsPanel"></span>
 </head>
@@ -38,9 +37,8 @@
 		
 		<div wicket:id="debugBar"/>
 		<div wicket:id="languageSelectionModalWindow"/>
-		<header class="main" wicket:id="mainHeader"/>
+		<header class="global-header" wicket:id="mainHeader"/>
 		
-		<!-- Should have the ability to add a specific class for page specific styles. -->
 		<main class="" role="main">
 			
 			<!--TODO : REFACTOR OUT A COUPLE OF PAGE HEADERS.   -->
@@ -50,21 +48,19 @@
 
 				<h1 wicket:id="titleLabel">Page specific heading</h1>
 				
-				<!-- Optional: Page specific sub heading info -->
 				<div wicket:id="subHeader" class="page-sub-header"/>
 
-				<!-- Optional: Page specific tabbed navigation -->
 				<nav wicket:id="navBar" class="nav-tabs"/>
-                <!-- Optional: Customizable action buttons or page specific navigation -->
+
 				<div wicket:id="actionGroup" class="action-group"/>
 			</header>
 
             <div class="page-content">
                 <wicket:child></wicket:child>
             </div>
-		</main><!-- /.wrapper-->
+		</main>
 
-	</div>
+	</div><!-- cls .wrapper-->
 
 	<footer class="footer-global">
 		<span wicket:id="versionLabel"></span>
