@@ -67,8 +67,6 @@ public class DashboardPage extends FieldIDFrontEndPage {
 	@Deprecated // for testing only... need to find a generic way to override configProvider for all unit tests.
 	public DashboardPage(ConfigurationProvider configProvider) {
     	super(configProvider);
-    	
-        redirectToSetupWizardIfNecessary();
 
         currentLayoutModel = new CurrentLayoutModel();
 
