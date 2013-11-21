@@ -12,10 +12,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.panel.Fragment;
-import org.apache.wicket.request.resource.ContextRelativeResource;
+import org.apache.wicket.model.Model;
 
 import java.util.List;
 
@@ -38,6 +35,7 @@ public class TwoColumnRight extends FieldIDTemplatePage {
     protected void addBreadCrumbBar(String breadCrumbBarId) {
         add(new BreadCrumbBar(breadCrumbBarId,
                 new NavigationItem(new FIDLabelModel("label.dashboard"), DashboardPage.class),
+                new NavigationItem(Model.of("Next page in hierarchy"), TemplatePage.class),
                 new NavigationItem(new FIDLabelModel("label.current_page"), TwoColumnRight.class)
         ));
     }

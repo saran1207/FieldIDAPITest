@@ -50,9 +50,7 @@ import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigur
 import com.n4systems.fieldid.wicket.pages.setup.translations.*;
 import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
-import com.n4systems.fieldid.wicket.pages.template.TemplateAssetSummaryPage;
-import com.n4systems.fieldid.wicket.pages.template.TwoColumnLeft;
-import com.n4systems.fieldid.wicket.pages.template.TwoColumnRight;
+import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.user.*;
 import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
@@ -192,10 +190,12 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
         mountPage("userOfflineProfile", UserOfflineProfilePage.class);
 
-
+        mountPage("template", TemplatePage.class);
         mountPage("template/assetSummary", TemplateAssetSummaryPage.class);
         mountPage("template/twoColumnLeft", TwoColumnLeft.class);
         mountPage("template/twoColumnRight", TwoColumnRight.class);
+        mountPage("template/noColumns", FirstTab.class);
+        mountPage("template/noColumnsTab", SecondTab.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
