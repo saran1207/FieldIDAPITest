@@ -3,7 +3,10 @@ package com.n4systems.fieldid.wicket;
 import com.n4systems.fieldid.wicket.components.action.ViewActionsListPage;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.SignatureResourceReference;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.TemporarySignatureResourceReference;
-import com.n4systems.fieldid.wicket.pages.*;
+import com.n4systems.fieldid.wicket.pages.DashboardPage;
+import com.n4systems.fieldid.wicket.pages.OopsPage;
+import com.n4systems.fieldid.wicket.pages.SecretTestPage;
+import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
@@ -24,6 +27,7 @@ import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgSummaryPage;
+import com.n4systems.fieldid.wicket.pages.org.PlacesPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
@@ -110,6 +114,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
         mountPage("places", OrgViewPage.class);
         mountPage("orgSummary", OrgSummaryPage.class);
+        mountPage("orgSummary2", PlacesPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 
