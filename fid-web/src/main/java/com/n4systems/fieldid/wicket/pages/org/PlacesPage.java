@@ -19,6 +19,7 @@ import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.components.user.UserFormIdentifiersPanel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
@@ -33,6 +34,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -46,7 +48,9 @@ import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.AbstractItem;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -56,6 +60,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.apache.wicket.util.time.Duration;
 
 import java.awt.*;
 import java.util.List;
@@ -157,45 +162,39 @@ public class PlacesPage extends FieldIDFrontEndPage {
                         setResponsePage(PlacesPage.class,new PageParameters().add("id",org.getId()));
                     }
                 }.add(new Label("name", ProxyModel.of(item.getModel(), on(BaseOrg.class).getName()))));
-                item.add(createChildrenMenu("children",org));
+                item.add(createChildrenMenu("children",item));
             }
         });
         return container;
     }
 
-    private Component createChildrenMenu(String id, final BaseOrg parentOrg) {
-        List<? extends BaseOrg> children = getOrgChildren(parentOrg);
-        children.add(null);
-
-        MarkupContainer container = new WebMarkupContainer("separator") {
+    private Component createChildrenMenu(String id, ListItem<BaseOrg> item) {
+        final BaseOrg parentOrg = item.getModelObject();
+        final MarkupContainer container = new WebMarkupContainer("separator") {
             @Override public boolean isVisible() {
                 // TODO : need to add permission checking for this.
                 return !(parentOrg instanceof DivisionOrg);
             }
         };
 
-        container.add(new ListView<BaseOrg>(id, children) {
-            @Override protected void populateItem(ListItem<BaseOrg> item) {
-                final BaseOrg org = item.getModelObject();
-                if (org == null) {
-                    // TODO : make this dynamic = create new division/customer/secondary??? depending on org.
-                    String key = getChildLabelKey(parentOrg);
-                    FIDLabelModel createNewLabel = new FIDLabelModel("label.create_new", new FIDLabelModel(key).getObject());
-                    item.add(new Label("name", createNewLabel).add(new AjaxEventBehavior("onclick") {
-                        @Override protected void onEvent(AjaxRequestTarget target) {
-                            setResponsePage(new PlacesPage(createNewOrg(parentOrg)));
-                        }
-                    }));
-                } else {
-                    item.add(new Label("name", Model.of(org.getDisplayName())).add(new AjaxEventBehavior("onclick") {
-                        @Override protected void onEvent(AjaxRequestTarget target) {
-                            setResponsePage(PlacesPage.class, new PageParameters().add("id", org.getId()));
-                        }
-                    }));
+        final RepeatingView repeat = new RepeatingView("children");
+        repeat.setOutputMarkupId(true);
+        final AbstractAjaxTimerBehavior timer = new AbstractAjaxTimerBehavior(Duration.milliseconds(300)) {
+            @Override protected void onTimer(AjaxRequestTarget target) {
+                for (final BaseOrg org:getOrgChildren(parentOrg)) {
+                    AbstractItem item = new AbstractItem(repeat.newChildId());
+                    item.add(new BookmarkablePageLink<Void>("link", PlacesPage.class, PageParametersBuilder.id(org.getId()))
+                                    .add(new Label("name", Model.of(org.getDisplayName()))));
+                    repeat.add(item);
                 }
+                stop();  // only do it once.
+                target.add(container);
             }
 
-        });
+        };
+        container.setOutputMarkupId(true);
+        container.add(timer);
+        container.add(repeat);
         return container;
     }
 
@@ -220,8 +219,6 @@ public class PlacesPage extends FieldIDFrontEndPage {
     }
 
     private List<? extends BaseOrg> getOrgChildren(BaseOrg org) {
-        // TODO DD : make this ajax so only updated when user clicks on it...not during initial render.
-        // i.e. replace("children", new ChildrenMenu(org))???   OR set item's model to org.
         if (org instanceof PrimaryOrg || org instanceof SecondaryOrg) {
             return orgService.getCustomersUnder(org);
         } else if (org instanceof CustomerOrg) {

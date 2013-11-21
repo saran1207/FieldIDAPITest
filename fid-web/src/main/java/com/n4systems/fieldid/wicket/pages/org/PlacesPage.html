@@ -3,24 +3,13 @@
     <!--NOTE TO CHRISTINA : all of this inline style stuff should be moved to appropriate .css file...wherever that is.   - derek -->
 
     <style type="text/css">
-        .pageContent input {
-            display:block;
-        }
-        .children-menu ul>li:hover {
-            background: yellow;
+        .header ul {
+            display:none;
         }
 
-        .children-menu ul {
-            /*display:none;*/
-            font-size:12px;
-            font-weight: normal;
-            color: #898989;
-        }
-        .children-menu p {
-            display:inline;
-        }
-        .children-menu p:hover {
-            background: #fafad2;
+        .header .separator p:hover {
+            background:#add8e6;
+            border:#0000cd;
         }
     </style>
 </wicket:head>
@@ -29,13 +18,15 @@
 
     <!-- --------------------------------------------------------------------------------------------------------- -->
 
-    <h1 wicket:id="header" style="font-size:22px;" class="header">
+    <h1 wicket:id="header" class="header">
         <span wicket:id="hierarchy">
             <a wicket:id="org"><span wicket:id="name"/></a>
-            <span wicket:id="separator" class="children-menu"><p>&gt;</p>
-                <ul>
-                    <li wicket:id="children"><span wicket:id="name"/></li>
-                </ul>
+            <span wicket:id="separator" class="separator"><p>&gt;</p>
+                 <ul>
+                     <li wicket:id="children">
+                         <a wicket:id="link"><span wicket:id="name"/></a>
+                     </li>
+                 </ul>
             </span>
         </span>
     </h1>
@@ -204,6 +195,5 @@
             <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
         </div>
     </wicket:fragment>
-
 
 </wicket:extend>
