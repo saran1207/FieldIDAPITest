@@ -70,12 +70,6 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 @SuppressWarnings("serial")
 public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIConstants {
 
-    // IS THIS STILL NEEDED?
-    public static final String SUB_MENU_ID = "subMenu";
-    public static final String LEFT_PANEL_ID = "leftPanel";
-    private static final String LEFT_PANEL_CONTROLLER_ID = "leftPanelController";
-    public static final String BOTTOM_PANEL_ID="bottomPanel";
-
     @SpringBean
 	private ConfigService configService;
 
@@ -126,10 +120,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(new DebugBar("debugBar"));
         add(new CustomJavascriptPanel("customJsPanel"));
         add(new GoogleAnalyticsContainer("googleAnalyticsScripts"));
-        add(new WebMarkupContainer(LEFT_PANEL_ID).setVisible(false));
-        add(new WebMarkupContainer(SUB_MENU_ID).setVisible(false));
-        add(new WebMarkupContainer(BOTTOM_PANEL_ID).setVisible(false));
-        add(new WebMarkupContainer(LEFT_PANEL_CONTROLLER_ID).setVisible(false));
 
         // TODO DD : refactor this...override
         addCssContainers();
@@ -155,6 +145,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
+
+        add(createSubHeader("subHeader"));
+
+        add(createActionGroup("actionGroup"));
     }
 
     protected boolean forceDefaultLanguage() {
@@ -216,6 +210,14 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     protected Component createHeaderLink(String id, String label) {
 		return new WebMarkupContainer(id).setVisible(false);
 	}
+
+    protected Component createSubHeader(String subHeaderId) {
+        return new WebMarkupContainer(subHeaderId).setVisible(false);
+    }
+
+    protected Component createActionGroup(String actionGroupId) {
+        return new WebMarkupContainer(actionGroupId).setVisible(false);
+    }
 
     private Component createSetupLinkContainer(SessionUser sessionUser) {
         boolean hasSetupAccess = sessionUser.hasSetupAccess();
@@ -307,11 +309,11 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     }
 
     protected void addNavBar(String navBarId) {
-        add(new NavigationBar(navBarId));
+        add(new NavigationBar(navBarId).setVisible(false));
     }
 
     protected void addBreadCrumbBar(String breadCrumbBarId) {
-        add(new BreadCrumbBar(breadCrumbBarId));
+        add(new BreadCrumbBar(breadCrumbBarId).setVisible(false));
     }
 
     protected ConfigurationProvider getConfigurationProvider() {
@@ -366,7 +368,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
         if(getMainCss() != null)
             response.renderOnDomReadyJavaScript("$('main[role=\"main\"]').addClass('"+getMainCss()+"');");
-
     }
 
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {
@@ -403,29 +404,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     // (both site_wide and fieldid have accumulated a ton of irrelevant stuff that may be used only on one page and breaks new pages).
     protected boolean useLegacyCss() {
         return true;
-    }
-
-    protected Component setLeftPanelContent(Component c) {
-        Preconditions.checkArgument(LEFT_PANEL_ID.equals(c.getId()), " you must use '" + LEFT_PANEL_ID + "' as your left panel id");
-    	replace(c.setVisible(true));
-        if (c instanceof HasLeftPanelController) {
-            HasLeftPanelController lpc = (HasLeftPanelController)c;
-            Component controller = lpc.getLeftPanelController(LEFT_PANEL_CONTROLLER_ID);
-            replace(controller.setVisible(true));
-        }
-        return c;
-    }
-
-    protected Component setBottomPanelContent(Component c) {
-        Preconditions.checkArgument(BOTTOM_PANEL_ID.equals(c.getId()), " you must use '" + BOTTOM_PANEL_ID + "' as your bottom panel id");
-        replace(c.setVisible(true));
-        return c;
-    }
-
-    protected Component setSubMenuContent(Component c) {
-        Preconditions.checkArgument(SUB_MENU_ID.equals(c.getId()), "you must use " + SUB_MENU_ID + "'as your sub menu id.");
-        replace(c.setVisible(true));
-        return c;
     }
 
     public TopFeedbackPanel getTopFeedbackPanel() {
@@ -491,7 +469,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
         }
 
-
         private void addSpeedIdentifyLinks(SessionUser sessionUser) {
             WebMarkupContainer identifyMenuContainer = new WebMarkupContainer("identifyMenuContainer");
             identifyMenuContainer.setVisible(sessionUser.hasAccess("tag"));
@@ -504,8 +481,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
             add(identifyMenuContainer);
         }
-
-
 
     }
 

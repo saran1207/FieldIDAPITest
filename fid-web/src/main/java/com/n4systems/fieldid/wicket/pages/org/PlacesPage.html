@@ -29,8 +29,6 @@
 
     <!-- --------------------------------------------------------------------------------------------------------- -->
 
-    <!--PAGE HEADER-->
-    <!--TITLE LABEL-->
     <h1 wicket:id="header" style="font-size:22px;" class="header">
         <span wicket:id="hierarchy">
             <a wicket:id="org"><span wicket:id="name"/></a>
@@ -42,25 +40,7 @@
         </span>
     </h1>
 
-    <!--ACTION GROUP-->
     <div wicket:id="actions" class="actions" style="width:100%;height:30px;display:inline-block;">
-        <span wicket:id="edit">
-            <ul class="dropdown">
-                <li class="menu">
-                    <a class="mattButton" href="javascript:void(0);">
-                        <wicket:message key="label.options"/><img src="/fieldid/images/menu-down.png"/>
-                    </a>
-                    <ul class="menu-items">
-                        <li><a wicket:id="details"> <wicket:message key="label.details"/></a></li>
-                        <li><a wicket:id="recurring"> <wicket:message key="label.recurring_events"/></a></li>
-                        <li><a wicket:id="eventTypes"> <wicket:message key="label.event_types"/></a></li>
-                        <li><a wicket:id="archive"> <wicket:message key="label.archive"/></a></li>
-                        <li><a wicket:id="merge"> <wicket:message key="label.merge"/></a></li>
-                        <li><a wicket:id="addUser"> <wicket:message key="label.add_user"/></a></li>
-                    </ul>
-                </li>
-            </ul>
-        </span>
         <span wicket:id="schedule">
             <ul class="dropdown">
                 <li class="menu">
@@ -87,16 +67,40 @@
                 </li>
             </ul>
         </span>
+
+        <span wicket:id="edit">
+            <ul class="dropdown">
+                <li class="menu">
+                    <a class="mattButton" href="javascript:void(0);">
+                        <wicket:message key="label.options"/><img src="/fieldid/images/menu-down.png"/>
+                    </a>
+                    <ul class="menu-items">
+                        <li><a wicket:id="details"> <wicket:message key="label.details"/></a></li>
+                        <li><a wicket:id="recurring"> <wicket:message key="label.recurring_events"/></a></li>
+                        <li><a wicket:id="eventTypes"> <wicket:message key="label.event_types"/></a></li>
+                        <li><a wicket:id="archive"> <wicket:message key="label.archive"/></a></li>
+                        <li><a wicket:id="merge"> <wicket:message key="label.merge"/></a></li>
+                        <li><a wicket:id="addUser"> <wicket:message key="label.add_user"/></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </span>
+    </div>
+
+    <nav class="nav-tabs">
+        <ul>
+            <li wicket:id="tabs"></li>
+        </ul>
+    </nav>
+
+    <div wicket:id="content">
+        <!--STUFF GOES HERE-->
     </div>
 
 
-        <div wicket:id="left" style="float:left;padding-right:15px;border-right:2px solid #808080;">
-            <!--DEPENDS ON PAGE STATE, MIGHT BE EDITDETAILS PANEL, VIEW DETAILSPANEL, NOTHING, ETC.... -->
-        </div>
+    <div wicket:id="modal"/>
 
-        <div wicket:id="right" style="float:left;" >
-            <!--DEPENDS ON PAGE STATE, MIGHT BE EDITDETAILS PANEL, VIEW EVENTS PANEL, ETC.... -->
-        </div>
+
 
     <!-- --------------------------------------------------------------------------------------------------------- -->
 
@@ -108,21 +112,36 @@
     <!--                                         -->
 
 
-    <wicket:fragment wicket:id="viewDetails" class="viewDetails">
-        <div wicket:id="map" class="googleMap" style="width:300px;height:300px;"></div>
-        <span>name</span>joe smith<br>
-        <span>email</span>jsmith@foo.com<br>
-        <span>phone</span>123 453 1233<br>
-        <span>fax</span>947 485 0138<br>
-        <textarea wicket:id="comments" class="comments"/>
+    <wicket:fragment wicket:id="details" class="details">
+        <img wicket:id="img" style="width:300px;height:300px;float:left;" class="img"><p><wicket:message key="label.no_images"/></p></img>
+        <div wicket:id="map" class="googleMap" style="width:700px;height:300px;"></div>
+        <h3>Contact</h3>
+        <div>Susan Reynolds</div>
+        <div>susan.reynolds@masterlock.com</div>
+        <div>43 MasterLock Circle</div>
+        <div>Oak Creek, WI 042104, USA</div>
+        <div>
+            <label>phone</label><span>123 453 1233</span>
+        </div>
+        <div><label>phone</label><span>123 453 1233</span></div>
+        <h3>General</h3>
+        <div><label>Site Supervisor</label><span>Henry Sheen</span></div>
+        <div><label>Property Class</label><span>Commercial C1</span></div>
+        <div><label>Status</label><span>Active</span></div>
+        <h3>Notes</h3>
+        <div>Please ensure that building owner is notified 2 hours in advance before entry onto the property.</div>
     </wicket:fragment>
 
-    <wicket:fragment wicket:id="summary">
-        <h2>Events</h2><p>1235 events performed. <br> 6 event types....<br> event performed last tuesday by joe.   pass.<br>5 recurring events scheduled.  <br> 3 events upcoming in the next week.</br></p>
-        <h2>Assets</h2><p>05745 assets<br> 43 asset event types....<br> </p>
-        <h2>Users</h2><p>63 users. <br> 12 admin, 44 read only, 3 r/w etc...</p>
-        <h2>Divisions/Secondary/Job Sites</h2><p>4 divisions (foo, bar, blah, etc...)</p>
+    <wicket:fragment wicket:id="events" class="events">
+        <h3>Events</h3>
     </wicket:fragment>
+
+    <wicket:fragment wicket:id="people" class="people">
+        <h3>People</h3>
+    </wicket:fragment>
+
+
+    <!-- USED IN MODAL WINDOWS -->
 
     <wicket:fragment wicket:id="edit">
         <h2><wicket:message key="label.details"/></h2>
@@ -155,7 +174,7 @@
     </wicket:fragment>
 
     <wicket:fragment wicket:id="deletePanel">
-        <form wicket:id="form">F
+        <form wicket:id="form">
             <div wicket:id="confirm"/>
             <div wicket:id="buttons"/>
         </form>

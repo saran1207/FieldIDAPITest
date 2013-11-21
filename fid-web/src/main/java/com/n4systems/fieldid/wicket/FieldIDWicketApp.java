@@ -3,7 +3,10 @@ package com.n4systems.fieldid.wicket;
 import com.n4systems.fieldid.wicket.components.action.ViewActionsListPage;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.SignatureResourceReference;
 import com.n4systems.fieldid.wicket.components.event.criteria.signature.resource.TemporarySignatureResourceReference;
-import com.n4systems.fieldid.wicket.pages.*;
+import com.n4systems.fieldid.wicket.pages.DashboardPage;
+import com.n4systems.fieldid.wicket.pages.OopsPage;
+import com.n4systems.fieldid.wicket.pages.SecretTestPage;
+import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
@@ -24,6 +27,7 @@ import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgSummaryPage;
+import com.n4systems.fieldid.wicket.pages.org.PlacesPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
@@ -50,7 +54,7 @@ import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigur
 import com.n4systems.fieldid.wicket.pages.setup.translations.*;
 import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
-import com.n4systems.fieldid.wicket.pages.template.TemplateAssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.user.*;
 import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
@@ -110,6 +114,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
         mountPage("places", OrgViewPage.class);
         mountPage("orgSummary", OrgSummaryPage.class);
+        mountPage("orgSummary2", PlacesPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 
@@ -190,8 +195,12 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
         mountPage("userOfflineProfile", UserOfflineProfilePage.class);
 
-
+        mountPage("template", TemplatePage.class);
         mountPage("template/assetSummary", TemplateAssetSummaryPage.class);
+        mountPage("template/twoColumnLeft", TwoColumnLeft.class);
+        mountPage("template/twoColumnRight", TwoColumnRight.class);
+        mountPage("template/noColumns", FirstTab.class);
+        mountPage("template/noColumnsTab", SecondTab.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

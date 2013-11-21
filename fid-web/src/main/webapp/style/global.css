@@ -197,6 +197,9 @@ section .container {
 .page-content hr {
   margin-bottom: 15px;
 }
+.page-content .action-group {
+  margin-bottom: 4px;
+}
 .column-wide {
   width: 66.129032%;
   float: left;
@@ -244,8 +247,8 @@ section .container {
 */
 @font-face {
   font-family: 'fontello';
-  src: url('/fonts/fontello.eot?84755376');
-  src: url('/fonts/fontello.eot?84755376#iefix') format('embedded-opentype'), url('/fonts/fontello.woff?84755376') format('woff'), url('/fonts/fontello.ttf?84755376') format('truetype'), url('/fonts/fontello.svg?84755376#fontello') format('svg');
+  src: url('../fonts/fontello.eot?84755376');
+  src: url('../fonts/fontello.eot?84755376#iefix') format('embedded-opentype'), url('../fonts/fontello.woff?84755376') format('woff'), url('../fonts/fontello.ttf?84755376') format('truetype'), url('../fonts/fontello.svg?84755376#fontello') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -1416,103 +1419,103 @@ figure p {
 /*--------------------------------------- 
   GLOBAL HEADER STYLES
 -----------------------------------------*/
-header.main {
+.global-header {
   position: relative;
   width: 100%;
   z-index: 50;
   background: #fff;
 }
-header.main .tenant-logo {
+.global-header .tenant-logo {
   padding-top: 15px;
   padding-bottom: 10px;
 }
-header.main .nav-list {
+.global-header .nav-list {
   font-size: 0;
 }
-header.main .nav-list > li {
+.global-header .nav-list > li {
   display: inline-block;
   font-size: 14px;
 }
-header.main .nav-list > li > a {
+.global-header .nav-list > li > a {
   padding: 10px 14px;
   display: inline-block;
 }
-header.main .nav-list .dropdown > a:after,
-header.main .nav-list .dropdown > span:after {
+.global-header .nav-list .dropdown > a:after,
+.global-header .nav-list .dropdown > span:after {
   font-family: "fontello", sans-serif;
   content: '\e82d';
   padding: 0 4px;
   font-size: 13px;
   padding-right: 0;
 }
-header.main .nav-list .dropdown:hover > a:after,
-header.main .nav-list .dropdown:hover > span:after {
+.global-header .nav-list .dropdown:hover > a:after,
+.global-header .nav-list .dropdown:hover > span:after {
   content: '\e830';
   padding-right: 0;
 }
-header.main .nav-list .dropdown ul li {
+.global-header .nav-list .dropdown ul li {
   border-top: 1px solid #f5f5f5;
 }
-header.main .nav-list .dropdown ul li a {
+.global-header .nav-list .dropdown ul li a {
   color: #3a3a3a;
 }
-header.main .nav-list .dropdown ul li:hover > a {
+.global-header .nav-list .dropdown ul li:hover > a {
   color: #e63300;
 }
-header.main .nav-user {
+.global-header .nav-user {
   text-align: right;
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 100;
 }
-header.main .nav-user .nav-list {
+.global-header .nav-user .nav-list {
   margin: 6px auto;
 }
-header.main .nav-user .nav-list > li {
+.global-header .nav-user .nav-list > li {
   border-left: 1px solid #c7c7c9;
 }
-header.main .nav-user .nav-list > li:first-child {
+.global-header .nav-user .nav-list > li:first-child {
   border: none;
 }
-header.main .nav-user .nav-list > li > span {
+.global-header .nav-user .nav-list > li > span {
   display: inline-block;
   padding: 4px 0 6px 16px;
   margin-right: 10px;
   color: #e63300;
 }
-header.main .nav-user .nav-list > li > span:after {
+.global-header .nav-user .nav-list > li > span:after {
   color: #666666;
 }
-header.main .nav-user li.username > span {
+.global-header .nav-user li.username > span {
   padding-left: 0;
 }
-header.main .nav-user li.username ul {
+.global-header .nav-user li.username ul {
   min-width: inherit;
   right: 2px;
   left: auto;
 }
-header.main .nav-main {
+.global-header .nav-main {
   background: #666666;
   -webkit-box-shadow: 0px 4px 8px -4px #666666;
   box-shadow: 0px 4px 8px -4px #666666;
 }
-header.main .nav-main .nav-list {
+.global-header .nav-main .nav-list {
   float: left;
 }
-header.main .nav-main .nav-list > li > a {
+.global-header .nav-main .nav-list > li > a {
   border-top: 2px solid transparent;
   color: #ffffff;
 }
-header.main .nav-main .nav-list > li:hover > a {
+.global-header .nav-main .nav-list > li:hover > a {
   border-top: 2px solid #e63300;
   background: #e2e2e2;
   color: #3a3a3a;
 }
-header.main .nav-main .nav-list .dropdown > ul {
+.global-header .nav-main .nav-list .dropdown > ul {
   left: -1px;
 }
-header.main .nav-main .search {
+.global-header .nav-main .search {
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -1522,20 +1525,20 @@ header.main .nav-main .search {
   background: #fff;
   margin-top: 6px;
 }
-header.main .nav-main .search input {
+.global-header .nav-main .search input {
   border: none;
   background: transparent;
   margin: 0;
   width: 225px;
 }
-header.main .nav-main .fontello-home:before {
+.global-header .nav-main .fontello-home:before {
   vertical-align: baseline;
   padding-right: 0;
 }
-header.main .nav-main .fontello-search:before {
+.global-header .nav-main .fontello-search:before {
   font-size: 16px;
 }
-header.main .nav-main.js-sticky {
+.global-header .nav-main.js-sticky {
   position: fixed;
   top: 38px;
   width: 100%;
@@ -1544,7 +1547,7 @@ header.main .nav-main.js-sticky {
   MEDIA QUERIES for the global header
 -----------------------------------------*/
 @media all and (max-width: 1100px) {
-  header.main .nav-list > li > a {
+  .main-header .nav-list > li > a {
     padding-left: 12px;
     padding-right: 12px;
   }

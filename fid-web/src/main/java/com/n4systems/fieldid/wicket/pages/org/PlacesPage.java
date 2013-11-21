@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.actions.users.UploadedImage;
@@ -11,7 +12,7 @@ import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
-import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
+import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.text.LabelledRequiredTextField;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
@@ -37,37 +38,46 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
+import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.awt.*;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
-// terminology note : you might also think of this as "places" page.  we might want to refactor code to have common words at some point.
-public class OrgSummaryPage extends FieldIDFrontEndPage {
 
-    interface FormPanel {
+public class PlacesPage extends FieldIDFrontEndPage {
+
+
+    enum Content { DETAILS, EVENTS, PEOPLE }
+
+    interface ModalPanel {
         Component submit(AjaxRequestTarget target);
         Component error(AjaxRequestTarget target);
+        Dimension init();
     }
 
-    private static final String RIGHT_PANEL_ID = "right";
-    private static final String LEFT_PANEL_ID = "left";
+    private static final String CONTENT_ID = "content";
+    private static final String TABS_ID = "tabs";
+    private static final String ACTIONS_ID = "actions";
+    private static final String HEADER_ID = "header";
 
     private @SpringBean PlaceService placeService;
     private @SpringBean UserGroupService userGroupService;
@@ -77,23 +87,57 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
     private IModel<? extends BaseOrg> model;
     private MarkupContainer actions;
     private GoogleMap map;
-    private Component left,right;
-    private Component summaryPanel,archivePanel,newUserPanel,viewDetailsLeftPanel,editEventTypesPanel,editPanel,editRecurringPanel;
+    private RepeatingView tabs;
+    private Component content,detailsPanel,eventsPanel,peoplePanel;
+    private Component newUserPanel,archivePanel,editEventTypesPanel,editRecurringPanel,editDetailsPanel;
+    private ModalWindow modal;
 
-    public OrgSummaryPage(PageParameters params) {
+    public PlacesPage(PageParameters params) {
         this(new EntityModel(BaseOrg.class, params.get("id").toLong()));
     }
 
-    public OrgSummaryPage(IModel<? extends BaseOrg> model) {
+    public PlacesPage(IModel<? extends BaseOrg> model) {
         init(model);
     }
 
     private void init(IModel<? extends BaseOrg>  model) {
         this.model = model;
-        add(createHeader("header"));
-        add(actions = createActions("actions"));
-        add(left=getViewDetailsLeftPanel());
-        add(right=getSummaryPanel());
+        add(createHeader(HEADER_ID));
+        add(actions = createActions(ACTIONS_ID));
+        add(content = new WebMarkupContainer(CONTENT_ID));
+        add(tabs = createTabs(TABS_ID));
+        add(modal = new FIDModalWindow("modal") {
+            @Override
+            public boolean isResizable() {
+                return true;
+            }
+        });
+        updateContent(getInitialContentState());
+    }
+
+    private Content getInitialContentState() {
+        return Content.DETAILS;
+    }
+
+    private RepeatingView createTabs(String id) {
+        RepeatingView repeat = new RepeatingView(id);
+        repeat.add(new Label(repeat.newChildId(),new FIDLabelModel("label.details")).add(new TabBehavior(Content.DETAILS)));
+        repeat.add(new Label(repeat.newChildId(),new FIDLabelModel("label.events")).add(new TabBehavior(Content.EVENTS)));
+        repeat.add(new Label(repeat.newChildId(),new FIDLabelModel("label.people")).add(new TabBehavior(Content.PEOPLE)));
+        return repeat;
+    }
+
+    private Component getContentForState(Content contentState) {
+        switch (contentState) {
+            case DETAILS:
+                return getDetailsPanel();
+            case EVENTS:
+                return getEventsPanel();
+            case PEOPLE:
+                return getPeoplePanel();
+            default:
+                throw new IllegalArgumentException("can't find content panel for " + contentState);
+        }
     }
 
     private Component createHeader(String id) {
@@ -110,7 +154,7 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
                 final BaseOrg org = item.getModelObject();
                 item.add(new Link("org") {
                     @Override public void onClick() {
-                        setResponsePage(OrgSummaryPage.class,new PageParameters().add("id",org.getId()));
+                        setResponsePage(PlacesPage.class,new PageParameters().add("id",org.getId()));
                     }
                 }.add(new Label("name", ProxyModel.of(item.getModel(), on(BaseOrg.class).getName()))));
                 item.add(createChildrenMenu("children",org));
@@ -119,14 +163,14 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         return container;
     }
 
-    private  Component createChildrenMenu(String id, final BaseOrg parentOrg) {
+    private Component createChildrenMenu(String id, final BaseOrg parentOrg) {
         List<? extends BaseOrg> children = getOrgChildren(parentOrg);
-        final boolean hasChildren = children.size()>0;
         children.add(null);
 
         MarkupContainer container = new WebMarkupContainer("separator") {
             @Override public boolean isVisible() {
-                return hasChildren;
+                // TODO : need to add permission checking for this.
+                return !(parentOrg instanceof DivisionOrg);
             }
         };
 
@@ -139,13 +183,13 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
                     FIDLabelModel createNewLabel = new FIDLabelModel("label.create_new", new FIDLabelModel(key).getObject());
                     item.add(new Label("name", createNewLabel).add(new AjaxEventBehavior("onclick") {
                         @Override protected void onEvent(AjaxRequestTarget target) {
-                            setResponsePage(new OrgSummaryPage(createNewOrg(parentOrg)));
+                            setResponsePage(new PlacesPage(createNewOrg(parentOrg)));
                         }
                     }));
                 } else {
                     item.add(new Label("name", Model.of(org.getDisplayName())).add(new AjaxEventBehavior("onclick") {
                         @Override protected void onEvent(AjaxRequestTarget target) {
-                            setResponsePage(OrgSummaryPage.class, new PageParameters().add("id", org.getId()));
+                            setResponsePage(PlacesPage.class, new PageParameters().add("id", org.getId()));
                         }
                     }));
                 }
@@ -156,7 +200,7 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
     }
 
     private String getChildLabelKey(BaseOrg parentOrg) {
-        if (parentOrg instanceof PrimaryOrg) {
+        if (parentOrg instanceof InternalOrg) {
             return "label.customer_type";
         } else if (parentOrg instanceof CustomerOrg) {
             return "label.division_type";
@@ -188,40 +232,33 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
     }
 
     private MarkupContainer createActions(String id) {
-        WebMarkupContainer actions = new WebMarkupContainer(id) {
-            @Override public boolean isVisible() {
-                return right instanceof SummaryPanel;
-            }
-        };
-        actions.setOutputMarkupId(true).setOutputMarkupPlaceholderTag(true);
+        WebMarkupContainer actions = new WebMarkupContainer(id);
+        actions.setOutputMarkupPlaceholderTag(true);
 
         MarkupContainer editMenu = new WebMarkupContainer("edit")
                 .add(new AjaxLink("details") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        switchRightPanel(getEditPanel(), target);
+                    @Override public void onClick(AjaxRequestTarget target) {
+                        showEditDialog(getEditDetailsPanel(), target);
                     }
                 })
                 .add(new AjaxLink("archive") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        switchRightPanel(getArhcivePanel(), target);
+                    @Override public void onClick(AjaxRequestTarget target) {
+                        showEditDialog(getArhcivePanel(), target);
                     }
                 })
                 .add(new AjaxLink("recurring") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        switchRightPanel(getEditRecurringPanel(), target);
+                    @Override public void onClick(AjaxRequestTarget target) {
+                        showEditDialog(getEditRecurringPanel(), target);
                     }
                 })
                 .add(new AjaxLink("eventTypes") {
                     @Override public void onClick(AjaxRequestTarget target) {
-                        switchRightPanel(getEditEventTypesPanel(), target);
+                        showEditDialog(getEditEventTypesPanel(), target);
                     }
                 })
                 .add(new AjaxLink("addUser") {
                     @Override public void onClick(AjaxRequestTarget target) {
-                        switchRightPanel(getNewUserPanel(), target);
+                        showEditDialog(getNewUserPanel(), target);
                     }
                 })
                 .add( new NonWicketLink("merge", "mergeCustomers.action?uniqueID="+model.getObject().getId()) {
@@ -245,19 +282,63 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         List<EventType> eventTypes = Lists.newArrayList(EventTypeBuilder.anEventType().named("Visual Inspection").build());
         MarkupContainer startMenu = new WebMarkupContainer("start")
                 .add(new ListView<EventType>("types", eventTypes) {
-                    @Override
-                    protected void populateItem(ListItem<EventType> item) {
+                    @Override protected void populateItem(ListItem<EventType> item) {
                         EventType eventType = item.getModelObject();
                         item.add(new AjaxLink("type") {
-                            @Override
-                            public void onClick(AjaxRequestTarget target) {
+                            @Override public void onClick(AjaxRequestTarget target) {
                                 // start event of this type....setResponsePage(new PerformEvent(this.place,eventType);
                             }
                         }.add(new Label("name", Model.of(eventType.getName()))));
                     }
                 });
-
         return actions.add(startMenu.setRenderBodyOnly(true),editMenu.setRenderBodyOnly(true),scheduleMenu.setRenderBodyOnly(true));
+    }
+
+    private boolean updateContent(Content contentState) {
+        Component newContent = getContentForState(contentState).setOutputMarkupPlaceholderTag(true);
+        if (!content.equals(newContent)) {
+            content.replaceWith(newContent);
+            content = newContent;
+            return true;
+        }
+        return false;
+    }
+
+    private void showEditDialog(Component panel, AjaxRequestTarget target) {
+        Preconditions.checkArgument(panel instanceof ModalPanel);
+        Dimension dim = ((ModalPanel)panel).init();
+        modal.setInitialHeight(dim.height);
+        modal.setInitialWidth(dim.width);
+        modal.setContent(panel);
+        modal.show(target);
+    }
+
+    private Component getDetailsPanel() {
+        if (detailsPanel==null) {
+            detailsPanel = new DetailsPanel();
+        }
+        return detailsPanel;
+    }
+
+    private Component getEventsPanel() {
+        if (eventsPanel==null) {
+            eventsPanel = new EventsPanel();
+        }
+        return eventsPanel;
+    }
+
+    private Component getPeoplePanel() {
+        if (peoplePanel==null) {
+            peoplePanel = new PeoplePanel();
+        }
+        return peoplePanel;
+    }
+
+    private Component getEditDetailsPanel() {
+        if (editDetailsPanel==null) {
+            editDetailsPanel = new EditPanel();
+        }
+        return editDetailsPanel;
     }
 
     private Component getNewUserPanel() {
@@ -274,27 +355,6 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         return archivePanel;
     }
 
-    private Component getSummaryPanel() {
-        if (summaryPanel==null) {
-            summaryPanel = new SummaryPanel();
-        }
-        return summaryPanel;
-    }
-
-    private Component getViewDetailsLeftPanel() {
-        if (viewDetailsLeftPanel==null) {
-            viewDetailsLeftPanel = new ViewDetailsLeftPanel();
-        }
-        return viewDetailsLeftPanel;
-    }
-
-    private Component getEditPanel() {
-        if (editPanel==null) {
-            editPanel = new EditPanel();
-        }
-        return editPanel;
-    }
-
     private Component getEditEventTypesPanel() {
         if (editEventTypesPanel==null) {
             editEventTypesPanel = new EditEventTypesPanel();
@@ -309,20 +369,6 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         return editRecurringPanel;
     }
 
-    private Component switchRightPanel(Component component, AjaxRequestTarget target) {
-        right.replaceWith(component);
-        right = component;
-        target.add(right,actions);
-        return right;
-    }
-
-    private Component switchLeftPanel(Component component, AjaxRequestTarget target) {
-        left.replaceWith(component);
-        left = component;
-        target.add(left);
-        return left;
-    }
-
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
@@ -330,44 +376,74 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/newCss/asset/asset.css");
     }
 
-    private Component createSubmitCancelButtons(String id, final FormPanel formPanel) {
-        return new Fragment(id,"saveCancelButtons",OrgSummaryPage.this)
+    private Component createSubmitCancelButtons(String id, final ModalPanel formPanel) {
+        return new Fragment(id,"saveCancelButtons",PlacesPage.this)
                 .add(new AjaxSubmitLink("submit") {
                     @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                         formPanel.submit(target);
+                        modal.close(target);
                     }
                     @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
                         formPanel.error(target);
+                        modal.close(target);
                     }
                 })
                 .add(new AjaxLink("cancel") {
                     @Override public void onClick(AjaxRequestTarget target) {
-                        switchRightPanel(getSummaryPanel(), target);
+                        modal.close(target);
                     }
                 });
     }
 
 
-    // --------------------- FRAGMENTS ---------------------------------
+    class TabBehavior extends AjaxEventBehavior {
 
-    class ViewDetailsLeftPanel extends Fragment {
+        private final Content contentState;
 
-        ViewDetailsLeftPanel() {
-            super(LEFT_PANEL_ID,"viewDetails",OrgSummaryPage.this);
-            //add(new GoogleMap("map",ProxyModel.of(model, on(BaseOrg.class).getGpsLocation())));
-            add(map = new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
-            // add name, email, phone, fax, etc... here..
-            add(new TextArea("comments",Model.of("comments go here")));
+        public TabBehavior(Content contentState) {
+            super("onclick");
+            this.contentState = contentState;
+        }
+
+        @Override protected void onEvent(AjaxRequestTarget target) {
+            if (updateContent(contentState)) {
+                target.add(content);  // TODO : add tabs as well, update the selected css class.
+            }
         }
     }
 
 
-    class EditPanel extends Fragment implements FormPanel {
-        IModel<BaseOrg> model;
+
+    // --------------------- FRAGMENTS ---------------------------------
+
+
+    class DetailsPanel extends Fragment {
+        public DetailsPanel() {
+            super(CONTENT_ID, "details", PlacesPage.this);
+            //add(new GoogleMap("map",ProxyModel.of(model, on(BaseOrg.class).getGpsLocation())));
+            add(map = new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
+            // add name, email, phone, fax, etc... here...
+            add(new ContextImage("img", "images/add-photo-slate.png"));
+        }
+    }
+
+    class PeoplePanel extends Fragment {
+        public PeoplePanel() {
+            super(CONTENT_ID, "people", PlacesPage.this);
+        }
+    }
+
+    class EventsPanel extends Fragment {
+        public EventsPanel() {
+            super(CONTENT_ID, "events", PlacesPage.this);
+        }
+    }
+
+    class EditPanel extends Fragment implements ModalPanel {
         Address address = new Address("111 queen st east, toronto");
 
         EditPanel() {
-            super(RIGHT_PANEL_ID, "edit", OrgSummaryPage.this);
+            super(CONTENT_ID, "edit", PlacesPage.this);
             add(new Form("form")
 //            add(new TextField("address", ProxyModel.of(model,on(BaseOrg.getLocation().getAddress()))));
                     .add(createSubmitCancelButtons("buttons", this))
@@ -387,29 +463,17 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         @Override public Component error(AjaxRequestTarget target) {
             return this;
         }
-    }
 
-    class SummaryPanel extends Fragment implements FormPanel {
-        public SummaryPanel() {
-            super(RIGHT_PANEL_ID, "summary", OrgSummaryPage.this);
-            setOutputMarkupId(true);
-        }
-
-        @Override public Component submit(AjaxRequestTarget target) {
-            return this;
-        }
-
-        @Override public Component error(AjaxRequestTarget target) {
-            return this;
+        @Override public Dimension init() {
+            return new Dimension(500,500);
         }
     }
 
-    class EditEventTypesPanel extends Fragment implements FormPanel {
+    class EditEventTypesPanel extends Fragment implements ModalPanel {
         private List<EventType> types = Lists.newArrayList();
 
         public EditEventTypesPanel() {
-            super(RIGHT_PANEL_ID, "editEventTypes", OrgSummaryPage.this);
-            setOutputMarkupId(true);
+            super(CONTENT_ID, "editEventTypes", PlacesPage.this);
             add(new Form("form")
 // TODO DD                    .add(new MultiSelectDropDownChoice<EventType>("types", ProxyModel.of(model, on(BaseOrg.class).getEventTypes()), getEventTypes(), new EventTypeChoiceRenderer()))
                     .add(new MultiSelectDropDownChoice<EventType>("types", new PropertyModel<List<EventType>>(this, "types"), getEventTypes(), new EventTypeChoiceRenderer()))
@@ -421,38 +485,43 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         }
         @Override public Component submit(AjaxRequestTarget target) {
             // TODO DD : save event types
-            switchRightPanel(getSummaryPanel(),target);
+            //switchRightPanel(getSummaryPanel(),target);
             return this;
         }
 
         @Override public Component error(AjaxRequestTarget target) {
             return this;
         }
+
+        @Override public Dimension init() {
+            return new Dimension(500,300);
+        }
     }
 
-    class EditRecurringPanel extends Fragment implements FormPanel {
+    class EditRecurringPanel extends Fragment implements ModalPanel {
         public EditRecurringPanel() {
-            super(RIGHT_PANEL_ID, "editRecurringEvents", OrgSummaryPage.this);
-            setOutputMarkupId(true);
+            super(CONTENT_ID, "editRecurringEvents", PlacesPage.this);
             add(new Form("form")
                     .add(new OrgRecurringEventPanel("recurring",model))
                     .add(createSubmitCancelButtons("buttons", this)));
         }
         @Override public Component submit(AjaxRequestTarget target) {
             // TODO : save recurring events stuff
-            switchRightPanel(getSummaryPanel(), target);
             return this;
         }
 
         @Override public Component error(AjaxRequestTarget target) {
             return this;
         }
+
+        @Override public Dimension init() {
+            return new Dimension(500,400);
+        }
     }
 
-    class ArchivePanel extends Fragment implements FormPanel {
+    class ArchivePanel extends Fragment implements ModalPanel {
         public ArchivePanel() {
-            super(RIGHT_PANEL_ID,"archivePanel",OrgSummaryPage.this);
-            setOutputMarkupId(true);
+            super(CONTENT_ID, "archivePanel", PlacesPage.this);
             add(new Form("form")
                     .add(new Label("confirm", new FIDLabelModel("message.confirm_archive_place",model.getObject().getName())))
                     .add(createSubmitCancelButtons("buttons",this)));
@@ -466,9 +535,13 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         @Override public Component error(AjaxRequestTarget target) {
             return this;
         }
+
+        @Override public Dimension init() {
+            return new Dimension(400,250);
+        }
     }
 
-    class NewUserPanel extends Fragment implements FormPanel {
+    class NewUserPanel extends Fragment implements ModalPanel {
         private User user;
         private List<UserGroup> groups = Lists.newArrayList();
         private String confirmPassword, password, rfidNumber;
@@ -477,9 +550,8 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
         private Component confirmPasswordText;
 
         public NewUserPanel() {
-            super(RIGHT_PANEL_ID,"newUserPanel",OrgSummaryPage.this);
+            super(CONTENT_ID,"newUserPanel",PlacesPage.this);
             user = createNewUser(new User());
-            setOutputMarkupId(true);
             add(new Form("form")
                     .add(new CheckBox("assignPassword", new PropertyModel(NewUserPanel.this,"assignPassword")).add(new AjaxFormComponentUpdatingBehavior("onchange") {
                         @Override protected void onUpdate(AjaxRequestTarget target) {
@@ -496,9 +568,8 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
                     }.setOutputMarkupPlaceholderTag(true))
                     .add(new LabelledTextField<String>("rfidNumber", "label.rfidnumber", new PropertyModel(NewUserPanel.this, "rfidNumber")))
                     .add(new UserFormIdentifiersPanel("user", new PropertyModel(this, "user"), new UploadedImage()) {
-                        @Override
-                        protected Component createOrgPicker(String id, IModel<BaseOrg> org) {
-                            return new OrgLocationPicker(id, org);
+                        @Override protected Component createOrgPicker(String id, IModel<BaseOrg> org) {
+                            return new WebMarkupContainer(id, org).setVisible(false);
                         }
                     })
                     .add(createSubmitCancelButtons("buttons", this)));
@@ -521,7 +592,6 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
             user.assignSecruityCardNumber(rfidNumber);
             userService.create(user);
             user = createNewUser(user);  // reset it so you are editing a new one each time.
-            switchRightPanel(getSummaryPanel(),target);
             return this;
         }
 
@@ -529,11 +599,15 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
             return this;
         }
 
+        @Override
+        public Dimension init() {
+            user = createNewUser(user);
+            return new Dimension(500,800);
+        }
+
         User getUser() {
             return user;
         }
     }
-
-
 
 }
