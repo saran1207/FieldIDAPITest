@@ -21,6 +21,9 @@ public interface Attachment {
 	 */
 	public boolean isImage();
 
+    // TODO : change to return type.  ContentTypeUtil suitable string .
+    // public String getContentType()
+
 	public boolean hasAttachedFile();
 
 }

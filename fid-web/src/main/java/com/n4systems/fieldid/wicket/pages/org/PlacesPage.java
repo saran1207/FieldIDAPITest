@@ -4,10 +4,13 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.actions.users.UploadedImage;
+import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.attachment.AttachmentService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -23,9 +26,8 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
-import com.n4systems.model.Address;
-import com.n4systems.model.EventType;
-import com.n4systems.model.GpsLocation;
+import com.n4systems.model.*;
+import com.n4systems.model.Event;
 import com.n4systems.model.builders.CustomerOrgBuilder;
 import com.n4systems.model.builders.DivisionOrgBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
@@ -38,6 +40,7 @@ import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -47,6 +50,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -56,6 +61,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -71,7 +77,8 @@ import static ch.lambdaj.Lambda.on;
 public class PlacesPage extends FieldIDFrontEndPage {
 
 
-    enum Content { DETAILS, EVENTS, PEOPLE }
+
+    enum Content { DETAILS, EVENTS, PEOPLE, ATTACHMENTS }
 
     interface ModalPanel {
         Component submit(AjaxRequestTarget target);
@@ -88,13 +95,15 @@ public class PlacesPage extends FieldIDFrontEndPage {
     private @SpringBean UserGroupService userGroupService;
     private @SpringBean UserService userService;
     private @SpringBean OrgService orgService;
+    private @SpringBean AttachmentService attachmentService;
+    private @SpringBean S3Service s3Service;
 
     private IModel<? extends BaseOrg> model;
     private MarkupContainer actions;
     private GoogleMap map;
     private RepeatingView tabs;
     private Component content,detailsPanel,eventsPanel,peoplePanel;
-    private Component newUserPanel,archivePanel,editEventTypesPanel,editRecurringPanel,editDetailsPanel;
+    private Component newUserPanel,archivePanel,editEventTypesPanel,editRecurringPanel,editDetailsPanel,attachmentsPanel;
     private ModalWindow modal;
 
     public PlacesPage(PageParameters params) {
@@ -140,14 +149,16 @@ public class PlacesPage extends FieldIDFrontEndPage {
                 return getEventsPanel();
             case PEOPLE:
                 return getPeoplePanel();
+            case ATTACHMENTS:
+                return getAttachmentsPanel();
             default:
                 throw new IllegalArgumentException("can't find content panel for " + contentState);
         }
     }
 
     private Component createHeader(String id) {
-        List<BaseOrg> hierarchy = Lists.newArrayList(model.getObject());
-        BaseOrg parent = model.getObject().getParent();
+        List<BaseOrg> hierarchy = Lists.newArrayList(getOrg());
+        BaseOrg parent = getOrg().getParent();
         while (parent!=null) {
             hierarchy.add(0,parent);
             parent = parent.getParent();
@@ -258,9 +269,9 @@ public class PlacesPage extends FieldIDFrontEndPage {
                         showEditDialog(getNewUserPanel(), target);
                     }
                 })
-                .add( new NonWicketLink("merge", "mergeCustomers.action?uniqueID="+model.getObject().getId()) {
+                .add( new NonWicketLink("merge", "mergeCustomers.action?uniqueID="+ getOrg().getId()) {
                     @Override public boolean isVisible() {
-                        return model.getObject() instanceof CustomerOrg;
+                        return getOrg() instanceof CustomerOrg;
                     }
                 });
 
@@ -283,12 +294,21 @@ public class PlacesPage extends FieldIDFrontEndPage {
                         EventType eventType = item.getModelObject();
                         item.add(new AjaxLink("type") {
                             @Override public void onClick(AjaxRequestTarget target) {
+
                                 // start event of this type....setResponsePage(new PerformEvent(this.place,eventType);
                             }
                         }.add(new Label("name", Model.of(eventType.getName()))));
                     }
                 });
         return actions.add(startMenu.setRenderBodyOnly(true),editMenu.setRenderBodyOnly(true),scheduleMenu.setRenderBodyOnly(true));
+    }
+
+    private boolean updateContent(Content contentState, AjaxRequestTarget target) {
+        if (updateContent(contentState)) {
+            target.add(content);
+            return true;
+        }
+        return false;
     }
 
     private boolean updateContent(Content contentState) {
@@ -352,6 +372,13 @@ public class PlacesPage extends FieldIDFrontEndPage {
         return archivePanel;
     }
 
+    private Component getAttachmentsPanel() {
+        if (this.attachmentsPanel==null) {
+            attachmentsPanel = new AttachmentsPanel();
+        }
+        return attachmentsPanel;
+    }
+
     private Component getEditEventTypesPanel() {
         if (editEventTypesPanel==null) {
             editEventTypesPanel = new EditEventTypesPanel();
@@ -403,9 +430,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
         }
 
         @Override protected void onEvent(AjaxRequestTarget target) {
-            if (updateContent(contentState)) {
-                target.add(content);  // TODO : add tabs as well, update the selected css class.
-            }
+            updateContent(contentState, target);
         }
     }
 
@@ -421,18 +446,183 @@ public class PlacesPage extends FieldIDFrontEndPage {
             add(map = new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
             // add name, email, phone, fax, etc... here...
             add(new ContextImage("img", "images/add-photo-slate.png"));
+            add(new AjaxLink("attachmentsLink") {
+                @Override public void onClick(AjaxRequestTarget target) {
+                    updateContent(Content.ATTACHMENTS,target);  // make this more of settings thang...?
+                }
+            }.add(new Label("label","8 attachments")));
         }
     }
 
     class PeoplePanel extends Fragment {
         public PeoplePanel() {
-            super(CONTENT_ID, "people", PlacesPage.this);
+            super(CONTENT_ID, "peoplePanel", PlacesPage.this);
+            add(new ListView<User>("people", getUsersModel()) {
+                @Override protected void populateItem(ListItem<User> item) {
+                    User user = item.getModelObject();
+                    item.add(new Label("id",user.getUserID()));
+                    item.add(new Label("first",user.getFirstName()));
+                    item.add(new Label("last",user.getLastName()));
+                }
+            });
+            add(new AjaxLink("add") {
+                @Override public void onClick(AjaxRequestTarget target) {
+                    showEditDialog(getNewUserPanel(),target);
+                }
+            });
         }
+
+        private IModel<? extends List<? extends User>> getUsersModel() {
+            return new LoadableDetachableModel<List<? extends User>>() {
+                @Override protected List<? extends User> load() {
+                    return placeService.getUsersFor(getOrg());
+                }
+            };
+        }
+    }
+
+    private BaseOrg getOrg() {
+        return model.getObject();
+    }
+
+    class AttachmentsPanel extends Fragment {
+        private FileUploadField uploadField;
+
+        public AttachmentsPanel() {
+            super(CONTENT_ID,"attachmentsPanel", PlacesPage.this);
+            add(new ListView<Attachment>("attachments",getAttachments()) {
+                @Override protected void populateItem(ListItem<Attachment> item) {
+                    Attachment attachment = item.getModelObject();
+                    WebMarkupContainer cell = new WebMarkupContainer("cell");
+                    //String url = s3Service.getPlaceAttachment(getOrg(), attachment);
+                    cell.add(new Label("comments", attachment.getComments()));
+                    cell.add(new ExternalImage("image", String.format("http://dummyimage.com/150x150/%d/fff.png&text=hello",(int)(Math.random()*0x1000000))));
+                    item.add(cell);
+                }
+            });
+            add(getAddAttachmentsForm());
+        }
+
+        private Form<Attachment> getAddAttachmentsForm() {
+            Form form = new Form("form");
+            form.setOutputMarkupId(true);
+            form.add(uploadField = new FileUploadField("upload"));
+            uploadField.add(new AjaxFormSubmitBehavior("onchange") {
+                @Override protected void onSubmit(AjaxRequestTarget target) {
+                    FileUpload fileUpload = uploadField.getFileUpload();
+
+                    if (fileUpload != null) {
+//                        Attachment attachment = new CriteriaResultImage();
+//                        criteriaResultImage.setCriteriaResult(criteriaResult);
+//                        criteriaResultImage.setFileName(fileUpload.getClientFileName());
+//                        criteriaResultImage.setContentType(fileUpload.getContentType());
+//
+//                        byte[] imageData = fileUpload.getBytes();
+//
+//                        criteriaResultImage.setMd5sum(DigestUtils.md5Hex(imageData));
+//
+//                        String tempFileName = s3Service.uploadTempCriteriaResultImage(criteriaResultImage, imageData);
+//                        criteriaResultImage.setTempFileName(tempFileName);
+//
+//                        criteriaResult.getCriteriaImages().add(criteriaResultImage);
+                    }
+
+//                    onClose(target);
+                }
+
+                @Override protected void onError(AjaxRequestTarget target) {
+                }
+            });
+            return form;
+        }
+
+
+        private IModel<? extends List<? extends Attachment>> getAttachments() {
+            return new LoadableDetachableModel<List<? extends Attachment>>() {
+                @Override protected List<? extends Attachment> load() {
+                    return attachmentService.getAttachmentsFor(getOrg());
+                }
+            };
+        }
+
+//        add(new ListView<AssetAttachment>("assetAttachments", assetAttachments) {
+//            @Override
+//            protected void populateItem(ListItem< AssetAttachment > item) {
+//                AssetAttachment attachment = item.getModelObject();
+//
+//                String fileName;
+//                try {
+//                    fileName = URLEncoder.encode(attachment.getFileName(), "UTF-8");
+//                } catch (Exception e) {
+//                    logger.warn("Could not conver to UTF-8", e);
+//                    fileName = attachment.getFileName().replace(" ", "+");
+//                }
+//
+//                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName=" + fileName + "&uniqueID=" + asset.getId() + "&attachmentID=" + attachment.getId());
+//
+//                WebComponent image;
+//                if(attachment.isImage()) {
+//                    item.add(image = new ExternalImage("attachmentImage", downloadUrl));
+//                    image.add(new AttributeModifier("class", "attachmentImage"));
+//                } else {
+//                    item.add(image = new org.apache.wicket.markup.html.image.Image("attachmentImage", new ContextRelativeResource("images/file-icon.png")));
+//                    image.add(new AttributeModifier("class", "attachmentIcon"));
+//                }
+//                ExternalLink attachmentLink;
+//                item.add(attachmentLink = new ExternalLink("attachmentLink", downloadUrl));
+//                attachmentLink.add(new Label("attachmentName", attachment.getFileName()));
+//                item.add(new Label("attachmentNote", attachment.getNote().getComments()));
+//            }
+//        });
+//
+//        List<FileAttachment> typeAttachments = asset.getType().getAttachments();
+//
+//        add(new ListView<FileAttachment>("assetTypeAttachments", typeAttachments) {
+//            @Override
+//            protected void populateItem(ListItem<FileAttachment> item) {
+//                FileAttachment attachment = item.getModelObject();
+//
+//                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetTypeAttachedFile.action?fileName=" + attachment.getFileName().replace(" ", "+") + "&uniqueID=" + asset.getType().getId() + "&attachmentID=" + attachment.getId());
+//
+//                WebComponent image;
+//                if (attachment.isImage()) {
+//                    item.add(image = new ExternalImage("attachmentImage", downloadUrl));
+//                    image.add(new AttributeModifier("class", "attachmentImage"));
+//                } else {
+//                    item.add(image = new org.apache.wicket.markup.html.image.Image("attachmentImage", new ContextRelativeResource("images/file-icon.png")));
+//                    image.add(new AttributeModifier("class", "attachmentIcon"));
+//                }
+//                ExternalLink attachmentLink;
+//                item.add(attachmentLink = new ExternalLink("attachmentLink", downloadUrl));
+//                attachmentLink.add(new Label("attachmentName", attachment.getFileName()));
+//                item.add(new Label("attachmentNote", attachment.getComments()));
+//            }
+//        });
+//    }
+
+
     }
 
     class EventsPanel extends Fragment {
         public EventsPanel() {
-            super(CONTENT_ID, "events", PlacesPage.this);
+            super(CONTENT_ID, "eventsPanel", PlacesPage.this);
+            add(new ListView<Event>("events", getEventsModel()) {
+                @Override protected void populateItem(ListItem<Event> item) {
+                    Event event = item.getModelObject();
+                    item.add(new Label("type",event.getEventType().getDisplayName()));
+                    item.add(new Label("status",event.getWorkflowState().getLabel()));
+                    item.add(new Label("scheduled",event.getDueDate().toString()));
+                    item.add(new Label("completed",event.getCompletedDate().toString()));
+                }
+            });
+        }
+
+        private IModel<? extends List<? extends Event>> getEventsModel() {
+            return new LoadableDetachableModel<List<? extends Event>>() {
+                @Override protected List<? extends Event> load() {
+                    return placeService.getEventsFor(getOrg());
+                }
+            };
         }
     }
 
@@ -478,7 +668,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
         }
 
         private List<EventType> getEventTypes() {
-            return placeService.getEventTypesFor(model.getObject());
+            return placeService.getEventTypesFor(getOrg());
         }
         @Override public Component submit(AjaxRequestTarget target) {
             // TODO DD : save event types
@@ -520,7 +710,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
         public ArchivePanel() {
             super(CONTENT_ID, "archivePanel", PlacesPage.this);
             add(new Form("form")
-                    .add(new Label("confirm", new FIDLabelModel("message.confirm_archive_place",model.getObject().getName())))
+                    .add(new Label("confirm", new FIDLabelModel("message.confirm_archive_place", getOrg().getName())))
                     .add(createSubmitCancelButtons("buttons",this)));
         }
         @Override public Component submit(AjaxRequestTarget target) {

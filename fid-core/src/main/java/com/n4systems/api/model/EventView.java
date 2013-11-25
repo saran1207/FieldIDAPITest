@@ -1,10 +1,7 @@
 package com.n4systems.api.model;
 
 import com.n4systems.api.validation.validators.*;
-import com.n4systems.exporting.beanutils.CriteriaResultSerializationHandler;
-import com.n4systems.exporting.beanutils.DateSerializationHandler;
-import com.n4systems.exporting.beanutils.OwnerSerializationHandler;
-import com.n4systems.exporting.beanutils.SerializableField;
+import com.n4systems.exporting.beanutils.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -27,6 +24,9 @@ public class EventView extends ExternalModelView {
 
 	@SerializableField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
 	private final String[] owners = new String[3];
+
+    @SerializableField(title = "", order = 450, handler = NewOwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
+    private final String[] newOwners = new String[3];
 
 	@SerializableField(title = "Performed By", order = 500, validators = { NotNullValidator.class, FullNameUserValidator.class })
 	private String performedBy;
@@ -52,10 +52,10 @@ public class EventView extends ExternalModelView {
 	@SerializableField(title = "Comments", order = 1100)
 	private String comments;
 
-    @SerializableField(title = "Action Notes", order = 1100)
+    @SerializableField(title = "Action Notes", order = 1200)
     private String notes;
 
-	@SerializableField(title = "Criteria", order = 1100, handler=CriteriaResultSerializationHandler.class, validators = {CriteriaResultValidator.class})
+	@SerializableField(title = "Criteria", order = 1300, handler=CriteriaResultSerializationHandler.class, validators = {CriteriaResultValidator.class})
 	private Collection<CriteriaResultView> criteriaResults = new ArrayList<CriteriaResultView>();
 
 	public EventView() {}
@@ -201,6 +201,38 @@ public class EventView extends ExternalModelView {
 	public String getDivision() {
 		return owners[OwnerSerializationHandler.DIVISION_INDEX];
 	}
+
+    public String[] getNewOwners() {
+        return newOwners;
+    }
+
+    public String getNewOwnerString() {
+        return String.format("%s %s %s", getOrganization(), getCustomer(), getDivision());
+    }
+
+    public void setNewOrganization(String organization) {
+        newOwners[NewOwnerSerializationHandler.ORGANIZATION_INDEX] = organization;
+    }
+
+    public String getNewOrganization() {
+        return newOwners[NewOwnerSerializationHandler.ORGANIZATION_INDEX];
+    }
+
+    public void setNewCustomer(String customer) {
+        newOwners[NewOwnerSerializationHandler.CUSTOMER_ID] = customer;
+    }
+
+    public String getNewCustomer() {
+        return newOwners[NewOwnerSerializationHandler.CUSTOMER_ID];
+    }
+
+    public void setNewDivision(String division) {
+        newOwners[NewOwnerSerializationHandler.DIVISION_INDEX] = division;
+    }
+
+    public String getNewDivision() {
+        return newOwners[NewOwnerSerializationHandler.DIVISION_INDEX];
+    }
 	
 	public String getLocation() {
 		return location;
