@@ -7,7 +7,9 @@ import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
+import com.n4systems.model.Attachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -59,6 +61,12 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String PROCEDURE_DEFINITION_IMAGE_PATH = "/assets/%d/procedure_definitions/%d/%s";
     public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB = "/assets/%d/procedure_definitions/%d/%s.thumbnail";
     public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM = "/assets/%d/procedure_definitions/%d/%s.medium";
+
+    public static final String PLACE_ATTACHMENT_TEMP = "/temp/place_attachments/%s";
+    public static final String PLACE_ATTACHMENT = "/place_attachments/%d/%s";
+    public static final String PLACE_IMAGE = PLACE_ATTACHMENT;  // images are treated as a type of attachment - go in same folder.
+    public static final String PLACE_IMAGE_MEDIUM = "/place_attachments/%d/%s.medium";
+    public static final String PLACE_IMAGE_THUMBNAIL = "/place_attachments/%d/%s.thumbnail";
 
     public static final String THUMBNAIL_EXTENSION = ".thumbnail";
     public static final String MEDIUM_EXTENSION = ".medium";
@@ -411,6 +419,92 @@ public class S3Service extends FieldIdPersistenceService {
                 criteriaResultImage.getFileName());
     }
 
+    public void finalizeAttachmentUpload(Attachment attachment) {
+//        if (attachment.getTempFileName()==null) {
+//            return;  // most likely it's already been finalized. (either that or things are fubar).
+//        }
+//        Long tenantId = image.getTenant().getId();
+//        String tempFileName = image.getTempFileName();
+//
+//        copyTemporaryProcedureDefinitionImageToFinal(image, PROCEDURE_DEFINITION_IMAGE_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH);
+//        copyTemporaryProcedureDefinitionImageToFinal(image, PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM);
+//        copyTemporaryProcedureDefinitionImageToFinal(image, PROCEDURE_DEFINITION_IMAGE_TEMP_THUMB, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB);
+//
+//        removeResource(tenantId, PROCEDURE_DEFINITION_IMAGE_TEMP, tempFileName);
+//        removeResource(tenantId, PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM, tempFileName);
+//        removeResource(tenantId, PROCEDURE_DEFINITION_IMAGE_TEMP_THUMB, tempFileName);
+//
+//        image.setTempFileName(null);
+    }
+
+    private void copyTemporaryAttachmentToFinal(Attachment image, String source, String dest) {
+//        copyTemporaryImageToFinal(image.getTempFileName(), source, dest,
+//                image.getProcedureDefinition().getAsset().getId(),
+//                image.getProcedureDefinition().getId(),
+//                image.getFileName());
+    }
+
+
+    private URL getAttachmentURL(Attachment attachment, String tempPath, String path) {
+//        if (attachment.getTempFileName()!=null) {
+//            return generateResourceUrl(procedureDefinitionImage.getTenant().getId(), tempPath ,
+//                    procedureDefinitionImage.getTempFileName());
+//        } else {
+//            return generateResourceUrl(procedureDefinitionImage.getTenant().getId(), path,
+//                    procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+//                    procedureDefinitionImage.getProcedureDefinition().getId(),
+//                    procedureDefinitionImage.getFileName());
+//        }
+        return null;
+    }
+
+    public URL getAttachmentURL(ProcedureDefinitionImage procedureDefinitionImage) {
+        return getProcedureDefinitionImageURLImpl(procedureDefinitionImage, PROCEDURE_DEFINITION_IMAGE_TEMP, PROCEDURE_DEFINITION_IMAGE_PATH);
+    }
+
+    public URL getAttachmentURLForMediumImage(Attachment attachment) {
+        return null;//getProcedureDefinitionImageURLImpl(procedureDefinitionImage, PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM);
+    }
+
+    public URL getAttachmentUrlForThumbnailImage(Attachment attachment) {
+        return null;//getProcedureDefinitionImageURLImpl(procedureDefinitionImage, PROCEDURE_DEFINITION_IMAGE_TEMP_THUMB, PROCEDURE_DEFINITION_IMAGE_PATH_THUMB);
+    }
+
+    public void removeAttachments(Attachment... attachments) {
+        for (Attachment attachment:attachments) {
+            removeAttachment(attachment);
+        }
+//        removeResource(attachment.getTenant().getId(),
+//                PROCEDURE_DEFINITION_IMAGE_PATH,
+//                procedureDefinition.getAsset().getId(),
+//                procedureDefinition.getId(),
+//                ""
+//        );
+    }
+
+    public void removeAttachment(Attachment attachment) {
+//        removeResource(attachment.getTenant().getId(),
+//                PROCEDURE_DEFINITION_IMAGE_PATH,
+//                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+//                procedureDefinitionImage.getProcedureDefinition().getId(),
+//                procedureDefinitionImage.getFileName()
+//        );
+        // if image, then remove medium & thumbnail.
+//        removeResource(procedureDefinitionImage.getProcedureDefinition().getTenant().getId(),
+//                PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
+//                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+//                procedureDefinitionImage.getProcedureDefinition().getId(),
+//                procedureDefinitionImage.getFileName()
+//        );
+//        removeResource(procedureDefinitionImage.getProcedureDefinition().getTenant().getId(),
+//                PROCEDURE_DEFINITION_IMAGE_PATH_THUMB,
+//                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+//                procedureDefinitionImage.getProcedureDefinition().getId(),
+//                procedureDefinitionImage.getFileName()
+//        );
+    }
+
+
     private URL getProcedureDefinitionImageURLImpl(ProcedureDefinitionImage procedureDefinitionImage, String tempPath, String path) {
         if (procedureDefinitionImage.getTempFileName()!=null) {
             return generateResourceUrl(procedureDefinitionImage.getTenant().getId(), tempPath ,
@@ -466,6 +560,11 @@ public class S3Service extends FieldIdPersistenceService {
                 procedureDefinitionImage.getProcedureDefinition().getId(),
                 procedureDefinitionImage.getFileName()
         );
+    }
+
+
+    public URL getPlaceAttachment(BaseOrg org, Attachment attachment) {
+        return generateResourceUrl(org.getTenant().getId(), attachment.getFileName(), org.getId());
     }
 
     public byte[] downloadCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {

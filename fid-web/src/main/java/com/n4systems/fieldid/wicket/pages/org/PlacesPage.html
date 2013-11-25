@@ -7,6 +7,11 @@
             display:none;
         }
 
+        ul li {
+            display:inline;
+            padding:4px;
+        }
+
         .header .separator p:hover {
             background:#add8e6;
             border:#0000cd;
@@ -91,8 +96,6 @@
 
     <div wicket:id="modal"/>
 
-
-
     <!-- --------------------------------------------------------------------------------------------------------- -->
 
 
@@ -105,6 +108,7 @@
 
     <wicket:fragment wicket:id="details" class="details">
         <img wicket:id="img" style="width:300px;height:300px;float:left;" class="img"><p><wicket:message key="label.no_images"/></p></img>
+        <a wicket:id="attachmentsLink"><span wicket:id="label"/></a>
         <div wicket:id="map" class="googleMap" style="width:700px;height:300px;"></div>
         <h3>Contact</h3>
         <div>Susan Reynolds</div>
@@ -123,12 +127,40 @@
         <div>Please ensure that building owner is notified 2 hours in advance before entry onto the property.</div>
     </wicket:fragment>
 
-    <wicket:fragment wicket:id="events" class="events">
+    <wicket:fragment wicket:id="eventsPanel" class="events">
         <h3>Events</h3>
+        <span wicket:id="events">
+            <ul>
+                <li wicket:id="status"></li>
+                <li wicket:id="type"></li>
+                <li wicket:id="scheduled"></li>
+                <li wicket:id="completed"></li>
+            </ul>
+        </span>
     </wicket:fragment>
 
-    <wicket:fragment wicket:id="people" class="people">
-        <h3>People</h3>
+    <wicket:fragment wicket:id="attachmentsPanel" class="attachments">
+        <h3>Attachments</h3>
+        <table>
+            <tr wicket:id="attachments">
+                <td wicket:id="cell"><img wicket:id="image"/> <span wicket:id="comments"/></td>
+            </tr>
+        </table>
+        <form wicket:id="form">
+            <input wicket:id="upload" type="file"/>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="peoplePanel">
+        <h3><wicket:message key="label.people"/></h3>
+        <span wicket:id="people" class="people">
+            <ul>
+                <li wicket:id="id"></li>
+                <li wicket:id="first"></li>
+                <li wicket:id="last"></li>
+            </ul>
+        </span>
+        <a wicket:id="add"><wicket:message key="label.add"/></a>
     </wicket:fragment>
 
 
