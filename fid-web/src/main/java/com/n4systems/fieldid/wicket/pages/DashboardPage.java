@@ -60,6 +60,9 @@ public class DashboardPage extends FieldIDFrontEndPage {
     
     private BaseOrg org;
 
+    boolean activeWindow = false;
+    boolean activeDashboardWindow = false;
+
     public DashboardPage() {
     	this(null);
     }
@@ -112,9 +115,16 @@ public class DashboardPage extends FieldIDFrontEndPage {
                     @Override
                     protected void onCloseWindow(AjaxRequestTarget target) {
                         configurationWindow.close(target);
+                        activeDashboardWindow = false;
                     }
+
                 });
-                configurationWindow.show(target);
+
+
+                if (activeDashboardWindow == false) {
+                    configurationWindow.show(target);
+                    activeDashboardWindow = true;
+                }
             }
 
             @Override
@@ -168,14 +178,23 @@ public class DashboardPage extends FieldIDFrontEndPage {
                 WidgetDefinition definition = dashboardService.createWidgetDefinition(type);
                 currentLayoutModel.getObject().getColumns().get(0).getWidgets().add(0, definition);
                 saveAndRepaintDashboard(target);
+
             }
 
             @Override
             protected void onCloseWindow(AjaxRequestTarget target) {
                 configurationWindow.close(target);
+                activeWindow = false;
             }
+
+
         });
-        configurationWindow.show(target);
+
+        if (activeWindow == false) {
+            configurationWindow.show(target);
+            activeWindow = true;
+        }
+
     }
 
     private void setContentVisibility() {
