@@ -321,9 +321,9 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
     }
 
 	protected void resolveOwner(EventView view, Event model, Transaction transaction) {
-		orgLoader.setOrganizationName(view.getOrganization());
-		orgLoader.setCustomerName(view.getCustomer());
-		orgLoader.setDivision(view.getDivision());
+		orgLoader.setOrganizationName(view.getNewOrganization());
+		orgLoader.setCustomerName(view.getNewCustomer());
+		orgLoader.setDivision(view.getNewDivision());
 		
 		BaseOrg owner = orgLoader.load(transaction);
 		model.setOwner(owner);
