@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class EventToViewConverter implements ModelToViewConverter<Event, EventView> {
+public class EventToViewConverter implements ModelToViewConverter<ThingEvent, EventView> {
 	private final NextEventDateByEventLoader nextDateLoader;
     private String dateFormat = "mm/dd/yy";
     private TimeZone timeZone;
@@ -38,7 +38,7 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 	}
 
 	@Override
-	public EventView toView(Event model) throws ConversionException {
+	public EventView toView(ThingEvent model) throws ConversionException {
 		EventView view = new EventView();
 		
 		convertDirectFields(model, view);
@@ -55,11 +55,11 @@ public class EventToViewConverter implements ModelToViewConverter<Event, EventVi
 		return view;
 	}
 
-	private void convertCriteriaResults(Event model, EventView view) {
+	private void convertCriteriaResults(ThingEvent model, EventView view) {
 		view.setCriteriaResults(convertCriteriaResults(model));
 	}
 
-	private List<CriteriaResultView> convertCriteriaResults(Event model) {
+	private List<CriteriaResultView> convertCriteriaResults(ThingEvent model) {
 		List<CriteriaResultView> results = new ArrayList<CriteriaResultView>();
 		for (CriteriaResult result:model.getResults()) { 
 			results.add(convertCriteriaResult(model, result));

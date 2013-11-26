@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -10,7 +11,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 public class EventCompletedCell extends Panel {
-    public EventCompletedCell(String id, IModel<Event> eventModel) {
+    public EventCompletedCell(String id, IModel<ThingEvent> eventModel) {
         super(id);
 
         Event event = eventModel.getObject();

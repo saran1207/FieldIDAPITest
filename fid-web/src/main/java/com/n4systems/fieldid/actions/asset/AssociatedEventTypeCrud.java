@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -22,8 +23,8 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 
 	private AssetType assetType;
-	private EventType eventType;
-	private List<EventType> eventTypes;
+	private ThingEventType eventType;
+	private List<ThingEventType> eventTypes;
 	private List<Boolean> assetTypeEvents;
 	private List<Boolean> eventTypeAssets;
 	private List<AssetType> assetTypes;
@@ -51,7 +52,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	}
 
 	public String doSave() {
-		List<EventType> selectedEventTypes = findEventsTypesSet();
+		List<ThingEventType> selectedEventTypes = findEventsTypesSet();
 
 		try {
             associatedEventTypesService.addAndRemove(assetType, selectedEventTypes);
@@ -83,10 +84,10 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	private List<EventType> findEventsTypesSet() {
-		List<EventType> selectedEventTypes = new ArrayList<EventType>();
+	private List<ThingEventType> findEventsTypesSet() {
+		List<ThingEventType> selectedEventTypes = new ArrayList<ThingEventType>();
 
-		for (EventType eventType : getEventTypes()) {
+		for (ThingEventType eventType : getEventTypes()) {
 			if (assetTypeEvents.get(getEventTypes().indexOf(eventType))) {
 				selectedEventTypes.add(eventType);
 			}
@@ -142,7 +143,7 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 		if (eventType == null) {
 			this.eventType = null;
 		} else if (this.eventType == null || eventType.equals(this.eventType.getId())) {
-			this.eventType = persistenceManager.find(new QueryBuilder<EventType>(EventType.class, getSecurityFilter())
+			this.eventType = persistenceManager.find(new QueryBuilder<ThingEventType>(ThingEventType.class, getSecurityFilter())
 														.addSimpleWhere("id", eventType));
 		}
 	}
@@ -226,9 +227,9 @@ public class AssociatedEventTypeCrud extends AbstractCrud {
 	/**
 	 * @return the eventTypes
 	 */
-	public List<EventType> getEventTypes() {
+	public List<ThingEventType> getEventTypes() {
 		if (eventTypes == null) {
-            QueryBuilder<EventType> queryBuilder = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
+            QueryBuilder<ThingEventType> queryBuilder = new QueryBuilder<ThingEventType>(ThingEventType.class, getSecurityFilter());
 			queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
             queryBuilder.addSimpleWhere("group.action", false);
 			queryBuilder.addOrder("name");

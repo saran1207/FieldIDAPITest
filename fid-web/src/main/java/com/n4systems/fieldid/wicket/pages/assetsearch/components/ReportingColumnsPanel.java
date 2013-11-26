@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.ReportConfiguration;
@@ -47,7 +48,7 @@ public class ReportingColumnsPanel extends AbstractColumnsPanel<EventReportCrite
     }
 
     @Override
-    protected List<ColumnMappingGroupView> getDynamicEventColumns(EventType eventType, List<EventType> availableEventTypes) {
+    protected List<ColumnMappingGroupView> getDynamicEventColumns(ThingEventType eventType, List<ThingEventType> availableEventTypes) {
         return dynamicColumnsService.getDynamicEventColumnsForReporting(eventType, availableEventTypes);
     }
 
@@ -56,7 +57,7 @@ public class ReportingColumnsPanel extends AbstractColumnsPanel<EventReportCrite
 		target.add(this);
 	}
 
-    public void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {
+    public void onEventTypeOrGroupUpdated(AjaxRequestTarget target, ThingEventType selectedEventType, List<ThingEventType> availableEventTypes) {
         updateDynamicEventColumns(selectedEventType,availableEventTypes);
         target.add(this);
     }

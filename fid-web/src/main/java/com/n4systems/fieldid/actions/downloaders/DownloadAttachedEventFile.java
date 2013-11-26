@@ -3,9 +3,7 @@ package com.n4systems.fieldid.actions.downloaders;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.wicket.util.ZipFileUtil;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.IOUtils;
 
@@ -17,7 +15,7 @@ import java.util.zip.ZipOutputStream;
 public class DownloadAttachedEventFile extends DownloadAction {
 	private static final long serialVersionUID = 1L;
 
-	private Event event;
+	private ThingEvent event;
 	private EventManager eventManager;
 	
 	public DownloadAttachedEventFile(EventManager eventManager, PersistenceManager persistenceManager) {

@@ -1,20 +1,5 @@
 package com.n4systems.ejb.impl;
 
-import java.io.File;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-
-import javax.persistence.EntityManager;
-
-import org.apache.log4j.Logger;
-
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
-import rfid.ejb.entity.PopulatorLogBean;
-
 import com.n4systems.ejb.AssetManager;
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
@@ -30,12 +15,7 @@ import com.n4systems.exceptions.NonUniqueAssetException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TooManyIdentifiersException;
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.LegacyFindOrCreateCustomerOrgHandler;
@@ -43,11 +23,15 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
-import com.n4systems.util.ConfigContext;
-import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.DateHelper;
-import com.n4systems.util.FuzzyResolver;
-import com.n4systems.util.StringUtils;
+import com.n4systems.util.*;
+import org.apache.log4j.Logger;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
+import rfid.ejb.entity.PopulatorLogBean;
+
+import javax.persistence.EntityManager;
+import java.io.File;
+import java.util.*;
 
 @SuppressWarnings("deprecation")
 
@@ -152,8 +136,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		Date datePerformed = fileData.getDatePerformed();
 
 		Asset asset;
-		List<Event> events;
-		Event event;
+		List<ThingEvent> events;
+        ThingEvent event;
 		// since proof tests may have multiple serial numbers, we'll need to do this process for each
 		for (String identifier : fileData.getIdentifiers()) {
 			event = null;
@@ -190,7 +174,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			events = eventManager.findEventsByDateAndAsset(datePerformedRangeStartInUTC, datePerformedRangeEndInUTC, asset, performedBy.getSecurityFilter());
 			
 			// now we need to find the event, supporting out ProofTestType, and does not already have a chart
-			for (Event insp: events) {
+			for (ThingEvent insp: events) {
 				if(insp.getType().supports(fileData.getFileType()) && !chartImageExists(insp)) {
 					// we have found our event, move on
 					event = insp;
@@ -369,8 +353,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return asset;
 	}
 	
-	private Event createEvent(Tenant tenant, User performedBy, BaseOrg owner, Asset asset, EventBook book, Date datePerformed, FileDataContainer fileData) {
-		Event event = new Event();
+	private ThingEvent createEvent(Tenant tenant, User performedBy, BaseOrg owner, Asset asset, EventBook book, Date datePerformed, FileDataContainer fileData) {
+        ThingEvent event = new ThingEvent();
 		event.setTenant(tenant);
 		
 		if (owner != null) {
@@ -400,7 +384,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		event.setAdvancedLocation(asset.getAdvancedLocation());
 		
 		// find the first event that for this asset that supports our file type
-		EventType inspType = findSupportedEventTypeForAsset(fileData.getFileType(), asset);
+		ThingEventType inspType = findSupportedEventTypeForAsset(fileData.getFileType(), asset);
 		
 		// if we were unable to find an event type, we cannot continue.
 		if(inspType == null) {
@@ -445,11 +429,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		return event;
 	}
 	
-	private EventType findSupportedEventTypeForAsset(ProofTestType proofTestType, Asset asset) {
-		EventType type = null;
+	private ThingEventType findSupportedEventTypeForAsset(ProofTestType proofTestType, Asset asset) {
+		ThingEventType type = null;
 		
 		// here we simply find the first event type that supports this asset type and proof test type
-		for(EventType inspType: asset.getType().getEventTypes()) {
+		for(ThingEventType inspType: asset.getType().getEventTypes()) {
 			if(inspType.supports(proofTestType)) {
 				type = inspType;
 				break;

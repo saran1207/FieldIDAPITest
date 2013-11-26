@@ -64,7 +64,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
         for (Asset asset : assetsToSchedule) {
             if(!checkIfScheduleExists(asset, event, futureDate)) {
-                Event schedule = new Event();
+                ThingEvent schedule = new ThingEvent();
                 schedule.setAsset(asset);
                 schedule.setType(event.getEventType());
                 schedule.setDueDate(futureDate.toDate());

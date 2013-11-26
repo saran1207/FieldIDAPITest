@@ -16,10 +16,7 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -41,11 +38,11 @@ public class OpenActionsCell extends Panel {
     private ModalWindow modalWindow;
     private SchedulePicker schedulePicker;
 
-    public OpenActionsCell(String id, final IModel<Event> eventModel, final Panel eventDisplayPanel) {
+    public OpenActionsCell(String id, final IModel<ThingEvent> eventModel, final Panel eventDisplayPanel) {
         super(id);
 
         add(modalWindow = createModalWindow(eventModel, eventDisplayPanel));
-        IModel<List<EventType>> eventTypesModel = createEventTypesModelForEvent(eventModel);
+        IModel<List<ThingEventType>> eventTypesModel = createEventTypesModelForEvent(eventModel);
         add(schedulePicker = new SchedulePicker("schedulePickerWindow", eventModel, eventTypesModel, new EventJobsForTenantModel()) {
             { setSaveButtonLabel(new FIDLabelModel("label.save")); }
             @Override
@@ -103,7 +100,7 @@ public class OpenActionsCell extends Panel {
         add(editLink);
     }
 
-    private IModel<List<EventType>> createEventTypesModelForEvent(IModel<Event> eventModel) {
+    private IModel<List<ThingEventType>> createEventTypesModelForEvent(IModel<ThingEvent> eventModel) {
         if (eventModel.getObject().getType() == null || !eventModel.getObject().getType().getGroup().isAction()) {
             return new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(eventModel, "asset.type"));
         } else {
@@ -111,7 +108,7 @@ public class OpenActionsCell extends Panel {
         }
     }
 
-    private DialogModalWindow createModalWindow(final IModel<Event> eventModel, final Panel eventDisplayPanel) {
+    private DialogModalWindow createModalWindow(final IModel<ThingEvent> eventModel, final Panel eventDisplayPanel) {
         DialogModalWindow dialogWindow = new DialogModalWindow("modalWindow");
         dialogWindow.setPageCreator(new ModalWindow.PageCreator() {
             @Override

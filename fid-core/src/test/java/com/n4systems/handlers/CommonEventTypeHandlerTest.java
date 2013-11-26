@@ -11,6 +11,7 @@ import java.util.Set;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.builders.AssetTypeBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.eventtype.CommonAssetTypeLoader;
@@ -22,7 +23,7 @@ import com.n4systems.persistence.Transaction;
 
 public class CommonEventTypeHandlerTest {
 
-	private static final Set<EventType> EMPTY_EVENT_TYPE_SET = new HashSet<EventType>();
+	private static final Set<ThingEventType> EMPTY_EVENT_TYPE_SET = new HashSet<ThingEventType>();
 
 	private class CommonAssetTypeIdLoaderTestDouble implements CommonAssetTypeLoader {
 		List<AssetType> assetTypes;
@@ -72,7 +73,7 @@ public class CommonEventTypeHandlerTest {
 
 		CommonEventTypeHandler sut = new LoaderBackedCommonEventTypeHandler(null);
 
-		Set<EventType> eventTypes = sut.findCommonEventTypesFor(new ArrayList<Long>());
+		Set<ThingEventType> eventTypes = sut.findCommonEventTypesFor(new ArrayList<Long>());
 
 		assertThat(eventTypes, equalTo(EMPTY_EVENT_TYPE_SET));
 
@@ -92,7 +93,7 @@ public class CommonEventTypeHandlerTest {
 
 		CommonEventTypeHandler sut = new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeIdLoaderTestDouble(ImmutableList.of(assetType)));
 		
-		Set<EventType> returnSet = sut.findCommonEventTypesFor(ImmutableList.of(1L));
+		Set<ThingEventType> returnSet = sut.findCommonEventTypesFor(ImmutableList.of(1L));
 
 		assertThat(returnSet, equalTo(EMPTY_EVENT_TYPE_SET));
 
@@ -101,14 +102,14 @@ public class CommonEventTypeHandlerTest {
 	@Test
 	public void should_return_entire_event_type_list_given_one_asset_type_with_many_event_types() {
 
-		EventType eventType = EventTypeBuilder.anEventType().build();
-		EventType eventType2 = EventTypeBuilder.anEventType().build();
+        ThingEventType eventType = EventTypeBuilder.anEventType().build();
+        ThingEventType eventType2 = EventTypeBuilder.anEventType().build();
 		AssetType assetType = AssetTypeBuilder.anAssetType().withEventTypes(eventType, eventType2).build();
 
 		CommonEventTypeHandler sut = new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeIdLoaderTestDouble(ImmutableList.of(assetType)));
-		Set<EventType> returnSet = sut.findCommonEventTypesFor(ImmutableList.of(1L));
+		Set<ThingEventType> returnSet = sut.findCommonEventTypesFor(ImmutableList.of(1L));
 
-		Set<EventType> expectedEventList = ImmutableSet.of(eventType, eventType2);
+		Set<ThingEventType> expectedEventList = ImmutableSet.of(eventType, eventType2);
 		assertThat(returnSet, equalTo(expectedEventList));
 
 	}
@@ -116,15 +117,15 @@ public class CommonEventTypeHandlerTest {
 	@Test
 	public void should_return_common_event_types_of_two_or_more_asset_types() {
 
-		EventType eventType = EventTypeBuilder.anEventType().build();
-		EventType eventType2 = EventTypeBuilder.anEventType().build();
+        ThingEventType eventType = EventTypeBuilder.anEventType().build();
+        ThingEventType eventType2 = EventTypeBuilder.anEventType().build();
 		AssetType assetType = AssetTypeBuilder.anAssetType().withEventTypes(eventType, eventType2).build();
 		AssetType assetType2 = AssetTypeBuilder.anAssetType().withEventTypes(eventType).build();
 
 		CommonEventTypeHandler sut = new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeIdLoaderTestDouble(ImmutableList.of(assetType, assetType2)));
-		Set<EventType> returnSet = sut.findCommonEventTypesFor(ImmutableList.of(1L));
+		Set<ThingEventType> returnSet = sut.findCommonEventTypesFor(ImmutableList.of(1L));
 
-		Set<EventType> expectedEventList = ImmutableSet.of(eventType);
+		Set<ThingEventType> expectedEventList = ImmutableSet.of(eventType);
 		assertThat(returnSet, equalTo(expectedEventList));
 
 	}
@@ -132,13 +133,13 @@ public class CommonEventTypeHandlerTest {
 	@Test
 	public void should_return_empty_set_from_multiple_asset_types_with_no_common_events() {
 
-		EventType eventType = EventTypeBuilder.anEventType().build();
-		EventType eventType2 = EventTypeBuilder.anEventType().build();
+        ThingEventType eventType = EventTypeBuilder.anEventType().build();
+        ThingEventType eventType2 = EventTypeBuilder.anEventType().build();
 		AssetType assetType = AssetTypeBuilder.anAssetType().withEventTypes(eventType).build();
 		AssetType assetType2 = AssetTypeBuilder.anAssetType().withEventTypes(eventType2).build();
 
 		CommonEventTypeHandler sut = new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeIdLoaderTestDouble(ImmutableList.of(assetType, assetType2)));
-		Set<EventType> returnSet = sut.findCommonEventTypesFor(ImmutableList.of(1L));
+		Set<ThingEventType> returnSet = sut.findCommonEventTypesFor(ImmutableList.of(1L));
 
 		assertThat(returnSet, equalTo(EMPTY_EVENT_TYPE_SET));
 
@@ -148,7 +149,7 @@ public class CommonEventTypeHandlerTest {
 	public void should_return_empty_set_given_no_asset_types() {
 		CommonEventTypeHandler sut = new LoaderBackedCommonEventTypeHandler(new CommonAssetTypeIdLoaderTestDouble(new ArrayList<AssetType>()));
 		
-		Set<EventType> returnSet = sut.findCommonEventTypesFor(ImmutableList.of(1L));
+		Set<ThingEventType> returnSet = sut.findCommonEventTypesFor(ImmutableList.of(1L));
 
 		assertThat(returnSet, equalTo(EMPTY_EVENT_TYPE_SET));
 

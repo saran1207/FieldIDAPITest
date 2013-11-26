@@ -5,11 +5,12 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.util.persistence.QueryBuilder;
 
-public class EventTypesByEventGroupIdLoader extends ListLoader<EventType> {
+public class EventTypesByEventGroupIdLoader extends ListLoader<ThingEventType> {
 
     private Long eventTypeGroupId;
 
@@ -18,8 +19,8 @@ public class EventTypesByEventGroupIdLoader extends ListLoader<EventType> {
     }
 
     @Override
-    protected List<EventType> load(EntityManager em, SecurityFilter filter) {
-        QueryBuilder<EventType> builder = new QueryBuilder<EventType>(EventType.class, filter);
+    protected List<ThingEventType> load(EntityManager em, SecurityFilter filter) {
+        QueryBuilder<ThingEventType> builder = new QueryBuilder<ThingEventType>(ThingEventType.class, filter);
 
         if (eventTypeGroupId != null) { 
             builder.addSimpleWhere("group.id", eventTypeGroupId);

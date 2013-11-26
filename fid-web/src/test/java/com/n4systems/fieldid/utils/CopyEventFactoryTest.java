@@ -1,22 +1,17 @@
 package com.n4systems.fieldid.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import com.n4systems.model.*;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.model.OneClickCriteriaResult;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
-import com.n4systems.model.Recommendation;
-import com.n4systems.model.Button;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 
 public class CopyEventFactoryTest {
@@ -32,8 +27,8 @@ public class CopyEventFactoryTest {
 
 	@Test
 	public void testCopyCriteriaResult() {
-		
-		Event i = new Event();
+
+        ThingEvent i = new ThingEvent();
 		
 		Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 		OneClickCriteriaResult criteriaResult = new OneClickCriteriaResult();

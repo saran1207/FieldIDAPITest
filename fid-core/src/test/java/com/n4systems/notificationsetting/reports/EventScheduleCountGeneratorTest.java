@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.event.SmartFailedEventListLoader;
 import com.n4systems.model.eventschedulecount.EventScheduleCount;
 import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
@@ -161,7 +162,7 @@ public class EventScheduleCountGeneratorTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		NotificationSetting notificationSetting = aNotificationSetting().includeFailed().build();
 		
-		List<Event> failedEvents = new FluentArrayList<Event>(new Event());
+		List<ThingEvent> failedEvents = new FluentArrayList<ThingEvent>(new ThingEvent());
 		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>(new EventScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
 		
 		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
@@ -178,7 +179,7 @@ public class EventScheduleCountGeneratorTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		NotificationSetting notificationSetting = aNotificationSetting().doNotIncludeFailed().build();
 		
-		List<Event> failedEvents = new FluentArrayList<Event>(new Event());
+		List<ThingEvent> failedEvents = new FluentArrayList<ThingEvent>(new ThingEvent());
 		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>(new EventScheduleCount(new Date(), notificationSetting.getOwner(), null, null, 1L));
 		
 		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
@@ -195,7 +196,7 @@ public class EventScheduleCountGeneratorTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		NotificationSetting notificationSetting = aNotificationSetting().includeFailed().sendBlankReport().build();
 		
-		List<Event> failedEvents = new FluentArrayList<Event>();
+		List<ThingEvent> failedEvents = new FluentArrayList<ThingEvent>();
 		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>();
 		
 		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
@@ -212,7 +213,7 @@ public class EventScheduleCountGeneratorTest {
 		MailManagerTestDouble mailManager = new MailManagerTestDouble();
 		NotificationSetting notificationSetting = aNotificationSetting().includeFailed().doNotSendBlankReport().build();
 		
-		List<Event> failedEvents = new FluentArrayList<Event>();
+		List<ThingEvent> failedEvents = new FluentArrayList<ThingEvent>();
 		List<EventScheduleCount> upcomingEventCounts = new FluentArrayList<EventScheduleCount>();
 		
 		EventScheduleCountGenerator sut = new EventScheduleCountGenerator(new SimpleDateFormat(), createSuccessfulUpcomingLoader(upcomingEventCounts),
@@ -224,7 +225,7 @@ public class EventScheduleCountGeneratorTest {
 		assertNull(message);
 	}
 	
-	private SmartFailedEventListLoader createSuccessfulFailedEventsLoader(NotificationSetting notificationSetting, List<Event> failedEvents) {
+	private SmartFailedEventListLoader createSuccessfulFailedEventsLoader(NotificationSetting notificationSetting, List<ThingEvent> failedEvents) {
 		SmartFailedEventListLoader loader = createMock(SmartFailedEventListLoader.class);
 		expect(loader.setFrequency(notificationSetting.getFrequency())).andReturn(loader);
 		expect(loader.setClock((Clock)anyObject())).andReturn(loader);

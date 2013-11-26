@@ -80,7 +80,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	protected final EventFormHelper eventFormHelper;
     private final EventCreationService eventCreationService;
 	protected Asset asset;
-	protected Event event;
+	protected ThingEvent event;
 
     protected EventBook eventBook;
 
@@ -149,11 +149,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	@Override
 	protected void initMemberFields() {
         if (openEventId != null && !openEventId.equals(0L)) {
-            event = persistenceManager.find(Event.class, openEventId, getTenant(), "asset", "eventForm.sections", "results", "results.criteriaImages", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
+            event = persistenceManager.find(ThingEvent.class, openEventId, getTenant(), "asset", "eventForm.sections", "results", "results.criteriaImages", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
             event.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
             event.setEventForm(event.getType().getEventForm());
         } else {
-            event = new Event();
+            event = new ThingEvent();
         }
 		isEditing = false;
 		event.setDate(new Date());
@@ -578,7 +578,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		return (event.getType() != null) ? event.getType().getId() : null;
 	}
 
-	public EventType getEventType() {
+	public ThingEventType getEventType() {
 		return event.getType();
 	}
 
@@ -596,7 +596,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		if (type == null) {
 			event.setType(null);
 		} else if (event.getType() == null || !type.equals(event.getType().getId())) {
-            EventType eventType = persistenceManager.find(EventType.class, type, getTenantId(), "eventForm.sections", "supportedProofTests", "infoFieldNames");
+            ThingEventType eventType = persistenceManager.find(ThingEventType.class, type, getTenantId(), "eventForm.sections", "supportedProofTests", "infoFieldNames");
             event.setType(eventType);
             if (event.getEventForm() == null) {
                 event.setEventForm(eventType.getEventForm());
@@ -612,7 +612,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		return (asset != null) ? asset.getId() : null;
 	}
 	
-	public List<Event> getEventSchedules() {
+	public List<ThingEvent> getEventSchedules() {
 		return eventScheduleManager.getAvailableSchedulesFor(asset, "asset");
 	}
 

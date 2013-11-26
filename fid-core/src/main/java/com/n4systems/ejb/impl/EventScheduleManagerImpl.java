@@ -38,15 +38,15 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 
     @Deprecated
     @CopiedToService(EventService.class)
-	public List<Event> autoSchedule(Asset asset) {
-		List<Event> schedules = new ArrayList<Event>();
+	public List<ThingEvent> autoSchedule(Asset asset) {
+		List<ThingEvent> schedules = new ArrayList<ThingEvent>();
 		
 		AssetType assetType = persistenceManager.find(AssetType.class, asset.getType().getId());
 		if (assetType != null) {
-			for (EventType type : assetType.getEventTypes()) {
+			for (ThingEventType type : assetType.getEventTypes()) {
 				AssetTypeSchedule schedule = assetType.getSchedule(type, asset.getOwner());
 				if (schedule != null && schedule.isAutoSchedule()) {
-                    Event event = new Event();
+                    ThingEvent event = new ThingEvent();
                     event.setAsset(asset);
                     event.setType(type);
 					event.setDueDate(assetType.getSuggestedNextEventDate(new Date(), type, asset.getOwner()));
@@ -60,8 +60,8 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 	}
 	
 	
-	public List<Event> getAutoEventSchedules(Asset asset) {
-		List<Event> schedules = new ArrayList<Event>();
+	public List<ThingEvent> getAutoEventSchedules(Asset asset) {
+		List<ThingEvent> schedules = new ArrayList<ThingEvent>();
 		
 		if (asset.getType() == null) {
 			return schedules;
@@ -72,7 +72,7 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 			for (AssociatedEventType type : assetType.getAssociatedEventTypes()) {
 				AssetTypeSchedule schedule = assetType.getSchedule(type.getEventType(), asset.getOwner());
 				if (schedule != null && schedule.isAutoSchedule()) {
-                    Event openEvent = new Event();
+                    ThingEvent openEvent = new ThingEvent();
                     openEvent.setOwner(asset.getOwner());
                     openEvent.setTenant(asset.getTenant());
                     openEvent.setAsset(asset);
@@ -85,17 +85,17 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 		return schedules;
 	}
 
-    public Event reattach(Event event) {
+    public ThingEvent reattach(ThingEvent event) {
         return persistenceManager.reattach(event);
     }
 
-	public Event update(Event event) {
+	public ThingEvent update(ThingEvent event) {
 		return eventScheduleService.updateSchedule(event);
 	}
 	
-	public void restoreScheduleForEvent(Event event) {
+	public void restoreScheduleForEvent(ThingEvent event) {
 		if (event.wasScheduled()) {
-            Event restoredOpenEvent = new Event();
+            ThingEvent restoredOpenEvent = new ThingEvent();
             restoredOpenEvent.copyDataFrom(event);
             persistenceManager.save(restoredOpenEvent);
 
@@ -115,8 +115,8 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
 		persistenceManager.save(schedule);
 	}
 
-    public List<Event> getAvailableSchedulesFor(Asset asset, String... postFetchFields) {
-        QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+    public List<ThingEvent> getAvailableSchedulesFor(Asset asset, String... postFetchFields) {
+        QueryBuilder<ThingEvent> query = new QueryBuilder<ThingEvent>(ThingEvent.class, new OpenSecurityFilter());
         query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
         query.addPostFetchPaths(postFetchFields);
         query.addOrder("dueDate");
@@ -124,8 +124,8 @@ public class EventScheduleManagerImpl implements EventScheduleManager {
         return persistenceManager.findAll(query);
     }
 
-    public List<Event> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType) {
-		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+    public List<ThingEvent> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, ThingEventType eventType) {
+		QueryBuilder<ThingEvent> query = new QueryBuilder<ThingEvent>(ThingEvent.class, new OpenSecurityFilter());
 		query.addSimpleWhere("asset", asset).addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
 		query.addSimpleWhere("type.id", eventType.getId());
 		query.addOrder("dueDate");

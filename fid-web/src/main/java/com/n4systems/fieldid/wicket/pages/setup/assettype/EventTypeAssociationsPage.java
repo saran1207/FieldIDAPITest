@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -49,7 +50,7 @@ public class EventTypeAssociationsPage extends FieldIDFrontEndPage {
     @SpringBean
     private AssociatedEventTypesService associatedEventTypesService;
 
-    private List<EventType> selectedTypes;
+    private List<ThingEventType> selectedTypes;
     private Form form;
 
     public EventTypeAssociationsPage(PageParameters params) {
@@ -72,16 +73,16 @@ public class EventTypeAssociationsPage extends FieldIDFrontEndPage {
             }
         };
 
-        form.add(new ListView<EventType>("eventType", eventTypeService.getAllEventTypesExcludingActions()) {
+        form.add(new ListView<ThingEventType>("eventType", eventTypeService.getAllEventTypesExcludingActions()) {
             @Override
-            protected void populateItem(final ListItem<EventType> item) {
+            protected void populateItem(final ListItem<ThingEventType> item) {
                 final IModel<Boolean> checked = Model.of(getCheckedValue(item.getModelObject()));
                 CheckBox checkBox;
                 item.add(checkBox = new CheckBox("checked", checked));
                 checkBox.add(new OnChangeAjaxBehavior() {
                     @Override
                     protected void onUpdate(AjaxRequestTarget target) {
-                        EventType eventType = item.getModelObject();
+                        ThingEventType eventType = item.getModelObject();
                         if(checked.getObject()) {
                             selectedTypes.add(eventType);
                         } else if(selectedTypes.contains(eventType)) {
@@ -145,8 +146,8 @@ public class EventTypeAssociationsPage extends FieldIDFrontEndPage {
         ));
     }
 
-    private List<EventType> getSelectedTypes(Set<AssociatedEventType> associatedEventTypes) {
-        List<EventType> selectedTypes = Lists.newArrayList();
+    private List<ThingEventType> getSelectedTypes(Set<AssociatedEventType> associatedEventTypes) {
+        List<ThingEventType> selectedTypes = Lists.newArrayList();
         for (AssociatedEventType type: associatedEventTypes) {
             selectedTypes.add(type.getEventType());
         }

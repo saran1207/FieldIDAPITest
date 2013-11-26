@@ -63,7 +63,7 @@ public class MassScheduleServiceTest extends FieldIdServiceTest {
     @Test
     public void test_performSchedules_without_duplicate_detection() {
         AssetType assetType = AssetTypeBuilder.anAssetType().named("assetType").build();
-        Event event = EventBuilder.anEvent().scheduledFor(jan1_2015.toDate()).build();
+        ThingEvent event = EventBuilder.anEvent().scheduledFor(jan1_2015.toDate()).build();
         ScheduleSummaryEntry scheduleSummaryEntry = new ScheduleSummaryEntryBuilder().withAssetType(assetType).withAssetIds(1L, 2L, 3L).withScheduledEvents(event).build();
         List<ScheduleSummaryEntry> schedules = Lists.newArrayList(scheduleSummaryEntry);
 
@@ -83,7 +83,7 @@ public class MassScheduleServiceTest extends FieldIdServiceTest {
     @Test
     public void test_performSchedules_with_duplicate_detection() {
         AssetType assetType = AssetTypeBuilder.anAssetType().named("assetType").build();
-        Event event = EventBuilder.anEvent().scheduledFor(jan1_2015.toDate()).build();
+        ThingEvent event = EventBuilder.anEvent().scheduledFor(jan1_2015.toDate()).build();
         ScheduleSummaryEntry scheduleSummaryEntry = new ScheduleSummaryEntryBuilder().withAssetType(assetType).withAssetIds(1L, 2L, 3L).withScheduledEvents(event).build();
         List<ScheduleSummaryEntry> schedules = Lists.newArrayList(scheduleSummaryEntry);
         // NOTE : i specifically used Timestamps in test because that's what you should expect.  also, they cause a bug when comparisons are not handled carefully and this test will break if that code is changed.

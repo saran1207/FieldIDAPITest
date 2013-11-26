@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TimeZone;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import com.n4systems.util.DateHelper;
@@ -18,7 +19,7 @@ public class MassUpdateEventModel implements Serializable {
     private Map<String, Boolean> select;
 
     public MassUpdateEventModel() {
-        event = new Event();
+        event = new ThingEvent();
         select = new HashMap<String, Boolean>();
     }
 

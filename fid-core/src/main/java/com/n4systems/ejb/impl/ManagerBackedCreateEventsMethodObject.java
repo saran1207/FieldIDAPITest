@@ -22,12 +22,12 @@ public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethod
 		this.eventSaver = eventSaver;
 	}
 
-	public List<Event> createEvents(String transactionGUID, List<Event> events, Map<Event, Date> nextEventDates) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
+	public List<ThingEvent> createEvents(String transactionGUID, List<ThingEvent> events, Map<ThingEvent, Date> nextEventDates) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
 		return createEvents(transactionGUID, events);
 	}
 
-	public List<Event> createEvents(String transactionGUID, List<Event> events) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
-		List<Event> savedEvents = new ArrayList<Event>();
+	public List<ThingEvent> createEvents(String transactionGUID, List<ThingEvent> events) throws ProcessingProofTestException, FileAttachmentException, TransactionAlreadyProcessedException, UnknownSubAsset {
+		List<ThingEvent> savedEvents = new ArrayList<ThingEvent>();
 		
 		/*
 		 *  XXX - Here we pull the Asset off the first event.  We then re-attach the asset back into persistence managed scope.
@@ -40,8 +40,8 @@ public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethod
 		persistenceManager.reattach(managedAsset);
 
 		Tenant tenant = null;
-		Event savedEvent = null;
-		for (Event event : events) {
+        ThingEvent savedEvent = null;
+		for (ThingEvent event : events) {
 			if (tenant == null) {
 				tenant = event.getTenant();
 			}

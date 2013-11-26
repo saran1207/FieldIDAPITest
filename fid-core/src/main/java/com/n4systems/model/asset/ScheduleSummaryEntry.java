@@ -2,6 +2,7 @@ package com.n4systems.model.asset;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class ScheduleSummaryEntry implements Serializable {
 
     private AssetType assetType;
     private List<Long> assetIds = new ArrayList<Long>();
-    private List<Event> schedules = new ArrayList<Event>();
+    private List<ThingEvent> schedules = new ArrayList<ThingEvent>();
 
     public AssetType getAssetType() {
         return assetType;
@@ -29,7 +30,7 @@ public class ScheduleSummaryEntry implements Serializable {
         return assetIds.size();
     }
 
-    public List<Event> getSchedules() {
+    public List<ThingEvent> getSchedules() {
         return schedules;
     }
 

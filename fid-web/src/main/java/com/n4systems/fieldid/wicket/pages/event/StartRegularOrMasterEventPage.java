@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.event;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -18,7 +19,7 @@ public class StartRegularOrMasterEventPage extends FieldIDAuthenticatedPage {
 
         StringValue scheduleIdParam = params.get("scheduleId");
         Long scheduleId = scheduleIdParam.isEmpty() ? null : scheduleIdParam.toLongObject();
-        EventType type = persistenceService.find(EventType.class, eventTypeId);
+        ThingEventType type = persistenceService.find(ThingEventType.class, eventTypeId);
 
         if (type.isMaster()) {
             String strutsAction = String.format("/masterEventAdd.action?assetId=%d&type=%d", assetId, eventTypeId);

@@ -1,26 +1,24 @@
 package com.n4systems.ejb;
 
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
 
 import java.util.List;
 
 public interface EventScheduleManager {
 	
-	public List<Event> autoSchedule(Asset asset);
+	public List<ThingEvent> autoSchedule(Asset asset);
 
-    public Event reattach(Event event);
-	public Event update(Event event);
-	public void restoreScheduleForEvent(Event event);
+    public ThingEvent reattach(ThingEvent event);
+	public ThingEvent update(ThingEvent event);
+	public void restoreScheduleForEvent(ThingEvent event);
 	
 	public void removeAllSchedulesFor(Asset asset);
 	
-	public List<Event> getAvailableSchedulesFor(Asset asset, String... postFetchFields);
+	public List<ThingEvent> getAvailableSchedulesFor(Asset asset, String... postFetchFields);
 	
-	public List<Event> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, EventType eventType);
+	public List<ThingEvent> getAvailableSchedulesForAssetFilteredByEventType(Asset asset, ThingEventType eventType);
 	
-	public List<Event> getAutoEventSchedules(Asset asset);
+	public List<ThingEvent> getAutoEventSchedules(Asset asset);
 	
 	public boolean schedulePastDue(Long scheduleId);
 	public Long getAssetIdForSchedule(Long scheduleId);

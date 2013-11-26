@@ -9,6 +9,7 @@ import java.util.Map;
 
 import com.n4systems.api.model.EventView;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import org.junit.Test;
 
 import com.n4systems.api.conversion.ConversionException;
@@ -23,18 +24,18 @@ public class EventExporterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_export() throws ExportException, ConversionException, MarshalingException, IOException {
-		Event model1 = new Event();
-		Event model2 = new Event();
+        ThingEvent model1 = new ThingEvent();
+        ThingEvent model2 = new ThingEvent();
 		EventView view1 = new EventView();
 		EventView view2 = new EventView();
 		Map<String, Object> map1 = new HashMap<String, Object>();
 		Map<String, Object> map2 = new HashMap<String, Object>();
 		
-		ListLoader<Event> eventLoader = createMock(ListLoader.class);
+		ListLoader<ThingEvent> eventLoader = createMock(ListLoader.class);
 		expect(eventLoader.load()).andReturn(Arrays.asList(model1, model2));
 		replay(eventLoader);
 		
-		ModelToViewConverter<Event, EventView> converter = createMock(ModelToViewConverter.class);
+		ModelToViewConverter<ThingEvent, EventView> converter = createMock(ModelToViewConverter.class);
 		expect(converter.toView(model1)).andReturn(view1);
 		expect(converter.toView(model2)).andReturn(view2);
 		replay(converter);

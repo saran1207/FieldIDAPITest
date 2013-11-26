@@ -82,7 +82,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public InspectionServiceDTO convert(Event event) {
+	public InspectionServiceDTO convert(ThingEvent event) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -112,7 +112,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Event convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
+	public ThingEvent convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -127,7 +127,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, Event schedule, Long tenantId) throws IOException {
+	public ThingEvent convert(InspectionServiceDTO inspectionServiceDTO, ThingEvent schedule, Long tenantId) throws IOException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

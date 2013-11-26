@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.wicket.components.schedule;
 
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 
@@ -13,7 +11,7 @@ public class SchedulePicker extends DialogModalWindow {
 
     private SchedulePickerPanel schedulePickerPanel;
 
-    public SchedulePicker(String id, IModel<Event> scheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
+    public SchedulePicker(String id, IModel<ThingEvent> scheduleModel, IModel<List<ThingEventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
         super(id);
 
         setContent(schedulePickerPanel = new SchedulePickerPanel(getContentId(), scheduleModel, eventTypeOptions, jobsOptions) {

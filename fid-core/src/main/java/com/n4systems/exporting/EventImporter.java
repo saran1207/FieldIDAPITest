@@ -10,6 +10,7 @@ import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.ContinueExistingTransactionManager;
 import com.n4systems.persistence.Transaction;
 
@@ -31,7 +32,7 @@ public class EventImporter extends AbstractImporter<EventView> {
 	@Override
 	protected void importView(Transaction transaction, EventView view) throws ConversionException {		
 		try {
-			Event event = converter.toModel(view, transaction);
+            ThingEvent event = converter.toModel(view, transaction);
 
             ContinueExistingTransactionManager continueTransaction = new ContinueExistingTransactionManager(transaction);
 			eventPersistenceFactory.createEventCreator(continueTransaction).create(

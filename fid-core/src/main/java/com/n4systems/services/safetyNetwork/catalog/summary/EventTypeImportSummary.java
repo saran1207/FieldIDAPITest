@@ -4,14 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 
 public class EventTypeImportSummary extends BaseImportSummary {
 
-	private Map<Long, EventType> importMapping = new HashMap<Long, EventType>();
+	private Map<Long, ThingEventType> importMapping = new HashMap<Long, ThingEventType>();
 	private boolean renamed = false;
 	private int numberRenamed = 0;
 	
-	public Map<Long, EventType> getImportMapping() {
+	public Map<Long, ThingEventType> getImportMapping() {
 		return importMapping;
 	}
 

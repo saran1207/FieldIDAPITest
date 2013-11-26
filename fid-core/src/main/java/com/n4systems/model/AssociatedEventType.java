@@ -1,30 +1,30 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.Saveable;
+import com.n4systems.model.parents.EntityWithTenant;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.n4systems.model.api.Saveable;
-import com.n4systems.model.parents.EntityWithTenant;
-
 @Entity
-@Table(name="associatedeventtypes")
+@Table(name="associated_event_types")
 public class AssociatedEventType extends EntityWithTenant implements Saveable {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToOne
-    @JoinColumn(name="eventtype_id")
-	private EventType eventType;
+    @JoinColumn(name="thing_event_type_id")
+	private ThingEventType eventType;
 	
 	@ManyToOne
-    @JoinColumn(name="producttype_id")
+    @JoinColumn(name="asset_type_id")
 	private AssetType assetType;
 	
 	public AssociatedEventType() {
 	}
 	
-	public AssociatedEventType(EventType eventType, AssetType assetType) {
+	public AssociatedEventType(ThingEventType eventType, AssetType assetType) {
 		super(eventType.getTenant());
 		this.eventType = eventType;
 		this.assetType = assetType;
@@ -38,11 +38,11 @@ public class AssociatedEventType extends EntityWithTenant implements Saveable {
 		this.assetType = assetType;
 	}
 
-	public EventType getEventType() {
+	public ThingEventType getEventType() {
 		return eventType;
 	}
 
-	public void setEventType(EventType eventType) {
+	public void setEventType(ThingEventType eventType) {
 		this.eventType = eventType;
 	}
 

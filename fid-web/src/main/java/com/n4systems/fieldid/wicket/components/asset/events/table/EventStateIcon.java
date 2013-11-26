@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.services.date.DateService;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -16,7 +17,7 @@ public class EventStateIcon extends Panel {
     private @SpringBean
     DateService dateService;
 
-    public EventStateIcon(String id, IModel<Event> eventModel) {
+    public EventStateIcon(String id, IModel<? extends Event> eventModel) {
         super(id);
 
         Event event = eventModel.getObject();

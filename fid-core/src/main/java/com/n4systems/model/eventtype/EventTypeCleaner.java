@@ -5,14 +5,12 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
-import com.n4systems.model.Tenant;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.api.EntityWithTenantCleaner;
 import com.n4systems.util.ListHelper;
 
-public class EventTypeCleaner extends EntityWithTenantCleaner<EventType> {
+public class EventTypeCleaner extends EntityWithTenantCleaner<ThingEventType> {
 	
     private final Cleaner<EventForm> eventFormCleaner;
 	
@@ -26,7 +24,7 @@ public class EventTypeCleaner extends EntityWithTenantCleaner<EventType> {
 	}
 	
 	@Override
-	public void clean(EventType type) {
+	public void clean(ThingEventType type) {
 		super.clean(type);
 
 		type.setFormVersion(EventType.DEFAULT_FORM_VERSION);
@@ -39,7 +37,7 @@ public class EventTypeCleaner extends EntityWithTenantCleaner<EventType> {
 		cleanInfoFieldNames(type);
 	}
 
-	private void cleanSupportedProofTests(EventType type) {
+	private void cleanSupportedProofTests(ThingEventType type) {
 		// Note: this is actually required so that hibernate does not move the old list to the new entity
 		// when it's being copied. -mf
 		type.setSupportedProofTests(ListHelper.copy(type.getSupportedProofTests(), new HashSet<ProofTestType>()));

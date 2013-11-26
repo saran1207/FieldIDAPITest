@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.model.*;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -14,11 +15,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.MissingEntityException;
 import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.utils.StrutsListHelper;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.RelativeTime;
 import com.n4systems.model.common.SimpleFrequency;
@@ -45,7 +41,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
 	private List<AssetTypeGroup> assetTypeGroups;
 	private List<AssetType> assetTypes;
 	private List<AssetStatus> assetStatuses;
-	private List<EventType> eventTypes;
+	private List<ThingEventType> eventTypes;
 	private List<FrequencyGroupView> frequencyGroups;
 	
 	private List<NotificationSetting> settingsList;
@@ -221,7 +217,7 @@ public class NotificationSettingsCrud extends AbstractCrud {
     	return periodEndList;
     }
 
-	public List<EventType> getEventTypes() {
+	public List<ThingEventType> getEventTypes() {
 		if (eventTypes == null) {
 			eventTypes = getLoaderFactory().createEventTypesByGroupListLoader().setEventTypeGroupId(view.getEventTypeGroupId()).load();
 		}

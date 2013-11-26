@@ -24,6 +24,7 @@ import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Address;
 import com.n4systems.model.EventType;
 import com.n4systems.model.GpsLocation;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.builders.CustomerOrgBuilder;
 import com.n4systems.model.builders.DivisionOrgBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
@@ -242,7 +243,7 @@ public class OrgSummaryPage extends FieldIDFrontEndPage {
                     }
                 });
 
-        List<EventType> eventTypes = Lists.newArrayList(EventTypeBuilder.anEventType().named("Visual Inspection").build());
+        List<ThingEventType> eventTypes = Lists.newArrayList(EventTypeBuilder.anEventType().named("Visual Inspection").build());
         MarkupContainer startMenu = new WebMarkupContainer("start")
                 .add(new ListView<EventType>("types", eventTypes) {
                     @Override

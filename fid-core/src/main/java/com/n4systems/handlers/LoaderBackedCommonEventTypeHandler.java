@@ -7,6 +7,7 @@ import java.util.Set;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.eventtype.CommonAssetTypeLoader;
 
 public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandler {
@@ -17,11 +18,11 @@ public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandle
 		this.assetTypeIdLoader = assetTypeIdLoader;
 	}
 
-	public Set<EventType> findCommonEventTypesFor(List<Long> assetIds) {
+	public Set<ThingEventType> findCommonEventTypesFor(List<Long> assetIds) {
 		List<AssetType> resultSet = getAssetTypes(assetIds);
 
-		Set<EventType> filterCommonEventTypes = filterCommonEventTypes(resultSet);
-		return filterCommonEventTypes == null ? new HashSet<EventType>() : filterCommonEventTypes;
+		Set<ThingEventType> filterCommonEventTypes = filterCommonEventTypes(resultSet);
+		return filterCommonEventTypes == null ? new HashSet<ThingEventType>() : filterCommonEventTypes;
 	}
 
 	private List<AssetType> getAssetTypes(List<Long> assetIds) {
@@ -33,11 +34,11 @@ public class LoaderBackedCommonEventTypeHandler implements CommonEventTypeHandle
 	}
 
 	@SuppressWarnings("deprecation")
-	private Set<EventType> filterCommonEventTypes(
+	private Set<ThingEventType> filterCommonEventTypes(
 			List<AssetType> resultSet) {
-		Set<EventType> commonEventTypes = null;
+		Set<ThingEventType> commonEventTypes = null;
 		for (AssetType assetType : resultSet) {
-			Set<EventType> currentEventTypes = assetType.getEventTypes();
+			Set<ThingEventType> currentEventTypes = assetType.getEventTypes();
 			if (commonEventTypes == null) {
 				commonEventTypes = currentEventTypes;
 			} else {

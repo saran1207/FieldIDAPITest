@@ -39,7 +39,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	}
 	
 	private void importEventType(Long originalId) throws ImportFailureException {
-		EventType importedEventType = importCatalog.getPublishedEventType(originalId);
+		ThingEventType importedEventType = importCatalog.getPublishedEventType(originalId);
 		try {
 			importIntoAccount(importedEventType);
 			
@@ -51,7 +51,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 		}
 	}
 
-	private void importIntoAccount(EventType importedEventType) {
+	private void importIntoAccount(ThingEventType importedEventType) {
 		clean(importedEventType);
 		
 		resolveGroup(importedEventType);
@@ -78,7 +78,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 		importedEventType.setGroup(importedGroupMapping.get(importedEventType.getGroup().getId()));
 	}
 
-	private void clean(EventType importedEventType) {
+	private void clean(ThingEventType importedEventType) {
 		cleanerFor(tenant).clean(importedEventType);
 	}
 
@@ -106,7 +106,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 		List<ListingPair> eventTypesLP = importCatalog.getPublishedEventTypesLP();
 		for (ListingPair eventType : eventTypesLP) {
 			if (eventTypeIds.contains(eventType.getId())) {
-				summary.getImportMapping().put(eventType.getId(), new EventType(createUniqueEventTypeName(eventType.getName())) );
+				summary.getImportMapping().put(eventType.getId(), new ThingEventType(createUniqueEventTypeName(eventType.getName())) );
 			}
 		}
 		return summary;
@@ -129,7 +129,7 @@ public class CatalogEventTypeImportHandler extends CatalogImportHandler {
 	}
 
 
-	public Map<Long, EventType> getImportMapping() {
+	public Map<Long, ThingEventType> getImportMapping() {
 		return summary.getImportMapping();
 	}
 	

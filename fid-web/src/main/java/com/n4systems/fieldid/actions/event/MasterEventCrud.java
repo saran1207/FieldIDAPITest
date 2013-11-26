@@ -38,7 +38,7 @@ public class MasterEventCrud extends AbstractCrud {
 	private EventScheduleManager eventScheduleManager;
 	private final EventPersistenceFactory eventPersistenceFactory;
 
-	private Event event;
+	private ThingEvent event;
 	private Asset asset;
 	private List<SubAssetHelper> subAssets;
 
@@ -74,10 +74,10 @@ public class MasterEventCrud extends AbstractCrud {
 	private void createNewMasterEvent() {
 		masterEvent = new MasterEvent();
         if (scheduleId != null) {
-            Event openEvent = persistenceManager.find(Event.class, scheduleId, getTenant(), "asset", "eventForm.sections", "results", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
+            ThingEvent openEvent = persistenceManager.find(ThingEvent.class, scheduleId, getTenant(), "asset", "eventForm.sections", "results", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
             masterEvent.setEvent(openEvent);
         } else {
-            masterEvent.setEvent(new Event());
+            masterEvent.setEvent(new ThingEvent());
         }
 		token = masterEvent.getToken();
 		masterEvent.getEvent().setAsset(asset);
@@ -89,7 +89,7 @@ public class MasterEventCrud extends AbstractCrud {
 		masterEvent = (MasterEvent) getSession().get(SESSION_KEY);
 
 		if (masterEvent == null || token == null || !MasterEvent.matchingMasterEvent(masterEvent, token)) {
-			Event event = eventManager.findAllFields(uniqueId, getSecurityFilter());
+			ThingEvent event = eventManager.findAllFields(uniqueId, getSecurityFilter());
 			masterEvent = new MasterEvent(event);
 			if (event != null) {
 				for (SubEvent subEvent : event.getSubEvents()) {
@@ -188,7 +188,7 @@ public class MasterEventCrud extends AbstractCrud {
 				if (masterEvent.isCleanToEventsToMatchConfiguration()) {
 					masterEvent.cleanSubEventsForNonValidSubAssets(asset);
 				}
-				Event master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());
+                ThingEvent master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());
 				
 				
 				CreateEventParameterBuilder createEventBuilder = new CreateEventParameterBuilder(master, getSessionUserId())
@@ -201,7 +201,7 @@ public class MasterEventCrud extends AbstractCrud {
                         createEventBuilder.build());
 				uniqueID = event.getId();
 			} else {
-				Event master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());
+                ThingEvent master = CopyEventFactory.copyEvent(masterEvent.getCompletedEvent());
 				event = eventManager.updateEvent(master, scheduleId, getSessionUser().getUniqueID(), masterEvent.getProofTestFile(), masterEvent.getUploadedFiles());
 			}
 
@@ -320,7 +320,7 @@ public class MasterEventCrud extends AbstractCrud {
 		if (type == null) {
 			event.setType(null);
 		} else if (event.getType() == null || !type.equals(event.getType())) {
-			event.setType(persistenceManager.find(EventType.class, type, getTenantId()));
+			event.setType(persistenceManager.find(ThingEventType.class, type, getTenantId()));
 		}
 	}
 

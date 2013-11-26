@@ -2,9 +2,10 @@ package com.n4systems.ws.model.eventtype;
 
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.ws.model.WsModelConverter;
 
-public class WsEventTypeConverter extends WsModelConverter<EventType, WsEventType> {
+public class WsEventTypeConverter extends WsModelConverter<ThingEventType, WsEventType> {
 	private final WsModelConverter<EventTypeGroup, WsEventTypeGroup> groupConverter;
 	
 	public WsEventTypeConverter() {
@@ -16,7 +17,7 @@ public class WsEventTypeConverter extends WsModelConverter<EventType, WsEventTyp
 	}
 	
 	@Override
-	public WsEventType fromModel(EventType model) {
+	public WsEventType fromModel(ThingEventType model) {
 		WsEventType wsEventType = new WsEventType();
 		wsEventType.setId(model.getId());
 		wsEventType.setName(model.getName());

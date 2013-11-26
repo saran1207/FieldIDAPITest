@@ -11,7 +11,7 @@ import org.apache.wicket.model.PropertyModel;
 
 public class ResultCell extends Panel {
 
-    public ResultCell(String id, IModel<Event> eventModel) {
+    public ResultCell(String id, IModel<? extends Event> eventModel) {
         super(id);
 
         Event event = eventModel.getObject();

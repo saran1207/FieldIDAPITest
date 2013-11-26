@@ -1,6 +1,7 @@
 package com.n4systems.model.eventschedule;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -8,7 +9,7 @@ import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 
-public class EventScheduleByGuidOrIdLoader extends SecurityFilteredLoader<Event> {
+public class EventScheduleByGuidOrIdLoader extends SecurityFilteredLoader<ThingEvent> {
     private static final Logger logger= Logger.getLogger(EventScheduleByGuidOrIdLoader.class);
 
 	private String mobileGuid;
@@ -20,8 +21,8 @@ public class EventScheduleByGuidOrIdLoader extends SecurityFilteredLoader<Event>
 	}
 
 	@Override
-	protected Event load(EntityManager em, SecurityFilter filter) {
-		Event schedule = null;
+	protected ThingEvent load(EntityManager em, SecurityFilter filter) {
+        ThingEvent schedule = null;
 		
 		if (mobileGuid != null && mobileGuid.trim().length() > 0) {
 			schedule = loadByGuid(em, filter);
@@ -42,15 +43,15 @@ public class EventScheduleByGuidOrIdLoader extends SecurityFilteredLoader<Event>
         return schedule;
 	}
 
-    private Event loadByLegacyScheduleId(long id, SecurityFilter filter, EntityManager em) {
-        QueryBuilder<Event> queryBuilder = getQueryBuilder(filter);
+    private ThingEvent loadByLegacyScheduleId(long id, SecurityFilter filter, EntityManager em) {
+        QueryBuilder<ThingEvent> queryBuilder = getQueryBuilder(filter);
         queryBuilder.addSimpleWhere("scheduleId", id);
         return queryBuilder.getSingleResult(em);
     }
 
-    protected Event loadByGuid(EntityManager em,
+    protected ThingEvent loadByGuid(EntityManager em,
 			SecurityFilter filter) {
-		QueryBuilder<Event> query = getQueryBuilder(filter);
+		QueryBuilder<ThingEvent> query = getQueryBuilder(filter);
 		query.addSimpleWhere("mobileGUID", mobileGuid);
 		
 		return query.getSingleResult(em);
@@ -67,8 +68,8 @@ public class EventScheduleByGuidOrIdLoader extends SecurityFilteredLoader<Event>
 		return this;
 	}
 	
-	protected QueryBuilder<Event> getQueryBuilder(SecurityFilter filter) {
-		return new QueryBuilder<Event>(Event.class, filter);
+	protected QueryBuilder<ThingEvent> getQueryBuilder(SecurityFilter filter) {
+		return new QueryBuilder<ThingEvent>(Event.class, filter);
 	}
 
 }

@@ -18,7 +18,7 @@ import org.apache.wicket.model.Model;
 import java.util.List;
 import java.util.Locale;
 
-public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
+public class EventTypeTranslationsPage extends TranslationsPage<ThingEventType> {
 
     public EventTypeTranslationsPage() {
         super();
@@ -32,8 +32,8 @@ public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
     }
 
     @Override
-    protected DropDownChoice<EventType> createChoice(String id) {
-        return new GroupedEventTypePicker(id, Model.of(new EventType()), new EventTypesForTenantModel());
+    protected DropDownChoice<ThingEventType> createChoice(String id) {
+        return new GroupedEventTypePicker(id, Model.of(new ThingEventType()), new EventTypesForTenantModel());
     }
 
     @Override

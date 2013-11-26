@@ -32,8 +32,8 @@ public class EventToViewConverterTest {
             protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
-		
-		Event model = new Event();
+
+        ThingEvent model = new ThingEvent();
 		model.setComments("comments");
 		model.setDate(new Date());
 		model.setAdvancedLocation(Location.onlyFreeformLocation("location"));
@@ -59,8 +59,8 @@ public class EventToViewConverterTest {
             protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
-		
-		Event model = new Event();
+
+        ThingEvent model = new ThingEvent();
 		model.setEventResult(EventResult.PASS);
 		
 		EventView view = converter.toView(model);
@@ -80,8 +80,8 @@ public class EventToViewConverterTest {
             protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
-		
-		Event model = new Event();
+
+        ThingEvent model = new ThingEvent();
 		model.setAsset(AssetBuilder.anAsset().withIdentifier("serial").build());
 		
 		EventView view = converter.toView(model);
@@ -101,8 +101,8 @@ public class EventToViewConverterTest {
             protected void convertEventStatus(Event model, EventView view) {}
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
-		
-		Event model = new Event();
+
+        ThingEvent model = new ThingEvent();
 		model.setPerformedBy(UserBuilder.anEmployee().withFirstName("Mark").withLastName("F").build());
 		
 		EventView view = converter.toView(model);
@@ -112,7 +112,7 @@ public class EventToViewConverterTest {
 	
 	@Test
 	public void to_view_copies_loads_next_event_date() throws ConversionException {
-		Event model = new Event();
+        ThingEvent model = new ThingEvent();
 		Date nextDate = new Date();
 		
 		NextEventDateByEventLoader loader = createMock(NextEventDateByEventLoader.class);
@@ -153,8 +153,8 @@ public class EventToViewConverterTest {
 		
 		EventBook book = new EventBook();
 		book.setName("event book");
-		
-		Event model = new Event();
+
+        ThingEvent model = new ThingEvent();
 		model.setBook(book);
 		
 		EventView view = converter.toView(model);
@@ -175,7 +175,7 @@ public class EventToViewConverterTest {
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
-		EventView view = converter.toView(new Event());
+		EventView view = converter.toView(new ThingEvent());
 		
 		assertNull(view.getEventBook());
 	}
@@ -195,8 +195,8 @@ public class EventToViewConverterTest {
 		
 		AssetStatus pse = new AssetStatus();
 		pse.setName("asset status");
-		
-		Event model = new Event();
+
+        ThingEvent model = new ThingEvent();
 		model.setAssetStatus(pse);
 		
 		EventView view = converter.toView(model);
@@ -217,7 +217,7 @@ public class EventToViewConverterTest {
 			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
-		EventView view = converter.toView(new Event());
+		EventView view = converter.toView(new ThingEvent());
 		
 		assertNull(view.getAssetStatus());
 	}
@@ -238,7 +238,7 @@ public class EventToViewConverterTest {
         EventStatus pse = new EventStatus();
         pse.setName("event status");
 
-        Event model = new Event();
+        ThingEvent model = new ThingEvent();
         model.setEventStatus(pse);
 
         EventView view = converter.toView(model);
@@ -259,7 +259,7 @@ public class EventToViewConverterTest {
             protected void convertOwnerFields(BaseOrg owner, EventView view) {}
         };
 
-        EventView view = converter.toView(new Event());
+        EventView view = converter.toView(new ThingEvent());
 
         assertNull(view.getEventStatus());
     }
@@ -283,9 +283,9 @@ public class EventToViewConverterTest {
 						OrgBuilder.aPrimaryOrg().withName("primary").build()
 				).build()
 		).build();
-		
-		
-		Event model = new Event();
+
+
+        ThingEvent model = new ThingEvent();
 		model.setOwner(org);
 		
 		EventView view = converter.toView(model);

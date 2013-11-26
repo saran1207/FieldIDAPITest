@@ -51,8 +51,8 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
     private boolean unassignedOnly;
 
     @ManyToOne
-    @JoinColumn(name="eventTypeId")
-    private EventType eventType;
+    @JoinColumn(name="thingEventTypeId")
+    private ThingEventType eventType;
 
     @Embedded
     private DateRange dateRange = new DateRange(RangeType.CUSTOM);
@@ -150,11 +150,11 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
         this.assignedTo = assignedTo;
     }
 
-    public EventType getEventType() {
+    public ThingEventType getEventType() {
         return eventType;
     }
 
-    public void setEventType(EventType eventType) {
+    public void setEventType(ThingEventType eventType) {
         this.eventType = eventType;
     }
 

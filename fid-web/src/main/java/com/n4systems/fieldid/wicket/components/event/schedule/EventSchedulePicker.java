@@ -5,6 +5,8 @@ import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.ThingEventType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -46,7 +48,7 @@ public class EventSchedulePicker extends FormComponentPanel<Event> {
             protected List<Event> load() {
                 List<Event> pickableSchedulesWithNewAndNone = new ArrayList<Event>();
                 List<Event> incompleteSchedules = scheduleService.findIncompleteSchedulesForAsset(assetModel.getObject());
-                pickableSchedulesWithNewAndNone.add(new Event());
+                pickableSchedulesWithNewAndNone.add(new ThingEvent());
                 pickableSchedulesWithNewAndNone.addAll(incompleteSchedules);
                 return pickableSchedulesWithNewAndNone;
             }

@@ -9,6 +9,7 @@ import com.n4systems.fieldid.actions.asset.TraceabilityCrud;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.safetynetwork.AssetAlreadyRegisteredLoader;
@@ -34,7 +35,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 	}
 	
 	protected AssetWebModel assetWebModel = new AssetWebModel(this);
-    protected List<Event> eventSchedules;
+    protected List<ThingEvent> eventSchedules;
 	
 	@Override
 	protected void postInit() {
@@ -83,7 +84,7 @@ public class SafetyNetworkAsset extends TraceabilityCrud{
 		return assetAttachments;
 	}
 
-    public List<Event> getEventSchedules() {
+    public List<ThingEvent> getEventSchedules() {
         if (eventSchedules == null) {
             eventSchedules = eventScheduleManager.getAvailableSchedulesFor(asset);
         }

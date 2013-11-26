@@ -8,11 +8,12 @@ import com.n4systems.ejb.impl.CreateEventParameter;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.tools.FileDataContainer;
 
 public class CreateEventParameterBuilder {
 
-	private final Event event;
+	private final ThingEvent event;
 	private final long userId;
 	private Date nextEventDate = null;
 	private FileDataContainer proofTestData = null;
@@ -20,7 +21,7 @@ public class CreateEventParameterBuilder {
 	private ArrayList<EventScheduleBundle> schedules = new ArrayList<EventScheduleBundle>();
     private Long scheduleId;
 
-    public CreateEventParameterBuilder(Event event, long userId) {
+    public CreateEventParameterBuilder(ThingEvent event, long userId) {
 		this.event = event;
 		this.userId = userId;
 	}

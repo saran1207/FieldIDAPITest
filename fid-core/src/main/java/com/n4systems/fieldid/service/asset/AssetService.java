@@ -480,11 +480,11 @@ public class AssetService extends FieldIdPersistenceService {
     }
 
     @LegacyMethod
-    public Event findLastEvents(Asset asset, SecurityFilter securityFilter) {
+    public ThingEvent findLastEvents(Asset asset, SecurityFilter securityFilter) {
         Query eventQuery = createAllEventQuery(asset, securityFilter, false, true);
-        Event event = null;
+        ThingEvent event = null;
         try {
-            event = (Event) eventQuery.getSingleResult();
+            event = (ThingEvent) eventQuery.getSingleResult();
         } catch (NoResultException e) {
         }
         return event;
@@ -509,7 +509,7 @@ public class AssetService extends FieldIdPersistenceService {
 
     @LegacyMethod
     private Query createAllEventQuery(Asset asset, SecurityFilter securityFilter, boolean count, boolean lastEvent) {
-        String query = "from "+Event.class.getName()+" event  left join event.asset " + "WHERE  " + securityFilter.produceWhereClause(Event.class, "event")
+        String query = "from "+ThingEvent.class.getName()+" event  left join event.asset " + "WHERE  " + securityFilter.produceWhereClause(Event.class, "event")
                 + " AND event.asset = :asset AND event.state= :activeState AND event.workflowState= :completed";
         if (count) {
             query = "SELECT count(event.id) " + query;

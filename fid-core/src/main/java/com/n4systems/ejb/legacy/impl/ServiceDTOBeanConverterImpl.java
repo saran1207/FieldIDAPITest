@@ -118,7 +118,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return bookDTO;
 	}
 
-	private void populateAbstractInspectionInfo(AbstractInspectionServiceDTO inspectionDTO, AbstractEvent event) {
+	private void populateAbstractInspectionInfo(AbstractInspectionServiceDTO inspectionDTO, AbstractEvent<ThingEventType> event) {
 		inspectionDTO.setComments(event.getComments());
 		inspectionDTO.setId(event.getId());
 		inspectionDTO.setInspectionMobileGUID(event.getMobileGUID());
@@ -138,13 +138,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		inspectionDTO.setInspectionTypeId(event.getType().getId());
 		inspectionDTO.setProductId(event.getAsset().getId());
 		inspectionDTO.setProductMobileGuid(event.getAsset().getMobileGUID());
-		for (CriteriaResult criteriaResult : event.getResults()) {
+        for (CriteriaResult criteriaResult : event.getResults()) {
 			inspectionDTO.getResults().add(convert(criteriaResult));
 		}
 
 	}
 
-	public com.n4systems.webservice.dto.InspectionServiceDTO convert(Event event) {
+	public com.n4systems.webservice.dto.InspectionServiceDTO convert(ThingEvent event) {
 		InspectionServiceDTO inspectionDTO = new InspectionServiceDTO();
 		persistenceManager.reattach(event, false);
         if (event.getAssigneeNotification() != null) {
@@ -178,7 +178,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 
 	}
 	
-	private void convertGpsLocationForEvent(InspectionServiceDTO inspectionDTO, Event event) {
+	private void convertGpsLocationForEvent(InspectionServiceDTO inspectionDTO, ThingEvent event) {
 		GpsLocation gpsLocation = event.getGpsLocation();
 		if(gpsLocation != null && gpsLocation.isValid()) {
 			inspectionDTO.setLatitude(event.getGpsLocation().getLatitude().doubleValue());
@@ -249,8 +249,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			}
 		}
 
-		List<Event> openEvents = eventScheduleManager.getAvailableSchedulesFor(asset);
-		for (Event openEvent : openEvents) {
+		List<ThingEvent> openEvents = eventScheduleManager.getAvailableSchedulesFor(asset);
+		for (ThingEvent openEvent : openEvents) {
 			productDTO.getSchedules().add(convertOpenEvent(openEvent));
 		}
 
@@ -436,16 +436,16 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	 * @deprecated Use the InspectionServiceDTOConverter
 	 */
 	@Deprecated
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, Event schedule, Long tenantId) throws IOException {
+	public ThingEvent convert(InspectionServiceDTO inspectionServiceDTO, ThingEvent schedule, Long tenantId) throws IOException {
 
 		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 
-        Event event = new Event();
+        ThingEvent event = new ThingEvent();
 
         if (schedule!=null) {
             // As long as this scheduled event's corresponding open event hasn't been completed or archived, we're going to use it
             if (schedule.getWorkflowState()== WorkflowState.OPEN && schedule.getState() == Archivable.EntityState.ACTIVE) {
-                event = persistenceManager.find(Event.class, schedule.getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
+                event = persistenceManager.find(ThingEvent.class, schedule.getId(), tenantId, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
             }
         }
 
@@ -984,7 +984,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return jobService;
 	}
 
-	private InspectionScheduleServiceDTO convertOpenEvent(Event event) {
+	private InspectionScheduleServiceDTO convertOpenEvent(ThingEvent event) {
 		InspectionScheduleServiceDTO scheduleService = new InspectionScheduleServiceDTO();
 
 		scheduleService.setId(event.getId());
@@ -998,11 +998,11 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return scheduleService;
 	}
 
-	public Event convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
+	public ThingEvent convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
 
 		Tenant tenant = persistenceManager.find(Tenant.class, tenantId);
 
-        Event openEvent = new Event();
+        ThingEvent openEvent = new ThingEvent();
 
         openEvent.setDueDate(stringToDate(inspectionScheduleServiceDTO.getNextDate()));
         openEvent.setTenant(tenant);

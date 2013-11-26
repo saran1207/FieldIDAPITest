@@ -2,6 +2,7 @@ package com.n4systems.model.event;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.security.OwnerAndDownFilter;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class FailedEventListLoader extends ListLoader<Event>{
+public class FailedEventListLoader extends ListLoader<ThingEvent>{
 	
 	private Clock clock;
 	private SimpleFrequency frequency;
@@ -30,8 +31,8 @@ public class FailedEventListLoader extends ListLoader<Event>{
 	}
 
 	@Override
-	protected List<Event> load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, filter);
+	protected List<ThingEvent> load(EntityManager em, SecurityFilter filter) {
+		QueryBuilder<ThingEvent> builder = new QueryBuilder<ThingEvent>(Event.class, filter);
 		
 		builder.addWhere(WhereClauseFactory.create("eventResult", EventResult.FAIL));
 		builder.addWhere(Comparator.GE, "date", "completedDate", getFromDate());  // this needs to be converted toUTC(timeZone)!!!
@@ -45,7 +46,7 @@ public class FailedEventListLoader extends ListLoader<Event>{
 		return builder.getResultList(em);
 	}
 
-	protected void applyNotificationFilters(QueryBuilder<Event> builder) {
+	protected void applyNotificationFilters(QueryBuilder<ThingEvent> builder) {
 		if(setting.getOwner() != null) {
 			builder.applyFilter(new OwnerAndDownFilter(setting.getOwner()));
 		}

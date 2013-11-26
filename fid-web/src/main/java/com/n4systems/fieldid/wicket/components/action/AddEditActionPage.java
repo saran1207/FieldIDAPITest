@@ -53,7 +53,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
     private boolean immediateSaveMode = false;
 
     public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel) {
-        add(new AddActionForm("addActionForm", new Model<Event>(new Event()), criteriaResultModel));
+        add(new AddActionForm("addActionForm", new Model<Event>(new ThingEvent()), criteriaResultModel));
     }
 
     public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel, IModel<Event> eventModel) {

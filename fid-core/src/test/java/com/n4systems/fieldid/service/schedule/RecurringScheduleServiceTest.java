@@ -211,7 +211,7 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
         Tenant tenant = TenantBuilder.aTenant().build();
         BaseOrg owner = OrgBuilder.aPrimaryOrg().build();
         Asset asset = AssetBuilder.anAsset().forTenant(tenant).withOwner(owner).build();
-        EventType eventType = EventTypeBuilder.anEventType().withId(55L).build();
+        ThingEventType eventType = EventTypeBuilder.anEventType().withId(55L).build();
         Recurrence recurrence = RecurrenceBuilder.aRecurrence().withType(RecurrenceType.DAILY).withTimes(RecurrenceTimeOfDay.EIGHT_AM).build();
         LocalDateTime dueDate = new LocalDateTime().withDate(2012, 5, 13);
         RecurringAssetTypeEvent recurringAssetTypeEvent = RecurringAssetTypeEventBuilder.anAssetTypeEvent().
@@ -238,7 +238,7 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
         Tenant tenant = TenantBuilder.aTenant().build();
         BaseOrg owner = OrgBuilder.aPrimaryOrg().build();
         Asset asset = AssetBuilder.anAsset().forTenant(tenant).withOwner(owner).build();
-        EventType eventType = EventTypeBuilder.anEventType().withId(55L).build();
+        ThingEventType eventType = EventTypeBuilder.anEventType().withId(55L).build();
         Recurrence recurrence = RecurrenceBuilder.aRecurrence().withType(RecurrenceType.DAILY).withTimes(RecurrenceTimeOfDay.EIGHT_AM).build();
         LocalDateTime dueDate = new LocalDateTime().withDate(2012, 5, 13);
         RecurringAssetTypeEvent recurringAssetTypeEvent = RecurringAssetTypeEventBuilder.anAssetTypeEvent().

@@ -19,7 +19,7 @@ public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
     private final AssetTypeGroup group;
     private final Collection<InfoFieldBean> infoFields;
     private final Set<AssetType> subTypes;
-	private final EventType[] eventTypes;
+	private final ThingEventType[] eventTypes;
     private final Boolean linkable;
 
 	public static AssetTypeBuilder anAssetType() {
@@ -27,10 +27,10 @@ public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
 	}
 	
 	public AssetTypeBuilder() {
-		this("*", "warnings", "instructions", "http://www.example.com", "no description", true, new ArrayList<InfoFieldBean>(), new HashSet<AssetType>(), null, new EventType[]{}, null, null, false);
+		this("*", "warnings", "instructions", "http://www.example.com", "no description", true, new ArrayList<InfoFieldBean>(), new HashSet<AssetType>(), null, new ThingEventType[]{}, null, null, false);
 	}
 	
-	private AssetTypeBuilder(String name, String warnings, String instructions, String cautionsURL, String descriptionTemplate, boolean manufactureCertificate, Collection<InfoFieldBean> infoFields, Set<AssetType> subTypes, AssetTypeGroup group, EventType[] eventTypes, Tenant tenant, String manufactureCertificateText, Boolean linkable) {
+	private AssetTypeBuilder(String name, String warnings, String instructions, String cautionsURL, String descriptionTemplate, boolean manufactureCertificate, Collection<InfoFieldBean> infoFields, Set<AssetType> subTypes, AssetTypeGroup group, ThingEventType[] eventTypes, Tenant tenant, String manufactureCertificateText, Boolean linkable) {
         super(tenant);
 		this.name = name;
 		this.warnings = warnings;
@@ -62,7 +62,7 @@ public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
 		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
 	}
 	
-	public AssetTypeBuilder withEventTypes(EventType... eventTypes) {
+	public AssetTypeBuilder withEventTypes(ThingEventType... eventTypes) {
 		return makeBuilder(new AssetTypeBuilder(name, warnings, instructions, cautionsURL, descriptionTemplate, manufactureCertificate, infoFields, subTypes, group, eventTypes, tenant, manufactureCertificateText, linkable));
 	}
 
@@ -121,7 +121,7 @@ public class AssetTypeBuilder extends EntityWithTenantBuilder<AssetType> {
 
 	private void addEventTypes(AssetType assetType) {
 		HashSet<AssociatedEventType> eventTypeSet = new HashSet<AssociatedEventType>();
-		for (EventType eventType : eventTypes) {
+		for (ThingEventType eventType : eventTypes) {
 			eventTypeSet.add(new AssociatedEventType(eventType, assetType));
 		}
         

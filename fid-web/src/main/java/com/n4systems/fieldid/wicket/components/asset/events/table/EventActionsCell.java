@@ -3,13 +3,14 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
 public class EventActionsCell extends Panel {
-    public EventActionsCell(String id, IModel<Event> eventModel) {
+    public EventActionsCell(String id, IModel<ThingEvent> eventModel) {
         super(id);
         
         Event event = eventModel.getObject();

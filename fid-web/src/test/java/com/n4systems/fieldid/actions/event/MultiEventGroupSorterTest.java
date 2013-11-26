@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.ThingEventType;
 import org.hamcrest.Matchers;
 import org.junit.Test;
 
@@ -30,7 +31,7 @@ public class MultiEventGroupSorterTest {
 	@Test
 	public void should_return_an_list_with_a_single_event_type_group_when_there_is_only_one_event_type_given() {
 		EventTypeGroup group = anEventTypeGroup().build();
-		FluentHashSet<EventType> eventTypes = new FluentHashSet<EventType>(anEventType().withGroup(group).build());
+		FluentHashSet<ThingEventType> eventTypes = new FluentHashSet<ThingEventType>(anEventType().withGroup(group).build());
 		List<EventTypeGroup> eventTypeGroupNames = new FluentArrayList<EventTypeGroup>(group);
 		
 		
@@ -43,7 +44,7 @@ public class MultiEventGroupSorterTest {
 	@Test
 	public void should_return_an_list_with_a_single_event_type_group_when_all_event_types_have_the_same_group() {
 		EventTypeGroup group = anEventTypeGroup().build();
-		FluentHashSet<EventType> eventTypes = new FluentHashSet<EventType>(
+		FluentHashSet<ThingEventType> eventTypes = new FluentHashSet<ThingEventType>(
 				anEventType().withGroup(group).build(),
 				anEventType().withGroup(group).build());
 		List<EventTypeGroup> eventTypeGroupNames = new FluentArrayList<EventTypeGroup>(group);
@@ -62,7 +63,7 @@ public class MultiEventGroupSorterTest {
 		EventTypeGroup qGroup = anEventTypeGroup().withName("q group").build();
 		EventTypeGroup aGroup = anEventTypeGroup().withName("a group").build();
 		
-		FluentHashSet<EventType> eventTypes = new FluentHashSet<EventType>(
+		FluentHashSet<ThingEventType> eventTypes = new FluentHashSet<ThingEventType>(
 				anEventType().withGroup(zGroup).build(),
 				anEventType().withGroup(aGroup).build(),
 				anEventType().withGroup(qGroup).build(),
@@ -83,8 +84,8 @@ public class MultiEventGroupSorterTest {
 	public void should_return_a_list_of_event_types_in_alphabeticable_for_the_given_group() {
 		EventTypeGroup group = anEventTypeGroup().withName("group 1").build();
 		EventType typeB = anEventType().named("eventType b").withGroup(group).build();
-		EventType typeA = anEventType().named("eventType a").withGroup(group).build();
-		EventType typeZ = anEventType().named("eventType z").withGroup(group).build();
+        EventType typeA = anEventType().named("eventType a").withGroup(group).build();
+        EventType typeZ = anEventType().named("eventType z").withGroup(group).build();
 		
 		FluentHashSet<EventType> eventTypes = new FluentHashSet<EventType>(typeB, typeA, typeZ);
 		List<EventType> expectedList = ImmutableList.of(typeA, typeB, typeZ);

@@ -8,11 +8,11 @@ public class RecurringAssetTypeEventBuilder extends BaseBuilder<RecurringAssetTy
     private BaseOrg owner;
     private Recurrence recurrence;
     private Tenant tenant;
-    private EventType eventType;
+    private ThingEventType eventType;
     private AssetType assetType;
     private Boolean ownerAndDown;
 
-    private RecurringAssetTypeEventBuilder(AssetType assetType, EventType eventType, BaseOrg owner, Recurrence recurrence, Tenant tenant, Boolean ownerAndDown) {
+    private RecurringAssetTypeEventBuilder(AssetType assetType, ThingEventType eventType, BaseOrg owner, Recurrence recurrence, Tenant tenant, Boolean ownerAndDown) {
         super(null);
         this.assetType = assetType;
         this.eventType = eventType;
@@ -24,7 +24,7 @@ public class RecurringAssetTypeEventBuilder extends BaseBuilder<RecurringAssetTy
 
     public static RecurringAssetTypeEventBuilder anAssetTypeEvent() {
         AssetType assetType = AssetTypeBuilder.anAssetType().build();
-        EventType eventType = EventTypeBuilder.anEventType().build();
+        ThingEventType eventType = EventTypeBuilder.anEventType().build();
         BaseOrg owner = OrgBuilder.aPrimaryOrg().build();
         Recurrence recurrence = RecurrenceBuilder.aRecurrence().build();
         Tenant tenant = TenantBuilder.aTenant().build();
@@ -35,7 +35,7 @@ public class RecurringAssetTypeEventBuilder extends BaseBuilder<RecurringAssetTy
         return new RecurringAssetTypeEventBuilder(assetType, eventType, owner, recurrence, tenant, ownerAndDown);
     }
 
-    public RecurringAssetTypeEventBuilder withEventType(EventType eventType) {
+    public RecurringAssetTypeEventBuilder withEventType(ThingEventType eventType) {
         return new RecurringAssetTypeEventBuilder(assetType, eventType, owner, recurrence, tenant, ownerAndDown);
     }
 

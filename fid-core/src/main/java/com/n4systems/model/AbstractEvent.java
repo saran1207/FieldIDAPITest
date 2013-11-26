@@ -12,15 +12,12 @@ import java.util.*;
 @Entity
 @Table(name = "events")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class AbstractEvent extends EntityWithTenant implements HasFileAttachments {
+public abstract class AbstractEvent<T extends EventType> extends EntityWithTenant implements HasFileAttachments {
 	private static final long serialVersionUID = 1L;
 
 	@Column(length=2500)
 	private String comments;
 	
-	@ManyToOne(fetch=FetchType.EAGER, optional = false)
-	private EventType type;
-
     @ManyToOne(fetch=FetchType.EAGER, optional=true)
     @JoinColumn(name="eventform_id")
     private EventForm eventForm;
@@ -113,7 +110,6 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 		
 	    return	"id: " + getId() +
 	    		"\nTenant: " + getTenant() + 
-	    		"\nType: " + getType() +
 	    		"\nAsset: " + getAsset() +
 	    		"\nResults: " + StringUtils.indent(resultString, 1);
     }
@@ -125,15 +121,6 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
 
 	public void setEditable(boolean editable) {
 		this.editable = editable;
-	}
-	
-	@AllowSafetyNetworkAccess
-	public EventType getType() {
-		return type;
-	}
-
-	public void setType(EventType type) {
-		this.type = type;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -278,5 +265,8 @@ public abstract class AbstractEvent extends EntityWithTenant implements HasFileA
             }
         }
     }
+
+    public abstract T getType();
+    public abstract void setType(T type);
 
 }

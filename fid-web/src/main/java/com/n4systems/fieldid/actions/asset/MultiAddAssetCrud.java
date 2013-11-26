@@ -461,20 +461,20 @@ public class MultiAddAssetCrud extends UploadAttachmentSupport {
 		WebEventScheduleToScheduleConverter converter = new WebEventScheduleToScheduleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
 		for (WebEventSchedule schedule: getNextSchedules()) {
 			if(schedule != null) {
-				Event openEvent = converter.convert(schedule, asset);
+				ThingEvent openEvent = converter.convert(schedule, asset);
 				eventScheduleManager.update( openEvent );
 			}
 		}
 	}
 	
-	public void setAutoEventSchedules(List<Event> openEvents) {
+	public void setAutoEventSchedules(List<ThingEvent> openEvents) {
 		ScheduleToWebEventScheduleConverter converter = new ScheduleToWebEventScheduleConverter(getSessionUser().createUserDateConverter());
 		for (Event openEvent : openEvents) {
 			webEventSchedules.add(converter.convert(openEvent));
 		}
 	}
 	
-	public List<Event> getAutoEventSchedules(Asset asset) {
+	public List<ThingEvent> getAutoEventSchedules(Asset asset) {
 		return eventScheduleManager.getAutoEventSchedules(asset);
 	}
 

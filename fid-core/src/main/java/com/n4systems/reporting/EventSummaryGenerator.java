@@ -76,8 +76,8 @@ public class EventSummaryGenerator {
 			Integer totalPassedEvents = 0;
 			Integer totalFailedEvents = 0;
 			Integer totalNAEvents = 0;
-			
-			Event event;
+
+			ThingEvent event;
 			for (Long inspectionId : eventIds) {
 				
 				event = eventManager.findAllFields(inspectionId, user.getSecurityFilter());

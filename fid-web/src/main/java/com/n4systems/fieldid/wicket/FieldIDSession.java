@@ -9,6 +9,7 @@ import com.n4systems.fieldid.utils.FlashScopeMarshaller;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -33,7 +34,7 @@ public class FieldIDSession extends WebSession {
     private String previouslyStoredTempFileId;
     private boolean concurrentSessionDetected;
     private CriteriaResult previouslyStoredCriteriaResult;
-    private Event previouslyStoredEventSchedule;
+    private ThingEvent previouslyStoredEventSchedule;
     private Locale userLocale;
 
     public FieldIDSession(Request request) {
@@ -163,11 +164,11 @@ public class FieldIDSession extends WebSession {
         this.previouslyStoredCriteriaResult = previouslyStoredCriteriaResult;
     }
 
-    public Event getPreviouslyStoredEventSchedule() {
+    public ThingEvent getPreviouslyStoredEventSchedule() {
         return previouslyStoredEventSchedule;
     }
 
-    public void setPreviouslyStoredEventSchedule(Event previouslyStoredEventSchedule) {
+    public void setPreviouslyStoredEventSchedule(ThingEvent previouslyStoredEventSchedule) {
         this.previouslyStoredEventSchedule = previouslyStoredEventSchedule;
     }
 

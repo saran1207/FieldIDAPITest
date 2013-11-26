@@ -1,23 +1,24 @@
 package com.n4systems.webservice.asset;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.event.LastEventLoader;
 import com.n4systems.webservice.ModelToServiceConverter;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
 import com.n4systems.webservice.dto.ProductServiceDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AssetToServiceConverter implements ModelToServiceConverter<Asset, ProductServiceDTO> {
 	private final ServiceDTOBeanConverter serviceConverter;
 	private final LastEventLoader lastEventLoader;
-	private final ModelToServiceConverter<Event, InspectionServiceDTO> eventConverter;
+	private final ModelToServiceConverter<ThingEvent, InspectionServiceDTO> eventConverter;
 	private boolean withPreviousEvents;
 	
-	public AssetToServiceConverter(ServiceDTOBeanConverter serviceConverter, LastEventLoader lastEventLoader, ModelToServiceConverter<Event, InspectionServiceDTO> eventConverter) {
+	public AssetToServiceConverter(ServiceDTOBeanConverter serviceConverter, LastEventLoader lastEventLoader, ModelToServiceConverter<ThingEvent, InspectionServiceDTO> eventConverter) {
 		this.serviceConverter = serviceConverter;
 		this.lastEventLoader = lastEventLoader;
 		this.eventConverter = eventConverter;
@@ -35,10 +36,10 @@ public class AssetToServiceConverter implements ModelToServiceConverter<Asset, P
 	}
 	
 	private List<InspectionServiceDTO> convertLastEvents(Long assetId) {
-		List<Event> events = lastEventLoader.setAssetId(assetId).load();
+		List<ThingEvent> events = lastEventLoader.setAssetId(assetId).load();
 		
 		List<InspectionServiceDTO> dtos = new ArrayList<InspectionServiceDTO>();
-		for (Event insp: events) {
+		for (ThingEvent insp: events) {
 			dtos.add(eventConverter.toServiceDTO(insp));
 		}
 		

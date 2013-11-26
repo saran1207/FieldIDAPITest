@@ -472,8 +472,8 @@ public class AssetCrud extends UploadAttachmentSupport {
 		WebEventScheduleToScheduleConverter converter = new WebEventScheduleToScheduleConverter(getLoaderFactory(), getSessionUser().createUserDateConverter());
 		
 		for (WebEventSchedule schedule: getNextSchedules()) {
-			if(schedule != null) {
-				Event openEvent = converter.convert(schedule, asset);
+			if (schedule != null) {
+				ThingEvent openEvent = converter.convert(schedule, asset);
 				eventScheduleManager.update( openEvent );
 			}
 		}
@@ -487,14 +487,14 @@ public class AssetCrud extends UploadAttachmentSupport {
 		this.webEventSchedules = eventSchedules;
 	}
 	
-	public void setAutoEventSchedules(List<Event> eventSchedules) {
+	public void setAutoEventSchedules(List<ThingEvent> eventSchedules) {
 		ScheduleToWebEventScheduleConverter converter = new ScheduleToWebEventScheduleConverter(getSessionUser().createUserDateConverter());
 		for (Event openEvent: eventSchedules) {
 			webEventSchedules.add(converter.convert(openEvent));
 		}
 	}
 	
-	public List<Event> getAutoEventSchedules() {
+	public List<ThingEvent> getAutoEventSchedules() {
 		return eventScheduleManager.getAutoEventSchedules(asset);
 	}
 	

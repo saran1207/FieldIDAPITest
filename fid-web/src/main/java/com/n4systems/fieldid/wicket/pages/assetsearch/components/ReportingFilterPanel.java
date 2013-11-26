@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.search.IncludeDueDateRange;
@@ -31,7 +32,7 @@ public class ReportingFilterPanel extends Panel {
             @Override
             protected Panel createContainedPanel(String id) {
                 return new EventDetailsCriteriaPanel(id, model) {
-                    @Override protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {
+                    @Override protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, ThingEventType selectedEventType, List<ThingEventType> availableEventTypes) {
                         ReportingFilterPanel.this.onEventTypeOrGroupUpdated(target, selectedEventType, availableEventTypes);
                     }
                 };
@@ -115,7 +116,7 @@ public class ReportingFilterPanel extends Panel {
         };
     }
 
-    protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {}
+    protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, ThingEventType selectedEventType, List<ThingEventType> availableEventTypes) {}
 
     protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {}
 

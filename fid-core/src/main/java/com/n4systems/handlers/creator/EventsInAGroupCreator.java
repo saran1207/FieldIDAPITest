@@ -9,10 +9,11 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 
 public interface EventsInAGroupCreator {
 
-	public List<Event> create(String transactionGUID, List<Event> events, Map<Event, Date> nextEventDates) throws TransactionAlreadyProcessedException,
+	public List<ThingEvent> create(String transactionGUID, List<ThingEvent> events, Map<ThingEvent, Date> nextEventDates) throws TransactionAlreadyProcessedException,
 			ProcessingProofTestException, FileAttachmentException, UnknownSubAsset;
 
 }

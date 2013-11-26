@@ -18,8 +18,8 @@ public class RecurringAssetTypeEvent extends ArchivableEntityWithOwner implement
     private AssetType assetType;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "event_type_id", nullable = false)
-    private EventType eventType;
+    @JoinColumn(name = "thing_event_type_id", nullable = false)
+    private ThingEventType eventType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="recurrence_id")
@@ -36,7 +36,7 @@ public class RecurringAssetTypeEvent extends ArchivableEntityWithOwner implement
         this(assetType, null, new Recurrence());
     }
 
-    public RecurringAssetTypeEvent(AssetType assetType, EventType eventType, Recurrence recurrence) {
+    public RecurringAssetTypeEvent(AssetType assetType, ThingEventType eventType, Recurrence recurrence) {
         this.assetType = assetType;
         this.eventType = eventType;
         this.recurrence = recurrence;
@@ -50,11 +50,11 @@ public class RecurringAssetTypeEvent extends ArchivableEntityWithOwner implement
         this.assetType = assetType;
     }
 
-    public EventType getEventType() {
+    public ThingEventType getEventType() {
         return eventType;
     }
 
-    public void setEventType(EventType eventType) {
+    public void setEventType(ThingEventType eventType) {
         this.eventType = eventType;
     }
 

@@ -6,8 +6,8 @@ import com.n4systems.fieldid.wicket.components.asset.events.table.EventActionsCe
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
+import com.n4systems.model.ThingEvent;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -32,7 +32,7 @@ public class LastEventPanel extends Panel {
         
         Asset asset = model.getObject();
 
-        Event lastEvent =  new LocalizeModel<Event>(new LastEventModel(asset)).getObject();
+        ThingEvent lastEvent =  new LocalizeModel<ThingEvent>(new LastEventModel(asset)).getObject();
 
         if(lastEvent != null) {
             EventResult eventResult = lastEvent.getEventResult();
@@ -53,7 +53,7 @@ public class LastEventPanel extends Panel {
         }
     }
 
-    class LastEventModel extends LoadableDetachableModel<Event> {
+    class LastEventModel extends LoadableDetachableModel<ThingEvent> {
         private Asset asset;
 
         LastEventModel(Asset asset) {
@@ -61,7 +61,7 @@ public class LastEventPanel extends Panel {
         }
 
         @Override
-        protected Event load() {
+        protected ThingEvent load() {
             return assetService.findLastEvents(asset, FieldIDSession.get().getSessionUser().getSecurityFilter());
         }
     }

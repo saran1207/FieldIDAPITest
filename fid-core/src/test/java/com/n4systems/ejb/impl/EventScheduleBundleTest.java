@@ -1,23 +1,22 @@
 package com.n4systems.ejb.impl;
 
-import static org.hamcrest.Matchers.*;
-
-import java.util.Date;
-
+import com.n4systems.model.Asset;
+import com.n4systems.model.Project;
+import com.n4systems.model.ThingEventType;
+import com.n4systems.model.builders.AssetBuilder;
+import com.n4systems.model.builders.EventTypeBuilder;
 import org.junit.Assert;
 import org.junit.Test;
 
-import com.n4systems.model.EventType;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Project;
-import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.model.builders.AssetBuilder;
+import java.util.Date;
+
+import static org.hamcrest.Matchers.notNullValue;
 
 
 public class EventScheduleBundleTest {
 
 	Asset asset = AssetBuilder.anAsset().build();
-	EventType eventType = EventTypeBuilder.anEventType().build();
+	ThingEventType eventType = EventTypeBuilder.anEventType().build();
 	Project job = new Project();
 	Date scheduleDate = new Date();
 	

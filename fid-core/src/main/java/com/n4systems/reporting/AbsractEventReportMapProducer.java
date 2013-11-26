@@ -40,7 +40,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
 	protected abstract File imagePath(FileAttachment imageAttachment);
 		
-	protected abstract AbstractEvent getEvent();
+	protected abstract AbstractEvent<ThingEventType> getEvent();
 
 	
 	private void addAbstractEventParameters() {
@@ -326,7 +326,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		}
 	}
 
-	protected Map<String, Object> addProofTestInfoParams(Event event) {
+	protected Map<String, Object> addProofTestInfoParams(ThingEvent event) {
 		Map<String, Object> proofTestInfo = new HashMap<String, Object>();
 		if (event.getProofTestInfo() != null) {
 			proofTestInfo.put("peakLoad", event.getProofTestInfo().getPeakLoad());

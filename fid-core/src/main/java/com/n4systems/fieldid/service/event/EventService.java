@@ -52,23 +52,17 @@ public class EventService extends FieldIdPersistenceService {
     @Autowired private PriorityCodeService priorityCodeService;
 
     @Transactional(readOnly = true)
-	public List<Event> getEventsByType(Long eventTypeId) {
-		QueryBuilder<Event> builder = getEventsByTypeBuilder(eventTypeId);
-        return persistenceService.findAll(builder);
-	}
-
-    @Transactional(readOnly = true)
-    public List<Event> getEventsByType(Long eventTypeId, Date from, Date to) {
-		QueryBuilder<Event> builder = getEventsByTypeBuilder(eventTypeId);
+    public List<ThingEvent> getThingEventsByType(Long eventTypeId, Date from, Date to) {
+		QueryBuilder<ThingEvent> builder = getThingEventsByTypeBuilder(eventTypeId);
 		builder.addWhere(Comparator.GE, "fromDate", "completedDate", from).addWhere(Comparator.LE, "toDate", "completedDate", to);
         builder.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
 		builder.setOrder("completedDate", false);
 		return persistenceService.findAll(builder);
 	}
     
-    private QueryBuilder<Event> getEventsByTypeBuilder(Long eventTypeId) {
-    	checkArgument(eventTypeId!=null, "you must specify an event type id to get a list of events.");
-    	QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
+    private QueryBuilder<ThingEvent> getThingEventsByTypeBuilder(Long eventTypeId) {
+    	checkArgument(eventTypeId != null, "you must specify an event type id to get a list of events.");
+    	QueryBuilder<ThingEvent> builder = createUserSecurityBuilder(ThingEvent.class);
     	builder.addSimpleWhere("type.id", eventTypeId);
     	builder.addOrder("completedDate");
     	return builder;
@@ -82,8 +76,8 @@ public class EventService extends FieldIdPersistenceService {
     }    
     
     @Transactional(readOnly = true)
-    public Event getEventFromSafetyNetwork(Long eventId) {
-		Event event = persistenceService.findNonSecure(Event.class, eventId);
+    public ThingEvent getEventFromSafetyNetwork(Long eventId) {
+        ThingEvent event = persistenceService.findNonSecure(ThingEvent.class, eventId);
 		
 		if (event == null) {
 			return null;
@@ -102,7 +96,7 @@ public class EventService extends FieldIdPersistenceService {
 			throw new SecurityException("Network event failed security check");
 		}
 
-		Event enhancedEvent = EntitySecurityEnhancer.enhance(event, securityContext.getUserSecurityFilter());
+        ThingEvent enhancedEvent = EntitySecurityEnhancer.enhance(event, securityContext.getUserSecurityFilter());
 		return enhancedEvent;
     }
     
@@ -269,17 +263,17 @@ public class EventService extends FieldIdPersistenceService {
 		return persistenceService.findAll(builder);	
 	}
 
-    public Event createNewMasterEvent(Long assetId, Long eventTypeId) {
-        Event masterEvent = createNewEvent(new Event(), assetId, eventTypeId);
+    public ThingEvent createNewMasterEvent(Long assetId, Long eventTypeId) {
+        ThingEvent masterEvent = createNewThingEvent(new ThingEvent(), assetId, eventTypeId);
         return masterEvent;
     }
 
-    public Event createEventFromOpenEvent(Long openEventId) {
-        Event event = persistenceService.find(Event.class, openEventId);
+    public ThingEvent createEventFromOpenEvent(Long openEventId) {
+        ThingEvent event = persistenceService.find(ThingEvent.class, openEventId);
         return event;
     }
 
-    public void populateNewEvent(Event masterEvent) {
+    public void populateNewEvent(ThingEvent masterEvent) {
         masterEvent.setEventForm(masterEvent.getType().getEventForm());
         masterEvent.setOwner(masterEvent.getAsset().getOwner());
         masterEvent.setDate(new Date());
@@ -294,8 +288,8 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    private <T extends AbstractEvent> T createNewEvent(T event, Long assetId, Long eventTypeId) {
-        EventType eventType = persistenceService.find(EventType.class, eventTypeId);
+    private ThingEvent createNewThingEvent(ThingEvent event, Long assetId, Long eventTypeId) {
+        ThingEventType eventType = persistenceService.find(ThingEventType.class, eventTypeId);
         Asset asset = persistenceService.find(Asset.class, assetId);
 
         event.setTenant(getCurrentTenant());
@@ -391,10 +385,10 @@ public class EventService extends FieldIdPersistenceService {
     	return findByMobileId(mobileId, false);
     }
     
-    public Event findByMobileId(String mobileId, boolean withArchived) {
-    	QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class, withArchived);
+    public ThingEvent findByMobileId(String mobileId, boolean withArchived) {
+    	QueryBuilder<ThingEvent> builder = createUserSecurityBuilder(ThingEvent.class, withArchived);
     	builder.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));
-    	Event event = persistenceService.find(builder);
+        ThingEvent event = persistenceService.find(builder);
     	return event;
     }
     
@@ -675,8 +669,8 @@ public class EventService extends FieldIdPersistenceService {
         return result;
     }
 
-    public List<Event> getAutoEventSchedules(Asset asset) {
-        List<Event> schedules = new ArrayList<Event>();
+    public List<ThingEvent> getAutoEventSchedules(Asset asset) {
+        List<ThingEvent> schedules = new ArrayList<ThingEvent>();
 
         if (asset.getType() == null) {
             return schedules;
@@ -687,7 +681,7 @@ public class EventService extends FieldIdPersistenceService {
             for (AssociatedEventType type : assetType.getAssociatedEventTypes()) {
                 AssetTypeSchedule schedule = assetType.getSchedule(type.getEventType(), asset.getOwner());
                 if (schedule != null && schedule.isAutoSchedule()) {
-                    Event openEvent = new Event();
+                    ThingEvent openEvent = new ThingEvent();
                     openEvent.setOwner(asset.getOwner());
                     openEvent.setTenant(asset.getTenant());
                     openEvent.setAsset(asset);

@@ -10,10 +10,7 @@ import com.n4systems.fieldid.wicket.components.asset.events.table.ProcedureState
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.ProcedureWorkflowState;
-import com.n4systems.model.WorkflowState;
+import com.n4systems.model.*;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.services.date.DateService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -41,14 +38,14 @@ public class UpcomingEventsPanel extends Panel {
 
     private Asset asset;
 
-    public UpcomingEventsPanel(String id, IModel<List<Event>> model, final Asset asset) {
+    public UpcomingEventsPanel(String id, IModel<List<ThingEvent>> model, final Asset asset) {
         super(id, model);
         this.asset = asset;
 
-        add(new ListView<Event>("upcomingEventsList", model) {
+        add(new ListView<ThingEvent>("upcomingEventsList", model) {
             @Override
-            protected void populateItem(ListItem<Event> item) {
-                Event schedule = item.getModelObject();
+            protected void populateItem(ListItem<ThingEvent> item) {
+                ThingEvent schedule = item.getModelObject();
 
                 item.add(new EventStateIcon("scheduleIcon", item.getModel()).setRenderBodyOnly(true));
 

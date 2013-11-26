@@ -52,7 +52,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			throw new NullPointerException("ApiEvent has null sid");
 		}
 
-        Event existingEvent;
+        ThingEvent existingEvent;
         if (apiEvent.getEventScheduleId() != null) {
             existingEvent = eventService.findByMobileId(apiEvent.getEventScheduleId(), true);
         } else {
@@ -76,7 +76,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			apiEvent.setSid(eventItem.getEventId());
 			apiEvent.setAssetId(eventItem.getAssetId());
 			
-			Event event = null;
+			ThingEvent event = null;
 			if(eventItem.isScheduled()) {
 				apiEvent.setEventScheduleId(eventItem.getEventId());
 				event = eventService.findByMobileId(eventItem.getEventId(), true);
@@ -85,7 +85,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 			}
 			
 			if(event == null) {
-				event = new Event();
+				event = new ThingEvent();
 			}
 			
 			event.setAsset(assetService.findByMobileId(apiEvent.getAssetId(), true));
@@ -169,9 +169,9 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		}
 	}
 	
-	private void createEvent(ApiEvent apiEvent, Event event) { // event is either open event or null.
+	private void createEvent(ApiEvent apiEvent, ThingEvent event) { // event is either open event or null.
 		if(event == null) {
-			event = new Event();
+			event = new ThingEvent();
 		}
 		convertApiEvent(apiEvent, event, false);
         List<FileAttachment> uploadedFiles = apiAttachmentResource.convert(apiEvent.getAttachments(), event.getTenant(), event.getCreatedBy());
@@ -180,7 +180,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		logger.info("Event MobileGUID: " + event.getMobileGUID() + " with EventResult: " + event.getEventResult());
 	}
 	
-	private void updateEvent(ApiEvent apiEvent, Event existingEvent) {
+	private void updateEvent(ApiEvent apiEvent, ThingEvent existingEvent) {
 		convertApiEvent(apiEvent, existingEvent, true);
 		List<FileAttachment> existingAttachments = new ArrayList<FileAttachment>(existingEvent.getAttachments());
 		List<FileAttachment> uploadedFiles = apiAttachmentResource.convert(apiEvent.getAttachments(), existingEvent.getTenant(), existingEvent.getCreatedBy());
@@ -190,7 +190,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		logger.info("Event MobileGUID: " + existingEvent.getMobileGUID() + " with EventResult: " + existingEvent.getEventResult());
 	}
 
-	private void convertApiEvent(ApiEvent apiEvent, Event event, boolean isUpdate) {
+	private void convertApiEvent(ApiEvent apiEvent, ThingEvent event, boolean isUpdate) {
         event.setWorkflowState(WorkflowState.COMPLETED);
 		
 		// Step 1: Convert abstract-event fields first.

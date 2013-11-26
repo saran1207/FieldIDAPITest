@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -30,7 +31,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 	private static Logger logger = Logger.getLogger(MultiProofTestUpload.class);
 	
 	private ProofTestHandler proofTestHandler;
-	private Event event = new Event();
+	private ThingEvent event = new ThingEvent();
 	private ProofTestType proofTestType;
 	private List<ListingPair> eventBooks;
 	
@@ -63,7 +64,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 		 *  These objects are not fully constructed.  They are actually just holders for the Id's
 		 *  DO NOT! persist this event on the attached Customer/EventBook!!
 		 */
-		event = (Event)getSession().get( "proofTestFiles_event" );
+		event = (ThingEvent)getSession().get( "proofTestFiles_event" );
 		proofTestType = (ProofTestType)getSession().get( "proofTestFiles_type" );
 		
 		List<File> proofTestFiles = getProofTestFiles();
@@ -150,7 +151,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 		return event;
 	}
 
-	public void setEvent( Event event) {
+	public void setEvent( ThingEvent event) {
 		this.event = event;
 	}
 

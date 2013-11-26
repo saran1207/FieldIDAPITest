@@ -55,10 +55,10 @@ public class EventCreationService extends FieldIdPersistenceService {
     private EventService eventService;
 
     @Transactional
-    public Event createEventWithSchedules(Event event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
-        Event savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles);
+    public ThingEvent createEventWithSchedules(ThingEvent event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
+        ThingEvent savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles);
         for (EventScheduleBundle eventScheduleBundle : schedules) {
-            Event openEvent = new Event();
+            ThingEvent openEvent = new ThingEvent();
             openEvent.setTenant(eventScheduleBundle.getAsset().getTenant());
             openEvent.setAsset(eventScheduleBundle.getAsset());
             openEvent.setType(eventScheduleBundle.getType());
@@ -72,7 +72,7 @@ public class EventCreationService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public Event createEvent(Event event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
+    public ThingEvent createEvent(ThingEvent event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
         defaultOneClickResultsWithNullState(event.getResults());
 
         EventResult calculatedEventResult = calculateEventResultAndScore(event);
@@ -166,21 +166,18 @@ public class EventCreationService extends FieldIdPersistenceService {
             if (null != nextEvent) {
                 uEvent = persistenceService.update(nextEvent);
             }
-
         }
-
     }
 
 
-
-    private void setAllTriggersForActions(Event event) {
+    private void setAllTriggersForActions(ThingEvent event) {
         event.setTriggersIntoResultingActions(event);
         for (SubEvent subEvent : event.getSubEvents()) {
             subEvent.setTriggersIntoResultingActions(event);
         }
     }
 
-    private void restoreCriteriaImages(Event event, Map<Long, List<String>> rememberedCriteriaImages) {
+    private void restoreCriteriaImages(ThingEvent event, Map<Long, List<String>> rememberedCriteriaImages) {
         for (CriteriaResult criteriaResult : event.getResults()) {
             int index = 0;
             for (CriteriaResultImage criteriaResultImage : criteriaResult.getCriteriaImages()) {
@@ -191,7 +188,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         }
     }
 
-    private Map<Long, List<String>> rememberCriteriaImages(Event event) {
+    private Map<Long, List<String>> rememberCriteriaImages(ThingEvent event) {
         Map<Long, List<String>> criteriaImageFiles = new HashMap<Long, List<String>>();
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (!criteriaResult.getCriteriaImages().isEmpty()) {
@@ -204,7 +201,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         return criteriaImageFiles;
     }
 
-    private void restoreTemporarySignatureFiles(Event event, Map<Long, String> rememberedSignatureFiles) {
+    private void restoreTemporarySignatureFiles(ThingEvent event, Map<Long, String> rememberedSignatureFiles) {
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (criteriaResult instanceof SignatureCriteriaResult && rememberedSignatureFiles.containsKey(criteriaResult.getCriteria().getId())) {
                 ((SignatureCriteriaResult) criteriaResult).setTemporaryFileId(rememberedSignatureFiles.get(criteriaResult.getCriteria().getId()));
@@ -212,7 +209,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         }
     }
 
-    private Map<Long, String> rememberTemporarySignatureFiles(Event event) {
+    private Map<Long, String> rememberTemporarySignatureFiles(ThingEvent event) {
         Map<Long,String> rememberedSignatureFiles = new HashMap<Long, String>();
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (criteriaResult instanceof  SignatureCriteriaResult) {
@@ -222,7 +219,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         return rememberedSignatureFiles;
     }
 
-    private Event processUploadedFiles(Event event, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+    private Event processUploadedFiles(ThingEvent event, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
         attachUploadedFiles(event, null, uploadedFiles);
 
         for (SubEvent subEvent : event.getSubEvents()) {
@@ -234,7 +231,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     private Event attachUploadedFiles(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
         File attachmentDirectory;
-        AbstractEvent targetEvent;
+        AbstractEvent<ThingEventType> targetEvent;
         if (subEvent == null) {
             attachmentDirectory = PathHandler.getAttachmentFile(event);
             targetEvent = event;
@@ -350,7 +347,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     }
 
-    private EventResult calculateEventResultAndScore(Event event) {
+    private EventResult calculateEventResultAndScore(ThingEvent event) {
         EventResultCalculator resultCalculator = new EventResultCalculator();
         EventResult eventResult = resultCalculator.findEventResult(event);
 
@@ -362,7 +359,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         return eventResult;
     }
 
-    private void setProofTestData(Event event, FileDataContainer fileData) {
+    private void setProofTestData(ThingEvent event, FileDataContainer fileData) {
         if (fileData == null) {
             return;
         }
@@ -377,7 +374,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         event.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
     }
 
-    private void confirmSubEventsAreAgainstAttachedSubAssets(Event event) throws UnknownSubAsset {
+    private void confirmSubEventsAreAgainstAttachedSubAssets(ThingEvent event) throws UnknownSubAsset {
         Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
         List<SubAsset> subAssets = assetService.findSubAssets(asset);
         for (SubEvent subEvent : event.getSubEvents()) {
@@ -387,7 +384,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         }
     }
 
-    private void setOrderForSubEvents(Event event) {
+    private void setOrderForSubEvents(ThingEvent event) {
         Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
         List<SubAsset> subAssets = assetService.findSubAssets(asset);
         List<SubEvent> reorderedSubEvents = new ArrayList<SubEvent>();
@@ -436,7 +433,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         asset.setAdvancedLocation(event.getAdvancedLocation());
     }
 
-    private void writeSignatureImagesToDisk(Event event) {
+    private void writeSignatureImagesToDisk(ThingEvent event) {
         SignatureService sigService = new SignatureService();
 
         writeSignatureImagesFor(sigService, event.getResults());
@@ -465,7 +462,7 @@ public class EventCreationService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public Event updateEvent(Event event, FileDataContainer fileData, List<FileAttachment> attachments) {
+    public ThingEvent updateEvent(ThingEvent event, FileDataContainer fileData, List<FileAttachment> attachments) {
 
         EventResult calculatedEventResult = calculateEventResultAndScore(event);
 
@@ -491,7 +488,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         return event;
     }
 
-    private void saveCriteriaResultImages(Event event) {
+    private void saveCriteriaResultImages(ThingEvent event) {
 		saveCriteriaResultImages(event.getResults());
 		for (SubEvent subEvent: event.getSubEvents()) {
 			saveCriteriaResultImages(subEvent.getResults());

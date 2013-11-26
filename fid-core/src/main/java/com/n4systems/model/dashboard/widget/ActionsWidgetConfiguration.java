@@ -1,6 +1,7 @@
 package com.n4systems.model.dashboard.widget;
 
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.user.User;
@@ -24,17 +25,17 @@ public class ActionsWidgetConfiguration extends WidgetConfiguration  {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="action_type", nullable=true)
-    private EventType actionType;
+    private ThingEventType actionType;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name="date_range", nullable=false)
 	private RangeType rangeType = RangeType.FOREVER;
 
-    public EventType getActionType() {
+    public ThingEventType getActionType() {
         return actionType;
     }
 
-    public void setActionType(EventType actionType) {
+    public void setActionType(ThingEventType actionType) {
         this.actionType = actionType;
     }
 

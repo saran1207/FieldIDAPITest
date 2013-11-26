@@ -93,7 +93,7 @@ public class EventResultCalculatorTest {
         Score score = ScoreBuilder.aScore().value(1d).build();
         ScoreCriteriaResult result = ScoreCriteriaResultBuilder.aScoreCriteriaResult().score(score).criteria(ScoreCriteriaBuilder.aScoreCriteria().build()).build();
 
-        EventType eventType = createEventType(true, ScoreCalculationType.SUM, atMostFive, atLeastTen);
+        ThingEventType eventType = createEventType(true, ScoreCalculationType.SUM, atMostFive, atLeastTen);
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(eventType).build();
         setEventForm(event);
 
@@ -105,7 +105,7 @@ public class EventResultCalculatorTest {
         Score score = ScoreBuilder.aScore().value(10d).build();
         ScoreCriteriaResult result = ScoreCriteriaResultBuilder.aScoreCriteriaResult().score(score).criteria(ScoreCriteriaBuilder.aScoreCriteria().build()).build();
 
-        EventType eventType = createEventType(true, ScoreCalculationType.SUM, atMostFive, atLeastTen);
+        ThingEventType eventType = createEventType(true, ScoreCalculationType.SUM, atMostFive, atLeastTen);
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(eventType).build();
         setEventForm(event);
 
@@ -117,7 +117,7 @@ public class EventResultCalculatorTest {
         Score score = ScoreBuilder.aScore().value(7d).build();
         ScoreCriteriaResult result = ScoreCriteriaResultBuilder.aScoreCriteriaResult().score(score).criteria(ScoreCriteriaBuilder.aScoreCriteria().build()).build();
 
-        EventType eventType = createEventType(true, ScoreCalculationType.SUM, atMostFive, atLeastTen);
+        ThingEventType eventType = createEventType(true, ScoreCalculationType.SUM, atMostFive, atLeastTen);
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(eventType).build();
         setEventForm(event);
 
@@ -132,7 +132,7 @@ public class EventResultCalculatorTest {
         ScoreResultRange failRange = ScoreResultRangeBuilder.aScoreResultRange().between(0d).and(5d).build();
         ScoreResultRange passRange = ScoreResultRangeBuilder.aScoreResultRange().between(8d).and(10d).build();
 
-        EventType eventType = createEventType(true, ScoreCalculationType.SUM, failRange, passRange);
+        ThingEventType eventType = createEventType(true, ScoreCalculationType.SUM, failRange, passRange);
         Event event = EventBuilder.anEvent().withCriteriaResults(result).ofType(eventType).build();
         setEventForm(event);
 
@@ -147,7 +147,7 @@ public class EventResultCalculatorTest {
         Score score2 = ScoreBuilder.aScore().value(20d).build();
         ScoreCriteriaResult result2 = ScoreCriteriaResultBuilder.aScoreCriteriaResult().score(score2).criteria(ScoreCriteriaBuilder.aScoreCriteria().build()).build();
 
-        EventType eventType = createEventType(true, ScoreCalculationType.AVERAGE, atMostFive, atLeastTen);
+        ThingEventType eventType = createEventType(true, ScoreCalculationType.AVERAGE, atMostFive, atLeastTen);
         Event event = EventBuilder.anEvent().withCriteriaResults(result, result2).ofType(eventType).build();
         setEventForm(event);
 
@@ -162,7 +162,7 @@ public class EventResultCalculatorTest {
         Score score2 = ScoreBuilder.aScore().value(6d).build();
         ScoreCriteriaResult result2 = ScoreCriteriaResultBuilder.aScoreCriteriaResult().score(score2).criteria(ScoreCriteriaBuilder.aScoreCriteria().build()).build();
 
-        EventType eventType = createEventType(true, ScoreCalculationType.AVERAGE, atMostFive, atLeastTen);
+        ThingEventType eventType = createEventType(true, ScoreCalculationType.AVERAGE, atMostFive, atLeastTen);
         Event event = EventBuilder.anEvent().withCriteriaResults(result, result2).ofType(eventType).build();
         setEventForm(event);
 
@@ -183,14 +183,14 @@ public class EventResultCalculatorTest {
         Score score4 = ScoreBuilder.aScore().value(4d).build();
         ScoreCriteriaResult result4 = ScoreCriteriaResultBuilder.aScoreCriteriaResult().score(score4).criteria(ScoreCriteriaBuilder.aScoreCriteria().build()).build();
 
-        EventType eventType = createEventType(true, ScoreCalculationType.SUM, atMostFive, atLeastTen);
+        ThingEventType eventType = createEventType(true, ScoreCalculationType.SUM, atMostFive, atLeastTen);
         Event event = EventBuilder.anEvent().withCriteriaResults(result, result2, result3, result4).ofType(eventType).build();
         setEventForm(event);
 
         assertEquals(EventResult.PASS, eventResultCalculator.findEventResult(event));
     }
 
-    private EventType createEventType() {
+    private ThingEventType createEventType() {
         return createEventType(false, null, null, null);
     }
 
@@ -198,7 +198,7 @@ public class EventResultCalculatorTest {
         event.setEventForm(event.getType().getEventForm());
     }
 
-    private EventType createEventType(boolean useScore, ScoreCalculationType scoreCalculationType, ScoreResultRange failRange, ScoreResultRange passRange) {
+    private ThingEventType createEventType(boolean useScore, ScoreCalculationType scoreCalculationType, ScoreResultRange failRange, ScoreResultRange passRange) {
         EventForm eventForm = EventFormBuilder.anEventForm().useScore(useScore).scoreCalculationType(scoreCalculationType).failRange(failRange).passRange(passRange).build();
         return EventTypeBuilder.anEventType().withEventForm(eventForm).build();
     }

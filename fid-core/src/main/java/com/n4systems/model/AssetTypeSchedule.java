@@ -13,18 +13,18 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "assettypeschedules")
+@Table(name = "asset_type_schedules")
 @Localized(ignore =true)
 public class AssetTypeSchedule extends EntityWithOwner implements Saveable, SecurityEnhanced<AssetTypeSchedule> {
 	private static final long serialVersionUID = 1L;
 	
 	@ManyToOne(optional=false)
-    @JoinColumn(name = "assettype_id")
+    @JoinColumn(name = "asset_type_id")
 	private AssetType assetType;
 	
 	@ManyToOne(optional=false)
-    @JoinColumn(name = "eventtype_id")
-	private EventType eventType;
+    @JoinColumn(name = "thing_event_type_id")
+	private ThingEventType eventType;
 	
 	@Column(name="frequency")
 	private Long frequencyInDays;
@@ -43,11 +43,11 @@ public class AssetTypeSchedule extends EntityWithOwner implements Saveable, Secu
 	}
 	
 	@AllowSafetyNetworkAccess
-	public EventType getEventType() {
+	public ThingEventType getEventType() {
 		return eventType;
 	}
 
-	public void setEventType(EventType eventType) {
+	public void setEventType(ThingEventType eventType) {
 		this.eventType = eventType;
 	}
 

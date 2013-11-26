@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.summary.EventResolutionSummary;
@@ -157,7 +158,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
         } else if (item instanceof AssetType) {
             criteria.setAssetType((AssetType) item);
         } else if (item instanceof EventType) {
-            criteria.setEventType((EventType) item);
+            criteria.setEventType((ThingEventType) item);
         }
     }
 

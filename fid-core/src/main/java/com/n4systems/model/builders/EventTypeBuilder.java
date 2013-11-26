@@ -1,20 +1,13 @@
 package com.n4systems.model.builders;
 
+import com.n4systems.fileprocessing.ProofTestType;
+import com.n4systems.model.*;
+
+import java.util.*;
+
 import static com.n4systems.model.builders.EventTypeGroupBuilder.anEventTypeGroup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.Tenant;
-
-public class EventTypeBuilder extends EntityWithTenantBuilder<EventType> {
+public class EventTypeBuilder extends EntityWithTenantBuilder<ThingEventType> {
 	private final String name;
 	private final String description;
 	private final boolean printable;
@@ -100,8 +93,8 @@ public class EventTypeBuilder extends EntityWithTenantBuilder<EventType> {
     }
 
 	@Override
-	public EventType createObject() {
-		EventType type = assignAbstractFields(new EventType());
+	public ThingEventType createObject() {
+        ThingEventType type = assignAbstractFields(new ThingEventType());
 		type.setName(name);
 		type.setDescription(description);
 		type.setPrintable(printable);

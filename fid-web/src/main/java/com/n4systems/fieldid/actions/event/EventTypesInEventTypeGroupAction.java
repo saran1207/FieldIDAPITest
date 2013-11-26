@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.event;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 public class EventTypesInEventTypeGroupAction extends AbstractAction {
 
     private Long eventTypeGroupId;
-    private List<EventType> eventTypes;
+    private List<ThingEventType> eventTypes;
 
     public EventTypesInEventTypeGroupAction(PersistenceManager persistenceManager) {
         super(persistenceManager);
@@ -34,7 +35,7 @@ public class EventTypesInEventTypeGroupAction extends AbstractAction {
         this.eventTypeGroupId = eventTypeGroupId;
     }
 
-    public List<EventType> getEventTypes() {
+    public List<ThingEventType> getEventTypes() {
         return eventTypes;
     }
 }

@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.services.date.DateService;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -48,10 +49,10 @@ public class QuickEventPage extends FieldIDFrontEndPage {
 
         add(new BookmarkablePageLink<Void>("manageSchedulesLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(assetId)));
 
-        final IModel<List<Event>> eventSchedulesModel = createEventSchedulesModel(assetModel);
-        add(new ListView<Event>("schedules", eventSchedulesModel) {
+        final IModel<List<ThingEvent>> eventSchedulesModel = createEventSchedulesModel(assetModel);
+        add(new ListView<ThingEvent>("schedules", eventSchedulesModel) {
             @Override
-            protected void populateItem(final ListItem<Event> item) {
+            protected void populateItem(final ListItem<ThingEvent> item) {
                 WebMarkupContainer daysAwayContainer = new WebMarkupContainer("daysAwayContainer");
                 daysAwayContainer.add(new Label("daysAwayLabel", createDaysAwayLabelModel(item.getModel())));
                 item.add(daysAwayContainer);
@@ -81,16 +82,16 @@ public class QuickEventPage extends FieldIDFrontEndPage {
         });
     }
 
-    private IModel<List<Event>> createEventSchedulesModel(final IModel<Asset> assetModel) {
-        return new LoadableDetachableModel<List<Event>>() {
+    private IModel<List<ThingEvent>> createEventSchedulesModel(final IModel<Asset> assetModel) {
+        return new LoadableDetachableModel<List<ThingEvent>>() {
             @Override
-            protected List<Event> load() {
+            protected List<ThingEvent> load() {
                 return eventScheduleService.getAvailableSchedulesFor(assetModel.getObject());
             }
         };
     }
 
-    private IModel<String> createDaysAwayLabelModel(final IModel<Event> scheduleModel) {
+    private IModel<String> createDaysAwayLabelModel(final IModel<? extends Event> scheduleModel) {
         return new LoadableDetachableModel<String>() {
             @Override
             protected String load() {

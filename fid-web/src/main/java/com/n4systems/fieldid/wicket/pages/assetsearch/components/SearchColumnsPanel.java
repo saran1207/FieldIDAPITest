@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ReportConfiguration;
@@ -29,7 +29,7 @@ public class SearchColumnsPanel extends AbstractColumnsPanel<AssetSearchCriteria
     }
 
     @Override
-    protected List<ColumnMappingGroupView> getDynamicEventColumns(EventType eventType, List<EventType> availableEventTypes) {
+    protected List<ColumnMappingGroupView> getDynamicEventColumns(ThingEventType eventType, List<ThingEventType> availableEventTypes) {
         return null;
     }
 

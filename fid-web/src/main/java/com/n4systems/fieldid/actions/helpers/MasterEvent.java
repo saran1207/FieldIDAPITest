@@ -14,7 +14,7 @@ public class MasterEvent {
 
 	private String token;
 	private Asset masterAsset;
-	private Event event;
+	private ThingEvent event;
 	private FileDataContainer proofTestFile;
 	private AssetStatus assetStatus;
 	private List<SubEvent> subEvents = new ArrayList<SubEvent>();
@@ -35,7 +35,7 @@ public class MasterEvent {
 		subEventUploadedFiles = new HashMap<SubEvent, List<FileAttachment>>();
 	}
 
-	public MasterEvent(Event event) {
+	public MasterEvent(ThingEvent event) {
 		this();
 
 		currentId = event.getId();
@@ -60,11 +60,11 @@ public class MasterEvent {
 		this.masterAsset = masterAsset;
 	}
 
-	public Event getEvent() {
+	public ThingEvent getEvent() {
 		return event;
 	}
 
-	public void setEvent(Event event) {
+	public void setEvent(ThingEvent event) {
 		this.event = event;
 	}
 
@@ -114,8 +114,8 @@ public class MasterEvent {
 		return null;
 	}
 
-	public Event createEventFromSubEvent(SubEvent subEvent) {
-		Event event = new Event();
+	public ThingEvent createEventFromSubEvent(SubEvent subEvent) {
+        ThingEvent event = new ThingEvent();
 
 		event.setId(subEvent.getId());
 		event.setAsset(subEvent.getAsset());
@@ -135,7 +135,7 @@ public class MasterEvent {
 		return event;
 	}
 
-	public SubEvent createSubEventFromEvent(Event event) {
+	public SubEvent createSubEventFromEvent(ThingEvent event) {
 		SubEvent subEvent = new SubEvent();
 
 		subEvent.setId(event.getId());
@@ -178,7 +178,7 @@ public class MasterEvent {
 		return null;
 	}
 
-	public Event getCompletedEvent() {
+	public ThingEvent getCompletedEvent() {
 		applyAssignToUpdateToEvent();
 		processSubEvents();
         if (overrideResult != null) {

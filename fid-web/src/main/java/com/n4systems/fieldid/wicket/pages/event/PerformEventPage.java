@@ -5,10 +5,7 @@ import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
+import com.n4systems.model.*;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
@@ -29,13 +26,13 @@ public class PerformEventPage extends EventPage {
     private PerformEventPage(Long scheduleId, Long assetId, Long typeId) {
         try {
             if (scheduleId != null) {
-                Event openEvent = eventService.createEventFromOpenEvent(scheduleId);
+                ThingEvent openEvent = eventService.createEventFromOpenEvent(scheduleId);
                 PostFetcher.postFetchFields(openEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
-                Event clonedEvent = (Event) openEvent.clone();
+                ThingEvent clonedEvent = (ThingEvent) openEvent.clone();
                 eventService.populateNewEvent(clonedEvent);
                 event = Model.of(clonedEvent);
             } else {
-                Event newMasterEvent = eventService.createNewMasterEvent(assetId, typeId);
+                ThingEvent newMasterEvent = eventService.createNewMasterEvent(assetId, typeId);
                 eventService.populateNewEvent(newMasterEvent);
                 event = Model.of(newMasterEvent);
             }

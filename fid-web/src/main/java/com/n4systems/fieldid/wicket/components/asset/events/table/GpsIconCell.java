@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.GpsLocation;
+import com.n4systems.model.ThingEvent;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -10,7 +11,7 @@ import org.apache.wicket.model.IModel;
 
 public class GpsIconCell extends Panel {
 
-    public GpsIconCell(String id, IModel<Event> eventModel) {
+    public GpsIconCell(String id, IModel<ThingEvent> eventModel) {
         super(id);
 
         GpsLocation gpsLocation = eventModel.getObject().getGpsLocation();

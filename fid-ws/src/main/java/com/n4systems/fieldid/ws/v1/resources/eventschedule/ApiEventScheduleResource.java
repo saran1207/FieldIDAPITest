@@ -177,12 +177,12 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 
         Asset asset = assetService.findByMobileId(apiEventSchedule.getAssetId(), true);
 
-        Event event = new Event();
+        ThingEvent event = new ThingEvent();
         event.setMobileGUID(apiEventSchedule.getSid());
         event.setDueDate(apiEventSchedule.getNextDate());
         event.setTenant(owner.getTenant());
         event.setAsset(asset);
-        event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
+        event.setType(persistenceService.find(ThingEventType.class, apiEventSchedule.getEventTypeId()));
         event.setOwner(asset.getOwner());
         event.setAssignee(getAssigneeUser(apiEventSchedule));
         if(event.getAssignee() == null)

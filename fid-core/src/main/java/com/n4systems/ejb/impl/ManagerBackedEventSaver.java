@@ -16,6 +16,7 @@ import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.EntityManager;
 import java.io.File;
@@ -40,7 +41,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		this.lastEventDateFinder = lastEventDateFinder;
 	}
 
-	public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
+	public ThingEvent createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
         EventResult calculatedEventResult = calculateEventResultAndScore(parameterObject.event);
 		if (parameterObject.event.getEventResult() == null || parameterObject.event.getEventResult() == EventResult.VOID) {
             parameterObject.event.setEventResult(calculatedEventResult);
@@ -102,7 +103,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		return parameterObject.event;
 	}
 
-    private Map<Long, byte[]> collectSignatureImageData(Event event) {
+    private Map<Long, byte[]> collectSignatureImageData(ThingEvent event) {
         Map<Long,byte[]> rememberedSignatures = new HashMap<Long, byte[]>();
         addSignatureResultsFor(event, rememberedSignatures);
         for (SubEvent subEvent : event.getSubEvents()) {
@@ -112,7 +113,7 @@ public class ManagerBackedEventSaver implements EventSaver {
         return rememberedSignatures;
     }
 
-    private void addSignatureResultsFor(AbstractEvent event, Map<Long, byte[]> rememberedSignatures) {
+    private void addSignatureResultsFor(AbstractEvent<ThingEventType> event, Map<Long, byte[]> rememberedSignatures) {
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (criteriaResult instanceof SignatureCriteriaResult) {
                 SignatureCriteriaResult signatureResult = (SignatureCriteriaResult) criteriaResult;
@@ -123,36 +124,7 @@ public class ManagerBackedEventSaver implements EventSaver {
         }
     }
 
-//    private EventSchedule findOrCreateSchedule(Event event, Long scheduleId) {
-//        EventSchedule eventSchedule = null;
-//
-//        if (scheduleId == null) {
-//            scheduleId = 0L;
-//        }
-//
-//        if (scheduleId == -1) {
-//            // This means the user selected 'create new schedule'
-//            // Basically we just want the placeholder schedule with 1 change -- pretend it was scheduled for now (nextDate is completedDate)
-//            eventSchedule = new EventSchedule();
-//            eventSchedule.copyDataFrom(event);
-//            eventSchedule.setNextDate(event.getDate());
-//            persistenceManager.save(eventSchedule);
-//            event.setSchedule(eventSchedule);
-//        } else if (scheduleId > 0) {
-//            // There was an existing schedule selected.
-//            eventSchedule = persistenceManager.find(EventSchedule.class, scheduleId, event.getTenant());
-//            if (eventSchedule == null || eventSchedule.getStatus() == EventSchedule.ScheduleStatus.COMPLETED || eventSchedule.getEvent().getButton() == null) {
-//                event.setSchedule(null);
-//            } else if (eventSchedule.getEvent() != null && (eventSchedule.getEvent().getButton() != Archivable.EntityState.ACTIVE || eventSchedule.getEvent().getWorkflowState() != Event.WorkflowStateCriteria.OPEN)) {
-//                event.setSchedule(null);
-//            } else{
-//                event.setSchedule(eventSchedule);
-//            }
-//        }
-//        return eventSchedule;
-//    }
-	
-	private void writeSignatureImagesToDisk(Event event, Map<Long, byte[]> rememberedSignatureImages) {
+	private void writeSignatureImagesToDisk(ThingEvent event, Map<Long, byte[]> rememberedSignatureImages) {
 		SignatureService sigService = new SignatureService();
 
         writeSignatureImagesFor(sigService, event.getResults(), rememberedSignatureImages);
@@ -176,7 +148,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		}
     }
 
-	public Event updateEvent(Event event, Long scheduleId, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+	public ThingEvent updateEvent(ThingEvent event, Long scheduleId, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		setProofTestData(event, fileData);
 		updateDeficiencies(event.getResults());
 
@@ -196,7 +168,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		return event;
 	}
 
-	private void setProofTestData(Event event, FileDataContainer fileData) {
+	private void setProofTestData(ThingEvent event, FileDataContainer fileData) {
 		if (fileData == null) {
 			return;
 		}
@@ -211,7 +183,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		event.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
 	}
 	
-	private void confirmSubEventsAreAgainstAttachedSubAssets(Event event) throws UnknownSubAsset {
+	private void confirmSubEventsAreAgainstAttachedSubAssets(ThingEvent event) throws UnknownSubAsset {
 		Asset asset = persistenceManager.find(Asset.class, event.getAsset().getId());
 		asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 		for (SubEvent subEvent : event.getSubEvents()) {
@@ -221,7 +193,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		}
 	}
 	
-	private void setOrderForSubEvents(Event event) {
+	private void setOrderForSubEvents(ThingEvent event) {
 		Asset asset = persistenceManager.find(Asset.class, event.getAsset().getId());
 		asset = new FindSubAssets(persistenceManager, asset).fillInSubAssets();
 		List<SubEvent> reorderedSubEvents = new ArrayList<SubEvent>();
@@ -235,7 +207,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		event.setSubEvents(reorderedSubEvents);
 	}
 
-	private EventResult calculateEventResultAndScore(Event event) {
+	private EventResult calculateEventResultAndScore(ThingEvent event) {
         EventResultCalculator resultCalculator = new EventResultCalculator();
 		EventResult eventResult = resultCalculator.findEventResult(event);
 
@@ -290,7 +262,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		}
 	}
 
-	private void updateScheduleOwnerShip(Event event, Long userId) {
+	private void updateScheduleOwnerShip(ThingEvent event, Long userId) {
         event.setOwner(event.getOwner());
         event.setAdvancedLocation(event.getAdvancedLocation());
         new EventScheduleServiceImpl(persistenceManager).updateSchedule(event);
@@ -317,7 +289,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 	
 	
-	private void processUploadedFiles(Event event, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+	private void processUploadedFiles(ThingEvent event, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		attachUploadedFiles(event, null, uploadedFiles);
 
 		for (SubEvent subEvent : event.getSubEvents()) {
@@ -327,9 +299,9 @@ public class ManagerBackedEventSaver implements EventSaver {
 		event = persistenceManager.update(event);
 	}
 
-	Event attachUploadedFiles(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+    ThingEvent attachUploadedFiles(ThingEvent event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		File attachmentDirectory;
-		AbstractEvent targetEvent;
+		AbstractEvent<ThingEventType> targetEvent;
 		if (subEvent == null) {
 			attachmentDirectory = PathHandler.getAttachmentFile(event);
 			targetEvent = event;
@@ -442,10 +414,9 @@ public class ManagerBackedEventSaver implements EventSaver {
 	/**
 	 * This must be called AFTER the event and sub-event have been persisted
 	 */
-	public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+	public ThingEvent attachFilesToSubEvent(ThingEvent event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		event = attachUploadedFiles(event, subEvent, uploadedFiles);
 		return persistenceManager.update(event);
 	}
-
 
 }

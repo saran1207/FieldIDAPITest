@@ -4,10 +4,7 @@ import com.n4systems.fieldid.service.event.EventCriteriaEditService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventResult;
-import com.n4systems.model.FileAttachment;
+import com.n4systems.model.*;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -36,8 +33,8 @@ public class EditEventPage extends EventPage {
         fileAttachments = new ArrayList<FileAttachment>(event.getObject().getAttachments());
     }
 
-    protected Event loadExistingEvent() {
-        Event existingEvent = eventService.lookupExistingEvent(Event.class, uniqueId);
+    protected ThingEvent loadExistingEvent() {
+        ThingEvent existingEvent = eventService.lookupExistingEvent(ThingEvent.class, uniqueId);
         PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
         return existingEvent;
     }
@@ -48,10 +45,10 @@ public class EditEventPage extends EventPage {
     }
 
     @Override
-    protected AbstractEvent doSave() {
+    protected ThingEvent doSave() {
         saveEventBookIfNecessary();
 
-        Event editedEvent = event.getObject();
+        ThingEvent editedEvent = event.getObject();
         editedEvent.setEventResult(getEventResult());
         criteriaEditService.storeCriteriaChanges(editedEvent);
         editedEvent.storeTransientCriteriaResults();

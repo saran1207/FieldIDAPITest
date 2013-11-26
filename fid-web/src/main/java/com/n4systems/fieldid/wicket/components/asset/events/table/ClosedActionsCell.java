@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -21,7 +22,7 @@ public class ClosedActionsCell extends Panel {
     @SpringBean
     private EventService eventService;
 
-    public ClosedActionsCell(String id, IModel<Event> eventModel, final EventListPanel eventListPanel) {
+    public ClosedActionsCell(String id, IModel<ThingEvent> eventModel, final EventListPanel eventListPanel) {
         super(id);
         
         final Event event = eventModel.getObject();

@@ -29,7 +29,7 @@ public class EventResultCalculator {
         return EventResult.NA;
     }
 
-    private Double calculateScore(AbstractEvent event) {
+    private Double calculateScore(AbstractEvent<?> event) {
         double total = 0d;
         int count = 0;
         int countScoreCriteria = 0;
@@ -66,7 +66,7 @@ public class EventResultCalculator {
         }
     }
 
-    private EventResult findResultFromOneClicks(AbstractEvent event) {
+    private EventResult findResultFromOneClicks(AbstractEvent<?> event) {
         EventResult eventResult = EventResult.NA;
         for (CriteriaResult result : event.getResults()) {
             if (result instanceof OneClickCriteriaResult) {

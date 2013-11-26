@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.model.FieldIDSpringModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import org.apache.wicket.model.IModel;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class EventTypesForAssetTypeModel extends FieldIDSpringModel<List<EventType>> {
+public class EventTypesForAssetTypeModel extends FieldIDSpringModel<List<ThingEventType>> {
 
     private IModel<AssetType> assetType;
 
@@ -20,8 +21,8 @@ public class EventTypesForAssetTypeModel extends FieldIDSpringModel<List<EventTy
     }
 
     @Override
-    protected List<EventType> load() {
-        List<EventType> eventTypes = new ArrayList<EventType>();
+    protected List<ThingEventType> load() {
+        List<ThingEventType> eventTypes = new ArrayList<ThingEventType>();
 
         if (assetType.getObject() == null) {
             return eventTypes;

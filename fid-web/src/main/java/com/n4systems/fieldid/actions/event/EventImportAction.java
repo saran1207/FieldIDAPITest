@@ -66,7 +66,7 @@ public class EventImportAction extends AbstractImportAction {
 		MapWriter writer = null;
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
 		try {
-			ListLoader<Event> eventLoader = getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleEvent()));
+			ListLoader<ThingEvent> eventLoader = getLoaderFactory().createPassthruListLoader(Arrays.asList(createExampleEvent()));
 			NextEventDateByEventLoader nextDateLoader = new NextEventDateByEventPassthruLoader(createExampleNextDate());
 			
 			// override the serialization handler factory so we can control which fields are output.  (i.e. use different handlers
@@ -99,8 +99,8 @@ public class EventImportAction extends AbstractImportAction {
 		return SUCCESS;
 	}
 	
-	private Event createExampleEvent() throws InstantiationException, IllegalAccessException {
-		Event example = new Event();
+	private ThingEvent createExampleEvent() throws InstantiationException, IllegalAccessException {
+		ThingEvent example = new ThingEvent();
 		
 		example.setEventForm(type.getEventForm());
 		

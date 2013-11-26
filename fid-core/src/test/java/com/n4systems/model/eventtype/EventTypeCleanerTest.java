@@ -7,16 +7,13 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.*;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.builders.UserBuilder;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.builders.TenantBuilder;
 
@@ -34,7 +31,7 @@ public class EventTypeCleanerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void clean_cleans_required_fields() {
-		EventType type = buildType();
+		ThingEventType type = buildType();
 		Tenant newTenant = TenantBuilder.aTenant().build();
 		
 		assertNotNull(type.getId());
@@ -72,8 +69,8 @@ public class EventTypeCleanerTest {
 		EasyMock.verify(eventFormCleaner);
 	}
 	
-	private EventType buildType() {
-		EventType type = EventTypeBuilder.anEventType().build();
+	private ThingEventType buildType() {
+        ThingEventType type = EventTypeBuilder.anEventType().build();
 		type.setName(name);
 		type.setDescription(description);
 		type.setPrintable(printable);

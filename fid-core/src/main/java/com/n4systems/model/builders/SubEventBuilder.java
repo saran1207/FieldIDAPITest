@@ -1,29 +1,30 @@
 package com.n4systems.model.builders;
 
-import static com.n4systems.model.builders.EventTypeBuilder.anEventType;
-import static com.n4systems.model.builders.AssetBuilder.anAsset;
-
-import com.n4systems.model.EventType;
 import com.n4systems.model.Asset;
+import com.n4systems.model.EventType;
 import com.n4systems.model.SubEvent;
+import com.n4systems.model.ThingEventType;
+
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.builders.EventTypeBuilder.anEventType;
 
 public class SubEventBuilder extends BaseBuilder<SubEvent> {
 
 	private final String name;
-	private final EventType eventType;
+	private final ThingEventType eventType;
 	private final Asset asset;
 	
 	public static SubEventBuilder aSubEvent(String name) {
 		return new SubEventBuilder(name, anEventType().build(), anAsset().build());
 	}
 
-	public SubEventBuilder(String name, EventType eventType, Asset asset) {
+	public SubEventBuilder(String name, ThingEventType eventType, Asset asset) {
 		this.name = name;
 		this.eventType = eventType;
 		this.asset = asset;
 	}
 	
-	public SubEventBuilder withType(EventType eventType) {
+	public SubEventBuilder withType(ThingEventType eventType) {
 		return new SubEventBuilder(name, eventType, asset);
 	}
 	

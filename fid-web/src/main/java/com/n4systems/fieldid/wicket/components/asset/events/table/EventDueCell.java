@@ -10,7 +10,7 @@ import org.apache.wicket.model.Model;
 
 public class EventDueCell extends Panel {
     
-    public EventDueCell(String id, IModel<Event> eventModel) {
+    public EventDueCell(String id, IModel<? extends Event> eventModel) {
         super(id);
         
         Event schedule = eventModel.getObject();

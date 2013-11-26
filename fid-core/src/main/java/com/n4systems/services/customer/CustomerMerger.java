@@ -5,10 +5,7 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.exceptions.DuplicateCustomerException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.TenantNotValidForActionException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventBook;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.eventbook.EventBookSaver;
 import com.n4systems.model.notificationsettings.NotificationSetting;
@@ -204,26 +201,26 @@ public class CustomerMerger {
 	}
 
 	private void moveEvents(Asset asset, BaseOrg winningOrg) {
-		QueryBuilder<Event> eventsQuery = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter()).addSimpleWhere("asset", asset);
+		QueryBuilder<ThingEvent> eventsQuery = new QueryBuilder<ThingEvent>(Event.class, new OpenSecurityFilter()).addSimpleWhere("asset", asset);
 		eventsQuery.addPostFetchPaths("subEvents", "subEvents.results", "subEvents.asset", "results", "asset");
-		List<Event> eventsToMove = PersistenceManager.findAll(eventsQuery);
+		List<ThingEvent> eventsToMove = PersistenceManager.findAll(eventsQuery);
 
-		for (Event eventToMove : eventsToMove) {
+		for (ThingEvent eventToMove : eventsToMove) {
 			eventToMove.setOwner(winningOrg);
 			updateEvent(eventToMove);
 		}
 	}
 
 	private void moveSchedules(Asset asset, BaseOrg winningOrg) {
-		List<Event> openEvents = scheduleManager.getAvailableSchedulesFor(asset, "asset");
+		List<ThingEvent> openEvents = scheduleManager.getAvailableSchedulesFor(asset, "asset");
 		
-		for (Event event : openEvents) {
+		for (ThingEvent event : openEvents) {
             event.setOwner(winningOrg);
 			scheduleManager.update(event);
 		}		
 	}
 
-	private void updateEvent(Event event) {
+	private void updateEvent(ThingEvent event) {
 		try {
 			eventManager.updateEvent(event, 0L, user.getId(), null, null);
 		} catch (Exception e) {

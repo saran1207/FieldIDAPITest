@@ -13,9 +13,9 @@ import static com.n4systems.model.builders.OrgBuilder.aPrimaryOrg;
 import static com.n4systems.model.builders.TenantBuilder.aTenant;
 import static com.n4systems.model.builders.UserBuilder.aUser;
 
-public class EventBuilder extends BaseBuilder<Event> {
+public class EventBuilder extends BaseBuilder<ThingEvent> {
 
-	private final EventType eventType;
+	private final ThingEventType eventType;
 	private final Asset asset;
 	private final List<SubEvent> subEvents;
 	private final List<FileAttachment> attachments;
@@ -58,7 +58,7 @@ public class EventBuilder extends BaseBuilder<Event> {
 		return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.FAIL, null, new HashSet<CriteriaResult>(), WorkflowState.COMPLETED, null, null);
 	}
 
-	protected EventBuilder(EventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, EventResult eventResult, AssetStatus assetStatus, Set<CriteriaResult> results, WorkflowState workflowState, Date dueDate, EventStatus eventStatus) {
+	protected EventBuilder(ThingEventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, EventResult eventResult, AssetStatus assetStatus, Set<CriteriaResult> results, WorkflowState workflowState, Date dueDate, EventStatus eventStatus) {
 		this.eventType = type;
 		this.asset = asset;
 		this.subEvents = subEvents;
@@ -81,7 +81,7 @@ public class EventBuilder extends BaseBuilder<Event> {
         return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, state, dueDate, eventStatus));
     }
 
-    public EventBuilder ofType(EventType type) {
+    public EventBuilder ofType(ThingEventType type) {
         return makeBuilder(new EventBuilder(type, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
     }
 	
@@ -142,8 +142,8 @@ public class EventBuilder extends BaseBuilder<Event> {
     }
 
     @Override
-	public Event createObject() {
-		Event event = new Event();
+	public ThingEvent createObject() {
+		ThingEvent event = new ThingEvent();
 		event.setId(getId());
 		event.setType(eventType);
 		event.setAsset(asset);

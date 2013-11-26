@@ -49,7 +49,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
         // private fields used to back form components.
         private RecurrenceTimeOfDay time = RecurrenceTimeOfDay.NINE_AM;
         private List<RecurrenceTimeOfDay> times = Lists.newArrayList(RecurrenceTimeOfDay.NINE_AM);
-        private EventType eventType = null;
+        private ThingEventType eventType = null;
         private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
         private BaseOrg owner;
         private Date dateTime = dateService.nowInUsersTimeZone().toDate();
@@ -67,7 +67,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
 
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
 
-            final List<EventType> eventTypes = Lists.newArrayList(getEventTypes());
+            final List<ThingEventType> eventTypes = Lists.newArrayList(getEventTypes());
             // set default value if one available.
             eventType = (eventTypes.size()>0) ? eventTypes.get(0) : null;
 
@@ -265,7 +265,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
             return autoassign;
         }
 
-        public EventType getEventType() {
+        public ThingEventType getEventType() {
             return eventType;
         }
 
@@ -302,7 +302,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
         return true;
     }
 
-    protected abstract List<EventType> getEventTypes();
+    protected abstract List<ThingEventType> getEventTypes();
 
     protected abstract void onCreateRecurrence(AjaxRequestTarget target, RecurringEventsForm form);
 

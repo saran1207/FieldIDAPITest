@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.SubEvent;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.PersistenceManager;
@@ -11,22 +12,22 @@ import com.n4systems.persistence.loaders.NonSecureIdLoader;
 import com.n4systems.persistence.loaders.SecurityFilteredLoader;
 import com.n4systems.persistence.utils.PostFetcher;
 
-abstract public class SafetyNetworkEventLoader extends SecurityFilteredLoader<Event> implements IdLoader<SafetyNetworkEventLoader> {
-	private final NonSecureIdLoader<Event> eventLoader;
+abstract public class SafetyNetworkEventLoader extends SecurityFilteredLoader<ThingEvent> implements IdLoader<SafetyNetworkEventLoader> {
+	private final NonSecureIdLoader<ThingEvent> eventLoader;
 	
-	public SafetyNetworkEventLoader(SecurityFilter filter, NonSecureIdLoader<Event> eventLoader) {
+	public SafetyNetworkEventLoader(SecurityFilter filter, NonSecureIdLoader<ThingEvent> eventLoader) {
 		super(filter);
 		this.eventLoader = eventLoader;
 	}
 	
 	public SafetyNetworkEventLoader(SecurityFilter filter) {
-		this(filter, new NonSecureIdLoader<Event>(Event.class));
+		this(filter, new NonSecureIdLoader<ThingEvent>(ThingEvent.class));
 	}
 
 	abstract protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Event event);
 	
 	@Override
-	public Event load(EntityManager em, SecurityFilter filter) {
+	public ThingEvent load(EntityManager em, SecurityFilter filter) {
 		// we want this session to be read-only since enhancement may change fields on the entities
 		PersistenceManager.setSessionReadOnly(em);
 		
@@ -34,7 +35,7 @@ abstract public class SafetyNetworkEventLoader extends SecurityFilteredLoader<Ev
 		eventLoader.setPostFetchPaths(Event.ALL_FIELD_PATHS);
 		
 		// to load this event we will first do an unsecured load by id
-		Event event = eventLoader.load(em);
+        ThingEvent event = eventLoader.load(em);
 		
 		if (event == null) {
 			return null;
@@ -54,7 +55,7 @@ abstract public class SafetyNetworkEventLoader extends SecurityFilteredLoader<Ev
 		}
 		
 		// now we need to make sure the event is security enhanced
-		Event enhancedEvent = EntitySecurityEnhancer.enhance(event, filter);
+        ThingEvent enhancedEvent = EntitySecurityEnhancer.enhance(event, filter);
 		return enhancedEvent;
 	}
 

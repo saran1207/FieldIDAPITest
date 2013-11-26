@@ -3,6 +3,7 @@ package com.n4systems.servicedto.converts;
 import com.n4systems.ejb.legacy.ServiceDTOBeanConverter;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.LoaderFactory;
 import com.n4systems.webservice.dto.InspectionServiceDTO;
@@ -36,9 +37,9 @@ public class InspectionServiceDTOConverter {
 		return new LocationServiceToContainerConverter(loaderFactory);
 	}
 	
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, Event schedule) throws Exception {
-		
-		Event event = null;
+	public ThingEvent convert(InspectionServiceDTO inspectionServiceDTO, ThingEvent schedule) throws Exception {
+
+        ThingEvent event = null;
 		try {
 
 			event = serviceDTOBeanconverter.convert(inspectionServiceDTO, schedule, systemSecurityGuard.getTenantId());

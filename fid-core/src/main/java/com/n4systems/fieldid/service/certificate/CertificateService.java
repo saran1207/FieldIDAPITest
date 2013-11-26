@@ -90,7 +90,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 	}
 
 	public JasperPrint generateEventCertificate(EventReportType type, Long eventId) throws NonPrintableEventType, ReportException {
-		Event event = eventService.getEventFromSafetyNetwork(eventId);
+		ThingEvent event = eventService.getEventFromSafetyNetwork(eventId);
 
 		DateTimeDefiner dateDefiner = new DateTimeDefiner(getCurrentUser());
 		
@@ -113,7 +113,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		}
 	}
 
-	private JasperPrint generateEventCertificateWithSubEvents(Event event, PrintOut printOut, DateTimeDefiner dateDefiner) throws JRException {
+	private JasperPrint generateEventCertificateWithSubEvents(ThingEvent event, PrintOut printOut, DateTimeDefiner dateDefiner) throws JRException {
         Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
 		File jasperFile = PathHandler.getPrintOutFile(printOut, locale);
 		reportCompiler.compileReports(jasperFile.getParentFile());
@@ -146,7 +146,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		return jasperPrint;
 	}
 
-	private JasperPrint generateEventCertificateWithoutSubEvents(Event event, PrintOut printOut, DateTimeDefiner dateDefiner) throws NonPrintableEventType, ReportException, JRException {
+	private JasperPrint generateEventCertificateWithoutSubEvents(ThingEvent event, PrintOut printOut, DateTimeDefiner dateDefiner) throws NonPrintableEventType, ReportException, JRException {
         Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
 		File jasperFile = PathHandler.getPrintOutFile(printOut, locale);
 		reportCompiler.compileReports(jasperFile.getParentFile());
@@ -174,7 +174,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		return jasperPrint;
 	}
 
-	private void addProofTestParams(Map<String, Object> reportMap, Event event) {
+	private void addProofTestParams(Map<String, Object> reportMap, ThingEvent event) {
 		reportMap.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
 		addProofTestInfoParams(reportMap, event.getProofTestInfo());
 	}

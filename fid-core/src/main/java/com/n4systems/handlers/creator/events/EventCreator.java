@@ -9,6 +9,7 @@ import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.handlers.creator.BasicTransactionManagement;
 import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
@@ -20,7 +21,7 @@ public class EventCreator extends BasicTransactionManagement {
 	private final EventPersistenceFactory eventPersistenceFactory;
 	private AuditLogger auditLogger;
 	private CreateEventParameter parameter;
-	private Event result;
+	private ThingEvent result;
 	private NextEventScheduleSerivce nextScheduleSerivce;
 	private EventSaver createEventSaver;
 
@@ -29,7 +30,7 @@ public class EventCreator extends BasicTransactionManagement {
 		this.eventPersistenceFactory = eventPersistenceFactory;
 	}
 
-	public Event create(CreateEventParameter parameter) throws ProcessFailureException {
+	public ThingEvent create(CreateEventParameter parameter) throws ProcessFailureException {
 		this.parameter = parameter;
 		auditLogger = eventPersistenceFactory.createCreateEventAuditLogger();
 		
@@ -68,7 +69,7 @@ public class EventCreator extends BasicTransactionManagement {
 
 	private void createSchedules(Transaction transaction) {
 		for (EventScheduleBundle eventScheduleBundle : parameter.schedules) {
-            Event openEvent = new Event();
+            ThingEvent openEvent = new ThingEvent();
             openEvent.setAsset(eventScheduleBundle.getAsset());
             openEvent.setType(eventScheduleBundle.getType());
             openEvent.setProject(eventScheduleBundle.getJob());

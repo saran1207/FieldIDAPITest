@@ -6,13 +6,14 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.loaders.NonSecureIdLoader;
 
 public class SafetyNetworkAssignedAssetEventLoader extends SafetyNetworkEventLoader {
 	private final AssetsByNetworkIdLoader assetsByNetworkIdLoader;
 
-	public SafetyNetworkAssignedAssetEventLoader(SecurityFilter filter, NonSecureIdLoader<Event> eventLoader, AssetsByNetworkIdLoader assetsByNetworkIdLoader) {
+	public SafetyNetworkAssignedAssetEventLoader(SecurityFilter filter, NonSecureIdLoader<ThingEvent> eventLoader, AssetsByNetworkIdLoader assetsByNetworkIdLoader) {
 		super(filter, eventLoader);
 		this.assetsByNetworkIdLoader = assetsByNetworkIdLoader;
 	}

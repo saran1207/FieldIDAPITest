@@ -12,10 +12,7 @@ import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.Project;
+import com.n4systems.model.*;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.time.DateUtil;
 import org.apache.commons.lang.time.DateUtils;
@@ -40,27 +37,27 @@ import static ch.lambdaj.Lambda.on;
 
 public class SchedulePickerPanel extends Panel {
 
-    private IModel<Event> scheduleModel;
+    private IModel<ThingEvent> scheduleModel;
     private ScheduleForm scheduleForm;
     private Label saveScheduleLabel;
 
     @SpringBean
     private DateService dateService;
 
-    public SchedulePickerPanel(String id, IModel<Event> scheduleModel, IModel<List<EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
+    public SchedulePickerPanel(String id, IModel<ThingEvent> scheduleModel, IModel<List<ThingEventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
         super(id);
         this.scheduleModel = scheduleModel;
         setOutputMarkupId(true);
 
-        add(scheduleForm = new ScheduleForm("scheduleForm", scheduleModel, new LocalizeModel<List<EventType>>(eventTypeOptions), jobsOptions));
+        add(scheduleForm = new ScheduleForm("scheduleForm", scheduleModel, new LocalizeModel<List<ThingEventType>>(eventTypeOptions), jobsOptions));
     }
 
-    class ScheduleForm extends Form<Event> {
+    class ScheduleForm extends Form<ThingEvent> {
 
         FIDFeedbackPanel feedbackPanel;
         DateTimePicker dateTimePicker;
 
-        public ScheduleForm(String id, final IModel<Event> eventScheduleModel, final IModel<List<EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
+        public ScheduleForm(String id, final IModel<ThingEvent> eventScheduleModel, final IModel<List<ThingEventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
             super(id, eventScheduleModel);
 
             Date dueDate = eventScheduleModel.getObject().getDueDate();
@@ -125,8 +122,8 @@ public class SchedulePickerPanel extends Panel {
             });
         }
 
-        private void setDefaultEventType(IModel<Event> eventScheduleModel, IModel<List<EventType>> eventTypeOptions) {
-            List<EventType> availableEventTypes = eventTypeOptions.getObject();
+        private void setDefaultEventType(IModel<ThingEvent> eventScheduleModel, IModel<List<ThingEventType>> eventTypeOptions) {
+            List<ThingEventType> availableEventTypes = eventTypeOptions.getObject();
             Event eventSchedule = eventScheduleModel.getObject();
             if (eventSchedule.getType() == null && availableEventTypes.size() > 0) {
                 eventSchedule.setType(availableEventTypes.get(0));

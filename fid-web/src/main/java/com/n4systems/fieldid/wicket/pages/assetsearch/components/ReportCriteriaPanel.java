@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.search.EventReportCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -25,7 +26,7 @@ public class ReportCriteriaPanel extends AbstractCriteriaPanel<EventReportCriter
     protected Panel createFiltersPanel(String filters, Model<EventReportCriteria> model) {
         return new ReportingFilterPanel("filters",model) {
             @Override
-            protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {
+            protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, ThingEventType selectedEventType, List<ThingEventType> availableEventTypes) {
                 getReportingColumnsPanel().onEventTypeOrGroupUpdated(target, selectedEventType, availableEventTypes);
             }
 

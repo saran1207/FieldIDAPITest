@@ -138,7 +138,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         // private fields used to back form components.
         private RecurrenceTimeOfDay time = RecurrenceTimeOfDay.NINE_AM;
         private List<RecurrenceTimeOfDay> times = Lists.newArrayList(RecurrenceTimeOfDay.NINE_AM);
-        private EventType eventType = null;
+        private ThingEventType eventType = null;
         private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
         private BaseOrg owner;
         private PredefinedLocation location;
@@ -159,7 +159,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
 
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
 
-             final List<EventType> eventTypes = Lists.newArrayList(assetType.getEventTypes());
+            final List<ThingEventType> eventTypes = Lists.newArrayList(assetType.getEventTypes());
             // set default value if one available.
             eventType = (eventTypes.size()>0) ? eventTypes.get(0) : null;
 

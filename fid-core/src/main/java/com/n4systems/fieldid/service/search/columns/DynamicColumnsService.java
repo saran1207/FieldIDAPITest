@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.n4systems.model.ThingEventType;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.ejb.AssetManager;
@@ -23,7 +24,7 @@ public class DynamicColumnsService extends FieldIdService {
     private @Autowired PersistenceManager persistenceManager;
     private @Autowired AssetManager assetManager;
 
-    public List<ColumnMappingGroupView> getDynamicEventColumnsForReporting(EventType selectedEventType, List<EventType> currentlyAvailableEventTypes) {
+    public List<ColumnMappingGroupView> getDynamicEventColumnsForReporting(ThingEventType selectedEventType, List<ThingEventType> currentlyAvailableEventTypes) {
         EventAttributeDynamicGroupGenerator dynamicGenerator = new EventAttributeDynamicGroupGenerator(persistenceManager);
         Long selectedEventTypeId = selectedEventType == null ? null : selectedEventType.getId();
         return dynamicGenerator.getDynamicGroups(selectedEventTypeId, idSet(currentlyAvailableEventTypes), securityContext.getUserSecurityFilter().getTenantId(), "event_search", securityContext.getUserSecurityFilter());

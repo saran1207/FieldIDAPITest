@@ -10,10 +10,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -55,7 +52,7 @@ public class FrequencyFormPanel extends Panel {
 
     private class FrequencyForm extends Form<AssetTypeSchedule> {
 
-        FidDropDownChoice<EventType> eventTypeChoice;
+        FidDropDownChoice<ThingEventType> eventTypeChoice;
         RequiredTextField<Long> frequencyField;
         OrgLocationPicker orgLocationPicker;
         CheckBox autoScheduleCheck;
@@ -65,11 +62,11 @@ public class FrequencyFormPanel extends Panel {
             add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
             model.getObject().setTenant(FieldIDSession.get().getTenant());
-            List<EventType> eventTypes = getEventTypes();
+            List<ThingEventType> eventTypes = getEventTypes();
             if(!getEventTypes().isEmpty())
                 model.getObject().setEventType(eventTypes.get(0));
 
-            add(eventTypeChoice = new FidDropDownChoice<EventType>("eventType", new PropertyModel<EventType>(model, "eventType"), eventTypes, new EventTypeChoiceRenderer()));
+            add(eventTypeChoice = new FidDropDownChoice<ThingEventType>("eventType", new PropertyModel<ThingEventType>(model, "eventType"), eventTypes, new EventTypeChoiceRenderer()));
             eventTypeChoice.setRequired(true);
             eventTypeChoice.add(new UpdateComponentOnChange());
             add(frequencyField = new RequiredTextField<Long>("frequencyInDays", new PropertyModel<Long>(model, "frequencyInDays"), Long.class));
@@ -120,8 +117,8 @@ public class FrequencyFormPanel extends Panel {
 
     protected void onSaveSchedule(AjaxRequestTarget target, AssetTypeSchedule schedule) {}
 
-    private List<EventType> getEventTypes() {
-        List<EventType> eventTypes = Lists.newArrayList();
+    private List<ThingEventType> getEventTypes() {
+        List<ThingEventType> eventTypes = Lists.newArrayList();
         List<AssociatedEventType> associatedEventTypes = associatedEventTypesService.getAssociatedEventTypes(assetType.getObject(), null);
         for (AssociatedEventType type: associatedEventTypes) {
             eventTypes.add(type.getEventType());

@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.assettype.RecurrenceFormPanel;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -28,7 +29,7 @@ public class OrgRecurringEventsFormPanel extends RecurrenceFormPanel {
         placeService.addRecurringEvent();
     }
 
-    protected List<EventType> getEventTypes() {
+    protected List<ThingEventType> getEventTypes() {
         //return model.getObject().getPlaces();
         return Lists.newArrayList(EventTypeBuilder.anEventType().named("Visual").build());
     }

@@ -10,6 +10,7 @@ import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.TextFieldCriteriaResult;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.builders.AssetBuilder;
 import com.n4systems.model.builders.ProcedureDefinitionBuilder;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -187,7 +188,7 @@ public class S3ServiceTest extends FieldIdServiceTest {
             }
 
             @Override public AbstractEvent getEvent() {
-                return new AbstractEvent() {
+                return new ThingEvent() {
                     @Override public Long getId() {
                         return eventId;
                     }

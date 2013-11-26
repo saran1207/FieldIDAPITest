@@ -3,6 +3,7 @@ package com.n4systems.services.search;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -58,10 +59,10 @@ public class EventIndexerService extends FieldIdPersistenceService {
     private void processIndexQueueItem(EventIndexQueueItem item) {
         switch(item.getType()) {
             case EVENT_INSERT:
-                updateIndex(persistenceService.findNonSecure(Event.class, item.getItemId()), false);
+                updateIndex(persistenceService.findNonSecure(ThingEvent.class, item.getItemId()), false);
                 break;
             case EVENT_UPDATE:
-                updateIndex(persistenceService.findNonSecure(Event.class, item.getItemId()), true);
+                updateIndex(persistenceService.findNonSecure(ThingEvent.class, item.getItemId()), true);
                 break;
             case TENANT:
                 updateTenant(persistenceService.findNonSecure(Tenant.class, item.getItemId()));
@@ -69,14 +70,14 @@ public class EventIndexerService extends FieldIdPersistenceService {
         }
     }
 
-    private void updateIndex(Event event, boolean update) {
+    private void updateIndex(ThingEvent event, boolean update) {
         if (event != null && event.getWorkflowState() == WorkflowState.COMPLETED) {
             eventIndexWriter.index(event.getTenant(), Arrays.asList(event), update);
         }
     }
 
     private void updateTenant(Tenant tenant) {
-        eventIndexWriter.reindexItems(tenant, new QueryBuilder<Event>(Event.class, new TenantOnlySecurityFilter(tenant)).addSimpleWhere("workflowState", WorkflowState.COMPLETED));
+        eventIndexWriter.reindexItems(tenant, new QueryBuilder<ThingEvent>(ThingEvent.class, new TenantOnlySecurityFilter(tenant)).addSimpleWhere("workflowState", WorkflowState.COMPLETED));
     }
 
     public void placeItemInQueueForTenant(Long tenantId) {

@@ -3,6 +3,7 @@ package com.n4systems.services;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 
 @CopiedToService(com.n4systems.fieldid.service.event.EventScheduleService.class)
 public class EventScheduleServiceImpl implements EventScheduleService {
@@ -14,7 +15,7 @@ public class EventScheduleServiceImpl implements EventScheduleService {
 	}
 	
 	@Override
-	public Long createSchedule(Event schedule) {
+	public Long createSchedule(ThingEvent schedule) {
 		Long id = persistenceManager.save(schedule);
 		schedule.getAsset().touch();
 		persistenceManager.update(schedule.getAsset());
@@ -22,8 +23,8 @@ public class EventScheduleServiceImpl implements EventScheduleService {
 	}
 
     @Override
-	public Event updateSchedule(Event schedule) {
-        Event event = null;
+	public ThingEvent updateSchedule(ThingEvent schedule) {
+        ThingEvent event = null;
         if (schedule.getId() == null) {
             persistenceManager.save(schedule);
             event = schedule;

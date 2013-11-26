@@ -48,7 +48,7 @@ public class EventFormHelper {
 		return currentCriteriaSections;
 	}
 
-	public Map<CriteriaSection, List<CriteriaResult>> getVisibleResults(AbstractEvent event) {
+	public Map<CriteriaSection, List<CriteriaResult>> getVisibleResults(AbstractEvent<ThingEventType> event) {
 		if (sections.get(event) == null) {
 			sections.put(event, new HashMap<CriteriaSection, List<CriteriaResult>>());
             EventForm eventForm = event.getEventForm();

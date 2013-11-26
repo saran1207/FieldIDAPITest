@@ -126,7 +126,7 @@ public class AssetSummaryPage extends AssetPage {
         add(orderDetails = new OrderDetailsPanel("orderDetailsPanel", assetModel));
         orderDetails.setVisible(orderDetailsEnabled || integrationEnabled);
     
-        add(upcomingEventsPanel = new UpcomingEventsPanel("upcomingEventsPanel", new LocalizeModel<List<Event>>(new UpcomingEventsListModel().setAsset(asset)), asset));
+        add(upcomingEventsPanel = new UpcomingEventsPanel("upcomingEventsPanel", new LocalizeModel<List<ThingEvent>>(new UpcomingEventsListModel().setAsset(asset)), asset));
         upcomingEventsPanel.setOutputMarkupPlaceholderTag(true);
         add(upcomingEventsMessage = new Label("upcomingEventsMessage", new FIDLabelModel("label.empty_schedule_list").getObject()));
         upcomingEventsMessage.setOutputMarkupPlaceholderTag(true);

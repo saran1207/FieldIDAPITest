@@ -96,13 +96,13 @@ public class AssetMergerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_merge_products_together_with_events() {
-		List<Event> eventsOnLosingProduct = new ArrayList<Event>();
+		List<ThingEvent> eventsOnLosingProduct = new ArrayList<ThingEvent>();
 		eventsOnLosingProduct.add(EventBuilder.anEvent().on(losingAsset).withTenant(TenantBuilder.aTenant().build()).build());
 		
-		mockEventLists(eventsOnLosingProduct, new ArrayList<Event>());
+		mockEventLists(eventsOnLosingProduct, new ArrayList<ThingEvent>());
 		
 				
-        expect(mockEventManager.updateEvent((Event)eq(eventsOnLosingProduct.get(0)), eq(0L), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(eventsOnLosingProduct.get(0));
+        expect(mockEventManager.updateEvent((ThingEvent)eq(eventsOnLosingProduct.get(0)), eq(0L), eq(user.getId()), (FileDataContainer)isNull(), (List<FileAttachment>)isNull())).andReturn(eventsOnLosingProduct.get(0));
 
 		mockArchiveOfLosingAsset();
 		
@@ -123,10 +123,10 @@ public class AssetMergerTest {
 		List<SubEvent> subEvents = new ArrayList<SubEvent>();
 		subEvents.add(sub);
 		
-		List<Event> masterEvents = new ArrayList<Event>();
+		List<ThingEvent> masterEvents = new ArrayList<ThingEvent>();
 		masterEvents.add(EventBuilder.anEvent().withSubEvents(subEvents).build());
 	
-		mockEventLists(new ArrayList<Event>(), masterEvents);
+		mockEventLists(new ArrayList<ThingEvent>(), masterEvents);
 		mockArchiveOfLosingAsset();
 		
 		
@@ -175,13 +175,13 @@ public class AssetMergerTest {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private void mockEventLists(List<Event> events, List<Event> masterEvents) {
-		expect(mockPersistenceManager.findAll((QueryBuilder<Event>)anyObject())).andReturn(events);
+	private void mockEventLists(List<ThingEvent> events, List<ThingEvent> masterEvents) {
+		expect(mockPersistenceManager.findAll((QueryBuilder<ThingEvent>)anyObject())).andReturn(events);
 		expect(mockPersistenceManager.passThroughFindAll(contains("SELECT"), (Map<String,Object>)anyObject())).andReturn(new ArrayList<Object>(masterEvents));
 	}
 	
 	private void mockEmptyEventList() {
-		mockEventLists(new ArrayList<Event>(), new ArrayList<Event>());
+		mockEventLists(new ArrayList<ThingEvent>(), new ArrayList<ThingEvent>());
 	}
 
 	

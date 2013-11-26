@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantMo
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.model.search.SearchCriteria;
@@ -109,11 +110,11 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
         return Lists.newArrayList();
     }
 
-    protected List<ColumnMappingGroupView> getDynamicEventColumns(EventType eventType, List<EventType> availableEventTypes) {
+    protected List<ColumnMappingGroupView> getDynamicEventColumns(ThingEventType eventType, List<ThingEventType> availableEventTypes) {
         return Lists.newArrayList();
     }
 
-    protected void updateDynamicEventColumns(EventType eventType, List<EventType> availableEventTypes) {
+    protected void updateDynamicEventColumns(ThingEventType eventType, List<ThingEventType> availableEventTypes) {
         dynamicEventColumnsModel.setObject(getDynamicEventColumns(eventType,  availableEventTypes));
     }
 

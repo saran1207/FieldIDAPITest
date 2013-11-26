@@ -28,16 +28,16 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	private LegacyAsset legacyAssetManager;
 	private EventScheduleManager eventScheduleManager;
-	protected Event openEvent;
+	protected ThingEvent openEvent;
 	
-	private EventType eventType;
+	private ThingEventType eventType;
 	private List<ListingPair> jobs;
 	private Asset asset;
 	private String nextDate;
 
 	protected String searchId;
 
-	private List<Event> eventSchedules;
+	private List<ThingEvent> eventSchedules;
 
 	public EventScheduleCrud(LegacyAsset legacyAssetManager, PersistenceManager persistenceManager, EventScheduleManager eventScheduleManager) {
 		super(persistenceManager);
@@ -47,12 +47,12 @@ public class EventScheduleCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		openEvent = new Event();
+		openEvent = new ThingEvent();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		openEvent = persistenceManager.find(Event.class, uniqueId, getTenantId(), "asset");
+		openEvent = persistenceManager.find(ThingEvent.class, uniqueId, getTenantId(), "asset");
 	}
 
 	private void testRequiredEntities(boolean existing) {
@@ -96,7 +96,7 @@ public class EventScheduleCrud extends AbstractCrud {
 		testRequiredEntities(false);
 		try {
 			Project tmpProject = openEvent.getProject();
-			openEvent = new Event();
+			openEvent = new ThingEvent();
             openEvent.setAsset(asset);
             openEvent.setType(eventType);
 			openEvent.setDueDate(convertDateWithOptionalTime(nextDate));
@@ -203,7 +203,7 @@ public class EventScheduleCrud extends AbstractCrud {
 	public void setType(Long eventTypeId) {
 		if (this.eventType == null || !this.eventType.getId().equals(eventTypeId)) {
 			this.eventType = null;
-			for (EventType insType : getEventTypes()) {
+			for (ThingEventType insType : getEventTypes()) {
 				if (insType.getId().equals(eventTypeId)) {
 					this.eventType = insType;
 					break;
@@ -216,8 +216,8 @@ public class EventScheduleCrud extends AbstractCrud {
 		return eventType;
 	}
 
-	public List<EventType> getEventTypes() {
-		List<EventType> eventTypes = new ArrayList<EventType>();
+	public List<ThingEventType> getEventTypes() {
+		List<ThingEventType> eventTypes = new ArrayList<ThingEventType>();
 		List<AssociatedEventType> associatedEventTypes = getLoaderFactory().createAssociatedEventTypesLoader().setAssetType(asset.getType()).load();
 		for (AssociatedEventType associatedEventType : associatedEventTypes) {
 			eventTypes.add(associatedEventType.getEventType());
@@ -237,7 +237,7 @@ public class EventScheduleCrud extends AbstractCrud {
 		this.nextDate = nextDate;
 	}
 
-	public List<Event> getEventSchedules() {
+	public List<ThingEvent> getEventSchedules() {
 		if (eventSchedules == null) {
 			eventSchedules = eventScheduleManager.getAvailableSchedulesFor(asset);
 		}

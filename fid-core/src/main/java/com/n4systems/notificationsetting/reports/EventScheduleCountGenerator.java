@@ -2,6 +2,7 @@ package com.n4systems.notificationsetting.reports;
 
 import com.n4systems.mail.MailManager;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.common.SimpleFrequency;
 import com.n4systems.model.event.FailedEventListLoader;
 import com.n4systems.model.eventschedulecount.EventScheduleCount;
@@ -66,7 +67,7 @@ public class EventScheduleCountGenerator {
 			overdueEvents = getOverdueEvents(setting, clock);
 		}
 		
-		List<Event> failedEvents = null;
+		List<ThingEvent> failedEvents = null;
 		if (setting.isIncludeFailed()) {
 			failedEvents = getFailedEvents(setting, clock);
 		}
@@ -77,7 +78,7 @@ public class EventScheduleCountGenerator {
 	}
 
 	private boolean shouldSendMessage(NotificationSetting setting, SortedSet<EventScheduleCount> upcomingEvents, 
-			SortedSet<EventScheduleCount> overdueEvents, List<Event> failedEvents) {
+			SortedSet<EventScheduleCount> overdueEvents, List<ThingEvent> failedEvents) {
 		if (setting.getSendBlankReport()) {
 			return true;
 		}
@@ -85,7 +86,7 @@ public class EventScheduleCountGenerator {
 		return (upcomingEvents != null && !upcomingEvents.isEmpty()) || (overdueEvents != null && !overdueEvents.isEmpty()) || (failedEvents != null && !failedEvents.isEmpty());
 	}
 
-	private List<Event> getFailedEvents(NotificationSetting setting, Clock clock) {
+	private List<ThingEvent> getFailedEvents(NotificationSetting setting, Clock clock) {
 		FailedEventListLoader loader = setupFailedLoader(setting, clock);
 		
 		return loader.load();
@@ -124,7 +125,7 @@ public class EventScheduleCountGenerator {
 		return upcomingLoader;
 	}
 
-	private void sendMessage(NotificationSetting setting, Date start, Date end, SortedSet<EventScheduleCount> upcomingEventCounts, SortedSet<EventScheduleCount> overdueEvents, List<Event> failedEvents) throws NoSuchProviderException, MessagingException {
+	private void sendMessage(NotificationSetting setting, Date start, Date end, SortedSet<EventScheduleCount> upcomingEventCounts, SortedSet<EventScheduleCount> overdueEvents, List<ThingEvent> failedEvents) throws MessagingException {
 		String messageSubject = "Events Report: " + setting.getName();
 		
 		// no we need to build the message body with the html event report table

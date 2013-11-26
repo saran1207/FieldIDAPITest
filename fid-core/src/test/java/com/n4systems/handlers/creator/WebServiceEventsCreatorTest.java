@@ -7,6 +7,7 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.security.AuditLogger;
 import com.n4systems.services.NextEventScheduleSerivce;
@@ -29,13 +30,13 @@ import static org.junit.Assert.assertThat;
 public class WebServiceEventsCreatorTest {
 	private final class CreateEventsMethodObjectSabatour implements CreateEventsMethodObject {
 		@Override
-		public List<Event> createEvents(String transactionGUID, List<Event> events, Map<Event, Date> nextEventDates) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
+		public List<ThingEvent> createEvents(String transactionGUID, List<ThingEvent> events, Map<ThingEvent, Date> nextEventDates) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
 				FileAttachmentException, UnknownSubAsset {
 					return createEvents(transactionGUID, events);
 				}
 
 		@Override
-		public List<Event> createEvents(String transactionGUID, List<Event> events) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
+		public List<ThingEvent> createEvents(String transactionGUID, List<ThingEvent> events) throws TransactionAlreadyProcessedException, ProcessingProofTestException,
 				FileAttachmentException, UnknownSubAsset {
 			throw new TransactionAlreadyProcessedException();
 		}
@@ -47,8 +48,8 @@ public class WebServiceEventsCreatorTest {
 
 	
 	private String transactionGUID = "301001-aas-df-as-dl2kajd";
-	private List<Event> events = new FluentArrayList<Event>(anEvent().build(), anEvent().build());
-	private Map<Event, Date> nextEventDates = ImmutableMap.of(events.get(0), new Date(), events.get(1), new Date());
+	private List<ThingEvent> events = new FluentArrayList<ThingEvent>(anEvent().build(), anEvent().build());
+	private Map<ThingEvent, Date> nextEventDates = ImmutableMap.of(events.get(0), new Date(), events.get(1), new Date());
 	
 	
 	@Test
@@ -110,7 +111,7 @@ public class WebServiceEventsCreatorTest {
 	
 	@Test
 	public void should_return_the_events_returned_from_CreateEventsMethodObject() throws Exception {
-		List<Event> savedEvents = new FluentArrayList<Event>(anEvent().build(), anEvent().build());
+		List<ThingEvent> savedEvents = new FluentArrayList<ThingEvent>(anEvent().build(), anEvent().build());
 		
 		CreateEventsMethodObject mockCreateEventsMethod = createMock(CreateEventsMethodObject.class);
 		expect(mockCreateEventsMethod.createEvents(transactionGUID, events)).andReturn(savedEvents);
@@ -121,7 +122,7 @@ public class WebServiceEventsCreatorTest {
 		
 		WebServiceEventsCreator sut = new WebServiceEventsCreator(transactionManager, eventPersistenceFactory);
 		
-		List<Event> actualSavedEvents = sut.create(transactionGUID, events, nextEventDates);
+		List<ThingEvent> actualSavedEvents = sut.create(transactionGUID, events, nextEventDates);
 		
 		Assert.assertThat(actualSavedEvents, equalTo(savedEvents));
 	}
@@ -176,8 +177,8 @@ public class WebServiceEventsCreatorTest {
 	public void should_create_all_schedules_for_the_next_event_date_map() throws Exception {
 		
 		NextEventScheduleSerivce nextEventScheduleSerivce = createMock(NextEventScheduleSerivce.class);
-		expect(nextEventScheduleSerivce.createNextSchedule(isA(Event.class)))
-			.andAnswer(new IAnswer<Event>() {	@Override public Event answer() throws Throwable { return (Event)getCurrentArguments()[0]; } })
+		expect(nextEventScheduleSerivce.createNextSchedule(isA(ThingEvent.class)))
+			.andAnswer(new IAnswer<ThingEvent>() {	@Override public ThingEvent answer() throws Throwable { return (ThingEvent)getCurrentArguments()[0]; } })
 			.times(nextEventDates.size());
 		replay(nextEventScheduleSerivce);
 		

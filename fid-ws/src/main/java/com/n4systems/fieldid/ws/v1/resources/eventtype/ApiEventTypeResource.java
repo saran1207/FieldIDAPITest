@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ws.rs.Path;
 
+import com.n4systems.model.*;
 import org.springframework.stereotype.Component;
 
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
@@ -21,34 +22,17 @@ import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiSelectCriteri
 import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiSignatureCriteria;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiTextFieldCriteria;
 import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiUnitOfMeasureCriteria;
-import com.n4systems.model.ComboBoxCriteria;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaSection;
-import com.n4systems.model.DateFieldCriteria;
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
-import com.n4systems.model.NumberFieldCriteria;
-import com.n4systems.model.OneClickCriteria;
-import com.n4systems.model.Score;
-import com.n4systems.model.ScoreCriteria;
-import com.n4systems.model.ScoreGroup;
-import com.n4systems.model.SelectCriteria;
-import com.n4systems.model.SignatureCriteria;
-import com.n4systems.model.Button;
-import com.n4systems.model.ButtonGroup;
-import com.n4systems.model.TextFieldCriteria;
-import com.n4systems.model.UnitOfMeasureCriteria;
 
 @Component
 @Path("eventType")
-public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventType> {
+public class ApiEventTypeResource extends SetupDataResource<ApiEventType, ThingEventType> {
 
 	public ApiEventTypeResource() {
-		super(EventType.class, true);
+		super(ThingEventType.class, true);
 	}
 
 	@Override
-	protected ApiEventType convertEntityToApiModel(EventType eventType) {
+	protected ApiEventType convertEntityToApiModel(ThingEventType eventType) {
 		ApiEventType apiEventType = new ApiEventType();
 		apiEventType.setSid(eventType.getId());
 		apiEventType.setActive(eventType.isActive());

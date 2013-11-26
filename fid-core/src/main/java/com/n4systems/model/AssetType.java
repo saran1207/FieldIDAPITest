@@ -188,8 +188,8 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 
 	@Deprecated
 	@AllowSafetyNetworkAccess
-	public Set<EventType> getEventTypes() {
-		Set<EventType> types = new HashSet<EventType>();
+	public Set<ThingEventType> getEventTypes() {
+		Set<ThingEventType> types = new HashSet<ThingEventType>();
 		for (AssociatedEventType eventType : eventTypes) {
 			types.add(eventType.getEventType());
 		}
@@ -556,10 +556,10 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
     }
 
     @Transient
-    public List<EventType> getAllEventTypesExcludingActions() {
-        List<EventType> allEventTypes = new ArrayList<EventType>();
+    public List<ThingEventType> getAllEventTypesExcludingActions() {
+        List<ThingEventType> allEventTypes = new ArrayList<ThingEventType>();
         for (AssociatedEventType assocEventType : eventTypes) {
-            EventType type = assocEventType.getEventType();
+            ThingEventType type = assocEventType.getEventType();
             if (!type.getGroup().isAction()) {
                 allEventTypes.add(type);
             }

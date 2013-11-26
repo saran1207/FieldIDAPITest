@@ -25,8 +25,8 @@ import java.util.List;
 
 public class EventDetailsCriteriaPanel extends Panel {
 
-    private FidDropDownChoice<EventType> eventTypeSelect;
-    private IModel<List<EventType>> availableEventTypesModel;
+    private FidDropDownChoice<ThingEventType> eventTypeSelect;
+    private IModel<List<ThingEventType>> availableEventTypesModel;
 
     public EventDetailsCriteriaPanel(String id, IModel<?> model) {
         super(id, model);
@@ -41,9 +41,9 @@ public class EventDetailsCriteriaPanel extends Panel {
         add(includeNetworkResultsContainer.setVisible(sessionUser.isEmployeeUser() || sessionUser.isSystemUser()));
 
         final IModel<EventTypeGroup> eventTypeGroupModel = new PropertyModel<EventTypeGroup>(getDefaultModel(), "eventTypeGroup");
-        final IModel<EventType> eventTypeModel = new PropertyModel<EventType>(getDefaultModel(), "eventType");
-        availableEventTypesModel = new LocalizeModel<List<EventType>>(new EventTypesForTenantModel(eventTypeGroupModel));
-        add(eventTypeSelect = new FidDropDownChoice<EventType>("eventType", availableEventTypesModel, new EventTypeChoiceRenderer()));
+        final IModel<ThingEventType> eventTypeModel = new PropertyModel<ThingEventType>(getDefaultModel(), "eventType");
+        availableEventTypesModel = new LocalizeModel<List<ThingEventType>>(new EventTypesForTenantModel(eventTypeGroupModel));
+        add(eventTypeSelect = new FidDropDownChoice<ThingEventType>("eventType", availableEventTypesModel, new EventTypeChoiceRenderer()));
         eventTypeSelect.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override protected void onUpdate(AjaxRequestTarget target) {
                 onEventTypeOrGroupUpdated(target, eventTypeModel.getObject(), availableEventTypesModel.getObject());
@@ -64,7 +64,7 @@ public class EventDetailsCriteriaPanel extends Panel {
         includeNetworkResultsContainer.add(new CheckBox("includeSafetyNetwork"));
     }
 
-    private FidDropDownChoice<EventTypeGroup> createEventTypeGroupChoice(IModel<EventTypeGroup> eventTypeGroupModel, final IModel<EventType> eventTypeModel, final IModel<List<EventType>> availableEventTypesModel) {
+    private FidDropDownChoice<EventTypeGroup> createEventTypeGroupChoice(IModel<EventTypeGroup> eventTypeGroupModel, final IModel<ThingEventType> eventTypeModel, final IModel<List<ThingEventType>> availableEventTypesModel) {
         FidDropDownChoice<EventTypeGroup> eventTypeGroupDropDownChoice = new FidDropDownChoice<EventTypeGroup>("eventTypeGroup",
                 eventTypeGroupModel, new LocalizeModel<List<EventTypeGroup>>(new EventTypeGroupsForTenantModel()), new ListableChoiceRenderer<EventTypeGroup>());
         eventTypeGroupDropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
@@ -78,10 +78,10 @@ public class EventDetailsCriteriaPanel extends Panel {
         return eventTypeGroupDropDownChoice;
     }
 
-    public IModel<List<EventType>> getAvailableEventTypesModel() {
+    public IModel<List<ThingEventType>> getAvailableEventTypesModel() {
         return availableEventTypesModel;
     }
 
-    protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<EventType> availableEventTypes) {}
+    protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, ThingEventType selectedEventType, List<ThingEventType> availableEventTypes) {}
 
 }

@@ -15,7 +15,7 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.service.task.AsyncService.LegacyAsyncTask;
 import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.downloadlink.DownloadState;
 import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
@@ -99,12 +99,12 @@ public class EventTypeExportService extends FieldIdPersistenceService {
 								
 	private void export(MapWriter excelMapWriter, Long eventTypeId, Date from, Date to, String dateFormat, TimeZone timeZone) throws ConversionException, IOException, MarshalingException  {
 		ExportMapMarshaller<EventView> exportMapMarshaller = new ExportMapMarshaller<EventView>(EventView.class);
-		ModelToViewConverter<Event,EventView> converter = new EventToViewConverter(new NextEventDateByEventPassthruLoader(), dateFormat, timeZone);
+		ModelToViewConverter<ThingEvent,EventView> converter = new EventToViewConverter(new NextEventDateByEventPassthruLoader(), dateFormat, timeZone);
 
         to = DateUtils.addDays(to, 1);
-		List<Event> events = eventService.getEventsByType(eventTypeId, from, to);
+		List<ThingEvent> events = eventService.getThingEventsByType(eventTypeId, from, to);
 		EventView view;				
-		for (Event event:events) {
+		for (ThingEvent event:events) {
 			view = converter.toView(event);
 			excelMapWriter.write(exportMapMarshaller.toBeanMap(view));
 		}			

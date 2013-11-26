@@ -1,9 +1,7 @@
 package com.n4systems.services;
 
 import com.n4systems.ejb.EventScheduleManager;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
 import com.n4systems.test.helpers.DateHelper;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,13 +28,13 @@ public class NextEventScheduleServiceTest {
 	@Test
 	public void test_creates_schedule_when_one_doesnt_exist() {
 		Asset asset = anAsset().build();
-		EventType eventType = anEventType().build();
+		ThingEventType eventType = anEventType().build();
 		Date nextDate = DateHelper.oneYearFromToday();
-		Event openEvent = anOpenEvent().on(asset).ofType(eventType).scheduledFor(nextDate).build();
-		List<Event> existingSchedules = new ArrayList<Event>();
+        ThingEvent openEvent = anOpenEvent().on(asset).ofType(eventType).scheduledFor(nextDate).build();
+		List<ThingEvent> existingSchedules = new ArrayList<ThingEvent>();
 		
 		expect(mockEventScheduleManager.getAvailableSchedulesFor(asset)).andReturn(existingSchedules);
-		expect(mockEventScheduleManager.update((Event)anyObject())).andReturn(openEvent);
+		expect(mockEventScheduleManager.update((ThingEvent)anyObject())).andReturn(openEvent);
 		replay(mockEventScheduleManager);
 		
 		ManagerBackedNextEventScheduleService scheduleService = new ManagerBackedNextEventScheduleService(mockEventScheduleManager);
@@ -49,11 +47,11 @@ public class NextEventScheduleServiceTest {
 	@Test
 	public void test_returns_existing_schedule_if_one_exists_on_same_day_ignoring_time() {
 		Asset asset = anAsset().build();
-		EventType eventType = anEventType().build();
+		ThingEventType eventType = anEventType().build();
 		Date nextDate = DateHelper.oneYearFromToday();
 		Date nextDateDifferentTime = new Date(nextDate.getTime() + 1);
-		Event openEvent = anOpenEvent().on(asset).ofType(eventType).scheduledFor(nextDate).build();
-		List<Event> existingSchedules = new ArrayList<Event>();
+        ThingEvent openEvent = anOpenEvent().on(asset).ofType(eventType).scheduledFor(nextDate).build();
+		List<ThingEvent> existingSchedules = new ArrayList<ThingEvent>();
 		existingSchedules.add(openEvent);
 				
 		expect(mockEventScheduleManager.getAvailableSchedulesFor(asset)).andReturn(existingSchedules);
@@ -66,8 +64,8 @@ public class NextEventScheduleServiceTest {
 		assertEquals(openEvent.getId(), returnedSchedule.getId());
 	}
 
-    private Event createOpenEvent(Asset asset, EventType eventType, Date nextDate) {
-        Event event = new Event();
+    private ThingEvent createOpenEvent(Asset asset, ThingEventType eventType, Date nextDate) {
+        ThingEvent event = new ThingEvent();
         event.setAsset(asset);
         event.setType(eventType);
         event.setDueDate(nextDate);

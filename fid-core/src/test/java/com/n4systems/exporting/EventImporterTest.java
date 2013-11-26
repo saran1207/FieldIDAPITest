@@ -18,6 +18,8 @@ import com.n4systems.handlers.creator.NullObjectDefaultedEventPersistenceFactory
 import com.n4systems.handlers.creator.events.EventCreator;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.builders.EventBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.persistence.Transaction;
@@ -55,14 +57,14 @@ public class EventImporterTest {
 		final EventView view = new EventView();
 		view.setNextEventDate(new Date());
 		
-		Event event = EventBuilder.anEvent().build();
+		ThingEvent event = EventBuilder.anEvent().build();
 		
 		Validator<ExternalModelView> validator = createMock(Validator.class);
 		expect(validator.getValidationContext()).andReturn(new HashMap<String, Object>());
 		replay(validator);
 
 		EventToModelConverter converter = createMock(EventToModelConverter.class);
-		expect(converter.getType()).andReturn(new EventType());
+		expect(converter.getType()).andReturn(new ThingEventType());
 		expect(converter.toModel(view, transaction)).andReturn(event);
 		replay(converter);
 		

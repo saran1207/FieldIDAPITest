@@ -20,7 +20,8 @@ import java.util.Set;
 
 @Entity
 @Table(name = "eventtypes")
-public class EventType extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable, SecurityEnhanced<EventType> {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class EventType extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;
 	
@@ -38,9 +39,6 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	private boolean retired = false;
 
 	@Column(nullable=false)
-	private boolean master = false;
-	
-	@Column(nullable=false)
 	private boolean assignedToAvailable = false;
 	
 	@ManyToOne(cascade={CascadeType.REFRESH}, optional=false)
@@ -50,12 +48,6 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
     @JoinColumn(name="eventform_id")
     private EventForm eventForm;
 
-	@ElementCollection(fetch= FetchType.LAZY)
-	@Enumerated(EnumType.STRING)
-    @JoinTable(name="eventtypes_supportedprooftests", joinColumns = {@JoinColumn(name="eventtypes_id")})
-    @Column(name="element")
-	private Set<ProofTestType> supportedProofTests = new HashSet<ProofTestType>();
-	
 	@ElementCollection(fetch= FetchType.LAZY)
 	@IndexColumn(name="orderidx")
     @JoinTable(name="eventtypes_infofieldnames", joinColumns = {@JoinColumn(name="eventtypes_id")})
@@ -139,20 +131,6 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	}
 
 	@AllowSafetyNetworkAccess
-	public Set<ProofTestType> getSupportedProofTests() {
-		return supportedProofTests;
-	}
-
-	public void setSupportedProofTests(Set<ProofTestType> supportedProofTests) {
-		this.supportedProofTests = supportedProofTests;
-	}
-	
-	@AllowSafetyNetworkAccess
-	public boolean supports(ProofTestType proofTestType) {
-		return supportedProofTests.contains(proofTestType);
-	}
-	
-	@AllowSafetyNetworkAccess
 	public String getDescription() {
 		return description;
 	}
@@ -178,16 +156,7 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 	public void setRetired(boolean retired) {
 		this.retired = retired;
 	}
-	
-	@AllowSafetyNetworkAccess
-	public boolean isMaster() {
-		return master;
-	}
 
-	public void setMaster(boolean master) {
-		this.master = master;
-	}
-	
 	@AllowSafetyNetworkAccess
 	public Long getLegacyEventId() {
 		return legacyEventId;
@@ -214,10 +183,6 @@ public class EventType extends ArchivableEntityWithTenant implements NamedEntity
 
 	public String getArchivedName() {
 		return archivedName;
-	}
-
-	public EventType enhance(SecurityLevel level) {
-		return EntitySecurityEnhancer.enhanceEntity(this, level);
 	}
 
 	public boolean isAssignedToAvailable() {

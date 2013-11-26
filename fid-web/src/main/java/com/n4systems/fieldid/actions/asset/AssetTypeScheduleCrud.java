@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.model.*;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -14,10 +15,6 @@ import com.n4systems.fieldid.actions.api.AbstractCrud;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventType;
 import com.n4systems.model.eventtype.EventFrequencySaver;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -38,7 +35,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 	private Long assetTypeId;
 	private Long eventTypeId;
 	private AssetType assetType;
-	private EventType eventType;
+	private ThingEventType eventType;
 	
 	private boolean customerForm = false;
 	private AssetTypeSchedule schedule;
@@ -177,7 +174,7 @@ public class AssetTypeScheduleCrud extends AbstractCrud implements HasDuplicateV
 
 	public EventType getEventType() {
 		if (eventType == null) {
-			eventType = persistenceManager.find(EventType.class, eventTypeId, getTenant());
+			eventType = persistenceManager.find(ThingEventType.class, eventTypeId, getTenant());
 		}
 		return eventType;
 	}

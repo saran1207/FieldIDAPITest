@@ -2,10 +2,11 @@ package com.n4systems.model.eventtype;
 
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.api.Cleaner;
 
 
-public class EventTypeCleanerAssignToFilter implements Cleaner<EventType>{
+public class EventTypeCleanerAssignToFilter implements Cleaner<ThingEventType>{
 
 	private final SystemSecurityGuard securityGuard;
 
@@ -13,7 +14,7 @@ public class EventTypeCleanerAssignToFilter implements Cleaner<EventType>{
 		this.securityGuard = securityGuard;
 	}
 
-	public void clean(EventType eventType) {
+	public void clean(ThingEventType eventType) {
 		if (!securityGuard.isAssignedToEnabled()) {
 			eventType.removeAssignedTo();
 		}

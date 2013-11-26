@@ -10,6 +10,7 @@ import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.exporting.io.MapReader;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.services.asset.AssetSaveService;
 import com.n4systems.util.ServiceLocator;
@@ -43,8 +44,8 @@ public class AssetImporter extends AbstractImporter<AssetView> {
 	}
 
 	private void autoScheduleEvents(Asset asset) {
-		List<Event> autoScheduledEvents = eventScheduleManager.getAutoEventSchedules(asset);
-		for (Event schedule: autoScheduledEvents) {
+		List<ThingEvent> autoScheduledEvents = eventScheduleManager.getAutoEventSchedules(asset);
+		for (ThingEvent schedule: autoScheduledEvents) {
 			if (schedule != null) {
 				eventScheduleManager.update( schedule );
 			}

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.util.DateHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,9 +31,9 @@ public class NextEventScheduleService extends FieldIdPersistenceService {
     }
 
     private Event findExistingSchedule(Event newSchedule) {
-        List<Event> openEvents = eventScheduleService.getAvailableSchedulesFor(newSchedule.getAsset());
+        List<ThingEvent> openEvents = eventScheduleService.getAvailableSchedulesFor(newSchedule.getAsset());
 
-        for (Event openEvent : openEvents) {
+        for (ThingEvent openEvent : openEvents) {
             if (DateHelper.isEqualIgnoringTime(openEvent.getDueDate(), newSchedule.getDueDate())
                     && openEvent.getEventType().equals(newSchedule.getEventType())) {
                 return openEvent;

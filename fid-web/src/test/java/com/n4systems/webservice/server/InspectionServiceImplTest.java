@@ -1,18 +1,18 @@
 package com.n4systems.webservice.server;
 
-import static org.junit.Assert.*;
+import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.webservice.server.bundles.ProofTestBundle;
+import com.n4systems.webservice.server.bundles.ProofTestStatusBundle;
+import com.n4systems.webservice.server.bundles.WebServiceStatus;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.junit.Test;
-
-import com.n4systems.model.Event;
-import com.n4systems.webservice.server.bundles.ProofTestBundle;
-import com.n4systems.webservice.server.bundles.ProofTestStatusBundle;
-import com.n4systems.webservice.server.bundles.WebServiceStatus;
+import static org.junit.Assert.assertEquals;
 
 public class InspectionServiceImplTest {
 
@@ -34,7 +34,7 @@ public class InspectionServiceImplTest {
 
 	@Test
 	public void should_add_success_to_the_status_list_collector_when_there_is_an_identifier_in_the_inspection_map() throws Exception {
-		Event aCreatedEvent = new Event();
+        ThingEvent aCreatedEvent = new ThingEvent();
 		
 		statusListCollector = new ArrayList<ProofTestStatusBundle>();
 		
@@ -58,7 +58,7 @@ public class InspectionServiceImplTest {
 	
 	@Test
 	public void should_add_a_single_success_to_the_status_list_collector_when_there_are_multiple_identifiers_in_the_inspection_map() throws Exception {
-		Event aCreatedEvent = new Event();
+        ThingEvent aCreatedEvent = new ThingEvent();
 		
 		statusListCollector = new ArrayList<ProofTestStatusBundle>();
 		

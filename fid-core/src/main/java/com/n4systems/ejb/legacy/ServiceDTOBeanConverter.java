@@ -11,7 +11,7 @@ import java.io.IOException;
 
 public interface ServiceDTOBeanConverter {
 
-	public InspectionServiceDTO convert(Event event);
+	public InspectionServiceDTO convert(ThingEvent event);
 
 	public Asset convert(ProductServiceDTO productServiceDTO, Asset targetProduct, long tenantId);
 
@@ -41,11 +41,11 @@ public interface ServiceDTOBeanConverter {
 
 	public BaseOrg convert(long ownerId, long tenantId);
 
-	public Event convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId);
+	public ThingEvent convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId);
 
 	public FileAttachment convert(AbstractEvent event, InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException;
 
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, Event schedule, Long tenantId) throws IOException;
+	public ThingEvent convert(InspectionServiceDTO inspectionServiceDTO, ThingEvent schedule, Long tenantId) throws IOException;
 
 	public User convert(UserServiceDTO user);
 

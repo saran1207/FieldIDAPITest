@@ -4,10 +4,7 @@ import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.impl.EventManagerImpl;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -28,7 +25,7 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		return new EventManagerImpl(em);
 	}
 
-	public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+	public ThingEvent attachFilesToSubEvent(ThingEvent event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -58,7 +55,7 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
         }
     }
 
-    public Event findAllFields(Long id, SecurityFilter filter) {
+    public ThingEvent findAllFields(Long id, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -74,7 +71,7 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 	}
 
 
-    public List<Event> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
+    public List<ThingEvent> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -89,7 +86,7 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-	public Event findEventThroughSubEvent(Long subEventId, SecurityFilter filter) {
+	public ThingEvent findEventThroughSubEvent(Long subEventId, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -105,7 +102,7 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 	}
 
 
-	public Pager<Event> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
+	public Pager<ThingEvent> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -150,7 +147,7 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-	public Event retireEvent(Event event, Long userId) {
+	public ThingEvent retireEvent(ThingEvent event, Long userId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
@@ -165,7 +162,7 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-	public Event updateEvent(Event event, Long scheduleId, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+	public ThingEvent updateEvent(ThingEvent event, Long scheduleId, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		Log4JAuditLogger auditLogger = new Log4JAuditLogger(new UpdateEventAuditHandler());
 
 		Throwable t = null;

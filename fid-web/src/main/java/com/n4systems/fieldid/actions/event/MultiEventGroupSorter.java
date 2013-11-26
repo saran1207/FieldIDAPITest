@@ -10,6 +10,7 @@ import java.util.Set;
 
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.api.Listable;
 
 public class MultiEventGroupSorter {
@@ -22,7 +23,7 @@ public class MultiEventGroupSorter {
 	private Map<EventTypeGroup, List<EventType>> groupToEventTypeMap = new HashMap<EventTypeGroup, List<EventType>>();
 	 
 	
-	public MultiEventGroupSorter(Set<EventType> eventTypes) {
+	public MultiEventGroupSorter(Set<? extends EventType> eventTypes) {
 		sortIntoMap(eventTypes);
 	}
 	
@@ -37,7 +38,7 @@ public class MultiEventGroupSorter {
 		return groupToEventTypeMap.get(group);
 	}
 
-	private void sortIntoMap(Set<EventType> eventTypes) {
+	private void sortIntoMap(Set<? extends EventType> eventTypes) {
 		for (EventType type : eventTypes) {
 			List<EventType> typeList = fetchCurrentList(type.getGroup());
 			

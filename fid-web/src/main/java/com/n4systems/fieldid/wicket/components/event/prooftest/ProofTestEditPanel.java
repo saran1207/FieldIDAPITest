@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.ProofTestInfo;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -28,7 +29,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
     private RemoveExistingProofTestPanel removeExistingPanel;
     private ProofTestDetailsPanel proofTestDetailsPanel;
     
-    public ProofTestEditPanel(String id, EventType eventType, IModel<ProofTestInfo> proofTestInfo) {
+    public ProofTestEditPanel(String id, ThingEventType eventType, IModel<ProofTestInfo> proofTestInfo) {
         super(id, proofTestInfo);
         setOutputMarkupId(true);
 
@@ -39,7 +40,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
 
     class RemoveExistingProofTestPanel extends WebMarkupContainer {
 
-        public RemoveExistingProofTestPanel(String id, final EventType eventType, final IModel<ProofTestInfo> proofTestInfo) {
+        public RemoveExistingProofTestPanel(String id, final ThingEventType eventType, final IModel<ProofTestInfo> proofTestInfo) {
             super(id);
             setOutputMarkupId(true);
 
@@ -64,7 +65,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
         FileUploadField fileUploadField;
 
 
-        public ProofTestDetailsPanel(String id, EventType eventType, IModel<ProofTestInfo> proofTestInfo) {
+        public ProofTestDetailsPanel(String id, ThingEventType eventType, IModel<ProofTestInfo> proofTestInfo) {
             super(id, proofTestInfo);
 
             setOutputMarkupId(true);
@@ -172,7 +173,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ProofTestInfo> {
         return proofTestDetailsPanel.getFileDataContainer();
     }
 
-    private ProofTestInfo createInitialProofTestObject(EventType eventType) {
+    private ProofTestInfo createInitialProofTestObject(ThingEventType eventType) {
         ProofTestInfo info = new ProofTestInfo();
         if (eventType.getSupportedProofTests().size() == 1) {
             info.setProofTestType(eventType.getSupportedProofTests().iterator().next());

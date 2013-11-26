@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.schedule;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -30,11 +31,11 @@ public class MassScheduleService extends FieldIdPersistenceService {
     private void performScheduleForAsset(ScheduleSummaryEntry scheduleSummary, Asset asset, boolean duplicateDetection) {
         List<Event> existingSchedules = duplicateDetection ? scheduleService.findIncompleteSchedulesForAsset(asset) : Collections.<Event>emptyList() ;
 
-        for (Event eventSchedule : scheduleSummary.getSchedules()) {
+        for (ThingEvent eventSchedule : scheduleSummary.getSchedules()) {
             if (!duplicateDetection || !duplicateScheduleAlreadyExists(eventSchedule, existingSchedules)) {
                 // Copy and save the new schedule
-                Event newSchedule = new Event();
-                newSchedule.setType(eventSchedule.getEventType());
+                ThingEvent newSchedule = new ThingEvent();
+                newSchedule.setType(eventSchedule.getType());
                 newSchedule.setDueDate(eventSchedule.getDueDate());
                 newSchedule.setProject(eventSchedule.getProject());
                 newSchedule.setAsset(asset);

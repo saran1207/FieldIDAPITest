@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.data.EventByNetworkIdProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -59,18 +60,18 @@ public class EventListPanel extends Panel {
         };
     }
 
-    private List<IColumn<Event>> getEventTableColumns() {
-        List<IColumn<Event>> columns = new ArrayList<IColumn<Event>>();
+    private List<IColumn<ThingEvent>> getEventTableColumns() {
+        List<IColumn<ThingEvent>> columns = new ArrayList<IColumn<ThingEvent>>();
 
         columns.add(new ResultIconColumn(new FIDLabelModel(""), "status"));
-        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.event.state"),"workflowState", "workflowState.label"));
+        columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.event.state"),"workflowState", "workflowState.label"));
         columns.add(new EventCompletedColumn(new FIDLabelModel("label.completed"), "completedDate", "date"));
         columns.add(new EventDueColumn(new FIDLabelModel("label.due"), "dueDate", "date"));
-        columns.add(new PropertyColumn<Event>(new FIDLabelModel("title.viewevent"), "type.name", "type.name"));
-        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.completed_by"), "performedBy.firstName", "performedBy.fullName"));
+        columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("title.viewevent"), "type.name", "type.name"));
+        columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.completed_by"), "performedBy.firstName", "performedBy.fullName"));
         columns.add(new ResultColumn(new FIDLabelModel("label.result"), "eventResult", "eventResult.displayName"));
-        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.event_status"), "eventStatus", "eventStatus.displayName"));
-        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName"));
+        columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.event_status"), "eventStatus", "eventStatus.displayName"));
+        columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName"));
 
         columns.add(new GpsIconColumn(new FIDLabelModel(""), "latitude"));
         columns.add(new ActionsColumn(new FIDLabelModel(""), "id", this));

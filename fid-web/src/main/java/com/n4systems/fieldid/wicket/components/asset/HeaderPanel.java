@@ -53,7 +53,7 @@ public class HeaderPanel extends Panel {
     @SpringBean private ProcedureDefinitionService procedureDefinitionService;
 
     private Boolean useContext;
-    private Event scheduleToAdd;
+    private ThingEvent scheduleToAdd;
     private Procedure procedureToSchedule;
 
     public  HeaderPanel(String id, IModel<Asset> assetModel, Boolean isView, Boolean useContext) {
@@ -126,7 +126,7 @@ public class HeaderPanel extends Panel {
 
         scheduleToAdd = createNewSchedule(asset);
 
-        final SchedulePicker schedulePicker = new SchedulePicker("schedulePicker", new PropertyModel<Event>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel()) {
+        final SchedulePicker schedulePicker = new SchedulePicker("schedulePicker", new PropertyModel<ThingEvent>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel()) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 scheduleToAdd.setTenant(FieldIDSession.get().getSessionUser().getTenant());
@@ -205,8 +205,8 @@ public class HeaderPanel extends Panel {
         return procedure;
     }
 
-    private Event createNewSchedule(Asset asset) {
-        Event schedule = new Event();
+    private ThingEvent createNewSchedule(Asset asset) {
+        ThingEvent schedule = new ThingEvent();
         schedule.setEventResult(EventResult.VOID);
         schedule.setAsset(asset);
         Set<UserGroup> groups = userService.getUser(FieldIDSession.get().getSessionUser().getId()).getGroups();

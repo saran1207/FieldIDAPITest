@@ -8,14 +8,15 @@ import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.SubEvent;
+import com.n4systems.model.ThingEvent;
 
 public interface EventSaver {
 
-	public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset;
+	public ThingEvent createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset;
 
 	/**
 	 * This must be called AFTER the event and subevent have been persisted
 	 */
-	public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException;
+	public ThingEvent attachFilesToSubEvent(ThingEvent event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException;
 
 }

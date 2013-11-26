@@ -3,6 +3,7 @@ package com.n4systems.servicedto.converts;
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
@@ -32,7 +33,7 @@ public class PopulateAssignedUserConverter implements AssignedUserConverter {
 	}
 
 	@Override
-	public Event convert(InspectionServiceDTO inspectionServiceDTO, Event event) throws ConversionException {
+	public ThingEvent convert(InspectionServiceDTO inspectionServiceDTO, ThingEvent event) throws ConversionException {
 		if (inspectionServiceDTO.isAssignmentIncluded()) {
 			applyAssignment(inspectionServiceDTO, event);
 		}

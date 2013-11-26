@@ -19,7 +19,7 @@ public class WebEventScheduleToScheduleConverter {
 		this.dateConverter = dateConverter;
 	}
 	
-	public Event convert(WebEventSchedule webSchedule, Asset asset) {
+	public ThingEvent convert(WebEventSchedule webSchedule, Asset asset) {
 		Date scheduledDate = dateConverter.convertDateTime(webSchedule.getDate());
         if (scheduledDate == null) {
             // NOTE : try to parse a date without hour/mins.  not all schedules require it.
@@ -28,9 +28,9 @@ public class WebEventScheduleToScheduleConverter {
             scheduledDate = dateConverter.convertDate(webSchedule.getDate());
         }
 
-		EventType eventType = loaderFactory.createFilteredIdLoader(EventType.class).setId(webSchedule.getType()).load();
+        ThingEventType eventType = loaderFactory.createFilteredIdLoader(ThingEventType.class).setId(webSchedule.getType()).load();
 
-        Event openEvent = new Event();
+        ThingEvent openEvent = new ThingEvent();
         openEvent.setTenant(asset.getTenant());
         openEvent.setAsset(asset);
         openEvent.setType(eventType);

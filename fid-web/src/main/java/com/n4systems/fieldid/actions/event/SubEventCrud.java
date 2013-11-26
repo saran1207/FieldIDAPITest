@@ -59,7 +59,7 @@ public class SubEventCrud extends EventCrud {
 	@Override
 	protected void initMemberFields() {
 		masterEventHelper = (MasterEvent) getSession().get(MasterEventCrud.SESSION_KEY);
-		event = new Event();
+		event = new ThingEvent();
 	}
 
 	@Override

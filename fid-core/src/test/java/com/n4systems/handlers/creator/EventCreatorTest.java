@@ -1,34 +1,33 @@
 package com.n4systems.handlers.creator;
 
-import static com.n4systems.model.builders.EventBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
-
-import java.util.Date;
-import java.util.List;
-
 import com.n4systems.ejb.impl.CreateEventParameter;
 import com.n4systems.ejb.impl.EventSaver;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.ejb.parameters.CreateEventParameterBuilder;
-import com.n4systems.handlers.creator.events.EventCreator;
-import com.n4systems.model.Event;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.services.NextEventScheduleSerivce;
-import org.junit.Assert;
-import org.junit.Test;
-
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessFailureException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.UnknownSubAsset;
+import com.n4systems.handlers.creator.events.EventCreator;
 import com.n4systems.model.FileAttachment;
-
+import com.n4systems.model.SubEvent;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
+import com.n4systems.services.NextEventScheduleSerivce;
+import org.junit.Assert;
+import org.junit.Test;
+
+import java.util.Date;
+import java.util.List;
+
+import static com.n4systems.model.builders.EventBuilder.anEvent;
+import static org.easymock.EasyMock.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertThat;
 
 
 public class EventCreatorTest {
@@ -38,11 +37,11 @@ public class EventCreatorTest {
 
 	private final class EventSaverSaboteur implements EventSaver {
 		
-		@Override public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
+		@Override public ThingEvent createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
 			throw new ProcessingProofTestException();
 		}
 
-		public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+		public ThingEvent attachFilesToSubEvent(ThingEvent event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 			return null;
 		}
 	}
@@ -138,36 +137,36 @@ public class EventCreatorTest {
 	
 	@Test
 	public void should_return_the_saved_event_on_success() throws Exception {
-		final Event savedEvent = anEvent().build();
+		final ThingEvent savedEvent = anEvent().build();
 		
 		eventPersistenceFactory.eventSaver = new EventSaver() {
-			public Event createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException ,FileAttachmentException , UnknownSubAsset {
+			public ThingEvent createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException ,FileAttachmentException , UnknownSubAsset {
 				return savedEvent;
 			}
 
 			@Override
-			public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+			public ThingEvent attachFilesToSubEvent(ThingEvent event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 				return null;
 			}
 		};
 		
 		EventCreator sut = new EventCreator(transactionManager, eventPersistenceFactory);
 		
-		Event actualReturnedEvent = sut.create(new CreateEventParameterBuilder(anEvent().build(), 1L).build());
+		ThingEvent actualReturnedEvent = sut.create(new CreateEventParameterBuilder(anEvent().build(), 1L).build());
 		
 		assertThat(actualReturnedEvent, sameInstance(savedEvent));
 	}
 	
 	@Test
 	public void should_save_the_set_event_schedules_given() throws Exception {
-		Event event = anEvent().build();
+        ThingEvent event = anEvent().build();
 		CreateEventParameter parameter = new CreateEventParameterBuilder(event, 1L)
 			.addSchedule(new EventScheduleBundle(event.getAsset(), EventTypeBuilder.anEventType().build(), null, new Date()))
 			.addSchedule(new EventScheduleBundle(event.getAsset(), EventTypeBuilder.anEventType().build(), null, new Date(2000)))
 			.build();
 		
 		NextEventScheduleSerivce nextScheduleService = createMock(NextEventScheduleSerivce.class);
-		expect(nextScheduleService.createNextSchedule(isA(Event.class))).andReturn(null).times(2);
+		expect(nextScheduleService.createNextSchedule(isA(ThingEvent.class))).andReturn(null).times(2);
 		replay(nextScheduleService);
 		
 		eventPersistenceFactory.nextEventScheduleSerivce = nextScheduleService;

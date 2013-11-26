@@ -189,11 +189,11 @@ public class CatalogServiceImpl implements CatalogService {
 		return new HashSet<ListingPair>(persistenceManager.findAll(importingEventTypeGroups));
 	}
 
-	public EventType getPublishedEventType(Long eventTypeId) {
+	public ThingEventType getPublishedEventType(Long eventTypeId) {
 		if (!getEventTypeIdsPublished().contains(eventTypeId)) {
 			throw new NotPublishedException("not published");
 		}
-		return persistenceManager.find(EventType.class, eventTypeId, getTenant().getId(), "supportedProofTests", "eventForm.sections", "infoFieldNames");
+		return persistenceManager.find(ThingEventType.class, eventTypeId, getTenant().getId(), "supportedProofTests", "eventForm.sections", "infoFieldNames");
 	}
 
 	public Collection<ButtonGroup> getStateSetsUsedIn(Set<Long> eventTypeIds) {

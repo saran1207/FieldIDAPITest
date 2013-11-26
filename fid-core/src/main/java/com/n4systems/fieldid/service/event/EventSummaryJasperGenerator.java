@@ -6,10 +6,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.certificate.ReportCompiler;
 import com.n4systems.fieldid.service.org.OrgService;
-import com.n4systems.model.Event;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.EventResult;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.search.EventReportCriteria;
@@ -75,10 +72,10 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
             Integer totalFailedEvents = 0;
             Integer totalNAEvents = 0;
 
-            Event event;
+            ThingEvent event;
             for (Long eventScheduleId : sortedIdList) {
 
-                event = persistenceService.find(Event.class, eventScheduleId);
+                event = persistenceService.find(ThingEvent.class, eventScheduleId);
 
                 Map<String, Object> eventMap = new HashMap<String, Object>();
                 eventMap.put("date", event.getDate());

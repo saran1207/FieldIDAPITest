@@ -27,7 +27,7 @@ import java.util.*;
 
 import static com.google.common.base.Preconditions.*;
 
-public class EventToModelConverter implements ViewToModelConverter<Event, EventView> {
+public class EventToModelConverter implements ViewToModelConverter<ThingEvent, EventView> {
 	public static final String UNIT_OF_MEASURE_SEPARATOR = "|";
 	private static final String UNIT_OF_MEASURE_SEPARATOR_REGEX = "\\|";
 	
@@ -56,8 +56,8 @@ public class EventToModelConverter implements ViewToModelConverter<Event, EventV
 	}
 
 	@Override
-	public Event toModel(EventView view, Transaction transaction) throws ConversionException {
-		Event model = new Event(); 	
+	public ThingEvent toModel(EventView view, Transaction transaction) throws ConversionException {
+        ThingEvent model = new ThingEvent();
 		
 		resolveType(model);
 		resolveOwner(view, model, transaction);

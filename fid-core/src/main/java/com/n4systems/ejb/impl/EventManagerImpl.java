@@ -49,14 +49,14 @@ public class EventManagerImpl implements EventManager {
 	}
 
 	
-	public Event findEventThroughSubEvent(Long subEventId, SecurityFilter filter) {
-		String str = "select e FROM "+Event.class.getName()+" e, IN( e.subEvents ) s WHERE s.id = :subEventId AND ";
-		str += filter.produceWhereClause(Event.class, "e");
+	public ThingEvent findEventThroughSubEvent(Long subEventId, SecurityFilter filter) {
+		String str = "select e FROM "+ThingEvent.class.getName()+" e, IN( e.subEvents ) s WHERE s.id = :subEventId AND ";
+		str += filter.produceWhereClause(ThingEvent.class, "e");
 		Query query = em.createQuery(str);
 		query.setParameter("subEventId", subEventId);
-		filter.applyParameters(query, Event.class);
+		filter.applyParameters(query, ThingEvent.class);
 		try {
-			return (Event) query.getSingleResult();
+			return (ThingEvent) query.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
@@ -82,10 +82,10 @@ public class EventManagerImpl implements EventManager {
 		}
 	}
 
-	public Event findAllFields(Long id, SecurityFilter filter) {
-		Event event = null;
+	public ThingEvent findAllFields(Long id, SecurityFilter filter) {
+        ThingEvent event = null;
 
-		QueryBuilder<Event> queryBuilder = new QueryBuilder<Event>(Event.class, filter);
+		QueryBuilder<ThingEvent> queryBuilder = new QueryBuilder<ThingEvent>(ThingEvent.class, filter);
 		queryBuilder.setSimpleSelect().addSimpleWhere("id", id).addSimpleWhere("state", EntityState.ACTIVE);
 		queryBuilder.addOrder("created");
 		queryBuilder.addPostFetchPaths(Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
@@ -106,20 +106,20 @@ public class EventManagerImpl implements EventManager {
 		return event;
 	}
 
-	public List<Event> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
+	public List<ThingEvent> findEventsByDateAndAsset(Date datePerformedRangeStart, Date datePerformedRangeEnd, Asset asset, SecurityFilter filter) {
 		
 
-		QueryBuilder<Event> queryBuilder = new QueryBuilder<Event>(Event.class, filter);
+		QueryBuilder<ThingEvent> queryBuilder = new QueryBuilder<ThingEvent>(ThingEvent.class, filter);
 		queryBuilder.setSimpleSelect();
 		queryBuilder.addSimpleWhere("state", EntityState.ACTIVE);
 		queryBuilder.addWhere(Comparator.GE, "beginingDate", "completedDate", datePerformedRangeStart).addWhere(Comparator.LE, "endingDate", "completedDate", datePerformedRangeEnd);
 		queryBuilder.addSimpleWhere("asset", asset);
 
-		List<Event> events;
+		List<ThingEvent> events;
 		try {
 			events = persistenceManager.findAll(queryBuilder);
 		} catch (InvalidQueryException e) {
-			events = new ArrayList<Event>();
+			events = new ArrayList<ThingEvent>();
 			logger.error("Unable to load Events by Date and Asset", e);
 		}
 
@@ -130,13 +130,13 @@ public class EventManagerImpl implements EventManager {
 	
 
 	
-	public Event updateEvent(Event event, Long scheduleId, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
+	public ThingEvent updateEvent(ThingEvent event, Long scheduleId, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) throws ProcessingProofTestException, FileAttachmentException {
 		return eventSaver.updateEvent(event, scheduleId, userId, fileData, uploadedFiles);
 	}
 
 
 
-	public Event retireEvent(Event event, Long userId) {
+	public ThingEvent retireEvent(ThingEvent event, Long userId) {
 		event.retireEntity();
 		event = persistenceManager.update(event, userId);
 		event.setAsset(persistenceManager.update(event.getAsset()));
@@ -147,11 +147,11 @@ public class EventManagerImpl implements EventManager {
 	/**
 	 * This must be called AFTER the event and subevent have been persisted
 	 */
-	public Event attachFilesToSubEvent(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+	public ThingEvent attachFilesToSubEvent(ThingEvent event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		return eventSaver.attachFilesToSubEvent(event, subEvent, uploadedFiles);
 	}
 
-	public Pager<Event> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
+	public Pager<ThingEvent> findNewestEvents(WSSearchCritiera searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {
 
 		List<Long> customerIds = searchCriteria.getCustomerIds();
 		List<Long> divisionIds = searchCriteria.getDivisionIds();
@@ -190,7 +190,7 @@ public class EventManagerImpl implements EventManager {
 			countQuery.setParameter("divisionIds", divisionIds);
 		securityFilter.applyParameters(countQuery, Event.class);
 
-		return new Page<Event>(query, countQuery, page, pageSize);
+		return new Page<ThingEvent>(query, countQuery, page, pageSize);
 	}
 
 //	public Pager<Event> findNewestEvents(WSJobSearchCriteria searchCriteria, SecurityFilter securityFilter, int page, int pageSize) {

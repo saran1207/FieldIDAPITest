@@ -3,6 +3,8 @@ package com.n4systems.model.eventtype;
 import static com.n4systems.model.builders.EventTypeBuilder.*;
 import static org.easymock.EasyMock.*;
 
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.ThingEventType;
 import org.junit.Test;
 
 import com.n4systems.model.EventType;
@@ -12,11 +14,11 @@ import com.n4systems.model.api.Cleaner;
 
 public class AggragateEventTypeCleanerTest {
 
-	EventType eventType = anEventType().build();
+    ThingEventType eventType = anEventType().build();
 	
 	@Test
 	public void should_run_with_out_errors_when_no_cleaners_given() throws Exception {
-		Cleaner<EventType> sut = new AggragateEventTypeCleaner();
+		Cleaner<ThingEventType> sut = new AggragateEventTypeCleaner();
 		
 		sut.clean(eventType);
 	}
@@ -27,7 +29,7 @@ public class AggragateEventTypeCleanerTest {
 	public void should_push_clean_call_to_supplied_event_type_cleaner() throws Exception {
 		
 		
-		Cleaner<EventType> subCleaner = createMock(Cleaner.class);
+		Cleaner<ThingEventType> subCleaner = createMock(Cleaner.class);
 		subCleaner.clean(eventType);
 		replay(subCleaner);
 		
@@ -42,11 +44,11 @@ public class AggragateEventTypeCleanerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_push_clean_call_to_supplied_event_type_cleaners() throws Exception {
-		Cleaner<EventType> subCleaner = createMock(Cleaner.class);
+		Cleaner<ThingEventType> subCleaner = createMock(Cleaner.class);
 		subCleaner.clean(eventType);
 		replay(subCleaner);
 		
-		Cleaner<EventType> subCleaner2 = createMock(Cleaner.class);
+		Cleaner<ThingEventType> subCleaner2 = createMock(Cleaner.class);
 		subCleaner2.clean(eventType);
 		replay(subCleaner2);
 		

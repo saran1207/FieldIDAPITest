@@ -1,7 +1,9 @@
 package com.n4systems.services.search.writer;
 
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.search.field.EventIndexField;
 import com.n4systems.services.search.field.IndexField;
@@ -11,10 +13,10 @@ import org.apache.lucene.index.IndexableField;
 import javax.persistence.EntityManager;
 import java.io.IOException;
 
-public class EventIndexWriter extends LuceneIndexWriter<Event> {
+public class EventIndexWriter extends LuceneIndexWriter<ThingEvent> {
 
     public EventIndexWriter() {
-        super(Event.class);
+        super(ThingEvent.class);
     }
 
     @Override
@@ -33,12 +35,12 @@ public class EventIndexWriter extends LuceneIndexWriter<Event> {
     }
 
     @Override
-    protected void unindex(org.apache.lucene.index.IndexWriter writer, Event event) throws IOException {
+    protected void unindex(org.apache.lucene.index.IndexWriter writer, ThingEvent event) throws IOException {
         unindex(writer, event.getId(), EventIndexField.ID.getField());
     }
 
     @Override
-    protected Document createDocument(EntityManager em, Event event) {
+    protected Document createDocument(EntityManager em, ThingEvent event) {
         Document doc = new Document();
 
         BaseOrg owner = event.getOwner();

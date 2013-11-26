@@ -3,9 +3,7 @@ package com.n4systems.reporting;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
+import com.n4systems.model.*;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
 
@@ -26,7 +24,7 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 
 	@Override
 	protected void eventParameter() {
-		Event event = (Event) this.getEvent();
+        ThingEvent event = (ThingEvent) this.getEvent();
 
         addNextAndPreviousData(event);
 		add("productLabel", null);
@@ -90,7 +88,7 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 	}
 
 	@Override
-	protected AbstractEvent getEvent() {
+	protected AbstractEvent<ThingEventType> getEvent() {
 		return event;
 	}
 }

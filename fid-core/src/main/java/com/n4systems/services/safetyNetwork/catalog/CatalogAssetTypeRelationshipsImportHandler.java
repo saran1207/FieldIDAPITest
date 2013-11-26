@@ -1,10 +1,7 @@
 package com.n4systems.services.safetyNetwork.catalog;
 
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeSchedule;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
 import com.n4systems.model.assettype.AssetTypeScheduleSaver;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.services.safetyNetwork.CatalogService;
@@ -23,7 +20,7 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
     private static final Logger logger = Logger.getLogger(CatalogAssetTypeRelationshipsImportHandler.class);
 
 	private Map<Long, AssetType> importedAssetTypeMapping = new HashMap<Long, AssetType>();
-	private Map<Long, EventType> importedEventTypeMapping = new HashMap<Long, EventType>();
+	private Map<Long, ThingEventType> importedEventTypeMapping = new HashMap<Long, ThingEventType>();
 	private AssetTypeRelationshipsImportSummary summary;
 	private AssetTypeScheduleSaver assetTypeScheduleSaver;
 	private PrimaryOrg primaryOrg;
@@ -49,7 +46,7 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 	public void importAssetTypeRelationships(AssetType originalAssetType) throws ImportFailureException {
 		AssetType importedAssetType = importedAssetTypeMapping.get(originalAssetType.getId());
 		try {
-			for (EventType connectedEventType : originalAssetType.getEventTypes()) {
+			for (ThingEventType connectedEventType : originalAssetType.getEventTypes()) {
 				importConnectionsToEventTypes(originalAssetType, importedAssetType, connectedEventType);
 				persistenceManager.update(importedAssetType);
 			}
@@ -61,7 +58,7 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 	}
 
 
-	private void importConnectionsToEventTypes(AssetType originalAssetType, AssetType importedAssetType, EventType connectedEventType) {
+	private void importConnectionsToEventTypes(AssetType originalAssetType, AssetType importedAssetType, ThingEventType connectedEventType) {
 		if (importedEventTypeMapping.get(connectedEventType.getId()) != null) {
 			persistenceManager.save(new AssociatedEventType(importedEventTypeMapping.get(connectedEventType.getId()), importedAssetType));
 			importAssetTypeSchedules(originalAssetType, importedAssetType, connectedEventType);
@@ -112,7 +109,7 @@ public class CatalogAssetTypeRelationshipsImportHandler extends CatalogImportHan
 	}
 
 
-	public CatalogAssetTypeRelationshipsImportHandler setImportedEventTypeMapping(Map<Long, EventType> importedEventTypeMapping) {
+	public CatalogAssetTypeRelationshipsImportHandler setImportedEventTypeMapping(Map<Long, ThingEventType> importedEventTypeMapping) {
 		this.importedEventTypeMapping = importedEventTypeMapping;
 		return this;
 	}

@@ -1,32 +1,32 @@
 package com.n4systems.model.eventtype;
 
-import static org.junit.Assert.*;
-
 import com.n4systems.model.EventForm;
+import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
+import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.builders.EventFormBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.event.EventFormSaver;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import com.n4systems.model.EventType;
-import com.n4systems.model.api.Cleaner;
-import com.n4systems.persistence.loaders.FilteredIdLoader;
+import static org.junit.Assert.assertEquals;
 
 public class EventTypeCopierTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_copy_process() {
-		Cleaner<EventType> typeCleaner = EasyMock.createMock(Cleaner.class);
-		FilteredIdLoader<EventType> typeLoader = EasyMock.createMock(FilteredIdLoader.class);
+		Cleaner<ThingEventType> typeCleaner = EasyMock.createMock(Cleaner.class);
+		FilteredIdLoader<ThingEventType> typeLoader = EasyMock.createMock(FilteredIdLoader.class);
 		EventTypeSaver typeSaver = EasyMock.createMock(EventTypeSaver.class);
 		EventTypeUniqueNameLoader typeNameLoader = EasyMock.createMock(EventTypeUniqueNameLoader.class);
         EventFormSaver formSaver = EasyMock.createMock(EventFormSaver.class);
 		
 		Long typeId = 42L;
 		String newName = "new name";
-		EventType fromType = EventTypeBuilder.anEventType().build();
+		ThingEventType fromType = EventTypeBuilder.anEventType().build();
         EventForm eventForm = EventFormBuilder.anEventForm().build();
         fromType.setEventForm(eventForm);
 		

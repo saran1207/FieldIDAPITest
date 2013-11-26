@@ -8,7 +8,6 @@ public abstract class EntityWithTenantCleaner<T extends EntityWithTenant> extend
 	private final Tenant newTenant;
 
 	public EntityWithTenantCleaner(Tenant newTenant) {
-		super();
 		this.newTenant = newTenant;
 	}
 

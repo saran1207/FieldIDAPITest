@@ -750,8 +750,8 @@ public class DataServiceImpl implements DataService {
             InspectionServiceDTOConverter converter = createInspectionServiceDTOConverter(tenantId);
             LegacyAsset productManager = WsServiceLocator.getLegacyAssetManager(tenantId);
 
-            List<Event> events = new ArrayList<Event>();
-            Map<Event, Date> nextInspectionDates = new HashMap<Event, Date>();
+            List<ThingEvent> events = new ArrayList<ThingEvent>();
+            Map<ThingEvent, Date> nextInspectionDates = new HashMap<ThingEvent, Date>();
             Asset asset = null;
 
             EventScheduleByGuidOrIdLoader scheduleLoader = new EventScheduleByGuidOrIdLoader(new TenantOnlySecurityFilter(tenantId));
@@ -773,9 +773,9 @@ public class DataServiceImpl implements DataService {
                     }
                 }
 
-                Event schedule = loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO);
+                ThingEvent schedule = loadScheduleFromInspectionDto(scheduleLoader, inspectionServiceDTO);
 
-                Event event = converter.convert(inspectionServiceDTO, schedule);
+                ThingEvent event = converter.convert(inspectionServiceDTO, schedule);
 
                 events.add(event);
                 nextInspectionDates.put(event, DtoDateConverter.convertStringToDate(inspectionServiceDTO.getNextDate()));
@@ -807,7 +807,7 @@ public class DataServiceImpl implements DataService {
 		}
 	}
 
-	private Event loadScheduleFromInspectionDto(EventScheduleByGuidOrIdLoader scheduleLoader, InspectionServiceDTO inspectionServiceDTO) {
+	private ThingEvent loadScheduleFromInspectionDto(EventScheduleByGuidOrIdLoader scheduleLoader, InspectionServiceDTO inspectionServiceDTO) {
 		return scheduleLoader.setId(inspectionServiceDTO.getInspectionScheduleId()).setMobileGuid(inspectionServiceDTO.getInspectionScheduleMobileGuid())
 				.load();
 	}
@@ -1018,11 +1018,11 @@ public class DataServiceImpl implements DataService {
 			NewestEventsForAssetIdLoader loader = new NewestEventsForAssetIdLoader(filter);
 			RealTimeInspectionLookupHandler lookupHandler = new RealTimeInspectionLookupHandler(loader);
 
-			List<Event> events = lookupHandler.setAssetId(requestInformation.getProductId()).setLastEventDate(requestInformation.getLastInspectionDate())
+			List<ThingEvent> events = lookupHandler.setAssetId(requestInformation.getProductId()).setLastEventDate(requestInformation.getLastInspectionDate())
 					.lookup();
 
 			FindInspectionResponse response = new FindInspectionResponse();
-			for (Event event : events) {
+			for (ThingEvent event : events) {
 				response.getInspections().add(converter.convert(event));
 			}
 

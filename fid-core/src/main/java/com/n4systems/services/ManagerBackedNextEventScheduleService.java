@@ -3,6 +3,7 @@ package com.n4systems.services;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.fieldid.CopiedToService;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.util.DateHelper;
 
 import java.util.List;
@@ -22,9 +23,9 @@ public class ManagerBackedNextEventScheduleService implements NextEventScheduleS
 	 * for the contained asset and event type it will simply return that one.
 	 * @return The newly created schedule, or the already existing one.
 	 */
-	public Event createNextSchedule(Event schedule) {
-		
-		Event eventSchedule = findExistingSchedule(schedule);
+	public ThingEvent createNextSchedule(ThingEvent schedule) {
+
+        ThingEvent eventSchedule = findExistingSchedule(schedule);
 		
 		if (eventSchedule == null) {
 			eventSchedule = eventScheduleManager.update(schedule);
@@ -34,10 +35,10 @@ public class ManagerBackedNextEventScheduleService implements NextEventScheduleS
 	}
 
 
-	private Event findExistingSchedule(Event newSchedule) {
-		List<Event> upcomingSchedules = eventScheduleManager.getAvailableSchedulesFor(newSchedule.getAsset());
+	private ThingEvent findExistingSchedule(ThingEvent newSchedule) {
+		List<ThingEvent> upcomingSchedules = eventScheduleManager.getAvailableSchedulesFor(newSchedule.getAsset());
 		
-		for (Event upcomingSchedule : upcomingSchedules) {
+		for (ThingEvent upcomingSchedule : upcomingSchedules) {
             if (upcomingSchedule.getDueDate() == null) continue;
 			if (DateHelper.isEqualIgnoringTime(upcomingSchedule.getDueDate(), newSchedule.getDueDate())
 					&& upcomingSchedule.getType().equals(newSchedule.getType())) {

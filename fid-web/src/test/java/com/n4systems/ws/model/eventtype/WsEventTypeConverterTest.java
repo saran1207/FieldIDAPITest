@@ -1,22 +1,21 @@
 package com.n4systems.ws.model.eventtype;
 
-import static org.junit.Assert.*;
-
+import com.n4systems.model.EventForm;
+import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.ThingEventType;
+import com.n4systems.model.builders.EventTypeBuilder;
+import com.n4systems.ws.model.WsModelConverter;
 import org.easymock.EasyMock;
 import org.junit.Test;
 
-import com.n4systems.model.EventForm;
-import com.n4systems.model.EventType;
-import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.ws.model.WsModelConverter;
+import static org.junit.Assert.*;
 
 public class WsEventTypeConverterTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
 	public void from_model_converts_all_fields() {
-		EventType model = EventTypeBuilder.anEventType()
+		ThingEventType model = EventTypeBuilder.anEventType()
 								.named("name")
 								.withDescription("description")
 								.withPrintable(true)
@@ -54,7 +53,7 @@ public class WsEventTypeConverterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void does_not_attempt_form_conversion_when_null() {
-		EventType model = EventTypeBuilder.anEventType().withEventForm(null).build();
+		ThingEventType model = EventTypeBuilder.anEventType().withEventForm(null).build();
 		WsEventType wsModel = new WsEventTypeConverter(EasyMock.createMock(WsModelConverter.class)).fromModel(model);
 		
 		assertNull(wsModel.getFormId());

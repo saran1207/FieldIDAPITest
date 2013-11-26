@@ -3,10 +3,7 @@ package com.n4systems.fieldid.wicket.components.assettype;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.AssociatedEventType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.RecurringAssetTypeEvent;
+import com.n4systems.model.*;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -41,8 +38,8 @@ public class AssetTypeRecurrenceFormPanel extends RecurrenceFormPanel {
         return newEvent;
     }
 
-    protected List<EventType> getEventTypes() {
-        List<EventType> eventTypes = Lists.newArrayList();
+    protected List<ThingEventType> getEventTypes() {
+        List<ThingEventType> eventTypes = Lists.newArrayList();
         List<AssociatedEventType> associatedEventTypes = associatedEventTypesService.getAssociatedEventTypes(assetType.getObject(), null);
         for (AssociatedEventType type: associatedEventTypes) {
             eventTypes.add(type.getEventType());

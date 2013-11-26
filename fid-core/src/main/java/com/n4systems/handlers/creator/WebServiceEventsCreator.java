@@ -12,6 +12,7 @@ import com.n4systems.exceptions.TransactionAlreadyProcessedException;
 import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.model.Event;
 
+import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.Transaction;
 import com.n4systems.persistence.TransactionManager;
 import com.n4systems.security.AuditLogger;
@@ -20,10 +21,10 @@ import com.n4systems.services.NextEventScheduleSerivce;
 public class WebServiceEventsCreator extends BasicTransactionManagement implements EventsInAGroupCreator {
 
 	private final EventPersistenceFactory eventPersistenceFactory;
-	private Map<Event, Date> nextEventDates;
-	private List<Event> events;
+	private Map<ThingEvent, Date> nextEventDates;
+	private List<ThingEvent> events;
 	private String transactionGUID;
-	private List<Event> results = null;
+	private List<ThingEvent> results = null;
 	private NextEventScheduleSerivce createNextEventScheduleService;
 	private CreateEventsMethodObject createEventsMethod;
 
@@ -32,7 +33,7 @@ public class WebServiceEventsCreator extends BasicTransactionManagement implemen
 		this.eventPersistenceFactory = eventPersistenceFactory;
 	}
 
-	public List<Event> create(String transactionGUID, List<Event> events, Map<Event, Date> nextEventDates) throws TransactionAlreadyProcessedException,
+	public List<ThingEvent> create(String transactionGUID, List<ThingEvent> events, Map<ThingEvent, Date> nextEventDates) throws TransactionAlreadyProcessedException,
 			ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
 		this.transactionGUID = transactionGUID;
 		this.events = events;
@@ -48,7 +49,6 @@ public class WebServiceEventsCreator extends BasicTransactionManagement implemen
 
 	protected void success() {
 		logSuccess(results);
-		
 	}
 
 	protected void failure(Exception e) {
@@ -72,11 +72,11 @@ public class WebServiceEventsCreator extends BasicTransactionManagement implemen
 	}
 
 	private void createSchedules(Transaction transaction) {
-		for (Entry<Event, Date> nextEventDate : nextEventDates.entrySet()) {
-			Event eventCreatingSchedule = nextEventDate.getKey();
+		for (Entry<ThingEvent, Date> nextEventDate : nextEventDates.entrySet()) {
+            ThingEvent eventCreatingSchedule = nextEventDate.getKey();
 			
 			if (nextEventDate.getValue() != null) {
-                Event openEvent = new Event();
+                ThingEvent openEvent = new ThingEvent();
                 openEvent.setAsset(eventCreatingSchedule.getAsset());
                 openEvent.setType(eventCreatingSchedule.getType());
 				createNextEventScheduleService.createNextSchedule(openEvent);
@@ -85,21 +85,20 @@ public class WebServiceEventsCreator extends BasicTransactionManagement implemen
 	}
 
 
-	private void logFailure(List<Event> events, Exception e) {
+	private void logFailure(List<ThingEvent> events, Exception e) {
 		auditLogEvent(events, e);
 	}
 
-	private void auditLogEvent(List<Event> events, Exception e) {
+	private void auditLogEvent(List<ThingEvent> events, Exception e) {
 		AuditLogger auditLogger = eventPersistenceFactory.createCreateEventAuditLogger();
 		for (Event event : events) {
 			auditLogger.audit("Create Events", event, e);
 		}
 	}
 
-	private void logSuccess(List<Event> events) {
+	private void logSuccess(List<ThingEvent> events) {
 		auditLogEvent(events, null);
 	}
 
-	
 
 }

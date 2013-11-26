@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.helpers;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.util.DateHelper;
 
 import java.util.List;
@@ -10,9 +11,9 @@ public class EventScheduleSuggestion {
 	public static final Long NO_SCHEDULE = 0L;
 	public static final Long NEW_SCHEDULE = -1L;
 	
-	List<Event> schedules;
+	List<ThingEvent> schedules;
 
-	public EventScheduleSuggestion(List<Event> schedules) {
+	public EventScheduleSuggestion(List<ThingEvent> schedules) {
 		this.schedules = schedules;
 	}
 	

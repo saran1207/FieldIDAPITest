@@ -3,6 +3,7 @@ package com.n4systems.model.builders;
 import com.google.common.collect.Lists;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public class ScheduleSummaryEntryBuilder extends BaseBuilder<ScheduleSummaryEntr
 
     private AssetType assetType;
     private List<Long> assetIds = Lists.newArrayList();
-    private List<Event> scheduledEvents = Lists.newArrayList();
+    private List<ThingEvent> scheduledEvents = Lists.newArrayList();
 
     public ScheduleSummaryEntryBuilder() {
     }
@@ -26,12 +27,10 @@ public class ScheduleSummaryEntryBuilder extends BaseBuilder<ScheduleSummaryEntr
         return this;
     }
 
-    public ScheduleSummaryEntryBuilder withScheduledEvents(Event... events) {
+    public ScheduleSummaryEntryBuilder withScheduledEvents(ThingEvent... events) {
         this.scheduledEvents.addAll(Lists.newArrayList(events));
         return this;
     }
-
-
 
     @Override
     public ScheduleSummaryEntry createObject() {

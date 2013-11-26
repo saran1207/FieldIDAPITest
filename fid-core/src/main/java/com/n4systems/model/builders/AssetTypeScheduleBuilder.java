@@ -3,18 +3,19 @@ package com.n4systems.model.builders;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeSchedule;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 
 public class AssetTypeScheduleBuilder extends BaseBuilder<AssetTypeSchedule> {
 	
 	private final AssetType assetType;
-	private final EventType eventType;
+	private final ThingEventType eventType;
 	private final Long frequencyInDays;
 	
 	public static AssetTypeScheduleBuilder anAssetTypeSchedule() {
 		return new AssetTypeScheduleBuilder(AssetTypeBuilder.anAssetType().build(), EventTypeBuilder.anEventType().build(), 365L);
 	}
 
-	private AssetTypeScheduleBuilder(AssetType assetType, EventType eventType, Long frequencyInDays) {
+	private AssetTypeScheduleBuilder(AssetType assetType, ThingEventType eventType, Long frequencyInDays) {
 		this.assetType = assetType;
 		this.eventType = eventType;
 		this.frequencyInDays = frequencyInDays;

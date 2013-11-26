@@ -2,6 +2,7 @@ package com.n4systems.ejb.impl;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -11,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 public class CreateEventParameter {
-	public Event event;
+	public ThingEvent event;
 	public final Date nextEventDate;
 	public final Long userId;
 	public final FileDataContainer fileData;
@@ -20,7 +21,7 @@ public class CreateEventParameter {
 	public final List<EventScheduleBundle> schedules;
 
 
-	public CreateEventParameter(Event event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
+	public CreateEventParameter(ThingEvent event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
 		this.event = event;
 		this.nextEventDate = nextEventDate;
 		this.userId = userId;

@@ -71,10 +71,10 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     @SpringBean protected PersistenceService persistenceService;
     @SpringBean protected EventStatusService eventStatusService;
 
-    protected IModel<Event> event;
+    protected IModel<ThingEvent> event;
 
-    private List<Event> schedules = new ArrayList<Event>();
-    private Event scheduleToAdd;
+    private List<ThingEvent> schedules = new ArrayList<ThingEvent>();
+    private ThingEvent scheduleToAdd;
     private List<AbstractEvent.SectionResults> sectionResults;
     protected List<FileAttachment> fileAttachments;
     private User assignedTo;
@@ -104,7 +104,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     }
 
     private SchedulePicker createSchedulePicker() {
-        return new SchedulePicker("schedulePicker", new PropertyModel<Event>(EventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel()) {
+        return new SchedulePicker("schedulePicker", new PropertyModel<ThingEvent>(EventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel()) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 schedules.add(scheduleToAdd);
@@ -117,8 +117,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         };
     }
 
-    private Event createNewOpenEvent() {
-        Event openEvent = new Event();
+    private ThingEvent createNewOpenEvent() {
+        ThingEvent openEvent = new ThingEvent();
         openEvent.setAsset(event.getObject().getAsset());
         return openEvent;
     }
@@ -231,13 +231,11 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             assetStatus.setNullValid(true);
             add(assetStatus);
 
-            if (event.getObject() instanceof Event) {
-                Event masterEvent = (Event) event.getObject();
-                DropDownChoice resultSelect = new DropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(EventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
-                resultSelect.add(new UpdateComponentOnChange());
-                resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
-                add(resultSelect);
-            }
+            ThingEvent masterEvent = event.getObject();
+            DropDownChoice resultSelect = new DropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(EventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
+            resultSelect.add(new UpdateComponentOnChange());
+            resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
+            add(resultSelect);
 
             List<EventStatus> eventStatuses = eventStatusService.getActiveStatuses();
             DropDownChoice workflowStateSelect = new DropDownChoice<EventStatus>("eventStatus", new PropertyModel<EventStatus>(event, "eventStatus"), eventStatuses, new ListableLabelChoiceRenderer<EventStatus>());
@@ -299,7 +297,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     }
 
     private boolean supportsProofTests() {
-        Event event = this.event.getObject();
+        ThingEvent event = this.event.getObject();
         return event.getType().getSupportedProofTests().size()>0 && event.getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
     }
 
@@ -340,9 +338,9 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     protected List<EventScheduleBundle> createEventScheduleBundles() {
         List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
 
-        for (Event sched : schedules) {
-            EventScheduleBundle bundle = new EventScheduleBundle(sched.getAsset(), sched.getEventType(), sched.getProject(), sched.getDueDate());
-            scheduleBundles.add(bundle );
+        for (ThingEvent sched : schedules) {
+            EventScheduleBundle bundle = new EventScheduleBundle(sched.getAsset(), sched.getType(), sched.getProject(), sched.getDueDate());
+            scheduleBundles.add(bundle);
         }
 
         return scheduleBundles;
@@ -386,7 +384,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     }
 
     protected void doAutoSchedule() {
-        Event e = event.getObject();
+        ThingEvent e = event.getObject();
 
         if (null == e.getDate()) {
             return;
@@ -395,7 +393,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         AssetTypeSchedule schedule = e.getAsset().getType().getSchedule(e.getType(), e.getOwner());
         schedules.clear();
         if (schedule != null) {
-            Event eventSchedule = new Event();
+            ThingEvent eventSchedule = new ThingEvent();
             eventSchedule.setAsset(e.getAsset());
             eventSchedule.setType(e.getType());
             eventSchedule.setDueDate(schedule.getNextDate(e.getDate()));

@@ -17,7 +17,7 @@ import javax.persistence.ManyToOne;
 public class OrgRecurringEvent extends EntityWithOwner implements Saveable, SecurityEnhanced<OrgRecurringEvent> {
 
     @ManyToOne(optional=false)
-    @JoinColumn(name = "eventtype_id")
+    @JoinColumn(name = "place_event_type_id")
     private EventType eventType;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -32,7 +32,6 @@ public class OrgRecurringEvent extends EntityWithOwner implements Saveable, Secu
     @Override
     public OrgRecurringEvent enhance(SecurityLevel level) {
         OrgRecurringEvent enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
-        enhanced.setEventType(enhance(eventType, level));
         return enhanced;
     }
 

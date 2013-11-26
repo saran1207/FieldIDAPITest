@@ -42,7 +42,7 @@ public interface CatalogService {
 
 	public Set<ListingPair> getEventTypeGroupsFor(Set<Long> eventTypeIds);
 	
-	public EventType getPublishedEventType(Long eventTypeId);
+	public ThingEventType getPublishedEventType(Long eventTypeId);
 	
 	public Collection<ButtonGroup> getStateSetsUsedIn(Set<Long> eventTypeIds);
 	

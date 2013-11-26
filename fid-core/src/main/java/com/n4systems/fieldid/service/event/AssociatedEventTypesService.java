@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.remover.ScheduleListRemovalService;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssociatedEventType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,7 +42,7 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public void addAndRemove(AssetType assetType, List<EventType> selectedEventTypes) {
+    public void addAndRemove(AssetType assetType, List<ThingEventType> selectedEventTypes) {
         final List<AssociatedEventType> types = getAssociatedEventTypes(assetType, null);
 
         List<AssociatedEventType> toBeAdded = findEventTypesToAdd(assetType, selectedEventTypes, types);
@@ -68,7 +69,7 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public void addAndRemove(EventType eventType, List<AssetType> selectedAssetTypes) {
+    public void addAndRemove(ThingEventType eventType, List<AssetType> selectedAssetTypes) {
         final List<AssociatedEventType> types = getAssociatedEventTypes(null, eventType);
 
         List<AssociatedEventType> toBeAdded = findAssetTypesToAdd(eventType, selectedAssetTypes, types);
@@ -95,7 +96,7 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
     }
 
 
-	private List<AssociatedEventType> findEventTypesToRemove(List<EventType> selectedEventTypes, List<AssociatedEventType> types) {
+	private List<AssociatedEventType> findEventTypesToRemove(List<ThingEventType> selectedEventTypes, List<AssociatedEventType> types) {
 		List<AssociatedEventType> toBeRemoved = new ArrayList<AssociatedEventType>();
 		for (AssociatedEventType associatedEventType : types) {
 			boolean found = false;
@@ -112,9 +113,9 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
 		return toBeRemoved;
 	}
 
-	private List<AssociatedEventType> findEventTypesToAdd(AssetType assetType, List<EventType> selectedEventTypes, List<AssociatedEventType> types) {
+	private List<AssociatedEventType> findEventTypesToAdd(AssetType assetType, List<ThingEventType> selectedEventTypes, List<AssociatedEventType> types) {
 		List<AssociatedEventType> toBeAdded = new ArrayList<AssociatedEventType>();
-		for (EventType selectedEventType : selectedEventTypes) {
+		for (ThingEventType selectedEventType : selectedEventTypes) {
 			boolean found = false;
 			for (AssociatedEventType associatedEventType : types) {
 				if (associatedEventType.getEventType().equals(selectedEventType)) {
@@ -128,7 +129,7 @@ public class AssociatedEventTypesService extends FieldIdPersistenceService {
 		return toBeAdded;
 	}
 
-	private List<AssociatedEventType> findAssetTypesToAdd(EventType eventType, List<AssetType> selectedAssetTypes, List<AssociatedEventType> types) {
+	private List<AssociatedEventType> findAssetTypesToAdd(ThingEventType eventType, List<AssetType> selectedAssetTypes, List<AssociatedEventType> types) {
 		List<AssociatedEventType> toBeAdded = new ArrayList<AssociatedEventType>();
 		for (AssetType selectedAssetType : selectedAssetTypes) {
 			boolean found = false;

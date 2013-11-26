@@ -20,15 +20,12 @@ import com.n4systems.util.StringUtils;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.TimeZone;
+import java.util.*;
 
 @Entity
 @Table(name = "masterevents")
 @PrimaryKeyJoinColumn(name="event_id")
-public class Event extends AbstractEvent implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<Event>, Exportable, LocationContainer, HasCreatedModifiedPlatform {
+public abstract class Event<T extends EventType> extends AbstractEvent<T> implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<ThingEvent>, Exportable, LocationContainer, HasCreatedModifiedPlatform {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
 	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.modifiedBy", "subEvents.eventForm.sections", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap"};
@@ -96,8 +93,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
     @ManyToOne(fetch=FetchType.EAGER, optional=false)
 	@JoinColumn(name="owner_id", nullable = false)
 	private BaseOrg owner;
-	
-	private ProofTestInfo proofTestInfo;
 	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@IndexColumn(name="orderidx")
@@ -213,15 +208,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 	@Override
 	public void setOwner(BaseOrg owner) {
 		this.owner = owner;
-	}
-
-	@AllowSafetyNetworkAccess
-	public ProofTestInfo getProofTestInfo() {
-		return proofTestInfo;
-	}
-
-	public void setProofTestInfo(ProofTestInfo proofTestInfo) {
-		this.proofTestInfo = proofTestInfo;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -356,24 +342,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
 	}
 	
-	@Override
-	public Event enhance(SecurityLevel level) {
-		Event enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
-		enhanced.setBook(enhance(book, level));
-		enhanced.setPerformedBy(enhance(performedBy, level));
-		enhanced.setType(enhance(getType(), level));
-		enhanced.setAsset(enhance(getAsset(), level));
-		enhanced.setOwner(enhance(getOwner(), level));
-		
-		List<SubEvent> enhancedSubEvents = new ArrayList<SubEvent>();
-		for (SubEvent subEvent : getSubEvents()) {
-			enhancedSubEvents.add(subEvent.enhance(level));
-		}
-		enhanced.setSubEvents(enhancedSubEvents);
-		
-		return enhanced;
-	}
-
 	// Events are never exported
 	@Override
 	public String getGlobalId() {
@@ -580,18 +548,6 @@ public class Event extends AbstractEvent implements Comparable<Event>, HasOwner,
 
     public void setRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
         this.recurringEvent = recurringEvent;
-    }
-
-    public Event copyDataFrom(Event event) {
-        setAsset(event.getAsset());
-        setType(event.getType());
-        setTenant(event.getTenant());
-        setCreated(event.getCreated());
-        setCreatedBy(event.getCreatedBy());
-        setModifiedBy(event.getModifiedBy());
-        setModified(event.getModified());
-
-        return this;
     }
 
     public EntityState getState() {

@@ -33,7 +33,7 @@ public class EventReportMapProducerTest {
 
 	@Test
 	public void test_sub_event_map_creation() {
-		EventType eventType = anEventType().named("test").build();
+        ThingEventType eventType = anEventType().named("test").build();
 		Event masterEvent = anEvent().build();
 		SubEvent targetEvent = aSubEvent("bob").withType(eventType).build();
 
@@ -48,7 +48,7 @@ public class EventReportMapProducerTest {
 
 	@Test
 	public void test_event_map_creation() {
-		EventType eventType = anEventType().named("test").build();
+        ThingEventType eventType = anEventType().named("test").build();
 		Asset targetAsset = AssetBuilder.anAsset().build();
 		Event targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
 
@@ -64,9 +64,9 @@ public class EventReportMapProducerTest {
 	@Test
 	public void test_event_map_with_null_predefinedLocation_creation() {
 
-		EventType eventType = anEventType().named("test").build();
+        ThingEventType eventType = anEventType().named("test").build();
 		Asset targetAsset = AssetBuilder.anAsset().build();
-		Event targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
+		ThingEvent targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
 
 		Location advancedLocation = new Location(null, FREEFORM_LOCATION);
 
@@ -85,9 +85,9 @@ public class EventReportMapProducerTest {
 
 	@Test
 	public void test_event_map_with_one_predefinedLocation_creation() {
-		EventType eventType = anEventType().named("test").build();
+		ThingEventType eventType = anEventType().named("test").build();
 		Asset targetAsset = AssetBuilder.anAsset().build();
-		Event targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
+        ThingEvent targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
 
 		Location advancedLocation = new Location(PredefinedLocationBuilder.aPredefinedLocation().build(), FREEFORM_LOCATION);
 
@@ -106,9 +106,9 @@ public class EventReportMapProducerTest {
 
 	@Test
 	public void test_event_map_with_two_predefinedLocations_creation() {
-		EventType eventType = anEventType().named("test").build();
+		ThingEventType eventType = anEventType().named("test").build();
 		Asset targetAsset = AssetBuilder.anAsset().build();
-		Event targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
+        ThingEvent targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
 
 		PredefinedLocation parent = PredefinedLocationBuilder.aPredefinedLocation().build();
 		PredefinedLocation child = PredefinedLocationBuilder.aPredefinedLocation().build();
@@ -173,7 +173,7 @@ public class EventReportMapProducerTest {
                         withCriteria(oneClickCriteria).build(),
         };
         EventForm eventForm = EventFormBuilder.anEventForm().withSections(sections).build();
-        EventType eventType = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
+        ThingEventType eventType = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
         Event event = anEvent().withCriteriaResults(criteriaResult).ofType(eventType).build();
         event.setEventForm(event.getType().getEventForm());
 
@@ -187,7 +187,7 @@ public class EventReportMapProducerTest {
     }
 
     private EventService createMockEventService() {
-        Event event = new Event();
+        ThingEvent event = new ThingEvent();
         EventService mockEventService = createMock(EventService.class);
         expect(mockEventService.findNextOpenEventOfSameType(anyObject(Event.class))).andReturn(event);
         expect(mockEventService.findNextOpenOrCompletedEventOfSameType(anyObject(Event.class))).andReturn(event);

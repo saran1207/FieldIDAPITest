@@ -2,7 +2,7 @@ package com.n4systems.servicedto.converts;
 
 import com.n4systems.api.conversion.ConversionException;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
@@ -75,7 +75,7 @@ public class PopulateAssignedUserConverterTest {
 
         PopulateAssignedUserConverter sut = new PopulateAssignedUserConverter(UNUSED_LOADER_FACTORY);
 
-        Event targetEvent = anEvent().build();
+        ThingEvent targetEvent = anEvent().build();
         sut.convert(inspectionServiceDTO, targetEvent);
 
 
@@ -88,7 +88,7 @@ public class PopulateAssignedUserConverterTest {
 
         PopulateAssignedUserConverter sut = new PopulateAssignedUserConverter(UNUSED_LOADER_FACTORY);
 
-        Event targetEvent = anEvent().build();
+        ThingEvent targetEvent = anEvent().build();
         sut.convert(inspectionServiceDTO, targetEvent);
 
 
@@ -112,7 +112,7 @@ public class PopulateAssignedUserConverterTest {
             }
         };
 
-        Event targetEvent = anEvent().build();
+        ThingEvent targetEvent = anEvent().build();
 
         sut.convert(inspectionServiceDTO, targetEvent);
         verify(loader);
@@ -131,7 +131,7 @@ public class PopulateAssignedUserConverterTest {
             }
         };
 
-        Event targetEvent = anEvent().build();
+        ThingEvent targetEvent = anEvent().build();
 
         sut.convert(inspectionServiceDTO, targetEvent);
 
@@ -156,7 +156,7 @@ public class PopulateAssignedUserConverterTest {
             }
         };
 
-        Event targetEvent = anEvent().build();
+        ThingEvent targetEvent = anEvent().build();
 
         sut.convert(inspectionServiceDTO, targetEvent);
 

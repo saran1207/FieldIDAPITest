@@ -13,10 +13,7 @@ import com.n4systems.exceptions.TenantNotValidForActionException;
 import com.n4systems.exceptions.UsedOnMasterEventException;
 import com.n4systems.exceptions.asset.AssetTypeMissMatchException;
 import com.n4systems.exceptions.asset.DuplicateAssetException;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.SubEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
@@ -86,30 +83,30 @@ public class AssetMerger {
 	}
 
 	private void moveEvents(Asset winningAsset, Asset losingAsset) {
-		QueryBuilder<Event> eventsQuery = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter()).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("asset", losingAsset);
-		List<Event> eventsToMove = persistenceManager.findAll(eventsQuery);
+		QueryBuilder<ThingEvent> eventsQuery = new QueryBuilder<ThingEvent>(ThingEvent.class, new OpenSecurityFilter()).addSimpleWhere("state", EntityState.ACTIVE).addSimpleWhere("asset", losingAsset);
+		List<ThingEvent> eventsToMove = persistenceManager.findAll(eventsQuery);
 
-		for (Event eventToMove : eventsToMove) {
+		for (ThingEvent eventToMove : eventsToMove) {
 			eventToMove.setAsset(winningAsset);
 			updateEvent(eventToMove);
 		}
 	}
 
 	private void moveSubEvents(Asset winningAsset, Asset losingAsset) {
-		String query = "SELECT DISTINCT master from " + Event.class.getName() + " master, IN (master.subEvents) subEvent "
+		String query = "SELECT DISTINCT master from " + ThingEvent.class.getName() + " master, IN (master.subEvents) subEvent "
 				+ "where subEvent.asset = :losingAsset AND master.state = :activeState";
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("losingAsset", losingAsset);
 		parameters.put("activeState", EntityState.ACTIVE);
-		List<Event> masterEventsWithSubEventToMove = persistenceManager.passThroughFindAll(query, parameters);
+		List<ThingEvent> masterEventsWithSubEventToMove = persistenceManager.passThroughFindAll(query, parameters);
 
-		for (Event masterEvent : masterEventsWithSubEventToMove) {
+		for (ThingEvent masterEvent : masterEventsWithSubEventToMove) {
 			updateSubEventAssets(winningAsset, losingAsset, masterEvent);
 			updateEvent(masterEvent);
 		}
 	}
 
-	private void updateEvent(Event event) {
+	private void updateEvent(ThingEvent event) {
 		try {
 			eventManager.updateEvent(event, 0L, user.getId(), null, null);
 		} catch (Exception e) {
@@ -117,7 +114,7 @@ public class AssetMerger {
 		}
 	}
 
-	private void updateSubEventAssets(Asset winningAsset, Asset losingAsset, Event masterEvent) {
+	private void updateSubEventAssets(Asset winningAsset, Asset losingAsset, ThingEvent masterEvent) {
 		for (SubEvent subEvent : masterEvent.getSubEvents()) {
 			if (subEvent.getAsset().equals(losingAsset)) {
 				subEvent.setAsset(winningAsset);

@@ -7,8 +7,8 @@ import java.util.*;
 
 public class CopyEventFactory {
 
-	public static Event copyEvent( Event event) {
-		Event newEvent = new Event();
+	public static ThingEvent copyEvent( ThingEvent event) {
+        ThingEvent newEvent = new ThingEvent();
 		
 		copyAbstractEvent(newEvent, event);
 		

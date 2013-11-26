@@ -13,6 +13,7 @@
  import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
  import com.n4systems.model.EventType;
  import com.n4systems.model.EventTypeGroup;
+ import com.n4systems.model.ThingEventType;
  import com.n4systems.model.eventtype.EventTypeCopier;
  import com.n4systems.security.Permissions;
  import com.n4systems.util.ListingPair;
@@ -34,8 +35,8 @@ public class EventTypeCrud extends AbstractCrud {
 	private List<ListingPair> eventTypeGroups;
     private List<EventTypeGroup> eventGroups;
     private List<EventTypeGroup> actionGroups;
-	private List<EventType> eventTypes;
-	private EventType eventType;
+	private List<ThingEventType> eventTypes;
+	private ThingEventType eventType;
 	private List<TrimmedString> infoFieldNames;
 	private String saveAndAdd;
 	private Map<String, Boolean> types;
@@ -59,16 +60,15 @@ public class EventTypeCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		eventType = new EventType();
+		eventType = new ThingEventType();
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		QueryBuilder<EventType> query = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
+		QueryBuilder<ThingEventType> query = new QueryBuilder<ThingEventType>(ThingEventType.class, getSecurityFilter());
 		query.addSimpleWhere("id", uniqueId);
 		query.addPostFetchPaths("eventForm.sections", "supportedProofTests", "infoFieldNames");
 		eventType = persistenceManager.find(query);
-		
 	}
 
 	private void testRequiredEntities(boolean existing) {
@@ -214,7 +214,7 @@ public class EventTypeCrud extends AbstractCrud {
         eventTypeRemovalService.startRemovalTask(eventType);
 	}
 
-	public List<EventType> getEventTypes() {
+	public List<ThingEventType> getEventTypes() {
 		if (eventTypes == null) {
             eventTypes = eventTypeService.getEventTypesIncludingActions(groupFilter, nameFilter);
 		}
@@ -247,7 +247,7 @@ public class EventTypeCrud extends AbstractCrud {
         return actionGroups;
     }
 
-    public void setEventType(EventType eventType) {
+    public void setEventType(ThingEventType eventType) {
 		this.eventType = eventType;
 	}
 
@@ -367,7 +367,7 @@ public class EventTypeCrud extends AbstractCrud {
 		this.groupFilter = groupFilter;
 	}
 
-	public void setEventTypes(List<EventType> eventTypes) {
+	public void setEventTypes(List<ThingEventType> eventTypes) {
 		this.eventTypes = eventTypes;
 	}
 

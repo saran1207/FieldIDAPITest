@@ -2,6 +2,7 @@ package com.n4systems.ws.resources;
 
 
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.lastmodified.LastModifiedListLoader;
 import com.n4systems.model.safetynetwork.IdLoader;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
@@ -11,10 +12,10 @@ import com.n4systems.ws.model.WsModelConverter;
 import com.n4systems.ws.model.eventtype.WsEventType;
 import com.n4systems.ws.model.eventtype.WsEventTypeConverter;
 
-public class EventTypeResourceDefiner implements ResourceDefiner<EventType, WsEventType> {
+public class EventTypeResourceDefiner implements ResourceDefiner<ThingEventType, WsEventType> {
 
 	@Override
-	public WsModelConverter<EventType, WsEventType> getResourceConverter() {
+	public WsModelConverter<ThingEventType, WsEventType> getResourceConverter() {
 		return new WsEventTypeConverter();
 	}
 
@@ -25,8 +26,8 @@ public class EventTypeResourceDefiner implements ResourceDefiner<EventType, WsEv
 	}
 
 	@Override
-	public IdLoader<FilteredIdLoader<EventType>> getResourceIdLoader(LoaderFactory loaderFactory) {
-		return loaderFactory.createFilteredIdLoader(EventType.class).setPostFetchFields("eventForm.sections", "infoFieldNames");
+	public IdLoader<FilteredIdLoader<ThingEventType>> getResourceIdLoader(LoaderFactory loaderFactory) {
+		return loaderFactory.createFilteredIdLoader(ThingEventType.class).setPostFetchFields("eventForm.sections", "infoFieldNames");
 	}
 
 	@Override

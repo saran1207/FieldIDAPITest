@@ -2,6 +2,7 @@ package com.n4systems.model.dashboard.widget;
 
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationForAgenda;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithOwner;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithUser;
@@ -25,8 +26,8 @@ public class WorkWidgetConfiguration extends WidgetConfiguration implements Conf
     private AssetType assetType;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="event_type_id", nullable=true)
-    private EventType eventType;
+    @JoinColumn(name="thing_event_type_id", nullable=true)
+    private ThingEventType eventType;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id", nullable=true)
@@ -41,11 +42,11 @@ public class WorkWidgetConfiguration extends WidgetConfiguration implements Conf
         this.assetType = assetType;
     }
 
-    public EventType getEventType() {
+    public ThingEventType getEventType() {
         return eventType;
     }
 
-    public void setEventType(EventType eventType) {
+    public void setEventType(ThingEventType eventType) {
         this.eventType = eventType;
     }
 

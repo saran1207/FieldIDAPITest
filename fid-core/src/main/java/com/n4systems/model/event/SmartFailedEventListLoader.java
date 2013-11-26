@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClause.ChainOp;
@@ -25,9 +26,9 @@ public class SmartFailedEventListLoader extends FailedEventListLoader {
 	}
 
 	@Override
-	protected List<Event> load(EntityManager em, SecurityFilter filter) {
+	protected List<ThingEvent> load(EntityManager em, SecurityFilter filter) {
 		// see WEB-2542 for details on how to handle failed, then passed events on same asset. 
-		QueryBuilder<Event> builder = createQueryBuilder(filter);
+		QueryBuilder<ThingEvent> builder = createQueryBuilder(filter);
 		
 		WhereParameterGroup statusGroup = new WhereParameterGroup("statusgroup");		
 		statusGroup.addClause(WhereClauseFactory.create(Comparator.EQ, "failStatus", "eventResult", EventResult.FAIL, null, ChainOp.OR));
@@ -42,7 +43,7 @@ public class SmartFailedEventListLoader extends FailedEventListLoader {
 		}
 		
 		builder.getPostFetchPaths().addAll(Arrays.asList(Event.ALL_FIELD_PATHS));
-		List<Event> results = builder.getResultList(em);
+		List<ThingEvent> results = builder.getResultList(em);
 		
 		results = filterEarlierEventsForSameAsset(results);		
 
@@ -55,14 +56,14 @@ public class SmartFailedEventListLoader extends FailedEventListLoader {
 	}
 
 	/*pkg protected so i can extract override in test*/
-	QueryBuilder<Event> createQueryBuilder(SecurityFilter filter) {
-		return new QueryBuilder<Event>(Event.class, filter);
+	QueryBuilder<ThingEvent> createQueryBuilder(SecurityFilter filter) {
+		return new QueryBuilder<ThingEvent>(ThingEvent.class, filter);
 	}
 
-	private List<Event> filterEarlierEventsForSameAsset(List<Event> results) {
+	private List<ThingEvent> filterEarlierEventsForSameAsset(List<ThingEvent> results) {
 		// precondition : list is sorted ascending by date.
-		final Map<String, Event> events = new HashMap<String, Event>();		
-		for (Event event:results) {			
+		final Map<String, ThingEvent> events = new HashMap<String, ThingEvent>();
+		for (ThingEvent event:results) {
 			String key = makeEventAssetKey(event);     
 			if (EventResult.FAIL.equals(event.getEventResult())) {
 				events.put(key, event);
@@ -70,7 +71,7 @@ public class SmartFailedEventListLoader extends FailedEventListLoader {
 				events.remove(key);
 			}
 		}
-		return new ArrayList<Event>(events.values());
+		return new ArrayList<ThingEvent>(events.values());
 	}
 
 	private String makeEventAssetKey(Event event) {

@@ -1,6 +1,7 @@
 package com.n4systems.model.eventschedule;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -32,16 +33,16 @@ public class EventScheduleByGuidOrIdLoaderTest {
 
     private class TestableEventScheduleByGuidOrIdLoader extends EventScheduleByGuidOrIdLoader {
 
-		private TestingQueryBuilder<Event> queryBuilder;
+		private TestingQueryBuilder<ThingEvent> queryBuilder;
 
 		public TestableEventScheduleByGuidOrIdLoader(SecurityFilter filter) {
 			super(filter);
 		}
 
 		@Override
-		protected QueryBuilder<Event> getQueryBuilder(SecurityFilter filter) {
-			queryBuilder = new TestingQueryBuilder<Event>(Event.class);
-			queryBuilder.setSingleResult(new Event());
+		protected QueryBuilder<ThingEvent> getQueryBuilder(SecurityFilter filter) {
+			queryBuilder = new TestingQueryBuilder<ThingEvent>(ThingEvent.class);
+			queryBuilder.setSingleResult(new ThingEvent());
 			return queryBuilder;
 		}
 

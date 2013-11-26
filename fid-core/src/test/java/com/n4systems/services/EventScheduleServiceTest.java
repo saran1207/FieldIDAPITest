@@ -2,6 +2,7 @@ package com.n4systems.services;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -14,7 +15,7 @@ public class EventScheduleServiceTest {
 
 	@Test @Ignore
     public void should_save_schedule_and_update_asset() {
-		Event openEvent = anOpenEvent().on(anAsset().build()).build();
+        ThingEvent openEvent = anOpenEvent().on(anAsset().build()).build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.save(openEvent)).andReturn(3L);
@@ -29,7 +30,7 @@ public class EventScheduleServiceTest {
 	
 	
 	@Test public void should_update_schedule_and_update_asset() {
-		Event openEvent = anOpenEvent().on(anAsset().build()).build();
+        ThingEvent openEvent = anOpenEvent().on(anAsset().build()).build();
 		
 		PersistenceManager mockPersistenceManager = createMock(PersistenceManager.class);
 		expect(mockPersistenceManager.update((Event)anyObject())).andReturn(openEvent);

@@ -92,8 +92,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     Component multiIdentifyContainer;
 
     SchedulePicker schedulePicker;
-    Event currentEventSchedule = new Event();
-    List<Event> schedulesToAdd = new ArrayList<Event>();
+    ThingEvent currentEventSchedule = new ThingEvent();
+    List<ThingEvent> schedulesToAdd = new ArrayList<ThingEvent>();
     MultipleAssetConfiguration multiAssetConfig = new MultipleAssetConfiguration();
     IModel<MultipleAssetConfiguration> multiAssetConfigModel = new PropertyModel<MultipleAssetConfiguration>(this, "multiAssetConfig");
     DialogModalWindow multipleWindow;
@@ -437,8 +437,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     }
 
     private void saveSchedulesForAsset(Asset asset) {
-        for (Event eventToSchedule : schedulesToAdd) {
-            Event copiedEvent = CopyEventFactory.copyEvent(eventToSchedule);
+        for (ThingEvent eventToSchedule : schedulesToAdd) {
+            ThingEvent copiedEvent = CopyEventFactory.copyEvent(eventToSchedule);
             copiedEvent.setAsset(asset);
             copiedEvent.setTenant(getTenant());
             copiedEvent.setOwner(asset.getOwner());
@@ -493,16 +493,16 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     }
 
     private SchedulePicker createSchedulePicker(IModel<AssetType> assetTypeModel) {
-        return new SchedulePicker("schedulePicker", new PropertyModel<Event>(this, "currentEventSchedule"), new EventTypesForAssetTypeModel(assetTypeModel), new EventJobsForTenantModel()) {
+        return new SchedulePicker("schedulePicker", new PropertyModel<ThingEvent>(this, "currentEventSchedule"), new EventTypesForAssetTypeModel(assetTypeModel), new EventJobsForTenantModel()) {
             {
                 setWindowClosedCallback(new WindowClosedCallback() {
                     @Override
                     public void onClose(AjaxRequestTarget target) {
-                        Event previouslyStoredEventSchedule = FieldIDSession.get().getPreviouslyStoredEventSchedule();
+                        ThingEvent previouslyStoredEventSchedule = FieldIDSession.get().getPreviouslyStoredEventSchedule();
                         if (previouslyStoredEventSchedule != null) {
                             FieldIDSession.get().setPreviouslyStoredEventSchedule(null);
                             schedulesToAdd.add(previouslyStoredEventSchedule);
-                            currentEventSchedule = new Event();
+                            currentEventSchedule = new ThingEvent();
                             target.add(eventSchedulesPanel);
                         }
                     }

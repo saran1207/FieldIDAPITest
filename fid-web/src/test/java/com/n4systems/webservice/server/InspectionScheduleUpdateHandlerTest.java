@@ -1,6 +1,7 @@
 package com.n4systems.webservice.server;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.event.SimpleEventSaver;
 import com.n4systems.model.eventschedule.EventScheduleByGuidOrIdLoader;
@@ -23,7 +24,7 @@ public class InspectionScheduleUpdateHandlerTest {
 
 	private SimpleEventSaver saver;
 	private EventScheduleByGuidOrIdLoader eventScheduleByMobileGuidLoader;
-	private Event openEvent;
+	private ThingEvent openEvent;
 	private InspectionScheduleServiceDTO inspectionScheduleServiceDTO;
 	private Event event;
 	

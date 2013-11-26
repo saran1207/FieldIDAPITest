@@ -52,10 +52,10 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 	private static final long UNASSIGNED_OPTION_VALUE = 0L;
 	private static final long KEEP_THE_SAME_OPTION = -1L;
 	private List<Long> assetIds = new ArrayList<Long>();
-	private Set<EventType> eventTypes;
+	private Set<ThingEventType> eventTypes;
 
-	private EventType eventType;
-	private Event event;
+	private ThingEventType eventType;
+	private ThingEvent event;
     private OwnerPicker ownerPicker;
 	
 	private final EventFormHelper eventFormHelper;
@@ -93,7 +93,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 	
 	@Override
 	protected void initMemberFields() {
-		event = new Event();
+		event = new ThingEvent();
 		event.setType(eventType);
         if (eventType != null) {
             event.setEventForm(eventType.getEventForm());
@@ -174,7 +174,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 		return assetIds;
 	}
 
-	public Set<EventType> getEventTypes() {
+	public Set<ThingEventType> getEventTypes() {
 		if (eventTypes == null) {
 			eventTypes = commonEventTypeHandler.findCommonEventTypesFor(assetIds);
 		}
@@ -189,7 +189,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 		if (type == null) {
 			eventType = null;
 		} else if (eventType == null || !type.equals(eventType.getId())) {
-			eventType = persistenceManager.find(EventType.class, type, getTenantId(), "eventForm.sections", "supportedProofTests", "infoFieldNames");
+			eventType = persistenceManager.find(ThingEventType.class, type, getTenantId(), "eventForm.sections", "supportedProofTests", "infoFieldNames");
 		}
 	}
 
@@ -197,7 +197,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 		return getSessionUser().getUniqueID();
 	}
 
-	public EventType getEventType() {
+	public ThingEventType getEventType() {
 		return eventType;
 	}
 
@@ -235,7 +235,7 @@ public class MultiEventAction extends AbstractCrud implements ActionWithCriteria
 		return event;
 	}
 
-	public void setEvent(Event event) {
+	public void setEvent(ThingEvent event) {
 		this.event = event;
 	}
 

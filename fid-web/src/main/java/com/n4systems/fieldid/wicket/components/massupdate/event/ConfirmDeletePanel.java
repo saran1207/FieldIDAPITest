@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePane
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.search.EventReportCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -48,7 +49,7 @@ public class ConfirmDeletePanel extends AbstractMassUpdatePanel {
                 
                 List<Long> eventIds =   eventSearchCriteria.getObject().getSelection().getSelectedIds();
                 for (Long id: eventIds) {
-                    Event event = persistenceService.find(Event.class, id);
+                    ThingEvent event = persistenceService.find(ThingEvent.class, id);
                     eventManager.retireEvent(event, getCurrentUser().getId());
                 }
                 eventSearchCriteria.getObject().getSelection().clear();

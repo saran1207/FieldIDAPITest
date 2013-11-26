@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.model.eventtype;
 import com.n4systems.fieldid.wicket.model.FieldIDSpringModel;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.event.EventTypesByEventGroupIdLoader;
 import com.n4systems.model.eventtype.EventTypeListLoader;
 import org.apache.wicket.model.IModel;
@@ -11,7 +12,7 @@ import org.apache.wicket.model.Model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EventTypesForTenantModel extends FieldIDSpringModel<List<EventType>> {
+public class EventTypesForTenantModel extends FieldIDSpringModel<List<ThingEventType>> {
 
     private IModel<EventTypeGroup> eventTypeGroupModel;
 
@@ -24,7 +25,7 @@ public class EventTypesForTenantModel extends FieldIDSpringModel<List<EventType>
     }
 
     @Override
-    protected List<EventType> load() {
+    protected List<ThingEventType> load() {
         EventTypeGroup eventTypeGroup = eventTypeGroupModel.getObject();
         Long groupId = eventTypeGroup == null ? null : eventTypeGroup.getId();
         return new EventTypesByEventGroupIdLoader(getSecurityFilter()).setEventTypeGroupId(groupId).load();
