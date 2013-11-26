@@ -3,7 +3,7 @@ package com.n4systems.model;
 import com.n4systems.model.api.DisplayEnum;
 
 public enum WorkflowState implements DisplayEnum {
-    OPEN("Open"), COMPLETED("Completed"), CLOSED("Closed");
+    OPEN("Open"), COMPLETED("Completed"), CLOSED("Closed"), NONE("None");
 
     private String label;
 

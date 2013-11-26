@@ -11,7 +11,7 @@ import com.n4systems.fieldid.wicket.components.tree.OrgTree;
 import com.n4systems.fieldid.wicket.data.OrgsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.org.OrgSummaryPage;
+import com.n4systems.fieldid.wicket.pages.org.PlacesPage;
 import com.n4systems.model.orgs.*;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.StringUtils;
@@ -151,7 +151,7 @@ public class OrgViewPage extends FieldIDFrontEndPage {
                 private Link createLink(String id, final BaseOrg org) {
                     return new Link(id) {
                         @Override public void onClick() {
-                            setResponsePage(OrgSummaryPage.class, new PageParameters().add("id",org.getId()));
+                            setResponsePage(PlacesPage.class, new PageParameters().add("id",org.getId()));
                         }
                     };
                 }

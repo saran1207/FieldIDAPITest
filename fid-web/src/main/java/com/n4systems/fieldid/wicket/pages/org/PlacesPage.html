@@ -1,0 +1,231 @@
+<wicket:head>
+
+    <!--NOTE TO CHRISTINA : all of this inline style stuff should be moved to appropriate .css file...wherever that is.   - derek -->
+
+    <style type="text/css">
+        .header ul {
+            display:none;
+        }
+
+        ul li {
+            display:inline;
+            padding:4px;
+        }
+
+        .header .separator p:hover {
+            background:#add8e6;
+            border:#0000cd;
+        }
+    </style>
+</wicket:head>
+
+<wicket:extend xmlns:wicket="http://www.w3.org/1999/html">
+
+    <!-- --------------------------------------------------------------------------------------------------------- -->
+
+    <h1 wicket:id="header" class="header">
+        <span wicket:id="hierarchy">
+            <a wicket:id="org"><span wicket:id="name"/></a>
+            <span wicket:id="separator" class="separator"><p>&gt;</p>
+                 <ul>
+                     <li wicket:id="children">
+                         <a wicket:id="link"><span wicket:id="name"/></a>
+                     </li>
+                 </ul>
+            </span>
+        </span>
+    </h1>
+
+    <div wicket:id="actions" class="actions" style="width:100%;height:30px;display:inline-block;">
+        <span wicket:id="schedule">
+            <ul class="dropdown">
+                <li class="menu">
+                    <a class="mattButton" href="javascript:void(0);">
+                        <wicket:message key="label.uc_schedule"/><img src="/fieldid/images/menu-down.png"/>
+                    </a>
+                    <ul class="menu-items">
+                        <li><a wicket:id="oneTime"> <wicket:message key="label.events"/></a></li>
+                        <li><a wicket:id="recurring"> <wicket:message key="label.create_recurring_event"/></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </span>
+
+        <span wicket:id="start">
+            <ul class="dropdown">
+                <li class="menu">
+                    <a class="mattButton" href="javascript:void(0);">
+                        <wicket:message key="label.start"/><img src="/fieldid/images/menu-down.png"/>
+                    </a>
+                    <ul wicket:id="types" class="menu-items">
+                        <li><a wicket:id="type"><span wicket:id="name"/></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </span>
+
+        <span wicket:id="edit">
+            <ul class="dropdown">
+                <li class="menu">
+                    <a class="mattButton" href="javascript:void(0);">
+                        <wicket:message key="label.options"/><img src="/fieldid/images/menu-down.png"/>
+                    </a>
+                    <ul class="menu-items">
+                        <li><a wicket:id="details"> <wicket:message key="label.details"/></a></li>
+                        <li><a wicket:id="recurring"> <wicket:message key="label.recurring_events"/></a></li>
+                        <li><a wicket:id="eventTypes"> <wicket:message key="label.event_types"/></a></li>
+                        <li><a wicket:id="archive"> <wicket:message key="label.archive"/></a></li>
+                        <li><a wicket:id="merge"> <wicket:message key="label.merge"/></a></li>
+                        <li><a wicket:id="addUser"> <wicket:message key="label.add_user"/></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </span>
+    </div>
+
+    <nav class="nav-tabs">
+        <ul>
+            <li wicket:id="tabs"></li>
+        </ul>
+    </nav>
+
+    <div wicket:id="content">
+        <!--STUFF GOES HERE-->
+    </div>
+
+
+    <div wicket:id="modal"/>
+
+    <!-- --------------------------------------------------------------------------------------------------------- -->
+
+
+
+    <!--                                         -->
+    <!--FRAGMENTS USED IN PAGE -->
+    <!--MOSTLY FOR ASSORTED LEFT AND RIGHT PANELS THAT SWITCH DEPENDING ON PAGE STATE-->
+    <!--                                         -->
+
+
+    <wicket:fragment wicket:id="details" class="details">
+        <img wicket:id="img" style="width:300px;height:300px;float:left;" class="img"><p><wicket:message key="label.no_images"/></p></img>
+        <a wicket:id="attachmentsLink"><span wicket:id="label"/></a>
+        <div wicket:id="map" class="googleMap" style="width:700px;height:300px;"></div>
+        <h3>Contact</h3>
+        <div>Susan Reynolds</div>
+        <div>susan.reynolds@masterlock.com</div>
+        <div>43 MasterLock Circle</div>
+        <div>Oak Creek, WI 042104, USA</div>
+        <div>
+            <label>phone</label><span>123 453 1233</span>
+        </div>
+        <div><label>phone</label><span>123 453 1233</span></div>
+        <h3>General</h3>
+        <div><label>Site Supervisor</label><span>Henry Sheen</span></div>
+        <div><label>Property Class</label><span>Commercial C1</span></div>
+        <div><label>Status</label><span>Active</span></div>
+        <h3>Notes</h3>
+        <div>Please ensure that building owner is notified 2 hours in advance before entry onto the property.</div>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="eventsPanel" class="events">
+        <h3>Events</h3>
+        <span wicket:id="events">
+            <ul>
+                <li wicket:id="status"></li>
+                <li wicket:id="type"></li>
+                <li wicket:id="scheduled"></li>
+                <li wicket:id="completed"></li>
+            </ul>
+        </span>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="attachmentsPanel" class="attachments">
+        <h3>Attachments</h3>
+        <table>
+            <tr wicket:id="attachments">
+                <td wicket:id="cell"><img wicket:id="image"/> <span wicket:id="comments"/></td>
+            </tr>
+        </table>
+        <form wicket:id="form">
+            <input wicket:id="upload" type="file"/>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="peoplePanel">
+        <h3><wicket:message key="label.people"/></h3>
+        <span wicket:id="people" class="people">
+            <ul>
+                <li wicket:id="id"></li>
+                <li wicket:id="first"></li>
+                <li wicket:id="last"></li>
+            </ul>
+        </span>
+        <a wicket:id="add"><wicket:message key="label.add"/></a>
+    </wicket:fragment>
+
+
+    <!-- USED IN MODAL WINDOWS -->
+
+    <wicket:fragment wicket:id="edit">
+        <h2><wicket:message key="label.details"/></h2>
+        <form wicket:id="form">
+            <span wicket:id="address" type="text"/>
+            <wicket:message key="label.type"/><input wicket:id="type" type="text"/>
+            <wicket:message key="label.status"/><input wicket:id="status" type="text"/>
+            <wicket:message key="label.name"/><input wicket:id="name" type="text"/>
+            <wicket:message key="label.email"/><input wicket:id="email" type="text"/>
+            <wicket:message key="label.phone"/><input wicket:id="phone" type="text"/>
+            <wicket:message key="label.fax"/><input wicket:id="fax" type="text"/>
+            <div wicket:id="buttons"/>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="editEventTypes">
+        <form wicket:id="form">
+            <wicket:message key="label.event_types"/>
+            <select wicket:id="types"/>
+            <div wicket:id="buttons"/>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="editRecurringEvents">
+        <form wicket:id="form">
+            <h2><wicket:message key="label.recurring_events"/></h2>
+            <div wicket:id="recurring"/>
+            <div wicket:id="buttons"/>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="deletePanel">
+        <form wicket:id="form">
+            <div wicket:id="confirm"/>
+            <div wicket:id="buttons"/>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="archivePanel">
+        <form wicket:id="form">
+            <div wicket:id="confirm"/>
+            <div wicket:id="buttons"/>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="newUserPanel">
+        <form wicket:id="form">
+            <div wicket:id="user"/>
+            <label><wicket:message key="label.assign_password" for="newUserAssignPw"/><input wicket:id="assignPassword" id="newUserAssignPw" type="checkbox"/></label>
+            <div wicket:id="password"/>
+            <div wicket:id="confirmPassword"/>
+            <div wicket:id="rfidNumber"/>
+            <div wicket:id="buttons"/>
+        </form>
+    </wicket:fragment>
+
+    <wicket:fragment wicket:id="saveCancelButtons">
+        <div class="buttons">
+            <a wicket:id="submit"><wicket:message key="label.save"/></a>
+            <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+        </div>
+    </wicket:fragment>
+
+</wicket:extend>

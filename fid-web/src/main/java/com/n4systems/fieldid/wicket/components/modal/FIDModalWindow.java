@@ -22,6 +22,12 @@ public class FIDModalWindow extends ModalWindow {
     	setInitialHeight(height);
 	}
 
+    public FIDModalWindow withInitialSize(int width, int height) {
+        setInitialHeight(height);
+        setInitialWidth(width);
+        return this;
+    }
+
     @Override
     protected void onInitialize() {
         super.onInitialize();

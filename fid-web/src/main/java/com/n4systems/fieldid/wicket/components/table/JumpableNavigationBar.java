@@ -117,7 +117,10 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
         }
 
         public void setJumpPage(Integer page) {
-            getTable().setCurrentPage(Math.max(0, page - 1));
+
+            if (null != page) {
+                getTable().setCurrentPage(Math.max(0, page - 1));
+            }
         }
     }
 

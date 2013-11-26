@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.IEventBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.location.LocationPicker;
 import com.n4systems.fieldid.wicket.components.massupdate.AbstractMassUpdatePanel;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.StatusChoiceRenderer;
@@ -149,19 +150,22 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
 
 			final CheckBox ownerCheck = new CheckBox("ownerCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[owner]"));
 			ownerCheck.setOutputMarkupId(true);
+
             final PropertyModel<BaseOrg> orgModel = new PropertyModel<BaseOrg>(massUpdateEventModel, "event.owner");
-            OrgPicker ownerPicker = new OrgPicker("owner", orgModel) {
-				@Override
-				protected void onPickerClosed(AjaxRequestTarget target) {
-					IModel<Boolean> model = (IModel<Boolean>) ownerCheck.getDefaultModel();
-					clearAllCheckboxes();
-					model.setObject(true);
+            add(ownerCheck);
+            add(new OrgLocationPicker("owner", orgModel) {
+                @Override
+                protected void onChanged(AjaxRequestTarget target) {
+                    IModel<Boolean> model = (IModel<Boolean>) ownerCheck.getDefaultModel();
+                    clearAllCheckboxes();
+                    model.setObject(true);
                     location.setOwner(orgModel.getObject());
-					target.add(ownerCheck, locationCheck, location);
-				}
-			};
-			add(ownerCheck);
-			add(ownerPicker);
+                    target.add(ownerCheck, locationCheck, location);
+                }
+
+
+            }.withAutoUpdate());
+
 
             final CheckBox performedByCheck = new CheckBox("performedByCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[performedBy]"));
             performedByCheck.setOutputMarkupId(true);

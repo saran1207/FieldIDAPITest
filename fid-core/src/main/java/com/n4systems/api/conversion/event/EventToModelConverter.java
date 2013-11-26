@@ -179,8 +179,8 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
 			@Override 
 			public CriteriaResult populate(SelectCriteriaResult result) {
 				checkArgument(criteria instanceof SelectCriteria);
-				if (StringUtils.isBlank(result.getResultString())) {
-					return result;  // leave it as nul...that's a valid value.
+				if (StringUtils.isBlank(criteriaResultView.getResultString())) {
+					return result;  // leave it as null...that's a valid value.
 				}
 				List<String> options = ((SelectCriteria)criteria).getOptions();
 				final String option = criteriaResultView.getResultString();				
@@ -321,9 +321,9 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
     }
 
 	protected void resolveOwner(EventView view, Event model, Transaction transaction) {
-		orgLoader.setOrganizationName(view.getOrganization());
-		orgLoader.setCustomerName(view.getCustomer());
-		orgLoader.setDivision(view.getDivision());
+		orgLoader.setOrganizationName(view.getNewOrganization());
+		orgLoader.setCustomerName(view.getNewCustomer());
+		orgLoader.setDivision(view.getNewDivision());
 		
 		BaseOrg owner = orgLoader.load(transaction);
 		model.setOwner(owner);

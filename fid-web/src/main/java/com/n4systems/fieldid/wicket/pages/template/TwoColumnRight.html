@@ -1,64 +1,39 @@
-	<!-- wraps all page content -->
-	<main class="" role="main">
+<html xmlns:wicket="http://wicket.apache.org">
+    <wicket:extend>
 
-		<!-- wraps page specific heading content -->
-		<header class="page-header">
+    <hr>
 
-			<nav class="bread-crumb">
-				<ol>
-					<li><a href="#">Parent page</a></li>
-					<li>Current page</li>
-				</ol>
-			</nav>
+    <!-- Right column: wide -->
+    <div class="column-wide">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+    </div><!-- cls .column-wide -->
 
-			<!-- Required page heading -->
-			<h1>Two Column: Right Sidebar</h1>
-		</header>			
-		
-		<div class="page-content">
-			<hr>
+    <!-- Right column: narrow MUST come after .column-wide -->
+    <div class="column-narrow-right">
+        <!-- Sample form styles. Refer to documentation for all features. -->
+        <form wicket:id="form">
+            <fieldset>
+                <legend>Form section title</legend>
+                <p>Upload an image of the asset to be displayed on the profile page. The image should be 300px wide.</p>
+                <div class="input-combo">
+                    <input wicket:id="fileUploadField" type="file" class="file-input js-file-input">
+                    <input wicket:id="textField" type="text" class="file-uploaded js-file-uploaded">
+                    <span class="btn-secondary btn-sml">Browse</span>
+                </div>
+            </fieldset>
 
-			<!-- Right column: wide -->
-			<div class="column-wide">
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
-				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
-			</div><!-- cls .column-wide -->	
+            <fieldset>
+                <legend>Form section title</legend>
+                <label>Clearance Level</label>
+                <select wicket:id="clearanceLevels" data-placeholder="" class="chzn-select-no-search"/>
 
-			<!-- Right column: narrow MUST come after .column-wide -->
-			<div class="column-narrow-right">
-				<!-- Sample form styles. Refer to documentation for all features. -->
-				<form>
-					<fieldset>
-						<legend>Form section title</legend>
-						<p>Upload an image of the asset to be displayed on the profile page. The image should be 300px wide.</p>
-						<div class="input-combo">
-							<input type="file" class="file-input js-file-input">
-							<input type="text" class="file-uploaded js-file-uploaded">
-							<span class="btn-secondary btn-sml">Browse</span>
-						</div>
-					</fieldset>
-
-					<fieldset>
-						<legend>Form section title</legend>
-						<label>Clearance Level</label>
-						<select data-placeholder="" class="chzn-select-no-search">
-							<option value=""></option>
-							<option>Level 5</option>
-							<option>Level 4</option>
-							<option>Level 3</option>
-							<option>Level 2</option>
-						</select>
-
-						<label>Warning</label>
-						<select data-placeholder="" class="chzn-select-no-search">
-							<option value=""></option>
-							<option>Use this for fall arrest only</option>
-							<option>Use this for restraint only</option>
-						</select>
-					</fieldset>
-				</form>
-			</div>
-		</div><!-- cls .page-content -->	
-	</main>
+                <label>Warning</label>
+                <select wicket:id="warnings" data-placeholder="" class="chzn-select-no-search"/>
+            </fieldset>
+        </form>
+    </div>
+    </wicket:extend>
+</html>

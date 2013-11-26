@@ -19,8 +19,10 @@ import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.SecurityContextInitializer;
+import com.n4systems.fieldid.service.amazon.S3ImageAttachmentHandler;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.*;
+import com.n4systems.fieldid.service.attachment.AttachmentService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.event.*;
@@ -686,6 +688,16 @@ public class FieldIdCoreConfig {
     @Bean
     public MixpanelService mixpanelService() {
         return new MixpanelService();
+    }
+
+    @Bean
+    public AttachmentService attachmentService() {
+        return new AttachmentService();
+    }
+
+    @Bean
+    public S3ImageAttachmentHandler s3ImageAttachmentHandler() {
+        return new S3ImageAttachmentHandler();
     }
 
 }

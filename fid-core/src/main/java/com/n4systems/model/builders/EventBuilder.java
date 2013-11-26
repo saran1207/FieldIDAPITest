@@ -37,8 +37,12 @@ public class EventBuilder extends BaseBuilder<ThingEvent> {
     public static EventBuilder anEvent() {
         return anEvent(anEventType());
     }
-    
+
     public static EventBuilder aFailedEvent() {
+        return aFailedEvent(anEventType());
+    }
+
+    public static EventBuilder aClosedEvent() {
         return aFailedEvent(anEventType());
     }
 
@@ -55,9 +59,14 @@ public class EventBuilder extends BaseBuilder<ThingEvent> {
     }
 
     public static EventBuilder aFailedEvent(EventTypeBuilder eventTypeBuilder) {
-		return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.FAIL, null, new HashSet<CriteriaResult>(), WorkflowState.COMPLETED, null, null);
-	}
+        return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.FAIL, null, new HashSet<CriteriaResult>(), WorkflowState.COMPLETED, null, null);
+    }
 
+    public static EventBuilder aClosedEvent(EventTypeBuilder eventTypeBuilder) {
+        return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.FAIL, null, new HashSet<CriteriaResult>(), WorkflowState.CLOSED, null, null);
+    }
+
+    protected EventBuilder(EventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, EventResult eventResult, AssetStatus assetStatus, Set<CriteriaResult> results, WorkflowState workflowState, Date dueDate, EventStatus eventStatus) {
 	protected EventBuilder(ThingEventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, EventResult eventResult, AssetStatus assetStatus, Set<CriteriaResult> results, WorkflowState workflowState, Date dueDate, EventStatus eventStatus) {
 		this.eventType = type;
 		this.asset = asset;

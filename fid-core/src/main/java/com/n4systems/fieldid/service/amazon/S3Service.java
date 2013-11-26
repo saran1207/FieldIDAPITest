@@ -7,7 +7,10 @@ import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
+import com.n4systems.model.Attachment;
+import com.n4systems.model.attachment.S3Attachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -60,6 +63,12 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String PROCEDURE_DEFINITION_IMAGE_PATH_THUMB = "/assets/%d/procedure_definitions/%d/%s.thumbnail";
     public static final String PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM = "/assets/%d/procedure_definitions/%d/%s.medium";
 
+    public static final String PLACE_ATTACHMENT_TEMP = "/temp/place_attachments/%s";
+    public static final String PLACE_ATTACHMENT = "/place_attachments/%d/%s";
+    public static final String PLACE_IMAGE = PLACE_ATTACHMENT;  // images are treated as a type of attachment - go in same folder.
+    public static final String PLACE_IMAGE_MEDIUM = "/place_attachments/%d/%s.medium";
+    public static final String PLACE_IMAGE_THUMBNAIL = "/place_attachments/%d/%s.thumbnail";
+
     public static final String THUMBNAIL_EXTENSION = ".thumbnail";
     public static final String MEDIUM_EXTENSION = ".medium";
 
@@ -67,6 +76,7 @@ public class S3Service extends FieldIdPersistenceService {
 	@Autowired private ImageService imageService;
     @Autowired private AmazonS3Client s3client;
     @Autowired private UUIDService uuidService;
+    @Autowired private S3AttachmentHandler s3ImageAttachmentHandler;
 
     public URL getBrandingLogoURL() {
         return getBrandingLogoURL(null);
@@ -468,6 +478,11 @@ public class S3Service extends FieldIdPersistenceService {
         );
     }
 
+
+    public URL getPlaceAttachment(BaseOrg org, Attachment attachment) {
+        return generateResourceUrl(org.getTenant().getId(), attachment.getFileName(), org.getId());
+    }
+
     public byte[] downloadCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
 		return downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
                 criteriaResultImage.getCriteriaResult().getEvent().getId(),
@@ -625,6 +640,18 @@ public class S3Service extends FieldIdPersistenceService {
         expirationDays = null;
     }
 
+    public void uploadTempAttachment(S3Attachment attachment) {
+        attachment.setTempFileName(uuidService.createUuid());
+        for (S3Attachment attachmentFlavour:getS3AttachmentHandler(attachment).getFlavours(attachment)) {
+            putObject(attachmentFlavour.getTempPath(), attachmentFlavour.getBytes(), attachmentFlavour.getContentType());
+        }
+    }
+
+    private S3AttachmentHandler getS3AttachmentHandler(S3Attachment attachment) {
+        // TODO : check meta-data for content-type and return appropriate handler.
+        // also, make these spring beans.
+        return s3ImageAttachmentHandler;
+    }
 
     public class S3ImagePath {
         private String origPath;

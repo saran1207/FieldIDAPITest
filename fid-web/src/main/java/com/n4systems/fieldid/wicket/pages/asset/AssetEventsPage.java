@@ -138,12 +138,19 @@ public class AssetEventsPage extends AssetPage{
     
     private List<WorkflowState> getWorkflowStates() {
         List<WorkflowState> states = new ArrayList<WorkflowState>();
+
         if(open)
             states.add(WorkflowState.OPEN);
         if(completed)
             states.add(WorkflowState.COMPLETED);
         if(closed)
             states.add(WorkflowState.CLOSED);
+
+
+        if (states.size() == 0) {
+            states.add(WorkflowState.NONE);
+        }
+
         return states;
     }
 
