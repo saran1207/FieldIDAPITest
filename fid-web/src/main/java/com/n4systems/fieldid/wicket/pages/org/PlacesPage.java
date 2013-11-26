@@ -287,7 +287,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
                     }
                 });
 
-        List<EventType> eventTypes = Lists.newArrayList(EventTypeBuilder.anEventType().named("Visual Inspection").build());
+        List<ThingEventType> eventTypes = Lists.newArrayList(EventTypeBuilder.anEventType().named("Visual Inspection").build());
         MarkupContainer startMenu = new WebMarkupContainer("start")
                 .add(new ListView<EventType>("types", eventTypes) {
                     @Override protected void populateItem(ListItem<EventType> item) {
