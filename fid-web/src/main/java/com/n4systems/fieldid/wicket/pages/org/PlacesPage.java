@@ -28,6 +28,8 @@ import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
 import com.n4systems.model.Event;
+import com.n4systems.model.attachment.PlaceAttachment;
+import com.n4systems.model.attachment.S3Attachment;
 import com.n4systems.model.builders.CustomerOrgBuilder;
 import com.n4systems.model.builders.DivisionOrgBuilder;
 import com.n4systems.model.builders.EventTypeBuilder;
@@ -75,8 +77,6 @@ import static ch.lambdaj.Lambda.on;
 
 
 public class PlacesPage extends FieldIDFrontEndPage {
-
-
 
     enum Content { DETAILS, EVENTS, PEOPLE, ATTACHMENTS }
 
@@ -454,6 +454,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
         }
     }
 
+
     class PeoplePanel extends Fragment {
         public PeoplePanel() {
             super(CONTENT_ID, "peoplePanel", PlacesPage.this);
@@ -485,18 +486,19 @@ public class PlacesPage extends FieldIDFrontEndPage {
         return model.getObject();
     }
 
+
     class AttachmentsPanel extends Fragment {
         private FileUploadField uploadField;
 
         public AttachmentsPanel() {
             super(CONTENT_ID,"attachmentsPanel", PlacesPage.this);
-            add(new ListView<Attachment>("attachments",getAttachments()) {
-                @Override protected void populateItem(ListItem<Attachment> item) {
-                    Attachment attachment = item.getModelObject();
+            add(new ListView<S3Attachment>("attachments",getAttachments()) {
+                @Override protected void populateItem(ListItem<S3Attachment> item) {
+                    S3Attachment attachment = item.getModelObject();
                     WebMarkupContainer cell = new WebMarkupContainer("cell");
                     //String url = s3Service.getPlaceAttachment(getOrg(), attachment);
                     cell.add(new Label("comments", attachment.getComments()));
-                    cell.add(new ExternalImage("image", String.format("http://dummyimage.com/150x150/%d/fff.png&text=hello",(int)(Math.random()*0x1000000))));
+                    cell.add(new ExternalImage("image", attachment.getFileName()));
                     item.add(cell);
                 }
             });
@@ -512,96 +514,34 @@ public class PlacesPage extends FieldIDFrontEndPage {
                     FileUpload fileUpload = uploadField.getFileUpload();
 
                     if (fileUpload != null) {
-//                        Attachment attachment = new CriteriaResultImage();
-//                        criteriaResultImage.setCriteriaResult(criteriaResult);
-//                        criteriaResultImage.setFileName(fileUpload.getClientFileName());
-//                        criteriaResultImage.setContentType(fileUpload.getContentType());
-//
-//                        byte[] imageData = fileUpload.getBytes();
-//
-//                        criteriaResultImage.setMd5sum(DigestUtils.md5Hex(imageData));
-//
-//                        String tempFileName = s3Service.uploadTempCriteriaResultImage(criteriaResultImage, imageData);
-//                        criteriaResultImage.setTempFileName(tempFileName);
-//
-//                        criteriaResult.getCriteriaImages().add(criteriaResultImage);
+                        S3Attachment attachment = new PlaceAttachment(getOrg(), fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes());
+                        s3Service.uploadTempAttachment(attachment);
+                        // TODO DD : add them to the org.  org.addAttachment(attachment);
                     }
-
-//                    onClose(target);
                 }
 
-                @Override protected void onError(AjaxRequestTarget target) {
-                }
+                @Override protected void onError(AjaxRequestTarget target) { }
             });
             return form;
         }
 
 
-        private IModel<? extends List<? extends Attachment>> getAttachments() {
-            return new LoadableDetachableModel<List<? extends Attachment>>() {
-                @Override protected List<? extends Attachment> load() {
-                    return attachmentService.getAttachmentsFor(getOrg());
+       private IModel<? extends List<? extends S3Attachment>> getAttachments() {
+           // TODO : remove.  this is just bogus test data.  should be stored via join table associated to org.
+            final List<S3Attachment> result = Lists.newArrayList();
+            for (int i=0; i<10 ; i++) {
+                final int finalI = i;
+                result.add(new PlaceAttachment(823473f));
+            }
+            return new LoadableDetachableModel<List<S3Attachment>>() {
+                @Override protected List<S3Attachment> load() {
+                    return result;
                 }
             };
         }
 
-//        add(new ListView<AssetAttachment>("assetAttachments", assetAttachments) {
-//            @Override
-//            protected void populateItem(ListItem< AssetAttachment > item) {
-//                AssetAttachment attachment = item.getModelObject();
-//
-//                String fileName;
-//                try {
-//                    fileName = URLEncoder.encode(attachment.getFileName(), "UTF-8");
-//                } catch (Exception e) {
-//                    logger.warn("Could not conver to UTF-8", e);
-//                    fileName = attachment.getFileName().replace(" ", "+");
-//                }
-//
-//                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName=" + fileName + "&uniqueID=" + asset.getId() + "&attachmentID=" + attachment.getId());
-//
-//                WebComponent image;
-//                if(attachment.isImage()) {
-//                    item.add(image = new ExternalImage("attachmentImage", downloadUrl));
-//                    image.add(new AttributeModifier("class", "attachmentImage"));
-//                } else {
-//                    item.add(image = new org.apache.wicket.markup.html.image.Image("attachmentImage", new ContextRelativeResource("images/file-icon.png")));
-//                    image.add(new AttributeModifier("class", "attachmentIcon"));
-//                }
-//                ExternalLink attachmentLink;
-//                item.add(attachmentLink = new ExternalLink("attachmentLink", downloadUrl));
-//                attachmentLink.add(new Label("attachmentName", attachment.getFileName()));
-//                item.add(new Label("attachmentNote", attachment.getNote().getComments()));
-//            }
-//        });
-//
-//        List<FileAttachment> typeAttachments = asset.getType().getAttachments();
-//
-//        add(new ListView<FileAttachment>("assetTypeAttachments", typeAttachments) {
-//            @Override
-//            protected void populateItem(ListItem<FileAttachment> item) {
-//                FileAttachment attachment = item.getModelObject();
-//
-//                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetTypeAttachedFile.action?fileName=" + attachment.getFileName().replace(" ", "+") + "&uniqueID=" + asset.getType().getId() + "&attachmentID=" + attachment.getId());
-//
-//                WebComponent image;
-//                if (attachment.isImage()) {
-//                    item.add(image = new ExternalImage("attachmentImage", downloadUrl));
-//                    image.add(new AttributeModifier("class", "attachmentImage"));
-//                } else {
-//                    item.add(image = new org.apache.wicket.markup.html.image.Image("attachmentImage", new ContextRelativeResource("images/file-icon.png")));
-//                    image.add(new AttributeModifier("class", "attachmentIcon"));
-//                }
-//                ExternalLink attachmentLink;
-//                item.add(attachmentLink = new ExternalLink("attachmentLink", downloadUrl));
-//                attachmentLink.add(new Label("attachmentName", attachment.getFileName()));
-//                item.add(new Label("attachmentNote", attachment.getComments()));
-//            }
-//        });
-//    }
-
-
     }
+
 
     class EventsPanel extends Fragment {
         public EventsPanel() {
@@ -625,6 +565,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
             };
         }
     }
+
 
     class EditPanel extends Fragment implements ModalPanel {
         Address address = new Address("111 queen st east, toronto");
@@ -656,6 +597,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
         }
     }
 
+
     class EditEventTypesPanel extends Fragment implements ModalPanel {
         private List<EventType> types = Lists.newArrayList();
 
@@ -685,6 +627,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
         }
     }
 
+
     class EditRecurringPanel extends Fragment implements ModalPanel {
         public EditRecurringPanel() {
             super(CONTENT_ID, "editRecurringEvents", PlacesPage.this);
@@ -705,6 +648,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
             return new Dimension(500,400);
         }
     }
+
 
     class ArchivePanel extends Fragment implements ModalPanel {
         public ArchivePanel() {
@@ -727,6 +671,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
             return new Dimension(400,250);
         }
     }
+
 
     class NewUserPanel extends Fragment implements ModalPanel {
         private User user;
