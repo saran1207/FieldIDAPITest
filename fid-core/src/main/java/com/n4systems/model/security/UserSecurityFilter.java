@@ -1,11 +1,10 @@
 package com.n4systems.model.security;
 
-import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.terms.completedordue.WithinUserGroupTerm;
 
 import javax.persistence.Query;
@@ -58,7 +57,8 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 			}
 		}
 
-        if (definer.isEventUserGroupFiltered() && user != null && user.getGroups().size() > 0) {
+        if (filterOrg.getPrimaryOrg().hasExtendedFeature(ExtendedFeature.UserGroupFiltering)
+                && definer.isEventUserGroupFiltered() && user != null && user.getGroups().size() > 0) {
             new WithinUserGroupTerm(null, user)
                     .applyToQuery(builder);
         }
