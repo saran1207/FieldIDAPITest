@@ -72,7 +72,11 @@ public class EventToModelConverterTest {
 		view.setCustomer("customer_name");
 		view.setDivision("division_name");
 		view.setOrganization("org_name");
-		
+
+        view.setNewCustomer("customer_name");
+        view.setNewDivision("division_name");
+        view.setNewOrganization("org_name");
+
 		BaseOrg org = OrgBuilder.aDivisionOrg().build();
 
 		OrgByNameLoader orgLoader = createMock(OrgByNameLoader.class);
