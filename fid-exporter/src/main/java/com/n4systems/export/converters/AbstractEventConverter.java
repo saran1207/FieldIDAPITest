@@ -49,7 +49,7 @@ public abstract class AbstractEventConverter<T extends AbstractEvent> extends Ab
 		writer.endNode();
 	}
 
-	private void writeAttributes(HierarchicalStreamWriter writer, AbstractEvent event) {
+	private void writeAttributes(HierarchicalStreamWriter writer, AbstractEvent<?> event) {
 		writer.startNode("Attributes");
 		for (Map.Entry<String, String> attrib: event.getInfoOptionMap().entrySet()) {
 			writer.startNode("Attribute");

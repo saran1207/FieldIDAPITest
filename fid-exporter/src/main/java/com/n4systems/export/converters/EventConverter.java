@@ -1,10 +1,11 @@
 package com.n4systems.export.converters;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-public class EventConverter extends AbstractEventConverter<Event> {
+public class EventConverter extends AbstractEventConverter<ThingEvent> {
 
 	@SuppressWarnings("rawtypes")
 	@Override
@@ -13,7 +14,7 @@ public class EventConverter extends AbstractEventConverter<Event> {
 	}
 
 	@Override
-	protected void marshalEntity(Event event, HierarchicalStreamWriter writer, MarshallingContext context) {
+	protected void marshalEntity(ThingEvent event, HierarchicalStreamWriter writer, MarshallingContext context) {
 		writer.startNode("Event");
 		super.marshalEntity(event, writer, context);
 		writeNode(writer, context, "ActiveState", event.getEntityState());
