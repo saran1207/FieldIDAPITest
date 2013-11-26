@@ -126,4 +126,11 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
     public boolean isCriteriaTrendsEnabled() {
         return primaryOrg.hasExtendedFeature(ExtendedFeature.CriteriaTrends);
     }
+
+    @Override
+    public boolean isUserGroupFilteringEnabled() {
+        return primaryOrg.hasExtendedFeature(ExtendedFeature.UserGroupFiltering);
+    }
+
+
 }

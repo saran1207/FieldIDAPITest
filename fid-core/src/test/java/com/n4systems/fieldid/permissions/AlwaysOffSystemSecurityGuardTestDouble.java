@@ -139,6 +139,11 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
     }
 
     @Override
+    public boolean isUserGroupFilteringEnabled() {
+        return false;
+    }
+
+    @Override
     public boolean isAdvancedEventSearchEnabled() {
         return false;
     }

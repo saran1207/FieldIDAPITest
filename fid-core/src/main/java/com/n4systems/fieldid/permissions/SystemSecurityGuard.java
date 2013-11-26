@@ -26,5 +26,6 @@ public interface SystemSecurityGuard {
     public boolean isGlobalSearchEnabled();
     public boolean isAdvancedEventSearchEnabled();
     public boolean isCriteriaTrendsEnabled();
+    public boolean isUserGroupFilteringEnabled();
 
 }
