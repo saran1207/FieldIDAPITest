@@ -641,7 +641,6 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public void uploadTempAttachment(S3Attachment attachment) {
-        attachment.setTempFileName(uuidService.createUuid());
         for (S3Attachment attachmentFlavour:getS3AttachmentHandler(attachment).getFlavours(attachment)) {
             putObject(attachmentFlavour.getTempPath(), attachmentFlavour.getBytes(), attachmentFlavour.getContentType());
         }
@@ -651,6 +650,24 @@ public class S3Service extends FieldIdPersistenceService {
         // TODO : check meta-data for content-type and return appropriate handler.
         // also, make these spring beans.
         return s3ImageAttachmentHandler;
+    }
+
+    public void finalize(S3Attachment attachment) {
+        List<S3Attachment> flavours = getS3AttachmentHandler(attachment).getFlavours(attachment);
+        for (S3Attachment flavour:flavours) {
+            finalizeImpl(flavour);
+        }
+    }
+
+    private void finalizeImpl(S3Attachment attachment) {
+        CopyObjectRequest copyObjectRequest = new CopyObjectRequest(
+                getBucket(),
+                    attachment.getTempPath(),
+                getBucket(),
+                    attachment.getPath());
+
+        getClient().copyObject(copyObjectRequest);
+        // what about removing from temp? when should this be done.
     }
 
     public class S3ImagePath {

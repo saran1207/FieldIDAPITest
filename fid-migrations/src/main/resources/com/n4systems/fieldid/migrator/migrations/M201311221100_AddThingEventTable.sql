@@ -1,4 +1,4 @@
-drop test thing_events;
+drop table if exists thing_events;
 
 CREATE TABLE thing_events (
   id bigint NOT NULL,

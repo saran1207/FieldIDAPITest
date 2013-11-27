@@ -1,45 +1,59 @@
 package com.n4systems.model.attachment;
 
+import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "s3_attachment")
+@Table(name = "s3_attachments")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public abstract class AbstractS3Attachment extends EntityWithTenant implements S3Attachment {
 
+    public enum Type {
+        PLACE,THING,PERSON   // EVENT, etc...?
+    }
+
     @Column(nullable = false)
-    private String fileName;
+    private String path;
 
     @Column(nullable = true)
     private String comments;
 
-    @Column(name = "md5sum")
+    @Column(name = "md5_sum", nullable=false)
     private String md5sum;
 
-    @Column(nullable=false)
+    @Column(name="content_type", nullable=false)
     private String contentType;
 
-    protected @Transient String tempFileName;
+    @Column(insertable = false, updatable = false)
+    @Enumerated(EnumType.STRING)
+    private Type type;
 
-    private @Transient byte[] bytes;
+    protected @Transient String tempPath;
+    protected @Transient String fileName;
+    protected @Transient byte[] bytes;
 
 
+    @Deprecated // for hibernate only.
     public AbstractS3Attachment() {
-
     }
 
-    public AbstractS3Attachment(String fileName, String contentType, byte[] bytes) {
+    public AbstractS3Attachment(Type type, Tenant tenant) {
+        super(tenant);
+        this.type = type;
+    }
+
+    public <T extends AbstractS3Attachment> T withContent(String fileName, String contentType, byte[] bytes) {
         this.fileName = fileName;
         this.contentType = contentType;
         this.bytes = bytes;
         this.md5sum = DigestUtils.md5Hex(bytes);
+        setPath(TENANT_PREFIX + getTenantId() + getRelativePath());
+        return (T)this;
     }
-
 
     public String getFileName() {
         return fileName;
@@ -65,10 +79,6 @@ public abstract class AbstractS3Attachment extends EntityWithTenant implements S
         this.contentType = contentType;
     }
 
-    public String getTempFileName() {
-        return tempFileName;
-    }
-
     public String getMd5sum() {
         return md5sum;
     }
@@ -81,19 +91,32 @@ public abstract class AbstractS3Attachment extends EntityWithTenant implements S
         return bytes;
     }
 
-    public void setTempFileName(String tempFileName) {
-        this.tempFileName = tempFileName;
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
     }
 
     public String getPath() {
-        return TENANT_PREFIX + getTenantId() + getRelativePath();
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 
     public String getTempPath() {
-        return TENANT_PREFIX + getTenantId() + getRelativeTempPath();
+        return tempPath;
     }
 
-    protected abstract String getRelativeTempPath();
+    public <T extends AbstractS3Attachment> T withTempFileName(String tempFileName) {
+        tempPath = TENANT_PREFIX + getTenantId() + getRelativeTempPath(tempFileName);
+        return (T)this;
+    }
+
+    protected abstract String getRelativeTempPath(String fileName);
 
     protected abstract String getRelativePath();
 

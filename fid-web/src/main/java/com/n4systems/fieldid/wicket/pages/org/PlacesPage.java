@@ -10,6 +10,7 @@ import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
@@ -97,6 +98,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
     private @SpringBean OrgService orgService;
     private @SpringBean AttachmentService attachmentService;
     private @SpringBean S3Service s3Service;
+    private @SpringBean UUIDService uuidService;
 
     private IModel<? extends BaseOrg> model;
     private MarkupContainer actions;
@@ -241,8 +243,8 @@ public class PlacesPage extends FieldIDFrontEndPage {
 
     private MarkupContainer createActions(String id) {
         WebMarkupContainer actions = new WebMarkupContainer(id);
-        actions.setOutputMarkupPlaceholderTag(true);
 
+        actions.setOutputMarkupPlaceholderTag(true);
         MarkupContainer editMenu = new WebMarkupContainer("edit")
                 .add(new AjaxLink("details") {
                     @Override public void onClick(AjaxRequestTarget target) {
@@ -498,7 +500,7 @@ public class PlacesPage extends FieldIDFrontEndPage {
                     WebMarkupContainer cell = new WebMarkupContainer("cell");
                     //String url = s3Service.getPlaceAttachment(getOrg(), attachment);
                     cell.add(new Label("comments", attachment.getComments()));
-                    cell.add(new ExternalImage("image", attachment.getFileName()));
+                    cell.add(new ExternalImage("image", s3Service.generateResourceUrl("/tenants/15511493/places/15511494/attachments/temp/").toString()));
                     item.add(cell);
                 }
             });
@@ -514,9 +516,10 @@ public class PlacesPage extends FieldIDFrontEndPage {
                     FileUpload fileUpload = uploadField.getFileUpload();
 
                     if (fileUpload != null) {
-                        S3Attachment attachment = new PlaceAttachment(getOrg(), fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes());
+                        PlaceAttachment attachment = createNewPlaceAttachment(fileUpload);
                         s3Service.uploadTempAttachment(attachment);
                         // TODO DD : add them to the org.  org.addAttachment(attachment);
+                        attachmentService.save(attachment);
                     }
                 }
 
@@ -525,8 +528,13 @@ public class PlacesPage extends FieldIDFrontEndPage {
             return form;
         }
 
+        private PlaceAttachment createNewPlaceAttachment(FileUpload fileUpload) {
+            return new PlaceAttachment(getOrg())
+                    .withContent(fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes())
+                    .withTempFileName(uuidService.createUuid());
+        }
 
-       private IModel<? extends List<? extends S3Attachment>> getAttachments() {
+        private IModel<? extends List<? extends S3Attachment>> getAttachments() {
            // TODO : remove.  this is just bogus test data.  should be stored via join table associated to org.
             final List<S3Attachment> result = Lists.newArrayList();
             for (int i=0; i<10 ; i++) {
