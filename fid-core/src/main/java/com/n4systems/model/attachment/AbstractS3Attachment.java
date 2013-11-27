@@ -46,13 +46,13 @@ public abstract class AbstractS3Attachment extends EntityWithTenant implements S
         this.type = type;
     }
 
-    public <T extends AbstractS3Attachment> T withContent(String fileName, String contentType, byte[] bytes) {
+    public AbstractS3Attachment withContent(String fileName, String contentType, byte[] bytes) {
         this.fileName = fileName;
         this.contentType = contentType;
         this.bytes = bytes;
         this.md5sum = DigestUtils.md5Hex(bytes);
         setPath(TENANT_PREFIX + getTenantId() + getRelativePath());
-        return (T)this;
+        return this;
     }
 
     public String getFileName() {
@@ -111,9 +111,9 @@ public abstract class AbstractS3Attachment extends EntityWithTenant implements S
         return tempPath;
     }
 
-    public <T extends AbstractS3Attachment> T withTempFileName(String tempFileName) {
+    public AbstractS3Attachment withTempFileName(String tempFileName) {
         tempPath = TENANT_PREFIX + getTenantId() + getRelativeTempPath(tempFileName);
-        return (T)this;
+        return this;
     }
 
     protected abstract String getRelativeTempPath(String fileName);

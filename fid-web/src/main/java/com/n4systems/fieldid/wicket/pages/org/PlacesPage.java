@@ -529,9 +529,10 @@ public class PlacesPage extends FieldIDFrontEndPage {
         }
 
         private PlaceAttachment createNewPlaceAttachment(FileUpload fileUpload) {
-            return new PlaceAttachment(getOrg())
-                    .withContent(fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes())
-                    .withTempFileName(uuidService.createUuid());
+            PlaceAttachment attachment = new PlaceAttachment(getOrg());
+            attachment.withContent(fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes())
+                      .withTempFileName(uuidService.createUuid());
+            return attachment;
         }
 
         private IModel<? extends List<? extends S3Attachment>> getAttachments() {

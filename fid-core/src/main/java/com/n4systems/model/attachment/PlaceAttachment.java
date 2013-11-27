@@ -28,12 +28,6 @@ public class PlaceAttachment extends AbstractS3Attachment {
     }
 
     @Override
-    public <T extends AbstractS3Attachment> T withContent(String fileName, String contentType, byte[] bytes) {
-        T attachment = super.withContent(fileName, contentType, bytes);
-        return attachment;
-    }
-
-    @Override
     public String getRelativePath() {
         return String.format(PATH_FORMAT, org.getId(), getFileName());
     }
