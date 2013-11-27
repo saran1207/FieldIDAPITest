@@ -36,7 +36,10 @@ public class BreadCrumbBar extends Panel {
                 WebMarkupContainer linkContainer = new WebMarkupContainer("linkContainer") {
                     @Override
                     public boolean isVisible() {
-                        return getPage().getClass() != navItem.getPageClass();
+                        if (getPage().getClass() != navItem.getPageClass()) {
+                            return true;
+                        }else
+                            return !getPage().getPageParameters().equals(navItem.getParameters());
                     }
                 };
                 linkContainer.setRenderBodyOnly(true);
@@ -56,7 +59,7 @@ public class BreadCrumbBar extends Panel {
                     @Override
                     public boolean isVisible() {
                         return getPage().getClass() == navItem.getPageClass() &&
-                                getPage().getPageParameters().getNamedKeys().equals(navItem.getParameters().getNamedKeys());
+                                getPage().getPageParameters().equals(navItem.getParameters());
                     }
                 });
             }
