@@ -1,5 +1,43 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-    Place Summary Page
+
+    <div class="column-narrow-left">
+        <img wicket:id="img" style="width:300px;height:300px;float:left;" class="img"><p><wicket:message key="label.no_images"/></p></img>
+        <a wicket:id="attachmentsLink"><span wicket:id="label"/></a>
+        <form wicket:id="contact">
+            <h3><wicket:message key="label.contact"/>
+                <span class="actions">
+                    <a wicket:id="save"><wicket:message key="label.save"/></a>
+                    <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+                    <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+                </span>
+            </h3>
+            <div><wicket:enclosure><label><wicket:message key="label.name"/><input wicket:id="name" type="text"/></label></wicket:enclosure></div>
+            <div><wicket:enclosure><label><wicket:message key="label.email"/><input wicket:id="email" type="text"/></label></wicket:enclosure></div>
+            <div><wicket:enclosure><span wicket:id="address" type="text"/></wicket:enclosure></div>
+            <div>
+                <wicket:enclosure><label><wicket:message key="label.phone"/><input wicket:id="phone" type="text"/></label></wicket:enclosure>
+            </div>
+            <div><wicket:enclosure><label><wicket:message key="label.fax"/><input wicket:id="fax" type="text"/></label></wicket:enclosure></div>
+        </form>
+        <form wicket:id="general">
+            <h3><wicket:message key="label.general"/>
+                <span class="actions">
+                    <a wicket:id="save"><wicket:message key="label.save"/></a>
+                    <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+                    <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+                </span>
+            </h3>
+            <div><label>Site Supervisor</label><span>Henry Sheen</span></div>
+            <div><label>Property Class</label><span>Commercial C1</span></div>
+            <div><label>Status</label><span>Active</span></div>
+            <wicket:enclosure><h3><wicket:message key="label.notes"/></h3><textarea wicket:id="notes"/></wicket:enclosure>
+        </form>
+    </div>
+
+    <div class="column-wide">
+        <div wicket:id="map" class="googleMap" style="width:700px;height:300px;"></div>
+    </div>
+
 </wicket:extend>
 </html>

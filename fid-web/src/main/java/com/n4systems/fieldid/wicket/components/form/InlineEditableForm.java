@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.form;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -25,6 +26,16 @@ public class InlineEditableForm extends Form {
                 return editing ? getEditingFormCss() : "";
             }
         }));
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        if (!editing) {
+            stopEditing();
+        } else {
+            startEditing();
+        }
     }
 
     public InlineEditableForm toggleEdit() {
@@ -76,12 +87,27 @@ public class InlineEditableForm extends Form {
     public MarkupContainer add(Component... childs) {
         MarkupContainer container = super.add(childs);
         for (Component component:childs) {
-            if (component instanceof FormComponent) {
-                component.setOutputMarkupPlaceholderTag(true);
-                component.add(new AttributeAppender("class",getCssClassForFields(component)));
-            }
+            addInlineEditingBehavior(component);
         }
         return container;
+    }
+
+    private void addInlineEditingBehavior(Component component) {
+        if (component instanceof FormComponent) {
+            component.add(new AttributeAppender("class",getCssClassForFields(component)));
+            component.add(new AttributeModifier("disabled", "disabled") {
+                @Override public boolean isEnabled(Component component) {
+                    return !editing;
+                }
+            });
+        } else if (component instanceof MarkupContainer) {
+            MarkupContainer container = (MarkupContainer) component;
+            container.visitChildren(Component.class, new IVisitor<Component, Object>() {
+                @Override public void component(Component component, IVisit<Object> visit) {
+                    addInlineEditingBehavior(component);
+                }
+            });
+        }
     }
 
     protected boolean hideEmptyFieldsWhenViewing() {
