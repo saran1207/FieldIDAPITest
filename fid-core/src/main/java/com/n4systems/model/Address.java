@@ -10,6 +10,8 @@ public class Address implements Serializable {
     private String text;
     private String description;
 
+    // TODO DD : normalize data and store country, postal code, city, etc...  everything you can break down from google info.
+
     @Embedded
     private GpsLocation gpsLocation;
 
