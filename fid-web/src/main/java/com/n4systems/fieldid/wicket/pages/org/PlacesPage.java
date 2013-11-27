@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
+import com.n4systems.fieldid.wicket.components.form.InlineEditableForm;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.text.LabelledRequiredTextField;
@@ -37,7 +38,6 @@ import com.n4systems.model.builders.EventTypeBuilder;
 import com.n4systems.model.orgs.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
-import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AbstractAjaxTimerBehavior;
@@ -47,12 +47,12 @@ import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
@@ -72,8 +72,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.time.Duration;
-import org.apache.wicket.util.visit.IVisit;
-import org.apache.wicket.util.visit.IVisitor;
 
 import java.awt.*;
 import java.util.List;
@@ -482,142 +480,6 @@ public class PlacesPage extends FieldIDFrontEndPage {
                     .add(new TextArea<String>("notes", new PropertyModel(PlacesPage.this, "notes")))
                     );
         }
-    }
-
-
-    class InlineEditableForm extends Form {
-
-        private boolean editing;
-        private String notEditingCss;
-        private String editingCss;
-
-        public InlineEditableForm(String id) {
-            super(id);
-            add(new AttributeAppender("class", new Model<String>() {
-                @Override public String getObject() {
-                    return editing ? "editable-inputs" : "";
-                }
-            }));
-        }
-
-        public InlineEditableForm toggleEdit() {
-            if (editing) {
-                stopEditing();
-            } else {
-                startEditing();
-            }
-            return this;
-        }
-
-        public InlineEditableForm startEditing() {
-            this.editing  = true;
-            visitChildren(FormComponent.class, new IVisitor<Component, Object>() {
-                @Override public void component(Component component, IVisit<Object> visit) {
-                    component.setVisible(true);
-                }
-            });
-            return this;
-        }
-
-        public InlineEditableForm stopEditing() {
-            this.editing = false;
-            visitChildren(FormComponent.class, new IVisitor<Component, Object>() {
-                @Override public void component(Component component, IVisit<Object> visit) {
-                    boolean isVisible = hideEmptyFieldsWhenViewing() && !StringUtils.isBlank(component.getDefaultModelObjectAsString());
-                    component.setVisible(isVisible);
-                }
-            });
-            return this;
-        }
-
-        private final IModel<String> getCssClassForFields(final Component component) {
-            return new Model<String>() {
-                @Override public String getObject() {
-                    return editing ? getEditingCss() : getNotEditingCss();
-                }
-            };
-        }
-
-        public InlineEditableForm withSaveCancelEditLinks() {
-            addSaveLink("save");
-            addCancelLink("cancel");
-            addEditLink("edit");
-            return this;
-        }
-
-        @Override
-        public MarkupContainer add(Component... childs) {
-            MarkupContainer container = super.add(childs);
-            for (Component component:childs) {
-                if (component instanceof FormComponent) {
-                    component.setOutputMarkupPlaceholderTag(true);
-                    component.add(new AttributeAppender("class",getCssClassForFields(component)));
-                }
-            }
-            return container;
-        }
-
-        protected boolean hideEmptyFieldsWhenViewing() {
-            return true;
-        }
-
-        protected String getNotEditingCss() {
-            return "";
-        }
-
-        protected String getEditingCss() {
-            return "editing";
-        }
-
-        protected String getHiddenCss() {
-            return "hidden";
-        }
-
-        protected void save(AjaxRequestTarget target) {  }
-
-        public void addSaveLink(String id) {
-            add(new AjaxSubmitLink(id) {
-                @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    editing = false;
-                    save(target);
-                    target.add(InlineEditableForm.this);
-                }
-                @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    // TODO : how to handle errors? are they practically possible?
-                }
-                @Override public boolean isVisible() {
-                    return editing;
-                }
-            }.setOutputMarkupPlaceholderTag(true));
-        }
-
-        public void addEditLink(String id) {
-            add(new AjaxLink(id) {
-                @Override public void onClick(AjaxRequestTarget target) {
-                    startEditing();
-                    target.add(InlineEditableForm.this);
-                }
-
-                @Override public boolean isVisible() {
-                    return !editing;
-                }
-            }.setOutputMarkupPlaceholderTag(true));
-        }
-
-
-        public void addCancelLink(String id) {
-            add(new AjaxLink(id) {
-                @Override public void onClick(AjaxRequestTarget target) {
-                    stopEditing();
-                    target.add(InlineEditableForm.this);   // TODO : add some javascript to refresh map.
-                }
-
-                @Override public boolean isVisible() {
-                    return editing;
-                }
-            }.setOutputMarkupPlaceholderTag(true));
-        }
-
     }
 
 
