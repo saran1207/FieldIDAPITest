@@ -41,13 +41,13 @@ public abstract class PlacePage extends FieldIDTemplatePage {
         navItems.add(aNavItem().label("label.places").page(OrgViewPage.class).build());
 
         if(org.getPrimaryOrg() != null) {
-            navItems.add(aNavItem().label(new PropertyModel<String>(org.getPrimaryOrg(), "name")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(org.getPrimaryOrg().getId())).build());
+            navItems.add(aNavItem().label(new PropertyModel<String>(org.getPrimaryOrg(), "name")).page(this.getClass()).params(PageParametersBuilder.id(org.getPrimaryOrg().getId())).build());
         }
         if(org.getCustomerOrg() != null) {
-            navItems.add(aNavItem().label(new PropertyModel<String>(org.getCustomerOrg(), "name")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(org.getCustomerOrg().getId())).build());
+            navItems.add(aNavItem().label(new PropertyModel<String>(org.getCustomerOrg(), "name")).page(this.getClass()).params(PageParametersBuilder.id(org.getCustomerOrg().getId())).build());
         }
         if(org.getDivisionOrg() != null) {
-            navItems.add(aNavItem().label(new PropertyModel<String>(org.getDivisionOrg(), "name")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(org.getDivisionOrg().getId())).build());
+            navItems.add(aNavItem().label(new PropertyModel<String>(org.getDivisionOrg(), "name")).page(this.getClass()).params(PageParametersBuilder.id(org.getDivisionOrg().getId())).build());
         }
 
         add(new BreadCrumbBar(breadCrumbBarId, navItems.toArray(new NavigationItem[0])));
