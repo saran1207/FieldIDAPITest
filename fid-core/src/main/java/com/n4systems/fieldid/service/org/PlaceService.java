@@ -10,8 +10,10 @@ import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.joda.time.LocalDate;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +49,7 @@ public class PlaceService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public List<? extends Event> getEventsFor(BaseOrg org) {
+    public List<ThingEvent> getEventsFor(BaseOrg org) {
         // TODO : TEST DATA FOR NOW.
         ThingEventType type = EventTypeBuilder.anEventType().named("visual").build();
         User user = UserBuilder.anAdminUser().withFirstName("joe").withLastName("smith").withUserId("joesmith").build();
@@ -57,6 +59,28 @@ public class PlaceService extends FieldIdPersistenceService {
                 EventBuilder.aClosedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build()
         );
     }
+
+    public List<ThingEvent> getOpenEventsFor(BaseOrg org, int days) {
+        // TODO : TEST DATA FOR NOW.
+        ThingEventType type = EventTypeBuilder.anEventType().named("visual").build();
+        User user = UserBuilder.anAdminUser().withFirstName("joe").withLastName("smith").withUserId("joesmith").build();
+        List<ThingEvent> result = new ArrayList<ThingEvent>();
+        for (int i=1; i<40; i++) {
+            Date performed = new LocalDate().withDayOfYear(i*8).toDate();
+            Date due = new LocalDate().withYear(2012).withDayOfYear((int) (Math.random()*355)+1).toDate();
+            result.add(
+                EventBuilder.anOpenEvent()
+                        .ofType(type)
+                        .performedOn(performed)
+                        .scheduledFor(due)
+                        .withOwner(org)
+                        .withPerformedBy(user).build()
+                    );
+        }
+        return result;
+    }
+
+
 
     public List<? extends Attachment> getAttachmentsFor(BaseOrg org) {
         Attachment attachment = new AssetAttachment();

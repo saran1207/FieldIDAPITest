@@ -68,4 +68,8 @@ public abstract class PlacePage extends FieldIDTemplatePage {
     protected Component createActionGroup(String actionGroupId) {
         return new PlaceActionGroup(actionGroupId);
     }
+
+    protected BaseOrg getOrg() {
+        return orgModel.getObject();
+    }
 }

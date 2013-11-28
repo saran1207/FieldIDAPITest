@@ -1,21 +1,34 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.form.InlineEditableForm;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.Address;
 import com.n4systems.model.GpsLocation;
+import com.n4systems.model.ThingEvent;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.List;
 
 public class PlaceSummaryPage extends PlacePage {
+
+    private @SpringBean PlaceService placeService;
 
     // BOGUS TEST DATA
     Address address = new Address("111 queen street, east");
@@ -35,6 +48,15 @@ public class PlaceSummaryPage extends PlacePage {
         //add(new GoogleMap("map",ProxyModel.of(model, on(BaseOrg.class).getGpsLocation())));
         add(map = new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
 
+        add(createFutureEventsListView());
+
+        add(new Link("viewAll") {
+            @Override public void onClick() {
+                // TODO : need constructor that takes current org model.   pass the "show only open events" parameter to page.
+                setResponsePage(new PlaceEventsPage(PageParametersBuilder.id(getOrg().getId())));
+            }
+        });
+
         add(new AjaxLink("attachmentsLink") {
             @Override public void onClick(AjaxRequestTarget target) {
                 //updateContent(Content.ATTACHMENTS, target);  // make this more of settings thang...?
@@ -53,5 +75,30 @@ public class PlaceSummaryPage extends PlacePage {
         add(new InlineEditableForm("general").withSaveCancelEditLinks()
                 .add(new TextArea<String>("notes", new PropertyModel(PlaceSummaryPage.this, "notes")))
         );
+    }
+
+    private Component createFutureEventsListView() {
+        final FutureEventsModel model = new FutureEventsModel();
+        ListView<ThingEvent> view = new ListView<ThingEvent>("events", model ) {
+            @Override protected void populateItem(ListItem<ThingEvent> item) {
+                ThingEvent event = item.getModelObject();
+                item.add(new Label("due", Model.of(event.getDueDate())));
+                item.add(new Label("type", Model.of(event.getEventType().getDisplayName())));
+                item.add(new Label("assignee", Model.of("joe smith")));
+            }
+
+            @Override public boolean isVisible() {
+                return model.getObject().size()>0;
+            }
+        };
+        return view;
+    }
+
+    class FutureEventsModel extends LoadableDetachableModel<List<ThingEvent>> {
+
+        @Override
+        protected List<ThingEvent> load() {
+            return placeService.getOpenEventsFor(getOrg(), 7);
+        }
     }
 }
