@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.org;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.components.org.PlaceActionGroup;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
@@ -63,4 +64,8 @@ public abstract class PlacePage extends FieldIDTemplatePage {
         ));
     }
 
+    @Override
+    protected Component createActionGroup(String actionGroupId) {
+        return new PlaceActionGroup(actionGroupId);
+    }
 }

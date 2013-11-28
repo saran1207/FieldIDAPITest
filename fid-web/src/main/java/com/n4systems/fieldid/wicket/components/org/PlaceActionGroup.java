@@ -14,11 +14,33 @@ public class PlaceActionGroup extends Panel {
             }
         });
 
-        add(new Link<Void>("scheduleLink") {
+        //listview of scheduled events
+
+        //listview of event types
+
+
+        add(new Link<Void>("archiveLink") {
             @Override
             public void onClick() {
             }
         });
 
+        add(new Link<Void>("mergeLink") {
+            @Override
+            public void onClick() {
+            }
+        });
+
+        add(new Link<Void>("recurringSchedulesLink") {
+            @Override
+            public void onClick() {
+            }
+        });
+
+        add(new Link<Void>("eventTypesLink") {
+            @Override
+            public void onClick() {
+            }
+        });
     }
 }
