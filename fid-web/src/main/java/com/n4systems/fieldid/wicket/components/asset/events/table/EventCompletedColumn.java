@@ -7,7 +7,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColu
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
-public class EventCompletedColumn extends PropertyColumn<ThingEvent> {
+public class EventCompletedColumn extends PropertyColumn<Event> {
 
 
     public EventCompletedColumn(IModel<String> displayModel, String sortProperty, String propertyExpression) {
@@ -15,7 +15,7 @@ public class EventCompletedColumn extends PropertyColumn<ThingEvent> {
     }
 
     @Override
-    public void populateItem(Item<ICellPopulator<ThingEvent>> item, String id, IModel<ThingEvent> eventModel) {
+    public void populateItem(Item<ICellPopulator<Event>> item, String id, IModel<Event> eventModel) {
         item.add(new EventCompletedCell(id, eventModel));
     }
 }

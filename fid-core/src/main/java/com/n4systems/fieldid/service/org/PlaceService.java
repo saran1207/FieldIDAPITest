@@ -82,6 +82,10 @@ public class PlaceService extends FieldIdPersistenceService {
 
 
 
+    public int countEventsFor(BaseOrg org) {
+        return getEventsFor(org).size();
+    }
+
     public List<? extends Attachment> getAttachmentsFor(BaseOrg org) {
         Attachment attachment = new AssetAttachment();
         attachment.setComments("hello world");

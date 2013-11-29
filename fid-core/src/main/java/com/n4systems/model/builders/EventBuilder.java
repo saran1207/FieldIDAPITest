@@ -43,7 +43,7 @@ public class EventBuilder extends BaseBuilder<ThingEvent> {
     }
 
     public static EventBuilder aClosedEvent() {
-        return aFailedEvent(anEventType());
+        return aClosedEvent(anEventType());
     }
 
     public static EventBuilder anOpenEvent() {

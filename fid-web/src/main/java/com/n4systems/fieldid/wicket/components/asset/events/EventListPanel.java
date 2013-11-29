@@ -1,9 +1,11 @@
 package com.n4systems.fieldid.wicket.components.asset.events;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.components.asset.events.table.*;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.EventByNetworkIdProvider;
+import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
@@ -26,60 +28,58 @@ public class EventListPanel extends Panel {
     @SpringBean
     private EventService eventService;
 
-    private EventByNetworkIdProvider dataProvider;
+    private FieldIDDataProvider<Event> dataProvider;
 
-    public EventListPanel(String id, IModel<Asset> assetModel, List<WorkflowState> states) {
-        super(id, assetModel);
+    public EventListPanel(String id, List<WorkflowState> states, FieldIDDataProvider<Event> dataProvider) {
+        super(id);
 
-        Asset asset = assetModel.getObject();
-
-        dataProvider = new EventByNetworkIdProvider(asset.getNetworkId(), "completedDate", SortOrder.DESCENDING, states);
+        this.dataProvider = dataProvider;
 
         SimpleDefaultDataTable table;
-        add(table = new SimpleDefaultDataTable<Event>("eventsTable", getEventTableColumns(),dataProvider, 10));
+        add(table = new SimpleDefaultDataTable<Event>("eventsTable", getEventTableColumns(), dataProvider, 10));
 
-        table.add(new AttributeAppender("class", getTableStyle(asset, states, table)).setSeparator(" "));
-
-
+        table.add(new AttributeAppender("class", getTableStyle(states, table)).setSeparator(" "));
     }
 
-    private IModel<String> getTableStyle(final Asset asset, final List<WorkflowState> states, final SimpleDefaultDataTable table) {
+    private IModel<String> getTableStyle(final List<WorkflowState> states, final SimpleDefaultDataTable table) {
 
         return  new Model<String>() {
             @Override
             public String getObject() {
                 String attribute = "";
-                if(eventService.countEventsByNetworkId(asset.getNetworkId(), states).intValue() == 0) {
+                if(dataProvider.size() == 0) {
                     attribute = "no_records";
                 }else if (table.getPageCount() < 2) {
                     attribute = "no_paging";
                 }
                 return attribute;
             }
-
         };
     }
 
-    private List<IColumn<ThingEvent>> getEventTableColumns() {
-        List<IColumn<ThingEvent>> columns = new ArrayList<IColumn<ThingEvent>>();
+    private List<IColumn<? extends Event>> getEventTableColumns() {
+        List<IColumn<? extends Event>> columns = Lists.newArrayList();
 
-        columns.add(new ResultIconColumn(new FIDLabelModel(""), "status"));
-        columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.event.state"),"workflowState", "workflowState.label"));
+        columns.add(new ResultIconColumn("status"));
+        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.event.state"),"workflowState", "workflowState.label"));
         columns.add(new EventCompletedColumn(new FIDLabelModel("label.completed"), "completedDate", "date"));
         columns.add(new EventDueColumn(new FIDLabelModel("label.due"), "dueDate", "date"));
-        columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("title.viewevent"), "type.name", "type.name"));
-        columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.completed_by"), "performedBy.firstName", "performedBy.fullName"));
+        columns.add(new PropertyColumn<Event>(new FIDLabelModel("title.viewevent"), "type.name", "type.name"));
+        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.completed_by"), "performedBy.firstName", "performedBy.fullName"));
         columns.add(new ResultColumn(new FIDLabelModel("label.result"), "eventResult", "eventResult.displayName"));
-        columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.event_status"), "eventStatus", "eventStatus.displayName"));
-        columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName"));
+        columns.add(new PropertyColumn<Event>(new FIDLabelModel("label.event_status"), "eventStatus", "eventStatus.displayName"));
+        addCustomColumns(columns);
 
-        columns.add(new GpsIconColumn(new FIDLabelModel(""), "latitude"));
-        columns.add(new ActionsColumn(new FIDLabelModel(""), "id", this));
+        columns.add(new GpsIconColumn("latitude"));
+        addActionColumn(columns);
         return columns;
     }
 
+    protected void addActionColumn(List<IColumn<? extends Event>> columns) {}
 
-    public EventByNetworkIdProvider getDataProvider() {
+    protected void addCustomColumns(List<IColumn<? extends Event>> columns) {}
+
+    public FieldIDDataProvider<Event> getDataProvider() {
         return dataProvider;
     }
 

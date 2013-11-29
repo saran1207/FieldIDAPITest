@@ -9,14 +9,14 @@ import org.apache.wicket.model.IModel;
 
 
 
-public class ResultColumn extends PropertyColumn<ThingEvent> {
+public class ResultColumn extends PropertyColumn<Event> {
 
     public ResultColumn(IModel<String> displayModel, String sortProperty, String propertyExpression) {
         super(displayModel, sortProperty, propertyExpression);
     }
 
     @Override
-    public void populateItem(Item<ICellPopulator<ThingEvent>> item, String id, IModel<ThingEvent> eventModel) {
+    public void populateItem(Item<ICellPopulator<Event>> item, String id, IModel<Event> eventModel) {
         item.add(new ResultCell(id, eventModel));
     }
 }

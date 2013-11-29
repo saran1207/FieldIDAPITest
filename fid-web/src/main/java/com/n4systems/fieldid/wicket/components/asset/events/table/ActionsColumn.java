@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.asset.events.table;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
@@ -16,8 +17,8 @@ public class ActionsColumn extends PropertyColumn<ThingEvent> {
 
     private EventListPanel eventListPanel;
 
-    public ActionsColumn(IModel<String> displayModel, String propertyExpression, EventListPanel eventListPanel) {
-        super(displayModel, propertyExpression);
+    public ActionsColumn(String propertyExpression, EventListPanel eventListPanel) {
+        super(new FIDLabelModel(""), propertyExpression);
         this.eventListPanel = eventListPanel;
     }
 

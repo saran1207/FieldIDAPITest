@@ -23,7 +23,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 
 public abstract class PlacePage extends FieldIDTemplatePage {
 
-    private IModel<BaseOrg> orgModel;
+    protected IModel<BaseOrg> orgModel;
 
     public PlacePage(PageParameters params) {
         orgModel = new EntityModel<BaseOrg>(BaseOrg.class, params.get("id").toLong());
