@@ -1,4 +1,5 @@
 <html xmlns:wicket="http://wicket.apache.org">
+
 <wicket:extend>
 
     <div class="column-narrow-left">
@@ -12,13 +13,21 @@
                     <a wicket:id="edit"><wicket:message key="label.edit"/></a>
                 </span>
             </h3>
-            <div><wicket:enclosure><label><wicket:message key="label.name"/><input wicket:id="name" type="text"/></label></wicket:enclosure></div>
-            <div><wicket:enclosure><label><wicket:message key="label.email"/><input wicket:id="email" type="text"/></label></wicket:enclosure></div>
-            <div><wicket:enclosure><span wicket:id="address" type="text"/></wicket:enclosure></div>
-            <div>
-                <wicket:enclosure><label><wicket:message key="label.phone"/><input wicket:id="phone" type="text"/></label></wicket:enclosure>
-            </div>
-            <div><wicket:enclosure><label><wicket:message key="label.fax"/><input wicket:id="fax" type="text"/></label></wicket:enclosure></div>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="name"><wicket:message key="label.name"/></label><input wicket:id="name" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="email"><wicket:message key="label.email"/></label><input wicket:id="email" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure>
+                <div class="form-horizontal"><span wicket:id="address" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="phone"><wicket:message key="label.phone"/></label><input wicket:id="phone" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="fax"><wicket:message key="label.fax"/></label><input wicket:id="fax" type="text"/></div>
+            </wicket:enclosure>
         </form>
         <form wicket:id="general">
             <h3><wicket:message key="label.general"/>
@@ -28,9 +37,12 @@
                     <a wicket:id="edit"><wicket:message key="label.edit"/></a>
                 </span>
             </h3>
-            <div><label>Site Supervisor</label><span>Henry Sheen</span></div>
-            <div><label>Property Class</label><span>Commercial C1</span></div>
-            <div><label>Status</label><span>Active</span></div>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="name"> <wicket:message key="label.name"/></label><input wicket:id="name" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="id"><wicket:message key="label.id"/></label><input wicket:id="id" type="text"/></div>
+            </wicket:enclosure>
             <wicket:enclosure><h3><wicket:message key="label.notes"/></h3><textarea wicket:id="notes"/></wicket:enclosure>
         </form>
     </div>

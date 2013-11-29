@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.form.InlineEditableForm;
+import com.n4systems.fieldid.wicket.components.form.LinkFieldsBehavior;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.Address;
 import com.n4systems.model.GpsLocation;
@@ -36,6 +37,8 @@ public class PlaceSummaryPage extends PlacePage {
             email="foo@bar.com",
             phone="123 456 7890",
             fax,
+            orgName = "111 Queen St.",
+            orgId,
             notes;
     // ---------------
 
@@ -73,6 +76,8 @@ public class PlaceSummaryPage extends PlacePage {
                 .add(new TextField("fax", new PropertyModel(PlaceSummaryPage.this, "fax"))));
 
         add(new InlineEditableForm("general").withSaveCancelEditLinks()
+                .add(new TextField("name", new PropertyModel(PlaceSummaryPage.this, "orgName")).add(new LinkFieldsBehavior(".title-label").forTextField()))
+                .add(new TextField("id", new PropertyModel(PlaceSummaryPage.this, "orgId")))
                 .add(new TextArea<String>("notes", new PropertyModel(PlaceSummaryPage.this, "notes")))
         );
     }

@@ -94,7 +94,7 @@ public class InlineEditableForm extends Form {
 
     private void addInlineEditingBehavior(Component component) {
         if (component instanceof FormComponent) {
-            component.add(new AttributeAppender("class",getCssClassForFields(component)));
+            component.add(new AttributeAppender("class",getCssClassForFields(component), " "));
             component.add(new AttributeModifier("disabled", "disabled") {
                 @Override public boolean isEnabled(Component component) {
                     return !editing;
@@ -103,7 +103,8 @@ public class InlineEditableForm extends Form {
         } else if (component instanceof MarkupContainer) {
             MarkupContainer container = (MarkupContainer) component;
             container.visitChildren(Component.class, new IVisitor<Component, Object>() {
-                @Override public void component(Component component, IVisit<Object> visit) {
+                @Override
+                public void component(Component component, IVisit<Object> visit) {
                     addInlineEditingBehavior(component);
                 }
             });
@@ -126,14 +127,10 @@ public class InlineEditableForm extends Form {
         return "editing";
     }
 
-    protected void save(AjaxRequestTarget target) {  }
-
     public void addSaveLink(String id) {
         add(new AjaxSubmitLink(id) {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                editing = false;
                 save(target);
-                target.add(InlineEditableForm.this);
             }
             @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
                 // TODO : how to handle errors? are they practically possible?
@@ -147,8 +144,7 @@ public class InlineEditableForm extends Form {
     public void addEditLink(String id) {
         add(new AjaxLink(id) {
             @Override public void onClick(AjaxRequestTarget target) {
-                startEditing();
-                target.add(InlineEditableForm.this);
+                edit(target);
             }
 
             @Override public boolean isVisible() {
@@ -160,14 +156,27 @@ public class InlineEditableForm extends Form {
     public void addCancelLink(String id) {
         add(new AjaxLink(id) {
             @Override public void onClick(AjaxRequestTarget target) {
-                stopEditing();
-                target.add(InlineEditableForm.this);   // TODO : add some javascript to refresh map.
+                cancel(target);
             }
-
             @Override public boolean isVisible() {
                 return editing;
             }
         }.setOutputMarkupPlaceholderTag(true));
+    }
+
+    protected void cancel(AjaxRequestTarget target) {
+        stopEditing();
+        target.add(InlineEditableForm.this);   // TODO : add some javascript to refresh map.
+    }
+
+    protected void edit(AjaxRequestTarget target) {
+        startEditing();
+        target.add(InlineEditableForm.this);
+    }
+
+    protected void save(AjaxRequestTarget target) {
+        stopEditing();
+        target.add(InlineEditableForm.this);
     }
 
 }

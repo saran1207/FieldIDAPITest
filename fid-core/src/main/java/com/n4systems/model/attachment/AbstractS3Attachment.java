@@ -1,8 +1,10 @@
 package com.n4systems.model.attachment;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.*;
 
@@ -47,6 +49,10 @@ public abstract class AbstractS3Attachment extends EntityWithTenant implements S
     }
 
     public AbstractS3Attachment withContent(String fileName, String contentType, byte[] bytes) {
+        Preconditions.checkArgument(StringUtils.isNotBlank(fileName)
+                && StringUtils.isNotBlank(contentType)
+                && bytes!=null && bytes.length>0,
+                    "you must specify all non-null args when creating a new attachment. ");
         this.fileName = fileName;
         this.contentType = contentType;
         this.bytes = bytes;

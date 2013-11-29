@@ -31,7 +31,7 @@ public abstract class PlacePage extends FieldIDTemplatePage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new PropertyModel<String>(orgModel, "displayName"));
+        return new Label(labelId, new PropertyModel<String>(orgModel, "name"));
     }
 
     @Override
