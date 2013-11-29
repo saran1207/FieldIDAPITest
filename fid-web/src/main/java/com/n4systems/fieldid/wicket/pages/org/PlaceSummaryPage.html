@@ -5,7 +5,7 @@
     <div class="column-narrow-left">
         <img wicket:id="img" style="width:300px;height:300px;float:left;" class="img"><p><wicket:message key="label.no_images"/></p></img>
         <a wicket:id="attachmentsLink"><span wicket:id="label"/></a>
-        <form wicket:id="contact">
+        <form wicket:id="contact" class="editable-inputs">
             <h3><wicket:message key="label.contact"/>
                 <span class="actions">
                     <a wicket:id="save"><wicket:message key="label.save"/></a>
@@ -29,7 +29,7 @@
                 <div class="form-horizontal"><label wicket:for="fax"><wicket:message key="label.fax"/></label><input wicket:id="fax" type="text"/></div>
             </wicket:enclosure>
         </form>
-        <form wicket:id="general">
+        <form wicket:id="general"  class="editable-inputs">
             <h3><wicket:message key="label.general"/>
                 <span class="actions">
                     <a wicket:id="save"><wicket:message key="label.save"/></a>

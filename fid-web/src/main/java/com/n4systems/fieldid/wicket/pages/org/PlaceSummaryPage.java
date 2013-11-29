@@ -76,7 +76,7 @@ public class PlaceSummaryPage extends PlacePage {
                 .add(new TextField("fax", new PropertyModel(PlaceSummaryPage.this, "fax"))));
 
         add(new InlineEditableForm("general").withSaveCancelEditLinks()
-                .add(new TextField("name", new PropertyModel(PlaceSummaryPage.this, "orgName")).add(new LinkFieldsBehavior(".title-label").forTextField()))
+                .add(new TextField("name", new PropertyModel(PlaceSummaryPage.this, "orgName")).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
                 .add(new TextField("id", new PropertyModel(PlaceSummaryPage.this, "orgId")))
                 .add(new TextArea<String>("notes", new PropertyModel(PlaceSummaryPage.this, "notes")))
         );

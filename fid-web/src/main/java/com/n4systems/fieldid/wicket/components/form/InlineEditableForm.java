@@ -21,11 +21,6 @@ public class InlineEditableForm extends Form {
 
     public InlineEditableForm(String id) {
         super(id);
-        add(new AttributeAppender("class", new Model<String>() {
-            @Override public String getObject() {
-                return editing ? getEditingFormCss() : "";
-            }
-        }));
     }
 
     @Override
@@ -113,10 +108,6 @@ public class InlineEditableForm extends Form {
 
     protected boolean hideEmptyFieldsWhenViewing() {
         return true;
-    }
-
-    protected String getEditingFormCss() {
-        return "editable-inputs";
     }
 
     protected String getNotEditingComponentCss() {
