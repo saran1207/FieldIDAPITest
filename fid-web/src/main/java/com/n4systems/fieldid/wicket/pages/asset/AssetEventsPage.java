@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.asset;
 
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
@@ -41,6 +42,8 @@ public class AssetEventsPage extends AssetPage{
 
     @SpringBean
     private MixpanelService mixpanelService;
+    @SpringBean
+    private EventService eventService;
 
     private boolean open = true;
     private boolean completed = true;
@@ -111,7 +114,7 @@ public class AssetEventsPage extends AssetPage{
                 columns.add(new ActionsColumn("id", this));
             }
         });
-        add(mapPanel = new EventMapPanel("mapPanel", assetModel));
+        add(mapPanel = new EventMapPanel("mapPanel", eventService.getEventsByNetworkId(asset.getNetworkId())));
         eventPanel.setOutputMarkupPlaceholderTag(true);
         mapPanel.setOutputMarkupPlaceholderTag(true);
         mapPanel.setVisible(false);
@@ -150,7 +153,6 @@ public class AssetEventsPage extends AssetPage{
 
     private void updateEventListPanel(AjaxRequestTarget target) {
         ((EventByNetworkIdProvider) eventPanel.getDataProvider()).setStates(getWorkflowStates());
-        eventPanel.getDefaultModel().detach();
         target.add(eventPanel);
         target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
 

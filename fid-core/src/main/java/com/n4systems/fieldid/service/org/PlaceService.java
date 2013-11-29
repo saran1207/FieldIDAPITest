@@ -54,8 +54,18 @@ public class PlaceService extends FieldIdPersistenceService {
         ThingEventType type = EventTypeBuilder.anEventType().named("visual").build();
         User user = UserBuilder.anAdminUser().withFirstName("joe").withLastName("smith").withUserId("joesmith").build();
         return Lists.newArrayList(
-                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).withGpsLocation(new GpsLocation(43.653489, -79.374796)).build(),
                 EventBuilder.aFailedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+                EventBuilder.anEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+                EventBuilder.anEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+                EventBuilder.aClosedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+                EventBuilder.aClosedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+                EventBuilder.aFailedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).withGpsLocation(new GpsLocation(43.637325,-79.424005)).build(),
+                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
                 EventBuilder.aClosedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build()
         );
     }
