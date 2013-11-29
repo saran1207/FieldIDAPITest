@@ -15,20 +15,17 @@ public class PrioritizedList<T> extends ArrayList<T> implements Comparator<T> {
     private int threshold;
     private boolean atThreshold;
     private Comparator<T> comparator;
+    private int originalSize;
 
     public PrioritizedList(List<? extends T> values, int threshold) {
-        this.threshold = threshold;
-        this.atThreshold = values.size() > threshold;
-        this.comparator = this;
-
-        init(values, threshold);
+        this(values, threshold, null);
     }
 
     public PrioritizedList(List<? extends T> values, int threshold, Comparator<T> comparator) {
         this.threshold = threshold;
         this.atThreshold = values.size() > threshold;
-        this.comparator = comparator;
-
+        this.comparator = comparator==null ? this : comparator;
+        this.originalSize = values.size();
         init(values, threshold);
     }
 
@@ -61,7 +58,9 @@ public class PrioritizedList<T> extends ArrayList<T> implements Comparator<T> {
         return StringUtils.compareAsString(o1, o2);
     }
 
-
+    public int getOriginalSize() {
+        return originalSize;
+    }
 }
 
 

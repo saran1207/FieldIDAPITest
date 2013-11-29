@@ -29,6 +29,10 @@ public abstract class PlacePage extends FieldIDTemplatePage {
         orgModel = new EntityModel<BaseOrg>(BaseOrg.class, params.get("id").toLong());
     }
 
+    public PlacePage(IModel<BaseOrg> model) {
+        orgModel = model;
+    }
+
     @Override
     protected Component createTitleLabel(String labelId) {
         return new Label(labelId, new PropertyModel<String>(orgModel, "name"));

@@ -70,7 +70,7 @@ public class PlaceService extends FieldIdPersistenceService {
         );
     }
 
-    public List<ThingEvent> getOpenEventsFor(BaseOrg org, int days) {
+    public List<ThingEvent> getOpenEventsFor(BaseOrg org) {
         // TODO : TEST DATA FOR NOW.
         ThingEventType type = EventTypeBuilder.anEventType().named("visual").build();
         User user = UserBuilder.anAdminUser().withFirstName("joe").withLastName("smith").withUserId("joesmith").build();
@@ -90,7 +90,9 @@ public class PlaceService extends FieldIdPersistenceService {
         return result;
     }
 
-
+    public List<ThingEvent> getOpenEventsFor(BaseOrg org, int days) {
+        return getOpenEventsFor(org);
+    }
 
     public int countEventsFor(BaseOrg org) {
         return getEventsFor(org).size();
@@ -102,4 +104,6 @@ public class PlaceService extends FieldIdPersistenceService {
         attachment.setFileName("/images/foo.png");
         return Lists.newArrayList(attachment);
     }
+
+
 }

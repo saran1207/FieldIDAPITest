@@ -1,15 +1,14 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
-import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
 import com.n4systems.fieldid.wicket.components.org.events.table.ActionsColumn;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -37,7 +36,15 @@ public class PlaceEventsPage extends PlacePage {
 
     public PlaceEventsPage(PageParameters params) {
         super(params);
+        init();
+    }
 
+    public PlaceEventsPage(IModel<BaseOrg> model) {
+        super(model);
+        init();
+    }
+
+    private final void init() {
         add(eventPanel = new EventListPanel("eventPanel", getWorkflowStates(), new PlaceEventDataProvider()) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends Event>> columns) {

@@ -8,6 +8,13 @@
             <li class="secondary-dropdown">
                 <a href="#"><wicket:message key="label.scheduled"/></a>
                 <ul>
+                    <li wicket:id="scheduled">
+                        <a wicket:id="event">
+                            <span wicket:id="name"c/><br><span wicket:id="note" class="note js-has-time"/>
+                        </a>
+                    </li>
+
+                    <wicket:remove>
                     <li>
                         <a href="#">Repair<br>
                             <span class="note">1,246 days ago 06/29/2010</span></a>
@@ -32,6 +39,7 @@
                         <a href="places-events.php">View All<br>
                             <span class="note">showing 5 out of 7</span></a>
                     </li>
+                    </wicket:remove>
                 </ul>
             </li>
             <li class="secondary-dropdown divider">
