@@ -66,7 +66,7 @@ var orgTreeFactory = (function() {
 			if (!initialized) {
 				initialized = true;
 				$tree = $('#'+options.id);
-				$text = $tree.prev('input[type=text]');
+				$text = $(options.filter);
 				$tree.jstree({
 					core:{animation:100, html_titles:true},
 					themes :  { dots:false },
@@ -75,7 +75,7 @@ var orgTreeFactory = (function() {
 							type : 'GET',
 							url : function(node) {
 								$node = node;
-								var base = new String(options.updateCallback);
+								var base = new String(options.url);
 								if (node!=-1) {
 									// search for a particular branch under the specified node.
 									return base +'&nodeId='+node.attr('id')+'&nodeType='+node.attr('data');
@@ -108,7 +108,7 @@ var orgTreeFactory = (function() {
 
 				// may need to use delegate here???
 				var keyTimer;
-				if (!$text) return;
+				if (!$text || $text.size()==0) return;
 				$text.bind('keyup', function(e,d) {
 					if (keyTimer) {
 						window.clearTimeout(keyTimer);

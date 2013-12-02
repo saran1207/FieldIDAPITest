@@ -15,7 +15,7 @@ public class OrgTree extends Tree {
     private static final String INIT_ORGTREE_JS = "var %s = orgTreeFactory.create(%s);";
     public static final String NODE_NAME_HTML = "<span>%s</span>";
     public static final String NODE_NAME_HIGHTLIGHTED_HTML = "%s<span class='match'>%s</span>%s";
-    public static final String NODE_HTML = "<span class='name'>%s</span><span class='identifier'>%s</span>";
+    public static final String NODE_HTML = "<span class='name'>%s</span>";
 
     private @SpringBean OrgService orgService;
     private String lastSearch = null;
@@ -38,9 +38,6 @@ public class OrgTree extends Tree {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/component/orgTree.js");
-// times not displayed at this point.
-//        response.renderJavaScriptReference("javascript/jquery.timeago.js");
-//        response.renderOnDomReadyJavaScript("jQuery.timeago.settings.allowFuture = true;");
     }
 
     protected OrgLocationTree getOrgTree(String search) {
@@ -92,7 +89,7 @@ public class OrgTree extends Tree {
         }
         // TODO : is "linked" information needed???
         String cssClass = node.isLinked() ? "linked" : "";
-        return String.format(NODE_HTML, name, node.getIdentifier());
+        return String.format(NODE_HTML, name);
     }
 
     private void openParents(JsonTreeNode parent) {
@@ -103,15 +100,21 @@ public class OrgTree extends Tree {
     }
 
     protected String getInitTreeJs() {
-        return String.format(INIT_ORGTREE_JS,getJsVariableName(),convertToJson(new TreeOptions()));
+        return String.format(INIT_ORGTREE_JS,getJsVariableName(),convertToJson(createTreeOptions()));
+    }
+
+    protected TreeOptions createTreeOptions() {
+        return new OrgTreeOptions();
     }
 
     // ------------------------------------------------------------
 
-    class TreeOptions {
-        String updateCallback = ajaxBehavior.getCallbackUrl().toString();
-        String id = OrgTree.this.getMarkupId();
-        String clickCallback = getWebRequest().getContextPath() + "/w/orgSummary";
+    class OrgTreeOptions extends TreeOptions {
+        String clickCallback = getWebRequest().getContextPath() + "/w/placeSummary";
+
+        OrgTreeOptions() {
+            super();
+        }
     }
 
 
