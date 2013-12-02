@@ -17,6 +17,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -61,7 +62,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
     private WebMarkupContainer container;
     private AbstractDefaultAjaxBehavior listBehavior;
     private AbstractDefaultAjaxBehavior treeBehavior;
-    private PageState pageState = PageState.LIST;
+    private PageState pageState = PageState.TREE;
     private WebMarkupContainer tree;
     private String textFilter = null;
     private BaseOrg org;
@@ -77,21 +78,28 @@ public class OrgViewPage extends FieldIDTemplatePage {
         container = new WebMarkupContainer("container");
         add(container.setOutputMarkupId(true));
         add(buttons = new WebMarkupContainer("buttons"));
+        buttons.setOutputMarkupId(true);
         buttons.add(new AjaxLink("tree") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
+            @Override public void onClick(AjaxRequestTarget target) {
                 updatePage(target, PageState.TREE);
             }
-        });
+        }.add(new AttributeAppender("class", getButtonModel(PageState.TREE), " " )));
         buttons.add(new AjaxLink("list") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
+            @Override public void onClick(AjaxRequestTarget target) {
                 updatePage(target, PageState.LIST);
             }
-        });
+        }.add(new AttributeAppender("class", getButtonModel(PageState.LIST), " " )));
         add(filter = new TextField("filter", new PropertyModel(this, "textFilter")).setOutputMarkupId(true));
         addTree();
         addList();
+    }
+
+    private IModel<String> getButtonModel(final PageState state) {
+        return new Model<String>() {
+            @Override public String getObject() {
+                return pageState.equals(state) ? "selected" : "";
+            }
+        };
     }
 
     @Override
@@ -107,9 +115,11 @@ public class OrgViewPage extends FieldIDTemplatePage {
     }
 
     private void updatePage(AjaxRequestTarget target, Object state) {
-        textFilter = "";
-        pageState = (PageState) state;
-        target.add(container);
+        if (!state.equals(pageState)) {
+            textFilter = "";
+            pageState = (PageState) state;
+            target.add(container, buttons);
+        }
     }
 
     @Override
