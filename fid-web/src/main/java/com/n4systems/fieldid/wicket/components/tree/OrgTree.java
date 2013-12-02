@@ -15,10 +15,7 @@ public class OrgTree extends Tree {
     private static final String INIT_ORGTREE_JS = "var %s = orgTreeFactory.create(%s);";
     public static final String NODE_NAME_HTML = "<span>%s</span>";
     public static final String NODE_NAME_HIGHTLIGHTED_HTML = "%s<span class='match'>%s</span>%s";
-    public static final String NODE_HTML = "<a href='www.google.com' class='%s'>%s</a>" +
-            "%s" +
-            "<span class='timeago' title='%s'>xx</span>" +
-            "<span class='timeago' title='%s'>xx</span>";
+    public static final String NODE_HTML = "<span class='name'>%s</span><span class='identifier'>%s</span>";
 
     private @SpringBean OrgService orgService;
     private String lastSearch = null;
@@ -41,8 +38,9 @@ public class OrgTree extends Tree {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/component/orgTree.js");
-        response.renderJavaScriptReference("javascript/jquery.timeago.js");
-        response.renderOnDomReadyJavaScript("jQuery.timeago.settings.allowFuture = true;");
+// times not displayed at this point.
+//        response.renderJavaScriptReference("javascript/jquery.timeago.js");
+//        response.renderOnDomReadyJavaScript("jQuery.timeago.settings.allowFuture = true;");
     }
 
     protected OrgLocationTree getOrgTree(String search) {
@@ -92,8 +90,9 @@ public class OrgTree extends Tree {
         } else {
             name = String.format(NODE_NAME_HIGHTLIGHTED_HTML, name.substring(0, index), name.substring(index, index + lastSearch.length()), name.substring(index + lastSearch.length()));
         }
+        // TODO : is "linked" information needed???
         String cssClass = node.isLinked() ? "linked" : "";
-        return String.format(NODE_HTML, cssClass, name, node.getIdentifier(), node.getCreated(), node.getModified());
+        return String.format(NODE_HTML, name, node.getIdentifier());
     }
 
     private void openParents(JsonTreeNode parent) {

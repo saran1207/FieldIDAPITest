@@ -57,7 +57,6 @@ public abstract class Tree extends Panel {
 
         };
     }
-
     protected String getInitTreeJs() {
         String url = ajaxBehavior.getCallbackUrl().toString();
         return String.format(INIT_TREE_JS,

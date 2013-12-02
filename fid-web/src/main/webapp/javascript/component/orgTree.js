@@ -95,14 +95,6 @@ var orgTreeFactory = (function() {
 					plugins : [ 'themes', 'json_data', 'ui', 'hotkeys' ]
 				});
 
-				$tree.bind('refresh.jstree', function (e, data) {
-					$('.timeago').timeago();
-				});
-
-				$tree.bind('load_node.jstree', function (e, data) {
-					$('.timeago').timeago();
-				});
-
 				$tree.bind("click.jstree", function (event, data) {
 					if (!$(event.currentTarget).is('a')) { return; }
 					var $link = $(event.target);
