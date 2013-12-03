@@ -1,6 +1,5 @@
 <wicket:panel>
-    <wicket:message key="label.address"/>
-    <input type="text" wicket:id="text" class="txt"/>
+    <label wicket:for="text"><wicket:message key="label.address"/></label><input type="text" wicket:id="text" class="txt"/>
     <div wicket:id="map" class="map"/>
     <input wicket:id="latitude" class="lat" type="hidden"/>
     <input wicket:id="longitude" class="lng" type="hidden"/>

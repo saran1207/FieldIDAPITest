@@ -39,7 +39,10 @@ public class NavigationBar extends Panel {
                 WebMarkupContainer linkContainer = new WebMarkupContainer("linkContainer") {
                     @Override
                     public boolean isVisible() {
-                        return getPage().getClass() != navItem.getPageClass();
+                        if (getPage().getClass() != navItem.getPageClass()) {
+                            return true;
+                        }else
+                            return !getPage().getPageParameters().equals(navItem.getParameters());
                     }
                 };
                 linkContainer.setRenderBodyOnly(true);
@@ -68,7 +71,7 @@ public class NavigationBar extends Panel {
                     @Override
                     public boolean isVisible() {
                         return getPage().getClass() == navItem.getPageClass() &&
-                                getPage().getPageParameters().getNamedKeys().equals(navItem.getParameters().getNamedKeys());
+                                getPage().getPageParameters().equals(navItem.getParameters());
                     }
                 });
             }
@@ -105,24 +108,22 @@ public class NavigationBar extends Panel {
         return queryString.toString();
     }
 
-    //TODO "selected" is for the old css, remove it when we move to template
     private AttributeModifier createSelectedAttributeModifier(final NavigationItem navItem) {
-        return new AttributeModifier("class", "selected active") {
+        return new AttributeModifier("class", "selected") {
             @Override
             public boolean isEnabled(Component component) {
                 return component.getPage().getClass() == navItem.getPageClass()
-                        && component.getPage().getPageParameters().getNamedKeys().equals(navItem.getParameters().getNamedKeys());
+                        && component.getPage().getPageParameters().equals(navItem.getParameters());
             }
         };
     }
 
-    //TODO "selected" is for the old css, remove it when we move to template
     private AttributeModifier createRightSelectedAttributeModifier(final NavigationItem navItem) {
-            return new AttributeModifier("class", "selected active add") {
+            return new AttributeModifier("class", "selected add") {
                 @Override
                 public boolean isEnabled(Component component) {
                     return component.getPage().getClass() == navItem.getPageClass()
-                            && component.getPage().getPageParameters().getNamedKeys().equals(navItem.getParameters().getNamedKeys());
+                            && component.getPage().getPageParameters().equals(navItem.getParameters());
                 }
             };
     }

@@ -15,18 +15,14 @@ public class EventMapPanel extends Panel {
     @SpringBean
     private EventService eventService;
     
-    public EventMapPanel(String id, IModel<Asset> assetModel) {
-        super(id, assetModel);
-        
-        Asset asset = assetModel.getObject();
-
-        List<Event> events = eventService.getEventsByNetworkId(asset.getNetworkId());
+    public EventMapPanel(String id, List<? extends Event> events) {
+        super(id);
 
         GoogleMap map;
         add(map = new GoogleMap("map"));
         
         for (Event event: events) {
-            if(event.getGpsLocation() != null) {
+            if(event.getGpsLocation() != null && event.getGpsLocation().isValid()) {
                 map.addLocation(event.getGpsLocation().getLatitude().doubleValue(), event.getGpsLocation().getLongitude().doubleValue());
             }
         }

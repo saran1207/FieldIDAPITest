@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserLimitService;
@@ -79,8 +78,8 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     @SpringBean
     private S3Service s3Service;
 
-    private Component titleLabel;
-	private Component topTitleLabel;
+    protected Component titleLabel;
+	protected Component topTitleLabel;
     private ConfigurationProvider configurationProvider;
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;

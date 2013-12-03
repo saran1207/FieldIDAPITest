@@ -68,7 +68,7 @@ var googleMapFactory = (function() {
 			lng : -77
 		 };
 		 var options = $.extend(defaults, opts);
-		 var $text = $address.children('.txt');
+		 var $text = $address.find('.txt');
 		 var $lat = $address.children('.lat');
 		 var $lng = $address.children('.lng');
 		 var $map = (options.mapVar) ? window[options.mapVar] : createAndShowWithLocation($address.children('.map').attr('id'), options.lat, options.lng);

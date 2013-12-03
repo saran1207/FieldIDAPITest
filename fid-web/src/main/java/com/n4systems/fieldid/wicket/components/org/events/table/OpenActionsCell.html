@@ -1,0 +1,20 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <div wicket:id="modalWindow"></div>
+
+    <div class="button-group split-btn btn-sml pull-right">
+        <a wicket:id="startLink" class="btn-secondary"><wicket:message key="label.start"/></a>
+        <div class="dropdown">
+            <a class="btn-secondary" href="javascript:void(0);"/>
+            <ul class="pull-right">
+                <li><a wicket:id="closeLink"><wicket:message key="label.close"/></a></li>
+                <li><a wicket:id="deleteLink"><wicket:message key="label.delete"/></a></li>
+                <li><a wicket:id="viewLink"><wicket:message key="label.view"/></a></li>
+                <li><a wicket:id="editLink"><wicket:message key="label.edit"/></a></li>
+            </ul>
+        </div>
+        <div wicket:id="schedulePickerWindow"></div>
+    </div>
+</wicket:panel>
+</html>

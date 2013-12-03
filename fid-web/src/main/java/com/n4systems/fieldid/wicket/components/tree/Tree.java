@@ -29,6 +29,10 @@ public abstract class Tree extends Panel {
         add(new AttributeAppender("class", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, getClass().getSimpleName().toString())));
     }
 
+    public String getFilterComponent() {
+        return null;
+    }
+
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/jstree/_lib/jquery.hotkeys.js");
@@ -57,13 +61,15 @@ public abstract class Tree extends Panel {
 
         };
     }
-
     protected String getInitTreeJs() {
-        String url = ajaxBehavior.getCallbackUrl().toString();
         return String.format(INIT_TREE_JS,
                 getJsVariableName(),
                 getParentMarkupId(),
-                convertToJson(new TreeOptions(url)));
+                convertToJson(createTreeOptions()));
+    }
+
+    protected TreeOptions createTreeOptions() {
+        return new TreeOptions();
     }
 
     private String getParentMarkupId() {
@@ -85,12 +91,9 @@ public abstract class Tree extends Panel {
     // ----------------------------------------------------------------------------------------
 
     public class TreeOptions {
-        String url;
-
-        TreeOptions(String url) {
-            this.url = url;
-        }
-
+        String url = ajaxBehavior.getCallbackUrl().toString();
+        String id = Tree.this.getMarkupId();
+        String filter = getFilterComponent();
     }
 
 }

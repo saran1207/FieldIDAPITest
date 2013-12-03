@@ -4,29 +4,26 @@ package com.n4systems.fieldid.wicket.pages.setup.org;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gson.Gson;
-import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
-import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
-import com.n4systems.fieldid.wicket.components.navigation.MattBar;
+import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.tree.OrgTree;
 import com.n4systems.fieldid.wicket.data.OrgsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.org.PlacesPage;
+import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.org.PlaceSummaryPage;
 import com.n4systems.model.orgs.*;
-import com.n4systems.services.date.DateService;
 import com.n4systems.util.StringUtils;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
-import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
@@ -35,12 +32,13 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 import java.util.Map;
 
-public class OrgViewPage extends FieldIDFrontEndPage {
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
+
+public class OrgViewPage extends FieldIDTemplatePage {
 
     // TODO : refactor ajaxTextField into separate component.
     private static final String INIT_TEXT_FIELD_JS = "autoCompleter.createAjaxTextField(%s)";
@@ -57,48 +55,71 @@ public class OrgViewPage extends FieldIDFrontEndPage {
         labelMap.put(CustomerOrg.class, new FIDLabelModel("label.customer_type"));
     }
 
-    private @SpringBean DateService dateService;
-
-    private OrgViewPanel panel;
     private Class<? extends BaseOrg> filterClass = null;
     private OrgTree orgTree;
+    private final WebMarkupContainer buttons;
+    private final Component filter;
     private WebMarkupContainer container;
     private AbstractDefaultAjaxBehavior listBehavior;
     private AbstractDefaultAjaxBehavior treeBehavior;
-    private PageState pageState = PageState.LIST;
+    private PageState pageState = PageState.TREE;
     private WebMarkupContainer tree;
-    private TextField<String> listText;
-    private TextField<String> treeText;
-    private Class<BaseOrg> typeFilter;
     private String textFilter = null;
     private BaseOrg org;
+    private DataView<BaseOrg> dataTable;
+    private OrgsDataProvider provider = new OrgsDataProvider() {
+        @Override protected String getTextFilter() {
+            return textFilter;
+        }
+    };
 
 
     public OrgViewPage() {
         container = new WebMarkupContainer("container");
         add(container.setOutputMarkupId(true));
-
-        container.add(new MattBar("buttons") {
-                    @Override protected void onEnterState(AjaxRequestTarget target, Object state) {
-                        buttonClicked(target, state);
-                    }
-                }
-                .setCurrentState(PageState.LIST)
-                .addLink(new FIDLabelModel("label.tree"), PageState.TREE)
-                .addLink(new FIDLabelModel("label.list"), PageState.LIST)
-        );
-        container.add(panel=new OrgViewPanel("orgView"));
+        add(buttons = new WebMarkupContainer("buttons"));
+        buttons.setOutputMarkupId(true);
+        buttons.add(new AjaxLink("tree") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                updatePage(target, PageState.TREE);
+            }
+        }.add(new AttributeAppender("class", getButtonModel(PageState.TREE), " " )));
+        buttons.add(new AjaxLink("list") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                updatePage(target, PageState.LIST);
+            }
+        }.add(new AttributeAppender("class", getButtonModel(PageState.LIST), " " )));
+        add(filter = new TextField("filter", new PropertyModel(this, "textFilter")).setOutputMarkupId(true));
+        addTree();
+        addList();
     }
 
-    private void buttonClicked(AjaxRequestTarget target, Object state) {
-        textFilter = "";
-        pageState = (PageState) state;
-        target.add(panel);
+    private IModel<String> getButtonModel(final PageState state) {
+        return new Model<String>() {
+            @Override public String getObject() {
+                return pageState.equals(state) ? "selected" : "";
+            }
+        };
     }
 
-    private IModel<String> getTypeString(BaseOrg org) {
-        IModel<String> model = labelMap.get(org.getClass());
-        return model==null ? Model.of("-") : model;
+    @Override
+    protected Component createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("label.places"));
+    }
+
+    @Override
+    protected void addBreadCrumbBar(String breadCrumbBarId) {
+        List<NavigationItem> navItems = Lists.newArrayList();
+        navItems.add(aNavItem().label("label.places").page(OrgViewPage.class).build());
+        add(new BreadCrumbBar(breadCrumbBarId, navItems.toArray(new NavigationItem[0])));
+    }
+
+    private void updatePage(AjaxRequestTarget target, Object state) {
+        if (!state.equals(pageState)) {
+            textFilter = "";
+            pageState = (PageState) state;
+            target.add(container, buttons);
+        }
     }
 
     @Override
@@ -108,126 +129,87 @@ public class OrgViewPage extends FieldIDFrontEndPage {
     }
 
 
-    class OrgViewPanel extends Fragment {
-        private DataView<BaseOrg> dataTable;
-        private OrgsDataProvider provider = new OrgsDataProvider() {
-            @Override protected String getTextFilter() {
-                return textFilter;
-            }
-            @Override protected Class<? extends BaseOrg> getTypeFilter() {
-                return typeFilter;
+    private void addList() {
+        final WebMarkupContainer list = new WebMarkupContainer("list") {
+            @Override public boolean isVisible() {
+                return PageState.LIST.equals(pageState);
             }
         };
+        list.setOutputMarkupId(true);
 
-        public OrgViewPanel(String id) {
-            super(id, "orgViewFragment", OrgViewPage.this);
-            setOutputMarkupId(true);
-            add(new AttributeAppender("class","org-view"));
-            addTree();
-            addList();
-        }
-
-        private void addList() {
-            final WebMarkupContainer list = new WebMarkupContainer("list") {
-                @Override public boolean isVisible() {
-                    return PageState.LIST.equals(pageState);
-                }
-            };
-            list.setOutputMarkupId(true);
-
-            add(dataTable = new DataView<BaseOrg>("table", provider, ITEMS_PER_PAGE) {
-                @Override
-                protected void populateItem(Item<BaseOrg> item) {
-                    final BaseOrg org = item.getModelObject();
-                    item.add(createLink("name", org).add(new Label("label", getMatchingNameText(org.getName(), textFilter)).setEscapeModelStrings(false)));
-                    String id = org instanceof ExternalOrg ? ((ExternalOrg) org).getCode() : org.getName();
-                    item.add(createLink("id",org).add(new Label("label", Model.of(id))));
-                    item.add(new Label("type", getTypeString(org)));
-                    item.add(new Label("parent", org.getParent() == null ? "-" : org.getParent().getName()));
-                    item.add(new TimeAgoLabel("created", Model.of(org.getCreated()),dateService.getUserTimeZone()));
-                    item.add(new TimeAgoLabel("modified", Model.of(org.getModified()),dateService.getUserTimeZone()));
-                }
-
-                private Link createLink(String id, final BaseOrg org) {
-                    return new Link(id) {
-                        @Override public void onClick() {
-                            setResponsePage(PlacesPage.class, new PageParameters().add("id",org.getId()));
-                        }
-                    };
-                }
-            });
-            dataTable.setCurrentPage(0);
-            listBehavior = new AbstractDefaultAjaxBehavior() {
-                protected void respond(final AjaxRequestTarget target) {
-                    IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-                    textFilter = params.getParameterValue("text").toString();
-                    dataTable.setCurrentPage(0);
-                    target.add(list);
-                }
-            };
-            dataTable.add(listBehavior);
-
-            list.add(new PagingNavigator("navigator", dataTable) {
-                @Override public boolean isVisible() {
-                    return PageState.LIST.equals(pageState) && dataTable.getRowCount()>ITEMS_PER_PAGE; // if only one page, don't need this.
-                }
-            });
-            list.add(dataTable);
-            list.add(new WebMarkupContainer("noResults")  {
-                @Override public boolean isVisible() {
-                    return dataTable.getRowCount()==0;
-                }
-            });
-            list.add(listText = new TextField<String>("filter", new PropertyModel(OrgViewPage.this, "textFilter")));
-            listText.setOutputMarkupId(true);
-            List<Class<? extends BaseOrg>> filterTypes = Lists.newArrayList(PrimaryOrg.class,SecondaryOrg.class, CustomerOrg.class, DivisionOrg.class);
-            IChoiceRenderer<Class<? extends BaseOrg>> filterTypeRenderer = new IChoiceRenderer<Class<? extends BaseOrg>>() {
-                @Override public Object getDisplayValue(Class<? extends BaseOrg> clazz) {
-                    return labelMap.get(clazz).getObject();
-                }
-                @Override public String getIdValue(Class<? extends BaseOrg> clazz, int index) {
-                    return clazz.getSimpleName();
-                }
-            };
-            final FidDropDownChoice<Class<? extends BaseOrg>> dropDown = new FidDropDownChoice<Class<? extends BaseOrg>>("orgType", new PropertyModel<Class<? extends BaseOrg>>(OrgViewPage.this, "filterClass"), filterTypes, filterTypeRenderer);
-            dropDown.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-                @Override protected void onUpdate(AjaxRequestTarget target) {
-                    typeFilter = (Class<BaseOrg>) dropDown.getDefaultModelObject();
-                    dataTable.setCurrentPage(0);
-                    target.add(list);
-                }
-            });
-            list.add(dropDown.setNullValid(true));
-            add(list);
-        }
-
-        private String getMatchingNameText(String name, String textFilter) {
-            int index = StringUtils.indexOfIgnoreCase(name, textFilter);
-            if (index==-1) {
-                return name;
+        list.add(dataTable = new DataView<BaseOrg>("table", provider, ITEMS_PER_PAGE) {
+            @Override
+            protected void populateItem(Item<BaseOrg> item) {
+                final BaseOrg org = item.getModelObject();
+                item.add(createLink("name", org).add(new Label("label", getMatchingNameText(org.getName(), textFilter)).setEscapeModelStrings(false)));
+                String id = org instanceof ExternalOrg ? ((ExternalOrg) org).getCode() : org.getName();
+                item.add(createLink("id", org).add(new Label("label", Model.of(id))));
+                item.add(new Label("parent", org.getParent() == null ? "-" : org.getParent().getName()));
             }
-            String highlightedMatchFormat = "%s<span class='match'>%s</span>%s";
-            return String.format(highlightedMatchFormat, name.substring(0,index), name.substring(index,index+textFilter.length()), name.substring(index+textFilter.length()));
+
+            private Link createLink(String id, final BaseOrg org) {
+                return new Link(id) {
+                    @Override
+                    public void onClick() {
+                        setResponsePage(PlaceSummaryPage.class, new PageParameters().add("id", org.getId()));
+                    }
+                };
+            }
+        });
+        dataTable.setCurrentPage(0);
+        listBehavior = new AbstractDefaultAjaxBehavior() {
+            protected void respond(final AjaxRequestTarget target) {
+                IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
+                textFilter = params.getParameterValue("text").toString();
+                dataTable.setCurrentPage(0);
+                target.add(list);
+            }
+        };
+        dataTable.add(listBehavior);
+
+        list.add(new PagingNavigator("navigator", dataTable) {
+            @Override public boolean isVisible() {
+                return PageState.LIST.equals(pageState) && dataTable.getRowCount()>ITEMS_PER_PAGE; // if only one page, don't need this.
+            }
+        });
+        list.add(dataTable);
+        list.add(new WebMarkupContainer("noResults") {
+            @Override
+            public boolean isVisible() {
+                return dataTable.getRowCount() == 0;
+            }
+        });
+        container.add(list);
+    }
+
+    private void addTree() {
+        container.add(tree = new WebMarkupContainer("tree") {
+            @Override public boolean isVisible() {
+                return PageState.TREE.equals(pageState);
+            }
+        });
+        tree.add(orgTree = new OrgTree("orgTree") {
+            @Override public String getFilterComponent() {
+                return "#"+filter.getMarkupId();
+            }
+        });
+    }
+
+    private String getMatchingNameText(String name, String textFilter) {
+        int index = StringUtils.indexOfIgnoreCase(name, textFilter);
+        if (index==-1) {
+            return name;
         }
-
-
-        private void addTree() {
-            add(tree = new WebMarkupContainer("tree") {
-                @Override public boolean isVisible() {
-                    return PageState.TREE.equals(pageState);
-                }
-            });
-            tree.add(orgTree = new OrgTree("orgTree"));
-            tree.add(treeText = new TextField<String>("filter", new PropertyModel(OrgViewPage.this, "textFilter"))).setOutputMarkupId(true);
-        }
-
+        String highlightedMatchFormat = "%s<span class='match'>%s</span>%s";
+        return String.format(highlightedMatchFormat, name.substring(0,index), name.substring(index,index+textFilter.length()), name.substring(index+textFilter.length()));
     }
 
 
     class AjaxTextFieldOptions {
         String parent = "#"+container.getMarkupId();
+        String target = "#"+container.getMarkupId();
         String callback = listBehavior.getCallbackUrl().toString();
-        String child = ".org-list input[type=text]";
+        String child = ".input-combo";
         Integer delay = 500;
     }
 

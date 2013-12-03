@@ -1,0 +1,75 @@
+<html xmlns:wicket="http://wicket.apache.org">
+
+<wicket:extend>
+
+    <div class="column-narrow-left">
+        <img wicket:id="img" style="width:300px;height:300px;float:left;" class="img"><p><wicket:message key="label.no_images"/></p></img>
+        <a wicket:id="attachmentsLink"><span wicket:id="label"/></a>
+        <form wicket:id="contact" class="editable-inputs">
+            <h3><wicket:message key="label.contact"/>
+                <span class="actions">
+                    <a wicket:id="save"><wicket:message key="label.save"/></a>
+                    <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+                    <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+                </span>
+            </h3>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="name"><wicket:message key="label.name"/></label><input wicket:id="name" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="email"><wicket:message key="label.email"/></label><input wicket:id="email" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure>
+                <div class="form-horizontal"><span wicket:id="address" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="phone"><wicket:message key="label.phone"/></label><input wicket:id="phone" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="fax"><wicket:message key="label.fax"/></label><input wicket:id="fax" type="text"/></div>
+            </wicket:enclosure>
+        </form>
+        <form wicket:id="general"  class="editable-inputs">
+            <h3><wicket:message key="label.general"/>
+                <span class="actions">
+                    <a wicket:id="save"><wicket:message key="label.save"/></a>
+                    <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+                    <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+                </span>
+            </h3>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="name"> <wicket:message key="label.name"/></label><input wicket:id="name" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure>
+                <div class="form-horizontal"><label wicket:for="id"><wicket:message key="label.id"/></label><input wicket:id="id" type="text"/></div>
+            </wicket:enclosure>
+            <wicket:enclosure><h3><wicket:message key="label.notes"/></h3><textarea wicket:id="notes"/></wicket:enclosure>
+        </form>
+    </div>
+
+    <div class="column-wide">
+        <div wicket:id="map" class="googleMap" style="width:700px;height:300px;"></div>
+
+        <section>
+            <h3 class="pull-left no-border"><wicket:message key="label.next_7_days"/></h3>
+            <a wicket:id="viewAll" class="btn-primary btn-sml pull-right"><wicket:message key="label.view_all_schedules"/></a>
+        </section>
+
+        <table class="need-some-class-herewithOverFlowY">
+            <tbody>
+            <tr>
+                <th><wicket:message key="label.due_date"/></th>
+                <th><wicket:message key="label.event_type"/></th>
+                <th><wicket:message key="label.assignedto"/></th>
+            </tr>
+            <tr wicket:id="events">
+                <td><span wicket:id="due"/></td>
+                <td><span wicket:id="type"/></td>
+                <td><span wicket:id="assignee"/></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</wicket:extend>
+</html>

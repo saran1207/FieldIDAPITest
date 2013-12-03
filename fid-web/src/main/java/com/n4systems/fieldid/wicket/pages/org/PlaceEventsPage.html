@@ -1,0 +1,24 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div wicket:id="filterPanel" class="filter pull-left"/>
+
+    <div class="button-group">
+        <a wicket:id="listLink" class="tipsy-tooltip btn-icon btn-secondary" title="List">
+            <span class="fontello-menu"/>
+        </a>
+        <a wicket:id="mapLink" class="tipsy-tooltip btn-icon btn-secondary" title="Map">
+            <span class="fontello-map"/>
+        </a>
+    </div>
+    <div wicket:id="eventPanel"/>
+    <div wicket:id="mapPanel"/>
+    <div wicket:id="blankSlate" class="info">
+        <h3><wicket:message key="label.places.perform_events_on"/>&nbsp;<strong wicket:id="blankSlateTitle"/></h3>
+        <p>
+            <wicket:message key="label.places.event.message.1"/> ( <span class="fontello-cog"></span>) <wicket:message key="label.places.event.message.2"/>
+            <em><wicket:message key="label.places.event.message.3"/></em> <wicket:message key="label.places.event.message.4"/> <span wicket:id="orgNameLabel"/>
+        </p>
+    </div>
+</wicket:extend>
+</html>

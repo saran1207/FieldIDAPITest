@@ -55,7 +55,7 @@ public class GoogleMap extends Panel {
         if (coords.isEmpty()) {
             response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_NO_LOCATION_JS, getJsVar(), getMarkupId(), centre.toString(), defaultZoom));
         } else {
-            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_WITH_LOCATION_JS,getJsVar(), getMarkupId(),getCoordsAsJsParams()));
+            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_WITH_LOCATION_JS, getJsVar(), getMarkupId(),getCoordsAsJsParams()));
         }
     }
 

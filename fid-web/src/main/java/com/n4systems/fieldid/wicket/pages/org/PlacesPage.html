@@ -105,26 +105,35 @@
     <!--MOSTLY FOR ASSORTED LEFT AND RIGHT PANELS THAT SWITCH DEPENDING ON PAGE STATE-->
     <!--                                         -->
 
-
     <wicket:fragment wicket:id="details" class="details">
         <img wicket:id="img" style="width:300px;height:300px;float:left;" class="img"><p><wicket:message key="label.no_images"/></p></img>
         <a wicket:id="attachmentsLink"><span wicket:id="label"/></a>
         <div wicket:id="map" class="googleMap" style="width:700px;height:300px;"></div>
-        <h3>Contact</h3>
-        <div>Susan Reynolds</div>
-        <div>susan.reynolds@masterlock.com</div>
-        <div>43 MasterLock Circle</div>
-        <div>Oak Creek, WI 042104, USA</div>
-        <div>
-            <label>phone</label><span>123 453 1233</span>
-        </div>
-        <div><label>phone</label><span>123 453 1233</span></div>
-        <h3>General</h3>
-        <div><label>Site Supervisor</label><span>Henry Sheen</span></div>
-        <div><label>Property Class</label><span>Commercial C1</span></div>
-        <div><label>Status</label><span>Active</span></div>
-        <h3>Notes</h3>
-        <div>Please ensure that building owner is notified 2 hours in advance before entry onto the property.</div>
+        <form wicket:id="contact">
+            <h3><wicket:message key="label.contact"/>
+                <a wicket:id="save"><wicket:message key="label.save"/></a>
+                <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+                <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+            </h3>
+            <div><wicket:enclosure><input wicket:id="name" type="text"/></wicket:enclosure></div>
+            <div><wicket:enclosure><input wicket:id="email" type="text"/></wicket:enclosure></div>
+            <div><wicket:enclosure><span wicket:id="address" type="text"/></wicket:enclosure></div>
+            <div>
+                <wicket:enclosure><label>phone</label><span><input wicket:id="phone" type="text"/></span></wicket:enclosure>
+            </div>
+            <div><wicket:enclosure><label>fax</label><span><input wicket:id="fax" type="text"/> </span></wicket:enclosure></div>
+        </form>
+        <form wicket:id="general">
+            <h3><wicket:message key="label.general"/>
+                <a wicket:id="save"><wicket:message key="label.save"/></a>
+                <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+                <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+            </h3>
+            <div><label>Site Supervisor</label><span>Henry Sheen</span></div>
+            <div><label>Property Class</label><span>Commercial C1</span></div>
+            <div><label>Status</label><span>Active</span></div>
+            <wicket:enclosure><h3><wicket:message key="label.notes"/></h3><textarea wicket:id="notes"/></wicket:enclosure>
+        </form>
     </wicket:fragment>
 
     <wicket:fragment wicket:id="eventsPanel" class="events">

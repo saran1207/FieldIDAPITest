@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
+import com.n4systems.fieldid.wicket.components.form.InlineEditableForm;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.text.LabelledRequiredTextField;
@@ -52,6 +53,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -107,6 +109,17 @@ public class PlacesPage extends FieldIDFrontEndPage {
     private Component content,detailsPanel,eventsPanel,peoplePanel;
     private Component newUserPanel,archivePanel,editEventTypesPanel,editRecurringPanel,editDetailsPanel,attachmentsPanel;
     private ModalWindow modal;
+
+    // ................TEST DATA...................
+    private Address address = new Address("111 Queen St east, toronto");
+    private String name="sue richardson",
+            email="foo@bar.com",
+            notes,
+            phone="123 456 7890", fax;
+    // ...........................................
+
+
+
 
     public PlacesPage(PageParameters params) {
         this(new EntityModel(BaseOrg.class, params.get("id").toLong()));
@@ -444,15 +457,28 @@ public class PlacesPage extends FieldIDFrontEndPage {
     class DetailsPanel extends Fragment {
         public DetailsPanel() {
             super(CONTENT_ID, "details", PlacesPage.this);
+
             //add(new GoogleMap("map",ProxyModel.of(model, on(BaseOrg.class).getGpsLocation())));
             add(map = new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
-            // add name, email, phone, fax, etc... here...
-            add(new ContextImage("img", "images/add-photo-slate.png"));
+
             add(new AjaxLink("attachmentsLink") {
                 @Override public void onClick(AjaxRequestTarget target) {
-                    updateContent(Content.ATTACHMENTS,target);  // make this more of settings thang...?
+                    updateContent(Content.ATTACHMENTS, target);  // make this more of settings thang...?
                 }
-            }.add(new Label("label","8 attachments")));
+            }.add(new Label("label", "8 attachments")));
+
+            add(new ContextImage("img", "images/add-photo-slate.png"));
+
+            add(new InlineEditableForm("contact").withSaveCancelEditLinks()
+                    .add(new TextField("name", new PropertyModel(PlacesPage.this, "name")))
+                    .add(new TextField("email", new PropertyModel(PlacesPage.this, "email")))
+                    .add(new AddressPanel("address", new PropertyModel(PlacesPage.this, "address")).withExternalMap(map.getJsVar()))
+                    .add(new TextField("phone", new PropertyModel(PlacesPage.this, "phone")))
+                    .add(new TextField("fax", new PropertyModel(PlacesPage.this, "fax"))));
+
+            add(new InlineEditableForm("general").withSaveCancelEditLinks()
+                    .add(new TextArea<String>("notes", new PropertyModel(PlacesPage.this, "notes")))
+                    );
         }
     }
 
@@ -529,9 +555,10 @@ public class PlacesPage extends FieldIDFrontEndPage {
         }
 
         private PlaceAttachment createNewPlaceAttachment(FileUpload fileUpload) {
-            return new PlaceAttachment(getOrg())
-                    .withContent(fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes())
-                    .withTempFileName(uuidService.createUuid());
+            PlaceAttachment attachment = new PlaceAttachment(getOrg());
+            attachment.withContent(fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes())
+                      .withTempFileName(uuidService.createUuid());
+            return attachment;
         }
 
         private IModel<? extends List<? extends S3Attachment>> getAttachments() {
