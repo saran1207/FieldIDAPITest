@@ -103,7 +103,7 @@ public class AssetEventsPage extends AssetPage{
 
         FieldIDDataProvider<Event> dataProvider = new EventByNetworkIdProvider(asset.getNetworkId(), "completedDate", SortOrder.DESCENDING, getWorkflowStates());
 
-        add(eventPanel = new EventListPanel("eventPanel", getWorkflowStates(), dataProvider) {
+        add(eventPanel = new EventListPanel("eventPanel", dataProvider) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends Event>> columns) {
                 columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName"));

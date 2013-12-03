@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
+import com.n4systems.fieldid.wicket.components.org.events.FilterPanel;
 import com.n4systems.fieldid.wicket.components.org.events.table.ActionsColumn;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.model.Event;
@@ -29,6 +30,7 @@ public class PlaceEventsPage extends PlacePage {
 
     private EventListPanel eventPanel;
     private EventMapPanel mapPanel;
+    private FilterPanel filterPanel;
 
     private boolean open = true;
     private boolean completed = true;
@@ -45,10 +47,22 @@ public class PlaceEventsPage extends PlacePage {
     }
 
     private final void init() {
-        add(eventPanel = new EventListPanel("eventPanel", getWorkflowStates(), new PlaceEventDataProvider()) {
+
+        boolean hasEvents = placeService.countEventsFor(orgModel.getObject()) > 0;
+
+        add(filterPanel = new FilterPanel("filterPanel", orgModel) {
+            @Override
+            public void onFilterSelectionChanged(AjaxRequestTarget target) {
+                //TODO Do filtering
+            }
+        });
+        filterPanel.setOutputMarkupPlaceholderTag(true);
+        filterPanel.setVisible(hasEvents);
+
+        add(eventPanel = new EventListPanel("eventPanel", new PlaceEventDataProvider()) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends Event>> columns) {
-                //add place status
+                //TODO add place status
             }
 
             @Override
@@ -58,36 +72,33 @@ public class PlaceEventsPage extends PlacePage {
         });
         eventPanel.setOutputMarkupPlaceholderTag(true);
         add(mapPanel = new EventMapPanel("mapPanel", placeService.getEventsFor(orgModel.getObject())));
+        eventPanel.setVisible(hasEvents);
         mapPanel.setOutputMarkupPlaceholderTag(true);
         mapPanel.setVisible(false);
 
-        AjaxLink listLink;
-        AjaxLink mapLink;
-
-        add(listLink = new AjaxLink<Void>("listLink") {
+        add(new AjaxLink<Void>("listLink") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 eventPanel.setVisible(true);
                 mapPanel.setVisible(false);
-                //filters.setVisible(true);
-                target.add(eventPanel);
-                target.add(mapPanel);
-                //target.add(filters);
+                filterPanel.setVisible(true);
+                target.add(eventPanel, mapPanel, filterPanel);
             }
         });
 
-        add(mapLink = new AjaxLink<Void>("mapLink") {
+        add(new AjaxLink<Void>("mapLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 eventPanel.setVisible(false);
                 mapPanel.setVisible(true);
-                //filters.setVisible(false);
+                filterPanel.setVisible(false);
                 target.add(eventPanel);
                 target.add(mapPanel);
-                //target.add(filters);
+                target.add(eventPanel, mapPanel, filterPanel);
             }
         });
+
     }
 
     @Override
