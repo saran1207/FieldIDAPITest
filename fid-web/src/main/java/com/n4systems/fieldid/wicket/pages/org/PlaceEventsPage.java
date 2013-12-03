@@ -14,8 +14,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -31,6 +34,7 @@ public class PlaceEventsPage extends PlacePage {
     private EventListPanel eventPanel;
     private EventMapPanel mapPanel;
     private FilterPanel filterPanel;
+    private WebMarkupContainer blankSlate;
 
     private boolean open = true;
     private boolean completed = true;
@@ -99,6 +103,11 @@ public class PlaceEventsPage extends PlacePage {
             }
         });
 
+        add(blankSlate = new WebMarkupContainer("blankSlate"));
+        blankSlate.setOutputMarkupPlaceholderTag(true);
+        blankSlate.add(new Label("blankSlateTitle", new PropertyModel(orgModel, "name")));
+        blankSlate.add(new Label("orgNameLabel", new PropertyModel(orgModel, "name")));
+        blankSlate.setVisible(!hasEvents);
     }
 
     @Override

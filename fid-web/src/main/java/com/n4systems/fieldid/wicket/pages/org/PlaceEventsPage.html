@@ -13,5 +13,12 @@
     </div>
     <div wicket:id="eventPanel"/>
     <div wicket:id="mapPanel"/>
+    <div wicket:id="blankSlate" class="info">
+        <h3><wicket:message key="label.places.perform_events_on"/>&nbsp;<strong wicket:id="blankSlateTitle"/></h3>
+        <p>
+            <wicket:message key="label.places.event.message.1"/> ( <span class="fontello-cog"></span>) <wicket:message key="label.places.event.message.2"/>
+            <em><wicket:message key="label.places.event.message.3"/></em> <wicket:message key="label.places.event.message.4"/> <span wicket:id="orgNameLabel"/>
+        </p>
+    </div>
 </wicket:extend>
 </html>

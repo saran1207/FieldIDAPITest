@@ -3,10 +3,8 @@ package com.n4systems.fieldid.wicket.components.org.events;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.EventType;
 import com.n4systems.model.WorkflowState;
-import com.n4systems.model.api.DisplayEnum;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormChoiceComponentUpdatingBehavior;
@@ -42,46 +40,6 @@ public class FilterPanel extends Panel {
 
     private DueDateState dueDateState;
     private ScheduledState scheduledState;
-
-    public enum DueDateState implements DisplayEnum
-    {
-        UPCOMING(new FIDLabelModel("label.upcoming").getObject()),
-        OVERDUE(new FIDLabelModel("label.overdue").getObject());
-
-        private String label;
-
-        DueDateState(String label) {
-            this.label = label;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-
-        public String getName() {
-            return name();
-        }
-    }
-
-    public enum ScheduledState implements DisplayEnum
-    {
-        SCHEDULED(new FIDLabelModel("label.upcoming").getObject()),
-        UNSCHEDULED(new FIDLabelModel("label.overdue").getObject());
-
-        private String label;
-
-        ScheduledState(String label) {
-            this.label = label;
-        }
-
-        public String getLabel() {
-            return label;
-        }
-
-        public String getName() {
-            return name();
-        }
-    }
 
     public FilterPanel(String id, IModel<BaseOrg> orgModel) {
         super(id, orgModel);
