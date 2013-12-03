@@ -1,19 +1,23 @@
 .mySavedItemsBox {
     display:none;
-    width: 325px;
+    width: 275px;
     position:absolute;
+    right: 18px;
     background-color:#fff;
     border:1px solid #ebebeb;
-    padding-bottom: 8px;
-    text-align:left;
+   /* padding-bottom: 8px;*/
+    text-align:right;
     overflow-y:auto;
-    max-height:500px;
-    padding-bottom:20px;
+    max-height: 500px;
+    /*padding-bottom:20px;*/
     z-index:1;  /** make sure this is above any FlotCharts that may appear below.   > 0 */
+}
+.mySavedItemsBox a {
+    padding: 0;
 }
 
 .mySavedItemsBox .savedItem {
-    padding: 8px 0 8px 16px;
+    padding: 6px 0;
     overflow:hidden;
     clear:left;
     display:block;
@@ -21,17 +25,19 @@
 
 .mySavedItemsBox .savedItem .itemName {
     display:block;
-    padding-top:6px;
+    /*padding-top:6px;*/
 }
 
 .mySavedItemsBox .savedItemContainer {
-    height:36px;
+    /*height:36px;*/
 }
 
 .mySavedItemsBox .savedItem img {
-    padding-right:16px;
+   /* padding-right:16px;
     display:block;
-    float:left;
+    float:left;*/
+    float: right;
+    padding: 0 10px;
 }
 
 .mySavedItemsBox div.savedItem:hover {
@@ -44,10 +50,11 @@
 }
 
 #pageHeader #mySavedItemsBox .manageLinkSection a {
-color:#356CA2;
-    display:block;
-    padding-left:16px;
-    line-height:32px;    
+    color:#356CA2;
+    /*display:block;
+    padding-left:16px;*/
+    line-height:32px;
+    padding-right: 14px;  
 }
 
 #pageHeader #mySavedItemsBox .manageLinkSection:hover {

@@ -5,6 +5,9 @@
         <meta wicket:id="metaIE" http-equiv="X-UA-Compatible" />
         <title>Field ID: <span wicket:id="topTitleLabel"></span></title>
 
+        <script type="text/javascript" src="//use.typekit.net/usa4tou.js"></script>
+        <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
         <link wicket:id="resetCss" type="text/css" href="/fieldid/style/reset.css" rel="stylesheet" media="all"/>
 
         <span wicket:id="legacyCss">
@@ -31,21 +34,19 @@
 	    <!--[if lte IE 7]>
 	        <link wicket:id="dropDownIECss" type="text/css" href="/fieldid/style/dropdown/ie.css" rel="stylesheet" media="all"/>
 	    <![endif]-->
-
         <span wicket:id="customJsPanel"></span>
 
     </head>
 
     <body id="fieldidBody">
 
-        <div wicket:id="debugBar"/>
+        <div wicket:id="debugBar" style="display:none;"/>
         <div wicket:id="languageSelectionModalWindow"/>
         <div wicket:id="mainHeader"/>
 
         <div id="systemNotices">
         </div>
-		       
-        <!-- note to christina : this only appears on search/reporting pages. might need to include this in header??   dd. -->
+
         <div id="subMenu" wicket:id="subMenu"/>
 
         <div id="page">
@@ -108,31 +109,31 @@
     </body>
 
 
-    <!--FRAMGMENT FOR HEADER-->
+    <!--FRAGMENT FOR HEADER-->
     <wicket:fragment wicket:id="legacyHeader">
         <div id="pageHeader" class="frontPageHeader">
 
-            <div id="pageActions">
-                <div id="companyLogo">
-                    <img width="215" height="61" wicket:id="tenantLogo" />
-                </div>
+            <div id="pageActions" class="content-wrap">
+                <!-- <div id="companyLogo"> -->
+                <img wicket:id="tenantLogo" class="company-logo" />
+                <!-- </div> -->
                 <div id="listContainer">
                     <ul class="listOfLinks">
-                        <li class="first">
-                            <span class="welcome">Welcome, </span><a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
-                            <span class="separator">|</span>
+                        <li>
+                            Welcome, <a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
+                            <!-- <span class="separator">|</span> -->
                         </li>
                         <li wicket:enclosure="languageSelection">
                             <a wicket:id="languageSelection"><wicket:message key="label.language"/></a>
-                            <span class="separator">|</span>
+                            <!-- <span class="separator">|</span> -->
                         </li>
                         <li>
                             <a wicket:id="support" target="_blank"></a>
-                            <span class="separator">|</span>
+                            <!-- <span class="separator">|</span> -->
                         </li>
                         <li>
                             <a href="/fieldid/logout.action" ><wicket:message key="label.logout"/></a>
-                            <span class="darkseparator">|</span>
+                            <!-- <span class="darkseparator">|</span> -->
                         </li>
                         <li class="last">
                             <span wicket:id="savedItemsDropdown"></span>
@@ -143,12 +144,13 @@
 
 
             <div id="pageNavigation">
-                <div id="navigationContent">
+                <div id="navigationContent" class="content-wrap clearfix">
                     <div id="navigationLinks">
-                        <ul class="dropdown">
+                        <ul class="dropdown clearfix">
                             <li>
-                                <a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"></a>
+                                <a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><span class="fontello-home">Dashboard</span></a>
                             </li>
+
                             <li wicket:id="identifyMenuContainer">
                                 <a wicket:id="identifyLink" class="speedLink textLink" id="menuIdentify">
                                     <wicket:message key="speed.identify"/>
@@ -192,7 +194,7 @@
                             <li wicket:id="setupLinkContainer">
                                 <a wicket:id="setupLink" class="speedLink textLink" id="menuSetup">
                                     <wicket:message key="label.setup"/>
-                                    <img src="/fieldid/images/down-arrow.png" />
+                                    <!-- <img src="/fieldid/images/down-arrow.png" /> -->
                                 </a>
 
                                 <ul wicket:id="setupSubMenuContainer" class="">

@@ -11,7 +11,8 @@ function showDropDown() {
         linkSelector = 'pageActions';
         withinSelector = "pageHeader";
     }
-    translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 70, 673);
+    //translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 70, 673);
+    translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 32);
 }
 
 function hideDropDown() {
@@ -28,7 +29,7 @@ function toggleDropBox() {
 }
 
 function listenForSavedItemsClick() {
-    jQuery('#mySavedItemsLink').click(toggleDropBox);
+    jQuery('#mySavedItemsLink').hover(showDropDown);
     jQuery('#mySavedItemsLink').parents('#pageActions').mouseleave(hideDropDown);
 }
 

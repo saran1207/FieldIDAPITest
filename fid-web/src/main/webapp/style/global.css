@@ -831,12 +831,12 @@ nav a {
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
+.nav-tabs > ul > li.selected a {
+  color: #3a3a3a;
+}
 .nav-tabs > ul > li span {
   padding: 10px 20px;
   display: inline-block;
-}
-.nav-tabs > ul > li span a {
-  color: #3a3a3a;
 }
 .nav-tabs > ul > li span:hover {
   color: #666666;
@@ -1101,7 +1101,6 @@ legend {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-weight: 600;
   position: absolute;
-  top: 10px;
   top: 0;
   font-size: 15px;
   border-bottom: 1px solid #dddddd;
@@ -1387,16 +1386,15 @@ form .two-columns {
 .form-horizontal .input-combo input[type="text"] {
   width: 295px;
 }
+.form-horizontal .input-combo.fluid input[type="text"] {
+  width: 99%;
+}
 .form-horizontal .control-group.checkbox input[type="checkbox"],
 .form-horizontal .control-group.checkbox input[type="radio"] {
   float: none;
 }
 .form-horizontal.compact {
   padding: 0 15px;
-}
-.form-horizontal.compact fieldset {
-  border: none;
-  padding: 25px 0 0;
 }
 .form-horizontal.compact .control-group {
   font-size: 0;
@@ -1458,17 +1456,15 @@ form .two-columns {
   font-weight: 600;
 }
 @media (max-width: 1150px) {
-  input[type="text"],
-  select,
-  textarea,
-  .form-horizontal .input-combo input[type="text"] {
+  .two-columns input[type="text"],
+  .two-columns select,
+  .two-columns textarea,
+  .two-columns .form-horizontal .input-combo input[type="text"],
+  .two-columns .text-block {
     width: 265px;
   }
-  .search-box {
-    width: 225px;
-  }
-  .search-box input {
-    width: 205px;
+  .two-columns .chzn-container {
+    width: 265px!important;
   }
 }
 /*--------------------------------------- 
@@ -1917,6 +1913,12 @@ figure p {
     padding-left: 12px;
     padding-right: 12px;
     font-size: 13px;
+  }
+  .global-header .search-box {
+    width: 225px;
+  }
+  .global-header .search-box input {
+    width: 205px;
   }
 }
 /*--------------------------------------- 

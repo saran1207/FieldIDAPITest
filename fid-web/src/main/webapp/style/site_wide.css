@@ -432,3 +432,39 @@ input.wavy-underline {
 .entypo-caret-up { background-position: -80px 0;}
 .entypo-search { background-position: -100px 0;}
 
+
+/*--------------------------------------- 
+	FONTELLO ICON FONTS
+-----------------------------------------*/
+/* 
+	Generated from http://fontello.com (all available icons listed here)
+	Icons are from the Entypo and Font Awesome icon set.
+	http://www.entypo.com/
+	http://fortawesome.github.io/Font-Awesome/
+*/
+@font-face {
+  font-family: 'fontello';
+  src: url('../fonts/fontello.eot?10576970');
+  src: url('../fonts/fontello.eot?10576970#iefix') format('embedded-opentype'), url('../fonts/fontello.woff?10576970') format('woff'), url('../fonts/fontello.ttf?10576970') format('truetype'), url('../fonts/fontello.svg?10576970#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+[class^="fontello-"] {
+  cursor: pointer;
+  font-size: 0;
+}
+[class^="fontello-"]:before {
+  font-size: 14px;
+  font-family: "fontello", sans-serif;
+  speak: none;
+  text-decoration: inherit;
+  padding-right: 4px;
+  line-height: 1;
+  font-variant: normal;
+  text-transform: none;
+}
+
+.fontello-home:before {
+  content: '\e818';
+}
+
