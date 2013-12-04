@@ -50,7 +50,6 @@ public class BasicPageTest extends FieldIdPageTest<BasicPageHarness, FieldIDFron
         assertVisible(getHarness().getGoogleAnalytics());
         assertInDocument("<script src=\"https://ssl.google-analytics.com/ga.js?placeholderParam\" type=\"text/javascript\"></script>");
 
-
         assertTrue(validateCssUrls(getHarness().getLastResponseAsString()));
         assertTrue(validateJavascriptUrls(getHarness().getLastResponseAsString()));
     }
@@ -84,11 +83,15 @@ public class BasicPageTest extends FieldIdPageTest<BasicPageHarness, FieldIDFron
     }
 
     private boolean validateJavascriptUrls(String html) {
-        return html.indexOf("?"+FieldIdVersion.getVersion())>=0 && html.indexOf(".css\"")==-1;
+        // NOTE : one exception to this rule is that we include....
+        //   src="//use.typekit.net/usa4tou.js"
+        // in our files. for this case we don't care about the lack of url parameter (i.e. potential caching problems).
+        html = html.replace("src=\"//use.typekit.net/usa4tou.js\"","{ignoreThisJsReference}");
+        return html.indexOf("?"+FieldIdVersion.getVersion())>=0 &&  html.indexOf(".js\"")==-1;
     }
 
     private boolean validateCssUrls(String html) {
-        return html.indexOf("?"+FieldIdVersion.getVersion())>=0 &&  html.indexOf(".js\"")==-1;
+        return html.indexOf("?"+FieldIdVersion.getVersion())>=0 && html.indexOf(".css\"")==-1;
     }
 
 	@Override
