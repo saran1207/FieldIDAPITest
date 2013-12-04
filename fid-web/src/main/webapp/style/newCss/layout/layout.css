@@ -109,7 +109,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 ------------------*/
 #listContainer {
 	float:right;
-	/*margin-right: 14px;*/
+	margin-right: 4px;
 }
 .listOfLinks {
 	width: 100%;
@@ -218,7 +218,7 @@ li:hover #menuSetup:after {
 #smartSearchContainer {
 	position: absolute;
 	top: 0;
-	right: 20px;
+	right: 14px;
 }
 
 #smartSearch {

@@ -239,6 +239,7 @@ h2 a {
 #pageHeader #pageNavigation #navigationContent #smartSearchContainer {
 	padding: 0;
 	text-align: right;
+	margin-right: 14px;
 }
 
 
