@@ -4,13 +4,15 @@
     position:absolute;
     right: 18px;
     background-color:#fff;
-    border:1px solid #ebebeb;
    /* padding-bottom: 8px;*/
     text-align:right;
     overflow-y:auto;
     max-height: 500px;
     /*padding-bottom:20px;*/
     z-index:1;  /** make sure this is above any FlotCharts that may appear below.   > 0 */
+    -webkit-box-shadow: 0px 6px 20px -10px #666666;
+    box-shadow: 0px 6px 20px -10px #666666;
+    border: 1px solid #c7c7c9;
 }
 .mySavedItemsBox a {
     padding: 0;
