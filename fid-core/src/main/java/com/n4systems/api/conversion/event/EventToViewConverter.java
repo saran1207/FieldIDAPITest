@@ -8,6 +8,7 @@ import com.n4systems.model.*;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.eventschedule.NextEventDateByEventPassthruLoader;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.utils.AssetEvent;
 import com.n4systems.util.DateHelper;
 
 import java.text.DateFormat;
@@ -122,8 +123,8 @@ public class EventToViewConverter implements ModelToViewConverter<ThingEvent, Ev
 		view.setStatus(eventResult.getDisplayName());
 	}
 
-	protected void convertAssetIdentifier(Event model, EventView view) {
-		view.setIdentifier(model.getAsset().getIdentifier());
+	protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {
+		view.setIdentifier(model.getTarget().getIdentifier());
 	}
 
 	protected void converterPerformedBy(Event model, EventView view) {
@@ -141,7 +142,7 @@ public class EventToViewConverter implements ModelToViewConverter<ThingEvent, Ev
 		}
 	}
 
-	protected void convertAssetStatus(Event model, EventView view) {
+	protected void convertAssetStatus(AssetEvent model, EventView view) {
 		if (model.getAssetStatus() != null) {
 			view.setAssetStatus(model.getAssetStatus().getName());
 		}

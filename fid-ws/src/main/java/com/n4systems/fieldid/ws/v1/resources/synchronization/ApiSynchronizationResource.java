@@ -1,14 +1,23 @@
 package com.n4systems.fieldid.ws.v1.resources.synchronization;
 
-import java.util.*;
-
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
+import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
+import com.n4systems.model.Asset;
+import com.n4systems.model.SubAsset;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
+import com.n4systems.model.offlineprofile.OfflineProfile;
+import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.OwnerAndDownFilter;
+import com.n4systems.model.user.User;
+import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -16,25 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
-import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
-import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.SubAsset;
-import com.n4systems.model.offlineprofile.OfflineProfile;
-import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.OpenSecurityFilter;
-import com.n4systems.model.security.OwnerAndDownFilter;
-import com.n4systems.model.user.User;
-import com.n4systems.util.persistence.NewObjectSelect;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereParameterGroup;
-import com.n4systems.util.persistence.WhereParameter.Comparator;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import java.util.*;
 
 @Path("/synchronize")
 @Component
@@ -129,7 +122,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 			: getSyncEndDate(profile.getSyncDuration(), startDate);
 		User user = getCurrentUser();
 		
-		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
+		QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class)
 		.addOrder("dueDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "dueDate", startDate));
@@ -149,8 +142,8 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
 			query.addWhere(WhereClauseFactory.create(Comparator.LE, "dueDate", endDate));
 		}
 		
-		List<Event> events = persistenceService.findAll(query);		
-		for(Event event : events) {
+		List<ThingEvent> events = persistenceService.findAll(query);
+		for(ThingEvent event : events) {
 			assets.add(convert(event.getAsset()));
 		}
 		return assets;

@@ -113,7 +113,7 @@ public class ManagerBackedEventSaver implements EventSaver {
         return rememberedSignatures;
     }
 
-    private void addSignatureResultsFor(AbstractEvent<ThingEventType> event, Map<Long, byte[]> rememberedSignatures) {
+    private void addSignatureResultsFor(AbstractEvent<ThingEventType,Asset> event, Map<Long, byte[]> rememberedSignatures) {
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (criteriaResult instanceof SignatureCriteriaResult) {
                 SignatureCriteriaResult signatureResult = (SignatureCriteriaResult) criteriaResult;
@@ -219,7 +219,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		return eventResult;
 	}
 	
-	private void updateAsset(Event event, Long modifiedById) {
+	private void updateAsset(ThingEvent event, Long modifiedById) {
 		User modifiedBy = em.find(User.class, modifiedById);
 		Asset asset = em.find(Asset.class, event.getAsset().getId());
 
@@ -246,7 +246,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		
 	}
 
-	private void statusUpdates(Event event, Asset asset) {
+	private void statusUpdates(ThingEvent event, Asset asset) {
 		asset.setAssetStatus(event.getAssetStatus());
 	}
 
@@ -301,7 +301,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 
     ThingEvent attachUploadedFiles(ThingEvent event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
 		File attachmentDirectory;
-		AbstractEvent<ThingEventType> targetEvent;
+		AbstractEvent<ThingEventType,Asset> targetEvent;
 		if (subEvent == null) {
 			attachmentDirectory = PathHandler.getAttachmentFile(event);
 			targetEvent = event;

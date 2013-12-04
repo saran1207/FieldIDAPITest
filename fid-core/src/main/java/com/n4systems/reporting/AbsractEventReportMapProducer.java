@@ -40,7 +40,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
 	protected abstract File imagePath(FileAttachment imageAttachment);
 		
-	protected abstract AbstractEvent<ThingEventType> getEvent();
+	protected abstract AbstractEvent<ThingEventType,Asset> getEvent();
 
 	
 	private void addAbstractEventParameters() {
@@ -51,7 +51,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		add("eventTypeDescription", getEvent().getType().getName());
 		add("eventInfoOptionMap", eventInfoOptions());
 		
-		add("product", new AssetReportMapProducer(getEvent().getAsset(), lastEventDateService, dateTimeDefinition, s3Service).produceMap());
+		add("product", new AssetReportMapProducer(getEvent().getTarget(), lastEventDateService, dateTimeDefinition, s3Service).produceMap());
 		
 		List<CriteriaStateView> criteriaViews = createCriteriaViews();
         populateTotalsAndPercentages();
@@ -67,7 +67,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         add("observations", new JRBeanCollectionDataSource(observationViews));
 
 		add("images", createEventImages());
-		add("ownerLogo", getCustomerLogo(getEvent().getAsset().getOwner()));
+		add("ownerLogo", getCustomerLogo(getEvent().getTarget().getOwner()));
 	}
 
     private void populateTotalsAndPercentages() {

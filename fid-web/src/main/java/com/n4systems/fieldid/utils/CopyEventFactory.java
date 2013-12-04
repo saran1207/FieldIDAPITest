@@ -2,6 +2,7 @@ package com.n4systems.fieldid.utils;
 
 import com.n4systems.model.*;
 import com.n4systems.model.parents.EntityWithTenant;
+import com.n4systems.model.utils.AssetEvent;
 
 import java.util.*;
 
@@ -11,6 +12,7 @@ public class CopyEventFactory {
         ThingEvent newEvent = new ThingEvent();
 		
 		copyAbstractEvent(newEvent, event);
+        copyAssetEvent(newEvent, event);
 		
 		newEvent.setAssignedTo(event.getAssignedTo());
 		newEvent.setOwner( event.getOwner() );
@@ -61,16 +63,20 @@ public class CopyEventFactory {
 	public static SubEvent copySubEvent( SubEvent oldSubEvent) {
 		SubEvent newSubEvent = new SubEvent();
 		copyAbstractEvent(newSubEvent, oldSubEvent);
+        copyAssetEvent(newSubEvent, oldSubEvent);
 		newSubEvent.setName( oldSubEvent.getName() );
 
 		return newSubEvent;
 	}
 
+    protected static void copyAssetEvent(AssetEvent newEvent, AssetEvent originalEvent) {
+        newEvent.setAssetStatus(originalEvent.getAssetStatus());
+        newEvent.setAsset( originalEvent.getAsset() );
+    }
+
 	protected static void copyAbstractEvent( AbstractEvent newEvent, AbstractEvent originalEvent) {
 		copyEntity(newEvent, originalEvent);
 		
-		newEvent.setAssetStatus(originalEvent.getAssetStatus());
-		newEvent.setAsset( originalEvent.getAsset() );
 		newEvent.setType( originalEvent.getType() );
 		newEvent.setComments( originalEvent.getComments() );
         newEvent.setEventForm( originalEvent.getEventForm() );

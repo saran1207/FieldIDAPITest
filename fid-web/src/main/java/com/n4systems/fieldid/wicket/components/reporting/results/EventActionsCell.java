@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.views.RowView;
@@ -37,7 +38,7 @@ public class EventActionsCell extends Panel {
 
         add(actionsLink);
 
-        Event event = (Event) rowModel.getObject().getEntity();
+        ThingEvent event = (ThingEvent) rowModel.getObject().getEntity();
         Long eventId = event.getId();
 
         boolean localEvent = event.getSecurityLevel(FieldIDSession.get().getSessionUser().getSecurityFilter().getOwner()).isLocal();
@@ -64,7 +65,7 @@ public class EventActionsCell extends Panel {
         add(safetyNetworkActionsList);
     }
 
-    private WebMarkupContainer createIncompleteEventActionsList(final Event event, boolean isReadOnly, boolean hasCreateEvent, boolean hasTag) {
+    private WebMarkupContainer createIncompleteEventActionsList(final ThingEvent event, boolean isReadOnly, boolean hasCreateEvent, boolean hasTag) {
         WebMarkupContainer incompleteEventActionsList = new WebMarkupContainer("incompleteEventActionsList");
         incompleteEventActionsList.setOutputMarkupId(true);
 
@@ -101,7 +102,7 @@ public class EventActionsCell extends Panel {
         return incompleteEventActionsList;
     }
 
-    private WebMarkupContainer createCompleteEventActionsList(Event event, Long eventId, boolean localEvent, boolean localEndUser, boolean printable, boolean hasCreateEvent, boolean hasEditEvent, boolean hasTag) {
+    private WebMarkupContainer createCompleteEventActionsList(ThingEvent event, Long eventId, boolean localEvent, boolean localEndUser, boolean printable, boolean hasCreateEvent, boolean hasEditEvent, boolean hasTag) {
         WebMarkupContainer completeEventActionsList = new WebMarkupContainer("completeEventActionsList");
         completeEventActionsList.setOutputMarkupId(true);
 
@@ -132,7 +133,7 @@ public class EventActionsCell extends Panel {
         return completeEventActionsList;
     }
 
-    private WebMarkupContainer createSafetyNetworkActionsList(Event event, boolean localEvent) {
+    private WebMarkupContainer createSafetyNetworkActionsList(ThingEvent event, boolean localEvent) {
         WebMarkupContainer safetyNetworkActionsList = new WebMarkupContainer("safetyNetworkActionsList");
 
         if (localEvent) {

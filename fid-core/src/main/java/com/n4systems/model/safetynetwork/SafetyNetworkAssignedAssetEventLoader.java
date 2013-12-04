@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
@@ -24,10 +25,10 @@ public class SafetyNetworkAssignedAssetEventLoader extends SafetyNetworkEventLoa
 	}
 	
 	@Override
-	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Event event) {
+	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, AbstractEvent<?,Asset> event) {
 		SafetyNetworkAssetSecurityManager securityManager = new SafetyNetworkAssetSecurityManager(filter.getOwner());
 		
-		List<Asset> linkedAssets = getLinkedAssets(em, filter, event.getAsset());
+		List<Asset> linkedAssets = getLinkedAssets(em, filter, event.getTarget());
 		
 		boolean hasAssignedAsset = securityManager.listContainsAnAssignedAsset(linkedAssets);
 		boolean assetIsPubliclyAvailable = securityManager.listContainsAnAssetPubliclyPublished(linkedAssets);

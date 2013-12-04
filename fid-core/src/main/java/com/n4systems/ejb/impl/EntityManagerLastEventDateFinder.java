@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -36,7 +37,7 @@ public class EntityManagerLastEventDateFinder implements LastEventDateFinder {
 
     @Override
     public Date findLastEventDate(Long eventId) {
-        Event event = persistenceManager.find(Event.class, eventId);
+        ThingEvent event = persistenceManager.find(ThingEvent.class, eventId);
         return findLastEventDate(event.getAsset(),event.getType());
     }
 

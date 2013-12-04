@@ -22,10 +22,10 @@ public class ClosedActionsCell extends Panel {
     @SpringBean
     private EventService eventService;
 
-    public ClosedActionsCell(String id, IModel<Event> eventModel, final EventListPanel eventListPanel) {
+    public ClosedActionsCell(String id, IModel<ThingEvent> eventModel, final EventListPanel eventListPanel) {
         super(id);
         
-        final Event event = eventModel.getObject();
+        final ThingEvent event = eventModel.getObject();
 
         AjaxLink deleteLink;
         add(deleteLink = new AjaxLink<Void>("deleteLink") {

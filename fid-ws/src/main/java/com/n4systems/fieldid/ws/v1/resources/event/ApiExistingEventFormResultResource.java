@@ -18,7 +18,7 @@ import com.n4systems.model.Button;
 public class ApiExistingEventFormResultResource extends FieldIdPersistenceService {
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
 	
-	public void convertApiEventFormResults(ApiEventFormResult eventFormResult, AbstractEvent<?> event) {
+	public void convertApiEventFormResults(ApiEventFormResult eventFormResult, AbstractEvent<?,?> event) {
 		// Flatten ApiEventFormResult Sections into a Hashtable so it can be looked up easily by mobileGuid.
 		Hashtable<String, ApiCriteriaResult> apiCriteriaResults = new Hashtable<String, ApiCriteriaResult>();
 		for(ApiCriteriaSectionResult apiSectionResult : eventFormResult.getSections()) {

@@ -1,0 +1,1 @@
+alter table events change column type_id type_id bigint default null;

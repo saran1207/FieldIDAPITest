@@ -13,13 +13,8 @@ import com.n4systems.model.offlineprofile.OfflineProfile.SyncDuration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
-import com.n4systems.util.persistence.WhereParameterGroup;
-
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
@@ -36,7 +31,7 @@ import java.util.List;
 
 @Component
 @Path("eventSchedule")
-public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Event> {
+public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, ThingEvent> {
 	private static Logger logger = Logger.getLogger(ApiEventScheduleResource.class);
 	
 	@Autowired private EventScheduleService eventScheduleService;
@@ -47,7 +42,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	public List<ApiEventSchedule>  findAllSchedules(Long assetId, SyncDuration syncDuration) {
 		List<ApiEventSchedule> apiEventSchedules = new ArrayList<ApiEventSchedule>();
 		
-		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
+		QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class)
 		.addOrder("dueDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
 		.addWhere(WhereClauseFactory.create("asset.id", assetId));
@@ -61,9 +56,9 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			query.addWhere(WhereClauseFactory.create(Comparator.LE, "dueDate", endDate));
 		}
 		
-		List<Event> schedules = persistenceService.findAll(query);
+		List<ThingEvent> schedules = persistenceService.findAll(query);
 		
-		for (Event schedule: schedules) {
+		for (ThingEvent schedule: schedules) {
 			apiEventSchedules.add(convertEntityToApiModel(schedule));
 		}
 		
@@ -74,7 +69,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEventSchedule(ApiEventSchedule apiEventSchedule) {
-		Event event = eventScheduleService.findByMobileId(apiEventSchedule.getSid());
+        ThingEvent event = eventScheduleService.findByMobileId(apiEventSchedule.getSid());
 
 		if (event == null) {
             event = converApiEventSchedule(apiEventSchedule);
@@ -83,7 +78,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 					event.getEventType().getName() + " on Asset " + event.getAsset().getMobileGUID());
 		} else if (event.getWorkflowState() == WorkflowState.OPEN) {
 			event.setDueDate(apiEventSchedule.getNextDate());
-            event.setType(persistenceService.find(EventType.class, apiEventSchedule.getEventTypeId()));
+            event.setType(persistenceService.find(ThingEventType.class, apiEventSchedule.getEventTypeId()));
             event.setAssignee(getAssigneeUser(apiEventSchedule));
             if(event.getAssignee() == null)
             	event.setAssignedGroup(getAssigneeUserGroup(apiEventSchedule));
@@ -140,7 +135,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	}
 
 	@Override
-	protected ApiEventSchedule convertEntityToApiModel(Event event) {
+	protected ApiEventSchedule convertEntityToApiModel(ThingEvent event) {
 		ApiEventSchedule apiSchedule = new ApiEventSchedule();
         // For backward compatibility, we must still use the GUID of the Schedule, since all
         // existing schedules out there in mobile land will refer to schedule GUIDs.
@@ -172,7 +167,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 		return apiSchedule;
 	}
 	
-	public Event converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
+	public ThingEvent converApiEventSchedule(ApiEventSchedule apiEventSchedule) {
 		BaseOrg owner = persistenceService.findUsingTenantOnlySecurityWithArchived(BaseOrg.class, apiEventSchedule.getOwnerId());
 
         Asset asset = assetService.findByMobileId(apiEventSchedule.getAssetId(), true);
@@ -229,7 +224,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 			@DefaultValue("25") @QueryParam("pageSize") int pageSize) {
 		User user = getCurrentUser();
 		
-		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
+		QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class)
 		.addOrder("dueDate")
         .addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
 		.addWhere(WhereClauseFactory.create(Comparator.GE, "startDate", "dueDate", startDate))
@@ -246,7 +241,7 @@ public class ApiEventScheduleResource extends ApiResource<ApiEventSchedule, Even
 	        query.addWhere(group);				
 		}
 		
-		List<Event> events = persistenceService.findAll(query, page, pageSize);
+		List<ThingEvent> events = persistenceService.findAll(query, page, pageSize);
 		Long total = persistenceService.count(query);
 		List<ApiEventSchedule> apiSchedules = convertAllEntitiesToApiModels(events);
 		ListResponse<ApiEventSchedule> response = new ListResponse<ApiEventSchedule>(apiSchedules, page, pageSize, total);

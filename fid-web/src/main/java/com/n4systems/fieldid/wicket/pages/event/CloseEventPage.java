@@ -39,13 +39,13 @@ public class CloseEventPage extends FieldIDFrontEndPage {
     private  @SpringBean EventScheduleService eventScheduleService;
     private  @SpringBean EventCreationService eventCreationService;
 
-    protected IModel<Event> openEventModel;
+    protected IModel<ThingEvent> openEventModel;
     private FieldIDFrontEndPage returnPage;
 
     public CloseEventPage(PageParameters params) {
         super(params);
         Long id = params.get("uniqueID").toLong();
-        openEventModel = new EntityModel<Event>(Event.class, id);
+        openEventModel = new EntityModel<ThingEvent>(ThingEvent.class, id);
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new Label("event", PropertyModel.of(openEventModel, "type.name")));
         add(new ResolveForm("form"));
@@ -112,7 +112,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
 
         @Override
         protected void onSubmit() {
-            Event openEvent = openEventModel.getObject();
+            ThingEvent openEvent = openEventModel.getObject();
             Asset asset = openEvent.getAsset();
             openEvent.setEventResult(EventResult.VOID);
             openEvent.setWorkflowState(WorkflowState.CLOSED);

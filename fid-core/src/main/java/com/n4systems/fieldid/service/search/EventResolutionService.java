@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.search;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.summary.EventResolutionSummary;
@@ -24,15 +25,15 @@ public class EventResolutionService extends FieldIdPersistenceService {
         EventResolutionSummary eventResolutionSummary = new EventResolutionSummary();
 
         for (int currentPage = 0; currentPage < totalPages; currentPage++) {
-            SearchResult<Event> pageResult = reportService.performRegularSearch(criteria, currentPage, summaryPageSize);
+            SearchResult<ThingEvent> pageResult = reportService.performRegularSearch(criteria, currentPage, summaryPageSize);
             addResultsToSummary(eventResolutionSummary, pageResult);
         }
 
         return eventResolutionSummary;
     }
 
-    private void addResultsToSummary(EventResolutionSummary eventResolutionSummary, SearchResult<Event> pageResult) {
-        for (Event event : pageResult.getResults()) {
+    private void addResultsToSummary(EventResolutionSummary eventResolutionSummary, SearchResult<ThingEvent> pageResult) {
+        for (ThingEvent event : pageResult.getResults()) {
             if (event.getRelevantDate() == null) {
                 continue;
             }

@@ -1,6 +1,7 @@
 package com.n4systems.model.orgs;
 
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.api.*;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
@@ -11,6 +12,8 @@ import com.n4systems.model.utils.GlobalID;
 import com.n4systems.persistence.localization.Localized;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "org_base")
@@ -26,6 +29,10 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("tenant.id", "", null, "state");
 	}
+
+    @ManyToMany(fetch= FetchType.LAZY, cascade= CascadeType.ALL)
+    @JoinTable(name="orgs_place_event_types", joinColumns = @JoinColumn(name="org_id"), inverseJoinColumns = @JoinColumn(name="place_event_type_id"))
+    private Set<PlaceEventType> eventTypes = new HashSet<PlaceEventType>();
 	
 	@Column(name="name", nullable = false, length = 255)
 	private String name;
@@ -281,4 +288,11 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
         return false;
     }
 
+    public Set<PlaceEventType> getEventTypes() {
+        return eventTypes;
+    }
+
+    public void setEventTypes(Set<PlaceEventType> eventTypes) {
+        this.eventTypes = eventTypes;
+    }
 }

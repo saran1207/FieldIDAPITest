@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -34,7 +34,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
 
     private boolean assetSummaryContext = false;
 
-    public ActionDetailsPage(final IModel<CriteriaResult> criteriaResultModel, final IModel<Event> actionModel) {
+    public ActionDetailsPage(final IModel<CriteriaResult> criteriaResultModel, final IModel<ThingEvent> actionModel) {
         add(new Label("priority", new PropertyModel<String>(actionModel, "priority.name")));
         add(new Label("notes", new PropertyModel<String>(actionModel, "notes")));
         if (actionModel.getObject().getAssignee() != null) {
@@ -112,7 +112,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         return true;
     }
 
-    private WebMarkupContainer createIssuingEventSection(IModel<CriteriaResult> criteriaResultModel, final IModel<Event> actionModel) {
+    private WebMarkupContainer createIssuingEventSection(IModel<CriteriaResult> criteriaResultModel, final IModel<ThingEvent> actionModel) {
         WebMarkupContainer issuingEventSection = new WebMarkupContainer("issuingEventSection") {
             @Override
             public boolean isVisible() {

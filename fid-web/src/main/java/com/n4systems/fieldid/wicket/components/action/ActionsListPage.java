@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.asset.events.table.EventStateIcon
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.security.Permissions;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -38,9 +39,9 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
             }
         });
 
-        add(new ListView<Event>("actionsList", new PropertyModel<List<? extends Event>>(criteriaResultModel, "actions")) {
+        add(new ListView<ThingEvent>("actionsList", new PropertyModel<List<ThingEvent>>(criteriaResultModel, "actions")) {
             @Override
-            protected void populateItem(final ListItem<Event> item) {
+            protected void populateItem(final ListItem<ThingEvent> item) {
                 item.add(new EventStateIcon("eventStateIcon", item.getModel()));
                 item.add(new Label("actionType", new PropertyModel<String>(item.getModel(), "type.name")));
                 if (item.getModelObject().getAssignee() != null) {

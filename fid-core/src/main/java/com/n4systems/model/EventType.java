@@ -1,22 +1,16 @@
 package com.n4systems.model;
 
-import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
-import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.persistence.localization.Localized;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "eventtypes")

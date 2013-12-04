@@ -16,9 +16,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
-import com.n4systems.util.persistence.MaxSelect;
-import com.n4systems.util.persistence.MinSelect;
-import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -146,7 +143,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         return event;
     }
 
-    public void updateRecurringAssetTypeEvent(Event event, EventEnum eventEnum) {
+    public void updateRecurringAssetTypeEvent(ThingEvent event, EventEnum eventEnum) {
 
         Event nextEvent = null;
         Event uEvent = null;
@@ -168,7 +165,6 @@ public class EventCreationService extends FieldIdPersistenceService {
             }
         }
     }
-
 
     private void setAllTriggersForActions(ThingEvent event) {
         event.setTriggersIntoResultingActions(event);
@@ -231,7 +227,7 @@ public class EventCreationService extends FieldIdPersistenceService {
 
     private Event attachUploadedFiles(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
         File attachmentDirectory;
-        AbstractEvent<ThingEventType> targetEvent;
+        AbstractEvent<ThingEventType,Asset> targetEvent;
         if (subEvent == null) {
             attachmentDirectory = PathHandler.getAttachmentFile(event);
             targetEvent = event;
@@ -398,7 +394,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         event.setSubEvents(reorderedSubEvents);
     }
 
-    private void updateAsset(Event event, Long modifiedById) {
+    private void updateAsset(ThingEvent event, Long modifiedById) {
         User modifiedBy = getCurrentUser();
         Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
         asset.setSubAssets(assetService.findSubAssets(asset));
@@ -424,7 +420,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         }
     }
 
-    private void statusUpdates(Event event, Asset asset) {
+    private void statusUpdates(ThingEvent event, Asset asset) {
         asset.setAssetStatus(event.getAssetStatus());
     }
 

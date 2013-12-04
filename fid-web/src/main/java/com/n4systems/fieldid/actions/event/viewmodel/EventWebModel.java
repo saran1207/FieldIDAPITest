@@ -6,6 +6,7 @@ import com.n4systems.fieldid.actions.asset.LocationWebModel;
 import com.n4systems.fieldid.actions.helpers.SessionUserDateConverter;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.opensymphony.xwork2.validator.annotations.CustomValidator;
 import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -63,7 +64,7 @@ public class EventWebModel implements UserDateFormatValidator {
         utcDueDate = event.getDueDate();
 	}
 	
-	public void pushValuesTo(Event event) {
+	public void pushValuesTo(ThingEvent event) {
 		if (locationSetFromAsset){
 			event.setAdvancedLocation(event.getAsset().getAdvancedLocation());
 		}else{

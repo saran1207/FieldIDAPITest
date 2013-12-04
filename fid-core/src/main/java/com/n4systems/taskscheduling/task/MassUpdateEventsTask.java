@@ -7,16 +7,17 @@ import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.exceptions.UpdateConatraintViolationException;
 import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.user.User;
 
 public class MassUpdateEventsTask extends MassUpdateTask {
 	
 	private List<Long> ids;
-	private Event event;
+	private ThingEvent event;
 	private Map<String, Boolean> values;
 	private User modifiedBy;
 
-	public MassUpdateEventsTask(MassUpdateManager massUpdateManager, List<Long> ids, Event event, Map<String, Boolean> values, User modifiedBy) {
+	public MassUpdateEventsTask(MassUpdateManager massUpdateManager, List<Long> ids, ThingEvent event, Map<String, Boolean> values, User modifiedBy) {
 		super(massUpdateManager);
 		this.ids = ids;
 		this.event = event;

@@ -222,7 +222,7 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
                 withRecurrence(recurrence).build();
 
         expect(persistenceService.findAll(QueryTypeMatcher.eq(Asset.class))).andReturn(Lists.newArrayList(asset));
-        expect(persistenceService.count(QueryTypeMatcher.eq(Event.class))).andReturn(0L);
+        expect(persistenceService.count(QueryTypeMatcher.eq(ThingEvent.class))).andReturn(0L);
         replay(persistenceService);
 
         expect(eventScheduleService.createSchedule(EventMatcher.eq(asset, dueDate.toDate(), owner, recurringAssetTypeEvent, tenant, eventType))).andReturn(33L);
@@ -426,7 +426,7 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
             this.eventType = type;
         }
 
-        public static final Event eq(Asset asset, Date dueDate, BaseOrg owner, RecurringAssetTypeEvent recurringAssetTypeEvent, Tenant tenant, EventType eventType) {
+        public static final ThingEvent eq(Asset asset, Date dueDate, BaseOrg owner, RecurringAssetTypeEvent recurringAssetTypeEvent, Tenant tenant, EventType eventType) {
             EasyMock.reportMatcher(new EventMatcher(asset, dueDate, owner, recurringAssetTypeEvent, tenant, eventType));
             return null;
         }
@@ -453,7 +453,7 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
             if (!(argument instanceof Event) ) {
                 return false;
             }
-            Event actual = (Event) argument;
+            ThingEvent actual = (ThingEvent) argument;
             return asset.equals(actual.getAsset()) &&
                     dueDate.equals(actual.getDueDate()) &&
                     tenant.equals(actual.getTenant()) &&

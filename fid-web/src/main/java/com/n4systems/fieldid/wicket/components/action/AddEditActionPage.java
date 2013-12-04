@@ -53,16 +53,16 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
     private boolean immediateSaveMode = false;
 
     public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel) {
-        add(new AddActionForm("addActionForm", new Model<Event>(new ThingEvent()), criteriaResultModel));
+        add(new AddActionForm("addActionForm", new Model<ThingEvent>(new ThingEvent()), criteriaResultModel));
     }
 
-    public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel, IModel<Event> eventModel) {
+    public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel, IModel<ThingEvent> eventModel) {
         editMode = true;
         add(new AddActionForm("addActionForm", eventModel, criteriaResultModel));
     }
 
-    class AddActionForm extends Form<Event> {
-        public AddActionForm(String id, final IModel<Event> eventModel, final IModel<CriteriaResult> criteriaResultModel) {
+    class AddActionForm extends Form<ThingEvent> {
+        public AddActionForm(String id, final IModel<ThingEvent> eventModel, final IModel<CriteriaResult> criteriaResultModel) {
             super(id, eventModel);
             setOutputMarkupId(true);
 
@@ -213,7 +213,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
         return date;
     }
 
-    private void autoScheduleBasedOnPriority(IModel<Event> model) {
+    private void autoScheduleBasedOnPriority(IModel<ThingEvent> model) {
         PriorityCode priority = model.getObject().getPriority();
         if (priority != null && priority.getAutoSchedule() != null) {
             PriorityCodeAutoScheduleType autoSchedule = priority.getAutoSchedule();

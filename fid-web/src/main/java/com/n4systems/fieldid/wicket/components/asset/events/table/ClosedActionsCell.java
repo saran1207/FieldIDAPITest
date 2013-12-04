@@ -25,7 +25,7 @@ public class ClosedActionsCell extends Panel {
     public ClosedActionsCell(String id, IModel<ThingEvent> eventModel, final EventListPanel eventListPanel) {
         super(id);
         
-        final Event event = eventModel.getObject();
+        final ThingEvent event = eventModel.getObject();
         WebMarkupContainer menu = new WebMarkupContainer("menu");
 
         AjaxLink deleteLink;

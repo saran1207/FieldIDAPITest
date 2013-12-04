@@ -19,7 +19,7 @@ public class NextEventScheduleService extends FieldIdPersistenceService {
      * @return The newly created schedule, or the already existing one.
      */
     @Transactional
-    public Event createNextSchedule(Event openEvent) {
+    public Event createNextSchedule(ThingEvent openEvent) {
 
         Event eventSchedule = findExistingSchedule(openEvent);
 
@@ -30,7 +30,7 @@ public class NextEventScheduleService extends FieldIdPersistenceService {
         return eventSchedule;
     }
 
-    private Event findExistingSchedule(Event newSchedule) {
+    private Event findExistingSchedule(ThingEvent newSchedule) {
         List<ThingEvent> openEvents = eventScheduleService.getAvailableSchedulesFor(newSchedule.getAsset());
 
         for (ThingEvent openEvent : openEvents) {

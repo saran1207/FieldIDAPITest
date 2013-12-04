@@ -50,7 +50,7 @@ public class EventReportMapProducerTest {
 	public void test_event_map_creation() {
         ThingEventType eventType = anEventType().named("test").build();
 		Asset targetAsset = AssetBuilder.anAsset().build();
-		Event targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
+		ThingEvent targetEvent = anEvent().ofType(eventType).on(targetAsset).build();
 
 		Map<String, Object> expectedReportMap = new HashMap<String, Object>();
 		expectedReportMap.put("productLabel", null);
@@ -131,7 +131,7 @@ public class EventReportMapProducerTest {
 
 	@Test
 	public void should_have_assigned_user_null_when_no_assignment_was_done_on_an_event() {
-		Event event = anEvent().withNoAssignedToUpdate().build();
+		ThingEvent event = anEvent().withNoAssignedToUpdate().build();
 
 		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null, createMockEventService(), createMockLastEventDateService());
 		Map<String, Object> actualReportMap = sut.produceMap();
@@ -141,7 +141,7 @@ public class EventReportMapProducerTest {
 
 	@Test
 	public void should_have_assigned_user_unassigned_when_an_assignment_to_unassigned_was_done() {
-		Event event = anEvent().withAssignedToUpdate(unassignAsset()).build();
+        ThingEvent event = anEvent().withAssignedToUpdate(unassignAsset()).build();
 
 		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null, createMockEventService(), createMockLastEventDateService());
 		Map<String, Object> actualReportMap = sut.produceMap();
@@ -152,7 +152,7 @@ public class EventReportMapProducerTest {
 	@Test
 	public void should_have_assigned_user_as_first_name_last_name_when_an_assignment_to_a_user_was_done() {
 		User namedEmployee = anEmployee().withFirstName("first").withLastName("last").build();
-		Event event = anEvent().withAssignedToUpdate(assignAssetToUser(namedEmployee)).build();
+        ThingEvent event = anEvent().withAssignedToUpdate(assignAssetToUser(namedEmployee)).build();
 
 		ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null, createMockEventService(), createMockLastEventDateService());
 		Map<String, Object> actualReportMap = sut.produceMap();
@@ -174,7 +174,7 @@ public class EventReportMapProducerTest {
         };
         EventForm eventForm = EventFormBuilder.anEventForm().withSections(sections).build();
         ThingEventType eventType = EventTypeBuilder.anEventType().withEventForm(eventForm).build();
-        Event event = anEvent().withCriteriaResults(criteriaResult).ofType(eventType).build();
+        ThingEvent event = anEvent().withCriteriaResults(criteriaResult).ofType(eventType).build();
         event.setEventForm(event.getType().getEventForm());
 
         ReportMapProducer sut = new EventReportMapProducer(event, new DefaultedDateTimeDefiner(), null, createMockEventService(), createMockLastEventDateService());
@@ -189,9 +189,9 @@ public class EventReportMapProducerTest {
     private EventService createMockEventService() {
         ThingEvent event = new ThingEvent();
         EventService mockEventService = createMock(EventService.class);
-        expect(mockEventService.findNextOpenEventOfSameType(anyObject(Event.class))).andReturn(event);
-        expect(mockEventService.findNextOpenOrCompletedEventOfSameType(anyObject(Event.class))).andReturn(event);
-        expect(mockEventService.findPreviousEventOfSameType(anyObject(Event.class))).andReturn(event);
+        expect(mockEventService.findNextOpenEventOfSameType(anyObject(ThingEvent.class))).andReturn(event);
+        expect(mockEventService.findNextOpenOrCompletedEventOfSameType(anyObject(ThingEvent.class))).andReturn(event);
+        expect(mockEventService.findPreviousEventOfSameType(anyObject(ThingEvent.class))).andReturn(event);
         replay(mockEventService);
         return mockEventService;
     }

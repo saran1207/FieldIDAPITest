@@ -16,7 +16,10 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
-import com.n4systems.model.*;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.ThingEventType;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -54,7 +57,7 @@ public class OpenActionsCell extends Panel {
 
         setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && FieldIDSession.get().getSessionUser().hasAccess("editevent"));
         
-        final Event schedule = eventModel.getObject();
+        final ThingEvent schedule = eventModel.getObject();
 
         String startAction = "selectEventAdd.action?scheduleId=" + schedule.getId() + "&assetId=" + schedule.getAsset().getId() + "&type=" + schedule.getType().getId();
         add(new NonWicketLink("startLink", startAction, new AttributeModifier("class", "mattButtonLeft")));
@@ -113,7 +116,7 @@ public class OpenActionsCell extends Panel {
         dialogWindow.setPageCreator(new ModalWindow.PageCreator() {
             @Override
             public Page createPage() {
-                IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
+                IModel<ThingEvent> entityModel = new EntityModel<ThingEvent>(ThingEvent.class, eventModel.getObject().getId());
                 return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), entityModel)
                         .setAssetSummaryContext(true);
             }
