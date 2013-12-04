@@ -74,7 +74,7 @@ public class SmartFailedEventListLoader extends FailedEventListLoader {
 		return new ArrayList<ThingEvent>(events.values());
 	}
 
-	private String makeEventAssetKey(Event event) {
+	private String makeEventAssetKey(ThingEvent event) {
 		return event.getType().getId()+":"+event.getAsset().getId();
 	}
 

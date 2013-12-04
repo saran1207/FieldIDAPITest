@@ -37,7 +37,7 @@ import java.util.*;
 public class EventImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(EventImportAction.class);
 	
-	private EventType type;
+	private ThingEventType type;
 	private List<EventType> eventTypes;
 	private InputStream exampleExportFileStream;
 	private String exampleExportFileSize;
@@ -168,7 +168,7 @@ public class EventImportAction extends AbstractImportAction {
 
 	public void setUniqueID(Long id) {
 		if (type == null || !type.getId().equals(id)) {
-			type = getLoaderFactory().createFilteredIdLoader(EventType.class).setPostFetchFields("eventForm.sections").setId(id).load();
+			type = getLoaderFactory().createFilteredIdLoader(ThingEventType.class).setPostFetchFields("eventForm.sections").setId(id).load();
 		}
 	}
 	

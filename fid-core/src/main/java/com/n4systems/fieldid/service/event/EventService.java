@@ -392,8 +392,8 @@ public class EventService extends FieldIdPersistenceService {
     	return event;
     }
     
-    public List<Event> getLastEventOfEachType(Long assetId) {
-		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
+    public List<ThingEvent> getLastEventOfEachType(Long assetId) {
+		QueryBuilder<ThingEvent> builder = new QueryBuilder<ThingEvent>(ThingEvent.class, securityContext.getUserSecurityFilter(), "i");
 		builder.addWhere(WhereClauseFactory.create("asset.id", assetId));
         builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
 
@@ -408,7 +408,7 @@ public class EventService extends FieldIdPersistenceService {
         return persistenceService.findAll(builder);
 	}
 
-    public Event retireEvent(Event event) {
+    public Event retireEvent(ThingEvent event) {
         event.retireEntity();
         event = persistenceService.update(event);
         event.setAsset(persistenceService.update(event.getAsset()));
@@ -487,8 +487,8 @@ public class EventService extends FieldIdPersistenceService {
         return query;
     }
 
-    public List<Event> getWork(DateRange dateRange, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {
-        QueryBuilder<Event> builder = createUserSecurityBuilder(Event.class);
+    public List<ThingEvent> getWork(DateRange dateRange, User user, BaseOrg org, AssetType assetType, EventType eventType, int limit) {
+        QueryBuilder<ThingEvent> builder = createUserSecurityBuilder(ThingEvent.class);
 
         addToWorkQuery(builder, user, org, assetType, eventType, dateRange);
         builder.setLimit(limit + 1);
@@ -561,8 +561,8 @@ public class EventService extends FieldIdPersistenceService {
         }
     }
 
-    public Event findPreviousEventOfSameType(Event event) {
-        QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
+    public Event findPreviousEventOfSameType(ThingEvent event) {
+        QueryBuilder<ThingEvent> builder = new QueryBuilder<ThingEvent>(ThingEvent.class, securityContext.getUserSecurityFilter(), "i");
         builder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", event.getId()));
         builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.COMPLETED));
         builder.addWhere(WhereClauseFactory.create("asset.id", event.getAsset().getId()));
@@ -602,17 +602,17 @@ public class EventService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public Event findNextOpenEventOfSameType(Event event) {
+    public Event findNextOpenEventOfSameType(ThingEvent event) {
         return findNextEventOfSameType(event, true);
     }
 
     @Transactional
-    public Event findNextOpenOrCompletedEventOfSameType(Event event) {
+    public Event findNextOpenOrCompletedEventOfSameType(ThingEvent event) {
         return findNextEventOfSameType(event, false);
     }
 
-    private Event findNextEventOfSameType(Event event, boolean openOnly) {
-        QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, securityContext.getUserSecurityFilter(), "i");
+    private Event findNextEventOfSameType(ThingEvent event, boolean openOnly) {
+        QueryBuilder<ThingEvent> builder = new QueryBuilder<ThingEvent>(Event.class, securityContext.getUserSecurityFilter(), "i");
 
         if (openOnly) {
             builder.addWhere(WhereClauseFactory.create("workflowState", WorkflowState.OPEN));

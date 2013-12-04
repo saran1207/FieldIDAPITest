@@ -7,6 +7,7 @@ import com.n4systems.exceptions.UpdateFailureException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.Project;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.FieldIdTransactionManager;
 import com.n4systems.persistence.Transaction;
@@ -38,7 +39,7 @@ Transaction transaction = transactionManager.startTransaction();
 	}
 
     @Override
-    public Long closeEvents(List<Long> ids, Event eventChanges, User modifiedBy) throws UpdateFailureException {
+    public Long closeEvents(List<Long> ids, ThingEvent eventChanges, User modifiedBy) throws UpdateFailureException {
         TransactionManager transactionManager = new FieldIdTransactionManager();
         Transaction transaction = transactionManager.startTransaction();
         try {
@@ -68,7 +69,7 @@ Transaction transaction = transactionManager.startTransaction();
 		}
 	}
 
-	public Long updateEvents(List<Long> ids, Event event, Map<String, Boolean> values, Long userId) throws UpdateFailureException {
+	public Long updateEvents(List<Long> ids, ThingEvent event, Map<String, Boolean> values, Long userId) throws UpdateFailureException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 Transaction transaction = transactionManager.startTransaction();
 		try {

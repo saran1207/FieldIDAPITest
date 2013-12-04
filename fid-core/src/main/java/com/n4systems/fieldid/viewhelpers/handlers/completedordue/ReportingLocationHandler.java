@@ -2,7 +2,7 @@ package com.n4systems.fieldid.viewhelpers.handlers.completedordue;
 
 import com.n4systems.fieldid.service.download.TableGenerationContext;
 import com.n4systems.fieldid.service.download.WebOutputHandler;
-import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 
 public class ReportingLocationHandler extends WebOutputHandler {
@@ -22,7 +22,7 @@ public class ReportingLocationHandler extends WebOutputHandler {
     }
 
     private String findLocation(Object value) {
-        Event event = (Event) value;
+        ThingEvent event = (ThingEvent) value;
 
         if (event.getWorkflowState() == WorkflowState.COMPLETED) {
             return event.getAdvancedLocation().getFullName();

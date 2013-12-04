@@ -40,7 +40,7 @@ public class OpenActionsCell extends Panel {
     private ModalWindow modalWindow;
     private Component/*SchedulePicker*/ schedulePicker;
 
-    public OpenActionsCell(String id, final IModel<Event> eventModel, final Panel eventDisplayPanel) {
+    public OpenActionsCell(String id, final IModel<ThingEvent> eventModel, final Panel eventDisplayPanel) {
         super(id);
 
         add(modalWindow = createModalWindow(eventModel, eventDisplayPanel));
@@ -59,7 +59,7 @@ public class OpenActionsCell extends Panel {
 
                 setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && FieldIDSession.get().getSessionUser().hasAccess("editevent"));
         
-        final Event schedule = eventModel.getObject();
+        final ThingEvent schedule = eventModel.getObject();
 
         String startAction = "selectEventAdd.action?scheduleId=" + schedule.getId() + "&assetId=" + schedule.getAsset().getId() + "&type=" + schedule.getType().getId();
         add(new NonWicketLink("startLink", startAction, new AttributeModifier("class", "btn-secondary")));
@@ -113,12 +113,12 @@ public class OpenActionsCell extends Panel {
         }
     }*/
 
-    private DialogModalWindow createModalWindow(final IModel<Event> eventModel, final Panel eventDisplayPanel) {
+    private DialogModalWindow createModalWindow(final IModel<ThingEvent> eventModel, final Panel eventDisplayPanel) {
         DialogModalWindow dialogWindow = new DialogModalWindow("modalWindow");
         dialogWindow.setPageCreator(new ModalWindow.PageCreator() {
             @Override
             public Page createPage() {
-                IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
+                IModel<ThingEvent> entityModel = new EntityModel<ThingEvent>(ThingEvent.class, eventModel.getObject().getId());
                 return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), entityModel)
                         .setAssetSummaryContext(true);
             }

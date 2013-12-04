@@ -1,12 +1,17 @@
 <wicket:extend>
 
     <style type="text/css">
+        /*CHRISTINA  this stuff is just for debugging....remove it  */
         .match {
             color:#00008b;
             background: #FDFD88;
             outline: 1px solid #A7B412;
         }
+        .action {
+            padding-left: 100px;
+        }
     </style>
+
 
     <div class="action-bar">
         <div wicket:id="buttons" class="button-group pull-left">
@@ -17,13 +22,14 @@
                 <span class="fontello-menu"><wicket:message key="label.list_view"/></span>
             </a>
         </div>
+        <div class="text-search pull-left">
+            <span class="fontello-search"></span>
+            <input wicket:id="filter" type="text" placeholder="Search by Place name or ID">
+        </div>
     </div>
 
-    <div class="input-combo">
-        <input wicket:id="filter" type="text" placeholder="Search by Place name or ID">
-    </div>
 
-    <div wicket:id="container">
+    <div wicket:id="container" class="tree-view column-custom-left">
         <div wicket:id="tree" class="tree-container">
             <div wicket:id="orgTree"/>
         </div>
@@ -40,4 +46,65 @@
         </div>
     </div>
 
+    <div wicket:id="createPanel" class="column-custom">
+        <div wicket:id="instructions" class="info">
+            <p><wicket:message key="label.create_place_instructions"/>/p>
+        </div>
+        <form wicket:id="form" class="add-place-form">
+            <h3 wicket:id="title"/>
+            <fieldset class="primary-selection form-horizontal">
+                <div class="control-group">
+                    <label><wicket:message key="label.select_level"/></label>
+                    <select wicket:id="level"/>
+                </div>
+            </fieldset>
+            <br><br>
+            <div class="two-columns pull-left">
+                <fieldset class="form-horizontal">
+                    <legend>Details</legend>
+                    <div class="control-group">
+                        <label>*ID</label>
+                        <input wicket:id="id" type="text"/>
+                    </div>
+                    <div class="control-group">
+                        <label>*Name</label>
+                        <input wicket:id="name" type="text"/>
+                    </div>
+                    <div class="control-group">
+                        <label>Notes</label>
+                        <textarea wicket:id="notes"/>
+                    </div>
+                    <!--<div class="control-group">-->
+                        <!--<label>Logo Image</label>-->
+                        <!--<div class="input-combo fluid">-->
+                            <!--<input type="file" class="file-input js-file-input">-->
+                            <!--<input type="text" class="file-uploaded js-file-uploaded">-->
+                            <!--<span class="btn-secondary btn-sml">Browse</span>-->
+                        <!--</div>-->
+                        <!--<span class="text-block">Upload a JPG, GIF, or PNG with a size of 200x50 pixels</span>-->
+                    <!--</div>-->
+                </fieldset>
+            </div>
+
+            <div class="two-columns pull-right">
+                <fieldset class="form-horizontal">
+                    <legend>Contact Information</legend>
+                    <div class="control-group">
+                        <label>Contact Name</label>
+                        <input wicket:id="contactName" type="text">
+                    </div>
+                    <div class="control-group">
+                        <label>Email Address</label>
+                        <input wicket:id="email" type="text">
+                    </div>
+                    <div wicket:id="address" class="control-group"/>
+                </fieldset>
+            </div>
+            <div class="action-group clear border-top text-right">
+                <a class="btn-primary btn-sml" type="submit">Save</a>
+                <a class="btn-link" href="#">Cancel</a>
+            </div>
+        </form>
+
+    </div>
 </wicket:extend>

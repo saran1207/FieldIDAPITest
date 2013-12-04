@@ -135,7 +135,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
 
-        add(createHeaderLink("headerLink", "headerLinkLabel"));
         add(createBackToLink("backToLink", "backToLinkLabel"));
         add(createRelogLink());
     }
@@ -238,10 +237,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     protected Component createBackToLink(String linkId, String linkLabelId) {
         return new WebMarkupContainer(linkId).setVisible(false);
     }
-    
-    protected Component createHeaderLink(String id, String label) {
-		return new WebMarkupContainer(id).setVisible(false);
-	}
 
     private Component createSetupLinkContainer(SessionUser sessionUser) {
         boolean hasSetupAccess = sessionUser.hasSetupAccess();
@@ -487,8 +482,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
             addSpeedIdentifyLinks(sessionUser);
 
-            add(createHeaderLink("headerLink", "headerLinkLabel"));
-            add(createBackToLink("backToLink", "backToLinkLabel"));
             add(new Label("loggedInUsernameLabel", sessionUser.getName()));
             add(new AjaxLink<Void>("languageSelection") {
                 @Override

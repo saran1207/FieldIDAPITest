@@ -188,8 +188,8 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		}
 	}
 
-	private void addNextEventScheduleParams(Map<String, Object> reportMap, Event event, DateTimeDefiner dateDefiner) {
-		Event openEvent = eventScheduleService.getNextEventSchedule(event.getAsset().getId(), event.getType().getId());
+	private void addNextEventScheduleParams(Map<String, Object> reportMap, AbstractEvent<?,Asset> event, DateTimeDefiner dateDefiner) {
+		Event openEvent = eventScheduleService.getNextEventSchedule(event.getTarget().getId(), event.getType().getId());
 		if (openEvent != null) {
             Date nextDate = openEvent.getDueDate();
             String formattedNextDate = new FieldIdDateFormatter(nextDate, dateDefiner, false, !DateUtil.isMidnight(nextDate)).format();

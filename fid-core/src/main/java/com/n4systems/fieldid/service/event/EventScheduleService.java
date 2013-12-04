@@ -2,8 +2,8 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
-import com.n4systems.model.api.Archivable;
-import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ public class EventScheduleService extends FieldIdPersistenceService {
     @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
 
 	@Transactional(readOnly = true)
-	public Event getNextEventSchedule(Long assetId, Long eventTypeId) {
-		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class)
+	public ThingEvent getNextEventSchedule(Long assetId, Long eventTypeId) {
+		QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class)
 				.addOrder("dueDate")
 				.addWhere(WhereClauseFactory.create(Comparator.EQ, "workflowState", WorkflowState.OPEN))
 				.addWhere(WhereClauseFactory.create("asset.id", assetId));
@@ -28,20 +28,20 @@ public class EventScheduleService extends FieldIdPersistenceService {
 			query.addWhere(WhereClauseFactory.create("type.id", eventTypeId));
 		}
 
-		List<Event> schedules = persistenceService.findAll(query);
+		List<ThingEvent> schedules = persistenceService.findAll(query);
 		return (schedules.isEmpty()) ? null : schedules.get(0);
 	}
 	
 	@Transactional(readOnly = true)
-	public Event findByMobileId(String mobileId) {
+	public ThingEvent findByMobileId(String mobileId) {
 		return findByMobileId(mobileId, false);
 	}
 
 	@Transactional(readOnly = true)
-	public Event findByMobileId(String mobileId, boolean withArchived) {
-		QueryBuilder<Event> query = createUserSecurityBuilder(Event.class, withArchived);
+	public ThingEvent findByMobileId(String mobileId, boolean withArchived) {
+		QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class, withArchived);
 		query.addWhere(WhereClauseFactory.create("mobileGUID", mobileId));
-        Event eventSchedule = persistenceService.find(query);
+        ThingEvent eventSchedule = persistenceService.find(query);
 		return eventSchedule;
 	}	
 
@@ -60,7 +60,7 @@ public class EventScheduleService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public Event getNextAvailableSchedule(Event event) {
+    public Event getNextAvailableSchedule(ThingEvent event) {
 
         QueryBuilder<Event> builder = createTenantSecurityBuilder(Event.class);
         builder.addSimpleWhere("recurringEvent", event.getRecurringEvent());
@@ -88,15 +88,15 @@ public class EventScheduleService extends FieldIdPersistenceService {
 
 
     @Transactional
-    public Event updateSchedule(Event schedule) {
-        Event updatedSchedule = persistenceService.update(schedule);
+    public Event updateSchedule(ThingEvent schedule) {
+        ThingEvent updatedSchedule = persistenceService.update(schedule);
         updatedSchedule.getAsset().touch();
         persistenceService.update(updatedSchedule.getAsset());
         return updatedSchedule;
     }
 
     @Transactional
-    public Long createSchedule(Event openEvent) {
+    public Long createSchedule(ThingEvent openEvent) {
         openEvent.setOwner(openEvent.getAsset().getOwner());
         Long id = persistenceService.save(openEvent);
         //Update the asset to notify mobile of change

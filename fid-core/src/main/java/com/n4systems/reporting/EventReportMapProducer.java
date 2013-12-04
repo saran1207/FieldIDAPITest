@@ -13,10 +13,10 @@ import java.util.Date;
 public class EventReportMapProducer extends AbsractEventReportMapProducer {
 	private static final String UNASSIGNED_USER_NAME = "Unassigned";
 
-	private final Event event;
+	private final ThingEvent event;
     private EventService eventService;
 
-    public EventReportMapProducer(Event event, DateTimeDefinition dateTimeDefinition, S3Service s3Service, EventService eventService, LastEventDateService lastEventDateService) {
+    public EventReportMapProducer(ThingEvent event, DateTimeDefinition dateTimeDefinition, S3Service s3Service, EventService eventService, LastEventDateService lastEventDateService) {
 		super(dateTimeDefinition, s3Service, lastEventDateService);
 		this.event = event;
         this.eventService = eventService;
@@ -46,7 +46,7 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 		fillInDate(event);
 	}
 
-    private void addNextAndPreviousData(Event event) {
+    private void addNextAndPreviousData(ThingEvent event) {
         Event nextOpenEvent = eventService.findNextOpenEventOfSameType(event);
         Event nextEvent = eventService.findNextOpenOrCompletedEventOfSameType(event);
         Event previousEvent = eventService.findPreviousEventOfSameType(event);
@@ -88,7 +88,7 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 	}
 
 	@Override
-	protected AbstractEvent<ThingEventType> getEvent() {
+	protected AbstractEvent<ThingEventType,Asset> getEvent() {
 		return event;
 	}
 }

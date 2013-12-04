@@ -177,7 +177,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 
 
 	@Override
-	public Long updateEvents(List<Long> ids, Event eventChanges, Map<String, Boolean> fieldMap, Long userId) throws UpdateFailureException {
+	public Long updateEvents(List<Long> ids, ThingEvent eventChanges, Map<String, Boolean> fieldMap, Long userId) throws UpdateFailureException {
 		if (ids.isEmpty()) {
 			return 0L;
 		}
@@ -187,7 +187,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		Set<String> updateKeys = getEnabledKeys(fieldMap);
 
 		boolean ownershipChanged = false;
-		Event changeTarget;
+		ThingEvent changeTarget;
         Set<Event> eventsUpdated = Sets.newHashSet();
         EventAudit audit = new EventAudit();
         audit.setModified(new Date());
@@ -195,7 +195,7 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
         audit.setTenant(user.getTenant());
 
         for (Long id : ids) {
-			changeTarget = persistenceManager.find(Event.class, id);
+			changeTarget = persistenceManager.find(ThingEvent.class, id);
             eventsUpdated.add(changeTarget);
 
 			for (String updateKey : updateKeys) {
@@ -321,16 +321,16 @@ public class MassUpdateManagerImpl implements MassUpdateManager {
 		return result;
 	}
 
-    public Long closeEvents(List<Long> ids, Event eventChanges, User modifiedBy) throws UpdateFailureException{
+    public Long closeEvents(List<Long> ids, ThingEvent eventChanges, User modifiedBy) throws UpdateFailureException{
 
         if (ids.isEmpty()) {
             return 0L;
         }
 
-        Event changeTarget;
+        ThingEvent changeTarget;
 
         for (Long id : ids) {
-            changeTarget = persistenceManager.find(Event.class, id);
+            changeTarget = persistenceManager.find(ThingEvent.class, id);
 
             Asset asset = changeTarget.getAsset();
             changeTarget.setEventResult(EventResult.VOID);

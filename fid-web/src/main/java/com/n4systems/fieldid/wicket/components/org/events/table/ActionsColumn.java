@@ -2,24 +2,24 @@ package com.n4systems.fieldid.wicket.components.org.events.table;
 
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
-public class ActionsColumn extends PropertyColumn<Event> {
+public class ActionsColumn extends AbstractColumn<ThingEvent> {
 
     private EventListPanel eventListPanel;
 
-    public ActionsColumn(String propertyExpression, EventListPanel eventListPanel) {
-        super(new FIDLabelModel(""), propertyExpression);
+    public ActionsColumn(EventListPanel eventListPanel) {
+        super(new FIDLabelModel(""));
         this.eventListPanel = eventListPanel;
     }
 
     @Override
-    public void populateItem(Item<ICellPopulator<Event>> item, String componentId, IModel<Event> eventModel) {
+    public void populateItem(Item<ICellPopulator<ThingEvent>> item, String componentId, IModel<ThingEvent> eventModel) {
         WorkflowState state = eventModel.getObject().getWorkflowState();
 
         if (state.equals(WorkflowState.COMPLETED)) {

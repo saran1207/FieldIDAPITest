@@ -4,26 +4,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.n4systems.model.*;
+import com.n4systems.model.utils.AssetEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.event.ApiEventAttribute;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Event;
-import com.n4systems.model.SubEvent;
 
-public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
+public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, ThingEvent> {
 	@Autowired private ApiSavedEventFormResource apiSavedEventFormResource;
 	@Autowired private EventService eventService;
 	
 	public List<ApiSavedEvent> findLastEventOfEachType(Long assetId) {
-		List<Event> events = eventService.getLastEventOfEachType(assetId);		
+		List<ThingEvent> events = eventService.getLastEventOfEachType(assetId);
 		return convertAllEntitiesToApiModels(events);
 	}
 	
 	@Override
-	protected ApiSavedEvent convertEntityToApiModel(Event event) {
+	protected ApiSavedEvent convertEntityToApiModel(ThingEvent event) {
 		ApiSavedEvent apiEvent = new ApiSavedEvent();
 		
 		convertAbstractEventToApiEvent(apiEvent, event);
@@ -57,16 +56,16 @@ public class ApiSavedEventResource extends ApiResource<ApiSavedEvent, Event> {
 		return apiEvent;
 	}
 	
-	private void convertAbstractEventToApiEvent(ApiSavedEvent apiEvent, AbstractEvent event) {
+	private void convertAbstractEventToApiEvent(ApiSavedEvent apiEvent, AbstractEvent<ThingEventType,Asset> event) {
 		apiEvent.setSid(event.getMobileGUID());
 		apiEvent.setModified(event.getModified());		
 		apiEvent.setComments(event.getComments());
 		apiEvent.setTypeId(event.getType().getId());
-		apiEvent.setAssetId(event.getAsset().getMobileGUID());				
+		apiEvent.setAssetId(event.getTarget().getMobileGUID());
 		apiEvent.setModifiedById(event.getModifiedBy() == null ? null : event.getModifiedBy().getId());
 		
-		if(event.getAssetStatus() != null) {
-			apiEvent.setAssetStatusId(event.getAssetStatus().getId());
+		if (event instanceof AssetEvent && ((AssetEvent)event).getAssetStatus() != null) {
+			apiEvent.setAssetStatusId(((AssetEvent)event).getAssetStatus().getId());
 		}
 		
 		if(event.getEventStatus() != null) {

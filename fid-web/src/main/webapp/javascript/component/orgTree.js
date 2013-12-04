@@ -62,11 +62,31 @@ var orgTreeFactory = (function() {
 			}
 		}
 
+		var postUpdate = function(event,data) {
+			if (data.rslt.obj==-1) {
+				postUpdateNodes($tree.find('ul>li>a'));
+			} else {
+				postUpdateNodes($(data.rslt.obj[0]).find('ul li a'));
+			}
+		}
+
+		function postUpdateNodes($nodes) {
+			$nodes.each(function(index,child) {
+				$('<span class="action">Add Secondary|Job Site</span>').data('id',child.parentNode.id).insertAfter(child);
+			});
+		}
+
 		function lazyInit() {
 			if (!initialized) {
 				initialized = true;
 				$tree = $('#'+options.id);
 				$text = $(options.filter);
+
+				$tree.bind("load_node.jstree", function (event, data) {
+					postUpdate(event,data);
+				});
+
+
 				$tree.jstree({
 					core:{animation:100, html_titles:true},
 					themes :  { dots:false },

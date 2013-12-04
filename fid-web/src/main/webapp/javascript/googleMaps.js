@@ -71,7 +71,11 @@ var googleMapFactory = (function() {
 		 var $text = $address.find('.txt');
 		 var $lat = $address.children('.lat');
 		 var $lng = $address.children('.lng');
-		 var $map = (options.mapVar) ? window[options.mapVar] : createAndShowWithLocation($address.children('.map').attr('id'), options.lat, options.lng);
+		 var $map;
+
+		 if (!options.noMap) {
+			 $map = (options.mapVar) ? window[options.mapVar] : createAndShowWithLocation($address.children('.map').attr('id'), options.lat, options.lng);
+		 }
 
 		 function getAddresses(request,response) {
 			 new google.maps.Geocoder().geocode( {'address': request.term}, function(results, status) {
@@ -99,9 +103,10 @@ var googleMapFactory = (function() {
 			var latLng = item.geometry.location;
 			$lat.val(latLng.lat());
 			$lng.val(latLng.lng());
-			$map.setLocation(latLng.lat(), latLng.lng(), item.formatted_address);
+			if ($map) {
+				$map.setLocation(latLng.lat(), latLng.lng(), item.formatted_address);
+			}
 		 }
-
 
 		 var textOptions = {
 			 delay:500,
@@ -227,7 +232,7 @@ var googleMapFactory = (function() {
 				}
 				var element = document.getElementById(id);
 				if (!element) { 
-					throw "can't find element " + id + " for google map.";
+					throw "can't find element '" + id + "' for google map.";
 				}
 				map = new google.maps.Map(element, options);
 				

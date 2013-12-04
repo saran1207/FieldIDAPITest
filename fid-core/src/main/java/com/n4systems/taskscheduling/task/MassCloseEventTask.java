@@ -2,7 +2,10 @@ package com.n4systems.taskscheduling.task;
 
 import com.n4systems.ejb.MassUpdateManager;
 import com.n4systems.exceptions.UpdateFailureException;
+import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.persistence.Transaction;
@@ -16,13 +19,13 @@ public class MassCloseEventTask implements Runnable{
 
     private static final Logger logger = Logger.getLogger(MassCloseEventTask.class);
     private List<Long> ids;
-    private Event event;
+    private ThingEvent event;
     private User modifiedBy;
 
     private Transaction transaction;
     private MassUpdateManager massUpdateManager;
 
-    public MassCloseEventTask(MassUpdateManager massUpdateManager, List<Long> ids, Event event, User modifiedBy) {
+    public MassCloseEventTask(MassUpdateManager massUpdateManager, List<Long> ids, ThingEvent event, User modifiedBy) {
         this.massUpdateManager = massUpdateManager;
         this.ids = ids;
 		this.event = event;

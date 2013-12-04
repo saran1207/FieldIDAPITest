@@ -1,0 +1,1 @@
+alter table thing_events add constraint fk_thing_events_on_assets foreign key (asset_id) references assets(id);

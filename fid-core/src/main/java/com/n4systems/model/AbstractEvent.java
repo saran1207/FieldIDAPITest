@@ -12,7 +12,7 @@ import java.util.*;
 @Entity
 @Table(name = "events")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class AbstractEvent<T extends EventType> extends EntityWithTenant implements HasFileAttachments {
+public abstract class AbstractEvent<T extends EventType, R extends EntityWithTenant> extends EntityWithTenant implements HasFileAttachments {
 	private static final long serialVersionUID = 1L;
 
 	@Column(length=2500)
@@ -22,14 +22,6 @@ public abstract class AbstractEvent<T extends EventType> extends EntityWithTenan
     @JoinColumn(name="eventform_id")
     private EventForm eventForm;
 
-	@ManyToOne(fetch=FetchType.LAZY, optional = false)
-    @JoinColumn(name="asset_id")
-	private Asset asset;
-	
-	@ManyToOne(optional = true)
-	@JoinColumn(name="assetstatus_id")
-	private AssetStatus assetStatus;
-	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy = "event", cascade=CascadeType.ALL)
 	private Set<CriteriaResult> results = new HashSet<CriteriaResult>();
 	
@@ -84,17 +76,6 @@ public abstract class AbstractEvent<T extends EventType> extends EntityWithTenan
 		ensureMobileGuidIsSet();
 	}
 
-    public void setTriggersIntoResultingActions(Event triggerEvent) {
-        for (CriteriaResult result : getResults()) {
-            for (Event action : result.getActions()) {
-                action.setAsset(getAsset());
-                action.setOwner(triggerEvent.getOwner());
-                action.setTriggerEvent(triggerEvent);
-                action.setSourceCriteriaResult(result);
-            }
-        }
-    }
-	
 	private void ensureMobileGuidIsSet() {
 		if (mobileGUID == null) {
 			mobileGUID = UUID.randomUUID().toString();
@@ -110,7 +91,6 @@ public abstract class AbstractEvent<T extends EventType> extends EntityWithTenan
 		
 	    return	"id: " + getId() +
 	    		"\nTenant: " + getTenant() + 
-	    		"\nAsset: " + getAsset() +
 	    		"\nResults: " + StringUtils.indent(resultString, 1);
     }
 
@@ -121,24 +101,6 @@ public abstract class AbstractEvent<T extends EventType> extends EntityWithTenan
 
 	public void setEditable(boolean editable) {
 		this.editable = editable;
-	}
-
-	@AllowSafetyNetworkAccess
-	public Asset getAsset() {
-		return asset;
-	}
-
-	public void setAsset(Asset asset) {
-		this.asset = asset;
-	}
-
-	@AllowSafetyNetworkAccess
-	public AssetStatus getAssetStatus() {
-		return assetStatus;
-	}
-
-	public void setAssetStatus(AssetStatus assetStatus) {
-		this.assetStatus = assetStatus;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -232,6 +194,18 @@ public abstract class AbstractEvent<T extends EventType> extends EntityWithTenan
 		return criteriaSection;
     }
 
+    public void setTriggersIntoResultingActions(Event triggerEvent) {
+        for (CriteriaResult result : getResults()) {
+            for (Event action : result.getActions()) {
+                copyDataIntoResultingAction(action);
+                action.setTriggerEvent(triggerEvent);
+                action.setSourceCriteriaResult(result);
+            }
+        }
+    }
+
+    protected abstract void copyDataIntoResultingAction(AbstractEvent<?,?> event);
+
     public static class SectionResults implements Serializable {
         public List<CriteriaResult> results;
         public CriteriaSection section;
@@ -268,5 +242,8 @@ public abstract class AbstractEvent<T extends EventType> extends EntityWithTenan
 
     public abstract T getType();
     public abstract void setType(T type);
+
+    public abstract R getTarget();
+    public abstract void setTarget(R target);
 
 }

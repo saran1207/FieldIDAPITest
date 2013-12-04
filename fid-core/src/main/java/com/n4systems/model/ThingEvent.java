@@ -1,9 +1,12 @@
 package com.n4systems.model;
 
 import com.n4systems.model.api.SecurityEnhanced;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.utils.AssetEvent;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,13 +15,25 @@ import java.util.List;
 @Entity
 @Table(name="thing_events")
 @PrimaryKeyJoinColumn(name="id")
-public class ThingEvent extends Event<ThingEventType> {
+public class ThingEvent extends Event<ThingEventType, Asset> implements AssetEvent {
 
     @ManyToOne
     @JoinColumn(name="thing_event_type_id")
     private ThingEventType type;
 
     private ProofTestInfo proofTestInfo;
+
+    @ManyToOne(fetch=FetchType.LAZY, optional = false)
+    @JoinColumn(name="asset_id")
+    private Asset asset;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name="asset_status_id")
+    private AssetStatus assetStatus;
+
+    @ManyToOne(fetch=FetchType.EAGER, optional=false)
+    @JoinColumn(name="owner_id", nullable = false)
+    private BaseOrg owner;
 
     @Override
     public ThingEventType getType() {
@@ -28,6 +43,16 @@ public class ThingEvent extends Event<ThingEventType> {
     @Override
     public void setType(ThingEventType type) {
         this.type = type;
+    }
+
+    @Override
+    public Asset getTarget() {
+        return getAsset();
+    }
+
+    @Override
+    public void setTarget(Asset target) {
+        setAsset(target);
     }
 
     public ThingEvent copyDataFrom(ThingEvent event) {
@@ -70,4 +95,34 @@ public class ThingEvent extends Event<ThingEventType> {
         return enhanced;
     }
 
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
+
+    public AssetStatus getAssetStatus() {
+        return assetStatus;
+    }
+
+    public void setAssetStatus(AssetStatus assetStatus) {
+        this.assetStatus = assetStatus;
+    }
+
+    public BaseOrg getOwner() {
+        return owner;
+    }
+
+    public void setOwner(BaseOrg owner) {
+        this.owner = owner;
+    }
+
+    @Override
+    protected void copyDataIntoResultingAction(AbstractEvent<?,?> event) {
+        ThingEvent action = (ThingEvent) event;
+        action.setAsset(getAsset());
+        action.setOwner(getOwner());
+    }
 }

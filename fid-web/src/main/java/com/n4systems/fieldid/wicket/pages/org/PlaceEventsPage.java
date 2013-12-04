@@ -71,7 +71,7 @@ public class PlaceEventsPage extends PlacePage {
 
             @Override
             protected void addActionColumn(List<IColumn<? extends Event>> columns) {
-                columns.add(new ActionsColumn("id", this));
+                columns.add(new ActionsColumn(this));
             }
         });
         eventPanel.setOutputMarkupPlaceholderTag(true);

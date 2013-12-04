@@ -15,7 +15,7 @@ public class OrgTree extends Tree {
     private static final String INIT_ORGTREE_JS = "var %s = orgTreeFactory.create(%s);";
     public static final String NODE_NAME_HTML = "<span>%s</span>";
     public static final String NODE_NAME_HIGHTLIGHTED_HTML = "%s<span class='match'>%s</span>%s";
-    public static final String NODE_HTML = "<span class='name'>%s</span><span class='action'>%s</span>";
+    public static final String NODE_HTML = "<span class='org' >%s</span>";
 
     private @SpringBean OrgService orgService;
     private String lastSearch = null;
@@ -89,7 +89,7 @@ public class OrgTree extends Tree {
         }
         // TODO : is "linked" information needed???
         String cssClass = node.isLinked() ? "linked" : "";
-        return String.format(NODE_HTML, name, "ADD");
+        return String.format(NODE_HTML, name);
     }
 
     private void openParents(JsonTreeNode parent) {

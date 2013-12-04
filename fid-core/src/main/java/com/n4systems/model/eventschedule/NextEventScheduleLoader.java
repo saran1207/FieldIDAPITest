@@ -1,6 +1,7 @@
 package com.n4systems.model.eventschedule;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.persistence.loaders.Loader;
@@ -47,7 +48,7 @@ public class NextEventScheduleLoader extends Loader<Event> {
 		return this;
 	}
 
-	public NextEventScheduleLoader setFieldsFromEvent(Event event) {
+	public NextEventScheduleLoader setFieldsFromEvent(ThingEvent event) {
 		setAssetId(event.getAsset().getId());
 		setTypeId(event.getType().getId());
 		return this;

@@ -46,7 +46,7 @@ public class PerformEventPage extends EventPage {
         }
     }
 
-    public PerformEventPage(Event event, Asset asset) {
+    public PerformEventPage(ThingEvent event, Asset asset) {
         this(event.getId(), asset.getId(), event.getType().getId());
     }
 

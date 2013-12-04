@@ -1,10 +1,11 @@
 package com.n4systems.fieldid.service.search;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.search.IncludeDueDateRange;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.security.NetworkIdSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.date.DateService;
@@ -24,13 +25,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ReportService extends SearchService<EventReportCriteria, Event> {
+public class ReportService extends SearchService<EventReportCriteria, ThingEvent> {
 
     @Autowired
     private DateService dateService;
 
     public ReportService() {
-        super(Event.class);
+        super(ThingEvent.class);
     }
 
     @Override

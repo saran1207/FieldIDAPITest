@@ -14,6 +14,7 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
+import com.n4systems.model.utils.AssetEvent;
 import com.n4systems.reporting.EventReportType;
 import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -272,20 +273,20 @@ public class ApiEventResource extends FieldIdPersistenceService {
 		}
 	}
 	
-	private void convertApiEventForAbstractEvent(ApiEvent apiEvent, AbstractEvent event, boolean isUpdate) {
+	private void convertApiEventForAbstractEvent(ApiEvent apiEvent, AbstractEvent<ThingEventType,Asset> event, boolean isUpdate) {
 		event.setTenant(getCurrentTenant());
 		event.setMobileGUID(apiEvent.getSid());
 		event.setModified(apiEvent.getModified());
 		event.setComments(apiEvent.getComments());		
-		event.setType(persistenceService.find(EventType.class, apiEvent.getTypeId()));		
+		event.setType(persistenceService.find(ThingEventType.class, apiEvent.getTypeId()));
 		event.setModifiedBy(persistenceService.findUsingTenantOnlySecurityWithArchived(User.class, apiEvent.getModifiedById()));
 		
-		if(event.getAsset() == null) { // In the case of MultiEvent, we set event.asset much early on.
-			event.setAsset(assetService.findByMobileId(apiEvent.getAssetId(), true));
+		if(event.getTarget() == null) { // In the case of MultiEvent, we set event.asset much early on.
+			event.setTarget(assetService.findByMobileId(apiEvent.getAssetId(), true));
 		}
 
 		if (apiEvent.getAssetStatusId() != null) {
-			event.setAssetStatus(persistenceService.findUsingTenantOnlySecurityWithArchived(AssetStatus.class, apiEvent.getAssetStatusId()));
+            ((AssetEvent)event).setAssetStatus(persistenceService.findUsingTenantOnlySecurityWithArchived(AssetStatus.class, apiEvent.getAssetStatusId()));
 		}
 		
 		if(apiEvent.getEventStatusId() != null) {

@@ -19,6 +19,7 @@ import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.SetupDataLastModDates;
 import com.n4systems.model.user.User;
+import com.n4systems.model.utils.AssetEvent;
 import com.n4systems.model.utils.FindSubAssets;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
@@ -118,7 +119,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return bookDTO;
 	}
 
-	private void populateAbstractInspectionInfo(AbstractInspectionServiceDTO inspectionDTO, AbstractEvent<ThingEventType> event) {
+	private void populateAbstractInspectionInfo(AbstractInspectionServiceDTO inspectionDTO, AbstractEvent<ThingEventType,Asset> event) {
 		inspectionDTO.setComments(event.getComments());
 		inspectionDTO.setId(event.getId());
 		inspectionDTO.setInspectionMobileGUID(event.getMobileGUID());
@@ -136,8 +137,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		
 		inspectionDTO.setEditable(event.isEditable());
 		inspectionDTO.setInspectionTypeId(event.getType().getId());
-		inspectionDTO.setProductId(event.getAsset().getId());
-		inspectionDTO.setProductMobileGuid(event.getAsset().getMobileGUID());
+		inspectionDTO.setProductId(((AssetEvent) event).getAsset().getId());
+		inspectionDTO.setProductMobileGuid(((AssetEvent) event).getAsset().getMobileGUID());
         for (CriteriaResult criteriaResult : event.getResults()) {
 			inspectionDTO.getResults().add(convert(criteriaResult));
 		}
@@ -397,13 +398,13 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 	 * Populates an abstract inspection with the fields from an abstract
 	 * inspection service dto
 	 */
-	private void populate(AbstractEvent event, AbstractInspectionServiceDTO inspectionServiceDTO, Tenant tenant) {
+	private void populate(AbstractEvent<ThingEventType,Asset> event, AbstractInspectionServiceDTO inspectionServiceDTO, Tenant tenant) {
 		event.setComments(inspectionServiceDTO.getComments());
 
 		// Required object lookups
 		event.setTenant(tenant);
-		event.setType(persistenceManager.find(EventType.class, inspectionServiceDTO.getInspectionTypeId(), new TenantOnlySecurityFilter(tenant.getId())));
-		event.setAsset((Asset) em.find(Asset.class, inspectionServiceDTO.getProductId()));
+		event.setType(persistenceManager.find(ThingEventType.class, inspectionServiceDTO.getInspectionTypeId(), new TenantOnlySecurityFilter(tenant.getId())));
+        ((AssetEvent) event).setAsset(em.find(Asset.class, inspectionServiceDTO.getProductId()));
 
 		// Mobile prior to 1.26 will send formVersion.
 		if (inspectionServiceDTO.getFormId() != null) {

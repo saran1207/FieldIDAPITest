@@ -17,9 +17,11 @@ public class JsonTreeNode {
     Map<String,String> attr;
     String state = "closed";
     JsonTreeNode[] children = null;
+    String id;
 
     public JsonTreeNode(OrgLocationTree.OrgLocationTreeNode node, JsonTreeNode parent) {
         this.data = node.getName();
+        this.id = node.getId() + "";
         addAttribute("id", node.getId() + "");
         addAttribute("data", node.getType().name());
         addAttribute("class", CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_HYPHEN, node.getType().name()));
