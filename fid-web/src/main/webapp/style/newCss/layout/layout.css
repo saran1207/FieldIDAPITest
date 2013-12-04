@@ -102,16 +102,14 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 }
 .company-logo {
 	height: 55px;
-	padding: 10px 0;
+	padding: 11px 0 7px;
 }
 
 /* Top navigation
 ------------------*/
-#pageActions {
-	padding: 0 10px;
-}
 #listContainer {
 	float:right;
+	/*margin-right: 14px;*/
 }
 .listOfLinks {
 	width: 100%;
@@ -162,7 +160,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 }
 #navigationLinks .dropdown > li > a {
 	border-top: 2px solid transparent;
-	padding: 10px 14px;
+	padding: 8px 14px 11px;
 }
 #navigationLinks .dropdown > li:hover > a {
 	border-top: 2px solid #e63300;
@@ -199,6 +197,9 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	padding: 0 4px;
 	font-size: 13px;
 	padding-right: 0;
+}
+#menuSetup:after {
+	padding: 0;
 }
 #mySavedItemsLink:after {
 	color: #666;

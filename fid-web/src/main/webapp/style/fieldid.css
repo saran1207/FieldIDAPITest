@@ -1,3 +1,24 @@
+/* temp */
+.debug-info {
+	display: none;
+}
+
+/* http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.clearfix {
+    *zoom: 1;
+}
 img {
 	vertical-align: text-bottom;
 }
@@ -104,13 +125,124 @@ h2 a {
 	z-index: 1;
 }
 
+/*----------------------
+  Global header and nav 
+------------------------*/
 #pageHeader {
 	width: 100%;
 	position: fixed;
-	background: none repeat scroll 0 0 #FFFFFF;
+	background: #FFFFFF;
 	z-index: 10;
-	margin-top: -1px;
+
+	font-family: "proxima-nova", Helvetica, Arial, sans-serif;
+	font-style: normal;
+	font-weight: 400;
 }
+#pageHeader #pageActions,
+#pageHeader #pageNavigation #navigationContent {
+	position: relative;
+	min-width: 1024px;
+	max-width: 1280px;
+	margin: 0 auto;	
+}
+#pageHeader #pageActions #companyLogo {
+	float: left;
+}
+	#pageHeader #pageActions #companyLogo img {
+		height: 55px;
+		width: auto;
+		padding: 10px 0;
+	}
+
+
+/* Top nav 
+-----------*/
+#pageHeader #pageActions #listContainer .listOfLinks {
+	margin: 9px 0 0;
+	padding: 0;
+	font-size: 13px;
+}
+#pageHeader #pageActions #listContainer .listOfLinks li {
+	display: inline-block;
+	border-left: 1px solid #c7c7c9;
+	padding: 0 10px;
+	float: left;
+}
+#pageHeader #pageActions #listContainer .listOfLinks li:first-child {
+	border: none;
+}
+#pageHeader #pageActions #listContainer .listOfLinks a {
+	color: #e63300;
+	margin-right: 0;
+	text-decoration: none;
+}
+#pageHeader #pageActions #listContainer .listOfLinks a:hover {
+	color: #3a3a3a;
+}
+#pageHeader #pageActions #listContainer .manageLinkSection a {
+	color: #356CA2;
+}
+#pageHeader #mySavedItemsLink:after {
+	padding: 0 4px;
+	color: #666;
+}
+#pageHeader .mySavedItemsBox {
+	right: 12px;
+}
+#pageHeader #pageActions #listContainer .savedItemContainer a {
+	color: #3a3a3a;
+}
+
+
+/* Site Nav
+------------*/
+#pageHeader #navigationContent {
+	width: auto;
+}
+#pageHeader #navigationContent a {
+	font-size: 14px;
+	padding: 10px 14px 9px;	
+}
+#pageHeader #navigationLinks .dropdown > li > a {
+	color: #f5f5f5;
+}
+#pageHeader #navigationLinks .dropdown > li:hover > a {
+	border-top: 2px solid #e63300;
+	background: #e2e2e2;
+	color: #3a3a3a;
+}
+#pageHeader #pageNavigation #navigationContent #navigationLinks {
+	padding-top: 0;
+}
+
+#pageHeader #navigationLinks .dropdown ul li {
+	border-top: 1px solid #f5f5f5;
+}
+#pageHeader #menuReport:after, #menuSetup:after, #mySavedItemsLink:after {
+	font-family: "fontello", sans-serif;
+	content: '\e82d';
+	font-size: 13px;
+}
+#pageHeader li:hover #menuReport:after, 
+#pageHeader li:hover #menuSetup:after {
+	content: '\e830';
+}
+#navigationLinks .fontello-home {
+	height: 17px;
+	display: block;
+	margin-top: 1px;
+}
+
+
+/* Search box
+--------------*/
+#pageHeader #pageNavigation #navigationContent #smartSearchContainer {
+	padding: 0;
+	text-align: right;
+}
+
+
+
 
 #headerPadding {
 	display:block;
@@ -147,15 +279,7 @@ h2 a {
 	text-align: left;
 }
 
-#pageHeader #pageActions {
-	float: none;
-	overflow: hidden;
-	margin-bottom: 15px;
-	padding-top: 3px;
-	height: 68px;
-	width: 1000px;
-	margin: auto;
-}
+
 
 #pageActions .listOfLinks {
 	margin-bottom: 15px;
@@ -217,7 +341,8 @@ h2 a {
 	float: right;
 }
 
-#companyLogo, #systemLogo {
+/*#companyLogo, */
+#systemLogo {
 	float: left;
 	padding-left: 20px;
 	width: 215px;
@@ -225,10 +350,10 @@ h2 a {
 }
 
 #pageHeader #pageNavigation {
-	background-color: #525252;
-	-moz-box-shadow: 0px 3px 8px #AAA;
-	-webkit-box-shadow: 0px 3px 8px #AAA;
-	box-shadow: 0px 3px 8px #AAA;
+	background-color: #666;
+	font-size: 14px;
+	-webkit-box-shadow: 0px 4px 8px -4px #666666;
+	box-shadow: 0px 4px 8px -4px #666666;
 }
 
 #pageNavigation a, #pageNavigation a:hover, #pageNavigation a:active, #pageNavigation a:visited
@@ -257,7 +382,7 @@ h2 a {
 	float: left;
 }
 
-#menuHome {
+/*#menuHome {
 	display: block;
 	width: 35px;
 	height: 22px;
@@ -266,7 +391,7 @@ h2 a {
 
 #menuHome:hover {
 	background: url(../images/home-over.png) no-repeat scroll center center transparent;
-}
+}*/
 
 .speedLink img {
 	padding-left: 3px;

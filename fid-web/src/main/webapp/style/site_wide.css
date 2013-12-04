@@ -466,5 +466,6 @@ input.wavy-underline {
 
 .fontello-home:before {
   content: '\e818';
+  padding-right: 0;
 }
 

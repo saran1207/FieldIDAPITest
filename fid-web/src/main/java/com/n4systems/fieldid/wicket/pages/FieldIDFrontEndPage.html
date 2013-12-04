@@ -114,26 +114,20 @@
         <div id="pageHeader" class="frontPageHeader">
 
             <div id="pageActions" class="content-wrap">
-                <!-- <div id="companyLogo"> -->
                 <img wicket:id="tenantLogo" class="company-logo" />
-                <!-- </div> -->
                 <div id="listContainer">
                     <ul class="listOfLinks">
                         <li>
                             Welcome, <a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel"></span></a>
-                            <!-- <span class="separator">|</span> -->
                         </li>
                         <li wicket:enclosure="languageSelection">
                             <a wicket:id="languageSelection"><wicket:message key="label.language"/></a>
-                            <!-- <span class="separator">|</span> -->
                         </li>
                         <li>
                             <a wicket:id="support" target="_blank"></a>
-                            <!-- <span class="separator">|</span> -->
                         </li>
                         <li>
                             <a href="/fieldid/logout.action" ><wicket:message key="label.logout"/></a>
-                            <!-- <span class="darkseparator">|</span> -->
                         </li>
                         <li class="last">
                             <span wicket:id="savedItemsDropdown"></span>
@@ -194,7 +188,6 @@
                             <li wicket:id="setupLinkContainer">
                                 <a wicket:id="setupLink" class="speedLink textLink" id="menuSetup">
                                     <wicket:message key="label.setup"/>
-                                    <!-- <img src="/fieldid/images/down-arrow.png" /> -->
                                 </a>
 
                                 <ul wicket:id="setupSubMenuContainer" class="">
