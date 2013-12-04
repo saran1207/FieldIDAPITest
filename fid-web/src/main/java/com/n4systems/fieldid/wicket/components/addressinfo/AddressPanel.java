@@ -22,6 +22,7 @@ public class AddressPanel extends Panel {
 
     private IModel<Address> model;
     private String externalMapJsVar;
+    private boolean noMap = false;
 
     public AddressPanel(String id, IModel<Address> model) {
         super(id, model);
@@ -31,9 +32,8 @@ public class AddressPanel extends Panel {
         add(new HiddenField<BigDecimal>("latitude", ProxyModel.of(model, on(Address.class).getGpsLocation().getLatitude())));
         add(new HiddenField<BigDecimal>("longitude", ProxyModel.of(model, on(Address.class).getGpsLocation().getLongitude())));
         add(new WebMarkupContainer("map") {
-            @Override
-            public boolean isVisible() {
-                return externalMapJsVar == null;
+            @Override public boolean isVisible() {
+                return noMap ==false && externalMapJsVar == null;
             }
         }.setOutputMarkupPlaceholderTag(true));
         setOutputMarkupId(true);
@@ -55,6 +55,11 @@ public class AddressPanel extends Panel {
         return this;
     }
 
+    public AddressPanel withNoMap() {
+        this.noMap = true;
+        return this;
+    }
+
     protected String getOptions() {
         return new GsonBuilder().create().toJson(new Options());
     }
@@ -63,6 +68,7 @@ public class AddressPanel extends Panel {
         Double lat;
         Double lng;
         String mapVar = externalMapJsVar;
+        Boolean noMap = AddressPanel.this.noMap;
 
         Options() {
             GpsLocation gpsLocation = model.getObject().getGpsLocation();

@@ -190,6 +190,7 @@ public class OrgLocationTree {
         private Date modified;
         private String identifier;
         private boolean isLinked;
+        private Boolean isPrimary;
 
         OrgLocationTreeNode() {
             this.id = -1L;
@@ -201,6 +202,9 @@ public class OrgLocationTree {
         OrgLocationTreeNode(T entity) {
             this.id = entity.getId();
             this.type = NodeType.fromClass(entity.getClass());
+            if (entity instanceof InternalOrg) {
+                isPrimary = (entity instanceof PrimaryOrg);
+            }
             this.name = entity instanceof BaseOrg ? ((BaseOrg)entity).getName() :
                         entity instanceof PredefinedLocation ? ((PredefinedLocation)entity).getName() :
                         "root";
@@ -228,6 +232,10 @@ public class OrgLocationTree {
 
         public Long getId() {
             return id;
+        }
+
+        public Boolean isPrimary() {
+            return isPrimary;
         }
 
         boolean isRootNode() {

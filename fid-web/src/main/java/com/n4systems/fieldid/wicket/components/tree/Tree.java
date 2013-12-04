@@ -19,6 +19,7 @@ public abstract class Tree extends Panel {
 
     protected final AbstractDefaultAjaxBehavior ajaxBehavior;
     private String search = null;
+    private AbstractDefaultAjaxBehavior actionsBehavior;
 
 
     public Tree(String id) {
@@ -88,12 +89,19 @@ public abstract class Tree extends Panel {
 
     protected abstract List<JsonTreeNode> getChildNodes(Long parentNodeId,String type);
 
+    public <T extends Tree> T withMenuCallback(AbstractDefaultAjaxBehavior actionsBehavior) {
+        this.actionsBehavior = actionsBehavior;
+        add(actionsBehavior);
+        return (T) this;
+    }
+
     // ----------------------------------------------------------------------------------------
 
     public class TreeOptions {
         String url = ajaxBehavior.getCallbackUrl().toString();
         String id = Tree.this.getMarkupId();
         String filter = getFilterComponent();
+        String menuCallback = actionsBehavior==null ? null : actionsBehavior.getCallbackUrl().toString();
     }
 
 }
