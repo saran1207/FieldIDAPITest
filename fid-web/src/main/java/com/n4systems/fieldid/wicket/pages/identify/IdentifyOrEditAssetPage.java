@@ -219,6 +219,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             setChildFormsToMultipart(locationPicker);
             add(locationPicker);
 
+            locationPicker.setOwner(assetModel.getObject().getOwner());
+
             OrgLocationPicker ownerPicker = new OrgLocationPicker("ownerPicker", new PropertyModel(assetModel,"owner")) {
                 @Override protected void onChanged(AjaxRequestTarget target) {
                     locationPicker.setOwner(getOwner());
