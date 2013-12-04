@@ -18,6 +18,7 @@ import org.joda.time.IllegalFieldValueException;
 import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Date;
@@ -35,6 +36,7 @@ import static org.junit.Assert.assertTrue;
  * because this code is testing an iterator for the most part, be aware of putting stuff like "foo.next()" in your debugger watches window.
  * it will screw up the order of the iterator and all subsequent assertions will fail.
  */
+@Ignore
 public class RecurringScheduleServiceTest extends FieldIdServiceTest {
 
     @TestTarget RecurringScheduleService recurringScheduleService;

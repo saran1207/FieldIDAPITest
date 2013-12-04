@@ -9,6 +9,7 @@ import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Date;
@@ -18,6 +19,7 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
+@Ignore
 public class EventToViewConverterTest {
 
 	@Test
