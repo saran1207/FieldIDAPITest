@@ -18,7 +18,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.List;
 
 public class EventListPanel extends Panel {
-    
+
+    public static final int EVENTS_PER_PAGE = 10;
     @SpringBean
     private EventService eventService;
 
@@ -30,7 +31,7 @@ public class EventListPanel extends Panel {
         this.dataProvider = dataProvider;
 
         SimpleDefaultDataTable table;
-        add(table = new SimpleDefaultDataTable<Event>("eventsTable", getEventTableColumns(), dataProvider, 10));
+        add(table = new SimpleDefaultDataTable<Event>("eventsTable", getEventTableColumns(), dataProvider, EVENTS_PER_PAGE));
 
         table.add(new AttributeAppender("class", getTableStyle(table.getPageCount())).setSeparator(" "));
     }

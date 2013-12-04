@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.user;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.SendSavedItemSchedule;
+import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
@@ -26,7 +27,7 @@ import java.util.*;
 public class UserService extends FieldIdPersistenceService {
 
     public List<User> getUsers(boolean registered, boolean includeSystem) {
-        QueryBuilder<User> builder = createUserQueryBuilder(registered, includeSystem);
+        QueryBuilder<User> builder = createUserQueryBuilderWithOrder(registered, includeSystem);
 
         if (!getCurrentUser().getGroups().isEmpty()) {
             return new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
@@ -48,6 +49,36 @@ public class UserService extends FieldIdPersistenceService {
         return orgUserMap;
     }
 
+    public List<User> getOrgUsers(BaseOrg org, String order, Boolean ascending) {
+        QueryBuilder<User> builder = createUserQueryBuilder(false, false);
+
+        builder.addSimpleWhere("owner", org);
+
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                builder.addOrder(subOrder, ascending);
+            }
+        }
+
+        return persistenceService.findAll(builder);
+    }
+
+    public Long countOrgUsers(BaseOrg org) {
+        QueryBuilder<User> builder = createUserQueryBuilder(false, false);
+
+        builder.addSimpleWhere("owner", org);
+
+        return persistenceService.count(builder);
+    }
+
+    public Date getLastLogin(Long userId) {
+        QueryBuilder<ActiveSession> builder = new QueryBuilder<ActiveSession>(ActiveSession.class);
+        builder.addSimpleWhere("user.id", userId);
+        ActiveSession activeSession = persistenceService.find(builder);
+        return activeSession != null ? activeSession.getDateCreated() : null;
+    }
+
     private QueryBuilder<User> createUserQueryBuilder(boolean registered, boolean includeSystem) {
         QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
 
@@ -61,7 +92,11 @@ public class UserService extends FieldIdPersistenceService {
             builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "userType", UserType.SYSTEM));
         }
 
-        return builder.addOrder("firstName").addOrder("lastName");
+        return builder;
+    }
+
+    private QueryBuilder<User> createUserQueryBuilderWithOrder(boolean registered, boolean includeSystem) {
+        return createUserQueryBuilder(registered, includeSystem).addOrder("firstName").addOrder("lastName");
     }
 
 	public User getUser(Long userId) {
