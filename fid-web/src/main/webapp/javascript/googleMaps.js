@@ -25,11 +25,11 @@
 var googleMapFactory = (function() {
 
 	 var defaultOptions = {
-		 zoom: 14,
-		 mapTypeId: google.maps.MapTypeId.ROADMAP
+		 zoom: 14
 	 };
 
 	 var create = function(id) {
+		 defaultOptions.mapTypeId=google.maps.MapTypeId.ROADMAP;
 		 return googleMap(id, defaultOptions);
 	 };
 
@@ -71,6 +71,9 @@ var googleMapFactory = (function() {
 		 var $text = $address.find('.txt');
 		 var $lat = $address.children('.lat');
 		 var $lng = $address.children('.lng');
+		 var $postalCode = $address.children('postal-code');
+		 var $postalCode = $address.children('postal-code');
+		 var $postalCode = $address.children('postal-code');
 		 var $map;
 
 		 if (!options.noMap) {

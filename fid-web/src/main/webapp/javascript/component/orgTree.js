@@ -70,9 +70,19 @@ var orgTreeFactory = (function() {
 			}
 		}
 
+		var addChild = function(event,args) {
+			if (options.menuCallback) {
+				var orgId = $(event.target).data('id');
+				var url = options.menuCallback+'&orgId='+orgId;
+				wicketAjaxGet(url,function(){}, function(){});
+			}
+		}
+
 		function postUpdateNodes($nodes) {
 			$nodes.each(function(index,child) {
-				$('<span class="action">Add Secondary|Job Site</span>').data('id',child.parentNode.id).insertAfter(child);
+				var actionsMenu = $('<span class="action">Add Secondary|Job Site</span>').data('id',child.parentNode.id);
+				actionsMenu.insertAfter(child);
+				actionsMenu.click(addChild);
 			});
 		}
 

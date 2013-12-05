@@ -12,6 +12,13 @@
         }
     </style>
 
+    <script type="text/javascript">
+        var toggleCreatePlacePanel = function () {
+//            $('.column-custom').toggle();
+//            $('.column-custom-left').toggle();
+        }
+    </script>
+
 
     <div class="action-bar">
         <div wicket:id="buttons" class="button-group pull-left">
@@ -47,17 +54,20 @@
     </div>
 
     <div wicket:id="createPanel" class="column-custom">
+        <!--MOVE THIS INTO OTHER SECTION-->
         <div wicket:id="instructions" class="info">
             <p><wicket:message key="label.create_place_instructions"/>/p>
         </div>
         <form wicket:id="form" class="add-place-form">
-            <h3 wicket:id="title"/>
-            <fieldset class="primary-selection form-horizontal">
-                <div class="control-group">
-                    <label><wicket:message key="label.select_level"/></label>
-                    <select wicket:id="level"/>
-                </div>
-            </fieldset>
+            <wicket:enclosure child="level">
+                <h3 wicket:id="title"/>
+                <fieldset class="primary-selection form-horizontal">
+                    <div class="control-group">
+                        <label><wicket:message key="label.select_level"/></label>
+                        <select wicket:id="level"/>
+                    </div>
+                </fieldset>
+            </wicket:enclosure>
             <br><br>
             <div class="two-columns pull-left">
                 <fieldset class="form-horizontal">
@@ -101,8 +111,8 @@
                 </fieldset>
             </div>
             <div class="action-group clear border-top text-right">
-                <a class="btn-primary btn-sml" type="submit">Save</a>
-                <a class="btn-link" href="#">Cancel</a>
+                <a wicket:id="submit" class="btn-primary btn-sml" type="submit"><wicket:message key="label.save"/></a>
+                <a wicket:id="cancel" class="btn-link" href="#"><wicket:message key="label.cancel"/></a>
             </div>
         </form>
 
