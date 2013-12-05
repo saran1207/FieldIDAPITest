@@ -41,8 +41,8 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public List<Event> getRecurringEventsForAsset(Asset asset, RecurringAssetTypeEvent event){
-        QueryBuilder<Event> query = createTenantSecurityBuilder(Event.class);
+    public List<ThingEvent> getRecurringEventsForAsset(Asset asset, RecurringAssetTypeEvent event){
+        QueryBuilder<ThingEvent> query = createTenantSecurityBuilder(ThingEvent.class);
         query.addSimpleWhere("asset", asset);
         query.addSimpleWhere("recurringEvent", event);
         return persistenceService.findAll(query);
@@ -79,7 +79,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
     /*package protected for test reasons*/
     boolean checkIfScheduleExists(Asset asset, RecurringAssetTypeEvent event, LocalDateTime futureDate) {
-        QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+        QueryBuilder<ThingEvent> query = new QueryBuilder<ThingEvent>(ThingEvent.class, new OpenSecurityFilter());
         query.addWhere(WhereClauseFactory.create("asset", asset));
         query.addWhere(WhereClauseFactory.create("recurringEvent", event));
 

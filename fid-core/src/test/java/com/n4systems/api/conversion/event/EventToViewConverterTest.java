@@ -9,7 +9,7 @@ import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.eventschedule.NextEventDateByEventLoader;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
-import org.junit.Ignore;
+import com.n4systems.model.utils.AssetEvent;
 import org.junit.Test;
 
 import java.util.Date;
@@ -19,20 +19,19 @@ import static org.easymock.EasyMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-@Ignore
 public class EventToViewConverterTest {
 
 	@Test
 	public void to_view_copies_simple_fields() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
-			protected void convertEventResult(Event model, EventView view) {}
-			protected void convertAssetIdentifier(Event model, EventView view) {}
-			protected void converterPerformedBy(Event model, EventView view) {}
-			protected void convertNextDate(Event model, EventView view) {}
-			protected void convertBook(Event model, EventView view) {}
-			protected void convertAssetStatus(Event model, EventView view) {}
-            protected void convertEventStatus(Event model, EventView view) {}
-			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+			@Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertBook(Event model, EventView view) {}
+            @Override protected void convertAssetStatus(AssetEvent model, EventView view) {}
+            @Override protected void convertEventStatus(Event model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 
         ThingEvent model = new ThingEvent();
@@ -52,14 +51,14 @@ public class EventToViewConverterTest {
 	@Test
 	public void to_view_copies_event_result() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
-			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertAssetIdentifier(Event model, EventView view) {}
-			protected void converterPerformedBy(Event model, EventView view) {}
-			protected void convertNextDate(Event model, EventView view) {}
-			protected void convertBook(Event model, EventView view) {}
-			protected void convertAssetStatus(Event model, EventView view) {}
-            protected void convertEventStatus(Event model, EventView view) {}
-			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertBook(Event model, EventView view) {}
+            @Override protected void convertAssetStatus(AssetEvent model, EventView view) {}
+            @Override protected void convertEventStatus(Event model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 
         ThingEvent model = new ThingEvent();
@@ -73,14 +72,14 @@ public class EventToViewConverterTest {
 	@Test
 	public void to_view_copies_identifier_to_identifier() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
-			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertEventResult(Event model, EventView view) {}
-			protected void converterPerformedBy(Event model, EventView view) {}
-			protected void convertNextDate(Event model, EventView view) {}
-			protected void convertBook(Event model, EventView view) {}
-			protected void convertAssetStatus(Event model, EventView view) {}
-            protected void convertEventStatus(Event model, EventView view) {}
-			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertBook(Event model, EventView view) {}
+            @Override protected void convertAssetStatus(AssetEvent model, EventView view) {}
+            @Override protected void convertEventStatus(Event model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 
         ThingEvent model = new ThingEvent();
@@ -94,14 +93,14 @@ public class EventToViewConverterTest {
 	@Test
 	public void to_view_copies_performed_by_full_name() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
-			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertEventResult(Event model, EventView view) {}
-			protected void convertAssetIdentifier(Event model, EventView view) {}
-			protected void convertNextDate(Event model, EventView view) {}
-			protected void convertBook(Event model, EventView view) {}
-			protected void convertAssetStatus(Event model, EventView view) {}
-            protected void convertEventStatus(Event model, EventView view) {}
-			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertBook(Event model, EventView view) {}
+            @Override protected void convertAssetStatus(AssetEvent model, EventView view) {}
+            @Override protected void convertEventStatus(Event model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 
         ThingEvent model = new ThingEvent();
@@ -123,14 +122,14 @@ public class EventToViewConverterTest {
 		replay(loader);
 		
 		EventToViewConverter converter = new EventToViewConverter(loader) {
-			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertEventResult(Event model, EventView view) {}
-			protected void convertAssetIdentifier(Event model, EventView view) {}
-			protected void converterPerformedBy(Event model, EventView view) {}
-			protected void convertBook(Event model, EventView view) {}
-			protected void convertAssetStatus(Event model, EventView view) {}
-            protected void convertEventStatus(Event model, EventView view) {}
-			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertBook(Event model, EventView view) {}
+            @Override protected void convertAssetStatus(AssetEvent model, EventView view) {}
+            @Override protected void convertEventStatus(Event model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
 		EventView view = converter.toView(model);
@@ -143,14 +142,14 @@ public class EventToViewConverterTest {
 	@Test
 	public void to_view_copies_book_name() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
-			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertEventResult(Event model, EventView view) {}
-			protected void convertAssetIdentifier(Event model, EventView view) {}
-			protected void converterPerformedBy(Event model, EventView view) {}
-			protected void convertNextDate(Event model, EventView view) {}
-			protected void convertAssetStatus(Event model, EventView view) {}
-            protected void convertEventStatus(Event model, EventView view) {}
-			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertAssetStatus(AssetEvent model, EventView view) {}
+            @Override protected void convertEventStatus(Event model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
 		EventBook book = new EventBook();
@@ -167,14 +166,14 @@ public class EventToViewConverterTest {
 	@Test
 	public void to_view_allows_null_books() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
-			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertEventResult(Event model, EventView view) {}
-			protected void convertAssetIdentifier(Event model, EventView view) {}
-			protected void converterPerformedBy(Event model, EventView view) {}
-			protected void convertNextDate(Event model, EventView view) {}
-			protected void convertAssetStatus(Event model, EventView view) {}
-            protected void convertEventStatus(Event model, EventView view) {}
-			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertAssetStatus(AssetEvent model, EventView view) {}
+            @Override protected void convertEventStatus(Event model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
 		EventView view = converter.toView(new ThingEvent());
@@ -185,14 +184,14 @@ public class EventToViewConverterTest {
 	@Test
 	public void to_view_copies_asset_status_name() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
-			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertEventResult(Event model, EventView view) {}
-			protected void convertAssetIdentifier(Event model, EventView view) {}
-			protected void converterPerformedBy(Event model, EventView view) {}
-			protected void convertNextDate(Event model, EventView view) {}
-			protected void convertBook(Event model, EventView view) {}
-            protected void convertEventStatus(Event model, EventView view) {}
-			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertBook(Event model, EventView view) {}
+            @Override protected void convertEventStatus(Event model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
 		AssetStatus pse = new AssetStatus();
@@ -209,14 +208,14 @@ public class EventToViewConverterTest {
 	@Test
 	public void to_view_allows_null_asset_status() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
-			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertEventResult(Event model, EventView view) {}
-			protected void convertAssetIdentifier(Event model, EventView view) {}
-			protected void converterPerformedBy(Event model, EventView view) {}
-			protected void convertNextDate(Event model, EventView view) {}
-			protected void convertBook(Event model, EventView view) {}
-            protected void convertEventStatus(Event model, EventView view) {}
-			protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertBook(Event model, EventView view) {}
+            @Override protected void convertEventStatus(Event model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
 		};
 		
 		EventView view = converter.toView(new ThingEvent());
@@ -227,14 +226,14 @@ public class EventToViewConverterTest {
     @Test
     public void to_view_copies_event_status_name() throws ConversionException {
         EventToViewConverter converter = new EventToViewConverter(null) {
-            protected void convertDirectFields(Event model, EventView view) {}
-            protected void convertEventResult(Event model, EventView view) {}
-            protected void convertAssetIdentifier(Event model, EventView view) {}
-            protected void converterPerformedBy(Event model, EventView view) {}
-            protected void convertNextDate(Event model, EventView view) {}
-            protected void convertBook(Event model, EventView view) {}
-            protected void convertAssetStatus(Event model, EventView view) {}
-            protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertBook(Event model, EventView view) {}
+            @Override protected void convertAssetStatus(AssetEvent model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
         };
 
         EventStatus pse = new EventStatus();
@@ -251,14 +250,14 @@ public class EventToViewConverterTest {
     @Test
     public void to_view_allows_null_event_status() throws ConversionException {
         EventToViewConverter converter = new EventToViewConverter(null) {
-            protected void convertDirectFields(Event model, EventView view) {}
-            protected void convertEventResult(Event model, EventView view) {}
-            protected void convertAssetIdentifier(Event model, EventView view) {}
-            protected void converterPerformedBy(Event model, EventView view) {}
-            protected void convertNextDate(Event model, EventView view) {}
-            protected void convertBook(Event model, EventView view) {}
-            protected void convertAssetStatus(Event model, EventView view) {}
-            protected void convertOwnerFields(BaseOrg owner, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertBook(Event model, EventView view) {}
+            @Override protected void convertAssetStatus(AssetEvent model, EventView view) {}
+            @Override protected void convertOwnerFields(BaseOrg owner, EventView view) {}
         };
 
         EventView view = converter.toView(new ThingEvent());
@@ -270,14 +269,14 @@ public class EventToViewConverterTest {
 	@Test
 	public void to_view_copies_owner_fields() throws ConversionException {
 		EventToViewConverter converter = new EventToViewConverter(null) {
-			protected void convertDirectFields(Event model, EventView view) {}
-			protected void convertEventResult(Event model, EventView view) {}
-			protected void convertAssetIdentifier(Event model, EventView view) {}
-			protected void converterPerformedBy(Event model, EventView view) {}
-			protected void convertNextDate(Event model, EventView view) {}
-			protected void convertBook(Event model, EventView view) {}
-			protected void convertAssetStatus(Event model, EventView view) {}
-            protected void convertEventStatus(Event model, EventView view) {}
+            @Override protected void convertDirectFields(Event model, EventView view) {}
+            @Override protected void convertEventResult(Event model, EventView view) {}
+            @Override protected void convertAssetIdentifier(AbstractEvent<?,Asset> model, EventView view) {}
+            @Override protected void converterPerformedBy(Event model, EventView view) {}
+            @Override protected void convertNextDate(Event model, EventView view) {}
+            @Override protected void convertBook(Event model, EventView view) {}
+            @Override protected void convertAssetStatus(AssetEvent model, EventView view) {}
+            @Override protected void convertEventStatus(Event model, EventView view) {}
 		};
 		
 		BaseOrg org = OrgBuilder.aDivisionOrg().withName("division").withParent(

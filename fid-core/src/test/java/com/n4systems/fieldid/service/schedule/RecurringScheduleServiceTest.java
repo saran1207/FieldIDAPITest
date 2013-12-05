@@ -36,7 +36,6 @@ import static org.junit.Assert.assertTrue;
  * because this code is testing an iterator for the most part, be aware of putting stuff like "foo.next()" in your debugger watches window.
  * it will screw up the order of the iterator and all subsequent assertions will fail.
  */
-@Ignore
 public class RecurringScheduleServiceTest extends FieldIdServiceTest {
 
     @TestTarget RecurringScheduleService recurringScheduleService;
@@ -251,7 +250,7 @@ public class RecurringScheduleServiceTest extends FieldIdServiceTest {
                 withRecurrence(recurrence).build();
 
         expect(persistenceService.findAll(QueryTypeMatcher.eq(Asset.class))).andReturn(Lists.newArrayList(asset));
-        expect(persistenceService.count(QueryTypeMatcher.eq(Event.class))).andReturn(1L);  // means event already exists
+        expect(persistenceService.count(QueryTypeMatcher.eq(ThingEvent.class))).andReturn(1L);  // means event already exists
         replay(persistenceService);
 
         // these will NOT be called because event already exists.
