@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.user.User;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import java.util.List;
@@ -19,14 +20,23 @@ import java.util.List;
 public class PeopleListPanel extends Panel {
 
     public static final int USERS_PER_PAGE = 10;
-    private FieldIDDataProvider<User> dataProvider;
+    private FieldIDDataProvider<User> dataProvider = null;
+
+    private SimpleDefaultDataTable table;
+    private WebMarkupContainer blankSlate;
 
     public PeopleListPanel(String id, FieldIDDataProvider<User> dataProvider) {
         super(id);
         this.dataProvider = dataProvider;
         setOutputMarkupPlaceholderTag(true);
-        SimpleDefaultDataTable<User> table;
         add(table = new SimpleDefaultDataTable<User>("usersTable", getUserTableColumns(), dataProvider, USERS_PER_PAGE));
+        add(blankSlate = new WebMarkupContainer("blankSlate"));
+        updateVisibility();
+    }
+
+    public void updateVisibility() {
+        table.setVisible(dataProvider.size() > 0);
+        blankSlate.setVisible(dataProvider.size() < 1);
     }
 
     private List<IColumn<User>> getUserTableColumns () {
@@ -41,4 +51,6 @@ public class PeopleListPanel extends Panel {
 
         return columns;
     }
+
+
 }

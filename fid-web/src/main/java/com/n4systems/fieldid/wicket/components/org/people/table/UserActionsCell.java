@@ -10,6 +10,7 @@ import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -24,7 +25,7 @@ public class UserActionsCell extends Panel {
         super(id, model);
 
         final User user = model.getObject();
-        if(user.isFullUser()) {
+        if(user.isFullUser() || user.isAdmin()) {
             add(new NonWicketLink("editLink", "employeeUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-sml btn-secondary")));
         } else if(user.isLiteUser()) {
             add(new NonWicketLink("editLink", "liteUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-sml btn-secondary")));
@@ -34,13 +35,17 @@ public class UserActionsCell extends Panel {
             add(new BookmarkablePageLink<EditPersonPage>("editLink", EditPersonPage.class, PageParametersBuilder.id(user.getId())));
         } else if(user.isUsageBasedUser()) {
             add(new BookmarkablePageLink<EditUsageBasedUserPage>("editLink", EditUsageBasedUserPage.class, PageParametersBuilder.id(user.getId())));
+        } else {
+            add(new WebMarkupContainer("editLink")).setVisible(false);
         }
+
 
         add(new AjaxLink<Void>("archiveLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 user.archiveUser();
                 userService.update(user);
+                listPanel.updateVisibility();
                 target.add(listPanel);
             }
         });
