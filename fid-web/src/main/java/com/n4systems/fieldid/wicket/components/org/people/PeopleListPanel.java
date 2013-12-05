@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.components.org.people.table.ActionsColumn;
 import com.n4systems.fieldid.wicket.components.org.people.table.LastLoginColumn;
 import com.n4systems.fieldid.wicket.components.org.people.table.UserGroupColumn;
+import com.n4systems.fieldid.wicket.components.org.people.table.UserIdLinkColumn;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -23,7 +24,7 @@ public class PeopleListPanel extends Panel {
     public PeopleListPanel(String id, FieldIDDataProvider<User> dataProvider) {
         super(id);
         this.dataProvider = dataProvider;
-
+        setOutputMarkupPlaceholderTag(true);
         SimpleDefaultDataTable<User> table;
         add(table = new SimpleDefaultDataTable<User>("usersTable", getUserTableColumns(), dataProvider, USERS_PER_PAGE));
     }
@@ -31,7 +32,7 @@ public class PeopleListPanel extends Panel {
     private List<IColumn<User>> getUserTableColumns () {
         List<IColumn<User>> columns = Lists.newArrayList();
 
-        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.userid"), "userID", "userID"));
+        columns.add(new UserIdLinkColumn(new FIDLabelModel("label.userid"), "userID"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.username"), "lastName, firstName", "fullName"));
         columns.add(new UserGroupColumn(new FIDLabelModel("label.user_groups")));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.emailaddress"), "emailAddress", "emailAddress"));

@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.pages.user.EditUsageBasedUserPage;
 import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -24,11 +25,11 @@ public class UserActionsCell extends Panel {
 
         final User user = model.getObject();
         if(user.isFullUser()) {
-            add(new NonWicketLink("editLink", "employeeUserEdit.action?uniqueID=" + user.getId()));
+            add(new NonWicketLink("editLink", "employeeUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-sml btn-secondary")));
         } else if(user.isLiteUser()) {
-            add(new NonWicketLink("editLink", "liteUserEdit.action?uniqueID=" + user.getId()));
+            add(new NonWicketLink("editLink", "liteUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-sml btn-secondary")));
         } else if(user.isReadOnly()) {
-            add(new NonWicketLink("editLink", "readOnlyUserEdit.action?uniqueID=" + user.getId()));
+            add(new NonWicketLink("editLink", "readOnlyUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-sml btn-secondary")));
         } else if(user.isPerson()) {
             add(new BookmarkablePageLink<EditPersonPage>("editLink", EditPersonPage.class, PageParametersBuilder.id(user.getId())));
         } else if(user.isUsageBasedUser()) {
