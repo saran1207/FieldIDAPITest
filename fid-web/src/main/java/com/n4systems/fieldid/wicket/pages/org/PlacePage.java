@@ -63,8 +63,8 @@ public abstract class PlacePage extends FieldIDTemplatePage {
         Long orgId = orgModel.getObject().getId();
         add(new NavigationBar(navBarId,
                 aNavItem().label(new FIDLabelModel("label.summary")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(orgId)).build(),
-                aNavItem().label(new FIDLabelModel("label.events")).page(PlaceEventsPage.class).params(PageParametersBuilder.id(orgId)).build(),
-                aNavItem().label(new FIDLabelModel("label.people")).page(PlacePeoplePage.class).params(PageParametersBuilder.id(orgId)).build()
+                aNavItem().label(new FIDLabelModel("label.events")).page(PlaceEventsPage.class).params(PageParametersBuilder.id(orgId)).build()
+        //        aNavItem().label(new FIDLabelModel("label.people")).page(PlacePeoplePage.class).params(PageParametersBuilder.id(orgId)).build()
         ));
     }
 
