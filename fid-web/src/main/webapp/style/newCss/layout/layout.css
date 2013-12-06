@@ -209,7 +209,8 @@ li:hover #menuSetup:after {
 	content: '\e830';
 }
 #menuReport img,
-.downArrow {
+#menuReport.speedLink img,
+#pageHeader .downArrow {
 	display: none;
 }
 

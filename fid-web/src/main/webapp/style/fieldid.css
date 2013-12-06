@@ -218,7 +218,14 @@ h2 a {
 #pageHeader #navigationLinks .dropdown ul li {
 	border-top: 1px solid #f5f5f5;
 }
-#pageHeader #menuReport:after, #menuSetup:after, #mySavedItemsLink:after {
+#navigationLinks .fontello-home {
+	height: 17px;
+	display: block;
+	margin-top: 1px;
+}
+#pageHeader #menuReport:after, 
+#menuSetup:after, 
+#mySavedItemsLink:after {
 	font-family: "fontello", sans-serif;
 	content: '\e82d';
 	font-size: 13px;
@@ -227,10 +234,9 @@ h2 a {
 #pageHeader li:hover #menuSetup:after {
 	content: '\e830';
 }
-#navigationLinks .fontello-home {
-	height: 17px;
-	display: block;
-	margin-top: 1px;
+#menuReport.speedLink img,
+#pageHeader .downArrow {
+	display: none;
 }
 
 

@@ -12,7 +12,24 @@
  * see fieldIdWide.js for related javascript.
  *
  */
- 
+
+/* GLOBAL PAGE HEADER */
+/* Overrides for wide layout pages */
+#pageHeader #pageActions .company-logo {
+    height: 55px;
+    width: auto;
+    padding: 11px 0 10px;
+}
+#pageHeader #pageActions #listContainer .listOfLinks {
+    margin-top: 10px;
+}
+#pageHeader #navigationContent a#menuHome {
+    padding-bottom: 8px;
+} 
+#menuReport.speedLink:after {
+    padding-left: 4px;
+}
+
 
 /** 
  PAGE
