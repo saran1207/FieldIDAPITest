@@ -105,4 +105,11 @@ public class EventScheduleService extends FieldIdPersistenceService {
         return id;
     }
 
+    @Transactional
+    public Long createSchedule(PlaceEvent openEvent) {
+        Long id = persistenceService.save(openEvent);
+        // TODO : does mobile need any information here???
+        return id;
+    }
+
 }

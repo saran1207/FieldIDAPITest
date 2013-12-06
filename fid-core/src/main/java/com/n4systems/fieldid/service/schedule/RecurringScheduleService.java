@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.model.*;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -111,6 +112,42 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
     public Iterable<LocalDateTime> getBoundedScheduledTimesIterator(Recurrence recurrence) {
         return new BoundedScheduleTimeIterator(recurrence);
     }
+
+    /*package protected for test reasons*/
+    boolean checkIfScheduleExists(BaseOrg place, RecurringPlaceEvent event, LocalDateTime futureDate) {
+        QueryBuilder<PlaceEvent> query = new QueryBuilder<PlaceEvent>(PlaceEvent.class, new OpenSecurityFilter());
+        query.addWhere(WhereClauseFactory.create("owner", place));
+        query.addWhere(WhereClauseFactory.create("recurringEvent", event));
+
+        //A simple equals does not work due to comparison problems comparing Timestamps and Date see java.sql.Timestamp
+        // .: we use a range.
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "dueDate", futureDate.minusMillis(1).toDate()));
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LE, "to", "dueDate", futureDate.toDate()));
+
+        return persistenceService.count(query) > 0;
+    }
+
+    public void schedulePlaceAnEventFor(RecurringPlaceEvent recurringEvent, LocalDateTime futureDate) {
+        BaseOrg place = recurringEvent.getPlace();
+
+        if(!checkIfScheduleExists(place, recurringEvent, futureDate)) {
+            PlaceEvent schedule = new PlaceEvent();
+            schedule.setOwner(place);
+            schedule.setType(recurringEvent.getEventType());
+            schedule.setDueDate(futureDate.toDate());
+            schedule.setTenant(place.getTenant());
+            // TODO : figure out how to handle this.
+            //schedule.setRecurringEvent(recurringEvent);
+            schedule.setEventResult(EventResult.VOID);
+            eventScheduleService.createSchedule(schedule);
+        }
+    }
+
+    public List<RecurringPlaceEvent> getRecurringPlaceEvents() {
+        QueryBuilder<RecurringPlaceEvent> query = new QueryBuilder<RecurringPlaceEvent>(RecurringPlaceEvent.class, new OpenSecurityFilter());
+        return persistenceService.findAll(query);
+    }
+
 
     class BoundedScheduleTimeIterator implements Iterable<LocalDateTime>, Iterator<LocalDateTime> {
 
@@ -238,4 +275,5 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
             return this;
         }
     }
+
 }

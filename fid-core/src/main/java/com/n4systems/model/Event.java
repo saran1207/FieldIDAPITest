@@ -545,6 +545,7 @@ public abstract class Event<T extends EventType, R extends EntityWithTenant> ext
         return getType();
     }
 
+
     public RecurringAssetTypeEvent getRecurringEvent() {
         return recurringEvent;
     }

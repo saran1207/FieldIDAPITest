@@ -15,6 +15,7 @@ import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceSummaryPage;
 import com.n4systems.model.Address;
+import com.n4systems.model.RecurringPlaceEvent;
 import com.n4systems.model.builders.CustomerOrgBuilder;
 import com.n4systems.model.builders.DivisionOrgBuilder;
 import com.n4systems.model.builders.SecondaryOrgBuilder;
@@ -127,6 +128,11 @@ public class OrgViewPage extends FieldIDTemplatePage {
                         // TODO : save the new thing.
                         BaseOrg org = ((PlaceData)createForm.getDefaultModelObject()).createNewChildOrg();
                         persistenceService.save(org);
+
+//                        RecurringPlaceEvent recurr = new RecurringPlaceEvent();
+//                        persistenceService.save(recurr);
+
+                        List<RecurringPlaceEvent> all = persistenceService.findAll(RecurringPlaceEvent.class);
                         toggleCreatePanel(target);
                     }
                     @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
@@ -301,14 +307,14 @@ public class OrgViewPage extends FieldIDTemplatePage {
                 PrimaryOrg primary = (PrimaryOrg) parent;
                 // TODO : augment builders to accommodate notes, address, etc..
                 return Level.SECONDARY.equals(level) ?
-                        SecondaryOrgBuilder.aSecondaryOrg().withPrimaryOrg(primary).withName(name).build() :
-                        CustomerOrgBuilder.aCustomerOrg().withParent(primary).withName(name).build();
+                        SecondaryOrgBuilder.aSecondaryOrg().withPrimaryOrg(primary).withName(name).withId(null).build() :
+                        CustomerOrgBuilder.aCustomerOrg().withParent(primary).withName(name).withId(null).build();
             } else if (parent instanceof CustomerOrg) {
                 CustomerOrg customer = (CustomerOrg) parent;
-                return DivisionOrgBuilder.aDivisionOrg().withCustomerOrg(customer).withName(name).build();
+                return DivisionOrgBuilder.aDivisionOrg().withCustomerOrg(customer).withName(name).withId(null).build();
             } else if (parent instanceof SecondaryOrg) {
                 SecondaryOrg secondary = (SecondaryOrg) parent;
-                return CustomerOrgBuilder.aCustomerOrg().withParent(secondary).withName(name).build();
+                return CustomerOrgBuilder.aCustomerOrg().withParent(secondary).withName(name).withId(null).build();
             }
             throw new IllegalStateException("can't build child org for " + parent==null?"NULL":parent.getClass().getSimpleName() + " org");
         }
