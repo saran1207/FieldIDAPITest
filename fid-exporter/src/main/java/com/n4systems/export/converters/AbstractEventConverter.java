@@ -9,16 +9,14 @@ import com.n4systems.model.*;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-public abstract class AbstractEventConverter extends AbstractEntityConverter<ThingEvent> {
+public abstract class AbstractEventConverter<T extends AbstractEvent> extends AbstractEntityConverter<T> {
 
 	@Override
-	protected void marshalEntity(ThingEvent event, HierarchicalStreamWriter writer, MarshallingContext context) {
-		writeNode(writer, context, "AssetId", event.getAsset().getMobileGUID());
+	protected void marshalEntity(T event, HierarchicalStreamWriter writer, MarshallingContext context) {
 		writeNode(writer, context, "EventType", event.getType());
 		
 		super.marshalEntity(event, writer, context);
 		
-		writeNode(writer, context, "AssetStatus", event.getAssetStatus());
 		writeNode(writer, context, "Comments", event.getComments());
 		
 		writeAttributes(writer, event);

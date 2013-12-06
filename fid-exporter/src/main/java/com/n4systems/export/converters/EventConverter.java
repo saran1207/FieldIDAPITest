@@ -16,7 +16,9 @@ public class EventConverter extends AbstractEventConverter<ThingEvent> {
 	@Override
 	protected void marshalEntity(ThingEvent event, HierarchicalStreamWriter writer, MarshallingContext context) {
 		writer.startNode("Event");
+        writeNode(writer, context, "AssetId", event.getAsset().getMobileGUID());
 		super.marshalEntity(event, writer, context);
+        writeNode(writer, context, "AssetStatus", event.getAssetStatus());
 		writeNode(writer, context, "ActiveState", event.getEntityState());
 		writeNode(writer, context, "Date", event.getDate());
 		writeNode(writer, context, "EventResult", event.getEventResult());
