@@ -2,7 +2,6 @@ package com.n4systems.model;
 
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
@@ -17,10 +16,6 @@ import java.util.List;
 @PrimaryKeyJoinColumn(name="id")
 public class ThingEvent extends Event<ThingEventType, Asset> implements AssetEvent {
 
-    @ManyToOne
-    @JoinColumn(name="thing_event_type_id")
-    private ThingEventType type;
-
     private ProofTestInfo proofTestInfo;
 
     @ManyToOne(fetch=FetchType.LAZY, optional = false)
@@ -34,16 +29,6 @@ public class ThingEvent extends Event<ThingEventType, Asset> implements AssetEve
     @ManyToOne(fetch=FetchType.EAGER, optional=false)
     @JoinColumn(name="owner_id", nullable = false)
     private BaseOrg owner;
-
-    @Override
-    public ThingEventType getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(ThingEventType type) {
-        this.type = type;
-    }
 
     @Override
     public Asset getTarget() {
@@ -82,7 +67,7 @@ public class ThingEvent extends Event<ThingEventType, Asset> implements AssetEve
         ThingEvent enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
         enhanced.setBook(enhance(getBook(), level));
         enhanced.setPerformedBy(enhance(getPerformedBy(), level));
-        enhanced.setType(enhance(getType(), level));
+        enhanced.setType(enhance((ThingEventType)getType(), level));
         enhanced.setAsset(enhance(getAsset(), level));
         enhanced.setOwner(enhance(getOwner(), level));
 
@@ -124,5 +109,9 @@ public class ThingEvent extends Event<ThingEventType, Asset> implements AssetEve
         ThingEvent action = (ThingEvent) event;
         action.setAsset(getAsset());
         action.setOwner(getOwner());
+    }
+
+    public ThingEventType getThingType() {
+        return (ThingEventType) getType();
     }
 }

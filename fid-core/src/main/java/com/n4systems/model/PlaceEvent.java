@@ -14,20 +14,6 @@ public class PlaceEvent extends Event<PlaceEventType, BaseOrg> {
     @JoinColumn(name="place_id")
     private BaseOrg place;
 
-    @ManyToOne
-    @JoinColumn(name="place_event_type_id")
-    private PlaceEventType eventType;
-
-    @Override
-    public PlaceEventType getType() {
-        return eventType;
-    }
-
-    @Override
-    public void setType(PlaceEventType type) {
-        eventType = type;
-    }
-
     @Override
     public BaseOrg getTarget() {
         return getPlace();

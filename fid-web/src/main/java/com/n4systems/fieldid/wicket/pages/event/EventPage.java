@@ -191,7 +191,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
 
-            proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event.getObject().getType(), proofTestInfo));
+            proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event.getObject().getThingType(), proofTestInfo));
             proofTestContainer.setVisible(supportsProofTests());
 
             add(proofTestContainer);
@@ -298,7 +298,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
     private boolean supportsProofTests() {
         ThingEvent event = this.event.getObject();
-        return event.getType().getSupportedProofTests().size()>0 && event.getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
+        return event.getThingType().getSupportedProofTests().size()>0 && event.getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
     }
 
     protected abstract Component createCancelLink(String cancelLink);

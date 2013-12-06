@@ -246,7 +246,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			return MISSING;
 		}
 
-		if (event.getType().isMaster()) {
+		if (event.getThingType().isMaster()) {
 			return "master";
 		}
 		
@@ -579,7 +579,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	public ThingEventType getEventType() {
-		return event.getType();
+		return event.getThingType();
 	}
 
 	public boolean isPrintable() {
@@ -805,7 +805,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
 	public Map<String, Boolean> getProofTestTypesUpload() {
 		Map<String, Boolean> uploadFlags = new HashMap<String, Boolean>();
-		for (ProofTestType proofTestType : event.getType().getSupportedProofTests()) {
+		for (ProofTestType proofTestType : event.getThingType().getSupportedProofTests()) {
 			uploadFlags.put(proofTestType.name(), proofTestType.isUploadable());
 		}
 

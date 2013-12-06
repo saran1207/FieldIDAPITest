@@ -70,7 +70,7 @@ public class MassUpdateService extends FieldIdPersistenceService {
         for (Long id : ids) {
             ThingEvent event = persistenceService.find(ThingEvent.class, id);
             if (event != null) {
-                if (event.getType().isMaster()) {
+                if (((ThingEventType)event.getType()).isMaster()) {
                     removalSummary.addMasterEventToDelete();
                     removalSummary.addStandardEventsToDelete(event.getSubEvents().size());
                 } else {
