@@ -3,6 +3,9 @@
 #pageHeader {
 	font-family: Helvetica, Arial, sans-serif;
 }
+#pageHeader #navigationContent a {
+	font-size: 13px;
+}
 
 /* IE7 and below */
 ul.dropdown ul li { 

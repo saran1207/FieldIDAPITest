@@ -2,6 +2,10 @@
 	HEADER DROP DOWN STYLING
 */
 
+#menuReport:after {
+	padding-left: 4px;
+}
+
 /* 
 	LEVEL ONE
 */

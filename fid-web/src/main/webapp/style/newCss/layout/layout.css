@@ -176,6 +176,32 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 #navigationLinks .dropdown ul li {
 	border-top: 1px solid #f5f5f5;
 }
+#menuReport:after, 
+#menuSetup:after,
+#mySavedItemsLink:after {
+	font-family: "fontello", sans-serif;
+	content: '\e82d';
+	font-size: 13px;
+	/*padding-right: 4px;	*/
+}
+#mySavedItemsLink:after {
+	color: #666;
+	padding-left: 4px;
+}
+#menuReport:after {
+	/*margin-left: -4px;*/
+}
+li:hover #menuReport:after, 
+li:hover #menuSetup:after {
+	content: '\e830';
+}
+#menuReport img,
+#menuReport.speedLink img,
+#pageHeader .downArrow {
+	display: none;
+}
+
+
 
 
 #headerPadding {
@@ -189,30 +215,6 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
     overflow: visible;
 }
 
-#menuReport:after, 
-#menuSetup:after,
-#mySavedItemsLink:after {
-	font-family: "fontello", sans-serif;
-	content: '\e82d';
-	padding: 0 4px;
-	font-size: 13px;
-	padding-right: 0;
-}
-#menuSetup:after {
-	padding: 0;
-}
-#mySavedItemsLink:after {
-	color: #666;
-}
-li:hover #menuReport:after, 
-li:hover #menuSetup:after {
-	content: '\e830';
-}
-#menuReport img,
-#menuReport.speedLink img,
-#pageHeader .downArrow {
-	display: none;
-}
 
 /* Search
 ----------*/

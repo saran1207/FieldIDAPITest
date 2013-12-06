@@ -1,8 +1,3 @@
-/* temp */
-.debug-info {
-	display: none;
-}
-
 /* http://nicolasgallagher.com/micro-clearfix-hack/ */
 .clearfix:before,
 .clearfix:after {
@@ -148,7 +143,8 @@ h2 a {
 #pageHeader #pageActions #companyLogo {
 	float: left;
 }
-	#pageHeader #pageActions #companyLogo img {
+	#pageHeader #pageActions #companyLogo img,
+	.company-logo {
 		height: 55px;
 		width: auto;
 		padding: 10px 0;
@@ -170,6 +166,7 @@ h2 a {
 }
 #pageHeader #pageActions #listContainer .listOfLinks li:first-child {
 	border: none;
+	padding-left: 0;
 }
 #pageHeader #pageActions #listContainer .listOfLinks a {
 	color: #e63300;
@@ -183,7 +180,6 @@ h2 a {
 	color: #356CA2;
 }
 #pageHeader #mySavedItemsLink:after {
-	padding: 0 4px;
 	color: #666;
 }
 #pageHeader .mySavedItemsBox {
@@ -229,6 +225,12 @@ h2 a {
 	font-family: "fontello", sans-serif;
 	content: '\e82d';
 	font-size: 13px;
+}
+#mySavedItemsLink:after {
+	padding-left: 4px;
+}
+#menuReport.struts:after {
+	margin-left: -4px;
 }
 #pageHeader li:hover #menuReport:after, 
 #pageHeader li:hover #menuSetup:after {

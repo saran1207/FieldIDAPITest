@@ -18,6 +18,9 @@
 		});
 	</script>
 
+	<!--[if lte IE 8]>
+        <link wicket:id="dropDownIECss" type="text/css" href="/fieldid/style/dropdown/ie.css" rel="stylesheet" media="all"/>
+    <![endif]-->
     <script type="text/javascript">
         ${action.getCustomJs()}
     </script>
@@ -102,7 +105,7 @@
 
 
                     <li>
-                        <a href="/fieldid/w/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" />
+                        <a href="/fieldid/w/reporting" class="speedLink textLink struts" id="menuReport"><@s.text name="speed.reporting" />
                             <#if securityGuard.isCriteriaTrendsEnabled() || securityGuard.isAdvancedEventSearchEnabled()>
                                 <!-- <img src="/fieldid/images/down-arrow.png" /> -->
                             </#if>
