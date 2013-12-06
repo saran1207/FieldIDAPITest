@@ -1,5 +1,17 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
+
+    <a wicket:id="addUserLink" class="btn-secondary btn-icon">
+        <span class="fontello-user-add"/>
+        <wicket:message key="label.add_user"/>
+    </a>
+    <a wicket:id="viewAllUsersLink" class="btn-secondary btn-icon">
+        <span class="fontello-users"/>
+        <wicket:message key="label.view_all_users"/>
+    </a>
+    <br>
     <div wicket:id="peopleListPanel"/>
+    <div wicket:id="addPlaceUserPanel"/>
+
 </wicket:extend>
 </html>

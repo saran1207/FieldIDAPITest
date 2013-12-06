@@ -9,7 +9,6 @@ import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.io.File;
@@ -51,8 +50,8 @@ public class EditUsageBasedUserPage extends UserPage {
     }
 
     @Override
-    protected Component createAccountPanel(String id, Form form) {
-        return new UserFormAccountPanel(id, user, form);
+    protected Component createAccountPanel(String id) {
+        return new UserFormAccountPanel(id, user);
     }
 
     @Override

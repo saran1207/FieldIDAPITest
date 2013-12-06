@@ -1,0 +1,32 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <div wicket:id="feedbackPanel"/>
+
+    <form wicket:id="addUserForm">
+
+        <div class="two-columns pull-left">
+
+            <fieldset wicket:id="identifiersPanel" class="form-horizontal" />
+
+            <fieldset wicket:id="localizationPanel" class="form-horizontal" />
+
+            <fieldset wicket:id="accountPanel" class="form-horizontal"/>
+
+            <!--
+
+
+
+                        <div wicket:id="permissionsPanel" class="fieldGroup permissionsFieldGroup"/>
+            -->
+
+        </div>
+
+        <div class="formAction">
+            <input type="submit" wicket:id="save" value="Save"/>
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+</wicket:panel>
+</html>

@@ -1,18 +1,17 @@
 package com.n4systems.fieldid.wicket.components.timezone;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
-
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
+import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.SortedSet;
 
 public class TimeZoneSelectorPanel extends Panel {
 	
@@ -23,7 +22,7 @@ public class TimeZoneSelectorPanel extends Panel {
 		final CountryModel countryModel = new CountryModel(timeZoneIdModel);
 		final RegionModel regionModel = new RegionModel(timeZoneIdModel, countryModel);
 		
-		add(new DropDownChoice<Country>("country", countryModel, new CountryListModel(), new ListableChoiceRenderer<Country>()) {
+		add(new FidDropDownChoice<Country>("country", countryModel, new CountryListModel(), new ListableChoiceRenderer<Country>()) {
 			@Override
 			protected boolean wantOnSelectionChangedNotifications() {
 				return true;
@@ -34,7 +33,7 @@ public class TimeZoneSelectorPanel extends Panel {
 			}
 		});
 		
-		add(new DropDownChoice<Region>("timeZone", regionModel, new RegionListModel(countryModel), new ListableChoiceRenderer<Region>()));
+		add(new FidDropDownChoice<Region>("timeZone", regionModel, new RegionListModel(countryModel), new ListableChoiceRenderer<Region>()));
 	}
 	
 	private class CountryModel implements IModel<Country> {
