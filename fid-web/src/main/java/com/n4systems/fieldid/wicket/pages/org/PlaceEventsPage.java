@@ -28,6 +28,9 @@ import java.util.List;
 
 public class PlaceEventsPage extends PlacePage {
 
+    // NOTE TO DIANA : used this as parameter.  if non-null then set filter flag to Open Only.
+    public static final String OPEN_PARAM = "open";
+
     @SpringBean
     private PlaceService placeService;
 

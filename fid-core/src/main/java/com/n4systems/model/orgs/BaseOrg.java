@@ -30,6 +30,10 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		return new SecurityDefiner("tenant.id", "", null, "state");
 	}
 
+
+    // NOTE TO NEIL: i think BaseOrg will need GpsLocation (or maybe add that to addressInfo?)
+    // also, attachments, image.
+
     @ManyToMany(fetch= FetchType.LAZY, cascade= CascadeType.ALL)
     @JoinTable(name="orgs_place_event_types", joinColumns = @JoinColumn(name="org_id"), inverseJoinColumns = @JoinColumn(name="place_event_type_id"))
     private Set<PlaceEventType> eventTypes = new HashSet<PlaceEventType>();
