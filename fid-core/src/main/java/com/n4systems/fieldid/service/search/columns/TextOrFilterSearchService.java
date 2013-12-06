@@ -46,7 +46,7 @@ public abstract class TextOrFilterSearchService<T extends SearchCriteria, M exte
     public <K> PageHolder<K> performSearch(T criteriaModel, ResultTransformer<K> transformer, Integer pageNumber, Integer pageSize, boolean selectedOnly) {
         SearchResult<M> searchResult;
         if (selectedOnly) {
-            searchResult = findSelectedEntities(criteriaModel);
+            searchResult = findSelectedEntities(criteriaModel, pageNumber, pageSize);
         } else if (criteriaModel.getQuery() != null) {
             searchResult = textSearch(criteriaModel, pageNumber, pageSize);
         } else {
@@ -63,9 +63,13 @@ public abstract class TextOrFilterSearchService<T extends SearchCriteria, M exte
         return new PageHolder<K>(pageResults, totalResultCount);
     }
 
-    private SearchResult<M> findSelectedEntities(T criteriaModel) {
-        List<M> entities = new ArrayList<M>(criteriaModel.getSelection().getNumSelectedIds());
-        for (Long id : criteriaModel.getSelection().getSelectedIds()) {
+    private SearchResult<M> findSelectedEntities(T criteriaModel, int pageNumber, int pageSize) {
+        int beginIndex = pageNumber * pageSize;
+        List<Long> selectedIdList = criteriaModel.getSelection().getSelectedIds();
+        List<Long> currentPageOfSelectedIds = selectedIdList.subList(beginIndex, Math.min(selectedIdList.size(), beginIndex + pageSize));
+
+        List<M> entities = new ArrayList<M>(pageSize);
+        for (Long id : currentPageOfSelectedIds) {
             entities.add(persistenceService.find(entityClass, id));
         }
         SearchResult<M> searchResult = new SearchResult<M>();
