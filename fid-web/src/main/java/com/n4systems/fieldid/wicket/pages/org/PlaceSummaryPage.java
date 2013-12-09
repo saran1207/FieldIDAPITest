@@ -81,6 +81,11 @@ public class PlaceSummaryPage extends PlacePage {
         );
     }
 
+    @Override
+    public String getMainCss() {
+        return "place-summary";
+    }
+
     private Component createFutureEventsListView() {
         final FutureEventsModel model = new FutureEventsModel();
         ListView<ThingEvent> view = new ListView<ThingEvent>("events", model ) {

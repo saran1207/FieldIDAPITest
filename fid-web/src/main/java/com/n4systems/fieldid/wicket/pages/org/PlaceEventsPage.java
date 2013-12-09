@@ -12,6 +12,7 @@ import com.n4systems.model.WorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -66,7 +67,7 @@ public class PlaceEventsPage extends PlacePage {
         filterPanel.setOutputMarkupPlaceholderTag(true);
         filterPanel.setVisible(hasEvents);
 
-        add(eventPanel = new EventListPanel("eventPanel", new PlaceEventDataProvider()) {
+        add(eventPanel = new EventListPanel("eventPanel", new PlaceEventDataProvider("completedDate", SortOrder.DESCENDING)) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends Event>> columns) {
                 //TODO add place status
@@ -125,6 +126,11 @@ public class PlaceEventsPage extends PlacePage {
 
     }
 
+    @Override
+    public String getMainCss() {
+        return "place-event";
+    }
+
     private List<WorkflowState> getWorkflowStates() {
         List<WorkflowState> states = new ArrayList<WorkflowState>();
 
@@ -144,9 +150,13 @@ public class PlaceEventsPage extends PlacePage {
 
     private class PlaceEventDataProvider extends FieldIDDataProvider<Event> {
 
+        public PlaceEventDataProvider(String order, SortOrder sortOrder) {
+            setSort(order, sortOrder);
+        }
+
         @Override
         public Iterator<? extends Event> iterator(int first, int count) {
-            List<? extends Event> eventsList = placeService.getEventsFor(orgModel.getObject());
+            List<? extends Event> eventsList = placeService.getEventsFor(orgModel.getObject());//, getSort().getProperty(), getSort().isAscending());
             eventsList = eventsList.subList(first, first + count);
             return eventsList.iterator();
         }
@@ -161,7 +171,7 @@ public class PlaceEventsPage extends PlacePage {
             return new AbstractReadOnlyModel<Event>() {
                 @Override
                 public Event getObject() {
-                    return (Event) object;
+                    return object;
                 }
             };
         }

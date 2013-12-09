@@ -85,8 +85,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
 
-    private String mainCss;
-
     public FieldIDTemplatePage() {
         this(null, null);
     }
@@ -365,7 +363,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             response.renderJavaScript(apptegicTemplate.asString(apptegicParams), null);
         }
 
-        if(getMainCss() != null)
+        if(!getMainCss().isEmpty())
             response.renderOnDomReadyJavaScript("$('main[role=\"main\"]').addClass('"+getMainCss()+"');");
     }
 
@@ -497,10 +495,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     }
 
     public String getMainCss() {
-        return mainCss;
-    }
-
-    public void setMainCss(String mainCss) {
-        this.mainCss = mainCss;
+        return "";
     }
 }
