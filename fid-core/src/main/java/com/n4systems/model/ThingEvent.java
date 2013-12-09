@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
@@ -14,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name="thing_events")
 @PrimaryKeyJoinColumn(name="id")
-public class ThingEvent extends Event<ThingEventType,ThingEvent, Asset> implements AssetEvent {
+public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implements AssetEvent, NetworkEntity<ThingEvent> {
 
     private ProofTestInfo proofTestInfo;
 
@@ -41,7 +42,7 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent, Asset> implemen
     }
 
     public ThingEvent copyDataFrom(ThingEvent event) {
-        SecurityEnhanced x = (Event)this;
+        SecurityEnhanced x = this;
         setAsset(event.getAsset());
         setType(event.getType());
         setTenant(event.getTenant());
@@ -113,5 +114,11 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent, Asset> implemen
 
     public ThingEventType getThingType() {
         return (ThingEventType) getType();
+    }
+
+    @Override
+    @AllowSafetyNetworkAccess
+    public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
+        return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
     }
 }

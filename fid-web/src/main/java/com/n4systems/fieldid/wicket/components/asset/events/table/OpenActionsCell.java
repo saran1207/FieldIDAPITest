@@ -101,7 +101,7 @@ public class OpenActionsCell extends Panel {
     }
 
     private IModel<List<? extends EventType>> createEventTypesModelForEvent(IModel<ThingEvent> eventModel) {
-        if (eventModel.getObject().getType() == null || !eventModel.getObject().getType().getGroup().isAction()) {
+        if (eventModel.getObject().getType() == null || !eventModel.getObject().getType().isActionEventType()) {
             return new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(eventModel, "asset.type"));
         } else {
             return new ActionTypesForTenantModel();

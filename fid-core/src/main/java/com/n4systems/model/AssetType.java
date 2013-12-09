@@ -560,9 +560,7 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
         List<ThingEventType> allEventTypes = new ArrayList<ThingEventType>();
         for (AssociatedEventType assocEventType : eventTypes) {
             ThingEventType type = assocEventType.getEventType();
-            if (!type.getGroup().isAction()) {
-                allEventTypes.add(type);
-            }
+            allEventTypes.add(type);
         }
         return allEventTypes;
     }

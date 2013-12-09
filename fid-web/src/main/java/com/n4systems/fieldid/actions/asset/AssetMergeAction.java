@@ -8,6 +8,7 @@ import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.fieldid.actions.asset.helpers.AssetLinkedHelper;
 import com.n4systems.fieldid.actions.helpers.AllEventHelper;
 import com.n4systems.model.Asset;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.eventschedule.NextEventScheduleLoader;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 
@@ -127,7 +128,7 @@ public class AssetMergeAction extends AbstractCrud {
 		return getAllEventHelper().getEventCount();
 	}
 
-	public List<Event> getEvents() {
+	public List<ThingEvent> getEvents() {
 		return getAllEventHelper().getEvents();
 	}
 

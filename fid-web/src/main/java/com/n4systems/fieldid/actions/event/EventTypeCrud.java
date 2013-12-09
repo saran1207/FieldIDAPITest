@@ -32,15 +32,20 @@ public class EventTypeCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private Logger logger = Logger.getLogger(EventTypeCrud.class);
 
+    private static final String ACTION_TYPE="Action";
+    private static final String ASSET_TYPE="Asset";
+    private static final String PLACE_TYPE="Place";
+
 	private List<ListingPair> eventTypeGroups;
     private List<EventTypeGroup> eventGroups;
     private List<EventTypeGroup> actionGroups;
-	private List<EventType> eventTypes;
+	private List<? extends EventType> eventTypes;
 	private ThingEventType eventType;
 	private List<TrimmedString> infoFieldNames;
 	private String saveAndAdd;
 	private Map<String, Boolean> types;
 	private EventTypeArchiveSummary archiveSummary;
+    private String typeFilter;
 	
 	private boolean assignedToAvailable = false;
 	
@@ -214,9 +219,17 @@ public class EventTypeCrud extends AbstractCrud {
         eventTypeRemovalService.startRemovalTask(eventType);
 	}
 
-	public List<EventType> getEventTypes() {
+	public List<? extends EventType> getEventTypes() {
 		if (eventTypes == null) {
-            eventTypes = eventTypeService.getAllEventTypes(groupFilter, nameFilter);
+            if (ACTION_TYPE.equals(typeFilter)) {
+                eventTypes = eventTypeService.getActionEventTypes(groupFilter, nameFilter);
+            } else if (ASSET_TYPE.equals(typeFilter)) {
+                eventTypes = eventTypeService.getThingEventTypes(groupFilter, nameFilter);
+            } else if (PLACE_TYPE.equals(typeFilter)) {
+                eventTypes = eventTypeService.getPlaceEventTypes(groupFilter, nameFilter);
+            } else {
+                eventTypes = eventTypeService.getAllEventTypes(groupFilter, nameFilter);
+            }
 		}
 
 		return eventTypes;
@@ -380,6 +393,18 @@ public class EventTypeCrud extends AbstractCrud {
 	}
 
     public boolean isAction() {
-        return eventType.getGroup() != null ? eventType.getGroup().isAction() : false;
+        return eventType.isActionEventType();
+    }
+
+    public List<String> getTypes() {
+        return Arrays.asList(ASSET_TYPE,PLACE_TYPE,ACTION_TYPE);
+    }
+
+    public String getTypeFilter() {
+        return typeFilter;
+    }
+
+    public void setTypeFilter(String type) {
+        this.typeFilter = type;
     }
 }

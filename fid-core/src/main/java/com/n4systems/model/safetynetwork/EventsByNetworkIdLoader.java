@@ -2,6 +2,7 @@ package com.n4systems.model.safetynetwork;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -13,7 +14,7 @@ import com.n4systems.util.persistence.*;
 import javax.persistence.EntityManager;
 import java.util.List;
 
-public class EventsByNetworkIdLoader extends ListLoader<Event> {
+public class EventsByNetworkIdLoader extends ListLoader<ThingEvent> {
 
 	private Long networkId;
 	
@@ -26,7 +27,7 @@ public class EventsByNetworkIdLoader extends ListLoader<Event> {
 	}
 
 	@Override
-	protected List<Event> load(EntityManager em, SecurityFilter filter) {
+	protected List<ThingEvent> load(EntityManager em, SecurityFilter filter) {
         QueryBuilder<Tenant> connectedTenantsQuery = new QueryBuilder<Tenant>(TypedOrgConnection.class, filter);
 		connectedTenantsQuery.setSimpleSelect("connectedOrg.tenant", true);
 
@@ -36,7 +37,7 @@ public class EventsByNetworkIdLoader extends ListLoader<Event> {
         wpg.addClause(insideSafetyNetworkSubClause);
         wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.owner.tenant.id", filter.getTenantId(), WhereClause.ChainOp.OR));
         
-		QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+		QueryBuilder<ThingEvent> builder = new QueryBuilder<ThingEvent>(ThingEvent.class, new OpenSecurityFilter());
 		builder.addWhere(WhereClauseFactory.create("asset.networkId", networkId));
         builder.addWhere(wpg);
         
@@ -51,11 +52,11 @@ public class EventsByNetworkIdLoader extends ListLoader<Event> {
 
         builder.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
 
-		List<Event> unsecuredEvents = builder.getResultList(em);
+		List<ThingEvent> unsecuredEvents = builder.getResultList(em);
 		
 		PersistenceManager.setSessionReadOnly(em);
 		
-		List<Event> enhancedEvents = EntitySecurityEnhancer.enhanceList(unsecuredEvents, filter);
+		List<ThingEvent> enhancedEvents = EntitySecurityEnhancer.enhanceList(unsecuredEvents, filter);
 		
 		return enhancedEvents;
 	}

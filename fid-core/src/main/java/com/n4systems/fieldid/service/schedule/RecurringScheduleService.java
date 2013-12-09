@@ -132,7 +132,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
         if(!checkIfScheduleExists(place, recurringEvent, futureDate)) {
             PlaceEvent schedule = new PlaceEvent();
-            schedule.setOwner(place);
+            schedule.setPlace(place);
             schedule.setType(recurringEvent.getEventType());
             schedule.setDueDate(futureDate.toDate());
             schedule.setTenant(place.getTenant());

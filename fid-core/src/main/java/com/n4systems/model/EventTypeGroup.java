@@ -19,9 +19,6 @@ public class EventTypeGroup extends ArchivableEntityWithTenant implements NamedE
 	@Column(nullable=false)
 	private @Localized String name;
 
-    @Column(nullable=false)
-    private boolean action;
-
 	@Column(nullable=false)
 	private String reportTitle;
 
@@ -125,13 +122,5 @@ public class EventTypeGroup extends ArchivableEntityWithTenant implements NamedE
 	public String toString() {
 		return name;
 	}
-
-    public boolean isAction() {
-        return action;
-    }
-
-    public void setAction(boolean action) {
-        this.action = action;
-    }
 
 }

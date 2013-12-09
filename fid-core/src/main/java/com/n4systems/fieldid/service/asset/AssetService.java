@@ -299,8 +299,8 @@ public class AssetService extends FieldIdPersistenceService {
 
         for (Long id : persistenceService.findAll(schedules)) {
             // We must find with tenant here otherwise users in groups may not be able to update some schedules ownership
-            QueryBuilder<Event> builder = createTenantSecurityBuilder(Event.class).addSimpleWhere("id", id);
-            Event schedule = persistenceService.find(builder);
+            QueryBuilder<ThingEvent> builder = createTenantSecurityBuilder(ThingEvent.class).addSimpleWhere("id", id);
+            ThingEvent schedule = persistenceService.find(builder);
 
             schedule.setOwner(asset.getOwner());
             schedule.setAdvancedLocation(asset.getAdvancedLocation());
