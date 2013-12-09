@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
@@ -23,7 +24,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -31,6 +31,7 @@ public class PlaceEventsPage extends PlacePage {
 
     // NOTE TO DIANA : used this as parameter.  if non-null then set filter flag to Open Only.
     public static final String OPEN_PARAM = "open";
+    public static final List<WorkflowState> ALL_WORKFLOW_STATES = Lists.newArrayList(WorkflowState.OPEN, WorkflowState.COMPLETED, WorkflowState.CLOSED);
 
     @SpringBean
     private PlaceService placeService;
@@ -40,17 +41,25 @@ public class PlaceEventsPage extends PlacePage {
     private FilterPanel filterPanel;
     private WebMarkupContainer blankSlate;
 
-    private boolean open = true;
-    private boolean completed = true;
-    private boolean closed = true;
+    public void setWorkflowStates(List<WorkflowState> workflowStates) {
+        this.workflowStates = workflowStates;
+    }
+
+    protected List<WorkflowState> workflowStates;
 
     public PlaceEventsPage(PageParameters params) {
         super(params);
+        if (!params.get(OPEN_PARAM).isEmpty())
+            workflowStates = Lists.newArrayList(WorkflowState.OPEN);
+        else
+            workflowStates = ALL_WORKFLOW_STATES;
         init();
     }
 
     public PlaceEventsPage(IModel<BaseOrg> model) {
         super(model);
+
+        workflowStates = ALL_WORKFLOW_STATES;
         init();
     }
 
@@ -58,10 +67,11 @@ public class PlaceEventsPage extends PlacePage {
 
         boolean hasEvents = placeService.countEventsFor(orgModel.getObject()) > 0;
 
-        add(filterPanel = new FilterPanel("filterPanel", orgModel) {
+        add(filterPanel = new FilterPanel("filterPanel", orgModel, workflowStates) {
             @Override
             public void onFilterSelectionChanged(AjaxRequestTarget target) {
-                //TODO Do filtering
+                PlaceEventsPage.this.setWorkflowStates(getWorkflowStates());
+                target.add(eventPanel);
             }
         });
         filterPanel.setOutputMarkupPlaceholderTag(true);
@@ -131,23 +141,6 @@ public class PlaceEventsPage extends PlacePage {
         return "place-event";
     }
 
-    private List<WorkflowState> getWorkflowStates() {
-        List<WorkflowState> states = new ArrayList<WorkflowState>();
-
-        if(open)
-            states.add(WorkflowState.OPEN);
-        if(completed)
-            states.add(WorkflowState.COMPLETED);
-        if(closed)
-            states.add(WorkflowState.CLOSED);
-
-        if (states.size() == 0) {
-            states.add(WorkflowState.NONE);
-        }
-
-        return states;
-    }
-
     private class PlaceEventDataProvider extends FieldIDDataProvider<Event> {
 
         public PlaceEventDataProvider(String order, SortOrder sortOrder) {
@@ -156,7 +149,7 @@ public class PlaceEventsPage extends PlacePage {
 
         @Override
         public Iterator<? extends Event> iterator(int first, int count) {
-            List<? extends Event> eventsList = placeService.getEventsFor(orgModel.getObject());//, getSort().getProperty(), getSort().isAscending());
+            List<? extends Event> eventsList = placeService.getEventsFor(orgModel.getObject(), getSort().getProperty(), getSort().isAscending(), workflowStates);
             eventsList = eventsList.subList(first, first + count);
             return eventsList.iterator();
         }
