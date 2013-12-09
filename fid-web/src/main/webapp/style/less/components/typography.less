@@ -1,0 +1,60 @@
+/*--------------------------------------- 
+  TYPOGRAPHY
+-----------------------------------------*
+
+/* BODY TEXT */
+body {
+	color: @grayDarkest;
+	font-size: @baseFontSize;
+	.proxima-nova;
+}
+a {
+	.transition(all 0.2s linear);
+	outline: none;
+
+	&:hover {
+		color: @grayDarkest;
+		text-decoration: none;
+	}
+	&:active {
+		outline: none;
+	}
+}
+main a {
+	color: @blue;
+}
+
+/* HEADINGS */
+h1, h2, h3, h4 {
+	font-family: @helveticaNeue;	
+}
+h1, h2 {
+	margin: 0;
+}
+h1 {
+	font-size: @xlargeFontSize;
+	font-weight: normal;
+	margin: 15px 0;
+	min-height: 29px;
+}
+h2 {
+	font-size: @largeFontSize;
+	font-weight: normal;
+}
+h3, h4 {
+	margin: 5px 0;
+}
+h3 {
+	font-size: 15px;
+	border-bottom: 1px solid @gray;
+	padding-bottom: 4px;
+
+	a {
+		font-weight: normal;
+	}
+}
+h4 {
+	font-size: @baseFontSize;
+}
+
+

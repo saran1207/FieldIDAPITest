@@ -55,8 +55,7 @@ public class PlaceSummaryPage extends PlacePage {
 
         add(new Link("viewAll") {
             @Override public void onClick() {
-                // TODO : need constructor that takes current org model.   pass the "show only open events" parameter to page.
-                setResponsePage(new PlaceEventsPage(PageParametersBuilder.id(getOrg().getId())));
+                setResponsePage(new PlaceEventsPage(PageParametersBuilder.id(getOrg().getId()).add(PlaceEventsPage.OPEN_PARAM,"true")));
             }
         });
 
@@ -80,6 +79,11 @@ public class PlaceSummaryPage extends PlacePage {
                 .add(new TextField("id", new PropertyModel(PlaceSummaryPage.this, "orgId")))
                 .add(new TextArea<String>("notes", new PropertyModel(PlaceSummaryPage.this, "notes")))
         );
+    }
+
+    @Override
+    public String getMainCss() {
+        return "place-summary";
     }
 
     private Component createFutureEventsListView() {

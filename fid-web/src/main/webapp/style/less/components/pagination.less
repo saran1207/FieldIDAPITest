@@ -1,0 +1,45 @@
+.pagination {
+	padding: 8px;
+	overflow: hidden;
+	text-align: right;
+
+	ul {
+		display: inline-block;
+
+		li {
+			display: inline-block;
+
+			a {
+				padding: 5px 8px;
+				text-decoration: none;
+				border: 1px solid @gray;
+				display: block;
+				color: @blue;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+	form {
+		display: inline-block;
+		margin-left: 5px;
+		padding-bottom: 0;
+
+		label {
+			display: inline-block;
+		}
+		input[type="text"] {
+			width: 50px;
+			margin: 0;
+		}
+	}
+}
+.pagination-compact {
+	display: inline-block;
+
+	.count {
+		margin-right: 5px;
+	}
+}

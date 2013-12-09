@@ -50,6 +50,7 @@
     <div class="column-wide">
         <div wicket:id="map" class="googleMap" style="width:700px;height:300px;"></div>
 
+        <wicket:enclosure child="events">
         <section>
             <h3 class="pull-left no-border"><wicket:message key="label.next_7_days"/></h3>
             <a wicket:id="viewAll" class="btn-primary btn-sml pull-right"><wicket:message key="label.view_all_schedules"/></a>
@@ -69,6 +70,7 @@
             </tr>
             </tbody>
         </table>
+        </wicket:enclosure>
     </div>
 
 </wicket:extend>

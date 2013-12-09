@@ -33,7 +33,7 @@
 </head>
 
 <body>
-	<div class="wrapper">
+	<div class="wrapper"><!-- creates a wrapper for the sticky footer -->
 		
 		<div wicket:id="debugBar"/>
 		<div wicket:id="languageSelectionModalWindow"/>
@@ -87,23 +87,27 @@
     <div class="content-wrap tenant-logo">
         <img wicket:id="tenantLogo" alt="logo">
     </div>
-    <nav class="nav-user js-nav-user">
-        <ul class="content-wrap nav-list">
+    <nav class="nav-user">
+        <ul class="content-wrap nav-list js-nav-list">
             <li class="dropdown username">
-                <wicket:message key="label.welcome"/>, <span wicket:id="loggedInUsernameLabel">N4 Systems</span>
-                <ul>
-                    <li><a href="/fieldid/myAccount.action">My Account</a></li>
-                    <li wicket:enclosure="languageSelection"><a wicket:id="languageSelection"><wicket:message key="label.language"/></a></li>
-                    <li><a wicket:id="support" target="_blank">Support</a></li>
-                    <li><a href="/fieldid/logout.action"><wicket:message key="label.logout"/></a></li>
-                </ul>
+                <wicket:message key="label.welcome"/>,  <a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel">N4 Systems</span></a>
+            </li>
+            <li wicket:enclosure="languageSelection">
+                <a wicket:id="languageSelection"><wicket:message key="label.language"/></a>
+            </li>
+            <li>
+                <a wicket:id="support" target="_blank"></a>
+            </li>
+            <li>
+                <a href="/fieldid/logout.action"><wicket:message key="label.logout"/></a>
             </li>
             <li class="dropdown">
                 <span wicket:id="savedItemsDropdown"></span>
             </li>
         </ul>
     </nav>
-    <nav class="nav-main js-sticky-nav">
+
+    <nav class="nav-main">
         <div class="content-wrap">
             <ul class="nav-list">
                 <li class="home">

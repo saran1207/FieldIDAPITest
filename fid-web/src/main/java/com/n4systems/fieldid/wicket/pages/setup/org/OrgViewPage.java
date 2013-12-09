@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.setup.org;
 
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
@@ -89,7 +88,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
         container = new WebMarkupContainer("container");
         add(container.setOutputMarkupId(true));
         container.add(createTree("tree"));
-        container.add(createList("list"));
+//        container.add(createList("list"));
 
         add(buttons = new WebMarkupContainer("buttons"));
         buttons.setOutputMarkupId(true);
@@ -98,11 +97,11 @@ public class OrgViewPage extends FieldIDTemplatePage {
                 updatePage(target, PageState.TREE);
             }
         }.add(new AttributeAppender("class", getButtonModel(PageState.TREE), " ")));
-        buttons.add(new AjaxLink("list") {
-            @Override public void onClick(AjaxRequestTarget target) {
-                updatePage(target, PageState.LIST);
-            }
-        }.add(new AttributeAppender("class", getButtonModel(PageState.LIST), " " )));
+//        buttons.add(new AjaxLink("list") {
+//            @Override public void onClick(AjaxRequestTarget target) {
+//                updatePage(target, PageState.LIST);
+//            }
+//        }.add(new AttributeAppender("class", getButtonModel(PageState.LIST), " " )));
         add(filter = new TextField("filter", new PropertyModel(this, "textFilter")).setOutputMarkupId(true));
 
         add(createPanel = createNewPlacePanel("createPanel"));
@@ -112,8 +111,8 @@ public class OrgViewPage extends FieldIDTemplatePage {
         WebMarkupContainer panel = new WebMarkupContainer(id);
         createForm = new Form<PlaceData>("form", newPlaceModel)
                 .add(new Label("title", new FIDLabelModel("label.customer")))
-                .add(new TextField("id"))
-                .add(new TextField("name"))
+                .add(new TextField("id").setRequired(true))
+                .add(new TextField("name").setRequired(true))
                 .add(new TextArea("notes"))
                 .add(new TextField("contactName"))
                 .add(new TextField("email"))
@@ -194,7 +193,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
-        response.renderOnDomReadyJavaScript(String.format(INIT_TEXT_FIELD_JS, new Gson().toJson(new AjaxTextFieldOptions())));
+//        response.renderOnDomReadyJavaScript(String.format(INIT_TEXT_FIELD_JS, new Gson().toJson(new AjaxTextFieldOptions())));
     }
 
     private Component  createList(String id) {
@@ -280,13 +279,13 @@ public class OrgViewPage extends FieldIDTemplatePage {
     }
 
 
-    class AjaxTextFieldOptions {
-        String parent = "#"+container.getMarkupId();
-        String target = "#"+container.getMarkupId();
-        String callback = listBehavior.getCallbackUrl().toString();
-        String child = ".input-combo";
-        Integer delay = 500;
-    }
+//    class AjaxTextFieldOptions {
+//        String parent = "#"+container.getMarkupId();
+//        String target = "#"+container.getMarkupId();
+//        String callback = listBehavior.getCallbackUrl().toString();
+//        String child = ".input-combo";
+//        Integer delay = 500;
+//    }
 
     class PlaceData implements Serializable {
         private String id, contactName, email, notes, name;

@@ -1,0 +1,166 @@
+@import "../variables.less";
+@import "../mixins.less";
+
+/*--------------------------------------- 
+  GLOBAL HEADER STYLES
+-----------------------------------------*/
+.global-header {
+	//position: relative;
+	position: fixed;
+	width: 100%;
+	z-index: @zindexHeader;
+	background: #fff;
+
+	.tenant-logo {
+		padding-top: 15px;
+		padding-bottom: 10px;
+	}
+
+	// Shared styles for navigation list
+	.nav-list {
+		font-size: 0; // Removes default space from between list items (caused by line break) when using display: inline-block; font-size to be redeclared in <li>.
+	
+		> li {
+			display: inline-block;
+			font-size: @baseFontSize;
+
+			> a {
+				padding: 10px 14px;
+				display: inline-block;
+			}
+		}
+		.dropdown {
+			> a:after,
+			> span:after {
+				.fontello-icon('\e82d');
+				font-size: @smallFontSize;
+				padding-right: 0;
+			}
+			&:hover > a:after,
+			&:hover > span:after  {
+				content: '\e830';
+				padding-right: 0;
+			}
+			ul li {
+				border-top: 1px solid @grayLight;
+				
+				a {
+					color: @grayDarkest;
+				}
+				&:hover > a {
+					color: @red;
+				}
+			}
+		}
+	}
+	
+	// top nav - user specific
+	.nav-user {
+		text-align: right;
+		//position: fixed;
+		position: absolute;
+		top: 0;
+		width: 100%;
+		z-index: @zindexTop;
+
+		.nav-list {
+			margin: 6px auto;
+
+			> li {
+				border-left: 1px solid @grayMedium;
+
+				&:first-child {
+					border: none;
+				}
+				> span {
+					display: inline-block;
+					padding: 4px 0 6px 16px;
+					margin-right: 10px;
+					color: @red;
+
+					&:after {
+						color: @grayDark;
+					}
+				}
+			}
+		}
+		li.username {
+			> span {
+				padding-left: 0;
+			}
+			ul {
+				min-width: inherit;
+				right: 2px;
+				left: auto;
+			}
+		}
+	}
+	
+	// main nav specific css
+	.nav-main {
+		background: @grayDark;
+		.shadow(0px 4px 8px -4px @grayDark);
+		
+		.nav-list {
+			float: left;
+
+			> li > a {
+				border-top: 2px solid transparent;
+				color: @grayLight;
+			}
+			> li:hover > a {
+				border-top: 2px solid @red;
+				background: lighten(@gray, 2%);
+				color: @grayDarkest;
+			}
+			.dropdown > ul {
+				left: -1px;
+			}
+		}
+		.search-box {
+			margin-top: 6px;
+		}
+		.fontello-home:before {
+			vertical-align: baseline;
+			padding-right: 0;
+		}
+		// &.js-sticky {
+		// 	position: fixed;
+		// 	top: 38px;
+		// 	width: 100%;
+		// }
+	}
+}
+
+
+/*--------------------------------------- 
+  MEDIA QUERIES for the global header
+-----------------------------------------*/
+@media (max-width: 1150px) {
+	.global-header {
+		.nav-main .nav-list {
+			> li > a {
+				padding-left: 10px;
+				padding-right: 10px;
+				font-size: 13px;
+			}
+			.dropdown ul li a {
+				width: 170px;
+				white-space: normal;
+			}
+		}
+		.search-box {
+			width: 215px;
+
+			input {
+				width: 195px;
+			}
+		}
+	}	
+}
+
+
+
+
+
+

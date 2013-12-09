@@ -1,0 +1,67 @@
+// -------------------------
+// VARIABLES
+// -------------------------
+
+// Grays
+// -------------------------
+//@grayLight:	    #F5F5F5; //mostly used for backgrounds
+@grayLight: 	#ececec;
+@gray: 			#dddddd; //mostly used for backgrounds
+@grayMedium:	#c7c7c9; //mostly used for borders
+@grayDark:		#666666;
+@grayDarkest:	#3a3a3a; //almost black, base font colour
+
+// Other colors
+// -------------------------
+@blue: 			#008BD3;
+@blueDark: 		#0065A6;
+@green: 		#5fb336;
+@yellow: 		#FFFFB2;
+@red: 			#e63300;
+@white:   		#ffffff;
+@black:  		#000000;
+
+
+// Typography
+// -------------------------
+@xsmallFontSize: 		12px;
+@smallFontSize: 		13px;
+@baseFontSize:          14px;
+@largeFontSize: 		18px;
+@xlargeFontSize: 		24px;
+@baseLineHeight:        20px;
+
+@helveticaNeue:        	"Helvetica Neue", Helvetica, Arial, sans-serif;
+@proximaNova: 			"proxima-nova", Helvetica, Arial, sans-serif;
+@fontello: 				"fontello", sans-serif;
+
+@light: 				300;
+@semiBold:   			600;
+@bold:   				700;
+
+
+// Z-index master list
+// -------------------------
+@zindexDropdown:			10;
+@zindexHeader:				50;
+@zindexTop:					100; // generic variable for highest level
+
+
+// GRID - 12 column 1280px grid 
+// 20px gutter, 85px columns, 20px left/right margin
+// --------------------------------------------------------------
+@column: 6.8548387%; // 85px / 1240px 
+@columnFixed: 85px;
+@gutter: 1.6129032%; // 20px / 1240px
+@gutterFixed: 20px;
+
+.width(@numColumns, @numGutters) {
+  	width: ((@numColumns * @column) + (@numGutters * @gutter));
+}
+.max-width(@numColumns, @numGutters) {
+  	max-width: ((@numColumns * @column) + (@numGutters * @gutter));
+}
+.width-fixed(@numColumns, @numGutters) {
+	width: ((@numColumns * @columnFixed) + (@numGutters * @gutterFixed));
+}
+
