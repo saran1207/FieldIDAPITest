@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name="place_events")
 @PrimaryKeyJoinColumn(name="id")
-public class PlaceEvent extends Event<PlaceEventType, BaseOrg> {
+public class PlaceEvent extends Event<PlaceEventType, PlaceEvent, BaseOrg> {
 
     @ManyToOne
     @JoinColumn(name="place_id")
@@ -25,7 +25,7 @@ public class PlaceEvent extends Event<PlaceEventType, BaseOrg> {
     }
 
     @Override
-    public ThingEvent enhance(SecurityLevel level) {
+    public PlaceEvent enhance(SecurityLevel level) {
         return null;
     }
 

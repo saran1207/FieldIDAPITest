@@ -14,7 +14,7 @@ import java.util.List;
 @Entity
 @Table(name="thing_events")
 @PrimaryKeyJoinColumn(name="id")
-public class ThingEvent extends Event<ThingEventType, Asset> implements AssetEvent {
+public class ThingEvent extends Event<ThingEventType,ThingEvent, Asset> implements AssetEvent {
 
     private ProofTestInfo proofTestInfo;
 

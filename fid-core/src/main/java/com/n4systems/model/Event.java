@@ -28,7 +28,7 @@ import java.util.TimeZone;
 @Entity
 @Table(name = "masterevents")
 @PrimaryKeyJoinColumn(name="event_id")
-public abstract class Event<T extends EventType, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<ThingEvent>, Exportable, LocationContainer, HasCreatedModifiedPlatform {
+public abstract class Event<T extends EventType, V extends Event, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<V>, Exportable, LocationContainer, HasCreatedModifiedPlatform {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
 	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.modifiedBy", "subEvents.eventForm.sections", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap"};
