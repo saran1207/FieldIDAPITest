@@ -68,7 +68,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         List<M> entities;
         Integer totalResultCount;
         if (selectedOnly) {
-            entities = findItemsInSelection(criteriaModel);
+            entities = findItemsInSelection(criteriaModel, pageNumber, pageSize);
             totalResultCount = criteriaModel.getSelection().getNumSelectedIds();
         } else {
             SearchResult<M> eventSearchResult = performRegularSearch(criteriaModel, pageNumber, pageSize);
@@ -83,9 +83,15 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         return new PageHolder<K>(pageResults, totalResultCount);
     }
 
-    private List<M> findItemsInSelection(T criteriaModel) {
-        List<M> items = new ArrayList<M>(criteriaModel.getSelection().getNumSelectedIds());
-        for (Long id : criteriaModel.getSelection().getSelectedIds()) {
+    private List<M> findItemsInSelection(T criteriaModel, int pageNumber, int pageSize) {
+
+        int beginIndex = pageNumber * pageSize;
+        List<Long> selectedIdList = criteriaModel.getSelection().getSelectedIds();
+        List<Long> currentPageOfSelectedIds = selectedIdList.subList(beginIndex, Math.min(selectedIdList.size(), beginIndex + pageSize));
+
+
+        List<M> items = new ArrayList<M>(pageSize);
+        for (Long id : currentPageOfSelectedIds) {
             items.add(persistenceService.find(searchClass, id));
         }
 
