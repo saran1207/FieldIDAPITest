@@ -217,4 +217,16 @@ public abstract class EventType extends ArchivableEntityWithTenant implements Na
         this.displayScorePercentage = displayScorePercentage;
     }
 
+    public boolean isThingEventType() {
+        return false;
+    }
+
+    public boolean isPlaceEventType() {
+        return false;
+    }
+
+    public boolean isActionEventType() {
+        return false;
+    }
+
 }

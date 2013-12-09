@@ -60,7 +60,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
         scheduleSummary = assetService.getAssetScheduleSummary(selectedIds);
         List<AssetType> assetTypesList = getAssetTypeList(scheduleSummary);
-        IModel<List<ThingEventType>> commonEventTypesModel = new CommonEventTypesModel(assetTypesList);
+        IModel<List<? extends EventType>> commonEventTypesModel = new CommonEventTypesModel(assetTypesList);
 
         assetTypesListContainer = new WebMarkupContainer("assetTypesListContainer");
         add(assetTypesListContainer.setOutputMarkupId(true));
@@ -86,7 +86,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
                 final WebMarkupContainer schedulesContainer = createScheduleListView("schedulesContainer", item.getModel());
                 item.add(schedulesContainer);
 
-                IModel<List<ThingEventType>> eventTypesForAssetType = new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(item.getModel(), "assetType"));
+                IModel<List<? extends EventType>> eventTypesForAssetType = new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(item.getModel(), "assetType"));
 
                 final SchedulePicker schedulePicker = createSchedulePicker(item, eventTypesForAssetType, jobsOptions);
                 item.add(new SimpleAjaxButton("openSchedulePickerButton", new FIDLabelModel("label.add_a_schedule")) {
@@ -131,7 +131,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/newCss/schedule/mass_schedule.css");
     }
 
-    private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<ThingEventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {
+    private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<? extends EventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {
         final Model<ThingEvent> eventScheduleModel = new Model<ThingEvent>(new ThingEvent());
         return new SchedulePicker("schedulePicker", eventScheduleModel, eventTypesForAssetType, jobsOptions) {
             @Override
@@ -143,7 +143,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         };
     }
 
-    private SchedulePicker createScheduleAllPicker(final IModel<List<ThingEventType>> commonEventTypesModel, final EventJobsForTenantModel jobsOptions) {
+    private SchedulePicker createScheduleAllPicker(final IModel<List<? extends EventType>> commonEventTypesModel, final EventJobsForTenantModel jobsOptions) {
         return new SchedulePicker("scheduleAllPicker", new PropertyModel<ThingEvent>(this, "scheduleForAll"), commonEventTypesModel, jobsOptions) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {

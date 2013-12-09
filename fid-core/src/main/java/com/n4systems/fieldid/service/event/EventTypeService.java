@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.ActionEventType;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEventType;
@@ -18,27 +19,35 @@ import java.util.List;
 @Transactional
 public class EventTypeService extends FieldIdPersistenceService {
 
-    public List<ThingEventType> getEventTypesIncludingActions(Long eventTypeGroupId) {
-        return getEventTypesIncludingActions(eventTypeGroupId, null);
+    public List<ActionEventType> getActionEventTypes(Long eventTypeGroupId) {
+        return getActionEventTypes(eventTypeGroupId, null);
     }
 
-    public List<ThingEventType> getAllEventTypesExcludingActions() {
-        return getEventTypesExcludingActions(null, null);
+    public List<ThingEventType> getThingEventTypes() {
+        return getThingEventTypes(null, null);
     }
 
-    public List<ThingEventType> getEventTypesExcludingActions(Long eventTypeGroupId, String nameFilter) {
-        QueryBuilder<ThingEventType> query = createEventTypeQuery(eventTypeGroupId, nameFilter);
-        query.addSimpleWhere("group.action", false);
+    public List<ThingEventType> getThingEventTypes(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<ThingEventType> query = createEventTypeQuery(ThingEventType.class, eventTypeGroupId, nameFilter);
         return persistenceService.findAll(query);
     }
 
-    public List<ThingEventType> getEventTypesIncludingActions(Long eventTypeGroupId, String nameFilter) {
-        QueryBuilder<ThingEventType> builder = createEventTypeQuery(eventTypeGroupId, nameFilter);
+    public List<ActionEventType> getActionEventTypes(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<ActionEventType> builder = createEventTypeQuery(ActionEventType.class, eventTypeGroupId, nameFilter);
         return persistenceService.findAll(builder);
     }
 
-    private QueryBuilder<ThingEventType> createEventTypeQuery(Long eventTypeGroupId, String nameFilter) {
-        QueryBuilder<ThingEventType> builder = createUserSecurityBuilder(ThingEventType.class);
+    public List<EventType> getAllEventTypes(Long eventTypeGroupId) {
+        return getAllEventTypes(eventTypeGroupId, null);
+    }
+
+    public List<EventType> getAllEventTypes(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<EventType> builder = createEventTypeQuery(EventType.class, eventTypeGroupId, nameFilter);
+        return persistenceService.findAll(builder);
+    }
+
+    private <T extends EventType> QueryBuilder<T> createEventTypeQuery(Class<T> clazz, Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<T> builder = createUserSecurityBuilder(clazz);
 
         if (eventTypeGroupId != null) {
             builder.addSimpleWhere("group.id", eventTypeGroupId);
@@ -76,8 +85,8 @@ public class EventTypeService extends FieldIdPersistenceService {
     }
 
 	public void touchEventTypesForGroup(Long eventTypeGroupId, User modifiedBy) {
-		List<ThingEventType> eventTypes = getEventTypesIncludingActions(eventTypeGroupId);
-		for (ThingEventType eventType: eventTypes) {
+		List<EventType> eventTypes = getAllEventTypes(eventTypeGroupId, null);
+		for (EventType eventType: eventTypes) {
 			update(eventType, modifiedBy);
 		}
 	}

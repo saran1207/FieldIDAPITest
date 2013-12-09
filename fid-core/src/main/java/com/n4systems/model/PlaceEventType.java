@@ -18,4 +18,9 @@ public class PlaceEventType extends EventType implements SecurityEnhanced<PlaceE
         return EntitySecurityEnhancer.enhanceEntity(this, level);
     }
 
+    @Override
+    public boolean isPlaceEventType() {
+        return true;
+    }
+
 }

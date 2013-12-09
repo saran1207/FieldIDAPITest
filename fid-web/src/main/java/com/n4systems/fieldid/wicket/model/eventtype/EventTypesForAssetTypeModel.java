@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class EventTypesForAssetTypeModel extends FieldIDSpringModel<List<ThingEventType>> {
+public class EventTypesForAssetTypeModel extends FieldIDSpringModel<List<? extends EventType>> {
 
     private IModel<AssetType> assetType;
 

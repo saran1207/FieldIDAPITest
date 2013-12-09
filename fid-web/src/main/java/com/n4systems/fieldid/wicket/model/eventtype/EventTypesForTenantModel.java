@@ -27,7 +27,7 @@ public class EventTypesForTenantModel extends FieldIDSpringModel<List<ThingEvent
     protected List<ThingEventType> load() {
         EventTypeGroup eventTypeGroup = eventTypeGroupModel.getObject();
         Long groupId = eventTypeGroup == null ? null : eventTypeGroup.getId();
-        return eventTypeService.getEventTypesExcludingActions(groupId, null);
+        return eventTypeService.getThingEventTypes(groupId, null);
     }
 
 }

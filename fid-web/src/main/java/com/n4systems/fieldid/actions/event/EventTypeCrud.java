@@ -35,7 +35,7 @@ public class EventTypeCrud extends AbstractCrud {
 	private List<ListingPair> eventTypeGroups;
     private List<EventTypeGroup> eventGroups;
     private List<EventTypeGroup> actionGroups;
-	private List<ThingEventType> eventTypes;
+	private List<EventType> eventTypes;
 	private ThingEventType eventType;
 	private List<TrimmedString> infoFieldNames;
 	private String saveAndAdd;
@@ -214,9 +214,9 @@ public class EventTypeCrud extends AbstractCrud {
         eventTypeRemovalService.startRemovalTask(eventType);
 	}
 
-	public List<ThingEventType> getEventTypes() {
+	public List<EventType> getEventTypes() {
 		if (eventTypes == null) {
-            eventTypes = eventTypeService.getEventTypesIncludingActions(groupFilter, nameFilter);
+            eventTypes = eventTypeService.getAllEventTypes(groupFilter, nameFilter);
 		}
 
 		return eventTypes;
@@ -367,7 +367,7 @@ public class EventTypeCrud extends AbstractCrud {
 		this.groupFilter = groupFilter;
 	}
 
-	public void setEventTypes(List<ThingEventType> eventTypes) {
+	public void setEventTypes(List<EventType> eventTypes) {
 		this.eventTypes = eventTypes;
 	}
 
