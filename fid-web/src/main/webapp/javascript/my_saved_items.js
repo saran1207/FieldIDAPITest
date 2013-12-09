@@ -31,6 +31,9 @@ function toggleDropBox() {
 function listenForSavedItemsClick() {
     jQuery('#mySavedItemsLink').hover(showDropDown);
     jQuery('#mySavedItemsLink').parents('#pageActions').mouseleave(hideDropDown);
+
+    // new template/framework header
+    jQuery('#mySavedItemsLink').parents('.js-nav-list').mouseleave(hideDropDown);
 }
 
 jQuery(document).ready(function() { listenForSavedItemsClick(); });
