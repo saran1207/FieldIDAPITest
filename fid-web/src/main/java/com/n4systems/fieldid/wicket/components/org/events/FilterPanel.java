@@ -32,19 +32,19 @@ public class FilterPanel extends Panel {
     private WebMarkupContainer openFilterOptions;
     private WebMarkupContainer typeFilterOptions;
 
-    private boolean open;
-    private boolean completed;
-    private boolean closed;
+    private boolean open = true;
+    private boolean completed = true;
+    private boolean closed = true;
 
     private List<WorkflowState> workflowStates;
 
     private DueDateState dueDateState;
     private ScheduledState scheduledState;
 
-    public FilterPanel(String id, IModel<BaseOrg> orgModel) {
+    public FilterPanel(String id, IModel<BaseOrg> orgModel, List<WorkflowState> workflowStates) {
         super(id, orgModel);
 
-        workflowStates = Lists.newArrayList();
+        this.workflowStates = workflowStates;
 
         add(completedFilterOptions = new RadioGroup<ScheduledState>("completedFilterOptions", new PropertyModel<ScheduledState>(this, "ScheduledState")));
         completedFilterOptions.add(new AjaxFormChoiceComponentUpdatingBehavior() {
@@ -89,9 +89,12 @@ public class FilterPanel extends Panel {
         add(new AjaxCheckBox("openCheckbox", new PropertyModel<Boolean>(this, "open")) {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                //TODO For future release
+/*
                 openFilterOptions.setVisible(open);
                 typeFilterOptions.setVisible(open || completed || closed);
                 target.add(openFilterOptions, typeFilterOptions);
+*/
                 updateWorkflowStateList(WorkflowState.OPEN, open);
                 onFilterSelectionChanged(target);
             }
@@ -100,9 +103,12 @@ public class FilterPanel extends Panel {
         add(new AjaxCheckBox("completedCheckbox", new PropertyModel<Boolean>(this, "completed")) {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                //TODO For future release
+/*
                 completedFilterOptions.setVisible(completed);
                 typeFilterOptions.setVisible(open || completed || closed);
                 target.add(completedFilterOptions, typeFilterOptions);
+*/
                 updateWorkflowStateList(WorkflowState.COMPLETED, completed);
                 onFilterSelectionChanged(target);
             }
@@ -111,8 +117,11 @@ public class FilterPanel extends Panel {
         add(new AjaxCheckBox("closedCheckbox", new PropertyModel<Boolean>(this, "closed")) {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
+                //TODO For future release
+/*
                 typeFilterOptions.setVisible(open || completed || closed);
                 target.add(typeFilterOptions);
+*/
                 updateWorkflowStateList(WorkflowState.CLOSED, closed);
                 onFilterSelectionChanged(target);
             }
@@ -127,6 +136,9 @@ public class FilterPanel extends Panel {
         }
     }
 
+    public List<WorkflowState> getWorkflowStates() {
+        return workflowStates;
+    }
 
     public void onFilterSelectionChanged(AjaxRequestTarget target) {}
 

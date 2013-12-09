@@ -9,7 +9,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 
-public class CommonEventTypesModel extends FieldIDSpringModel<List<ThingEventType>> {
+public class CommonEventTypesModel extends FieldIDSpringModel<List<? extends EventType>> {
 
     @SpringBean
     private EventTypeService eventTypeService;

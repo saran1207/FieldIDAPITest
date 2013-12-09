@@ -57,4 +57,8 @@ public class ThingEventType extends EventType implements SecurityEnhanced<ThingE
         return EntitySecurityEnhancer.enhanceEntity(this, level);
     }
 
+    @Override
+    public boolean isThingEventType() {
+        return true;
+    }
 }

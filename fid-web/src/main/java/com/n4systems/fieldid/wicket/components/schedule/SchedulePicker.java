@@ -11,7 +11,7 @@ public class SchedulePicker extends DialogModalWindow {
 
     private SchedulePickerPanel schedulePickerPanel;
 
-    public SchedulePicker(String id, IModel<ThingEvent> scheduleModel, IModel<List<ThingEventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
+    public SchedulePicker(String id, IModel<ThingEvent> scheduleModel, IModel<List<? extends EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
         super(id);
 
         setContent(schedulePickerPanel = new SchedulePickerPanel(getContentId(), scheduleModel, eventTypeOptions, jobsOptions) {

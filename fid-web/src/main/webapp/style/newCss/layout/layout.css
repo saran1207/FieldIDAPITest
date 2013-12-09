@@ -92,6 +92,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	font-weight: 400;
 }
 
+
 /* Logo and top nav
 --------------------*/
 #pageHeader .content-wrap {
@@ -103,6 +104,15 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 .company-logo {
 	height: 55px;
 	padding: 11px 0 7px;
+}
+
+#pageHeader.struts-header #companyLogo {
+	float: left;
+}
+#pageHeader.struts-header #companyLogo img {
+	height: 55px;
+	width: auto;
+	padding: 10px 0;
 }
 
 /* Top navigation
@@ -152,15 +162,24 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 	-webkit-box-shadow: 0px 4px 8px -4px #666666;
 	box-shadow: 0px 4px 8px -4px #666666;
 }
-#pageNavigation a,#pageNavigation a:hover,#pageNavigation a:active,#pageNavigation a:visited {
+#pageNavigation a,
+#pageNavigation a:hover,
+#pageNavigation a:active,
+#pageNavigation a:visited {
 	text-decoration: none;
 }
-#pageNavigation .speedLink,#pageNavigation .speedLink:hover,#pageNavigation .speedLink:active,#pageNavigation .speedLink:visited {
+#pageNavigation .speedLink,
+#pageNavigation .speedLink:hover,
+#pageNavigation .speedLink:active,
+#pageNavigation .speedLink:visited {
 	color: #f5f5f5;
 }
 #navigationLinks .dropdown > li > a {
 	border-top: 2px solid transparent;
 	padding: 8px 14px 11px;
+}
+.struts-header #navigationLinks .dropdown > li > a {
+	padding: 9px 14px;
 }
 #navigationLinks .dropdown > li:hover > a {
 	border-top: 2px solid #e63300;
@@ -176,21 +195,22 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 #navigationLinks .dropdown ul li {
 	border-top: 1px solid #f5f5f5;
 }
+
 #menuReport:after, 
 #menuSetup:after,
 #mySavedItemsLink:after {
 	font-family: "fontello", sans-serif;
 	content: '\e82d';
 	font-size: 13px;
-	/*padding-right: 4px;	*/
 }
 #mySavedItemsLink:after {
 	color: #666;
 	padding-left: 4px;
 }
-#menuReport:after {
-	/*margin-left: -4px;*/
+#menuReport.struts:after {
+	padding-left: 0px;
 }
+
 li:hover #menuReport:after, 
 li:hover #menuSetup:after {
 	content: '\e830';
@@ -199,6 +219,12 @@ li:hover #menuSetup:after {
 #menuReport.speedLink img,
 #pageHeader .downArrow {
 	display: none;
+}
+
+#pageHeader.struts-header .fontello-home {
+	height: 15px;
+	display: block;
+	margin-top: 2px;
 }
 
 

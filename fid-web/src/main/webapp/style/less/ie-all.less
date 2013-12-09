@@ -1,0 +1,18 @@
+@import "components/variables.less";
+@import "components/mixins.less";
+
+//Created a separate IE stylesheet so IE version specific CSS can be grouped together and be deleted as they become unsupported. Note that IE 10 and up DO NOT support conditional comments at all.
+
+
+/* IE9 and below 
+-----------------*/
+
+//overrides dropdown color for chosen plugin
+.chzn-container .chzn-results .highlighted {
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+// Search/Filter left column
+form.filters {
+	overflow: scroll;
+}

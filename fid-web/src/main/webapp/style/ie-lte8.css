@@ -1,0 +1,28 @@
+/* IE8 and below
+-----------------*/
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.input-combo input[type="text"] {
+  height: 20px;
+}
+/* IE7 and below
+-----------------*/
+.global-header .nav-list > li {
+  *display: inline;
+}
+[class^="fontello-"] {
+  *font-size: 14px;
+}
+.dropdown,
+.dropup {
+  *display: inline;
+}
+.dropdown ul li a,
+.dropup ul li a {
+  *display: inline;
+}
+.column-narrow-left,
+.column-narrow-right {
+  *width: auto;
+}

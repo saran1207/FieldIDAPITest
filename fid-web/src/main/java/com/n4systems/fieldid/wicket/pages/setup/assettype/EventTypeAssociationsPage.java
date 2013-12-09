@@ -19,7 +19,6 @@ import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -73,7 +72,7 @@ public class EventTypeAssociationsPage extends FieldIDFrontEndPage {
             }
         };
 
-        form.add(new ListView<ThingEventType>("eventType", eventTypeService.getAllEventTypesExcludingActions()) {
+        form.add(new ListView<ThingEventType>("eventType", eventTypeService.getThingEventTypes()) {
             @Override
             protected void populateItem(final ListItem<ThingEventType> item) {
                 final IModel<Boolean> checked = Model.of(getCheckedValue(item.getModelObject()));
@@ -98,7 +97,7 @@ public class EventTypeAssociationsPage extends FieldIDFrontEndPage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 selectedTypes.clear();
-                selectedTypes.addAll(eventTypeService.getAllEventTypesExcludingActions());
+                selectedTypes.addAll(eventTypeService.getThingEventTypes());
                 target.add(form);
             }
         });

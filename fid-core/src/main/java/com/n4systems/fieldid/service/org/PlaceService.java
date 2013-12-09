@@ -50,6 +50,10 @@ public class PlaceService extends FieldIdPersistenceService {
     }
 
     public List<ThingEvent> getEventsFor(BaseOrg org) {
+        return getEventsFor(org, null, false, null);
+    }
+
+    public List<ThingEvent> getEventsFor(BaseOrg org, String order, boolean ascending, List<WorkflowState> workflowStates) {
         // TODO : TEST DATA FOR NOW.
         ThingEventType type = EventTypeBuilder.anEventType().named("visual").build();
         User user = UserBuilder.anAdminUser().withFirstName("joe").withLastName("smith").withUserId("joesmith").build();
@@ -95,7 +99,7 @@ public class PlaceService extends FieldIdPersistenceService {
     }
 
     public int countEventsFor(BaseOrg org) {
-        return getEventsFor(org).size();
+        return getEventsFor(org, null, false, null).size();
     }
 
     public List<? extends Attachment> getAttachmentsFor(BaseOrg org) {

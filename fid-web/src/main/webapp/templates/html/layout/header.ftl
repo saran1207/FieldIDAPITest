@@ -26,9 +26,9 @@
     </script>
 
 </head>
-<div id="pageHeader" class="frontPageHeader">
+<div id="pageHeader" class="frontPageHeader struts-header">
 
-	<div id="pageActions" class="clearfix">
+	<div id="pageActions" class="clearfix content-wrap">
 		<#include "_companyLogo.ftl"/>
 		<div id="listContainer">
 			<ul class="listOfLinks">				
@@ -66,9 +66,9 @@
   	</div> 
 
 	<div id="pageNavigation">
-		<div id="navigationContent">
+		<div id="navigationContent" class="content-wrap">
 			<div id="navigationLinks">
-				<ul class="dropdown">
+				<ul class="dropdown clearfix">
 					<li>
 						<a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><span class="fontello-home">Dashboard</span></a>
 					</li>
