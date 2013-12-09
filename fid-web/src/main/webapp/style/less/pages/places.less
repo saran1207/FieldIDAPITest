@@ -1,0 +1,95 @@
+@import "../components/variables.less";
+@import "../components/mixins.less";
+
+/*--------------------------------------- 
+  PLACES LISTING AND ADD PAGE
+-----------------------------------------*/
+
+// List/Tree view buttons and text search
+.text-search {
+	margin-left: 5px;
+}
+.action-bar {
+	margin-bottom: 30px;
+}
+
+// Tree view / left column
+.column-custom-left {
+	width: 375px;
+	float: left;
+	margin-right: 30px;
+}
+.tree-view {
+	ins {
+		text-decoration: none;
+	}
+	ul li {
+		padding-top: 4px;
+		list-style-type: none;
+	}
+	.level-one {
+		padding: 8px 0;
+		border-bottom: 1px solid @gray;
+	}
+	.level-two {
+		margin-left: 20px;
+		border-top: 1px dashed @gray;
+		margin-top: 5px;
+	}
+	.level-three,
+	.level-four {
+		margin-left: 30px;
+	}	
+	.add-place {
+		font-size: @smallFontSize;
+		float: right;
+		cursor: pointer;
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
+.column-custom {
+	width: auto;
+	overflow: auto;
+
+	.two-columns {
+		padding-top: 8px;
+
+		.form-horizontal label {
+			width: 40%;
+		}
+		input[type="text"], 
+		select, textarea,
+		.input-combo {
+			width: 58%;
+		}
+		.text-block {
+			margin-left: 40%;
+		}
+	}
+}
+.add-place-form {
+	.primary-selection {
+		label {
+			width: 19.5%;
+		}
+		.chzn-container {
+			width: 286px!important;
+		}
+	}
+}
+
+// List view
+.list-view tr {
+	height: 33px;
+}
+
+
+@media (max-width: 1150px) {
+	.two-columns {
+		width: 100%;
+	}
+}

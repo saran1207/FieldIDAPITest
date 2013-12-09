@@ -1,0 +1,275 @@
+/*--------------------------------------- 
+  BUTTONS
+-----------------------------------------*/
+// These classes can be applied to various HTML tags to allow for 
+// semantic markup.
+
+// <a class="btn-secondary" href="#">Button text</a>
+// <span class="btn-secondary">Button text</span>
+// <input class="btn-primary" type="submit" value="">
+// <button class="btn-save">Save</button>
+
+// This will apply to any class that starts with "btn" so be mindful of creating new class names using this prefix. This class was created to attach these styles without using an additional class to change colors.
+[class^="btn"] {
+	text-decoration: none;
+	display: inline-block;
+	padding: 8px 16px;
+	.border-radius(2px);
+	border: 1px solid @grayMedium;
+	font-size: 14px;
+	color: #fff;
+	.transition(all 0.3s ease-out);
+	width: auto;
+	cursor: pointer;
+	margin: 0;
+	white-space: nowrap;
+	
+	&:hover {
+		color: #fff;
+	}
+
+	// Disabled button styles
+	&.disabled {
+		.opacity(50);
+
+		&:hover {
+			.shadow(none); //overrides and removes hover styles
+			cursor: not-allowed;
+		}
+	}
+	&.hide {
+		display: none;
+	}
+}
+
+
+// Button colours
+// ---------------
+.btn-primary {
+	background: @blue;
+	border-color: darken(@blue, 5%);
+}
+	.dropdown:hover .btn-primary,
+	.btn-primary:hover,
+	.btn-primary.selected {
+		.btn-hover(@blue, 20%);
+	}
+
+.btn-secondary {
+	.gradient(#eee, #eee, #fff);
+	color: @grayDarkest;
+}
+	.dropdown:hover .btn-secondary,
+	.btn-secondary:hover,
+	.btn-secondary.selected {
+		background: @white;
+		color: @grayDarkest;
+	}
+
+.btn-save {
+	background: @green;
+	border-color: darken(@green, 5%);
+}
+	.dropdown:hover .btn-save,
+	.btn-save:hover {
+		.btn-hover(@green, 10%);
+	}
+
+.btn-info {
+	background: @blueDark;
+	border-color: darken(@blueDark, 5%);
+}
+	.dropdown:hover .btn-info,
+	.btn-info:hover {
+		.btn-hover(@blueDark, 20%);
+	}
+
+.btn-warning {
+	background: darken(@yellow, 10%);
+	border-color: darken(@yellow, 40%);
+	color: @grayDark;
+}
+	.dropdown:hover .btn-warning,
+	.btn-warning:hover {
+		.btn-hover(@yellow, 40%);
+		color: @grayDarkest;
+	}
+
+.btn-danger {
+	background: @red;
+	border-color: darken(@red, 5%);
+}
+	.dropdown:hover .btn-danger,
+	.btn-danger:hover {
+		.btn-hover(@red, 20%);
+	}
+
+// Button styled as link
+.btn-link {
+	border: 0;
+	color: @blue;
+	text-decoration: underline;
+
+	&:hover {
+		color: @blue;
+		text-decoration: none;
+	}
+	
+}
+
+// Form buttons
+// -------------
+input[class^="btn"], 
+button[class^="btn"] {   
+	height: 35px;
+
+	&.btn-sml {
+		height: 29px;
+	}
+}
+
+
+// Different button sizes
+// -----------------------
+.btn-lrg {
+	padding: 8px 25px;
+	font-size: 18px;
+}
+.btn-sml {
+	padding: 5px 12px;
+}
+.btn-xsml {
+	padding: 4px 8px;
+	font-size: 12px;
+	.border-radius(3px);
+}
+
+
+// Icon buttons
+// -------------
+.btn-icon {
+	padding: 8px;
+
+	&.btn-sml {
+		padding: 5px;
+	}
+	[class^="fontello-"] {
+		padding-left: 4px;
+	}
+}
+
+
+// Dropdown buttons
+// -----------------
+
+// Dropdown CSS shared with generic dropdown styles also 
+// used in navigation. CSS can be found in dropdowns.less
+.dropdown {
+	> [class^="btn"]:after {
+		.fontello-icon('\e811');
+		padding-right: 0;
+	}
+	&:hover [class^="btn"]:after {
+		content: '\e813';
+	}
+}
+.dropup {
+	> [class^="btn"]:after {
+		.fontello-icon('\e813');
+		padding-right: 0px;
+	}
+	&:hover [class^="btn"]:after {
+		content: '\e811';
+	}
+}
+.dropdown,
+.dropup {
+	.btn-link {
+		text-decoration: none;
+		color: @grayDarkest;
+		padding-right: 12px;
+		padding-left: 12px;
+		margin-bottom: 2px;
+
+		& + ul a {
+			padding-left: 12px;
+			padding-right: 12px;
+		}
+	}
+}
+
+
+// Groups buttons together into a nav bar
+// ---------------------------------------
+.button-group {
+	font-size: 0;
+	display: inline-block;
+
+	> [class^="btn"],
+	> .split-btn,
+	> .dropdown {
+		margin-right: -1px;
+	}
+	.dropdown {
+		font-size: @baseFontSize;
+	}
+	> [class^="btn"]:not(:last-child),
+	.dropdown:not(:last-child) [class^="btn"],
+	.split-btn:not(:last-child) [class^="btn"] {
+		.border-right-radius(0px);
+	}
+	> [class^="btn"]:not(:first-child),
+	.dropdown:not(:first-child) [class^="btn"],
+	.split-btn:not(:first-child) [class^="btn"] {
+		.border-left-radius(0px);
+	}
+	.input-combo {
+		display: inline-block;
+	}
+}
+
+
+
+// Split button with dropdowns
+// ----------------------------
+.split-btn {
+	display: inline-block;
+	position: relative;
+	white-space: nowrap;
+	font-size: 0;
+	
+	> [class^="btn"] {
+		margin-bottom: 1px;
+		margin-right: -1px;
+		.border-right-radius(0px);
+	}
+	.dropdown {
+		position: static;
+		font-size: @baseFontSize;
+		
+		//reduces padding for dropdown button with arrow icon
+		[class^="btn"] {
+			padding-left: 5px;
+			padding-right: 10px;
+		}
+	}
+	&.btn-sml {
+		padding: 0;
+
+		[class^="btn"] {
+			padding: 5px 10px;
+		}
+		.dropdown [class^="btn"] {
+			padding-left: 6px;
+		}
+		.dropdown ul li a {
+			padding: 6px 10px;
+			font-size: @smallFontSize;
+		}
+	}
+}
+
+// The .dropdown class is shared for buttons and navigation
+// and is contained in it's own file, dropdowns.less.
+
+

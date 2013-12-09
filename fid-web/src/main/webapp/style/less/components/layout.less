@@ -1,0 +1,144 @@
+/*--------------------------------------- 
+  PAGE LAYOUT
+-----------------------------------------*/
+// Layout rules divide the page into sections.
+// Default grid system, global page container styles, page structure
+
+// Applies a natural box layout model to all elements. 
+// Padding and border won't affect the width of the box.
+* {  
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	*behavior: url(../scripts/boxsizing.htc); // IE 6 & 7
+}
+
+// Separates sections of the page or component. ex. Page title and page content
+hr {
+	border: 0;
+	border-top: 1px solid @grayMedium;
+	margin: 0;
+	clear: both;
+}
+
+header {
+	.clearfix;
+	
+	hr {
+		margin-bottom: 15px;
+	}
+}
+
+// The <main> element wraps all the content on the page excluding the global header, main site navigation and footer.
+// .content-wrap can be used for center aligning page content when the parent container (<main>) needs to span 100% of the page 
+// (ex. adding a background color that spans across the viewport).
+main,
+.content-wrap {
+	max-width: 1400px;
+	width: 96%;
+	margin: 0 auto;
+	.clearfix;
+	position: relative;
+	// background: url(../img/_temp/grid.png) repeat-y;
+	// background-size: 100%;
+}
+main {
+	margin-bottom: 40px;
+	padding-top: 125px;
+}
+
+// Use to group content within a page.  Should contain a natural heading, otherwise, use a <div>
+section {
+	margin-bottom: 25px;
+}
+
+// Used to group action items, such as buttons, together.
+.action-group,
+.action-bar {
+	.clearfix;
+}
+
+// Single page heading
+.page-header {
+	position: relative;
+
+	.action-group {
+		position: absolute;
+		bottom: 4px;
+		right: 0;
+	}
+}
+
+// Single page content
+.page-content {
+	.clearfix;
+
+	> hr {
+		margin-bottom: 15px;
+	}
+
+	.action-group {
+		margin-bottom: 4px;
+	}
+}
+
+// Used to create columns, a main section and a sidebar section. 
+// Sidebar can be on the left or right side.
+.column-wide {
+	.width(9,8);
+	float: left;
+}
+.column-narrow-left,
+.column-narrow-right {
+	.width(3,2);
+	float: left;
+
+	.upload {
+		margin-bottom: 40px;
+
+		p {
+			background: @grayLight;
+			border: 1px solid @grayMedium;
+			padding: 50px 20px;
+			margin-bottom: 2px;
+			text-align: center;
+		}
+	}
+}
+.column-narrow-left {
+	margin-right: @gutter;
+}
+.column-narrow-right {
+	margin-left: @gutter;
+}
+
+// Spans 100% width
+.column-full {
+	.width(12,11);
+	clear: both;
+}
+
+// Two equal columns
+// add class .pull-left to the left column
+// anc class .pull-right to the right column
+.two-columns {
+	width: 49%;
+}
+
+
+
+/*--------------------------------------- 
+  MEDIA QUERIES for page layout
+-----------------------------------------*/
+@media all and (max-width: 1280px) {
+}
+
+@media (max-width: 1100px) {
+	main,
+	.content-wrap {
+		//margin: 0 20px;
+		//width: 1024px;
+		width: 984px;
+	}
+}
+

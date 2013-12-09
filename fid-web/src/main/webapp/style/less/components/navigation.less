@@ -1,0 +1,109 @@
+/*--------------------------------------- 
+  NAVIGATION
+-----------------------------------------*/
+nav a {
+	text-decoration: none;
+}
+
+
+/* HORIZONTAL NAVIGATION */
+.nav-horizontal {
+	font-size: 0; /* Removes default space from between list items (caused by line break) when using display: inline-block; font-size to be redeclared in <li>. */
+	
+	> li {
+		display: inline-block;
+		position: relative;
+		font-size: @baseFontSize + 1;
+
+		> a {
+			padding: 8px 0 6px; 
+			margin: 0 16px;
+			display: inline-block;
+			display: block;
+		}
+	}
+}
+
+
+/* BREAD CRUMBS */
+.bread-crumb {
+	font-family: @helveticaNeue;
+	margin: 10px 0 0;
+
+	a {
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+	ol {
+		font-size: 0;
+
+		li {
+			display: inline;
+			font-size: 12px;
+		}
+		li + li:before {
+			.fontello-icon('\e82f');
+		}
+	}
+}
+
+
+/* TABBED NAVIGATION */
+.nav-tabs {
+	position: relative;
+	border-bottom: 1px solid @grayMedium;
+	margin: 15px 0;
+
+	> ul {
+		overflow: hidden;
+		margin-bottom: -2px;
+
+		> li {
+			float: left;
+			border: 1px solid transparent;
+			cursor: pointer;
+
+			&.selected {
+				border-color: @grayMedium;
+				border-bottom-color: transparent;
+				background: #fff;
+				.border-radius(2px);
+
+				a {
+					color: @grayDarkest;
+				}
+			}
+			span {
+				padding: 10px 20px;
+				display: inline-block;
+
+				&:hover {
+					color: @grayDark;
+				}
+			}
+		}
+	}
+}
+.nav-tabs + .action-group {
+	bottom: 20px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
