@@ -1,0 +1,47 @@
+@import "components/variables.less";
+@import "components/mixins.less";
+
+//Created a separate IE stylesheet so IE version specific CSS can be grouped together and be deleted as they become unsupported. Note that IE 10 and up DO NOT support conditional comments at all.
+
+//*background: green; /* IE 7 and below */
+//_background: blue; /* IE 6 */
+
+
+/* IE8 and below
+-----------------*/
+body {
+	font-family: @helveticaNeue;
+}
+.input-combo input[type="text"]{
+	height: 20px;
+}
+
+
+/* IE7 and below
+-----------------*/
+.global-header .nav-list > li {
+	*display: inline;
+}
+
+[class^="fontello-"] {
+	*font-size: @baseFontSize;
+}
+
+//dropdowns 
+.dropdown,
+.dropup {
+	*display: inline;
+
+	ul li a {
+		*display: inline;
+	}
+}
+
+//page layout 
+.column-narrow-left,
+.column-narrow-right {
+	*width: auto;
+}
+
+ 
+

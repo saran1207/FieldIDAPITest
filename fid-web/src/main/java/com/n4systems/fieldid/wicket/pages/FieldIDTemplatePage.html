@@ -22,7 +22,10 @@
 	<link rel="stylesheet" href="/fieldid/style/plugins/chosen/chosen.css">
 	<link rel="stylesheet" href="/fieldid/style/global.css">
 	<!--[if IE]>
-		<link rel="stylesheet" href="/fieldid/style/ie.css">
+        <link rel="stylesheet" href="/fieldid/style/ie-all.css">
+    <![endif]-->
+    <!--[if lte IE 8]>
+		<link rel="stylesheet" href="/fieldid/style/ie-lte8.css">
 		<link rel="stylesheet" href="/fieldid/style/fontello-ie7.css">
 	<![endif]-->
 
@@ -87,9 +90,9 @@
     <div class="content-wrap tenant-logo">
         <img wicket:id="tenantLogo" alt="logo">
     </div>
-    <nav class="nav-user">
-        <ul class="content-wrap nav-list js-nav-list">
-            <li class="dropdown username">
+    <nav class="nav-user js-nav-user">
+        <ul class="content-wrap nav-list">
+            <li class="username">
                 <wicket:message key="label.welcome"/>,  <a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel">N4 Systems</span></a>
             </li>
             <li wicket:enclosure="languageSelection">
@@ -101,7 +104,7 @@
             <li>
                 <a href="/fieldid/logout.action"><wicket:message key="label.logout"/></a>
             </li>
-            <li class="dropdown">
+            <li class="saved-items">
                 <span wicket:id="savedItemsDropdown"></span>
             </li>
         </ul>
@@ -225,7 +228,7 @@
                 <input type="hidden" name="useContext" value="true" id="smartSearch_useContext">
                 <input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination">
                 <input type="text" name="search" wicket:message="value:label.search">
-                <span class="fontello-search">search</span>
+                <!-- <span class="fontello-search">search</span> -->
             </form>
         </div><!-- /.content-wrap -->
     </nav><!-- /.nav-main -->

@@ -12,8 +12,11 @@
 	background: #fff;
 
 	.tenant-logo {
-		padding-top: 15px;
-		padding-bottom: 10px;
+		padding: 11px 0 7px;
+
+		img {
+			height: 55px;	
+		}
 	}
 
 	// Shared styles for navigation list
@@ -25,7 +28,6 @@
 			font-size: @baseFontSize;
 
 			> a {
-				padding: 10px 14px;
 				display: inline-block;
 			}
 		}
@@ -57,24 +59,23 @@
 	// top nav - user specific
 	.nav-user {
 		text-align: right;
-		//position: fixed;
 		position: absolute;
 		top: 0;
 		width: 100%;
 		z-index: @zindexTop;
 
 		.nav-list {
-			margin: 6px auto;
+			margin-top: 10px;
 
 			> li {
 				border-left: 1px solid @grayMedium;
+				font-size: 13px;
 
 				&:first-child {
 					border: none;
 				}
 				> span {
 					display: inline-block;
-					padding: 4px 0 6px 16px;
 					margin-right: 10px;
 					color: @red;
 
@@ -82,16 +83,61 @@
 						color: @grayDark;
 					}
 				}
+				> a {
+					padding: 0 10px;
+					color: @red;
+
+					&:hover {
+						color: @grayDarkest;
+					}
+				}
 			}
 		}
 		li.username {
-			> span {
+			> a {
 				padding-left: 0;
 			}
-			ul {
-				min-width: inherit;
-				right: 2px;
-				left: auto;
+			// ul {
+			// 	min-width: inherit;
+			// 	right: 2px;
+			// 	left: auto;
+			// }
+		}
+
+		//My Saved items overrides
+		.saved-items {
+			#mySavedItemsLink {
+				padding-left: 10px;
+				color: @red;
+
+				&:after {
+					font-family: "fontello", sans-serif;
+					content: '\e82d';
+					padding-left: 4px;
+					color: @grayDark;
+				}
+			}
+			.downArrow {
+				display: none;
+			}
+	
+			#mySavedItemsBox {
+				right: 9px;
+
+				.manageLinkSection {
+
+					&:hover {
+						background-color: #f0f0f0;
+					}
+					a {
+						color: @blue;
+						line-height: 32px;
+						padding-right: 14px;
+					}
+				}
+				.savedItemContainer a {
+					color: @grayDarkest;
+				}
 			}
 		}
 	}
@@ -107,6 +153,7 @@
 			> li > a {
 				border-top: 2px solid transparent;
 				color: @grayLight;
+				padding: 10px 14px;
 			}
 			> li:hover > a {
 				border-top: 2px solid @red;
@@ -117,18 +164,20 @@
 				left: -1px;
 			}
 		}
-		.search-box {
-			margin-top: 6px;
-		}
 		.fontello-home:before {
 			vertical-align: baseline;
 			padding-right: 0;
+		}		
+		.search {
+			float: right;
+
+			input[type="text"] {
+				width: 230px;
+				border: 1px solid #999;
+				margin: 5px 0;
+			}
 		}
-		// &.js-sticky {
-		// 	position: fixed;
-		// 	top: 38px;
-		// 	width: 100%;
-		// }
+		
 	}
 }
 

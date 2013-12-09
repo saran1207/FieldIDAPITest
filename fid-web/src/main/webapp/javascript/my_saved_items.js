@@ -12,7 +12,7 @@ function showDropDown() {
         withinSelector = "pageHeader";
     }
     //translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 70, 673);
-    translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 32);
+    translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 26);
 }
 
 function hideDropDown() {
@@ -33,7 +33,7 @@ function listenForSavedItemsClick() {
     jQuery('#mySavedItemsLink').parents('#pageActions').mouseleave(hideDropDown);
 
     // new template/framework header
-    jQuery('#mySavedItemsLink').parents('.js-nav-list').mouseleave(hideDropDown);
+    jQuery('#mySavedItemsLink').parents('.js-nav-user').mouseleave(hideDropDown);
 }
 
 jQuery(document).ready(function() { listenForSavedItemsClick(); });

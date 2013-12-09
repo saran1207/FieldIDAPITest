@@ -66,7 +66,7 @@
 }
 .info {
   border: 1px solid #dddddd;
-  background: #f7f7f7;
+  background: #f1f1f1;
   font-size: 13px;
 }
 .success {
@@ -252,6 +252,7 @@ main:after,
 }
 main {
   margin-bottom: 40px;
+  padding-top: 125px;
 }
 section {
   margin-bottom: 25px;
@@ -334,7 +335,7 @@ section {
 }
 .column-narrow-left .upload p,
 .column-narrow-right .upload p {
-  background: #f5f5f5;
+  background: #ececec;
   border: 1px solid #c7c7c9;
   padding: 50px 20px;
   margin-bottom: 2px;
@@ -422,8 +423,14 @@ section {
 .fontello-angle-double-left:before {
   content: '\e821';
 }
+.fontello-angle-double-left-sml:before {
+  content: '\00AB';
+}
 .fontello-angle-double-right:before {
   content: '\e822';
+}
+.fontello-angle-double-right-sml:before {
+  content: '\00BB';
 }
 .fontello-angle-double-up:before {
   content: '\e827';
@@ -693,7 +700,7 @@ section {
 }
 .dropdown ul li a:hover,
 .dropup ul li a:hover {
-  background: #f5f5f5;
+  background: #ececec;
 }
 .dropdown ul .divider,
 .dropup ul .divider {
@@ -741,7 +748,7 @@ section {
 }
 .secondary-dropdown > a:after {
   font-family: "fontello", sans-serif;
-  content: '\e80d';
+  content: '\00BB';
   padding: 0 4px;
 }
 .pull-right .secondary-dropdown ul {
@@ -1117,7 +1124,7 @@ textarea {
   border: 1px solid #c7c7c9;
 }
 input[type="text"] {
-  height: 29px;
+  height: 28px;
   margin: 4px 0 10px;
 }
 label {
@@ -1177,7 +1184,7 @@ input[type="checkbox"] {
 }
 .input-combo input[type="text"] {
   margin: 0;
-  height: 29px;
+  height: 28px;
   width: 295px;
 }
 .input-combo [class^="btn"] {
@@ -1337,7 +1344,7 @@ legend + p {
 }
 .primary-selection {
   padding-bottom: 15px;
-  background: #f5f5f5;
+  background: #ececec;
   border: 1px solid #dddddd;
 }
 .primary-selection label {
@@ -1456,16 +1463,7 @@ form .two-columns {
   font-weight: 600;
 }
 @media (max-width: 1150px) {
-  .two-columns input[type="text"],
-  .two-columns select,
-  .two-columns textarea,
-  .two-columns .form-horizontal .input-combo input[type="text"],
-  .two-columns .text-block {
-    width: 265px;
-  }
-  .two-columns .chzn-container {
-    width: 265px!important;
-  }
+  
 }
 /*--------------------------------------- 
   TABLE STYLES
@@ -1519,14 +1517,14 @@ th.active [class^="fontello-"] {
 }
 /* Each row has a bottom border */
 table.borders tr {
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid #ececec;
 }
 table.borders tr:last-child {
   border-bottom: none;
 }
 /* Every other row has a bg color */
 table.striped tr:nth-child(odd) {
-  background: #f5f5f5;
+  background: #ececec;
 }
 table.striped th,
 table.striped td {
@@ -1585,7 +1583,7 @@ table.comfortable td {
   clear: both;
 }
 .list-table.borders > li {
-  border-bottom: 1px solid #f5f5f5;
+  border-bottom: 1px solid #ececec;
 }
 .list-table .action-group {
   position: absolute;
@@ -1798,14 +1796,16 @@ figure p {
   GLOBAL HEADER STYLES
 -----------------------------------------*/
 .global-header {
-  position: relative;
+  position: fixed;
   width: 100%;
   z-index: 50;
   background: #fff;
 }
 .global-header .tenant-logo {
-  padding-top: 15px;
-  padding-bottom: 10px;
+  padding: 11px 0 7px;
+}
+.global-header .tenant-logo img {
+  height: 55px;
 }
 .global-header .nav-list {
   font-size: 0;
@@ -1815,7 +1815,6 @@ figure p {
   font-size: 14px;
 }
 .global-header .nav-list > li > a {
-  padding: 10px 14px;
   display: inline-block;
 }
 .global-header .nav-list .dropdown > a:after,
@@ -1832,7 +1831,7 @@ figure p {
   padding-right: 0;
 }
 .global-header .nav-list .dropdown ul li {
-  border-top: 1px solid #f5f5f5;
+  border-top: 1px solid #ececec;
 }
 .global-header .nav-list .dropdown ul li a {
   color: #3a3a3a;
@@ -1842,36 +1841,65 @@ figure p {
 }
 .global-header .nav-user {
   text-align: right;
-  position: fixed;
+  position: absolute;
   top: 0;
   width: 100%;
   z-index: 100;
 }
 .global-header .nav-user .nav-list {
-  margin: 6px auto;
+  margin-top: 10px;
 }
 .global-header .nav-user .nav-list > li {
   border-left: 1px solid #c7c7c9;
+  font-size: 13px;
 }
 .global-header .nav-user .nav-list > li:first-child {
   border: none;
 }
 .global-header .nav-user .nav-list > li > span {
   display: inline-block;
-  padding: 4px 0 6px 16px;
   margin-right: 10px;
   color: #e63300;
 }
 .global-header .nav-user .nav-list > li > span:after {
   color: #666666;
 }
-.global-header .nav-user li.username > span {
+.global-header .nav-user .nav-list > li > a {
+  padding: 0 10px;
+  color: #e63300;
+}
+.global-header .nav-user .nav-list > li > a:hover {
+  color: #3a3a3a;
+}
+.global-header .nav-user li.username > a {
   padding-left: 0;
 }
-.global-header .nav-user li.username ul {
-  min-width: inherit;
-  right: 2px;
-  left: auto;
+.global-header .nav-user .saved-items #mySavedItemsLink {
+  padding-left: 10px;
+  color: #e63300;
+}
+.global-header .nav-user .saved-items #mySavedItemsLink:after {
+  font-family: "fontello", sans-serif;
+  content: '\e82d';
+  padding-left: 4px;
+  color: #666666;
+}
+.global-header .nav-user .saved-items .downArrow {
+  display: none;
+}
+.global-header .nav-user .saved-items #mySavedItemsBox {
+  right: 9px;
+}
+.global-header .nav-user .saved-items #mySavedItemsBox .manageLinkSection:hover {
+  background-color: #f0f0f0;
+}
+.global-header .nav-user .saved-items #mySavedItemsBox .manageLinkSection a {
+  color: #008bd3;
+  line-height: 32px;
+  padding-right: 14px;
+}
+.global-header .nav-user .saved-items #mySavedItemsBox .savedItemContainer a {
+  color: #3a3a3a;
 }
 .global-header .nav-main {
   background: #666666;
@@ -1883,7 +1911,8 @@ figure p {
 }
 .global-header .nav-main .nav-list > li > a {
   border-top: 2px solid transparent;
-  color: #ffffff;
+  color: #ececec;
+  padding: 10px 14px;
 }
 .global-header .nav-main .nav-list > li:hover > a {
   border-top: 2px solid #e63300;
@@ -1893,39 +1922,43 @@ figure p {
 .global-header .nav-main .nav-list .dropdown > ul {
   left: -1px;
 }
-.global-header .nav-main .search-box {
-  margin-top: 6px;
-}
 .global-header .nav-main .fontello-home:before {
   vertical-align: baseline;
   padding-right: 0;
 }
-.global-header .nav-main.js-sticky {
-  position: fixed;
-  top: 38px;
-  width: 100%;
+.global-header .nav-main .search {
+  float: right;
+}
+.global-header .nav-main .search input[type="text"] {
+  width: 230px;
+  border: 1px solid #999;
+  margin: 5px 0;
 }
 /*--------------------------------------- 
   MEDIA QUERIES for the global header
 -----------------------------------------*/
 @media (max-width: 1150px) {
   .global-header .nav-main .nav-list > li > a {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
     font-size: 13px;
   }
+  .global-header .nav-main .nav-list .dropdown ul li a {
+    width: 170px;
+    white-space: normal;
+  }
   .global-header .search-box {
-    width: 225px;
+    width: 215px;
   }
   .global-header .search-box input {
-    width: 205px;
+    width: 195px;
   }
 }
 /*--------------------------------------- 
   FOOTER
 -----------------------------------------*/
 .footer-global {
-  background: #f5f5f5;
+  background: #ececec;
   padding-top: 20px;
 }
 .footer-global img {
