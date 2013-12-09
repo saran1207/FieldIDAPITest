@@ -723,4 +723,10 @@ public class AssetService extends FieldIdPersistenceService {
         return asset;
     }
 
+    public Asset findAssetWithInfoOptions(Long id) {
+        Asset asset =  persistenceService.find(Asset.class, id);
+        List<InfoOptionBean> infoList = asset.getOrderedInfoOptionList();
+
+        return asset;
+    }
 }

@@ -63,21 +63,11 @@ public abstract class TextOrFilterSearchService<T extends SearchCriteria, M exte
         return new PageHolder<K>(pageResults, totalResultCount);
     }
 
-    private SearchResult<M> findSelectedEntities(T criteriaModel, int pageNumber, int pageSize) {
-        int beginIndex = pageNumber * pageSize;
-        List<Long> selectedIdList = criteriaModel.getSelection().getSelectedIds();
-        List<Long> currentPageOfSelectedIds = selectedIdList.subList(beginIndex, Math.min(selectedIdList.size(), beginIndex + pageSize));
 
-        List<M> entities = new ArrayList<M>(pageSize);
-        for (Long id : currentPageOfSelectedIds) {
-            entities.add(persistenceService.find(entityClass, id));
-        }
-        SearchResult<M> searchResult = new SearchResult<M>();
-        searchResult.setResults(entities);
-        searchResult.setTotalResultCount(entities.size());
-        return searchResult;
-    }
 
+
+
+    protected abstract SearchResult<M> findSelectedEntities(T criteriaModel, int pageNumber, int pageSize);
     protected abstract List<Long> textIdSearch(T criteria);
     protected abstract List<Long> filterIdSearch(T criteria);
 
