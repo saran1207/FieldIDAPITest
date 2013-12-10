@@ -16,7 +16,10 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
-import com.n4systems.model.*;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEvent;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -43,7 +46,7 @@ public class OpenActionsCell extends Panel {
 
         add(modalWindow = createModalWindow(eventModel, eventDisplayPanel));
         IModel<List<? extends EventType>> eventTypesModel = createEventTypesModelForEvent(eventModel);
-        add(schedulePicker = new SchedulePicker("schedulePickerWindow", eventModel, eventTypesModel, new EventJobsForTenantModel()) {
+        add(schedulePicker = new SchedulePicker<ThingEvent>("schedulePickerWindow", eventModel, eventTypesModel, new EventJobsForTenantModel()) {
             { setSaveButtonLabel(new FIDLabelModel("label.save")); }
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {

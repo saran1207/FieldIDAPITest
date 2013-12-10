@@ -495,7 +495,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     }
 
     private SchedulePicker createSchedulePicker(IModel<AssetType> assetTypeModel) {
-        return new SchedulePicker("schedulePicker", new PropertyModel<ThingEvent>(this, "currentEventSchedule"), new EventTypesForAssetTypeModel(assetTypeModel), new EventJobsForTenantModel()) {
+        return new SchedulePicker<ThingEvent>("schedulePicker", new PropertyModel<ThingEvent>(this, "currentEventSchedule"), new EventTypesForAssetTypeModel(assetTypeModel), new EventJobsForTenantModel()) {
             {
                 setWindowClosedCallback(new WindowClosedCallback() {
                     @Override
