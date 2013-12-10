@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.model.eventtype;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.model.FieldIDSpringModel;
 import com.n4systems.model.EventType;
-import com.n4systems.model.ThingEventType;
+import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.model.IModel;
 
@@ -20,16 +20,13 @@ public class EventTypesForPlaceModel extends FieldIDSpringModel<List<? extends E
     }
 
     @Override
-    protected List<ThingEventType> load() {
-        List<ThingEventType> eventTypes = Lists.newArrayList();
+    protected List<PlaceEventType> load() {
 
         if (orgModel.getObject() == null) {
-            return eventTypes;
+            return Lists.newArrayList();
         }
-        //TODO update when model changes are complete
-/*        for (AssociatedEventType associatedEventType : orgModel.getObject().getAssociatedEventTypes()) {
-            eventTypes.add(associatedEventType.getEventType());
-        }*/
+
+        List<PlaceEventType> eventTypes = Lists.newArrayList(orgModel.getObject().getEventTypes());
 
         Collections.sort(eventTypes, new Comparator<EventType>() {
             @Override
