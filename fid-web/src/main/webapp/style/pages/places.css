@@ -85,6 +85,11 @@
 .place-event .event-panel .navigator {
   float: left;
 }
+.place-event .all-events-map {
+  margin-top: 10px;
+  width: 100%;
+  height: 550px;
+}
 @media (max-width: 1150px) {
   .two-columns {
     width: 100%;
