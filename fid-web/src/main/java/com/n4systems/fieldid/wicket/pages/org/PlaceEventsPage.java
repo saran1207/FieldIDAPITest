@@ -2,12 +2,14 @@ package com.n4systems.fieldid.wicket.pages.org;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.PlaceService;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
 import com.n4systems.fieldid.wicket.components.org.events.FilterPanel;
 import com.n4systems.fieldid.wicket.components.org.events.table.ActionsColumn;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
@@ -103,7 +105,7 @@ public class PlaceEventsPage extends PlacePage {
                 filterPanel.setVisible(true);
                 target.add(eventPanel, mapPanel, filterPanel);
             }
-        });
+        }.add(new TipsyBehavior(new FIDLabelModel("label.list"), TipsyBehavior.Gravity.NW)));
 
         add(new AjaxLink<Void>("mapLink") {
             @Override
@@ -115,7 +117,7 @@ public class PlaceEventsPage extends PlacePage {
                 target.add(mapPanel);
                 target.add(eventPanel, mapPanel, filterPanel);
             }
-        });
+        }.add(new TipsyBehavior(new FIDLabelModel("label.map"), TipsyBehavior.Gravity.NW)));
 
         add(blankSlate = new WebMarkupContainer("blankSlate"));
         blankSlate.setOutputMarkupPlaceholderTag(true);
