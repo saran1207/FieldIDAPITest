@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:extend>
+    <div wicket:id="feedbackPanel"/>
+
+    <div class="multiColumn clearBoth">
+        <div class="fieldGroup fieldGroupGap" wicket:id="userList">
+            <h2><wicket:message key="label.admin_users"/></h2>
+            <table class="list" style="width: 400px">
+                <thead>
+                <tr>
+                    <th><wicket:message key="label.type"/></th>
+                    <th><wicket:message key="label.email_address"/></th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr wicket:id="user">
+                    <td><label wicket:id="type"/></td>
+                    <td><label wicket:id="email"/></td>
+                    <td><a wicket:id="reset_password"><wicket:message key="label.reset_password"/></a></td>
+                    <td><a wicket:id="remove"><wicket:message key="label.remove"/></a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="fieldGroup">
+            <h2><wicket:message key="label.add_admin_user"/></h2>
+            <form wicket:id="form">
+                <div class="infoSet">
+                    <label class="label"><wicket:message key="label.type"/></label>
+                    <select wicket:id="type"></select>
+                </div>
+
+                <div class="infoSet">
+                    <label class="label"><wicket:message key="label.email"/></label>
+                    <input wicket:id="email" type="text">
+                </div>
+                <div class="actions">
+                    <a wicket:id="add" type="submit"><wicket:message key="label.add"/></a>
+                </div>
+            </form>
+        </div>
+    </div>
+</wicket:extend>
+</html>

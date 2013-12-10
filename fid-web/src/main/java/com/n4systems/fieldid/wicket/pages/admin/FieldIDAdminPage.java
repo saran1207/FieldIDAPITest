@@ -28,6 +28,7 @@ public class FieldIDAdminPage extends FieldIDWicketPage {
 		NavigationItemBuilder navItemBuilder = NavigationItemBuilder.aNavItem();
 		add(new NavigationBar("navBar",
 			navItemBuilder.page("/admin/organizations.action").label("Tenants").build(),
+			navItemBuilder.page("/w/admin/users").label("Users").build(),
 			navItemBuilder.page("/admin/eulas.action").label("EULA").build(),
 			navItemBuilder.page("/admin/orderMappingList.action").label("Order Mappings").build(),
 			navItemBuilder.page("/admin/mailTest.action").label("Mail").build(),

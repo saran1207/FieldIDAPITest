@@ -6,6 +6,9 @@
             <a href="/fieldid/admin/organizations.action">Tenants</a>
         </#if>
     </li>
+	<li>
+	    <a href="/fieldid/w/admin/users">Users</a>
+	</li>
     <li class=" <#if action.isPageName('eulas')>selected</#if>">
         <#if action.isPageName('eulas')>
             EULA
