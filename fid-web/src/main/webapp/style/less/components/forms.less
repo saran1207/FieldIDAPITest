@@ -68,19 +68,23 @@ form .action-group {
 
 // checkboxes & radio boxes
 // -------------------------
+
+//input inside of a label
 label {
 	input[type="radio"], 
 	input[type="checkbox"] {
-		float: left;
 		margin: 0 4px 0 -14px;
 	}
 }
+
+//TODO used on asset-events.php in prototype, may need to refactor
 .checkbox {
 	overflow: hidden;
-
+	
+	//input inside of a label
 	label {
 		padding-left: 15px;
-		margin: 5px 0;
+		margin: 5px 12px 5px 0;
 		line-height: 1;
 	}
 	&.inline {
@@ -198,7 +202,7 @@ input[type="checkbox"] {
 	.border-radius(0);
 }
 
-// Editable inputs
+// Editable inputs - for inline editing
 // ------------------------------------
 
 input:disabled {
@@ -440,6 +444,8 @@ form {
 }
 
 
+// Media Queries
+// --------------
 @media (max-width: 1150px) {
 	
 	// Form control widths contained in two equal columns
