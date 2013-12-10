@@ -1636,6 +1636,52 @@ table.comfortable td {
 .pagination-compact .count {
   margin-right: 5px;
 }
+.navigation .navigatorLabel {
+  float: left;
+  margin-right: 10px;
+  border-right: 1px solid #c7c7c9;
+  padding-right: 10px;
+}
+.navigation .navigatorLabel span {
+  display: inline-block;
+  padding: 6px 0;
+}
+.navigation .navigator a {
+  display: inline-block;
+  padding: 5px 8px;
+  text-decoration: none;
+  border: 1px solid #dddddd;
+  color: #008bd3;
+}
+.navigation .navigator em {
+  display: inline-block;
+  padding: 5px 8px;
+  font-style: normal;
+}
+/* FILTERS - filters.less 
+-------------------------*/
+.filter {
+  *zoom: 1;
+  padding-top: 14px;
+}
+.filter:before,
+.filter:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.filter:after {
+  clear: both;
+}
+.filter:before,
+.filter:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.filter:after {
+  clear: both;
+}
 .filter h3 {
   border: none;
   float: left;

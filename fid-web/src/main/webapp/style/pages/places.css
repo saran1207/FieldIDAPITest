@@ -1,6 +1,6 @@
-/*--------------------------------------- 
-  PLACES LISTING AND ADD PAGE
------------------------------------------*/
+/*----------------------------------------- 
+  CUSTOM STYLES FOR ALL PAGES UNDER PLACES
+-------------------------------------------*/
 .text-search {
   margin-left: 5px;
 }
@@ -68,6 +68,22 @@
 }
 .list-view tr {
   height: 33px;
+}
+.place-summary .attachments {
+  padding-bottom: 20px;
+  display: block;
+}
+.place-event .event-panel table {
+  position: relative;
+}
+.place-event .event-panel .navigation {
+  position: absolute;
+  right: 0;
+  top: -37px;
+  border-bottom: none;
+}
+.place-event .event-panel .navigator {
+  float: left;
 }
 @media (max-width: 1150px) {
   .two-columns {

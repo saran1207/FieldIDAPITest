@@ -1,9 +1,7 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-    <div wicket:id="filterPanel" class="filter pull-left"/>
-
-    <div class="button-group pull-right">
+    <div class="button-group">
         <span wicket:id="listLink" class="btn-icon btn-secondary tipsy-tooltip" title="List">
             <span class="fontello-menu">menu</span>
         </span>
@@ -11,7 +9,9 @@
             <span class="fontello-map"/>
         </a>
     </div>
-    <div wicket:id="eventPanel"/>
+
+    <div wicket:id="filterPanel" class="filter"/>
+    <div wicket:id="eventPanel" class="event-panel" />
     <div wicket:id="mapPanel"/>
     <div wicket:id="blankSlate" class="info">
         <h3><wicket:message key="label.places.perform_events_on"/>&nbsp;<strong wicket:id="blankSlateTitle"/></h3>

@@ -1,9 +1,12 @@
 @import "../components/variables.less";
 @import "../components/mixins.less";
 
-/*--------------------------------------- 
-  PLACES LISTING AND ADD PAGE
------------------------------------------*/
+/*----------------------------------------- 
+  CUSTOM STYLES FOR ALL PAGES UNDER PLACES
+-------------------------------------------*/
+
+// Landing page - list/tree view & add form
+// -----------------------------------------
 
 // List/Tree view buttons and text search
 .text-search {
@@ -88,6 +91,39 @@
 }
 
 
+// Places Summary page
+// --------------------
+.place-summary {
+	.attachments {
+		padding-bottom: 20px;
+		display: block;
+	}
+}
+
+
+// Places Event page
+// --------------------
+.place-event {
+	.event-panel {
+		table {
+			position: relative;
+		}
+		.navigation {
+			position: absolute;
+			right: 0;
+			top: -37px;
+			border-bottom: none;
+		}
+		.navigator {
+			float: left;
+		}
+	}
+}	
+
+
+
+// Media Queries
+// --------------
 @media (max-width: 1150px) {
 	.two-columns {
 		width: 100%;
