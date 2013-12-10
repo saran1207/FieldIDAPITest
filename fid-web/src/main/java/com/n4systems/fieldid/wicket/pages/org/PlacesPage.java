@@ -640,11 +640,11 @@ public class PlacesPage extends FieldIDFrontEndPage {
             super(CONTENT_ID, "editEventTypes", PlacesPage.this);
             add(new Form("form")
 // TODO DD                    .add(new MultiSelectDropDownChoice<EventType>("types", ProxyModel.of(model, on(BaseOrg.class).getEventTypes()), getEventTypes(), new EventTypeChoiceRenderer()))
-                    .add(new MultiSelectDropDownChoice<EventType>("types", new PropertyModel<List<EventType>>(this, "types"), getEventTypes(), new EventTypeChoiceRenderer()))
+                    .add(new MultiSelectDropDownChoice<PlaceEventType>("types", new PropertyModel<List<PlaceEventType>>(this, "types"), getEventTypes(), new EventTypeChoiceRenderer()))
                     .add(createSubmitCancelButtons("buttons",this)));
         }
 
-        private List<EventType> getEventTypes() {
+        private List<PlaceEventType> getEventTypes() {
             return placeService.getEventTypesFor(getOrg());
         }
         @Override public Component submit(AjaxRequestTarget target) {
