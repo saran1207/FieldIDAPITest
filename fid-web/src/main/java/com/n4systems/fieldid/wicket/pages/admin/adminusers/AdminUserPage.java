@@ -2,6 +2,8 @@ package com.n4systems.fieldid.wicket.pages.admin.adminusers;
 
 
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.model.BooleanModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
 import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
 import com.n4systems.model.admin.AdminUser;
@@ -52,8 +54,21 @@ public class AdminUserPage extends FieldIDAdminPage {
 						adminUserService.removeAdminUser(item.getModelObject());
 						userList.detach();
 						target.add(userList);
+
 					}
 				});
+
+				AjaxLink<?> enabledLink = new AjaxLink<Void>("toggle_enabled") {
+					@Override
+					public void onClick(AjaxRequestTarget target) {
+						adminUserService.enableUser(item.getModelObject(), !item.getModelObject().isEnabled());
+						userList.detach();
+						target.add(userList);
+					}
+				};
+				enabledLink.add(new Label("toggle_enabled_label", new BooleanModel(new PropertyModel<Boolean>(item.getModel(), "enabled"), new FIDLabelModel("label.disable"), new FIDLabelModel("label.enable"))));
+				item.add(enabledLink);
+
 				item.add(new AjaxLink<Void>("reset_password") {
 					@Override
 					public void onClick(AjaxRequestTarget target) {

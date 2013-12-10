@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.saveditems.send;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.model.BooleanModel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.YesOrNoModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.time.HourToStringDisplayModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -46,8 +46,8 @@ public class ManageSendItemSchedulesPage extends FieldIDFrontEndPage {
                 item.add(new Label("time", new HourToStringDisplayModel(new PropertyModel<Integer>(item.getModel(), "hourToSend"))));
                 item.add(new Label("format", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "reportFormat.displayName"))));
                 item.add(new Label("sendTo", new FIDLabelModel(new PropertyModel<String>(item.getModel(), "emailAddressesJoined"))));
-                item.add(new Label("sendToMe", new YesOrNoModel(new PropertyModel<Boolean>(item.getModel(), "sendToOwner"))));
-                item.add(new Label("sendBlankReport", new YesOrNoModel(new PropertyModel<Boolean>(item.getModel(), "sendBlankReport"))));
+                item.add(new Label("sendToMe", new BooleanModel(new PropertyModel<Boolean>(item.getModel(), "sendToOwner"))));
+                item.add(new Label("sendBlankReport", new BooleanModel(new PropertyModel<Boolean>(item.getModel(), "sendBlankReport"))));
                 item.add(new Label("subject", new PropertyModel<String>(item.getModel(), "subject")));
                 item.add(new Link("deleteLink") {
                     @Override

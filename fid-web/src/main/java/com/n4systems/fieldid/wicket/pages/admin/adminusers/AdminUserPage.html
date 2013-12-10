@@ -15,15 +15,19 @@
                     <th><wicket:message key="label.type"/></th>
                     <th><wicket:message key="label.email_address"/></th>
                     <th>&nbsp;</th>
-                    <th>&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr wicket:id="user">
                     <td><label wicket:id="type"/></td>
                     <td><label wicket:id="email"/></td>
-                    <td><a wicket:id="reset_password"><wicket:message key="label.reset_password"/></a></td>
-                    <td><a wicket:id="remove"><wicket:message key="label.remove"/></a></td>
+                    <td>
+                        <a wicket:id="reset_password"><wicket:message key="label.reset_password"/></a>
+                        &nbsp;|&nbsp;
+                        <a wicket:id="toggle_enabled"><wicket:container wicket:id="toggle_enabled_label"/></a>
+                        &nbsp;|&nbsp;
+                        <a wicket:id="remove"><wicket:message key="label.remove"/></a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

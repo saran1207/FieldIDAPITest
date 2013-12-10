@@ -31,7 +31,7 @@ public class AdminUserService extends FieldIdPersistenceService {
 
 	public void createAndNotifyAdminUserWithRandomPass(String email, AdminUserType type) {
 		String password = securityService.generatePassword(12);
-		AdminUser user = createAdminUser(email, password, type);
+		createAdminUser(email, password, type);
 
 		try {
 			sendWelcomeEmail(email, password);
@@ -102,4 +102,10 @@ public class AdminUserService extends FieldIdPersistenceService {
 			logger.error("Failed sending admin user reset password message", e);
 		}
 	}
+
+	public AdminUser enableUser(AdminUser adminUser, boolean enabled) {
+		adminUser.setEnabled(enabled);
+		return persistenceService.update(adminUser);
+	}
+
 }
