@@ -92,7 +92,12 @@ public class PlaceSummaryPage extends PlacePage {
             @Override protected void populateItem(ListItem<PlaceEvent> item) {
                 PlaceEvent event = item.getModelObject();
                 item.add(new Label("due", Model.of(event.getDueDate())));
-                item.add(new Label("type", Model.of(event.getEventType().getDisplayName())));
+                // TODO : for debugging only. remove this when we know all data is valid.
+                if ( event.getEventType()==null) {
+                    item.add(new Label("type", "ERROR : event '" + event.getId() + "' has null type???"));
+                } else {
+                    item.add(new Label("type", Model.of(event.getEventType().getDisplayName())));
+                }
                 item.add(new Label("assignee", Model.of("joe smith")));
             }
 

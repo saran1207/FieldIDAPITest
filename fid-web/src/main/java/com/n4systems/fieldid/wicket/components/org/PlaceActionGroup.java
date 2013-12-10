@@ -3,15 +3,19 @@ package com.n4systems.fieldid.wicket.components.org;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForPlaceModel;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
+import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.collections.PrioritizedList;
@@ -102,8 +106,13 @@ public class PlaceActionGroup extends Panel {
 
         add(new Link<Void>("archiveLink") {
             @Override public void onClick() {
+                placeService.archive(getOrg());
+                setResponsePage(OrgViewPage.class);
             }
-        });
+            @Override public boolean isVisible() {
+                return getOrg() instanceof CustomerOrg || getOrg() instanceof DivisionOrg;
+            }
+        }.add(new ConfirmBehavior(new FIDLabelModel("msg.confirm_archive_org",getOrg().getDisplayName()))));
 
         add(new Link<Void>("recurringSchedulesLink") {
             @Override public void onClick() {
