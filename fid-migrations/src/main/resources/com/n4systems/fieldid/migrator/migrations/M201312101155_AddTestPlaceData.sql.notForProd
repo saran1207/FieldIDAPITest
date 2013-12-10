@@ -1,0 +1,145 @@
+set @n4 = (select id from tenants where name='n4');
+set @org = (select id from org_base where tenant_id = @n4 and secondary_id is null and customer_id is null and division_id is null);
+set @group = (select id from eventtypegroups where tenant_id = @n4 limit 1);
+set @eventform = (select id from eventforms where tenant_id = @n4 limit 1);
+set @next_event_type = (select max(id) from eventtypes);
+set @event_type = @next_event_type + 1; 
+set @event_id = (select max(id)+1 from events);
+set @user = (select id from users where tenant_id = @n4 and userid='n4systems');
+
+
+INSERT INTO eventtypes (id, tenant_id, created, modified, modifiedby, name, group_id, description, printable, legacyeventid, retired, master, formversion, state, archivedName, assignedtoavailable, eventform_id, createdby, display_section_totals, display_score_percentage)
+  VALUES (@next_event_type+1, @n4, now(), '2008-12-12 20:15:29', @user, 'TypeA', @group, null, true, null, false, false, 1, 'ACTIVE', null, false, @eventform, null, false, false);
+INSERT INTO eventtypes (id, tenant_id, created, modified, modifiedby, name, group_id, description, printable, legacyeventid, retired, master, formversion, state, archivedName, assignedtoavailable, eventform_id, createdby, display_section_totals, display_score_percentage)
+  VALUES (@next_event_type+2, @n4, now(), '2010-04-16 12:54:40', @user, 'TypeB', @group, null, true, null, false, false, 1, 'ACTIVE', null, false, @eventform, null, false, false);
+INSERT INTO eventtypes (id, tenant_id, created, modified, modifiedby, name, group_id, description, printable, legacyeventid, retired, master, formversion, state, archivedName, assignedtoavailable, eventform_id, createdby, display_section_totals, display_score_percentage)
+  VALUES (@next_event_type+3, @n4, now(), '2011-01-10 18:29:03', @user, 'TypeC', @group, 'b30.9-6', true, null, false, false, 1, 'ACTIVE', null, false, @eventform, null, false, false);
+INSERT INTO eventtypes (id, tenant_id, created, modified, modifiedby, name, group_id, description, printable, legacyeventid, retired, master, formversion, state, archivedName, assignedtoavailable, eventform_id, createdby, display_section_totals, display_score_percentage)
+  VALUES (@next_event_type+4, @n4, now(), '2011-01-10 18:28:51', @user, 'TypeD', @group, 'b30.9-5', true, null, false, false, 1, 'ACTIVE', null, false, @eventform, null, false, false);
+INSERT INTO eventtypes (id, tenant_id, created, modified, modifiedby, name, group_id, description, printable, legacyeventid, retired, master, formversion, state, archivedName, assignedtoavailable, eventform_id, createdby, display_section_totals, display_score_percentage)
+  VALUES (@next_event_type+5, @n4, now(), '2012-12-05 20:02:08', @user, 'TypeE', @group, null, true, null, false, false, 1, 'ACTIVE', null, false, @eventform, null, false, false);
+INSERT INTO eventtypes (id, tenant_id, created, modified, modifiedby, name, group_id, description, printable, legacyeventid, retired, master, formversion, state, archivedName, assignedtoavailable, eventform_id, createdby, display_section_totals, display_score_percentage)
+  VALUES (@next_event_type+6, @n4, now(), '2012-07-26 19:27:15', @user, 'TypeF', @group, 'b30.9-1', true, null, false, false, 1, 'ACTIVE', null, false, @eventform, null, false, false);
+INSERT INTO eventtypes (id, tenant_id, created, modified, modifiedby, name, group_id, description, printable, legacyeventid, retired, master, formversion, state, archivedName, assignedtoavailable, eventform_id, createdby, display_section_totals, display_score_percentage)
+  VALUES (@next_event_type+7, @n4, now(), '2011-01-10 18:20:55', @user, 'TypeG', @group, null, true, null, false, false, 1, 'ACTIVE', null, false, @eventform, null, false, false);
+INSERT INTO eventtypes (id, tenant_id, created, modified, modifiedby, name, group_id, description, printable, legacyeventid, retired, master, formversion, state, archivedName, assignedtoavailable, eventform_id, createdby, display_section_totals, display_score_percentage)
+  VALUES (@next_event_type+8, @n4, now(), '2012-01-26 18:51:08', @user, 'TypeH', @group, null, true, null, false, false, 1, 'ACTIVE', null, false, @eventform, null, false, false);
+
+INSERT INTO place_event_types (id) VALUES (@next_event_type+1);
+INSERT INTO place_event_types (id) VALUES (@next_event_type+2);
+INSERT INTO place_event_types (id) VALUES (@next_event_type+3);
+INSERT INTO place_event_types (id) VALUES (@next_event_type+4);
+INSERT INTO place_event_types (id) VALUES (@next_event_type+5);
+INSERT INTO place_event_types (id) VALUES (@next_event_type+6);
+INSERT INTO place_event_types (id) VALUES (@next_event_type+7);
+INSERT INTO place_event_types (id) VALUES (@next_event_type+8);
+
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id)
+  VALUES (@event_id+1, @n4, now(), '2009-12-14 19:45:23', @user, 'Pulled to 2 X the working load limit', @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id)
+  VALUES (@event_id+2, @n4, now(), '2009-12-14 19:45:23', @user, 'Pulled to 2 X the working load limit', @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+3, @n4, now(), '2008-09-12 20:34:56', @user, 'Chain Sling passed visual inspection (serial number 08-000002)', @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+4, @n4, now(), '2008-09-10 18:55:05', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+5, @n4, now(), '2008-09-10 18:34:47', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+6, @n4, now(), '2008-09-12 20:49:01', @user, 'Chain Sling (08-000002) pulledl on a Chant Test Bed', @event_form, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+7, @n4, now(), '2008-09-12 20:53:57', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+8, @n4, now(), '2009-12-14 19:45:23', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+9, @n4, now(), '2008-10-08 14:45:37', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+10, @n4, now(), '2008-10-08 14:43:50', @user, 'Pulled to 2 X the working load limit', @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+11, @n4, now(), '2008-10-08 14:42:59', @user, 'Pulled to 2 X the working load limit and more', @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+12, @n4, now(), '2008-10-01 21:58:58', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+13, @n4, now(), '2008-10-01 22:13:13', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+14, @n4, now(), '2008-10-08 14:42:19', @user, 'hello', @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+15, @n4, now(), '2008-10-08 14:43:13', @user, 'Pulled to 2 X the working load limit.  Inspectio passed.', @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+16, @n4, now(), '2008-10-08 14:41:48', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+17, @n4, now(), '2008-10-08 14:41:12', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+18, @n4, now(), '2008-10-08 14:44:30', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+19, @n4, now(), '2008-10-08 14:46:56', @user, 'Pulled to 2 X the working load limit', @event_type, null, null, null, false, @event_form, null, null, null);
+INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
+VALUES (@event_id+20, @n4, now(), '2008-10-21 23:07:33', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+1, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'COMPLETED');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+2, '', false, 'PASS', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'COMPLETED');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+3, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'CLOSED');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+4, '', false, 'FAIL', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+5, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+6, '', false, 'PASS', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+7, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+8, '', false, 'PASS', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+9, '', false, 'PASS', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+10, '', false, 'PASS', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+11, '', false, 'PASS', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+12, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+13, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+14, '', false, 'PASS', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+15, '', false, 'PASS', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+16, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+17, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+18, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+19, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
+  VALUES (@event_id+20, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'OPEN');
+
+
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+1,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+2,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+3,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+4,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+5,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+6,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+7,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+8,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+9,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+10,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+11,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+12,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+13,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+14,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+15,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+16,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+17,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+18,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+19,@org,@event_type);
+INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+20,@org,@event_type);
+
+update masterevents set dueDate = date_add(now(),interval 31 day) where workflow_state='OPEN' and completedDate is null and event_id>=5198314;
+
+update masterevents set longitude = -123.0 + (rand()*48), latitude= 31.0 + (rand()*24) where event_id >=@event_id;
+update masterevents set completedDate = now() where workflow_state='COMPLETED' and event_id>=@event_id;
+update masterevents set completedDate = now() where workflow_state='CLOSED' and event_id>=@event_id;

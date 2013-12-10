@@ -4,17 +4,12 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.model.builders.EventBuilder;
-import com.n4systems.model.builders.EventTypeBuilder;
-import com.n4systems.model.builders.UserBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
-import org.joda.time.LocalDate;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Transactional
@@ -49,52 +44,68 @@ public class PlaceService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public List<ThingEvent> getEventsFor(BaseOrg org) {
-        return getEventsFor(org, null, false, null);
+    public List<PlaceEvent> getEventsFor(BaseOrg org) {
+        return getEventsFor(org, null, false, new ArrayList<WorkflowState>());
     }
 
-    public List<ThingEvent> getEventsFor(BaseOrg org, String order, boolean ascending, List<WorkflowState> workflowStates) {
-        // TODO : TEST DATA FOR NOW.
-        ThingEventType type = EventTypeBuilder.anEventType().named("visual").build();
-        User user = UserBuilder.anAdminUser().withFirstName("joe").withLastName("smith").withUserId("joesmith").build();
-        return Lists.newArrayList(
-                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).withGpsLocation(new GpsLocation(43.653489, -79.374796)).build(),
-                EventBuilder.aFailedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
-                EventBuilder.anEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
-                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
-                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
-                EventBuilder.anEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
-                EventBuilder.aClosedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
-                EventBuilder.aClosedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
-                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
-                EventBuilder.aFailedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).withGpsLocation(new GpsLocation(43.637325,-79.424005)).build(),
-                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
-                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
-                EventBuilder.aClosedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build()
-        );
-    }
-
-    public List<ThingEvent> getOpenEventsFor(BaseOrg org) {
-        // TODO : TEST DATA FOR NOW.
-        ThingEventType type = EventTypeBuilder.anEventType().named("visual").build();
-        User user = UserBuilder.anAdminUser().withFirstName("joe").withLastName("smith").withUserId("joesmith").build();
-        List<ThingEvent> result = new ArrayList<ThingEvent>();
-        for (int i=1; i<40; i++) {
-            Date performed = new LocalDate().withDayOfYear(i*8).toDate();
-            Date due = new LocalDate().withYear(2012).withDayOfYear((int) (Math.random()*355)+1).toDate();
-            result.add(
-                EventBuilder.anOpenEvent()
-                        .ofType(type)
-                        .performedOn(performed)
-                        .scheduledFor(due)
-                        .withOwner(org)
-                        .withPerformedBy(user).build()
-                    );
+    public List<PlaceEvent> getEventsFor(BaseOrg org, String order, boolean ascending, List<WorkflowState> workflowStates) {
+        QueryBuilder<PlaceEvent> query = createUserSecurityBuilder(PlaceEvent.class);
+        //query.addSimpleWhere("place",org);
+        if (order!=null) {
+            query.setOrder(order,ascending);
         }
-        return result;
+        // TODO : add workflow state stuff here...
+
+
+        return persistenceService.findAll(query);
+//
+//
+//        // TODO : TEST DATA FOR NOW.
+//        ThingEventType type = EventTypeBuilder.anEventType().named("visual").build();
+//        User user = UserBuilder.anAdminUser().withFirstName("joe").withLastName("smith").withUserId("joesmith").build();
+//        return Lists.newArrayList(
+//                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).withGpsLocation(new GpsLocation(43.653489, -79.374796)).build(),
+//                EventBuilder.aFailedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+//                EventBuilder.anEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+//                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+//                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+//                EventBuilder.anEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+//                EventBuilder.aClosedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+//                EventBuilder.aClosedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+//                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+//                EventBuilder.aFailedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).withGpsLocation(new GpsLocation(43.637325,-79.424005)).build(),
+//                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+//                EventBuilder.anOpenEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build(),
+//                EventBuilder.aClosedEvent().ofType(type).performedOn(new Date()).scheduledFor(new Date()).withOwner(org).withPerformedBy(user).build()
+//        );
     }
 
-    public List<ThingEvent> getOpenEventsFor(BaseOrg org, int days) {
+    public List<PlaceEvent> getOpenEventsFor(BaseOrg org) {
+        QueryBuilder<PlaceEvent> query = createUserSecurityBuilder(PlaceEvent.class);
+        query.addSimpleWhere("place",org);
+        query.setOrder("dueDate",true);
+        query.addSimpleWhere("workflowState",WorkflowState.OPEN);
+        return persistenceService.findAll(query);
+//        // TODO : TEST DATA FOR NOW.
+//        ThingEventType type = EventTypeBuilder.anEventType().named("visual").build();
+//        User user = UserBuilder.anAdminUser().withFirstName("joe").withLastName("smith").withUserId("joesmith").build();
+//        List<ThingEvent> result = new ArrayList<ThingEvent>();
+//        for (int i=1; i<40; i++) {
+//            Date performed = new LocalDate().withDayOfYear(i*8).toDate();
+//            Date due = new LocalDate().withYear(2012).withDayOfYear((int) (Math.random()*355)+1).toDate();
+//            result.add(
+//                EventBuilder.anOpenEvent()
+//                        .ofType(type)
+//                        .performedOn(performed)
+//                        .scheduledFor(due)
+//                        .withOwner(org)
+//                        .withPerformedBy(user).build()
+//                    );
+//        }
+//        return result;
+    }
+
+    public List<PlaceEvent> getOpenEventsFor(BaseOrg org, int days) {
         return getOpenEventsFor(org);
     }
 
@@ -108,6 +119,5 @@ public class PlaceService extends FieldIdPersistenceService {
         attachment.setFileName("/images/foo.png");
         return Lists.newArrayList(attachment);
     }
-
 
 }

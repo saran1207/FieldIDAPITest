@@ -6,17 +6,15 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.action.ActionDetailsPage;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
-import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.eventtype.ActionTypesForTenantModel;
-import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
-import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
-import com.n4systems.model.*;
+import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.PlaceEvent;
+import com.n4systems.model.ThingEvent;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.Page;
@@ -30,8 +28,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.List;
-
 public class OpenActionsCell extends Panel {
 
     @SpringBean private EventService eventService;
@@ -40,7 +36,7 @@ public class OpenActionsCell extends Panel {
     private ModalWindow modalWindow;
     private Component/*SchedulePicker*/ schedulePicker;
 
-    public OpenActionsCell(String id, final IModel<ThingEvent> eventModel, final Panel eventDisplayPanel) {
+    public OpenActionsCell(String id, final IModel<PlaceEvent> eventModel, final Panel eventDisplayPanel) {
         super(id);
 
         add(modalWindow = createModalWindow(eventModel, eventDisplayPanel));
@@ -59,9 +55,11 @@ public class OpenActionsCell extends Panel {
 
                 setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && FieldIDSession.get().getSessionUser().hasAccess("editevent"));
         
-        final ThingEvent schedule = eventModel.getObject();
+        final PlaceEvent schedule = eventModel.getObject();
 
-        String startAction = "selectEventAdd.action?scheduleId=" + schedule.getId() + "&assetId=" + schedule.getAsset().getId() + "&type=" + schedule.getType().getId();
+
+        // NOTE TO DIANA : this is now a PlaceEvent so no reference to asset will exist.
+        String startAction = "TO BE DONE";//"selectEventAdd.action?scheduleId=" + schedule.getId() + "&assetId=" + schedule.getAsset().getId() + "&type=" + schedule.getType().getId();
         add(new NonWicketLink("startLink", startAction, new AttributeModifier("class", "btn-secondary")));
 
         add(new Link("closeLink") {
@@ -75,7 +73,9 @@ public class OpenActionsCell extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 try{
-                    eventService.retireEvent(schedule);
+                    // TODO DD: need to write service to handle place events (or events generically?)
+                    throw new IllegalStateException("archiving not supported");
+                    //eventService.retireEvent(schedule);
                 } catch (Exception e) {
                     error(new FIDLabelModel("error.eventdeleting").getObject());
                     target.add(((AssetEventsPage)getPage()).getFeedbackPanel());
@@ -113,7 +113,7 @@ public class OpenActionsCell extends Panel {
         }
     }*/
 
-    private DialogModalWindow createModalWindow(final IModel<ThingEvent> eventModel, final Panel eventDisplayPanel) {
+    private DialogModalWindow createModalWindow(final IModel<PlaceEvent> eventModel, final Panel eventDisplayPanel) {
         DialogModalWindow dialogWindow = new DialogModalWindow("modalWindow");
         dialogWindow.setPageCreator(new ModalWindow.PageCreator() {
             @Override

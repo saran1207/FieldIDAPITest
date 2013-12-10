@@ -4,7 +4,7 @@ import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.services.date.DateService;
@@ -40,14 +40,13 @@ public class PlaceActionGroup extends Panel {
             }
         });
 
-        add(new ListView<ThingEvent>("scheduled", new ScheduledEventsMenuModel()) {
-            @Override protected void populateItem(ListItem<ThingEvent> item) {
-                ThingEvent event = item.getModelObject();
+        add(new ListView<PlaceEvent>("scheduled", new ScheduledEventsMenuModel()) {
+            @Override protected void populateItem(ListItem<PlaceEvent> item) {
+                PlaceEvent event = item.getModelObject();
                 ScheduledEventsMenuModel listModel = (ScheduledEventsMenuModel) getModel();
                 if (event==null) {
                     item.add(new Link("event") {
-                        @Override
-                        public void onClick() {
+                        @Override public void onClick() {
                             setResponsePage(new PlaceEventsPage(model));
                         }
                     }
@@ -94,18 +93,17 @@ public class PlaceActionGroup extends Panel {
 
 
     // TODO DD : change this to placeEvent.
-    class ScheduledEventsMenuModel extends LoadableDetachableModel<PrioritizedList<ThingEvent>> {
+    class ScheduledEventsMenuModel extends LoadableDetachableModel<PrioritizedList<PlaceEvent>> {
 
         public int getTotalEvents() {
             return getObject().getOriginalSize();
         }
 
         @Override
-        protected PrioritizedList<ThingEvent> load() {
-            PrioritizedList<ThingEvent> result = new PrioritizedList<ThingEvent>(placeService.getOpenEventsFor(model.getObject()), MAX_MENU_ITEMS,
-                    new Comparator<ThingEvent>() {
-                        @Override
-                        public int compare(ThingEvent e1, ThingEvent e2) {
+        protected PrioritizedList<PlaceEvent> load() {
+            PrioritizedList<PlaceEvent> result = new PrioritizedList<PlaceEvent>(placeService.getOpenEventsFor(model.getObject()), MAX_MENU_ITEMS,
+                    new Comparator<PlaceEvent>() {
+                        @Override public int compare(PlaceEvent e1, PlaceEvent e2) {
                             if (e1 == null) {
                                 return e2 == null ? 0 : -1;
                             }
