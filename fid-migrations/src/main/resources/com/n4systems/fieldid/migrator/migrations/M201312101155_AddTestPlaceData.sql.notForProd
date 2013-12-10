@@ -138,7 +138,7 @@ INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+18
 INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+19,@org,@event_type);
 INSERT INTO place_events (id, place_id, place_event_type_id) VALUES(@event_id+20,@org,@event_type);
 
-update masterevents set dueDate = date_add(now(),interval 31 day) where workflow_state='OPEN' and completedDate is null and event_id>=5198314;
+update masterevents set dueDate = date_add(now(),interval 31 day) where workflow_state='OPEN' and completedDate is null and event_id>=@event_id;
 
 update masterevents set longitude = -123.0 + (rand()*48), latitude= 31.0 + (rand()*24) where event_id >=@event_id;
 update masterevents set completedDate = now() where workflow_state='COMPLETED' and event_id>=@event_id;
