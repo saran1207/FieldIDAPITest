@@ -10,7 +10,9 @@
 	</script>
 </head>
 
+<#if superUser>
 <input class="floatRight" type="button" onClick="window.location='/fieldid/w/admin/addTenant'" value="Create a new Tenant" />
+</#if>
 
 <div id="orgListFilter">
 	<@s.form id="listFilterForm" method="get" theme="simple"> 

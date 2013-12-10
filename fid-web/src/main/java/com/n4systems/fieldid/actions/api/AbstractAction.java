@@ -22,6 +22,7 @@ import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.activesession.ActiveSessionSaver;
+import com.n4systems.model.admin.AdminUserType;
 import com.n4systems.model.downloadlink.DownloadCoordinator;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
@@ -689,4 +690,8 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
     public boolean isPlacesEnabled() {
         return getConfigContext().getBoolean(ConfigEntry.PLACES_ENABLED);
     }
+
+	public boolean isSuperUser() {
+		return getSession().getAdminUser().getType().equals(AdminUserType.SUPER);
+	}
 }

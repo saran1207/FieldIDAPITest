@@ -1,6 +1,6 @@
 <div class="editHeader">
 	<h3>Plan</h3>
-	<p> | <a href="javascript:void(0);" onClick="editPlan(${id});"><@s.text name="label.edit"/></a></p>
+	<#if superUser><p> | <a href="javascript:void(0);" onClick="editPlan(${id});"><@s.text name="label.edit"/></a></p></#if>
 </div>
 <div id="fullAccounts" class="limit">
 	<div class="limitLabel"><@s.text name="label.employee_accounts"/></div>

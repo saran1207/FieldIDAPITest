@@ -1,15 +1,15 @@
 package com.n4systems.fieldidadmin.actions;
 
-import com.n4systems.fieldidadmin.managers.UserSecurityManager;
+import com.n4systems.model.admin.AdminUser;
+import com.n4systems.services.admin.AdminUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class AuthenticationAction extends AbstractAdminAction {
-
-
 	private static final long serialVersionUID = 1L;
 
-	private UserSecurityManager userSecurityManager;
-	
-	
+	@Autowired
+	private AdminUserService adminUserService;
+
 	private String username;
 	private String password;
 	
@@ -18,16 +18,17 @@ public class AuthenticationAction extends AbstractAdminAction {
 	}
 	
 	public String doCreate() {
-		
-		if (userSecurityManager.login(username, password)) {
+		AdminUser user = adminUserService.authenticateUser(username, password);
+		if (user != null) {
 			getSession().setAdminAuthenticated(true);
+			getSession().setAdminUser(user);
 		}
-		
 		return SUCCESS;
 	}
 	
 	public String doDelete() {
 		getSession().setAdminAuthenticated(false);
+		getSession().setAdminUser(null);
 		return SUCCESS;
 	}
 
@@ -45,14 +46,6 @@ public class AuthenticationAction extends AbstractAdminAction {
 
 	public void setUsername(String username) {
 		this.username = username;
-	}
-
-	public UserSecurityManager getUserSecurityManager() {
-		return userSecurityManager;
-	}
-
-	public void setUserSecurityManager(UserSecurityManager userSecurityManager) {
-		this.userSecurityManager = userSecurityManager;
 	}
 	
 }

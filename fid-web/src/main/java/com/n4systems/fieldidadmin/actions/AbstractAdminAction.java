@@ -2,6 +2,7 @@ package com.n4systems.fieldidadmin.actions;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
+import com.n4systems.model.admin.AdminUserType;
 import com.opensymphony.xwork2.ActionSupport;
 import org.apache.struts2.ServletActionContext;
 
@@ -32,4 +33,8 @@ public class AbstractAdminAction extends ActionSupport {
     public boolean isPageName(String pageName) {
         return pageName.equals(this.pageName);
     }
+
+	public boolean isSuperUser() {
+		return getSession().getAdminUser().getType().equals(AdminUserType.SUPER);
+	}
 }

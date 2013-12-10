@@ -43,6 +43,18 @@
 	<div id="orgStatus">
 		<#include "_status.ftl"/>
 	</div>
+
+	<#if superUser>
+	<div>
+		<a href='<@s.url namespace="/admin" action="rebuildIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_index"/></a>
+	</div>
+	<div>
+		<a href='<@s.url namespace="/admin" action="rebuildEventIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_event_index"/></a>
+    </div>
+	<div>
+		<a href='<@s.url namespace="/admin" action="rebuildCriteriaTrendsIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_criteria_trends_index"/></a>
+	</div>
+	</#if>
 </div>
 
 <div id="orgPlan">
@@ -83,24 +95,6 @@
 			<#include "_extendedFeatures.ftl"/>
 		</tr>
 	</#list>
-    <tr>
-        <td colspan="2">&nbsp;</td>
-        <td>
-            <a href='<@s.url namespace="/admin" action="rebuildIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_index"/></a>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">&nbsp;</td>
-        <td>
-            <a href='<@s.url namespace="/admin" action="rebuildEventIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_event_index"/></a>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">&nbsp;</td>
-        <td>
-            <a href='<@s.url namespace="/admin" action="rebuildCriteriaTrendsIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_criteria_trends_index"/></a>
-        </td>
-    </tr>
 	<tr><td colspan = "4">&nbsp;</td></tr>
 	<tr id="plansAndPricingRow">
 		<#include "_plansAndPricing.ftl"/>		
