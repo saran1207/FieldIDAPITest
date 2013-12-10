@@ -51,6 +51,9 @@ input:focus {
 form .action-group {
 	padding-top: 5px;
 }
+form h3 {
+	margin-top: 30px;
+}
 
 //label with no associated input
 .label {
@@ -173,7 +176,6 @@ input[type="checkbox"] {
 // ------------------------
 .chzn-container {
 	margin: 4px 0 10px;
-	// .width-fixed(3,2)!important; //temp hack
 }
 .chzn-single.chzn-default,
 .chzn-container-single .chzn-single {
@@ -202,9 +204,9 @@ input[type="checkbox"] {
 	.border-radius(0);
 }
 
+
 // Editable inputs - for inline editing
 // ------------------------------------
-
 input:disabled {
 	border: none;
 	background: @white;
@@ -213,7 +215,6 @@ input:disabled {
 
 .editable-inputs {
 	position: relative;
-	margin-bottom: 30px;
 
 	input[type="text"]:disabled {
 		height: auto;
@@ -222,11 +223,12 @@ input:disabled {
 	}
 	input[type="text"] {
 		margin: 1px 0;
-		width: 100%;
+		width: 68%;
+		font-size: @baseFontSize;
 	}
-	.form-horizontal label,
-	.form-horizontal input {
-		width: auto;
+	.form-horizontal label {
+		width: 30%;
+		text-align: left;
 	}
 	.actions {
 		position: absolute;

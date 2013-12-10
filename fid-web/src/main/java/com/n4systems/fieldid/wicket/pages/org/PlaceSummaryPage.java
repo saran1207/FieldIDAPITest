@@ -33,7 +33,7 @@ public class PlaceSummaryPage extends PlacePage {
 
     // BOGUS TEST DATA
     Address address = new Address("111 queen street, east");
-    String name="susan richardson",
+    String name="Susan Richardson",
             email="foo@bar.com",
             phone="123 456 7890",
             fax,

@@ -93,6 +93,9 @@ div.info h3 {
   font-size: 24px;
   border: none;
 }
+div.info h3 strong {
+  font-weight: normal;
+}
 div.info p {
   color: #666666;
 }
@@ -813,7 +816,7 @@ nav a {
 .bread-crumb ol li + li:before {
   font-family: "fontello", sans-serif;
   content: '\e82f';
-  padding: 0 4px;
+  padding: 0 2px;
 }
 /* TABBED NAVIGATION */
 .nav-tabs {
@@ -1144,6 +1147,9 @@ input:focus {
 form .action-group {
   padding-top: 5px;
 }
+form h3 {
+  margin-top: 30px;
+}
 .label {
   font-weight: 600;
 }
@@ -1259,7 +1265,6 @@ input:disabled {
 }
 .editable-inputs {
   position: relative;
-  margin-bottom: 30px;
 }
 .editable-inputs input[type="text"]:disabled {
   height: auto;
@@ -1268,11 +1273,12 @@ input:disabled {
 }
 .editable-inputs input[type="text"] {
   margin: 1px 0;
-  width: 100%;
+  width: 68%;
+  font-size: 14px;
 }
-.editable-inputs .form-horizontal label,
-.editable-inputs .form-horizontal input {
-  width: auto;
+.editable-inputs .form-horizontal label {
+  width: 30%;
+  text-align: left;
 }
 .editable-inputs .actions {
   position: absolute;
