@@ -41,39 +41,39 @@ INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
 VALUES (@event_id+3, @n4, now(), '2008-09-12 20:34:56', @user, 'Chain Sling passed visual inspection (serial number 08-000002)', @event_type, null, null, null, false, @event_form, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+4, @n4, now(), '2008-09-10 18:55:05', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+4, @n4, now(), '2008-09-10 18:55:05', @user, null, @event_type, null, null, null, false, @event_type, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+5, @n4, now(), '2008-09-10 18:34:47', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+5, @n4, now(), '2008-09-10 18:34:47', @user, null, @event_type, null, null, null, false, @event_type, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+6, @n4, now(), '2008-09-12 20:49:01', @user, 'Chain Sling (08-000002) pulledl on a Chant Test Bed', @event_form, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+6, @n4, now(), '2008-09-12 20:49:01', @user, 'Chain Sling (08-000002) pulledl on a Chant Test Bed', @event_type, null, null, null, false, @event_form, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+7, @n4, now(), '2008-09-12 20:53:57', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+7, @n4, now(), '2008-09-12 20:53:57', @user, null, @event_type, null, null, null, false, @event_type, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+8, @n4, now(), '2009-12-14 19:45:23', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+8, @n4, now(), '2009-12-14 19:45:23', @user, null, @event_type, null, null, null, false, @event_type, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+9, @n4, now(), '2008-10-08 14:45:37', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+9, @n4, now(), '2008-10-08 14:45:37', @user, null, @event_type, null, null, null, false, @event_type, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
 VALUES (@event_id+10, @n4, now(), '2008-10-08 14:43:50', @user, 'Pulled to 2 X the working load limit', @event_type, null, null, null, false, @event_form, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
 VALUES (@event_id+11, @n4, now(), '2008-10-08 14:42:59', @user, 'Pulled to 2 X the working load limit and more', @event_type, null, null, null, false, @event_form, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+12, @n4, now(), '2008-10-01 21:58:58', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+12, @n4, now(), '2008-10-01 21:58:58', @user, null, @event_type, null, null, null, false, @event_type, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+13, @n4, now(), '2008-10-01 22:13:13', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+13, @n4, now(), '2008-10-01 22:13:13', @user, null, @event_type, null, null, null, false, @event_type, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
 VALUES (@event_id+14, @n4, now(), '2008-10-08 14:42:19', @user, 'hello', @event_type, null, null, null, false, @event_form, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
 VALUES (@event_id+15, @n4, now(), '2008-10-08 14:43:13', @user, 'Pulled to 2 X the working load limit.  Inspectio passed.', @event_type, null, null, null, false, @event_form, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+16, @n4, now(), '2008-10-08 14:41:48', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+16, @n4, now(), '2008-10-08 14:41:48', @user, null, @event_type, null, null, null, false, @event_type, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
 VALUES (@event_id+17, @n4, now(), '2008-10-08 14:41:12', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+18, @n4, now(), '2008-10-08 14:44:30', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+18, @n4, now(), '2008-10-08 14:44:30', @user, null, @event_type, null, null, null, false, @event_type, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
 VALUES (@event_id+19, @n4, now(), '2008-10-08 14:46:56', @user, 'Pulled to 2 X the working load limit', @event_type, null, null, null, false, @event_form, null, null, null);
 INSERT INTO events (id, tenant_id, created, modified, modifiedby, comments, type_id, asset_id, assetstatus_id, mobileguid, editable, eventform_id, createdby, score, eventstatus_id) 
-VALUES (@event_id+20, @n4, now(), '2008-10-21 23:07:33', @user, null, @event_type, null, null, null, false, @event_form, null, null, null);
+VALUES (@event_id+20, @n4, now(), '2008-10-21 23:07:33', @user, null, @event_type, null, null, null, false, @event_type, null, null, null);
 
 INSERT INTO masterevents (event_id, location, printable, event_result, performedby_id, state, owner_id, latitude, longitude, completedDate, workflow_state)
   VALUES (@event_id+1, '', false, 'NA', @user, 'ACTIVE', null, 51.8596810595, -115.0163024888, null, 'COMPLETED');
