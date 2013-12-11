@@ -69,8 +69,21 @@
 .list-view tr {
   height: 33px;
 }
+.place-summary .uploads {
+  position: relative;
+}
+.place-summary .uploads p {
+  position: absolute;
+  top: 50px;
+  text-align: center;
+  width: 100%;
+  font-weight: bold;
+}
+.place-summary .uploads .input-combo {
+  margin: 0;
+}
 .place-summary .attachments {
-  padding-bottom: 20px;
+  padding: 20px 0;
   display: block;
 }
 .place-summary .google-map {

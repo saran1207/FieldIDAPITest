@@ -3,10 +3,17 @@
 <wicket:extend>
 
     <div class="column-narrow-left">
-        <!-- summary image -->
-        <img wicket:id="img" class="feature-img">
-        <p><wicket:message key="label.no_images"/></p>
-        
+        <!-- profile summary image -->
+        <div class="uploads">
+            <img wicket:id="img" class="feature-img">
+            <p><wicket:message key="label.upload_images"/></p>
+            <div class="input-combo file-upload fluid">
+                <input type="file" class="file-input js-file-input">
+                <input type="text" class="file-uploaded js-file-uploaded">
+                <span class="btn-secondary btn-sml">Browse</span>
+            </div>
+        </div>
+
         <!-- attachments -->
         <a wicket:id="attachmentsLink" class="attachments"><span wicket:id="label"/></a>
 

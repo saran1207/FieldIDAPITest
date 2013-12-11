@@ -1184,45 +1184,44 @@ input[type="checkbox"] {
 }
 .input-combo {
   display: inline-block;
-  width: auto;
   position: relative;
+  border: 1px solid #c7c7c9;
+  margin: 4px 0;
 }
 .input-combo input[type="text"] {
   margin: 0;
-  height: 28px;
-  width: 295px;
+  border: none;
 }
 .input-combo [class^="btn"] {
   position: absolute;
   top: 0;
   right: 0;
+  border-width: 0 0 0 1px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  height: 100%;
 }
 .input-combo.hide {
   display: none;
 }
-.input-combo .file-input {
-  zoom: 1;
-  filter: alpha(opacity=50);
-  opacity: 0;
+.input-combo.file-upload input[type="file"] {
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
+  width: 100%;
   z-index: 1;
-  width: 72px;
-}
-.input-combo .file-uploaded {
-  position: relative;
-  padding-right: 75px;
+  zoom: 1;
+  filter: alpha(opacity=50);
+  opacity: 0.01;
+  filter: alpha(opacity=1);
 }
 .input-combo.fluid {
   width: 100%;
 }
 .input-combo.fluid input[type="text"] {
   width: 99%;
-}
-.input-combo.medium input[type="text"] {
-  height: 35px;
 }
 .text-block {
   display: block;
