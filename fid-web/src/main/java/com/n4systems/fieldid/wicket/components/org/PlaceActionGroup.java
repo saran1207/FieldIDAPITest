@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForPlaceModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventTypesPage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
@@ -84,7 +85,7 @@ public class PlaceActionGroup extends Panel {
                 if (event==null) {
                     item.add(new Link("event") {
                         @Override public void onClick() {
-                            setResponsePage(new PlaceEventsPage(model));
+                            setResponsePage(PlaceEventsPage.class, PageParametersBuilder.id(getOrg().getId()));
                         }
                     }
                     .add(new Label("name", "View All " + listModel.getTotalEvents()))
@@ -124,7 +125,7 @@ public class PlaceActionGroup extends Panel {
 
         add(new Link<Void>("eventTypesLink") {
             @Override public void onClick() {
-                setResponsePage(new PlaceEventTypesPage(model));
+                setResponsePage(PlaceEventTypesPage.class,PageParametersBuilder.id(getOrg().getId()));
             }
         });
     }

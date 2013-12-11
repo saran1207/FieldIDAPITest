@@ -26,6 +26,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
+
 public class PlaceEventTypesPage extends PlacePage {
 
     private @SpringBean PlaceService placeService;
@@ -50,22 +52,9 @@ public class PlaceEventTypesPage extends PlacePage {
 
 
     @Override
-    protected List<NavigationItem> createNavItems(BaseOrg org) {
-//        List<NavigationItem> navItems = Lists.newArrayList();
-//
-//        navItems.add(aNavItem().label("label.places").page(OrgViewPage.class).build());
-//
-//        if(org.getPrimaryOrg() != null) {
-//            navItems.add(aNavItem().label(new PropertyModel<String>(org.getPrimaryOrg(), "name")).page(this.getClass()).params(PageParametersBuilder.id(org.getPrimaryOrg().getId())).build());
-//        }
-//        if(org.getCustomerOrg() != null) {
-//            navItems.add(aNavItem().label(new PropertyModel<String>(org.getCustomerOrg(), "name")).page(this.getClass()).params(PageParametersBuilder.id(org.getCustomerOrg().getId())).build());
-//        }
-//        if(org.getDivisionOrg() != null) {
-//            navItems.add(aNavItem().label(new PropertyModel<String>(org.getDivisionOrg(), "name")).page(this.getClass()).params(PageParametersBuilder.id(org.getDivisionOrg().getId())).build());
-//        }
-//        return navItems;
-        List<NavigationItem> navItems = super.createNavItems(org);
+    protected List<NavigationItem> createBreadCrumbs(BaseOrg org) {
+        List<NavigationItem> navItems = super.createBreadCrumbs(org);
+        navItems.add(aNavItem().label(new FIDLabelModel("label.event_types")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
         return navItems;
     }
 
