@@ -52,10 +52,7 @@ import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.transaction.TransactionService;
-import com.n4systems.fieldid.service.user.SendWelcomeEmailService;
-import com.n4systems.fieldid.service.user.UserGroupService;
-import com.n4systems.fieldid.service.user.UserLimitService;
-import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.service.user.*;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.persistence.listeners.LocalizationListener;
@@ -700,4 +697,8 @@ public class FieldIdCoreConfig {
         return new S3ImageAttachmentHandler();
     }
 
+    @Bean
+    public SendForgotUserEmailService sendForgotUserEmailService() {
+        return new SendForgotUserEmailService();
+    }
 }

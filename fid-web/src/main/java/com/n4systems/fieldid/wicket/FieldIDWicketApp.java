@@ -59,6 +59,7 @@ import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.user.*;
 import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
+import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
@@ -196,6 +197,8 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
         mountPage("userOfflineProfile", UserOfflineProfilePage.class);
+
+        mountPage("userAccountSearch", UserAccountSearchPage.class);
 
         mountPage("template", TemplatePage.class);
         mountPage("template/assetSummary", TemplateAssetSummaryPage.class);

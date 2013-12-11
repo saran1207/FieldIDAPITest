@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+
+   <span wicket:id="title"></span>
+    <div wicket:id="feedbackPanel" class="formErrors"></div>
+
+    <div id="mainContent" class="login-page">
+
+        <div class="titleBlock">
+            <wicket:message key="label.forgot_username"/>
+        </div>
+
+    <form wicket:id="GetUsernameForm" class="minForm forgot-login-form">
+
+        <p class="actionInstructions">
+            Instructions
+        </p>
+
+
+        <div class="infoSet">
+            <input wicket:id="userEmail" id="userEmail" type="text" size="40"/>
+        </div>
+
+        <div class="actions">
+         <input type="submit" wicket:id="sendUsername" wicket:message="value:label.send_email_now" class="blue-submit"/>
+            <span style="color:#999;"><wicket:message key="label.or"/></span>
+            <a wicket:id="cancel"><wicket:message key="label.return_to_sign_in" /></a>
+        </div>
+
+
+    </form>
+
+    </div>
+
+
+    <script type="text/javascript">
+        jQuery('#userEmail').watermark('userEmail');
+    </script>
+
+
+
+</wicket:extend>
+
+
+
+</html>

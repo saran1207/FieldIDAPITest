@@ -23,10 +23,9 @@
             <div class="actions" id="normalActions_container">
                 <@s.submit cssClass="blue-submit" key="label.sign_in" id="signInButton"/>
         <span class="login-help">
-            <a href="<@s.url action="forgotPassword"/>"><@s.text name="link.emailpassword"/></a>
+            <a href="<@s.url action="forgotPassword"/>"><@s.text name="link.emailpassword"/></a><nbsp;><nbsp;><nbsp;>
+             <a href="<@s.url value="/w/userAccountSearch"/>"><@s.text name="link.useremail"/></a>
         </span>
-
-
             </div>
         <#if userLimitService.readOnlyUsersEnabled>
             <div class="request"><a href="<@s.url action="registerUser"/>"><span><@s.text name="label.requestanaccount"/></span></a></div>
