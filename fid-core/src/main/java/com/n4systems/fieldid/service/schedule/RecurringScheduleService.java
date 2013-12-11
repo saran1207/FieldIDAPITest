@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.schedule;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
+import com.n4systems.fieldid.service.event.PlaceEventScheduleService;
 import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -30,6 +31,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
     public static final int WEEKLY_WEEKDAY_EVENT_COUNT = 2;
 
     @Autowired private EventScheduleService eventScheduleService;
+    @Autowired private PlaceEventScheduleService placeEventScheduleService;
 
     public List<RecurringAssetTypeEvent> getRecurringAssetTypeEvents() {
         QueryBuilder<RecurringAssetTypeEvent> query = new QueryBuilder<RecurringAssetTypeEvent>(RecurringAssetTypeEvent.class, new OpenSecurityFilter());
@@ -139,7 +141,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
             // TODO : figure out how to handle this.
             //schedule.setRecurringEvent(recurringEvent);
             schedule.setEventResult(EventResult.VOID);
-            eventScheduleService.createSchedule(schedule);
+            placeEventScheduleService.createSchedule(schedule);
         }
     }
 

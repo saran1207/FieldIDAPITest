@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.org;
 
+import com.n4systems.fieldid.service.event.PlaceEventScheduleService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -43,6 +44,7 @@ public class PlaceActionGroup extends Panel {
     private @SpringBean PlaceService placeService;
     private @SpringBean DateService dateService;
     private @SpringBean UserService userService;
+    private @SpringBean PlaceEventScheduleService placeEventScheduleService;
 
     private final IModel<BaseOrg> model;
 
@@ -60,7 +62,7 @@ public class PlaceActionGroup extends Panel {
         schedulePicker = new SchedulePicker<PlaceEvent>("schedulePicker", new PropertyModel<PlaceEvent>(this, "scheduleToAdd"), new EventTypesForPlaceModel(model)){
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
-                //TODO Persist Schedule
+                placeEventScheduleService.createSchedule(scheduleToAdd);
                 scheduleToAdd = createNewSchedule(model.getObject());
                 //TODO refresh containing page
             }
