@@ -18,7 +18,7 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 	@Column(length=2500)
 	private String comments;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = EventType.class)
     @JoinColumn(name="type_id")
     private EventType<T> type;
 	
