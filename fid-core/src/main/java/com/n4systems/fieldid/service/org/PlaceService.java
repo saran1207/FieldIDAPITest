@@ -61,10 +61,17 @@ public class PlaceService extends FieldIdPersistenceService {
     public List<PlaceEvent> getEventsFor(BaseOrg org, String order, boolean ascending, List<WorkflowState> workflowStates) {
         QueryBuilder<PlaceEvent> query = createUserSecurityBuilder(PlaceEvent.class);
         //query.addSimpleWhere("place",org);
-        if (order!=null) {
-            query.setOrder(order,ascending);
+
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                query.addOrder(subOrder, ascending);
+            }
         }
-        // TODO : add workflow state stuff here...
+
+        if(workflowStates!= null && !workflowStates.isEmpty()) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "workflowStatesList", "workflowState", workflowStates));
+        }
 
         return persistenceService.findAll(query);
     }
@@ -81,8 +88,8 @@ public class PlaceService extends FieldIdPersistenceService {
         return getOpenEventsFor(org);
     }
 
-    public int countEventsFor(BaseOrg org) {
-        return getEventsFor(org, null, false, null).size();
+    public int countEventsFor(BaseOrg org, List<WorkflowState> workflowStates) {
+        return getEventsFor(org, null, false, workflowStates).size();
     }
 
     public List<? extends Attachment> getAttachmentsFor(BaseOrg org) {

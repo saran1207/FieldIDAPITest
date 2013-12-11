@@ -42,6 +42,7 @@ public class PlaceEventsPage extends PlacePage {
     private EventMapPanel mapPanel;
     private FilterPanel filterPanel;
     private WebMarkupContainer blankSlate;
+    PlaceEventDataProvider dataProvider;
 
     public void setWorkflowStates(List<WorkflowState> workflowStates) {
         this.workflowStates = workflowStates;
@@ -67,19 +68,21 @@ public class PlaceEventsPage extends PlacePage {
 
     private final void init() {
 
-        boolean hasEvents = placeService.countEventsFor(orgModel.getObject()) > 0;
+        boolean hasEvents = placeService.countEventsFor(orgModel.getObject(), null) > 0;
 
         add(filterPanel = new FilterPanel("filterPanel", orgModel, workflowStates) {
             @Override
             public void onFilterSelectionChanged(AjaxRequestTarget target) {
-                PlaceEventsPage.this.setWorkflowStates(getWorkflowStates());
+                workflowStates = getWorkflowStates();
+                PlaceEventsPage.this.dataProvider.setWorkflowStates(getWorkflowStates());
                 target.add(eventPanel);
             }
         });
         filterPanel.setOutputMarkupPlaceholderTag(true);
         filterPanel.setVisible(hasEvents);
 
-        add(eventPanel = new EventListPanel("eventPanel", new PlaceEventDataProvider("completedDate", SortOrder.DESCENDING)) {
+        dataProvider = new PlaceEventDataProvider("completedDate", SortOrder.DESCENDING, workflowStates);
+        add(eventPanel = new EventListPanel("eventPanel", dataProvider) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends Event>> columns) {
                 //TODO add place status
@@ -143,20 +146,23 @@ public class PlaceEventsPage extends PlacePage {
 
     private class PlaceEventDataProvider extends FieldIDDataProvider<Event> {
 
-        public PlaceEventDataProvider(String order, SortOrder sortOrder) {
+        private List<WorkflowState> states;
+
+        public PlaceEventDataProvider(String order, SortOrder sortOrder, List<WorkflowState> workflowStates) {
             setSort(order, sortOrder);
+            this.states = workflowStates;
         }
 
         @Override
         public Iterator<? extends Event> iterator(int first, int count) {
-            List<? extends Event> eventsList = placeService.getEventsFor(orgModel.getObject(), getSort().getProperty(), getSort().isAscending(), workflowStates);
+            List<? extends Event> eventsList = placeService.getEventsFor(orgModel.getObject(), getSort().getProperty(), getSort().isAscending(), states);
             eventsList = eventsList.subList(first, first + count);
             return eventsList.iterator();
         }
 
         @Override
         public int size() {
-            return placeService.countEventsFor(orgModel.getObject());
+            return placeService.countEventsFor(orgModel.getObject(), states);
         }
 
         @Override
@@ -167,6 +173,10 @@ public class PlaceEventsPage extends PlacePage {
                     return object;
                 }
             };
+        }
+
+        public void setWorkflowStates(List<WorkflowState> workflowStates) {
+            this.states = workflowStates;
         }
     }
 }
