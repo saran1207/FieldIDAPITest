@@ -51,6 +51,9 @@ input:focus {
 form .action-group {
 	padding-top: 5px;
 }
+form h3 {
+	margin-top: 30px;
+}
 
 //label with no associated input
 .label {
@@ -68,19 +71,23 @@ form .action-group {
 
 // checkboxes & radio boxes
 // -------------------------
+
+//input inside of a label
 label {
 	input[type="radio"], 
 	input[type="checkbox"] {
-		float: left;
 		margin: 0 4px 0 -14px;
 	}
 }
+
+//TODO used on asset-events.php in prototype, may need to refactor
 .checkbox {
 	overflow: hidden;
-
+	
+	//input inside of a label
 	label {
 		padding-left: 15px;
-		margin: 5px 0;
+		margin: 5px 12px 5px 0;
 		line-height: 1;
 	}
 	&.inline {
@@ -101,39 +108,42 @@ input[type="checkbox"] {
 // text input with button combo 
 // -----------------------------
 
-// TODO: need to make a large, sml
 .input-combo {
 	display: inline-block;
-	width: auto;
 	position: relative;
+	border: 1px solid @grayMedium;
+	margin: 4px 0;
 
 	input[type="text"] {
 		margin: 0;
-		height: 28px;
-		width: 295px;
+		border: none;
 	}
 	[class^="btn"] {
 		position: absolute;
 		top: 0;
-		right: 0;	
+		right: 0;
+
+		border-width: 0 0 0 1px;
+		.border-radius(0);
+		height: 100%;	
 	}
 	&.hide {
 		display: none;
 	}
 
-	// customized file input types
-	.file-input {
-		.opacity(0);
-		position: absolute;
-		right: 0;
-		top: 0;
-		bottom: 0;
-		z-index: 1;
-		width: 72px;
-	}
-	.file-uploaded {
-		position: relative;
-		padding-right: 75px;
+	// input type="file"
+	&.file-upload {
+
+		input[type="file"]{
+			position: absolute;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			width: 100%;
+			z-index: 1;
+			.opacity(1);
+			filter: alpha(opacity=1);
+		}
 	}
 
 	// spans 100% of the container
@@ -142,13 +152,6 @@ input[type="checkbox"] {
 
 		input[type="text"] {
 			width: 99%;
-		}
-	}
-
-	// input combo using standard size button 
-	&.medium {
-		input[type="text"] {
-			height: 35px;
 		}
 	}
 }
@@ -169,7 +172,6 @@ input[type="checkbox"] {
 // ------------------------
 .chzn-container {
 	margin: 4px 0 10px;
-	// .width-fixed(3,2)!important; //temp hack
 }
 .chzn-single.chzn-default,
 .chzn-container-single .chzn-single {
@@ -198,9 +200,9 @@ input[type="checkbox"] {
 	.border-radius(0);
 }
 
-// Editable inputs
-// ------------------------------------
 
+// Editable inputs - for inline editing
+// ------------------------------------
 input:disabled {
 	border: none;
 	background: @white;
@@ -209,7 +211,6 @@ input:disabled {
 
 .editable-inputs {
 	position: relative;
-	margin-bottom: 30px;
 
 	input[type="text"]:disabled {
 		height: auto;
@@ -218,11 +219,12 @@ input:disabled {
 	}
 	input[type="text"] {
 		margin: 1px 0;
-		width: 100%;
+		width: 68%;
+		font-size: @baseFontSize;
 	}
-	.form-horizontal label,
-	.form-horizontal input {
-		width: auto;
+	.form-horizontal label {
+		width: 30%;
+		text-align: left;
 	}
 	.actions {
 		position: absolute;
@@ -440,6 +442,8 @@ form {
 }
 
 
+// Media Queries
+// --------------
 @media (max-width: 1150px) {
 	
 	// Form control widths contained in two equal columns

@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.components.form.LinkFieldsBehavior;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.Address;
 import com.n4systems.model.GpsLocation;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.PlaceEvent;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -33,7 +33,7 @@ public class PlaceSummaryPage extends PlacePage {
 
     // BOGUS TEST DATA
     Address address = new Address("111 queen street, east");
-    String name="susan richardson",
+    String name="Susan Richardson",
             email="foo@bar.com",
             phone="123 456 7890",
             fax,
@@ -48,7 +48,6 @@ public class PlaceSummaryPage extends PlacePage {
     public PlaceSummaryPage(PageParameters params) {
         super(params);
 
-        //add(new GoogleMap("map",ProxyModel.of(model, on(BaseOrg.class).getGpsLocation())));
         add(map = new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
 
         add(createFutureEventsListView());
@@ -88,11 +87,16 @@ public class PlaceSummaryPage extends PlacePage {
 
     private Component createFutureEventsListView() {
         final FutureEventsModel model = new FutureEventsModel();
-        ListView<ThingEvent> view = new ListView<ThingEvent>("events", model ) {
-            @Override protected void populateItem(ListItem<ThingEvent> item) {
-                ThingEvent event = item.getModelObject();
+        ListView<PlaceEvent> view = new ListView<PlaceEvent>("events", model ) {
+            @Override protected void populateItem(ListItem<PlaceEvent> item) {
+                PlaceEvent event = item.getModelObject();
                 item.add(new Label("due", Model.of(event.getDueDate())));
-                item.add(new Label("type", Model.of(event.getEventType().getDisplayName())));
+                // TODO : for debugging only. remove this when we know all data is valid.
+                if ( event.getEventType()==null) {
+                    item.add(new Label("type", "ERROR : event '" + event.getId() + "' has null type???"));
+                } else {
+                    item.add(new Label("type", Model.of(event.getEventType().getDisplayName())));
+                }
                 item.add(new Label("assignee", Model.of("joe smith")));
             }
 
@@ -103,10 +107,10 @@ public class PlaceSummaryPage extends PlacePage {
         return view;
     }
 
-    class FutureEventsModel extends LoadableDetachableModel<List<ThingEvent>> {
+    class FutureEventsModel extends LoadableDetachableModel<List<PlaceEvent>> {
 
         @Override
-        protected List<ThingEvent> load() {
+        protected List<PlaceEvent> load() {
             return placeService.getOpenEventsFor(getOrg(), 7);
         }
     }

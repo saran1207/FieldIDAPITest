@@ -35,29 +35,29 @@ import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
-public class SchedulePickerPanel extends Panel {
+public class SchedulePickerPanel<T extends Event> extends Panel {
 
-    private IModel<ThingEvent> scheduleModel;
+    private IModel<T> scheduleModel;
     private ScheduleForm scheduleForm;
     private Label saveScheduleLabel;
 
     @SpringBean
     private DateService dateService;
 
-    public SchedulePickerPanel(String id, IModel<ThingEvent> scheduleModel, IModel<List<? extends EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
+    public SchedulePickerPanel(String id, IModel<T> scheduleModel, IModel<List<? extends EventType>> eventTypeOptions, IModel<List<Project>> jobsOptions) {
         super(id);
         this.scheduleModel = scheduleModel;
         setOutputMarkupId(true);
 
-        add(scheduleForm = new ScheduleForm("scheduleForm", scheduleModel, new LocalizeModel<List<? extends EventType>>(eventTypeOptions), jobsOptions));
+        add(scheduleForm = new ScheduleForm<T>("scheduleForm", scheduleModel, new LocalizeModel<List<? extends EventType>>(eventTypeOptions), jobsOptions));
     }
 
-    class ScheduleForm extends Form<ThingEvent> {
+    class ScheduleForm<T extends Event> extends Form {
 
         FIDFeedbackPanel feedbackPanel;
         DateTimePicker dateTimePicker;
 
-        public ScheduleForm(String id, final IModel<ThingEvent> eventScheduleModel, final IModel<List<? extends EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
+        public ScheduleForm(String id, final IModel<T> eventScheduleModel, final IModel<List<? extends EventType>> eventTypeOptions, final IModel<List<Project>> jobsOptions) {
             super(id, eventScheduleModel);
 
             Date dueDate = eventScheduleModel.getObject().getDueDate();
@@ -80,7 +80,12 @@ public class SchedulePickerPanel extends Panel {
             add(eventTypeSelect);
             WebMarkupContainer jobSelectContainer = new WebMarkupContainer("jobSelectContainer");
             jobSelectContainer.add(jobSelect);
-            jobSelectContainer.setVisible(FieldIDSession.get().getSessionUser().getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Projects));
+
+            if (eventScheduleModel.getObject().getClass().equals(PlaceEvent.class)) {
+                jobSelectContainer.setVisible(false);
+            } else {
+                jobSelectContainer.setVisible(FieldIDSession.get().getSessionUser().getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.Projects));
+            }
 
             add(jobSelectContainer);
 
@@ -122,7 +127,7 @@ public class SchedulePickerPanel extends Panel {
             });
         }
 
-        private void setDefaultEventType(IModel<ThingEvent> eventScheduleModel, IModel<List<? extends EventType>> eventTypeOptions) {
+        private void setDefaultEventType(IModel<T> eventScheduleModel, IModel<List<? extends EventType>> eventTypeOptions) {
             List<? extends EventType> availableEventTypes = eventTypeOptions.getObject();
             Event eventSchedule = eventScheduleModel.getObject();
             if (eventSchedule.getType() == null && availableEventTypes.size() > 0) {

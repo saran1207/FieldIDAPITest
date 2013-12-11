@@ -130,7 +130,7 @@ var orgTreeFactory = (function() {
 					var $link = $(event.target);
 					if ($link.hasClass('jstree-loading')) {return;}
 					var node = $link.closest('li');
-					var url = options.clickCallback + '?id=' + node.attr('id') + '&type=' + node.attr('data');
+					var url = options.clickCallback + '?id=' + node.attr('id');
 					window.location = url;
 				});
 

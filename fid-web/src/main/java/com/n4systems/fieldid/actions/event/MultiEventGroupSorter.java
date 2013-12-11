@@ -20,10 +20,10 @@ public class MultiEventGroupSorter {
 		}
 	}
 
-	private Map<EventTypeGroup, List<EventType>> groupToEventTypeMap = new HashMap<EventTypeGroup, List<EventType>>();
+	private Map<EventTypeGroup, List<EventType<?>>> groupToEventTypeMap = new HashMap<EventTypeGroup, List<EventType<?>>>();
 	 
 	
-	public MultiEventGroupSorter(Set<? extends EventType> eventTypes) {
+	public MultiEventGroupSorter(Set<? extends EventType<?>> eventTypes) {
 		sortIntoMap(eventTypes);
 	}
 	
@@ -34,13 +34,13 @@ public class MultiEventGroupSorter {
 		return eventTypeGroupList;
 	}
 		
-	public List<EventType> getEventTypesForGroup(EventTypeGroup group){
+	public List<EventType<?>> getEventTypesForGroup(EventTypeGroup group){
 		return groupToEventTypeMap.get(group);
 	}
 
-	private void sortIntoMap(Set<? extends EventType> eventTypes) {
+	private void sortIntoMap(Set<? extends EventType<?>> eventTypes) {
 		for (EventType type : eventTypes) {
-			List<EventType> typeList = fetchCurrentList(type.getGroup());
+			List<EventType<?>> typeList = fetchCurrentList(type.getGroup());
 			
 			typeList.add(type);
 			
@@ -50,20 +50,20 @@ public class MultiEventGroupSorter {
 		}
 	}
 
-	private void storeList(EventTypeGroup group, List<EventType> typeList) {
+	private void storeList(EventTypeGroup group, List<EventType<?>> typeList) {
 		groupToEventTypeMap.put(group, typeList);
 	}
 
-	private void sortList(List<EventType> typeList) {
+	private void sortList(List<EventType<?>> typeList) {
 		Collections.sort(typeList, new ListableByDisplayNameComparator());
 	}
 
-	private List<EventType> fetchCurrentList(EventTypeGroup group) {
-		List<EventType> typeList;
+	private List<EventType<?>> fetchCurrentList(EventTypeGroup group) {
+		List<EventType<?>> typeList;
 		if (groupToEventTypeMap.containsKey(group)) {
 			typeList = groupToEventTypeMap.get(group);
 		} else {
-			typeList = new ArrayList<EventType>();
+			typeList = new ArrayList<EventType<?>>();
 		}
 		return typeList;
 	}

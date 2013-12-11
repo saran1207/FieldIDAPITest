@@ -128,9 +128,6 @@ public class OrgViewPage extends FieldIDTemplatePage {
                         BaseOrg org = ((PlaceData)createForm.getDefaultModelObject()).createNewChildOrg();
                         persistenceService.save(org);
 
-//                        RecurringPlaceEvent recurr = new RecurringPlaceEvent();
-//                        persistenceService.save(recurr);
-
                         List<RecurringPlaceEvent> all = persistenceService.findAll(RecurringPlaceEvent.class);
                         toggleCreatePanel(target);
                     }

@@ -68,11 +68,11 @@
 	font-style: normal;
 	font-weight: 400;
 }
-.fontello-icon(@value) {
+.fontello-icon(@value, @padding: 4px) {
 	font-family: @fontello;
 	content: @value;
 	//vertical-align: middle;
-	padding: 0 4px;
+	padding: 0 @padding;
 }
 
 // CSS3 PROPERTIES

@@ -378,7 +378,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	}
 	
 	public Set<Event> getEventsWithLocation() {
-    	List<Event> events = getAllEventHelper().getEvents();
+    	List<ThingEvent> events = getAllEventHelper().getEvents();
     	Set<Event> result = new HashSet<Event>();
     	for (Event event:events) { 
     		if (event.getGpsLocation()!=null) { 

@@ -3,52 +3,89 @@
 <wicket:extend>
 
     <div class="column-narrow-left">
-        <img wicket:id="img" style="width:300px;height:300px;float:left;" class="img"><p><wicket:message key="label.no_images"/></p></img>
-        <a wicket:id="attachmentsLink"><span wicket:id="label"/></a>
+        <!-- profile summary image -->
+        <div class="uploads">
+            <img wicket:id="img" class="feature-img">
+            <p><wicket:message key="label.upload_images"/></p>
+            <div class="input-combo file-upload fluid">
+                <input type="file" class="file-input js-file-input">
+                <input type="text" class="file-uploaded js-file-uploaded">
+                <span class="btn-secondary btn-sml">Browse</span>
+            </div>
+        </div>
+
+        <!-- attachments -->
+        <a wicket:id="attachmentsLink" class="attachments"><span wicket:id="label"/></a>
+
+        <!-- Contact info -->
         <form wicket:id="contact" class="editable-inputs">
-            <h3><wicket:message key="label.contact"/>
-                <span class="actions">
-                    <a wicket:id="save"><wicket:message key="label.save"/></a>
-                    <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
-                    <a wicket:id="edit"><wicket:message key="label.edit"/></a>
-                </span>
-            </h3>
+            <h3><wicket:message key="label.contact"/></h3>
+            <span class="actions">
+                <a wicket:id="save"><wicket:message key="label.save"/></a>
+                <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+                <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+            </span>
             <wicket:enclosure>
-                <div class="form-horizontal"><label wicket:for="name"><wicket:message key="label.name"/></label><input wicket:id="name" type="text"/></div>
+                <div class="form-horizontal">
+                    <label wicket:for="name"><wicket:message key="label.name"/>:</label>
+                    <input wicket:id="name" type="text"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
-                <div class="form-horizontal"><label wicket:for="email"><wicket:message key="label.email"/></label><input wicket:id="email" type="text"/></div>
+                <div class="form-horizontal">
+                    <label wicket:for="email"><wicket:message key="label.email"/>:</label>
+                    <input wicket:id="email" type="text"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
-                <div class="form-horizontal"><span wicket:id="address" type="text"/></div>
+                <div class="form-horizontal">
+                    <span wicket:id="address" type="text"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
-                <div class="form-horizontal"><label wicket:for="phone"><wicket:message key="label.phone"/></label><input wicket:id="phone" type="text"/></div>
+                <div class="form-horizontal">
+                    <label wicket:for="phone"><wicket:message key="label.phone"/>:</label>
+                    <input wicket:id="phone" type="text"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
-                <div class="form-horizontal"><label wicket:for="fax"><wicket:message key="label.fax"/></label><input wicket:id="fax" type="text"/></div>
+                <div class="form-horizontal">
+                    <label wicket:for="fax"><wicket:message key="label.fax"/>:</label>
+                    <input wicket:id="fax" type="text"/>
+                </div>
             </wicket:enclosure>
         </form>
+
+        <!-- General form -->
         <form wicket:id="general"  class="editable-inputs">
-            <h3><wicket:message key="label.general"/>
-                <span class="actions">
-                    <a wicket:id="save"><wicket:message key="label.save"/></a>
-                    <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
-                    <a wicket:id="edit"><wicket:message key="label.edit"/></a>
-                </span>
-            </h3>
+            <h3><wicket:message key="label.general"/></h3>
+            <span class="actions">
+                <a wicket:id="save"><wicket:message key="label.save"/></a>
+                <a wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+                <a wicket:id="edit"><wicket:message key="label.edit"/></a>
+            </span>
             <wicket:enclosure>
-                <div class="form-horizontal"><label wicket:for="name"> <wicket:message key="label.name"/></label><input wicket:id="name" type="text"/></div>
+                <div class="form-horizontal">
+                    <label wicket:for="name"><wicket:message key="label.name"/>:</label>
+                    <input wicket:id="name" type="text"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
-                <div class="form-horizontal"><label wicket:for="id"><wicket:message key="label.id"/></label><input wicket:id="id" type="text"/></div>
+                <div class="form-horizontal">
+                    <label wicket:for="id"><wicket:message key="label.id"/>:</label>
+                    <input wicket:id="id" type="text"/>
+                </div>
             </wicket:enclosure>
-            <wicket:enclosure><h3><wicket:message key="label.notes"/></h3><textarea wicket:id="notes"/></wicket:enclosure>
+            <wicket:enclosure>
+                <h3><wicket:message key="label.notes"/></h3>
+                <textarea wicket:id="notes"/>
+            </wicket:enclosure>
         </form>
-    </div>
+    </div><!-- cls .column-narrow-left-->
 
     <div class="column-wide">
-        <div wicket:id="map" class="googleMap" style="width:700px;height:300px;"></div>
+        <!-- Location map -->
+        <div wicket:id="map" class="google-map"></div>
 
         <wicket:enclosure child="events">
         <section>

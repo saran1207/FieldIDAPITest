@@ -66,11 +66,10 @@ public class TenantCreationService extends FieldIdPersistenceService {
         EventTypeGroup actionGroup = new EventTypeGroup();
         actionGroup.setTenant(tenant);
         actionGroup.setName(DEFAULT_ACTIONS_GROUP_NAME);
-        actionGroup.setAction(true);
         actionGroup.setReportTitle("Action");
         persistenceService.save(actionGroup);
 
-        EventType correctiveAction = new ThingEventType();
+        ActionEventType correctiveAction = new ActionEventType();
         correctiveAction.setGroup(actionGroup);
         correctiveAction.setTenant(tenant);
         correctiveAction.setName("Corrective Action");

@@ -104,7 +104,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     }
 
     private SchedulePicker createSchedulePicker() {
-        return new SchedulePicker("schedulePicker", new PropertyModel<ThingEvent>(EventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel()) {
+        return new SchedulePicker<ThingEvent>("schedulePicker", new PropertyModel<ThingEvent>(EventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel()) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 schedules.add(scheduleToAdd);
@@ -191,8 +191,12 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
 
-            proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event.getObject().getThingType(), proofTestInfo));
-            proofTestContainer.setVisible(supportsProofTests());
+            if (event.getObject().getType().isThingEventType()) {
+                proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event.getObject().getThingType(), proofTestInfo));
+                proofTestContainer.setVisible(supportsProofTests());
+            } else {
+                proofTestContainer.setVisible(false);
+            }
 
             add(proofTestContainer);
 

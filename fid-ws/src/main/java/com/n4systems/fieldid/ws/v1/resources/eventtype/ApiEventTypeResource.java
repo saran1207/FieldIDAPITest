@@ -25,26 +25,26 @@ import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiUnitOfMeasure
 
 @Component
 @Path("eventType")
-public class ApiEventTypeResource extends SetupDataResource<ApiEventType, ThingEventType> {
+public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventType> {
 
 	public ApiEventTypeResource() {
-		super(ThingEventType.class, true);
+		super(EventType.class, true);
 	}
 
 	@Override
-	protected ApiEventType convertEntityToApiModel(ThingEventType eventType) {
+	protected ApiEventType convertEntityToApiModel(EventType eventType) {
 		ApiEventType apiEventType = new ApiEventType();
 		apiEventType.setSid(eventType.getId());
 		apiEventType.setActive(eventType.isActive());
 		apiEventType.setModified(eventType.getModified());
 		
 		// We only set the rest of the fields if the entity is active.
-		if(eventType.isActive()) {
+		if (eventType.isActive()) {
 			apiEventType.setAssignedToAvailable(eventType.isAssignedToAvailable());
 			apiEventType.setDescription(eventType.getDescription());
-			apiEventType.setMaster(eventType.isMaster());
+			apiEventType.setMaster(eventType instanceof ThingEventType && ((ThingEventType)eventType).isMaster());
 			apiEventType.setName(eventType.getName());
-			apiEventType.setAction(eventType.getGroup().isAction());
+			apiEventType.setAction(eventType.isActionEventType());
 			apiEventType.setPrintable(eventType.isPrintable());
 			apiEventType.setHasPrintOut(eventType.getGroup().hasPrintOut());
 			apiEventType.setHasObservationPrintOut(eventType.getGroup().hasObservationPrintOut());

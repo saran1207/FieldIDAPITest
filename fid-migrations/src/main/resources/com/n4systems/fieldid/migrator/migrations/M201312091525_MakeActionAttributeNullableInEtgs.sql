@@ -1,0 +1,1 @@
+alter table eventtypegroups change column action action tinyint default null;

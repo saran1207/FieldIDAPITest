@@ -312,6 +312,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public PlaceEventScheduleService placeEventScheduleService() {
+        return new PlaceEventScheduleService();
+    }
+
+    @Bean
     public JobService jobService() {
         return new JobService();
     }

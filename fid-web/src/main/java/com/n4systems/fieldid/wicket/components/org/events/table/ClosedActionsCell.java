@@ -1,18 +1,15 @@
 package com.n4systems.fieldid.wicket.components.org.events.table;
 
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
-import com.n4systems.model.Event;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.PlaceEvent;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -22,17 +19,19 @@ public class ClosedActionsCell extends Panel {
     @SpringBean
     private EventService eventService;
 
-    public ClosedActionsCell(String id, IModel<ThingEvent> eventModel, final EventListPanel eventListPanel) {
+    public ClosedActionsCell(String id, IModel<PlaceEvent> eventModel, final EventListPanel eventListPanel) {
         super(id);
         
-        final ThingEvent event = eventModel.getObject();
+        final PlaceEvent event = eventModel.getObject();
 
         AjaxLink deleteLink;
         add(deleteLink = new AjaxLink<Void>("deleteLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 try{
-                    eventService.retireEvent(event);
+                    // TODO DD: need to write service to handle place events (or events generically?)
+                    throw new IllegalStateException("deleting not supported");
+                    //eventService.retireEvent(event);
                 } catch (Exception e) {
                     error(new FIDLabelModel("error.eventdeleting").getObject());
                     target.add(((AssetEventsPage)getPage()).getFeedbackPanel());

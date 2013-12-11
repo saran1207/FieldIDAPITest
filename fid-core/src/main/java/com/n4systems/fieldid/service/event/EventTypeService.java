@@ -1,10 +1,7 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.ActionEventType;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.ThingEventType;
+import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
@@ -25,6 +22,11 @@ public class EventTypeService extends FieldIdPersistenceService {
 
     public List<ThingEventType> getThingEventTypes() {
         return getThingEventTypes(null, null);
+    }
+
+    public List<PlaceEventType> getPlaceEventTypes(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<PlaceEventType> query = createEventTypeQuery(PlaceEventType.class, eventTypeGroupId, nameFilter);
+        return persistenceService.findAll(query);
     }
 
     public List<ThingEventType> getThingEventTypes(Long eventTypeGroupId, String nameFilter) {

@@ -1,0 +1,1 @@
+alter table place_events drop column place_event_type_id;

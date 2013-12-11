@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-public class EventScheduleService extends FieldIdPersistenceService {
+public class  EventScheduleService extends FieldIdPersistenceService {
 
     private static Logger logger = Logger.getLogger( EventScheduleService.class );
 
@@ -104,12 +104,4 @@ public class EventScheduleService extends FieldIdPersistenceService {
         persistenceService.update(openEvent.getAsset());
         return id;
     }
-
-    @Transactional
-    public Long createSchedule(PlaceEvent openEvent) {
-        Long id = persistenceService.save(openEvent);
-        // TODO : does mobile need any information here???
-        return id;
-    }
-
 }

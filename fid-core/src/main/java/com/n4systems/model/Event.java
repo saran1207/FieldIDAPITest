@@ -1,15 +1,16 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.*;
+import com.n4systems.model.api.Archivable;
+import com.n4systems.model.api.Exportable;
+import com.n4systems.model.api.HasCreatedModifiedPlatform;
+import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.notification.AssigneeNotification;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -28,10 +29,11 @@ import java.util.TimeZone;
 @Entity
 @Table(name = "masterevents")
 @PrimaryKeyJoinColumn(name="event_id")
-public abstract class Event<T extends EventType, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<ThingEvent>, Exportable, LocationContainer, HasCreatedModifiedPlatform {
+public abstract class Event<T extends EventType, V extends Event, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, Archivable, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasOwner {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
-	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.modifiedBy", "subEvents.eventForm.sections", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap"};
+	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.eventForm.sections"};
+    public static final String[] ASSET_EVENT_FIELDS = { "type.supportedProofTests", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap","subEvents.modifiedBy",};
 	
 	public static final SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
@@ -150,10 +152,6 @@ public abstract class Event<T extends EventType, R extends EntityWithTenant> ext
     @Column(name="created_platform", length = 200)
     private String createdPlatform;
 
-    @ManyToOne(fetch=FetchType.EAGER, optional=false)
-    @JoinColumn(name="owner_id", nullable = false)
-    private BaseOrg owner;
-
 	public Event() {
 	}
 
@@ -200,17 +198,6 @@ public abstract class Event<T extends EventType, R extends EntityWithTenant> ext
 
 	public void setBook(EventBook book) {
 		this.book = book;
-	}
-
-	@Override
-	@AllowSafetyNetworkAccess
-	public BaseOrg getOwner() {
-		return owner;
-	}
-	
-	@Override
-	public void setOwner(BaseOrg owner) {
-		this.owner = owner;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -332,19 +319,12 @@ public abstract class Event<T extends EventType, R extends EntityWithTenant> ext
 	    		"\nAssigned To: " + assignedTo +
 	    		"\nState: " + state + 
 	    		"\nDate: " + getDate() +
-	    		"\nOwner: " + getOwner() +
 	    		"\nBook: " + getBook() +
 	    		"\nPerformed By: " + getPerformedBy() + 
 	    		"\nResult: " + getEventResult() +
 	    		"\nSubEvents: " + StringUtils.indent(subEventString, 1);
     }
 
-	@Override
-	@AllowSafetyNetworkAccess
-	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
-		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
-	}
-	
 	// Events are never exported
 	@Override
 	public String getGlobalId() {

@@ -250,7 +250,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		asset.setAssetStatus(event.getAssetStatus());
 	}
 
-	private void ownershipUpdates(Event event, Asset asset) {
+	private void ownershipUpdates(ThingEvent event, Asset asset) {
 		asset.setOwner(event.getOwner());
 		asset.setAdvancedLocation(event.getAdvancedLocation());
 	}

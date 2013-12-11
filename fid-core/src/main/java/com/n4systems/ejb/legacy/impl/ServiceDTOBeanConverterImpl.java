@@ -497,7 +497,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 		return event;
 	}
 
-	private void findOrCreateEventBook(InspectionServiceDTO eventDto, Event event) {
+	private void findOrCreateEventBook(InspectionServiceDTO eventDto, ThingEvent event) {
 		SecurityFilter filter = new TenantOnlySecurityFilter(event.getTenant().getId());
 		
 		EventBook book = null;

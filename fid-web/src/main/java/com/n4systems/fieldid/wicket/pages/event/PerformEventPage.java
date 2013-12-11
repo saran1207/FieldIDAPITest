@@ -28,6 +28,9 @@ public class PerformEventPage extends EventPage {
             if (scheduleId != null) {
                 ThingEvent openEvent = eventService.createEventFromOpenEvent(scheduleId);
                 PostFetcher.postFetchFields(openEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
+                if (openEvent.getType().isThingEventType()) {
+                    PostFetcher.postFetchFields(openEvent, Event.ASSET_EVENT_FIELDS);
+                }
                 ThingEvent clonedEvent = (ThingEvent) openEvent.clone();
                 eventService.populateNewEvent(clonedEvent);
                 event = Model.of(clonedEvent);
@@ -71,7 +74,10 @@ public class PerformEventPage extends EventPage {
         event.getObject().storeTransientCriteriaResults();
         event.getObject().setEventResult(getEventResult());
 
-        FileDataContainer fileDataContainer = proofTestEditPanel.getFileDataContainer();
+        FileDataContainer fileDataContainer = null;
+        if (event.getObject().getType().isThingEventType()) {
+            fileDataContainer = proofTestEditPanel.getFileDataContainer();
+        }
 
         Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, fileAttachments, createEventScheduleBundles());
 

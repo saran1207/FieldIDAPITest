@@ -83,39 +83,16 @@ public class MultiEventGroupSorterTest {
 	@Test
 	public void should_return_a_list_of_event_types_in_alphabeticable_for_the_given_group() {
 		EventTypeGroup group = anEventTypeGroup().withName("group 1").build();
-		EventType typeB = anEventType().named("eventType b").withGroup(group).build();
-        EventType typeA = anEventType().named("eventType a").withGroup(group).build();
-        EventType typeZ = anEventType().named("eventType z").withGroup(group).build();
+		EventType<?> typeB = anEventType().named("eventType b").withGroup(group).build();
+        EventType<?> typeA = anEventType().named("eventType a").withGroup(group).build();
+        EventType<?> typeZ = anEventType().named("eventType z").withGroup(group).build();
 		
-		FluentHashSet<EventType> eventTypes = new FluentHashSet<EventType>(typeB, typeA, typeZ);
-		List<EventType> expectedList = ImmutableList.of(typeA, typeB, typeZ);
+		FluentHashSet<EventType<?>> eventTypes = new FluentHashSet<EventType<?>>(typeB, typeA, typeZ);
+		List<EventType<?>> expectedList = ImmutableList.of(typeA, typeB, typeZ);
 		
 		MultiEventGroupSorter sut = new MultiEventGroupSorter(eventTypes);
 		
 		assertThat(sut.getEventTypesForGroup(group), Matchers.equalTo(expectedList));
 	}
-	
-	@Test
-	public void should_split_list_of_event_types_by_group() {
-		EventTypeGroup group1 = anEventTypeGroup().withName("group 1").build();
-		EventTypeGroup group2 = anEventTypeGroup().withName("group 2").build();
-		
-		EventType typeA = anEventType().named("eventType a").withGroup(group2).build();
-		EventType typeB = anEventType().named("eventType b").withGroup(group1).build();
-		EventType typeZ = anEventType().named("eventType z").withGroup(group1).build();
-		
-		FluentHashSet<EventType> eventTypes = new FluentHashSet<EventType>(typeB, typeA, typeZ);
-		List<EventType> expectedGroup1List = ImmutableList.of(typeB, typeZ);
-		List<EventType> expectedGroup2List = ImmutableList.of(typeA);
-		
-		MultiEventGroupSorter sut = new MultiEventGroupSorter(eventTypes);
-		
-		assertThat(sut.getEventTypesForGroup(group1), Matchers.equalTo(expectedGroup1List));
-		assertThat(sut.getEventTypesForGroup(group2), Matchers.equalTo(expectedGroup2List));
-	}
-	
-	
-	
-	
 	
 }

@@ -93,6 +93,9 @@ div.info h3 {
   font-size: 24px;
   border: none;
 }
+div.info h3 strong {
+  font-weight: normal;
+}
 div.info p {
   color: #666666;
 }
@@ -813,7 +816,7 @@ nav a {
 .bread-crumb ol li + li:before {
   font-family: "fontello", sans-serif;
   content: '\e82f';
-  padding: 0 4px;
+  padding: 0 2px;
 }
 /* TABBED NAVIGATION */
 .nav-tabs {
@@ -1144,6 +1147,9 @@ input:focus {
 form .action-group {
   padding-top: 5px;
 }
+form h3 {
+  margin-top: 30px;
+}
 .label {
   font-weight: 600;
 }
@@ -1156,7 +1162,6 @@ form .action-group {
 }
 label input[type="radio"],
 label input[type="checkbox"] {
-  float: left;
   margin: 0 4px 0 -14px;
 }
 .checkbox {
@@ -1164,7 +1169,7 @@ label input[type="checkbox"] {
 }
 .checkbox label {
   padding-left: 15px;
-  margin: 5px 0;
+  margin: 5px 12px 5px 0;
   line-height: 1;
 }
 .checkbox.inline label {
@@ -1179,45 +1184,44 @@ input[type="checkbox"] {
 }
 .input-combo {
   display: inline-block;
-  width: auto;
   position: relative;
+  border: 1px solid #c7c7c9;
+  margin: 4px 0;
 }
 .input-combo input[type="text"] {
   margin: 0;
-  height: 28px;
-  width: 295px;
+  border: none;
 }
 .input-combo [class^="btn"] {
   position: absolute;
   top: 0;
   right: 0;
+  border-width: 0 0 0 1px;
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+  height: 100%;
 }
 .input-combo.hide {
   display: none;
 }
-.input-combo .file-input {
-  zoom: 1;
-  filter: alpha(opacity=50);
-  opacity: 0;
+.input-combo.file-upload input[type="file"] {
   position: absolute;
   right: 0;
   top: 0;
   bottom: 0;
+  width: 100%;
   z-index: 1;
-  width: 72px;
-}
-.input-combo .file-uploaded {
-  position: relative;
-  padding-right: 75px;
+  zoom: 1;
+  filter: alpha(opacity=50);
+  opacity: 0.01;
+  filter: alpha(opacity=1);
 }
 .input-combo.fluid {
   width: 100%;
 }
 .input-combo.fluid input[type="text"] {
   width: 99%;
-}
-.input-combo.medium input[type="text"] {
-  height: 35px;
 }
 .text-block {
   display: block;
@@ -1260,7 +1264,6 @@ input:disabled {
 }
 .editable-inputs {
   position: relative;
-  margin-bottom: 30px;
 }
 .editable-inputs input[type="text"]:disabled {
   height: auto;
@@ -1269,11 +1272,12 @@ input:disabled {
 }
 .editable-inputs input[type="text"] {
   margin: 1px 0;
-  width: 100%;
+  width: 68%;
+  font-size: 14px;
 }
-.editable-inputs .form-horizontal label,
-.editable-inputs .form-horizontal input {
-  width: auto;
+.editable-inputs .form-horizontal label {
+  width: 30%;
+  text-align: left;
 }
 .editable-inputs .actions {
   position: absolute;
@@ -1637,33 +1641,69 @@ table.comfortable td {
 .pagination-compact .count {
   margin-right: 5px;
 }
-.filter h3 {
-  border: 0;
+.navigation .navigatorLabel {
+  float: left;
+  margin-right: 10px;
+  border-right: 1px solid #c7c7c9;
+  padding-right: 10px;
+}
+.navigation .navigatorLabel span {
   display: inline-block;
-  margin-right: 12px;
+  padding: 6px 0;
+}
+.navigation .navigator a {
+  display: inline-block;
+  padding: 5px 8px;
+  text-decoration: none;
+  border: 1px solid #dddddd;
+  color: #008bd3;
+}
+.navigation .navigator em {
+  display: inline-block;
+  padding: 5px 8px;
+  font-style: normal;
+}
+/* FILTERS - filters.less 
+-------------------------*/
+.filter {
+  *zoom: 1;
+  padding-top: 14px;
+}
+.filter:before,
+.filter:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.filter:after {
+  clear: both;
+}
+.filter:before,
+.filter:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.filter:after {
+  clear: both;
+}
+.filter h3 {
+  border: none;
+  float: left;
+  padding: 2px 0 0 0;
+  margin: 0 12px 0 0;
   font-size: 14px;
 }
 .filter ul {
   list-style-type: none;
-  display: inline-block;
+  float: left;
 }
 .filter ul li {
   display: inline-block;
-  margin-right: 15px;
 }
 .filter ul .selected a {
   text-decoration: none;
   color: #3a3a3a;
-}
-.filter label input[type="radio"],
-.filter label input[type="checkbox"] {
-  margin-left: 0;
-}
-.filter label input[type="checkbox"] {
-  margin-top: 2px;
-}
-.filter label input[type="radio"] {
-  margin-top: 1px;
 }
 .filter .divider {
   padding: 5px 5px 5px 20px;

@@ -2,12 +2,14 @@ package com.n4systems.fieldid.wicket.pages.org;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.PlaceService;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
 import com.n4systems.fieldid.wicket.components.org.events.FilterPanel;
 import com.n4systems.fieldid.wicket.components.org.events.table.ActionsColumn;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
@@ -40,6 +42,7 @@ public class PlaceEventsPage extends PlacePage {
     private EventMapPanel mapPanel;
     private FilterPanel filterPanel;
     private WebMarkupContainer blankSlate;
+    PlaceEventDataProvider dataProvider;
 
     public void setWorkflowStates(List<WorkflowState> workflowStates) {
         this.workflowStates = workflowStates;
@@ -65,19 +68,21 @@ public class PlaceEventsPage extends PlacePage {
 
     private final void init() {
 
-        boolean hasEvents = placeService.countEventsFor(orgModel.getObject()) > 0;
+        boolean hasEvents = placeService.countEventsFor(orgModel.getObject(), null) > 0;
 
         add(filterPanel = new FilterPanel("filterPanel", orgModel, workflowStates) {
             @Override
             public void onFilterSelectionChanged(AjaxRequestTarget target) {
-                PlaceEventsPage.this.setWorkflowStates(getWorkflowStates());
+                workflowStates = getWorkflowStates();
+                PlaceEventsPage.this.dataProvider.setWorkflowStates(getWorkflowStates());
                 target.add(eventPanel);
             }
         });
         filterPanel.setOutputMarkupPlaceholderTag(true);
         filterPanel.setVisible(hasEvents);
 
-        add(eventPanel = new EventListPanel("eventPanel", new PlaceEventDataProvider("completedDate", SortOrder.DESCENDING)) {
+        dataProvider = new PlaceEventDataProvider("completedDate", SortOrder.DESCENDING, workflowStates);
+        add(eventPanel = new EventListPanel("eventPanel", dataProvider) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends Event>> columns) {
                 //TODO add place status
@@ -103,7 +108,7 @@ public class PlaceEventsPage extends PlacePage {
                 filterPanel.setVisible(true);
                 target.add(eventPanel, mapPanel, filterPanel);
             }
-        });
+        }.add(new TipsyBehavior(new FIDLabelModel("label.list"), TipsyBehavior.Gravity.NW)));
 
         add(new AjaxLink<Void>("mapLink") {
             @Override
@@ -115,7 +120,7 @@ public class PlaceEventsPage extends PlacePage {
                 target.add(mapPanel);
                 target.add(eventPanel, mapPanel, filterPanel);
             }
-        });
+        }.add(new TipsyBehavior(new FIDLabelModel("label.map"), TipsyBehavior.Gravity.NW)));
 
         add(blankSlate = new WebMarkupContainer("blankSlate"));
         blankSlate.setOutputMarkupPlaceholderTag(true);
@@ -127,8 +132,6 @@ public class PlaceEventsPage extends PlacePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-
-        response.renderCSSReference("style/newCss/places.css");
 
         //Needs to be included because the map panel is initially hidden.
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
@@ -143,20 +146,23 @@ public class PlaceEventsPage extends PlacePage {
 
     private class PlaceEventDataProvider extends FieldIDDataProvider<Event> {
 
-        public PlaceEventDataProvider(String order, SortOrder sortOrder) {
+        private List<WorkflowState> states;
+
+        public PlaceEventDataProvider(String order, SortOrder sortOrder, List<WorkflowState> workflowStates) {
             setSort(order, sortOrder);
+            this.states = workflowStates;
         }
 
         @Override
         public Iterator<? extends Event> iterator(int first, int count) {
-            List<? extends Event> eventsList = placeService.getEventsFor(orgModel.getObject(), getSort().getProperty(), getSort().isAscending(), workflowStates);
+            List<? extends Event> eventsList = placeService.getEventsFor(orgModel.getObject(), getSort().getProperty(), getSort().isAscending(), states);
             eventsList = eventsList.subList(first, first + count);
             return eventsList.iterator();
         }
 
         @Override
         public int size() {
-            return placeService.countEventsFor(orgModel.getObject());
+            return placeService.countEventsFor(orgModel.getObject(), states);
         }
 
         @Override
@@ -167,6 +173,10 @@ public class PlaceEventsPage extends PlacePage {
                     return object;
                 }
             };
+        }
+
+        public void setWorkflowStates(List<WorkflowState> workflowStates) {
+            this.states = workflowStates;
         }
     }
 }

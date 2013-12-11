@@ -83,6 +83,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         return new PageHolder<K>(pageResults, totalResultCount);
     }
 
+    // TODO: This is redundant and needs to be refactored back to the TextOrFilterSearchService only.
     private List<M> findItemsInSelection(T criteriaModel, int pageNumber, int pageSize) {
 
         int beginIndex = pageNumber * pageSize;

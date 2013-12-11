@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "eventtypes")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class EventType extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
+public abstract class EventType<T extends EventType> extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable, SecurityEnhanced<T> {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;
 	

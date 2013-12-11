@@ -2,6 +2,11 @@ ${action.setPageType('event_type', 'list')!}
 
 <head>
 	<@n4.includeStyle href="listFilter" type="page"/>
+    <style>
+        #typeFilter {
+            width:80px;
+        }
+    </style>
 </head>
 
 <div class="listFilter quickForm" >
@@ -12,6 +17,7 @@ ${action.setPageType('event_type', 'list')!}
 	</div>
 	<@s.form id="listFilterForm" method="get">
 		<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
+        <@s.select key="label.type" name="typeFilter" id="typeFilter" list="types" headerKey="" headerValue="All" labelposition="left"/>
 		<@s.select key="label.eventtypegroup" name="groupFilter" id="groupFilter" list="eventTypeGroups" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
 		<div class="formAction filterAction">
 			<@s.submit key="hbutton.filter" />

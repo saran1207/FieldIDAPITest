@@ -1,14 +1,29 @@
 package com.n4systems.fieldid.wicket.components.org;
 
+import com.n4systems.fieldid.service.event.PlaceEventScheduleService;
 import com.n4systems.fieldid.service.org.PlaceService;
+import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
+import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForPlaceModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.org.PlaceEventTypesPage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
+import com.n4systems.model.EventResult;
+import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.collections.PrioritizedList;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -17,9 +32,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Comparator;
+import java.util.Set;
 
 public class PlaceActionGroup extends Panel {
 
@@ -27,28 +44,48 @@ public class PlaceActionGroup extends Panel {
 
     private @SpringBean PlaceService placeService;
     private @SpringBean DateService dateService;
+    private @SpringBean UserService userService;
+    private @SpringBean PlaceEventScheduleService placeEventScheduleService;
 
     private final IModel<BaseOrg> model;
 
+    private PlaceEvent scheduleToAdd;
+
+    private SchedulePicker<PlaceEvent> schedulePicker;
+
     public PlaceActionGroup(String id, final IModel<BaseOrg> model) {
-        super(id);
+        super(id, model);
 
         this.model = model;
 
-        add(new Link<Void>("scheduleLink") {
-            @Override public void onClick() {
+        scheduleToAdd = createNewSchedule(model.getObject());
+
+        schedulePicker = new SchedulePicker<PlaceEvent>("schedulePicker", new PropertyModel<PlaceEvent>(this, "scheduleToAdd"), new EventTypesForPlaceModel(model)){
+            @Override
+            protected void onPickComplete(AjaxRequestTarget target) {
+                placeEventScheduleService.createSchedule(scheduleToAdd);
+                scheduleToAdd = createNewSchedule(model.getObject());
+                //TODO refresh containing page
+            }
+        };
+
+        add(schedulePicker);
+
+        add(new AjaxLink<Void>("scheduleLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                schedulePicker.show(target);
             }
         });
 
-        add(new ListView<ThingEvent>("scheduled", new ScheduledEventsMenuModel()) {
-            @Override protected void populateItem(ListItem<ThingEvent> item) {
-                ThingEvent event = item.getModelObject();
+        add(new ListView<PlaceEvent>("scheduled", new ScheduledEventsMenuModel()) {
+            @Override protected void populateItem(ListItem<PlaceEvent> item) {
+                PlaceEvent event = item.getModelObject();
                 ScheduledEventsMenuModel listModel = (ScheduledEventsMenuModel) getModel();
                 if (event==null) {
                     item.add(new Link("event") {
-                        @Override
-                        public void onClick() {
-                            setResponsePage(new PlaceEventsPage(model));
+                        @Override public void onClick() {
+                            setResponsePage(PlaceEventsPage.class, PageParametersBuilder.id(getOrg().getId()));
                         }
                     }
                     .add(new Label("name", "View All " + listModel.getTotalEvents()))
@@ -73,8 +110,13 @@ public class PlaceActionGroup extends Panel {
 
         add(new Link<Void>("archiveLink") {
             @Override public void onClick() {
+                placeService.archive(getOrg());
+                setResponsePage(OrgViewPage.class);
             }
-        });
+            @Override public boolean isVisible() {
+                return getOrg() instanceof CustomerOrg || getOrg() instanceof DivisionOrg;
+            }
+        }.add(new ConfirmBehavior(new FIDLabelModel("msg.confirm_archive_org",getOrg().getDisplayName()))));
 
         add(new Link<Void>("recurringSchedulesLink") {
             @Override public void onClick() {
@@ -83,29 +125,39 @@ public class PlaceActionGroup extends Panel {
 
         add(new Link<Void>("eventTypesLink") {
             @Override public void onClick() {
+                setResponsePage(PlaceEventTypesPage.class,PageParametersBuilder.id(getOrg().getId()));
             }
         });
+    }
+
+    private PlaceEvent createNewSchedule(BaseOrg org) {
+        PlaceEvent schedule = new PlaceEvent();
+        schedule.setEventResult(EventResult.VOID);
+        schedule.setPlace(org);
+        schedule.setTenant(FieldIDSession.get().getSessionUser().getTenant());
+        Set<UserGroup> groups = userService.getUser(FieldIDSession.get().getSessionUser().getId()).getGroups();
+        if (!groups.isEmpty()) {
+            schedule.setAssignedUserOrGroup(groups.iterator().next());
+        }
+        return schedule;
     }
 
     private BaseOrg getOrg() {
         return model.getObject();
     }
 
-
-
     // TODO DD : change this to placeEvent.
-    class ScheduledEventsMenuModel extends LoadableDetachableModel<PrioritizedList<ThingEvent>> {
+    class ScheduledEventsMenuModel extends LoadableDetachableModel<PrioritizedList<PlaceEvent>> {
 
         public int getTotalEvents() {
             return getObject().getOriginalSize();
         }
 
         @Override
-        protected PrioritizedList<ThingEvent> load() {
-            PrioritizedList<ThingEvent> result = new PrioritizedList<ThingEvent>(placeService.getOpenEventsFor(model.getObject()), MAX_MENU_ITEMS,
-                    new Comparator<ThingEvent>() {
-                        @Override
-                        public int compare(ThingEvent e1, ThingEvent e2) {
+        protected PrioritizedList<PlaceEvent> load() {
+            PrioritizedList<PlaceEvent> result = new PrioritizedList<PlaceEvent>(placeService.getOpenEventsFor(model.getObject()), MAX_MENU_ITEMS,
+                    new Comparator<PlaceEvent>() {
+                        @Override public int compare(PlaceEvent e1, PlaceEvent e2) {
                             if (e1 == null) {
                                 return e2 == null ? 0 : -1;
                             }

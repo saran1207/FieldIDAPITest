@@ -18,9 +18,9 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 	@Column(length=2500)
 	private String comments;
 
-    @ManyToOne
+    @ManyToOne(targetEntity = EventType.class)
     @JoinColumn(name="type_id")
-    private EventType type;
+    private EventType<T> type;
 	
     @ManyToOne(fetch=FetchType.EAGER, optional=true)
     @JoinColumn(name="eventform_id")
@@ -247,11 +247,11 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
     public abstract R getTarget();
     public abstract void setTarget(R target);
 
-    public EventType getType() {
+    public EventType<T> getType() {
         return type;
     }
 
-    public void setType(EventType type) {
+    public void setType(EventType<T> type) {
         this.type = type;
     }
 }

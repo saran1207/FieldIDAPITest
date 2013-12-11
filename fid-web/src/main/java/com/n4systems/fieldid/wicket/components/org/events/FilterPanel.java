@@ -21,6 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FilterPanel extends Panel {
@@ -32,11 +33,9 @@ public class FilterPanel extends Panel {
     private WebMarkupContainer openFilterOptions;
     private WebMarkupContainer typeFilterOptions;
 
-    private boolean open = true;
-    private boolean completed = true;
-    private boolean closed = true;
-
-    private List<WorkflowState> workflowStates;
+    private boolean open;
+    private boolean completed;
+    private boolean closed;
 
     private DueDateState dueDateState;
     private ScheduledState scheduledState;
@@ -44,7 +43,14 @@ public class FilterPanel extends Panel {
     public FilterPanel(String id, IModel<BaseOrg> orgModel, List<WorkflowState> workflowStates) {
         super(id, orgModel);
 
-        this.workflowStates = workflowStates;
+        for (WorkflowState state: workflowStates) {
+            if(state.equals(WorkflowState.OPEN))
+                open = true;
+            if(state.equals(WorkflowState.COMPLETED))
+                completed = true;
+            if(state.equals(WorkflowState.CLOSED))
+                closed = true;
+        }
 
         add(completedFilterOptions = new RadioGroup<ScheduledState>("completedFilterOptions", new PropertyModel<ScheduledState>(this, "ScheduledState")));
         completedFilterOptions.add(new AjaxFormChoiceComponentUpdatingBehavior() {
@@ -95,7 +101,6 @@ public class FilterPanel extends Panel {
                 typeFilterOptions.setVisible(open || completed || closed);
                 target.add(openFilterOptions, typeFilterOptions);
 */
-                updateWorkflowStateList(WorkflowState.OPEN, open);
                 onFilterSelectionChanged(target);
             }
         });
@@ -109,7 +114,6 @@ public class FilterPanel extends Panel {
                 typeFilterOptions.setVisible(open || completed || closed);
                 target.add(completedFilterOptions, typeFilterOptions);
 */
-                updateWorkflowStateList(WorkflowState.COMPLETED, completed);
                 onFilterSelectionChanged(target);
             }
         });
@@ -122,22 +126,26 @@ public class FilterPanel extends Panel {
                 typeFilterOptions.setVisible(open || completed || closed);
                 target.add(typeFilterOptions);
 */
-                updateWorkflowStateList(WorkflowState.CLOSED, closed);
                 onFilterSelectionChanged(target);
             }
         });
     }
 
-    private void updateWorkflowStateList(WorkflowState state, boolean add) {
-        if(add && !workflowStates.contains(state)) {
-            workflowStates.add(state);
-        } else {
-            workflowStates.remove(state);
-        }
-    }
-
     public List<WorkflowState> getWorkflowStates() {
-        return workflowStates;
+        List<WorkflowState> states = new ArrayList<WorkflowState>();
+
+        if(open)
+            states.add(WorkflowState.OPEN);
+        if(completed)
+            states.add(WorkflowState.COMPLETED);
+        if(closed)
+            states.add(WorkflowState.CLOSED);
+
+        if (states.size() == 0) {
+            states.add(WorkflowState.NONE);
+        }
+
+        return states;
     }
 
     public void onFilterSelectionChanged(AjaxRequestTarget target) {}

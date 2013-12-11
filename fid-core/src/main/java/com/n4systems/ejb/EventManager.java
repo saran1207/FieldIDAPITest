@@ -37,6 +37,6 @@ public interface EventManager {
 
 	public ThingEvent attachFilesToSubEvent(ThingEvent event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException;
 
-	public ThingEvent retireEvent(ThingEvent event, Long userId);
+	public Event retireEvent(Event event, Long userId);
 
 }
