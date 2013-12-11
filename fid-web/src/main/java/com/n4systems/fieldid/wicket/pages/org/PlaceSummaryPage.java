@@ -48,7 +48,6 @@ public class PlaceSummaryPage extends PlacePage {
     public PlaceSummaryPage(PageParameters params) {
         super(params);
 
-        //add(new GoogleMap("map",ProxyModel.of(model, on(BaseOrg.class).getGpsLocation())));
         add(map = new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
 
         add(createFutureEventsListView());

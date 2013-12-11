@@ -43,6 +43,11 @@ public abstract class PlacePage extends FieldIDTemplatePage {
     @Override
     protected void addBreadCrumbBar(String breadCrumbBarId) {
         BaseOrg org = orgModel.getObject();
+        List<NavigationItem> navItems = createNavItems(org);
+        add(new BreadCrumbBar(breadCrumbBarId, navItems.toArray(new NavigationItem[0])));
+    }
+
+    protected List<NavigationItem> createNavItems(BaseOrg org) {
         List<NavigationItem> navItems = Lists.newArrayList();
 
         navItems.add(aNavItem().label("label.places").page(OrgViewPage.class).build());
@@ -56,8 +61,7 @@ public abstract class PlacePage extends FieldIDTemplatePage {
         if(org.getDivisionOrg() != null) {
             navItems.add(aNavItem().label(new PropertyModel<String>(org.getDivisionOrg(), "name")).page(this.getClass()).params(PageParametersBuilder.id(org.getDivisionOrg().getId())).build());
         }
-
-        add(new BreadCrumbBar(breadCrumbBarId, navItems.toArray(new NavigationItem[0])));
+        return navItems;
     }
 
     @Override

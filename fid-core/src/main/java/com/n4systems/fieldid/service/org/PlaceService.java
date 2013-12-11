@@ -152,4 +152,8 @@ public class PlaceService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
+    public List<PlaceEventType> getEventTypes() {
+        QueryBuilder<PlaceEventType> query = createTenantSecurityBuilder(PlaceEventType.class);
+        return persistenceService.findAll(query);
+    }
 }
