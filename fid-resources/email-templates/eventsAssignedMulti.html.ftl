@@ -81,7 +81,7 @@
                 ${event.type.name}
                 <br/>
                 <br/>
-                <#if event.type.group.action && event.priority?exists>
+                <#if event.type.actionEventType && event.priority?exists>
                     ${event.priority.name}
                     <br/>
                     <p>
@@ -94,7 +94,7 @@
                 </a>
                 <br/>
                 <br/>
-                <#if event.type.group.action>
+                <#if event.type.actionEventType>
                     Assigned by ${event.modifiedBy.fullName}
                 </#if>
             </div>

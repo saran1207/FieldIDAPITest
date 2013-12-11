@@ -191,8 +191,12 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
 
-            proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event.getObject().getThingType(), proofTestInfo));
-            proofTestContainer.setVisible(supportsProofTests());
+            if (event.getObject().getType().isThingEventType()) {
+                proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event.getObject().getThingType(), proofTestInfo));
+                proofTestContainer.setVisible(supportsProofTests());
+            } else {
+                proofTestContainer.setVisible(false);
+            }
 
             add(proofTestContainer);
 

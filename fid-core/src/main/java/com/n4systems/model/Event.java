@@ -1,6 +1,9 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.*;
+import com.n4systems.model.api.Archivable;
+import com.n4systems.model.api.Exportable;
+import com.n4systems.model.api.HasCreatedModifiedPlatform;
+import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
@@ -29,7 +32,8 @@ import java.util.TimeZone;
 public abstract class Event<T extends EventType, V extends Event, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, Archivable, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasOwner {
 	private static final long serialVersionUID = 1L;
 	public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
-	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.modifiedBy", "subEvents.eventForm.sections", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap"};
+	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.eventForm.sections"};
+    public static final String[] ASSET_EVENT_FIELDS = { "type.supportedProofTests", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap","subEvents.modifiedBy",};
 	
 	public static final SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);

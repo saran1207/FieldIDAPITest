@@ -68,7 +68,7 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         ThingEvent enhanced = EntitySecurityEnhancer.enhanceEntity(this, level);
         enhanced.setBook(enhance(getBook(), level));
         enhanced.setPerformedBy(enhance(getPerformedBy(), level));
-        enhanced.setType(enhance((ThingEventType)getType(), level));
+        enhanced.setType(enhance(getType(), level));
         enhanced.setAsset(enhance(getAsset(), level));
         enhanced.setOwner(enhance(getOwner(), level));
 

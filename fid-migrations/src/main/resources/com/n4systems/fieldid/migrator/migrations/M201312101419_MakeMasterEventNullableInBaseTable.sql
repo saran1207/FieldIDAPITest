@@ -1,0 +1,1 @@
+alter table eventtypes change column master master tinyint default false;

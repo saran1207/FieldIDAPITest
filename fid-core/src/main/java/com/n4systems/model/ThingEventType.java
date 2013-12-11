@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "thing_event_types")
 @PrimaryKeyJoinColumn(name="id")
-public class ThingEventType extends EventType implements SecurityEnhanced<ThingEventType> {
+public class ThingEventType extends EventType<ThingEventType> {
 
     public ThingEventType() {}
 

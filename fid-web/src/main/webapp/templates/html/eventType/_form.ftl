@@ -37,10 +37,7 @@
 <div class="infoSet">
 	<@s.label cssClass="label" value="${action.getText('label.group')}:" />
 	<span class="fieldHolder">
-		<@s.select emptyOption="true" name="group">
-            <@s.optgroup label="Event Groups" list="eventGroups" listKey="id" listValue="name"/>
-		    <@s.optgroup label="Action Groups" list="actionGroups" listKey="id" listValue="name" />
-        </@s.select>
+		<@s.select emptyOption="true" name="group" list="eventGroups" listValue="name" listKey="id" />
 	</span>
 </div>
 <div class="infoSet">
@@ -50,7 +47,7 @@
 	</span>
 </div>
 
-<#if !action.isAction()>
+<#if eventType.thingEventType>
     <div class="infoSet">
         <@s.label cssClass="label" value="${action.getText('label.masterevent')}:" />
         <span class="fieldHolder">
@@ -67,7 +64,7 @@
         </div>
     </#if>
 </#if>
-<#if securityGuard.proofTestIntegrationEnabled>
+<#if securityGuard.proofTestIntegrationEnabled && eventType.thingEventType>
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.supportedprooftesttype"/></th>

@@ -3,6 +3,7 @@ package com.n4systems.model;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
+import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.persistence.localization.Localized;
@@ -15,7 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "eventtypes")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class EventType extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
+public abstract class EventType<T extends EventType> extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable, SecurityEnhanced<T> {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;
 	

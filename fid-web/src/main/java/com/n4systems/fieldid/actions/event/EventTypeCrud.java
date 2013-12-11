@@ -11,10 +11,9 @@
  import com.n4systems.fieldid.viewhelpers.TrimmedString;
  import com.n4systems.fileprocessing.ProofTestType;
  import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
- import com.n4systems.model.EventType;
- import com.n4systems.model.EventTypeGroup;
- import com.n4systems.model.ThingEventType;
+ import com.n4systems.model.*;
  import com.n4systems.model.eventtype.EventTypeCopier;
+ import com.n4systems.persistence.utils.PostFetcher;
  import com.n4systems.security.Permissions;
  import com.n4systems.util.ListingPair;
  import com.n4systems.util.persistence.QueryBuilder;
@@ -24,6 +23,7 @@
  import com.opensymphony.xwork2.validator.annotations.Validations;
  import org.apache.log4j.Logger;
  import org.apache.struts2.interceptor.validation.SkipValidation;
+ import org.springframework.beans.factory.annotation.Autowired;
 
  import java.util.*;
 
@@ -31,6 +31,9 @@
 public class EventTypeCrud extends AbstractCrud {
 	private static final long serialVersionUID = 1L;
 	private Logger logger = Logger.getLogger(EventTypeCrud.class);
+
+    @Autowired
+    private com.n4systems.fieldid.service.PersistenceService persistenceService;
 
     private static final String ACTION_TYPE="Action";
     private static final String ASSET_TYPE="Asset";
@@ -40,12 +43,13 @@ public class EventTypeCrud extends AbstractCrud {
     private List<EventTypeGroup> eventGroups;
     private List<EventTypeGroup> actionGroups;
 	private List<? extends EventType> eventTypes;
-	private ThingEventType eventType;
+	private EventType eventType;
 	private List<TrimmedString> infoFieldNames;
 	private String saveAndAdd;
 	private Map<String, Boolean> types;
 	private EventTypeArchiveSummary archiveSummary;
     private String typeFilter;
+    private String newEventType;
 	
 	private boolean assignedToAvailable = false;
 	
@@ -65,16 +69,26 @@ public class EventTypeCrud extends AbstractCrud {
 
 	@Override
 	protected void initMemberFields() {
-		eventType = new ThingEventType();
+        if (ACTION_TYPE.equals(newEventType)) {
+            eventType = new ActionEventType();
+        } else if (PLACE_TYPE.equals(newEventType)) {
+            eventType = new PlaceEventType();
+        } else {
+            eventType = new ThingEventType();
+        }
 	}
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-		QueryBuilder<ThingEventType> query = new QueryBuilder<ThingEventType>(ThingEventType.class, getSecurityFilter());
+		QueryBuilder<EventType> query = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
 		query.addSimpleWhere("id", uniqueId);
-		query.addPostFetchPaths("eventForm.sections", "supportedProofTests", "infoFieldNames");
-		eventType = persistenceManager.find(query);
-	}
+//		query.addPostFetchPaths("eventForm.sections", "supportedProofTests", "infoFieldNames");
+		eventType = persistenceService.find(query);
+        PostFetcher.postFetchFields(eventType, "eventForm.sections", "infoFieldNames");
+        if (eventType.isThingEventType()) {
+            PostFetcher.postFetchFields(eventType, "supportedProofTests");
+        }
+    }
 
 	private void testRequiredEntities(boolean existing) {
 		if (eventType == null || (existing && eventType.isNew())) {
@@ -124,8 +138,10 @@ public class EventTypeCrud extends AbstractCrud {
 
 		eventType.setInfoFieldNames(TrimmedString.mapFromTrimmedStrings(infoFieldNames));
 
-		processSupportedTypes();
-		
+        if (eventType.isThingEventType()) {
+            processSupportedTypes();
+        }
+
 		processAssignedToAvailable();
 
 		StrutsListHelper.clearNulls(eventType.getInfoFieldNames());
@@ -248,16 +264,9 @@ public class EventTypeCrud extends AbstractCrud {
 
     public List<EventTypeGroup> getEventGroups() {
         if (eventGroups == null) {
-            eventGroups = eventTypeGroupService.getEventTypeGroupsExcludingActions();
+            eventGroups = eventTypeGroupService.getAllEventTypeGroups();
         }
         return eventGroups;
-    }
-
-    public List<EventTypeGroup> getActionGroups() {
-        if (actionGroups == null) {
-            actionGroups = eventTypeGroupService.getEventTypeGroupsActionsOnly();
-        }
-        return actionGroups;
     }
 
     public void setEventType(ThingEventType eventType) {
@@ -300,7 +309,7 @@ public class EventTypeCrud extends AbstractCrud {
 				types.put(type.name(), false);
 			}
 
-			for (ProofTestType type : eventType.getSupportedProofTests()) {
+			for (ProofTestType type : ((ThingEventType)eventType).getSupportedProofTests()) {
 				types.put(type.name(), true);
 			}
 		}
@@ -309,7 +318,7 @@ public class EventTypeCrud extends AbstractCrud {
 	}
 
 	private void processSupportedTypes() {
-		Set<ProofTestType> supportedTypes = eventType.getSupportedProofTests();
+		Set<ProofTestType> supportedTypes = ((ThingEventType)eventType).getSupportedProofTests();
 		supportedTypes.clear();
 		// convert the map of types back to a list of prooftestTypes
 		if (types != null && !types.isEmpty()) {
@@ -335,11 +344,11 @@ public class EventTypeCrud extends AbstractCrud {
 	}
 
 	public boolean isMaster() {
-		return eventType.isMaster();
+		return ((ThingEventType)eventType).isMaster();
 	}
 
 	public void setMaster(boolean master) {
-		eventType.setMaster(master);
+        ((ThingEventType)eventType).setMaster(master);
 	}
 
 	public void setSaveAndAdd(String saveAndAdd) {
@@ -407,4 +416,25 @@ public class EventTypeCrud extends AbstractCrud {
     public void setTypeFilter(String type) {
         this.typeFilter = type;
     }
+
+    public String getNewEventType() {
+        return newEventType;
+    }
+
+    public void setNewEventType(String newEventType) {
+        this.newEventType = newEventType;
+    }
+
+    public String getAssetTypeString() {
+        return ASSET_TYPE;
+    }
+
+    public String getPlaceTypeString() {
+        return PLACE_TYPE;
+    }
+
+    public String getActionTypeString() {
+        return ACTION_TYPE;
+    }
+
 }

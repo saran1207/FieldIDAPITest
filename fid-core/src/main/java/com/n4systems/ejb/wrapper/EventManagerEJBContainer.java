@@ -147,7 +147,7 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
 		}
 	}
 
-	public ThingEvent retireEvent(ThingEvent event, Long userId) {
+	public Event retireEvent(Event event, Long userId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
 		Transaction transaction = transactionManager.startTransaction();
 		try {
