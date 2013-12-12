@@ -9,9 +9,9 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.Address;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.PlaceEvent;
-import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -44,17 +44,23 @@ public class PlaceSummaryPage extends PlacePage {
 
 
     private final GoogleMap map;
+    private WebMarkupContainer futureEventsListContainer;
+    private ListView<PlaceEvent> futureEventsListView;
 
     public PlaceSummaryPage(PageParameters params) {
         super(params);
 
         add(map = new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
 
-        add(createFutureEventsListView());
+        add(futureEventsListContainer = new WebMarkupContainer("eventsListContainer"));
+        futureEventsListContainer.add(futureEventsListView = createFutureEventsListView());
+        futureEventsListContainer.setOutputMarkupPlaceholderTag(true);
+        futureEventsListContainer.setVisible(futureEventsListView.getList().size() > 0);
 
         add(new Link("viewAll") {
-            @Override public void onClick() {
-                setResponsePage(new PlaceEventsPage(PageParametersBuilder.id(getOrg().getId()).add(PlaceEventsPage.OPEN_PARAM,"true")));
+            @Override
+            public void onClick() {
+                setResponsePage(new PlaceEventsPage(PageParametersBuilder.id(getOrg().getId()).add(PlaceEventsPage.OPEN_PARAM, "true")));
             }
         });
 
@@ -81,11 +87,17 @@ public class PlaceSummaryPage extends PlacePage {
     }
 
     @Override
+    protected void refreshContent(AjaxRequestTarget target) {
+        futureEventsListContainer.setVisible(futureEventsListView.getList().size() > 0);
+        target.add(futureEventsListContainer);
+    }
+
+    @Override
     public String getMainCss() {
         return "place-summary";
     }
 
-    private Component createFutureEventsListView() {
+    private ListView<PlaceEvent> createFutureEventsListView() {
         final FutureEventsModel model = new FutureEventsModel();
         ListView<PlaceEvent> view = new ListView<PlaceEvent>("events", model ) {
             @Override protected void populateItem(ListItem<PlaceEvent> item) {

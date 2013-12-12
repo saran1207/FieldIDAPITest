@@ -65,7 +65,7 @@ public class PlaceActionGroup extends Panel {
             protected void onPickComplete(AjaxRequestTarget target) {
                 placeEventScheduleService.createSchedule(scheduleToAdd);
                 scheduleToAdd = createNewSchedule(model.getObject());
-                //TODO refresh containing page
+                refreshContainingPage(target);
             }
         };
 
@@ -129,6 +129,8 @@ public class PlaceActionGroup extends Panel {
             }
         });
     }
+
+    protected void refreshContainingPage(AjaxRequestTarget target) {};
 
     private PlaceEvent createNewSchedule(BaseOrg org) {
         PlaceEvent schedule = new PlaceEvent();

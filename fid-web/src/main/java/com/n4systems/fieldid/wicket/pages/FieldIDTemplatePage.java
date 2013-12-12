@@ -121,6 +121,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         // TODO DD : refactor this...override
         addCssContainers();
 
+        add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
 
         add(createHeaderLink("headerLink", "headerLinkLabel"));

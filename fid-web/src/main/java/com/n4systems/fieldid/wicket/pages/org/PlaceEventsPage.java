@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.org.events.FilterPanel;
 import com.n4systems.fieldid.wicket.components.org.events.table.ActionsColumn;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
@@ -42,7 +43,8 @@ public class PlaceEventsPage extends PlacePage {
     private EventMapPanel mapPanel;
     private FilterPanel filterPanel;
     private WebMarkupContainer blankSlate;
-    PlaceEventDataProvider dataProvider;
+    private PlaceEventDataProvider dataProvider;
+    private FIDFeedbackPanel feedbackPanel;
 
     public void setWorkflowStates(List<WorkflowState> workflowStates) {
         this.workflowStates = workflowStates;
@@ -66,9 +68,16 @@ public class PlaceEventsPage extends PlacePage {
         init();
     }
 
+    @Override
+    protected void refreshContent(AjaxRequestTarget target) {
+        target.add(eventPanel, mapPanel);
+    }
+
     private final void init() {
 
         boolean hasEvents = placeService.countEventsFor(orgModel.getObject(), null) > 0;
+
+        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
         add(filterPanel = new FilterPanel("filterPanel", orgModel, workflowStates) {
             @Override
@@ -142,6 +151,10 @@ public class PlaceEventsPage extends PlacePage {
     @Override
     public String getMainCss() {
         return "place-event";
+    }
+
+    public FIDFeedbackPanel getFeedbackPanel() {
+        return feedbackPanel;
     }
 
     private class PlaceEventDataProvider extends FieldIDDataProvider<Event> {
