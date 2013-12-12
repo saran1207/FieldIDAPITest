@@ -2,9 +2,10 @@ package com.n4systems.services.admin;
 
 import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.admin.AdminUserType;
-import com.n4systems.services.SecurityService;
+import com.n4systems.fieldid.service.SecurityService;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -25,7 +26,7 @@ public class AdminUserServiceTest extends FieldIdServiceTest {
 		char[] salt = new char[] {'a', 'b', 'c'};
 		char[] pass = new char[] {'d', 'e', 'f'};
 
-		expect(securityService.generateSalt(128)).andReturn(salt);
+		expect(securityService.generateSalt(64)).andReturn(salt);
 		expect(securityService.hashSaltedPassword("helloworld", salt)).andReturn(pass);
 
 		expect(persistenceService.save(anyObject(AdminUser.class))).andReturn(1L);

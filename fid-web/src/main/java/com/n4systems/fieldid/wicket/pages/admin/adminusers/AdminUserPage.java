@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
 import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
 import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.admin.AdminUserType;
-import com.n4systems.services.admin.AdminUserService;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;

@@ -49,9 +49,8 @@ public class UserService extends FieldIdPersistenceService {
         return orgUserMap;
     }
 
-    public List<User> getOrgUsers(BaseOrg org, String order, Boolean ascending) {
+    public List<User> getOrgUsers(BaseOrg org, String order, Boolean ascending, int first, int count) {
         QueryBuilder<User> builder = createUserQueryBuilder(false, false);
-
         builder.addSimpleWhere("owner", org);
 
         if (order != null) {
@@ -61,7 +60,7 @@ public class UserService extends FieldIdPersistenceService {
             }
         }
 
-        return persistenceService.findAll(builder);
+        return persistenceService.findAllPaginated(builder, first, count);
     }
 
     public Long countOrgUsers(BaseOrg org) {

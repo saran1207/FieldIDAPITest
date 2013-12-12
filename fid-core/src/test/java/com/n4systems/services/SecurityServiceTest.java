@@ -1,6 +1,7 @@
 package com.n4systems.services;
 
 import com.n4systems.fieldid.junit.FieldIdServiceTest;
+import com.n4systems.fieldid.service.SecurityService;
 import com.n4systems.test.TestMock;
 import com.n4systems.test.TestTarget;
 import org.easymock.Capture;

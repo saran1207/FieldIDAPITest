@@ -1,20 +1,19 @@
-package com.n4systems.services.admin;
+package com.n4systems.fieldid.service.admin;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.SecurityService;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.admin.AdminUserType;
-import com.n4systems.services.SecurityService;
+import com.n4systems.model.admin.SudoPermission;
+import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.mail.MessagingException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AdminUserService extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(AdminUserService.class);
@@ -57,6 +56,11 @@ public class AdminUserService extends FieldIdPersistenceService {
 		return persistenceService.update(adminUser);
 	}
 
+	private boolean passwordMatches(AdminUser user, String password) {
+		char[] hashPass = securityService.hashSaltedPassword(password, user.getSalt());
+		return Arrays.equals(hashPass, user.getPassword());
+	}
+
 	public AdminUser authenticateUser(String email, String password) {
 		if (email == null || password == null) throw new IllegalArgumentException("Email or password cannot be null");
 
@@ -68,8 +72,7 @@ public class AdminUserService extends FieldIdPersistenceService {
 			return null;
 		}
 
-		char[] hashPass = securityService.hashSaltedPassword(password, user.getSalt());
-		return Arrays.equals(hashPass, user.getPassword()) ? user : null;
+		return passwordMatches(user, password) ? user : null;
 	}
 
 	public List<AdminUser> findAllAdminUsers() {
@@ -106,6 +109,39 @@ public class AdminUserService extends FieldIdPersistenceService {
 	public AdminUser enableUser(AdminUser adminUser, boolean enabled) {
 		adminUser.setEnabled(enabled);
 		return persistenceService.update(adminUser);
+	}
+
+	public void createSudoPermission(AdminUser adminUser, User user) {
+		QueryBuilder<SudoPermission> query = new QueryBuilder<SudoPermission>(SudoPermission.class);
+		query.addWhere(WhereClauseFactory.create("adminUser", adminUser));
+		query.addWhere(WhereClauseFactory.create("user", user));
+		SudoPermission permission = persistenceService.find(query);
+
+		if (permission != null) {
+			permission.setCreated(new Date());
+			persistenceService.update(permission);
+		} else {
+			permission = new SudoPermission();
+			permission.setAdminUser(adminUser);
+			permission.setUser(user);
+			persistenceService.save(permission);
+		}
+	}
+
+	public User attemptSudoAuthentication(String tenantName, String userId, String password) {
+		QueryBuilder<SudoPermission> query = new QueryBuilder<SudoPermission>(SudoPermission.class);
+		query.addWhere(WhereClauseFactory.create("user.tenant.name", tenantName));
+		query.addWhere(WhereClauseFactory.create("user.userID", userId));
+		List<SudoPermission> permissions = persistenceService.findAll(query);
+
+		SudoPermission allowedPermission = null;
+		for (SudoPermission permission: permissions) {
+			if (passwordMatches(permission.getAdminUser(), password)) {
+				allowedPermission = permission;
+				break;
+			}
+		}
+		return (allowedPermission != null) ? allowedPermission.getUser() : null;
 	}
 
 }

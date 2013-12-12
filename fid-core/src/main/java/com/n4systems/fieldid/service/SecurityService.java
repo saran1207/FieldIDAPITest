@@ -1,4 +1,4 @@
-package com.n4systems.services;
+package com.n4systems.fieldid.service;
 
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;

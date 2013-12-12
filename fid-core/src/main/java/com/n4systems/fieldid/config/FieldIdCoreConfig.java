@@ -59,8 +59,9 @@ import com.n4systems.persistence.listeners.LocalizationListener;
 import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
-import com.n4systems.services.SecurityService;
-import com.n4systems.services.admin.AdminUserService;
+import com.n4systems.fieldid.service.SecurityService;
+import com.n4systems.fieldid.service.admin.AdminSecurityService;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.services.date.DateService;
@@ -738,6 +739,11 @@ public class FieldIdCoreConfig {
 		} catch (GeneralSecurityException e) {
 			throw new SecurityException("Unable to create SHA-512 MessageDigest", e);
 		}
+	}
+
+	@Bean
+	public AdminSecurityService adminSecurityService() {
+		return new AdminSecurityService();
 	}
     @Bean
     public SendForgotUserEmailService sendForgotUserEmailService() {

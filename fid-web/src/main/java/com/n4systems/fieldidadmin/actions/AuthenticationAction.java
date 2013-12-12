@@ -1,7 +1,7 @@
 package com.n4systems.fieldidadmin.actions;
 
 import com.n4systems.model.admin.AdminUser;
-import com.n4systems.services.admin.AdminUserService;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class AuthenticationAction extends AbstractAdminAction {

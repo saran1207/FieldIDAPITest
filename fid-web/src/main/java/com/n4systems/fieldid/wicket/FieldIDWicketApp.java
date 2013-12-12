@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.pages.admin.adminusers.AdminUserPage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
+import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
@@ -166,6 +167,7 @@ public class FieldIDWicketApp extends WebApplication {
 		mountPage("admin/users", AdminUserPage.class);
 		mountPage("admin/connections", ConnectionViewPage.class);
         mountPage("admin/configureLanguages", ConfigureLanguagesPage.class);
+		mountPage("admin/tenantUsers", TenantUserListPage.class);
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);
