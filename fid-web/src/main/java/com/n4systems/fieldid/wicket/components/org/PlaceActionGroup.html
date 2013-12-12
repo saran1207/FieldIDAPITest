@@ -10,51 +10,19 @@
                 <ul>
                     <li wicket:id="scheduled">
                         <a wicket:id="event">
-                            <span wicket:id="name"c/><br><span wicket:id="note" class="note js-has-time"/>
+                            <span wicket:id="name"/><br><span wicket:id="note" class="note js-has-time"/>
                         </a>
                     </li>
-
-                    <wicket:remove>
-                        <!-- for mocking up screen only. -->
-                        <li>
-                            <a href="#">Repair<br>
-                                <span class="note">1,246 days ago 06/29/2010</span></a>
-                        </li>
-                        <li>
-                            <a href="#">Chain Sling Visual<br>
-                                <span class="note">1,221 days ago 07/24/2010</span></a>
-                        </li>
-                        <li>
-                            <a href="#">Pull Test<br>
-                                <span class="note">95 days ago 08/23/2013</span></a>
-                        </li>
-                        <li>
-                            <a href="#">Chain Sling Visual<br>
-                                <span class="note">95 days ago 08/23/2013 1:21 PM</span></a>
-                        </li>
-                        <li>
-                            <a href="#">Repair<br>
-                                <span class="note">31 days ago 10/26/2013 5:32 PM</span></a>
-                        </li>
-                        <li class="divider">
-                            <a href="places-events.php">View All<br>
-                                <span class="note">showing 5 out of 7</span></a>
-                        </li>
-                    </wicket:remove>
                 </ul>
             </li>
             <li class="secondary-dropdown divider">
                 <a href="#"><wicket:message key="label.unscheduled"/></a>
                 <ul>
-                    <li><a href="#">Chain Sling Inspection</a></li>
-                    <li><a href="#">Chain Sling Visual</a></li>
-                    <li><a href="#">Chain Sling Visual - Master</a></li>
-                    <li><a href="#">Check In</a></li>
-                    <li><a href="#">Check Out</a></li>
-                    <li><a href="#">Criteria Instructions Test</a></li>
-                    <li><a href="#">Drop test</a></li>
-                    <li><a href="#">Equipment Record</a></li>
-                    <li><a href="#">Negative Number Test</a></li>
+                    <li wicket:id="unscheduled">
+                        <a wicket:id="event">
+                            <span wicket:id="name"/>
+                        </a>
+                    </li>
                 </ul>
             </li>
         </ul>

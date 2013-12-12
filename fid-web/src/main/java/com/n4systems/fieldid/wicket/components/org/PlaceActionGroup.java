@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.org;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.PlaceEventScheduleService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.user.UserService;
@@ -16,6 +17,7 @@ import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.PlaceEvent;
+import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -25,6 +27,7 @@ import com.n4systems.util.collections.PrioritizedList;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -35,7 +38,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Set;
 
 public class PlaceActionGroup extends Panel {
@@ -83,11 +88,7 @@ public class PlaceActionGroup extends Panel {
                 PlaceEvent event = item.getModelObject();
                 ScheduledEventsMenuModel listModel = (ScheduledEventsMenuModel) getModel();
                 if (event==null) {
-                    item.add(new Link("event") {
-                        @Override public void onClick() {
-                            setResponsePage(PlaceEventsPage.class, PageParametersBuilder.id(getOrg().getId()));
-                        }
-                    }
+                    item.add(new BookmarkablePageLink<PlaceEventsPage>("event", PlaceEventsPage.class, PageParametersBuilder.id(getOrg().getId()))
                     .add(new Label("name", "View All " + listModel.getTotalEvents()))
                     .add(new Label("note", "......")));
                 } else {
@@ -99,6 +100,18 @@ public class PlaceActionGroup extends Panel {
                     .add(new Label("name", event.getEventType().getDisplayName()))
                     .add(new TimeAgoLabel("note", Model.of(event.getDueDate()), dateService.getUserTimeZone())));
                 }
+            }
+        });
+
+        add(new ListView<PlaceEventType>("unscheduled", new UnscheduledEventTypesMenuModel()) {
+            @Override
+            protected void populateItem(ListItem<PlaceEventType> item) {
+                item.add(new Link("event") {
+                    @Override
+                    public void onClick() {
+                        //TODO link to perform event page with bookmarkable link
+                    }
+                }.add(new Label("name", new PropertyModel<String>(item.getModel(), "displayName"))));
             }
         });
 
@@ -170,6 +183,21 @@ public class PlaceActionGroup extends Panel {
                 result.add(null);  // placeholder for "view all" menu item.
             }
             return result;
+        }
+    }
+
+    class UnscheduledEventTypesMenuModel extends LoadableDetachableModel<List<PlaceEventType>> {
+        @Override
+        protected List<PlaceEventType> load() {
+            List<PlaceEventType> placeEventTypesList = Lists.newArrayList(model.getObject().getEventTypes());
+            Collections.sort(placeEventTypesList, new Comparator<PlaceEventType> () {
+
+                @Override
+                public int compare(PlaceEventType o1, PlaceEventType o2) {
+                    return o1.getName().compareTo(o2.getName());
+                }
+            });
+            return placeEventTypesList;
         }
     }
 
