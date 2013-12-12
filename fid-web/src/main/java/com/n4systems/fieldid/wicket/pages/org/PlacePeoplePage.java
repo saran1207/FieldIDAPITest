@@ -62,6 +62,11 @@ public class PlacePeoplePage extends PlacePage {
         viewAllUsersLink.setVisible(false);
     }
 
+    @Override
+    protected void refreshContent(AjaxRequestTarget target) {
+        //TODO
+    }
+
     private class PlaceUsersDataProvider extends FieldIDDataProvider<User> {
 
         private PlaceUsersDataProvider(String order, SortOrder sortOrder) {

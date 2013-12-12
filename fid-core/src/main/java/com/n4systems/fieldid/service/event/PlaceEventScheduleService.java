@@ -17,7 +17,6 @@ public class PlaceEventScheduleService extends FieldIdPersistenceService {
 
     @Transactional
     public Long createSchedule(PlaceEvent schedule) {
-        schedule.setOwner(schedule.getPlace());
         Long id = persistenceService.save(schedule);
         //Update org to notify mobile of change
         schedule.getPlace().touch();

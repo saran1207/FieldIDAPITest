@@ -10,9 +10,9 @@ import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForPlaceModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
+import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.ThingEvent;
@@ -36,7 +36,7 @@ public class OpenActionsCell extends Panel {
     private SchedulePicker<PlaceEvent> schedulePicker;
 
     public OpenActionsCell(String id, final IModel<PlaceEvent> eventModel, final Panel eventDisplayPanel) {
-        super(id);
+        super(id, eventModel);
 
         final PlaceEvent schedule = eventModel.getObject();
 
@@ -66,12 +66,12 @@ public class OpenActionsCell extends Panel {
                     //eventService.retireEvent(schedule);
                 } catch (Exception e) {
                     error(new FIDLabelModel("error.eventdeleting").getObject());
-                    target.add(((AssetEventsPage)getPage()).getFeedbackPanel());
+                    target.add(((PlaceEventsPage) getPage()).getFeedbackPanel());
                 }
                 info(new FIDLabelModel("message.eventdeleted").getObject());
-                eventDisplayPanel.getDefaultModel().detach();
+                //eventDisplayPanel.getDefaultModel().detach();
                 target.add(eventDisplayPanel);
-                target.add(((FieldIDFrontEndPage) getPage()).getTopFeedbackPanel());
+                target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
             }
         });
 

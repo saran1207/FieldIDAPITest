@@ -12,12 +12,12 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
 
 import java.util.List;
 
@@ -76,8 +76,15 @@ public abstract class PlacePage extends FieldIDTemplatePage {
 
     @Override
     protected Component createActionGroup(String actionGroupId) {
-        return new PlaceActionGroup(actionGroupId,orgModel);
+        return new PlaceActionGroup(actionGroupId,orgModel) {
+            @Override
+            protected void refreshContainingPage(AjaxRequestTarget target) {
+                refreshContent(target);
+            }
+        };
     }
+
+    protected abstract void refreshContent(AjaxRequestTarget target);
 
     protected BaseOrg getOrg() {
         return orgModel.getObject();

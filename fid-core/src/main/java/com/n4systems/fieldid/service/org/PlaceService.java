@@ -60,7 +60,7 @@ public class PlaceService extends FieldIdPersistenceService {
 
     public List<PlaceEvent> getEventsFor(BaseOrg org, String order, boolean ascending, List<WorkflowState> workflowStates) {
         QueryBuilder<PlaceEvent> query = createUserSecurityBuilder(PlaceEvent.class);
-        //query.addSimpleWhere("place",org);
+        query.addSimpleWhere("place",org);
 
         if (order != null) {
             String[] orders = order.split(",");
