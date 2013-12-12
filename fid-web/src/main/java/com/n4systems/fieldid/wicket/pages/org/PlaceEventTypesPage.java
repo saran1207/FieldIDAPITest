@@ -47,9 +47,8 @@ public class PlaceEventTypesPage extends PlacePage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.event_types"));
+        return new Label(labelId, new FIDLabelModel("label.associate_event_types"));
     }
-
 
     @Override
     protected List<NavigationItem> createBreadCrumbs(BaseOrg org) {

@@ -1,8 +1,10 @@
 package com.n4systems.model.orgs;
 
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.api.*;
+import com.n4systems.model.attachment.PlaceAttachment;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.DenyReadOnlyUsersAccess;
@@ -31,13 +33,21 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	}
 
 
-    // NOTE TO NEIL: i think BaseOrg will need GpsLocation (or maybe add that to addressInfo?)
-    // also, attachments, image.
-
     @ManyToMany(fetch= FetchType.LAZY, cascade= CascadeType.ALL)
     @JoinTable(name="orgs_place_event_types", joinColumns = @JoinColumn(name="org_id"), inverseJoinColumns = @JoinColumn(name="place_event_type_id"))
     private Set<PlaceEventType> eventTypes = new HashSet<PlaceEventType>();
-	
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "image_id")
+    private PlaceAttachment image;
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="name", column = @Column(name="contactname")),
+            @AttributeOverride(name="email", column = @Column(name="contactemail"))
+    })
+    private Contact contact = new Contact();
+
 	@Column(name="name", nullable = false, length = 255)
 	private String name;
 
@@ -298,5 +308,23 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 
     public void setEventTypes(Set<PlaceEventType> eventTypes) {
         this.eventTypes = eventTypes;
+    }
+
+
+    @AllowSafetyNetworkAccess
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+    public PlaceAttachment getImage() {
+        return image;
+    }
+
+    public void setImage(PlaceAttachment image) {
+        this.image = image;
     }
 }

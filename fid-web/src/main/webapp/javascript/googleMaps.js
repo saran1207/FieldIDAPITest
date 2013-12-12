@@ -126,13 +126,15 @@ var googleMapFactory = (function() {
 
 		 };
 
-		 $text.autocomplete(textOptions).data('autocomplete')._renderItem =
-			 function(ul,item) {
-				 return $("<li></li>")
-					 .data("item.autocomplete", item)
-					 .append("<a>" + item.formatted_address + "</a>")
-					 .appendTo(ul);
-			 };
+		 if ($text.size()>0) {
+			 $text.autocomplete(textOptions).data('autocomplete')._renderItem =
+				 function(ul,item) {
+					 return $("<li></li>")
+						 .data("item.autocomplete", item)
+						 .append("<a>" + item.formatted_address + "</a>")
+						 .appendTo(ul);
+				 };
+	 	}
 
 
 		 return {

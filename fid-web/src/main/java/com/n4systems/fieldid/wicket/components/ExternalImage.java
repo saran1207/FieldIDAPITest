@@ -4,9 +4,16 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebComponent;
 
+import java.net.URL;
+
 public class ExternalImage extends WebComponent {
 
     private final String imageUrl;
+
+    public ExternalImage(String id, URL url) {
+        super(id);
+        this.imageUrl = url!=null ? url.toString() : "";
+    }
 
     public ExternalImage(String id, String imageUrl) {
         super(id);

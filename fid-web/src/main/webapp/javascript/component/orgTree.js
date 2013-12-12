@@ -80,6 +80,7 @@ var orgTreeFactory = (function() {
 
 		function postUpdateNodes($nodes) {
 			$nodes.each(function(index,child) {
+				// TODO : use correct term...either Add.. or Add Division.
 				var actionsMenu = $('<span class="action">Add Secondary|Job Site</span>').data('id',child.parentNode.id);
 				actionsMenu.insertAfter(child);
 				actionsMenu.click(addChild);

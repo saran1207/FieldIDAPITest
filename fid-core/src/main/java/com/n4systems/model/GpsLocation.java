@@ -1,9 +1,8 @@
 package com.n4systems.model;
 
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.math.BigDecimal;
-
-import javax.persistence.Embeddable;
 
 @Embeddable
 public class GpsLocation implements Serializable{

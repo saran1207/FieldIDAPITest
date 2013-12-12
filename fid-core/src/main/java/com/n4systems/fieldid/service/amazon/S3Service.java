@@ -18,6 +18,7 @@ import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -648,7 +649,7 @@ public class S3Service extends FieldIdPersistenceService {
 
     private S3AttachmentHandler getS3AttachmentHandler(S3Attachment attachment) {
         // TODO : check meta-data for content-type and return appropriate handler.
-        // also, make these spring beans.
+        // for now we only have one type of attachments running through this code.
         return s3ImageAttachmentHandler;
     }
 
@@ -669,6 +670,27 @@ public class S3Service extends FieldIdPersistenceService {
         getClient().copyObject(copyObjectRequest);
         // what about removing from temp? when should this be done.
     }
+
+    public URL getAttachmentUrl(S3Attachment attachment, String suffix) {
+        if (attachment==null || StringUtils.isBlank(attachment.getPath())) {
+            return null;
+        }
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+
+        String path = attachment.getPath();
+        if (StringUtils.isNotBlank(suffix)) {
+            path = suffix.startsWith(".") ? path+suffix : path + "." + suffix;
+        }
+        URL url = generatePresignedUrl(path, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public URL getAttachmentUrl(S3Attachment attachment) {
+        return getAttachmentUrl(attachment,null);
+    }
+
+
+
 
     public class S3ImagePath {
         private String origPath;

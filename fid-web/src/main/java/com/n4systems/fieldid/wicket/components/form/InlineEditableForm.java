@@ -155,20 +155,27 @@ public class InlineEditableForm extends Form {
         }.setOutputMarkupPlaceholderTag(true));
     }
 
-    protected void cancel(AjaxRequestTarget target) {
+    private final void cancel(AjaxRequestTarget target) {
         stopEditing();
-        target.add(InlineEditableForm.this);   // TODO : add some javascript to refresh map.
+        target.add(InlineEditableForm.this);
+        onCancel(target);
     }
 
-    protected void edit(AjaxRequestTarget target) {
+    private final void edit(AjaxRequestTarget target) {
         startEditing();
         target.add(InlineEditableForm.this);
+        onEdit(target);
     }
 
-    protected void save(AjaxRequestTarget target) {
+    private final void save(AjaxRequestTarget target) {
         stopEditing();
         target.add(InlineEditableForm.this);
+        onSave(target);
     }
+
+    protected void onCancel(AjaxRequestTarget target) { }
+    protected void onEdit(AjaxRequestTarget target) { }
+    protected void onSave(AjaxRequestTarget target) { }
 
 }
 

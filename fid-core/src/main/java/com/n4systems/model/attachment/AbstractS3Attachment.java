@@ -31,8 +31,7 @@ public abstract class AbstractS3Attachment extends EntityWithTenant implements S
     private String contentType;
 
     @Column(insertable = false, updatable = false)
-    @Enumerated(EnumType.STRING)
-    private Type type;
+    private String type;
 
     protected @Transient String tempPath;
     protected @Transient String fileName;
@@ -43,9 +42,9 @@ public abstract class AbstractS3Attachment extends EntityWithTenant implements S
     public AbstractS3Attachment() {
     }
 
-    public AbstractS3Attachment(Type type, Tenant tenant) {
+    protected AbstractS3Attachment(Type type, Tenant tenant) {
         super(tenant);
-        this.type = type;
+        setType(type);
     }
 
     public AbstractS3Attachment withContent(String fileName, String contentType, byte[] bytes) {
@@ -97,12 +96,19 @@ public abstract class AbstractS3Attachment extends EntityWithTenant implements S
         return bytes;
     }
 
-    public Type getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    @Deprecated // for hibernate use only.   use setType(Type t) instead.
+    public void setType(String type) {
+        Preconditions.checkArgument(type!=null && Type.valueOf(type.toUpperCase())!=null);
         this.type = type;
+    }
+
+    public void setType(Type type) {
+        Preconditions.checkArgument(type!=null);
+        this.type = type.toString();
     }
 
     public String getPath() {

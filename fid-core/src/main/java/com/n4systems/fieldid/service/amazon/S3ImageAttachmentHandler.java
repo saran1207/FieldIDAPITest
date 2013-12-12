@@ -9,14 +9,17 @@ import java.util.List;
 
 public class S3ImageAttachmentHandler implements S3AttachmentHandler {
 
+    public static final String MEDIUM_SUFFIX = ".medium";
+    public static final String THUMBNAIL_SUFFIX = ".thumbnail";
+
     @Autowired private ImageService imageService;
 
     @Override
     public List<S3Attachment> getFlavours(S3Attachment attachment) {
         List<S3Attachment> result = Lists.newArrayList(attachment);
-        S3Attachment medium = new Flavour(attachment, ".medium", imageService.generateMedium(attachment.getBytes()));
+        S3Attachment medium = new Flavour(attachment, MEDIUM_SUFFIX, imageService.generateMedium(attachment.getBytes()));
         result.add(medium);
-        S3Attachment thumbnail = new Flavour(attachment, ".thumbnail", imageService.generateThumbnail(attachment.getBytes()));
+        S3Attachment thumbnail = new Flavour(attachment, THUMBNAIL_SUFFIX, imageService.generateThumbnail(attachment.getBytes()));
         result.add(thumbnail);
         return result;
     }

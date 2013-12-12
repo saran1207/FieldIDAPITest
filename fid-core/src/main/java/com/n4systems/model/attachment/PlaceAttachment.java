@@ -1,13 +1,14 @@
 package com.n4systems.model.attachment;
 
 import com.google.common.base.Preconditions;
-import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 
 @Entity
+@DiscriminatorValue(value= "PLACE")
 public class PlaceAttachment extends AbstractS3Attachment {
 
     private static String BASE_PATH = "/places/%d/attachments/";
@@ -16,15 +17,11 @@ public class PlaceAttachment extends AbstractS3Attachment {
 
     protected @Transient BaseOrg org;
 
-    @Deprecated // for debugging only..remove this later.
-    public PlaceAttachment(double bogus) {
-        super();
-        setFileName("/jenn.jpg");
-        setTenant(TenantBuilder.aTenant().named("bogus").withId(123L).build());
+    public PlaceAttachment() {
     }
 
     public PlaceAttachment(BaseOrg org) {
-        super(Type.PLACE, org.getTenant());
+        super(Type.PLACE,org.getTenant());
         this.org = org;
     }
 

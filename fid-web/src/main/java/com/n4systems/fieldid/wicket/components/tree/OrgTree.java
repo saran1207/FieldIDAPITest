@@ -20,6 +20,8 @@ public class OrgTree extends Tree {
     private @SpringBean OrgService orgService;
     private String lastSearch = null;
 
+    // TODO : add "root node id".  if null get entire tree else get single root node.
+
     public OrgTree(String id) {
         super(id);
     }

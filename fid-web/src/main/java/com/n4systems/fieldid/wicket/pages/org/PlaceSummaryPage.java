@@ -1,14 +1,18 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.PlaceService;
+import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.form.InlineEditableForm;
 import com.n4systems.fieldid.wicket.components.form.LinkFieldsBehavior;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Address;
-import com.n4systems.model.GpsLocation;
+import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEvent;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -25,37 +29,37 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.net.URL;
 import java.util.List;
+
+import static ch.lambdaj.Lambda.on;
 
 public class PlaceSummaryPage extends PlacePage {
 
     private @SpringBean PlaceService placeService;
+    private @SpringBean S3Service s3Service;
 
-    // BOGUS TEST DATA
-    Address address = new Address("111 queen street, east");
-    String name="Susan Richardson",
-            email="foo@bar.com",
-            phone="123 456 7890",
-            fax,
-            orgName = "111 Queen St.",
-            orgId,
-            notes;
-    // ---------------
+    // TEST DATA
+    private Address address = new Address();
 
 
     private final GoogleMap map;
     private WebMarkupContainer futureEventsListContainer;
     private ListView<PlaceEvent> futureEventsListView;
+    private Contact contact;
 
     public PlaceSummaryPage(PageParameters params) {
         super(params);
 
-        add(map = new GoogleMap("map", Model.of(new GpsLocation(43.70263, -79.46654))));
+        add(map = new GoogleMap("map", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getGpsLocation())));
 
-        add(futureEventsListContainer = new WebMarkupContainer("eventsListContainer"));
+        add(futureEventsListContainer = new WebMarkupContainer("eventsListContainer") {
+            @Override public boolean isVisible() {
+                return futureEventsListView.getList().size() > 0;
+            }
+        });
         futureEventsListContainer.add(futureEventsListView = createFutureEventsListView());
         futureEventsListContainer.setOutputMarkupPlaceholderTag(true);
-        futureEventsListContainer.setVisible(futureEventsListView.getList().size() > 0);
 
         add(new Link("viewAll") {
             @Override
@@ -64,26 +68,38 @@ public class PlaceSummaryPage extends PlacePage {
             }
         });
 
+        // TODO : change this to fileUpoadWidget.
         add(new AjaxLink("attachmentsLink") {
             @Override public void onClick(AjaxRequestTarget target) {
                 //updateContent(Content.ATTACHMENTS, target);  // make this more of settings thang...?
             }
-        }.add(new Label("label", "8 attachments")));
+        }.add(new Label("label", "image")));
         
-        add(new ContextImage("img", "images/add-photo-slate.png"));
+        URL imageUrl = s3Service.getAttachmentUrl(getOrg().getImage());
+        if (imageUrl==null) {
+            add(new ContextImage("img", "images/add-photo-slate.png"));
+        } else {
+            add(new ExternalImage("img", imageUrl));
+        }
 
+        contact = new Contact(getOrg().getContact());
         add(new InlineEditableForm("contact").withSaveCancelEditLinks()
-                .add(new TextField("name", new PropertyModel(PlaceSummaryPage.this, "name")))
-                .add(new TextField("email", new PropertyModel(PlaceSummaryPage.this, "email")))
+                .add(new TextField("name", ProxyModel.of(contact,on(Contact.class).getName())))
+                .add(new TextField("email", ProxyModel.of(contact,on(Contact.class).getEmail())))
                 .add(new AddressPanel("address", new PropertyModel(PlaceSummaryPage.this, "address")).withExternalMap(map.getJsVar()))
-                .add(new TextField("phone", new PropertyModel(PlaceSummaryPage.this, "phone")))
-                .add(new TextField("fax", new PropertyModel(PlaceSummaryPage.this, "fax"))));
+                .add(new TextField("phone", ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo().getPhone1())))
+                .add(new TextField("phone2", ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo().getPhone2())))
+                .add(new TextField("fax", ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo().getFax1()))));
 
         add(new InlineEditableForm("general").withSaveCancelEditLinks()
-                .add(new TextField("name", new PropertyModel(PlaceSummaryPage.this, "orgName")).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
-                .add(new TextField("id", new PropertyModel(PlaceSummaryPage.this, "orgId")))
-                .add(new TextArea<String>("notes", new PropertyModel(PlaceSummaryPage.this, "notes")))
+                .add(new TextField("name", ProxyModel.of(orgModel,on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
+                .add(new TextField("id", ProxyModel.of(orgModel,on(BaseOrg.class).getId())))
+                .add(new TextArea<String>("notes", ProxyModel.of(orgModel,on(BaseOrg.class).getNotes())))
         );
+        // TOOD : override save method for both forms to actually save the stuff. make sure to
+        // 1:update map.
+        // 2:copy over Contact information into org from temp backing model.
+
     }
 
     @Override

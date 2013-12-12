@@ -4,12 +4,12 @@ import com.n4systems.model.parents.AbstractEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "addressinfo")
 public class AddressInfo extends AbstractEntity {
-	private static final long serialVersionUID = 1L;
-	
+
 	private String streetAddress = "";
 	private String city = "";
 	private String state = "";
@@ -18,10 +18,13 @@ public class AddressInfo extends AbstractEntity {
 	private String phone1 = "";
 	private String phone2 = "";
 	private String fax1 = "";
-	
-	public AddressInfo() {}
-	
-	public AddressInfo(AddressInfo addressInfo) {
+    private GpsLocation gpsLocation = new GpsLocation();
+
+    private @Transient String input;
+
+	public AddressInfo() { }
+
+    public AddressInfo(AddressInfo addressInfo) {
 		streetAddress = addressInfo.streetAddress;
 		city = addressInfo.city;
 		state = addressInfo.state;
@@ -150,10 +153,35 @@ public class AddressInfo extends AbstractEntity {
 		other.fax1 = fax1;
 	}
 
-	@Override
-	public String toString() {
-		return "AddressInfo [city=" + city + ", country=" + country + ", fax1=" + fax1 + ", phone1=" + phone1 + ", phone2=" + phone2 + ", state=" + state + ", streetAddress=" + streetAddress
-				+ ", zip=" + zip + "]";
-	}
-	
+    public GpsLocation getGpsLocation() {
+        return gpsLocation;
+    }
+
+    public void setGpsLocation(GpsLocation gpsLocation) {
+        this.gpsLocation = gpsLocation;
+    }
+
+    public String getInput() {
+        return input;
+    }
+
+    public void setInput(String input) {
+        this.input = input;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressInfo{" +
+                "city='" + city + '\'' +
+                ", streetAddress='" + streetAddress + '\'' +
+                ", state='" + state + '\'' +
+                ", country='" + country + '\'' +
+                ", zip='" + zip + '\'' +
+                ", phone1='" + phone1 + '\'' +
+                ", phone2='" + phone2 + '\'' +
+                ", fax1='" + fax1 + '\'' +
+                ", gpsLocation=" + gpsLocation +
+                '}';
+    }
+
 }

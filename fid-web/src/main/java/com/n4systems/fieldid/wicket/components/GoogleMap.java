@@ -37,10 +37,20 @@ public class GoogleMap extends Panel {
 
     public GoogleMap(String id, IModel<GpsLocation> model) {
         this(id);
-        GpsLocation location = model.getObject();
-        addLocation(location.getLatitude().doubleValue(), location.getLongitude().doubleValue());
+        addLocation(model.getObject());
     }
 
+    public GoogleMap(String id, GpsLocation location) {
+        this(id);
+        addLocation(location);
+    }
+
+    public GoogleMap addLocation(GpsLocation location) {
+        if (location!=null) {
+            addLocation(location.getLatitude().doubleValue(),location.getLongitude().doubleValue());
+        }
+        return this;
+    }
 
     public GoogleMap addLocation(Double latitude, Double longitude) {
         coords.add(new Coord(latitude,longitude));
