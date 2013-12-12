@@ -2,6 +2,7 @@ ${action.setPageType('event_type', 'list')!}
 
 <head>
 	<@n4.includeStyle href="listFilter" type="page"/>
+    <@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
     <style>
         #typeFilter {
             width:80px;
