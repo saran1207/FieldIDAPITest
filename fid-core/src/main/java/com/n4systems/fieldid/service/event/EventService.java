@@ -411,8 +411,8 @@ public class EventService extends FieldIdPersistenceService {
     public Event retireEvent(ThingEvent event) {
         event.retireEntity();
         event = persistenceService.update(event);
-        event.setAsset(persistenceService.update(event.getAsset()));
-        persistenceService.update(event);
+        event.getAsset().touch();
+        persistenceService.update(event.getAsset());
         return event;
     }
 

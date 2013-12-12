@@ -61,15 +61,12 @@ public class OpenActionsCell extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 try{
-                    // TODO DD: need to write service to handle place events (or events generically?)
-                    throw new IllegalStateException("archiving not supported");
-                    //eventService.retireEvent(schedule);
+                    placeEventScheduleService.retireSchedule(schedule);
                 } catch (Exception e) {
                     error(new FIDLabelModel("error.eventdeleting").getObject());
                     target.add(((PlaceEventsPage) getPage()).getFeedbackPanel());
                 }
                 info(new FIDLabelModel("message.eventdeleted").getObject());
-                //eventDisplayPanel.getDefaultModel().detach();
                 target.add(eventDisplayPanel);
                 target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
             }

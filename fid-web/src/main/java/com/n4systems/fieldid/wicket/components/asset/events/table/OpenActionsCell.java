@@ -79,7 +79,6 @@ public class OpenActionsCell extends Panel {
                     target.add(((AssetEventsPage)getPage()).getFeedbackPanel());
                 }
                 info(new FIDLabelModel("message.eventdeleted").getObject());
-                eventDisplayPanel.getDefaultModel().detach();
                 target.add(eventDisplayPanel);
                 target.add(((FieldIDFrontEndPage) getPage()).getTopFeedbackPanel());
             }

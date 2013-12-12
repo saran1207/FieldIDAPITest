@@ -24,4 +24,12 @@ public class PlaceEventScheduleService extends FieldIdPersistenceService {
         return id;
     }
 
+    public PlaceEvent retireSchedule(PlaceEvent schedule) {
+        schedule.retireEntity();
+        schedule = persistenceService.update(schedule);
+        schedule.getPlace().touch();
+        persistenceService.update(schedule.getPlace());
+        return schedule;
+    }
+
 }
