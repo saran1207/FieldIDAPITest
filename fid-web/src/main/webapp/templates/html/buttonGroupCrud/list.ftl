@@ -2,7 +2,9 @@ ${action.setPageType('event_type', 'button_groups')!}
 <title><@s.text name="title.buttonsetup"/></title>
 <head>
 	<@n4.includeStyle href="buttonGroups" type="page" />
-	<style>
+    <@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+
+<style>
 		.rowName{ width:220px; }
 		.formErrors { width:190px; }
 		.message ul li, .error ul li { padding-left: 5px; }

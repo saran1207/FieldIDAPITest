@@ -1,4 +1,7 @@
 ${action.setPageType('event_type', 'edit')!}
+<head>
+    <@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+</head>
 
 <@s.form action="eventTypeDelete" id="mainContent" cssClass="fullForm fluidSets" theme="fieldid">
 	<h2><@s.text name="label.delete_summary"/></h2>

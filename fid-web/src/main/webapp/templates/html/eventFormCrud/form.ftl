@@ -1,5 +1,10 @@
 ${action.setPageType('event_type', 'event_form')!}
 
+<head>
+<@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+</head>
+
+
 <script type="text/javascript">
     var eventTypeViewUrl = '<@s.url namespace="/" action="eventType" uniqueID="${eventType.id}"/>';
     var promptBeforeLeaving = true;

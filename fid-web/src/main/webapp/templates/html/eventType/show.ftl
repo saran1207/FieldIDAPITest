@@ -1,4 +1,7 @@
 ${action.setPageType('event_type', 'show')!}
+<head>
+    <@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+</head>
 <style>
 	p.criteria span {
 		width:auto;
