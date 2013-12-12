@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.service.user;
 
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.SendSavedItemSchedule;
+import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
@@ -27,7 +27,7 @@ import java.util.*;
 public class UserService extends FieldIdPersistenceService {
 
     public List<User> getUsers(boolean registered, boolean includeSystem) {
-        QueryBuilder<User> builder = createUserQueryBuilder(registered, includeSystem);
+        QueryBuilder<User> builder = createUserQueryBuilderWithOrder(registered, includeSystem);
 
         if (!getCurrentUser().getGroups().isEmpty()) {
             return new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
@@ -49,6 +49,36 @@ public class UserService extends FieldIdPersistenceService {
         return orgUserMap;
     }
 
+    public List<User> getOrgUsers(BaseOrg org, String order, Boolean ascending) {
+        QueryBuilder<User> builder = createUserQueryBuilder(false, false);
+
+        builder.addSimpleWhere("owner", org);
+
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                builder.addOrder(subOrder, ascending);
+            }
+        }
+
+        return persistenceService.findAll(builder);
+    }
+
+    public Long countOrgUsers(BaseOrg org) {
+        QueryBuilder<User> builder = createUserQueryBuilder(false, false);
+
+        builder.addSimpleWhere("owner", org);
+
+        return persistenceService.count(builder);
+    }
+
+    public Date getLastLogin(Long userId) {
+        QueryBuilder<ActiveSession> builder = new QueryBuilder<ActiveSession>(ActiveSession.class);
+        builder.addSimpleWhere("user.id", userId);
+        ActiveSession activeSession = persistenceService.find(builder);
+        return activeSession != null ? activeSession.getDateCreated() : null;
+    }
+
     private QueryBuilder<User> createUserQueryBuilder(boolean registered, boolean includeSystem) {
         QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
 
@@ -62,15 +92,19 @@ public class UserService extends FieldIdPersistenceService {
             builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "userType", UserType.SYSTEM));
         }
 
-        return builder.addOrder("firstName").addOrder("lastName");
+        return builder;
     }
 
-	public User getUser(Long userId) {
-		QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
+    private QueryBuilder<User> createUserQueryBuilderWithOrder(boolean registered, boolean includeSystem) {
+        return createUserQueryBuilder(registered, includeSystem).addOrder("firstName").addOrder("lastName");
+    }
+
+    public User getUser(Long userId) {
+        QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
         builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "id", userId));
         User user = persistenceService.find(builder);
         return user;
-	}
+    }
 
     public void moveSavedItem(Long userId, int fromIndex, int toIndex) {
         User user = getUser(userId);
@@ -78,35 +112,35 @@ public class UserService extends FieldIdPersistenceService {
         user.getSavedItems().remove(fromIndex);
         user.getSavedItems().add(toIndex, savedItem);
     }
-	
-	public User authenticateUserByPassword(String tenantName, String userId, String password) {
-		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
-		UserQueryHelper.applyFullyActiveFilter(builder);
-		
-		builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
-		builder.addWhere(WhereClauseFactory.createCaseInsensitive("userID", userId));
-		builder.addWhere(WhereClauseFactory.create("hashPassword", User.hashPassword(password)));
-		builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.PERSON));
-		
-		User user = persistenceService.find(builder);
-		return user;
-	}
 
-	public User authenticateUserBySecurityCard(String tenantName, String cardNumber) {
-		if (StringUtils.isEmpty(cardNumber)) {
-			return null;
-		}
+    public User authenticateUserByPassword(String tenantName, String userId, String password) {
+        QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
+        UserQueryHelper.applyFullyActiveFilter(builder);
 
-		QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
-		UserQueryHelper.applyFullyActiveFilter(builder);
-		
-		builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
-		builder.addWhere(WhereClauseFactory.create("hashSecurityCardNumber", User.hashSecurityCardNumber(cardNumber)));
-		builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.PERSON));
+        builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
+        builder.addWhere(WhereClauseFactory.createCaseInsensitive("userID", userId));
+        builder.addWhere(WhereClauseFactory.create("hashPassword", User.hashPassword(password)));
+        builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.PERSON));
 
-		List<User> users = persistenceService.findAll(builder);
-		return (users.size() != 1) ? null : users.get(0);
-	}
+        User user = persistenceService.find(builder);
+        return user;
+    }
+
+    public User authenticateUserBySecurityCard(String tenantName, String cardNumber) {
+        if (StringUtils.isEmpty(cardNumber)) {
+            return null;
+        }
+
+        QueryBuilder<User> builder = new QueryBuilder<User>(User.class, new OpenSecurityFilter());
+        UserQueryHelper.applyFullyActiveFilter(builder);
+
+        builder.addWhere(WhereClauseFactory.createCaseInsensitive("tenant.name", tenantName));
+        builder.addWhere(WhereClauseFactory.create("hashSecurityCardNumber", User.hashSecurityCardNumber(cardNumber)));
+        builder.addWhere(WhereClauseFactory.create(Comparator.NE, "userType", UserType.PERSON));
+
+        List<User> users = persistenceService.findAll(builder);
+        return (users.size() != 1) ? null : users.get(0);
+    }
 
     private TreeMap<BaseOrg, List<User>> createOrgUserMap() {
         return new TreeMap<BaseOrg, List<User>>(new PrimaryOrgFirstComparator());
@@ -230,10 +264,6 @@ public class UserService extends FieldIdPersistenceService {
         List<User> users = new ArrayList<User>();
         users = persistenceService.findAll(builder);
         return users;
-    }
-
-    public List<User> getOrgUsers(BaseOrg object, String property, boolean ascending) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
     }
 
 
