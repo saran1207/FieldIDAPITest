@@ -6,7 +6,6 @@
 
 <wicket:extend>
 
-   <span wicket:id="title"></span>
     <div wicket:id="feedbackPanel" class="formErrors"></div>
 
     <div id="mainContent" class="login-page">
@@ -18,7 +17,7 @@
     <form wicket:id="GetUsernameForm" class="minForm forgot-login-form">
 
         <p class="actionInstructions">
-            Instructions
+            <wicket:message key="label.forgot_username_instructions"/>
         </p>
 
 

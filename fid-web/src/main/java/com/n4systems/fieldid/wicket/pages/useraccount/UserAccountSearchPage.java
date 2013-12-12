@@ -32,7 +32,6 @@ public class UserAccountSearchPage extends FieldIDWicketPage {
     @Override
     protected void onInitialize() {
         super.onInitialize();
-        add(new Label("title", "UserAccountSearch"));
         add(new FeedbackPanel("feedbackPanel"));
         add(new GetUsernameForm("GetUsernameForm"));
     }

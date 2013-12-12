@@ -232,4 +232,9 @@ public class UserService extends FieldIdPersistenceService {
         return users;
     }
 
+    public List<User> getOrgUsers(BaseOrg object, String property, boolean ascending) {
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
+
+
 }

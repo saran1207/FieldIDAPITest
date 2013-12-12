@@ -29,7 +29,7 @@ public class SendForgotUserEmailService {
 
         String messageBody = sb.toString();
 
-        MailMessage message = new MailMessage("Password Reset ", messageBody);
+        MailMessage message = new MailMessage("Your Field ID user name ", messageBody);
         message.getToAddresses().add(emailAddress);
 
         try {
