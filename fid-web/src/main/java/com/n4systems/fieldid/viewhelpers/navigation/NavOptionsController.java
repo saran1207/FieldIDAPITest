@@ -27,6 +27,7 @@ public class NavOptionsController {
 	private boolean returnToReport = false;
 	private String entityIdentifier;
 	private boolean onSafetyNetwork = false;
+    private String includeTemplate;
 
 	private boolean onSetupSettings = false;
 	private boolean onSetupOwners = false;
@@ -64,6 +65,8 @@ public class NavOptionsController {
 
 			p.load(propertyFile);
 			HierarchicalProperties commonProps = p.getProperties("common");
+
+            includeTemplate = commonProps.getString("includeTemplate");
 			onSetup = commonProps.getBoolean("onSetup");
 			onSetupSettings = commonProps.getBoolean("onSetupSettings");
 			onSetupOwners = commonProps.getBoolean("onSetupOwners");
@@ -197,4 +200,8 @@ public class NavOptionsController {
 	public boolean isOnSetupTemplate() {
 		return onSetupTemplate;
 	}
+
+    public String getIncludeTemplate() {
+        return includeTemplate;
+    }
 }

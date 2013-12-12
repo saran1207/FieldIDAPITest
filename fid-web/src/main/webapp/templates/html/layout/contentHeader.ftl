@@ -1,11 +1,15 @@
 <div id="contentHeader">
 	<#include "_notificationArea.ftl"/>
     <div id="contentTitle">
+
+        <#if navOptions.includeTemplate?exists>
+            <#include navOptions.includeTemplate/>
+        </#if>
+
 	    <h1>
 	    	<#include "_title.ftl"/>
 	    </h1>
-	    
-	    
+
 		<div class="backToLink">
 			<#if navOptions.onSetup>
 				<a href="<@s.url action="setup" namespace="/"/>">&#171; <@s.text name="label.back_to_setup"/></a>
