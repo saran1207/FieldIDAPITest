@@ -38,5 +38,6 @@ public class FIDFeedbackPanel extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/layout/feedback_errors.css");
+        response.renderCSSReference("style/pages/alerts.css");
     }
 }
