@@ -52,8 +52,8 @@ var googleMapFactory = (function() {
 		return map;
 	};
 
-	 var createAutoCompleteAddress = function($address,options) {
-		 var widget = autoCompleteAddress($address,options);
+	 var createAutoCompleteAddress = function(options) {
+		 var widget = autoCompleteAddress(options);
 		 widget.updateContentWithAddress = false;
 		 return widget;
 	 }
@@ -62,18 +62,21 @@ var googleMapFactory = (function() {
 	 /**
 	  * autocomplete text field with built in map returned by factory.
 	  */
-	 function autoCompleteAddress($address,opts) {
+	 function autoCompleteAddress(opts) {
 		 var defaults = {
 			lat : 44,
 			lng : -77
 		 };
 		 var options = $.extend(defaults, opts);
+		 var $address = $(options.id);
 		 var $text = $address.find('.txt');
 		 var $lat = $address.children('.lat');
 		 var $lng = $address.children('.lng');
-		 var $postalCode = $address.children('postal-code');
-		 var $postalCode = $address.children('postal-code');
-		 var $postalCode = $address.children('postal-code');
+		 var $street_address = $address.children('.street-address');
+		 var $city = $address.children('.city');
+		 var $country = $address.children('.country');
+		 var $postalCode = $address.children('.postal-code');
+		 var $state = $address.children('.state');
 		 var $map;
 
 		 if (!options.noMap) {
@@ -101,6 +104,15 @@ var googleMapFactory = (function() {
 
 		 };
 
+		 function extractFromGeoCode(components, type) {
+			 for (var i=0; i<components.length; i++) {
+				 for (var j=0; j<components[i].types.length; j++) {
+					 if (components[i].types[j] == type) return components[i].long_name;
+				 }
+			 }
+			 return "";
+		 }
+
 		 function update(item) {
 			$text.val(item.formatted_address);
 			var latLng = item.geometry.location;
@@ -109,7 +121,15 @@ var googleMapFactory = (function() {
 			if ($map) {
 				$map.setLocation(latLng.lat(), latLng.lng(), item.formatted_address);
 			}
-		 }
+
+			var addressInfo = item.address_components;
+			$street_address.val(extractFromGeoCode(addressInfo,'street_number') + ' ' + extractFromGeoCode(addressInfo,'route'));
+			$city.val(extractFromGeoCode(addressInfo,'locality'));
+			$country.val(extractFromGeoCode(addressInfo,'country'));
+			$postalCode.val(extractFromGeoCode(addressInfo,'postal_code'));
+			$state.val(extractFromGeoCode(addressInfo,'administrative_area_level_1'));
+			$country.val(extractFromGeoCode(addressInfo,'country'));
+		}
 
 		 var textOptions = {
 			 delay:500,

@@ -6,6 +6,7 @@ import com.n4systems.fieldid.permissions.UserSecurityGuard;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistry;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryDatabaseDataSource;
 import com.n4systems.fieldid.ui.seenit.SeenItRegistryImpl;
+import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.user.User;
 import com.n4systems.util.HashCode;
 import com.n4systems.util.selection.MultiIdSelection;
@@ -41,6 +42,7 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 
     public static final String LOGIN_FAILURE_INFO = "loginFailureInfo";
 	public static final String ADMIN_AUTHENTICATED = "adminAuthenticated";
+	public static final String ADMIN_USER = "adminUser";
 	
 	public WebSessionMap() {
 		this(ServletActionContext.getRequest().getSession(false));
@@ -400,5 +402,13 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 
 	public boolean isAdminAuthenticated() {
 		return containsKey(ADMIN_AUTHENTICATED);
+	}
+
+	public AdminUser getAdminUser() {
+		return get(ADMIN_USER, AdminUser.class);
+	}
+
+	public void setAdminUser(AdminUser adminUser) {
+		put(ADMIN_USER, adminUser);
 	}
 }

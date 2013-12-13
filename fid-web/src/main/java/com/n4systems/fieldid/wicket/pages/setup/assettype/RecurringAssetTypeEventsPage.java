@@ -14,10 +14,10 @@ import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
+import com.n4systems.fieldid.wicket.model.BooleanModel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.EnumLabelModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.YesOrNoModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
@@ -228,7 +228,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                     if(((RecurringAssetTypeEvent) item.getDefaultModelObject()).getOwner() == null)
                         item.add(new Label("affectAll", "---"));
                     else
-                        item.add(new Label("affectAll", new YesOrNoModel(new PropertyModel<Boolean>(item.getModelObject(), "ownerAndDown"))));
+                        item.add(new Label("affectAll", new BooleanModel(new PropertyModel<Boolean>(item.getModelObject(), "ownerAndDown"))));
                     item.add(new IndicatingAjaxLink("remove") {
                         @Override
                         public void onClick(AjaxRequestTarget target) {

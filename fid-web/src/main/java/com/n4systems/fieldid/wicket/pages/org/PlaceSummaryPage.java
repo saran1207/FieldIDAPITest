@@ -9,7 +9,6 @@ import com.n4systems.fieldid.wicket.components.form.InlineEditableForm;
 import com.n4systems.fieldid.wicket.components.form.LinkFieldsBehavior;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
-import com.n4systems.model.Address;
 import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
@@ -25,7 +24,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -38,9 +36,6 @@ public class PlaceSummaryPage extends PlacePage {
 
     private @SpringBean PlaceService placeService;
     private @SpringBean S3Service s3Service;
-
-    // TEST DATA
-    private Address address = new Address();
 
 
     private final GoogleMap map;
@@ -86,7 +81,7 @@ public class PlaceSummaryPage extends PlacePage {
         add(new InlineEditableForm("contact").withSaveCancelEditLinks()
                 .add(new TextField("name", ProxyModel.of(contact,on(Contact.class).getName())))
                 .add(new TextField("email", ProxyModel.of(contact,on(Contact.class).getEmail())))
-                .add(new AddressPanel("address", new PropertyModel(PlaceSummaryPage.this, "address")).withExternalMap(map.getJsVar()))
+                .add(new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())).withExternalMap(map.getJsVar()))
                 .add(new TextField("phone", ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo().getPhone1())))
                 .add(new TextField("phone2", ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo().getPhone2())))
                 .add(new TextField("fax", ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo().getFax1()))));

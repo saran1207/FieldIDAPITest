@@ -60,6 +60,14 @@
 	font-size: @smallFontSize;
 }
 
+// Truncate string with ellipsis
+.truncate(@width) {
+	width: @width;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
 // TYPOGRAPHY
 // --------------------------------------------------
 // Defaults to normal weight. Use variables for semibold and bold

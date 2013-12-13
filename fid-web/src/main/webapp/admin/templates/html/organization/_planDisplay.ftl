@@ -1,6 +1,7 @@
 <div class="editHeader">
 	<h3>Plan</h3>
-	<p> | <a href="javascript:void(0);" onClick="editPlan(${id});"><@s.text name="label.edit"/></a></p>
+	<#if superUser><p> | <a href="javascript:void(0);" onClick="editPlan(${id});"><@s.text name="label.edit"/></a></p></#if>
+    <p> | <a href="/fieldid/w/admin/tenantUsers?id=${id}">View All Users</a></p>
 </div>
 <div id="fullAccounts" class="limit">
 	<div class="limitLabel"><@s.text name="label.employee_accounts"/></div>
@@ -24,3 +25,4 @@
         ${userLimits.usageBasedUsersEnabled?string('Enabled', 'Disabled')}<#if userLimits.usageBasedUsersEnabled>, ${userLimits.usageBasedUserEvents} remaining.</#if>
     </div>
 </div>
+

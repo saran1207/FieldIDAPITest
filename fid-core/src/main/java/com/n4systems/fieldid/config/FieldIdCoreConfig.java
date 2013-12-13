@@ -19,6 +19,9 @@ import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.SecurityContextInitializer;
+import com.n4systems.fieldid.service.SecurityService;
+import com.n4systems.fieldid.service.admin.AdminSecurityService;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.amazon.S3ImageAttachmentHandler;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.*;
@@ -74,6 +77,7 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.lucene.analysis.util.CharArraySet;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -88,10 +92,19 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.io.StringReader;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.security.Security;
+import java.util.Random;
 
 @Configuration
 @EnableCaching
 public class FieldIdCoreConfig {
+
+	static {
+		Security.addProvider(new BouncyCastleProvider());
+	}
 
     @Bean
     public AmazonS3Client amazonS3Client() {
@@ -701,6 +714,37 @@ public class FieldIdCoreConfig {
     public S3ImageAttachmentHandler s3ImageAttachmentHandler() {
         return new S3ImageAttachmentHandler();
     }
+
+	@Bean
+	@Scope("singleton")
+	public Random secureRandom() {
+		return new SecureRandom();
+	}
+
+	@Bean
+	public SecurityService securityService() {
+		return new SecurityService();
+	}
+
+	@Bean
+	public AdminUserService adminUserService() {
+		return new AdminUserService();
+	}
+
+	@Bean
+	@Scope("prototype")
+	public MessageDigest sha512Digest() {
+		try {
+			return MessageDigest.getInstance("SHA-512", "BC");
+		} catch (GeneralSecurityException e) {
+			throw new SecurityException("Unable to create SHA-512 MessageDigest", e);
+		}
+	}
+
+	@Bean
+	public AdminSecurityService adminSecurityService() {
+		return new AdminSecurityService();
+	}
 
     @Bean
     public SendForgotUserEmailService sendForgotUserEmailService() {

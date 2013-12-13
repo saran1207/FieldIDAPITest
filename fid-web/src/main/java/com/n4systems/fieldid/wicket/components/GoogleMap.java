@@ -3,9 +3,11 @@ package com.n4systems.fieldid.wicket.components;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.n4systems.model.GpsLocation;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,6 +27,11 @@ public class GoogleMap extends Panel {
     public GoogleMap(String id) {
         super(id);
         setOutputMarkupId(true);
+        add(new AttributeAppender("class",new Model<String>() {
+            @Override public String getObject() {
+                return coords.isEmpty() ? "no-location" : "";
+            }
+        }, " "));
     }
 
     public GoogleMap(String id, Double... points) {

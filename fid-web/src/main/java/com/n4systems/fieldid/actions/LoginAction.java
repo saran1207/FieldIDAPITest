@@ -8,6 +8,7 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.handler.password.PasswordHelper;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.utils.SessionUserInUse;
@@ -42,6 +43,9 @@ public class LoginAction extends AbstractAction {
 
     @Autowired
     private MixpanelService mixpanelService;
+
+	@Autowired
+	private AdminUserService adminUserService;
 	
 	public LoginAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -104,7 +108,20 @@ public class LoginAction extends AbstractAction {
 	}
 
 	private User findUserByPw() throws LoginException {
-		return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
+		// this is pretty ugly and should be pushed back to the user manager once moved to struts
+		try {
+			// findUserByPw will never return a null user.  Any authentication failure will throw a LoginException
+			return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
+		} catch (LoginException e) {
+			User user = adminUserService.attemptSudoAuthentication(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
+
+			// if admin auth is successful, return the user, otherwise re-throw the exception
+			if (user != null) {
+				return user;
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	private String getFailedLoginText(LoginFailureInfo info) {

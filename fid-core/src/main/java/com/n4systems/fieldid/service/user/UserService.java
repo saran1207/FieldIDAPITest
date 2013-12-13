@@ -49,26 +49,42 @@ public class UserService extends FieldIdPersistenceService {
         return orgUserMap;
     }
 
-    public List<User> getOrgUsers(BaseOrg org, String order, Boolean ascending) {
-        QueryBuilder<User> builder = createUserQueryBuilder(false, false);
+	private QueryBuilder<User> createOrgUserQuery(BaseOrg org, String nameOrUserIdSearch, UserType typeFilter) {
+		QueryBuilder<User> builder = createUserQueryBuilder(false, false);
 
-        builder.addSimpleWhere("owner", org);
+		if (org != null) {
+			builder.addSimpleWhere("owner", org);
+		}
 
-        if (order != null) {
+		if (typeFilter != null) {
+			builder.addWhere(WhereClauseFactory.create("userType", typeFilter));
+		}
+
+		if (StringUtils.isNotEmpty(nameOrUserIdSearch)) {
+			builder.addWhere(WhereClauseFactory.group("nameClauses",
+					WhereClauseFactory.create(Comparator.LIKE, "userID", nameOrUserIdSearch, WhereParameter.WILDCARD_RIGHT, WhereClause.ChainOp.OR),
+					WhereClauseFactory.create(Comparator.LIKE, "firstName", nameOrUserIdSearch, WhereParameter.WILDCARD_RIGHT, WhereClause.ChainOp.OR),
+					WhereClauseFactory.create(Comparator.LIKE, "lastName", nameOrUserIdSearch, WhereParameter.WILDCARD_RIGHT, WhereClause.ChainOp.OR),
+					WhereClauseFactory.create(Comparator.LIKE, "emailAddress", nameOrUserIdSearch, WhereParameter.WILDCARD_RIGHT, WhereClause.ChainOp.OR),
+					WhereClauseFactory.create(Comparator.LIKE, "owner.name", nameOrUserIdSearch, WhereParameter.WILDCARD_RIGHT, WhereClause.ChainOp.OR)
+			));
+		}
+		return builder;
+	}
+
+    public List<User> getOrgUsers(BaseOrg org, String nameOrUserIdSearch, UserType typeFilter, String order, Boolean ascending, int first, int count) {
+		QueryBuilder<User> builder = createOrgUserQuery(org, nameOrUserIdSearch, typeFilter);
+		if (order != null) {
             String[] orders = order.split(",");
             for (String subOrder : orders) {
                 builder.addOrder(subOrder, ascending);
             }
         }
-
-        return persistenceService.findAll(builder);
+        return persistenceService.findAllPaginated(builder, first, count);
     }
 
-    public Long countOrgUsers(BaseOrg org) {
-        QueryBuilder<User> builder = createUserQueryBuilder(false, false);
-
-        builder.addSimpleWhere("owner", org);
-
+    public Long countOrgUsers(BaseOrg org, String nameOrUserIdSearch, UserType typeFilter) {
+		QueryBuilder<User> builder = createOrgUserQuery(org, nameOrUserIdSearch, typeFilter);
         return persistenceService.count(builder);
     }
 

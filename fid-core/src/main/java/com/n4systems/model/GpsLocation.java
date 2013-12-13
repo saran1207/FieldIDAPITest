@@ -16,6 +16,10 @@ public class GpsLocation implements Serializable{
 		setLatitude(latitude);
 		setLongitude(longitude);
 	}
+
+    public boolean isEmpty() {
+        return latitude==null && longitude==null;
+    }
 	
 	// CAVEAT : be careful about changing this...javascript code makes assumptions.
 	@Override

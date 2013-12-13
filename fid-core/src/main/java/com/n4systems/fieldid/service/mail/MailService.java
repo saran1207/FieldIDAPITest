@@ -1,30 +1,33 @@
 package com.n4systems.fieldid.service.mail;
 
-import java.util.Properties;
-
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.mail.MailMessage;
+import com.n4systems.util.mail.TemplateMailMessage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.mail.*;
+import java.util.Map;
+import java.util.Properties;
 
 @Transactional(readOnly = true)
 public class MailService extends FieldIdPersistenceService {
 
 	@Autowired
 	private ConfigService configService;
-	
-	public void sendMessage(MailMessage mailMessage) throws NoSuchProviderException, MessagingException {
+
+	public void sendNotification(String template, String toAddress, String subject, Map<String, Object> templateParams) throws MessagingException {
+		TemplateMailMessage mailMessage = new TemplateMailMessage();
+		mailMessage.getToAddresses().add(toAddress);
+		mailMessage.setTemplatePath(template);
+		mailMessage.setSubject(subject);
+		mailMessage.getTemplateMap().putAll(templateParams);
+		sendMessage(mailMessage);
+	}
+
+	public void sendMessage(MailMessage mailMessage) throws MessagingException {
 		Session mailSession = Session.getInstance(getMailProperties(), getAuthenticator());
 		Message message = mailMessage.compileMessage(mailSession);
 

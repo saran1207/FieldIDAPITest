@@ -9,9 +9,6 @@
 // -----------------------------------------
 
 // List/Tree view buttons and text search
-.text-search {
-	margin-left: 5px;
-}
 .action-bar {
 	margin-bottom: 30px;
 }
@@ -25,26 +22,30 @@
 .tree-view {
 	ins {
 		text-decoration: none;
+		vertical-align: middle;
 	}
 	ul li {
-		padding-top: 4px;
 		list-style-type: none;
+
+		a {
+			display: inline-block;
+			.truncate(185px);
+		}
 	}
 	.level-one {
-		padding: 8px 0;
+		padding: 4px 0;
 		border-bottom: 1px solid @gray;
 	}
 	.level-two {
 		margin-left: 20px;
 		border-top: 1px dashed @gray;
-		margin-top: 5px;
+		padding-top: 4px;
 	}
 	.level-three,
 	.level-four {
 		margin-left: 30px;
 	}	
-	.add-place {
-		font-size: @smallFontSize;
+	.action {
 		float: right;
 		cursor: pointer;
 		text-decoration: underline;
@@ -82,6 +83,9 @@
 		.chzn-container {
 			width: 286px!important;
 		}
+	}
+	h3 {
+		margin-top: 0;
 	}
 }
 
