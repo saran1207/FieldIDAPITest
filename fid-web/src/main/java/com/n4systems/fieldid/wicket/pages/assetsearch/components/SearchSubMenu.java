@@ -187,7 +187,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         massUpdateLink.setVisible(sessionUser.hasAccess("tag"));
         massScheduleLink.setVisible(sessionUser.hasAccess("createevent"));
         
-        actions.setVisible(rowsSelected && (selected < maxUpdate) && (massEventLink.isVisible() || massUpdateLink.isVisible() || massScheduleLink.isVisible()));
+        actions.setVisible(rowsSelected && (selected < maxUpdate) && (massEventLink.isVisible() || massUpdateLink.isVisible() || massScheduleLink.isVisible() || exportLink.isVisible()));
     }
 
     protected void onSearchSubmit() { }
