@@ -19,6 +19,9 @@ import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.SecurityContextInitializer;
+import com.n4systems.fieldid.service.SecurityService;
+import com.n4systems.fieldid.service.admin.AdminSecurityService;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.amazon.S3ImageAttachmentHandler;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.*;
@@ -59,9 +62,6 @@ import com.n4systems.persistence.listeners.LocalizationListener;
 import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
-import com.n4systems.fieldid.service.SecurityService;
-import com.n4systems.fieldid.service.admin.AdminSecurityService;
-import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
 import com.n4systems.services.dashboard.DashboardService;
 import com.n4systems.services.date.DateService;
@@ -745,6 +745,7 @@ public class FieldIdCoreConfig {
 	public AdminSecurityService adminSecurityService() {
 		return new AdminSecurityService();
 	}
+
     @Bean
     public SendForgotUserEmailService sendForgotUserEmailService() {
         return new SendForgotUserEmailService();

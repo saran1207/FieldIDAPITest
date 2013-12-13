@@ -66,6 +66,7 @@ public class AdminUserService extends FieldIdPersistenceService {
 
 		QueryBuilder<AdminUser> query = new QueryBuilder<AdminUser>(AdminUser.class);
 		query.addWhere(WhereClauseFactory.create("email", email));
+		query.addWhere(WhereClauseFactory.create("enabled", true));
 
 		AdminUser user = persistenceService.find(query);
 		if (user == null) {
@@ -111,6 +112,14 @@ public class AdminUserService extends FieldIdPersistenceService {
 		return persistenceService.update(adminUser);
 	}
 
+	public boolean sudoPermissionExists(AdminUser adminUser, User user) {
+		QueryBuilder<SudoPermission> query = new QueryBuilder<SudoPermission>(SudoPermission.class);
+		query.addWhere(WhereClauseFactory.create("adminUser", adminUser));
+		query.addWhere(WhereClauseFactory.create("user", user));
+		boolean exists = persistenceService.exists(query);
+		return exists;
+	}
+
 	public void createSudoPermission(AdminUser adminUser, User user) {
 		QueryBuilder<SudoPermission> query = new QueryBuilder<SudoPermission>(SudoPermission.class);
 		query.addWhere(WhereClauseFactory.create("adminUser", adminUser));
@@ -130,6 +139,7 @@ public class AdminUserService extends FieldIdPersistenceService {
 
 	public User attemptSudoAuthentication(String tenantName, String userId, String password) {
 		QueryBuilder<SudoPermission> query = new QueryBuilder<SudoPermission>(SudoPermission.class);
+		query.addWhere(WhereClauseFactory.create("adminUser.enabled", true));
 		query.addWhere(WhereClauseFactory.create("user.tenant.name", tenantName));
 		query.addWhere(WhereClauseFactory.create("user.userID", userId));
 		List<SudoPermission> permissions = persistenceService.findAll(query);

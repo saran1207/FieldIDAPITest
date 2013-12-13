@@ -55,4 +55,9 @@ public class PlacePeoplePage extends PlacePage {
         viewAllUsersLink.setOutputMarkupPlaceholderTag(true);
         viewAllUsersLink.setVisible(false);
 	}
+
+	@Override
+	protected void refreshContent(AjaxRequestTarget target) {
+
+	}
 }
