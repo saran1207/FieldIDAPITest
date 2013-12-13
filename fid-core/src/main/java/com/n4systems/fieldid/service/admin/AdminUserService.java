@@ -154,7 +154,13 @@ public class AdminUserService extends FieldIdPersistenceService {
 				break;
 			}
 		}
-		return (allowedPermission != null) ? allowedPermission.getUser() : null;
+
+		if (allowedPermission != null) {
+			logger.info("SudoLogin: [" + allowedPermission.getAdminUser().getEmail() + "] --> [" + allowedPermission.getUser() + "]");
+			return allowedPermission.getUser();
+		} else {
+			return null;
+		}
 	}
 
 	@Scheduled(fixedRate = 300000) // 5 min
