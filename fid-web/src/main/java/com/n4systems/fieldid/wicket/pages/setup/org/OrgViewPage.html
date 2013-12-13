@@ -1,17 +1,4 @@
 <wicket:extend>
-
-    <style type="text/css">
-        /*CHRISTINA  this stuff is just for debugging....remove it  */
-        .match {
-            color:#00008b;
-            background: #FDFD88;
-            outline: 1px solid #A7B412;
-        }
-        .action {
-            padding-left: 100px;
-        }
-    </style>
-
     <script type="text/javascript">
         var toggleCreatePlacePanel = function () {
 //            $('.column-custom').toggle();
@@ -19,9 +6,11 @@
         }
     </script>
 
-
+    <hr>
     <div class="action-bar">
-        <div wicket:id="buttons" class="button-group pull-left">
+
+        <!-- TODO: DEREK Hide for now. No point in showing tree view button if it's the only view available. -->
+        <div wicket:id="buttons" class="button-group pull-left" style="display:none;">
             <a wicket:id="tree" class="btn-secondary btn-icon js-tree-view" title="Tree View">
                 <span class="fontello-flow-cascade"><wicket:message key="label.tree_view"/></span>
             </a>
@@ -29,6 +18,7 @@
                 <!--<span class="fontello-menu"><wicket:message key="label.list_view"/></span>-->
             <!--</a>-->
         </div>
+
         <div class="text-search pull-left">
             <span class="fontello-search"></span>
             <input wicket:id="filter" type="text" placeholder="Search by Place name or ID">
@@ -37,6 +27,77 @@
 
 
     <div wicket:id="container" class="tree-view column-custom-left">
+
+    <!-- EXAMPLE MARKUP FOR TREE -->
+    <wicket:remove>
+        <!-- 1st level: Primary -->
+        <ul>                
+            <li class="level-one primary">
+                <!-- <ins class="jstree-icon">&nbsp;</ins> --><!-- this class is what the plugin renders -->
+                <ins class="fontello-minus-squared"></ins><!-- if possible, I'd like be able to customize the class, if not, I should be able to override existing plugin css -->
+                <a href="places-fbhs.php">Primary Safety First Construction (SFC)</a>
+                <span class="action">Add Customer/Secondary</span>
+                
+                <!-- 2nd level: Jobsite (no Secondary) -->
+                <ul class="level-two customer-jobsite">
+                    <li>
+                        <ins class="fontello-minus-squared-small"></ins>
+                        <a href="#">Customer/Jobsite</a>
+                        <span class="action">Add Division</span>
+
+                        <!-- 3rd: Divisions -->
+                        <ul class="level-three division">
+                            <!-- No icon here since you can't drill down anymore levels. If you can't hide it, I can hide it in CSS. -->
+                            <li><a href="#">Division 1</a></li>
+                            <li><a href="#">Division 2</a></li>
+                        </ul><!-- cls third level -->
+                    </li>
+                </ul><!-- cls second level -->
+                
+                <!-- 2nd level: Secondary -->
+                <ul class="level-two secondary"><!-- same as above but the second class is "secondary" instead of customer-jobsite -->
+                    <li>
+                        <ins class="fontello-minus-squared-small"></ins>
+                        <a href="#">Secondary</a>
+                        <span class="action">Add Customer</span>
+
+                        <!-- 3rd: Jobsite/Customer -->
+                        <ul class="level-three customer-jobsite">
+                            <li>
+                                <ins class="fontello-minus-squared-small"></ins>
+                                <a href="#">Customer/Jobsite</a>
+                                <span class="action">Add Division</span>
+
+                                <!-- 4th: Divisions -->
+                                <ul class="level-four division">
+                                    <li><a href="#">Division 1</a></li>
+                                    <li><a href="#">Division 2</a></li>
+                                    <li><a href="#">Division 3</a></li>
+                                </ul><!-- cls fourth level -->
+                            </li>
+                        </ul><!-- cls third level -->
+                    </li>
+                </ul><!-- cls second level -->
+            </li>
+
+            <li class="level-one primary">
+                <ins class="fontello-minus-squared"></ins>
+                <a href="places-fbhs.php">Primary 2</a>
+                <span class="action">Add Customer/Secondary</span>
+            </li>
+            <li class="level-one primary">
+                <ins class="fontello-minus-squared"></ins>
+                <a href="places-fbhs.php">Primary 3</a>
+                <span class="action">Add Customer/Secondary</span>
+            </li>
+            <li class="level-one primary">
+                <ins class="fontello-minus-squared"></ins>
+                <a href="places-fbhs.php">Primary 4</a>
+                <span class="action">Add Customer/Secondary</span>
+            </li>
+        </ul>
+    </wicket:remove>   
+
         <div wicket:id="tree" class="tree-container">
             <div wicket:id="orgTree"/>
         </div>
@@ -54,13 +115,15 @@
     </div>
 
     <div wicket:id="createPanel" class="column-custom">
-        <!--MOVE THIS INTO OTHER SECTION-->
+        <!-- Show on page load - hide when form is open -->
         <div wicket:id="instructions" class="info">
             <p><wicket:message key="label.create_place_instructions"/>/p>
         </div>
+
         <form wicket:id="form" class="add-place-form">
+            <!-- TODO: Derek, can you put "Add" in the title? -->
+            <h3 wicket:id="title"/>
             <wicket:enclosure child="level">
-                <h3 wicket:id="title"/>
                 <fieldset class="primary-selection form-horizontal">
                     <div class="control-group">
                         <label><wicket:message key="label.select_level"/></label>
@@ -86,9 +149,9 @@
                     </div>
                     <!--<div class="control-group">-->
                         <!--<label>Logo Image</label>-->
-                        <!--<div class="input-combo fluid">-->
-                            <!--<input type="file" class="file-input js-file-input">-->
-                            <!--<input type="text" class="file-uploaded js-file-uploaded">-->
+                        <!--<div class="input-combo fluid file-upload">-->
+                            <!--<input type="file">-->
+                            <!--<input type="text"">-->
                             <!--<span class="btn-secondary btn-sml">Browse</span>-->
                         <!--</div>-->
                         <!--<span class="text-block">Upload a JPG, GIF, or PNG with a size of 200x50 pixels</span>-->
