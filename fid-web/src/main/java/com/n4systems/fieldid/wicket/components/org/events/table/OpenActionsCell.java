@@ -62,13 +62,13 @@ public class OpenActionsCell extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 try{
                     placeEventScheduleService.retireSchedule(schedule);
+                    info(new FIDLabelModel("message.eventdeleted").getObject());
+                    target.add(eventDisplayPanel);
+                    target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
                 } catch (Exception e) {
                     error(new FIDLabelModel("error.eventdeleting").getObject());
                     target.add(((PlaceEventsPage) getPage()).getFeedbackPanel());
                 }
-                info(new FIDLabelModel("message.eventdeleted").getObject());
-                target.add(eventDisplayPanel);
-                target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
             }
         });
 
