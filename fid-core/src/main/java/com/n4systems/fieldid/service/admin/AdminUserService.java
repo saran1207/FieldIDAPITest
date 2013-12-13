@@ -9,11 +9,14 @@ import com.n4systems.model.admin.SudoPermission;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.mail.MessagingException;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 public class AdminUserService extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(AdminUserService.class);
@@ -154,4 +157,15 @@ public class AdminUserService extends FieldIdPersistenceService {
 		return (allowedPermission != null) ? allowedPermission.getUser() : null;
 	}
 
+	@Scheduled(fixedRate = 300000) // 5 min
+	public void expireSudoPermissions() {
+		QueryBuilder<SudoPermission> query = new QueryBuilder<SudoPermission>(SudoPermission.class);
+
+		Date expireDate = new Date(System.currentTimeMillis() - TimeUnit.HOURS.toMillis(2));
+		query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LT, "created", expireDate));
+
+		for (SudoPermission permission: persistenceService.findAll(query)) {
+			persistenceService.remove(permission);
+		}
+	}
 }

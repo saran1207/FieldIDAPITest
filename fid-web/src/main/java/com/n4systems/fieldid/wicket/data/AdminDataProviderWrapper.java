@@ -54,17 +54,17 @@ public class AdminDataProviderWrapper<T> extends FieldIDDataProvider<T> {
 
 	@Override
 	public SortParam getSort() {
-		return dataProvider.getSort();    //To change body of overridden methods use File | Settings | File Templates.
+		return dataProvider.getSort();
 	}
 
 	@Override
 	public void setSort(SortParam param) {
-		dataProvider.setSort(param);    //To change body of overridden methods use File | Settings | File Templates.
+		dataProvider.setSort(param);
 	}
 
 	@Override
 	public void setSort(String property, SortOrder order) {
-		dataProvider.setSort(property, order);    //To change body of overridden methods use File | Settings | File Templates.
+		dataProvider.setSort(property, order);
 	}
 
 	@Override
