@@ -6,21 +6,25 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.util.DateTimeDefinition;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.io.FileUtils;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.sql.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.Logger;
 
 public class AssetReportMapProducer extends ReportMapProducer {
 
 	private static final String UNASSIGNED_USER_NAME = "Unassigned";
 	private final Asset asset;
     private LastEventDateService lastEventDateService;
+
+    private static org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(AssetReportMapProducer.class);
 
     public AssetReportMapProducer(Asset asset, LastEventDateService lastEventDateService, DateTimeDefinition dateTimeDefinition, S3Service s3Service) {
 		super(dateTimeDefinition, s3Service);
@@ -47,7 +51,10 @@ public class AssetReportMapProducer extends ReportMapProducer {
         java.util.Date lastEventDate = lastEventDateService.findLastEventDate(asset);
 		add("lastInspectionDate", formatDate(lastEventDate, true));
 		add("infoOptionBeanList", asset.getOrderedInfoOptionList());
-		add("infoOptionDataSource", new JRBeanCollectionDataSource(asset.getOrderedInfoOptionList()));
+
+        List<InfoOptionBean> clone = cloneInfoOptionList(asset.getOrderedInfoOptionList());
+        transformInfoOptionListDateFields(clone);
+        add("infoOptionDataSource", new JRBeanCollectionDataSource(clone));
 		add("assignedUserName", assignedUserName());
 		
 		AssetType assetType = asset.getType();
@@ -64,7 +71,38 @@ public class AssetReportMapProducer extends ReportMapProducer {
         add("longitude", asset.getGpsLocation() != null ? asset.getGpsLocation().getLongitude() : "");
 	}
 
-	private String assignedUserName() {
+    private List<InfoOptionBean> cloneInfoOptionList(List<InfoOptionBean> orderedInfoOptionList) {
+
+        List<InfoOptionBean> clone = new ArrayList<InfoOptionBean>(orderedInfoOptionList.size());
+        for(InfoOptionBean item: orderedInfoOptionList) {
+            InfoOptionBean infoOptionBean = new InfoOptionBean();
+
+            try {
+                BeanUtils.copyProperties(infoOptionBean, item);
+            } catch (IllegalAccessException e) {
+                logger.error(e.getMessage());
+            } catch (InvocationTargetException e) {
+                logger.error(e.getMessage());
+            }
+
+            clone.add(infoOptionBean);
+        }
+
+        return clone;
+    }
+
+    private void transformInfoOptionListDateFields( List<InfoOptionBean> optionBeanList) {
+
+        for (InfoOptionBean option : optionBeanList) {
+            if (option.getInfoField().getFieldType().equals(InfoFieldBean.DATEFIELD_FIELD_TYPE)) {
+                option.setName(String.valueOf(formatDateToTDate(option)));
+            }
+        }
+
+    }
+
+
+    private String assignedUserName() {
 		return asset.isAssigned() ? asset.getAssignedUser().getUserLabel() : UNASSIGNED_USER_NAME;
 	}
 
@@ -102,6 +140,11 @@ public class AssetReportMapProducer extends ReportMapProducer {
 		Date date = new Date(Long.parseLong(option.getName()));
 		return formatDate(date, option.getInfoField().isIncludeTime());
 	}
+
+    private long formatDateToTDate(InfoOptionBean option) {
+        Date date = new Date(Long.parseLong(option.getName()));
+        return formatDateToTimezoneDate(date).getTime();
+    }
 
 	private String assetStatusName() {
 		return (asset.getAssetStatus() != null) ? asset.getAssetStatus().getName() : null;

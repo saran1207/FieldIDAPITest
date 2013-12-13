@@ -3,6 +3,7 @@ package com.n4systems.reporting;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.PlainDate;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.FieldIdDateFormatter;
 import org.apache.log4j.Logger;
@@ -46,6 +47,10 @@ public abstract class ReportMapProducer {
 		}
 		return new FieldIdDateFormatter(date, dateTimeDefinition, true, showTime).format();
 	}
+
+    protected Date formatDateToTimezoneDate(Date date) {
+        return DateHelper.convertToUserTimeZone(date, dateTimeDefinition.getTimeZone());
+    }
 
 	protected void add(String key, Object value) {
 		reportMap.put(key, value);
