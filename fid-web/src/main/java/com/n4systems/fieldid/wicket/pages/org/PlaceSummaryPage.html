@@ -37,9 +37,10 @@
                     <input wicket:id="email" type="text"/>
                 </div>
             </wicket:enclosure>
-            <wicket:enclosure>
+            <wicket:enclosure child="address">
                 <div class="form-horizontal">
-                    <span wicket:id="address" type="text"/>
+                    <label wicket:for="address"><wicket:message key="label.address"/>:</label>
+                    <span wicket:id="address"/>
                 </div>
             </wicket:enclosure>
             <wicket:enclosure>

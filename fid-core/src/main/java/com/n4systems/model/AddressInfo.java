@@ -21,6 +21,7 @@ public class AddressInfo extends AbstractEntity {
     private GpsLocation gpsLocation = new GpsLocation();
 
     private @Transient String input;
+    private @Transient String formattedAddress;
 
 	public AddressInfo() { }
 
@@ -167,6 +168,14 @@ public class AddressInfo extends AbstractEntity {
 
     public void setInput(String input) {
         this.input = input;
+    }
+
+    public String getFormattedAddress() {
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
     }
 
     @Override

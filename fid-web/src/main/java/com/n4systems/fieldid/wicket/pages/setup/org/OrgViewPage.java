@@ -13,7 +13,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceSummaryPage;
-import com.n4systems.model.Address;
+import com.n4systems.model.AddressInfo;
 import com.n4systems.model.RecurringPlaceEvent;
 import com.n4systems.model.builders.CustomerOrgBuilder;
 import com.n4systems.model.builders.DivisionOrgBuilder;
@@ -275,7 +275,6 @@ public class OrgViewPage extends FieldIDTemplatePage {
         return String.format(highlightedMatchFormat, name.substring(0,index), name.substring(index,index+textFilter.length()), name.substring(index+textFilter.length()));
     }
 
-
 //    class AjaxTextFieldOptions {
 //        String parent = "#"+container.getMarkupId();
 //        String target = "#"+container.getMarkupId();
@@ -286,7 +285,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
 
     class PlaceData implements Serializable {
         private String id, contactName, email, notes, name;
-        private Address address = new Address();
+        private AddressInfo address = new AddressInfo();
         private BaseOrg parent;
         private Level level;
 
@@ -298,7 +297,6 @@ public class OrgViewPage extends FieldIDTemplatePage {
         }
 
         public BaseOrg createNewChildOrg() {
-            System.out.println(toString());
             if (parent instanceof PrimaryOrg) {
                 PrimaryOrg primary = (PrimaryOrg) parent;
                 // TODO : augment builders to accommodate notes, address, etc..

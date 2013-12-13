@@ -1,9 +1,14 @@
 <wicket:panel>
     <wicket:enclosure child="text">
-        <label wicket:for="text"><wicket:message key="label.address"/>:</label>
         <input type="text" wicket:id="text" class="txt"/>
         <div wicket:id="map" class="map"/>
         <input wicket:id="latitude" class="lat" type="hidden"/>
         <input wicket:id="longitude" class="lng" type="hidden"/>
+        <input wicket:id="street_address" class="street-address" type="hidden"/>
+        <input wicket:id="locality" class="city" type="hidden"/>
+        <input wicket:id="administrative_area_level_1" class="state" type="hidden"/>
+        <input wicket:id="country" class="country" type="hidden"/>
+        <input wicket:id="postal_code" class="postal-code" type="hidden"/>
     </wicket:enclosure>
 </wicket:panel>
+
