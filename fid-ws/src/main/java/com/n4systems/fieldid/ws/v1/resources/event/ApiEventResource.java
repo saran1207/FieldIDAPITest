@@ -4,8 +4,8 @@ import com.n4systems.exceptions.NonPrintableEventType;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
-import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.service.event.ThingEventCreationService;
 import com.n4systems.fieldid.ws.v1.resources.eventattachment.ApiEventAttachmentResource;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.model.*;
@@ -41,7 +41,7 @@ public class ApiEventResource extends FieldIdPersistenceService {
 	@Autowired private ApiEventAttachmentResource apiAttachmentResource;
 	@Autowired private ApiEventFormResultResource apiEventFormResultResource;
 	@Autowired private ApiExistingEventFormResultResource apiExistingEventFormResultResource;	
-    @Autowired private EventCreationService eventCreationService;
+    @Autowired private ThingEventCreationService eventCreationService;
     @Autowired private EventService eventService;
     @Autowired private CertificateService certificateService;
 	

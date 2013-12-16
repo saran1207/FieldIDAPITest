@@ -1,5 +1,6 @@
 package com.n4systems.ejb.impl;
 
+import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ThingEvent;
@@ -18,10 +19,10 @@ public class CreateEventParameter {
 	public final FileDataContainer fileData;
 	public final List<FileAttachment> uploadedFiles;
 
-	public final List<EventScheduleBundle> schedules;
+	public final List<EventScheduleBundle<Asset>> schedules;
 
 
-	public CreateEventParameter(ThingEvent event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
+	public CreateEventParameter(ThingEvent event, Date nextEventDate, Long userId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<Asset>> schedules) {
 		this.event = event;
 		this.nextEventDate = nextEventDate;
 		this.userId = userId;

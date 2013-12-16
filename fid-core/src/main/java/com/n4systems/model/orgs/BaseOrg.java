@@ -21,7 +21,7 @@ import java.util.Set;
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Localized(ignore =true)
-public abstract class BaseOrg extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable {
+public abstract class BaseOrg extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable, HasOwner {
 
 	private static final long serialVersionUID = 1L;
 	public static final String SECONDARY_ID_FILTER_PATH = "secondaryOrg.id";
@@ -326,5 +326,15 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 
     public void setImage(PlaceAttachment image) {
         this.image = image;
+    }
+
+    @Override
+    public BaseOrg getOwner() {
+        return this;
+    }
+
+    @Override
+    public void setOwner(BaseOrg owner) {
+        throw new UnsupportedOperationException("Can't set owner");
     }
 }

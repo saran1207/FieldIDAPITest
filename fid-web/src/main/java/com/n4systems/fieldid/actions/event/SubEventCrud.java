@@ -16,7 +16,7 @@ import com.n4systems.fieldid.actions.helpers.EventCrudHelper;
 import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.event.ThingEventCreationService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
@@ -32,7 +32,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import static com.n4systems.fieldid.utils.CopyEventFactory.copyEvent;
 
@@ -51,7 +50,7 @@ public class SubEventCrud extends EventCrud {
     private String overrideResult;
 
 	public SubEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
-			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService,
+			AssetManager assetManager, EventScheduleManager eventScheduleManager, ThingEventCreationService eventCreationService,
             PersistenceService persistenceService) {
 
 		super(persistenceManager, eventManager, userManager, legacyAssetManager, assetManager, eventScheduleManager, eventCreationService, persistenceService);

@@ -29,6 +29,8 @@ import com.n4systems.fieldid.service.attachment.AttachmentService;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.event.*;
+import com.n4systems.fieldid.service.event.perform.PerformPlaceEventHelperService;
+import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
 import com.n4systems.fieldid.service.export.EventTypeExportService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.job.JobService;
@@ -169,8 +171,13 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
-    public EventCreationService eventCreationService() {
-        return new EventCreationService();
+    public ThingEventCreationService eventCreationService() {
+        return new ThingEventCreationService();
+    }
+
+    @Bean
+    public PlaceEventCreationService placeEventCreationService() {
+        return new PlaceEventCreationService();
     }
 
     @Bean
@@ -749,5 +756,15 @@ public class FieldIdCoreConfig {
     @Bean
     public SendForgotUserEmailService sendForgotUserEmailService() {
         return new SendForgotUserEmailService();
+    }
+
+    @Bean
+    public PerformThingEventHelperService performThingEventHelperService() {
+        return new PerformThingEventHelperService();
+    }
+
+    @Bean
+    public PerformPlaceEventHelperService performPlaceEventHelperService() {
+        return new PerformPlaceEventHelperService();
     }
 }

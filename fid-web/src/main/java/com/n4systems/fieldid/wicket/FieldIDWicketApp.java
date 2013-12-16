@@ -140,6 +140,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("performEvent", PerformEventPage.class);
         mountPage("editEvent", EditEventPage.class);
 
+        mountPage("performPlaceEvent", PerformPlaceEventPage.class);
+
         mountPage("closeEvent", CloseEventPage.class);
 
         mountPage("sendSavedItem", SendSavedItemPage.class);
@@ -212,8 +214,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("template/twoColumnRight", TwoColumnRight.class);
         mountPage("template/noColumns", FirstTab.class);
         mountPage("template/noColumnsTab", SecondTab.class);
-
-        mountPage("performPlaceEvent", PlaceEventPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

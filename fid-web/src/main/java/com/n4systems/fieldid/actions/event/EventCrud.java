@@ -25,7 +25,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.event.ThingEventCreationService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ui.OptionLists;
@@ -46,6 +46,8 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import com.n4systems.model.utils.AssetEvent;
+import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
@@ -78,7 +80,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	protected final ProductionEventPersistenceFactory eventPersistenceFactory;
 	protected final EventHelper eventHelper;
 	protected final EventFormHelper eventFormHelper;
-    private final EventCreationService eventCreationService;
+    private final ThingEventCreationService eventCreationService;
 	protected Asset asset;
 	protected Event event;
 
@@ -132,7 +134,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
     private MixpanelService mixpanelService;
 
     public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
-			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService, PersistenceService persistenceService) {
+			AssetManager assetManager, EventScheduleManager eventScheduleManager, ThingEventCreationService eventCreationService, PersistenceService persistenceService) {
 		super(persistenceManager);
 		this.eventManager = eventManager;
 		this.legacyAssetManager = legacyAssetManager;
@@ -164,15 +166,24 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
         Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
         try {
             ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getCurrentUser().getLanguage());
-			if (allowNetworkResults) {
-				
-				// if we're in a vendor context we need to look events for assigned assets rather than registered assets
-				event = getLoaderFactory().createSafetyNetworkEventLoader(isInVendorContext()).setId(uniqueId).load();
-				
-			} else {
-				event = eventManager.findAllFields(uniqueId, getSecurityFilter());
-			}
-			
+
+            Event testEvent = persistenceService.find(Event.class, uniqueId);
+
+            if (testEvent instanceof PlaceEvent) {
+                event = testEvent;
+                PostFetcher.postFetchFields(event, Event.PLACE_FIELD_PATHS);
+            } else {
+                if (allowNetworkResults) {
+
+                    // if we're in a vendor context we need to look events for assigned assets rather than registered assets
+                    event = getLoaderFactory().createSafetyNetworkEventLoader(isInVendorContext()).setId(uniqueId).load();
+
+                } else {
+                    event = eventManager.findAllFields(uniqueId, getSecurityFilter());
+                }
+            }
+
+
 			if (event != null && !event.isActive()) {
 				event = null;
 			}
@@ -197,7 +208,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			throw new MissingEntityException();
 		}
 
-		if (asset == null) {
+		if (event instanceof AssetEvent && asset == null) {
 			addActionError(getText("error.noasset"));
 			throw new MissingEntityException();
 		}
@@ -451,8 +462,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		return SUCCESS;
 	}
 
-    protected List<EventScheduleBundle> createEventScheduleBundles() {
-		List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
+    protected List<EventScheduleBundle<Asset>> createEventScheduleBundles() {
+		List<EventScheduleBundle<Asset>> scheduleBundles = new ArrayList<EventScheduleBundle<Asset>>();
 		StrutsListHelper.clearNulls(nextSchedules);
 		
 		WebEventScheduleToEventScheduleBundleConverter converter = createWebEventScheduleToEventScheduleBundleConverter();
