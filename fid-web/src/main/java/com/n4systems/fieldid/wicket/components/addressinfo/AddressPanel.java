@@ -25,6 +25,8 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
     private IModel<AddressInfo> model;
     private String externalMapJsVar;
     private boolean noMap = false;
+    private boolean hideIfChildrenHidden = false;
+    private boolean empty;
 
     public AddressPanel(String id, IModel<AddressInfo> model) {
         super(id, model);
@@ -79,6 +81,20 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
     public IModel<String> getLabel() {
         return Model.of("address");
     }
+
+    public AddressPanel hideIfChildrenHidden() {
+        this.hideIfChildrenHidden = true;
+        return this;
+    }
+
+    @Override
+    public boolean isVisible() {
+        if (super.isVisible()) {
+            return get("text").isVisible();
+        }
+        return false;
+    }
+
 
     class Options {
         String id = String.format("#%s",AddressPanel.this.getMarkupId());

@@ -89,7 +89,7 @@ public class PlaceSummaryPage extends PlacePage {
         }       .withSaveCancelEditLinks()
                 .add(new TextField("name", ProxyModel.of(contact,on(Contact.class).getName())))
                 .add(new TextField("email", ProxyModel.of(contact,on(Contact.class).getEmail())))
-                .add(new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())).withExternalMap(map.getJsVar()))
+                .add(new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())).withExternalMap(map.getJsVar()).hideIfChildrenHidden())
                 .add(new TextField("phone", ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo().getPhone1())))
                 .add(new TextField("phone2", ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo().getPhone2())))
                 .add(new TextField("fax", ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo().getFax1()))));
