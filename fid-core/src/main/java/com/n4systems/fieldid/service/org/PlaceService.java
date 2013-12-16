@@ -6,24 +6,22 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.UserType;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Transactional
 public class PlaceService extends FieldIdPersistenceService {
+
+    private @Autowired OrgService orgService;
 
     /**
      * NOTE THAT ALL METHODS IN THIS SERVICE ARE JUST PLACEHOLDERS FOR 2013.8!!!!
@@ -155,5 +153,24 @@ public class PlaceService extends FieldIdPersistenceService {
     public List<PlaceEventType> getEventTypes() {
         QueryBuilder<PlaceEventType> query = createTenantSecurityBuilder(PlaceEventType.class);
         return persistenceService.findAll(query);
+    }
+
+    public Long countDescendants(BaseOrg org) {
+        Preconditions.checkNotNull(org);
+        QueryBuilder<BaseOrg> query = getDescendantsQuery(org);
+        return persistenceService.count(query);
+    }
+
+    public List<BaseOrg> getDescendants(BaseOrg org, int page, int pageSize) {
+        Preconditions.checkNotNull(org);
+        QueryBuilder<BaseOrg> query = getDescendantsQuery(org);
+        return persistenceService.findAllPaginated(query, page, pageSize);
+    }
+
+    private QueryBuilder<BaseOrg> getDescendantsQuery(BaseOrg org) {
+        QueryBuilder<BaseOrg> query = createUserSecurityBuilder(BaseOrg.class);
+        query.addSimpleWhere("parent", org);
+        query.addOrder("name");
+        return query;
     }
 }

@@ -13,15 +13,14 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForPlaceModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.event.PerformPlaceEventPage;
+import com.n4systems.fieldid.wicket.pages.org.PlaceDescendantsPage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventTypesPage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.PlaceEventType;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.*;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.collections.PrioritizedList;
@@ -135,6 +134,26 @@ public class PlaceActionGroup extends Panel {
                 setResponsePage(PlaceEventTypesPage.class,PageParametersBuilder.id(getOrg().getId()));
             }
         });
+
+        add(new Link<Void>("descendants") {
+            @Override public void onClick() {
+                setResponsePage(PlaceDescendantsPage.class,PageParametersBuilder.id(getOrg().getId()));
+            }
+            @Override public boolean isVisible() {
+                return !(getOrg() instanceof DivisionOrg);
+            }
+        }.add(new Label("label", getLabelForOrg())));
+    }
+
+    private IModel<String> getLabelForOrg() {
+        if (getOrg() instanceof PrimaryOrg) {
+            return new FIDLabelModel("label.add_secondary_customer_to", getOrg().getDisplayName());
+        } else if (getOrg() instanceof SecondaryOrg) {
+            return new FIDLabelModel("label.add_customer_to", getOrg().getDisplayName());
+        } else if (getOrg() instanceof CustomerOrg) {
+            return new FIDLabelModel("label.add_division_to", getOrg().getDisplayName());
+        }
+        throw new IllegalStateException("this shouldn't be shown for divisions or other non-primary/secondary/customer orgs.");
     }
 
     protected void refreshContainingPage(AjaxRequestTarget target) {};
