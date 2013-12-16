@@ -3,15 +3,14 @@ package com.n4systems.fieldid.service.event;
 import com.n4systems.ejb.impl.EventResultCalculator;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.exceptions.FileAttachmentException;
-import com.n4systems.exceptions.ProcessingProofTestException;
-import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.exceptions.UnknownSubAsset;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.model.*;
+import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
+import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.signature.SignatureService;
@@ -26,50 +25,41 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.*;
 
-public class EventCreationService extends FieldIdPersistenceService {
-    
-    private static final Logger logger = Logger.getLogger(EventCreationService.class);
+public abstract class EventCreationService<T extends Event<?,?,?>, V extends EntityWithTenant & HasOwner> extends FieldIdPersistenceService {
 
-    @Autowired
-    private AssetService assetService;
+    protected static final Logger logger = Logger.getLogger(EventCreationService.class);
 
-    @Autowired
-    private LastEventDateService lastEventDateService;
-
-    @Autowired
-    private NextEventScheduleService nextEventScheduleService;
-
-	@Autowired
-	private S3Service s3Service;
-
-    @Autowired
-    private TenantSettingsService tenantSettingsService;
-
-    @Autowired
-    private EventScheduleService eventScheduleService;
-
-    @Autowired
-    private EventService eventService;
+    @Autowired protected AssetService assetService;
+    @Autowired protected LastEventDateService lastEventDateService;
+    @Autowired protected NextEventScheduleService nextEventScheduleService;
+	@Autowired protected S3Service s3Service;
+    @Autowired protected TenantSettingsService tenantSettingsService;
+    @Autowired protected EventScheduleService eventScheduleService;
+    @Autowired protected EventService eventService;
 
     @Transactional
-    public ThingEvent createEventWithSchedules(ThingEvent event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle> schedules) {
-        ThingEvent savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles);
-        for (EventScheduleBundle eventScheduleBundle : schedules) {
-            ThingEvent openEvent = new ThingEvent();
-            openEvent.setTenant(eventScheduleBundle.getAsset().getTenant());
-            openEvent.setAsset(eventScheduleBundle.getAsset());
+    public T createEventWithSchedules(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<V>> schedules) {
+        T savedEvent = createEvent(event, scheduleId, fileData, uploadedFiles);
+        for (EventScheduleBundle<V> eventScheduleBundle : schedules) {
+            T openEvent = createEvent();
+            openEvent.setTenant(eventScheduleBundle.getTarget().getTenant());
+            setTargetFromScheduleBundle(openEvent, eventScheduleBundle);
             openEvent.setType(eventScheduleBundle.getType());
-            openEvent.setOwner(eventScheduleBundle.getAsset().getOwner());
+            openEvent.setOwner(eventScheduleBundle.getTarget().getOwner());
             openEvent.setProject(eventScheduleBundle.getJob());
             openEvent.setDueDate(eventScheduleBundle.getScheduledDate());
             openEvent.setAssignedUserOrGroup(eventScheduleBundle.getAssginee());
-            nextEventScheduleService.createNextSchedule(openEvent);
+            postCreateSchedule(openEvent);
         }
         return savedEvent;
     }
 
+    protected abstract T createEvent();
+    protected abstract void setTargetFromScheduleBundle(T event, EventScheduleBundle<V> bundle);
+    protected void postCreateSchedule(T openEvent) {}
+
     @Transactional
-    public ThingEvent createEvent(ThingEvent event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
+    public T createEvent(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {
         defaultOneClickResultsWithNullState(event.getResults());
 
         EventResult calculatedEventResult = calculateEventResultAndScore(event);
@@ -82,17 +72,11 @@ public class EventCreationService extends FieldIdPersistenceService {
 
         event.setWorkflowState(WorkflowState.COMPLETED);
 
-        setProofTestData(event, fileData);
-
-        confirmSubEventsAreAgainstAttachedSubAssets(event);
-
-        setOrderForSubEvents(event);
-
         Date completedDate = event.getDate();
 
-//        findOrCreateSchedule(event, scheduleId);
-
         event.setDate(completedDate);
+
+        preSaveEvent(event, fileData);
 
         if (event.getId() == null) {
             persistenceService.save(event);
@@ -115,65 +99,36 @@ public class EventCreationService extends FieldIdPersistenceService {
             event = persistenceService.update(event);
         }
 
-
         setAllTriggersForActions(event);
 
-        updateAsset(event, user.getId());
+        postSaveEvent(event, fileData);
 
-        // writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an 
+        // writeSignatureImagesToDisk MUST be called after persistenceManager.save(parameterObject.event, parameterObject.userId) as an
         // event id is required to build the save path
         writeSignatureImagesToDisk(event);
 		saveCriteriaResultImages(event);
-        saveProofTestFiles(event, fileData);
 
         processUploadedFiles(event, uploadedFiles);
-
-        // Do this last, as it can throw an exception if the schedule is in an invalid state.
-//        event.getSchedule().completed(event);
-//        persistenceService.update(event.getSchedule());
 
         if(user.isUsageBasedUser()) {
             int eventCount = event.getSubEvents().size() + 1;
             tenantSettingsService.decrementUsageBasedEventCount(eventCount);
         }
 
-        updateRecurringAssetTypeEvent(event, EventEnum.PERFORM);
-
-
         return event;
     }
 
-    public void updateRecurringAssetTypeEvent(ThingEvent event, EventEnum eventEnum) {
+    protected void preSaveEvent(T event, FileDataContainer fileData) {}
+    protected void postSaveEvent(T event, FileDataContainer fileData) {}
 
-        Event nextEvent = null;
-        Event uEvent = null;
-
-        RecurringAssetTypeEvent recurringEvent = event.getRecurringEvent();
-
-        if (null != recurringEvent && recurringEvent.getAutoAssign()) {
-
-            nextEvent = eventScheduleService.getNextAvailableSchedule(event);
-
-            if (eventEnum == EventEnum.PERFORM) {
-                nextEvent.setAssignee(event.getPerformedBy());
-            } else if (eventEnum == EventEnum.CLOSE) {
-                nextEvent.setAssignee(event.getAssignee());
-            }
-
-            if (null != nextEvent) {
-                uEvent = persistenceService.update(nextEvent);
-            }
-        }
-    }
-
-    private void setAllTriggersForActions(ThingEvent event) {
+    private void setAllTriggersForActions(T event) {
         event.setTriggersIntoResultingActions(event);
         for (SubEvent subEvent : event.getSubEvents()) {
             subEvent.setTriggersIntoResultingActions(event);
         }
     }
 
-    private void restoreCriteriaImages(ThingEvent event, Map<Long, List<String>> rememberedCriteriaImages) {
+    private void restoreCriteriaImages(T event, Map<Long, List<String>> rememberedCriteriaImages) {
         for (CriteriaResult criteriaResult : event.getResults()) {
             int index = 0;
             for (CriteriaResultImage criteriaResultImage : criteriaResult.getCriteriaImages()) {
@@ -184,7 +139,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         }
     }
 
-    private Map<Long, List<String>> rememberCriteriaImages(ThingEvent event) {
+    private Map<Long, List<String>> rememberCriteriaImages(T event) {
         Map<Long, List<String>> criteriaImageFiles = new HashMap<Long, List<String>>();
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (!criteriaResult.getCriteriaImages().isEmpty()) {
@@ -197,7 +152,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         return criteriaImageFiles;
     }
 
-    private void restoreTemporarySignatureFiles(ThingEvent event, Map<Long, String> rememberedSignatureFiles) {
+    private void restoreTemporarySignatureFiles(T event, Map<Long, String> rememberedSignatureFiles) {
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (criteriaResult instanceof SignatureCriteriaResult && rememberedSignatureFiles.containsKey(criteriaResult.getCriteria().getId())) {
                 ((SignatureCriteriaResult) criteriaResult).setTemporaryFileId(rememberedSignatureFiles.get(criteriaResult.getCriteria().getId()));
@@ -205,7 +160,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         }
     }
 
-    private Map<Long, String> rememberTemporarySignatureFiles(ThingEvent event) {
+    private Map<Long, String> rememberTemporarySignatureFiles(T event) {
         Map<Long,String> rememberedSignatureFiles = new HashMap<Long, String>();
         for (CriteriaResult criteriaResult : event.getResults()) {
             if (criteriaResult instanceof  SignatureCriteriaResult) {
@@ -215,7 +170,7 @@ public class EventCreationService extends FieldIdPersistenceService {
         return rememberedSignatureFiles;
     }
 
-    private Event processUploadedFiles(ThingEvent event, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
+    private Event processUploadedFiles(T event, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
         attachUploadedFiles(event, null, uploadedFiles);
 
         for (SubEvent subEvent : event.getSubEvents()) {
@@ -312,124 +267,18 @@ public class EventCreationService extends FieldIdPersistenceService {
         return event;
     }
 
-    private void saveProofTestFiles(Event event, FileDataContainer fileData) throws ProcessingProofTestException {
-        if (fileData == null) {
-            return;
-        }
-        File proofTestFile = PathHandler.getProofTestFile(event);
-        File chartImageFile = PathHandler.getChartImageFile(event);
-
-        // we should make sure our parent directories exist first
-        proofTestFile.getParentFile().mkdirs();
-        chartImageFile.getParentFile().mkdirs();
-
-        try {
-            if (fileData.getFileData() != null) {
-                FileUtils.writeByteArrayToFile(proofTestFile, fileData.getFileData());
-            } else if (proofTestFile.exists()) {
-                proofTestFile.delete();
-            }
-
-            if (fileData.getChart() != null) {
-                FileUtils.writeByteArrayToFile(chartImageFile, fileData.getChart());
-            } else if (chartImageFile.exists()) {
-                chartImageFile.delete();
-            }
-
-        } catch (IOException e) {
-            logger.error("Failed while writing Proof Test files", e);
-            throw new ProcessingProofTestException(e);
-        }
-
-    }
-
-    private EventResult calculateEventResultAndScore(ThingEvent event) {
+    private EventResult calculateEventResultAndScore(T event) {
         EventResultCalculator resultCalculator = new EventResultCalculator();
         EventResult eventResult = resultCalculator.findEventResult(event);
 
-        for (SubEvent subEvent : event.getSubEvents()) {
-            EventResult currentResult = resultCalculator.findEventResult(subEvent);
-            eventResult = resultCalculator.adjustStatus(eventResult, currentResult);
-        }
-
-        return eventResult;
+        return adjustEventResult(event, eventResult, resultCalculator);
     }
 
-    private void setProofTestData(ThingEvent event, FileDataContainer fileData) {
-        if (fileData == null) {
-            return;
-        }
-
-        if (event.getProofTestInfo() == null) {
-            event.setProofTestInfo(new ProofTestInfo());
-        }
-
-        event.getProofTestInfo().setProofTestType(fileData.getFileType());
-        event.getProofTestInfo().setDuration(fileData.getTestDuration());
-        event.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
-        event.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
+    protected EventResult adjustEventResult(T event, EventResult initialResult, EventResultCalculator resultCalculator) {
+        return initialResult;
     }
 
-    private void confirmSubEventsAreAgainstAttachedSubAssets(ThingEvent event) throws UnknownSubAsset {
-        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
-        List<SubAsset> subAssets = assetService.findSubAssets(asset);
-        for (SubEvent subEvent : event.getSubEvents()) {
-            if (!subAssets.contains(new SubAsset(subEvent.getAsset(), null))) {
-                throw new UnknownSubAsset("asset id " + subEvent.getAsset().getId() + " is not attached to asset " + asset.getId());
-            }
-        }
-    }
-
-    private void setOrderForSubEvents(ThingEvent event) {
-        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
-        List<SubAsset> subAssets = assetService.findSubAssets(asset);
-        List<SubEvent> reorderedSubEvents = new ArrayList<SubEvent>();
-        for (SubAsset subAsset : subAssets) {
-            for (SubEvent subEvent : event.getSubEvents()) {
-                if (subEvent.getAsset().equals(subAsset.getAsset())) {
-                    reorderedSubEvents.add(subEvent);
-                }
-            }
-        }
-        event.setSubEvents(reorderedSubEvents);
-    }
-
-    private void updateAsset(ThingEvent event, Long modifiedById) {
-        User modifiedBy = getCurrentUser();
-        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
-        asset.setSubAssets(assetService.findSubAssets(asset));
-
-        // pushes the location and the ownership to the asset based on the
-        // events data.
-        ownershipUpdates(event, asset);
-        statusUpdates(event, asset);
-        assignedToUpdates(event, asset);
-        gpsUpdates(event, asset);
-
-        try {
-            assetService.update(asset, modifiedBy);
-        } catch (SubAssetUniquenessException e) {
-            logger.error("received a subasset uniquness error this should not be possible form this type of update.", e);
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void assignedToUpdates(Event event, Asset asset) {
-        if (event.hasAssignToUpdate()) {
-            asset.setAssignedUser(event.getAssignedTo().getAssignedUser());
-        }
-    }
-
-    private void statusUpdates(ThingEvent event, Asset asset) {
-        asset.setAssetStatus(event.getAssetStatus());
-    }
-
-    private void ownershipUpdates(Event event, Asset asset) {
-        asset.setOwner(event.getOwner());
-        asset.setAdvancedLocation(event.getAdvancedLocation());
-    }
-
-    private void writeSignatureImagesToDisk(ThingEvent event) {
+    private void writeSignatureImagesToDisk(T event) {
         SignatureService sigService = new SignatureService();
 
         writeSignatureImagesFor(sigService, event.getResults());
@@ -450,15 +299,8 @@ public class EventCreationService extends FieldIdPersistenceService {
         }
     }
 
-    private void gpsUpdates(Event event, Asset asset) {
-        if (event.getGpsLocation() != null && event.getGpsLocation().isValid()) {
-            logger.info("Valid GPS recieved during inspection. Updating Asset " + asset.getIdentifier());
-            asset.setGpsLocation(event.getGpsLocation());
-        }
-    }
-
     @Transactional
-    public ThingEvent updateEvent(ThingEvent event, FileDataContainer fileData, List<FileAttachment> attachments) {
+    public T updateEvent(T event, FileDataContainer fileData, List<FileAttachment> attachments) {
 
         EventResult calculatedEventResult = calculateEventResultAndScore(event);
 
@@ -467,8 +309,7 @@ public class EventCreationService extends FieldIdPersistenceService {
             event.setEventResult(calculatedEventResult);
         }
 
-        setProofTestData(event, fileData);
-        saveProofTestFiles(event, fileData);
+        preUpdateEvent(event, fileData);
 
         writeSignatureImagesToDisk(event);
         saveCriteriaResultImages(event);
@@ -477,14 +318,16 @@ public class EventCreationService extends FieldIdPersistenceService {
         event.getAttachments().clear();
         
         event = persistenceService.update(event);
+        postUpdateEvent(event, fileData);
         processUploadedFiles(event, attachments);
-
-        updateRecurringAssetTypeEvent(event, EventEnum.PERFORM);
 
         return event;
     }
 
-    private void saveCriteriaResultImages(ThingEvent event) {
+    protected abstract void preUpdateEvent(T event, FileDataContainer fileData);
+    protected abstract void postUpdateEvent(T event, FileDataContainer fileData);
+
+    private void saveCriteriaResultImages(T event) {
 		saveCriteriaResultImages(event.getResults());
 		for (SubEvent subEvent: event.getSubEvents()) {
 			saveCriteriaResultImages(subEvent.getResults());

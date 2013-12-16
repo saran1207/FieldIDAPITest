@@ -7,11 +7,11 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.ejb.legacy.UserManager;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.event.ThingEventCreationService;
 
 public class NetworkEventCrud extends EventCrud {
 
-    public NetworkEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager, AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService, PersistenceService persistenceService) {
+    public NetworkEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager, AssetManager assetManager, EventScheduleManager eventScheduleManager, ThingEventCreationService eventCreationService, PersistenceService persistenceService) {
         super(persistenceManager, eventManager, userManager, legacyAssetManager, assetManager, eventScheduleManager, eventCreationService, persistenceService);
     }
 

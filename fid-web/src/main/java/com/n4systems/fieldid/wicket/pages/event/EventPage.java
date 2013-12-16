@@ -1,15 +1,16 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
-import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.components.*;
+import com.n4systems.fieldid.wicket.components.Comment;
+import com.n4systems.fieldid.wicket.components.DateTimePicker;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.SimpleAjaxButton;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.event.attributes.AttributesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook;
@@ -26,13 +27,10 @@ import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
-import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.*;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
@@ -50,12 +48,11 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -64,22 +61,20 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public abstract class EventPage extends FieldIDFrontEndPage {
+public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
     @SpringBean protected EventService eventService;
-    @SpringBean protected EventCreationService eventCreationService;
     @SpringBean protected PersistenceService persistenceService;
     @SpringBean protected EventStatusService eventStatusService;
 
-    protected IModel<ThingEvent> event;
+    protected IModel<T> event;
 
-    private List<ThingEvent> schedules = new ArrayList<ThingEvent>();
-    private ThingEvent scheduleToAdd;
+    protected List<T> schedules = new ArrayList<T>();
+    private T scheduleToAdd;
     private List<AbstractEvent.SectionResults> sectionResults;
     protected List<FileAttachment> fileAttachments;
     private User assignedTo;
     protected ProofTestEditPanel proofTestEditPanel;
-    private IModel<ProofTestInfo> proofTestInfo;
     private SchedulePicker schedulePicker;
 
     protected EventResult eventResult;
@@ -91,10 +86,6 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         super.onInitialize();
         sectionResults = event.getObject().getSectionResults();
         scheduleToAdd = createNewOpenEvent();
-        proofTestInfo = new PropertyModel<ProofTestInfo>(event, "proofTestInfo");
-        if (proofTestInfo.getObject() == null) {
-            proofTestInfo = new Model<ProofTestInfo>(new ProofTestInfo());
-        }
         if(event.getObject().hasAssignToUpdate()) {
             assignedTo = event.getObject().getAssignedTo().getAssignedUser();
         }
@@ -103,25 +94,18 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         add(new OuterEventForm("outerEventForm"));
     }
 
-    private SchedulePicker createSchedulePicker() {
-        return new SchedulePicker<ThingEvent>("schedulePicker", new PropertyModel<ThingEvent>(EventPage.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(event, "asset.type")), new EventJobsForTenantModel()) {
-            @Override
-            protected void onPickComplete(AjaxRequestTarget target) {
-                schedules.add(scheduleToAdd);
-                scheduleToAdd = createNewOpenEvent();
-                // CAVEAT : shouldn't use enclosures for ajax component - results in javascript noise if component not visible.
-                // see http://jawher.net/2009/09/17/wicket-enclosures-and-ajax-no-no/
-                // use InlineEnclosure instead.
-                target.add(schedulesContainer);
-            }
-        };
+    protected abstract SchedulePicker<T> createSchedulePicker();
+
+    protected void onSchedulePickComplete(AjaxRequestTarget target) {
+        schedules.add(scheduleToAdd);
+        scheduleToAdd = createNewOpenEvent();
+        // CAVEAT : shouldn't use enclosures for ajax component - results in javascript noise if component not visible.
+        // see http://jawher.net/2009/09/17/wicket-enclosures-and-ajax-no-no/
+        // use InlineEnclosure instead.
+        target.add(schedulesContainer);
     }
 
-    private ThingEvent createNewOpenEvent() {
-        ThingEvent openEvent = new ThingEvent();
-        openEvent.setAsset(event.getObject().getAsset());
-        return openEvent;
-    }
+    protected abstract T createNewOpenEvent();
 
     class OuterEventForm extends Form {
 
@@ -130,16 +114,8 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
         public OuterEventForm(String id) {
             super(id);
-            add(new Label("assetTypeName", new PropertyModel<String>(event, "asset.type.name")));
 
-            add(new Label("description", new PropertyModel<String>(event, "asset.description")));
-            add(new IdentifierLabel("identifierLabel", new PropertyModel<AssetType>(event, "asset.type")));
-            BookmarkablePageLink<Void> assetLink = new BookmarkablePageLink<Void>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getObject().getAsset().getId()));
-            assetLink.add(new Label("identifier", new PropertyModel<Object>(event, "asset.identifier")));
-            add(assetLink);
-
-            add(new Label("rfidNumber", new PropertyModel<String>(event, "asset.rfidNumber")));
-            add(new Label("referenceNumber", new PropertyModel<String>(event, "asset.customerRefNumber")));
+            add(createTargetDetailsPanel(event));
 
             GroupedUserPicker groupedUserPicker;
             add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(EventPage.this, "assignedTo"), new GroupedVisibleUsersModel()));
@@ -192,7 +168,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
 
             if (event.getObject().getType().isThingEventType()) {
-                proofTestContainer.add(proofTestEditPanel = new ProofTestEditPanel("proofTest", event.getObject().getThingType(), proofTestInfo));
+                proofTestContainer.add(proofTestEditPanel = createProofTestEditPanel("proofTest"));
                 proofTestContainer.setVisible(supportsProofTests());
             } else {
                 proofTestContainer.setVisible(false);
@@ -230,12 +206,9 @@ public abstract class EventPage extends FieldIDFrontEndPage {
 
             add(new Comment("comments", new PropertyModel<String>(event, "comments")).addMaxLengthValidation(2500));
 
-            DropDownChoice assetStatus = new DropDownChoice<AssetStatus>("assetStatus", new PropertyModel<AssetStatus>(event, "assetStatus"), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>());
-            assetStatus.add(new UpdateComponentOnChange());
-            assetStatus.setNullValid(true);
-            add(assetStatus);
+            add(createPostEventPanel(event));
 
-            ThingEvent masterEvent = event.getObject();
+            Event masterEvent = event.getObject();
             DropDownChoice resultSelect = new DropDownChoice<EventResult>("eventResult", new PropertyModel<EventResult>(EventPage.this, "eventResult"), EventResult.getValidEventResults(), new ListableLabelChoiceRenderer<EventResult>());
             resultSelect.add(new UpdateComponentOnChange());
             resultSelect.setNullValid(masterEvent.isResultFromCriteriaAvailable());
@@ -274,12 +247,13 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             }
 
 
-            if (persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getObject().getAsset().getId()).isArchived()) {
+            if (targetAlreadyArchived(event.getObject())) {
                 error(getString("error.asset_has_been_archived"));
                 return;
             }
             event.getObject().setSectionResults(sectionResults);
-            event.getObject().setProofTestInfo(proofTestInfo.getObject());
+            onPreSave(event.getObject());
+            onPreSave(event.getObject());
             saveAssignedToIfNecessary();
             saveEventBookIfNecessary();
             if (doPostSubmitValidation()) {
@@ -289,6 +263,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             }
         }
     }
+
 
     protected Behavior createUpdateAutoschedulesOnChangeBehavior() {
         return new UpdateComponentOnChange() {
@@ -300,12 +275,12 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         };
     }
 
-    private boolean supportsProofTests() {
-        ThingEvent event = this.event.getObject();
-        return event.getThingType().getSupportedProofTests().size()>0 && event.getOwner().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.ProofTestIntegration);
-    }
-
-    protected abstract Component createCancelLink(String cancelLink);
+    protected abstract Component createTargetDetailsPanel(IModel<T> model);
+    protected abstract Component createPostEventPanel(IModel<T> event);
+    protected abstract boolean supportsProofTests();
+    protected abstract ProofTestEditPanel createProofTestEditPanel(String id);
+    protected abstract Component createCancelLink(String id);
+    protected abstract boolean targetAlreadyArchived(T event);
 
     private Link createDeleteLink(String linkId) {
         return new Link(linkId) {
@@ -315,9 +290,9 @@ public abstract class EventPage extends FieldIDFrontEndPage {
             }
             @Override
             public void onClick() {
-                eventService.retireEvent(event.getObject());
+                retireEvent(event.getObject());
                 FieldIDSession.get().info(getString("message.eventdeleted"));
-                setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getObject().getAsset().getId()));
+                gotoSummaryPage(event.getObject());
             }
         };
     }
@@ -338,17 +313,9 @@ public abstract class EventPage extends FieldIDFrontEndPage {
     }
 
     protected abstract AbstractEvent doSave();
-
-    protected List<EventScheduleBundle> createEventScheduleBundles() {
-        List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
-
-        for (ThingEvent sched : schedules) {
-            EventScheduleBundle bundle = new EventScheduleBundle(sched.getAsset(), sched.getType(), sched.getProject(), sched.getDueDate());
-            scheduleBundles.add(bundle);
-        }
-
-        return scheduleBundles;
-    }
+    protected abstract void retireEvent(T event);
+    protected abstract void gotoSummaryPage(T event);
+    protected void onPreSave(T event) { }
 
     private boolean doPostSubmitValidation() {
         if (event instanceof Event) {
@@ -387,23 +354,7 @@ public abstract class EventPage extends FieldIDFrontEndPage {
         return false;
     }
 
-    protected void doAutoSchedule() {
-        ThingEvent e = event.getObject();
-
-        if (null == e.getDate()) {
-            return;
-        }
-
-        AssetTypeSchedule schedule = e.getAsset().getType().getSchedule(e.getType(), e.getOwner());
-        schedules.clear();
-        if (schedule != null) {
-            ThingEvent eventSchedule = new ThingEvent();
-            eventSchedule.setAsset(e.getAsset());
-            eventSchedule.setType(e.getType());
-            eventSchedule.setDueDate(schedule.getNextDate(e.getDate()));
-            schedules.add(eventSchedule);
-        }
-    }
+    protected void doAutoSchedule() { }
 
     public EventResult getEventResult() {
         return eventResult;

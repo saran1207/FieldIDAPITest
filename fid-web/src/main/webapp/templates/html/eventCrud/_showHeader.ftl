@@ -31,7 +31,7 @@
     </script>
 </head>
 <div class="event-header">
-    <h1 class="event-summary"> <span class="greyText">${event.type.displayName!}  /</span> ${event.asset.identifier!}</h1>
+    <h1 class="event-summary"> <span class="greyText">${event.type.displayName!}  /</span> <#if event.asset?exists> ${event.asset.identifier!} </#if> </h1>
     <p class="owner-summary">
         <img src="/fieldid/images/location-icon.png">
         <#if !event.advancedLocation.isBlank()>
@@ -49,16 +49,18 @@
     </p>
 
     <div class="actions">
-        <#if event.tenant.id == sessionUser.tenant.id>
-            <@s.url id="summaryLink" namespace="/" value="w/assetSummary?uniqueID=${asset.id}"/>
+        <#if event.asset?exists>
+            <#if event.tenant.id == sessionUser.tenant.id>
+                <@s.url id="summaryLink" namespace="/" value="w/assetSummary?uniqueID=${asset.id}"/>
 
-        <#else>
-            <@s.url id="summaryLink" namespace="/" value="w/assetSummary?uniqueID=${linkedAsset.id}"/>
+            <#else>
+                <@s.url id="summaryLink" namespace="/" value="w/assetSummary?uniqueID=${linkedAsset.id}"/>
+            </#if>
+
+            <a class="mattButton <#if event.anyCertPrintable && userSecurityGuard.allowedEditEvent>summary<#else>summary-wide</#if>" href="${summaryLink}">
+                <@s.text name="label.assetsummary"/>
+            </a>
         </#if>
-
-        <a class="mattButton <#if event.anyCertPrintable && userSecurityGuard.allowedEditEvent>summary<#else>summary-wide</#if>" href="${summaryLink}">
-            <@s.text name="label.assetsummary"/>
-        </a>
 
         <#if userSecurityGuard.allowedEditEvent && event.tenant.id == sessionUser.tenant.id>
             <a class="mattButton edit" href="<@s.url action="selectEventEdit" uniqueID="${event.id}"/>">

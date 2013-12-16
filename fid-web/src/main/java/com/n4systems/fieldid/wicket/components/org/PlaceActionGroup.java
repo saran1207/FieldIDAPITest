@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForPlaceModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.event.PerformPlaceEventPage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventTypesPage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
@@ -36,6 +37,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Collections;
@@ -92,13 +94,9 @@ public class PlaceActionGroup extends Panel {
                     .add(new Label("name", "View All " + listModel.getTotalEvents()))
                     .add(new Label("note", "......")));
                 } else {
-                    item.add(new Link("event") {
-                        @Override public void onClick() {
-                            // TODO : do something....go to perform event page.
-                        }
-                    }
-                    .add(new Label("name", event.getEventType().getDisplayName()))
-                    .add(new TimeAgoLabel("note", Model.of(event.getDueDate()), dateService.getUserTimeZone())));
+                    item.add(new BookmarkablePageLink<Void>("event", PerformPlaceEventPage.class, new PageParameters().add("placeId", getOrg().getId()).add("scheduleId", event.getId()).add("type", event.getType().getId()))
+                            .add(new Label("name", event.getEventType().getDisplayName()))
+                            .add(new TimeAgoLabel("note", Model.of(event.getDueDate()), dateService.getUserTimeZone())));
                 }
             }
         });
@@ -106,12 +104,8 @@ public class PlaceActionGroup extends Panel {
         add(new ListView<PlaceEventType>("unscheduled", new UnscheduledEventTypesMenuModel()) {
             @Override
             protected void populateItem(ListItem<PlaceEventType> item) {
-                item.add(new Link("event") {
-                    @Override
-                    public void onClick() {
-                        //TODO link to perform event page with bookmarkable link
-                    }
-                }.add(new Label("name", new PropertyModel<String>(item.getModel(), "displayName"))));
+                item.add(new BookmarkablePageLink<Void>("event", PerformPlaceEventPage.class, new PageParameters().add("placeId", getOrg().getId()).add("type", item.getModelObject().getId()))
+                .add(new Label("name", new PropertyModel<String>(item.getModel(), "displayName"))));
             }
         });
 

@@ -25,13 +25,15 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
     private IModel<AddressInfo> model;
     private String externalMapJsVar;
     private boolean noMap = false;
+    private boolean hideIfChildrenHidden = false;
+    private boolean empty;
 
     public AddressPanel(String id, IModel<AddressInfo> model) {
         super(id, model);
         this.model = model;
         setOutputMarkupId(true);
         add(new AttributeAppender("class", "address"));
-        add(new TextField<String>("text", ProxyModel.of(model, on(AddressInfo.class).getInput())));
+        add(new TextField<String>("text", ProxyModel.of(model, on(AddressInfo.class).getFormattedAddress())));
         add(new HiddenField<BigDecimal>("latitude", ProxyModel.of(model, on(AddressInfo.class).getGpsLocation().getLatitude())));
         add(new HiddenField<BigDecimal>("longitude", ProxyModel.of(model, on(AddressInfo.class).getGpsLocation().getLongitude())));
         // the wicket id's chosen here are chosen to reflect the json properties that are returned by the GoogleMaps API.
@@ -79,6 +81,20 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
     public IModel<String> getLabel() {
         return Model.of("address");
     }
+
+    public AddressPanel hideIfChildrenHidden() {
+        this.hideIfChildrenHidden = true;
+        return this;
+    }
+
+    @Override
+    public boolean isVisible() {
+        if (super.isVisible()) {
+            return get("text").isVisible();
+        }
+        return false;
+    }
+
 
     class Options {
         String id = String.format("#%s",AddressPanel.this.getMarkupId());

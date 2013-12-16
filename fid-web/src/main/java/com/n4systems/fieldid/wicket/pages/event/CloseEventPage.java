@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventCreationService;
 import com.n4systems.fieldid.service.event.EventEnum;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventStatusService;
+import com.n4systems.fieldid.service.event.ThingEventCreationService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
@@ -36,8 +36,8 @@ public class CloseEventPage extends FieldIDFrontEndPage {
     private @SpringBean EventStatusService eventStatusService;
     private @SpringBean UserService userService;
     private @SpringBean PersistenceService persistenceService;
-    private  @SpringBean EventScheduleService eventScheduleService;
-    private  @SpringBean EventCreationService eventCreationService;
+    private @SpringBean EventScheduleService eventScheduleService;
+    private @SpringBean ThingEventCreationService eventCreationService;
 
     protected IModel<ThingEvent> openEventModel;
     private FieldIDFrontEndPage returnPage;
@@ -127,7 +127,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
             persistenceService.update(openEvent);
             FieldIDSession.get().info(getString("message.event_closed"));
 
-            eventCreationService.updateRecurringAssetTypeEvent(openEvent, EventEnum.CLOSE);
+            eventCreationService.assignNextEventInSeries(openEvent, EventEnum.CLOSE);
 
             if (returnPage!=null) {
                 setResponsePage(returnPage);

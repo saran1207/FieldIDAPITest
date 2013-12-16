@@ -263,44 +263,6 @@ public class EventService extends FieldIdPersistenceService {
 		return persistenceService.findAll(builder);	
 	}
 
-    public ThingEvent createNewMasterEvent(Long assetId, Long eventTypeId) {
-        ThingEvent masterEvent = createNewThingEvent(new ThingEvent(), assetId, eventTypeId);
-        return masterEvent;
-    }
-
-    public ThingEvent createEventFromOpenEvent(Long openEventId) {
-        ThingEvent event = persistenceService.find(ThingEvent.class, openEventId);
-        return event;
-    }
-
-    public void populateNewEvent(ThingEvent masterEvent) {
-        masterEvent.setEventForm(masterEvent.getType().getEventForm());
-        masterEvent.setOwner(masterEvent.getAsset().getOwner());
-        masterEvent.setDate(new Date());
-        masterEvent.setPerformedBy(getCurrentUser());
-        masterEvent.setPrintable(masterEvent.getEventType().isPrintable());
-        masterEvent.setAdvancedLocation(masterEvent.getAsset().getAdvancedLocation());
-        masterEvent.setPerformedBy(getCurrentUser());
-        masterEvent.setProofTestInfo(new ProofTestInfo());
-        masterEvent.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
-        masterEvent.setAssetStatus(masterEvent.getAsset().getAssetStatus());
-        new NewEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(masterEvent);
-    }
-
-    @Transactional
-    private ThingEvent createNewThingEvent(ThingEvent event, Long assetId, Long eventTypeId) {
-        ThingEventType eventType = persistenceService.find(ThingEventType.class, eventTypeId);
-        Asset asset = persistenceService.find(Asset.class, assetId);
-
-        event.setTenant(getCurrentTenant());
-        event.setAsset(asset);
-        event.setType(eventType);
-        event.setEventForm(eventType.getEventForm());
-        event.setAssetStatus(asset.getAssetStatus());
-
-        return event;
-    }
-
     public <T extends AbstractEvent> T lookupExistingEvent(Class<T> clazz, Long eventId) {
         T event = persistenceService.find(clazz, eventId);
 
