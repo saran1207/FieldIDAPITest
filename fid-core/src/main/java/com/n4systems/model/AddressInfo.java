@@ -1,6 +1,11 @@
 package com.n4systems.model;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 import com.n4systems.model.parents.AbstractEntity;
+import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -20,7 +25,6 @@ public class AddressInfo extends AbstractEntity {
 	private String fax1 = "";
     private GpsLocation gpsLocation = new GpsLocation();
 
-    private @Transient String input;
     private @Transient String formattedAddress;
 
 	public AddressInfo() { }
@@ -162,15 +166,15 @@ public class AddressInfo extends AbstractEntity {
         this.gpsLocation = gpsLocation;
     }
 
-    public String getInput() {
-        return input;
-    }
-
-    public void setInput(String input) {
-        this.input = input;
-    }
-
     public String getFormattedAddress() {
+        if (formattedAddress==null) {
+            Predicate<String> skipBlank = new Predicate<String>() {
+                @Override public boolean apply(String input) {
+                    return StringUtils.isNotBlank(input);
+                }
+            };
+            return Joiner.on(',').join(Iterables.filter(Lists.newArrayList(streetAddress, city, state, country, zip), skipBlank));
+        }
         return formattedAddress;
     }
 

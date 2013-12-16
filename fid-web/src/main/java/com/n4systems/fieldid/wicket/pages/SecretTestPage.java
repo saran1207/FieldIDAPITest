@@ -2,10 +2,10 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.EventType;
-import com.n4systems.model.GpsLocation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.AssetIndexerService;
@@ -42,13 +42,15 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     private List<SearchResult> docs = Lists.newArrayList();
     private List<EventType> testEntities = Lists.newArrayList();
     private AddressInfo address = new AddressInfo();
+    private GoogleMap map;
 
     public SecretTestPage() {
-        address.setGpsLocation(new GpsLocation(178523L, 12728L));
-        address.setInput("111 Queen St East, Toronto");
+//        address.setGpsLocation(new GpsLocation(178523L, 12728L));
+//        address.setInput("111 Queen St East, Toronto");
 
         Form form = new Form("form");
-        form.add(new AddressPanel("address", new PropertyModel(this,"address")));
+        form.add(map=new GoogleMap("map"));
+        form.add(new AddressPanel("address", new PropertyModel(this,"address")).withExternalMap(map.getJsVar()));
         form.add(new SubmitLink("submit") {
             @Override public void onSubmit() {
                 super.onSubmit();

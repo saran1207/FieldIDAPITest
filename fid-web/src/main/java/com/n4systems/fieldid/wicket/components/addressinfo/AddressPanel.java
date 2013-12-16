@@ -31,7 +31,7 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
         this.model = model;
         setOutputMarkupId(true);
         add(new AttributeAppender("class", "address"));
-        add(new TextField<String>("text", ProxyModel.of(model, on(AddressInfo.class).getInput())));
+        add(new TextField<String>("text", ProxyModel.of(model, on(AddressInfo.class).getFormattedAddress())));
         add(new HiddenField<BigDecimal>("latitude", ProxyModel.of(model, on(AddressInfo.class).getGpsLocation().getLatitude())));
         add(new HiddenField<BigDecimal>("longitude", ProxyModel.of(model, on(AddressInfo.class).getGpsLocation().getLongitude())));
         // the wicket id's chosen here are chosen to reflect the json properties that are returned by the GoogleMaps API.

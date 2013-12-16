@@ -25,7 +25,7 @@
 var googleMapFactory = (function() {
 
 	 var defaultOptions = {
-		 zoom: 14
+		 zoom: 5
 	 };
 
 	 var create = function(id) {
@@ -214,7 +214,14 @@ var googleMapFactory = (function() {
 		}
 
 		/* public methods exposed */
-		return { 		
+		function removeMarkers() {
+			for (var i = 0; i < markers.length; i++) {
+				markers[i].setMap(map);
+			}
+			markers = [];
+		}
+
+		return {
 			
 			makeMarker : function(loc) {
 				return new google.maps.Marker({
@@ -232,18 +239,23 @@ var googleMapFactory = (function() {
 				return loc;
 			},
 
-			setLocation : function(latitude, longitude, title) {
+			setLocation : function(latitude, longitude, title, address) {
 				locations = [];
 				var loc = new google.maps.LatLng(latitude,longitude);
 				locations.push(loc);
 				loc.args = [].slice.call(arguments, 2);
+				removeMarkers();
+				var marker = this.makeMarker(loc);
+				marker.setMap(map);
 				map.setCenter(loc);
-				if (markers.length==1) {
-					markers[0].setPosition(loc);
-					if (title) {
-						markers[0].address = 'hello';
-						markers[0].content = title;
-					}
+				markers.push(marker);
+				marker.setPosition(loc);
+				marker.address = address ? address : null;
+				marker.content = title ? title : null;
+				if (marker.content || this.updateContentWithAddress) {
+					google.maps.event.addListener(marker, 'click', function() {
+						showInfoWindow(this, map);
+					});
 				}
 				if (infowindow) infowindow.close();
 				return loc;
@@ -265,28 +277,31 @@ var googleMapFactory = (function() {
 				var count = locations.length;
 
 				for (var i=0; i<count; i++) {
-					var loc = locations[i];
-					var marker = this.makeMarker(loc);
-					markers.push(marker);
-					marker.setMap(map);
-					if (marker.content || this.updateContentWithAddress) {
-						google.maps.event.addListener(marker, 'click', function() {
-							showInfoWindow(this, map);
-						});						
-					}
-					bounds.extend(loc);							
+					addLoc(locations[i]);
+					bounds.extend(loc);
 				}
-				if (count>1) { 
+				if (count>1) {
 					map.fitBounds(bounds);
-				} else if (count==1) { 
+				} else if (count==1) {
 					map.setCenter(locations[0]);
-				}			
-			}		
-			
+				}
+			},
+
+
+			addLoc : function(loc) {
+				var marker = this.makeMarker(loc);
+				markers.push(marker);
+				marker.setMap(map);
+				if (marker.content || this.updateContentWithAddress) {
+					google.maps.event.addListener(marker, 'click', function() {
+						showInfoWindow(this, map);
+					});
+				}
+			}
 		};
 		
 	}
-	
+
 	function prefixed(prefix,url) {
 		return prefix ? prefix+url : url;
 	}

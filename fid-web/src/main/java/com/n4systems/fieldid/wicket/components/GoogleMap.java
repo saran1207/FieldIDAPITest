@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components;
 
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import com.n4systems.model.GpsLocation;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -10,7 +11,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class GoogleMap extends Panel {
@@ -19,10 +19,10 @@ public class GoogleMap extends Panel {
     private static final String GOOGLE_MAP_WITH_LOCATION_JS = "%s = googleMapFactory.createAndShowWithLocation('%s',%s );";
     private static final String GOOGLE_MAP_NO_LOCATION_JS = "%s = googleMapFactory.createAndShow('%s',%s, %d);";
 
-    private List<Coord> coords = new ArrayList<Coord>();
+    private List<Coord> coords = Lists.newArrayList();
     // centre of north america is default location.
     private Coord centre = new Coord(43.548548, -96.987305);
-    private int defaultZoom = 3;
+    private int defaultZoom = 12;
 
     public GoogleMap(String id) {
         super(id);
@@ -50,6 +50,12 @@ public class GoogleMap extends Panel {
     public GoogleMap(String id, GpsLocation location) {
         this(id);
         addLocation(location);
+    }
+
+    public GoogleMap setLocation(GpsLocation location) {
+        coords = Lists.newArrayList();
+        addLocation(location);
+        return this;
     }
 
     public GoogleMap addLocation(GpsLocation location) {

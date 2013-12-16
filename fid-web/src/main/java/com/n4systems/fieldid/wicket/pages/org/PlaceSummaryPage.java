@@ -78,7 +78,15 @@ public class PlaceSummaryPage extends PlacePage {
         }
 
         contact = new Contact(getOrg().getContact());
-        add(new InlineEditableForm("contact").withSaveCancelEditLinks()
+        add(new InlineEditableForm("contact") {
+            @Override protected void onSave(AjaxRequestTarget target) {
+                super.onSave(target);
+                target.add(map);
+            }
+            @Override protected void onCancel(AjaxRequestTarget target) {
+                super.onCancel(target);
+            }
+        }       .withSaveCancelEditLinks()
                 .add(new TextField("name", ProxyModel.of(contact,on(Contact.class).getName())))
                 .add(new TextField("email", ProxyModel.of(contact,on(Contact.class).getEmail())))
                 .add(new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())).withExternalMap(map.getJsVar()))
