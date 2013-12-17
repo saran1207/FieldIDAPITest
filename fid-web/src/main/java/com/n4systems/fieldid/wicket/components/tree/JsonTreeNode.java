@@ -24,9 +24,17 @@ public class JsonTreeNode {
         this.id = node.getId() + "";
         addAttribute("id", node.getId() + "");
         addAttribute("data", node.getType().name());
-        addAttribute("class", CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_HYPHEN, node.getType().name()));
+        addAttribute("class", getClass(node));
         this.parent = parent;
         this.isLeaf = node.isLeaf();
+    }
+
+    private String getClass(OrgLocationTree.OrgLocationTreeNode node) {
+        String cssClass = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_HYPHEN, node.getType().name());
+        if (Boolean.TRUE.equals(node.isPrimary())) {
+            cssClass += " primary";
+        }
+        return cssClass;
     }
 
     public void setChildren(List<JsonTreeNode> nodes) {
