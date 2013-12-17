@@ -150,13 +150,13 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         }
     }
 
-    public List<RecurringPlaceEvent> getRecurringPlaceEvents() {
+    public List<RecurringPlaceEvent> getAllRecurringPlaceEvents() {
         QueryBuilder<RecurringPlaceEvent> query = new QueryBuilder<RecurringPlaceEvent>(RecurringPlaceEvent.class, new OpenSecurityFilter());
         return persistenceService.findAll(query);
     }
 
-    public List<RecurringPlaceEvent> getOrgRecurringPlaceEvents(BaseOrg org) {
-        QueryBuilder<RecurringPlaceEvent> query = new QueryBuilder<RecurringPlaceEvent>(RecurringPlaceEvent.class, new OpenSecurityFilter());
+    public List<RecurringPlaceEvent> getRecurringPlaceEvents(BaseOrg org) {
+        QueryBuilder<RecurringPlaceEvent> query = createTenantSecurityBuilder(RecurringPlaceEvent.class);
         query.addSimpleWhere("owner", org);
         return persistenceService.findAll(query);
     }
@@ -277,8 +277,6 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         }
 
     }
-
-
 
     class ScheduleTimeIterator implements Iterable<LocalDateTime>, Iterator<LocalDateTime> {
 

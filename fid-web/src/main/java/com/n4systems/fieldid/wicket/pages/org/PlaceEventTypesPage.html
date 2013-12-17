@@ -3,7 +3,14 @@
 <wicket:extend>
 	<hr>
 
-	<div class="info">
+    <div class="action-group">
+        <a wicket:id="backToPlaceLink" class="btn-secondary btn-sml">
+            <span class="fontello-angle-double-left-sml"></span>
+            <wicket:message key="label.back_to"/>&nbsp;<span wicket:id="backToLabel"/>
+        </a>
+    </div>
+
+    <div class="info">
 		<h3>(FP0) Associate event types for <strong>Selected Place</strong></h3>
 		<p>To get started, select the dropdown and choose the event types you would like to associate to <span>Selected Place</span>.</p>
 	</div>

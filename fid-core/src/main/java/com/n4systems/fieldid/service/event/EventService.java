@@ -6,7 +6,6 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.util.ExistingEventTransientCriteriaResultPopulator;
-import com.n4systems.fieldid.service.event.util.NewEventTransientCriteriaResultPopulator;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.Archivable.EntityState;
@@ -440,11 +439,10 @@ public class EventService extends FieldIdPersistenceService {
         query.addNullSafeWhere(Comparator.EQ, "owner", "owner", owner);
         query.addNullSafeWhere(Comparator.EQ, "assignee", "assignee", assignee);
         query.addNullSafeWhere(Comparator.EQ, "type", "type", actionType);
-        // TODO query.addSimpleWhere("type.group.action", Boolean.TRUE);
         query.addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
         query.addWhere(Comparator.NOTNULL, "triggeredEvent", "triggeredEvent", null);
-        // make sure it's an action-able event type group.
-        query.addSimpleWhere("type.group.action", Boolean.TRUE);
+        // make sure it's an action-able event type
+        query.addWhere(Comparator.EQ, "actionType", "type.actionType", true);
         query.addGroupBy("priority");
         return query;
     }

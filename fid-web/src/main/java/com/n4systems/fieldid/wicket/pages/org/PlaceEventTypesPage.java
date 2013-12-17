@@ -19,6 +19,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -69,6 +70,10 @@ public class PlaceEventTypesPage extends PlacePage {
 
     private void init() {
         eventTypes = Lists.newArrayList(orgModel.getObject().getEventTypes());
+
+        add(new BookmarkablePageLink<PlaceSummaryPage>("backToPlaceLink", PlaceSummaryPage.class, PageParametersBuilder.id(getOrg().getId()))
+                .add(new Label("backToLabel", new PropertyModel<String>(orgModel, "name"))));
+
 
         add(new Form("form")
                 .add(new MultiSelectDropDownChoice<PlaceEventType>("eventTypes", new PropertyModel(this, "eventTypes"), getAllEventTypes(), new EventTypeChoiceRenderer<PlaceEventType>()))

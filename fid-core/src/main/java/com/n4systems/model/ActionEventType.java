@@ -22,4 +22,17 @@ public class ActionEventType extends EventType<ActionEventType> {
     public ActionEventType enhance(SecurityLevel level) {
         return EntitySecurityEnhancer.enhanceEntity(this, level);
     }
+
+    @Override
+    protected void onUpdate() {
+        super.onUpdate();
+        setActionType(true);
+    }
+
+    @Override
+    protected void onCreate() {
+        super.onCreate();
+        setActionType(true);
+    }
+
 }

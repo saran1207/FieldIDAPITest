@@ -58,6 +58,12 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
     @Column(nullable=false, name="display_score_percentage")
     private boolean displayScorePercentage;
 
+    // Hibernate's implementation of jpql's TYPE(field) operator seems completely busted for at least
+    // join table inheritance. This is unfortunately necessary as a workaround so our queries can be able to
+    // separate actions from events.
+    @Column(name="action_type")
+    private boolean actionType = false;
+
 	private Long legacyEventId;
 
 	public EventType() {
@@ -227,6 +233,16 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
 
     public boolean isActionEventType() {
         return false;
+    }
+
+    @Deprecated // remove when TYPE() works. See field comment.
+    public boolean isActionType() {
+        return actionType;
+    }
+
+    @Deprecated
+    public void setActionType(boolean actionType) {
+        this.actionType = actionType;
     }
 
 }

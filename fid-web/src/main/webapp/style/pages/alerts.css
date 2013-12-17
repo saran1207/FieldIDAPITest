@@ -68,17 +68,9 @@ label + .note {
   text-align: center;
   font-weight: 700;
 }
-#contentHeader div.success {
-  padding: 0;
-  border: none;
-}
-#pageContent div.error {
-  font-size: 13px;
-}
 /* FID Feedback panel - error messaging
 ----------------------------------------*/
 .error h3 {
-  font-family: "proxima-nova", Helvetica, Arial, sans-serif;
   border-bottom: none;
 }
 .error ul {
