@@ -2,6 +2,7 @@ package com.n4systems.taskscheduling.task;
 
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.model.RecurringAssetTypeEvent;
+import com.n4systems.model.RecurringPlaceEvent;
 import com.n4systems.taskscheduling.ScheduledTask;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.time.MethodTimer;
@@ -27,10 +28,17 @@ public class RecurringSchedulesTask extends ScheduledTask {
     protected void runTask() throws Exception {
         MethodTimer timer = new MethodTimer().withLogger(logger).start();
 
-        List<RecurringAssetTypeEvent> list = getRecurringScheduleService().getRecurringAssetTypeEvents();
-        for(RecurringAssetTypeEvent event: list) {
+        List<RecurringAssetTypeEvent> recurringAssetTypeEventList = getRecurringScheduleService().getRecurringAssetTypeEvents();
+        for(RecurringAssetTypeEvent event: recurringAssetTypeEventList) {
             for (LocalDateTime dateTime : getRecurringScheduleService().getBoundedScheduledTimesIterator(event.getRecurrence())) {
                 getRecurringScheduleService().scheduleAnEventFor(event, dateTime);
+            }
+        }
+
+        List<RecurringPlaceEvent> recurringPlaceEventList = getRecurringScheduleService().getAllRecurringPlaceEvents();
+        for(RecurringPlaceEvent event: recurringPlaceEventList) {
+            for (LocalDateTime dateTime : getRecurringScheduleService().getBoundedScheduledTimesIterator(event.getRecurrence())) {
+                getRecurringScheduleService().schedulePlaceAnEventFor(event, dateTime);
             }
         }
 

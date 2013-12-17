@@ -94,7 +94,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
 
             @Override
             protected List<RecurringPlaceEvent> load() {
-                return recurringScheduleService.getOrgRecurringPlaceEvents(getOrg());
+                return recurringScheduleService.getRecurringPlaceEvents(getOrg());
             }
         };
     }
