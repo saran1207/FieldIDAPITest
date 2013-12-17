@@ -26,7 +26,8 @@ var orgTreeFactory = (function() {
 
 		var defaults = {
 			delay:500,
-			minLength:0
+			minLength:0,
+			vernacular:'customer'
 		};
 		var options = $.extend(defaults, opts);
 
@@ -80,11 +81,26 @@ var orgTreeFactory = (function() {
 
 		function postUpdateNodes($nodes) {
 			$nodes.each(function(index,child) {
-				// TODO : use correct term...either Add.. or Add Division.
-				var actionsMenu = $('<span class="action">Add Secondary|Job Site</span>').data('id',child.parentNode.id);
-				actionsMenu.insertAfter(child);
-				actionsMenu.click(addChild);
+				var addText = getAddText($(child));
+				if (addText) {
+					var actionsMenu = $('<span class="action">'+ addText + '</span>').data('id',child.parentNode.id);
+					actionsMenu.insertAfter(child);
+					actionsMenu.click(addChild);
+				}
 			});
+		}
+
+		function getAddText($node) {
+			var $li = $node.closest('li');
+			// TODO : check for safety network stuff here.
+			if ($li.hasClass('internal-org')) {
+				// TODO : localize this text. pass it in from wicket.
+				return $li.hasClass('primary') ? 'Add Descendant' : 'Add ' + options.vernacular;
+			} else if ($li.hasClass('customer-org')) {
+				return 'Add Division';
+			} else {
+				return null;
+			}
 		}
 
 		function lazyInit() {

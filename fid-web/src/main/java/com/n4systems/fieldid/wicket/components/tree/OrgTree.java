@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.tree;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.OrgLocationTree;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.util.StringUtils;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -19,6 +20,7 @@ public class OrgTree extends Tree {
 
     private @SpringBean OrgService orgService;
     private String lastSearch = null;
+    private String customerTerm = new FIDLabelModel("label.customer").getObject();
 
     // TODO : add "root node id".  if null get entire tree else get single root node.
 
@@ -113,6 +115,7 @@ public class OrgTree extends Tree {
 
     class OrgTreeOptions extends TreeOptions {
         String clickCallback = getWebRequest().getContextPath() + "/w/placeSummary";
+        String vernacular = customerTerm;
 
         OrgTreeOptions() {
             super();
