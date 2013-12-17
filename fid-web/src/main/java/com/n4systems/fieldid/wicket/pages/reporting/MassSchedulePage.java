@@ -226,4 +226,8 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         return false;
     }
 
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("label.mass_schedule"));
+    }
 }
