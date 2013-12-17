@@ -687,10 +687,6 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
         return offlineProfileService.hasOfflineProfile(getCurrentUser());
     }
 
-    public boolean isPlacesEnabled() {
-        return getConfigContext().getBoolean(ConfigEntry.PLACES_ENABLED);
-    }
-
 	public boolean isSuperUser() {
 		return getSession().getAdminUser().getType().equals(AdminUserType.SUPER);
 	}

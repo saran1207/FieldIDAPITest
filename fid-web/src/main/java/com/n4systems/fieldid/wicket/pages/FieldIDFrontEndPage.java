@@ -472,7 +472,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
             add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
 
-            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class).setVisible(getConfigurationProvider().getBoolean(ConfigEntry.PLACES_ENABLED)));
+            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class));
 
             BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
             procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));

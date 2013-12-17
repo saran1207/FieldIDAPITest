@@ -129,9 +129,7 @@
                     </li>
 
                     <li>
-                        <#if action.isPlacesEnabled()>
-                            <a href="/fieldid/w/places" class="speedLink textLink" id="menuPlaces"><@s.text name="speed.places" /></a>
-                        </#if>
+                        <a href="/fieldid/w/places" class="speedLink textLink" id="menuPlaces"><@s.text name="speed.places" /></a>
                     </li>
 
                     <#if securityGuard.lotoProceduresEnabled>

@@ -439,7 +439,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
             add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent")));
 
-            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class).setVisible(getConfigurationProvider().getBoolean(ConfigEntry.PLACES_ENABLED)));
+            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class));
 
             add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
 
