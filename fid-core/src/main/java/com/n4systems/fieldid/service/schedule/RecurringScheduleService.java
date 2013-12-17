@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.PlaceEventScheduleService;
+import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -11,12 +12,14 @@ import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
+import org.apache.log4j.Logger;
 import org.joda.time.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 @Transactional
 public class RecurringScheduleService extends FieldIdPersistenceService {
@@ -32,6 +35,9 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
     @Autowired private EventScheduleService eventScheduleService;
     @Autowired private PlaceEventScheduleService placeEventScheduleService;
+    @Autowired private AsyncService asyncService;
+
+    private static final Logger logger= Logger.getLogger(RecurringScheduleService.class);
 
     public List<RecurringAssetTypeEvent> getRecurringAssetTypeEvents() {
         QueryBuilder<RecurringAssetTypeEvent> query = new QueryBuilder<RecurringAssetTypeEvent>(RecurringAssetTypeEvent.class, new OpenSecurityFilter());
@@ -118,7 +124,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
     /*package protected for test reasons*/
     boolean checkIfScheduleExists(BaseOrg place, RecurringPlaceEvent event, LocalDateTime futureDate) {
         QueryBuilder<PlaceEvent> query = new QueryBuilder<PlaceEvent>(PlaceEvent.class, new OpenSecurityFilter());
-        query.addWhere(WhereClauseFactory.create("owner", place));
+        query.addWhere(WhereClauseFactory.create("place", place));
         query.addWhere(WhereClauseFactory.create("recurringEvent", event));
 
         //A simple equals does not work due to comparison problems comparing Timestamps and Date see java.sql.Timestamp
@@ -138,8 +144,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
             schedule.setType(recurringEvent.getEventType());
             schedule.setDueDate(futureDate.toDate());
             schedule.setTenant(place.getTenant());
-            // TODO : figure out how to handle this.
-            //schedule.setRecurringEvent(recurringEvent);
+            schedule.setRecurringEvent(recurringEvent);
             schedule.setEventResult(EventResult.VOID);
             placeEventScheduleService.createSchedule(schedule);
         }
@@ -154,6 +159,52 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         QueryBuilder<RecurringPlaceEvent> query = new QueryBuilder<RecurringPlaceEvent>(RecurringPlaceEvent.class, new OpenSecurityFilter());
         query.addSimpleWhere("owner", org);
         return persistenceService.findAll(query);
+    }
+
+    public void purgeRecurringEvent(RecurringPlaceEvent recurringEvent) {
+        removeScheduledEvents(recurringEvent);
+        removeRecurringEvent(recurringEvent);
+
+    }
+
+    private void removeScheduledEvents(RecurringPlaceEvent recurringEvent){
+        QueryBuilder<PlaceEvent> query = createTenantSecurityBuilder(PlaceEvent.class);
+
+        query.addSimpleWhere("workflowState", WorkflowState.OPEN);
+        query.addSimpleWhere("recurringEvent", recurringEvent);
+
+        List<PlaceEvent> events = persistenceService.findAll(query);
+        for (PlaceEvent event:events) {
+            logger.info("removing scheduled event for asset " + event.getPlace().getDisplayName() + " on " + event.getDueDate());
+            persistenceService.delete(event);
+        }
+    }
+
+    public void removeRecurringEvent(RecurringPlaceEvent recurringEvent) {
+        recurringEvent.archiveEntity();
+        persistenceService.update(recurringEvent);
+    }
+
+    public void addRecurringEvent(BaseOrg org, final RecurringPlaceEvent recurringEvent) {
+        persistenceService.save(recurringEvent.getRecurrence());
+        persistenceService.save(recurringEvent);
+
+        AsyncService.AsyncTask<Void> task = asyncService.createTask(new Callable<Void>() {
+            @Override
+            public Void call() throws Exception {
+                scheduleInitialEvents(recurringEvent);
+                return null;
+            }
+        });
+        asyncService.run(task);
+        org.touch();
+        persistenceService.update(org);
+    }
+
+    private void scheduleInitialEvents(RecurringPlaceEvent recurringPlaceEvent) {
+        for (LocalDateTime dateTime: getBoundedScheduledTimesIterator(recurringPlaceEvent.getRecurrence())) {
+            schedulePlaceAnEventFor(recurringPlaceEvent, dateTime);
+        }
     }
 
     class BoundedScheduleTimeIterator implements Iterable<LocalDateTime>, Iterator<LocalDateTime> {

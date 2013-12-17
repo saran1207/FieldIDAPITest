@@ -148,9 +148,8 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
 
         protected void onCreate(AjaxRequestTarget target, RecurringEventsForm form) {
             RecurrenceFormPanel.this.onCreateRecurrence(target, form);
+            resetForm();
         }
-
-
 
         public Recurrence createRecurrence() {
             if ( type.requiresDate() ) {
@@ -160,6 +159,13 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
             } else {
                 return new Recurrence(type).withTime(time);
             }
+        }
+
+        private void resetForm() {
+            time = RecurrenceTimeOfDay.NINE_AM;
+            eventType = null;
+            type = RecurrenceType.MONTHLY_1ST;
+            //private Date dateTime = dateService.nowInUsersTimeZone().toDate();
         }
 
         private TimeContainer createTimePicker() {

@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
-import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.wicket.components.DisplayRecurrenceTimeModel;
 import com.n4systems.fieldid.wicket.components.assettype.RecurrenceFormPanel;
@@ -32,10 +31,9 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
 
     @SpringBean
     private RecurringScheduleService recurringScheduleService;
-    @SpringBean
-    private PlaceService placeService;
 
     private WebMarkupContainer scheduleList;
+    private ListView<RecurringPlaceEvent> listView;
     private ModalWindow recurrenceModalWindow;
 
     public PlaceRecurringSchedulesPage(PageParameters params) {
@@ -57,11 +55,11 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
             }
         });
 
-        scheduleList.add(new ListView<RecurringPlaceEvent>("recurringEvent", getRecurringEvents()) {
+        scheduleList.add(listView = new ListView<RecurringPlaceEvent>("recurringEvent", getRecurringEvents()) {
 
             @Override
-            protected void populateItem(ListItem<RecurringPlaceEvent> item) {
-                final RecurringPlaceEvent event = (RecurringPlaceEvent) item.getDefaultModelObject();
+            protected void populateItem(final ListItem<RecurringPlaceEvent> item) {
+                final RecurringPlaceEvent event = item.getModelObject();
 
                 item.add(new Label("eventType", new PropertyModel<String>(item.getDefaultModelObject(), "eventType.name")));
                 item.add(new Label("recurrence", new EnumLabelModel(event.getRecurrence().getType())));
@@ -77,7 +75,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
                 item.add(new AjaxLink("remove") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        placeService.removeRecurringEvent(event);
+                        recurringScheduleService.purgeRecurringEvent(item.getModelObject());
                         refreshContent(target);
                     }
                 });
@@ -87,6 +85,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
 
     @Override
     protected void refreshContent(AjaxRequestTarget target) {
+        listView.detach();
         target.add(scheduleList);
     }
 
@@ -105,6 +104,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
             @Override
             protected void onCreateRecurrence(AjaxRequestTarget target, RecurringEventsForm form) {
                 super.onCreateRecurrence(target, form);
+                recurrenceModalWindow.close(target);
                 refreshContent(target);
             }
         };

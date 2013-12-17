@@ -3,7 +3,10 @@ package com.n4systems.fieldid.service.org;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.*;
+import com.n4systems.model.Attachment;
+import com.n4systems.model.PlaceEvent;
+import com.n4systems.model.PlaceEventType;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.orgs.BaseOrg;
@@ -41,21 +44,6 @@ public class PlaceService extends FieldIdPersistenceService {
         QueryBuilder<PlaceEventType> query = createUserSecurityBuilder(PlaceEventType.class);
         query.addOrder("name");
         return persistenceService.findAll(query);
-    }
-
-    public void removeRecurringEvent(RecurringPlaceEvent event) {
-        persistenceService.reattach(event);
-        persistenceService.remove(event);
-    }
-
-    public void addRecurringEvent(BaseOrg org, RecurringPlaceEvent recurringEvent) {
-        persistenceService.save(recurringEvent.getRecurrence());
-        persistenceService.save(recurringEvent);
-
-        //TODO Schedule events using async service
-
-        org.touch();
-        persistenceService.update(org);
     }
 
     public List<? extends User> getUsersFor(BaseOrg org) {

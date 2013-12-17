@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.components.org;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.org.PlaceService;
+import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.wicket.components.assettype.RecurrenceFormPanel;
 import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.RecurringPlaceEvent;
@@ -14,7 +14,8 @@ import java.util.List;
 
 public class RecurringPlaceEventsFormPanel extends RecurrenceFormPanel<BaseOrg> {
 
-    private @SpringBean PlaceService placeService;
+    @SpringBean
+    private RecurringScheduleService recurringScheduleService;
 
     private final IModel<BaseOrg> model;
 
@@ -25,7 +26,7 @@ public class RecurringPlaceEventsFormPanel extends RecurrenceFormPanel<BaseOrg> 
 
     @Override
     protected void onCreateRecurrence(AjaxRequestTarget target, RecurringEventsForm form) {
-        placeService.addRecurringEvent(((BaseOrg)getDefaultModelObject()), createRecurringEventFromForm(form));
+        recurringScheduleService.addRecurringEvent(((BaseOrg) getDefaultModelObject()), createRecurringEventFromForm(form));
     }
 
     private RecurringPlaceEvent createRecurringEventFromForm(RecurringEventsForm form) {
