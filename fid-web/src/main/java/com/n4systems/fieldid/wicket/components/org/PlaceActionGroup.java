@@ -140,14 +140,18 @@ public class PlaceActionGroup extends Panel {
     }
 
     private IModel<String> getLabelForOrg() {
-        if (getOrg() instanceof PrimaryOrg) {
-            return new FIDLabelModel("label.add_secondary_customer_to", getOrg().getDisplayName());
-        } else if (getOrg() instanceof SecondaryOrg) {
-            return new FIDLabelModel("label.add_customer_to", getOrg().getDisplayName());
-        } else if (getOrg() instanceof CustomerOrg) {
-            return new FIDLabelModel("label.add_division_to", getOrg().getDisplayName());
-        }
-        throw new IllegalStateException("this shouldn't be shown for divisions or other non-primary/secondary/customer orgs.");
+        return new Model<String>() {
+            @Override public String getObject() {
+                if (getOrg() instanceof PrimaryOrg) {
+                    return new FIDLabelModel("label.add_secondary_customer_to", getOrg().getDisplayName()).getObject();
+                } else if (getOrg() instanceof SecondaryOrg) {
+                    return new FIDLabelModel("label.add_customer_to", getOrg().getDisplayName()).getObject();
+                } else if (getOrg() instanceof CustomerOrg) {
+                    return new FIDLabelModel("label.add_division_to", getOrg().getDisplayName()).getObject();
+                }
+                throw new IllegalStateException("this shouldn't be shown for divisions or other non-primary/secondary/customer orgs.");
+            }
+        };
     }
 
     protected void refreshContainingPage(AjaxRequestTarget target) {};
