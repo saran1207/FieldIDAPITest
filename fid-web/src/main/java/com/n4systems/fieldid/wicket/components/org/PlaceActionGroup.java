@@ -92,7 +92,7 @@ public class PlaceActionGroup extends Panel {
                 if (event==null) {
                     item.add(new BookmarkablePageLink<PlaceEventsPage>("event", PlaceEventsPage.class, PageParametersBuilder.id(getOrg().getId()))
                     .add(new Label("name", "View All " + listModel.getTotalEvents()))
-                    .add(new Label("note", "......")));
+                    .add(new Label("note", " ").setVisible(false)));
                 } else {
                     item.add(new BookmarkablePageLink<Void>("event", PerformPlaceEventPage.class, new PageParameters().add("placeId", getOrg().getId()).add("scheduleId", event.getId()).add("type", event.getType().getId()))
                             .add(new Label("name", event.getEventType().getDisplayName()))

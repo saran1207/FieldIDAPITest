@@ -75,6 +75,9 @@
 .list-view tr {
   height: 33px;
 }
+.dropdown ul li.add-descendant a {
+  white-space: normal;
+}
 .place-summary .uploads {
   position: relative;
 }
