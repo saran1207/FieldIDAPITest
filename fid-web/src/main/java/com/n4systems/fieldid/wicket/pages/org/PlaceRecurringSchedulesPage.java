@@ -4,13 +4,17 @@ import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.wicket.components.DisplayRecurrenceTimeModel;
 import com.n4systems.fieldid.wicket.components.assettype.RecurrenceFormPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.RecurringPlaceEventsFormPanel;
 import com.n4systems.fieldid.wicket.model.EnumLabelModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.util.NullCoverterModel;
 import com.n4systems.model.RecurrenceTime;
 import com.n4systems.model.RecurringPlaceEvent;
+import com.n4systems.model.orgs.BaseOrg;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -26,6 +30,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
 import java.util.Set;
+
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 public class PlaceRecurringSchedulesPage extends PlacePage{
 
@@ -83,10 +89,42 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
         });
     }
 
-    @Override
+    public RecurrenceFormPanel getRecurrenceForm() {
+        return new RecurringPlaceEventsFormPanel(recurrenceModalWindow.getContentId(), orgModel) {
+            @Override
+            protected void onCreateRecurrence(AjaxRequestTarget target, RecurringEventsForm form) {
+                super.onCreateRecurrence(target, form);
+                recurrenceModalWindow.close(target);
+                refreshContent(target);
+            }
+        };
+    }
+
     protected void refreshContent(AjaxRequestTarget target) {
         listView.detach();
         target.add(scheduleList);
+    }
+
+    @Override
+    protected Component createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("label.recurring_events_for", orgModel.getObject().getDisplayName()));
+    }
+
+    @Override
+    protected Component createActionGroup(String actionGroupId) {
+        return new WebMarkupContainer(actionGroupId).setVisible(false);
+    }
+
+    @Override
+    protected List<NavigationItem> createBreadCrumbs(BaseOrg org) {
+        List<NavigationItem> navItems = super.createBreadCrumbs(org);
+        navItems.add(aNavItem().label(new FIDLabelModel("label.recurring_events")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
+        return navItems;
+    }
+
+    @Override
+    protected void addNavBar(String navBarId) {
+        add(new NavigationBar(navBarId).setVisible(false));
     }
 
     private LoadableDetachableModel<List<RecurringPlaceEvent>> getRecurringEvents() {
@@ -95,17 +133,6 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
             @Override
             protected List<RecurringPlaceEvent> load() {
                 return recurringScheduleService.getRecurringPlaceEvents(getOrg());
-            }
-        };
-    }
-
-    public RecurrenceFormPanel getRecurrenceForm() {
-        return new RecurringPlaceEventsFormPanel(recurrenceModalWindow.getContentId(), orgModel) {
-            @Override
-            protected void onCreateRecurrence(AjaxRequestTarget target, RecurringEventsForm form) {
-                super.onCreateRecurrence(target, form);
-                recurrenceModalWindow.close(target);
-                refreshContent(target);
             }
         };
     }
