@@ -60,9 +60,9 @@ public class PlaceActionGroup extends Panel {
 
     private SchedulePicker<PlaceEvent> schedulePicker;
 
+
     public PlaceActionGroup(String id, final IModel<BaseOrg> model) {
         super(id, model);
-
         this.model = model;
 
         scheduleToAdd = createNewSchedule(model.getObject());
@@ -143,11 +143,11 @@ public class PlaceActionGroup extends Panel {
         return new Model<String>() {
             @Override public String getObject() {
                 if (getOrg() instanceof PrimaryOrg) {
-                    return new FIDLabelModel("label.add_secondary_customer_to", getOrg().getDisplayName()).getObject();
+                    return new FIDLabelModel("label.add_secondary_customer_to", getOrg().getName()).getObject();
                 } else if (getOrg() instanceof SecondaryOrg) {
-                    return new FIDLabelModel("label.add_customer_to", getOrg().getDisplayName()).getObject();
+                    return new FIDLabelModel("label.add_customer_to", getOrg().getName()).getObject();
                 } else if (getOrg() instanceof CustomerOrg) {
-                    return new FIDLabelModel("label.add_division_to", getOrg().getDisplayName()).getObject();
+                    return new FIDLabelModel("label.add_division_to", getOrg().getName()).getObject();
                 }
                 throw new IllegalStateException("this shouldn't be shown for divisions or other non-primary/secondary/customer orgs.");
             }
