@@ -1,11 +1,15 @@
 @import "../components/variables.less";
 @import "../components/mixins.less";
 
-/*  Error/warning messages, instructions, notifications
------------------------------------------------------*/
-// for inline messages
-.error {// currently not used anywhere
-	.border-bg(@red, 40%);
+/*--------------------------------------------- 
+  Error/warning messages, notes, notifications
+-----------------------------------------------*/
+
+// For inline messages
+.error {
+	border: 1px solid #FFC2C2;
+	background-color: #FFEBEB;
+	font-size: @smallFontSize;
 }
 .warning {
 	.border-bg(darken(@yellow, 40%), 40%);
@@ -14,8 +18,10 @@
 	.border-bg(@gray, 8%);
 }
 .success {
-	.border-bg(@green, 40%);
+	.border-bg(@green, 45%);
 }
+
+// Block messages
 div.info,
 div.success,
 div.warning,
@@ -28,7 +34,9 @@ div.error {
 		margin-bottom: 0;
 	}
 }
-
+div.error {
+	padding: 10px 15px;
+}
 div.info {
 	h3 {
 		font-weight: @light;
@@ -44,16 +52,6 @@ div.info {
 	}
 }
 
-.instructions {
-	display: inline-block;
-	font-style: italic;
-	color: @grayDark;
-	font-size: @xsmallFontSize;
-}
-	label + .instructions {
-		margin-left: 12px;
-	}
-//new class name for instructions.  delete when all instances have been updated
 .note {
 	display: inline-block;
 	font-style: italic;
@@ -63,3 +61,72 @@ div.info {
 	label + .note {
 		margin-left: 12px;
 	}
+
+
+/* Top Feedback panel - success messaging
+------------------------------------------*/
+
+// For FieldIDTemplatePage.html
+.feedback-panel .success {
+	padding: 15px;
+
+	ul {
+		list-style-type: none;
+		text-align: center;
+		font-weight: @bold;
+	}
+}
+
+// For FieldIDFrontEndPage.html - old template pages.
+// Can delete this when all pages have been moved over.	
+#contentHeader {
+	div.success {
+		padding: 0;
+		border: none;
+	}
+}
+
+#pageContent {
+	div.error {
+		font-size: 13px;
+	}
+}
+
+/* FID Feedback panel - error messaging
+----------------------------------------*/
+.error {
+	h3 {
+		font-family: @proximaNova;
+		border-bottom: none;
+	}
+	ul {
+		margin-left: 15px;
+
+		span.errorMessage {
+			color: @red;
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

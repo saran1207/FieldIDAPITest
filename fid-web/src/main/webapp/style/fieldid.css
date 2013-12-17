@@ -420,17 +420,22 @@ h2 a {
 }
 
 .error ul {
-	border: 1px solid #FF3030;
+	/*border: 1px solid #FF3030;
 	background-color: #ffebeb;
-	font-weight: bold;
+	font-weight: bold;*/
 }
 
 .message ul {
-	background-color: #EBF8CD;
-	border: 1px solid #CCCCCC;
+	/*background-color: #EBF8CD;
+	border: 1px solid #CCCCCC;*/
 	font-weight: bold;
 	padding-top:10px;
-	padding-bottom:10px;	
+	padding-bottom:10px;
+
+	border: 1px solid #5fb336;
+	background-color: #e3f4db;
+	text-align: center;
+	font-size: 13px;
 }
 
 .largeText * {

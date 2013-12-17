@@ -118,6 +118,13 @@
     margin-right:auto;
     width:50%;
 }
+#notifications .error {
+    border: 1px solid #FFC2C2;
+    background-color: #FFEBEB;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+}
 
 #password.passwordBox, #userName.textbox {
     width:84%;

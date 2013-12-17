@@ -1,66 +1,71 @@
 body {
-    font-size: 11px;
-    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+    /*font-size: 11px;
+    font-family: "lucida grande", tahoma, verdana, arial, sans-serif;*/
 }
 
 #formErrors {
-    width: 100%;
+   /* width: 100%;*/
 }
 
 .formErrors {
-    border:1px solid #FFC2C2;
-    background-color:#FFEBEB;
+    /*border:1px solid #FFC2C2;
+    background-color:#FFEBEB;*/
     padding: 10px;
     margin: 10px 0;
 }
 
 .formErrors ul li span {
-    width: auto;
+    /*width: auto;*/
 }
 
 .formErrors ul {
-    margin-left: 20px;
+    /*margin-left: 20px;*/
 }
 
 .formErrors ul li {
-    list-style-type: square;
+    /*list-style-type: square;
     padding: 5px;
     vertical-align:middle;
-    margin-left:2em;
+    margin-left:2em;*/
 }
 
 #formErrors h2 {
-    background-color: transparent;
+    /*background-color: transparent;
     padding: 0px;
     margin: 0px;
     border:none;
     font-size:1.2em;
-    line-height:21px;
+    line-height:21px;*/
 }
 
 #formErrors * {
-    float: none;
+    /*float: none;*/
 }
 
+/* Added #contentHeader to restrict this changes to just the pre-framework pages */
 #contentHeader #notifications span {
     line-height: 30px;
     padding: 0px 10px;
 }
-
-.message ul {
-    background-color: #EBF8CD;
-    border: 1px solid #CCCCCC;
+#contentHeader .message ul {
+    /*background-color: #EBF8CD;
+    border: 1px solid #CCCCCC;*/
     font-weight: bold;
     padding-top:10px;
     padding-bottom:10px;
+
+    border: 1px solid #5fb336;
+    background-color: #e3f4db;
+    text-align: center;
+    font-size: 13px;
 }
 
 .error, .errorMessage {
-    color: #F00;
+    /*color: #F00;*/
 }
 
 .error ul {
-    border: 1px solid #FF3030;
+    /*border: 1px solid #FF3030;
     background-color: #ffebeb;
-    font-weight: bold;
+    font-weight: bold;*/
 }
