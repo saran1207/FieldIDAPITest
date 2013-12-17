@@ -241,7 +241,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             nonIntegrationOrderContainer.setVisible(!primaryOrgForTenant.hasExtendedFeature(ExtendedFeature.Integration));
             nonIntegrationOrderContainer.add(new TextField<String>("orderNumber", ProxyModel.of(assetModel, on(Asset.class).getNonIntergrationOrderNumber())));
 
-            add(new DropDownChoice<AssetStatus>("assetStatusSelect", ProxyModel.of(assetModel, on(Asset.class).getAssetStatus()), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()));
+            add(new DropDownChoice<AssetStatus>("assetStatusSelect", ProxyModel.of(assetModel, on(Asset.class).getAssetStatus()), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));
 
             add(new Comment("comments", ProxyModel.of(assetModel, on(Asset.class).getComments())));
 
