@@ -241,7 +241,7 @@ public class WhereParameter<T> implements WhereClause<T> {
 		return param;
 	}
 
-	private String applyFunction(String fn, String param) {
+	protected String applyFunction(String fn, String param) {
 		return fn + "(" + param + ")";
 	}
 
