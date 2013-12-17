@@ -1,0 +1,1 @@
+DELETE FROM configurations WHERE identifier = "PLACES_ENABLED";
