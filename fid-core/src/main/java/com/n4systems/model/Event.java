@@ -128,10 +128,6 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
     @Transient
     private boolean resultFromCriteriaAvailable = false;
 
-    @ManyToOne()
-    @JoinColumn(name="recurring_event_id")
-    private RecurringAssetTypeEvent recurringEvent;
-
     @Column(name="notes", length = 500)
     private String notes;
 
@@ -524,15 +520,6 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
 
     public EventType getEventType() {
         return getType();
-    }
-
-
-    public RecurringAssetTypeEvent getRecurringEvent() {
-        return recurringEvent;
-    }
-
-    public void setRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
-        this.recurringEvent = recurringEvent;
     }
 
     public EntityState getState() {

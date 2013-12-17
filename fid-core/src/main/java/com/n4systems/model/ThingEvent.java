@@ -31,6 +31,10 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
     @JoinColumn(name="owner_id", nullable = false)
     private BaseOrg owner;
 
+    @ManyToOne()
+    @JoinColumn(name="recurring_event_id")
+    private RecurringAssetTypeEvent recurringEvent;
+
     @Override
     public Asset getTarget() {
         return getAsset();
@@ -120,5 +124,13 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
     @AllowSafetyNetworkAccess
     public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
         return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
+    }
+
+    public RecurringAssetTypeEvent getRecurringEvent() {
+        return recurringEvent;
+    }
+
+    public void setRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
+        this.recurringEvent = recurringEvent;
     }
 }

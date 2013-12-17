@@ -120,6 +120,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("placePeople", PlacePeoplePage.class);
         mountPage("placeEventTypes", PlaceEventTypesPage.class);
         mountPage("placeDescendants", PlaceDescendantsPage.class);
+        mountPage("placeRecurringEvents", PlaceRecurringSchedulesPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 

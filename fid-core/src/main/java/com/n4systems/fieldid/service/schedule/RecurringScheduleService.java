@@ -150,6 +150,11 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
+    public List<RecurringPlaceEvent> getOrgRecurringPlaceEvents(BaseOrg org) {
+        QueryBuilder<RecurringPlaceEvent> query = new QueryBuilder<RecurringPlaceEvent>(RecurringPlaceEvent.class, new OpenSecurityFilter());
+        query.addSimpleWhere("owner", org);
+        return persistenceService.findAll(query);
+    }
 
     class BoundedScheduleTimeIterator implements Iterable<LocalDateTime>, Iterator<LocalDateTime> {
 

@@ -1,10 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.setup.assettype;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.event.AssociatedEventTypesService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
+import com.n4systems.fieldid.wicket.components.DisplayRecurrenceTimeModel;
 import com.n4systems.fieldid.wicket.components.assettype.AssetTypeRecurrenceFormPanel;
 import com.n4systems.fieldid.wicket.components.assettype.FrequencyFormPanel;
 import com.n4systems.fieldid.wicket.components.assettype.RecurrenceFormPanel;
@@ -37,10 +37,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -119,7 +116,7 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 item.add(new Label("eventType", new PropertyModel<String>(item.getDefaultModelObject(), "eventType.name")));
                 item.add(new Label("recurrence", new EnumLabelModel(event.getRecurrence().getType())));
                 item.add(new Label("org", new NullCoverterModel(new PropertyModel<String>(item.getDefaultModelObject(), "owner.name"), "---")));
-                item.add(new Label("time", new DisplayTimeModel(new PropertyModel<Set<RecurrenceTime>>(item.getDefaultModelObject(), "recurrence.times"))));
+                item.add(new Label("time", new DisplayRecurrenceTimeModel(new PropertyModel<Set<RecurrenceTime>>(item.getDefaultModelObject(), "recurrence.times"))));
 
                 boolean hasAffectAll = false;
                 if (event.getOwner() != null && (event.getOwnerAndDown())) {
@@ -303,37 +300,6 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
                 return new Integer(frequencyList.getList().size()).longValue();
             }
         };
-    }
-
-    class DisplayTimeModel extends Model<String> {
-
-        private PropertyModel<Set<RecurrenceTime>> model;
-
-        DisplayTimeModel(PropertyModel<Set<RecurrenceTime>> model) {
-            this.model = model;
-        }
-
-        @Override
-        public String getObject() {
-            List<String> result = Lists.newArrayList();
-            Iterator<RecurrenceTime> iterator = model.getObject().iterator();
-            while (iterator.hasNext()) {
-                result.add(convertTimeToString(iterator.next()));
-            }
-            return Joiner.on(",").join(result);
-        }
-
-        protected String convertTimeToString(RecurrenceTime time) {
-            String monthDay = (time.hasDay()) ?
-                    new LocalDate().withMonthOfYear(time.getMonth()).withDayOfMonth(time.getDayOfMonth()).toString("MMM d") + " " :
-                    "";
-
-            LocalTime localTime = new LocalTime().withHourOfDay(time.getHour()).withMinuteOfHour(time.getMinute());
-
-            String clock = localTime.toString("hh:mm a");
-
-            return monthDay + clock;
-        }
     }
 
     @Override

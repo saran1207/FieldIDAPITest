@@ -1,17 +1,28 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.Saveable;
+import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
-import javax.persistence.Entity;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "recurring_place_events")
 @PrimaryKeyJoinColumn(name="id")
-public class RecurringPlaceEvent extends RecurringEvent<PlaceEventType> {
+public class RecurringPlaceEvent extends ArchivableEntityWithOwner implements Saveable, SecurityEnhanced<RecurringPlaceEvent>, Cloneable {
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "event_type_id", nullable = false)
+    private PlaceEventType eventType;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="recurrence_id")
+    private Recurrence recurrence = new Recurrence();
+
+    private boolean autoAssign;
 
     public RecurringPlaceEvent() {
         super();
@@ -23,7 +34,7 @@ public class RecurringPlaceEvent extends RecurringEvent<PlaceEventType> {
 
     public RecurringPlaceEvent(BaseOrg place, PlaceEventType eventType, Recurrence recurrence) {
         //Preconditions.checkArgument(place!=null,"can't pass null org.");
-        super(place.getTenant(),place);
+        super(place.getTenant(), place);
         setEventType(eventType);
         setRecurrence(recurrence);
     }
@@ -44,6 +55,30 @@ public class RecurringPlaceEvent extends RecurringEvent<PlaceEventType> {
 
     public BaseOrg getPlace() {
         return getOwner();
+    }
+
+    public boolean isAutoAssign() {
+        return autoAssign;
+    }
+
+    public void setAutoAssign(boolean autoAssign) {
+        this.autoAssign = autoAssign;
+    }
+
+    public PlaceEventType getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(PlaceEventType eventType) {
+        this.eventType = eventType;
+    }
+
+    public Recurrence getRecurrence() {
+        return recurrence;
+    }
+
+    public void setRecurrence(Recurrence recurrence) {
+        this.recurrence = recurrence;
     }
 
 }

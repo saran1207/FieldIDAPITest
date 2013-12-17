@@ -17,6 +17,10 @@ public class PlaceEvent extends Event<PlaceEventType, PlaceEvent, BaseOrg> imple
     @JoinColumn(name="place_id")
     private BaseOrg place;
 
+    @ManyToOne()
+    @JoinColumn(name="recurring_event_id")
+    private RecurringPlaceEvent recurringEvent;
+
     @Override
     public BaseOrg getTarget() {
         return getPlace();
@@ -60,5 +64,13 @@ public class PlaceEvent extends Event<PlaceEventType, PlaceEvent, BaseOrg> imple
     @Override
     public PlaceEvent enhance(SecurityLevel level) {
         return EntitySecurityEnhancer.enhance(this, level);
+    }
+
+    public RecurringPlaceEvent getRecurringEvent() {
+        return recurringEvent;
+    }
+
+    public void setRecurringEvent(RecurringPlaceEvent recurringEvent) {
+        this.recurringEvent = recurringEvent;
     }
 }

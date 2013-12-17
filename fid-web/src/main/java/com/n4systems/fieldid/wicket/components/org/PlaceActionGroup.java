@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.pages.event.PerformPlaceEventPage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceDescendantsPage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventTypesPage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
+import com.n4systems.fieldid.wicket.pages.org.PlaceRecurringSchedulesPage;
 import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.PlaceEvent;
@@ -124,16 +125,9 @@ public class PlaceActionGroup extends Panel {
             }
         }.add(new ConfirmBehavior(new FIDLabelModel("msg.confirm_archive_org",getOrg().getDisplayName()))));
 
-        add(new Link<Void>("recurringSchedulesLink") {
-            @Override public void onClick() {
-            }
-        });
+        add(new BookmarkablePageLink<PlaceRecurringSchedulesPage>("recurringSchedulesLink", PlaceRecurringSchedulesPage.class, PageParametersBuilder.id(getOrg().getId())));
 
-        add(new Link<Void>("eventTypesLink") {
-            @Override public void onClick() {
-                setResponsePage(PlaceEventTypesPage.class,PageParametersBuilder.id(getOrg().getId()));
-            }
-        });
+        add(new BookmarkablePageLink<PlaceEventTypesPage>("eventTypesLink", PlaceEventTypesPage.class,PageParametersBuilder.id(getOrg().getId())));
 
         add(new Link<Void>("descendants") {
             @Override public void onClick() {

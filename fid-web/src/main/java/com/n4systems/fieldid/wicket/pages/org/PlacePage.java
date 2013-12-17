@@ -84,7 +84,7 @@ public abstract class PlacePage extends FieldIDTemplatePage {
         };
     }
 
-    protected abstract void refreshContent(AjaxRequestTarget target);
+    protected void refreshContent(AjaxRequestTarget target) {}
 
     protected BaseOrg getOrg() {
         return orgModel.getObject();

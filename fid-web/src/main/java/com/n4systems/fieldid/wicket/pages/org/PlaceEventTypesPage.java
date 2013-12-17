@@ -63,11 +63,6 @@ public class PlaceEventTypesPage extends PlacePage {
     }
 
     @Override
-    protected void refreshContent(AjaxRequestTarget target) {
-
-    }
-
-    @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId).setVisible(false));
     }

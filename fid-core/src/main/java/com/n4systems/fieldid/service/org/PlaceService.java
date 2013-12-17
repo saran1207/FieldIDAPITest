@@ -6,7 +6,9 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.model.orgs.*;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.UserType;
@@ -16,7 +18,10 @@ import com.n4systems.util.persistence.WhereParameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Transactional
 public class PlaceService extends FieldIdPersistenceService {
@@ -38,17 +43,24 @@ public class PlaceService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public void removeRecurringEvent(OrgRecurringEvent event) {
-        throw new UnsupportedOperationException("removing recurring events not implemented yet");
+    public void removeRecurringEvent(RecurringPlaceEvent event) {
+        persistenceService.reattach(event);
+        persistenceService.remove(event);
     }
 
-    public void addRecurringEvent() {
-        throw new UnsupportedOperationException("adding recurring events not implemented yet");
+    public void addRecurringEvent(BaseOrg org, RecurringPlaceEvent recurringEvent) {
+        persistenceService.save(recurringEvent.getRecurrence());
+        persistenceService.save(recurringEvent);
+
+        //TODO Schedule events using async service
+
+        org.touch();
+        persistenceService.update(org);
     }
 
     public List<? extends User> getUsersFor(BaseOrg org) {
         QueryBuilder<User> query = createUserSecurityBuilder(User.class);
-        query.addSimpleWhere("owner",org);
+        query.addSimpleWhere("owner", org);
         return persistenceService.findAll(query);
     }
 
@@ -58,7 +70,7 @@ public class PlaceService extends FieldIdPersistenceService {
 
     public List<PlaceEvent> getEventsFor(BaseOrg org, String order, boolean ascending, List<WorkflowState> workflowStates) {
         QueryBuilder<PlaceEvent> query = createUserSecurityBuilder(PlaceEvent.class);
-        query.addSimpleWhere("place",org);
+        query.addSimpleWhere("place", org);
 
         if (order != null) {
             String[] orders = order.split(",");
