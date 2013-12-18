@@ -35,3 +35,8 @@
 #contentHeader .formErrors ul li {
     list-style-type: disc;
 }
+
+/* Auto-logout notification */
+#cboxLoadedContent div.error {
+    display: none;
+}
