@@ -4,6 +4,7 @@ import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 
 import javax.persistence.*;
@@ -12,6 +13,10 @@ import javax.persistence.*;
 @Table(name="place_events")
 @PrimaryKeyJoinColumn(name="id")
 public class PlaceEvent extends Event<PlaceEventType, PlaceEvent, BaseOrg> implements NetworkEntity<PlaceEvent> {
+
+    public static final SecurityDefiner createSecurityDefiner() {
+        return new SecurityDefiner("tenant.id", "place", null, "state", true);
+    }
 
     @ManyToOne
     @JoinColumn(name="place_id")

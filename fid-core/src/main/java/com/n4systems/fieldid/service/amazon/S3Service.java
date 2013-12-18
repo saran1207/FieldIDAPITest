@@ -647,6 +647,12 @@ public class S3Service extends FieldIdPersistenceService {
         }
     }
 
+    public void uploadAttachment(S3Attachment attachment) {
+        for (S3Attachment attachmentFlavour:getS3AttachmentHandler(attachment).getFlavours(attachment)) {
+            putObject(attachmentFlavour.getPath(), attachmentFlavour.getBytes(), attachmentFlavour.getContentType());
+        }
+    }
+
     private S3AttachmentHandler getS3AttachmentHandler(S3Attachment attachment) {
         // TODO : check meta-data for content-type and return appropriate handler.
         // for now we only have one type of attachments running through this code.

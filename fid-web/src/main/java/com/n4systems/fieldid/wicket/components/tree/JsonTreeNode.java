@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.tree;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.org.OrgLocationTree;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
@@ -31,9 +32,19 @@ public class JsonTreeNode {
 
     private String getClass(OrgLocationTree.OrgLocationTreeNode node) {
         String cssClass = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_HYPHEN, node.getType().name());
+
+        boolean canManageCustomers = FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers();
+
         if (OrgLocationTree.NodeType.INTERNAL_ORG.equals(node.getType())) {
             cssClass += Boolean.TRUE.equals(node.isPrimary()) ? " primary" : " secondary";
         }
+
+        if(node.isLinked()) {
+            cssClass += " safety-network";
+        }
+
+        if(!canManageCustomers)
+            cssClass += " no-permission";
         return cssClass;
     }
 

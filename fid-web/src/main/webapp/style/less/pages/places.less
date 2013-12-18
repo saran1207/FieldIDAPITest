@@ -54,7 +54,13 @@
 			text-decoration: none;
 		}
 	}
+
+	.no-permission .action {
+	    display: none;
+	}
 }
+
+// Right column / add form
 .column-custom {
 	width: auto;
 	overflow: auto;
@@ -80,19 +86,15 @@
 		label {
 			width: 19.5%;
 		}
-		.chzn-container {
-			width: 286px!important;
-		}
-	}
-	h3 {
-		margin-top: 0;
 	}
 }
+
 
 // List view
 .list-view tr {
 	height: 33px;
 }
+
 
 // Action Group styles
 // --------------------
@@ -101,10 +103,10 @@
 }
 
 
+
 // Places Summary page
 // --------------------
 .place-summary {
-
 	.uploads {
 		position: relative;
 
@@ -118,10 +120,6 @@
 		.input-combo {
 			margin: 0;
 		}
-	}
-	.attachments {
-		padding: 20px 0;
-		display: block;
 	}
 	.google-map {
 		width: 100%;
@@ -162,6 +160,17 @@
 		height: 550px;
 	}
 }	
+
+// Place Recurring Schedules
+// -------------------------
+//overriding styles for chosen dropdowns
+.chzn-container .chzn-results {
+	max-height: 160px!important;
+}
+.chzn-drop,
+.chzn-search input {
+	width: 100%!important;
+}
 
 
 

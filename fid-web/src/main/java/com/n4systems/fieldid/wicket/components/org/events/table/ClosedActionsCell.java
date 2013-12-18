@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.org.events.table;
 
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -44,6 +45,7 @@ public class ClosedActionsCell extends Panel {
 
             }
         });
+        deleteLink.setVisible(FieldIDSession.get().getUserSecurityGuard().isAllowedEditEvent());
 
         add(new NonWicketIframeLink("viewLink", "aHtml/iframe/event.action?uniqueID=" + event.getID(), true, 650, 600, new AttributeModifier("class", "btn-secondary")));
     }

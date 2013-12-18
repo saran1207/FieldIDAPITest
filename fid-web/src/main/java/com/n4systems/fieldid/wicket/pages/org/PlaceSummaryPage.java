@@ -96,11 +96,9 @@ public class PlaceSummaryPage extends PlacePage {
 
         add(new InlineEditableForm("general").withSaveCancelEditLinks()
                 .add(new TextField("name", ProxyModel.of(orgModel,on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
+                .add(new TextField("id", ProxyModel.of(orgModel,on(BaseOrg.class).getCode())))
                 .add(new TextArea<String>("notes", ProxyModel.of(orgModel,on(BaseOrg.class).getNotes())))
         );
-        // TOOD : override save method for both forms to actually save the stuff. make sure to
-        // 1:update map.
-        // 2:copy over Contact information into org from temp backing model.
 
     }
 

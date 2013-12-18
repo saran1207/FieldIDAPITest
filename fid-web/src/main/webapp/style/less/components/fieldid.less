@@ -1,0 +1,40 @@
+// The CSS here is used for overriding the framework's 
+// global styles or adding styles that the framework does 
+// not need, to work with old components that have not 
+// been rewritten using the new markup and structure but 
+// need to be displayed on new pages that are written using 
+// the new structure.  As components are moved over to the 
+// new framework, the styles here may need to be rewritten 
+// or deleted.
+
+/* --------------------------------
+   Existing wicket modal structure
+-----------------------------------*/
+
+.wicket-modal {
+	
+	//form styles
+	.left, .right {
+		float: left;
+	}
+	.left {
+		line-height: 30px;
+		width: 100px;
+		text-align: right;
+		padding-right: 10px;
+	}
+	.right {
+		//input and label are both in right div
+		.checkbox {
+			margin-left: 99px;
+		}
+	}
+	img.tooltip {
+		padding-left: 5px;
+		vertical-align: middle;
+	}
+	.btn {
+		float: right;
+		margin-top: 20px;
+	}
+}

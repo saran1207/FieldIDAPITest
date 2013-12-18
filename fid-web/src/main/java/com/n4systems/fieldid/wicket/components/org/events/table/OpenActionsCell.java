@@ -38,6 +38,8 @@ public class OpenActionsCell extends Panel {
     public OpenActionsCell(String id, final IModel<PlaceEvent> eventModel, final Panel eventDisplayPanel) {
         super(id, eventModel);
 
+        final boolean canCreateEvents = FieldIDSession.get().getUserSecurityGuard().isAllowedCreateEvent();
+
         final PlaceEvent schedule = eventModel.getObject();
 
         add(modalWindow = createModalWindow(eventModel, eventDisplayPanel));
@@ -53,7 +55,7 @@ public class OpenActionsCell extends Panel {
 
         //TODO This should link to the perform event page
         String startAction = "TO BE DONE";
-        add(new NonWicketLink("startLink", startAction, new AttributeModifier("class", "btn-secondary")));
+        add(new NonWicketLink("startLink", startAction, new AttributeModifier("class", "btn-secondary")).setVisible(canCreateEvents));
 
         add(new BookmarkablePageLink<CloseEventPage>("closeLink", CloseEventPage.class, PageParametersBuilder.uniqueId(schedule.getId())));
 

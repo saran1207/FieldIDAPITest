@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.model.Event;
 import com.n4systems.model.PlaceEvent;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -14,15 +15,21 @@ public class EventActionsCell extends Panel {
         
         Event event = eventModel.getObject();
 
+        add(new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getID(), new AttributeModifier("class", "btn-secondary")));
+
+        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
+
         NonWicketLink editLink;
-        add(editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID=" + event.getID()));
+        optionsContainer.add(editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID=" + event.getID()));
         editLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("editevent"));
         
         NonWicketLink printLink;
-        add(printLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID=" + event.getID() + "&reportType=INSPECTION_CERT"));
+        optionsContainer.add(printLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID=" + event.getID() + "&reportType=INSPECTION_CERT"));
         printLink.setVisible(event.isEventCertPrintable());
 
-        add(new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getID(), new AttributeModifier("class", "btn-secondary")));
+        optionsContainer.setVisible(editLink.isVisible() || printLink.isVisible());
+
+        add(optionsContainer);
     }
 
 }

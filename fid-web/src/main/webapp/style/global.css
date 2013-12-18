@@ -1961,3 +1961,27 @@ body {
 .wrapper:after {
   height: 125px;
 }
+/* --------------------------------
+   Existing wicket modal structure
+-----------------------------------*/
+.wicket-modal .left,
+.wicket-modal .right {
+  float: left;
+}
+.wicket-modal .left {
+  line-height: 30px;
+  width: 100px;
+  text-align: right;
+  padding-right: 10px;
+}
+.wicket-modal .right .checkbox {
+  margin-left: 99px;
+}
+.wicket-modal img.tooltip {
+  padding-left: 5px;
+  vertical-align: middle;
+}
+.wicket-modal .btn {
+  float: right;
+  margin-top: 20px;
+}

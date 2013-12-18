@@ -147,6 +147,7 @@ var orgTreeFactory = (function() {
 					var $link = $(event.target);
 					if ($link.hasClass('jstree-loading')) {return;}
 					var node = $link.closest('li');
+                    if (node.hasClass('safety-network')) {return;}
 					var url = options.clickCallback + '?id=' + node.attr('id');
 					window.location = url;
 				});
