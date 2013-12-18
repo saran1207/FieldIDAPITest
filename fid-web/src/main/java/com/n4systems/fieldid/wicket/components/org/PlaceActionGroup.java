@@ -13,20 +13,18 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForPlaceModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.event.PerformPlaceEventPage;
-import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
-import com.n4systems.fieldid.wicket.pages.org.PlaceDescendantsPage;
-import com.n4systems.fieldid.wicket.pages.org.PlaceEventTypesPage;
-import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
-import com.n4systems.fieldid.wicket.pages.org.PlaceRecurringSchedulesPage;
+import com.n4systems.fieldid.wicket.pages.org.*;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.PlaceEventType;
-import com.n4systems.model.orgs.*;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.collections.PrioritizedList;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -65,6 +63,10 @@ public class PlaceActionGroup extends Panel {
         super(id, model);
         this.model = model;
 
+        final boolean canCreateEvents = FieldIDSession.get().getUserSecurityGuard().isAllowedCreateEvent();
+        final boolean canManageCustomers = FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers();
+        final boolean canManageSystemConfig = FieldIDSession.get().getUserSecurityGuard().isAllowedManageSystemConfig();
+
         scheduleToAdd = createNewSchedule(model.getObject());
 
         schedulePicker = new SchedulePicker<PlaceEvent>("schedulePicker", new PropertyModel<PlaceEvent>(this, "scheduleToAdd"), new EventTypesForPlaceModel(model)){
@@ -78,12 +80,13 @@ public class PlaceActionGroup extends Panel {
 
         add(schedulePicker);
 
+
         add(new AjaxLink<Void>("scheduleLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 schedulePicker.show(target);
             }
-        });
+        }.setVisible(canCreateEvents));
 
         add(new ListView<PlaceEvent>("scheduled", new ScheduledEventsMenuModel()) {
             @Override protected void populateItem(ListItem<PlaceEvent> item) {
@@ -99,7 +102,7 @@ public class PlaceActionGroup extends Panel {
                             .add(new TimeAgoLabel("note", Model.of(event.getDueDate()), dateService.getUserTimeZone())));
                 }
             }
-        });
+        }.setVisible(canCreateEvents));
 
         add(new ListView<PlaceEventType>("unscheduled", new UnscheduledEventTypesMenuModel()) {
             @Override
@@ -107,51 +110,56 @@ public class PlaceActionGroup extends Panel {
                 item.add(new BookmarkablePageLink<Void>("event", PerformPlaceEventPage.class, new PageParameters().add("placeId", getOrg().getId()).add("type", item.getModelObject().getId()))
                 .add(new Label("name", new PropertyModel<String>(item.getModel(), "displayName"))));
             }
-        });
+        }.setVisible(canCreateEvents));
 
-        add( new NonWicketLink("mergeLink", "mergeCustomers.action?uniqueID="+ getOrg().getId()) {
-            @Override public boolean isVisible() {
-                return getOrg() instanceof CustomerOrg;
-            }
-        });
 
-        add(new Link<Void>("archiveLink") {
-            @Override public void onClick() {
+        Component mergeLink;
+        Link archiveLink;
+        Link recurringSchedulesLink;
+        Link eventTypesLink;
+        Link descendantsLink;
+        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
+
+        optionsContainer.add(mergeLink = new NonWicketLink("mergeLink", "mergeCustomers.action?uniqueID=" + getOrg().getId()));
+        mergeLink.setVisible(getOrg().isCustomer() && canManageCustomers);
+
+        optionsContainer.add(archiveLink = new Link<Void>("archiveLink") {
+            @Override
+            public void onClick() {
                 placeService.archive(getOrg());
                 setResponsePage(OrgViewPage.class);
             }
-            @Override public boolean isVisible() {
-                return getOrg() instanceof CustomerOrg || getOrg() instanceof DivisionOrg;
-            }
-        }.add(new ConfirmBehavior(new FIDLabelModel("msg.confirm_archive_org",getOrg().getDisplayName()))));
+        });
+        archiveLink.add(new ConfirmBehavior(new FIDLabelModel("msg.confirm_archive_org", getOrg().getDisplayName())));
+        archiveLink.setVisible((getOrg().isCustomer() || getOrg().isDivision()) && canManageCustomers);
 
-        add(new BookmarkablePageLink<PlaceRecurringSchedulesPage>("recurringSchedulesLink", PlaceRecurringSchedulesPage.class, PageParametersBuilder.id(getOrg().getId())));
+        optionsContainer.add(recurringSchedulesLink = new BookmarkablePageLink<PlaceRecurringSchedulesPage>("recurringSchedulesLink", PlaceRecurringSchedulesPage.class, PageParametersBuilder.id(getOrg().getId())));
+        recurringSchedulesLink.setVisible(canManageSystemConfig);
 
-        add(new BookmarkablePageLink<PlaceEventTypesPage>("eventTypesLink", PlaceEventTypesPage.class,PageParametersBuilder.id(getOrg().getId())));
+        optionsContainer.add(eventTypesLink = new BookmarkablePageLink<PlaceEventTypesPage>("eventTypesLink", PlaceEventTypesPage.class, PageParametersBuilder.id(getOrg().getId())));
+        eventTypesLink.setVisible(canManageSystemConfig);
 
-        add(new Link<Void>("descendants") {
-            @Override public void onClick() {
-                setResponsePage(PlaceDescendantsPage.class,PageParametersBuilder.id(getOrg().getId()));
-            }
-            @Override public boolean isVisible() {
-                return !(getOrg() instanceof DivisionOrg);
-            }
-        }.add(new Label("label", getLabelForOrg())));
+        optionsContainer.add(descendantsLink = new BookmarkablePageLink<PlaceDescendantsPage>("descendants", PlaceDescendantsPage.class, PageParametersBuilder.id(getOrg().getId())));
+        descendantsLink.setVisible((!getOrg().isDivision()) && canManageCustomers);
+        descendantsLink.add(new Label("label", getLabelForOrg()));
+
+        add(optionsContainer);
+        optionsContainer.setVisible(mergeLink.isVisible()
+                || archiveLink.isVisible()
+                || recurringSchedulesLink.isVisible()
+                || eventTypesLink.isVisible()
+                || descendantsLink.isVisible());
     }
 
     private IModel<String> getLabelForOrg() {
-        return new Model<String>() {
-            @Override public String getObject() {
-                if (getOrg() instanceof PrimaryOrg) {
-                    return new FIDLabelModel("label.add_secondary_customer_to", getOrg().getName()).getObject();
-                } else if (getOrg() instanceof SecondaryOrg) {
-                    return new FIDLabelModel("label.add_customer_to", getOrg().getName()).getObject();
-                } else if (getOrg() instanceof CustomerOrg) {
-                    return new FIDLabelModel("label.add_division_to", getOrg().getName()).getObject();
-                }
-                throw new IllegalStateException("this shouldn't be shown for divisions or other non-primary/secondary/customer orgs.");
-            }
-        };
+        if (getOrg().isPrimary()) {
+            return new FIDLabelModel("label.add_secondary_customer_to", getOrg().getDisplayName());
+        } else if (getOrg().isSecondary()) {
+            return new FIDLabelModel("label.add_customer_to", getOrg().getDisplayName());
+        } else if (getOrg().isCustomer()) {
+            return new FIDLabelModel("label.add_division_to", getOrg().getDisplayName());
+        } else
+            return Model.of("");
     }
 
     protected void refreshContainingPage(AjaxRequestTarget target) {};

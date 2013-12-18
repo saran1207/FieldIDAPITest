@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.form;
 
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
@@ -139,7 +140,8 @@ public class InlineEditableForm extends Form {
             }
 
             @Override public boolean isVisible() {
-                return !editing;
+                boolean canManageCustomers = FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers();
+                return canManageCustomers && !editing;
             }
         }.setOutputMarkupPlaceholderTag(true));
     }
