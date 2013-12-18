@@ -2,7 +2,6 @@ package com.n4systems.model.orgs;
 
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -14,8 +13,6 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 abstract public class ExternalOrg extends BaseOrg {
 
-    // TODO : pull this up to BaseOrg??? confirm with matt.
-	private String code;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)
 	@JoinColumn(name="linked_id")
@@ -51,16 +48,6 @@ abstract public class ExternalOrg extends BaseOrg {
 		} else {
 			setAddressInfo(null);
 		}
-	}
-	
-	@AllowSafetyNetworkAccess
-    @DenyReadOnlyUsersAccess
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	@AllowSafetyNetworkAccess

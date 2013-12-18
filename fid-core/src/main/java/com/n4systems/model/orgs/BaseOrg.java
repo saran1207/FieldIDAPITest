@@ -32,6 +32,8 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		return new SecurityDefiner("tenant.id", "", null, "state");
 	}
 
+    @Column(name="code")
+    private String code;
 
     @ManyToMany(fetch= FetchType.LAZY, cascade= CascadeType.ALL)
     @JoinTable(name="orgs_place_event_types", joinColumns = @JoinColumn(name="org_id"), inverseJoinColumns = @JoinColumn(name="place_event_type_id"))
@@ -40,6 +42,10 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "image_id")
     private PlaceAttachment image;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "report_image_id")
+    private PlaceAttachment reportImage;
 
     @Embedded
     @AttributeOverrides({
@@ -336,5 +342,23 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
     @Override
     public void setOwner(BaseOrg owner) {
         throw new UnsupportedOperationException("Can't set owner");
+    }
+
+    @AllowSafetyNetworkAccess
+    @DenyReadOnlyUsersAccess
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public PlaceAttachment getReportImage() {
+        return reportImage;
+    }
+
+    public void setReportImage(PlaceAttachment reportImage) {
+        this.reportImage = reportImage;
     }
 }

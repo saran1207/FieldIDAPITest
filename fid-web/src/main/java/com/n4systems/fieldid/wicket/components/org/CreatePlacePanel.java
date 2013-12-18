@@ -6,9 +6,7 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AddressInfo;
-import com.n4systems.model.builders.CustomerOrgBuilder;
-import com.n4systems.model.builders.DivisionOrgBuilder;
-import com.n4systems.model.builders.SecondaryOrgBuilder;
+import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -44,7 +42,7 @@ public class CreatePlacePanel extends Panel {
         form = new Form<PlaceData>("form", newPlaceModel);
 
         form.add(new Label("title", getTitleModel()))
-            .add(new TextField("id").setRequired(true))
+            .add(new TextField("code").setRequired(true))
             .add(new TextField("name").setRequired(true))
             .add(new TextArea("notes"))
             .add(new TextField("contactName"))
@@ -147,7 +145,7 @@ public class CreatePlacePanel extends Panel {
 
 
     class PlaceData implements Serializable {
-        private String id, contactName, email, notes, name;
+        private String code, contactName, email, notes, name;
         private AddressInfo address = new AddressInfo();
         private BaseOrg parent;
         private Level level;
@@ -164,14 +162,42 @@ public class CreatePlacePanel extends Panel {
                 PrimaryOrg primary = (PrimaryOrg) parent;
                 // TODO : augment builders to accommodate notes, address, etc..
                 return Level.SECONDARY.equals(level) ?
-                        SecondaryOrgBuilder.aSecondaryOrg().withPrimaryOrg(primary).withName(name).withId(null).build() :
-                        CustomerOrgBuilder.aCustomerOrg().withParent(primary).withName(name).withId(null).build();
+                        OrgBuilder.aSecondaryOrg()
+                                .withContact(contactName, email)
+                                .withCode(code)
+                                .withAddress(address)
+                                .withNotes(notes)
+                                .withParent(primary)
+                                .withName(name)
+                                .withId(null).build() :
+                        OrgBuilder.aCustomerOrg()
+                                .withCode(code)
+                                .withContact(contactName, email)
+                                .withAddress(address)
+                                .withNotes(notes)
+                                .withParent(primary)
+                                .withName(name)
+                                .withId(null).build();
             } else if (parent instanceof CustomerOrg) {
                 CustomerOrg customer = (CustomerOrg) parent;
-                return DivisionOrgBuilder.aDivisionOrg().withCustomerOrg(customer).withName(name).withId(null).build();
+                return OrgBuilder.aDivisionOrg()
+                        .withCode(code)
+                        .withContact(contactName, email)
+                        .withAddress(address)
+                        .withNotes(notes)
+                        .withParent(customer)
+                        .withName(name)
+                        .withId(null).build();
             } else if (parent instanceof SecondaryOrg) {
                 SecondaryOrg secondary = (SecondaryOrg) parent;
-                return CustomerOrgBuilder.aCustomerOrg().withParent(secondary).withName(name).withId(null).build();
+                return OrgBuilder.aCustomerOrg()
+                        .withCode(code)
+                        .withContact(contactName, email)
+                        .withAddress(address)
+                        .withNotes(notes)
+                        .withParent(secondary)
+                        .withName(name)
+                        .withId(null).build();
             }
             throw new IllegalStateException("can't build child org for " + parent==null?"NULL":parent.getClass().getSimpleName() + " org");
         }
@@ -182,14 +208,15 @@ public class CreatePlacePanel extends Panel {
 
         @Override
         public String toString() {
-            return "Place{" +
+            return "PlaceData{" +
                     "address=" + address +
-                    ", level='" + level + '\'' +
+                    ", code='" + code + '\'' +
                     ", contactName='" + contactName + '\'' +
                     ", email='" + email + '\'' +
                     ", notes='" + notes + '\'' +
                     ", name='" + name + '\'' +
-                    ", parent=" + (parent==null? "noParent" : parent.getId()) +
+                    ", parent=" + parent +
+                    ", level=" + level +
                     '}';
         }
     }
