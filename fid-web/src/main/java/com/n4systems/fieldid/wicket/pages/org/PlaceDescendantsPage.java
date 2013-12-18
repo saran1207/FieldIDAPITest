@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.components.org.CreatePlacePanel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -15,7 +16,6 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -60,14 +60,26 @@ public class PlaceDescendantsPage extends PlacePage {
 
     private void init() {
         add(table = new SimpleDefaultDataTable<BaseOrg>("descendants", getDescendantsColumns(), new DescendantsDataProvider() , 10));
-        add(new Label("createNewPlace", "CREATE NEW PLACE"));
+        add(new CreatePlacePanel("createNewPlace") {
+            @Override protected void onCreate(BaseOrg org, AjaxRequestTarget target) {
+                // TODO add feedback.
+                persistenceService.save(org);
+                resetModelObject();
+                target.add(this);
+            }
+            @Override protected void onCancel(AjaxRequestTarget target) {
+                // TODO ? what to do here???  should i even show button.
+            }
+        }.forParentOrg(getOrg()).show());
     }
 
     private List<IColumn<BaseOrg>> getDescendantsColumns() {
         List<IColumn<BaseOrg>> columns = Lists.newArrayList();
-        columns.add(new AbstractColumn<BaseOrg>(new FIDLabelModel("label.name")) {
-            @Override
-            public void populateItem(Item<ICellPopulator<BaseOrg>> cellItem, String componentId, final IModel<BaseOrg> rowModel) {
+        String key = getOrg().isCustomer() ? "label.divisions" :
+                    getOrg().isSecondary() ? "label.customers" :
+                            getOrg().isPrimary() ? "label.descendants" : "label.children";
+        columns.add(new AbstractColumn<BaseOrg>(new FIDLabelModel(key)) {
+            @Override public void populateItem(Item<ICellPopulator<BaseOrg>> cellItem, String componentId, final IModel<BaseOrg> rowModel) {
                 cellItem.add(new OrgCell(componentId,rowModel));
             }
         });
