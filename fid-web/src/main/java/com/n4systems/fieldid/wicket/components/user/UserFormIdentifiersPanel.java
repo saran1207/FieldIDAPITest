@@ -3,8 +3,10 @@ package com.n4systems.fieldid.wicket.components.user;
 import com.n4systems.fieldid.actions.users.UploadedImage;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.org.OrgPicker;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
@@ -46,7 +48,14 @@ public class UserFormIdentifiersPanel extends Panel {
     public UserFormIdentifiersPanel(String id, IModel<User> user, UploadedImage signatureImage) {
         super(id, user);
         this.uploadedImage = signatureImage;
-        add(createOrgPicker("orgPicker", new PropertyModel<BaseOrg>(user, "owner")));
+
+        OrgLocationPicker ownerPicker = new OrgLocationPicker("ownerPicker", new PropertyModel(user,"owner")) {
+            @Override protected void onChanged(AjaxRequestTarget target) { }
+
+            @Override protected void onError(AjaxRequestTarget target, RuntimeException e) { }
+        }.withAutoUpdate();
+        add(ownerPicker.setRequired(true).setLabel(new FIDLabelModel("label.owner")));
+
         add(new MultiSelectDropDownChoice<UserGroup>("group",
                 new PropertyModel<List<UserGroup>>(user, "groups"),
                 userGroupService.getActiveUserGroups(),
@@ -61,10 +70,6 @@ public class UserFormIdentifiersPanel extends Panel {
         add(uploadForm = new UploadForm("uploadForm"));
         uploadForm.setMultiPart(true);
         uploadForm.setVisible(!user.getObject().isPerson());
-    }
-
-    protected Component createOrgPicker(String id, IModel<BaseOrg> org) {
-        return new OrgPicker("orgPicker", org);
     }
 
     class UploadForm extends Form<FileAttachment> {
