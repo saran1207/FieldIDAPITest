@@ -39,11 +39,12 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
     @JoinTable(name="orgs_place_event_types", joinColumns = @JoinColumn(name="org_id"), inverseJoinColumns = @JoinColumn(name="place_event_type_id"))
     private Set<PlaceEventType> eventTypes = new HashSet<PlaceEventType>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    // NOTE : not sure if images should be many or one-to-one.  is it possible that multiple orgs could have same image?
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "image_id")
     private PlaceAttachment image;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "report_image_id")
     private PlaceAttachment reportImage;
 

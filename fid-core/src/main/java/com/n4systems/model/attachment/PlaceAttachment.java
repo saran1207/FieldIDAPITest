@@ -28,13 +28,13 @@ public class PlaceAttachment extends AbstractS3Attachment {
     @Override
     public String getRelativePath() {
         Preconditions.checkState(org!=null,"you must specify org before calling this");
-        return String.format(PATH_FORMAT, org.getId(), getFileName());
+        return String.format(PATH_FORMAT, org.getId(), getSubdiretoryAndFilename(getFileName()));
     }
 
     @Override
     public String getRelativeTempPath(String fileName) {
         Preconditions.checkState(org!=null,"you must specify org before calling this");
-        return String.format(TEMP_PATH_FORMAT,org.getId(),fileName);
+        return String.format(TEMP_PATH_FORMAT,org.getId(),getSubdiretoryAndFilename(fileName));
     }
 
     @Override
