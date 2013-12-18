@@ -441,6 +441,8 @@ input.wavy-underline {
 	Icons are from the Entypo and Font Awesome icon set.
 	http://www.entypo.com/
 	http://fortawesome.github.io/Font-Awesome/
+
+	Also included in dropdown/style.css - some pages do not include this stylesheet
 */
 @font-face {
   font-family: 'fontello';
