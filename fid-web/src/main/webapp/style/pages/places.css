@@ -44,6 +44,9 @@
 .tree-view .action:hover {
   text-decoration: none;
 }
+.tree-view .no-permission .action {
+  display: none;
+}
 .column-custom {
   width: auto;
   overflow: auto;
@@ -66,12 +69,6 @@
 .add-place-form .primary-selection label {
   width: 19.5%;
 }
-.add-place-form .primary-selection .chzn-container {
-  width: 286px!important;
-}
-.add-place-form h3 {
-  margin-top: 0;
-}
 .list-view tr {
   height: 33px;
 }
@@ -90,10 +87,6 @@
 }
 .place-summary .uploads .input-combo {
   margin: 0;
-}
-.place-summary .attachments {
-  padding: 20px 0;
-  display: block;
 }
 .place-summary .google-map {
   width: 100%;
@@ -121,6 +114,13 @@
   margin-top: 10px;
   width: 100%;
   height: 550px;
+}
+.chzn-container .chzn-results {
+  max-height: 160px!important;
+}
+.chzn-drop,
+.chzn-search input {
+  width: 100%!important;
 }
 @media (max-width: 1150px) {
   .two-columns {
