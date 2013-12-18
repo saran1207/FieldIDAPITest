@@ -10,7 +10,6 @@ import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -35,10 +34,6 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
     public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
 	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.eventForm.sections"};
     public static final String[] ASSET_EVENT_FIELDS = { "type.supportedProofTests", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap","subEvents.modifiedBy",};
-	
-	public static final SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
-	}
 
     public enum WorkflowStateGrouping {
         NON_COMPLETE(WorkflowState.OPEN, WorkflowState.CLOSED), COMPLETE(WorkflowState.COMPLETED);
