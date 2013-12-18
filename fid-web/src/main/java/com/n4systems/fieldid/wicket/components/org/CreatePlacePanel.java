@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.org;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
@@ -8,8 +9,10 @@ import com.n4systems.model.AddressInfo;
 import com.n4systems.model.builders.CustomerOrgBuilder;
 import com.n4systems.model.builders.DivisionOrgBuilder;
 import com.n4systems.model.builders.SecondaryOrgBuilder;
-import com.n4systems.model.orgs.*;
-import org.apache.wicket.Component;
+import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.CustomerOrg;
+import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.orgs.SecondaryOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -32,46 +35,46 @@ public class CreatePlacePanel extends Panel {
 
     enum Level {SECONDARY,CUSTOMER};
 
-    private Component form;
+    private Form<PlaceData> form;
     private CompoundPropertyModel<PlaceData> newPlaceModel = new CompoundPropertyModel(new PlaceData());
 
     public CreatePlacePanel(String id) {
         super(id);
 
-        form = new Form<PlaceData>("form", newPlaceModel)
-                .add(new Label("title", getTitleModel()))
-                .add(new TextField("id").setRequired(true))
-                .add(new TextField("name").setRequired(true))
-                .add(new TextArea("notes"))
-                .add(new TextField("contactName"))
-                .add(new TextField("email"))
-                .add(new FidDropDownChoice<Level>("level", new PropertyModel(newPlaceModel,"level"), Lists.newArrayList(Level.values()), new EnumChoiceRenderer<Level>()) {
-                    @Override public boolean isVisible() {
-                        return newPlaceModel.getObject().parent instanceof PrimaryOrg;
-                    }
-                })
-                .add(new AddressPanel("address",new PropertyModel(newPlaceModel,"address")).withNoMap())
-                .add(new AjaxSubmitLink("submit") {
-                    @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                        // TODO : add feedback of some sort???
-                        PlaceData data = (PlaceData) CreatePlacePanel.this.form.getDefaultModelObject();
-                        onCreate(data.createNewChildOrg(), target);
-                    }
-                    @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+        form = new Form<PlaceData>("form", newPlaceModel);
 
-                    }
-                })
-                .add(new AjaxLink("cancel") {
-                    @Override public void onClick(AjaxRequestTarget target) {
-                        onCancel(target);
-                    }
-                })
-                .setOutputMarkupPlaceholderTag(true);
+        form.add(new Label("title", getTitleModel()))
+            .add(new TextField("id").setRequired(true))
+            .add(new TextField("name").setRequired(true))
+            .add(new TextArea("notes"))
+            .add(new TextField("contactName"))
+            .add(new TextField("email"))
+            .add(new FidDropDownChoice<Level>("level", new PropertyModel(newPlaceModel, "level"), Lists.newArrayList(Level.values()), new EnumChoiceRenderer<Level>()) {
+                @Override public boolean isVisible() {
+                    return newPlaceModel.getObject().parent instanceof PrimaryOrg;
+                }
+            })
+            .add(new AddressPanel("address", new PropertyModel(newPlaceModel, "address")).withNoMap())
+            .add(new AjaxSubmitLink("submit") {
+                @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    // TODO : add feedback of some sort???
+                    PlaceData data = (PlaceData) CreatePlacePanel.this.form.getDefaultModelObject();
+                    onCreate(data.createNewChildOrg(), target);
+                }
+
+                @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+                }
+            })
+            .add(new AjaxLink("cancel") {
+                @Override public void onClick(AjaxRequestTarget target) {
+                    onCancel(target);
+                }
+            })
+            .setOutputMarkupPlaceholderTag(true);
 
         add(form);
         add(new WebMarkupContainer("blankSlate") {
-            @Override
-            public boolean isVisible() {
+            @Override public boolean isVisible() {
                 return !form.isVisible();
             }
         });
@@ -84,16 +87,23 @@ public class CreatePlacePanel extends Panel {
         form.setVisible(false);
     }
 
+    public CreatePlacePanel forParentOrg(BaseOrg parent) {
+        resetModelObject(parent);
+        return this;
+    }
+
     private IModel<String> getTitleModel() {
         return new Model<String>() {
             @Override public String getObject() {
                 PlaceData data = newPlaceModel.getObject();
+                Preconditions.checkArgument(data.getParent()!=null,"need to know what org you are adding to. ");
+                String name = data.getParent().getName();
                 if (data.getParent() instanceof PrimaryOrg) {
-                    return new FIDLabelModel("label.add_secondary_customer_to",data.parent.getName()).getObject();
+                    return new FIDLabelModel("label.add_secondary_customer_to", name).getObject();
                 } else if (data.getParent() instanceof SecondaryOrg) {
-                    return new FIDLabelModel("label.add_customer_to",data.parent.getName()).getObject();
+                    return new FIDLabelModel("label.add_customer_to", name).getObject();
                 } else {
-                    return new FIDLabelModel("label.add_division_to",data.parent.getName()).getObject();
+                    return new FIDLabelModel("label.add_division_to", name).getObject();
                 }
             }
         };
@@ -126,6 +136,12 @@ public class CreatePlacePanel extends Panel {
 
     public CreatePlacePanel resetModelObject(BaseOrg parent) {
         form.setDefaultModelObject(new PlaceData(parent));
+        return this;
+    }
+
+    public CreatePlacePanel resetModelObject() {
+        PlaceData data = form.getModel().getObject();
+        form.setDefaultModelObject(new PlaceData(data.getParent()));
         return this;
     }
 

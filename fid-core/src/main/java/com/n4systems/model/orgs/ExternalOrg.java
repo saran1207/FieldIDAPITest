@@ -13,7 +13,8 @@ import javax.persistence.MappedSuperclass;
 @SuppressWarnings("serial")
 @MappedSuperclass
 abstract public class ExternalOrg extends BaseOrg {
-	
+
+    // TODO : pull this up to BaseOrg??? confirm with matt.
 	private String code;
 
     @ManyToOne(optional = true, fetch = FetchType.EAGER)

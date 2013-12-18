@@ -2,7 +2,7 @@
 <wicket:panel>
     <a wicket:id="scheduleLink" class="btn-secondary"><wicket:message key="label.uc_schedule"/></a>
 
-    <div class="dropdown">
+    <div class="dropdown" wicket:enclosure="scheduled">
         <span class="btn-secondary" href="#"><wicket:message key="label.start_event"/></span>
         <ul class="pull-right">
             <li class="secondary-dropdown">
@@ -28,7 +28,7 @@
         </ul>
     </div>
 
-    <div class="button-group">
+    <div wicket:id="optionsContainer" class="button-group">
         <div class="dropdown icon">
             <span class="fontello-cog" href="#"><wicket:message key="label.options"/></span>
             <ul class="pull-right">

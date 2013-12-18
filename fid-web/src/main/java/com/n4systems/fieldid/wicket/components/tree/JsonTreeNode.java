@@ -31,8 +31,8 @@ public class JsonTreeNode {
 
     private String getClass(OrgLocationTree.OrgLocationTreeNode node) {
         String cssClass = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_HYPHEN, node.getType().name());
-        if (Boolean.TRUE.equals(node.isPrimary())) {
-            cssClass += " primary";
+        if (OrgLocationTree.NodeType.INTERNAL_ORG.equals(node.getType())) {
+            cssClass += Boolean.TRUE.equals(node.isPrimary()) ? " primary" : " secondary";
         }
         return cssClass;
     }
