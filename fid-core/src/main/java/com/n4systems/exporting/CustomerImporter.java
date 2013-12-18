@@ -12,6 +12,7 @@ import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
 import com.n4systems.model.orgs.OrgSaver;
 import com.n4systems.model.orgs.customer.CustomerOrgArchiver;
+import com.n4systems.model.orgs.division.DivisionOrgArchiver;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
@@ -74,6 +75,20 @@ public class CustomerImporter extends AbstractImporter<FullExternalOrgView> {
 		DivisionOrg division = divisionConverter.toModel(view, transaction);
 		
 		orgSaver.saveOrUpdate(transaction, division);
+
+        if (null != view.getArchive() && view.getArchive().equals("Y")) {
+
+            OrgSaver saver = new OrgSaver();
+            SecurityFilter securityFilter = new TenantOnlySecurityFilter(division.getTenant());
+            boolean active = false;
+
+            try {
+               DivisionOrgArchiver archiver = new DivisionOrgArchiver();
+                archiver.doArchive(division, saver, new UserSaver(), securityFilter, active, transaction);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 	}
 
 }
