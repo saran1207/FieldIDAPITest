@@ -39,6 +39,10 @@ public class JsonTreeNode {
             cssClass += Boolean.TRUE.equals(node.isPrimary()) ? " primary" : " secondary";
         }
 
+        if(node.isLinked()) {
+            cssClass += " safety-network";
+        }
+
         if(!canManageCustomers)
             cssClass += " no-permission";
         return cssClass;
