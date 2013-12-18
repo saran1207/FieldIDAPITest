@@ -2,7 +2,7 @@
 <wicket:panel>
     <div class="button-group split-btn btn-sml pull-right">
         <a wicket:id="viewLink"><wicket:message key="label.view"/></a>
-        <div class="dropdown">
+        <div wicket:enclosure="deleteLink" class="dropdown">
             <a class="btn-secondary" href="javascript:void(0);"/>
             <ul class="pull-right">
                 <li><a wicket:id="deleteLink"><wicket:message key="label.delete"/></a></li>
