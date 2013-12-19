@@ -54,7 +54,7 @@ public class PlaceEventTypesPage extends PlacePage {
     @Override
     protected List<NavigationItem> createBreadCrumbs(BaseOrg org) {
         List<NavigationItem> navItems = super.createBreadCrumbs(org);
-        navItems.add(aNavItem().label(new FIDLabelModel("label.event_types")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
+        navItems.add(aNavItem().label(new FIDLabelModel("label.associate_event_types")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
         return navItems;
     }
 

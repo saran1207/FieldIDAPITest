@@ -434,7 +434,8 @@
         margin: 4px 0 10px;
     }
     .chzn-single.chzn-default,
-    .chzn-container-single .chzn-single {
+    .chzn-container-single .chzn-single,
+    .chzn-container-multi .chzn-choices {
         border-radius: 0;
         box-shadow: none;
         background: none;
@@ -446,9 +447,11 @@
     .chzn-container-single .chzn-default{
         color: lighten(@grayDarkest, 25%);
     }
-    .chzn-container-single .chzn-single div b {
-        background-position-y: 3px;
+    // aligns the input text to the middle
+    .chzn-container-single .chzn-single {
+        line-height: 29px;
     }
+    // change the default from blue to gray
     .chzn-container .chzn-results {
         .highlighted {
             background-color: @gray;
@@ -458,6 +461,19 @@
     }
     .chzn-container-single .chzn-drop {
         .border-radius(0);
+    }
+    .chzn-container-multi .chzn-choices {
+        min-height: 29px!important; //overriding line 147
+    }
+    // makes the typeable part of the input of the multi-select span the height of the box
+    .chzn-container-multi .chzn-choices {
+        .search-field input {
+            height: auto;
+        }
+    }
+    // stops the x icon from switching on hover
+    .chzn-container-multi .chzn-choices .search-choice .search-choice-close:hover {
+        background-position: -48px 1px;
     }
 }
 
