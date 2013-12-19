@@ -284,6 +284,8 @@ var googleMapFactory = (function() {
 					map.fitBounds(bounds);
 				} else if (count==1) {
 					map.setCenter(locations[0]);
+				} else if (count==0) {
+					map.setZoom(options.zoom);
 				}
 			},
 

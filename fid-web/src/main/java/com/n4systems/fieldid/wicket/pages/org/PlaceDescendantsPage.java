@@ -27,6 +27,8 @@ import java.util.List;
 
 public class PlaceDescendantsPage extends PlacePage {
 
+    private static final int ROWS_PER_PAGE = 20;
+
     private @SpringBean PlaceService placeService;
     private @SpringBean PersistenceService persistenceService;
 
@@ -59,7 +61,7 @@ public class PlaceDescendantsPage extends PlacePage {
     }
 
     private void init() {
-        add(table = new SimpleDefaultDataTable<BaseOrg>("descendants", getDescendantsColumns(), new DescendantsDataProvider() , 10));
+        add(table = new SimpleDefaultDataTable<BaseOrg>("descendants", getDescendantsColumns(), new DescendantsDataProvider() , ROWS_PER_PAGE));
         add(new CreatePlacePanel("createNewPlace") {
             @Override protected void onCreate(BaseOrg org, AjaxRequestTarget target) {
                 // TODO add feedback.
@@ -111,8 +113,6 @@ public class PlaceDescendantsPage extends PlacePage {
                 }
             };
         }
-
-
 
     }
 

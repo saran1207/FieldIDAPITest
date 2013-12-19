@@ -22,16 +22,24 @@ public class GoogleMap extends Panel {
     private List<Coord> coords = Lists.newArrayList();
     // centre of north america is default location.
     private Coord centre = new Coord(43.548548, -96.987305);
-    private int defaultZoom = 12;
+    private int defaultZoom = 5;
 
     public GoogleMap(String id) {
         super(id);
         setOutputMarkupId(true);
         add(new AttributeAppender("class",new Model<String>() {
             @Override public String getObject() {
-                return coords.isEmpty() ? "no-location" : "";
+                return coords.isEmpty() ? getCssForEmptyMap() : getCss();
             }
         }, " "));
+    }
+
+    protected String getCss() {
+        return "";
+    }
+
+    protected String getCssForEmptyMap() {
+        return "hide";
     }
 
     public GoogleMap(String id, Double... points) {
