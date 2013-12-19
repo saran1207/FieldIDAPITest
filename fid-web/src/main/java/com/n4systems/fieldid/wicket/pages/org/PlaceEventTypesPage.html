@@ -3,22 +3,19 @@
 <wicket:extend>
 	<hr>
 
-    <div class="action-group">
-        <a wicket:id="backToPlaceLink" class="btn-secondary btn-sml">
-            <span class="fontello-angle-double-left-sml"></span>
-            <wicket:message key="label.back_to"/>&nbsp;<span wicket:id="backToLabel"/>
-        </a>
-    </div>
+    <a wicket:id="backToPlaceLink" class="btn-secondary btn-sml">
+        <span class="fontello-angle-double-left-sml"></span>
+        <wicket:message key="label.back_to"/>&nbsp;<span wicket:id="backToLabel"/>
+    </a>
 
     <div class="info">
-		<h3>(FP0) Associate event types for <strong>Selected Place</strong></h3>
-		<p>To get started, select the dropdown and choose the event types you would like to associate to <span>Selected Place</span>.</p>
+		<p>To get started, click the input and choose the event types you would like to associate to <span>Selected Place</span>.</p>
 	</div>
     <form wicket:id="form">
         <select wicket:id="eventTypes"/>
-
+        
         <br>
-        <span wicket:id="submit" class="btn-primary"><wicket:message key="label.ok"/></span>
+        <span wicket:id="submit" class="btn-primary btn-sml"><wicket:message key="label.ok"/></span>
         <a wicket:id="cancel" class="btn-link"><wicket:message key="label.cancel"/></a>
     </form>
 </wicket:extend>

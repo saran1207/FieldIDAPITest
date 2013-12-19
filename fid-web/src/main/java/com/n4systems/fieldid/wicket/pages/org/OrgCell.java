@@ -15,7 +15,7 @@ public class OrgCell extends Panel {
         add(new Link("org") {
             @Override public void onClick() {
                 if (org instanceof DivisionOrg) {
-                    setResponsePage(PlaceDescendantsPage.class, PageParametersBuilder.id(org.getId()));
+                    setResponsePage(PlaceSummaryPage.class, PageParametersBuilder.id(org.getId()));
                 } else {
                     setResponsePage(PlaceDescendantsPage.class, PageParametersBuilder.id(org.getId()));
                 }

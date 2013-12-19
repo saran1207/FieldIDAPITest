@@ -39,6 +39,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
     private RecurringScheduleService recurringScheduleService;
 
     private WebMarkupContainer scheduleList;
+    private WebMarkupContainer blankSlate;
     private ListView<RecurringPlaceEvent> listView;
     private ModalWindow recurrenceModalWindow;
 
@@ -46,7 +47,12 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
         super(params);
 
         add(scheduleList = new WebMarkupContainer("scheduleList"));
-        scheduleList.setOutputMarkupId(true);
+        scheduleList.setOutputMarkupPlaceholderTag(true);
+
+        add(blankSlate = new WebMarkupContainer("blankSlate"));
+        blankSlate.setOutputMarkupPlaceholderTag(true);
+
+        setVisibility();
 
         add(recurrenceModalWindow = new DialogModalWindow("addRecurrence").setInitialWidth(480));
         recurrenceModalWindow.setContent(getRecurrenceForm());
@@ -102,7 +108,14 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
 
     protected void refreshContent(AjaxRequestTarget target) {
         listView.detach();
-        target.add(scheduleList);
+        setVisibility();
+        target.add(scheduleList, blankSlate);
+    }
+
+    private void setVisibility() {
+        boolean hasRecurrences = recurringScheduleService.countRecurringPlaceEvents(getOrg()) > 0;
+        scheduleList.setVisible(hasRecurrences);
+        blankSlate.setVisible(!hasRecurrences);
     }
 
     @Override

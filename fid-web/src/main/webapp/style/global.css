@@ -261,30 +261,37 @@ section {
   margin-bottom: 4px;
 }
 .column-wide {
+  width: 66.129032%;
+  float: left;
+}
+.column-wide.narrow {
   width: 74.5967739%;
+}
+.column-left,
+.column-right {
+  width: 32.2580644%;
   float: left;
 }
-.column-narrow-left,
-.column-narrow-right {
-  width: 23.7903225%;
-  float: left;
-}
-.column-narrow-left .upload,
-.column-narrow-right .upload {
+.column-left .upload,
+.column-right .upload {
   margin-bottom: 40px;
 }
-.column-narrow-left .upload p,
-.column-narrow-right .upload p {
+.column-left .upload p,
+.column-right .upload p {
   background: #ececec;
   border: 1px solid #c7c7c9;
   padding: 50px 20px;
   margin-bottom: 2px;
   text-align: center;
 }
-.column-narrow-left {
+.column-left.narrow,
+.column-right.narrow {
+  width: 23.7903225%;
+}
+.column-left {
   margin-right: 1.6129032%;
 }
-.column-narrow-right {
+.column-right {
   margin-left: 1.6129032%;
 }
 .column-full {
@@ -1065,7 +1072,7 @@ textarea {
 }
 input[type="text"] {
   height: 28px;
-  margin: 4px 0 10px;
+  margin-bottom: 10px;
 }
 label {
   display: block;
@@ -1162,35 +1169,6 @@ input[type="checkbox"] {
   padding: 6px;
   margin: 4px 0 6px;
 }
-.chzn-container {
-  margin: 4px 0 10px;
-}
-.chzn-single.chzn-default,
-.chzn-container-single .chzn-single {
-  border-radius: 0;
-  box-shadow: none;
-  background: none;
-  height: 29px;
-  padding-left: 4px;
-  border-color: #c7c7c9;
-}
-.chzn-container-single .chzn-single span,
-.chzn-container-single .chzn-default {
-  color: #7a7a7a;
-}
-.chzn-container-single .chzn-single div b {
-  background-position-y: 3px;
-}
-.chzn-container .chzn-results .highlighted {
-  background-color: #dddddd;
-  background-image: none;
-  color: #7a7a7a;
-}
-.chzn-container-single .chzn-drop {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-}
 input:disabled {
   border: none;
   background: #ffffff;
@@ -1205,13 +1183,14 @@ input:disabled {
   padding-left: 0;
 }
 .editable-inputs input[type="text"] {
-  margin: 1px 0;
-  width: 68%;
   font-size: 14px;
 }
 .editable-inputs .form-horizontal label {
   width: 30%;
   text-align: left;
+}
+.editable-inputs .form-horizontal input[type="text"] {
+  width: 68%;
 }
 .editable-inputs .actions {
   position: absolute;
@@ -1315,6 +1294,9 @@ form .two-columns {
   display: inline-block;
   vertical-align: middle;
   padding-right: 10px;
+}
+.form-horizontal input[type="text"] {
+  margin-bottom: 0;
 }
 .form-horizontal .link {
   font-size: 13px;
@@ -1762,8 +1744,8 @@ figure img {
 figure p {
   margin: 0;
 }
-/* expands feature image to the width of the column */
-[class^="column-narrow-"] .feature-img {
+.column-left .feature-img,
+.column-right .feature-img {
   width: 100%;
 }
 /*--------------------------------------- 

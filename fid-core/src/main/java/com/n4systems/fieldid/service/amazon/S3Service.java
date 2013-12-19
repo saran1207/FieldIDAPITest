@@ -114,6 +114,10 @@ public class S3Service extends FieldIdPersistenceService {
         uploadResource(file, null, CUSTOMER_LOGO_PATH, customerOrgId);
     }
 
+    public void uploadCustomerLogo(Long customerOrgId, String contentType, byte[] bytes) {
+        uploadResource(bytes, contentType, null, CUSTOMER_LOGO_PATH, customerOrgId);
+    }
+
     public void removeCustomerLogo(Long customerOrgId) {
         removeResource(null, CUSTOMER_LOGO_PATH, customerOrgId);
     }
@@ -642,13 +646,13 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public void uploadTempAttachment(S3Attachment attachment) {
-        for (S3Attachment attachmentFlavour:getS3AttachmentHandler(attachment).getFlavours(attachment)) {
+        for (S3Attachment attachmentFlavour:getS3AttachmentHandler(attachment).createFlavours(attachment)) {
             putObject(attachmentFlavour.getTempPath(), attachmentFlavour.getBytes(), attachmentFlavour.getContentType());
         }
     }
 
     public void uploadAttachment(S3Attachment attachment) {
-        for (S3Attachment attachmentFlavour:getS3AttachmentHandler(attachment).getFlavours(attachment)) {
+        for (S3Attachment attachmentFlavour:getS3AttachmentHandler(attachment).createFlavours(attachment)) {
             putObject(attachmentFlavour.getPath(), attachmentFlavour.getBytes(), attachmentFlavour.getContentType());
         }
     }
@@ -660,7 +664,7 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public void finalize(S3Attachment attachment) {
-        List<S3Attachment> flavours = getS3AttachmentHandler(attachment).getFlavours(attachment);
+        List<S3Attachment> flavours = getS3AttachmentHandler(attachment).createFlavours(attachment);
         for (S3Attachment flavour:flavours) {
             finalizeImpl(flavour);
         }
@@ -695,8 +699,12 @@ public class S3Service extends FieldIdPersistenceService {
         return getAttachmentUrl(attachment,null);
     }
 
-
-
+    public void removeAttachment(S3Attachment attachment) {
+        List<S3Attachment> flavours = getS3AttachmentHandler(attachment).getFlavours(attachment);
+        for (S3Attachment flavour:flavours) {
+            deleteObject(flavour.getPath());
+        }
+    }
 
     public class S3ImagePath {
         private String origPath;

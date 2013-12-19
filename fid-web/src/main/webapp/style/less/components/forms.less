@@ -167,35 +167,35 @@ input[type="checkbox"] {
 
 // Chosen plugin overrides 
 // ------------------------
-.chzn-container {
-	margin: 4px 0 10px;
-}
-.chzn-single.chzn-default,
-.chzn-container-single .chzn-single {
-	border-radius: 0;
-	box-shadow: none;
-	background: none;
-	height: 29px;
-	padding-left: 4px;
-	border-color: @grayMedium;
-}
-.chzn-container-single .chzn-single span,
-.chzn-container-single .chzn-default{
-	color: lighten(@grayDarkest, 25%);
-}
-.chzn-container-single .chzn-single div b {
-	background-position-y: 3px;
-}
-.chzn-container .chzn-results {
-	.highlighted {
-		background-color: @gray;
-		background-image: none;
-		color: #7a7a7a;
-	}
-}
-.chzn-container-single .chzn-drop {
-	.border-radius(0);
-}
+// .chzn-container {
+// 	margin: 4px 0 10px;
+// }
+// .chzn-single.chzn-default,
+// .chzn-container-single .chzn-single {
+// 	border-radius: 0;
+// 	box-shadow: none;
+// 	background: none;
+// 	height: 29px;
+// 	padding-left: 4px;
+// 	border-color: @grayMedium;
+// }
+// .chzn-container-single .chzn-single span,
+// .chzn-container-single .chzn-default{
+// 	color: lighten(@grayDarkest, 25%);
+// }
+// .chzn-container-single .chzn-single div b {
+// 	background-position-y: 3px;
+// }
+// .chzn-container .chzn-results {
+// 	.highlighted {
+// 		background-color: @gray;
+// 		background-image: none;
+// 		color: #7a7a7a;
+// 	}
+// }
+// .chzn-container-single .chzn-drop {
+// 	.border-radius(0);
+// }
 
 
 // Editable inputs - for inline editing
@@ -215,13 +215,18 @@ input:disabled {
 		padding-left: 0;
 	}
 	input[type="text"] {
-		margin: 1px 0;
-		width: 68%;
+		// margin: 1px 0;
+		// width: 68%;
 		font-size: @baseFontSize;
 	}
-	.form-horizontal label {
-		width: 30%;
-		text-align: left;
+	.form-horizontal {
+		label {
+			width: 30%;
+			text-align: left;
+		}
+		input[type="text"] {
+			width: 68%;
+		}
 	}
 	.actions {
 		position: absolute;

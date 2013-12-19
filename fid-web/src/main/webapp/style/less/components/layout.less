@@ -84,13 +84,19 @@ section {
 
 // Used to create columns, a main section and a sidebar section. 
 // Sidebar can be on the left or right side.
+// add this second class of '.narrow' to use a smaller sidebar.
 .column-wide {
-	.width(9,8);
+	.width(8,7);
 	float: left;
+
+	//add this second class to use a smaller sidebar
+	&.narrow {
+		.width(9,8);
+	}
 }
-.column-narrow-left,
-.column-narrow-right {
-	.width(3,2);
+.column-left,
+.column-right {
+	.width(4,3);
 	float: left;
 
 	.upload {
@@ -104,15 +110,19 @@ section {
 			text-align: center;
 		}
 	}
+	//add this second class to use a smaller sidebar
+	&.narrow {
+		.width(3,2);
+	}
 }
-.column-narrow-left {
+.column-left {
 	margin-right: @gutter;
 }
-.column-narrow-right {
+.column-right {
 	margin-left: @gutter;
 }
 
-// Spans 100% width
+// Spans 100% width - not sure if this is needed anymore? -need to test
 .column-full {
 	.width(12,11);
 	clear: both;

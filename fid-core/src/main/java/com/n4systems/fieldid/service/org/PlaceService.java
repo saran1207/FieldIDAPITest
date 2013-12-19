@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.org;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Attachment;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.PlaceEventType;
@@ -12,12 +13,14 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
+import com.n4systems.model.orgs.PrimaryOrgChildren;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.UserType;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.time.MethodTimer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,8 @@ import java.util.Set;
 public class PlaceService extends FieldIdPersistenceService {
 
     private @Autowired OrgService orgService;
+    private @Autowired
+    S3Service s3Service;
 
     /**
      * NOTE THAT ALL METHODS IN THIS SERVICE ARE JUST PLACEHOLDERS FOR 2013.8!!!!
@@ -136,7 +141,6 @@ public class PlaceService extends FieldIdPersistenceService {
         } else if (org instanceof DivisionOrg) {
             return Lists.newArrayList();
         } else {
-            // TODO DD : confirm with matt whether primary/secondary can be archived????
             throw new IllegalStateException("can't archive orgs of type " + org.getClass().getSimpleName());
         }
     }
@@ -157,20 +161,42 @@ public class PlaceService extends FieldIdPersistenceService {
 
     public Long countDescendants(BaseOrg org) {
         Preconditions.checkNotNull(org);
-        QueryBuilder<BaseOrg> query = getDescendantsQuery(org);
+        QueryBuilder query = getDescendantsQuery(org);
         return persistenceService.count(query);
     }
 
-    public List<BaseOrg> getDescendants(BaseOrg org, int page, int pageSize) {
-        Preconditions.checkNotNull(org);
-        QueryBuilder<BaseOrg> query = getDescendantsQuery(org);
-        return persistenceService.findAllPaginated(query, page, pageSize);
+    private QueryBuilder getDescendantsQuery(BaseOrg org) {
+        QueryBuilder query;
+        if (org.isPrimary()) {
+            query = createTenantSecurityBuilder(PrimaryOrgChildren.class);
+        } else if (org.isSecondary()) {
+            query = createTenantSecurityBuilder(CustomerOrg.class);
+        } else if (org.isCustomer()) {
+            query = createTenantSecurityBuilder(DivisionOrg.class);
+        } else {
+            throw new IllegalStateException("can't get children for division " + org);
+        }
+        query.addSimpleWhere("parent", org);
+        return query;
     }
 
-    private QueryBuilder<BaseOrg> getDescendantsQuery(BaseOrg org) {
-        QueryBuilder<BaseOrg> query = createUserSecurityBuilder(BaseOrg.class);
-        query.addSimpleWhere("parent", org);
-        query.addOrder("name");
-        return query;
+// TODO DD :     @Cacheable("descendants")
+    public List<BaseOrg> getDescendants(BaseOrg org, int page, int pageSize) {
+        List<BaseOrg> result = Lists.newArrayList();
+MethodTimer methodTimer = new MethodTimer().start();
+        Preconditions.checkNotNull(org);
+        QueryBuilder query = getDescendantsQuery(org);
+        if (query.getFromArgument().getTableClass().equals(PrimaryOrgChildren.class)) {
+            query.addOrder("org.name");
+            List<PrimaryOrgChildren> children = persistenceService.findAllPaginated(query, page, pageSize);
+            for (PrimaryOrgChildren child:children){
+                result.add(child.getOrg());
+            }
+        } else {
+            query.addOrder("name");
+            result = persistenceService.findAllPaginated(query, page, pageSize);
+        }
+methodTimer.stop();
+        return result;
     }
 }
