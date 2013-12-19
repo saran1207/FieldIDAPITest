@@ -89,6 +89,14 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
             Map<Long, List<String>> rememberedCriteriaImages = rememberCriteriaImages(event);
 
             event.setTriggersIntoResultingActions(event);
+
+            for (CriteriaResult result : event.getResults()) {
+                for (Event action : result.getActions()) {
+                    persistenceService.save(action);
+                }
+            }
+
+
             event = persistenceService.update(event);
 
             restoreTemporarySignatureFiles(event, rememberedSignatureMap);
