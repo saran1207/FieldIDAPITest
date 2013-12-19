@@ -5,7 +5,7 @@
     <parent>
         <artifactId>fieldid-root</artifactId>
         <groupId>com.fieldid</groupId>
-        <version>2013.8.0-SNAPSHOT</version>
+        <version>2013.9.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>fid-index-validator</artifactId>
