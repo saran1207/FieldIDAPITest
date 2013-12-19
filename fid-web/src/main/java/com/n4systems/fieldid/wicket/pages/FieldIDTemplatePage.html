@@ -124,10 +124,7 @@
                 <li wicket:id="startEventLinkContainer">
                     <a href="/fieldid/startEvent.action"><wicket:message key="speed.event"/></a>
                 </li>
-                <li>
-                    <a wicket:id="placesLink"><wicket:message key="speed.places"/></a>
-                </li>
-                <li class="dropdown">
+                <li class="dropdown"><!-- remove this dropdown class when the beta search link is removed -->
                     <a wicket:id="assetSearchLink"><wicket:message key="speed.search"/></a>
                     <wicket:enclosure child="newAssetSearchLink">
                         <ul>
@@ -145,6 +142,9 @@
                             <li><a wicket:id="criteriaTrendsLink"><wicket:message key="nav.trending"/></a></li>
                         </wicket:enclosure>
                     </ul>
+                </li>
+                <li>
+                    <a wicket:id="placesLink"><wicket:message key="speed.places"/></a>
                 </li>
                 <wicket:enclosure>
                     <li><a wicket:id="procedureLink"><wicket:message key="speed.procedures"/></a></li>
