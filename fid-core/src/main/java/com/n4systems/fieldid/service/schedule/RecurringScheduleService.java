@@ -161,6 +161,12 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
+    public Long countRecurringPlaceEvents(BaseOrg org) {
+        QueryBuilder<RecurringPlaceEvent> query = createTenantSecurityBuilder(RecurringPlaceEvent.class);
+        query.addSimpleWhere("owner", org);
+        return persistenceService.count(query);
+    }
+
     public void purgeRecurringEvent(RecurringPlaceEvent recurringEvent) {
         removeScheduledEvents(recurringEvent);
         removeRecurringEvent(recurringEvent);
