@@ -1176,13 +1176,14 @@ input:disabled {
   padding-left: 0;
 }
 .editable-inputs input[type="text"] {
-  margin: 1px 0;
-  width: 68%;
   font-size: 14px;
 }
 .editable-inputs .form-horizontal label {
   width: 30%;
   text-align: left;
+}
+.editable-inputs .form-horizontal input[type="text"] {
+  width: 68%;
 }
 .editable-inputs .actions {
   position: absolute;

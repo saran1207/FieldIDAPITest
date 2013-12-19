@@ -103,6 +103,9 @@
   width: 68%;
   font-size: 14px;
 }
+.place-summary .editable-inputs label {
+  font-weight: bold;
+}
 .place-event .event-panel table {
   position: relative;
 }

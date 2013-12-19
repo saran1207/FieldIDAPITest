@@ -215,13 +215,18 @@ input:disabled {
 		padding-left: 0;
 	}
 	input[type="text"] {
-		margin: 1px 0;
-		width: 68%;
+		// margin: 1px 0;
+		// width: 68%;
 		font-size: @baseFontSize;
 	}
-	.form-horizontal label {
-		width: 30%;
-		text-align: left;
+	.form-horizontal {
+		label {
+			width: 30%;
+			text-align: left;
+		}
+		input[type="text"] {
+			width: 68%;
+		}
 	}
 	.actions {
 		position: absolute;
