@@ -10,7 +10,6 @@ import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.model.attachment.PlaceAttachment;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -199,22 +198,5 @@ MethodTimer methodTimer = new MethodTimer().start();
         }
 methodTimer.stop();
         return result;
-    }
-
-    public BaseOrg saveProfileImage(BaseOrg org, PlaceAttachment image) {
-        //remove old image if there is one
-        if(org.getImage() != null) {
-            PlaceAttachment oldImage = org.getImage();
-            s3Service.removeAttachment(oldImage);
-            persistenceService.remove(oldImage);
-        }
-        persistenceService.save(image);
-        s3Service.uploadAttachment(image);
-        org.setImage(image);
-        return update(org);
-    }
-
-    public BaseOrg update(BaseOrg org) {
-       return persistenceService.update(org);
     }
 }

@@ -7,12 +7,13 @@
         <div wicket:id="imageContainer" class="uploads">
             <img wicket:id="img" class="feature-img">
 
-            <p><wicket:message key="label.upload_profile_image"/></p>
+            <p wicket:id="imgMsg"><wicket:message key="label.upload_profile_image"/></p>
             <form wicket:id="imageUploadForm" class="input-combo file-upload fluid">
                 <input wicket:id="imageUploadField" type="file">
-                <input wicket:id="imageNameField" type="text">
+                <input type="text">
                 <span wicket:enclosure="imageUploadField" class="btn-secondary btn-sml">Browse</span>
             </form>
+            <a wicket:id="removeLink"><wicket:message key="label.remove"/></a>
         </div>
 
         <!-- Contact info -->

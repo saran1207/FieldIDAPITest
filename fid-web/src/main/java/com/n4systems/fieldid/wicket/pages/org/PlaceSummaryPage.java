@@ -12,10 +12,10 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEvent;
-import com.n4systems.model.attachment.PlaceAttachment;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,7 +30,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -48,10 +47,11 @@ public class PlaceSummaryPage extends PlacePage {
     private WebMarkupContainer futureEventsListContainer;
     private ListView<PlaceEvent> futureEventsListView;
     private Contact contact;
-    private String imageFileName;
 
     private WebMarkupContainer imageContainer;
+    private WebMarkupContainer imageMsg;
     private WebComponent image;
+    private AjaxLink removeLink;
 
     public PlaceSummaryPage(PageParameters params) {
         super(params);
@@ -77,41 +77,33 @@ public class PlaceSummaryPage extends PlacePage {
         add(imageContainer = new WebMarkupContainer("imageContainer"));
         imageContainer.setOutputMarkupId(true);
 
+        imageContainer.add(imageMsg = new WebMarkupContainer("imgMsg"));
+        imageMsg.setOutputMarkupPlaceholderTag(true);
+        imageMsg.setVisible(!logoExists());
+
         imageContainer.add(image = getImage());
         image.setOutputMarkupId(true);
-        if(getOrg().getImage() != null) {
-            imageFileName = getOrg().getImage().getPath().substring(getOrg().getImage().getPath().lastIndexOf('/') + 1);
-        }
-
 
 
         Form imageUploadForm = new Form<Void>("imageUploadForm");
-        final TextField<String> fileNameField = new TextField<String>("imageNameField", new PropertyModel<String>(this, "imageFileName"));
         final FileUploadField fileUploadField = new FileUploadField("imageUploadField");
-        fileNameField.setEnabled(FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers());
         fileUploadField.setVisible(FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers());
-        fileNameField.setOutputMarkupId(true);
 
         fileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 FileUpload uploadedFile = fileUploadField.getFileUpload();
-                imageFileName = uploadedFile.getClientFileName();
 
                 BaseOrg org = getOrg();
 
-                PlaceAttachment newImage = new PlaceAttachment(org);
-                newImage.withContent(imageFileName, uploadedFile.getContentType(), uploadedFile.getBytes());
+                s3Service.uploadCustomerLogo(org.getId(), uploadedFile.getContentType(), uploadedFile.getBytes());
 
-                orgModel.setObject(placeService.saveProfileImage(org, newImage));
-
-                WebComponent newImageComponent = getImage();
-                newImageComponent.setParent(PlaceSummaryPage.this);
-
-                image.replaceWith(newImageComponent);
+                imageContainer.replace(getImage());
                 image.setOutputMarkupId(true);
+                imageMsg.setVisible(s3Service.customerLogoExists(org.getId()));
+                removeLink.setVisible(true);
 
-                target.add(fileNameField, image, imageContainer);
+                target.add(image, imageMsg, removeLink, imageContainer);
             }
 
             @Override
@@ -120,7 +112,22 @@ public class PlaceSummaryPage extends PlacePage {
         });
 
         imageUploadForm.add(fileUploadField);
-        imageUploadForm.add(fileNameField);
+
+        imageContainer.add(removeLink = new AjaxLink<Void>("removeLink") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                s3Service.removeCustomerLogo(getOrg().getId());
+                imageContainer.replace(getImage());
+                image.setOutputMarkupId(true);
+                imageMsg.setVisible(!logoExists());
+                removeLink.setVisible(false);
+
+                target.add(image, imageMsg, removeLink, imageContainer);
+            }
+        });
+        removeLink.setOutputMarkupPlaceholderTag(true);
+        removeLink.setVisible(logoExists());
 
         imageContainer.add(imageUploadForm);
 
@@ -185,9 +192,13 @@ public class PlaceSummaryPage extends PlacePage {
         return view;
     }
 
+    private boolean logoExists() {
+        return s3Service.customerLogoExists(getOrg().getId());
+    }
+
     public WebComponent getImage() {
-        if(getOrg().getImage() != null) {
-            return new ExternalImage("img", s3Service.getAttachmentUrl(getOrg().getImage()));
+        if(logoExists()) {
+            return new ExternalImage("img", s3Service.getCustomerLogoURL(getOrg().getId()));
         } else {
            return new ContextImage("img", "images/add-photo-slate.png");
         }

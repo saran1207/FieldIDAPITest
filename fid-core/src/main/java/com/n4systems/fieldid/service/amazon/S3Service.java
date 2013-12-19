@@ -114,6 +114,10 @@ public class S3Service extends FieldIdPersistenceService {
         uploadResource(file, null, CUSTOMER_LOGO_PATH, customerOrgId);
     }
 
+    public void uploadCustomerLogo(Long customerOrgId, String contentType, byte[] bytes) {
+        uploadResource(bytes, contentType, null, CUSTOMER_LOGO_PATH, customerOrgId);
+    }
+
     public void removeCustomerLogo(Long customerOrgId) {
         removeResource(null, CUSTOMER_LOGO_PATH, customerOrgId);
     }

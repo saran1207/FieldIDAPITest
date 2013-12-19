@@ -4,7 +4,6 @@ import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.api.*;
-import com.n4systems.model.attachment.PlaceAttachment;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.DenyReadOnlyUsersAccess;
@@ -39,14 +38,14 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
     @JoinTable(name="orgs_place_event_types", joinColumns = @JoinColumn(name="org_id"), inverseJoinColumns = @JoinColumn(name="place_event_type_id"))
     private Set<PlaceEventType> eventTypes = new HashSet<PlaceEventType>();
 
-    // NOTE : not sure if images should be many or one-to-one.  is it possible that multiple orgs could have same image?
-    @OneToOne(fetch = FetchType.EAGER)
+    // NOTE : for later?
+/*    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "image_id")
     private PlaceAttachment image;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "report_image_id")
-    private PlaceAttachment reportImage;
+    private PlaceAttachment reportImage;*/
 
     @Embedded
     @AttributeOverrides({
@@ -327,13 +326,13 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
         this.contact = contact;
     }
 
-    public PlaceAttachment getImage() {
+/*    public PlaceAttachment getImage() {
         return image;
     }
 
     public void setImage(PlaceAttachment image) {
         this.image = image;
-    }
+    }*/
 
     @Override
     public BaseOrg getOwner() {
@@ -355,11 +354,11 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
         this.code = code;
     }
 
-    public PlaceAttachment getReportImage() {
+/*    public PlaceAttachment getReportImage() {
         return reportImage;
     }
 
     public void setReportImage(PlaceAttachment reportImage) {
         this.reportImage = reportImage;
-    }
+    }*/
 }
