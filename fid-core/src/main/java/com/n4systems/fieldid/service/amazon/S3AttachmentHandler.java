@@ -9,4 +9,7 @@ public interface S3AttachmentHandler {
     List<S3Attachment> createFlavours(S3Attachment attachment);
 
     List<S3Attachment> getFlavours(S3Attachment attachment);
+
+    // TODO DD : add/refactor create,delete,finalize methods into handler.
+
 }

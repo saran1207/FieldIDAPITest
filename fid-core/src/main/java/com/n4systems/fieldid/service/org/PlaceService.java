@@ -3,12 +3,14 @@ package com.n4systems.fieldid.service.org;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Attachment;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.model.attachment.PlaceAttachment;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -32,7 +34,8 @@ import java.util.Set;
 public class PlaceService extends FieldIdPersistenceService {
 
     private @Autowired OrgService orgService;
-    private @Autowired S3Service s3Service;
+    private @Autowired
+    S3Service s3Service;
 
     /**
      * NOTE THAT ALL METHODS IN THIS SERVICE ARE JUST PLACEHOLDERS FOR 2013.8!!!!
@@ -139,7 +142,6 @@ public class PlaceService extends FieldIdPersistenceService {
         } else if (org instanceof DivisionOrg) {
             return Lists.newArrayList();
         } else {
-            // TODO DD : confirm with matt whether primary/secondary can be archived????
             throw new IllegalStateException("can't archive orgs of type " + org.getClass().getSimpleName());
         }
     }
@@ -197,13 +199,6 @@ MethodTimer methodTimer = new MethodTimer().start();
         }
 methodTimer.stop();
         return result;
-    }
-
-    private QueryBuilder<BaseOrg> getDescendantsQuery(BaseOrg org) {
-        QueryBuilder<BaseOrg> query = createUserSecurityBuilder(BaseOrg.class);
-        query.addSimpleWhere("parent", org);
-        query.addOrder("name");
-        return query;
     }
 
     public BaseOrg saveProfileImage(BaseOrg org, PlaceAttachment image) {
