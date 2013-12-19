@@ -4,11 +4,6 @@
 .action-bar {
   margin-bottom: 30px;
 }
-.column-custom-left {
-  width: 375px;
-  float: left;
-  margin-right: 30px;
-}
 .tree-view ins {
   text-decoration: none;
   vertical-align: middle;
@@ -47,23 +42,19 @@
 .tree-view .no-permission .action {
   display: none;
 }
-.column-custom {
-  width: auto;
-  overflow: auto;
-}
-.column-custom .two-columns {
+.column-wide .two-columns {
   padding-top: 8px;
 }
-.column-custom .two-columns .form-horizontal label {
+.column-wide .two-columns .form-horizontal label {
   width: 40%;
 }
-.column-custom .two-columns input[type="text"],
-.column-custom .two-columns select,
-.column-custom .two-columns textarea,
-.column-custom .two-columns .input-combo {
+.column-wide .two-columns input[type="text"],
+.column-wide .two-columns select,
+.column-wide .two-columns textarea,
+.column-wide .two-columns .input-combo {
   width: 58%;
 }
-.column-custom .two-columns .text-block {
+.column-wide .two-columns .text-block {
   margin-left: 40%;
 }
 .add-place-form .primary-selection label {
@@ -103,8 +94,14 @@
   width: 68%;
   font-size: 14px;
 }
+.place-summary .editable-inputs input[type="text"] {
+  width: 100%;
+}
 .place-summary .editable-inputs label {
   font-weight: bold;
+}
+.place-summary .editable-inputs .address input[type="text"] {
+  text-overflow: ellipsis;
 }
 .place-event .event-panel table {
   position: relative;
