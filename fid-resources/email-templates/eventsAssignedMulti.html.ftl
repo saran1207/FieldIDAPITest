@@ -73,7 +73,11 @@
     <#list events as event>
         <div class="event">
             <div class="info">
-                ${event.asset.type.name} / ${event.asset.identifier}
+                <#if event.asset?exists>
+                    ${event.asset.type.name} / ${event.asset.identifier}
+                <#elseif event.place?exists>
+                    ${event.place.displayName}
+                </#if>
                 <br/>
                 ${event.owner.displayName}
                 <br/>
