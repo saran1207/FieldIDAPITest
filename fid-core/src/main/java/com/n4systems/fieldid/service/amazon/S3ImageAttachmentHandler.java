@@ -15,7 +15,7 @@ public class S3ImageAttachmentHandler implements S3AttachmentHandler {
     @Autowired private ImageService imageService;
 
     @Override
-    public List<S3Attachment> getFlavours(S3Attachment attachment) {
+    public List<S3Attachment> createFlavours(S3Attachment attachment) {
         List<S3Attachment> result = Lists.newArrayList(attachment);
         S3Attachment medium = new Flavour(attachment, MEDIUM_SUFFIX, imageService.generateMedium(attachment.getBytes()));
         result.add(medium);
@@ -24,6 +24,15 @@ public class S3ImageAttachmentHandler implements S3AttachmentHandler {
         return result;
     }
 
+    @Override
+    public List<S3Attachment> getFlavours(S3Attachment attachment) {
+        List<S3Attachment> result = Lists.newArrayList(attachment);
+        S3Attachment medium = new Flavour(attachment, MEDIUM_SUFFIX, null);
+        result.add(medium);
+        S3Attachment thumbnail = new Flavour(attachment, THUMBNAIL_SUFFIX, null);
+        result.add(thumbnail);
+        return result;
+    }
 
     class Flavour implements S3Attachment {
         S3Attachment delegate;
