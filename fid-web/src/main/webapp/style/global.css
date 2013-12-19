@@ -1162,35 +1162,6 @@ input[type="checkbox"] {
   padding: 6px;
   margin: 4px 0 6px;
 }
-.chzn-container {
-  margin: 4px 0 10px;
-}
-.chzn-single.chzn-default,
-.chzn-container-single .chzn-single {
-  border-radius: 0;
-  box-shadow: none;
-  background: none;
-  height: 29px;
-  padding-left: 4px;
-  border-color: #c7c7c9;
-}
-.chzn-container-single .chzn-single span,
-.chzn-container-single .chzn-default {
-  color: #7a7a7a;
-}
-.chzn-container-single .chzn-single div b {
-  background-position-y: 3px;
-}
-.chzn-container .chzn-results .highlighted {
-  background-color: #dddddd;
-  background-image: none;
-  color: #7a7a7a;
-}
-.chzn-container-single .chzn-drop {
-  -webkit-border-radius: 0;
-  -moz-border-radius: 0;
-  border-radius: 0;
-}
 input:disabled {
   border: none;
   background: #ffffff;

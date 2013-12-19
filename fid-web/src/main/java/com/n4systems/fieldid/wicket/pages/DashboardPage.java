@@ -91,7 +91,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
         response.renderCSSReference("style/dashboard/dashboard.css");
         response.renderCSSReference("style/dashboard/widgetconfig.css");
-        response.renderCSSReference("style/chosen/chosen.css");
+        response.renderCSSReference("style/plugins/chosen/chosen.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
         response.renderCSSReference("style/newCss/component/buttons.css");
     }
