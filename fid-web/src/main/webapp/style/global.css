@@ -97,7 +97,7 @@ h2 {
 h1 {
   font-size: 24px;
   font-weight: normal;
-  margin: 15px 0;
+  margin: 15px 0 10px;
   min-height: 29px;
 }
 h2 {
@@ -766,7 +766,7 @@ nav a {
 .nav-tabs {
   position: relative;
   border-bottom: 1px solid #c7c7c9;
-  margin: 15px 0;
+  margin-bottom: 15px;
 }
 .nav-tabs > ul {
   overflow: hidden;
@@ -1739,11 +1739,6 @@ figure img {
 }
 figure p {
   margin: 0;
-}
-.column-left .feature-img,
-.column-right .feature-img {
-  max-width: 100%;
-  max-height: 200px;
 }
 .column-left .feature-image img,
 .column-right .feature-image img {

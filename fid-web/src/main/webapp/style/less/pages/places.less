@@ -60,13 +60,16 @@
 	.two-columns {
 		padding-top: 8px;
 
-		.form-horizontal label {
+		label {
 			width: 40%;
 		}
 		input[type="text"], 
 		select, textarea,
 		.input-combo {
 			width: 58%;
+		}
+		.chzn-container {
+			width: 58%!important;
 		}
 		.text-block {
 			margin-left: 40%;
@@ -118,6 +121,10 @@
 		}
 		.feature-image {
 			background: @black;
+
+			img {
+				background: @white;
+			}
 		}
 		label {
 			text-align: left;
@@ -153,8 +160,30 @@
 	}
 }
 
-// Places add descendants form
+
+// Places add descendants page
 // ----------------------------
+.place-add-descendant {
+	.column-left {
+		table {
+			margin-top: 20px;
+		}
+		th {
+			background: transparent;
+
+			&:first-child,
+			&:last-child {
+				border-left: none;
+				border-right: none;
+			}
+		}
+	}
+	.column-wide {
+		padding-top: 58px;
+	}
+}
+
+// Places add descendants form
 // Using on the landing/tree view page and on the 
 // add/view descendants for a specific tenant page
 .add-descendants-form {

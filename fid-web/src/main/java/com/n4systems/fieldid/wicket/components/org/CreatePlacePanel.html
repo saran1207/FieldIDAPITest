@@ -1,24 +1,21 @@
 <wicket:panel>
-
     <!--TODO : use property files, wicket:message for hard coded strings. -->
-
     <!-- Show on page load - hide when form is open -->
     <div wicket:id="blankSlate" class="info">
         <p><wicket:message key="label.create_place_instructions"/></p>
     </div>
 
-    <form wicket:id="form" class="add-place-form">
-        <!-- TODO: Derek, can you put "Add" in the title? -->
+    <form wicket:id="form" class="add-descendants-form">
         <h3 wicket:id="title"/>
         <wicket:enclosure child="level">
             <fieldset class="primary-selection form-horizontal">
-                <div class="control-group">
+                <div class="control-group two-columns">
                     <label><wicket:message key="label.select_level"/></label>
                     <select wicket:id="level"/>
                 </div>
             </fieldset>
         </wicket:enclosure>
-        <br><br>
+
         <div class="two-columns pull-left">
             <fieldset class="form-horizontal">
                 <legend>Details</legend>
@@ -34,15 +31,6 @@
                     <label>Notes</label>
                     <textarea wicket:id="notes"/>
                 </div>
-                <!--<div class="control-group">-->
-                <!--<label>Logo Image</label>-->
-                <!--<div class="input-combo fluid file-upload">-->
-                <!--<input type="file">-->
-                <!--<input type="text"">-->
-                <!--<span class="btn-secondary btn-sml">Browse</span>-->
-                <!--</div>-->
-                <!--<span class="text-block">Upload a JPG, GIF, or PNG with a size of 200x50 pixels</span>-->
-                <!--</div>-->
             </fieldset>
         </div>
 
@@ -59,7 +47,15 @@
                 </div>
                 <div class="control-group">
                     <label><wicket:message key="label.address"/></label>
-                    <div wicket:id="address" class="control-group"/>
+                    <div wicket:id="address"/>
+                </div>
+                <div class="control-group">
+                    <label><wicket:message key="label.timezone"/></label>
+                    <select class="timezone"><!-- replace this -->
+                        <option selected="selected" value="">Replace this - FPO</option>
+                        <option value="Addis Ababa">Addis Ababa</option>
+                        <option value="Addis Aden">Aden</option>
+                    </select>
                 </div>
             </fieldset>
         </div>

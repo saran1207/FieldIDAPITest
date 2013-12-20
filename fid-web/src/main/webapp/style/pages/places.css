@@ -45,7 +45,7 @@
 .column-wide .two-columns {
   padding-top: 8px;
 }
-.column-wide .two-columns .form-horizontal label {
+.column-wide .two-columns label {
   width: 40%;
 }
 .column-wide .two-columns input[type="text"],
@@ -53,6 +53,9 @@
 .column-wide .two-columns textarea,
 .column-wide .two-columns .input-combo {
   width: 58%;
+}
+.column-wide .two-columns .chzn-container {
+  width: 58%!important;
 }
 .column-wide .two-columns .text-block {
   margin-left: 40%;
@@ -86,6 +89,9 @@
 .place-summary .uploads .feature-image {
   background: #000000;
 }
+.place-summary .uploads .feature-image img {
+  background: #ffffff;
+}
 .place-summary .uploads label {
   text-align: left;
   width: 28%;
@@ -117,6 +123,20 @@
 }
 .place-summary .editable-inputs input[type="text"] {
   text-overflow: ellipsis;
+}
+.place-add-descendant .column-left table {
+  margin-top: 20px;
+}
+.place-add-descendant .column-left th {
+  background: transparent;
+}
+.place-add-descendant .column-left th:first-child,
+.place-add-descendant .column-left th:last-child {
+  border-left: none;
+  border-right: none;
+}
+.place-add-descendant .column-wide {
+  padding-top: 58px;
 }
 .add-descendants-form .address {
   display: inline;

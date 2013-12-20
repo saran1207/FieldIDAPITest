@@ -60,6 +60,11 @@ public class PlaceDescendantsPage extends PlacePage {
         add(new NavigationBar(navBarId).setVisible(false));
     }
 
+    @Override
+    public String getMainCss() {
+        return "place-add-descendant";
+    }
+
     private void init() {
         add(table = new SimpleDefaultDataTable<BaseOrg>("descendants", getDescendantsColumns(), new DescendantsDataProvider() , ROWS_PER_PAGE));
         add(new CreatePlacePanel("createNewPlace") {
