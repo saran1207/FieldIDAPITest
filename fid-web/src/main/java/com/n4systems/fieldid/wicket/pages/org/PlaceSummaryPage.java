@@ -52,10 +52,18 @@ public class PlaceSummaryPage extends PlacePage {
     private WebMarkupContainer imageContainer;
     private WebMarkupContainer imageMsg;
     private WebComponent image;
-    private AjaxLink removeLink;
+    private AjaxLink removeImageLink;
+
+    private WebMarkupContainer certImageContainer;
+    private WebMarkupContainer certImageMsg;
+    private WebComponent certImage;
+    private AjaxLink removeCertImageLink;
 
     public PlaceSummaryPage(PageParameters params) {
         super(params);
+
+        final BaseOrg org = getOrg();
+        boolean canManageCustomers = FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers();
 
         add(map = new GoogleMap("map", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getGpsLocation())));
 
@@ -71,7 +79,7 @@ public class PlaceSummaryPage extends PlacePage {
         add(new Link("viewAll") {
             @Override
             public void onClick() {
-                setResponsePage(new PlaceEventsPage(PageParametersBuilder.id(getOrg().getId()).add(PlaceEventsPage.OPEN_PARAM, "true")));
+                setResponsePage(new PlaceEventsPage(PageParametersBuilder.id(org.getId()).add(PlaceEventsPage.OPEN_PARAM, "true")));
             }
         });
 
@@ -85,26 +93,23 @@ public class PlaceSummaryPage extends PlacePage {
         imageContainer.add(image = getImage());
         image.setOutputMarkupId(true);
 
-
         Form imageUploadForm = new Form<Void>("imageUploadForm");
         final FileUploadField fileUploadField = new FileUploadField("imageUploadField");
-        fileUploadField.setVisible(FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers());
+        imageUploadForm.setVisible(canManageCustomers);
 
         fileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 FileUpload uploadedFile = fileUploadField.getFileUpload();
 
-                BaseOrg org = getOrg();
-
                 s3Service.uploadCustomerLogo(org.getId(), uploadedFile.getContentType(), uploadedFile.getBytes());
 
                 imageContainer.replace(getImage());
                 image.setOutputMarkupId(true);
-                imageMsg.setVisible(s3Service.customerLogoExists(org.getId()));
-                removeLink.setVisible(true);
+                imageMsg.setVisible(!logoExists());
+                removeImageLink.setVisible(true);
 
-                target.add(image, imageMsg, removeLink, imageContainer);
+                target.add(image, imageMsg, removeImageLink, imageContainer);
             }
 
             @Override
@@ -114,25 +119,25 @@ public class PlaceSummaryPage extends PlacePage {
 
         imageUploadForm.add(fileUploadField);
 
-        imageContainer.add(removeLink = new AjaxLink<Void>("removeLink") {
+        imageContainer.add(removeImageLink = new AjaxLink<Void>("removeImageLink") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                s3Service.removeCustomerLogo(getOrg().getId());
+                s3Service.removeCustomerLogo(org.getId());
                 imageContainer.replace(getImage());
                 image.setOutputMarkupId(true);
                 imageMsg.setVisible(!logoExists());
-                removeLink.setVisible(false);
+                removeImageLink.setVisible(false);
 
-                target.add(image, imageMsg, removeLink, imageContainer);
+                target.add(image, imageMsg, removeImageLink, imageContainer);
             }
         });
-        removeLink.setOutputMarkupPlaceholderTag(true);
-        removeLink.setVisible(logoExists());
+        removeImageLink.setOutputMarkupPlaceholderTag(true);
+        removeImageLink.setVisible(logoExists() && canManageCustomers);
 
         imageContainer.add(imageUploadForm);
 
-        contact = new Contact(getOrg().getContact());
+        contact = new Contact(org.getContact());
         add(new InlineEditableForm("contact") {
             @Override
             protected void onSave(AjaxRequestTarget target) {
@@ -167,6 +172,69 @@ public class PlaceSummaryPage extends PlacePage {
                     .add(new TextField<String>("certificateName").setVisible(false))
             );
         }
+
+
+        add(certImageContainer = new WebMarkupContainer("certImageContainer"));
+        certImageContainer.setOutputMarkupId(true);
+        certImageContainer.setVisible(org.isInternal());
+
+        certImageContainer.add(certImageMsg = new WebMarkupContainer("certImgMsg"));
+        certImageMsg.setOutputMarkupPlaceholderTag(true);
+        certImageMsg.setVisible(!certificateImageExists());
+
+        certImageContainer.add(certImage = getCertificateImage());
+        certImage.setOutputMarkupId(true);
+
+        Form certImageUploadForm = new Form<Void>("certImageUploadForm");
+        final FileUploadField certFileUploadField = new FileUploadField("certImageUploadField");
+        certImageUploadForm.setVisible(canManageCustomers);
+
+        certFileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target) {
+                FileUpload uploadedFile = certFileUploadField.getFileUpload();
+
+                if(org.isPrimary())
+                    s3Service.uploadPrimaryOrgCertificateLogo(uploadedFile.getContentType(), uploadedFile.getBytes());
+                else
+                    s3Service.uploadSecondaryOrgCertificateLogo(org.getId(), uploadedFile.getContentType(), uploadedFile.getBytes());
+
+                certImageContainer.replace(getCertificateImage());
+                certImage.setOutputMarkupId(true);
+                certImageMsg.setVisible(!certificateImageExists());
+                removeCertImageLink.setVisible(true);
+
+                target.add(certImage, certImageMsg,  removeCertImageLink, certImageContainer);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target) {
+            }
+        });
+
+        certImageUploadForm.add(certFileUploadField);
+
+        certImageContainer.add(removeCertImageLink = new AjaxLink<Void>("removeCertImageLink") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if(org.isPrimary())
+                    s3Service.removePrimaryOrgCertificateLogo();
+                else
+                    s3Service.removeSecondaryOrgCertificateLogo(org.getId());
+
+                certImageContainer.replace(getCertificateImage());
+                certImage.setOutputMarkupId(true);
+                certImageMsg.setVisible(!certificateImageExists());
+                removeCertImageLink.setVisible(false);
+
+                target.add(certImage, certImageMsg, removeCertImageLink, certImageContainer);
+            }
+        });
+        removeCertImageLink.setOutputMarkupPlaceholderTag(true);
+        removeCertImageLink.setVisible(certificateImageExists() && canManageCustomers);
+
+        certImageContainer.add(certImageUploadForm);
 
     }
 
@@ -212,6 +280,26 @@ public class PlaceSummaryPage extends PlacePage {
             return new ExternalImage("img", s3Service.getCustomerLogoURL(getOrg().getId()));
         } else {
            return new ContextImage("img", "images/add-photo-slate.png");
+        }
+    }
+
+    private boolean certificateImageExists() {
+        if(getOrg().isPrimary())
+            return s3Service.primaryOrgCertificateLogoExists();
+        else if (getOrg().isSecondary())
+            return s3Service.secondaryOrgCertificateLogoExists(getOrg().getId());
+        else
+            return false;
+    }
+
+    public WebComponent getCertificateImage() {
+        if (certificateImageExists()) {
+            if(getOrg().isPrimary())
+                return new ExternalImage("certImg", s3Service.getPrimaryOrgCertificateLogoURL());
+            else
+                return new ExternalImage("certImg", s3Service.getSecondaryOrgCertificateLogoURL(getOrg().getId()));
+        } else {
+           return new ContextImage("certImg", "images/add-photo-slate.png");
         }
     }
 

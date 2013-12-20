@@ -11,9 +11,9 @@
             <form wicket:id="imageUploadForm" class="input-combo file-upload fluid">
                 <input wicket:id="imageUploadField" type="file">
                 <input type="text">
-                <span wicket:enclosure="imageUploadField" class="btn-secondary btn-sml">Browse</span>
+                <span class="btn-secondary btn-sml">Browse</span>
             </form>
-            <a wicket:id="removeLink"><wicket:message key="label.remove"/></a>
+            <a wicket:id="removeImageLink"><wicket:message key="label.remove"/></a>
         </div>
 
         <!-- Contact info -->
@@ -79,11 +79,18 @@
             </wicket:enclosure>
         </form>
 
-        <label for=""><wicket:message key="label.pdf_report_image"/>:</label>
-        <div class="input-combo file-upload fluid">
-            <input type="file">
-            <input type="text">
-            <span class="btn-secondary btn-sml">Browse</span>
+        <div wicket:id="certImageContainer" class="uploads">
+            <label wicket:for="certImageUploadField"><wicket:message key="label.pdf_report_image"/>:</label>
+
+            <img wicket:id="certImg" class="feature-img">
+
+            <p wicket:id="certImgMsg"><wicket:message key="label.upload_certificate_image"/></p>
+            <form wicket:id="certImageUploadForm" class="input-combo file-upload fluid">
+                <input wicket:id="certImageUploadField" type="file">
+                <input type="text">
+                <span class="btn-secondary btn-sml">Browse</span>
+            </form>
+            <a wicket:id="removeCertImageLink"><wicket:message key="label.remove"/></a>
         </div>
 
     </div><!-- cls .column-narrow-left-->

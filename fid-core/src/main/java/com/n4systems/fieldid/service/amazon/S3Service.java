@@ -156,8 +156,16 @@ public class S3Service extends FieldIdPersistenceService {
         uploadResource(file, null, PRIMARY_CERTIFICATE_LOGO_PATH);
     }
 
+    public void uploadPrimaryOrgCertificateLogo(String contentType, byte[] bytes) {
+        uploadResource(bytes, contentType, null, PRIMARY_CERTIFICATE_LOGO_PATH);
+    }
+
     public void uploadSecondaryOrgCertificateLogo(File file, Long secondaryOrgId) {
         uploadResource(file, null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
+    }
+
+    public void uploadSecondaryOrgCertificateLogo(Long secondaryOrgId, String contentType, byte[] bytes) {
+        uploadResource(bytes, contentType, null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
     }
 
     public void removePrimaryOrgCertificateLogo() {
