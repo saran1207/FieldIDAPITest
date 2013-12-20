@@ -43,6 +43,10 @@
                     <span wicket:id="address"/>
                 </div>
             </wicket:enclosure>
+            <wicket:enclosure child="timeZone">
+                <label wicket:for="timeZone"><wicket:message key="label.timezone"/>:</label>
+                <select wicket:id="timeZone"/>
+            </wicket:enclosure>
             <wicket:enclosure>
                 <div class="control-group">
                     <label wicket:for="phone"><wicket:message key="label.phone"/></label>

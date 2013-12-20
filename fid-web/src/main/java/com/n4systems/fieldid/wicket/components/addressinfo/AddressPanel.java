@@ -1,17 +1,10 @@
 package com.n4systems.fieldid.wicket.components.addressinfo;
 
 import com.google.gson.GsonBuilder;
-import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
-import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
-import com.n4systems.fieldid.wicket.components.timezone.RegionListModel;
-import com.n4systems.fieldid.wicket.components.timezone.RegionModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.GpsLocation;
-import com.n4systems.util.timezone.Country;
-import com.n4systems.util.timezone.CountryList;
-import com.n4systems.util.timezone.Region;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -49,21 +42,10 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
         // to help understand the javascript binding better.
         // see https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
         //formatted_address
-
-        final IModel<String> timeZoneIdModel = ProxyModel.of(model,on(AddressInfo.class).getTimeZoneId());
-        final IModel<Country> countryModel = new CountryFromAddressModel(model);
-        final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
-
-        add(new FidDropDownChoice<Region>("timeZone", regionModel, new RegionListModel(countryModel), new ListableChoiceRenderer<Region>()) {
-            @Override public boolean isVisible() {
-                return true;//timeZoneIdModel!=null && isTimeZoneVisible();
-            }
-        });
-
         add(new HiddenField<String>("country", ProxyModel.of(model, on(AddressInfo.class).getCountry()))
                 .add( new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override protected void onUpdate(AjaxRequestTarget target) {
-                        target.add(get("timeZone"));
+                        onCountryChange(target);
                     }
                 })
         );
@@ -77,6 +59,12 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
                 return noMap ==false && externalMapJsVar == null;
             }
         }.setOutputMarkupPlaceholderTag(true));
+    }
+
+    protected void onCountryChange(AjaxRequestTarget target) { }
+
+    protected boolean isTimeZoneVisible() {
+        return true;
     }
 
     @Override
@@ -141,25 +129,6 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
             }
         }
 
-    }
-
-    class CountryFromAddressModel extends Model<Country> {
-        private final IModel<AddressInfo> addressModel;
-
-        CountryFromAddressModel(IModel<AddressInfo> model) {
-            super();
-            this.addressModel = model;
-        }
-
-        @Override
-        public Country getObject() {
-            return CountryList.getInstance().getCountryByName(addressModel.getObject().getCountry());
-        }
-
-        @Override
-        public void setObject(Country country) {
-            addressModel.getObject().setCountry(country.getName());
-        }
     }
 
 }

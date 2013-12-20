@@ -1,19 +1,30 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.form.InlineEditableForm;
 import com.n4systems.fieldid.wicket.components.form.LinkFieldsBehavior;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.timezone.RegionListModel;
+import com.n4systems.fieldid.wicket.components.timezone.RegionModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.util.timezone.Country;
+import com.n4systems.util.timezone.CountryList;
+import com.n4systems.util.timezone.Region;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -29,8 +40,10 @@ import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -42,6 +55,7 @@ public class PlaceSummaryPage extends PlacePage {
 
     private @SpringBean PlaceService placeService;
     private @SpringBean S3Service s3Service;
+    private @SpringBean PersistenceService persistenceService;
 
 
     private final GoogleMap map;
@@ -53,6 +67,9 @@ public class PlaceSummaryPage extends PlacePage {
     private WebMarkupContainer imageMsg;
     private WebComponent image;
     private AjaxLink removeImageLink;
+    private AjaxLink removeLink;
+    private Component timeZone;
+    private AddressPanel address;
 
     private WebMarkupContainer certImageContainer;
     private WebMarkupContainer certImageMsg;
@@ -134,42 +151,37 @@ public class PlaceSummaryPage extends PlacePage {
 
         imageContainer.add(imageUploadForm);
 
+        final IModel<String> timeZoneIdModel = new PropertyModel(orgModel,"defaultTimeZone");
+        final IModel<Country> countryModel = new CountryFromAddressModel(ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo()));
+        final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
+
         contact = new Contact(org.getContact());
-        add(new InlineEditableForm("contact") {
-            @Override
-            protected void onSave(AjaxRequestTarget target) {
-                super.onSave(target);
+        MarkupContainer form = new InlineEditableForm("contact") {
+            @Override protected void onSave(AjaxRequestTarget target) {
+                persistenceService.save(getOrg());
                 target.add(map);
             }
 
-            @Override
-            protected void onCancel(AjaxRequestTarget target) {
+            @Override protected void onCancel(AjaxRequestTarget target) {
                 super.onCancel(target);
             }
-        }.withSaveCancelEditLinks()
-                .add(new TextField<String>("name", ProxyModel.of(contact, on(Contact.class).getName())))
-                .add(new TextField<String>("email", ProxyModel.of(contact, on(Contact.class).getEmail())))
-                .add(new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())).withExternalMap(map.getJsVar()).hideIfChildrenHidden())
-                .add(new TextField<String>("phone", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone1())))
-                .add(new TextField<String>("phone2", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone2())))
-                .add(new TextField<String>("fax", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getFax1()))));
-
-        if(orgModel.getObject().isInternal()) {
-            add(new InlineEditableForm("general").withSaveCancelEditLinks()
-                    .add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
-                    .add(new TextField<String>("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
-                    .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())))
-                    .add(new TextField<String>("certificateName", ProxyModel.of(orgModel, on(InternalOrg.class).getCertificateName())))
-            );
-        } else {
-            add(new InlineEditableForm("general").withSaveCancelEditLinks()
-                    .add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
-                    .add(new TextField<String>("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
-                    .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())))
-                    .add(new TextField<String>("certificateName").setVisible(false))
-            );
-        }
-
+        }.withSaveCancelEditLinks();
+        form.add(new TextField("name", ProxyModel.of(contact, on(Contact.class).getName())))
+            .add(new TextField("email", ProxyModel.of(contact, on(Contact.class).getEmail())))
+            .add(new TextField("phone", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone1())))
+            .add(new TextField("phone2", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone2())))
+            .add(new TextField("fax", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getFax1())))
+            .add(address = new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())) {
+                @Override protected void onCountryChange(AjaxRequestTarget target) {
+                    target.add(timeZone);
+                }
+            }.withExternalMap(map.getJsVar()).hideIfChildrenHidden())
+            .add(timeZone = new FidDropDownChoice<Region>("timeZone", regionModel, new RegionListModel(countryModel), new ListableChoiceRenderer<Region>()) {
+                @Override public boolean isVisible() {
+                    return getOrg().isInternal() && address.isVisible();
+                }
+            });
+        add(form);
 
         add(certImageContainer = new WebMarkupContainer("certImageContainer"));
         certImageContainer.setOutputMarkupId(true);
@@ -233,6 +245,23 @@ public class PlaceSummaryPage extends PlacePage {
 
         certImageContainer.add(certImageUploadForm);
 
+        InlineEditableForm generalForm = new InlineEditableForm("general") {
+            @Override protected void onSave(AjaxRequestTarget target) {
+                persistenceService.save(getOrg());
+                target.add();
+            }
+        }.withSaveCancelEditLinks();
+
+        generalForm.add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
+                .add(new TextField<String>("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
+                .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())))
+                .add(new TextField<String>("certificateName", ProxyModel.of(orgModel, on(InternalOrg.class).getCertificateName())) {
+                    @Override public boolean isVisible() {
+                        return getOrg().isInternal();
+                    }
+                }
+                );
+        add(generalForm);
     }
 
     @Override
@@ -307,4 +336,24 @@ public class PlaceSummaryPage extends PlacePage {
             return placeService.getOpenEventsFor(getOrg(), 7);
         }
     }
+
+    class CountryFromAddressModel extends Model<Country> {
+        private final IModel<AddressInfo> addressModel;
+
+        CountryFromAddressModel(IModel<AddressInfo> model) {
+            super();
+            this.addressModel = model;
+        }
+
+        @Override
+        public Country getObject() {
+            return CountryList.getInstance().getCountryByName(addressModel.getObject().getCountry());
+        }
+
+        @Override
+        public void setObject(Country country) {
+            addressModel.getObject().setCountry(country.getName());
+        }
+    }
+
 }

@@ -142,6 +142,7 @@ public class PlaceActionGroup extends Panel {
         optionsContainer.add(descendantsLink = new BookmarkablePageLink<PlaceDescendantsPage>("descendants", PlaceDescendantsPage.class, PageParametersBuilder.id(getOrg().getId())));
         descendantsLink.setVisible((!getOrg().isDivision()) && canManageCustomers);
         descendantsLink.add(new Label("label", getLabelForOrg()));
+        descendantsLink.add(new Label("orgName", getOrg().getName()));
 
         add(optionsContainer);
         optionsContainer.setVisible(mergeLink.isVisible()
@@ -153,11 +154,11 @@ public class PlaceActionGroup extends Panel {
 
     private IModel<String> getLabelForOrg() {
         if (getOrg().isPrimary()) {
-            return new FIDLabelModel("label.add_secondary_customer_to", getOrg().getDisplayName());
+            return new FIDLabelModel("label.add_secondary_customer_to");
         } else if (getOrg().isSecondary()) {
-            return new FIDLabelModel("label.add_customer_to", getOrg().getDisplayName());
+            return new FIDLabelModel("label.add_customer_to");
         } else if (getOrg().isCustomer()) {
-            return new FIDLabelModel("label.add_division_to", getOrg().getDisplayName());
+            return new FIDLabelModel("label.add_division_to");
         } else
             return Model.of("");
     }
