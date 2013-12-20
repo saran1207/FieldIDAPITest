@@ -26,8 +26,9 @@ public class AddressInfo extends AbstractEntity {
     private GpsLocation gpsLocation = new GpsLocation();
 
     private @Transient String formattedAddress;
+    private @Transient String timeZoneId;
 
-	public AddressInfo() { }
+    public AddressInfo() { }
 
     public AddressInfo(AddressInfo addressInfo) {
 		streetAddress = addressInfo.streetAddress;
@@ -38,6 +39,8 @@ public class AddressInfo extends AbstractEntity {
 		phone1 = addressInfo.phone1;
 		phone2 = addressInfo.phone2;
 		fax1 = addressInfo.fax1;
+        timeZoneId = addressInfo.timeZoneId;
+        formattedAddress = addressInfo.formattedAddress;
 	}
 
 	public String getStreetAddress() {
@@ -180,6 +183,14 @@ public class AddressInfo extends AbstractEntity {
 
     public void setFormattedAddress(String formattedAddress) {
         this.formattedAddress = formattedAddress;
+    }
+
+    public String getTimeZoneId() {
+        return timeZoneId;
+    }
+
+    public void setTimeZoneId(String timeZoneId) {
+        this.timeZoneId = timeZoneId;
     }
 
     @Override

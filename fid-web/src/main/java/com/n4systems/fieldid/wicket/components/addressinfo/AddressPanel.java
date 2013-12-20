@@ -1,10 +1,19 @@
 package com.n4systems.fieldid.wicket.components.addressinfo;
 
 import com.google.gson.GsonBuilder;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.timezone.RegionListModel;
+import com.n4systems.fieldid.wicket.components.timezone.RegionModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.GpsLocation;
+import com.n4systems.util.timezone.Country;
+import com.n4systems.util.timezone.CountryList;
+import com.n4systems.util.timezone.Region;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -40,7 +49,25 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
         // to help understand the javascript binding better.
         // see https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
         //formatted_address
-        add(new HiddenField<String>("country", ProxyModel.of(model, on(AddressInfo.class).getCountry())));
+
+        final IModel<String> timeZoneIdModel = ProxyModel.of(model,on(AddressInfo.class).getTimeZoneId());
+        final IModel<Country> countryModel = new CountryFromAddressModel(model);
+        final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
+
+        add(new FidDropDownChoice<Region>("timeZone", regionModel, new RegionListModel(countryModel), new ListableChoiceRenderer<Region>()) {
+            @Override public boolean isVisible() {
+                return true;//timeZoneIdModel!=null && isTimeZoneVisible();
+            }
+        });
+
+        add(new HiddenField<String>("country", ProxyModel.of(model, on(AddressInfo.class).getCountry()))
+                .add( new AjaxFormComponentUpdatingBehavior("onchange") {
+                    @Override protected void onUpdate(AjaxRequestTarget target) {
+                        target.add(get("timeZone"));
+                    }
+                })
+        );
+
         add(new HiddenField<String>("administrative_area_level_1", ProxyModel.of(model, on(AddressInfo.class).getState())));
         add(new HiddenField<String>("locality", ProxyModel.of(model, on(AddressInfo.class).getCity())));
         add(new HiddenField<String>("street_address", ProxyModel.of(model, on(AddressInfo.class).getStreetAddress())));
@@ -114,6 +141,25 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
             }
         }
 
+    }
+
+    class CountryFromAddressModel extends Model<Country> {
+        private final IModel<AddressInfo> addressModel;
+
+        CountryFromAddressModel(IModel<AddressInfo> model) {
+            super();
+            this.addressModel = model;
+        }
+
+        @Override
+        public Country getObject() {
+            return CountryList.getInstance().getCountryByName(addressModel.getObject().getCountry());
+        }
+
+        @Override
+        public void setObject(Country country) {
+            addressModel.getObject().setCountry(country.getName());
+        }
     }
 
 }

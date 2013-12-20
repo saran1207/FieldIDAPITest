@@ -129,6 +129,19 @@ var googleMapFactory = (function() {
 			$postalCode.val(extractFromGeoCode(addressInfo,'postal_code'));
 			$state.val(extractFromGeoCode(addressInfo,'administrative_area_level_1'));
 			$country.val(extractFromGeoCode(addressInfo,'country'));
+
+			 // for now, the wicket component only listens for changes on the country field. other events may have to be triggered later.
+			 $country.change();
+//			 TODO : if timezone is required the do webservice call to
+//			 https://maps.googleapis.com/maps/api/timezone/json?location=-33.86,151.20&timestamp=0&sensor=false
+//			 which yields {
+//			 "dstOffset" : 0,
+//				 "rawOffset" : 36000,
+//				 "status" : "OK",
+//				 "timeZoneId" : "Australia/Sydney",
+//				 "timeZoneName" : "Australian Eastern Standard Time"
+//		 }
+//			 and store timeZoneName in hidden field.
 		}
 
 		 var textOptions = {

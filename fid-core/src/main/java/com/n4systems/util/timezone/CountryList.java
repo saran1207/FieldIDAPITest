@@ -1,15 +1,18 @@
 package com.n4systems.util.timezone;
 
-import java.io.InputStream;
-import java.util.Iterator;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamImplicit;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+
+import java.io.InputStream;
+import java.util.Iterator;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @XStreamAlias("CountryList")
 public class CountryList implements Iterable<Country> {
@@ -78,11 +81,19 @@ public class CountryList implements Iterable<Country> {
 	}
 	
 	public Country getCountryByFullName(String id) {
-		return getCountryByName(id.substring(0, id.indexOf(':')));
+		return id==null ? null : getCountryByName(id.substring(0, id.indexOf(':')));
 	}
 	
 	public Region getRegionByFullId(String id) {
 		Country country = getCountryByFullName(id);
 		return (country == null) ? null : country.getRegionById(id.substring(id.indexOf(':') + 1));
 	}
+
+    public List<Region> getAllRegions() {
+        SortedSet<Region> regions = Sets.newTreeSet();
+        for (Country country:getCountries()) {
+            regions.addAll(country.getRegions());
+        }
+        return Lists.newArrayList(regions);
+    }
 }
