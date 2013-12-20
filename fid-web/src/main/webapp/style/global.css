@@ -1186,11 +1186,7 @@ input:disabled {
   font-size: 14px;
 }
 .editable-inputs .form-horizontal label {
-  width: 30%;
   text-align: left;
-}
-.editable-inputs .form-horizontal input[type="text"] {
-  width: 68%;
 }
 .editable-inputs .actions {
   position: absolute;
@@ -1746,7 +1742,15 @@ figure p {
 }
 .column-left .feature-img,
 .column-right .feature-img {
-  width: 100%;
+  max-width: 100%;
+  max-height: 200px;
+}
+.column-left .feature-image img,
+.column-right .feature-image img {
+  max-width: 100%;
+  max-height: 250px;
+  display: block;
+  margin: 0 auto;
 }
 /*--------------------------------------- 
   GLOBAL HEADER STYLES

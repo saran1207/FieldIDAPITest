@@ -5,8 +5,9 @@
     <div class="column-left">
         <!-- profile summary image -->
         <div wicket:id="imageContainer" class="uploads">
-            <img wicket:id="img" class="feature-img">
-
+            <div class="feature-image">
+                <img wicket:id="img">
+            </div>
             <p wicket:id="imgMsg"><wicket:message key="label.upload_profile_image"/></p>
             <form wicket:id="imageUploadForm" class="input-combo file-upload fluid">
                 <input wicket:id="imageUploadField" type="file">
@@ -17,7 +18,7 @@
         </div>
 
         <!-- Contact info -->
-        <form wicket:id="contact" class="editable-inputs">
+        <form wicket:id="contact" class="editable-inputs form-horizontal">
             <h3><wicket:message key="label.contact"/></h3>
             <span class="actions">
                 <a wicket:id="save"><wicket:message key="label.save"/></a>
@@ -25,33 +26,45 @@
                 <a wicket:id="edit"><wicket:message key="label.edit"/>/<wicket:message key="label.add"/></a>
             </span>
             <wicket:enclosure>
-                <label wicket:for="name"><wicket:message key="label.name"/>:</label>
-                <input wicket:id="name" type="text"/>
+                <div class="control-group">
+                    <label wicket:for="name"><wicket:message key="label.name"/></label>
+                    <input wicket:id="name" type="text"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
-                <label wicket:for="email"><wicket:message key="label.email"/>:</label>
-                <input wicket:id="email" type="text"/>
+                <div class="control-group">
+                    <label wicket:for="email"><wicket:message key="label.email"/></label>
+                    <input wicket:id="email" type="text"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure child="address">
-                <label wicket:for="address"><wicket:message key="label.address"/>:</label>
-                <span wicket:id="address"/>
+                <div class="control-group">
+                    <label wicket:for="address"><wicket:message key="label.address"/></label>
+                    <span wicket:id="address"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
-                <label wicket:for="phone"><wicket:message key="label.phone"/>:</label>
-                <input wicket:id="phone" type="text"/>
+                <div class="control-group">
+                    <label wicket:for="phone"><wicket:message key="label.phone"/></label>
+                    <input wicket:id="phone" type="text"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
-                <label wicket:for="phone2"><wicket:message key="label.phone2"/>:</label>
-                <input wicket:id="phone2" type="text"/>
+                <div class="control-group">
+                    <label wicket:for="phone2"><wicket:message key="label.phone2"/></label>
+                    <input wicket:id="phone2" type="text"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
-                <label wicket:for="fax"><wicket:message key="label.fax"/>:</label>
-                <input wicket:id="fax" type="text"/>
+                <div class="control-group">
+                    <label wicket:for="fax"><wicket:message key="label.fax"/></label>
+                    <input wicket:id="fax" type="text"/>
+                </div>
             </wicket:enclosure>
         </form>
 
         <!-- General form -->
-        <form wicket:id="general"  class="editable-inputs">
+        <form wicket:id="general"  class="editable-inputs form-horizontal">
             <h3><wicket:message key="label.general"/></h3>
             <span class="actions">
                 <a wicket:id="save"><wicket:message key="label.save"/></a>
@@ -59,31 +72,41 @@
                 <a wicket:id="edit"><wicket:message key="label.edit"/>/<wicket:message key="label.add"/></a>
             </span>
             <wicket:enclosure>
-                <label wicket:for="name"><wicket:message key="label.name"/>:</label>
-                <input wicket:id="name" type="text"/>
+                <div class="control-group">
+                    <label wicket:for="name"><wicket:message key="label.name"/></label>
+                    <input wicket:id="name" type="text"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
-                <label wicket:for="id"><wicket:message key="label.id"/>:</label>
-                <input wicket:id="id" type="text"/>
+                <div class="control-group">
+                    <label wicket:for="id"><wicket:message key="label.id"/></label>
+                    <input wicket:id="id" type="text"/>
+                </div>
             </wicket:enclosure>
-
             <wicket:enclosure>
-                <label wicket:for="certificateName"><wicket:message key="label.name_on_pdf_reports"/>:</label>
-                <input wicket:id="certificateName" type="text">
+                <div class="control-group">
+                    <label wicket:for="certificateName"><wicket:message key="label.name_on_pdf_reports"/></label>
+                    <input wicket:id="certificateName" type="text">
+                </div>
             </wicket:enclosure>
-                <label><wicket:message key="label.timezone"/>:</label>
-                <div id="timezone"/>
+                <div class="control-group">
+                    <label><wicket:message key="label.timezone"/></label>
+                    <div id="timezone"/>
+                </div>
             <wicket:enclosure>
-                <label><wicket:message key="label.notes"/>:</label>
-                <textarea wicket:id="notes"/>
+                <div class="control-group">
+                    <label><wicket:message key="label.notes"/></label>
+                    <textarea wicket:id="notes"/>
+                </div>
             </wicket:enclosure>
         </form>
 
+
         <div wicket:id="certImageContainer" class="uploads">
-            <label wicket:for="certImageUploadField"><wicket:message key="label.pdf_report_image"/>:</label>
-
-            <img wicket:id="certImg" class="feature-img">
-
+            <label wicket:for="certImageUploadField"><wicket:message key="label.pdf_report_image"/></label>
+            <div class="feature-image">
+                <img wicket:id="certImg">
+            </div>
             <p wicket:id="certImgMsg"><wicket:message key="label.upload_certificate_image"/></p>
             <form wicket:id="certImageUploadForm" class="input-combo file-upload fluid">
                 <input wicket:id="certImageUploadField" type="file">
@@ -92,8 +115,7 @@
             </form>
             <a wicket:id="removeCertImageLink"><wicket:message key="label.remove"/></a>
         </div>
-
-    </div><!-- cls .column-narrow-left-->
+    </div><!-- cls .column-left-->
 
     <div class="column-wide">
         <!-- Location map -->

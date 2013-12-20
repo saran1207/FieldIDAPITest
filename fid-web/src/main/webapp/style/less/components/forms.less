@@ -31,7 +31,7 @@ textarea {
 }
 input[type="text"] {
 	height: 28px;
-	margin: 4px 0 10px;
+	margin-bottom: 10px;
 }
 label {
 	display: block;
@@ -221,11 +221,11 @@ input:disabled {
 	}
 	.form-horizontal {
 		label {
-			width: 30%;
+			//width: 30%;
 			text-align: left;
 		}
 		input[type="text"] {
-			width: 68%;
+			// width: 68%;
 		}
 	}
 	.actions {
@@ -335,7 +335,7 @@ legend + p {
 
 // Forms & columns
 // -------------------------------
-
+// TODO: test before removing -- see layout.less
 form {
 	.column-wide {
 		.width(8,7);
@@ -366,6 +366,9 @@ form {
 		display: inline-block;
 		vertical-align: middle;
 		padding-right: 10px;
+	}
+	input[type="text"] {
+		margin-bottom: 0;
 	}
 	.link {
 		font-size: @smallFontSize;
