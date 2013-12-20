@@ -5,10 +5,11 @@
     <div class="column-left">
         <!-- profile summary image -->
         <div wicket:id="imageContainer" class="uploads">
+            <p wicket:id="imgMsg"><wicket:message key="label.upload_profile_image"/></p>
             <div class="feature-image">
                 <img wicket:id="img">
             </div>
-            <p wicket:id="imgMsg"><wicket:message key="label.upload_profile_image"/></p>
+            
             <form wicket:id="imageUploadForm" class="input-combo file-upload fluid">
                 <input wicket:id="imageUploadField" type="file">
                 <input type="text">
@@ -44,8 +45,8 @@
                 </div>
             </wicket:enclosure>
             <wicket:enclosure child="timeZone">
-                <div class="control-group">
-                    <label wicket:for="timeZone"><wicket:message key="label.timezone"/>:</label>
+                <div class="control-group clearfix timezone">
+                    <label wicket:for="timeZone"><wicket:message key="label.timezone"/></label>
                     <select wicket:id="timeZone"/>
                 </div>
             </wicket:enclosure>
@@ -102,20 +103,22 @@
                 </div>
             </wicket:enclosure>
         </form>
-
-
-        <div wicket:id="certImageContainer" class="uploads">
+        <div wicket:id="certImageContainer" class="uploads pdf-report-img">
             <label wicket:for="certImageUploadField"><wicket:message key="label.pdf_report_image"/></label>
-            <div class="feature-image">
-                <img wicket:id="certImg">
+
+            <div class="controls">
+                <p wicket:id="certImgMsg">&nbsp;<wicket:message key="label.upload_certificate_image"/></p>
+                <div class="feature-image">
+                    <img wicket:id="certImg">
+                </div>
+                
+                <form wicket:id="certImageUploadForm" class="input-combo file-upload fluid">
+                    <input wicket:id="certImageUploadField" type="file">
+                    <input type="text">
+                    <span class="btn-secondary btn-sml">Browse</span>
+                </form>
+                <a wicket:id="removeCertImageLink"><wicket:message key="label.remove"/></a>
             </div>
-            <p wicket:id="certImgMsg"><wicket:message key="label.upload_certificate_image"/></p>
-            <form wicket:id="certImageUploadForm" class="input-combo file-upload fluid">
-                <input wicket:id="certImageUploadField" type="file">
-                <input type="text">
-                <span class="btn-secondary btn-sml">Browse</span>
-            </form>
-            <a wicket:id="removeCertImageLink"><wicket:message key="label.remove"/></a>
         </div>
     </div><!-- cls .column-left-->
 

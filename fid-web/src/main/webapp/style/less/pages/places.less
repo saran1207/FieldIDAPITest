@@ -109,11 +109,12 @@
 		position: relative;
 
 		p {
-			position: absolute;
-			top: 50px;
-			text-align: center;
-			width: 100%;
-			font-weight: bold;
+			// position: absolute;
+			// top: 50px;
+			// text-align: center;
+			// width: 100%;
+			// font-weight: bold;
+			margin: 0;
 		}
 		.remove {
 			margin-top: 4px;
@@ -121,6 +122,7 @@
 		}
 		.feature-image {
 			background: @black;
+			margin-top: 4px;
 
 			img {
 				background: @white;
@@ -133,6 +135,13 @@
 		}
 		.controls {
 			width: 70%;
+		}
+
+		&.pdf-report-img {
+			label,
+			.controls {
+				float: left;
+			}
 		}
 	}
 	.google-map {
@@ -154,8 +163,22 @@
 		input[type="text"], select, textarea {
 			width: 70%;
 		}
+		.chzn-container {
+			width: 70%!important;
+			margin: 0;
+		}
 		input[type="text"] {
 			text-overflow: ellipsis;
+		}
+		.timezone {
+			label {
+				float: left;
+				line-height: 29px;
+			}
+			.chzn-container {
+				float: left;
+				margin: 0 0 0 3px;
+			}
 		}
 	}
 }

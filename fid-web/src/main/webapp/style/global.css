@@ -1066,7 +1066,6 @@ select,
 textarea {
   width: 295px;
   padding-left: 4px;
-  font-size: 13px;
   font-family: "proxima-nova", Helvetica, Arial, sans-serif;
   border: 1px solid #c7c7c9;
 }
@@ -1181,9 +1180,6 @@ input:disabled {
   height: auto;
   margin: 0;
   padding-left: 0;
-}
-.editable-inputs input[type="text"] {
-  font-size: 14px;
 }
 .editable-inputs .form-horizontal label {
   text-align: left;
