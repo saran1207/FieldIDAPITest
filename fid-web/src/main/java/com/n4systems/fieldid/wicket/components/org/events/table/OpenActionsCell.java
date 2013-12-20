@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.components.org.events.table;
 
 import com.n4systems.fieldid.service.event.PlaceEventScheduleService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.action.ActionDetailsPage;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
@@ -12,12 +11,12 @@ import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForPlaceModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
+import com.n4systems.fieldid.wicket.pages.event.PerformPlaceEventPage;
 import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
 import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.Event;
 import com.n4systems.model.PlaceEvent;
-import com.n4systems.model.ThingEvent;
 import com.n4systems.model.orgs.BaseOrg;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -26,6 +25,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class OpenActionsCell extends Panel {
@@ -53,9 +53,12 @@ public class OpenActionsCell extends Panel {
             }
         });
 
-        //TODO This should link to the perform event page
-        String startAction = "TO BE DONE";
-        add(new NonWicketLink("startLink", startAction, new AttributeModifier("class", "btn-secondary")).setVisible(canCreateEvents));
+
+        PageParameters params = PageParametersBuilder.param("scheduleId", schedule.getId());
+        params.add("type", schedule.getEventType().getId());
+        params.add("placeId", schedule.getPlace().getId());
+
+        add(new BookmarkablePageLink<PerformPlaceEventPage>("startLink", PerformPlaceEventPage.class, params).setVisible(canCreateEvents));
 
         add(new BookmarkablePageLink<CloseEventPage>("closeLink", CloseEventPage.class, PageParametersBuilder.uniqueId(schedule.getId())));
 
@@ -98,8 +101,8 @@ public class OpenActionsCell extends Panel {
         dialogWindow.setPageCreator(new ModalWindow.PageCreator() {
             @Override
             public Page createPage() {
-                IModel<ThingEvent> entityModel = new EntityModel<ThingEvent>(ThingEvent.class, eventModel.getObject().getId());
-                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), entityModel)
+                IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
+                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), Event.class, entityModel)
                         .setAssetSummaryContext(true);
             }
         });

@@ -30,10 +30,10 @@ import java.util.TimeZone;
 @PrimaryKeyJoinColumn(name="event_id")
 public abstract class Event<T extends EventType, V extends Event, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, Archivable, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasOwner {
 	private static final long serialVersionUID = 1L;
-	public static final String[] PLACE_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "infoOptionMap", "subEvents" };
-    public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
+	public static final String[] PLACE_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "infoOptionMap", "subEvents", "place" };
+    public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
 	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.eventForm.sections"};
-    public static final String[] ASSET_EVENT_FIELDS = { "type.supportedProofTests", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap","subEvents.modifiedBy",};
+    public static final String[] THING_TYPE_PATHS = { "type.supportedProofTests" };
 
     public enum WorkflowStateGrouping {
         NON_COMPLETE(WorkflowState.OPEN, WorkflowState.CLOSED), COMPLETE(WorkflowState.COMPLETED);
@@ -660,3 +660,4 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
         }
     }
 }
+

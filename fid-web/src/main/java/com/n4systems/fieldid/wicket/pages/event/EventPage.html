@@ -39,7 +39,7 @@
                 </span>
             </div>
 
-            <div class="infoSet">
+            <div class="infoSet" wicket:id="eventBookContainer">
                 <label class="label"><wicket:message key="label.eventbook"/></label>
                 <span class="fieldHolder">
                     <div wicket:id="newOrExistingEventBook"/>
@@ -50,7 +50,7 @@
 
         </div>
 
-        <div>
+        <div wicket:id="ownerSection">
 
             <h2><wicket:message key="label.owner"/></h2>
 
@@ -61,17 +61,21 @@
                 </span>
             </div>
 
-            <div class="infoSet" style="overflow:visible">
-                <!-- blargh : why is overflow hidden for infoSet? hack so i can see popups in this div.-->
-                <label class="label">* <wicket:message key="label.owner"/></label>
+            <div>
 
-                <span wicket:id="orgPicker"></span>
-            </div>
+                <div class="infoSet" style="overflow:visible">
+                    <!-- blargh : why is overflow hidden for infoSet? hack so i can see popups in this div.-->
+                    <label class="label">* <wicket:message key="label.owner"/></label>
 
-            <div class="infoSet">
-                <label class="label"><wicket:message key="label.location"/></label>
+                    <span wicket:id="orgPicker"></span>
+                </div>
 
-                <span wicket:id="locationPicker"></span>
+                <div class="infoSet">
+                    <label class="label"><wicket:message key="label.location"/></label>
+
+                    <span wicket:id="locationPicker"></span>
+                </div>
+
             </div>
 
         </div>

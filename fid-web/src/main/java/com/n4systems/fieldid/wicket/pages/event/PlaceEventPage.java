@@ -7,9 +7,7 @@ import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForPlaceModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.org.PlaceSummaryPage;
-import com.n4systems.model.Asset;
 import com.n4systems.model.PlaceEvent;
-import com.n4systems.model.ThingEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -31,6 +29,14 @@ public abstract class PlaceEventPage extends EventPage<PlaceEvent> {
         PlaceEvent placeEvent = new PlaceEvent();
         placeEvent.setPlace(event.getObject().getPlace());
         return placeEvent;
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        ownerSection.setVisible(false);
+        jobsContainer.setVisible(false);
+        eventBookContainer.setVisible(false);
     }
 
     @Override
