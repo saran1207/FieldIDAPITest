@@ -26,7 +26,7 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
@@ -76,12 +76,9 @@ public class PlaceSummaryPage extends PlacePage {
         futureEventsListContainer.add(futureEventsListView = createFutureEventsListView());
         futureEventsListContainer.setOutputMarkupPlaceholderTag(true);
 
-        add(new Link("viewAll") {
-            @Override
-            public void onClick() {
-                setResponsePage(new PlaceEventsPage(PageParametersBuilder.id(org.getId()).add(PlaceEventsPage.OPEN_PARAM, "true")));
-            }
-        });
+        PageParameters pageParameters = PageParametersBuilder.id(org.getId());
+        pageParameters.add(PlaceEventsPage.OPEN_PARAM, true);
+        add(new BookmarkablePageLink<PlaceEventsPage>("viewAll", PlaceEventsPage.class, pageParameters));
 
         add(imageContainer = new WebMarkupContainer("imageContainer"));
         imageContainer.setOutputMarkupId(true);
