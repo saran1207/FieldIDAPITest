@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.org;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -71,11 +72,11 @@ public class CreatePlacePanel extends Panel {
             .setOutputMarkupPlaceholderTag(true);
 
         add(form);
-        add(new WebMarkupContainer("blankSlate") {
-            @Override public boolean isVisible() {
-                return !form.isVisible();
-            }
-        });
+
+        boolean canManageCustomers = FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers();
+
+        add(new WebMarkupContainer("blankSlate").setVisible(!form.isVisible() && canManageCustomers));
+
         setOutputMarkupPlaceholderTag(true);
         IModel<String> cssClass = getCssClass();
         if (cssClass!=null) {

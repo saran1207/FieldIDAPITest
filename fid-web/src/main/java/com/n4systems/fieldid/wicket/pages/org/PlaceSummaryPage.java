@@ -88,7 +88,7 @@ public class PlaceSummaryPage extends PlacePage {
 
         imageContainer.add(imageMsg = new WebMarkupContainer("imgMsg"));
         imageMsg.setOutputMarkupPlaceholderTag(true);
-        imageMsg.setVisible(!logoExists());
+        imageMsg.setVisible(!logoExists() && canManageCustomers);
 
         imageContainer.add(image = getImage());
         image.setOutputMarkupId(true);
@@ -180,7 +180,7 @@ public class PlaceSummaryPage extends PlacePage {
 
         certImageContainer.add(certImageMsg = new WebMarkupContainer("certImgMsg"));
         certImageMsg.setOutputMarkupPlaceholderTag(true);
-        certImageMsg.setVisible(!certificateImageExists());
+        certImageMsg.setVisible(!certificateImageExists() && canManageCustomers);
 
         certImageContainer.add(certImage = getCertificateImage());
         certImage.setOutputMarkupId(true);
