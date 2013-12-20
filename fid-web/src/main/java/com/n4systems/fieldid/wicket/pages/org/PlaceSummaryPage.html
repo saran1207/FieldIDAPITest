@@ -44,8 +44,10 @@
                 </div>
             </wicket:enclosure>
             <wicket:enclosure child="timeZone">
-                <label wicket:for="timeZone"><wicket:message key="label.timezone"/>:</label>
-                <select wicket:id="timeZone"/>
+                <div class="control-group">
+                    <label wicket:for="timeZone"><wicket:message key="label.timezone"/>:</label>
+                    <select wicket:id="timeZone"/>
+                </div>
             </wicket:enclosure>
             <wicket:enclosure>
                 <div class="control-group">
@@ -93,10 +95,6 @@
                     <input wicket:id="certificateName" type="text">
                 </div>
             </wicket:enclosure>
-                <div class="control-group">
-                    <label><wicket:message key="label.timezone"/></label>
-                    <div id="timezone"/>
-                </div>
             <wicket:enclosure>
                 <div class="control-group">
                     <label><wicket:message key="label.notes"/></label>
