@@ -22,6 +22,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -60,7 +61,12 @@ public class OpenActionsCell extends Panel {
 
         add(new BookmarkablePageLink<PerformPlaceEventPage>("startLink", PerformPlaceEventPage.class, params).setVisible(canCreateEvents));
 
-        add(new BookmarkablePageLink<CloseEventPage>("closeLink", CloseEventPage.class, PageParametersBuilder.uniqueId(schedule.getId())));
+        add(new Link("closeLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new CloseEventPage(PageParametersBuilder.uniqueId(schedule.getId()), (FieldIDTemplatePage) getPage()));
+            }
+        });
 
         add(new AjaxLink<Void>("deleteLink") {
             @Override
