@@ -25,7 +25,7 @@
 var googleMapFactory = (function() {
 
 	 var defaultOptions = {
-		 zoom: 5
+		 zoom: 14
 	 };
 
 	 var create = function(id) {
@@ -229,7 +229,7 @@ var googleMapFactory = (function() {
 		/* public methods exposed */
 		function removeMarkers() {
 			for (var i = 0; i < markers.length; i++) {
-				markers[i].setMap(map);
+				markers[i].setMap(null);
 			}
 			markers = [];
 		}
@@ -290,7 +290,16 @@ var googleMapFactory = (function() {
 				var count = locations.length;
 
 				for (var i=0; i<count; i++) {
-					addLoc(locations[i]);
+					var loc = locations[i];
+					var marker = this.makeMarker(loc);
+					markers.push(marker);
+					marker.setMap(map);
+					if (marker.content || this.updateContentWithAddress) {
+						google.maps.event.addListener(marker, 'click', function() {
+							showInfoWindow(this, map);
+						});
+					}
+
 					bounds.extend(loc);
 				}
 				if (count>1) {
@@ -300,19 +309,8 @@ var googleMapFactory = (function() {
 				} else if (count==0) {
 					map.setZoom(options.zoom);
 				}
-			},
-
-
-			addLoc : function(loc) {
-				var marker = this.makeMarker(loc);
-				markers.push(marker);
-				marker.setMap(map);
-				if (marker.content || this.updateContentWithAddress) {
-					google.maps.event.addListener(marker, 'click', function() {
-						showInfoWindow(this, map);
-					});
-				}
 			}
+
 		};
 		
 	}

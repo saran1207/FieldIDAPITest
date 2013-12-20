@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
-import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.EventType;
 import com.n4systems.model.orgs.BaseOrg;
@@ -15,7 +14,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 import org.springframework.util.StringUtils;
@@ -49,8 +47,8 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
 //        address.setInput("111 Queen St East, Toronto");
 
         Form form = new Form("form");
-        form.add(map=new GoogleMap("map"));
-        form.add(new AddressPanel("address", new PropertyModel(this,"address")).withExternalMap(map.getJsVar()));
+        form.add(map=new GoogleMap("map").addLocation(43.548548, -96.987305).addLocation(3.548548, -56.987305).addLocation(49.548548, -6.987305));
+//        form.add(new AddressPanel("address", new PropertyModel(this,"address")).withExternalMap(map.getJsVar()));
         form.add(new SubmitLink("submit") {
             @Override public void onSubmit() {
                 super.onSubmit();
