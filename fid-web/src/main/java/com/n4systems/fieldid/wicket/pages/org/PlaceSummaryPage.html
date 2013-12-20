@@ -67,24 +67,25 @@
                 <input wicket:id="id" type="text"/>
             </wicket:enclosure>
 
-                <label for=""><wicket:message key="label.pdf_report_image"/>:</label>
-                <div class="input-combo file-upload fluid">
-                    <input type="file">
-                    <input type="text">
-                    <span class="btn-secondary btn-sml">Browse</span>
-                </div>
-
-                <label for=""><wicket:message key="label.name_on_pdf_reports"/>:</label>
-                <input id="" type="text">
-
-                <label for=""><wicket:message key="label.timezone"/>:</label>
-                <input id="" type="text">
-
+            <wicket:enclosure>
+                <label wicket:for="certificateName"><wicket:message key="label.name_on_pdf_reports"/>:</label>
+                <input wicket:id="certificateName" type="text">
+            </wicket:enclosure>
+                <label><wicket:message key="label.timezone"/>:</label>
+                <div id="timezone"/>
             <wicket:enclosure>
                 <label><wicket:message key="label.notes"/>:</label>
                 <textarea wicket:id="notes"/>
             </wicket:enclosure>
         </form>
+
+        <label for=""><wicket:message key="label.pdf_report_image"/>:</label>
+        <div class="input-combo file-upload fluid">
+            <input type="file">
+            <input type="text">
+            <span class="btn-secondary btn-sml">Browse</span>
+        </div>
+
     </div><!-- cls .column-narrow-left-->
 
     <div class="column-wide">

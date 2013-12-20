@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.InternalOrg;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -144,18 +145,28 @@ public class PlaceSummaryPage extends PlacePage {
                 super.onCancel(target);
             }
         }.withSaveCancelEditLinks()
-                .add(new TextField("name", ProxyModel.of(contact, on(Contact.class).getName())))
-                .add(new TextField("email", ProxyModel.of(contact, on(Contact.class).getEmail())))
+                .add(new TextField<String>("name", ProxyModel.of(contact, on(Contact.class).getName())))
+                .add(new TextField<String>("email", ProxyModel.of(contact, on(Contact.class).getEmail())))
                 .add(new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())).withExternalMap(map.getJsVar()).hideIfChildrenHidden())
-                .add(new TextField("phone", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone1())))
-                .add(new TextField("phone2", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone2())))
-                .add(new TextField("fax", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getFax1()))));
+                .add(new TextField<String>("phone", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone1())))
+                .add(new TextField<String>("phone2", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone2())))
+                .add(new TextField<String>("fax", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getFax1()))));
 
-        add(new InlineEditableForm("general").withSaveCancelEditLinks()
-                .add(new TextField("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
-                .add(new TextField("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
-                .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())))
-        );
+        if(orgModel.getObject().isInternal()) {
+            add(new InlineEditableForm("general").withSaveCancelEditLinks()
+                    .add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
+                    .add(new TextField<String>("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
+                    .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())))
+                    .add(new TextField<String>("certificateName", ProxyModel.of(orgModel, on(InternalOrg.class).getCertificateName())))
+            );
+        } else {
+            add(new InlineEditableForm("general").withSaveCancelEditLinks()
+                    .add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
+                    .add(new TextField<String>("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
+                    .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())))
+                    .add(new TextField<String>("certificateName").setVisible(false))
+            );
+        }
 
     }
 
