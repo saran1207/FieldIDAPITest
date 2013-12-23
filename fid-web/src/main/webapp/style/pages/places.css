@@ -4,42 +4,103 @@
 .action-bar {
   margin-bottom: 30px;
 }
-.tree-view ins {
-  text-decoration: none;
-  vertical-align: middle;
-}
-.tree-view ul li {
-  list-style-type: none;
-}
-.tree-view ul li a {
-  display: inline-block;
-  width: 185px;
+.tree-custom ul li a {
+  width: 60%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding: 2px 0;
 }
-.tree-view .level-one {
-  padding: 4px 0;
+.tree-custom .jstree ins {
+  float: left;
+  line-height: 1.5;
+  cursor: pointer;
+  width: 22px;
+  height: 20px;
+}
+.tree-custom .jstree > ul > li {
   border-bottom: 1px solid #dddddd;
+  padding-top: 6px;
 }
-.tree-view .level-two {
-  margin-left: 20px;
-  border-top: 1px dashed #dddddd;
-  padding-top: 4px;
+.tree-custom .jstree li {
+  line-height: 1;
 }
-.tree-view .level-three,
-.tree-view .level-four {
-  margin-left: 30px;
+.tree-custom .jstree .org {
+  color: #008bd3;
+  text-decoration: underline;
 }
-.tree-view .action {
+.tree-custom .jstree .org:hover {
+  text-decoration: none;
+}
+.tree-custom .jstree li.internal-org {
+  font-size: 14px;
+  font-weight: 400;
+}
+.tree-custom .jstree li.internal-org > ul {
+  margin: 4px 0;
+}
+.tree-custom .jstree li.customer-org {
+  padding: 2px 0;
+  border-top: 1px dashed #ececec;
+}
+.tree-custom .jstree li.customer-org span {
+  font-size: 13px;
+}
+.tree-custom .jstree li.division-org {
+  font-size: 13px;
+}
+.tree-custom .jstree li.division-org:first-child {
+  padding-top: 2px;
+}
+.tree-custom .jstree-default li,
+.tree-custom .jstree-default ins {
+  background: none;
+}
+.tree-custom .jstree-default ins {
+  font-size: 14px;
+}
+.tree-custom .jstree-default.jstree-focused {
+  margin-top: 0;
+}
+.tree-custom .jstree-default .primary.jstree-open > ins:before {
+  font-family: "fontello", sans-serif;
+  padding: 0 4px;
+  content: '\e83e';
+}
+.tree-custom .jstree-default .primary.jstree-closed > ins:before {
+  font-family: "fontello", sans-serif;
+  padding: 0 4px;
+  content: '\e83d';
+}
+.tree-custom .jstree-default .primary > a .org {
+  font-weight: 700;
+}
+.tree-custom .jstree-default .secondary.jstree-open > ins:before,
+.tree-custom .jstree-default .customer-org.jstree-open > ins:before {
+  font-family: "fontello", sans-serif;
+  padding: 0 4px;
+  content: '\e835';
+}
+.tree-custom .jstree-default .secondary.jstree-closed > ins:before,
+.tree-custom .jstree-default .customer-org.jstree-closed > ins:before {
+  font-family: "fontello", sans-serif;
+  padding: 0 4px;
+  content: '\e836';
+}
+.tree-custom .jstree-default .jstree-hovered {
+  background: none;
+  border: none;
+  padding: 2px 0;
+}
+.tree-custom .jstree-default .action {
   float: right;
   cursor: pointer;
   text-decoration: underline;
 }
-.tree-view .action:hover {
+.tree-custom .jstree-default .action:hover {
   text-decoration: none;
 }
-.tree-view .no-permission .action {
+.tree-custom .jstree-default .no-permission .action {
   display: none;
 }
 .column-wide .two-columns {

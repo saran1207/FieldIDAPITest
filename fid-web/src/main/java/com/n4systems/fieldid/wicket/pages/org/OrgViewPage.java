@@ -86,7 +86,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
 
         add(createPanel = new CreatePlacePanel("createPanel") {
             @Override protected IModel<String> getCssClass() {
-                return Model.of("column-wide narrow");
+                return Model.of("column-wide");
             }
 
             @Override protected void onCancel(AjaxRequestTarget target) {
