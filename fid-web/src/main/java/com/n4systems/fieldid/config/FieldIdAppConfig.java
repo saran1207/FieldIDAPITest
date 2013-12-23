@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.pages.widgets.OrgDateRangeSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgPeriodSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.OrgSubtitleHelper;
 import com.n4systems.fieldid.wicket.pages.widgets.WidgetFactory;
+import com.n4systems.fieldid.wicket.util.javascript.JavascriptUtil;
 import com.n4systems.services.search.parser.SearchParserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -94,6 +95,11 @@ public class FieldIdAppConfig {
     @Bean
     public LocalizedFieldSorter localizedFieldFilter() {
         return new LocalizedFieldSorter();
+    }
+
+    @Bean
+    public JavascriptUtil javascriptUtil() {
+        return new JavascriptUtil();
     }
 
 }

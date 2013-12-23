@@ -128,11 +128,13 @@ public class CreatePlacePanel extends Panel {
         return this;
     }
 
-
-
     public CreatePlacePanel toggle() {
         form.setVisible(!form.isVisible());
         return this;
+    }
+
+    public boolean isFormVisible() {
+        return form.isVisible();
     }
 
     protected void onCancel(AjaxRequestTarget target) { }
