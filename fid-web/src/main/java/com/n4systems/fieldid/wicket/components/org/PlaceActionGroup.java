@@ -142,7 +142,6 @@ public class PlaceActionGroup extends Panel {
         optionsContainer.add(descendantsLink = new BookmarkablePageLink<PlaceDescendantsPage>("descendants", PlaceDescendantsPage.class, PageParametersBuilder.id(getOrg().getId())));
         descendantsLink.setVisible((!getOrg().isDivision()) && canManageCustomers);
         descendantsLink.add(new Label("label", getLabelForOrg()));
-        descendantsLink.add(new Label("orgName", getOrg().getName()));
 
         add(optionsContainer);
         optionsContainer.setVisible(mergeLink.isVisible()

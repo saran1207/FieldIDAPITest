@@ -109,11 +109,11 @@ public class CreatePlacePanel extends Panel {
                 Preconditions.checkArgument(data.getParent()!=null,"need to know what org you are adding to. ");
                 String name = data.getParent().getName();
                 if (data.getParent() instanceof PrimaryOrg) {
-                    return new FIDLabelModel("label.add_secondary_customer_to", name).getObject();
+                    return new FIDLabelModel("label.add_secondary_customer", name).getObject();
                 } else if (data.getParent() instanceof SecondaryOrg) {
-                    return new FIDLabelModel("label.add_customer_to", name).getObject();
+                    return new FIDLabelModel("label.add_customer", name).getObject();
                 } else {
-                    return new FIDLabelModel("label.add_division_to", name).getObject();
+                    return new FIDLabelModel("label.add_division", name).getObject();
                 }
             }
         };
