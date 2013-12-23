@@ -52,7 +52,6 @@
         <#if event.asset?exists>
             <#if event.tenant.id == sessionUser.tenant.id>
                 <@s.url id="summaryLink" namespace="/" value="w/assetSummary?uniqueID=${asset.id}"/>
-
             <#else>
                 <@s.url id="summaryLink" namespace="/" value="w/assetSummary?uniqueID=${linkedAsset.id}"/>
             </#if>
@@ -61,14 +60,26 @@
                 <@s.text name="label.assetsummary"/>
             </a>
         </#if>
+        <#if event.place?exists>
+            <@s.url id="summaryLink" namespace="/" value="w/placeSummary?id=${event.place.id}" />
+            <a class="mattButton <#if event.anyCertPrintable && userSecurityGuard.allowedEditEvent>summary<#else>summary-wide</#if>" href="${summaryLink}">
+                <@s.text name="label.place_summary"/>
+            </a>
+        </#if>
 
-        <#if userSecurityGuard.allowedEditEvent && event.tenant.id == sessionUser.tenant.id>
+        <#if userSecurityGuard.allowedEditEvent && event.tenant.id == sessionUser.tenant.id && event.asset?exists>
             <a class="mattButton edit" href="<@s.url action="selectEventEdit" uniqueID="${event.id}"/>">
                 <@s.text name="label.edit"/>
             </a>
         </#if>
 
-        <#if event.anyCertPrintable>
+        <#if userSecurityGuard.allowedEditEvent && event.place?exists>
+            <a class="mattButton edit" href="<@s.url action="w/editPlaceEvent" uniqueID="${event.id}"/>">
+                <@s.text name="label.edit"/>
+            </a>
+        </#if>
+
+        <#if event.anyCertPrintable && event.asset?exists>
             <@s.url id="eventCertUrl" action="downloadEventCert" namespace="/file" reportType="INSPECTION_CERT" uniqueID="${uniqueID}" />
             <@s.url id="observationCertUrl" action="downloadEventCert" namespace="/file" reportType="OBSERVATION_CERT" uniqueID="${uniqueID}" />
 

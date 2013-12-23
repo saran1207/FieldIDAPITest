@@ -14,11 +14,14 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
 import java.util.Locale;
 
-public class EventTypeTranslationsPage extends TranslationsPage<ThingEventType> {
+public class EventTypeTranslationsPage extends TranslationsPage<EventType> {
+
+    private EventType eventType;
 
     public EventTypeTranslationsPage() {
         super();
@@ -32,8 +35,8 @@ public class EventTypeTranslationsPage extends TranslationsPage<ThingEventType> 
     }
 
     @Override
-    protected DropDownChoice<ThingEventType> createChoice(String id) {
-        return new GroupedEventTypePicker(id, Model.of(new ThingEventType()), new EventTypesForTenantModel());
+    protected DropDownChoice<EventType> createChoice(String id) {
+        return new GroupedEventTypePicker(id, new PropertyModel<EventType>(this, "eventType"), new EventTypesForTenantModel());
     }
 
     @Override

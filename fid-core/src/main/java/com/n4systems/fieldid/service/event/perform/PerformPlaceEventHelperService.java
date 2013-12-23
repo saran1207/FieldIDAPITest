@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.service.event.perform;
 
+import com.n4systems.model.Event;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.persistence.utils.PostFetcher;
 
 public class PerformPlaceEventHelperService extends PerformEventHelperService<PlaceEvent, PlaceEventType>{
 
@@ -22,4 +24,8 @@ public class PerformPlaceEventHelperService extends PerformEventHelperService<Pl
         return newEvent;
     }
 
+    @Override
+    protected void postFetchAdditionalFields(PlaceEvent event) {
+        PostFetcher.postFetchFields(event, Event.PLACE_FIELD_PATHS);
+    }
 }

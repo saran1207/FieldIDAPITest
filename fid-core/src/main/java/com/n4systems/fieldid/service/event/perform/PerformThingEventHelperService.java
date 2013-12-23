@@ -35,8 +35,9 @@ public class PerformThingEventHelperService extends PerformEventHelperService<Th
 
     @Override
     protected void postFetchAdditionalFields(ThingEvent event) {
+        PostFetcher.postFetchFields(event, Event.ALL_FIELD_PATHS);
         if (event.getType().isThingEventType()) {
-            PostFetcher.postFetchFields(event, Event.ASSET_EVENT_FIELDS);
+            PostFetcher.postFetchFields(event, Event.THING_TYPE_PATHS);
         }
     }
 }

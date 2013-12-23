@@ -8,6 +8,8 @@ import com.n4systems.fieldid.wicket.components.org.CreatePlacePanel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.Component;
@@ -16,14 +18,19 @@ import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulato
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Iterator;
 import java.util.List;
+
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 public class PlaceDescendantsPage extends PlacePage {
 
@@ -46,13 +53,20 @@ public class PlaceDescendantsPage extends PlacePage {
     }
 
     @Override
+    protected Component createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.decendants", getOrg().getName()));
+    }
+
+    @Override
     protected Component createActionGroup(String actionGroupId) {
         return new WebMarkupContainer(actionGroupId).setVisible(false);
     }
 
     @Override
-    protected void refreshContent(AjaxRequestTarget target) {
-
+    protected List<NavigationItem> createBreadCrumbs(BaseOrg org) {
+        List<NavigationItem> navItems = super.createBreadCrumbs(org);
+        navItems.add(aNavItem().label(new FIDLabelModel("label.decendants")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
+        return navItems;
     }
 
     @Override
@@ -60,14 +74,23 @@ public class PlaceDescendantsPage extends PlacePage {
         add(new NavigationBar(navBarId).setVisible(false));
     }
 
+    @Override
+    public String getMainCss() {
+        return "place-add-descendant";
+    }
+
     private void init() {
+
+        add(new BookmarkablePageLink<PlaceSummaryPage>("backToPlaceLink", PlaceSummaryPage.class, PageParametersBuilder.id(getOrg().getId()))
+                .add(new Label("backToLabel", new PropertyModel<String>(orgModel, "name"))));
+
         add(table = new SimpleDefaultDataTable<BaseOrg>("descendants", getDescendantsColumns(), new DescendantsDataProvider() , ROWS_PER_PAGE));
         add(new CreatePlacePanel("createNewPlace") {
             @Override protected void onCreate(BaseOrg org, AjaxRequestTarget target) {
-                // TODO add feedback.
                 persistenceService.save(org);
                 resetModelObject();
-                target.add(this);
+                target.add(getTopFeedbackPanel());
+
             }
             @Override protected void onCancel(AjaxRequestTarget target) {
                 // TODO ? what to do here???  should i even show button.

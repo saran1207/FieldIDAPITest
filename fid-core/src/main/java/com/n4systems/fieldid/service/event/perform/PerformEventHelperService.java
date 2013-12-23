@@ -25,7 +25,6 @@ public abstract class PerformEventHelperService<T extends Event, V extends Event
             T event;
             if (scheduleId != null) {
                 event = createEventFromOpenEvent(scheduleId);
-                PostFetcher.postFetchFields(event, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
                 postFetchAdditionalFields(event);
                 event = (T) event.clone();
                 populateNewEvent(event);

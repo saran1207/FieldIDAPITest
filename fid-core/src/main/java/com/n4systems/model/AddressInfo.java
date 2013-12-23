@@ -27,7 +27,7 @@ public class AddressInfo extends AbstractEntity {
 
     private @Transient String formattedAddress;
 
-	public AddressInfo() { }
+    public AddressInfo() { }
 
     public AddressInfo(AddressInfo addressInfo) {
 		streetAddress = addressInfo.streetAddress;
@@ -38,6 +38,7 @@ public class AddressInfo extends AbstractEntity {
 		phone1 = addressInfo.phone1;
 		phone2 = addressInfo.phone2;
 		fax1 = addressInfo.fax1;
+        formattedAddress = addressInfo.formattedAddress;
 	}
 
 	public String getStreetAddress() {

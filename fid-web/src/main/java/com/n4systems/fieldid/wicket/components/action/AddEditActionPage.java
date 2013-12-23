@@ -51,18 +51,27 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
     private boolean editMode = false;
     private boolean immediateSaveMode = false;
+    private Class<? extends Event> eventClass;
 
-    public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel) {
-        add(new AddActionForm("addActionForm", new Model<ThingEvent>(new ThingEvent()), criteriaResultModel));
+    public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel, Class<? extends Event> eventClass) {
+        this.eventClass = eventClass;
+        Event event = null;
+        try {
+            event = eventClass.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        add(new AddActionForm("addActionForm", new Model<Event>(event), criteriaResultModel));
     }
 
-    public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel, IModel<ThingEvent> eventModel) {
+    public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel, IModel<Event> eventModel) {
+        this.eventClass = (Class<Event>) eventModel.getObject().getClass();
         editMode = true;
         add(new AddActionForm("addActionForm", eventModel, criteriaResultModel));
     }
 
-    class AddActionForm extends Form<ThingEvent> {
-        public AddActionForm(String id, final IModel<ThingEvent> eventModel, final IModel<CriteriaResult> criteriaResultModel) {
+    class AddActionForm extends Form<Event> {
+        public AddActionForm(String id, final IModel<Event> eventModel, final IModel<CriteriaResult> criteriaResultModel) {
             super(id, eventModel);
             setOutputMarkupId(true);
 
@@ -109,7 +118,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     if (immediateSaveMode) {
                         persistenceService.update(getModelObject());
-                        setResponsePage(new ActionDetailsPage(criteriaResultModel, eventModel));
+                        setResponsePage(new ActionDetailsPage(criteriaResultModel, eventClass, eventModel));
 
                     } else {
                         Event addedAction = getModelObject();
@@ -120,7 +129,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                         }
 
                         FieldIDSession.get().setActionsForCriteria(criteriaResultModel.getObject(), criteriaResultModel.getObject().getActions());
-                        setResponsePage(new ActionsListPage(criteriaResultModel));
+                        setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
                     }
                 }
 
@@ -139,7 +148,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
             Link cancelLink = new  Link("cancelLink") {
                 @Override public void onClick() {
-                    setResponsePage(new ActionsListPage(criteriaResultModel));
+                    setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
                 }
             };
             add(cancelLink);
@@ -157,7 +166,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                     }
 
                     FieldIDSession.get().setActionsForCriteria(criteriaResultModel.getObject(), criteriaResultModel.getObject().getActions());
-                    setResponsePage(new ActionsListPage(criteriaResultModel));
+                    setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
                 }
 
                 @Override
@@ -213,7 +222,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
         return date;
     }
 
-    private void autoScheduleBasedOnPriority(IModel<ThingEvent> model) {
+    private void autoScheduleBasedOnPriority(IModel<Event> model) {
         PriorityCode priority = model.getObject().getPriority();
         if (priority != null && priority.getAutoSchedule() != null) {
             PriorityCodeAutoScheduleType autoSchedule = priority.getAutoSchedule();

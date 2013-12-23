@@ -1,18 +1,18 @@
 <html xmlns:wicket="http://wicket.apache.org">
 
 <wicket:extend>
-
-    <div class="column-left narrow">
-
+	<hr>
+    <div class="column-left">
+        <a wicket:id="backToPlaceLink" class="btn-secondary btn-sml">
+            <span class="fontello-angle-double-left-sml"></span>
+            <wicket:message key="label.back_to"/>&nbsp;<span wicket:id="backToLabel"/>
+        </a>
         <table wicket:id="descendants" class="list borders clear"/>
-
-
     </div><!-- cls .column-left-->
 
     <div class="column-wide">
         <div wicket:id="createNewPlace"/>
     </div>
-
 
 </wicket:extend>
 

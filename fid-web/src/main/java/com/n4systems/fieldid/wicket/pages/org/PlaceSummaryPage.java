@@ -1,18 +1,31 @@
 package com.n4systems.fieldid.wicket.pages.org;
 
+import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.form.InlineEditableForm;
 import com.n4systems.fieldid.wicket.components.form.LinkFieldsBehavior;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.timezone.RegionListModel;
+import com.n4systems.fieldid.wicket.components.timezone.RegionModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.util.timezone.Country;
+import com.n4systems.util.timezone.CountryList;
+import com.n4systems.util.timezone.Region;
+import org.apache.wicket.Component;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -25,11 +38,13 @@ import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.ContextImage;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -41,6 +56,7 @@ public class PlaceSummaryPage extends PlacePage {
 
     private @SpringBean PlaceService placeService;
     private @SpringBean S3Service s3Service;
+    private @SpringBean PersistenceService persistenceService;
 
 
     private final GoogleMap map;
@@ -51,10 +67,24 @@ public class PlaceSummaryPage extends PlacePage {
     private WebMarkupContainer imageContainer;
     private WebMarkupContainer imageMsg;
     private WebComponent image;
+    private AjaxLink removeImageLink;
     private AjaxLink removeLink;
+    private Component timeZone;
+    private AddressPanel address;
+    private String defaultTimeZone;
+    private String certificateName;
+
+    private WebMarkupContainer certImageContainer;
+    private WebMarkupContainer certImageMsg;
+    private WebComponent certImage;
+    private AjaxLink removeCertImageLink;
+
 
     public PlaceSummaryPage(PageParameters params) {
         super(params);
+
+        final BaseOrg org = getOrg();
+        boolean canManageCustomers = FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers();
 
         add(map = new GoogleMap("map", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getGpsLocation())));
 
@@ -67,43 +97,37 @@ public class PlaceSummaryPage extends PlacePage {
         futureEventsListContainer.add(futureEventsListView = createFutureEventsListView());
         futureEventsListContainer.setOutputMarkupPlaceholderTag(true);
 
-        add(new Link("viewAll") {
-            @Override
-            public void onClick() {
-                setResponsePage(new PlaceEventsPage(PageParametersBuilder.id(getOrg().getId()).add(PlaceEventsPage.OPEN_PARAM, "true")));
-            }
-        });
+        PageParameters pageParameters = PageParametersBuilder.id(org.getId());
+        pageParameters.add(PlaceEventsPage.OPEN_PARAM, true);
+        add(new BookmarkablePageLink<PlaceEventsPage>("viewAll", PlaceEventsPage.class, pageParameters));
 
         add(imageContainer = new WebMarkupContainer("imageContainer"));
         imageContainer.setOutputMarkupId(true);
 
         imageContainer.add(imageMsg = new WebMarkupContainer("imgMsg"));
         imageMsg.setOutputMarkupPlaceholderTag(true);
-        imageMsg.setVisible(!logoExists());
+        imageMsg.setVisible(!logoExists() && canManageCustomers);
 
         imageContainer.add(image = getImage());
         image.setOutputMarkupId(true);
 
-
         Form imageUploadForm = new Form<Void>("imageUploadForm");
         final FileUploadField fileUploadField = new FileUploadField("imageUploadField");
-        fileUploadField.setVisible(FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers());
+        imageUploadForm.setVisible(canManageCustomers);
 
         fileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
             @Override
             protected void onSubmit(AjaxRequestTarget target) {
                 FileUpload uploadedFile = fileUploadField.getFileUpload();
 
-                BaseOrg org = getOrg();
-
                 s3Service.uploadCustomerLogo(org.getId(), uploadedFile.getContentType(), uploadedFile.getBytes());
 
                 imageContainer.replace(getImage());
                 image.setOutputMarkupId(true);
-                imageMsg.setVisible(s3Service.customerLogoExists(org.getId()));
-                removeLink.setVisible(true);
+                imageMsg.setVisible(!logoExists());
+                removeImageLink.setVisible(true);
 
-                target.add(image, imageMsg, removeLink, imageContainer);
+                target.add(image, imageMsg, removeImageLink, imageContainer);
             }
 
             @Override
@@ -113,50 +137,145 @@ public class PlaceSummaryPage extends PlacePage {
 
         imageUploadForm.add(fileUploadField);
 
-        imageContainer.add(removeLink = new AjaxLink<Void>("removeLink") {
+        imageContainer.add(removeImageLink = new AjaxLink<Void>("removeImageLink") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                s3Service.removeCustomerLogo(getOrg().getId());
+                s3Service.removeCustomerLogo(org.getId());
                 imageContainer.replace(getImage());
                 image.setOutputMarkupId(true);
                 imageMsg.setVisible(!logoExists());
-                removeLink.setVisible(false);
+                removeImageLink.setVisible(false);
 
-                target.add(image, imageMsg, removeLink, imageContainer);
+                target.add(image, imageMsg, removeImageLink, imageContainer);
             }
         });
-        removeLink.setOutputMarkupPlaceholderTag(true);
-        removeLink.setVisible(logoExists());
+        removeImageLink.setOutputMarkupPlaceholderTag(true);
+        removeImageLink.setVisible(logoExists() && canManageCustomers);
 
         imageContainer.add(imageUploadForm);
 
-        contact = new Contact(getOrg().getContact());
-        add(new InlineEditableForm("contact") {
+        final IModel<String> timeZoneIdModel = new PropertyModel(this,"defaultTimeZone");
+        final IModel<Country> countryModel = new CountryFromAddressModel(ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo()));
+        final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
+
+        contact = new Contact(org.getContact());
+        MarkupContainer form = new InlineEditableForm("contact") {
+            @Override protected void onSave(AjaxRequestTarget target) {
+                if (getOrg() instanceof InternalOrg) {
+                    ((InternalOrg)getOrg()).setDefaultTimeZone(defaultTimeZone);
+                }
+                persistenceService.save(getOrg());
+                info(new FIDLabelModel("label.place_saved",getOrg().getName()));
+                target.add(map,getTopFeedbackPanel());
+            }
+
+            @Override protected void error(AjaxRequestTarget target) {
+                error(new FIDLabelModel("errors.place_save",getOrg().getName()));
+                target.add(getTopFeedbackPanel());
+            }
+        }.withSaveCancelEditLinks();
+        form.add(new TextField("name", ProxyModel.of(contact, on(Contact.class).getName())))
+            .add(new TextField("email", ProxyModel.of(contact, on(Contact.class).getEmail())))
+            .add(new TextField("phone", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone1())))
+            .add(new TextField("phone2", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone2())))
+            .add(new TextField("fax", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getFax1())))
+            .add(address = new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())) {
+                @Override protected void onCountryChange(AjaxRequestTarget target) {
+                    target.add(timeZone);
+                }
+            }.withExternalMap(map.getJsVar()).hideIfChildrenHidden())
+            .add(timeZone = new FidDropDownChoice<Region>("timeZone", regionModel, new RegionListModel(countryModel), new ListableChoiceRenderer<Region>()) {
+                @Override public boolean isVisible() {
+                    return getOrg().isInternal() && address.isVisible();
+                }
+            });
+        add(form);
+
+        add(certImageContainer = new WebMarkupContainer("certImageContainer"));
+        certImageContainer.setOutputMarkupId(true);
+        certImageContainer.setVisible(org.isInternal());
+
+        certImageContainer.add(certImageMsg = new WebMarkupContainer("certImgMsg"));
+        certImageMsg.setOutputMarkupPlaceholderTag(true);
+        certImageMsg.setVisible(!certificateImageExists() && canManageCustomers);
+
+        certImageContainer.add(certImage = getCertificateImage());
+        certImage.setOutputMarkupId(true);
+
+        Form certImageUploadForm = new Form<Void>("certImageUploadForm");
+        final FileUploadField certFileUploadField = new FileUploadField("certImageUploadField");
+        certImageUploadForm.setVisible(canManageCustomers);
+
+        certFileUploadField.add(new AjaxFormSubmitBehavior("onchange") {
             @Override
-            protected void onSave(AjaxRequestTarget target) {
-                super.onSave(target);
-                target.add(map);
+            protected void onSubmit(AjaxRequestTarget target) {
+                FileUpload uploadedFile = certFileUploadField.getFileUpload();
+
+                if(org.isPrimary())
+                    s3Service.uploadPrimaryOrgCertificateLogo(uploadedFile.getContentType(), uploadedFile.getBytes());
+                else
+                    s3Service.uploadSecondaryOrgCertificateLogo(org.getId(), uploadedFile.getContentType(), uploadedFile.getBytes());
+
+                certImageContainer.replace(getCertificateImage());
+                certImage.setOutputMarkupId(true);
+                certImageMsg.setVisible(!certificateImageExists());
+                removeCertImageLink.setVisible(true);
+
+                target.add(certImage, certImageMsg,  removeCertImageLink, certImageContainer);
             }
 
             @Override
-            protected void onCancel(AjaxRequestTarget target) {
-                super.onCancel(target);
+            protected void onError(AjaxRequestTarget target) {
             }
-        }.withSaveCancelEditLinks()
-                .add(new TextField("name", ProxyModel.of(contact, on(Contact.class).getName())))
-                .add(new TextField("email", ProxyModel.of(contact, on(Contact.class).getEmail())))
-                .add(new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())).withExternalMap(map.getJsVar()).hideIfChildrenHidden())
-                .add(new TextField("phone", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone1())))
-                .add(new TextField("phone2", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone2())))
-                .add(new TextField("fax", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getFax1()))));
+        });
 
-        add(new InlineEditableForm("general").withSaveCancelEditLinks()
-                .add(new TextField("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
-                .add(new TextField("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
-                .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())))
-        );
+        certImageUploadForm.add(certFileUploadField);
 
+        certImageContainer.add(removeCertImageLink = new AjaxLink<Void>("removeCertImageLink") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if(org.isPrimary())
+                    s3Service.removePrimaryOrgCertificateLogo();
+                else
+                    s3Service.removeSecondaryOrgCertificateLogo(org.getId());
+
+                certImageContainer.replace(getCertificateImage());
+                certImage.setOutputMarkupId(true);
+                certImageMsg.setVisible(!certificateImageExists());
+                removeCertImageLink.setVisible(false);
+
+                target.add(certImage, certImageMsg, removeCertImageLink, certImageContainer);
+            }
+        });
+        removeCertImageLink.setOutputMarkupPlaceholderTag(true);
+        removeCertImageLink.setVisible(certificateImageExists() && canManageCustomers);
+
+        certImageContainer.add(certImageUploadForm);
+
+        InlineEditableForm generalForm = new InlineEditableForm("general") {
+            @Override protected void onSave(AjaxRequestTarget target) {
+                persistenceService.save(getOrg());
+                target.add(getTopFeedbackPanel());
+            }
+
+            @Override protected void error(AjaxRequestTarget target) {
+                target.add(getTopFeedbackPanel());
+            }
+        }.withSaveCancelEditLinks();
+
+        generalForm
+                .add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
+                .add(new TextField<String>("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
+                .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())));
+
+        if(orgModel.getObject().isInternal()) {
+            generalForm.add(new TextField<String>("certificateName", ProxyModel.of(orgModel, on(InternalOrg.class).getCertificateName())));
+        } else {
+            generalForm.add(new TextField<String>("certificateName", new PropertyModel(this,"certificateName")).setVisible(false));
+        }
+        add(generalForm);
     }
 
     @Override
@@ -176,12 +295,7 @@ public class PlaceSummaryPage extends PlacePage {
             @Override protected void populateItem(ListItem<PlaceEvent> item) {
                 PlaceEvent event = item.getModelObject();
                 item.add(new Label("due", Model.of(event.getDueDate())));
-                // TODO : for debugging only. remove this when we know all data is valid.
-                if ( event.getEventType()==null) {
-                    item.add(new Label("type", "ERROR : event '" + event.getId() + "' has null type???"));
-                } else {
-                    item.add(new Label("type", Model.of(event.getEventType().getDisplayName())));
-                }
+                item.add(new Label("type", Model.of(event.getEventType().getDisplayName())));
                 item.add(new Label("assignee", Model.of("joe smith")));
             }
 
@@ -204,6 +318,26 @@ public class PlaceSummaryPage extends PlacePage {
         }
     }
 
+    private boolean certificateImageExists() {
+        if(getOrg().isPrimary())
+            return s3Service.primaryOrgCertificateLogoExists();
+        else if (getOrg().isSecondary())
+            return s3Service.secondaryOrgCertificateLogoExists(getOrg().getId());
+        else
+            return false;
+    }
+
+    public WebComponent getCertificateImage() {
+        if (certificateImageExists()) {
+            if(getOrg().isPrimary())
+                return new ExternalImage("certImg", s3Service.getPrimaryOrgCertificateLogoURL());
+            else
+                return new ExternalImage("certImg", s3Service.getSecondaryOrgCertificateLogoURL(getOrg().getId()));
+        } else {
+           return new ContextImage("certImg", "images/add-photo-slate.png");
+        }
+    }
+
     class FutureEventsModel extends LoadableDetachableModel<List<PlaceEvent>> {
 
         @Override
@@ -211,4 +345,24 @@ public class PlaceSummaryPage extends PlacePage {
             return placeService.getOpenEventsFor(getOrg(), 7);
         }
     }
+
+    class CountryFromAddressModel extends Model<Country> {
+        private final IModel<AddressInfo> addressModel;
+
+        CountryFromAddressModel(IModel<AddressInfo> model) {
+            super();
+            this.addressModel = model;
+        }
+
+        @Override
+        public Country getObject() {
+            return CountryList.getInstance().getCountryByName(addressModel.getObject().getCountry());
+        }
+
+        @Override
+        public void setObject(Country country) {
+            addressModel.getObject().setCountry(country.getName());
+        }
+    }
+
 }

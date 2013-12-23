@@ -45,10 +45,10 @@ public class CriteriaSectionEditPanel extends Panel {
     private Popup popup;
     private RichTextDisplay richTextDisplay;
 
-    public CriteriaSectionEditPanel(String id, IModel<List<CriteriaResult>> results) {
+    public CriteriaSectionEditPanel(String id, final Class<? extends Event> eventClass, IModel<List<CriteriaResult>> results) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
-        add(new CriteriaEditForm("criteriaEditForm", results));
+        add(new CriteriaEditForm("criteriaEditForm", eventClass, results));
 
         add(criteriaImagesModalWindow = new DialogModalWindow("imagesWindow"));
         criteriaImagesModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
@@ -87,7 +87,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
     class CriteriaEditForm extends Form<List<CriteriaResult>> {
 
-        public CriteriaEditForm(String id, IModel<List<CriteriaResult>> results) {
+        public CriteriaEditForm(String id, final Class<? extends Event> eventClass, IModel<List<CriteriaResult>> results) {
             super(id, results);
 
             add(new ListView<CriteriaResult>("criteria", results) {
@@ -175,7 +175,7 @@ public class CriteriaSectionEditPanel extends Panel {
                             actionsWindow.setPageCreator(new ModalWindow.PageCreator() {
                                 @Override
                                 public Page createPage() {
-                                    return new ActionsListPage(item.getModel());
+                                    return new ActionsListPage(item.getModel(), eventClass);
                                 }
 
                                 ;

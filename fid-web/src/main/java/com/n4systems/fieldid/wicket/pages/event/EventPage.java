@@ -26,7 +26,6 @@ import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
-import com.n4systems.fieldid.wicket.model.assetstatus.AssetStatusesForTenantModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
@@ -48,7 +47,6 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.validation.IFormValidator;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -78,6 +76,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     private SchedulePicker schedulePicker;
 
     protected EventResult eventResult;
+    protected WebMarkupContainer ownerSection;
+    protected WebMarkupContainer jobsContainer;
+    protected WebMarkupContainer eventBookContainer;
 
     private WebMarkupContainer schedulesContainer;
 
@@ -117,12 +118,15 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
             add(createTargetDetailsPanel(event));
 
+            ownerSection = new WebMarkupContainer("ownerSection");
+            add(ownerSection);
+
             GroupedUserPicker groupedUserPicker;
-            add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(EventPage.this, "assignedTo"), new GroupedVisibleUsersModel()));
+            ownerSection.add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(EventPage.this, "assignedTo"), new GroupedVisibleUsersModel()));
             groupedUserPicker.setNullValid(true);
             groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
-            add(new OrgLocationPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
+            ownerSection.add(new OrgLocationPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
                 @Override
                 protected void onChanged(AjaxRequestTarget target) {
                     doAutoSchedule();
@@ -183,25 +187,28 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
 
             DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "dueDate"), true).withNoAllDayCheckbox();
+
+            eventBookContainer = new WebMarkupContainer("eventBookContainer");
 			newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
             newOrExistingEventBook.setOwner(event.getObject().getOwner());
 
             AttributesEditPanel attributesEditPanel = new AttributesEditPanel("eventAttributes", event);
 
-            add(newOrExistingEventBook);
+            eventBookContainer.add(newOrExistingEventBook);
+            add(eventBookContainer);
             add(attributesEditPanel);
             add(datePerformedPicker);
             add(dateScheduledPicker);
             add(performedBy);
 
-            WebMarkupContainer jobsContainer = new WebMarkupContainer("jobsContainer");
+            jobsContainer = new WebMarkupContainer("jobsContainer");
             add(jobsContainer);
             jobsContainer.setVisible(getSessionUser().getOrganization().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.Projects));
             DropDownChoice<Project> jobSelect = new DropDownChoice<Project>("job", new PropertyModel<Project>(event, "project"), new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>());
             jobSelect.setNullValid(true);
             jobsContainer.add(jobSelect);
 
-            add(locationPicker = new LocationPicker("locationPicker", new PropertyModel<Location>(event, "advancedLocation")).withRelativePosition());
+            ownerSection.add(locationPicker = new LocationPicker("locationPicker", new PropertyModel<Location>(event, "advancedLocation")).withRelativePosition());
             locationPicker.setOwner(new PropertyModel<BaseOrg>(event, "owner").getObject());
 
             add(new Comment("comments", new PropertyModel<String>(event, "comments")).addMaxLengthValidation(2500));
@@ -223,7 +230,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(new CheckBox("printable", new PropertyModel<Boolean>(event, "printable")).add(new UpdateComponentOnChange()));
 
             EventForm form = event.getObject().getEventForm();
-            add(new EventFormEditPanel("eventFormPanel", new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(form!=null && form.getAvailableSections().size()>0));
+            add(new EventFormEditPanel("eventFormPanel", event.getObject().getClass(), new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(form!=null && form.getAvailableSections().size()>0));
             add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(EventPage.this, "fileAttachments")));
 
             Button saveButton = new Button("saveButton");

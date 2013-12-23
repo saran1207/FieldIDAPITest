@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
@@ -39,19 +40,19 @@ public class CloseEventPage extends FieldIDFrontEndPage {
     private @SpringBean EventScheduleService eventScheduleService;
     private @SpringBean ThingEventCreationService eventCreationService;
 
-    protected IModel<ThingEvent> openEventModel;
-    private FieldIDFrontEndPage returnPage;
+    protected IModel<Event> openEventModel;
+    private FieldIDAuthenticatedPage returnPage;
 
     public CloseEventPage(PageParameters params) {
         super(params);
         Long id = params.get("uniqueID").toLong();
-        openEventModel = new EntityModel<ThingEvent>(ThingEvent.class, id);
+        openEventModel = new EntityModel<Event>(Event.class, id);
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new Label("event", PropertyModel.of(openEventModel, "type.name")));
         add(new ResolveForm("form"));
     }
 
-    public CloseEventPage(PageParameters params, FieldIDFrontEndPage returnPage) {
+    public CloseEventPage(PageParameters params, FieldIDAuthenticatedPage returnPage) {
         this(params);
         this.returnPage = returnPage;
     }
@@ -112,22 +113,26 @@ public class CloseEventPage extends FieldIDFrontEndPage {
 
         @Override
         protected void onSubmit() {
-            ThingEvent openEvent = openEventModel.getObject();
-            Asset asset = openEvent.getAsset();
+            Event openEvent = openEventModel.getObject();
             openEvent.setEventResult(EventResult.VOID);
             openEvent.setWorkflowState(WorkflowState.CLOSED);
             openEvent.setDate(new Date());
             openEvent.setPerformedBy(resolvedBy);
             openEvent.setEventStatus(eventStatus);
             openEvent.setComments(comment);
-            openEvent.setOwner(asset.getOwner());
-            openEvent.setAdvancedLocation(asset.getAdvancedLocation());
-            openEvent.setAssignedTo(AssignedToUpdate.assignAssetToUser(asset.getAssignedUser()));
+            if (openEvent instanceof ThingEvent) {
+                Asset asset = ((ThingEvent)openEvent).getAsset();
+                openEvent.setOwner(asset.getOwner());
+                openEvent.setAdvancedLocation(asset.getAdvancedLocation());
+                openEvent.setAssignedTo(AssignedToUpdate.assignAssetToUser(asset.getAssignedUser()));
+                eventCreationService.assignNextEventInSeries((ThingEvent) openEvent, EventEnum.CLOSE);
+            } else if (openEvent instanceof PlaceEvent) {
+                openEvent.setOwner(((PlaceEvent)openEvent).getPlace());
+            }
 
             persistenceService.update(openEvent);
             FieldIDSession.get().info(getString("message.event_closed"));
 
-            eventCreationService.assignNextEventInSeries(openEvent, EventEnum.CLOSE);
 
             if (returnPage!=null) {
                 setResponsePage(returnPage);

@@ -52,7 +52,7 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
 
     @ManyToOne
     @JoinColumn(name="thingEventTypeId")
-    private ThingEventType eventType;
+    private EventType eventType;
 
     @Embedded
     private DateRange dateRange = new DateRange(RangeType.CUSTOM);
@@ -126,6 +126,10 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
     @JoinColumn(name="eventStatus")
     private EventStatus eventStatus;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name="search_type")
+    private EventSearchType eventSearchType = EventSearchType.EVENTS;
+
     public Location getLocation() {
         return location;
     }
@@ -150,11 +154,11 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
         this.assignedTo = assignedTo;
     }
 
-    public ThingEventType getEventType() {
+    public EventType getEventType() {
         return eventType;
     }
 
-    public void setEventType(ThingEventType eventType) {
+    public void setEventType(EventType eventType) {
         this.eventType = eventType;
     }
 
@@ -389,4 +393,11 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
         return getAssignedUserGroup();
     }
 
+    public EventSearchType getEventSearchType() {
+        return eventSearchType;
+    }
+
+    public void setEventSearchType(EventSearchType eventSearchType) {
+        this.eventSearchType = eventSearchType;
+    }
 }

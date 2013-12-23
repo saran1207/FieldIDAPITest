@@ -96,6 +96,9 @@ public class EventManagerImpl implements EventManager {
 				// now we need to postfetch the rec/def lists on the results. We
 				// can't do this above since the results themselvs are a list.
 				persistenceManager.postFetchFields(event.getResults(), "recommendations", "deficiencies");
+                if (event.getType().isThingEventType()) {
+                    persistenceManager.postFetchFields(event, Event.THING_TYPE_PATHS);
+                }
 
 			}
 

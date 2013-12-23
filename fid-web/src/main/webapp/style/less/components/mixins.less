@@ -83,6 +83,28 @@
 	padding: 0 @padding;
 }
 
+// Fontello icon mixins - TODO: add all the other icons
+.fontello-plus-squared-small(@padding: 0 4px) { 
+	font-family: @fontello;
+	padding: @padding;
+	content: '\e836';
+}
+.fontello-plus-squared(@padding: 0 4px) {
+	font-family: @fontello;
+	padding: @padding;
+	content: '\e83d';
+} 
+.fontello-minus-squared(@padding: 0 4px) {
+	font-family: @fontello;
+	padding: @padding; 
+	content: '\e83e';
+}
+.fontello-minus-squared-small(@padding: 0 4px) { 
+	font-family: @fontello;
+	padding: @padding;
+	content: '\e835';
+}
+
 // CSS3 PROPERTIES
 // --------------------------------------------------
 
@@ -144,6 +166,7 @@
 	-o-transition: @transition;
 	transition: @transition;
 }
+
 
 //---------------------------------------------------
 //  LESS Elements 0.9

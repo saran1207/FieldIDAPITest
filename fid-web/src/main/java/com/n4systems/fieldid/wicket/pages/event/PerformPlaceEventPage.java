@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.perform.PerformPlaceEventHelperService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.org.PlaceSummaryPage;
 import com.n4systems.model.AbstractEvent;
@@ -12,6 +13,7 @@ import com.n4systems.model.FileAttachment;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -25,11 +27,11 @@ public class PerformPlaceEventPage extends PlaceEventPage {
     @SpringBean private PersistenceService persistenceService;
     @SpringBean private EventScheduleService eventScheduleService;
 
-    @SpringBean private PerformPlaceEventHelperService thingEventHelperService;
+    @SpringBean private PerformPlaceEventHelperService placeEventHelperService;
 
     public PerformPlaceEventPage(Long scheduleId, Long orgId, Long typeId) {
         try {
-            PlaceEvent placeEvent = thingEventHelperService.createEvent(scheduleId, orgId, typeId);
+            PlaceEvent placeEvent = placeEventHelperService.createEvent(scheduleId, orgId, typeId);
             event = Model.of(placeEvent);
 
             setEventResult(event.getObject().getEventResult());
@@ -67,4 +69,9 @@ public class PerformPlaceEventPage extends PlaceEventPage {
         return savedEvent;
     }
 
+
+    @Override
+    protected Component createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.perform_place_event"));
+    }
 }

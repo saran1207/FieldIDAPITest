@@ -16,10 +16,7 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.EventType;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.*;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -115,8 +112,8 @@ public class OpenActionsCell extends Panel {
         dialogWindow.setPageCreator(new ModalWindow.PageCreator() {
             @Override
             public Page createPage() {
-                IModel<ThingEvent> entityModel = new EntityModel<ThingEvent>(ThingEvent.class, eventModel.getObject().getId());
-                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), entityModel)
+                IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
+                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), ThingEvent.class, entityModel)
                         .setAssetSummaryContext(true);
             }
         });

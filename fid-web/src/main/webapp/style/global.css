@@ -97,7 +97,7 @@ h2 {
 h1 {
   font-size: 24px;
   font-weight: normal;
-  margin: 15px 0;
+  margin: 15px 0 10px;
   min-height: 29px;
 }
 h2 {
@@ -766,7 +766,7 @@ nav a {
 .nav-tabs {
   position: relative;
   border-bottom: 1px solid #c7c7c9;
-  margin: 15px 0;
+  margin-bottom: 15px;
 }
 .nav-tabs > ul {
   overflow: hidden;
@@ -1066,7 +1066,6 @@ select,
 textarea {
   width: 295px;
   padding-left: 4px;
-  font-size: 13px;
   font-family: "proxima-nova", Helvetica, Arial, sans-serif;
   border: 1px solid #c7c7c9;
 }
@@ -1182,15 +1181,8 @@ input:disabled {
   margin: 0;
   padding-left: 0;
 }
-.editable-inputs input[type="text"] {
-  font-size: 14px;
-}
 .editable-inputs .form-horizontal label {
-  width: 30%;
   text-align: left;
-}
-.editable-inputs .form-horizontal input[type="text"] {
-  width: 68%;
 }
 .editable-inputs .actions {
   position: absolute;
@@ -1744,9 +1736,12 @@ figure img {
 figure p {
   margin: 0;
 }
-.column-left .feature-img,
-.column-right .feature-img {
-  width: 100%;
+.column-left .feature-image img,
+.column-right .feature-image img {
+  max-width: 100%;
+  max-height: 250px;
+  display: block;
+  margin: 0 auto;
 }
 /*--------------------------------------- 
   GLOBAL HEADER STYLES

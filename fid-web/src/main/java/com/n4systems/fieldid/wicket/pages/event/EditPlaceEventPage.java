@@ -7,7 +7,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.FileAttachment;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.PlaceEvent;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,14 +17,14 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
 
-public class EditEventPage extends ThingEventPage {
+public class EditPlaceEventPage extends PlaceEventPage {
 
     @SpringBean private EventService eventService;
     @SpringBean private EventCriteriaEditService criteriaEditService;
 
     private long uniqueId;
 
-    public EditEventPage(PageParameters parameters) {
+    public EditPlaceEventPage(PageParameters parameters) {
         uniqueId = parameters.get("uniqueID").toLong();
         event = Model.of(loadExistingEvent());
         event.getObject().setResultFromCriteriaAvailable();
@@ -36,12 +36,9 @@ public class EditEventPage extends ThingEventPage {
         fileAttachments = new ArrayList<FileAttachment>(event.getObject().getAttachments());
     }
 
-    protected ThingEvent loadExistingEvent() {
-        ThingEvent existingEvent = eventService.lookupExistingEvent(ThingEvent.class, uniqueId);
-        PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
-        if (existingEvent.getType().isThingEventType()) {
-            PostFetcher.postFetchFields(existingEvent, Event.THING_TYPE_PATHS);
-        }
+    protected PlaceEvent loadExistingEvent() {
+        PlaceEvent existingEvent = eventService.lookupExistingEvent(PlaceEvent.class, uniqueId);
+        PostFetcher.postFetchFields(existingEvent, Event.PLACE_FIELD_PATHS);
         return existingEvent;
     }
 
@@ -51,10 +48,10 @@ public class EditEventPage extends ThingEventPage {
     }
 
     @Override
-    protected ThingEvent doSave() {
+    protected PlaceEvent doSave() {
         saveEventBookIfNecessary();
 
-        ThingEvent editedEvent = event.getObject();
+        PlaceEvent editedEvent = event.getObject();
         editedEvent.setEventResult(getEventResult());
         criteriaEditService.storeCriteriaChanges(editedEvent);
         editedEvent.storeTransientCriteriaResults();

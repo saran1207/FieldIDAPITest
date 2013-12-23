@@ -8,7 +8,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -33,8 +33,10 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
     private S3Service s3Service;
 
     private boolean assetSummaryContext = false;
+    private Class<? extends Event> eventClass;
 
-    public ActionDetailsPage(final IModel<CriteriaResult> criteriaResultModel, final IModel<ThingEvent> actionModel) {
+    public ActionDetailsPage(final IModel<CriteriaResult> criteriaResultModel, final Class<? extends Event> eventClass, final IModel<Event> actionModel) {
+        this.eventClass = eventClass;
         add(new Label("priority", new PropertyModel<String>(actionModel, "priority.name")));
         add(new Label("notes", new PropertyModel<String>(actionModel, "notes")));
         if (actionModel.getObject().getAssignee() != null) {
@@ -101,7 +103,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
     }
 
     protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
-        setResponsePage(new ActionsListPage(criteriaResultModel));
+        setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
     }
 
     protected boolean isStartable(IModel<CriteriaResult> criteriaResultModel) {
@@ -112,7 +114,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
         return true;
     }
 
-    private WebMarkupContainer createIssuingEventSection(IModel<CriteriaResult> criteriaResultModel, final IModel<ThingEvent> actionModel) {
+    private WebMarkupContainer createIssuingEventSection(IModel<CriteriaResult> criteriaResultModel, final IModel<Event> actionModel) {
         WebMarkupContainer issuingEventSection = new WebMarkupContainer("issuingEventSection") {
             @Override
             public boolean isVisible() {

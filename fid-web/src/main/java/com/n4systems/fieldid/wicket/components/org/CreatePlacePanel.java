@@ -2,9 +2,12 @@ package com.n4systems.fieldid.wicket.components.org;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
+import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
@@ -55,12 +58,14 @@ public class CreatePlacePanel extends Panel {
             .add(new AddressPanel("address", new PropertyModel(newPlaceModel, "address")).withNoMap())
             .add(new AjaxSubmitLink("submit") {
                 @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    // TODO : add feedback of some sort???
                     PlaceData data = (PlaceData) CreatePlacePanel.this.form.getDefaultModelObject();
-                    onCreate(data.createNewChildOrg(), target);
+                    BaseOrg childOrg = data.createNewChildOrg();
+                    onCreate(childOrg, target);
+                    getTopFeedbackPanel().info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
                 }
 
                 @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    getTopFeedbackPanel().error(new FIDLabelModel("errors.create_place"));
                 }
             })
             .add(new AjaxLink("cancel") {
@@ -71,11 +76,11 @@ public class CreatePlacePanel extends Panel {
             .setOutputMarkupPlaceholderTag(true);
 
         add(form);
-        add(new WebMarkupContainer("blankSlate") {
-            @Override public boolean isVisible() {
-                return !form.isVisible();
-            }
-        });
+
+        boolean canManageCustomers = FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers();
+
+        add(new WebMarkupContainer("blankSlate").setVisible(!form.isVisible() && canManageCustomers));
+
         setOutputMarkupPlaceholderTag(true);
         IModel<String> cssClass = getCssClass();
         if (cssClass!=null) {
@@ -83,6 +88,13 @@ public class CreatePlacePanel extends Panel {
         }
 
         form.setVisible(false);
+    }
+
+    public TopFeedbackPanel getTopFeedbackPanel() {
+        if ( getPage() instanceof FieldIDTemplatePage) {
+            return ((FieldIDTemplatePage)getPage()).getTopFeedbackPanel();
+        }
+        throw new IllegalStateException("current page doesn't have " + TopFeedbackPanel.class.getSimpleName());
     }
 
     public CreatePlacePanel forParentOrg(BaseOrg parent) {
@@ -97,11 +109,11 @@ public class CreatePlacePanel extends Panel {
                 Preconditions.checkArgument(data.getParent()!=null,"need to know what org you are adding to. ");
                 String name = data.getParent().getName();
                 if (data.getParent() instanceof PrimaryOrg) {
-                    return new FIDLabelModel("label.add_secondary_customer_to", name).getObject();
+                    return new FIDLabelModel("label.add_secondary_customer", name).getObject();
                 } else if (data.getParent() instanceof SecondaryOrg) {
-                    return new FIDLabelModel("label.add_customer_to", name).getObject();
+                    return new FIDLabelModel("label.add_customer", name).getObject();
                 } else {
-                    return new FIDLabelModel("label.add_division_to", name).getObject();
+                    return new FIDLabelModel("label.add_division", name).getObject();
                 }
             }
         };
@@ -111,21 +123,18 @@ public class CreatePlacePanel extends Panel {
         return null;
     }
 
-    public CreatePlacePanel showBlankSlate(boolean showBlankSlate) {
-        form.setVisible(!showBlankSlate);
-        return this;
-    }
-
     public CreatePlacePanel show() {
         form.setVisible(true);
         return this;
     }
 
-
-
     public CreatePlacePanel toggle() {
         form.setVisible(!form.isVisible());
         return this;
+    }
+
+    public boolean isFormVisible() {
+        return form.isVisible();
     }
 
     protected void onCancel(AjaxRequestTarget target) { }

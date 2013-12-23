@@ -26,7 +26,7 @@ public class ReportCriteriaPanel extends AbstractCriteriaPanel<EventReportCriter
     protected Panel createFiltersPanel(String filters, Model<EventReportCriteria> model) {
         return new ReportingFilterPanel("filters",model) {
             @Override
-            protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, ThingEventType selectedEventType, List<ThingEventType> availableEventTypes) {
+            protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<? extends EventType> availableEventTypes) {
                 getReportingColumnsPanel().onEventTypeOrGroupUpdated(target, selectedEventType, availableEventTypes);
             }
 

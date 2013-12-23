@@ -25,13 +25,13 @@ select,
 textarea {
 	.width-fixed(3,2);
 	padding-left: 4px;
-	font-size: @smallFontSize;
+	//font-size: @smallFontSize;
 	font-family: @proximaNova;
 	border: 1px solid @grayMedium;
 }
 input[type="text"] {
 	height: 28px;
-	margin: 4px 0 10px;
+	margin-bottom: 10px;
 }
 label {
 	display: block;
@@ -214,18 +214,9 @@ input:disabled {
 		margin: 0;
 		padding-left: 0;
 	}
-	input[type="text"] {
-		// margin: 1px 0;
-		// width: 68%;
-		font-size: @baseFontSize;
-	}
 	.form-horizontal {
 		label {
-			width: 30%;
 			text-align: left;
-		}
-		input[type="text"] {
-			width: 68%;
 		}
 	}
 	.actions {
@@ -335,7 +326,7 @@ legend + p {
 
 // Forms & columns
 // -------------------------------
-
+// TODO: test before removing -- see layout.less
 form {
 	.column-wide {
 		.width(8,7);
@@ -366,6 +357,9 @@ form {
 		display: inline-block;
 		vertical-align: middle;
 		padding-right: 10px;
+	}
+	input[type="text"] {
+		margin-bottom: 0;
 	}
 	.link {
 		font-size: @smallFontSize;

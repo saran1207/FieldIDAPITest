@@ -25,7 +25,7 @@
 var googleMapFactory = (function() {
 
 	 var defaultOptions = {
-		 zoom: 5
+		 zoom: 14
 	 };
 
 	 var create = function(id) {
@@ -129,6 +129,19 @@ var googleMapFactory = (function() {
 			$postalCode.val(extractFromGeoCode(addressInfo,'postal_code'));
 			$state.val(extractFromGeoCode(addressInfo,'administrative_area_level_1'));
 			$country.val(extractFromGeoCode(addressInfo,'country'));
+
+			 // for now, the wicket component only listens for changes on the country field. other events may have to be triggered later.
+			 $country.change();
+//			 TODO : if timezone is required the do webservice call to
+//			 https://maps.googleapis.com/maps/api/timezone/json?location=-33.86,151.20&timestamp=0&sensor=false
+//			 which yields {
+//			 "dstOffset" : 0,
+//				 "rawOffset" : 36000,
+//				 "status" : "OK",
+//				 "timeZoneId" : "Australia/Sydney",
+//				 "timeZoneName" : "Australian Eastern Standard Time"
+//		 }
+//			 and store timeZoneName in hidden field.
 		}
 
 		 var textOptions = {
@@ -216,7 +229,7 @@ var googleMapFactory = (function() {
 		/* public methods exposed */
 		function removeMarkers() {
 			for (var i = 0; i < markers.length; i++) {
-				markers[i].setMap(map);
+				markers[i].setMap(null);
 			}
 			markers = [];
 		}
@@ -277,7 +290,16 @@ var googleMapFactory = (function() {
 				var count = locations.length;
 
 				for (var i=0; i<count; i++) {
-					addLoc(locations[i]);
+					var loc = locations[i];
+					var marker = this.makeMarker(loc);
+					markers.push(marker);
+					marker.setMap(map);
+					if (marker.content || this.updateContentWithAddress) {
+						google.maps.event.addListener(marker, 'click', function() {
+							showInfoWindow(this, map);
+						});
+					}
+
 					bounds.extend(loc);
 				}
 				if (count>1) {
@@ -287,19 +309,8 @@ var googleMapFactory = (function() {
 				} else if (count==0) {
 					map.setZoom(options.zoom);
 				}
-			},
-
-
-			addLoc : function(loc) {
-				var marker = this.makeMarker(loc);
-				markers.push(marker);
-				marker.setMap(map);
-				if (marker.content || this.updateContentWithAddress) {
-					google.maps.event.addListener(marker, 'click', function() {
-						showInfoWindow(this, map);
-					});
-				}
 			}
+
 		};
 		
 	}

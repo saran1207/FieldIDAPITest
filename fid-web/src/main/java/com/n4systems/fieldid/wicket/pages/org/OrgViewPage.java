@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.tree.OrgTree;
 import com.n4systems.fieldid.wicket.data.OrgsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.util.JavascriptUtil;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.ExternalOrg;
 import com.n4systems.util.StringUtils;
@@ -43,7 +44,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
     public static final int ITEMS_PER_PAGE = 20;
 
     private @SpringBean PersistenceService persistenceService;
-
+    private @SpringBean JavascriptUtil javascriptUtil;
 
     private Component createForm;
     private OrgTree orgTree;
@@ -86,7 +87,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
 
         add(createPanel = new CreatePlacePanel("createPanel") {
             @Override protected IModel<String> getCssClass() {
-                return Model.of("column-wide narrow");
+                return Model.of("column-wide");
             }
 
             @Override protected void onCancel(AjaxRequestTarget target) {
@@ -95,16 +96,20 @@ public class OrgViewPage extends FieldIDTemplatePage {
             }
 
             @Override protected void onCreate(BaseOrg org, AjaxRequestTarget target) {
-                super.onCreate(org,target);
+                super.onCreate(org, target);
+                persistenceService.save(org);
                 toggleCreatePanel(target);
+                // TODO : need to update tree here to show new node!!!
             }
         });
 
     }
 
     private void toggleCreatePanel(AjaxRequestTarget target) {
-        // need to add some sort of feedback panel here.
-        target.add(createPanel.toggle());
+        target.add(createPanel.toggle(),getTopFeedbackPanel());
+        if (createPanel.isFormVisible()) {
+            javascriptUtil.scrollToTop(target);
+        }
     }
 
     private IModel<String> getButtonModel(final PageState state) {
@@ -204,6 +209,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
                 Long parentOrgId = params.getParameterValue("orgId").toLong();
                 BaseOrg parent = persistenceService.findById(BaseOrg.class,parentOrgId);
                 target.add(createPanel.resetModelObject(parent).show());
+                javascriptUtil.scrollToTop(target);
             }
         };
 

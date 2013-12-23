@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEventType;
 import com.n4systems.model.dashboard.widget.WorkWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
@@ -26,7 +27,7 @@ public class WorkConfigPanel extends WidgetConfigPanel<WorkWidgetConfiguration> 
         addConfigElement(new OrgLocationPicker("org", new PropertyModel<BaseOrg>(configModel, "org")));
         addConfigElement(new GroupedUserPicker("user", new PropertyModel<User>(configModel, "user"), new GroupedVisibleUsersModel(), false).setNullValid(true));
         addConfigElement(new GroupedAssetTypePicker("assetType", new PropertyModel<AssetType>(configModel, "assetType"), new GroupedAssetTypesForTenantModel(new Model<AssetTypeGroup>()), false).setNullValid(true));
-        addConfigElement(new DropDownChoice<ThingEventType>("eventType", new PropertyModel<ThingEventType>(configModel,"eventType"), new EventTypesForTenantModel(), new EventTypeChoiceRenderer()).setNullValid(true));
+        addConfigElement(new DropDownChoice<EventType>("eventType", new PropertyModel<EventType>(configModel,"eventType"), new EventTypesForTenantModel(), new EventTypeChoiceRenderer()).setNullValid(true));
     }
 
 }

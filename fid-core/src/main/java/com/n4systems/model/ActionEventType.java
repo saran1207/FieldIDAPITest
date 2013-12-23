@@ -7,6 +7,7 @@ import com.n4systems.model.security.SecurityLevel;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name="action_event_types")
@@ -33,6 +34,13 @@ public class ActionEventType extends EventType<ActionEventType> {
     protected void onCreate() {
         super.onCreate();
         setActionType(true);
+    }
+
+    //XXX: Legacy Post fetch code craps out if there's no supportedProofTests method on an event type....
+    //When events are not viewable in struts this should no longer be necessary...
+    @Transient
+    public boolean isSupportedProofTests() {
+        return false;
     }
 
 }
