@@ -9,7 +9,7 @@ import com.n4systems.fieldid.wicket.components.tree.OrgTree;
 import com.n4systems.fieldid.wicket.data.OrgsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
-import com.n4systems.fieldid.wicket.util.javascript.JavascriptUtil;
+import com.n4systems.fieldid.wicket.util.JavascriptUtil;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.ExternalOrg;
 import com.n4systems.util.StringUtils;
