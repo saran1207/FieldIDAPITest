@@ -36,7 +36,7 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
     @JoinColumn(name="owner_id", nullable = false)
     private BaseOrg owner;
 
-    @ManyToOne()
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
     @JoinColumn(name="recurring_event_id")
     private RecurringAssetTypeEvent recurringEvent;
 
