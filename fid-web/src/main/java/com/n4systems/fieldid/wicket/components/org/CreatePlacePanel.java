@@ -5,7 +5,9 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
+import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
@@ -56,12 +58,14 @@ public class CreatePlacePanel extends Panel {
             .add(new AddressPanel("address", new PropertyModel(newPlaceModel, "address")).withNoMap())
             .add(new AjaxSubmitLink("submit") {
                 @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    // TODO : add feedback of some sort???
                     PlaceData data = (PlaceData) CreatePlacePanel.this.form.getDefaultModelObject();
-                    onCreate(data.createNewChildOrg(), target);
+                    BaseOrg childOrg = data.createNewChildOrg();
+                    onCreate(childOrg, target);
+                    getTopFeedbackPanel().info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
                 }
 
                 @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    getTopFeedbackPanel().error(new FIDLabelModel("errors.create_place"));
                 }
             })
             .add(new AjaxLink("cancel") {
@@ -84,6 +88,13 @@ public class CreatePlacePanel extends Panel {
         }
 
         form.setVisible(false);
+    }
+
+    public TopFeedbackPanel getTopFeedbackPanel() {
+        if ( getPage() instanceof FieldIDTemplatePage) {
+            return ((FieldIDTemplatePage)getPage()).getTopFeedbackPanel();
+        }
+        throw new IllegalStateException("current page doesn't have " + TopFeedbackPanel.class.getSimpleName());
     }
 
     public CreatePlacePanel forParentOrg(BaseOrg parent) {
@@ -110,11 +121,6 @@ public class CreatePlacePanel extends Panel {
 
     protected IModel<String> getCssClass() {
         return null;
-    }
-
-    public CreatePlacePanel showBlankSlate(boolean showBlankSlate) {
-        form.setVisible(!showBlankSlate);
-        return this;
     }
 
     public CreatePlacePanel show() {

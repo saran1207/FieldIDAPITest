@@ -96,15 +96,16 @@ public class OrgViewPage extends FieldIDTemplatePage {
 
             @Override protected void onCreate(BaseOrg org, AjaxRequestTarget target) {
                 super.onCreate(org,target);
+                persistenceService.save(org);
                 toggleCreatePanel(target);
+                // TODO : need to update tree here to show new node!!!
             }
         });
 
     }
 
     private void toggleCreatePanel(AjaxRequestTarget target) {
-        // need to add some sort of feedback panel here.
-        target.add(createPanel.toggle());
+        target.add(createPanel.toggle(),getTopFeedbackPanel());
     }
 
     private IModel<String> getButtonModel(final PageState state) {

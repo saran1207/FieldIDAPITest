@@ -154,11 +154,11 @@ public class PlaceActionGroup extends Panel {
 
     private IModel<String> getLabelForOrg() {
         if (getOrg().isPrimary()) {
-            return new FIDLabelModel("label.add_secondary_customer_to");
+            return new FIDLabelModel("label.add_secondary_customer_to",getOrg().getName());
         } else if (getOrg().isSecondary()) {
-            return new FIDLabelModel("label.add_customer_to");
+            return new FIDLabelModel("label.add_customer_to",getOrg().getName());
         } else if (getOrg().isCustomer()) {
-            return new FIDLabelModel("label.add_division_to");
+            return new FIDLabelModel("label.add_division_to",getOrg().getName());
         } else
             return Model.of("");
     }

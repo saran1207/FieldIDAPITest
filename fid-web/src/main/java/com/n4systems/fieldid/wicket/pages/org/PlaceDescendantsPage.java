@@ -69,10 +69,10 @@ public class PlaceDescendantsPage extends PlacePage {
         add(table = new SimpleDefaultDataTable<BaseOrg>("descendants", getDescendantsColumns(), new DescendantsDataProvider() , ROWS_PER_PAGE));
         add(new CreatePlacePanel("createNewPlace") {
             @Override protected void onCreate(BaseOrg org, AjaxRequestTarget target) {
-                // TODO add feedback.
                 persistenceService.save(org);
                 resetModelObject();
-                target.add(this);
+                target.add(getTopFeedbackPanel());
+
             }
             @Override protected void onCancel(AjaxRequestTarget target) {
                 // TODO ? what to do here???  should i even show button.

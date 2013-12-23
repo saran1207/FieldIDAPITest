@@ -125,7 +125,7 @@ public class InlineEditableForm extends Form {
                 save(target);
             }
             @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
-                // TODO : how to handle errors? are they practically possible?
+
             }
             @Override public boolean isVisible() {
                 return editing;
@@ -175,6 +175,8 @@ public class InlineEditableForm extends Form {
         onSave(target);
     }
 
+
+    protected void error(AjaxRequestTarget target) { }
     protected void onCancel(AjaxRequestTarget target) { }
     protected void onEdit(AjaxRequestTarget target) { }
     protected void onSave(AjaxRequestTarget target) { }

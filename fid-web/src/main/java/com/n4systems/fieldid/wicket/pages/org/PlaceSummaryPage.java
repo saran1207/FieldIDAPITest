@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.components.form.LinkFieldsBehavior;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.timezone.RegionListModel;
 import com.n4systems.fieldid.wicket.components.timezone.RegionModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AddressInfo;
@@ -70,11 +71,14 @@ public class PlaceSummaryPage extends PlacePage {
     private AjaxLink removeLink;
     private Component timeZone;
     private AddressPanel address;
+    private String defaultTimeZone;
+    private String certificateName;
 
     private WebMarkupContainer certImageContainer;
     private WebMarkupContainer certImageMsg;
     private WebComponent certImage;
     private AjaxLink removeCertImageLink;
+
 
     public PlaceSummaryPage(PageParameters params) {
         super(params);
@@ -151,19 +155,24 @@ public class PlaceSummaryPage extends PlacePage {
 
         imageContainer.add(imageUploadForm);
 
-        final IModel<String> timeZoneIdModel = new PropertyModel(orgModel,"defaultTimeZone");
+        final IModel<String> timeZoneIdModel = new PropertyModel(this,"defaultTimeZone");
         final IModel<Country> countryModel = new CountryFromAddressModel(ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo()));
         final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
 
         contact = new Contact(org.getContact());
         MarkupContainer form = new InlineEditableForm("contact") {
             @Override protected void onSave(AjaxRequestTarget target) {
+                if (getOrg() instanceof InternalOrg) {
+                    ((InternalOrg)getOrg()).setDefaultTimeZone(defaultTimeZone);
+                }
                 persistenceService.save(getOrg());
-                target.add(map);
+                info(new FIDLabelModel("label.place_saved",getOrg().getName()));
+                target.add(map,getTopFeedbackPanel());
             }
 
-            @Override protected void onCancel(AjaxRequestTarget target) {
-                super.onCancel(target);
+            @Override protected void error(AjaxRequestTarget target) {
+                error(new FIDLabelModel("errors.place_save",getOrg().getName()));
+                target.add(getTopFeedbackPanel());
             }
         }.withSaveCancelEditLinks();
         form.add(new TextField("name", ProxyModel.of(contact, on(Contact.class).getName())))
@@ -248,19 +257,24 @@ public class PlaceSummaryPage extends PlacePage {
         InlineEditableForm generalForm = new InlineEditableForm("general") {
             @Override protected void onSave(AjaxRequestTarget target) {
                 persistenceService.save(getOrg());
-                target.add();
+                target.add(getTopFeedbackPanel());
+            }
+
+            @Override protected void error(AjaxRequestTarget target) {
+                target.add(getTopFeedbackPanel());
             }
         }.withSaveCancelEditLinks();
 
-        generalForm.add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
+        generalForm
+                .add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
                 .add(new TextField<String>("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
-                .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())))
-                .add(new TextField<String>("certificateName", ProxyModel.of(orgModel, on(InternalOrg.class).getCertificateName())) {
-                    @Override public boolean isVisible() {
-                        return getOrg().isInternal();
-                    }
-                }
-                );
+                .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())));
+
+        if(orgModel.getObject().isInternal()) {
+            generalForm.add(new TextField<String>("certificateName", ProxyModel.of(orgModel, on(InternalOrg.class).getCertificateName())));
+        } else {
+            generalForm.add(new TextField<String>("certificateName", new PropertyModel(this,"certificateName")).setVisible(false));
+        }
         add(generalForm);
     }
 
@@ -281,12 +295,7 @@ public class PlaceSummaryPage extends PlacePage {
             @Override protected void populateItem(ListItem<PlaceEvent> item) {
                 PlaceEvent event = item.getModelObject();
                 item.add(new Label("due", Model.of(event.getDueDate())));
-                // TODO : for debugging only. remove this when we know all data is valid.
-                if ( event.getEventType()==null) {
-                    item.add(new Label("type", "ERROR : event '" + event.getId() + "' has null type???"));
-                } else {
-                    item.add(new Label("type", Model.of(event.getEventType().getDisplayName())));
-                }
+                item.add(new Label("type", Model.of(event.getEventType().getDisplayName())));
                 item.add(new Label("assignee", Model.of("joe smith")));
             }
 
