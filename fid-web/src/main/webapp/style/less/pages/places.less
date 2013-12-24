@@ -7,7 +7,6 @@
 
 // Landing page - list/tree view & add form
 // -----------------------------------------
-
 // List/Tree view buttons and text search
 .action-bar {
 	margin-bottom: 30px;
@@ -16,33 +15,30 @@
 // Tree view / left column
 //overrides for jstree plugin
 .tree-custom {
-	ul li a {
-		//Adds ellipsis for place names that span wider than max width.
-		.truncate(60%);
-		padding: 2px 0;
-	}
 	.jstree {
 		ins {
-			float: left;
-			line-height: 1.5;
 			cursor: pointer;
+			float: left;
+			padding: 1px 2px;
 
 			//makes the hit area of the icon a bit bigger
 			width: 22px;
 			height: 20px;
 		}
+		a {
+			padding: 2px 0;
+			//Adds ellipsis for place names that span wider than max width.
+			.truncate(60%);
+		}
 		> ul > li {
 			// adds a border between the top level place
 			border-bottom: 1px solid @gray;
-			padding-top: 6px;
-		}
-		li {
-			line-height: 1;
+			padding-top: 4px;
 		}
 		.org {
 			color: @blue;
 			text-decoration: underline;
-
+			
 			&:hover {
 				text-decoration: none;
 			}
@@ -50,21 +46,25 @@
 		li.internal-org {
 			font-size: @baseFontSize;
 			font-weight: @regular;
+			
+			//only applied when the parent org is also shown
+			li.customer-org {
+				padding: 2px 0;
+				border-top: 1px dashed @grayLight;
 
-			> ul {
-				margin: 4px 0;
+				span {
+					font-size: @smallFontSize;
+				}
 			}
 		}
+		//applied when only this level is showing without parent org
 		li.customer-org {
-			padding: 2px 0;
-			border-top: 1px dashed @grayLight;
-
-			span {
-				font-size: @smallFontSize;
-			}
+			font-size: @baseFontSize;
+			border-bottom: none;
 		}
 		li.division-org {
 			font-size: @smallFontSize;
+			border-bottom: none;
 
 			&:first-child {
 				padding-top: 2px;
@@ -84,10 +84,10 @@
 		}
 		.primary {
 			&.jstree-open > ins:before {
-				.fontello-minus-squared;
+				.fontello-minus-squared(0 3px);
 			}
 			&.jstree-closed > ins:before  {
-				.fontello-plus-squared;
+				.fontello-plus-squared(0 3px);
 			}
 			> a .org {
 				font-weight: @bold;
@@ -102,7 +102,8 @@
 				.fontello-plus-squared-small;
 			}
 		}
-		.jstree-hovered {
+		.jstree-hovered,
+		.jstree-clicked {
 			background: none;
 			border: none;
 			padding: 2px 0;
@@ -119,6 +120,17 @@
 		}
 		.no-permission .action {
 		    display: none;
+		}
+	}
+	
+	//Firefox only
+	@-moz-document url-prefix() { 
+		.tree-custom .jstree > ul > li {
+			position: relative;
+		}
+		.tree-custom .jstree-default .action {
+			position: absolute;
+			right: 0;
 		}
 	}	
 }
