@@ -60,16 +60,20 @@ public abstract class SetupDataResource<A, E extends AbstractEntity> extends Api
 			@QueryParam("after") DateParam after,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("500") @QueryParam("pageSize") int pageSize) {
-		
+
+		ListResponse<A> response = getApiPage(after, page, pageSize);
+		return response;
+	}
+
+	protected ListResponse<A> getApiPage(DateParam after, int page, int pageSize) {
 		QueryBuilder<E> builder = createFindAllBuilder(after);
 		List<E> entityModels = persistenceService.findAll(builder, page, pageSize);
 		Long total = persistenceService.count(builder);
-		
+
 		List<A> apiModels = convertAllEntitiesToApiModels(entityModels);
-		ListResponse<A> response = new ListResponse<A>(apiModels, page, pageSize, total);
-		return response;
+		return new ListResponse<A>(apiModels, page, pageSize, total);
 	}
-	
+
 	@GET
 	@Path("{id}")
 	@Consumes(MediaType.TEXT_PLAIN)

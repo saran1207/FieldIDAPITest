@@ -1,27 +1,15 @@
 package com.n4systems.fieldid.ws.v1.resources.eventtype;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ws.rs.Path;
-
+import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
+import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.*;
+import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
+import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.*;
 import org.springframework.stereotype.Component;
 
-import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiComboBoxCriteria;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiCriteria;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiDateFieldCriteria;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiEventStatus;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiNumberFieldCriteria;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiOneClickCriteria;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiOneClickState;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiScore;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiScoreCriteria;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiSelectCriteria;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiSignatureCriteria;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiTextFieldCriteria;
-import com.n4systems.fieldid.ws.v1.resources.eventtype.criteria.ApiUnitOfMeasureCriteria;
+import javax.ws.rs.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Path("eventType")
@@ -29,6 +17,20 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 
 	public ApiEventTypeResource() {
 		super(EventType.class, true);
+	}
+
+	@Override
+	protected ListResponse<ApiEventType> getApiPage(DateParam after, int page, int pageSize) {
+		//XXX - filtering out PlaceEventTypes, will be removed when place event types are implemented on mobile
+		List<EventType> nonPlaceEventTypes = new ArrayList<EventType>();
+		for (EventType eventType: persistenceService.findAll(createFindAllBuilder(after))) {
+			if (!(eventType instanceof PlaceEventType))
+				nonPlaceEventTypes.add(eventType);
+		}
+
+		int startIndex = page * pageSize;
+		List<ApiEventType> apiModels = convertAllEntitiesToApiModels(nonPlaceEventTypes.subList(startIndex, startIndex + pageSize));
+		return new ListResponse<ApiEventType>(apiModels, page, pageSize, nonPlaceEventTypes.size());
 	}
 
 	@Override
