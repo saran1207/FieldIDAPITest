@@ -49,14 +49,14 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
             openEvent.setProject(eventScheduleBundle.getJob());
             openEvent.setDueDate(eventScheduleBundle.getScheduledDate());
             openEvent.setAssignedUserOrGroup(eventScheduleBundle.getAssginee());
-            postCreateSchedule(openEvent);
+            doSaveSchedule(openEvent);
         }
         return savedEvent;
     }
 
     protected abstract T createEvent();
     protected abstract void setTargetFromScheduleBundle(T event, EventScheduleBundle<V> bundle);
-    protected void postCreateSchedule(T openEvent) {}
+    protected void doSaveSchedule(T openEvent) {}
 
     @Transactional
     public T createEvent(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles) {

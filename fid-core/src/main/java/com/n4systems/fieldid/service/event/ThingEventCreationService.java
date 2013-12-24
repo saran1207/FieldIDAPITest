@@ -29,7 +29,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     }
 
     @Override
-    protected void postCreateSchedule(ThingEvent openEvent) {
+    protected void doSaveSchedule(ThingEvent openEvent) {
         nextEventScheduleService.createNextSchedule(openEvent);
     }
 
@@ -182,7 +182,6 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
 
     public void assignNextEventInSeries(ThingEvent event, EventEnum eventEnum) {
         Event nextEvent = null;
-        Event uEvent = null;
 
         RecurringAssetTypeEvent recurringEvent = event.getRecurringEvent();
 
@@ -194,10 +193,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
             } else if (eventEnum == EventEnum.CLOSE) {
                 nextEvent.setAssignee(event.getAssignee());
             }
-
-            if (null != nextEvent) {
-                uEvent = persistenceService.update(nextEvent);
-            }
         }
     }
+
 }

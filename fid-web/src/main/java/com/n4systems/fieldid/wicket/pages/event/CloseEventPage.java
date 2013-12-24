@@ -1,10 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventEnum;
-import com.n4systems.fieldid.service.event.EventScheduleService;
-import com.n4systems.fieldid.service.event.EventStatusService;
-import com.n4systems.fieldid.service.event.ThingEventCreationService;
+import com.n4systems.fieldid.service.event.*;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
@@ -39,6 +36,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
     private @SpringBean PersistenceService persistenceService;
     private @SpringBean EventScheduleService eventScheduleService;
     private @SpringBean ThingEventCreationService eventCreationService;
+    private @SpringBean PlaceEventCreationService placeEventCreationService;
 
     protected IModel<Event> openEventModel;
     private FieldIDAuthenticatedPage returnPage;
@@ -128,6 +126,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
                 eventCreationService.assignNextEventInSeries((ThingEvent) openEvent, EventEnum.CLOSE);
             } else if (openEvent instanceof PlaceEvent) {
                 openEvent.setOwner(((PlaceEvent)openEvent).getPlace());
+                placeEventCreationService.assignNextEventInSeries((PlaceEvent)openEvent, EventEnum.CLOSE);
             }
 
             persistenceService.update(openEvent);
@@ -151,6 +150,5 @@ public class CloseEventPage extends FieldIDFrontEndPage {
     private List<EventStatus> getActiveStatuses() {
         return eventStatusService.getActiveStatuses();
     }
-
 
 }

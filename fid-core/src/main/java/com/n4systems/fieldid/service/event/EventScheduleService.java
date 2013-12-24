@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -60,8 +61,16 @@ public class  EventScheduleService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public Event getNextAvailableSchedule(ThingEvent event) {
+    public List<PlaceEvent> getAvailableSchedulesFor(BaseOrg place) {
+        QueryBuilder<PlaceEvent> query = createUserSecurityBuilder(PlaceEvent.class);
+        query.addSimpleWhere("place", place).addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
+        query.addOrder("dueDate");
 
+        return persistenceService.findAll(query);
+    }
+
+    @Transactional
+    public Event getNextAvailableSchedule(ThingEvent event) {
         QueryBuilder<Event> builder = createTenantSecurityBuilder(Event.class);
         builder.addSimpleWhere("recurringEvent", event.getRecurringEvent());
         builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
@@ -70,28 +79,37 @@ public class  EventScheduleService extends FieldIdPersistenceService {
         builder.addWhere(WhereClauseFactory.create("asset.id", event.getAsset().getId()));
         builder.addWhere(WhereClauseFactory.create("type.id", event.getType().getId()));
         builder.addOrder("dueDate");
-
-//        PassthruWhereClause latestClause = new PassthruWhereClause("latest_event");
-//        String minDateSelect = String.format("SELECT MIN(iSub.dueDate) FROM %s iSub WHERE iSub.state = :iSubState AND iSub.asset.id = :iSubAssetId AND iSub.type.id = :iSubTypeId AND iSub.dueDate > :iSubCompletedDate ", Event.class.getName());
-//         minDateSelect += " AND iSub.workflowState = :iSubEventWorkflowState";
-//         latestClause.getParams().put("iSubEventWorkflowState", WorkflowState.OPEN);
-//        latestClause.setClause(String.format("i.dueDate = (%s)", minDateSelect));
-//        latestClause.getParams().put("iSubAssetId", event.getAsset().getId());
-//        latestClause.getParams().put("iSubTypeId", event.getType().getId());
-//        latestClause.getParams().put("iSubCompletedDate", event.getCompletedDate());
-//        latestClause.getParams().put("iSubState", Archivable.EntityState.ACTIVE);
-//        builder.addWhere(latestClause);
         builder.setLimit(1);
 
         return persistenceService.find(builder);
     }
 
+    @Transactional
+    public PlaceEvent getNextAvailableSchedule(PlaceEvent event) {
+        QueryBuilder<PlaceEvent> builder = createTenantSecurityBuilder(PlaceEvent.class);
+        builder.addSimpleWhere("recurringEvent", event.getRecurringEvent());
+        builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
+
+        builder.addWhere(WhereClauseFactory.create(Comparator.NE, "id", event.getId()));
+        builder.addWhere(WhereClauseFactory.create("place.id", event.getPlace().getId()));
+        builder.addWhere(WhereClauseFactory.create("type.id", event.getType().getId()));
+        builder.addOrder("dueDate");
+        builder.setLimit(1);
+
+        return persistenceService.find(builder);
+    }
 
     @Transactional
     public Event updateSchedule(ThingEvent schedule) {
         ThingEvent updatedSchedule = persistenceService.update(schedule);
         updatedSchedule.getAsset().touch();
         persistenceService.update(updatedSchedule.getAsset());
+        return updatedSchedule;
+    }
+
+    @Transactional
+    public Event updateSchedule(PlaceEvent schedule) {
+        PlaceEvent updatedSchedule = persistenceService.update(schedule);
         return updatedSchedule;
     }
 
