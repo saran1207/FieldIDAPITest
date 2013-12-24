@@ -36,9 +36,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class OrgViewPage extends FieldIDTemplatePage {
 
-    // TODO : refactor ajaxTextField into separate component.
-//    private static final String INIT_TEXT_FIELD_JS = "autoCompleter.createAjaxTextField(%s)";
-
     enum PageState { TREE, LIST };
 
     public static final int ITEMS_PER_PAGE = 20;
@@ -64,12 +61,10 @@ public class OrgViewPage extends FieldIDTemplatePage {
         }
     };
 
-
     public OrgViewPage() {
         container = new WebMarkupContainer("container");
         add(container.setOutputMarkupId(true));
         container.add(createTree("tree"));
-//        container.add(createList("list"));
 
         add(buttons = new WebMarkupContainer("buttons"));
         buttons.setOutputMarkupId(true);
@@ -78,11 +73,6 @@ public class OrgViewPage extends FieldIDTemplatePage {
                 updatePage(target, PageState.TREE);
             }
         }.add(new AttributeAppender("class", getButtonModel(PageState.TREE), " ")));
-//        buttons.add(new AjaxLink("list") {
-//            @Override public void onClick(AjaxRequestTarget target) {
-//                updatePage(target, PageState.LIST);
-//            }
-//        }.add(new AttributeAppender("class", getButtonModel(PageState.LIST), " " )));
         add(filter = new TextField("filter", new PropertyModel(this, "textFilter")).setOutputMarkupId(true));
 
         add(createPanel = new CreatePlacePanel("createPanel") {
@@ -95,11 +85,11 @@ public class OrgViewPage extends FieldIDTemplatePage {
                 toggleCreatePanel(target);
             }
 
-            @Override protected void onCreate(BaseOrg org, AjaxRequestTarget target) {
-                super.onCreate(org, target);
-                persistenceService.save(org);
+            @Override protected void onCreate(BaseOrg childOrg, AjaxRequestTarget target) {
+                super.onCreate(childOrg, target);
+                persistenceService.save(childOrg);
                 toggleCreatePanel(target);
-                // TODO : need to update tree here to show new node!!!
+                orgTree.updateBranch(getParentOrg().getId(), target);
             }
         });
 
@@ -144,7 +134,6 @@ public class OrgViewPage extends FieldIDTemplatePage {
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
-//        response.renderOnDomReadyJavaScript(String.format(INIT_TEXT_FIELD_JS, new Gson().toJson(new AjaxTextFieldOptions())));
     }
 
     private Component  createList(String id) {
@@ -229,14 +218,5 @@ public class OrgViewPage extends FieldIDTemplatePage {
         String highlightedMatchFormat = "%s<span class='match'>%s</span>%s";
         return String.format(highlightedMatchFormat, name.substring(0,index), name.substring(index,index+textFilter.length()), name.substring(index+textFilter.length()));
     }
-
-//    class AjaxTextFieldOptions {
-//        String parent = "#"+container.getMarkupId();
-//        String target = "#"+container.getMarkupId();
-//        String callback = listBehavior.getCallbackUrl().toString();
-//        String child = ".input-combo";
-//        Integer delay = 500;
-//    }
-
 
 }

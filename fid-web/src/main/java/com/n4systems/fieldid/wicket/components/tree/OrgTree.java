@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class OrgTree extends Tree {
 
-    private static final String INIT_ORGTREE_JS = "var %s = orgTreeFactory.create(%s);";
+    private static final String INIT_ORGTREE_JS = "%s = orgTreeFactory.create(%s);";
     public static final String NODE_NAME_HTML = "<span>%s</span>";
     public static final String NODE_NAME_HIGHTLIGHTED_HTML = "%s<span class='match'>%s</span>%s";
     public static final String NODE_HTML = "<span class='org' >%s</span>";

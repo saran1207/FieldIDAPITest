@@ -45,6 +45,12 @@ var orgTreeFactory = (function() {
 			}
 		}
 
+		var updateBranch = function(nodeId) {
+			jQuery.jstree._reference(getTree()).load_node_json(nodeId,null,null);
+			jQuery.jstree._reference(getTree()).open_node(nodeId,null,true);
+		}
+
+
 		function showNoResultsMsg() {
 			var noResults = $tree.siblings('.no-results');
 			if (noResults.length==0) {
@@ -174,7 +180,8 @@ var orgTreeFactory = (function() {
 
 
 		return {
-			update : update
+			update : update,
+			updateBranch : updateBranch
 		}
 
 	}

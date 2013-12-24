@@ -127,6 +127,11 @@ public class CreatePlacePanel extends Panel {
         form.setVisible(false);
     }
 
+    public BaseOrg getParentOrg() {
+        PlaceData data = (PlaceData) form.getDefaultModelObject();
+        return data.getParent();
+    }
+
     public TopFeedbackPanel getTopFeedbackPanel() {
         if ( getPage() instanceof FieldIDTemplatePage) {
             return ((FieldIDTemplatePage)getPage()).getTopFeedbackPanel();

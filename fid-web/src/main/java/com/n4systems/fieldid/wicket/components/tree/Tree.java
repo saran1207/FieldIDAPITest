@@ -16,6 +16,7 @@ import java.util.List;
 public abstract class Tree extends Panel {
 
     private static final String INIT_TREE_JS = "%s = treeFactory.create('%s',%s);";
+    private static final String UPDATE_TREE_JS = "%s.updateBranch('#%d')";
 
     protected final AbstractDefaultAjaxBehavior ajaxBehavior;
     private String search = null;
@@ -93,6 +94,10 @@ public abstract class Tree extends Panel {
         this.actionsBehavior = actionsBehavior;
         add(actionsBehavior);
         return (T) this;
+    }
+
+    public void updateBranch(Long nodeId, AjaxRequestTarget target) {
+        target.appendJavaScript(String.format(UPDATE_TREE_JS,getJsVariableName(),nodeId));
     }
 
     // ----------------------------------------------------------------------------------------
