@@ -6,7 +6,11 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.components.timezone.RegionListModel;
+import com.n4systems.fieldid.wicket.components.timezone.RegionModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.orgs.CountryFromAddressModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.builders.OrgBuilder;
@@ -14,7 +18,11 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.util.timezone.Country;
+import com.n4systems.util.timezone.Region;
+import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -38,9 +46,17 @@ public class CreatePlacePanel extends Panel {
 
     private Form<PlaceData> form;
     private CompoundPropertyModel<PlaceData> newPlaceModel = new CompoundPropertyModel(new PlaceData());
+    private MarkupContainer timeZoneContainer;
+    private AddressPanel address;
+
+    private String defaultTimeZone;
 
     public CreatePlacePanel(String id) {
         super(id);
+
+        final IModel<String> timeZoneIdModel = new PropertyModel(this,"defaultTimeZone");
+        final IModel<Country> countryModel = new CountryFromAddressModel(new PropertyModel<AddressInfo>(newPlaceModel, "address"));
+        final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
 
         form = new Form<PlaceData>("form", newPlaceModel);
 
@@ -54,17 +70,37 @@ public class CreatePlacePanel extends Panel {
                 @Override public boolean isVisible() {
                     return newPlaceModel.getObject().parent instanceof PrimaryOrg;
                 }
-            })
-            .add(new AddressPanel("address", new PropertyModel(newPlaceModel, "address")).withNoMap())
+            }.add(new OnChangeAjaxBehavior() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    target.add(timeZoneContainer);
+                }
+            }))
+            .add(address = new AddressPanel("address", new PropertyModel(newPlaceModel, "address")){
+                @Override protected void onCountryChange(AjaxRequestTarget target) {
+                    target.add(timeZoneContainer);
+                }
+            }.withNoMap())
+            .add(timeZoneContainer = new WebMarkupContainer("timeZoneContainer") {
+                @Override
+                public boolean isVisible() {
+                    return newPlaceModel.getObject().level == Level.SECONDARY && address.isVisible();
+                }
+            }
+                .add(new FidDropDownChoice<Region>("timeZone", regionModel, new RegionListModel(countryModel), new ListableChoiceRenderer<Region>()) {
+                })
+            )
             .add(new AjaxSubmitLink("submit") {
-                @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                @Override
+                protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     PlaceData data = (PlaceData) CreatePlacePanel.this.form.getDefaultModelObject();
                     BaseOrg childOrg = data.createNewChildOrg();
                     onCreate(childOrg, target);
                     getTopFeedbackPanel().info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
                 }
 
-                @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
                     getTopFeedbackPanel().error(new FIDLabelModel("errors.create_place"));
                 }
             })
@@ -74,6 +110,7 @@ public class CreatePlacePanel extends Panel {
                 }
             })
             .setOutputMarkupPlaceholderTag(true);
+        timeZoneContainer.setOutputMarkupPlaceholderTag(true);
 
         add(form);
 

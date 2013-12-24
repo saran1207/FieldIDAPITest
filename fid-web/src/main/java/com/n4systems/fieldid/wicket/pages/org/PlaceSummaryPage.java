@@ -15,14 +15,13 @@ import com.n4systems.fieldid.wicket.components.timezone.RegionListModel;
 import com.n4systems.fieldid.wicket.components.timezone.RegionModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.model.orgs.CountryFromAddressModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
-import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.util.timezone.Country;
-import com.n4systems.util.timezone.CountryList;
 import com.n4systems.util.timezone.Region;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -166,7 +165,7 @@ public class PlaceSummaryPage extends PlacePage {
                     ((InternalOrg)getOrg()).setDefaultTimeZone(defaultTimeZone);
                 }
                 persistenceService.save(getOrg());
-                info(new FIDLabelModel("label.place_saved",getOrg().getName()));
+                info(new FIDLabelModel("label.place_saved", getOrg().getName()));
                 target.add(map,getTopFeedbackPanel());
             }
 
@@ -343,25 +342,6 @@ public class PlaceSummaryPage extends PlacePage {
         @Override
         protected List<PlaceEvent> load() {
             return placeService.getOpenEventsFor(getOrg(), 7);
-        }
-    }
-
-    class CountryFromAddressModel extends Model<Country> {
-        private final IModel<AddressInfo> addressModel;
-
-        CountryFromAddressModel(IModel<AddressInfo> model) {
-            super();
-            this.addressModel = model;
-        }
-
-        @Override
-        public Country getObject() {
-            return CountryList.getInstance().getCountryByName(addressModel.getObject().getCountry());
-        }
-
-        @Override
-        public void setObject(Country country) {
-            addressModel.getObject().setCountry(country.getName());
         }
     }
 
