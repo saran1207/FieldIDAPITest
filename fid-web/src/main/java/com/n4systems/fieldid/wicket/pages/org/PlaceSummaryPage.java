@@ -154,6 +154,10 @@ public class PlaceSummaryPage extends PlacePage {
 
         imageContainer.add(imageUploadForm);
 
+        if (getOrg() instanceof InternalOrg) {
+            defaultTimeZone = ((InternalOrg)getOrg()).getDefaultTimeZone();
+        }
+
         final IModel<String> timeZoneIdModel = new PropertyModel(this,"defaultTimeZone");
         final IModel<Country> countryModel = new CountryFromAddressModel(ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo()));
         final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
