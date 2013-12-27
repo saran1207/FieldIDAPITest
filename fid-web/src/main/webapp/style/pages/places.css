@@ -4,6 +4,9 @@
 .action-bar {
   margin-bottom: 30px;
 }
+.tree-custom {
+  margin-top: 13px;
+}
 .tree-custom .jstree ins {
   cursor: pointer;
   float: left;
@@ -61,6 +64,12 @@
 .tree-custom .jstree-default.jstree-focused {
   margin-top: 0;
 }
+.tree-custom .jstree-default .jstree-hovered,
+.tree-custom .jstree-default .jstree-clicked {
+  background: none;
+  border: none;
+  padding: 2px 0;
+}
 .tree-custom .jstree-default .primary.jstree-open > ins:before {
   font-family: "fontello", sans-serif;
   padding: 0 3px;
@@ -86,12 +95,6 @@
   padding: 0 4px;
   content: '\e836';
 }
-.tree-custom .jstree-default .jstree-hovered,
-.tree-custom .jstree-default .jstree-clicked {
-  background: none;
-  border: none;
-  padding: 2px 0;
-}
 .tree-custom .jstree-default .action {
   float: right;
   cursor: pointer;
@@ -112,9 +115,6 @@
     right: 0;
   }
 }
-.column-wide .two-columns {
-  padding-top: 8px;
-}
 .column-wide .two-columns label {
   width: 40%;
 }
@@ -130,8 +130,18 @@
 .column-wide .two-columns .text-block {
   margin-left: 40%;
 }
-.add-place-form .primary-selection label {
-  width: 19.5%;
+.add-descendants-form .primary-selection {
+  margin-bottom: 10px;
+}
+.add-descendants-form .primary-selection label {
+  float: left;
+  margin-top: 8px;
+}
+.add-descendants-form .primary-selection .chzn-container {
+  margin: 0;
+}
+.add-descendants-form .address {
+  display: inline;
 }
 .list-view tr {
   height: 33px;
@@ -141,9 +151,6 @@
 }
 .options ul {
   width: 200px;
-}
-.place-summary .uploads {
-  position: relative;
 }
 .place-summary .uploads p {
   margin: 0;
@@ -220,9 +227,6 @@
 }
 .place-add-descendant .column-wide {
   padding-top: 58px;
-}
-.add-descendants-form .address {
-  display: inline;
 }
 .place-event .event-panel table {
   position: relative;

@@ -15,13 +15,15 @@
 // Tree view / left column
 //overrides for jstree plugin
 .tree-custom {
+	margin-top: 13px;
+
 	.jstree {
 		ins {
 			cursor: pointer;
 			float: left;
 			padding: 1px 2px;
 
-			//makes the hit area of the icon a bit bigger
+			//makes the hit area of the icon bigger
 			width: 22px;
 			height: 20px;
 		}
@@ -72,6 +74,7 @@
 		}
 	}
 	.jstree-default {
+		//overrides icons with fontello icons
 		li, 
 		ins {
 			background: none;
@@ -81,6 +84,12 @@
 		}
 		&.jstree-focused {
 			margin-top: 0;
+		}
+		.jstree-hovered,
+		.jstree-clicked {
+			background: none;
+			border: none;
+			padding: 2px 0;
 		}
 		.primary {
 			&.jstree-open > ins:before {
@@ -102,12 +111,8 @@
 				.fontello-plus-squared-small;
 			}
 		}
-		.jstree-hovered,
-		.jstree-clicked {
-			background: none;
-			border: none;
-			padding: 2px 0;
-		}
+		
+
 		// add links
 		.action {
 			float: right;
@@ -135,12 +140,9 @@
 	}	
 }
 
-
 // Right column / add form
 .column-wide {
 	.two-columns {
-		padding-top: 8px;
-
 		label {
 			width: 40%;
 		}
@@ -157,14 +159,26 @@
 		}
 	}
 }
-.add-place-form {
+
+// Places add descendants form
+// Using on the landing/tree view page AND on the 
+// add/view descendants for a specific tenant page
+.add-descendants-form {
 	.primary-selection {
+		margin-bottom: 10px;
+
 		label {
-			width: 19.5%;
+			float: left;
+			margin-top: 8px;
+		}
+		.chzn-container {
+			margin: 0;
 		}
 	}
+	.address {
+		display: inline;
+	}
 }
-
 
 // List view
 .list-view tr {
@@ -187,8 +201,6 @@
 // --------------------
 .place-summary {
 	.uploads {
-		position: relative;
-
 		p {
 			margin: 0;
 		}
@@ -279,15 +291,6 @@
 	}
 	.column-wide {
 		padding-top: 58px;
-	}
-}
-
-// Places add descendants form
-// Using on the landing/tree view page and on the 
-// add/view descendants for a specific tenant page
-.add-descendants-form {
-	.address {
-		display: inline;
 	}
 }
 

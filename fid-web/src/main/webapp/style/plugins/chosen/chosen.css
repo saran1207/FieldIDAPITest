@@ -504,6 +504,9 @@
 .fieldid-framework .chzn-container-multi .chzn-choices .search-choice .search-choice-close:hover {
   background-position: -48px 1px;
 }
+.fieldid-framework .control-group .chzn-container {
+  margin: 0;
+}
 .fieldid-framework .editable-inputs .chzn-disabled {
   filter: alpha(opacity=1) !important;
   opacity: 1!important;
@@ -517,4 +520,7 @@
 }
 .fieldid-framework .editable-inputs .chzn-container.chzn-disabled .chzn-single div b {
   background: none;
+}
+.fieldid-framework .chzn-container .chzn-results .highlighted {
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }

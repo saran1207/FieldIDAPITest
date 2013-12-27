@@ -476,7 +476,10 @@
     .chzn-container-multi .chzn-choices .search-choice .search-choice-close:hover {
         background-position: -48px 1px;
     }
-    
+    //removes margin for horizontal label and select format
+    .control-group .chzn-container {
+        margin: 0;
+    }
     // overrides styles for inline editing
     .editable-inputs {
         .chzn-disabled {
@@ -495,6 +498,11 @@
                 background: none;
             }
         }
+    }
+
+    //overrides dropdown color for chosen plugin for IE
+    .chzn-container .chzn-results .highlighted {
+        filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     }
 }
 
