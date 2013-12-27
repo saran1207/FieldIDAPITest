@@ -130,7 +130,7 @@ public class PlaceActionGroup extends Panel {
                 setResponsePage(OrgViewPage.class);
             }
         });
-        archiveLink.add(new ConfirmBehavior(new FIDLabelModel("msg.confirm_archive_org", getOrg().getDisplayName())));
+        archiveLink.add(new ConfirmBehavior(new FIDLabelModel("msg.confirm_archive_org", getOrg().getName())));
         archiveLink.setVisible((getOrg().isCustomer() || getOrg().isDivision()) && canManageCustomers);
 
         optionsContainer.add(recurringSchedulesLink = new BookmarkablePageLink<PlaceRecurringSchedulesPage>("recurringSchedulesLink", PlaceRecurringSchedulesPage.class, PageParametersBuilder.id(getOrg().getId())));
