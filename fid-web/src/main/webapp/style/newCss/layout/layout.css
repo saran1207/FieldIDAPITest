@@ -97,7 +97,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 --------------------*/
 #pageHeader .content-wrap {
 	min-width: 1024px;
-	max-width: 1280px;
+	max-width: 1400px;
 	margin: 0 auto;
 	position: relative;
 }
