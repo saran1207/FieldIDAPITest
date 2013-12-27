@@ -165,7 +165,7 @@ public class PlaceSummaryPage extends PlacePage {
                     ((InternalOrg)getOrg()).setDefaultTimeZone(defaultTimeZone);
                 }
                 persistenceService.save(getOrg());
-                info(new FIDLabelModel("label.place_saved", getOrg().getName()));
+                info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
                 target.add(map,getTopFeedbackPanel());
             }
 
@@ -256,6 +256,7 @@ public class PlaceSummaryPage extends PlacePage {
         InlineEditableForm generalForm = new InlineEditableForm("general") {
             @Override protected void onSave(AjaxRequestTarget target) {
                 persistenceService.save(getOrg());
+                info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
                 target.add(getTopFeedbackPanel());
             }
 
