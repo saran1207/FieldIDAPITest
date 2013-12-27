@@ -32,9 +32,9 @@ import java.util.List;
 
 public class PlaceEventsPage extends PlacePage {
 
-    // NOTE TO DIANA : used this as parameter.  if non-null then set filter flag to Open Only.
     public static final String OPEN_PARAM = "open";
     public static final List<WorkflowState> ALL_WORKFLOW_STATES = Lists.newArrayList(WorkflowState.OPEN, WorkflowState.COMPLETED, WorkflowState.CLOSED);
+    private enum Display { LIST, MAP };
 
     @SpringBean
     private PlaceService placeService;
@@ -45,6 +45,7 @@ public class PlaceEventsPage extends PlacePage {
     private WebMarkupContainer blankSlate;
     private PlaceEventDataProvider dataProvider;
     private FIDFeedbackPanel feedbackPanel;
+    private Display display = Display.LIST;
 
     public void setWorkflowStates(List<WorkflowState> workflowStates) {
         this.workflowStates = workflowStates;
@@ -70,12 +71,11 @@ public class PlaceEventsPage extends PlacePage {
 
     @Override
     protected void refreshContent(AjaxRequestTarget target) {
-        target.add(eventPanel, mapPanel);
+        setVisibilty();
+        target.add(eventPanel, filterPanel, mapPanel, blankSlate);
     }
 
     private final void init() {
-
-        boolean hasEvents = placeService.countEventsFor(orgModel.getObject(), null) > 0;
 
         add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
@@ -88,7 +88,6 @@ public class PlaceEventsPage extends PlacePage {
             }
         });
         filterPanel.setOutputMarkupPlaceholderTag(true);
-        filterPanel.setVisible(hasEvents);
 
         dataProvider = new PlaceEventDataProvider("completedDate", SortOrder.DESCENDING, workflowStates);
         add(eventPanel = new EventListPanel("eventPanel", dataProvider) {
@@ -104,7 +103,6 @@ public class PlaceEventsPage extends PlacePage {
         });
         eventPanel.setOutputMarkupPlaceholderTag(true);
         add(mapPanel = new EventMapPanel("mapPanel", placeService.getEventsFor(orgModel.getObject())));
-        eventPanel.setVisible(hasEvents);
         mapPanel.setOutputMarkupPlaceholderTag(true);
         mapPanel.setVisible(false);
 
@@ -115,6 +113,7 @@ public class PlaceEventsPage extends PlacePage {
                 eventPanel.setVisible(true);
                 mapPanel.setVisible(false);
                 filterPanel.setVisible(true);
+                display = Display.LIST;
                 target.add(eventPanel, mapPanel, filterPanel);
             }
         }.add(new TipsyBehavior(new FIDLabelModel("label.list"), TipsyBehavior.Gravity.NW)));
@@ -125,8 +124,7 @@ public class PlaceEventsPage extends PlacePage {
                 eventPanel.setVisible(false);
                 mapPanel.setVisible(true);
                 filterPanel.setVisible(false);
-                target.add(eventPanel);
-                target.add(mapPanel);
+                display = Display.MAP;
                 target.add(eventPanel, mapPanel, filterPanel);
             }
         }.add(new TipsyBehavior(new FIDLabelModel("label.map"), TipsyBehavior.Gravity.NW)));
@@ -135,7 +133,7 @@ public class PlaceEventsPage extends PlacePage {
         blankSlate.setOutputMarkupPlaceholderTag(true);
         blankSlate.add(new Label("blankSlateTitle", new PropertyModel(orgModel, "name")));
         blankSlate.add(new Label("orgNameLabel", new PropertyModel(orgModel, "name")));
-        blankSlate.setVisible(!hasEvents);
+        setVisibilty();
     }
 
     @Override
@@ -155,6 +153,20 @@ public class PlaceEventsPage extends PlacePage {
 
     public FIDFeedbackPanel getFeedbackPanel() {
         return feedbackPanel;
+    }
+
+    private void setVisibilty() {
+        boolean hasEvents = placeService.countEventsFor(orgModel.getObject(), null) > 0;
+        if(display.equals(Display.LIST)) {
+            eventPanel.setVisible(hasEvents);
+            filterPanel.setVisible(hasEvents);
+            mapPanel.setVisible(false);
+        } else {
+            eventPanel.setVisible(false);
+            filterPanel.setVisible(false);
+            mapPanel.setVisible(hasEvents);
+        }
+        blankSlate.setVisible(!hasEvents);
     }
 
     private class PlaceEventDataProvider extends FieldIDDataProvider<Event> {

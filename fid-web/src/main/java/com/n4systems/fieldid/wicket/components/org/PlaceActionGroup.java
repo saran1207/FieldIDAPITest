@@ -58,6 +58,7 @@ public class PlaceActionGroup extends Panel {
 
     private SchedulePicker<PlaceEvent> schedulePicker;
 
+    private WebMarkupContainer eventsContainer;
 
     public PlaceActionGroup(String id, final IModel<BaseOrg> model) {
         super(id, model);
@@ -75,6 +76,7 @@ public class PlaceActionGroup extends Panel {
                 placeEventScheduleService.createSchedule(scheduleToAdd);
                 scheduleToAdd = createNewSchedule(model.getObject());
                 refreshContainingPage(target);
+                target.add(eventsContainer);
             }
         };
 
@@ -88,30 +90,34 @@ public class PlaceActionGroup extends Panel {
             }
         }.setVisible(canCreateEvents));
 
-        add(new ListView<PlaceEvent>("scheduled", new ScheduledEventsMenuModel()) {
-            @Override protected void populateItem(ListItem<PlaceEvent> item) {
+        add(eventsContainer = new WebMarkupContainer("eventsContainer"));
+        eventsContainer.setOutputMarkupPlaceholderTag(true);
+        eventsContainer.setVisible(canCreateEvents);
+
+        eventsContainer.add(new ListView<PlaceEvent>("scheduled", new ScheduledEventsMenuModel()) {
+            @Override
+            protected void populateItem(ListItem<PlaceEvent> item) {
                 PlaceEvent event = item.getModelObject();
                 ScheduledEventsMenuModel listModel = (ScheduledEventsMenuModel) getModel();
-                if (event==null) {
+                if (event == null) {
                     item.add(new BookmarkablePageLink<PlaceEventsPage>("event", PlaceEventsPage.class, PageParametersBuilder.id(getOrg().getId()))
-                    .add(new Label("name", "View All " + listModel.getTotalEvents()))
-                    .add(new Label("note", " ").setVisible(false)));
+                            .add(new Label("name", "View All " + listModel.getTotalEvents()))
+                            .add(new Label("note", " ").setVisible(false)));
                 } else {
                     item.add(new BookmarkablePageLink<Void>("event", PerformPlaceEventPage.class, new PageParameters().add("placeId", getOrg().getId()).add("scheduleId", event.getId()).add("type", event.getType().getId()))
                             .add(new Label("name", event.getEventType().getDisplayName()))
                             .add(new TimeAgoLabel("note", Model.of(event.getDueDate()), dateService.getUserTimeZone())));
                 }
             }
-        }.setVisible(canCreateEvents));
+        });
 
-        add(new ListView<PlaceEventType>("unscheduled", new UnscheduledEventTypesMenuModel()) {
+        eventsContainer.add(new ListView<PlaceEventType>("unscheduled", new UnscheduledEventTypesMenuModel()) {
             @Override
             protected void populateItem(ListItem<PlaceEventType> item) {
                 item.add(new BookmarkablePageLink<Void>("event", PerformPlaceEventPage.class, new PageParameters().add("placeId", getOrg().getId()).add("type", item.getModelObject().getId()))
                 .add(new Label("name", new PropertyModel<String>(item.getModel(), "displayName"))));
             }
-        }.setVisible(canCreateEvents));
-
+        });
 
         Component mergeLink;
         Link archiveLink;
@@ -181,7 +187,6 @@ public class PlaceActionGroup extends Panel {
         return model.getObject();
     }
 
-    // TODO DD : change this to placeEvent.
     class ScheduledEventsMenuModel extends LoadableDetachableModel<PrioritizedList<PlaceEvent>> {
 
         public int getTotalEvents() {
@@ -196,7 +201,7 @@ public class PlaceActionGroup extends Panel {
                             if (e1 == null) {
                                 return e2 == null ? 0 : -1;
                             }
-                            return e1.getDueDate().compareTo(e2.getDueDate());
+                            return e1.getDueDate().compareTo(e2.getDueDate()) == 0 ? e1.getId().compareTo(e2.getId()) : e1.getDueDate().compareTo(e2.getDueDate());
                         }
                     });
             if (result.getOriginalSize()>MAX_MENU_ITEMS) {
