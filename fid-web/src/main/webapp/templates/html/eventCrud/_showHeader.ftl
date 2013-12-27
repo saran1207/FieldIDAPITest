@@ -74,7 +74,7 @@
         </#if>
 
         <#if userSecurityGuard.allowedEditEvent && event.place?exists>
-            <a class="mattButton edit" href="<@s.url action="w/editPlaceEvent" uniqueID="${event.id}"/>">
+            <a class="mattButton edit" href="<@s.url namespace="/" value="w/editPlaceEvent" uniqueID="${event.id}"/>">
                 <@s.text name="label.edit"/>
             </a>
         </#if>

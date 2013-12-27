@@ -55,7 +55,7 @@ public class EditPlaceEventPage extends PlaceEventPage {
         editedEvent.setEventResult(getEventResult());
         criteriaEditService.storeCriteriaChanges(editedEvent);
         editedEvent.storeTransientCriteriaResults();
-        return eventCreationService.updateEvent(editedEvent, proofTestEditPanel.getFileDataContainer(), fileAttachments);
+        return eventCreationService.updateEvent(editedEvent, null, fileAttachments);
     }
 
     @Override
