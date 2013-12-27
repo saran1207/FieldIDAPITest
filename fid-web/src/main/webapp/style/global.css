@@ -105,7 +105,7 @@ h1 {
 }
 h2 {
   font-size: 18px;
-  font-weight: normal;
+  font-weight: 400;
 }
 h3,
 h4 {
@@ -160,6 +160,9 @@ header:after {
 }
 header hr {
   margin-bottom: 15px;
+}
+.page-sub-header {
+  margin-bottom: 10px;
 }
 main,
 .content-wrap {
@@ -718,6 +721,9 @@ section {
 }
 .dropdown.icon [class^="fontello-"]:before {
   font-size: 18px;
+}
+.dropdown.icon:hover [class^="fontello-"]:before {
+  color: #008bd3;
 }
 /*--------------------------------------- 
   NAVIGATION
@@ -1552,6 +1558,9 @@ table.comfortable td {
 .pagination-compact .count {
   margin-right: 5px;
 }
+.navigation td {
+  padding: 0;
+}
 .navigation .navigatorLabel {
   float: left;
   margin-right: 10px;
@@ -1573,6 +1582,12 @@ table.comfortable td {
   display: inline-block;
   padding: 5px 8px;
   font-style: normal;
+}
+.navigation .navigator .first em,
+.navigation .navigator .prev em,
+.navigation .navigator .next em,
+.navigation .navigator .last em {
+  display: none;
 }
 /* FILTERS - filters.less 
 -------------------------*/

@@ -10,6 +10,10 @@
 // List/Tree view buttons and text search
 .action-bar {
 	margin-bottom: 30px;
+
+	.text-search {
+		.width(4,3);
+	}
 }
 
 // Tree view / left column
@@ -165,14 +169,15 @@
 // add/view descendants for a specific tenant page
 .add-descendants-form {
 	.primary-selection {
-		margin-bottom: 10px;
-
 		label {
 			float: left;
 			margin-top: 8px;
 		}
 		.chzn-container {
 			margin: 0;
+		}
+		.two-columns {
+			padding-top: 5px;
 		}
 	}
 	.address {
@@ -188,8 +193,15 @@
 
 // Action Group styles
 // --------------------
-.dropdown ul li.add-descendant a {
-	white-space: normal;
+.dropdown ul .add-descendant {
+	em {
+		display: block;
+		color: @grayDark;
+		font-style: normal
+	}
+	a {
+		white-space: normal;
+	}
 }
 .options ul {
 	width: 200px;
@@ -218,7 +230,7 @@
 		}
 		label {
 			text-align: left;
-			width: 28%;
+			width: 29%;
 			font-weight: bold;
 		}
 		.controls {
@@ -277,10 +289,25 @@
 .place-add-descendant {
 	.column-left {
 		table {
-			margin-top: 20px;
+			//margin-top: 20px;
+			position: relative;
+			border-bottom: 1px solid @gray;
+
+			.navigation {
+				position: absolute;
+				bottom: -55px;
+
+				.navigatorLabel {
+					float:none;
+					border: none;
+				}
+			}
 		}
 		th {
 			background: transparent;
+			padding-bottom: 0;
+			font-size: @largeFontSize;
+			font-weight: @regular;
 
 			&:first-child,
 			&:last-child {
@@ -290,7 +317,8 @@
 		}
 	}
 	.column-wide {
-		padding-top: 58px;
+		//padding-top: 56px;
+		padding-top: 7px;
 	}
 }
 

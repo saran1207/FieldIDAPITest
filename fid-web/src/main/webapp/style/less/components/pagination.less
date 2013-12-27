@@ -46,7 +46,10 @@
 
 //Pagination for wicket component
 .navigation {
-	
+	td {
+		padding: 0;
+	}
+
 	// item count
 	.navigatorLabel {
 		float: left;
@@ -59,9 +62,9 @@
 			padding: 6px 0;
 		}
 	}
-	// number & arrow links
-	.navigator {
 
+	// number & arrow links
+	.navigator {		
 		a {
 			display: inline-block;
 			padding: 5px 8px;
@@ -73,6 +76,11 @@
 			display: inline-block;
 			padding: 5px 8px;
 			font-style: normal;
+		}
+		.first, .prev, .next, .last {
+			em {
+				display: none;
+			}
 		}
 	}
 }

@@ -4,6 +4,9 @@
 .action-bar {
   margin-bottom: 30px;
 }
+.action-bar .text-search {
+  width: 32.2580644%;
+}
 .tree-custom {
   margin-top: 13px;
 }
@@ -130,9 +133,6 @@
 .column-wide .two-columns .text-block {
   margin-left: 40%;
 }
-.add-descendants-form .primary-selection {
-  margin-bottom: 10px;
-}
 .add-descendants-form .primary-selection label {
   float: left;
   margin-top: 8px;
@@ -140,13 +140,21 @@
 .add-descendants-form .primary-selection .chzn-container {
   margin: 0;
 }
+.add-descendants-form .primary-selection .two-columns {
+  padding-top: 5px;
+}
 .add-descendants-form .address {
   display: inline;
 }
 .list-view tr {
   height: 33px;
 }
-.dropdown ul li.add-descendant a {
+.dropdown ul .add-descendant em {
+  display: block;
+  color: #666666;
+  font-style: normal;
+}
+.dropdown ul .add-descendant a {
   white-space: normal;
 }
 .options ul {
@@ -168,7 +176,7 @@
 }
 .place-summary .uploads label {
   text-align: left;
-  width: 28%;
+  width: 29%;
   font-weight: bold;
 }
 .place-summary .uploads .controls {
@@ -215,10 +223,22 @@
   margin: 0 0 0 3px;
 }
 .place-add-descendant .column-left table {
-  margin-top: 20px;
+  position: relative;
+  border-bottom: 1px solid #dddddd;
+}
+.place-add-descendant .column-left table .navigation {
+  position: absolute;
+  bottom: -55px;
+}
+.place-add-descendant .column-left table .navigation .navigatorLabel {
+  float: none;
+  border: none;
 }
 .place-add-descendant .column-left th {
   background: transparent;
+  padding-bottom: 0;
+  font-size: 18px;
+  font-weight: 400;
 }
 .place-add-descendant .column-left th:first-child,
 .place-add-descendant .column-left th:last-child {
@@ -226,7 +246,7 @@
   border-right: none;
 }
 .place-add-descendant .column-wide {
-  padding-top: 58px;
+  padding-top: 7px;
 }
 .place-event .event-panel table {
   position: relative;
