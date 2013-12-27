@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.components.DisplayRecurrenceTimeModel;
 import com.n4systems.fieldid.wicket.components.assettype.RecurrenceFormPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.components.org.BackToPlaceSubHeader;
 import com.n4systems.fieldid.wicket.components.org.RecurringPlaceEventsFormPanel;
 import com.n4systems.fieldid.wicket.model.EnumLabelModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -20,9 +21,9 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -56,16 +57,6 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
 
         add(recurrenceModalWindow = new DialogModalWindow("addRecurrence").setInitialWidth(480));
         recurrenceModalWindow.setContent(getRecurrenceForm());
-
-        add(new BookmarkablePageLink<PlaceSummaryPage>("backToPlaceLink", PlaceSummaryPage.class, PageParametersBuilder.id(getOrg().getId()))
-                .add(new Label("backToLabel", new PropertyModel<String>(orgModel, "name"))));
-
-        add(new AjaxLink("addRecurrenceLink") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                recurrenceModalWindow.show(target);
-            }
-        });
 
         scheduleList.add(listView = new ListView<RecurringPlaceEvent>("recurringEvent", getRecurringEvents()) {
 
@@ -125,7 +116,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
 
     @Override
     protected Component createActionGroup(String actionGroupId) {
-        return new WebMarkupContainer(actionGroupId).setVisible(false);
+        return new ActionGroup(actionGroupId);
     }
 
     @Override
@@ -140,6 +131,11 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
         add(new NavigationBar(navBarId).setVisible(false));
     }
 
+    @Override
+    protected Component createSubHeader(String subHeaderId) {
+        return new BackToPlaceSubHeader(subHeaderId, orgModel);
+    }
+
     private LoadableDetachableModel<List<RecurringPlaceEvent>> getRecurringEvents() {
         return new LoadableDetachableModel<List<RecurringPlaceEvent>>() {
 
@@ -148,5 +144,17 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
                 return recurringScheduleService.getRecurringPlaceEvents(getOrg());
             }
         };
+    }
+
+    private class ActionGroup extends Fragment {
+        public ActionGroup(String id) {
+            super(id, "addRecurrenceActionGroup", PlaceRecurringSchedulesPage.this);
+            add(new AjaxLink("addRecurrenceLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    recurrenceModalWindow.show(target);
+                }
+            });
+        }
     }
 }

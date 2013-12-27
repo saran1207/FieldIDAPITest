@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.components.org.BackToPlaceSubHeader;
 import com.n4systems.fieldid.wicket.components.org.CreatePlacePanel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
@@ -19,11 +20,9 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColu
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -65,7 +64,14 @@ public class PlaceDescendantsPage extends PlacePage {
     @Override
     protected List<NavigationItem> createBreadCrumbs(BaseOrg org) {
         List<NavigationItem> navItems = super.createBreadCrumbs(org);
-        navItems.add(aNavItem().label(new FIDLabelModel("label.decendants")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
+        if (org.isPrimary()) {
+            navItems.add(aNavItem().label(new FIDLabelModel("label.decendants")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
+        } else if(org.isSecondary()) {
+            navItems.add(aNavItem().label(new FIDLabelModel("label.add_view_customers")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
+        } else if(org.isCustomer()) {
+            navItems.add(aNavItem().label(new FIDLabelModel("label.add_view_divisions")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
+        }
+
         return navItems;
     }
 
@@ -75,14 +81,16 @@ public class PlaceDescendantsPage extends PlacePage {
     }
 
     @Override
+    protected Component createSubHeader(String subHeaderId) {
+        return new BackToPlaceSubHeader(subHeaderId, orgModel);
+    }
+
+    @Override
     public String getMainCss() {
         return "place-add-descendant";
     }
 
     private void init() {
-
-        add(new BookmarkablePageLink<PlaceSummaryPage>("backToPlaceLink", PlaceSummaryPage.class, PageParametersBuilder.id(getOrg().getId()))
-                .add(new Label("backToLabel", new PropertyModel<String>(orgModel, "name"))));
 
         add(table = new SimpleDefaultDataTable<BaseOrg>("descendants", getDescendantsColumns(), new DescendantsDataProvider() , ROWS_PER_PAGE));
         add(new CreatePlacePanel("createNewPlace") {

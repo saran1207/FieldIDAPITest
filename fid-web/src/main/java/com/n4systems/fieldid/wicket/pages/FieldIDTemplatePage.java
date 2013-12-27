@@ -210,7 +210,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 	}
 
     protected Component createSubHeader(String subHeaderId) {
-        return new WebMarkupContainer(subHeaderId).setVisible(false);
+        return new WebMarkupContainer(subHeaderId).setVisible(true);
     }
 
     protected Component createActionGroup(String actionGroupId) {
