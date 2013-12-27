@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.event;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.model.user.User;
+import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import org.apache.commons.lang.StringUtils;
@@ -46,6 +47,17 @@ public class EventTypeService extends FieldIdPersistenceService {
     public List<EventType> getAllEventTypes(Long eventTypeGroupId, String nameFilter) {
         QueryBuilder<EventType> builder = createEventTypeQuery(EventType.class, eventTypeGroupId, nameFilter);
         return persistenceService.findAll(builder);
+    }
+
+    public EventType getEventType(Long id) {
+        QueryBuilder<EventType> query = createUserSecurityBuilder(EventType.class);
+        query.addSimpleWhere("id", id);
+        EventType eventType = persistenceService.find(query);
+        PostFetcher.postFetchFields(eventType, "eventForm.sections", "infoFieldNames");
+        if (eventType.isThingEventType()) {
+            PostFetcher.postFetchFields(eventType, "supportedProofTests");
+        }
+        return eventType;
     }
 
     private <T extends EventType> QueryBuilder<T> createEventTypeQuery(Class<T> clazz, Long eventTypeGroupId, String nameFilter) {
