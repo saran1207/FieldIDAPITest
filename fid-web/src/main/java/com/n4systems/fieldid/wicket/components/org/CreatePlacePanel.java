@@ -20,6 +20,7 @@ import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.Region;
+import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
@@ -32,6 +33,7 @@ import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -42,9 +44,11 @@ import java.io.Serializable;
 
 public class CreatePlacePanel extends Panel {
 
+
     enum Level {SECONDARY,CUSTOMER};
 
     private Form<PlaceData> form;
+    private Component feedback;
     private CompoundPropertyModel<PlaceData> newPlaceModel = new CompoundPropertyModel(new PlaceData());
     private MarkupContainer timeZoneContainer;
     private AddressPanel address;
@@ -61,6 +65,7 @@ public class CreatePlacePanel extends Panel {
         form = new Form<PlaceData>("form", newPlaceModel);
 
         form.add(new Label("title", getTitleModel()))
+            .add(feedback = new FeedbackPanel("feedback").setOutputMarkupId(true))
             .add(new TextField("code").setRequired(true))
             .add(new TextField("name").setRequired(true))
             .add(new TextArea("notes"))
@@ -70,14 +75,15 @@ public class CreatePlacePanel extends Panel {
                 @Override public boolean isVisible() {
                     return newPlaceModel.getObject().parent instanceof PrimaryOrg;
                 }
-            }.add(new OnChangeAjaxBehavior() {
+            }.setRequired(true).add(new OnChangeAjaxBehavior() {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
                     target.add(timeZoneContainer);
                 }
             }))
-            .add(address = new AddressPanel("address", new PropertyModel(newPlaceModel, "address")){
-                @Override protected void onCountryChange(AjaxRequestTarget target) {
+            .add(address = new AddressPanel("address", new PropertyModel(newPlaceModel, "address")) {
+                @Override
+                protected void onCountryChange(AjaxRequestTarget target) {
                     target.add(timeZoneContainer);
                 }
             }.withNoMap())
@@ -96,12 +102,13 @@ public class CreatePlacePanel extends Panel {
                     PlaceData data = (PlaceData) CreatePlacePanel.this.form.getDefaultModelObject();
                     BaseOrg childOrg = data.createNewChildOrg();
                     onCreate(childOrg, target);
-                    getTopFeedbackPanel().info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
+                    info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
+                    target.add(getTopFeedbackPanel());
                 }
 
                 @Override
                 protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    getTopFeedbackPanel().error(new FIDLabelModel("errors.create_place"));
+                    target.add(feedback);
                 }
             })
             .add(new AjaxLink("cancel") {

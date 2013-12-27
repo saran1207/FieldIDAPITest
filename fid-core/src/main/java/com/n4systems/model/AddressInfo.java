@@ -174,7 +174,8 @@ public class AddressInfo extends AbstractEntity {
                     return StringUtils.isNotBlank(input);
                 }
             };
-            return Joiner.on(',').join(Iterables.filter(Lists.newArrayList(streetAddress, city, state, country, zip), skipBlank));
+            Iterable<String> nonBlankFields = Iterables.filter(Lists.newArrayList(streetAddress, city, state, country, zip), skipBlank);
+            return Joiner.on(',').join(nonBlankFields);
         }
         return formattedAddress;
     }

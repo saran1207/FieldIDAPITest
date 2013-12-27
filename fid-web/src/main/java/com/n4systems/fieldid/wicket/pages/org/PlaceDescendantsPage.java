@@ -97,11 +97,8 @@ public class PlaceDescendantsPage extends PlacePage {
             @Override protected void onCreate(BaseOrg org, AjaxRequestTarget target) {
                 persistenceService.save(org);
                 resetModelObject();
-                target.add(getTopFeedbackPanel());
-
             }
             @Override protected void onCancel(AjaxRequestTarget target) {
-                // TODO ? what to do here???  should i even show button.
             }
         }.forParentOrg(getOrg()).show());
     }
