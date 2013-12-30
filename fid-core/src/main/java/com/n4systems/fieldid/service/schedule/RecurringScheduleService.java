@@ -181,7 +181,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
         List<PlaceEvent> events = persistenceService.findAll(query);
         for (PlaceEvent event:events) {
-            logger.info("removing scheduled event for asset " + event.getPlace().getDisplayName() + " on " + event.getDueDate());
+            logger.debug("removing scheduled event for place: " + event.getPlace().getDisplayName() + " on " + event.getDueDate());
             persistenceService.delete(event);
         }
     }
