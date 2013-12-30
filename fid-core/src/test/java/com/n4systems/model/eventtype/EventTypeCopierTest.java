@@ -18,8 +18,8 @@ public class EventTypeCopierTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void test_copy_process() {
-		Cleaner<ThingEventType> typeCleaner = EasyMock.createMock(Cleaner.class);
-		FilteredIdLoader<ThingEventType> typeLoader = EasyMock.createMock(FilteredIdLoader.class);
+		Cleaner<EventType> typeCleaner = EasyMock.createMock(Cleaner.class);
+		FilteredIdLoader<EventType> typeLoader = EasyMock.createMock(FilteredIdLoader.class);
 		EventTypeSaver typeSaver = EasyMock.createMock(EventTypeSaver.class);
 		EventTypeUniqueNameLoader typeNameLoader = EasyMock.createMock(EventTypeUniqueNameLoader.class);
         EventFormSaver formSaver = EasyMock.createMock(EventFormSaver.class);

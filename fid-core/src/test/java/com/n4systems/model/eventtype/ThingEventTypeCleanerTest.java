@@ -17,7 +17,7 @@ import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.api.Cleaner;
 import com.n4systems.model.builders.TenantBuilder;
 
-public class EventTypeCleanerTest {
+public class ThingEventTypeCleanerTest {
 	private static final String name = "type_name";	
 	private static final String description = "type_desc";
 	private static final boolean printable = true;
@@ -43,7 +43,7 @@ public class EventTypeCleanerTest {
 		eventFormCleaner.clean(type.getEventForm());
 		EasyMock.replay(eventFormCleaner);
 		
-		EventTypeCleaner cleaner = new EventTypeCleaner(newTenant, eventFormCleaner);
+		ThingEventTypeCleaner cleaner = new ThingEventTypeCleaner(newTenant, eventFormCleaner);
 		cleaner.clean(type);
 		
 		assertNull(type.getId());

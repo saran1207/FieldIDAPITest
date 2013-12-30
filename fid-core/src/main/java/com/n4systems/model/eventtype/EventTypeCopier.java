@@ -11,13 +11,14 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.persistence.loaders.FilteredIdLoader;
 
 public class EventTypeCopier implements Copier<EventType> {
-	private final Cleaner<ThingEventType> typeCleaner;
-	private final FilteredIdLoader<ThingEventType> typeLoader;
+	private final Cleaner<EventType> typeCleaner;
+	private final FilteredIdLoader<EventType> typeLoader;
 	private final EventTypeSaver typeSaver;
 	private final EventTypeUniqueNameLoader typeNameLoader;
     private final EventFormSaver formSaver;
+    private boolean withProofTests = true;
 	
-	public EventTypeCopier(Cleaner<ThingEventType> typeCleaner, FilteredIdLoader<ThingEventType> typeLoader, EventTypeSaver typeSaver, EventFormSaver formSaver, EventTypeUniqueNameLoader typeNameLoader) {
+	public EventTypeCopier(Cleaner<EventType> typeCleaner, FilteredIdLoader<EventType> typeLoader, EventTypeSaver typeSaver, EventFormSaver formSaver, EventTypeUniqueNameLoader typeNameLoader) {
 		this.typeCleaner = typeCleaner;
 		this.typeLoader = typeLoader;
 		this.typeSaver = typeSaver;
@@ -26,7 +27,7 @@ public class EventTypeCopier implements Copier<EventType> {
 	}
 	
 	protected EventTypeCopier(Tenant tenant, SecurityFilter filter) {
-		this(new EventTypeCleaner(tenant), new FilteredIdLoader<ThingEventType>(filter, ThingEventType.class), new EventTypeSaver(), new EventFormSaver(), new EventTypeUniqueNameLoader(filter));
+		this(new ThingEventTypeCleaner(tenant), new FilteredIdLoader<EventType>(filter, EventType.class), new EventTypeSaver(), new EventFormSaver(), new EventTypeUniqueNameLoader(filter));
 	}
 	
 	public EventTypeCopier(Tenant tenant) {
@@ -37,7 +38,12 @@ public class EventTypeCopier implements Copier<EventType> {
 	public EventType copy(Long id) {
 		// note we don't maintain a transaction here as we don't want our type to be in managed scope.
 		// otherwise we would be editing the model as we copied
-        ThingEventType type = typeLoader.setId(id).setPostFetchFields("eventForm.sections", "supportedProofTests", "infoFieldNames").load();
+        if (withProofTests) {
+            typeLoader.setPostFetchFields("eventForm.sections", "supportedProofTests", "infoFieldNames");
+        } else {
+            typeLoader.setPostFetchFields("eventForm.sections", "infoFieldNames");
+        }
+        EventType type = typeLoader.setId(id).load();
 		
 		typeCleaner.clean(type);
 
@@ -51,5 +57,9 @@ public class EventTypeCopier implements Copier<EventType> {
 		
 		return type;
 	}
+
+    public void withProofTests(boolean withProofTests) {
+        this.withProofTests = withProofTests;
+    }
 	
 }
