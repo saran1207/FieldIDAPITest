@@ -53,7 +53,15 @@ public class PlaceDescendantsPage extends PlacePage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.decendants", getOrg().getName()));
+        if (getOrg().isPrimary()) {
+            return new Label(labelId, new FIDLabelModel("title.decendants", getOrg().getName()));
+        } else if (getOrg().isSecondary()) {
+            return new Label(labelId, new FIDLabelModel("title.add_view_customers", getOrg().getName()));
+        } else if (getOrg().isCustomer()) {
+            return new Label(labelId, new FIDLabelModel("title.add_view_divisions", getOrg().getName()));
+        } else {
+            return new Label(labelId);
+        }
     }
 
     @Override

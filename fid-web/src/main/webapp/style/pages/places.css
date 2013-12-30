@@ -220,7 +220,6 @@
 }
 .place-add-descendant .descendants-list {
   position: relative;
-  border-bottom: 1px solid #dddddd;
 }
 .place-add-descendant .descendants-list th {
   background: transparent;
@@ -238,11 +237,12 @@
 }
 .place-add-descendant .descendants-list .navigation {
   position: absolute;
-  bottom: -60px;
+  bottom: -65px;
   right: 0;
   left: 0;
   padding: 0 5px 5px 0;
   border-bottom: 1px solid #dddddd;
+  border-top: 1px solid #dddddd;
 }
 .place-add-descendant .descendants-list .navigation td {
   float: right;
