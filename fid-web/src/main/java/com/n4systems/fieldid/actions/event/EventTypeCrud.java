@@ -15,6 +15,7 @@
  import com.n4systems.model.eventtype.EventTypeCopier;
  import com.n4systems.security.Permissions;
  import com.n4systems.util.ListingPair;
+ import com.n4systems.util.persistence.QueryBuilder;
  import com.opensymphony.xwork2.validator.annotations.CustomValidator;
  import com.opensymphony.xwork2.validator.annotations.RequiredFieldValidator;
  import com.opensymphony.xwork2.validator.annotations.RequiredStringValidator;
@@ -78,7 +79,15 @@ public class EventTypeCrud extends AbstractCrud {
 
 	@Override
 	protected void loadMemberFields(Long uniqueId) {
-        eventType = eventTypeService.getEventType(uniqueId);
+        QueryBuilder<EventType> query = new QueryBuilder<EventType>(EventType.class, getSecurityFilter());
+        query.addSimpleWhere("id", uniqueId);
+        EventType testLoadEventTypeToDetermineType = persistenceManager.find(query);
+
+        if (testLoadEventTypeToDetermineType.isThingEventType()) {
+            eventType = persistenceManager.find(EventType.class, uniqueId, "eventForm.sections", "infoFieldNames", "supportedProofTests");
+        } else {
+            eventType = persistenceManager.find(EventType.class, uniqueId, "eventForm.sections", "infoFieldNames");
+        }
     }
 
 	private void testRequiredEntities(boolean existing) {

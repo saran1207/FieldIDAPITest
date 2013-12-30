@@ -27,17 +27,17 @@ public class EventTypeService extends FieldIdPersistenceService {
 
     public List<PlaceEventType> getPlaceEventTypes(Long eventTypeGroupId, String nameFilter) {
         QueryBuilder<PlaceEventType> query = createEventTypeQuery(PlaceEventType.class, eventTypeGroupId, nameFilter);
-        return persistenceService.findAll(query);
+        return postFetchForStruts(persistenceService.findAll(query));
     }
 
     public List<ThingEventType> getThingEventTypes(Long eventTypeGroupId, String nameFilter) {
         QueryBuilder<ThingEventType> query = createEventTypeQuery(ThingEventType.class, eventTypeGroupId, nameFilter);
-        return persistenceService.findAll(query);
+        return postFetchForStruts(persistenceService.findAll(query));
     }
 
     public List<ActionEventType> getActionEventTypes(Long eventTypeGroupId, String nameFilter) {
         QueryBuilder<ActionEventType> builder = createEventTypeQuery(ActionEventType.class, eventTypeGroupId, nameFilter);
-        return persistenceService.findAll(builder);
+        return postFetchForStruts(persistenceService.findAll(builder));
     }
 
     public List<EventType> getAllEventTypes(Long eventTypeGroupId) {
@@ -46,7 +46,15 @@ public class EventTypeService extends FieldIdPersistenceService {
 
     public List<EventType> getAllEventTypes(Long eventTypeGroupId, String nameFilter) {
         QueryBuilder<EventType> builder = createEventTypeQuery(EventType.class, eventTypeGroupId, nameFilter);
-        return persistenceService.findAll(builder);
+        return postFetchForStruts(persistenceService.findAll(builder));
+    }
+
+    // XXX: Not sure why adding post fetch paths to the created builder isn't solving this issue, but it isn't...
+    private <T extends EventType> List<T> postFetchForStruts(List<T> results) {
+        for (T eventType : results) {
+            PostFetcher.postFetchFields(eventType, "modifiedBy", "modifiedBy.fullName");
+        }
+        return results;
     }
 
     public EventType getEventType(Long id) {
