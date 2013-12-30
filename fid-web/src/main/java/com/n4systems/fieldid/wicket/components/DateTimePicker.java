@@ -26,7 +26,9 @@ import rfid.web.helper.SessionUser;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Locale;
 
 
@@ -67,6 +69,16 @@ public class DateTimePicker extends Panel {
                     // strip off hours if "allDay"
                     @Override public Date convertToObject(String value, Locale locale) {
                         Date date = super.convertToObject(value, locale);
+
+                        //set to 12 noon instead of midnight for date only
+                        if(!isIncludeTime()) {
+                            //set to 12:00 noon
+                            GregorianCalendar gcal = (GregorianCalendar) Calendar.getInstance();
+                            gcal.setTime(date);
+                            gcal.set(Calendar.HOUR_OF_DAY, 12);
+                            date = gcal.getTime();
+                        }
+
                         return allDay ?
                             new LocalDate(date).toDate() :
                             date;

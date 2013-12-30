@@ -39,6 +39,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import java.io.Serializable;
 
@@ -70,17 +71,18 @@ public class CreatePlacePanel extends Panel {
             .add(new TextField("name").setRequired(true))
             .add(new TextArea("notes"))
             .add(new TextField("contactName"))
-            .add(new TextField("email"))
+            .add(new TextField("email").add(EmailAddressValidator.getInstance()))
             .add(new FidDropDownChoice<Level>("level", new PropertyModel(newPlaceModel, "level"), Lists.newArrayList(Level.values()), new EnumChoiceRenderer<Level>()) {
-                @Override public boolean isVisible() {
-                    return newPlaceModel.getObject().parent instanceof PrimaryOrg;
-                }
-            }.setRequired(true).add(new OnChangeAjaxBehavior() {
-                @Override
-                protected void onUpdate(AjaxRequestTarget target) {
-                    target.add(timeZoneContainer);
-                }
-            }))
+            @Override
+            public boolean isVisible() {
+                return newPlaceModel.getObject().parent instanceof PrimaryOrg;
+            }
+        }.setRequired(true).add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                target.add(timeZoneContainer);
+            }
+        }))
             .add(address = new AddressPanel("address", new PropertyModel(newPlaceModel, "address")) {
                 @Override
                 protected void onCountryChange(AjaxRequestTarget target) {
