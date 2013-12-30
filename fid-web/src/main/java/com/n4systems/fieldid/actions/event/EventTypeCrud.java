@@ -216,6 +216,7 @@ public class EventTypeCrud extends AbstractCrud {
 	public String doCopy() {
 		try {
 			EventTypeCopier typeCopier = createEventTypeCopier();
+            typeCopier.withProofTests(eventType.isThingEventType());
 			EventType newType = typeCopier.copy(getUniqueID());
 			
 			addFlashMessageText(getText("message.event_type_copied", new String[] {newType.getName()}));

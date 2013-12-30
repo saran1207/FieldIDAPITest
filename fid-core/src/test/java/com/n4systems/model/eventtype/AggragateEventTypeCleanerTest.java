@@ -18,7 +18,7 @@ public class AggragateEventTypeCleanerTest {
 	
 	@Test
 	public void should_run_with_out_errors_when_no_cleaners_given() throws Exception {
-		Cleaner<ThingEventType> sut = new AggragateEventTypeCleaner();
+		Cleaner<EventType> sut = new AggragateEventTypeCleaner();
 		
 		sut.clean(eventType);
 	}
@@ -29,7 +29,7 @@ public class AggragateEventTypeCleanerTest {
 	public void should_push_clean_call_to_supplied_event_type_cleaner() throws Exception {
 		
 		
-		Cleaner<ThingEventType> subCleaner = createMock(Cleaner.class);
+		Cleaner<EventType> subCleaner = createMock(Cleaner.class);
 		subCleaner.clean(eventType);
 		replay(subCleaner);
 		
@@ -44,11 +44,11 @@ public class AggragateEventTypeCleanerTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void should_push_clean_call_to_supplied_event_type_cleaners() throws Exception {
-		Cleaner<ThingEventType> subCleaner = createMock(Cleaner.class);
+		Cleaner<EventType> subCleaner = createMock(Cleaner.class);
 		subCleaner.clean(eventType);
 		replay(subCleaner);
 		
-		Cleaner<ThingEventType> subCleaner2 = createMock(Cleaner.class);
+		Cleaner<EventType> subCleaner2 = createMock(Cleaner.class);
 		subCleaner2.clean(eventType);
 		replay(subCleaner2);
 		
