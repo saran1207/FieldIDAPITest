@@ -165,6 +165,7 @@
 }
 
 // Places add descendants form
+// ----------------------------
 // Using on the landing/tree view page AND on the 
 // add/view descendants for a specific tenant page
 .add-descendants-form {
@@ -286,7 +287,6 @@
 	
 	.descendants-list {
 		position: relative;
-		border-bottom: 1px solid @gray;
 
 		// override default table heading styles
 		th {
@@ -308,11 +308,12 @@
 		// move nav to bottom of table
 		.navigation {
 			position: absolute;
-			bottom: -60px;
+			bottom: -65px;
 			right: 0;
 			left: 0;
 			padding: 0 5px 5px 0;
 			border-bottom: 1px solid @gray;
+			border-top: 1px solid @gray;
 			
 			//float nav to the right
 			td {
