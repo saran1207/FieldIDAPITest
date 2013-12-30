@@ -467,6 +467,7 @@
 .fieldid-framework .chzn-container {
   margin: 4px 0 10px;
   font-size: 14px;
+  vertical-align: middle;
 }
 .fieldid-framework .chzn-single.chzn-default,
 .fieldid-framework .chzn-container-single .chzn-single,

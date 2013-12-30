@@ -119,23 +119,19 @@
   }
 }
 .column-wide .two-columns label {
-  width: 40%;
+  width: 30%;
 }
 .column-wide .two-columns input[type="text"],
 .column-wide .two-columns select,
 .column-wide .two-columns textarea,
 .column-wide .two-columns .input-combo {
-  width: 58%;
+  width: 65%;
 }
 .column-wide .two-columns .chzn-container {
-  width: 58%!important;
+  width: 65%!important;
 }
 .column-wide .two-columns .text-block {
-  margin-left: 40%;
-}
-.add-descendants-form .primary-selection label {
-  float: left;
-  margin-top: 8px;
+  margin-left: 30%;
 }
 .add-descendants-form .primary-selection .chzn-container {
   margin: 0;
@@ -222,28 +218,41 @@
   float: left;
   margin: 0 0 0 3px;
 }
-.place-add-descendant .column-left table {
+.place-add-descendant .descendants-list {
   position: relative;
   border-bottom: 1px solid #dddddd;
 }
-.place-add-descendant .column-left table .navigation {
-  position: absolute;
-  bottom: -55px;
-}
-.place-add-descendant .column-left table .navigation .navigatorLabel {
-  float: none;
-  border: none;
-}
-.place-add-descendant .column-left th {
+.place-add-descendant .descendants-list th {
   background: transparent;
   padding-bottom: 0;
   font-size: 18px;
   font-weight: 400;
 }
-.place-add-descendant .column-left th:first-child,
-.place-add-descendant .column-left th:last-child {
+.place-add-descendant .descendants-list th:first-child,
+.place-add-descendant .descendants-list th:last-child {
   border-left: none;
   border-right: none;
+}
+.place-add-descendant .descendants-list tr {
+  border-bottom: none;
+}
+.place-add-descendant .descendants-list .navigation {
+  position: absolute;
+  bottom: -60px;
+  right: 0;
+  left: 0;
+  padding: 0 5px 5px 0;
+  border-bottom: 1px solid #dddddd;
+}
+.place-add-descendant .descendants-list .navigation td {
+  float: right;
+}
+.place-add-descendant .descendants-list .navigation .navigatorLabel {
+  float: none;
+  border: none;
+  text-align: right;
+  margin-right: 0;
+  padding-right: 0;
 }
 .place-add-descendant .column-wide {
   padding-top: 7px;
@@ -273,7 +282,10 @@
   width: 100%!important;
 }
 @media (max-width: 1150px) {
-  .two-columns {
+  .column-wide .two-columns {
     width: 100%;
+  }
+  .column-wide .two-columns label {
+    width: 25%;
   }
 }

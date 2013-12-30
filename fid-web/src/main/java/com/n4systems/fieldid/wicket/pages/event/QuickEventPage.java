@@ -125,6 +125,7 @@ public class QuickEventPage extends FieldIDFrontEndPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
         response.renderCSSReference("style/pageStyles/quick_event.css");
     }
 

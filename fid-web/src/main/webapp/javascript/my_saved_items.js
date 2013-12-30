@@ -12,7 +12,7 @@ function showDropDown() {
         withinSelector = "pageHeader";
     }
     //translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 70, 673);
-    translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 26);
+    translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 30);
 }
 
 function hideDropDown() {
@@ -29,11 +29,27 @@ function toggleDropBox() {
 }
 
 function listenForSavedItemsClick() {
-    jQuery('#mySavedItemsLink').hover(showDropDown);
+    jQuery('#mySavedItemsLink').click(toggleDropBox);
     jQuery('#mySavedItemsLink').parents('#pageActions').mouseleave(hideDropDown);
+}
 
+function listenForSavedItemsHover() {
+    jQuery("#mySavedItemsLink").hover(
+        function() {
+            showDropDown(); 
+        }, 
+        function() {
+            //do nothing on mouseleave
+        }
+    );
+    jQuery('#mySavedItemsLink').parents('#pageActions').mouseleave(hideDropDown);
+    
     // new template/framework header
     jQuery('#mySavedItemsLink').parents('.js-nav-user').mouseleave(hideDropDown);
 }
 
-jQuery(document).ready(function() { listenForSavedItemsClick(); });
+//jQuery(document).ready(function() { listenForSavedItemsClick(); });
+jQuery(document).ready(function() { listenForSavedItemsHover(); });
+
+
+

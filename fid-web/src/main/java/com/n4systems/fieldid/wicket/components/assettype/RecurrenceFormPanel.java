@@ -62,6 +62,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
         private final FIDFeedbackPanel feedback;
         private Boolean ownerAndDown;
         private Boolean autoassign;
+        List<EventType> eventTypes;
 
         public RecurringEventsForm(String id) {
             super(id);
@@ -70,7 +71,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
 
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
 
-            final List<EventType> eventTypes = Lists.newArrayList(getEventTypes());
+            eventTypes = Lists.newArrayList(getEventTypes());
             // set default value if one available.
             eventType = (eventTypes.size()>0) ? eventTypes.get(0) : null;
 
@@ -163,7 +164,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
 
         private void resetForm() {
             time = RecurrenceTimeOfDay.NINE_AM;
-            eventType = null;
+            eventType = (eventTypes.size()>0) ? eventTypes.get(0) : null;
             type = RecurrenceType.MONTHLY_1ST;
             //private Date dateTime = dateService.nowInUsersTimeZone().toDate();
         }

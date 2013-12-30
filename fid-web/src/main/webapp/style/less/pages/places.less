@@ -148,18 +148,18 @@
 .column-wide {
 	.two-columns {
 		label {
-			width: 40%;
+			width: 30%;
 		}
 		input[type="text"], 
 		select, textarea,
 		.input-combo {
-			width: 58%;
+			width: 65%;
 		}
 		.chzn-container {
-			width: 58%!important;
+			width: 65%!important;
 		}
 		.text-block {
-			margin-left: 40%;
+			margin-left: 30%;
 		}
 	}
 }
@@ -169,10 +169,6 @@
 // add/view descendants for a specific tenant page
 .add-descendants-form {
 	.primary-selection {
-		label {
-			float: left;
-			margin-top: 8px;
-		}
 		.chzn-container {
 			margin: 0;
 		}
@@ -287,22 +283,12 @@
 // Places add descendants page
 // ----------------------------
 .place-add-descendant {
-	.column-left {
-		table {
-			//margin-top: 20px;
-			position: relative;
-			border-bottom: 1px solid @gray;
+	
+	.descendants-list {
+		position: relative;
+		border-bottom: 1px solid @gray;
 
-			.navigation {
-				position: absolute;
-				bottom: -55px;
-
-				.navigatorLabel {
-					float:none;
-					border: none;
-				}
-			}
-		}
+		// override default table heading styles
 		th {
 			background: transparent;
 			padding-bottom: 0;
@@ -315,9 +301,34 @@
 				border-right: none;
 			}
 		}
+		tr {
+			border-bottom: none;
+		}
+
+		// move nav to bottom of table
+		.navigation {
+			position: absolute;
+			bottom: -60px;
+			right: 0;
+			left: 0;
+			padding: 0 5px 5px 0;
+			border-bottom: 1px solid @gray;
+			
+			//float nav to the right
+			td {
+				float: right;
+			}
+			.navigatorLabel {
+				float:none;
+				border: none;
+				text-align: right;
+				margin-right: 0;
+				padding-right: 0;
+			}
+		}	
 	}
+			
 	.column-wide {
-		//padding-top: 56px;
 		padding-top: 7px;
 	}
 }
@@ -347,6 +358,7 @@
 	}
 }	
 
+
 // Place Recurring Schedules
 // -------------------------
 //overriding styles for chosen dropdowns
@@ -363,7 +375,11 @@
 // Media Queries
 // --------------
 @media (max-width: 1150px) {
-	.two-columns {
+	.column-wide .two-columns {
 		width: 100%;
+		
+		label {
+			width: 25%;
+		}
 	}
 }

@@ -1,37 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.useraccount;
 
-import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
-import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.useraccount.table.AssetProfileLinkCell;
-import com.n4systems.fieldid.wicket.pages.useraccount.table.RemoveActionCell;
-import com.n4systems.model.Asset;
-import com.n4systems.model.offlineprofile.OfflineProfile;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.DataTable;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
@@ -46,6 +22,7 @@ public class MobileOfflineProfilePage extends FieldIDFrontEndPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
         response.renderCSSReference("style/newCss/component/buttons.css");
         response.renderCSSReference("style/newCss/user/mobile-offline.css");
     }

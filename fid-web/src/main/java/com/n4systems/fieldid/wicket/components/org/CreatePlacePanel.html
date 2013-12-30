@@ -1,11 +1,10 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-    <!--TODO : use property files, wicket:message for hard coded strings. -->
+
     <!-- Show on page load - hide when form is open -->
     <div wicket:id="blankSlate" class="info">
         <p><wicket:message key="label.create_place_instructions"/></p>
     </div>
-
 
     <form wicket:id="form" class="add-descendants-form">
         <div wicket:id="feedback"/>
@@ -13,7 +12,7 @@
         <wicket:enclosure child="level">
             <fieldset class="primary-selection form-horizontal">
                 <div class="two-columns">
-                    <label><wicket:message key="label.select_level"/></label>
+                    <label>*<wicket:message key="label.select_level"/></label>
                     <select wicket:id="level"/>
                 </div>
             </fieldset>
@@ -21,17 +20,17 @@
 
         <div class="two-columns pull-left">
             <fieldset class="form-horizontal">
-                <legend>Details</legend>
+                <legend><wicket:message key="label.details"/></legend>
                 <div class="control-group">
-                    <label>*ID</label>
+                    <label>*<wicket:message key="label.id"/></label>
                     <input wicket:id="code" type="text"/>
                 </div>
                 <div class="control-group">
-                    <label>*Name</label>
+                    <label>*<wicket:message key="label.name"/></label>
                     <input wicket:id="name" type="text"/>
                 </div>
                 <div class="control-group">
-                    <label>Notes</label>
+                    <label><wicket:message key="label.notes"/></label>
                     <textarea wicket:id="notes"/>
                 </div>
             </fieldset>
@@ -39,13 +38,13 @@
 
         <div class="two-columns pull-right">
             <fieldset class="form-horizontal">
-                <legend>Contact Information</legend>
+                <legend><wicket:message key="label.contact_information"/></legend>
                 <div class="control-group">
-                    <label>Contact Name</label>
+                    <label><wicket:message key="label.contactname"/></label>
                     <input wicket:id="contactName" type="text">
                 </div>
                 <div class="control-group">
-                    <label>Email Address</label>
+                    <label><wicket:message key="label.email_address"/></label>
                     <input wicket:id="email" type="text">
                 </div>
                 <div class="control-group">
@@ -58,6 +57,7 @@
                 </div>
             </fieldset>
         </div>
+
         <div class="action-group clear border-top text-right">
             <a wicket:id="submit" class="btn-primary btn-sml" type="submit"><wicket:message key="label.save"/></a>
             <a wicket:id="cancel" class="btn-link" href="#"><wicket:message key="label.cancel"/></a>

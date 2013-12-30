@@ -19,7 +19,6 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
-import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
@@ -442,8 +441,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class));
 
             add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
-
-            add(new BookmarkablePageLink<Void>("newAssetSearchLink", AdvancedAssetSearchPage.class));
 
             add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class));
 

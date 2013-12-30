@@ -21,6 +21,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -41,6 +42,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
 
     private WebMarkupContainer scheduleList;
     private WebMarkupContainer blankSlate;
+    private WebMarkupContainer noEventTypes;
     private ListView<RecurringPlaceEvent> listView;
     private ModalWindow recurrenceModalWindow;
 
@@ -52,6 +54,10 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
 
         add(blankSlate = new WebMarkupContainer("blankSlate"));
         blankSlate.setOutputMarkupPlaceholderTag(true);
+
+        add(noEventTypes = new WebMarkupContainer("noEventTypes"));
+        noEventTypes.setOutputMarkupPlaceholderTag(true);
+        noEventTypes.add(new BookmarkablePageLink<PlaceEventTypesPage>("eventTypesLink", PlaceEventTypesPage.class, PageParametersBuilder.id(getOrg().getId())));
 
         setVisibility();
 
@@ -106,7 +112,8 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
     private void setVisibility() {
         boolean hasRecurrences = recurringScheduleService.countRecurringPlaceEvents(getOrg()) > 0;
         scheduleList.setVisible(hasRecurrences);
-        blankSlate.setVisible(!hasRecurrences);
+        blankSlate.setVisible(!hasRecurrences && !hasEventTypes());
+        noEventTypes.setVisible(!hasRecurrences && hasEventTypes());
     }
 
     @Override
@@ -154,7 +161,16 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
                 public void onClick(AjaxRequestTarget target) {
                     recurrenceModalWindow.show(target);
                 }
+
+                @Override
+                protected boolean isLinkEnabled() {
+                    return !hasEventTypes();
+                }
             });
         }
+    }
+
+    private boolean hasEventTypes() {
+        return getOrg().getEventTypes().isEmpty();
     }
 }
