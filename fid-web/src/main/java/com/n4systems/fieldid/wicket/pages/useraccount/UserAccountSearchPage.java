@@ -40,7 +40,7 @@ public class UserAccountSearchPage extends FieldIDWicketPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
-        response.renderCSSReference("pageStyles/login.css");
+        response.renderCSSReference("/style/pageStyles/login.css");
         response.renderJavaScriptReference("jquery/watermark/jquery.watermark.js");
 
     }
