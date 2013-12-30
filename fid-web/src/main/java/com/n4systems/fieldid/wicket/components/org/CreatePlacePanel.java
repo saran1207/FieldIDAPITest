@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.feedback.TopFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.timezone.RegionListModel;
@@ -33,7 +34,6 @@ import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -65,7 +65,7 @@ public class CreatePlacePanel extends Panel {
         form = new Form<PlaceData>("form", newPlaceModel);
 
         form.add(new Label("title", getTitleModel()))
-            .add(feedback = new FeedbackPanel("feedback").setOutputMarkupId(true))
+            .add(feedback = new FIDFeedbackPanel("feedback").setOutputMarkupId(true))
             .add(new TextField("code").setRequired(true))
             .add(new TextField("name").setRequired(true))
             .add(new TextArea("notes"))
