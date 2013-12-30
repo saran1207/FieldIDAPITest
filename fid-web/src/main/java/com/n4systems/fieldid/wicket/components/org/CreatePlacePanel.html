@@ -1,10 +1,10 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
+
     <!-- Show on page load - hide when form is open -->
     <div wicket:id="blankSlate" class="info">
         <p><wicket:message key="label.create_place_instructions"/></p>
     </div>
-
 
     <form wicket:id="form" class="add-descendants-form">
         <div wicket:id="feedback"/>
@@ -57,6 +57,7 @@
                 </div>
             </fieldset>
         </div>
+
         <div class="action-group clear border-top text-right">
             <a wicket:id="submit" class="btn-primary btn-sml" type="submit"><wicket:message key="label.save"/></a>
             <a wicket:id="cancel" class="btn-link" href="#"><wicket:message key="label.cancel"/></a>
