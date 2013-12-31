@@ -7,6 +7,9 @@
 .action-bar .text-search {
   width: 32.2580644%;
 }
+.action-bar .text-search input[type="text"] {
+  width: 98%;
+}
 .tree-custom {
   margin-top: 13px;
 }
