@@ -19,6 +19,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -166,7 +167,13 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
                 protected boolean isLinkEnabled() {
                     return !hasEventTypes();
                 }
-            });
+
+                @Override
+                protected void disableLink(ComponentTag tag) {
+                    super.disableLink(tag);
+                    tag.put("class", tag.getAttribute("class") + " disabled");
+                }
+            }.setBeforeDisabledLink("").setAfterDisabledLink(""));
         }
     }
 
