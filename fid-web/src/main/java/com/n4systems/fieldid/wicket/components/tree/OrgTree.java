@@ -22,7 +22,7 @@ public class OrgTree extends Tree {
     private String lastSearch = null;
     private String customerTerm = new FIDLabelModel("label.customer").getObject();
 
-    // TODO : add "root node id".  if null get entire tree else get single root node.
+
 
     public OrgTree(String id) {
         super(id);

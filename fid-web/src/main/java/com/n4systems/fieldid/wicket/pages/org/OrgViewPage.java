@@ -89,7 +89,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
                 super.onCreate(childOrg, target);
                 persistenceService.save(childOrg);
                 toggleCreatePanel(target);
-                orgTree.updateBranch(getParentOrg().getId(), target);
+                orgTree.updateBranch(getParentOrg().getId(), childOrg.getId(), target);
             }
         });
 

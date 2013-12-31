@@ -45,9 +45,17 @@ var orgTreeFactory = (function() {
 			}
 		}
 
-		var updateBranch = function(nodeId) {
-			jQuery.jstree._reference(getTree()).load_node_json(nodeId,null,null);
-			jQuery.jstree._reference(getTree()).open_node(nodeId,null,true);
+		var updateBranch = function(parentNodeId,nodeId) {
+			jQuery.jstree._reference(getTree()).open_node(parentNodeId,null,true);
+			jQuery.jstree._reference(getTree()).load_node_json(parentNodeId,null,null);
+			setTimeout(function() {
+					$(nodeId).addClass('added');
+				}
+				,500);
+			setTimeout(function() {
+					$(nodeId).removeClass('added');
+				}
+				,2000);
 		}
 
 
