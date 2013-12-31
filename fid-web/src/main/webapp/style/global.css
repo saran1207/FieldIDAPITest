@@ -979,6 +979,26 @@ button[class^="btn"].btn-sml {
   padding-left: 12px;
   padding-right: 12px;
 }
+.dropdown.disabled,
+.dropup.disabled {
+  zoom: 1;
+  filter: alpha(opacity=50);
+  opacity: 0.5;
+}
+.dropdown.disabled ul,
+.dropup.disabled ul {
+  display: none;
+}
+.dropdown.disabled:hover [class^="btn"],
+.dropup.disabled:hover [class^="btn"] {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+.dropdown.disabled:hover [class^="btn"]:after,
+.dropup.disabled:hover [class^="btn"]:after {
+  content: '\e811';
+}
 .button-group {
   font-size: 0;
   display: inline-block;

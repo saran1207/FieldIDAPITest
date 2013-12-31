@@ -196,6 +196,23 @@ button[class^="btn"] {
 			padding-right: 12px;
 		}
 	}
+
+	// Disabled button styles
+	&.disabled {
+		.opacity(50);
+
+		ul {
+			display: none;
+		}
+		&:hover [class^="btn"]{
+			.shadow(none); //overrides and removes hover styles
+			cursor: not-allowed;
+
+			&:after {
+				content: '\e811';
+			}
+		}
+	}
 }
 
 
