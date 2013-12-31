@@ -119,7 +119,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.recurring_events_for", orgModel.getObject().getDisplayName()));
+        return new Label(labelId, new FIDLabelModel("label.recurring_schedules_for", orgModel.getObject().getDisplayName()));
     }
 
     @Override
@@ -130,7 +130,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
     @Override
     protected List<NavigationItem> createBreadCrumbs(BaseOrg org) {
         List<NavigationItem> navItems = super.createBreadCrumbs(org);
-        navItems.add(aNavItem().label(new FIDLabelModel("label.recurring_events")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
+        navItems.add(aNavItem().label(new FIDLabelModel("label.recurring_schedules")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
         return navItems;
     }
 

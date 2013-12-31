@@ -11,6 +11,8 @@ import com.n4systems.fieldid.wicket.components.org.events.FilterPanel;
 import com.n4systems.fieldid.wicket.components.org.events.table.ActionsColumn;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
@@ -29,6 +31,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Iterator;
 import java.util.List;
+
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 public class PlaceEventsPage extends PlacePage {
 
@@ -149,6 +153,13 @@ public class PlaceEventsPage extends PlacePage {
     @Override
     public String getMainCss() {
         return "place-event";
+    }
+
+    @Override
+    protected List<NavigationItem> createBreadCrumbs(BaseOrg org) {
+        List<NavigationItem> navItems = super.createBreadCrumbs(org);
+        navItems.add(aNavItem().label(new FIDLabelModel("label.events")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
+        return navItems;
     }
 
     public FIDFeedbackPanel getFeedbackPanel() {
