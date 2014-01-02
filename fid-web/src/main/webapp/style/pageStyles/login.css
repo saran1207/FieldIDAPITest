@@ -71,6 +71,11 @@
     margin-left:125px;
     width:350px;
 }
+.forgot-login-form.minForm input[type="text"] {
+    width: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
 
 #pageFooter .logo {
     float: right;
