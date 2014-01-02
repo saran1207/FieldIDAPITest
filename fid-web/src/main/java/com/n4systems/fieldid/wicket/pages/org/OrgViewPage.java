@@ -12,7 +12,6 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.util.JavascriptUtil;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.ExternalOrg;
 import com.n4systems.util.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -23,16 +22,12 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.navigation.paging.PagingNavigator;
-import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.IRequestParameters;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class OrgViewPage extends FieldIDTemplatePage {
@@ -141,56 +136,6 @@ public class OrgViewPage extends FieldIDTemplatePage {
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
-    }
-
-    private Component  createList(String id) {
-        final WebMarkupContainer list = new WebMarkupContainer(id) {
-            @Override public boolean isVisible() {
-                return PageState.LIST.equals(pageState);
-            }
-        };
-        list.setOutputMarkupId(true);
-
-        list.add(dataTable = new DataView<BaseOrg>("table", provider, ITEMS_PER_PAGE) {
-            @Override protected void populateItem(Item<BaseOrg> item) {
-                final BaseOrg org = item.getModelObject();
-                item.add(createLink("name", org).add(new Label("label", getMatchingNameText(org.getName(), textFilter)).setEscapeModelStrings(false)));
-                String id = org instanceof ExternalOrg ? ((ExternalOrg) org).getCode() : org.getName();
-                item.add(createLink("id", org).add(new Label("label", Model.of(id))));
-                item.add(new Label("parent", org.getParent() == null ? "-" : org.getParent().getName()));
-            }
-
-            private Link createLink(String id, final BaseOrg org) {
-                return new Link(id) {
-                    @Override public void onClick() {
-                        setResponsePage(PlaceSummaryPage.class, new PageParameters().add("id", org.getId()));
-                    }
-                };
-            }
-        });
-        dataTable.setCurrentPage(0);
-        listBehavior = new AbstractDefaultAjaxBehavior() {
-            protected void respond(final AjaxRequestTarget target) {
-                IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
-                textFilter = params.getParameterValue("text").toString();
-                dataTable.setCurrentPage(0);
-                target.add(list);
-            }
-        };
-        dataTable.add(listBehavior);
-
-        list.add(new PagingNavigator("navigator", dataTable) {
-            @Override public boolean isVisible() {
-                return PageState.LIST.equals(pageState) && dataTable.getRowCount()>ITEMS_PER_PAGE; // if only one page, don't need this.
-            }
-        });
-        list.add(dataTable);
-        list.add(new WebMarkupContainer("noResults") {
-            @Override public boolean isVisible() {
-                return dataTable.getRowCount() == 0;
-            }
-        });
-        return list;
     }
 
     private Component createTree(String id) {
