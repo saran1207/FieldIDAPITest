@@ -138,6 +138,7 @@ h2 a {
 	position: relative;
 	min-width: 1024px;
 	max-width: 1400px;
+	width: 98%;
 	margin: 0 auto;	
 }
 #pageHeader #pageActions #companyLogo {
