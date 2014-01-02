@@ -1,40 +1,119 @@
-// The CSS here is used for overriding the framework's 
-// global styles or adding styles that the framework does 
-// not need, to work with old components that have not 
-// been rewritten using the new markup and structure but 
-// need to be displayed on new pages that are written using 
-// the new structure.  As components are moved over to the 
-// new framework, the styles here may need to be rewritten 
-// or deleted.
+// ----------------------------------------------------------------------------------------
+// The CSS here is used for overriding the framework's global styles *or* adding styles 
+// that the framework does not need, to work with *old components* that have not been 
+// rewritten using the new framework markup and css but need to be displayed on pages that 
+// use the new structure. 
+
+// The css here will only affect the styling of old components displayed on the new pages
+// and will not affect the styling of existing pre-framework pages. As components are moved
+// over to the new framework, the styles here may need to be rewritten or deleted.
+// ----------------------------------------------------------------------------------------
+
 
 /* --------------------------------
    Existing wicket modal structure
 -----------------------------------*/
-
 .wicket-modal {
-	
-	//form styles
+	a {
+		color: @blue;
+	}
+	a.mattButton {
+		padding: 5px 12px;
+		.border-radius(2px);
+		font-size: @baseFontSize;
+		width: auto;
+		cursor: pointer;
+		margin: 0;
+		.shadow(none);
+		font-family: @proximaNova;
+		-webkit-font-smoothing: auto;
+	}
+	[class^="btn"] {
+		color: @white;
+	}
+	.btn-secondary {
+		color: @grayDarkest;
+	}
+	div.dialog-modal {
+		.shadow(0px 1px 5px @grayMedium);
+	}
+
+	//FORM STYLES
+	//aligns the label and input on one line
 	.left, .right {
 		float: left;
 	}
 	.left {
 		line-height: 30px;
-		width: 100px;
+		width: 110px;
 		text-align: right;
 		padding-right: 10px;
 	}
 	.right {
-		//input and label are both in right div
+		//checkbox input and label are both in right div
 		.checkbox {
-			margin-left: 99px;
+			margin-left: 109px;
 		}
 	}
+	// aligns tooltip image
 	img.tooltip {
 		padding-left: 5px;
 		vertical-align: middle;
 	}
 	.btn {
 		float: right;
-		margin-top: 20px;
+		margin: 20px 30px 0 0;
+	}
+	
+	//Add Schedule form
+	.newScheduleForm {
+		.schedulePickerTitle {
+			font-size: @baseFontSize + 2;
+			border-bottom: 1px solid @gray;
+			padding-bottom: 4px;
+			font-weight: @bold;
+			color: @grayDarkest;
+			margin-bottom: 5px;
+		}
+		//aligning Set Due Date options
+		.scheduleRow {
+			padding-top: 0;
+
+			.datetimepicker { // input
+				float: left;
+				border: 1px solid #c7c7c9;
+			}
+			.ui-datepicker-trigger { //calendar image
+				float: left;
+				margin-top: 6px;
+			}
+			input[type="checkbox"] {
+				margin: 8px 5px 0 12px;
+			}
+			label { // all day label
+				float: left;
+				margin-top: 6px;
+			}
+			.dateQuickLinks {
+				font-size: @xsmallFontSize;
+				
+				a { 
+					padding: 0 1px;
+				}
+			}
+		}
+		.scheduleRow label,
+		.assignmentSection .assignmentSectionTitle {
+			color: @grayDarkest;
+			font-size: @baseFontSize;
+		}
+		.formActions {
+			padding: 10px 0;
+
+			.blueButton {
+				background: @blue;
+				border: 1px solid darken(@blue, 5%);
+			}
+		}
 	}
 }

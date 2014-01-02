@@ -1,11 +1,9 @@
 .formErrors {
-    /*border:1px solid #FFC2C2;
-    background-color:#FFEBEB;*/
     padding: 10px;
     margin: 10px 0;
 }
 
-/* Added #contentHeader to restrict this changes to just the pre-framework pages */
+/* Added #contentHeader to restrict these changes to just the pre-framework pages */
 #contentHeader #notifications span {
     line-height: 30px;
     padding: 0px 10px;
@@ -27,7 +25,7 @@
 }
 
 /* FID Feedback panel */
-#pageContent .errorMessage ,
+#pageContent .errorMessage,
 .wicket-modal .errorMessage {
     font-size: 13px;
     list-style-type: disc;
@@ -39,4 +37,19 @@
 /* Auto-logout notification */
 #cboxLoadedContent div.error {
     display: none;
+}
+
+/* Modal forms */
+div.formErrors.error {
+    font-size: 13px;
+}
+div.formErrors.error ul {
+    margin-left: 0;
+}
+div.formErrors.error h3 {
+    margin: 4px 0;
+}
+div.dialog-modal h3.w_captionText {
+    color: inherit;
+    font-weight: bold;
 }

@@ -54,6 +54,9 @@ public abstract class PlacePage extends FieldIDTemplatePage {
         if(org.getPrimaryOrg() != null) {
             navItems.add(aNavItem().label(new PropertyModel<String>(org.getPrimaryOrg(), "name")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(org.getPrimaryOrg().getId())).build());
         }
+        if(org.getSecondaryOrg() != null) {
+            navItems.add(aNavItem().label(new PropertyModel<String>(org.getSecondaryOrg(), "name")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(org.getSecondaryOrg().getId())).build());
+        }
         if(org.getCustomerOrg() != null) {
             navItems.add(aNavItem().label(new PropertyModel<String>(org.getCustomerOrg(), "name")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(org.getCustomerOrg().getId())).build());
         }

@@ -7,6 +7,9 @@
 .action-bar .text-search {
   width: 32.2580644%;
 }
+.action-bar .text-search input[type="text"] {
+  width: 98%;
+}
 .tree-custom {
   margin-top: 13px;
 }
@@ -289,3 +292,12 @@
     width: 25%;
   }
 }
+
+ /* NOTE to christina.  derek added this class to nodes that have just been created.
+    the class is removed after delay.
+ */
+.jstree.jstree-default li.added {
+    background: #ffff00;
+}
+
+

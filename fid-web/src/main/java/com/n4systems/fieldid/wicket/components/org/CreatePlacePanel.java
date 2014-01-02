@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.components.org;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -123,10 +122,6 @@ public class CreatePlacePanel extends Panel {
 
         add(form);
 
-        boolean canManageCustomers = FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers();
-
-        add(new WebMarkupContainer("blankSlate").setVisible(!form.isVisible() && canManageCustomers));
-
         setOutputMarkupPlaceholderTag(true);
         IModel<String> cssClass = getCssClass();
         if (cssClass!=null) {
@@ -155,16 +150,17 @@ public class CreatePlacePanel extends Panel {
 
     private IModel<String> getTitleModel() {
         return new Model<String>() {
-            @Override public String getObject() {
+            @Override
+            public String getObject() {
                 PlaceData data = newPlaceModel.getObject();
-                Preconditions.checkArgument(data.getParent()!=null,"need to know what org you are adding to. ");
-                String name = data.getParent().getName();
+                        Preconditions.checkArgument(data.getParent()!=null,"need to know what org you are adding to. ");
+                        String name = data.getParent().getName();
                 if (data.getParent() instanceof PrimaryOrg) {
-                    return new FIDLabelModel("label.add_secondary_customer", name).getObject();
+                            return new FIDLabelModel("label.add_secondary_customer_to_x", name).getObject();
                 } else if (data.getParent() instanceof SecondaryOrg) {
-                    return new FIDLabelModel("label.add_customer", name).getObject();
+                            return new FIDLabelModel("label.add_customer_to_x", name).getObject();
                 } else {
-                    return new FIDLabelModel("label.add_division", name).getObject();
+                            return new FIDLabelModel("label.add_division_to_x", name).getObject();
                 }
             }
         };

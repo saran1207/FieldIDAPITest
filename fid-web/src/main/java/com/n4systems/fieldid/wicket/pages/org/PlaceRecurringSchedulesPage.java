@@ -19,6 +19,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -118,7 +119,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.recurring_events_for", orgModel.getObject().getDisplayName()));
+        return new Label(labelId, new FIDLabelModel("label.recurring_schedules_for", orgModel.getObject().getDisplayName()));
     }
 
     @Override
@@ -129,7 +130,7 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
     @Override
     protected List<NavigationItem> createBreadCrumbs(BaseOrg org) {
         List<NavigationItem> navItems = super.createBreadCrumbs(org);
-        navItems.add(aNavItem().label(new FIDLabelModel("label.recurring_events")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
+        navItems.add(aNavItem().label(new FIDLabelModel("label.recurring_schedules")).page(getClass()).params(PageParametersBuilder.id(org.getId())).build());
         return navItems;
     }
 
@@ -166,7 +167,13 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
                 protected boolean isLinkEnabled() {
                     return !hasEventTypes();
                 }
-            });
+
+                @Override
+                protected void disableLink(ComponentTag tag) {
+                    super.disableLink(tag);
+                    tag.put("class", tag.getAttribute("class") + " disabled");
+                }
+            }.setBeforeDisabledLink("").setAfterDisabledLink(""));
         }
     }
 

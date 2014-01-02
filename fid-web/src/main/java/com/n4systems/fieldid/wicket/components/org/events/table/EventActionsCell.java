@@ -2,10 +2,13 @@ package com.n4systems.fieldid.wicket.components.org.events.table;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.event.EditPlaceEventPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.PlaceEvent;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 
@@ -19,8 +22,8 @@ public class EventActionsCell extends Panel {
 
         WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
 
-        NonWicketLink editLink;
-        optionsContainer.add(editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID=" + event.getID()));
+        BookmarkablePageLink editLink;
+        optionsContainer.add(editLink = new BookmarkablePageLink<Void>("editLink", EditPlaceEventPage.class, PageParametersBuilder.uniqueId(event.getID())));
         editLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("editevent"));
         
         NonWicketLink printLink;

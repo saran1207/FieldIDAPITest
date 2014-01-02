@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.org;
 
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.org.CreatePlacePanel;
@@ -52,6 +53,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
     private PageState pageState = PageState.TREE;
     private WebMarkupContainer tree;
     private CreatePlacePanel createPanel;
+    private WebMarkupContainer blankSlate;
 
     private String textFilter = null;
     private DataView<BaseOrg> dataTable;
@@ -89,14 +91,18 @@ public class OrgViewPage extends FieldIDTemplatePage {
                 super.onCreate(childOrg, target);
                 persistenceService.save(childOrg);
                 toggleCreatePanel(target);
-                orgTree.updateBranch(getParentOrg().getId(), target);
+                orgTree.updateBranch(getParentOrg().getId(), childOrg.getId(), target);
             }
         });
 
+        add(blankSlate = new WebMarkupContainer("blankSlate"));
+        blankSlate.setVisible(FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers());
+        blankSlate.setOutputMarkupPlaceholderTag(true);
     }
 
     private void toggleCreatePanel(AjaxRequestTarget target) {
-        target.add(createPanel.toggle(),getTopFeedbackPanel());
+        blankSlate.setVisible(createPanel.isFormVisible());
+        target.add(blankSlate, createPanel.toggle(), getTopFeedbackPanel());
         if (createPanel.isFormVisible()) {
             javascriptUtil.scrollToTop(target);
         }
@@ -130,6 +136,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
         response.renderCSSReference("style/pages/places.css");
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
@@ -188,7 +195,8 @@ public class OrgViewPage extends FieldIDTemplatePage {
 
     private Component createTree(String id) {
         add(tree = new WebMarkupContainer(id) {
-            @Override public boolean isVisible() {
+            @Override
+            public boolean isVisible() {
                 return PageState.TREE.equals(pageState);
             }
         });
@@ -197,14 +205,16 @@ public class OrgViewPage extends FieldIDTemplatePage {
                 IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
                 Long parentOrgId = params.getParameterValue("orgId").toLong();
                 BaseOrg parent = persistenceService.findById(BaseOrg.class,parentOrgId);
-                target.add(createPanel.resetModelObject(parent).show());
+                blankSlate.setVisible(false);
+                target.add(createPanel.resetModelObject(parent).show(), blankSlate);
                 javascriptUtil.scrollToTop(target);
             }
         };
 
         tree.add(orgTree = new OrgTree("orgTree") {
-            @Override public String getFilterComponent() {
-                return "#"+filter.getMarkupId();
+            @Override
+            public String getFilterComponent() {
+                return "#" + filter.getMarkupId();
             }
         }.withMenuCallback(actionsBehavior));
         return tree;

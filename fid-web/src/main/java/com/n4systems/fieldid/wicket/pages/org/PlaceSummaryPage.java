@@ -42,11 +42,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Date;
 import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
@@ -297,10 +297,10 @@ public class PlaceSummaryPage extends PlacePage {
         final FutureEventsModel model = new FutureEventsModel();
         ListView<PlaceEvent> view = new ListView<PlaceEvent>("events", model ) {
             @Override protected void populateItem(ListItem<PlaceEvent> item) {
-                PlaceEvent event = item.getModelObject();
-                item.add(new Label("due", Model.of(event.getDueDate())));
-                item.add(new Label("type", Model.of(event.getEventType().getDisplayName())));
-                item.add(new Label("assignee", Model.of("joe smith")));
+                IModel<PlaceEvent> event = item.getModel();
+                item.add(new Label("due", new PropertyModel<Date>(event, "dueDate")));
+                item.add(new Label("type", new PropertyModel<Date>(event, "type.displayName")));
+                item.add(new Label("assignee", new PropertyModel<Date>(event, "assignedUserOrGroup.displayName")));
             }
 
             @Override public boolean isVisible() {

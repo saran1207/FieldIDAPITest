@@ -107,6 +107,7 @@ public class PlaceDescendantsPage extends PlacePage {
                 resetModelObject();
             }
             @Override protected void onCancel(AjaxRequestTarget target) {
+                setResponsePage(PlaceSummaryPage.class, PageParametersBuilder.id(getOrg().getId()));
             }
         }.forParentOrg(getOrg()).show());
     }

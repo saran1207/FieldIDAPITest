@@ -24,6 +24,7 @@ import com.n4systems.util.collections.PrioritizedList;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -119,6 +120,10 @@ public class PlaceActionGroup extends Panel {
             }
         });
 
+        if (!hasEvents()) {
+            eventsContainer.add(new AttributeAppender("class", "disabled").setSeparator(" "));
+        }
+
         Component mergeLink;
         Link archiveLink;
         Link recurringSchedulesLink;
@@ -185,6 +190,10 @@ public class PlaceActionGroup extends Panel {
 
     private BaseOrg getOrg() {
         return model.getObject();
+    }
+
+    private boolean hasEvents() {
+        return (!model.getObject().getEventTypes().isEmpty()) && (!placeService.getOpenEventsFor(model.getObject()).isEmpty());
     }
 
     class ScheduledEventsMenuModel extends LoadableDetachableModel<PrioritizedList<PlaceEvent>> {

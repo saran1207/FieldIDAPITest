@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
     <hr>
     <div class="action-bar">
@@ -37,6 +38,10 @@
         <!--</div>-->
     </div>
 
+    <div wicket:id="blankSlate" class="info">
+        <p><wicket:message key="label.create_place_instructions"/></p>
+    </div>
     <div wicket:id="createPanel"/>
 
 </wicket:extend>
+</html>

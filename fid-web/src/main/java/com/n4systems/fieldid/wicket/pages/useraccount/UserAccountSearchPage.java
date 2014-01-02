@@ -104,7 +104,6 @@ public class UserAccountSearchPage extends FieldIDWicketPage {
         return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
     }
 
-
     class GetUsernameForm extends Form {
 
         private String userEmail;

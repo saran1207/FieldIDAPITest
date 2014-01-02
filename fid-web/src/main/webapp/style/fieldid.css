@@ -138,6 +138,7 @@ h2 a {
 	position: relative;
 	min-width: 1024px;
 	max-width: 1400px;
+	width: 98%;
 	margin: 0 auto;	
 }
 #pageHeader #pageActions #companyLogo {
@@ -2370,8 +2371,15 @@ th.wicket_orderDown {
 	border: 2px;	
 }
 
-.allEventsMap { 
+.allEventsMap {
 	height: 550px;
+}
+
+.all-events-map {
+    margin-top: 50px;
+    width: 100%;
+    height: 550px;
+    border: 2px;
 }
 
 .eventMap { 

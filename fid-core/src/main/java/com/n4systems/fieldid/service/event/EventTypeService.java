@@ -52,7 +52,7 @@ public class EventTypeService extends FieldIdPersistenceService {
     // XXX: Not sure why adding post fetch paths to the created builder isn't solving this issue, but it isn't...
     private <T extends EventType> List<T> postFetchForStruts(List<T> results) {
         for (T eventType : results) {
-            PostFetcher.postFetchFields(eventType, "modifiedBy", "modifiedBy.fullName");
+            PostFetcher.postFetchFields(eventType, "modifiedBy", "modifiedBy.fullName", "createdBy", "createdBy.fullName");
         }
         return results;
     }
