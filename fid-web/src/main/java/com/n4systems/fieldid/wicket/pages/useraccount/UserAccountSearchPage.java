@@ -79,6 +79,7 @@ public class UserAccountSearchPage extends FieldIDWicketPage {
         response.renderCSSReference("style/pageStyles/login.css");
         response.renderCSSReference("newCss/layout/layout.css");
         response.renderCSSReference("style/branding/default.css");
+        response.renderJavaScriptReference("jquery/watermark/jquery.watermark.js");
 
         response.renderCSSReference("style/colorbox.css");
         response.renderCSSReference("style/fieldid.css");
