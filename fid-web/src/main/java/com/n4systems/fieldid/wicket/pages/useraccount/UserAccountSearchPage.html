@@ -6,7 +6,21 @@
 
 <wicket:extend>
 
-    <div wicket:id="feedbackPanel" class="formErrors"></div>
+    <div id="page">
+
+        <div id="pageHeader">
+            <div id="companyLogo">
+
+                <img wicket:id="tenantLogo"/>
+            </div>
+
+        </div>
+
+        <div wicket:id="feedbackPanel"></div>
+        <div wicket:id="topFeedbackPanel"></div>
+
+
+        <div id="pageContent" class="brandedContainer public pageContent">
 
     <div id="mainContent" class="login-page">
 
@@ -15,6 +29,7 @@
         </div>
 
     <form wicket:id="GetUsernameForm" class="minForm forgot-login-form">
+
 
         <p class="actionInstructions">
             <wicket:message key="label.forgot_username_instructions"/>
@@ -26,7 +41,7 @@
         </div>
 
         <div class="actions">
-         <input type="submit" wicket:id="sendUsername" wicket:message="value:label.send_email_now" class="blue-submit"/>
+            <a wicket:id="sendUsername" class="blue-submit"><wicket:message key="label.send_email_now"/></a>
             <span style="color:#999;"><wicket:message key="label.or"/></span>
             <a wicket:id="cancel"><wicket:message key="label.return_to_sign_in" /></a>
         </div>
@@ -40,9 +55,28 @@
     <script type="text/javascript">
         jQuery('#userEmail').watermark('userEmail');
     </script>
+    </div>
+    <div id="pageFooter">
+
+        <div id="sslCert">
+            <img wicket:id="password-icon"/>
+           <wicket:message key="label.aboutssl-prefix"/>&nbsp<a target="_blank" href="http://www.thawte.com/digital-certificates/"><wicket:message key="label.aboutssllabel"/></a>
+        </div>
 
 
 
+        <div class="logo">
+            <div>
+                <img wicket:id="logo-icon"/>
+            </div>
+            <div style="margin-top:4px;margin-left:4px;">
+                <a href="http://www.fieldid.com/" target="_blank"><wicket:message key="label.copyright"/>&nbsp;<wicket:message key="label.n4systems"/></a>
+            </div>
+        </div>
+
+
+</div>
+    </div>
 </wicket:extend>
 
 
