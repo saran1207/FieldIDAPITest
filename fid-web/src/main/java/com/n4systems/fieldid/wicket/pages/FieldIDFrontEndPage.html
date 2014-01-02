@@ -69,14 +69,6 @@
 	    			<div wicket:id="navBar"></div>
 	
 				</div>
-	
-				<script type="text/javascript">
-			    	$(document).ready(function() {
-				        $('#searchText').bind('focus', clearDescription);
-			        	$('#searchText').bind('blur', replaceDescription);
-			        	$('#smartSearch').bind('submit', submitSmartSearch);
-			    	});
-				</script>
 
 	        	<div id="pageContent" class="pageContent">
 			        <wicket:child></wicket:child>
@@ -256,11 +248,19 @@
                     </div>
                     <div id="smartSearchContainer">
 
-                        <form id="smartSearch" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
-                            <input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/><input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>
-                        <input type="text" name="search" wicket:message="value:label.search" id="searchText" class="description"/></span>
-
+                        <form id="smartSearch" class="js-smart-search" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
+                            <input type="hidden" name="useContext" value="true" id="smartSearch_useContext"/>
+                            <input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination"/><span class='fieldHolder'>
+                            <input type="text" name="search" wicket:message="value:label.search" id="searchText" class="js-search-text js-description"/></span>
                         </form>
+
+                        <script type="text/javascript">
+                            $(document).ready(function() {
+                                $('.js-search-text').bind('focus', clearDescription);
+                                $('.js-search-text').bind('blur', replaceDescription);
+                                $('.js-smart-search').bind('submit', submitSmartSearch);
+                            });
+                        </script>
                     </div>
                 </div>
             </div>

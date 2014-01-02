@@ -365,6 +365,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
         if(!getMainCss().isEmpty())
             response.renderOnDomReadyJavaScript("$('main[role=\"main\"]').addClass('"+getMainCss()+"');");
+
     }
 
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {

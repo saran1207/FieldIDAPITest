@@ -438,8 +438,8 @@ function selectNone(containerId) {
 var fieldDescriptions = new Object();
 function clearDescription(event) {
 	var element = event.target;
-	if ($(element).hasClass("description")) {
-		$(element).removeClass("description");
+	if ($(element).hasClass("js-description")) {
+		$(element).removeClass("js-description");
 		fieldDescriptions[element.id] = element.value;
 		element.value = "";
 	}
@@ -448,14 +448,14 @@ function clearDescription(event) {
 function replaceDescription(event) {
 	var element = event.target;
 	if (jQuery.trim(element.value).length == 0) {
-		$(element).addClass("description");
+		$(element).addClass("js-description");
 		element.value = fieldDescriptions[element.id];
 	}
 }
 
 function submitSmartSearch(event) {
-	var element = $('#searchText');
-	if (element.value.strip().empty() || element.hasClassName("description")) {
+	var element = $('.js-search-text');
+	if (element.value.strip().empty() || element.hasClassName("js-description")) {
 		alert("You cannot search for a blank identifier or rfid number");
 		event.stop();
 	}

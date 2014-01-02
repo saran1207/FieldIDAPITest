@@ -32,6 +32,7 @@
 	<script src="/fieldid/javascript/vendors/modernizr-2.6.2.js"></script>
 	<!-- Custom javascript configured by tenant -->
 	<span wicket:id="customJsPanel"></span>
+
 </head>
 
 <body class="fieldid-framework">
@@ -220,12 +221,21 @@
                 </li>
             </ul>
 
-            <form class="search" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
+            <form class="search js-smart-search" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
                 <input type="hidden" name="useContext" value="true" id="smartSearch_useContext">
                 <input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination">
-                <input type="text" name="search" wicket:message="value:label.search">
+                <input type="text" name="search" class="js-search-text js-description" wicket:message="value:label.search">
                 <!-- <span class="fontello-search">search</span> -->
             </form>
+
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('.js-search-text').bind('focus', clearDescription);
+                    $('.js-search-text').bind('blur', replaceDescription);
+                    $('.js-smart-search').bind('submit', submitSmartSearch);
+                });
+            </script>
+
         </div><!-- /.content-wrap -->
     </nav><!-- /.nav-main -->
 </wicket:fragment>
