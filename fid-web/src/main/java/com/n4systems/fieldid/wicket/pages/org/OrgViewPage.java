@@ -96,7 +96,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
     }
 
     private void toggleCreatePanel(AjaxRequestTarget target) {
-        target.add(createPanel.toggle(),getTopFeedbackPanel());
+        target.add(createPanel.toggle(), getTopFeedbackPanel());
         if (createPanel.isFormVisible()) {
             javascriptUtil.scrollToTop(target);
         }
@@ -130,6 +130,7 @@ public class OrgViewPage extends FieldIDTemplatePage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
         response.renderCSSReference("style/pages/places.css");
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
