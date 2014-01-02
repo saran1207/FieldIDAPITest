@@ -4,12 +4,10 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.model.Attachment;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable;
-import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
 import com.n4systems.model.orgs.DivisionOrg;
@@ -93,13 +91,6 @@ public class PlaceService extends FieldIdPersistenceService {
 
     public int countEventsFor(BaseOrg org, List<WorkflowState> workflowStates) {
         return getEventsFor(org, null, false, workflowStates).size();
-    }
-
-    public List<? extends Attachment> getAttachmentsFor(BaseOrg org) {
-        Attachment attachment = new AssetAttachment();
-        attachment.setComments("hello world");
-        attachment.setFileName("/images/foo.png");
-        return Lists.newArrayList(attachment);
     }
 
     public void archive(BaseOrg org) {
