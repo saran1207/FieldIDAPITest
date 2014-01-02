@@ -309,8 +309,8 @@ public class OrgLocationTree {
             }
 
             if (o1.getType().equals(o2.getType())) {
-                return o1.isPrimary() ? -1 :
-                        o2.isPrimary() ? 1 :
+                return Boolean.TRUE.equals(o1.isPrimary()) ? -1 :
+                        Boolean.TRUE.equals(o2.isPrimary()) ? 1 :
                         o1.getName().compareToIgnoreCase(o2.getName());
             }
             return NodeType.INTERNAL_ORG.equals(o1.getType()) ? -1 : 1;
