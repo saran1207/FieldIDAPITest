@@ -193,7 +193,7 @@ public class PlaceActionGroup extends Panel {
     }
 
     private boolean hasEvents() {
-        return (!model.getObject().getEventTypes().isEmpty()) && (!placeService.getOpenEventsFor(model.getObject()).isEmpty());
+        return (!model.getObject().getEventTypes().isEmpty()) || (!placeService.getOpenEventsFor(model.getObject()).isEmpty());
     }
 
     class ScheduledEventsMenuModel extends LoadableDetachableModel<PrioritizedList<PlaceEvent>> {
