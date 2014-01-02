@@ -87,7 +87,7 @@ public class ProjectManagerImpl implements ProjectManager {
 		if (statuses != null && !statuses.isEmpty()) {
 			countQueryStr += " AND event.workflowState IN (:statuses) ";
 		}
-		
+
 		Query countQuery = em.createQuery(countQueryStr).setParameter("project", project);
 		filter.applyParameters(countQuery);
 		if (statuses != null && !statuses.isEmpty()) {
@@ -98,7 +98,7 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 
 	private ManualSecurityFilter createManualSecurityFilter(SecurityFilter userFilter, String scheduleTablePrefix) {
-		SecurityDefiner securityDefiner = Event.createSecurityDefiner();
+		SecurityDefiner securityDefiner = ThingEvent.createSecurityDefiner();
 		ManualSecurityFilter filter = new ManualSecurityFilter(userFilter);
 		filter.setTargets(scheduleTablePrefix + "." + securityDefiner.getTenantPath(), scheduleTablePrefix + "." + securityDefiner.getOwnerPath(), null, scheduleTablePrefix + "." + securityDefiner.getStatePath());
 		return filter;
