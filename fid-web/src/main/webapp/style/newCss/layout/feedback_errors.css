@@ -43,9 +43,6 @@
 div.formErrors.error {
     font-size: 13px;
 }
-div.formErrors.error ul {
-    margin-left: 0;
-}
 div.formErrors.error h3 {
     margin: 4px 0;
 }

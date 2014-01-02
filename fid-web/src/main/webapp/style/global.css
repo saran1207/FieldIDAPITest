@@ -696,6 +696,9 @@ section {
   left: 100%;
   min-width: inherit;
 }
+.secondary-dropdown:hover > a {
+  background: #ececec;
+}
 .secondary-dropdown:hover ul {
   display: block;
 }
@@ -718,6 +721,7 @@ section {
 }
 .dropdown.icon {
   padding: 8px 8px 10px;
+  cursor: pointer;
 }
 .dropdown.icon [class^="fontello-"]:before {
   font-size: 18px;
@@ -1947,8 +1951,7 @@ figure p {
   FOOTER
 -----------------------------------------*/
 .footer-global {
-  background: #ececec;
-  padding-top: 20px;
+  background: #f3f3f3;
 }
 .footer-global img {
   float: right;

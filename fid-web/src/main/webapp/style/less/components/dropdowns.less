@@ -87,8 +87,13 @@
 		left: 100%;
 		min-width: inherit;
 	}
-	&:hover ul {
-		display: block;
+	&:hover {
+		> a {
+			background: @grayLight;
+		}
+		ul {
+			display: block;
+		}
 	}
 	> a:after {
 		//content: "\00BB";
@@ -111,6 +116,7 @@
 // Dropdown with icon only
 .dropdown.icon {
 	padding: 8px 8px 10px;
+	cursor: pointer;
 
 	[class^="fontello-"]:before {
 		font-size: @largeFontSize;

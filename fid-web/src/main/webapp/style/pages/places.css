@@ -1,6 +1,9 @@
 /*----------------------------------------- 
   CUSTOM STYLES FOR ALL PAGES UNDER PLACES
 -------------------------------------------*/
+.info.column-wide {
+  margin-top: 22px;
+}
 .action-bar {
   margin-bottom: 30px;
 }
@@ -9,6 +12,12 @@
 }
 .action-bar .text-search input[type="text"] {
   width: 98%;
+}
+/* NOTE to christina.  derek added this class to nodes that have just been created.
+    the class is removed after delay.
+ */
+.jstree.jstree-default li.added {
+  background: #ffff00;
 }
 .tree-custom {
   margin-top: 13px;
@@ -292,12 +301,3 @@
     width: 25%;
   }
 }
-
- /* NOTE to christina.  derek added this class to nodes that have just been created.
-    the class is removed after delay.
- */
-.jstree.jstree-default li.added {
-    background: #ffff00;
-}
-
-
