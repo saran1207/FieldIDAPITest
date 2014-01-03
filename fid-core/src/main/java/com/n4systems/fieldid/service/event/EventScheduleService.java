@@ -71,7 +71,7 @@ public class  EventScheduleService extends FieldIdPersistenceService {
 
     @Transactional
     public Event getNextAvailableSchedule(ThingEvent event) {
-        QueryBuilder<Event> builder = createTenantSecurityBuilder(Event.class);
+        QueryBuilder<ThingEvent> builder = createTenantSecurityBuilder(ThingEvent.class);
         builder.addSimpleWhere("recurringEvent", event.getRecurringEvent());
         builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
 
