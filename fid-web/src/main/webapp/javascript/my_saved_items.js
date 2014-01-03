@@ -4,8 +4,8 @@ function showDropDown() {
     savedItemsDropBoxShown = true;
     jQuery('#mySavedItemsBox').load("/fieldid/w/savedItems", function() { jQuery(this).slideDown(80) } );
     var boxSelector = "#mySavedItemsBox";
-    var linkSelector = "#pageActions";
-    var withinSelector = "#pageHeader";
+    var linkSelector = ".js-page-actions";
+    var withinSelector = ".js-page-header";
     if (typeof(Prototype) == 'object') {
         boxSelector = 'mySavedItemsBox';
         linkSelector = 'pageActions';
