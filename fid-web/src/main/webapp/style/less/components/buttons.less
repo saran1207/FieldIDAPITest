@@ -15,7 +15,7 @@
 	display: inline-block;
 	padding: 8px 16px;
 	.border-radius(2px);
-	border: 1px solid @grayMedium;
+	border: 1px solid @gray-medium;
 	font-size: 14px;
 	color: #fff;
 	.transition(all 0.3s ease-out);
@@ -57,13 +57,13 @@
 
 .btn-secondary {
 	.gradient(#eee, #eee, #fff);
-	color: @grayDarkest;
+	color: @gray-darkest;
 }
 	.dropdown:hover .btn-secondary,
 	.btn-secondary:hover,
 	.btn-secondary.selected {
 		background: @white;
-		color: @grayDarkest;
+		color: @gray-darkest;
 	}
 
 .btn-save {
@@ -76,23 +76,23 @@
 	}
 
 .btn-info {
-	background: @blueDark;
-	border-color: darken(@blueDark, 5%);
+	background: @blue-dark;
+	border-color: darken(@blue-dark, 5%);
 }
 	.dropdown:hover .btn-info,
 	.btn-info:hover {
-		.btn-hover(@blueDark, 20%);
+		.btn-hover(@blue-dark, 20%);
 	}
 
 .btn-warning {
 	background: darken(@yellow, 10%);
 	border-color: darken(@yellow, 40%);
-	color: @grayDark;
+	color: @gray-dark;
 }
 	.dropdown:hover .btn-warning,
 	.btn-warning:hover {
 		.btn-hover(@yellow, 40%);
-		color: @grayDarkest;
+		color: @gray-darkest;
 	}
 
 .btn-danger {
@@ -186,7 +186,7 @@ button[class^="btn"] {
 .dropup {
 	.btn-link {
 		text-decoration: none;
-		color: @grayDarkest;
+		color: @gray-darkest;
 		padding-right: 12px;
 		padding-left: 12px;
 		margin-bottom: 2px;
@@ -228,7 +228,7 @@ button[class^="btn"] {
 		margin-right: -1px;
 	}
 	.dropdown {
-		font-size: @baseFontSize;
+		font-size: @base-font-size;
 	}
 	> [class^="btn"]:not(:last-child),
 	.dropdown:not(:last-child) [class^="btn"],
@@ -262,7 +262,7 @@ button[class^="btn"] {
 	}
 	.dropdown {
 		position: static;
-		font-size: @baseFontSize;
+		font-size: @base-font-size;
 		
 		//reduces padding for dropdown button with arrow icon
 		[class^="btn"] {
@@ -281,7 +281,7 @@ button[class^="btn"] {
 		}
 		.dropdown ul li a {
 			padding: 6px 10px;
-			font-size: @smallFontSize;
+			font-size: @small-font-size;
 		}
 	}
 }

@@ -13,7 +13,7 @@ nav a {
 	> li {
 		display: inline-block;
 		position: relative;
-		font-size: @baseFontSize + 1;
+		font-size: @base-font-size + 1;
 
 		> a {
 			padding: 8px 0 6px; 
@@ -27,7 +27,7 @@ nav a {
 
 /* BREAD CRUMBS */
 .bread-crumb {
-	font-family: @helveticaNeue;
+	font-family: @helvetica-neue;
 	margin: 10px 0 0;
 
 	a {
@@ -54,7 +54,7 @@ nav a {
 /* TABBED NAVIGATION */
 .nav-tabs {
 	position: relative;
-	border-bottom: 1px solid @grayMedium;
+	border-bottom: 1px solid @gray-medium;
 	margin-bottom: 15px;
 
 	> ul {
@@ -67,13 +67,13 @@ nav a {
 			cursor: pointer;
 
 			&.selected {
-				border-color: @grayMedium;
+				border-color: @gray-medium;
 				border-bottom-color: transparent;
 				background: #fff;
 				.border-radius(2px);
 
 				a {
-					color: @grayDarkest;
+					color: @gray-darkest;
 				}
 			}
 			span {
@@ -81,7 +81,7 @@ nav a {
 				display: inline-block;
 
 				&:hover {
-					color: @grayDark;
+					color: @gray-dark;
 				}
 			}
 		}

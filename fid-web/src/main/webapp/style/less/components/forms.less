@@ -11,8 +11,8 @@ fieldset {
 	position: relative;
 }
 legend {
-	font-family: @helveticaNeue;
-	font-weight: @semiBold;
+	font-family: @helvetica-neue;
+	font-weight: @semi-bold;
 	position: absolute;
 	top: 0;
 	font-size: 15px;
@@ -25,9 +25,9 @@ select,
 textarea {
 	.width-fixed(3,2);
 	padding-left: 4px;
-	//font-size: @smallFontSize;
-	font-family: @proximaNova;
-	border: 1px solid @grayMedium;
+	//font-size: @small-font-size;
+	font-family: @proxima-nova;
+	border: 1px solid @gray-medium;
 }
 input[type="text"] {
 	height: 28px;
@@ -45,7 +45,7 @@ textarea {
 textarea:focus, 
 input:focus {
 	outline: none;
-	border-color: @grayDark;
+	border-color: @gray-dark;
 }
 
 form .action-group {
@@ -54,7 +54,7 @@ form .action-group {
 
 //label with no associated input
 .label {
-	font-weight: @semiBold;
+	font-weight: @semi-bold;
 
 	&.inline {
 		margin-right: 8px;
@@ -108,7 +108,7 @@ input[type="checkbox"] {
 .input-combo {
 	display: inline-block;
 	position: relative;
-	border: 1px solid @grayMedium;
+	border: 1px solid @gray-medium;
 	margin: 4px 0;
 
 	input[type="text"] {
@@ -177,11 +177,11 @@ input[type="checkbox"] {
 // 	background: none;
 // 	height: 29px;
 // 	padding-left: 4px;
-// 	border-color: @grayMedium;
+// 	border-color: @gray-medium;
 // }
 // .chzn-container-single .chzn-single span,
 // .chzn-container-single .chzn-default{
-// 	color: lighten(@grayDarkest, 25%);
+// 	color: lighten(@gray-darkest, 25%);
 // }
 // .chzn-container-single .chzn-single div b {
 // 	background-position-y: 3px;
@@ -203,7 +203,7 @@ input[type="checkbox"] {
 input:disabled {
 	border: none;
 	background: @white;
-	color: @grayDarkest;
+	color: @gray-darkest;
 }
 
 .editable-inputs {
@@ -254,7 +254,7 @@ legend + p {
 .search-box {
 	.border-radius(3px);
 	width: 280px;
-	border: 1px solid @grayMedium;
+	border: 1px solid @gray-medium;
 	height: 28px;
 	background: #fff;
 	
@@ -272,10 +272,10 @@ legend + p {
 // Text search, no button needed
 // -----------------------------
 .text-search {
-	border: 1px solid @grayMedium;
+	border: 1px solid @gray-medium;
 	
 	.fontello-search:before {
-		color: @grayMedium;
+		color: @gray-medium;
 		padding-left: 6px;
 	}
 	input[type="text"] {
@@ -310,7 +310,7 @@ legend + p {
 //add class to the <fieldset> that contains the primary selection to create more prominence
 .primary-selection {
 	padding-bottom: 15px;
-	background: @grayLight;
+	background: @gray-light;
 	border: 1px solid @gray;
 
 	label {
@@ -362,7 +362,7 @@ form {
 		margin-bottom: 0;
 	}
 	.link {
-		font-size: @smallFontSize;
+		font-size: @small-font-size;
 	}
 	.text-block {
 		margin-left: 194px;
@@ -400,7 +400,7 @@ form {
 		.clearfix;
 
 		label, .text-block {
-			font-size: @smallFontSize;
+			font-size: @small-font-size;
 		}
 		.text-block {
 			margin-top: 0;
@@ -432,8 +432,8 @@ form {
 		margin-left: 45%;
 	}
 	.primary-selection label {
-		font-size: @baseFontSize;
-		font-weight: @semiBold;
+		font-size: @base-font-size;
+		font-weight: @semi-bold;
 	}
 }
 

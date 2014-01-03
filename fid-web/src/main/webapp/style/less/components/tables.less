@@ -11,7 +11,7 @@ table {
 th {
 	text-align: left;
 	background: @gray;
-	border-bottom: 1px solid @grayMedium;
+	border-bottom: 1px solid @gray-medium;
 	padding: 8px 6px;
 
 	&:first-child {
@@ -33,7 +33,7 @@ td {
 td,
 td p,
 td h4 {
-	font-size: @smallFontSize;
+	font-size: @small-font-size;
 }
 tr {
 	margin-left: 5px;
@@ -42,12 +42,12 @@ tr {
 /* Table headings that contain sortable links */
 th {
 	a {
-		color: @grayDarkest;
+		color: @gray-darkest;
 		display: inline-block;
 	}
 }
 th.active {
-	background: @grayMedium;
+	background: @gray-medium;
 
 	a {
 		text-decoration: none;
@@ -60,7 +60,7 @@ th.active {
 /* Each row has a bottom border */
 table.borders {
 	tr {
-		border-bottom: 1px solid @grayLight;
+		border-bottom: 1px solid @gray-light;
 
 		&:last-child {
 			border-bottom: none;
@@ -71,7 +71,7 @@ table.borders {
 /* Every other row has a bg color */
 table.striped {
 	tr:nth-child(odd) {
-		background: @grayLight;
+		background: @gray-light;
 	}
 	th,
 	td {
@@ -120,7 +120,7 @@ table.comfortable {
 		.clearfix();
 	}
 	&.borders > li {
-		border-bottom: 1px solid @grayLight;
+		border-bottom: 1px solid @gray-light;
 	}
 	.action-group {
 		position: absolute;

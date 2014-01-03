@@ -59,26 +59,26 @@
 			}
 		}
 		li.internal-org {
-			font-size: @baseFontSize;
+			font-size: @base-font-size;
 			font-weight: @regular;
 			
 			//only applied when the parent org is also shown
 			li.customer-org {
 				padding: 2px 0;
-				border-top: 1px dashed @grayLight;
+				border-top: 1px dashed @gray-light;
 
 				span {
-					font-size: @smallFontSize;
+					font-size: @small-font-size;
 				}
 			}
 		}
 		//applied when only this level is showing without parent org
 		li.customer-org {
-			font-size: @baseFontSize;
+			font-size: @base-font-size;
 			border-bottom: none;
 		}
 		li.division-org {
-			font-size: @smallFontSize;
+			font-size: @small-font-size;
 			border-bottom: none;
 
 			&:first-child {
@@ -93,7 +93,7 @@
 			background: none;
 		}
 		ins {
-			font-size: @baseFontSize;
+			font-size: @base-font-size;
 		}
 		&.jstree-focused {
 			margin-top: 0;
@@ -108,6 +108,7 @@
 			border: none;
 			padding: 2px 0;
 		}
+		//primary icons
 		.primary {
 			&.jstree-open > ins:before {
 				.fontello-minus-squared(0 3px);
@@ -119,6 +120,7 @@
 				font-weight: @bold;
 			}
 		}
+		//secondary and customer/jobsite icons
 		.secondary,
 		.customer-org {
 			&.jstree-open > ins:before  {
@@ -205,7 +207,7 @@
 .dropdown ul .add-descendant {
 	em {
 		display: block;
-		color: @grayDark;
+		color: @gray-dark;
 		// font-style: normal
 	}
 	a {
@@ -232,7 +234,7 @@
 		.feature-image {
 			// background: @black;
 			margin-top: 4px;
-			border: 1px solid @grayMedium;
+			border: 1px solid @gray-medium;
 			padding: 5px;
 
 			img {
@@ -309,7 +311,7 @@
 		th {
 			background: transparent;
 			padding-bottom: 0;
-			font-size: @largeFontSize;
+			font-size: @large-font-size;
 			font-weight: @regular;
 
 			&:first-child,

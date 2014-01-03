@@ -26,7 +26,7 @@
 	font-size: 0; //hides text
 
 	&:before {
-		font-size: @baseFontSize; //shows icon
+		font-size: @base-font-size; //shows icon
 		font-family: @fontello;
 		speak: none; //determines whether or not to render text aurally
 		text-decoration: inherit;
@@ -116,7 +116,7 @@
 // Options for different sized icons
 .icon-lrg,
 [class^="fontello-"].icon-lrg:before {
-	font-size: @largeFontSize;
+	font-size: @large-font-size;
 }
 [class^="fontello-"].icon-lrg {
 	font-size: 0;
@@ -141,8 +141,8 @@
 	.text-hide();
 
 	&:before {
-		color: @grayDarkest;
-		font-size: @baseFontSize;
+		color: @gray-darkest;
+		font-size: @base-font-size;
 	}
 }
 .icon-calendar {
