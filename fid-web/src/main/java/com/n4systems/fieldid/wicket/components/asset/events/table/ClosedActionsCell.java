@@ -40,7 +40,6 @@ public class ClosedActionsCell extends Panel {
 
                 }
                 info(new FIDLabelModel("message.eventdeleted").getObject());
-                eventListPanel.getDefaultModel().detach();
                 target.add(eventListPanel);
                 target.add(((FieldIDFrontEndPage) getPage()).getTopFeedbackPanel());
 
