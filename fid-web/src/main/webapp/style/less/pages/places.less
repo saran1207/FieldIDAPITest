@@ -25,14 +25,6 @@
 	}
 }
 
-
- /* NOTE to christina.  derek added this class to nodes that have just been created.
-    the class is removed after delay.
- */
-.jstree.jstree-default li.added {
-    background: #ffff00;
-}
-
 // Tree view / left column
 //overrides for jstree plugin
 .tree-custom {
@@ -106,6 +98,10 @@
 		&.jstree-focused {
 			margin-top: 0;
 		}
+		// changes the background to yellow for newly added Places 
+		li.added {
+		    background: @yellow;
+		}
 		.jstree-hovered,
 		.jstree-clicked {
 			background: none;
@@ -131,8 +127,7 @@
 			&.jstree-closed > ins:before  {
 				.fontello-plus-squared-small;
 			}
-		}
-		
+		}	
 
 		// add links
 		.action {
@@ -211,7 +206,7 @@
 	em {
 		display: block;
 		color: @grayDark;
-		font-style: normal
+		// font-style: normal
 	}
 	a {
 		white-space: normal;
@@ -235,8 +230,10 @@
 			display: inline-block;
 		}
 		.feature-image {
-			background: @black;
+			// background: @black;
 			margin-top: 4px;
+			border: 1px solid @grayMedium;
+			padding: 5px;
 
 			img {
 				background: @white;
@@ -257,6 +254,9 @@
 				float: left;
 			}
 		}
+	}
+	.info.empty-schedule {
+		margin-top: 5px;
 	}
 	.google-map {
 		width: 100%;

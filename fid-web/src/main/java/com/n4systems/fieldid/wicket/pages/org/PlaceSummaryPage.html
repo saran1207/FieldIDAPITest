@@ -5,16 +5,15 @@
     <div class="column-left">
         <!-- profile summary image -->
         <div wicket:id="imageContainer" class="uploads">
-            <p wicket:id="imgMsg" class="note"><wicket:message key="label.upload_profile_image"/></p>
             <div class="feature-image">
                 <img wicket:id="img">
             </div>
-            
             <form wicket:id="imageUploadForm" class="input-combo file-upload fluid">
                 <input wicket:id="imageUploadField" type="file">
                 <input type="text">
                 <span class="btn-secondary btn-sml">Browse</span>
             </form>
+            <p wicket:id="imgMsg" class="note"><wicket:message key="label.upload_profile_image"/></p>
             <a wicket:id="removeImageLink"><wicket:message key="label.remove"/></a>
         </div>
 
@@ -107,22 +106,25 @@
             <label wicket:for="certImageUploadField"><wicket:message key="label.pdf_report_image"/></label>
 
             <div class="controls">
-                <p wicket:id="certImgMsg" class="note">&nbsp;<wicket:message key="label.upload_certificate_image"/></p>
                 <div class="feature-image">
                     <img wicket:id="certImg">
                 </div>
-                
                 <form wicket:id="certImageUploadForm" class="input-combo file-upload fluid">
                     <input wicket:id="certImageUploadField" type="file">
                     <input type="text">
                     <span class="btn-secondary btn-sml">Browse</span>
                 </form>
+                <p wicket:id="certImgMsg" class="note">&nbsp;<wicket:message key="label.upload_certificate_image"/></p>
                 <a wicket:id="removeCertImageLink"><wicket:message key="label.remove"/></a>
             </div>
         </div>
     </div><!-- cls .column-left-->
 
     <div class="column-wide">
+
+        <div class="info empty-schedule">
+            <p><wicket:message key="label.empty_schedule_list"/>.</p>
+        </div>
         <!-- Location map -->
         <div wicket:id="map" class="google-map"></div>
 
@@ -132,8 +134,7 @@
             <a wicket:id="viewAll" class="btn-primary btn-sml pull-right"><wicket:message key="label.view_all_schedules"/></a>
         </section>
 
-        <table wicket:id="eventsListContainer" class="need-some-class-herewithOverFlowY">
-            <tbody>
+        <table wicket:id="eventsListContainer">
             <tr>
                 <th><wicket:message key="label.due_date"/></th>
                 <th><wicket:message key="label.event_type"/></th>
@@ -144,7 +145,6 @@
                 <td><span wicket:id="type"/></td>
                 <td><span wicket:id="assignee"/></td>
             </tr>
-            </tbody>
         </table>
         </wicket:enclosure>
     </div>
