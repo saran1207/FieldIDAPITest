@@ -2014,10 +2014,9 @@ body {
   float: left;
 }
 .wicket-modal .left {
-  line-height: 30px;
   width: 110px;
   text-align: right;
-  padding-right: 10px;
+  padding: 10px 10px 0 0;
 }
 .wicket-modal .right .checkbox {
   margin-left: 109px;

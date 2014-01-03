@@ -486,6 +486,9 @@
 .fieldid-framework .chzn-container-single .chzn-single {
   line-height: 29px;
 }
+.fieldid-framework .chzn-container-single .chzn-single abbr {
+  top: 9px;
+}
 .fieldid-framework .chzn-container .chzn-results .highlighted {
   background-color: #dddddd;
   background-image: none;
