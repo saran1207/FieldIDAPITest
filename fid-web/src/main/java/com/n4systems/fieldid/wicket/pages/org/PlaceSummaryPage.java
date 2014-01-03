@@ -75,9 +75,9 @@ public class PlaceSummaryPage extends PlacePage {
 
     private WebMarkupContainer certImageContainer;
     private WebMarkupContainer certImageMsg;
+    private WebMarkupContainer schedulesBlankSlate;
     private WebComponent certImage;
     private AjaxLink removeCertImageLink;
-
 
     public PlaceSummaryPage(PageParameters params) {
         super(params);
@@ -87,18 +87,22 @@ public class PlaceSummaryPage extends PlacePage {
 
         add(map = new GoogleMap("map", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getGpsLocation())));
 
-        add(futureEventsListContainer = new WebMarkupContainer("eventsListContainer") {
-            @Override
-            public boolean isVisible() {
-                return futureEventsListView.getList().size() > 0;
-            }
-        });
+
+        add(futureEventsListContainer = new WebMarkupContainer("eventsListContainer"));
         futureEventsListContainer.add(futureEventsListView = createFutureEventsListView());
         futureEventsListContainer.setOutputMarkupPlaceholderTag(true);
 
+        boolean hasSchedules = futureEventsListView.getList().size() > 0;
+
+        futureEventsListContainer.setVisible(hasSchedules);
+
+        add(schedulesBlankSlate = new WebMarkupContainer("schedulesBlankSlate"));
+        schedulesBlankSlate.setOutputMarkupPlaceholderTag(true);
+        schedulesBlankSlate.setVisible(!hasSchedules);
+
         PageParameters pageParameters = PageParametersBuilder.id(org.getId());
         pageParameters.add(PlaceEventsPage.OPEN_PARAM, true);
-        add(new BookmarkablePageLink<PlaceEventsPage>("viewAll", PlaceEventsPage.class, pageParameters));
+        futureEventsListContainer.add(new BookmarkablePageLink<PlaceEventsPage>("viewAll", PlaceEventsPage.class, pageParameters));
 
         add(imageContainer = new WebMarkupContainer("imageContainer"));
         imageContainer.setOutputMarkupId(true);
@@ -284,8 +288,10 @@ public class PlaceSummaryPage extends PlacePage {
 
     @Override
     protected void refreshContent(AjaxRequestTarget target) {
-        futureEventsListContainer.setVisible(futureEventsListView.getList().size() > 0);
-        target.add(futureEventsListContainer);
+        boolean hasSchedules = futureEventsListView.getList().size() > 0;
+        futureEventsListContainer.setVisible(hasSchedules);
+        schedulesBlankSlate.setVisible(!hasSchedules);
+        target.add(futureEventsListContainer, schedulesBlankSlate);
     }
 
     @Override

@@ -122,31 +122,30 @@
 
     <div class="column-wide">
 
-        <div class="info empty-schedule">
+        <div wicket:id="schedulesBlankSlate" class="info empty-schedule">
             <p><wicket:message key="label.empty_schedule_list"/>.</p>
         </div>
         <!-- Location map -->
         <div wicket:id="map" class="google-map"></div>
 
-        <wicket:enclosure child="eventsListContainer">
-        <section>
-            <h3 class="pull-left no-border"><wicket:message key="label.next_7_days"/></h3>
-            <a wicket:id="viewAll" class="btn-primary btn-sml pull-right"><wicket:message key="label.view_all_schedules"/></a>
-        </section>
-
-        <table wicket:id="eventsListContainer">
-            <tr>
-                <th><wicket:message key="label.due_date"/></th>
-                <th><wicket:message key="label.event_type"/></th>
-                <th><wicket:message key="label.assignedto"/></th>
-            </tr>
-            <tr wicket:id="events">
-                <td><span wicket:id="due"/></td>
-                <td><span wicket:id="type"/></td>
-                <td><span wicket:id="assignee"/></td>
-            </tr>
-        </table>
-        </wicket:enclosure>
+        <div wicket:id="eventsListContainer">
+            <section>
+                <h3 class="pull-left no-border"><wicket:message key="label.next_7_days"/></h3>
+                <a wicket:id="viewAll" class="btn-primary btn-sml pull-right"><wicket:message key="label.view_all_schedules"/></a>
+            </section>
+            <table>
+                <tr>
+                    <th><wicket:message key="label.due_date"/></th>
+                    <th><wicket:message key="label.event_type"/></th>
+                    <th><wicket:message key="label.assignedto"/></th>
+                </tr>
+                <tr wicket:id="events">
+                    <td><span wicket:id="due"/></td>
+                    <td><span wicket:id="type"/></td>
+                    <td><span wicket:id="assignee"/></td>
+                </tr>
+            </table>
+        </div>
     </div>
 
 </wicket:extend>
