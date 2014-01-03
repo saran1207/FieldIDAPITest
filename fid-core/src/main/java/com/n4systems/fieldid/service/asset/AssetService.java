@@ -292,9 +292,11 @@ public class AssetService extends FieldIdPersistenceService {
     }
 
     private void updateSchedulesOwnership(Asset asset) {
+        // just load the list because in order to paginate
         QueryBuilder<Long> schedules = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(asset.getTenant().getId()))
                 .setSimpleSelect("id")
                 .addSimpleWhere("asset", asset)
+                .addSimpleWhere("state", Archivable.EntityState.ACTIVE)
                 .addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
 
         for (Long id : persistenceService.findAll(schedules)) {

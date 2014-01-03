@@ -13,11 +13,13 @@ import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.mail.MessagingException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
+@Transactional
 public class AdminUserService extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(AdminUserService.class);
 
