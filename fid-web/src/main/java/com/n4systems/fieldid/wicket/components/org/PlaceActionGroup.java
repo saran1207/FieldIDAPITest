@@ -83,13 +83,18 @@ public class PlaceActionGroup extends Panel {
 
         add(schedulePicker);
 
-
-        add(new AjaxLink<Void>("scheduleLink") {
+        AjaxLink scheduleLink;
+        add(scheduleLink = new AjaxLink<Void>("scheduleLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 schedulePicker.show(target);
             }
-        }.setVisible(canCreateEvents));
+        });
+        scheduleLink.setVisible(canCreateEvents);
+
+        if (!hasAssociatedEvents()) {
+            scheduleLink.add(new AttributeAppender("class", "disabled").setSeparator(" "));
+        }
 
         add(eventsContainer = new WebMarkupContainer("eventsContainer"));
         eventsContainer.setOutputMarkupPlaceholderTag(true);
@@ -193,7 +198,11 @@ public class PlaceActionGroup extends Panel {
     }
 
     private boolean hasEvents() {
-        return (!model.getObject().getEventTypes().isEmpty()) || (!placeService.getOpenEventsFor(model.getObject()).isEmpty());
+        return (hasAssociatedEvents()) || (!placeService.getOpenEventsFor(model.getObject()).isEmpty());
+    }
+
+    private boolean hasAssociatedEvents() {
+        return !model.getObject().getEventTypes().isEmpty();
     }
 
     class ScheduledEventsMenuModel extends LoadableDetachableModel<PrioritizedList<PlaceEvent>> {
