@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.orgs.CountryFromAddressModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.api.DisplayEnum;
 import com.n4systems.model.builders.OrgBuilder;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -29,8 +30,8 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.EnumChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -43,9 +44,6 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import java.io.Serializable;
 
 public class CreatePlacePanel extends Panel {
-
-
-    enum Level {SECONDARY,CUSTOMER};
 
     private Form<PlaceData> form;
     private Component feedback;
@@ -71,7 +69,7 @@ public class CreatePlacePanel extends Panel {
             .add(new TextArea("notes"))
             .add(new TextField("contactName"))
             .add(new TextField("email").add(EmailAddressValidator.getInstance()))
-            .add(new FidDropDownChoice<Level>("level", new PropertyModel(newPlaceModel, "level"), Lists.newArrayList(Level.values()), new EnumChoiceRenderer<Level>()) {
+            .add(new FidDropDownChoice<Level>("level", new PropertyModel(newPlaceModel, "level"), Lists.newArrayList(Level.values()), getLevelChoiceRenderer()) {
             @Override
             public boolean isVisible() {
                 return newPlaceModel.getObject().parent instanceof PrimaryOrg;
@@ -199,6 +197,39 @@ public class CreatePlacePanel extends Panel {
         return this;
     }
 
+    public IChoiceRenderer<Level> getLevelChoiceRenderer() {
+        return new IChoiceRenderer<Level>() {
+            @Override
+            public Object getDisplayValue(Level object) {
+                return new FIDLabelModel(object.getLabel()).getObject();
+            }
+
+            @Override
+            public String getIdValue(Level object, int index) {
+                return object.name();
+            }
+        };
+    }
+
+    private enum Level implements DisplayEnum{
+        SECONDARY("label.level.secondary"),
+        CUSTOMER("label.level.customer");
+
+        private String label;
+
+        private Level(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String getLabel() {
+            return label;
+        }
+
+        public String getName() {
+            return name();
+        }
+    };
 
     class PlaceData implements Serializable {
         private String code, contactName, email, notes, name;
