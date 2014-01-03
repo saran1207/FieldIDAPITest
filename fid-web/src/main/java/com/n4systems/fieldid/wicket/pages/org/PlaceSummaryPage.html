@@ -128,12 +128,10 @@
         <!-- Location map -->
         <div wicket:id="map" class="google-map"></div>
 
-        <div wicket:id="eventsListContainer">
-            <section>
-                <h3 class="pull-left no-border"><wicket:message key="label.next_7_days"/></h3>
-                <a wicket:id="viewAll" class="btn-primary btn-sml pull-right"><wicket:message key="label.view_all_schedules"/></a>
-            </section>
-            <table>
+        <section wicket:id="eventsListContainer">
+            <h3 class="pull-left no-border"><wicket:message key="label.next_7_days"/></h3>
+            <a wicket:id="viewAll" class="btn-primary btn-sml pull-right"><wicket:message key="label.view_all_schedules"/></a>
+            <table class="clear">
                 <tr>
                     <th><wicket:message key="label.due_date"/></th>
                     <th><wicket:message key="label.event_type"/></th>
@@ -145,7 +143,7 @@
                     <td><span wicket:id="assignee"/></td>
                 </tr>
             </table>
-        </div>
+        </section>
     </div>
 
 </wicket:extend>
