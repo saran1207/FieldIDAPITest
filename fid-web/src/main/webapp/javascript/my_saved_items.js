@@ -39,13 +39,12 @@ function listenForSavedItemsHover() {
             showDropDown(); 
         }, 
         function() {
-            //do nothing on mouseleave
+            jQuery(this).parents('#pageActions').mouseleave(hideDropDown);
+
+            // new template/framework header
+            jQuery(this).parents('.js-nav-user').mouseleave(hideDropDown);
         }
     );
-    jQuery('#mySavedItemsLink').parents('#pageActions').mouseleave(hideDropDown);
-    
-    // new template/framework header
-    jQuery('#mySavedItemsLink').parents('.js-nav-user').mouseleave(hideDropDown);
 }
 
 //jQuery(document).ready(function() { listenForSavedItemsClick(); });

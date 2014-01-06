@@ -1840,10 +1840,11 @@ figure p {
   position: absolute;
   top: 0;
   width: 100%;
+  height: 75px;
   z-index: 100;
 }
 .global-header .nav-user .nav-list {
-  margin-top: 10px;
+  padding-top: 10px;
 }
 .global-header .nav-user .nav-list > li {
   border-left: 1px solid #c7c7c9;
