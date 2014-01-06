@@ -94,7 +94,7 @@ public abstract class ThingEventPage extends EventPage<ThingEvent> {
 
     @Override
     protected void gotoSummaryPage(ThingEvent event) {
-        setResponsePage(AssetSummaryPage.class, PageParametersBuilder.id(event.getAsset().getId()));
+        setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
     }
 
     @Override
