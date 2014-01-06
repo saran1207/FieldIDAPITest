@@ -174,7 +174,7 @@ public class PlaceSummaryPage extends PlacePage {
                 }
                 persistenceService.save(getOrg());
                 info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
-                target.add(map,getTopFeedbackPanel());
+                target.add(map, getTopFeedbackPanel());
             }
 
             @Override protected void error(AjaxRequestTarget target) {
@@ -190,7 +190,9 @@ public class PlaceSummaryPage extends PlacePage {
             .add(address = new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())) {
                 @Override protected void onCountryChange(AjaxRequestTarget target) {
                     setDefaultTimeZone();
-                    target.add(timeZone);
+                    if (timeZone.isVisible()) {
+                        target.add(timeZone);
+                    }
                 }
             }.withExternalMap(map.getJsVar()).hideIfChildrenHidden())
             .add(timeZone = new FidDropDownChoice<Region>("timeZone", regionModel, new RegionListModel(countryModel), new ListableChoiceRenderer<Region>()) {
