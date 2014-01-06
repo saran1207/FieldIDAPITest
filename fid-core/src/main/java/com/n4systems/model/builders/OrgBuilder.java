@@ -64,15 +64,15 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	}
 
     public OrgBuilder tenant(Tenant tenant) {
-        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent, null));
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
     }
 
     public OrgBuilder withAddress(AddressInfo addressInfo) {
-        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent, null));
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
     }
 
     public OrgBuilder withCode(String code) {
-        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent, null));
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
     }
 
     public OrgBuilder withAllTestData() {
