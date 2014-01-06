@@ -57,6 +57,9 @@
 .text-right {
   text-align: right;
 }
+.match {
+  background: #ffffb2;
+}
 /*--------------------------------------- 
   TYPOGRAPHY
 -----------------------------------------*
