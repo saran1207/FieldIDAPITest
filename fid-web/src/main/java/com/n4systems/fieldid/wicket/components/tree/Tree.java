@@ -17,6 +17,7 @@ public abstract class Tree extends Panel {
 
     private static final String INIT_TREE_JS = "%s = treeFactory.create('%s',%s);";
     private static final String UPDATE_TREE_JS = "%s.updateBranch('#%d','#%d')";
+    private static final String REFRESH_TREE_JS = "%s.refresh()";
 
     protected final AbstractDefaultAjaxBehavior ajaxBehavior;
     private String search = null;
@@ -97,7 +98,11 @@ public abstract class Tree extends Panel {
     }
 
     public void updateBranch(Long parentOrgId, Long orgId, AjaxRequestTarget target) {
-        target.appendJavaScript(String.format(UPDATE_TREE_JS,getJsVariableName(),parentOrgId, orgId));
+        target.appendJavaScript(String.format(UPDATE_TREE_JS, getJsVariableName(), parentOrgId, orgId));
+    }
+
+    public void refresh(AjaxRequestTarget target) {
+        target.appendJavaScript(String.format(REFRESH_TREE_JS, getJsVariableName()));
     }
 
     // ----------------------------------------------------------------------------------------

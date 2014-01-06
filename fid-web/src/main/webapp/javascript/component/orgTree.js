@@ -58,6 +58,9 @@ var orgTreeFactory = (function() {
 				,2000);
 		}
 
+        var refresh = function() {
+            jQuery.jstree._reference(getTree()).refresh(-1);
+        }
 
 		function showNoResultsMsg() {
 			var noResults = $tree.siblings('.no-results');
@@ -189,7 +192,8 @@ var orgTreeFactory = (function() {
 
 		return {
 			update : update,
-			updateBranch : updateBranch
+			updateBranch : updateBranch,
+            refresh: refresh
 		}
 
 	}
