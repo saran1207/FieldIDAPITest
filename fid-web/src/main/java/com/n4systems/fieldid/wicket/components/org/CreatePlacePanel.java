@@ -45,6 +45,27 @@ import java.io.Serializable;
 
 public class CreatePlacePanel extends Panel {
 
+    enum Level implements DisplayEnum {
+        SECONDARY("label.level.secondary"),
+        CUSTOMER("label.level.customer");
+
+        private String label;
+
+        private Level(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String getLabel() {
+            return label;
+        }
+
+        public String getName() {
+            return name();
+        }
+    };
+
+
     private Form<PlaceData> form;
     private Component feedback;
     private CompoundPropertyModel<PlaceData> newPlaceModel = new CompoundPropertyModel(new PlaceData());
@@ -210,26 +231,6 @@ public class CreatePlacePanel extends Panel {
             }
         };
     }
-
-    private enum Level implements DisplayEnum{
-        SECONDARY("label.level.secondary"),
-        CUSTOMER("label.level.customer");
-
-        private String label;
-
-        private Level(String label) {
-            this.label = label;
-        }
-
-        @Override
-        public String getLabel() {
-            return label;
-        }
-
-        public String getName() {
-            return name();
-        }
-    };
 
     class PlaceData implements Serializable {
         private String code, contactName, email, notes, name;

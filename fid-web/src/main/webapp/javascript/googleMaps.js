@@ -78,6 +78,7 @@ var googleMapFactory = (function() {
 		 var $postalCode = $address.children('.postal-code');
 		 var $state = $address.children('.state');
 		 var $map;
+		 var currentInput;
 
 		 if (!options.noMap) {
 			 $map = (options.mapVar) ? window[options.mapVar] : createAndShowWithLocation($address.children('.map').attr('id'), options.lat, options.lng);
@@ -113,25 +114,40 @@ var googleMapFactory = (function() {
 			 return "";
 		 }
 
-		 function update(item) {
-			$text.val(item.formatted_address);
-			var latLng = item.geometry.location;
-			$lat.val(latLng.lat());
-			$lng.val(latLng.lng());
-			if ($map) {
-				$map.setLocation(latLng.lat(), latLng.lng(), item.formatted_address);
+		 function updateNonAddress(textInput) {
+		 	update(textInput);
+		 }
+
+		 function updateAddress(item) {
+		 	update(item.formatted_address, item.geometry.location, item.address_components);
+		 }
+
+		 function update(formattedAddress, latLng, addressInfo) {
+			$text.val(formattedAddress);
+			if (latLng) {
+				$lat.val(latLng.lat());
+				$lng.val(latLng.lng());
+				if ($map) {
+					$map.setLocation(latLng.lat(), latLng.lng(), formattedAddress);
+				}
 			}
 
-			var addressInfo = item.address_components;
-			$street_address.val(extractFromGeoCode(addressInfo,'street_number') + ' ' + extractFromGeoCode(addressInfo,'route'));
-			$city.val(extractFromGeoCode(addressInfo,'locality'));
-			$country.val(extractFromGeoCode(addressInfo,'country'));
-			$postalCode.val(extractFromGeoCode(addressInfo,'postal_code'));
-			$state.val(extractFromGeoCode(addressInfo,'administrative_area_level_1'));
-			$country.val(extractFromGeoCode(addressInfo,'country'));
+			if (addressInfo) {
+				$street_address.val(extractFromGeoCode(addressInfo,'street_number') + ' ' + extractFromGeoCode(addressInfo,'route'));
+				$city.val(extractFromGeoCode(addressInfo,'locality'));
+				$country.val(extractFromGeoCode(addressInfo,'country'));
+				$postalCode.val(extractFromGeoCode(addressInfo,'postal_code'));
+				$state.val(extractFromGeoCode(addressInfo,'administrative_area_level_1'));
+			} else {
+				$street_address.val(null);
+				$city.val(null);
+				$country.val(null);
+				$postalCode.val(null);
+				$state.val(null);
+			}
 
-			 // for now, the wicket component only listens for changes on the country field. other events may have to be triggered later.
-			 $country.change();
+			currentInput = $text.val();
+
 //			 TODO : if timezone is required the do webservice call to
 //			 https://maps.googleapis.com/maps/api/timezone/json?location=-33.86,151.20&timestamp=0&sensor=false
 //			 which yields {
@@ -148,15 +164,22 @@ var googleMapFactory = (function() {
 			 delay:500,
 			 minLength:1,
 			 source: function(request,response) { getAddresses(request,response); },
-			 focus: function(event,ui) {
-				 update(ui.item);
+//			 focus: function(event,ui) {
+//				 updateAddress(ui.item);
+//				 return false;
+//			 },
+			 select: function(event,ui) {
+				 updateAddress(ui.item);
+				 $country.change();
 				 return false;
 			 },
-			 select: function(event,ui) {
-				 update(ui.item);
-				 return false;
-			 }
-
+			 change : function(a,b) {
+				 		// address is NOT a selected value, just some random input so we'll remove any gps, postal code, country etc... values.
+				 		if (currentInput!=$text.val()) {
+						 	updateNonAddress($text.val());
+							 $country.change();
+						 }
+					 }
 		 };
 
 		 if ($text.size()>0) {

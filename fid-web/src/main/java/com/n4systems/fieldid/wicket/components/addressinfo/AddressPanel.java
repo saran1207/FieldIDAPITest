@@ -38,10 +38,7 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
         add(new TextField<String>("text", ProxyModel.of(model, on(AddressInfo.class).getFormattedAddress())));
         add(new HiddenField<BigDecimal>("latitude", ProxyModel.of(model, on(AddressInfo.class).getGpsLocation().getLatitude())));
         add(new HiddenField<BigDecimal>("longitude", ProxyModel.of(model, on(AddressInfo.class).getGpsLocation().getLongitude())));
-        // the wicket id's chosen here are chosen to reflect the json properties that are returned by the GoogleMaps API.
-        // to help understand the javascript binding better.
-        // see https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
-        //formatted_address
+
         add(new HiddenField<String>("country", ProxyModel.of(model, on(AddressInfo.class).getCountry()))
                 .add( new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override protected void onUpdate(AjaxRequestTarget target) {
@@ -50,6 +47,9 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
                 })
         );
 
+        // the wicket id's chosen here are chosen to reflect the json properties that are returned by the GoogleMaps API.
+        // to help understand the javascript binding better.
+        // see https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
         add(new HiddenField<String>("administrative_area_level_1", ProxyModel.of(model, on(AddressInfo.class).getState())));
         add(new HiddenField<String>("locality", ProxyModel.of(model, on(AddressInfo.class).getCity())));
         add(new HiddenField<String>("street_address", ProxyModel.of(model, on(AddressInfo.class).getStreetAddress())));

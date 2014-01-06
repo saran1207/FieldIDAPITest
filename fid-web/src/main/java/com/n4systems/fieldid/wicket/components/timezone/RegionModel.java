@@ -26,6 +26,11 @@ public class RegionModel implements IModel<Region> {
     @Override
     public void setObject(Region region) {
         Country country = countryModel.getObject();
-        timeZoneIdModel.setObject(country.getFullName(region));
+        if (country!=null) {
+            timeZoneIdModel.setObject(country.getFullName(region));
+        } else {
+            timeZoneIdModel.setObject(null);
+        }
     }
+
 }

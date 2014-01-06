@@ -21,9 +21,9 @@ import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.util.StringUtils;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.Region;
-import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
@@ -68,7 +68,7 @@ public class PlaceSummaryPage extends PlacePage {
     private WebComponent image;
     private AjaxLink removeImageLink;
     private AjaxLink removeLink;
-    private Component timeZone;
+    private FidDropDownChoice<Region> timeZone;
     private AddressPanel address;
     private String defaultTimeZone;
     private String certificateName;
@@ -189,6 +189,7 @@ public class PlaceSummaryPage extends PlacePage {
             .add(new TextField("fax", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getFax1())))
             .add(address = new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())) {
                 @Override protected void onCountryChange(AjaxRequestTarget target) {
+                    setDefaultTimeZone();
                     target.add(timeZone);
                 }
             }.withExternalMap(map.getJsVar()).hideIfChildrenHidden())
@@ -284,6 +285,28 @@ public class PlaceSummaryPage extends PlacePage {
             generalForm.add(new TextField<String>("certificateName", new PropertyModel(this,"certificateName")).setVisible(false));
         }
         add(generalForm);
+    }
+
+    private void setDefaultTimeZone() {
+        //set defaultTimeZone to
+        //   1: existing non-null value if valid (i.e. exists in regionModels list)
+        //   2: the best one or first one in region models list.  (scan for similar city names).
+        RegionModel regionModel = (RegionModel) timeZone.getModel();
+        Region currentRegion = regionModel.getObject();
+
+        List<? extends Region> regions = timeZone.getChoices();
+        if (StringUtils.isNotEmpty(defaultTimeZone)) {
+            for (Region region:regions) {
+                if (region.equals(currentRegion)) {
+                    return;
+                }
+            }
+        }
+        if (regions.size()>0) {
+            regionModel.setObject(regions.get(0));
+        } else {
+            defaultTimeZone = null;
+        }
     }
 
     @Override
