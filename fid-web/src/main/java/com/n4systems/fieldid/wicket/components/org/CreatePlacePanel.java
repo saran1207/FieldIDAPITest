@@ -102,7 +102,7 @@ public class CreatePlacePanel extends Panel {
                     BaseOrg childOrg = data.createNewChildOrg();
                     onCreate(childOrg, target);
                     info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
-                    target.add(getTopFeedbackPanel());
+                    target.add(getTopFeedbackPanel(), feedback);
                 }
 
                 @Override
