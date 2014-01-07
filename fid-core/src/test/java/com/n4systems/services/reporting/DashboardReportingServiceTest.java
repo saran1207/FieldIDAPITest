@@ -14,10 +14,7 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.model.dashboard.widget.*;
 import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.search.AssetSearchCriteria;
-import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.IncludeDueDateRange;
-import com.n4systems.model.search.WorkflowStateCriteria;
+import com.n4systems.model.search.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
@@ -575,9 +572,6 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition);
         replay(persistenceService);
 
-        expect(eventTypeGroupService.getDefaultActionGroup()).andReturn(eventTypeGroup);
-        replay(eventTypeGroupService);
-
         expect(priorityCodeService.getPriorityCodeByName(priorityString)).andReturn(priority);
         replay(priorityCodeService);
 
@@ -588,7 +582,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         assertEquals(priority, result.getPriority());
         assertEquals(WorkflowStateCriteria.OPEN, result.getWorkflowState());
         assertEquals(user, result.getAssignee());
-        assertEquals(eventTypeGroup, result.getEventTypeGroup());
+        assertEquals(EventSearchType.ACTIONS, result.getEventSearchType());
 
         verifyTestMocks();
     }
