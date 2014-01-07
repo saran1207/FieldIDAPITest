@@ -89,9 +89,6 @@ public class PlaceSummaryPage extends PlacePage {
         final BaseOrg org = getOrg();
         boolean canManageCustomers = FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers();
 
-        add(map = new GoogleMap("map", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getGpsLocation())));
-
-
         add(futureEventsListContainer = new WebMarkupContainer("eventsListContainer"));
         futureEventsListContainer.add(futureEventsListView = createFutureEventsListView());
         futureEventsListContainer.setOutputMarkupPlaceholderTag(true);
@@ -172,6 +169,9 @@ public class PlaceSummaryPage extends PlacePage {
         final IModel<Country> countryModel = new CountryFromAddressModel(addressModel);
         final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
 
+        add(map = new GoogleMap("map", new PropertyModel(addressModel, "gpsLocation")));
+
+
         contact = new Contact(org.getContact());
         MarkupContainer form = new InlineEditableForm("contact") {
             @Override protected void onSave(AjaxRequestTarget target) {
@@ -182,6 +182,7 @@ public class PlaceSummaryPage extends PlacePage {
                 getOrg().setContact(contact);
                 persistenceService.save(getOrg());
                 getTopFeedbackPanel().info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
+                map.setLocation(addressInfo.getGpsLocation());
                 target.add(map,getTopFeedbackPanel());
             }
         }.withSaveCancelEditLinks();

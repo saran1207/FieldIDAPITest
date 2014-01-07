@@ -24,6 +24,9 @@ public class GoogleMap extends Panel {
     private Coord centre = new Coord(43.548548, -96.987305);
     private int defaultZoom = 5;
 
+    // CAVEAT : note that this currently doesn't support dynamic models.  just a one time creation.
+    // need a IModel<List<GpsLocation>> model that converts BigDecimal to double's for json marshalling.
+
     public GoogleMap(String id) {
         super(id);
         setOutputMarkupId(true);
