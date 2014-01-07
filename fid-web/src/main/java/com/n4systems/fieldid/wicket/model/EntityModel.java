@@ -54,4 +54,8 @@ public class EntityModel<T extends EntityWithTenant> extends FieldIDSpringModel<
         return persistenceService.find(User.class, FieldIDSession.get().getSessionUser().getUniqueID());
     }
 
+    @Override
+    public void detach() {
+        super.detach();
+    }
 }

@@ -29,24 +29,23 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
     private boolean noMap = false;
     private boolean hideIfChildrenHidden = false;
     private boolean empty;
+    private final TextField<String> text;
 
     public AddressPanel(String id, IModel<AddressInfo> model) {
         super(id, model);
         this.model = model;
         setOutputMarkupId(true);
         add(new AttributeAppender("class", "address"));
-        add(new TextField<String>("text", ProxyModel.of(model, on(AddressInfo.class).getFormattedAddress())));
+        add(text = new TextField<String>("text", ProxyModel.of(model, on(AddressInfo.class).getFormattedAddress())));
         add(new HiddenField<BigDecimal>("latitude", ProxyModel.of(model, on(AddressInfo.class).getGpsLocation().getLatitude())));
         add(new HiddenField<BigDecimal>("longitude", ProxyModel.of(model, on(AddressInfo.class).getGpsLocation().getLongitude())));
-
         add(new HiddenField<String>("country", ProxyModel.of(model, on(AddressInfo.class).getCountry()))
-                .add( new AjaxFormComponentUpdatingBehavior("onchange") {
+                .add(new AjaxFormComponentUpdatingBehavior("onchange") {
                     @Override protected void onUpdate(AjaxRequestTarget target) {
                         onCountryChange(target);
                     }
                 })
         );
-
         // the wicket id's chosen here are chosen to reflect the json properties that are returned by the GoogleMaps API.
         // to help understand the javascript binding better.
         // see https://developers.google.com/maps/documentation/geocoding/#ReverseGeocoding
@@ -110,6 +109,10 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
         return false;
     }
 
+    public AddressPanel setRequired(boolean required) {
+        text.setRequired(required);
+        return this;
+    }
 
     class Options {
         String id = String.format("#%s",AddressPanel.this.getMarkupId());

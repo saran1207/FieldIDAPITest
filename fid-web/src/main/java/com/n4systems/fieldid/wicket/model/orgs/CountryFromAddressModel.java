@@ -16,7 +16,8 @@ public class CountryFromAddressModel extends Model<Country> {
 
     @Override
     public Country getObject() {
-        return CountryList.getInstance().getCountryByName(addressModel.getObject().getCountry());
+        Country country = CountryList.getInstance().getCountryByName(addressModel.getObject().getCountry());
+        return country;
     }
 
     @Override

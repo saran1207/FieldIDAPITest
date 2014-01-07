@@ -92,11 +92,9 @@ var googleMapFactory = (function() {
 					 } else if (results.length>1) {
 						 //alert('multiple address found - just taking the first one for now.');   // TODO : create a menu with list of all possibilities.   "did you mean....A/B/C...?"
 						 response(results);
-						 //response($.map(results,function(value,i) {return value.formatted_address;}));
 					 }
 					 else {
 						 response(results);
-						 //response($.map(results,function(value,i) {return value.formatted_address;}));
 					 }
 				 } else {
 					 response([]);
@@ -147,27 +145,12 @@ var googleMapFactory = (function() {
 			}
 
 			currentInput = $text.val();
-
-//			 TODO : if timezone is required the do webservice call to
-//			 https://maps.googleapis.com/maps/api/timezone/json?location=-33.86,151.20&timestamp=0&sensor=false
-//			 which yields {
-//			 "dstOffset" : 0,
-//				 "rawOffset" : 36000,
-//				 "status" : "OK",
-//				 "timeZoneId" : "Australia/Sydney",
-//				 "timeZoneName" : "Australian Eastern Standard Time"
-//		 }
-//			 and store timeZoneName in hidden field.
 		}
 
 		 var textOptions = {
 			 delay:500,
 			 minLength:1,
 			 source: function(request,response) { getAddresses(request,response); },
-//			 focus: function(event,ui) {
-//				 updateAddress(ui.item);
-//				 return false;
-//			 },
 			 select: function(event,ui) {
 				 updateAddress(ui.item);
 				 $country.change();
@@ -179,6 +162,7 @@ var googleMapFactory = (function() {
 						 	updateNonAddress($text.val());
 							 $country.change();
 						 }
+				 		return false;
 					 }
 		 };
 

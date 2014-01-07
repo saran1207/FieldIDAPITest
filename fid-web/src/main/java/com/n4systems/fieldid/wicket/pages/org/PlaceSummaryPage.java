@@ -17,11 +17,11 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.orgs.CountryFromAddressModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.util.StringUtils;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.Region;
 import org.apache.wicket.MarkupContainer;
@@ -40,6 +40,7 @@ import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -71,6 +72,7 @@ public class PlaceSummaryPage extends PlacePage {
     private FidDropDownChoice<Region> timeZone;
     private AddressPanel address;
     private String defaultTimeZone;
+    private AddressInfo addressInfo = new AddressInfo();
     private String certificateName;
 
     private WebMarkupContainer certImageContainer;
@@ -78,6 +80,8 @@ public class PlaceSummaryPage extends PlacePage {
     private WebMarkupContainer schedulesBlankSlate;
     private WebComponent certImage;
     private AjaxLink removeCertImageLink;
+    private final FeedbackPanel contactFeedback;
+    private final FeedbackPanel generalFeedback;
 
     public PlaceSummaryPage(PageParameters params) {
         super(params);
@@ -158,12 +162,14 @@ public class PlaceSummaryPage extends PlacePage {
 
         imageContainer.add(imageUploadForm);
 
+        addressInfo = new AddressInfo(getOrg().getAddressInfo());
         if (getOrg() instanceof InternalOrg) {
             defaultTimeZone = ((InternalOrg)getOrg()).getDefaultTimeZone();
         }
 
         final IModel<String> timeZoneIdModel = new PropertyModel(this,"defaultTimeZone");
-        final IModel<Country> countryModel = new CountryFromAddressModel(ProxyModel.of(orgModel,on(BaseOrg.class).getAddressInfo()));
+        PropertyModel addressModel = new PropertyModel(this, "addressInfo");
+        final IModel<Country> countryModel = new CountryFromAddressModel(addressModel);
         final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
 
         contact = new Contact(org.getContact());
@@ -172,14 +178,11 @@ public class PlaceSummaryPage extends PlacePage {
                 if (getOrg() instanceof InternalOrg) {
                     ((InternalOrg)getOrg()).setDefaultTimeZone(defaultTimeZone);
                 }
+                getOrg().copyAddressInfo(addressInfo);
+                getOrg().setContact(contact);
                 persistenceService.save(getOrg());
-                info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
-                target.add(map, getTopFeedbackPanel());
-            }
-
-            @Override protected void error(AjaxRequestTarget target) {
-                error(new FIDLabelModel("errors.place_save",getOrg().getName()));
-                target.add(getTopFeedbackPanel());
+                getTopFeedbackPanel().info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
+                target.add(map,getTopFeedbackPanel());
             }
         }.withSaveCancelEditLinks();
         form.add(new TextField("name", ProxyModel.of(contact, on(Contact.class).getName())))
@@ -187,19 +190,23 @@ public class PlaceSummaryPage extends PlacePage {
             .add(new TextField("phone", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone1())))
             .add(new TextField("phone2", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone2())))
             .add(new TextField("fax", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getFax1())))
-            .add(address = new AddressPanel("address", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo())) {
-                @Override protected void onCountryChange(AjaxRequestTarget target) {
-                    setDefaultTimeZone();
+            .add(contactFeedback = new FeedbackPanel("feedback"))
+            .add(address = new AddressPanel("address", addressModel) {
+                @Override
+                protected void onCountryChange(AjaxRequestTarget target) {
+                    verifyDefaultTimeZoneId();
                     if (timeZone.isVisible()) {
                         target.add(timeZone);
                     }
                 }
             }.withExternalMap(map.getJsVar()).hideIfChildrenHidden())
             .add(timeZone = new FidDropDownChoice<Region>("timeZone", regionModel, new RegionListModel(countryModel), new ListableChoiceRenderer<Region>()) {
-                @Override public boolean isVisible() {
+                @Override
+                public boolean isVisible() {
                     return getOrg().isInternal() && address.isVisible();
                 }
             });
+        timeZone.setNullValid(false).setRequired(true).setOutputMarkupId(true);
         add(form);
 
         add(certImageContainer = new WebMarkupContainer("certImageContainer"));
@@ -236,8 +243,7 @@ public class PlaceSummaryPage extends PlacePage {
             }
 
             @Override
-            protected void onError(AjaxRequestTarget target) {
-            }
+            protected void onError(AjaxRequestTarget target) { }
         });
 
         certImageUploadForm.add(certFileUploadField);
@@ -267,11 +273,7 @@ public class PlaceSummaryPage extends PlacePage {
         InlineEditableForm generalForm = new InlineEditableForm("general") {
             @Override protected void onSave(AjaxRequestTarget target) {
                 persistenceService.save(getOrg());
-                info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
-                target.add(getTopFeedbackPanel());
-            }
-
-            @Override protected void error(AjaxRequestTarget target) {
+                getTopFeedbackPanel().info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
                 target.add(getTopFeedbackPanel());
             }
         }.withSaveCancelEditLinks();
@@ -279,7 +281,9 @@ public class PlaceSummaryPage extends PlacePage {
         generalForm
                 .add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
                 .add(new TextField<String>("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
+                .add(generalFeedback = new FeedbackPanel("feedback"))
                 .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())));
+
 
         if(orgModel.getObject().isInternal()) {
             generalForm.add(new TextField<String>("certificateName", ProxyModel.of(orgModel, on(InternalOrg.class).getCertificateName())));
@@ -289,25 +293,17 @@ public class PlaceSummaryPage extends PlacePage {
         add(generalForm);
     }
 
-    private void setDefaultTimeZone() {
-        //set defaultTimeZone to
-        //   1: existing non-null value if valid (i.e. exists in regionModels list)
-        //   2: the best one or first one in region models list.  (scan for similar city names).
+    private void verifyDefaultTimeZoneId() {
         RegionModel regionModel = (RegionModel) timeZone.getModel();
         Region currentRegion = regionModel.getObject();
-
         List<? extends Region> regions = timeZone.getChoices();
-        if (StringUtils.isNotEmpty(defaultTimeZone)) {
-            for (Region region:regions) {
-                if (region.equals(currentRegion)) {
-                    return;
-                }
+        for (Region region:regions) {
+            if (region.equals(currentRegion)) {
+                return;
             }
         }
         if (regions.size()>0) {
             regionModel.setObject(regions.get(0));
-        } else {
-            defaultTimeZone = null;
         }
     }
 

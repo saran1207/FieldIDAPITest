@@ -15,9 +15,6 @@ public class RegionModel implements IModel<Region> {
     }
 
     @Override
-    public void detach() {}
-
-    @Override
     public Region getObject() {
         Region region = CountryList.getInstance().getRegionByFullId(timeZoneIdModel.getObject());
         return region;
@@ -27,10 +24,18 @@ public class RegionModel implements IModel<Region> {
     public void setObject(Region region) {
         Country country = countryModel.getObject();
         if (country!=null) {
+            if (region!=null) {
+                timeZoneIdModel.setObject(country.getFullName(region));
+            } else {
+                timeZoneIdModel.setObject(country.getFullName(country.getRegions().first()));
+            }
+        } else if (region!=null) {
+            country = CountryList.getInstance().findCountryForRegion(region);
             timeZoneIdModel.setObject(country.getFullName(region));
-        } else {
-            timeZoneIdModel.setObject(null);
         }
     }
 
+    @Override
+    public void detach() {
+    }
 }

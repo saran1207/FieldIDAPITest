@@ -9,7 +9,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public  class RegionListModel extends LoadableDetachableModel<List<Region>> {
+public class RegionListModel extends LoadableDetachableModel<List<Region>> {
     private IModel<Country> countryModel;
 
     public RegionListModel(IModel<Country> countryModel) {

@@ -158,6 +158,19 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 		this.addressInfo = addressInfo;
 	}
 
+    public void copyAddressInfo(AddressInfo addressInfo) {
+        this.addressInfo.setCountry(addressInfo.getCountry());
+        this.addressInfo.setFax1(addressInfo.getFax1());
+        this.addressInfo.setGpsLocation(addressInfo.getGpsLocation());
+        this.addressInfo.setPhone1(addressInfo.getPhone1());
+        this.addressInfo.setPhone2(addressInfo.getPhone2());
+        this.addressInfo.setState(addressInfo.getState());
+        this.addressInfo.setStreetAddress(addressInfo.getStreetAddress());
+        this.addressInfo.setZip(addressInfo.getZip());
+        this.addressInfo.setCity(addressInfo.getCity());
+        this.addressInfo.setFormattedAddress(addressInfo.getFormattedAddress());
+    }
+
 	@Override
 	public void setGlobalId(String globalId) {
 		this.globalId = globalId;
