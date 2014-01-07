@@ -88,6 +88,7 @@ public class UserAccountSearchPage extends FieldIDWicketPage {
 
         response.renderCSSReference("style/pageStyles/login.css");
 
+
         response.renderCSSReference("style/reset.css");
         response.renderCSSReference("style/site_wide.css");
 
@@ -98,10 +99,10 @@ public class UserAccountSearchPage extends FieldIDWicketPage {
     protected void sendUsername(String emailAddress) {
         List<User> users = userService.findUsersByEmailAddress(emailAddress);
 
-//        if (users.size() == 1) {
+        if (users.size() >= 1 ) {
             sendForgotUserEmailService.sendForgotUserEmail(emailAddress, users.get(0), getBaseURI());
             info("Your user name has been sent to the following email address: " + emailAddress);
-//        }
+        }
 
     }
 
