@@ -266,6 +266,9 @@
   margin-right: 0;
   padding-right: 0;
 }
+.place-add-descendant .column-left.narrow {
+  padding-bottom: 60px;
+}
 .place-add-descendant .column-wide {
   padding-top: 7px;
 }

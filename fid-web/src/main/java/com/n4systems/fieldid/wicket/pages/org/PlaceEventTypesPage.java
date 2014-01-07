@@ -48,7 +48,7 @@ public class PlaceEventTypesPage extends PlacePage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.associate_event_types"));
+        return new Label(labelId, new FIDLabelModel("title.associate_event_types", getOrg().getName()));
     }
 
     @Override
@@ -75,6 +75,8 @@ public class PlaceEventTypesPage extends PlacePage {
 
     private void init() {
         eventTypes = Lists.newArrayList(orgModel.getObject().getEventTypes());
+
+        add(new Label("name", new PropertyModel<String>(orgModel, "name")));
 
         add(new Form("form")
                 .add(new MultiSelectDropDownChoice<PlaceEventType>("eventTypes", new PropertyModel(this, "eventTypes"), getAllEventTypes(), new EventTypeChoiceRenderer<PlaceEventType>()))
