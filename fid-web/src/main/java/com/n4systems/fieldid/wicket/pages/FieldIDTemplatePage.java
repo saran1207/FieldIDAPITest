@@ -14,6 +14,7 @@ import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
@@ -431,7 +432,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
                 }
             }.setVisible(selectLanguagePanel.hasLanguagesToDisplay()));
 
-            add(new ExternalLink("support", getSupportUrl(), getString("label.support")));
+            add(new ExternalLink("support", getSupportUrl(), new FIDLabelModel("label.support").getObject()));
 
             add(new SavedItemsDropdown("savedItemsDropdown"));
 

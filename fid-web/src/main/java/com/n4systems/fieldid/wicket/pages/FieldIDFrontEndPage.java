@@ -14,6 +14,7 @@ import com.n4systems.fieldid.wicket.components.localization.SelectLanguagePanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
@@ -478,7 +479,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
             add(procedureLink);
 
-            add(new ExternalLink("support", getSupportUrl(), getString("label.support") ));
+            add(new ExternalLink("support", getSupportUrl(), new FIDLabelModel("label.support").getObject()));
 
             addSpeedIdentifyLinks(sessionUser);
 
