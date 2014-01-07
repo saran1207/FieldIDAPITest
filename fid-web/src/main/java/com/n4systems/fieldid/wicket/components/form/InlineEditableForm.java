@@ -125,7 +125,7 @@ public class InlineEditableForm extends Form {
                 save(target);
             }
             @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
-
+                InlineEditableForm.this.onError(target);
             }
             @Override public boolean isVisible() {
                 return editing;
@@ -173,6 +173,10 @@ public class InlineEditableForm extends Form {
         stopEditing();
         target.add(InlineEditableForm.this);
         onSave(target);
+    }
+
+    protected final void onError(AjaxRequestTarget target) {
+        target.add(InlineEditableForm.this);
     }
 
 

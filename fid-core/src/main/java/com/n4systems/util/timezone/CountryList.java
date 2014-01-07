@@ -96,4 +96,13 @@ public class CountryList implements Iterable<Country> {
         }
         return Lists.newArrayList(regions);
     }
+
+    public Country findCountryForRegion(Region region) {
+        for (Country country:getCountries()) {
+            if (country.getRegions().contains(region)) {
+                return country;
+            }
+        }
+        return null;
+    }
 }
