@@ -214,6 +214,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("template/noColumns", FirstTab.class);
         mountPage("template/noColumnsTab", SecondTab.class);
 
+        mountPage("oops", OopsPage.class);
+
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());
 
