@@ -43,6 +43,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -75,6 +76,9 @@ public class PlaceSummaryPage extends PlacePage {
     private String defaultTimeZone;
     private AddressInfo addressInfo = new AddressInfo();
     private String certificateName;
+    private String phone1;
+    private String phone2;
+    private String fax;
 
     private WebMarkupContainer certImageContainer;
     private WebMarkupContainer certImageMsg;
@@ -174,11 +178,7 @@ public class PlaceSummaryPage extends PlacePage {
         contact = new Contact(org.getContact());
         MarkupContainer form = new InlineEditableForm("contact") {
             @Override protected void onSave(AjaxRequestTarget target) {
-                if (getOrg() instanceof InternalOrg) {
-                    ((InternalOrg)getOrg()).setDefaultTimeZone(defaultTimeZone);
-                }
-                getOrg().copyAddressInfo(addressInfo);
-                getOrg().setContact(contact);
+                updateOrg();
                 persistenceService.save(getOrg());
                 info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
                 map.setLocation(addressInfo.getGpsLocation());
@@ -188,9 +188,9 @@ public class PlaceSummaryPage extends PlacePage {
         }.withSaveCancelEditLinks();
         form.add(new TextField("name", ProxyModel.of(contact, on(Contact.class).getName())))
             .add(new TextField("email", ProxyModel.of(contact, on(Contact.class).getEmail())))
-            .add(new TextField("phone", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone1())))
-            .add(new TextField("phone2", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone2())))
-            .add(new TextField("fax", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getFax1())))
+            .add(new TextField("phone", new PropertyModel(addressModel, "phone1")))
+            .add(new TextField("phone2", new PropertyModel(addressModel, "phone2")))
+            .add(new TextField("fax", new PropertyModel(addressModel, "fax1")))
             .add(address = new AddressPanel("address", addressModel) {
                 @Override
                 protected void onCountryChange(AjaxRequestTarget target) {
@@ -285,12 +285,21 @@ public class PlaceSummaryPage extends PlacePage {
                 .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())));
 
 
-        if(orgModel.getObject().isInternal()) {
-            generalForm.add(new TextField<String>("certificateName", ProxyModel.of(orgModel, on(InternalOrg.class).getCertificateName())));
-        } else {
-            generalForm.add(new TextField<String>("certificateName", new PropertyModel(this,"certificateName")).setVisible(false));
-        }
+        IModel<String> certificateModel = orgModel.getObject().isInternal() ? ProxyModel.of(orgModel, on(InternalOrg.class).getCertificateName()) : Model.of(certificateName);
+        generalForm.add(new TextField<String>("certificateName", certificateModel) {
+            @Override public boolean isVisible() {
+                return super.isVisible() && orgModel.getObject().isInternal();
+            }
+        });
         add(generalForm);
+    }
+
+    private void updateOrg() {
+        if (getOrg() instanceof InternalOrg) {
+            ((InternalOrg)getOrg()).setDefaultTimeZone(defaultTimeZone);
+        }
+        getOrg().copyAddressInfo(addressInfo);
+        getOrg().setContact(contact);
     }
 
     private void verifyDefaultTimeZoneId() {
