@@ -47,7 +47,6 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.AssetEvent;
-import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
@@ -170,8 +169,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
             Event testEvent = persistenceService.find(Event.class, uniqueId);
 
             if (testEvent instanceof PlaceEvent) {
-                event = testEvent;
-                PostFetcher.postFetchFields(event, Event.PLACE_FIELD_PATHS);
+                event = persistenceManager.find(Event.class, uniqueId, Event.PLACE_FIELD_PATHS);
             } else {
                 if (allowNetworkResults) {
 
