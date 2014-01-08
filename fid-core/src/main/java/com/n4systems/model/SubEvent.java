@@ -19,10 +19,6 @@ public class SubEvent extends AbstractEvent<ThingEventType, Asset> implements Se
 	@Column( length = 255 )
 	private String name;
 
-    @ManyToOne(fetch=FetchType.EAGER, optional = false)
-    @JoinColumn(name="thing_event_type_id")
-    private ThingEventType type;
-
     @ManyToOne(fetch=FetchType.LAZY, optional = false)
     @JoinColumn(name="asset_id")
     private Asset asset;
@@ -57,14 +53,6 @@ public class SubEvent extends AbstractEvent<ThingEventType, Asset> implements Se
 		enhanced.setAsset(enhance(getAsset(), level));
 		return enhanced;
 	}
-
-    public ThingEventType getType() {
-        return type;
-    }
-
-    public void setType(ThingEventType type) {
-        this.type = type;
-    }
 
     @Override
     public Asset getTarget() {
