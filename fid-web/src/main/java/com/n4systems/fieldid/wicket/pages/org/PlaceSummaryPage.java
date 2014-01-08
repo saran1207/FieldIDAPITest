@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.components.timezone.RegionModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.orgs.CountryFromAddressModel;
+import com.n4systems.fieldid.wicket.util.JavascriptUtil;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
@@ -40,7 +41,6 @@ import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
@@ -57,6 +57,7 @@ public class PlaceSummaryPage extends PlacePage {
     private @SpringBean PlaceService placeService;
     private @SpringBean S3Service s3Service;
     private @SpringBean PersistenceService persistenceService;
+    private @SpringBean JavascriptUtil javascriptUtil;
 
 
     private final GoogleMap map;
@@ -80,8 +81,6 @@ public class PlaceSummaryPage extends PlacePage {
     private WebMarkupContainer schedulesBlankSlate;
     private WebComponent certImage;
     private AjaxLink removeCertImageLink;
-    private final FeedbackPanel contactFeedback;
-    private final FeedbackPanel generalFeedback;
 
     public PlaceSummaryPage(PageParameters params) {
         super(params);
@@ -181,9 +180,10 @@ public class PlaceSummaryPage extends PlacePage {
                 getOrg().copyAddressInfo(addressInfo);
                 getOrg().setContact(contact);
                 persistenceService.save(getOrg());
-                getTopFeedbackPanel().info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
+                info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
                 map.setLocation(addressInfo.getGpsLocation());
                 target.add(map,getTopFeedbackPanel());
+                javascriptUtil.fadeFeedback(target,".message");
             }
         }.withSaveCancelEditLinks();
         form.add(new TextField("name", ProxyModel.of(contact, on(Contact.class).getName())))
@@ -191,7 +191,6 @@ public class PlaceSummaryPage extends PlacePage {
             .add(new TextField("phone", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone1())))
             .add(new TextField("phone2", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getPhone2())))
             .add(new TextField("fax", ProxyModel.of(orgModel, on(BaseOrg.class).getAddressInfo().getFax1())))
-            .add(contactFeedback = new FeedbackPanel("feedback"))
             .add(address = new AddressPanel("address", addressModel) {
                 @Override
                 protected void onCountryChange(AjaxRequestTarget target) {
@@ -274,7 +273,8 @@ public class PlaceSummaryPage extends PlacePage {
         InlineEditableForm generalForm = new InlineEditableForm("general") {
             @Override protected void onSave(AjaxRequestTarget target) {
                 persistenceService.save(getOrg());
-                getTopFeedbackPanel().info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
+                info(new FIDLabelModel("label.place_saved", getOrg().getName()).getObject());
+                javascriptUtil.fadeFeedback(target,".message");
                 target.add(getTopFeedbackPanel());
             }
         }.withSaveCancelEditLinks();
@@ -282,7 +282,6 @@ public class PlaceSummaryPage extends PlacePage {
         generalForm
                 .add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
                 .add(new TextField<String>("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
-                .add(generalFeedback = new FeedbackPanel("feedback"))
                 .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())));
 
 
