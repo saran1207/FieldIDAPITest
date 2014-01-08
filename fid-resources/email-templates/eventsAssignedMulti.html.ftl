@@ -75,13 +75,11 @@
             <div class="info">
                 <#if event.asset?exists>
                     ${event.asset.type.name} / ${event.asset.identifier}
+                    <br/>
+                    ${event.owner.displayName}
                 <#elseif event.place?exists>
                     ${event.place.displayName}
                 </#if>
-                <br/>
-        <#if event.asset?exists>
-                ${event.owner.displayName}
-        </#if>
                 <br/>
                 <br/>
                 ${event.type.name}
