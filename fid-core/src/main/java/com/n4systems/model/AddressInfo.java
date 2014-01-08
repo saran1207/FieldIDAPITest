@@ -39,6 +39,7 @@ public class AddressInfo extends AbstractEntity {
 		phone2 = addressInfo.phone2;
 		fax1 = addressInfo.fax1;
         formattedAddress = addressInfo.formattedAddress;
+        gpsLocation = addressInfo.gpsLocation;
 	}
 
 	public String getStreetAddress() {
