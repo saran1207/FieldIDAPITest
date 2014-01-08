@@ -79,7 +79,9 @@
                     ${event.place.displayName}
                 </#if>
                 <br/>
+        <#if event.asset?exists>
                 ${event.owner.displayName}
+        </#if>
                 <br/>
                 <br/>
                 ${event.type.name}
