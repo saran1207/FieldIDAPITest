@@ -101,9 +101,9 @@
 	<#if !uniqueID?exists >
 		<@s.text name="label.or"/>
 		<@s.submit key="hbutton.saveandaddeventform" name="saveAndAdd"/> 
-	<#else >
+	<#elseif eventType.thingEventType>
 		<@s.text name="label.or"/>
-		<@s.url id="deleteConfirmUrl" action="eventTypeDeleteConfirm" uniqueID="${uniqueID}"/>
+        <@s.url id="deleteConfirmUrl" action="eventTypeDeleteConfirm" uniqueID="${uniqueID}"/>
 		<a href="#" onclick="return redirect('${deleteConfirmUrl}');"><@s.text name="label.delete"/></a>
 	</#if>
 		<@s.text name="label.or"/> <a href="${cancelUrl}"><@s.text name="label.cancel"/></a>
