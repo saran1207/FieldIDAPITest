@@ -326,7 +326,16 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
 		orgLoader.setDivision(view.getNewDivision());
 		
 		BaseOrg owner = orgLoader.load(transaction);
-		model.setOwner(owner);
+        //If New Owner fields are blank set it to the original owner.
+        if(owner == null) {
+            orgLoader.setOrganizationName(view.getOrganization());
+            orgLoader.setCustomerName(view.getCustomer());
+            orgLoader.setDivision(view.getDivision());
+            owner = orgLoader.load(transaction);
+            model.setOwner(owner);
+        } else {
+		    model.setOwner(owner);
+        }
 	}
 	
 	public EventType getType() {
