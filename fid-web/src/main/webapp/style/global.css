@@ -1985,7 +1985,7 @@ body {
 .wrapper:after {
   height: 125px;
 }
-/* --------------------------------
+/*---------------------------------
    Existing wicket modal structure
 -----------------------------------*/
 .wicket-modal a {
@@ -2078,4 +2078,14 @@ body {
 .wicket-modal .newScheduleForm .formActions .blueButton {
   background: #008bd3;
   border: 1px solid #007aba;
+}
+/*--------------
+   cbox overlay
+----------------*/
+#colorbox,
+#cboxOverlay,
+#cboxWrapper {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
 }
