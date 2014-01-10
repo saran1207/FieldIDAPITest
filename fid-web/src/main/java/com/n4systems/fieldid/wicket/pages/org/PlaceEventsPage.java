@@ -147,7 +147,6 @@ public class PlaceEventsPage extends PlacePage {
         //Needs to be included because the map panel is initially hidden.
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
-
     }
 
     @Override
@@ -191,8 +190,7 @@ public class PlaceEventsPage extends PlacePage {
 
         @Override
         public Iterator<? extends Event> iterator(int first, int count) {
-            List<? extends Event> eventsList = placeService.getEventsFor(orgModel.getObject(), getSort().getProperty(), getSort().isAscending(), states);
-            eventsList = eventsList.subList(first, first + count);
+            List<? extends Event> eventsList = placeService.getEventsFor(orgModel.getObject(), getSort().getProperty(), getSort().isAscending(), states, first,count);
             return eventsList.iterator();
         }
 
