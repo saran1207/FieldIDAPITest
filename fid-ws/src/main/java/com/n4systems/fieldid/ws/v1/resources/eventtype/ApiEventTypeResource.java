@@ -24,12 +24,23 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		//XXX - filtering out PlaceEventTypes, will be removed when place event types are implemented on mobile
 		List<EventType> nonPlaceEventTypes = new ArrayList<EventType>();
 		for (EventType eventType: persistenceService.findAll(createFindAllBuilder(after))) {
-			if (!(eventType instanceof PlaceEventType))
+			if (!(eventType instanceof PlaceEventType)) {
 				nonPlaceEventTypes.add(eventType);
+			}
 		}
 
+		List<ApiEventType> apiModels;
 		int startIndex = page * pageSize;
-		List<ApiEventType> apiModels = convertAllEntitiesToApiModels(nonPlaceEventTypes.subList(startIndex, startIndex + pageSize));
+
+		if (startIndex > nonPlaceEventTypes.size()) {
+			apiModels = new ArrayList<ApiEventType>();
+		} else {
+			int endIndex = startIndex + pageSize;
+			if (endIndex > nonPlaceEventTypes.size()) {
+				endIndex = nonPlaceEventTypes.size();
+			}
+			apiModels = convertAllEntitiesToApiModels(nonPlaceEventTypes.subList(startIndex, endIndex));
+		}
 		return new ListResponse<ApiEventType>(apiModels, page, pageSize, nonPlaceEventTypes.size());
 	}
 
