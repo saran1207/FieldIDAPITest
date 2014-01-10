@@ -166,7 +166,7 @@ header hr {
   margin-bottom: 15px;
 }
 .page-sub-header {
-  margin-bottom: 10px;
+  margin-bottom: 4px;
 }
 main,
 .content-wrap {
@@ -756,25 +756,25 @@ nav a {
   display: inline-block;
   display: block;
 }
-/* BREAD CRUMBS */
-.bread-crumb {
+/* BREADCRUMB */
+.breadcrumb {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   margin: 10px 0 0;
 }
-.bread-crumb a {
+.breadcrumb a {
   text-decoration: underline;
 }
-.bread-crumb a:hover {
+.breadcrumb a:hover {
   text-decoration: none;
 }
-.bread-crumb ol {
+.breadcrumb ol {
   font-size: 0;
 }
-.bread-crumb ol li {
+.breadcrumb ol li {
   display: inline;
   font-size: 12px;
 }
-.bread-crumb ol li + li:before {
+.breadcrumb ol li + li:before {
   font-family: "fontello", sans-serif;
   content: '\e82f';
   padding: 0 2px;
