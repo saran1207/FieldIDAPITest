@@ -203,8 +203,6 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
             }
         });
         asyncService.run(task);
-        org.touch();
-        persistenceService.update(org);
     }
 
     private void scheduleInitialEvents(RecurringPlaceEvent recurringPlaceEvent) {
