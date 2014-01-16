@@ -3,9 +3,18 @@
 <wicket:extend>
 	<hr>
 
-    <div class="info">
+    <div wicket:enclosure="addEventTypeLink" class="info">
+        <p>
+            <span wicket:id="msg"/>
+            <a wicket:id="addEventTypeLink"><wicket:message key="label.here"/></a>
+            <wicket:message key="msg.places.event_types.2"/>
+        </p>
+    </div>
+
+    <div wicket:enclosure="name" class="info">
 		<p><wicket:message key="msg.associate_event_types"/>&nbsp;<span wicket:id="name"/></p>
 	</div>
+
     <form wicket:id="form">
         <select wicket:id="eventTypes"/>
         
@@ -13,5 +22,6 @@
         <span wicket:id="submit" class="btn-primary btn-sml"><wicket:message key="label.ok"/></span>
         <a wicket:id="cancel" class="btn-link"><wicket:message key="label.cancel"/></a>
     </form>
+
 </wicket:extend>
 </html>

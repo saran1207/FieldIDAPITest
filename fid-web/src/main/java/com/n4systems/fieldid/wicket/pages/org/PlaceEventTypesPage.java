@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.BackToPlaceSubHeader;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
@@ -76,26 +77,35 @@ public class PlaceEventTypesPage extends PlacePage {
     private void init() {
         eventTypes = Lists.newArrayList(orgModel.getObject().getEventTypes());
 
-        add(new Label("name", new PropertyModel<String>(orgModel, "name")));
+        boolean hasEventTypes = !getAllEventTypes().isEmpty();
+
+        add(new Label("name", new PropertyModel<String>(orgModel, "name")).setVisible(hasEventTypes));
 
         add(new Form("form")
                 .add(new MultiSelectDropDownChoice<PlaceEventType>("eventTypes", new PropertyModel(this, "eventTypes"), getAllEventTypes(), new EventTypeChoiceRenderer<PlaceEventType>()))
-                        .add(new AjaxSubmitLink("submit") {
-                            @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                                getOrg().setEventTypes(Sets.newHashSet(eventTypes));
-                                persistenceService.update(getOrg());
-                                backToSummaryPage();
-                            }
+                .add(new AjaxSubmitLink("submit") {
+                    @Override
+                    protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                        getOrg().setEventTypes(Sets.newHashSet(eventTypes));
+                        persistenceService.update(getOrg());
+                        backToSummaryPage();
+                    }
 
-                            @Override protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    @Override
+                    protected void onError(AjaxRequestTarget target, Form<?> form) {
 
-                            }
-                        })
-                        .add(new AjaxLink("cancel") {
-                            @Override public void onClick(AjaxRequestTarget target) {
-                                backToSummaryPage();
-                            }
-                        }));
+                    }
+                })
+                .add(new AjaxLink("cancel") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        backToSummaryPage();
+                    }
+                })
+                .setVisible(hasEventTypes));
+
+        add(new Label("msg", new FIDLabelModel("msg.places.event_types.1", getOrg().getName())));
+        add(new NonWicketLink("addEventTypeLink", "eventTypeAdd.action?newEventType=Place").setVisible(!hasEventTypes));
     }
 
     private void backToSummaryPage() {

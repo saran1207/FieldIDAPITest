@@ -1,8 +1,0 @@
-/* IE9 and below 
------------------*/
-.chzn-container .chzn-results .highlighted {
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-}
-form.filters {
-  overflow: scroll;
-}

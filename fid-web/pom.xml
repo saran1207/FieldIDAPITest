@@ -55,6 +55,30 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.lesscss</groupId>
+                <artifactId>lesscss-maven-plugin</artifactId>
+                <version>1.3.3</version>
+                <configuration>
+                    <sourceDirectory>${basedir}/src/main/webapp/style/less</sourceDirectory>
+                    <outputDirectory>${basedir}/src/main/webapp/style/</outputDirectory>
+                    <compress>true</compress>
+                    <includes>
+                        <include>global.less</include>
+                        <include>ie-all.less</include>
+                        <include>ie-lte8.less</include>
+                        <include>pages/</include>
+                        <include>plugins/</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 		</plugins>
 	</build>
 	<dependencies>
