@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.amazon.S3AttachmentHandler;
 import com.n4systems.fieldid.service.amazon.S3ImageAttachmentHandler;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.attachment.*;
+import com.n4systems.model.orgs.BaseOrg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,22 +71,11 @@ public class AttachmentService extends FieldIdPersistenceService {
         return attachment;
     }
 
-
-//    public S3ImageAttachment createPlaceImageAttachment(final BaseOrg org) {
-//        return new S3ImageAttachment(org.getTenant()) {
-//            @Override protected String getRelativePath(String fileName) {
-//                return String.format("/places/%d/attachments/%s",org.getId(),fileName);
-//            }
-//        };
-//    }
-//
-//    public S3ImageAttachment createAssetImageAttachment(final Asset asset) {
-//        return new S3ImageAttachment(asset.getTenant()) {
-//            @Override protected String getRelativePath(String fileName) {
-//                return String.format("/assets/%d/images/%s",asset.getId(),fileName);
-//            }
-//        };
-//    }
+    public S3ImageAttachment createPlaceImageAttachment(BaseOrg org, String fileName, String contentType, byte[] bytes) {
+        return new S3ImageAttachment(org.getTenant())
+                .withContent(fileName, contentType, bytes)
+                .withSubdirectories("places", org.getId()+"", "images");
+    }
 
     public S3ImageAttachment createBogusImageAttachment(Tenant tenant, String fileName, String contentType, byte[] bytes) {
         return new S3ImageAttachment(tenant)
