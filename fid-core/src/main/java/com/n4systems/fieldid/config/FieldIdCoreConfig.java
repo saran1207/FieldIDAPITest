@@ -22,6 +22,7 @@ import com.n4systems.fieldid.service.SecurityContextInitializer;
 import com.n4systems.fieldid.service.SecurityService;
 import com.n4systems.fieldid.service.admin.AdminSecurityService;
 import com.n4systems.fieldid.service.admin.AdminUserService;
+import com.n4systems.fieldid.service.attachment.FileAttachmentHandler;
 import com.n4systems.fieldid.service.amazon.S3ImageAttachmentHandler;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.*;
@@ -722,7 +723,12 @@ public class FieldIdCoreConfig {
         return new S3ImageAttachmentHandler();
     }
 
-	@Bean
+    @Bean
+    public FileAttachmentHandler fileAttachmentHandler() {
+        return new FileAttachmentHandler();
+    }
+
+    @Bean
 	@Scope("singleton")
 	public Random secureRandom() {
 		return new SecureRandom();

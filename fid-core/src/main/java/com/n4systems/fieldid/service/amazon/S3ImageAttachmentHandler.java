@@ -1,74 +1,82 @@
 package com.n4systems.fieldid.service.amazon;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.attachment.Flavour;
 import com.n4systems.fieldid.service.images.ImageService;
-import com.n4systems.model.attachment.S3Attachment;
+import com.n4systems.model.attachment.Attachment;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class S3ImageAttachmentHandler implements S3AttachmentHandler {
+public class S3ImageAttachmentHandler extends S3AttachmentHandler {
 
-    public static final String MEDIUM_SUFFIX = ".medium";
-    public static final String THUMBNAIL_SUFFIX = ".thumbnail";
+    private @Autowired ImageService imageService;
 
-    @Autowired private ImageService imageService;
 
-    @Override
-    public List<S3Attachment> createFlavours(S3Attachment attachment) {
-        List<S3Attachment> result = Lists.newArrayList(attachment);
-        S3Attachment medium = new Flavour(attachment, MEDIUM_SUFFIX, imageService.generateMedium(attachment.getBytes()));
-        result.add(medium);
-        S3Attachment thumbnail = new Flavour(attachment, THUMBNAIL_SUFFIX, imageService.generateThumbnail(attachment.getBytes()));
-        result.add(thumbnail);
-        return result;
+    private List<Class<? extends Flavour>> flavours = Lists.newArrayList(MediumFlavour.class, ThumbnailFlavour.class );
+
+
+    public S3ImageAttachmentHandler() {
     }
 
     @Override
-    public List<S3Attachment> getFlavours(S3Attachment attachment) {
-        List<S3Attachment> result = Lists.newArrayList(attachment);
-        S3Attachment medium = new Flavour(attachment, MEDIUM_SUFFIX, null);
-        result.add(medium);
-        S3Attachment thumbnail = new Flavour(attachment, THUMBNAIL_SUFFIX, null);
-        result.add(thumbnail);
-        return result;
+    protected List<Class<? extends Flavour>> getFlavourTypes() {
+        return flavours;
     }
 
-    class Flavour implements S3Attachment {
-        S3Attachment delegate;
-        String suffix;
-        byte[] bytes;
+    @Override
+    protected Flavour getAttachmentFlavour(Attachment attachment, Class<? extends Flavour> flavour) {
+        Preconditions.checkNotNull(flavour,"must specify a valid non-null flavour class");
+        if (flavour.equals(MediumFlavour.class)) {
+            return new MediumFlavour(attachment);
+        } else if (flavour.equals(ThumbnailFlavour.class)) {
+            return new ThumbnailFlavour(attachment);
+        }
+        throw new IllegalArgumentException("invalid flavour type : " + flavour.getSimpleName());
+    }
 
-        Flavour(S3Attachment delegate, String suffix, byte[] bytes) {
-            this.delegate = delegate;
-            this.suffix = suffix;
-            this.bytes = bytes;
+
+    // --------------------------------------------------------------------------------------------------
+
+
+    public class MediumFlavour extends Flavour {
+
+        public static final String SUFFIX = "medium";
+
+        public MediumFlavour(Attachment delegate) {
+            super(delegate);
         }
 
         @Override
-        public byte[] getBytes() {
-            return bytes;
+        public String getSuffix() {
+            return SUFFIX;
         }
 
         @Override
-        public String getContentType() {
-            return delegate.getContentType();
+        protected byte[] createBytes(byte[] bytes) {
+            return imageService.generateMedium(bytes);
+        }
+    }
+
+    public class ThumbnailFlavour extends Flavour {
+
+        public static final String SUFFIX = "thumbnail";
+
+        public ThumbnailFlavour(Attachment delegate) {
+            super(delegate);
         }
 
         @Override
-        public String getComments() {
-            return delegate.getComments();
+        protected byte[] createBytes(byte[] bytes) {
+            return imageService.generateThumbnail(bytes);
         }
 
         @Override
-        public String getPath() {
-            return delegate.getPath()+suffix;
-        }
-
-        @Override
-        public String getTempPath() {
-            return delegate.getTempPath()+suffix;
+        public String getSuffix() {
+            return SUFFIX;
         }
 
     }
+
 }
