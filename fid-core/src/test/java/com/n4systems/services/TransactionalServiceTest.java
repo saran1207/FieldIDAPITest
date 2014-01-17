@@ -23,9 +23,10 @@ public class TransactionalServiceTest extends FieldIdUnitTest {
             }
             FieldIdPersistenceService instance = null;
             try {
+                // i need to create an instance because @Transactional has runtime retention policy, not class.
                 instance = service.newInstance();
             } catch (Throwable e) {
-                System.out.println("skipping class : " + service.getSimpleName() + " because i can't create it.  code smell.");
+                System.out.println("-------- skipping class : " + service.getSimpleName() + " because i can't create it.  code smell?");
                 continue;
             }
             if (instance.getClass().getAnnotation(Transactional.class)==null) {
