@@ -183,6 +183,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                     }
                 });
             }
+            deleteLink.setVisible(editMode);
             add(deleteLink);
         }
 
