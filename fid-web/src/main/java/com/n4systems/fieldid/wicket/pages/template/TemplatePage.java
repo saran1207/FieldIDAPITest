@@ -14,7 +14,8 @@ public class TemplatePage extends FieldIDTemplatePage {
 
     public TemplatePage() {
         add(new BookmarkablePageLink<Void>("twoColumnLeftLink", TwoColumnLeft.class));
-        add(new BookmarkablePageLink<Void>("twoColumnRightLink", TwoColumnLeft.class));
+        add(new BookmarkablePageLink<Void>("twoColumnRightLink", TwoColumnRight.class));
+        add(new BookmarkablePageLink<Void>("twoColumnEqualLink", TwoColumnEqual.class));
         add(new BookmarkablePageLink<Void>("noColumnsLink", FirstTab.class));
     }
 
