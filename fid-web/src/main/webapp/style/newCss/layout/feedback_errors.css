@@ -2,6 +2,16 @@
     padding: 10px;
     margin: 10px 0;
 }
+.error {
+    border: 1px solid #FFC2C2;
+    background-color: #FFEBEB;
+}
+.error ul {
+    margin-left: 15px;
+}
+.error ul span.errorMessage {
+    color: #e63300;
+}
 
 /* Added #contentHeader to restrict these changes to just the pre-framework pages */
 #contentHeader #notifications span {
@@ -44,9 +54,10 @@ div.formErrors.error {
     font-size: 13px;
 }
 div.formErrors.error h3 {
-    margin: 4px 0;
+    margin: 0;
 }
 div.dialog-modal h3.w_captionText {
     color: inherit;
     font-weight: bold;
 }
+
