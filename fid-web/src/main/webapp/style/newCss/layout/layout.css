@@ -14,11 +14,6 @@
 .clearfix {
     *zoom: 1;
 }
-
-/* temp */
-.debug-info {
-	display: none;
-}
 body {
 	text-align: left;
 	color: #333333;
