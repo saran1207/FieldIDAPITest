@@ -12,6 +12,7 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
 
     public AssetSearchResultsPanel(String id, final IModel<AssetSearchCriteria> criteriaModel) {
         super(id, criteriaModel);
+        resultButtons.setVisible(true);
     }
 
     @Override
@@ -21,11 +22,8 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
 
     @Override
     protected FieldIdAPIDataProvider createDataProvider(IModel<AssetSearchCriteria> criteriaModel) {
-//        if (criteriaModel.getObject().getQuery() == null) {
-            return new AssetSearchDataProvider(criteriaModel.getObject());
-//        } else {
-//            return new LuceneBackedAssetSearchDataProvider(criteriaModel.getObject());
-//        }
+        return new AssetSearchDataProvider(criteriaModel.getObject());
     }
 
 }
+

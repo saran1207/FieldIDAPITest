@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.data;
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.search.columns.AssetTextOrFilterSearchService;
 import com.n4systems.fieldid.wicket.model.LocalizeAround;
+import com.n4systems.model.Asset;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.views.TableView;
@@ -11,7 +12,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class AssetSearchDataProvider extends FieldIdAPIDataProvider {
+public class AssetSearchDataProvider extends FieldIdAPIDataProvider<Asset> {
 
     private @SpringBean AssetTextOrFilterSearchService assetTextOrFilterSearchService;
     private AssetSearchCriteria searchCriteria;

@@ -1,13 +1,16 @@
 package com.n4systems.model;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Embeddable
-public class GpsLocation implements Serializable{
+public class GpsLocation implements Serializable {
 
-	private BigDecimal latitude = null;    
+    @Column(name="latitude")
+	private BigDecimal latitude = null;
+    @Column(name="longitude")
 	private BigDecimal longitude = null;
 	
 	public GpsLocation(){}
