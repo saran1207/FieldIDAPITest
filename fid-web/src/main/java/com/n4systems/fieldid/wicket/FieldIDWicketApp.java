@@ -216,6 +216,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("template/wide", Wide.class);
         mountPage("template/noColumns", FirstTab.class);
         mountPage("template/noColumnsTab", SecondTab.class);
+        mountPage("template/allTemplates", AllTemplates.class);
+
 
         mountPage("oops", OopsPage.class);
 

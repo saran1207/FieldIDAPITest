@@ -1,0 +1,261 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+    <a wicket:id="toggleWide" class="btn-secondary btn-sml">Show Wide Layout Option</a>
+    <a wicket:id="toggleRegular" class="btn-secondary btn-sml">Show Regular Layout Option</a>
+    <hr>
+
+    <!-- no columns -->
+    <section class="clearfix">
+        <h3>No Columns example</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, unde assumenda tempore omnis incidunt repudiandae alias laudantium maiores aut distinctio. Doloribus, inventore aliquam itaque illo consequatur officia quos harum architecto. Praesentium, nobis, quo, adipisci quae officia vitae temporibus optio pariatur laboriosam cumque cupiditate laborum non illo reprehenderit inventore quis repellat deserunt debitis. Odit, doloremque, accusamus eaque modi nesciunt atque soluta labore maxime id provident deleniti maiores possimus ipsam ut cupiditate consequuntur natus minima harum.</p>
+        <table>
+            <tr>
+                <th><a href="#">Heading 1</a></th>
+                <th><a href="#">Heading 2</a></th>
+                <th><a href="#">Heading 3</a></th>
+                <th><a href="#">Heading 4</a></th>
+                <th><a href="#">Heading 5</a></th>
+                <th><a href="#">Heading 6</a></th>
+                <th><a href="#">Heading 7</a></th>
+                <th></th>
+            </tr>
+
+            <tr>
+                <td><a href="#">Link</a></td>
+                <td>Lorem Ipsum</td>
+                <td>Quaeritis</td>
+                <td>in culpa qui</td>
+                <td>sed do eiusmod</td>
+                <td>07/02/13 12:00 AM EDT</td>
+                <td>07/03/13 12:00 AM EDT</td>
+                <td class="pull-right">
+                    <div class="dropdown">
+                        <a class="btn-secondary btn-sml" href="#">Actions</a>
+                        <ul class="pull-right">
+                            <li><a href="#">Action 1</a></li>
+                            <li><a href="#">Action 2</a></li>
+                            <li><a href="#">Action 3</a></li>
+                            <li class="divider">
+                                <a href="#">Action 4</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><a href="#">Link</a></td>
+                <td>Lorem Ipsum</td>
+                <td>Quaeritis</td>
+                <td>in culpa qui</td>
+                <td>sed do eiusmod</td>
+                <td>07/02/13 12:00 AM EDT</td>
+                <td>07/03/13 12:00 AM EDT</td>
+                <td class="pull-right">
+                    <a class="btn-secondary btn-sml" href="#">Actions</a>
+                    <div class="dropdown">
+                        <a class="btn-secondary btn-sml" href="#">Actions</a>
+                        <ul class="pull-right">
+                            <li><a href="#">View</a></li>
+                            <li><a href="#">Edit</a></li>
+                            <li><a href="#">Print Report</a></li>
+                            <li class="divider">
+                                <a href="#">Start Event</a>
+                            </li>
+                            <li class="divider">
+                                <a href="#">View Asset</a>
+                            </li>
+                            <li><a href="#">Edit Asset</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td><a href="#">Link</a></td>
+                <td>Lorem Ipsum</td>
+                <td>Quaeritis</td>
+                <td>in culpa qui</td>
+                <td>sed do eiusmod</td>
+                <td>07/02/13 12:00 AM EDT</td>
+                <td>07/03/13 12:00 AM EDT</td>
+                <td class="pull-right"><a class="btn-secondary btn-sml" href="#">Actions</a></td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- two columns: equal -->
+    <section class="clearfix">
+        <h3>Two Columns: Equal Widths example</h3>
+        <div class="columns-two">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, unde assumenda tempore omnis incidunt repudiandae alias laudantium maiores aut distinctio. Doloribus, inventore aliquam itaque illo consequatur officia quos harum architecto. Praesentium, nobis, quo, adipisci quae officia vitae temporibus optio pariatur laboriosam cumque cupiditate laborum non illo reprehenderit inventore quis repellat deserunt debitis. Odit, doloremque, accusamus eaque modi nesciunt atque soluta labore maxime id provident deleniti maiores possimus ipsam ut cupiditate consequuntur natus minima harum.</p>
+        </div>
+        <div class="columns-two">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, unde assumenda tempore omnis incidunt repudiandae alias laudantium maiores aut distinctio. Doloribus, inventore aliquam itaque illo consequatur officia quos harum architecto. Praesentium, nobis, quo, adipisci quae officia vitae temporibus optio pariatur laboriosam cumque cupiditate laborum non illo reprehenderit inventore quis repellat deserunt debitis. Odit, doloremque, accusamus eaque modi nesciunt atque soluta labore maxime id provident deleniti maiores possimus ipsam ut cupiditate consequuntur natus minima harum.</p>
+        </div>
+    </section>
+
+    <!-- two columns right sidebar -->
+    <section class="clearfix">
+        <h3>Two Columns: Right Sidebar example</h3>
+        <div class="column-wide">
+            <form action="">
+                <fieldset class="form-horizontal">
+                    <legend>Horizontal Form</legend>
+                    <div class="control-group">
+                        <label>Label 1</label>
+                        <input type="text" value="sample value">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Label 2</label>
+                        <input type="text">
+                        <a href="#" class="link">Example</a>
+                    </div>
+                    <div class="control-group">
+                        <label>Label 3</label>
+                        <input type="text">
+                        <span class="text-block">Sample text block</span>
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-horizontal">
+                    <legend>Horizontal Form</legend>
+                    <div class="control-group">
+                        <label>Label 4</label>
+                        <input type="text">
+                    </div>
+                    <div class="control-group">
+                        <label>Label 5</label>
+                        <input type="text">
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="column-right">
+            <form action="">
+                <fieldset>
+                    <legend>Default Form</legend>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo, placeat, et nesciunt hic cumque.</p>
+                    <div class="control-group">
+                        <label>Label 1</label>
+                        <input type="text" value="sample value">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Label 2</label>
+                        <input type="text">
+                    </div>
+                    <div class="control-group">
+                        <label>Label 3</label>
+                        <input type="text">
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </section>
+
+    <!-- two columns left sidebar -->
+    <section class="clearfix">
+        <h3>Two Columns: Left Sidebar example</h3>
+        <div class="column-left">
+            <form action="">
+                <fieldset>
+                    <legend>Default Form</legend>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nemo, placeat, et nesciunt hic cumque.</p>
+                    <div class="control-group">
+                        <label>Label 1</label>
+                        <input type="text" value="sample value">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Label 2</label>
+                        <input type="text">
+                    </div>
+                    <div class="control-group">
+                        <label>Label 3</label>
+                        <input type="text">
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="column-wide">
+            <form action="">
+                <fieldset class="form-horizontal">
+                    <legend>Horizontal Form</legend>
+                    <div class="control-group">
+                        <label>Label 1</label>
+                        <input type="text" value="sample value">
+                    </div>
+
+                    <div class="control-group">
+                        <label>Label 2</label>
+                        <input type="text">
+                        <a href="#" class="link">Example</a>
+                    </div>
+                    <div class="control-group">
+                        <label>Label 3</label>
+                        <input type="text">
+                        <span class="text-block">Sample text block</span>
+                    </div>
+                </fieldset>
+
+                <fieldset class="form-horizontal">
+                    <legend>Horizontal Form</legend>
+                    <div class="control-group">
+                        <label>Label 4</label>
+                        <input type="text">
+                    </div>
+                    <div class="control-group">
+                        <label>Label 5</label>
+                        <input type="text">
+                    </div>
+                </fieldset>
+            </form>			</div>
+    </section>
+
+    <hr>
+    <h2>Additional options</h2>
+
+    <!-- two columns narrow -->
+    <section class="clearfix">
+        <h3>Two Columns: narrow Sidebar example</h3>
+        <div class="column-left narrow">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, unde assumenda tempore omnis incidunt repudiandae alias laudantium maiores aut distinctio. Doloribus, inventore aliquam itaque illo consequatur officia quos harum architecto. Praesentium, nobis, quo, adipisci quae officia vitae temporibus optio pariatur laboriosam cumque cupiditate laborum non illo reprehenderit inventore quis repellat deserunt debitis. Odit, doloremque, accusamus eaque modi nesciunt atque soluta labore maxime id provident deleniti maiores possimus ipsam ut cupiditate consequuntur natus minima harum.</p>
+        </div>
+        <div class="column-wide narrow">
+            <p>Biscuit liquorice jelly-o sweet roll chocolate cake chocolate bar pie. Donut powder danish pudding chocolate cake tootsie roll. Tiramisu brownie pudding applicake fruitcake applicake candy icing. Unerdwear.com gingerbread topping tart tiramisu jelly beans carrot cake cookie cake. Macaroon unerdwear.com sweet icing gummi bears jelly-o caramels carrot cake. Danish tart applicake halvah gummies pastry. Pastry candy gummies wafer chocolate cake gummies ice cream dessert.</p>
+
+            <p>Chocolate bar brownie soufflé. Sweet roll gingerbread soufflé ice cream unerdwear.com jelly-o. Wafer gummi bears chocolate tiramisu oat cake. Lollipop sesame snaps marshmallow lollipop tootsie roll icing chupa chups candy canes. Icing fruitcake biscuit jelly-o. Cookie macaroon chocolate cake gummi bears cheesecake marzipan topping cupcake. Gummi bears danish jelly beans. Oat cake halvah sesame snaps muffin pudding bonbon wafer apple pie. Pastry gummies jelly cupcake apple pie candy ice cream pie unerdwear.com.</p>
+
+            <p>Toffee apple pie candy canes muffin cupcake lollipop applicake halvah chocolate. Candy canes donut oat cake sweet roll halvah apple pie cake. Dessert tiramisu dessert biscuit tootsie roll sweet macaroon. Cookie dragée tart tart candy canes candy canes candy canes. Lollipop sweet roll chupa chups applicake tootsie roll. Pastry donut candy dragée chocolate chocolate bar jujubes macaroon toffee. Sweet fruitcake fruitcake unerdwear.com jelly-o powder danish. Jelly marshmallow tootsie roll lemon drops gingerbread. Tootsie roll sweet roll chupa chups.</p>
+        </div>
+    </section>
+
+    <!-- two columns fixed -->
+    <section class="clearfix">
+        <h3>Two Columns: Fixed Sidebar example</h3>
+        <div class="column-left fixed">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, unde assumenda tempore omnis incidunt repudiandae alias laudantium maiores aut distinctio. Doloribus, inventore aliquam itaque illo consequatur officia quos harum architecto. Praesentium, nobis, quo, adipisci quae officia vitae temporibus optio pariatur laboriosam cumque cupiditate laborum non illo reprehenderit inventore quis repellat deserunt debitis. Odit, doloremque, accusamus eaque modi nesciunt atque soluta labore maxime id provident deleniti maiores possimus ipsam ut cupiditate consequuntur natus minima harum.</p>
+        </div>
+        <div class="column-wide fixed">
+            <p>Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. De carne lumbering animata corpora quaeritis. Summus brains sit​​, morbo vel maleficia? De apocalypsi gorger omero undead survivor dictum mauris. Hi mindless mortuis soulless creaturas, imo evil stalking monstra adventus resi dentevil vultus comedat cerebella viventium. Qui animated corpse, cricket bat max brucks terribilem incessu zomby. The voodoo sacerdos flesh eater, suscitat mortuos comedere carnem virus. Zonbi tattered for solum oculi eorum defunctis go lum cerebro. Nescio brains an Undead zombies. Sicut malus putrid voodoo horror. Nigh tofth eliv ingdead.</p>
+
+            <p>Horribilem walking dead resurgere de crazed sepulcris creaturis, zombie sicut de grave feeding iride et serpens. Pestilentia, shaun ofthe dead scythe animated corpses ipsa screams. Pestilentia est plague haec decaying ambulabat mortuos. Sicut zeder apathetic malus voodoo. Aenean a dolor plan et terror soulless vulnerum contagium accedunt, mortui iam vivam unlife. Qui tardius moveri, brid eof reanimator sed in magna copia sint terribiles undeath legionis. Alii missing oculis aliorum sicut serpere crabs nostram. Putridi braindead odores kill and infect, aere implent left four dead.</p>
+        </div>
+    </section>
+
+    <!-- two columns narrow & fixed -->
+    <section class="clearfix">
+        <h3>Two Columns: Narrow & Fixed Sidebar example</h3>
+        <div class="column-left narrow fixed">
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, unde assumenda tempore omnis incidunt repudiandae alias laudantium maiores aut distinctio. Doloribus, inventore aliquam itaque illo consequatur officia quos harum architecto. Praesentium, nobis, quo, adipisci quae officia vitae temporibus optio pariatur laboriosam cumque cupiditate laborum non illo reprehenderit inventore quis repellat deserunt debitis. Odit, doloremque, accusamus eaque modi nesciunt atque soluta labore maxime id provident deleniti maiores possimus ipsam ut cupiditate consequuntur natus minima harum.</p>
+        </div>
+        <div class="column-wide narrow fixed">
+            <p>Biscuit liquorice jelly-o sweet roll chocolate cake chocolate bar pie. Donut powder danish pudding chocolate cake tootsie roll. Tiramisu brownie pudding applicake fruitcake applicake candy icing. Unerdwear.com gingerbread topping tart tiramisu jelly beans carrot cake cookie cake. Macaroon unerdwear.com sweet icing gummi bears jelly-o caramels carrot cake. Danish tart applicake halvah gummies pastry. Pastry candy gummies wafer chocolate cake gummies ice cream dessert.</p>
+
+            <p>Chocolate bar brownie soufflé. Sweet roll gingerbread soufflé ice cream unerdwear.com jelly-o. Wafer gummi bears chocolate tiramisu oat cake. Lollipop sesame snaps marshmallow lollipop tootsie roll icing chupa chups candy canes. Icing fruitcake biscuit jelly-o. Cookie macaroon chocolate cake gummi bears cheesecake marzipan topping cupcake. Gummi bears danish jelly beans. Oat cake halvah sesame snaps muffin pudding bonbon wafer apple pie. Pastry gummies jelly cupcake apple pie candy ice cream pie unerdwear.com.</p>
+
+            <p>Toffee apple pie candy canes muffin cupcake lollipop applicake halvah chocolate. Candy canes donut oat cake sweet roll halvah apple pie cake. Dessert tiramisu dessert biscuit tootsie roll sweet macaroon. Cookie dragée tart tart candy canes candy canes candy canes. Lollipop sweet roll chupa chups applicake tootsie roll. Pastry donut candy dragée chocolate chocolate bar jujubes macaroon toffee. Sweet fruitcake fruitcake unerdwear.com jelly-o powder danish. Jelly marshmallow tootsie roll lemon drops gingerbread. Tootsie roll sweet roll chupa chups.</p>
+        </div>
+    </section>
+</wicket:extend>
+</html>
