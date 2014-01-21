@@ -1,6 +1,7 @@
 package com.n4systems.util.json;
 
 import com.google.gson.*;
+import com.n4systems.model.GpsLocation;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.util.chart.Chartable;
 import com.n4systems.util.chart.ChartableMap;
@@ -51,6 +52,17 @@ public class JsonRenderer implements Serializable {
             object.addProperty("text",annotation.getText());
             object.addProperty("x",annotation.getX());
             object.addProperty("y",annotation.getY());
+            return object;
+        }
+    }
+
+    class GpsLocationSerializer implements JsonSerializer<GpsLocation> {
+
+        @Override
+        public JsonElement serialize(GpsLocation src, Type typeOfSrc, JsonSerializationContext context) {
+            JsonObject object = new JsonObject();
+            object.addProperty("latitude",src.getLatitude().doubleValue());
+            object.addProperty("longitude",src.getLongitude().doubleValue());
             return object;
         }
     }

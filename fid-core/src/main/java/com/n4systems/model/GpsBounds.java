@@ -3,6 +3,7 @@ package com.n4systems.model;
 import javax.persistence.*;
 import java.io.Serializable;
 
+// TEST??
 @Embeddable
 public class GpsBounds implements Serializable {
 

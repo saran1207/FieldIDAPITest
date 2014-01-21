@@ -90,7 +90,7 @@ public class AttachmentService extends FieldIdPersistenceService {
     }
 
 
-    public S3ImageAttachment find(Long id) {
-        return persistenceService.find(S3ImageAttachment.class, id);
+    public <T extends AbstractAttachment> T find(Long id) {
+        return (T) persistenceService.find(AbstractAttachment.class, id);
     }
 }
