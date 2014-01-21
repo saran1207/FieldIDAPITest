@@ -1,0 +1,132 @@
+<html xmlns:wicket="http://wicket.apache.org">
+    <wicket:extend>
+
+    <hr>
+    <!-- Left column: narrow -->
+    <div class="column-left narrow">
+
+        <!-- Sample content. Refer to style guide documentation for all available styles. -->
+        <img wicket:id="featureImage" class="feature-img" alt="air hoist">
+
+        <section>
+            <h3>Two column table</h3>
+            <table class="two-columns">
+                <tr>
+                    <td>Reference Number</td>
+                    <td>I1445</td>
+                </tr>
+                <tr>
+                    <td>Visibility</td>
+                    <td>false</td>
+                </tr>
+                <tr>
+                    <td>Created By</td>
+                    <td>12/09/09 4:58 PM EST</td>
+                </tr>
+                <tr>
+                    <td>Modified By</td>
+                    <td>N4 Systems 10/26/12 1:56 PM EDT</td>
+                </tr>
+            </table>
+        </section>
+    </div>
+
+    <!-- Right column: wide -->
+    <div class="column-wide narrow">
+        <section class="schedules">
+            <h3>Table listing</h3>
+            <table class="borders">
+                <tr>
+                    <td>Lorem ipsum dolor sit amet.</td>
+                    <td>Dolor harum totam accusamus.</td>
+                    <td>07/24/13</td>
+                    <td><span class="btn-secondary btn-sml pull-right">Edit</span></td>
+                </tr>
+                <tr>
+                    <td>Lorem ipsum dolor sit amet.</td>
+                    <td>Dolor harum totam accusamus.</td>
+                    <td>07/24/13</td>
+                    <td><span class="btn-secondary btn-sml pull-right">Edit</span></td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h3>Images with captions</h3>
+            <ul class="list-table">
+                <li>
+                    <figure>
+                        <img src="http://placeimg.com/50/50/arch/1">
+                        <figcaption><a href="#">logo.png</a></figcaption>
+                    </figure>
+                </li>
+                <li>
+                    <figure>
+                        <img src="http://placeimg.com/50/50/arch">
+                        <figcaption>
+                            <a href="#">Field-ID-2011-EllisDon.pdf</a>
+                            <p>Instruction Manual</p>
+                        </figcaption>
+                    </figure>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h3>Page content heading</h3>
+
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, in, maiores ipsa deleniti omnis animi temporibus blanditiis suscipit maxime ex necessitatibus quis tenetur magni sed iusto praesentium debitis expedita ut.</p>
+            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, in, maiores ipsa deleniti omnis animi temporibus blanditiis suscipit maxime ex necessitatibus quis tenetur magni sed iusto praesentium debitis expedita ut.</p>
+        </section>
+    </div><!-- cls .column-wide -->
+
+    <hr>
+
+    <!-- Right column: wide -->
+    <div class="column-wide narrow">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+    </div><!-- cls .column-wide -->
+
+    <!-- Right column: narrow MUST come after .column-wide -->
+    <div class="column-right narrow">
+        <!-- Sample form styles. Refer to documentation for all features. -->
+        <form wicket:id="form">
+            <fieldset>
+                <legend>Form section title</legend>
+                <p>Upload an image of the asset to be displayed on the profile page. The image should be 300px wide.</p>
+                <div class="input-combo">
+                    <input wicket:id="fileUploadField" type="file" class="file-input js-file-input">
+                    <input wicket:id="textField" type="text" class="file-uploaded js-file-uploaded">
+                    <span class="btn-secondary btn-sml">Browse</span>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Form section title</legend>
+                <label>Clearance Level</label>
+                <select wicket:id="clearanceLevels" data-placeholder="" class="chzn-select-no-search"/>
+
+                <label>Warning</label>
+                <select wicket:id="warnings" data-placeholder="" class="chzn-select-no-search"/>
+            </fieldset>
+        </form>
+    </div>
+
+         <wicket:fragment wicket:id="actions">
+            <!-- Any combination of button styles can be contain within here. Refer to style guide documentaton. Example of single and grouped buttons below. -->
+            <a wicket:id="secondaryLink" class="btn-secondary">Secondary</a>
+            <div class="button-group">
+                <div class="dropdown">
+                    <a class="btn-secondary" href="#">Dropdown</a>
+                    <ul class="pull-right">
+                        <li><a href="#">item</a></li>
+                        <li><a href="#">item</a></li>
+                    </ul>
+                </div>
+                <a wicket:id="primaryLink" class="btn-primary">Primary</a>
+            </div>
+         </wicket:fragment>
+    </wicket:extend>
+</html>
