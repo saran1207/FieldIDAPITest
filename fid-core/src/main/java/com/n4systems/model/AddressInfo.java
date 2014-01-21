@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.parents.AbstractEntity;
 import org.apache.commons.lang.StringUtils;
 
@@ -13,7 +14,7 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name = "addressinfo")
-public class AddressInfo extends AbstractEntity {
+public class AddressInfo extends AbstractEntity implements HasGpsLocation {
 
 	private String streetAddress = "";
 	private String city = "";

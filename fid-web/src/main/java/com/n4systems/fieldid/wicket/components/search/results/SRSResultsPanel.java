@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.search.results;
 
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
@@ -14,13 +15,14 @@ import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
@@ -29,10 +31,13 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
     protected FieldIdAPIDataProvider provider;
     protected MultiIdSelection selectedRows;
     protected IModel<T> criteriaModel;
+    protected GoogleMap map;
+    protected WebMarkupContainer resultButtons;
 
     public SRSResultsPanel(String id, final IModel<T> criteriaModel) {
         super(id);
         this.criteriaModel = criteriaModel;
+        setOutputMarkupId(true);
 
         selectedRows = criteriaModel.getObject().getSelection();
 
@@ -90,8 +95,40 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
 
         dataTable.getTable().setCurrentPage(criteriaModel.getObject().getPageNumber());
         selectUnselectRowColumn.setDataTable(dataTable.getTable());
+
+        add(map = new GoogleMap("resultsMap") {
+            @Override protected String getCssForEmptyMap() {
+                return "";
+            }
+        });
+        map.setVisible(true);
+
+        resultButtons = new WebMarkupContainer("resultButtons");
+        resultButtons.add(new IndicatingAjaxLink("table") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                showTable(target);
+            }
+        });
+        resultButtons.add(new IndicatingAjaxLink("map") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                showMap(target);
+            }
+        });
+        add(resultButtons.setVisible(true));
     }
-    
+
+    protected void showTable(AjaxRequestTarget target) {
+        map.setVisible(false);
+        dataTable.setVisible(true);
+        target.add(this);
+    }
+
+    protected void showMap(AjaxRequestTarget target) {
+        map.setVisible(true);
+        dataTable.setVisible(false);
+        target.add(this);
+    }
+
     // package protected method is extract/overridden for testing purposes
     protected SerializableSecurityGuard getSecurityGuard() {
 		return new SerializableSecurityGuard(FieldIDSession.get().getTenant());

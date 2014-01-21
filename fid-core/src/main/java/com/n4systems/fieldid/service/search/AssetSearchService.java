@@ -10,6 +10,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.terms.GpsBoundsTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
 import java.util.ArrayList;
@@ -47,11 +48,16 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 
 		addPredefinedLocationTerm(search, criteriaModel);
 		addAssignedUserTerm(search, criteriaModel);
+
+        addGpsLocationTerm(search, criteriaModel);
+    }
+
+    private void addGpsLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
+        search.add(new GpsBoundsTerm("gpsLocation",criteriaModel.getBounds()));
     }
 
 
-
-	private void addPredefinedLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
+    private void addPredefinedLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
         if (predefLocationId != null) {
 			search.add(new PredefinedLocationSearchTerm("preLocSearchId", predefLocationId));

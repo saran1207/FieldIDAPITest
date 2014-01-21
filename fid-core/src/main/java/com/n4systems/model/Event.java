@@ -1,9 +1,6 @@
 package com.n4systems.model;
 
-import com.n4systems.model.api.Archivable;
-import com.n4systems.model.api.Exportable;
-import com.n4systems.model.api.HasCreatedModifiedPlatform;
-import com.n4systems.model.api.HasOwner;
+import com.n4systems.model.api.*;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
@@ -28,7 +25,7 @@ import java.util.TimeZone;
 @Entity
 @Table(name = "masterevents")
 @PrimaryKeyJoinColumn(name="event_id")
-public abstract class Event<T extends EventType, V extends Event, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, Archivable, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasOwner {
+public abstract class Event<T extends EventType, V extends Event, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, Archivable, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasOwner, HasGpsLocation {
 	private static final long serialVersionUID = 1L;
 	public static final String[] PLACE_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "infoOptionMap", "subEvents", "place" };
     public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
