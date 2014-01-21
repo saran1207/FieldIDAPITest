@@ -39,14 +39,10 @@ var googleMapFactory = (function() {
 		 return map;
 	 };
 
-	 var createAndShowWithLocation = function(id) {
+	 var createAndShowWithLocation = function(id,locations) {
 		var map = create(id, defaultOptions);
-        if (arguments.length>1 && (arguments.length-1)%2!=0) {
-            throw "you must specify latitude & longitude in pairs but you've only passed " + arguments.length-1 + "coordinates";
-        }
-        // note that this method doesn't support additional args that "addLocation" can handle.  just the latitude/longitude.
-        for (var i=1;i<arguments.length;i+=2) {
-		    map.addLocation(arguments[i], arguments[i+1]);
+        for (var i=0;i<locations.length;i++) {
+		    map.addLocation(locations[i].latitude, locations[i].longitude);
         }
 		map.show();
 		return map;

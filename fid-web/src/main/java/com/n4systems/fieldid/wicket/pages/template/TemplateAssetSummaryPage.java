@@ -98,7 +98,7 @@ public class TemplateAssetSummaryPage extends AssetPage {
 
 
         if(asset.getGpsLocation() != null) {
-            add(new GoogleMap("map").addLocation(asset.getGpsLocation().getLatitude().doubleValue(), asset.getGpsLocation().getLongitude().doubleValue()));
+            add(new GoogleMap("map",asset));
         } else {
             WebMarkupContainer map;
             add(map = new WebMarkupContainer("map"));
