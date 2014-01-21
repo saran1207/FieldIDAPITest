@@ -50,7 +50,9 @@ public class AllTemplates extends FieldIDTemplatePage {
     protected void addBreadCrumbBar(String breadCrumbBarId) {
         add(new BreadCrumbBar(breadCrumbBarId,
                 new NavigationItem(new FIDLabelModel("label.dashboard"), DashboardPage.class),
-                new NavigationItem(Model.of("Template Page"), AllTemplates.class)
+                new NavigationItem(Model.of("Template Page"), TemplatePage.class),
+                new NavigationItem(new FIDLabelModel("label.current_page"), AllTemplates.class)
+
         ));
     }
 
