@@ -50,6 +50,10 @@ main,
 main {
 	margin-bottom: 40px;
 	padding-top: 125px;
+
+	&.wide {
+		max-width: 100%;
+	}
 }
 
 // Use to group content within a page.  Should contain a natural heading, otherwise, use a <div>
@@ -136,8 +140,35 @@ section {
 // Two equal columns
 // add class .pull-left to the left column
 // anc class .pull-right to the right column
+// TODO: old class name, need to update
 .two-columns {
 	width: 49%;
+}
+
+// Two columns - equal width
+.columns-two {
+	.width(6,5);
+	float: left;
+
+	&:first-of-type {
+		margin-right: @gutter;
+	}
+}
+
+// Fixed width sidebar
+.column-left,
+.column-right {
+	&.fixed {
+		.width-fixed(4,3);
+	}
+	&.narrow.fixed {
+		.width-fixed(3,2);
+	}
+}
+.column-wide.fixed {
+	width: auto;
+	overflow: auto;
+	float: none;
 }
 
 
@@ -151,8 +182,6 @@ section {
 @media (max-width: 1100px) {
 	main,
 	.content-wrap {
-		//margin: 0 20px;
-		//width: 1024px;
 		width: 984px;
 	}
 }

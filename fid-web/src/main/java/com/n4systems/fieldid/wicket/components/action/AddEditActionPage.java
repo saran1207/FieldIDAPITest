@@ -183,6 +183,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                     }
                 });
             }
+            deleteLink.setVisible(editMode);
             add(deleteLink);
         }
 
@@ -258,7 +259,8 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/event_actions.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/pages/alerts.css");
+        
+        //Old CSS file - remove when site is completely moved over to framework styles.
         response.renderCSSReference("style/newCss/layout/feedback_errors.css");
     }
 

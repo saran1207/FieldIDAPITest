@@ -12,7 +12,7 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 // This loader is a direct migration from EventScheduleManager.getNextScheduleFor(Long, Long)
-public class NextEventScheduleLoader extends Loader<Event> {
+public class NextEventScheduleLoader extends Loader<ThingEvent> {
 
 	private Long assetId;
 	private Long typeId;
@@ -20,16 +20,16 @@ public class NextEventScheduleLoader extends Loader<Event> {
 	public NextEventScheduleLoader() {}
 
 	@Override
-	public Event load(EntityManager em) {
-		Event schedule = null;
+	public ThingEvent load(EntityManager em) {
+		ThingEvent schedule = null;
 		
-		QueryBuilder<Event> query = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+		QueryBuilder<ThingEvent> query = new QueryBuilder<ThingEvent>(ThingEvent.class, new OpenSecurityFilter());
 		query.addSimpleWhere("asset.id", assetId).addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
 		if (typeId != null)
 			query.addSimpleWhere("type.id", typeId);
 		query.addOrder("dueDate");
 		
-		List<Event> schedules = query.getResultList(em, 0, 1);
+		List<ThingEvent> schedules = query.getResultList(em, 0, 1);
 			
 		if (!schedules.isEmpty()) {
 			schedule = schedules.get(0);

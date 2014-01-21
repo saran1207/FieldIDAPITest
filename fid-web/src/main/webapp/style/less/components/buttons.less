@@ -6,11 +6,11 @@
 
 // <a class="btn-secondary" href="#">Button text</a>
 // <span class="btn-secondary">Button text</span>
-// <input class="btn-primary" type="submit" value="">
-// <button class="btn-save">Save</button>
+// <input class="btn-primary" type="submit" value="Button text">
+// <button class="btn-primary">Button text</button>
 
-// This will apply to any class that starts with "btn" so be mindful of creating new class names using this prefix. This class was created to attach these styles without using an additional class to change colors.
-[class^="btn"] {
+// This style applies to any class that starts with "btn" so be mindful of creating new class names using the "btn" prefix. This class was created to attach these styles without using an additional class to change colors.
+[class^="btn-"] {
 	text-decoration: none;
 	display: inline-block;
 	padding: 8px 16px;
@@ -116,6 +116,18 @@
 	}
 	
 }
+
+// Back button
+.btn-back {
+	// adds double left arrow before text
+	&:before { 
+		content: '\00AB';
+		font-size: 14px;
+		font-family: "fontello", sans-serif; 
+		padding-right: 4px;
+	} 
+}
+
 
 // Form buttons
 // -------------
