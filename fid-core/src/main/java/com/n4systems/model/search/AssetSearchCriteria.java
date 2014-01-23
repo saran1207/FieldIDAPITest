@@ -63,6 +63,8 @@ public class AssetSearchCriteria extends SearchCriteria {
     @Embedded
     private GpsBounds bounds =  new GpsBounds(0.548548, -146.987305,543.548548, +96.987305);
 
+    @Column
+    private Boolean hasGps;
 
     public GpsBounds getBounds() {
         return bounds;
@@ -88,6 +90,13 @@ public class AssetSearchCriteria extends SearchCriteria {
         this.verticalLocationGrouping = verticalLocationGrouping;
     }
 
+    public Boolean getHasGps() {
+        return hasGps;
+    }
+
+    public void setHasGps(Boolean hasGps) {
+        this.hasGps = hasGps;
+    }
 
     public String getRfidNumber() {
         return rfidNumber;

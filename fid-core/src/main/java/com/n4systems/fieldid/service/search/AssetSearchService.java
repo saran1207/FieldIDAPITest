@@ -11,6 +11,7 @@ import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.terms.GpsBoundsTerm;
+import com.n4systems.util.persistence.search.terms.HasGpsTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 
 import java.util.ArrayList;
@@ -50,6 +51,13 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 		addAssignedUserTerm(search, criteriaModel);
 
         addGpsLocationTerm(search, criteriaModel);
+        addHasGpsTerm(search, criteriaModel);
+    }
+
+    private void addHasGpsTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
+        if(criteriaModel.getHasGps() != null) {
+            search.add(new HasGpsTerm(criteriaModel.getHasGps()));
+        }
     }
 
     private void addGpsLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
