@@ -26,11 +26,11 @@ public class UserActionsCell extends Panel {
 
         final User user = model.getObject();
         if(user.isFullUser() || user.isAdmin()) {
-            add(new NonWicketLink("editLink", "employeeUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-sml btn-secondary")));
+            add(new NonWicketLink("editLink", "employeeUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-secondary")));
         } else if(user.isLiteUser()) {
-            add(new NonWicketLink("editLink", "liteUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-sml btn-secondary")));
+            add(new NonWicketLink("editLink", "liteUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-secondary")));
         } else if(user.isReadOnly()) {
-            add(new NonWicketLink("editLink", "readOnlyUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-sml btn-secondary")));
+            add(new NonWicketLink("editLink", "readOnlyUserEdit.action?uniqueID=" + user.getId(), new AttributeAppender("class", "btn-secondary")));
         } else if(user.isPerson()) {
             add(new BookmarkablePageLink<EditPersonPage>("editLink", EditPersonPage.class, PageParametersBuilder.id(user.getId())));
         } else if(user.isUsageBasedUser()) {

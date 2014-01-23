@@ -1,9 +1,9 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-    <div class="button-group split-btn btn-sml pull-right">
+    <div class="split-btn pull-right">
         <a wicket:id="viewLink" class="btn-secondary"><wicket:message key="label.view"/></a>
         <div wicket:enclosure="optionsContainer" class="dropdown">
-            <a class="btn-secondary" href="javascript:void(0);"/>
+            <button class="btn-secondary">Toggle Dropdown</button>
             <ul wicket:id="optionsContainer" class="pull-right">
                 <li><a wicket:id="editLink"><wicket:message key="label.edit"/></a></li>
                 <li><a wicket:id="printReportLink"><wicket:message key="label.print"/></a></li>

@@ -10,19 +10,22 @@
 // <button class="btn-primary">Button text</button>
 
 // This style applies to any class that starts with "btn" so be mindful of creating new class names using the "btn" prefix. This class was created to attach these styles without using an additional class to change colors.
+[class*="btn-"],
 [class^="btn-"] {
 	text-decoration: none;
 	display: inline-block;
-	padding: 8px 16px;
+	padding: 6px 12px;
 	.border-radius(2px);
 	border: 1px solid @gray-medium;
-	font-size: 14px;
+	font-size: @base-font-size;
 	color: #fff;
 	.transition(all 0.3s ease-out);
 	width: auto;
 	cursor: pointer;
 	margin: 0;
 	white-space: nowrap;
+	line-height: @base-line-height;
+	text-align: center;
 	
 	&:hover {
 		color: #fff;
@@ -41,7 +44,6 @@
 		display: none;
 	}
 }
-
 
 // Button colours
 // ---------------
@@ -65,34 +67,13 @@
 		background: @white;
 		color: @gray-darkest;
 	}
-
-.btn-save {
+.btn-success {
 	background: @green;
 	border-color: darken(@green, 5%);
 }
-	.dropdown:hover .btn-save,
-	.btn-save:hover {
+	.dropdown:hover .btn-success,
+	.btn-success:hover {
 		.btn-hover(@green, 10%);
-	}
-
-.btn-info {
-	background: @blue-dark;
-	border-color: darken(@blue-dark, 5%);
-}
-	.dropdown:hover .btn-info,
-	.btn-info:hover {
-		.btn-hover(@blue-dark, 20%);
-	}
-
-.btn-warning {
-	background: darken(@yellow, 10%);
-	border-color: darken(@yellow, 40%);
-	color: @gray-dark;
-}
-	.dropdown:hover .btn-warning,
-	.btn-warning:hover {
-		.btn-hover(@yellow, 40%);
-		color: @gray-darkest;
 	}
 
 .btn-danger {
@@ -105,6 +86,7 @@
 	}
 
 // Button styled as link
+// ----------------------
 .btn-link {
 	border: 0;
 	color: @blue;
@@ -118,44 +100,28 @@
 }
 
 // Back button
+// ------------
 .btn-back {
 	// adds double left arrow before text
 	&:before { 
+		font-size: @base-font-size;
+		font-family: @fontello;
 		content: '\00AB';
-		font-size: 14px;
-		font-family: "fontello", sans-serif; 
 		padding-right: 4px;
 	} 
 }
 
-
-// Form buttons
-// -------------
-input[class^="btn"], 
-button[class^="btn"] {   
-	height: 35px;
-
-	&.btn-sml {
-		height: 29px;
-	}
-}
-
-
 // Different button sizes
 // -----------------------
 .btn-lrg {
-	padding: 8px 25px;
-	font-size: 18px;
+	padding: 8px 16px;
+	font-size: @large-font-size;
 }
 .btn-sml {
-	padding: 5px 12px;
-}
-.btn-xsml {
 	padding: 4px 8px;
-	font-size: 12px;
+	font-size: @small-font-size;
 	.border-radius(3px);
 }
-
 
 // Icon buttons
 // -------------
@@ -178,8 +144,10 @@ button[class^="btn"] {
 // used in navigation. CSS can be found in dropdowns.less
 .dropdown {
 	> [class^="btn"]:after {
-		.fontello-icon('\e811');
-		padding-right: 0;
+		font-size: @base-font-size;
+		font-family: @fontello;
+		content: '\e811';
+		padding-left: 5px;	
 	}
 	&:hover [class^="btn"]:after {
 		content: '\e813';
@@ -271,30 +239,33 @@ button[class^="btn"] {
 		margin-bottom: 1px;
 		margin-right: -1px;
 		.border-right-radius(0px);
+
 	}
 	.dropdown {
 		position: static;
 		font-size: @base-font-size;
-		
-		//reduces padding for dropdown button with arrow icon
-		[class^="btn"] {
+
+		> [class^="btn"] {
+			//reduces padding for dropdown button with arrow icon
 			padding-left: 5px;
 			padding-right: 10px;
+			//hides text - only show icon
+			font-size: 0;
 		}
 	}
-	&.btn-sml {
-		padding: 0;
+}
 
-		[class^="btn"] {
-			padding: 5px 10px;
-		}
-		.dropdown [class^="btn"] {
-			padding-left: 6px;
-		}
-		.dropdown ul li a {
-			padding: 6px 10px;
-			font-size: @small-font-size;
-		}
+// Firefox only
+@-moz-document url-prefix() { 
+	[class^="btn-"] {
+		vertical-align: middle;
+	}
+	input::-moz-focus-inner {
+   	 	padding: 1px 0px 2px;
+	}
+	.split-btn,
+	.split-btn [class^="btn-"] {
+    	vertical-align: top;
 	}
 }
 
