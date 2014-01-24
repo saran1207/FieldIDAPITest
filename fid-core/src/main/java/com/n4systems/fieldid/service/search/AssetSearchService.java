@@ -142,7 +142,7 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 
     @Transactional(readOnly = true)
     public MappedResults<AssetSearchRecord> performMapSearch(AssetSearchCriteria criteriaModel) {
-        QueryBuilder<Asset> query = createBaseSearchQueryBuilder(criteriaModel);
+        QueryBuilder<AssetSearchRecord> query = createBaseMappedSearchQueryBuilder(criteriaModel);
 
         int totalResultCount = findCount(query).intValue();
 
@@ -153,7 +153,7 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
         MappedResults<AssetSearchRecord> searchResult = new MappedResults<AssetSearchRecord>();
         searchResult.setCount(totalResultCount);
 
-        List<Asset> queryResults;
+        List<AssetSearchRecord> queryResults;
         queryResults = persistenceService.findAll(query);
         searchResult.addLocations(queryResults);
 

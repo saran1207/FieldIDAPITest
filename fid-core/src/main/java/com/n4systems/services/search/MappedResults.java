@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.api.HasGpsLocation;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,10 +42,10 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         return groupCount + "";
     }
 
-    public MappedResults<T> addLocations(List<? extends HasGpsLocation> locations) {
-        for (HasGpsLocation hasGpsLocation:locations) {
+    public MappedResults<T> addLocations(List<T> locations) {
+        for (T hasGpsLocation:locations) {
             GpsLocation gpsLocation = hasGpsLocation.getGpsLocation();
-            add(gpsLocation, hasGpsLocation.toString());
+            add(gpsLocation, hasGpsLocation);
         }
         setCount(locations.size());
         return this;
@@ -59,12 +58,12 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         return this;
     }
 
-    private void add(GpsLocation gpsLocation, String description) {
+    private void add(GpsLocation gpsLocation, T entity) {
         MappedResult result = results.get(gpsLocation);
         if (result==null) {
             results.put(gpsLocation,result = new MappedResult(gpsLocation));
         }
-        result.add(description);
+        result.add(entity);
     }
 
     public Iterator<MappedResult> getMappedResults() {
@@ -77,27 +76,20 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
 
 
     public class MappedResult implements Serializable {
-        List<String> descs = Lists.newArrayList();
+        List<T> entities = Lists.newArrayList();
         GpsLocation location;
 
         MappedResult(GpsLocation location) {
             this.location = location;
         }
 
-        MappedResult add(String desc) {
-            if (StringUtils.isNotBlank(desc)) {
-                descs.add(desc);
-            }
+        MappedResult add(T entity) {
+            entities.add(entity);
             return this;
         }
 
-        MappedResult add(T entry) {
-            descs.add(getDescription(entry));
-            return this;
-        }
-
-        public List<String> getDescs() {
-            return descs;
+        public List<T> getEntities() {
+            return entities;
         }
 
         public GpsLocation getLocation() {
@@ -105,12 +97,12 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         }
 
         public String toString() {
-            if (descs.size()==0) {
+            if (entities.size()==0) {
                 return null;
-            } else if (descs.size()==1) {
-                return descs.get(0);
+            } else if (entities.size()==1) {
+                return entities.get(0).toString();
             } else { //if (descs.size()>1) {
-                return Joiner.on("\n").join(getDescription(descs.size()), descs);
+                return getDescription(entities.size()) + "\t" + Joiner.on("\t").skipNulls().join(entities);
             }
         }
 
