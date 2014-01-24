@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import com.n4systems.model.GpsLocation;
@@ -11,10 +12,9 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import java.lang.reflect.Type;
-import java.util.Iterator;
 import java.util.List;
 
-public class GoogleMap extends Panel {
+public class GoogleMap<T extends HasGpsLocation> extends Panel {
     public static final String GOOGLE_MAPS_JS_ID = "googleMaps";
     public static final String GOOGLE_MAP_API_ID = "google-map-api";
     private static final String GOOGLE_MAP_WITH_LOCATION_JS = "%s = googleMapFactory.createAndShowWithLocation('%s',%s );";
@@ -111,23 +111,40 @@ public class GoogleMap extends Panel {
         return this;
     }
 
+    protected String getDescription(List<T> entitiesAtLocation) {
+        if (entitiesAtLocation.isEmpty()) {
+            return getEmptyDescription();
+        } else if (entitiesAtLocation.size()==1) {
+            return getDescription(entitiesAtLocation.get(0));
+        } else {
+            return getMultipleDescription(entitiesAtLocation);
+        }
+    }
 
+    protected String getMultipleDescription(List<T> entitiesAtLocation) {
+        return Joiner.on(" , " ).skipNulls().join(entitiesAtLocation);
+    }
 
-    class MappedResultsSerializer implements JsonSerializer<MappedResults> {
+    protected String getDescription(T entity) {
+        return entity==null ? "" : entity.toString();
+    }
+
+    protected String getEmptyDescription() {
+        return "";
+    }
+
+    class MappedResultsSerializer implements JsonSerializer<MappedResults<T>> {
 
         @Override
-        public JsonElement serialize(MappedResults results, Type typeOfSrc, JsonSerializationContext context) {
+        public JsonElement serialize(MappedResults<T> results, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject object = new JsonObject();
             object.addProperty("count",results.getCount());
             JsonArray data = new JsonArray();
-            Iterator<MappedResults.MappedResult> iter = results.getMappedResults();
-            while (iter.hasNext()) {
+            for (GpsLocation location:results.getLocations()) {
                 JsonObject o = new JsonObject();
-                MappedResults.MappedResult result = iter.next();
-                GpsLocation location = result.getLocation();
                 o.addProperty("latitude",location.getLatitude());
                 o.addProperty("longitude",location.getLongitude());
-                o.addProperty("desc",result.toString());
+                o.addProperty("desc", getDescription(results.getEntitiesAtLocation(location)));
                 data.add(o);
             }
             object.add("results",data);

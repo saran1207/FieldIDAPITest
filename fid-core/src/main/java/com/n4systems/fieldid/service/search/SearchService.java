@@ -154,10 +154,19 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         return persistenceService.count(searchBuilder);
     }
 
+    public QueryBuilder<S> createBaseMappedSearchQueryBuilder(T criteriaModel) {
+        QueryBuilder<S> searchBuilder = createAppropriateMappedQueryBuilder(criteriaModel);
+        augmentSearchBuilder(criteriaModel, searchBuilder);
+        return searchBuilder;
+    }
+
     public QueryBuilder<M> createBaseSearchQueryBuilder(T criteriaModel) {
 		// create our QueryBuilder, note the type will be the same as our selectClass
 		QueryBuilder<M> searchBuilder = createAppropriateQueryBuilder(criteriaModel, searchClass);
+        return augmentSearchBuilder(criteriaModel, searchBuilder);
+    }
 
+    private <E> QueryBuilder<E> augmentSearchBuilder(T criteriaModel, QueryBuilder<E> searchBuilder) {
         ColumnMappingView sortColumn = criteriaModel.getSortColumn();
 
         if (sortColumn != null && sortColumn.getJoinExpression() != null) {
@@ -175,7 +184,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         addSearchTerms(criteriaModel, searchTerms);
         addJoinTerms(criteriaModel, joinTerms);
 
-		// convert all our search terms to where parameters
+        // convert all our search terms to where parameters
         for (SearchTermDefiner term : searchTerms) {
             for (WhereClause<?> param: term.getWhereParameters()) {
                 searchBuilder.addWhere(param);
@@ -188,10 +197,10 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
         applyOwnerFilter(criteriaModel, searchBuilder);
 
-		return searchBuilder;
+        return searchBuilder;
     }
 
-    protected void applyOwnerFilter(T criteriaModel, QueryBuilder<M> searchBuilder) {
+    protected void applyOwnerFilter(T criteriaModel, QueryBuilder<?> searchBuilder) {
         List<QueryFilter> searchFilters = new ArrayList<QueryFilter>();
 
         if (criteriaModel.getOwner() != null) {
@@ -203,9 +212,14 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         }
     }
 
+    protected QueryBuilder<S> createAppropriateMappedQueryBuilder(T criteria) {
+        return new QueryBuilder<S>(searchClass, securityContext.getUserSecurityFilter());
+    }
+
     protected <E> QueryBuilder<E> createAppropriateQueryBuilder(T criteria, Class<E> searchClass) {
         return createUserSecurityBuilder(searchClass);
     }
+
 
     protected void addJoinTerms(T criteriaModel, List<JoinTerm> joinTerms) { }
     protected abstract void addSearchTerms(T criteriaModel, List<SearchTermDefiner> search);

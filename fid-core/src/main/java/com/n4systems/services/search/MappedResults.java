@@ -7,17 +7,14 @@ import com.n4systems.model.GpsLocation;
 import com.n4systems.model.api.HasGpsLocation;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MappedResults<T extends HasGpsLocation> implements Serializable {
 
     private Integer count;
     // TODO : aggregate locations that are within say, 2% of each other.  for this i'd need to know the bounds of all results first.
     // i.e. go through all adding to sorted map, keep a running tab on min/max lat/lng then go through and find all
-    private Map<GpsLocation,MappedResult> results = Maps.newHashMap();
+    private Map<GpsLocation,MappedResult<T>> results = Maps.newHashMap();
 
     public MappedResults(ArrayList<GpsLocation> locations) {
         add(locations);
@@ -59,36 +56,45 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
     }
 
     private void add(GpsLocation gpsLocation, T entity) {
-        MappedResult result = results.get(gpsLocation);
+        MappedResult<T> result = results.get(gpsLocation);
         if (result==null) {
             results.put(gpsLocation,result = new MappedResult(gpsLocation));
         }
         result.add(entity);
     }
 
-    public Iterator<MappedResult> getMappedResults() {
-        return results.values().iterator();
+    public Collection<MappedResult<T>> getMappedResults() {
+        return results.values();
     }
 
     public boolean isEmpty() {
         return results.isEmpty();
     }
 
+    public Collection<GpsLocation> getLocations() {
+        return results.keySet();
+    }
 
-    public class MappedResult implements Serializable {
-        List<T> entities = Lists.newArrayList();
+    public List<T> getEntitiesAtLocation(GpsLocation location) {
+        MappedResult<T> result = results.get(location);
+        return result==null ? null : result.getEntities();
+    }
+
+
+    public class MappedResult<E extends HasGpsLocation> implements Serializable {
+        List<E> entities = Lists.newArrayList();
         GpsLocation location;
 
         MappedResult(GpsLocation location) {
             this.location = location;
         }
 
-        MappedResult add(T entity) {
+        MappedResult add(E entity) {
             entities.add(entity);
             return this;
         }
 
-        public List<T> getEntities() {
+        public List<E> getEntities() {
             return entities;
         }
 
