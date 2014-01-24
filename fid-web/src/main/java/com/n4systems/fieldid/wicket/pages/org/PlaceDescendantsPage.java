@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.components.org.BackToPlaceSubHeader;
 import com.n4systems.fieldid.wicket.components.org.CreatePlacePanel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
@@ -20,6 +19,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColu
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -89,8 +89,9 @@ public class PlaceDescendantsPage extends PlacePage {
     }
 
     @Override
-    protected Component createSubHeader(String subHeaderId) {
-        return new BackToPlaceSubHeader(subHeaderId, orgModel);
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        return new BookmarkablePageLink<PlaceSummaryPage>(linkId, PlaceSummaryPage.class, PageParametersBuilder.id(getOrg().getId()))
+                .add(new Label(linkLabelId, new FIDLabelModel("label.back_to_x", getOrg().getName())));
     }
 
     @Override

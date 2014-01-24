@@ -5,7 +5,6 @@ import com.n4systems.fieldid.wicket.components.DisplayRecurrenceTimeModel;
 import com.n4systems.fieldid.wicket.components.assettype.RecurrenceFormPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.components.org.BackToPlaceSubHeader;
 import com.n4systems.fieldid.wicket.components.org.RecurringPlaceEventsFormPanel;
 import com.n4systems.fieldid.wicket.model.EnumLabelModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -140,8 +139,9 @@ public class PlaceRecurringSchedulesPage extends PlacePage{
     }
 
     @Override
-    protected Component createSubHeader(String subHeaderId) {
-        return new BackToPlaceSubHeader(subHeaderId, orgModel);
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        return new BookmarkablePageLink<PlaceSummaryPage>(linkId, PlaceSummaryPage.class, PageParametersBuilder.id(getOrg().getId()))
+                .add(new Label(linkLabelId, new FIDLabelModel("label.back_to_x", getOrg().getName())));
     }
 
     private LoadableDetachableModel<List<RecurringPlaceEvent>> getRecurringEvents() {

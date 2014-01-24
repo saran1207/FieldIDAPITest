@@ -7,7 +7,6 @@ import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.components.org.BackToPlaceSubHeader;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
@@ -21,6 +20,7 @@ import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -70,8 +70,9 @@ public class PlaceEventTypesPage extends PlacePage {
     }
 
     @Override
-    protected Component createSubHeader(String subHeaderId) {
-        return new BackToPlaceSubHeader(subHeaderId, orgModel);
+    protected Component createBackToLink(String linkId, String linkLabelId) {
+        return new BookmarkablePageLink<PlaceSummaryPage>(linkId, PlaceSummaryPage.class, PageParametersBuilder.id(getOrg().getId()))
+                .add(new Label(linkLabelId, new FIDLabelModel("label.back_to_x", getOrg().getName())));
     }
 
     private void init() {

@@ -125,7 +125,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
 
         add(createHeaderLink("headerLink", "headerLinkLabel"));
-        add(createBackToLink("backToLink", "backToLinkLabel"));
         add(createRelogLink());
     }
 
@@ -210,7 +209,11 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 	}
 
     protected Component createSubHeader(String subHeaderId) {
-        return new WebMarkupContainer(subHeaderId).setVisible(true);
+        WebMarkupContainer subHeader = new WebMarkupContainer(subHeaderId);
+        Component backToLink = createBackToLink("backToLink", "backToLinkLabel");
+        subHeader.add(backToLink);
+        subHeader.setVisible(backToLink.isVisible());
+        return subHeader;
     }
 
     protected Component createActionGroup(String actionGroupId) {
@@ -456,9 +459,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
             procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
             add(procedureLink);
-
-            add(createHeaderLink("headerLink", "headerLinkLabel"));
-            add(createBackToLink("backToLink", "backToLinkLabel"));
 
             add(createSetupLinkContainer(sessionUser));
             add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));
