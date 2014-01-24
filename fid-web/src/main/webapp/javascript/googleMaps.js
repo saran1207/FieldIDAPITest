@@ -39,10 +39,11 @@ var googleMapFactory = (function() {
 		 return map;
 	 };
 
-	 var createAndShowWithLocation = function(id,locations) {
+	 var createAndShowWithLocation = function(id,data) {
 		var map = create(id, defaultOptions);
-        for (var i=0;i<locations.length;i++) {
-		    map.addLocation(locations[i].latitude, locations[i].longitude);
+		var results = data.results;
+        for (var i=0;i<results.length;i++) {
+		    map.addLocation(results[i].latitude, results[i].longitude, results[i].desc);
         }
 		map.show();
 		return map;
@@ -240,15 +241,19 @@ var googleMapFactory = (function() {
 		return {
 			
 			makeMarker : function(loc) {
-				return new google.maps.Marker({
+				var desc = loc.desc;
+				var marker = new google.maps.Marker({
 					draggable : false,
 					position: loc,
 					map: map
 				});
+				marker.content = desc;
+				return marker;
 			},
 
-			addLocation : function(latitude,longitude) {
+			addLocation : function(latitude,longitude,desc) {
 				var loc = new google.maps.LatLng(latitude,longitude);
+				if (desc) { loc.desc = desc; }
 				locations.push(loc);  				
 				loc.args =  [].slice.call(arguments, 2); /* attach any additional args possibly passed to location. may be used by makeMarker() */
 				if (infowindow) infowindow.close();
@@ -302,7 +307,6 @@ var googleMapFactory = (function() {
 							showInfoWindow(this, map);
 						});
 					}
-
 					bounds.extend(loc);
 				}
 				if (count>1) {

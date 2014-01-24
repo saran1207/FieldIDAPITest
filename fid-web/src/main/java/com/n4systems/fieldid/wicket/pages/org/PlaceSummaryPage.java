@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.GpsModel;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.form.InlineEditableForm;
 import com.n4systems.fieldid.wicket.components.form.LinkFieldsBehavior;
@@ -20,6 +21,7 @@ import com.n4systems.fieldid.wicket.util.JavascriptUtil;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
+import com.n4systems.model.GpsLocation;
 import com.n4systems.model.PlaceEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
@@ -172,7 +174,7 @@ public class PlaceSummaryPage extends PlacePage {
         final IModel<Country> countryModel = new CountryFromAddressModel(addressModel);
         final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
 
-        add(map = new GoogleMap("map", new PropertyModel(addressModel, "gpsLocation")));
+        add(map = new GoogleMap("map", new GpsModel(new PropertyModel<GpsLocation>(addressModel, "gpsLocation"))));
 
 
         contact = new Contact(org.getContact());

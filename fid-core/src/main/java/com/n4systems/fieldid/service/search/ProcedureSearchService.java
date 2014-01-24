@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class ProcedureSearchService extends SearchService<ProcedureCriteria, Procedure> {
+public class ProcedureSearchService extends SearchService<ProcedureCriteria, Procedure, Procedure> {
 
     @Autowired
     private DateService dateService;

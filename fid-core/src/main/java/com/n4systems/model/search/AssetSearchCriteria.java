@@ -59,9 +59,10 @@ public class AssetSearchCriteria extends SearchCriteria {
     // 0...1.  defines ratio of map to break into quadrants when grouping
     private @Transient Double horizLocationGrouping = 1/5.0;
     private @Transient Double verticalLocationGrouping = 1/3.0;
+    private @Transient Integer maxItemsBeforeGrouping = 100;
 
     @Embedded
-    private GpsBounds bounds =  new GpsBounds(0.548548, -146.987305,543.548548, +96.987305);
+    private GpsBounds bounds; // =  new GpsBounds(0.548548, -146.987305,543.548548, +96.987305);
 
     @Column
     private Boolean hasGps;
@@ -184,6 +185,10 @@ public class AssetSearchCriteria extends SearchCriteria {
 
     public void setColumns(List<String> columns) {
         this.columns = columns;
+    }
+
+    public Integer getMaxItemsBeforeGrouping() {
+        return maxItemsBeforeGrouping;
     }
 
     @Transient

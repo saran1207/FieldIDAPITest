@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.search;
 
+import com.google.common.collect.Lists;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
@@ -7,21 +8,22 @@ import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.user.User;
+import com.n4systems.services.reporting.AssetSearchRecord;
+import com.n4systems.services.search.MappedResults;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.terms.GpsBoundsTerm;
 import com.n4systems.util.persistence.search.terms.HasGpsTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset> {
-
-
+public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset, AssetSearchRecord> {
 
     public AssetSearchService() {
         super(Asset.class);
@@ -137,5 +139,26 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
         }
         return super.convertResults(criteriaModel, results);
     }
+
+    @Transactional(readOnly = true)
+    public MappedResults<AssetSearchRecord> performMapSearch(AssetSearchCriteria criteriaModel) {
+        QueryBuilder<Asset> query = createBaseSearchQueryBuilder(criteriaModel);
+
+        int totalResultCount = findCount(query).intValue();
+
+        NewObjectSelect select = new NewObjectSelect(AssetSearchRecord.class);
+        select.setConstructorArgs(Lists.newArrayList("id", "gpsLocation", "type.name", "identifier", "assetStatus.name"));
+        query.setSelectArgument(select);
+
+        MappedResults<AssetSearchRecord> searchResult = new MappedResults<AssetSearchRecord>();
+        searchResult.setCount(totalResultCount);
+
+        List<Asset> queryResults;
+        queryResults = persistenceService.findAll(query);
+        searchResult.addLocations(queryResults);
+
+        return searchResult;
+    }
+
 
 }

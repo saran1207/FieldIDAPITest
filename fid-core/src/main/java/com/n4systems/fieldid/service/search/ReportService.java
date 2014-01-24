@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ReportService extends SearchService<EventReportCriteria, ThingEvent> {
+public class ReportService extends SearchService<EventReportCriteria, ThingEvent, ThingEvent> {
 
     @Autowired
     private DateService dateService;

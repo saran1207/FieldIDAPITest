@@ -7,24 +7,19 @@ import com.n4systems.fieldid.service.search.SearchResult;
 import com.n4systems.model.Asset;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteria;
-import com.n4systems.model.utils.PlainDate;
+import com.n4systems.services.reporting.AssetSearchRecord;
 import com.n4systems.services.search.AssetFullTextSearchService;
+import com.n4systems.services.search.MappedResults;
 import com.n4systems.services.search.SearchResults;
 import com.n4systems.services.search.field.AssetIndexField;
-import com.n4systems.util.FieldIdDateFormatter;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.TokenGroup;
 import org.springframework.beans.factory.annotation.Autowired;
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<AssetSearchCriteria, Asset> {
+public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<AssetSearchCriteria, Asset, AssetSearchRecord> {
 
     private @Autowired AssetFullTextSearchService fullTextSearchService;
     private @Autowired AssetSearchService searchService;
@@ -109,8 +104,10 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
         return searchResult;
     }
 
-
-
+    @Override
+    protected MappedResults<AssetSearchRecord> filterSearch(AssetSearchCriteria criteriaModel) {
+        return searchService.performMapSearch(criteriaModel);
+    }
 
     @Override
     protected SearchResult<Asset> filterSearch(AssetSearchCriteria criteriaModel, Integer pageNumber, Integer pageSize) {

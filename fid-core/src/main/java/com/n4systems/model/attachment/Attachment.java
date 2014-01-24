@@ -14,4 +14,15 @@ public interface Attachment {
     String getContentType();
     byte[] getBytes();
 
+    // getFileName();   use GUID as path filename part.
+
+    // instead of db...
+
+    //  PATH | MD5 | CONTENTTYPE | COMMENTS | TYPE
+
+    // use...
+
+    //  KEY     | FILENAME     | CONTENTTYPE | COMMENTS | TYPE
+    //   guid       orgi.jpg      image/jpg     hello     S3_IMAGE
+
 }

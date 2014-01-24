@@ -1,19 +1,21 @@
 package com.n4systems.fieldid.service.search.columns;
 
+import com.google.common.base.Preconditions;
 import com.n4systems.ejb.PageHolder;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.search.SearchResult;
+import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.services.search.MappedResults;
 import com.n4systems.util.persistence.search.ResultTransformer;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class TextOrFilterSearchService<T extends SearchCriteria, M extends EntityWithTenant & NetworkEntity> extends FieldIdPersistenceService {
+public abstract class TextOrFilterSearchService<T extends SearchCriteria, M extends EntityWithTenant & NetworkEntity, K extends HasGpsLocation> extends FieldIdPersistenceService {
 
     private Class<M> entityClass;
 
@@ -38,6 +40,12 @@ public abstract class TextOrFilterSearchService<T extends SearchCriteria, M exte
             return filterCountPages(criteriaModel, pageSize);
         }
     }
+
+    public MappedResults<K> performSearch(T criteriaModel) {
+        Preconditions.checkArgument(criteriaModel.getQuery() == null, "map searching not supported for Advanced Search queries!");
+        return filterSearch(criteriaModel);
+    }
+
 
     public <K> PageHolder<K> performSearch(T criteriaModel, ResultTransformer<K> transformer, Integer pageNumber, Integer pageSize) {
         return performSearch(criteriaModel, transformer, pageNumber, pageSize, false);
@@ -76,6 +84,5 @@ public abstract class TextOrFilterSearchService<T extends SearchCriteria, M exte
 
     protected abstract SearchResult<M> textSearch(T criteriaModel, Integer pageNumber, Integer pageSize);
     protected abstract SearchResult<M> filterSearch(T criteriaModel, Integer pageNumber, Integer pageSize);
-
-
+    protected abstract MappedResults<K> filterSearch(T criteriaModel);
 }

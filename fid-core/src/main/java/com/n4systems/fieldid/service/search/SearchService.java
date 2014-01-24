@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -13,6 +14,7 @@ import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.services.date.DateService;
+import com.n4systems.services.search.MappedResults;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereClause;
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public abstract class SearchService<T extends SearchCriteria, M extends EntityWithTenant & NetworkEntity> extends FieldIdPersistenceService {
+public abstract class SearchService<T extends SearchCriteria, M extends EntityWithTenant & NetworkEntity, S extends HasGpsLocation> extends FieldIdPersistenceService {
 
 	public @Autowired OrgService orgService;
     protected @Autowired DateService dateService;
@@ -100,6 +102,11 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
     }
 
     @Transactional(readOnly = true)
+    public SearchResult<M> performRegularSearch(T criteriaModel) {
+        return performFilterSearch(criteriaModel, null, null);
+    }
+
+    @Transactional(readOnly = true)
     public SearchResult<M> performRegularSearch(T criteriaModel, Integer pageNumber, Integer pageSize) {
         return performFilterSearch(criteriaModel, pageNumber, pageSize);
     }
@@ -121,7 +128,12 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         SearchResult<M> searchResult = new SearchResult<M>();
         searchResult.setTotalResultCount(totalResultCount);
 
-        List<M> queryResults = persistenceService.findAll(searchBuilder, pageNumber, pageSize);
+        List<M> queryResults;
+        if (pageNumber!=null && pageSize!=null) {
+            queryResults = persistenceService.findAll(searchBuilder, pageNumber, pageSize);
+        } else {
+            queryResults = persistenceService.findAll(searchBuilder);
+        }
 
         queryResults = convertResults(criteriaModel, queryResults);
 
@@ -129,11 +141,16 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         return searchResult;
     }
 
+    @Transactional(readOnly = true)
+    public MappedResults<S> performMapSearch(T criteriaModel) {
+        throw new UnsupportedOperationException("map searching not supported for this service " + getClass().getSimpleName());
+    }
+
     protected List<M> convertResults(T criteriaModel, List results) {
         return results;
     }
 
-    private Long findCount(QueryBuilder<?> searchBuilder) {
+    protected Long findCount(QueryBuilder<?> searchBuilder) {
         return persistenceService.count(searchBuilder);
     }
 

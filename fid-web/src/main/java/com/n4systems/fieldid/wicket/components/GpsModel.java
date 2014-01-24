@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.api.HasGpsLocation;
+import com.n4systems.services.search.MappedResults;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -11,21 +12,20 @@ import org.apache.wicket.model.Model;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GpsModel extends LoadableDetachableModel<List<GpsLocation>> {
+public class GpsModel<T extends HasGpsLocation> extends LoadableDetachableModel<MappedResults<T>> {
 
-    private IModel<List<GpsLocation>> model= null;
-    private IModel<List<? extends HasGpsLocation>> indirectModel = null;
+    private IModel<MappedResults<T>> model= null;
+
+    public GpsModel() {
+
+    }
 
     public GpsModel(ArrayList<GpsLocation> locations) {
-        this.model = new Model(locations);
+        this.model = Model.of(new MappedResults<T>(locations));
     }
 
     public GpsModel(GpsLocation location) {
         this(Lists.newArrayList(location));
-    }
-
-    public GpsModel(HasGpsLocation entity) {
-        this(Lists.newArrayList(entity.getGpsLocation()));
     }
 
     public GpsModel(List<? extends HasGpsLocation> entities) {
@@ -33,37 +33,37 @@ public class GpsModel extends LoadableDetachableModel<List<GpsLocation>> {
         for (HasGpsLocation entity:entities) {
             locations.add(entity.getGpsLocation());
         }
-        this.model = new Model(locations);
+        this.model = Model.of(new MappedResults<T>(locations));
     }
 
-    public GpsModel(IModel<List<? extends HasGpsLocation>> entitiesModel) {
-        this.indirectModel = entitiesModel;
-        this.model = null;
+    public GpsModel(final IModel<GpsLocation> gpsLocation) {
+        model = new Model<MappedResults<T>>() {
+            @Override public MappedResults<T> getObject() {
+                MappedResults<T> data = new MappedResults();
+                data.add(Lists.newArrayList(gpsLocation.getObject()));
+                return data;
+            }
+
+            @Override public void detach() {
+                super.detach();
+                gpsLocation.detach();
+            }
+        };
     }
 
     @Override
-    protected List<GpsLocation> load() {
-        if (model!=null) {
-            return model.getObject();
-        } else {
-            Preconditions.checkNotNull(indirectModel);
-            ArrayList<GpsLocation> locations = Lists.newArrayList();
-            for (HasGpsLocation entity:indirectModel.getObject()) {
-                locations.add(entity.getGpsLocation());
-            }
-            return locations;
-        }
+    protected MappedResults<T> load() {
+        Preconditions.checkNotNull(model,"no model supplied to get GpsLocations.");
+        return model.getObject();
+    }
+
+    public boolean isEmpty() {
+        return getObject().isEmpty();
     }
 
     @Override
     public void detach() {
         super.detach();
-        if(indirectModel!=null) {
-            indirectModel.detach();
-        }
-    }
-
-    public boolean isEmpty() {
-        return getObject().isEmpty();
+        model.detach();
     }
 }

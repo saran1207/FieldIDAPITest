@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket.components.proceduresearch.results;
 
+import com.n4systems.fieldid.wicket.components.GpsModel;
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.data.ProcedureDataProvider;
+import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.search.ProcedureCriteria;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -12,6 +14,11 @@ public class ProcedureResultsPanel extends SRSResultsPanel<ProcedureCriteria> {
 
     public ProcedureResultsPanel(String id, IModel<ProcedureCriteria> criteriaModel) {
         super(id, criteriaModel);
+    }
+
+    @Override
+    protected GpsModel<? extends HasGpsLocation> createMapModel(IModel<ProcedureCriteria> criteriaModel) {
+        throw new UnsupportedOperationException("maps not supported in " + getClass().getSimpleName());
     }
 
     @Override

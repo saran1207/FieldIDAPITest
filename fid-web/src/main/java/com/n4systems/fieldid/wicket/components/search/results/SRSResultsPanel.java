@@ -3,9 +3,11 @@ package com.n4systems.fieldid.wicket.components.search.results;
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.GpsModel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
+import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.loader.ColumnMappingLoader;
 import com.n4systems.model.search.ColumnMappingConverter;
@@ -96,7 +98,9 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
         dataTable.getTable().setCurrentPage(criteriaModel.getObject().getPageNumber());
         selectUnselectRowColumn.setDataTable(dataTable.getTable());
 
-        add(map = new GoogleMap("resultsMap") {
+        GpsModel<? extends HasGpsLocation> mapModel = createMapModel(criteriaModel);
+
+        add(map = new GoogleMap("resultsMap",mapModel) {
             @Override protected String getCssForEmptyMap() {
                 return "";
             }
@@ -116,6 +120,8 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
         });
         add(resultButtons.setVisible(true));
     }
+
+    protected abstract GpsModel<? extends HasGpsLocation> createMapModel(IModel<T> criteriaModel);
 
     protected void showTable(AjaxRequestTarget target) {
         map.setVisible(false);
@@ -178,4 +184,5 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
     public SimpleDataTable<RowView> getDataTable() {
         return dataTable;
     }
+
 }
