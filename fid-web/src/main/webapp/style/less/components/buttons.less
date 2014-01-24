@@ -1,17 +1,14 @@
-/*--------------------------------------- 
-  BUTTONS
------------------------------------------*/
-// These classes can be applied to various HTML tags to allow for 
-// semantic markup.
+//---------------------------
+// BUTTONS
+//---------------------------
 
-// <a class="btn-secondary" href="#">Button text</a>
-// <span class="btn-secondary">Button text</span>
-// <input class="btn-primary" type="submit" value="Button text">
-// <button class="btn-primary">Button text</button>
-
-// This style applies to any class that starts with "btn" so be mindful of creating new class names using the "btn" prefix. This class was created to attach these styles without using an additional class to change colors.
-[class*="btn-"],
-[class^="btn-"] {
+// Base Styles
+// ---------------
+// This style applies to any class containing "btn-" so be mindful 
+// of creating new class names using this prefix. Pattern matching 
+// is used to attach the base button styles to remove the inclusion
+// of an additional class.
+[class*="btn-"] {
 	text-decoration: none;
 	display: inline-block;
 	padding: 6px 12px;
@@ -40,10 +37,14 @@
 			cursor: not-allowed;
 		}
 	}
+	&.selected:hover {
+		cursor: default;
+	}
 	&.hide {
 		display: none;
 	}
 }
+
 
 // Button colours
 // ---------------
@@ -67,12 +68,14 @@
 		background: @white;
 		color: @gray-darkest;
 	}
+
 .btn-success {
 	background: @green;
 	border-color: darken(@green, 5%);
 }
 	.dropdown:hover .btn-success,
-	.btn-success:hover {
+	.btn-success:hover,
+	.btn-success.selected {
 		.btn-hover(@green, 10%);
 	}
 
@@ -81,9 +84,11 @@
 	border-color: darken(@red, 5%);
 }
 	.dropdown:hover .btn-danger,
-	.btn-danger:hover {
+	.btn-danger:hover,
+	.btn-danger.selected {
 		.btn-hover(@red, 20%);
 	}
+
 
 // Button styled as link
 // ----------------------
@@ -91,13 +96,14 @@
 	border: 0;
 	color: @blue;
 	text-decoration: underline;
+	background: transparent;
 
 	&:hover {
 		color: @blue;
 		text-decoration: none;
 	}
-	
 }
+
 
 // Back button
 // ------------
@@ -111,8 +117,9 @@
 	} 
 }
 
-// Different button sizes
-// -----------------------
+
+// Button sizes
+// -------------
 .btn-lrg {
 	padding: 8px 16px;
 	font-size: @large-font-size;
@@ -123,8 +130,9 @@
 	.border-radius(3px);
 }
 
-// Icon buttons
-// -------------
+
+// Buttons icons
+// --------------
 .btn-icon {
 	padding: 8px;
 
@@ -139,31 +147,16 @@
 
 // Dropdown buttons
 // -----------------
-
-// Dropdown CSS shared with generic dropdown styles also 
+// CSS for the dropdown list is shared with dropdown styles
 // used in navigation. CSS can be found in dropdowns.less
-.dropdown {
-	> [class^="btn"]:after {
-		font-size: @base-font-size;
-		font-family: @fontello;
-		content: '\e811';
-		padding-left: 5px;	
-	}
-	&:hover [class^="btn"]:after {
-		content: '\e813';
-	}
-}
-.dropup {
-	> [class^="btn"]:after {
-		.fontello-icon('\e813');
-		padding-right: 0px;
-	}
-	&:hover [class^="btn"]:after {
-		content: '\e811';
-	}
-}
 .dropdown,
 .dropup {
+
+	> [class*="btn-"]:after {
+		font-size: @base-font-size;
+		font-family: @fontello;
+		padding-left: 5px;
+	}
 	.btn-link {
 		text-decoration: none;
 		color: @gray-darkest;
@@ -184,7 +177,7 @@
 		ul {
 			display: none;
 		}
-		&:hover [class^="btn"]{
+		&:hover [class*="btn-"]{
 			.shadow(none); //overrides and removes hover styles
 			cursor: not-allowed;
 
@@ -194,15 +187,31 @@
 		}
 	}
 }
+.dropdown {
+	> [class*="btn-"]:after {
+		content: '\e811';
+	}
+	&:hover [class*="btn-"]:after {
+		content: '\e813';
+	}
+}
+.dropup {
+	> [class*="btn-"]:after {
+		content: '\e813';
+	}
+	&:hover [class*="btn-"]:after {
+		content: '\e811';
+	}
+}
 
 
-// Groups buttons together into a nav bar
-// ---------------------------------------
+// Groups buttons in a single line
+// --------------------------------
 .button-group {
 	font-size: 0;
 	display: inline-block;
 
-	> [class^="btn"],
+	> [class*="btn-"],
 	> .split-btn,
 	> .dropdown {
 		margin-right: -1px;
@@ -210,21 +219,22 @@
 	.dropdown {
 		font-size: @base-font-size;
 	}
-	> [class^="btn"]:not(:last-child),
-	.dropdown:not(:last-child) [class^="btn"],
-	.split-btn:not(:last-child) [class^="btn"] {
+	// removes border radius of buttons not 
+	// at the beggining or end of the group
+	> [class*="btn-"]:not(:last-child),
+	.dropdown:not(:last-child) [class*="btn-"],
+	.split-btn:not(:last-child) [class*="btn-"] {
 		.border-right-radius(0px);
 	}
-	> [class^="btn"]:not(:first-child),
-	.dropdown:not(:first-child) [class^="btn"],
-	.split-btn:not(:first-child) [class^="btn"] {
+	> [class*="btn-"]:not(:first-child),
+	.dropdown:not(:first-child) [class*="btn-"],
+	.split-btn:not(:first-child) [class*="btn-"] {
 		.border-left-radius(0px);
 	}
 	.input-combo {
 		display: inline-block;
 	}
 }
-
 
 
 // Split button with dropdowns
@@ -235,17 +245,17 @@
 	white-space: nowrap;
 	font-size: 0;
 	
-	> [class^="btn"] {
+	> [class*="btn-"] {
 		margin-bottom: 1px;
 		margin-right: -1px;
 		.border-right-radius(0px);
-
 	}
-	.dropdown {
+	.dropdown,
+	.dropup {
 		position: static;
 		font-size: @base-font-size;
 
-		> [class^="btn"] {
+		> [class*="btn-"] {
 			//reduces padding for dropdown button with arrow icon
 			padding-left: 5px;
 			padding-right: 10px;
@@ -255,21 +265,20 @@
 	}
 }
 
+
 // Firefox only
+// -------------
 @-moz-document url-prefix() { 
-	[class^="btn-"] {
+	[class*="btn-"] {
 		vertical-align: middle;
 	}
 	input::-moz-focus-inner {
    	 	padding: 1px 0px 2px;
 	}
 	.split-btn,
-	.split-btn [class^="btn-"] {
+	.split-btn [class*="btn-"] {
     	vertical-align: top;
 	}
 }
-
-// The .dropdown class is shared for buttons and navigation
-// and is contained in it's own file, dropdowns.less.
 
 
