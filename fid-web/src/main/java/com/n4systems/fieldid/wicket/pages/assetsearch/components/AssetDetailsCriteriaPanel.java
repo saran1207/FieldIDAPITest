@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.model.assettype.GroupedAssetTypesForTenantMo
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -45,11 +46,11 @@ public class AssetDetailsCriteriaPanel extends Panel {
         groupedAssetTypePicker.setNullValid(true);
         groupedAssetTypePicker.add(new AttributeAppender("data-placeholder", " "));
 
-        add(new FidDropDownChoice<Boolean>("hasGps",new PropertyModel<Boolean>(getDefaultModel(), "hasGps"),
+        add(new FidDropDownChoice<Boolean>("hasGps", new PropertyModel<Boolean>(getDefaultModel(), "hasGps"),
                 Lists.newArrayList(Boolean.TRUE, Boolean.FALSE), new IChoiceRenderer<Boolean>() {
             @Override
             public Object getDisplayValue(Boolean object) {
-                if(object)
+                if (object)
                     return new FIDLabelModel("label.has_gps").getObject();
                 else
                     return new FIDLabelModel("label.no_gps").getObject();
@@ -59,7 +60,10 @@ public class AssetDetailsCriteriaPanel extends Panel {
             public String getIdValue(Boolean object, int index) {
                 return object.toString();
             }
-        }).setNullValid(true));
+
+
+        }).setNullValid(true)
+                .setVisible(getDefaultModelObject().getClass().equals(AssetSearchCriteria.class)));
 
     }
 
