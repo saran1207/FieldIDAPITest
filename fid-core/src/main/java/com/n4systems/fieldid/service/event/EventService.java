@@ -443,6 +443,7 @@ public class EventService extends FieldIdPersistenceService {
         query.addWhere(Comparator.NOTNULL, "triggeredEvent", "triggeredEvent", null);
         // make sure it's an action-able event type
         query.addWhere(Comparator.EQ, "actionType", "type.actionType", true);
+        query.addSimpleWhere("priority.state", EntityState.ACTIVE);
         query.addGroupBy("priority");
         return query;
     }
