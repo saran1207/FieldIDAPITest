@@ -75,7 +75,6 @@ public class PriorityCodePage extends FieldIDTemplatePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/priority/priority_codes.css");
         response.renderCSSReference("style/tipsy/tipsy.css");
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         // CAVEAT : https://github.com/jaz303/tipsy/issues/19
