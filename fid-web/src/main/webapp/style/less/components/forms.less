@@ -6,8 +6,8 @@
 // --------------------
 fieldset {
 	border: 0;
-	margin: 0 0 -1px;
-	padding: 15px 0 25px;
+	margin: 15px 0 -1px;
+	padding: 15px 0 15px;
 	position: relative;
 }
 legend {
@@ -25,7 +25,6 @@ select,
 textarea {
 	.width-fixed(3,2);
 	padding-left: 4px;
-	//font-size: @small-font-size;
 	font-family: @proxima-nova;
 	border: 1px solid @gray-medium;
 }
@@ -68,7 +67,6 @@ form .action-group {
 
 // checkboxes & radio boxes
 // -------------------------
-
 //input inside of a label
 label {
 	input[type="radio"], 
@@ -130,7 +128,6 @@ input[type="checkbox"] {
 
 	// input type="file"
 	&.file-upload {
-
 		input[type="file"]{
 			position: absolute;
 			right: 0;
@@ -163,39 +160,6 @@ input[type="checkbox"] {
 	padding: 6px;
 	margin: 4px 0 6px;
 }
-
-
-// Chosen plugin overrides 
-// ------------------------
-// .chzn-container {
-// 	margin: 4px 0 10px;
-// }
-// .chzn-single.chzn-default,
-// .chzn-container-single .chzn-single {
-// 	border-radius: 0;
-// 	box-shadow: none;
-// 	background: none;
-// 	height: 29px;
-// 	padding-left: 4px;
-// 	border-color: @gray-medium;
-// }
-// .chzn-container-single .chzn-single span,
-// .chzn-container-single .chzn-default{
-// 	color: lighten(@gray-darkest, 25%);
-// }
-// .chzn-container-single .chzn-single div b {
-// 	background-position-y: 3px;
-// }
-// .chzn-container .chzn-results {
-// 	.highlighted {
-// 		background-color: @gray;
-// 		background-image: none;
-// 		color: #7a7a7a;
-// 	}
-// }
-// .chzn-container-single .chzn-drop {
-// 	.border-radius(0);
-// }
 
 
 // Editable inputs - for inline editing
@@ -324,25 +288,6 @@ legend + p {
 }
 
 
-// Forms & columns
-// -------------------------------
-// TODO: test before removing -- see layout.less
-form {
-	.column-wide {
-		.width(8,7);
-	}
-	.column-narrow-left,
-	.column-narrow-right {
-		.width(4,3);	
-	}
-	.column-wide,
-	.column-narrow-left,
-	.column-narrow-right,
-	.two-columns {
-		padding-top: 20px;
-	}
-}
-
 // Horizontal form
 // ----------------
 
@@ -434,21 +379,6 @@ form {
 	.primary-selection label {
 		font-size: @base-font-size;
 		font-weight: @semi-bold;
-	}
-}
-
-
-// Media Queries
-// --------------
-@media (max-width: 1150px) {
-	
-	// Form control widths contained in two equal columns
-	.two-columns {
-		input[type="text"], select, textarea,
-		.form-horizontal .input-combo input[type="text"],
-		.text-block  {
-			//width: 265px;
-		}
 	}
 }
 

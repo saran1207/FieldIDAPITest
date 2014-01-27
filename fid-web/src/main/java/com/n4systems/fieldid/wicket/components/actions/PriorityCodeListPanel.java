@@ -4,12 +4,14 @@ import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.setup.prioritycode.ConfirmArchivePage;
 import com.n4systems.model.PriorityCode;
 import com.n4systems.model.PriorityCodeAutoScheduleType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -51,26 +53,24 @@ public class PriorityCodeListPanel extends Panel {
 
                 item.add(new Label("autoSchedule", createAutoScheduleDescriptionModel(item.getModel())));
 
-                final AjaxLink edit;
-                final AjaxLink archive;
+                if (priorityCodeService.countOpenActionsWithPriorityCode(priorityCode) > 0) {
+                    item.add(new BookmarkablePageLink<Void>("archive", ConfirmArchivePage.class, PageParametersBuilder.id(priorityCode.getId())));
+                }else {
+                    item.add(new AjaxLink("archive") {
+                        @Override
+                        public void onClick(AjaxRequestTarget target) {
+                            priorityCodeService.archive(priorityCode);
+                            target.add(PriorityCodeListPanel.this);
+                        }
+                    });
+                }
 
-                item.add(archive = new AjaxLink("archive") {
-                    @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        priorityCodeService.archive(priorityCode);
-                        target.add(PriorityCodeListPanel.this);
-                    }
-                });
-                archive.add(new AttributeAppender("title", new FIDLabelModel("label.archive")));
-
-                item.add(edit = new AjaxLink("edit") {
+                item.add(new AjaxLink("edit") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         onEditPriorityCodeClicked(target, item.getModelObject());
-//                        target.appendJavaScript("$('.tipsy').remove();");
                     }
                 });
-                edit.add(new AttributeAppender("title", new FIDLabelModel("label.edit")));
             }
 
         };

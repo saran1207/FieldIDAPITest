@@ -87,7 +87,7 @@ public class IsolationPointEditor extends Panel {
         form.add(new TextArea("check").setLabel(new FIDLabelModel("label.check")).setRequired(true));
         form.add(new TextArea("method").setLabel(new FIDLabelModel("label.method")).setRequired(true));
 
-        form.add(imagePanel = new IsolationPointImagePanel("annotation").add(createEditClickBehavior()));
+        form.add(imagePanel = new IsolationPointImagePanel("annotation", (IsolationPoint) getDefaultModelObject()).add(createEditClickBehavior()));
 
         form.add(new AjaxSubmitLink("done") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
