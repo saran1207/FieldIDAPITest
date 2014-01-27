@@ -7,25 +7,25 @@ import com.n4systems.fieldid.wicket.components.actions.PriorityCodeArchivedListP
 import com.n4systems.fieldid.wicket.components.actions.PriorityCodeListPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.PriorityCode;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class PriorityCodePage extends FieldIDFrontEndPage {
+public class PriorityCodePage extends FieldIDTemplatePage {
 
     @SpringBean
     private PriorityCodeService priorityCodeService;
@@ -33,57 +33,16 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
     @SpringBean
     private PersistenceService persistenceService;
 
-    private AjaxSubmitLink addPriorityCodeButton;
-
     private AjaxLink viewAll;
     private AjaxLink viewArchived;
     private PriorityCodeListPanel priorityCodeListPanel;
     private PriorityCodeArchivedListPanel priorityCodeArchivedListPanel;
 
     private ModalWindow addOrEditPriorityCodeWindow;
-    private AddEditPriorityCodePanel addEditPriorityCodePanel;
 
     public PriorityCodePage() {
         add(addOrEditPriorityCodeWindow = new DialogModalWindow("priorityCodeModalWindow").setInitialWidth(365).setInitialHeight(280));
-        addOrEditPriorityCodeWindow.setContent(addEditPriorityCodePanel = createAddEditPanel(Model.of(new PriorityCode())));
-        add(viewAll = new AjaxLink<Void>("viewAll") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                viewAll.add(new AttributeAppender("class", "mattButtonPressed").setSeparator(" "));
-                viewArchived.add(new AttributeModifier("class", "mattButtonRight"));
-                priorityCodeListPanel.setVisible(true);
-                priorityCodeArchivedListPanel.setVisible(false);
-                target.add(viewAll, viewArchived, priorityCodeListPanel, priorityCodeArchivedListPanel);
-                refreshTipsy(target);
-            }
-        });
-        viewAll.add(new AttributeAppender("class", "mattButtonPressed").setSeparator(" "));
-
-        add(viewArchived = new AjaxLink<Void>("viewArchived") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                viewArchived.add(new AttributeAppender("class", "mattButtonPressed").setSeparator(" "));
-                viewAll.add(new AttributeModifier("class", "mattButtonLeft"));
-                priorityCodeListPanel.setVisible(false);
-                priorityCodeArchivedListPanel.setVisible(true);
-                target.add(viewAll, viewArchived, priorityCodeListPanel, priorityCodeArchivedListPanel);
-                refreshTipsy(target);
-            }
-        });
-
-        Form openForm = new Form("openForm");
-        openForm.add(addPriorityCodeButton = new AjaxSubmitLink("addPriorityCodeButton") {
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                addOrEditPriorityCodeWindow.setContent(createAddEditPanel(Model.of(new PriorityCode())));
-                addOrEditPriorityCodeWindow.show(target);
-            }
-
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-            }
-        });
-        add(openForm);
+        addOrEditPriorityCodeWindow.setContent(createAddEditPanel(Model.of(new PriorityCode())));
 
         add(priorityCodeListPanel = new PriorityCodeListPanel("priorityCodeList") {
             @Override
@@ -116,11 +75,7 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
         response.renderCSSReference("style/newCss/priority/priority_codes.css");
-
-        response.renderCSSReference("style/newCss/setup/prettyItemList.css");
-
         response.renderCSSReference("style/tipsy/tipsy.css");
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
         // CAVEAT : https://github.com/jaz303/tipsy/issues/19
@@ -134,7 +89,7 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new PriorityCodeTitleLabel(labelId);
+        return new TitleLabel(labelId);
     }
 
     @Override
@@ -152,5 +107,61 @@ public class PriorityCodePage extends FieldIDFrontEndPage {
         BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, AssetsAndEventsPage.class);
         pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
         return pageLink;
+    }
+
+    @Override
+    protected Component createActionGroup(String actionGroupId) {
+        return new ActionGroup(actionGroupId);
+    }
+
+    private class TitleLabel extends Fragment {
+
+        public TitleLabel(String id) {
+            super(id, "priorityCodesTitleLabel", PriorityCodePage.this);
+            ContextImage tooltip;
+
+            add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
+            tooltip.add(new AttributeAppender("title", new FIDLabelModel("msg.priority_codes")));
+        }
+    }
+
+    private class ActionGroup extends Fragment {
+
+        public ActionGroup(String id) {
+            super(id, "priorityCodesActionGroup", PriorityCodePage.this);
+
+            add(viewAll = new AjaxLink<Void>("viewAll") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    viewAll.add(new AttributeAppender("class", "selected").setSeparator(" "));
+                    viewArchived.add(new AttributeModifier("class", "btn-secondary"));
+                    priorityCodeListPanel.setVisible(true);
+                    priorityCodeArchivedListPanel.setVisible(false);
+                    target.add(viewAll, viewArchived, priorityCodeListPanel, priorityCodeArchivedListPanel);
+                    refreshTipsy(target);
+                }
+            });
+            viewAll.add(new AttributeAppender("class", "mattButtonPressed").setSeparator(" "));
+
+            add(viewArchived = new AjaxLink<Void>("viewArchived") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    viewArchived.add(new AttributeAppender("class", "selected").setSeparator(" "));
+                    viewAll.add(new AttributeModifier("class", "btn-secondary"));
+                    priorityCodeListPanel.setVisible(false);
+                    priorityCodeArchivedListPanel.setVisible(true);
+                    target.add(viewAll, viewArchived, priorityCodeListPanel, priorityCodeArchivedListPanel);
+                    refreshTipsy(target);
+                }
+            });
+
+            add(new AjaxLink<Void>("addPriorityCodeButton") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    addOrEditPriorityCodeWindow.setContent(createAddEditPanel(Model.of(new PriorityCode())));
+                    addOrEditPriorityCodeWindow.show(target);
+                }
+            });
+        }
     }
 }
