@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.model.Event;
 import com.n4systems.model.PriorityCode;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -67,5 +69,26 @@ public class PriorityCodeService extends FieldIdPersistenceService {
         builder.addOrder("name");
 
         return persistenceService.find(builder);
+    }
+
+    public Long countOpenActionsWithPriorityCode(PriorityCode priorityCode) {
+        return persistenceService.count(getOpenActionsByPriorityQuery(priorityCode));
+    }
+
+    public void archiveAndUpdateActions(PriorityCode priorityCode, PriorityCode newPriorityCode) {
+        List<Event> openActions = persistenceService.findAll(getOpenActionsByPriorityQuery(priorityCode));
+        for (Event action: openActions) {
+            action.setPriority(newPriorityCode);
+            persistenceService.update(action);
+        }
+        persistenceService.archive(priorityCode);
+    }
+
+    private QueryBuilder<Event> getOpenActionsByPriorityQuery(PriorityCode priorityCode) {
+        QueryBuilder<Event> builder = createTenantSecurityBuilder(Event.class);
+        builder.addSimpleWhere("type.actionType", true);
+        builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
+        builder.addSimpleWhere("priority", priorityCode);
+        return builder;
     }
 }

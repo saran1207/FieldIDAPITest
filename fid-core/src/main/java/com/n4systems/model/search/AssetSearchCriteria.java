@@ -62,7 +62,7 @@ public class AssetSearchCriteria extends SearchCriteria {
     private @Transient Integer maxItemsBeforeGrouping = 100;
 
     @Embedded
-    private GpsBounds bounds; // =  new GpsBounds(0.548548, -146.987305,543.548548, +96.987305);
+    private GpsBounds bounds = new GpsBounds(0.548548, -146.987305,543.548548, +96.987305);
 
     @Column
     private Boolean hasGps;

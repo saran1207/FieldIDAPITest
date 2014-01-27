@@ -1,9 +1,9 @@
 @import "../components/variables.less";
 @import "../components/mixins.less";
 
-/*----------------------------------------- 
-  CUSTOM STYLES FOR ALL PAGES UNDER PLACES
--------------------------------------------*/
+// ------------------------------------------
+//  CUSTOM STYLES FOR ALL PAGES UNDER PLACES
+// ------------------------------------------
 
 // Landing page - list/tree view & add form
 // -----------------------------------------
@@ -158,26 +158,6 @@
 	}	
 }
 
-// Right column / add form
-.column-wide {
-	.two-columns {
-		label {
-			width: 30%;
-		}
-		input[type="text"], 
-		select, textarea,
-		.input-combo {
-			width: 65%;
-		}
-		.chzn-container {
-			width: 65%!important;
-		}
-		.text-block {
-			margin-left: 30%;
-		}
-	}
-}
-
 // Places add descendants form
 // ----------------------------
 // Using on the landing/tree view page AND on the 
@@ -219,7 +199,6 @@
 }
 
 
-
 // Places Summary page
 // --------------------
 .place-summary {
@@ -232,7 +211,6 @@
 			display: inline-block;
 		}
 		.feature-image {
-			// background: @black;
 			margin-top: 4px;
 			border: 1px solid @gray-medium;
 			padding: 5px;
@@ -303,7 +281,7 @@
 // Places add descendants page
 // ----------------------------
 .place-add-descendant {
-	
+
 	.descendants-list {
 		position: relative;
 
@@ -357,7 +335,7 @@
 
 
 // Places Event page
-// --------------------
+// ------------------
 .place-event {
 	.event-panel {
 		table {
@@ -382,8 +360,8 @@
 
 
 // Place Recurring Schedules
-// -------------------------
-//overriding styles for chosen dropdowns
+// --------------------------
+// overriding styles for chosen dropdowns
 .chzn-container .chzn-results {
 	max-height: 155px!important;
 }
@@ -393,15 +371,3 @@
 }
 
 
-
-// Media Queries
-// --------------
-@media (max-width: 1150px) {
-	.column-wide .two-columns {
-		width: 100%;
-		
-		label {
-			width: 25%;
-		}
-	}
-}

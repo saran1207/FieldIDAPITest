@@ -5,20 +5,16 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.api.HasGpsLocation;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class MappedResults<T extends HasGpsLocation> implements Serializable {
 
     private Integer count;
     // TODO : aggregate locations that are within say, 2% of each other.  for this i'd need to know the bounds of all results first.
     // i.e. go through all adding to sorted map, keep a running tab on min/max lat/lng then go through and find all
-    private Map<GpsLocation,MappedResult> results = Maps.newHashMap();
+    private Map<GpsLocation,MappedResult<T>> results = Maps.newHashMap();
 
     public MappedResults(ArrayList<GpsLocation> locations) {
         add(locations);
@@ -43,10 +39,10 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         return groupCount + "";
     }
 
-    public MappedResults<T> addLocations(List<? extends HasGpsLocation> locations) {
-        for (HasGpsLocation hasGpsLocation:locations) {
+    public MappedResults<T> addLocations(List<T> locations) {
+        for (T hasGpsLocation:locations) {
             GpsLocation gpsLocation = hasGpsLocation.getGpsLocation();
-            add(gpsLocation, hasGpsLocation.toString());
+            add(gpsLocation, hasGpsLocation);
         }
         setCount(locations.size());
         return this;
@@ -59,45 +55,47 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         return this;
     }
 
-    private void add(GpsLocation gpsLocation, String description) {
-        MappedResult result = results.get(gpsLocation);
+    private void add(GpsLocation gpsLocation, T entity) {
+        MappedResult<T> result = results.get(gpsLocation);
         if (result==null) {
             results.put(gpsLocation,result = new MappedResult(gpsLocation));
         }
-        result.add(description);
+        result.add(entity);
     }
 
-    public Iterator<MappedResult> getMappedResults() {
-        return results.values().iterator();
+    public Collection<MappedResult<T>> getMappedResults() {
+        return results.values();
     }
 
     public boolean isEmpty() {
         return results.isEmpty();
     }
 
+    public Collection<GpsLocation> getLocations() {
+        return results.keySet();
+    }
 
-    public class MappedResult implements Serializable {
-        List<String> descs = Lists.newArrayList();
+    public List<T> getEntitiesAtLocation(GpsLocation location) {
+        MappedResult<T> result = results.get(location);
+        return result==null ? null : result.getEntities();
+    }
+
+
+    public class MappedResult<E extends HasGpsLocation> implements Serializable {
+        List<E> entities = Lists.newArrayList();
         GpsLocation location;
 
         MappedResult(GpsLocation location) {
             this.location = location;
         }
 
-        MappedResult add(String desc) {
-            if (StringUtils.isNotBlank(desc)) {
-                descs.add(desc);
-            }
+        MappedResult add(E entity) {
+            entities.add(entity);
             return this;
         }
 
-        MappedResult add(T entry) {
-            descs.add(getDescription(entry));
-            return this;
-        }
-
-        public List<String> getDescs() {
-            return descs;
+        public List<E> getEntities() {
+            return entities;
         }
 
         public GpsLocation getLocation() {
@@ -105,12 +103,12 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         }
 
         public String toString() {
-            if (descs.size()==0) {
+            if (entities.size()==0) {
                 return null;
-            } else if (descs.size()==1) {
-                return descs.get(0);
+            } else if (entities.size()==1) {
+                return entities.get(0).toString();
             } else { //if (descs.size()>1) {
-                return Joiner.on("\n").join(getDescription(descs.size()), descs);
+                return getDescription(entities.size()) + "\t" + Joiner.on("\t").skipNulls().join(entities);
             }
         }
 
