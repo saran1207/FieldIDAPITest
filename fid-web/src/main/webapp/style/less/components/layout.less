@@ -40,7 +40,7 @@ header {
 main,
 .content-wrap {
 	max-width: 1400px;
-	width: 96%;
+	width: 95%;
 	margin: 0 auto;
 	.clearfix;
 	position: relative;
@@ -150,8 +150,26 @@ section {
 	.width(6,5);
 	float: left;
 
-	&:first-of-type {
+	&:nth-of-type(2n+1) {
 		margin-right: @gutter;
+	}
+	&.narrow {
+		// Form overrides for narrow styles
+		label {
+			width: 30%;
+		}
+		input[type="text"], 
+		select, 
+		textarea, 
+		.input-combo {
+			width: 65%;
+		}
+		.chzn-container {
+			width: 65%!important;
+		}
+		.text-block {
+			margin-left: 30%;
+		}
 	}
 }
 
@@ -182,7 +200,12 @@ section {
 @media (max-width: 1100px) {
 	main,
 	.content-wrap {
-		width: 984px;
+		min-width: 980px;
+	}
+	.columns-two {
+		&.narrow {
+			width: 100%;
+		}
 	}
 }
 
