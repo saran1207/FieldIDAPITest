@@ -4,10 +4,15 @@ import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.PriorityCode;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -22,6 +27,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
+
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 public class ConfirmArchivePage extends FieldIDTemplatePage {
 
@@ -74,6 +81,16 @@ public class ConfirmArchivePage extends FieldIDTemplatePage {
     @Override
     protected Component createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("title.archive_priority_code", priorityCodeModel.getObject().getDisplayName()));
+    }
+
+    @Override
+    protected void addBreadCrumbBar(String breadCrumbBarId) {
+        add(new BreadCrumbBar(breadCrumbBarId,
+                new NavigationItem(new FIDLabelModel("label.dashboard"), DashboardPage.class),
+                new NavigationItem(new FIDLabelModel("label.setup"), AssetsAndEventsPage.class),
+                new NavigationItem(new FIDLabelModel("label.manage_priority_codes"), PriorityCodePage.class),
+                aNavItem().label(new FIDLabelModel("label.archive")).page(ConfirmArchivePage.class).params(PageParametersBuilder.id(priorityCodeModel.getObject().getId())).build()
+        ));
     }
 
     private LoadableDetachableModel<List<PriorityCode>> createPriorityCodesModel() {

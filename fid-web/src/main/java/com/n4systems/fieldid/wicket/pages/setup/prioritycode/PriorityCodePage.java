@@ -6,7 +6,10 @@ import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.actions.PriorityCodeArchivedListPanel;
 import com.n4systems.fieldid.wicket.components.actions.PriorityCodeListPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
+import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
+import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.PriorityCode;
@@ -111,6 +114,15 @@ public class PriorityCodePage extends FieldIDTemplatePage {
     @Override
     protected Component createActionGroup(String actionGroupId) {
         return new ActionGroup(actionGroupId);
+    }
+
+    @Override
+    protected void addBreadCrumbBar(String breadCrumbBarId) {
+        add(new BreadCrumbBar(breadCrumbBarId,
+                new NavigationItem(new FIDLabelModel("label.dashboard"), DashboardPage.class),
+                new NavigationItem(new FIDLabelModel("label.setup"), AssetsAndEventsPage.class),
+                new NavigationItem(new FIDLabelModel("label.manage_priority_codes"), PriorityCodePage.class)
+        ));
     }
 
     private class TitleLabel extends Fragment {
