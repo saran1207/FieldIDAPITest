@@ -236,7 +236,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         getIsolationPoints().remove(isolationPoint);
     }
 
-    private void softDeleteImage(ImageAnnotation annotation) {
+    public void softDeleteImage(ImageAnnotation annotation) {
         if (annotation==null) {
             return;
         }
