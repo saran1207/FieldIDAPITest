@@ -1,8 +1,8 @@
-/*--------------------------------------- 
-  PAGE LAYOUT
------------------------------------------*/
-// Layout rules divide the page into sections.
-// Default grid system, global page container styles, page structure
+//---------------------------
+// PAGE LAYOUT
+//---------------------------
+// Layout rules divide the page into sections and defines page structure.
+
 
 // Applies a natural box layout model to all elements. 
 // Padding and border won't affect the width of the box.
@@ -13,7 +13,8 @@
 	*behavior: url(../scripts/boxsizing.htc); // IE 6 & 7
 }
 
-// Separates sections of the page or component. ex. Page title and page content
+// Horizonal line used to separates sections of the page
+// ex. Page title and page content
 hr {
 	border: 0;
 	border-top: 1px solid @gray-medium;
@@ -91,18 +92,11 @@ section {
 	}
 }
 
-// Used to create columns, a main section and a sidebar section. 
-// Sidebar can be on the left or right side.
-// add this second class of '.narrow' to use a smaller sidebar.
-.column-wide {
-	.width(8,7);
-	float: left;
 
-	//add this second class to use a smaller sidebar
-	&.narrow {
-		.width(9,8);
-	}
-}
+// Page columns
+// ---------------
+
+// Sidebar style column
 .column-left,
 .column-right {
 	.width(4,3);
@@ -119,7 +113,7 @@ section {
 			text-align: center;
 		}
 	}
-	//add this second class to use a smaller sidebar
+	//add this class to use a smaller sidebar
 	&.narrow {
 		.width(3,2);
 	}
@@ -131,18 +125,15 @@ section {
 	margin-left: @gutter;
 }
 
-// Spans 100% width - not sure if this is needed anymore? -need to test
-.column-full {
-	.width(12,11);
-	clear: both;
-}
+// Second column used with the above sidebar style columns
+.column-wide {
+	.width(8,7);
+	float: left;
 
-// Two equal columns
-// add class .pull-left to the left column
-// anc class .pull-right to the right column
-// TODO: old class name, need to update
-.two-columns {
-	width: 49%;
+	//add this class when using a smaller sidebar
+	&.narrow {
+		.width(9,8);
+	}
 }
 
 // Two columns - equal width
@@ -190,19 +181,17 @@ section {
 }
 
 
-
-/*--------------------------------------- 
-  MEDIA QUERIES for page layout
------------------------------------------*/
-@media all and (max-width: 1280px) {
-}
-
+//---------------------------
+// MEDIA QUERIES
+//---------------------------
 @media (max-width: 1100px) {
 	main,
 	.content-wrap {
 		min-width: 980px;
 	}
 	.columns-two {
+		// Collapses 2 equal width & narrow columns
+		// to one column for smaller resolutions
 		&.narrow {
 			width: 100%;
 		}

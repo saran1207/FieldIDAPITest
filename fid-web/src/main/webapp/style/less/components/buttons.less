@@ -3,11 +3,11 @@
 //---------------------------
 
 // Base Styles
-// ---------------
+// ------------
 // This style applies to any class containing "btn-" so be mindful 
 // of creating new class names using this prefix. Pattern matching 
-// is used to attach the base button styles to remove the inclusion
-// of an additional class.
+// is used to attach the base button styles to the various button
+// styles without adding another class.
 [class*="btn-"] {
 	text-decoration: none;
 	display: inline-block;
@@ -28,7 +28,8 @@
 		color: #fff;
 	}
 
-	// Disabled button styles
+	// Disabled buttons
+	// -----------------
 	&.disabled {
 		.opacity(50);
 
@@ -117,7 +118,7 @@
 	} 
 }
 .btn-next {
-	// adds double left arrow before text
+	// adds double right arrow before text
 	&:after { 
 		font-size: @base-font-size;
 		font-family: @fontello;
@@ -141,7 +142,7 @@
 
 
 // Button icons
-// --------------
+// -------------
 .btn-icon {
 	padding: 8px;
 
@@ -154,10 +155,10 @@
 }
 
 
-// Dropdown buttons
-// -----------------
-// CSS for the dropdown list is shared with dropdown styles
-// used in navigation. CSS can be found in dropdowns.less
+// Dropdown & Dropup buttons
+// --------------------------
+// CSS for a dropdown list is shared between navigation
+// & button dropdowns and can be found in dropdowns.less
 .dropdown,
 .dropup {
 
@@ -179,7 +180,8 @@
 		}
 	}
 
-	// Disabled button styles
+	// Disabled styles
+	// ----------------
 	&.disabled {
 		.opacity(50);
 
@@ -216,6 +218,7 @@
 
 // Groups buttons in a single line
 // --------------------------------
+// Creates a connected navbar style
 .button-group {
 	font-size: 0;
 	display: inline-block;
@@ -248,6 +251,7 @@
 
 // Split button with dropdowns
 // ----------------------------
+// Combines the base buttong with a dropdown
 .split-btn {
 	display: inline-block;
 	position: relative;
