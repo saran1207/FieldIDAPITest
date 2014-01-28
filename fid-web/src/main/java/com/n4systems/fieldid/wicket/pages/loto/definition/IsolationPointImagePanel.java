@@ -68,12 +68,16 @@ public class IsolationPointImagePanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 ImageAnnotation annotation = getImageAnnotation();
-                ProcedureDefinitionImage procedureDefinitionImage = (ProcedureDefinitionImage) annotation.getImage();
 
-                ProcedureDefinition procedureDefinition = procedureDefinitionImage.getProcedureDefinition();
-                isolationPoint.setAnnotation(null);
+                if (null != annotation.getImage()) {
+                    ProcedureDefinitionImage procedureDefinitionImage = (ProcedureDefinitionImage) annotation.getImage();
 
-                procedureDefinition.softDeleteImage(annotation);
+                    ProcedureDefinition procedureDefinition = procedureDefinitionImage.getProcedureDefinition();
+                    isolationPoint.setAnnotation(null);
+
+                    procedureDefinition.softDeleteImage(annotation);
+                }
+
 
                 target.add(IsolationPointImagePanel.this);
 
