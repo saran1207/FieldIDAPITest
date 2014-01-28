@@ -143,6 +143,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
 
+        add(createBackToLink("backToLink", "backToLinkLabel"));
         add(createSubHeader("subHeader"));
 
         add(createActionGroup("actionGroup"));
@@ -209,11 +210,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 	}
 
     protected Component createSubHeader(String subHeaderId) {
-        WebMarkupContainer subHeader = new WebMarkupContainer(subHeaderId);
-        Component backToLink = createBackToLink("backToLink", "backToLinkLabel");
-        subHeader.add(backToLink);
-        subHeader.setVisible(backToLink.isVisible());
-        return subHeader;
+        return new WebMarkupContainer(subHeaderId).setVisible(false);
     }
 
     protected Component createActionGroup(String actionGroupId) {
