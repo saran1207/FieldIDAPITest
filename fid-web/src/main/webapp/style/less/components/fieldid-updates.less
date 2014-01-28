@@ -10,9 +10,8 @@
 // ----------------------------------------------------------------------------------------
 
 
-/*---------------------------------
-   Existing wicket modal structure
------------------------------------*/
+// Existing wicket modal 
+// ----------------------
 .wicket-modal {
 	a {
 		color: @blue;
@@ -34,6 +33,7 @@
 	.btn-secondary {
 		color: @gray-darkest;
 	}
+
 	div.dialog-modal {
 		.shadow(0px 1px 5px @gray-medium);
 	}
@@ -62,6 +62,11 @@
 	.btn {
 		float: right;
 		margin: 20px 30px 0 0;
+	}
+
+	//Chosen plugin
+	.chzn-drop {
+		.box-sizing(content-box);
 	}
 	
 	//Add Schedule form
@@ -117,15 +122,13 @@
 	}
 }
 
-/*--------------
-   cbox overlay
-----------------*/
+
+// cbox overlay
+// -------------
 #colorbox, #cboxOverlay, #cboxWrapper {
 	// Applies a natural box layout model to all elements.
-	// Need to set it back to content-box
-	-webkit-box-sizing: content-box;
-	-moz-box-sizing: content-box;
-	box-sizing: content-box;
+	// Need to set it back to the default
+	.box-sizing(content-box);
 }
 
 
