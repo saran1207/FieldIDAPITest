@@ -44,7 +44,7 @@ public class PriorityCodePage extends FieldIDTemplatePage {
     private ModalWindow addOrEditPriorityCodeWindow;
 
     public PriorityCodePage() {
-        add(addOrEditPriorityCodeWindow = new DialogModalWindow("priorityCodeModalWindow").setInitialWidth(365).setInitialHeight(280));
+        add(addOrEditPriorityCodeWindow = new DialogModalWindow("priorityCodeModalWindow").setInitialWidth(365).setInitialHeight(200));
         addOrEditPriorityCodeWindow.setContent(createAddEditPanel(Model.of(new PriorityCode())));
 
         add(priorityCodeListPanel = new PriorityCodeListPanel("priorityCodeList") {
@@ -120,7 +120,7 @@ public class PriorityCodePage extends FieldIDTemplatePage {
     protected void addBreadCrumbBar(String breadCrumbBarId) {
         add(new BreadCrumbBar(breadCrumbBarId,
                 new NavigationItem(new FIDLabelModel("label.dashboard"), DashboardPage.class),
-                new NavigationItem(new FIDLabelModel("label.setup"), AssetsAndEventsPage.class),
+                new NavigationItem(new FIDLabelModel("label.setup_assets_events"), AssetsAndEventsPage.class),
                 new NavigationItem(new FIDLabelModel("label.manage_priority_codes"), PriorityCodePage.class)
         ));
     }
@@ -171,6 +171,10 @@ public class PriorityCodePage extends FieldIDTemplatePage {
                 public void onClick(AjaxRequestTarget target) {
                     addOrEditPriorityCodeWindow.setContent(createAddEditPanel(Model.of(new PriorityCode())));
                     addOrEditPriorityCodeWindow.show(target);
+
+                    //Change the overflow style for the modal so that the drop downs don't create scroll bars
+                    target.appendJavaScript("var height = $('.w_content_container').attr('style').split(';')[1];" +
+                            "$('.w_content_container').attr('style', 'overflow: visible;' + height +';');");
                 }
             });
         }
