@@ -245,7 +245,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         ProcedureDefinitionImage image = (ProcedureDefinitionImage) annotation.getImage();
 
         for (IsolationPoint isolationPoint:getIsolationPoints()) {
-            if (!annotation.equals(isolationPoint.getAnnotation()) && annotation.getImage().equals(isolationPoint.getAnnotation().getImage())) {
+            if (null != isolationPoint.getAnnotation() && !annotation.equals(isolationPoint.getAnnotation()) && annotation.getImage().equals(isolationPoint.getAnnotation().getImage())) {
                 usedInOtherIsolationPoint = true;
             }
         }
