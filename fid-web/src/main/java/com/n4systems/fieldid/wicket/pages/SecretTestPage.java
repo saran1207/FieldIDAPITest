@@ -62,13 +62,13 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
             protected void onSubmit(AjaxRequestTarget target) {
                 FileUpload fileUpload = upload.getFileUpload();
                 String fileName = fileUpload.getClientFileName();
-                S3ImageAttachment bogusImageAttachment = attachmentService.createBogusImageAttachment(getCurrentUser().getTenant(), fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes());
-                attachmentService.save(bogusImageAttachment);
-
-                bogusImageAttachment = attachmentService.find(bogusImageAttachment.getId());
-                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment));
-                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment, S3ImageAttachmentHandler.MediumFlavour.class));
-                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment, S3ImageAttachmentHandler.ThumbnailFlavour.class));
+//                S3ImageAttachment bogusImageAttachment = attachmentService.createBogusImageAttachment(getCurrentUser().getTenant(), fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes());
+//                attachmentService.save(bogusImageAttachment);
+//
+//                bogusImageAttachment = attachmentService.find(bogusImageAttachment.getId());
+//                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment));
+//                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment, S3ImageAttachmentHandler.MediumFlavour.class));
+//                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment, S3ImageAttachmentHandler.ThumbnailFlavour.class));
 
 
 
