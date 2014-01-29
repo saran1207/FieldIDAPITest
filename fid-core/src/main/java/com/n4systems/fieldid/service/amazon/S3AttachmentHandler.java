@@ -30,7 +30,7 @@ public class S3AttachmentHandler extends AbstractAttachmentHandler<S3Attachment>
     private String bucket;
 
 
-    protected S3AttachmentHandler() {
+    public S3AttachmentHandler() {
     }
 
     @Override

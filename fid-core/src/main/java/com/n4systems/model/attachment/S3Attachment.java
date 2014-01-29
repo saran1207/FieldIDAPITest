@@ -9,8 +9,8 @@ import javax.persistence.Entity;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
-@DiscriminatorValue(value= "S3_FILE") // === Type.toString()
+//@Entity
+//@DiscriminatorValue(value= "S3_FILE") // === Type.toString()
 public class S3Attachment extends AbstractAttachment implements CacheableAttachment {
 
     private List<SupportedFlavour> flavourRequests = Lists.newArrayList();

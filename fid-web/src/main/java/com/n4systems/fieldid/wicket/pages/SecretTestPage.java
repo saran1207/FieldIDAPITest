@@ -2,12 +2,10 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.amazon.S3ImageAttachmentHandler;
 import com.n4systems.fieldid.service.attachment.AttachmentService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.EventType;
-import com.n4systems.model.attachment.S3ImageAttachment;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.AssetIndexerService;
