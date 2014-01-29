@@ -491,7 +491,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         }
     }
 
-    public String getMainCss() {
+    protected String getMainCss() {
         return "";
     }
 }
