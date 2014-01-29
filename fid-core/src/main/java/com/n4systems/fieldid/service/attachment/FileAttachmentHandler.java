@@ -11,7 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 
-public class FileAttachmentHandler implements AttachmentHandler<LocalFileAttachment> {
+public class FileAttachmentHandler extends AbstractAttachmentHandler<LocalFileAttachment> {
 
     @Override
     public void upload(LocalFileAttachment attachment) throws AttachmentException {
@@ -20,7 +20,7 @@ public class FileAttachmentHandler implements AttachmentHandler<LocalFileAttachm
 
     @Override
     public void uploadTemp(LocalFileAttachment attachment) throws AttachmentException {
-        upload(new File(attachment.getTempPath()), attachment.getBytes());
+        upload(new File(getTempPath(attachment)), attachment.getBytes());
     }
 
     private void upload(File file, byte[] bytes) throws AttachmentException {
@@ -40,7 +40,7 @@ public class FileAttachmentHandler implements AttachmentHandler<LocalFileAttachm
     @Override
     public void finalize(LocalFileAttachment attachment) throws AttachmentException {
         try {
-            FileUtils.copyFile(new File(attachment.getTempPath()), new File(attachment.getPath()));
+            FileUtils.copyFile(new File(getTempPath(attachment)), new File(attachment.getPath()));
         } catch (IOException e) {
             throw new AttachmentException(e);
         }
@@ -58,24 +58,19 @@ public class FileAttachmentHandler implements AttachmentHandler<LocalFileAttachm
 
     @Override
     @Deprecated  // should use #load when dealing with files.
-    public URL getUrl(LocalFileAttachment attachment, Class<? extends Flavour> flavour) {
+    public URL getUrl(LocalFileAttachment attachment, String flavourRequest) {
         throw new UnsupportedOperationException("local files do not support different flavours");
-    }
-
-    @Override
-    @Deprecated  // should use #load when dealing with files.
-    public Collection<URL> getUrls(LocalFileAttachment attachment) {
-        try {
-            return Lists.newArrayList(new File(attachment.getPath()).toURI().toURL());
-        } catch (MalformedURLException e) {
-            throw new AttachmentException(e);
-        }
     }
 
     @Override
     public int remove(LocalFileAttachment attachment) {
         new File(attachment.getPath()).delete();
         return 1;
+    }
+
+    @Override
+    public String getTempPath(LocalFileAttachment attachment) {
+        return "temp/"+attachment.getPath();
     }
 
     public byte[] load(LocalFileAttachment attachment) {

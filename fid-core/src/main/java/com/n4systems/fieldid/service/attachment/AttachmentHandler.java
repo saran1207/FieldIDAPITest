@@ -12,7 +12,7 @@ public interface AttachmentHandler<T extends Attachment> {
     void uploadTemp(T attachment);
     void finalize(T attachment);
     URL getUrl(T attachment);
-    URL getUrl(T attachment, Class<? extends Flavour> flavour);
-    Collection<URL> getUrls(T attachment);
+    URL getUrl(T attachment, String  flavourRequest);
     int remove(T attachment);
+    String getTempPath(T attachment);
 }

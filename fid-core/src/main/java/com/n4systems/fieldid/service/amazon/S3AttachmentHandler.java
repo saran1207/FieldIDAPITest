@@ -4,9 +4,9 @@ import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Lists;
-import com.n4systems.fieldid.service.attachment.AttachmentHandler;
-import com.n4systems.fieldid.service.attachment.Flavour;
+import com.n4systems.fieldid.service.attachment.*;
+import com.n4systems.fieldid.service.images.ImageService;
+import com.n4systems.model.attachment.S3Attachment;
 import com.n4systems.model.attachment.Attachment;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
@@ -19,12 +19,13 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URL;
 import java.util.Date;
-import java.util.List;
 
-public class S3AttachmentHandler implements AttachmentHandler<Attachment>, InitializingBean {
+public class S3AttachmentHandler extends AbstractAttachmentHandler<S3Attachment> implements InitializingBean {
 
     private @Autowired AmazonS3Client s3Client;
     private @Autowired ConfigService configService;
+    private @Autowired ImageService imageService;
+
 
     private String bucket;
 
@@ -32,80 +33,54 @@ public class S3AttachmentHandler implements AttachmentHandler<Attachment>, Initi
     protected S3AttachmentHandler() {
     }
 
-    private List<Attachment> createFlavours(Attachment attachment) {
-        List<Attachment> result = Lists.newArrayList(attachment);
-        for (Class<? extends Flavour> flavour: getFlavourTypes()) {
-            Flavour attachmentFlavour = getAttachmentFlavour(attachment, flavour);
-            attachmentFlavour.generateBytes();
-            result.add(attachmentFlavour);
-        }
-        return result;
-    }
-
-    private List<Attachment> getFlavours(Attachment attachment) {
-        List<Attachment> result = Lists.newArrayList(attachment);
-        for (Class<? extends Flavour> flavour: getFlavourTypes()) {
-            Flavour attachmentFlavour = getAttachmentFlavour(attachment, flavour);
-            result.add(attachmentFlavour);
-        }
-        return result;
-    }
-
-    protected Flavour getAttachmentFlavour(Attachment attachment, Class<? extends Flavour> flavour) {
-        throw new UnsupportedOperationException("if you have flavours in your handler, you must override this method to create them.");
-    }
-
-    protected List<Class<? extends Flavour>> getFlavourTypes() {
-        return Lists.newArrayList();
+    @Override
+    public void uploadTemp(S3Attachment attachment) {
+        putObject(getTempPath(attachment), attachment.getBytes(), attachment.getContentType());
     }
 
     @Override
-    public void uploadTemp(Attachment attachment) {
-        for (Attachment attachmentFlavour:getFlavours(attachment)) {
-            putObject(attachmentFlavour.getTempPath(), attachmentFlavour.getBytes(), attachmentFlavour.getContentType());
-            attachmentFlavour.setState(Attachment.State.LIMBO);
-        }
+    public void upload(S3Attachment attachment) {
+        putObject(attachment.getPath(), attachment.getBytes(), attachment.getContentType());
+        attachment.setState(Attachment.State.UPLOADED);
+        primeCache(attachment);
     }
 
     @Override
-    public void upload(Attachment attachment) {
-        for (Attachment attachmentFlavour:createFlavours(attachment)) {
-            putObject(attachmentFlavour.getPath(), attachmentFlavour.getBytes(), attachmentFlavour.getContentType());
-            attachmentFlavour.setState(Attachment.State.UPLOADED);
-        }
+    public void finalize(S3Attachment attachment) {
+        finalizeImpl(attachment);
+        primeCache(attachment);
     }
 
-    @Override
-    public void finalize(Attachment attachment) {
-        List<Attachment> flavours = createFlavours(attachment);
-        for (Attachment flavour:flavours) {
-            finalizeImpl(flavour);
-        }
-    }
-
-    private void finalizeImpl(Attachment attachment) {
+    private void finalizeImpl(S3Attachment attachment) {
         CopyObjectRequest copyObjectRequest = new CopyObjectRequest(
                 getBucket(),
-                attachment.getTempPath(),
+                getTempPath(attachment),
                 getBucket(),
                 attachment.getPath());
 
         s3Client.copyObject(copyObjectRequest);
         attachment.setState(Attachment.State.UPLOADED);
-        // what about removing from temp? when should this be done.
     }
 
+    @Deprecated  // do we need this anymore??
     protected int getExpiryInDays() {
-        return 1;
+        return 10000;
     }
 
     @Override
-    public URL getUrl(Attachment attachment, Class<? extends Flavour> flavour) {
-        return getUrl(getAttachmentFlavour(attachment,flavour));
+    public URL getUrl(S3Attachment attachment, String flavourRequest) {
+        Flavour x = getAttachmentFlavour(attachment, flavourRequest);
+        x.getBytes();
+        x.getContentType();
+        x.getComments();
+        return null;
     }
 
+    // either front-end hits this service to get bytes OR it asks for flavour.
+    //   at the end of the day it needs bytes, contentType written to response.
+
     @Override
-    public URL getUrl(Attachment attachment) {
+    public URL getUrl(S3Attachment attachment) {
         Preconditions.checkArgument(attachment!=null && StringUtils.isNotBlank(attachment.getPath()));
         Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
         URL url = s3Client.generatePresignedUrl(getBucket(), attachment.getPath(), expires, HttpMethod.GET);
@@ -113,21 +88,10 @@ public class S3AttachmentHandler implements AttachmentHandler<Attachment>, Initi
     }
 
     @Override
-    public List<URL> getUrls(Attachment attachment) {
-        List<URL> result = Lists.newArrayList(getUrl(attachment));
-        for (Attachment flavour:getFlavours(attachment)) {
-            result.add(getUrl(flavour));
-        }
-        return result;
-    }
-
-    @Override
-    public int remove(Attachment attachment) {
-        List<Attachment> flavours = getFlavours(attachment);
-        for (Attachment flavour:flavours) {
-            deleteObject(flavour.getPath());
-        }
-        return flavours.size();
+    public int remove(S3Attachment attachment) {
+        deleteObject(attachment.getPath());
+        // need to purge cache here!!???
+        return 1;
     }
 
     private PutObjectResult putObject(String path, File file) {

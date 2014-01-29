@@ -3,33 +3,46 @@ package com.n4systems.fieldid.service.attachment;
 import com.google.common.base.Preconditions;
 import com.n4systems.model.attachment.Attachment;
 
-public abstract class Flavour implements Attachment {
+// CAVEAT : all implementations of this should be prototype scoped spring beans.
+//  i.e. add them to the applicationContext and they will automatically be picked up.
+public abstract class Flavour<T extends FlavourOptions> implements Attachment {
 
-    Attachment delegate;
+    protected Attachment delegate;
     byte[] bytes;
-    State state;
+    protected T options;
+    private String name = getClass().getSimpleName();
 
     public Flavour() {
-
     }
 
-    public abstract String getSuffix();
+    public <E extends Flavour> E forAttachment(Attachment delegate) {
+        this.delegate = delegate;
+        return (E) this;
+    }
 
     public Flavour(Attachment delegate) {
         this.delegate = delegate;
     }
 
+    public <E extends Flavour> E withOptions(T options) {
+        this.options = options;
+        return (E) this;
+    }
+
     @Override
     public byte[] getBytes() {
+        if (bytes==null) {
+            bytes = createBytes(delegate.getBytes(), options);
+        }
         return bytes;
     }
 
-    public <T extends Flavour> T generateBytes() {
-        bytes = createBytes(delegate.getBytes());
-        return (T) this;
+    @Override
+    public String getFileName() {
+        return delegate.getFileName();
     }
 
-    protected abstract byte[] createBytes(byte[] bytes);
+    protected abstract byte[] createBytes(byte[] bytes, T options);
 
     @Override
     public String getContentType() {
@@ -38,39 +51,20 @@ public abstract class Flavour implements Attachment {
 
     @Override
     public String getComments() {
-        return String.format("%s (%s)",delegate.getComments(), getSuffix());
+        return String.format("%s (%s)", delegate.getComments(), getName());
     }
 
     @Override
     public String getPath() {
-        return insertSuffix(delegate.getPath(),getSuffix());
+        return delegate.getPath();
     }
 
-    private String insertSuffix(String path, String suffix) {
-        Preconditions.checkNotNull(path,"you must have a path for attachment flavour " + toString());
-        int index = path.lastIndexOf(".");
-        if (index==-1) {
-            return path + suffix;
-        }
-        return new StringBuffer(path.substring(0,index))
-                .append('.')
-                .append(suffix)
-                .append(path.substring(index))
-                .toString();
-    }
-
-    @Override
-    public String getTempPath() {
-        return insertSuffix(delegate.getTempPath(),getSuffix());
+    public String getName() {
+        return name;
     }
 
     public State getState() {
-        return state;
-    }
-
-    @Override
-    public void setState(State state) {
-        this.state = state;
+        return delegate.getState();
     }
 
     @Override
@@ -79,9 +73,18 @@ public abstract class Flavour implements Attachment {
     }
 
     @Override
+    public void setState(State state) {
+        throw new IllegalStateException("you should not be setting state on " + getClass().getSimpleName() + " flavour of " + delegate.getFileName());
+    }
+
+    @Override
     public String toString() {
         return "Flavour{" +
-                "delegate=" + delegate.getPath() +
-                '}';
+                "delegate=" + delegate.getFileName() + " ---> " + delegate.getPath() +
+                "}";
+    }
+
+    public T isSupportedRequest(String[] flavourRequest) {
+        return null;
     }
 }

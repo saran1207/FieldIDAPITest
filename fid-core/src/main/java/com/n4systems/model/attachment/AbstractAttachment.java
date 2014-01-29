@@ -3,17 +3,18 @@ package com.n4systems.model.attachment;
 import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity
-@Table(name = "s3_attachments")    // TODO : change this table name to 'attachments'.
+@Table(name = "s3_attachments")    // TODO : change this table name to 'attachments' or 'blobs' or 'data-files' or ????
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public abstract class AbstractAttachment extends EntityWithTenant implements Attachment {
@@ -34,11 +35,17 @@ public abstract class AbstractAttachment extends EntityWithTenant implements Att
     @Column(insertable = false, updatable = false)
     private Type type = Type.LOCAL_FILE;
 
+    @Column(name="file_name")
+    private String fileName;
+
+    @Column(name="meta_inf")
+    private String metaInf;
+
     protected @Transient State state = State.UPLOADED;
-    protected @Transient String tempPath;
-    protected @Transient String fileName;
+    protected @Transient String guid;
     protected @Transient byte[] bytes;
     protected @Transient List<String> subdirectories = Lists.newArrayList();
+    protected @Transient Map<String, String> meta = Maps.newHashMap();
     protected @Transient String prefix = "";
 
 
@@ -57,12 +64,26 @@ public abstract class AbstractAttachment extends EntityWithTenant implements Att
                 && StringUtils.isNotBlank(contentType)
                 && bytes!=null && bytes.length>0,
                     "you must specify all non-null args when creating a new attachment. ");
-        this.fileName = createUnique(fileName);
+        this.fileName = fileName;
         this.contentType = contentType;
         this.bytes = bytes;
         this.md5sum = DigestUtils.md5Hex(bytes);
         this.state = State.VOID;
         calculatePaths();
+        return (T) this;
+    }
+
+    public <T extends AbstractAttachment> T withMetaInf(String... inf) {
+        meta.put("basic",Joiner.on("/").join(inf));
+        generateMetaInf();
+        return (T) this;
+    }
+
+    public <T extends AbstractAttachment> T addMetaInf(String key, Object value) {
+        Preconditions.checkNotNull(key,"meta info key must not be null");
+        Preconditions.checkNotNull(value,"meta info value must not be null");
+        meta.put(key, value.toString());
+        generateMetaInf();
         return (T) this;
     }
 
@@ -88,32 +109,18 @@ public abstract class AbstractAttachment extends EntityWithTenant implements Att
 
     private void calculatePaths() {
         this.path = getSubdirectoryAndFilename();
-        this.tempPath = getSubdirectoryAndFilename("temp");
-    }
-
-    protected String createUnique(String fileName) {
-        String ms = "." + new Date().getTime();
-        int index = fileName.lastIndexOf(".");
-        if (index==-1) {
-            return fileName+ms;
-        } else {
-            return fileName.substring(0,index) + ms + fileName.substring(index);
-        }
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
     }
 
     protected String getSubdirectoryAndFilename(String... optionalDirs) {
+        Preconditions.checkNotNull(guid,"you must give the attachment a name (guid) before using.  " + getFileName());
         List<String> path = Lists.newArrayList(optionalDirs);
         path.addAll(subdirectories);
-        path.add(fileName);
+        path.add(guid);
         return prefix + Joiner.on("/").skipNulls().join(path);
+    }
+
+    private void generateMetaInf() {
+        this.metaInf = Joiner.on("&").withKeyValueSeparator("=").join(meta);
     }
 
     public String getComments() {
@@ -165,19 +172,6 @@ public abstract class AbstractAttachment extends EntityWithTenant implements Att
         return getTenant().getId();
     }
 
-    private String getRelativePath() {
-        return getSubdirectoryAndFilename();
-    }
-
-    public String getRelativeTempPath() {
-        return getSubdirectoryAndFilename("temp");
-    }
-
-    @Override
-    public String getTempPath() {
-        return tempPath;
-    }
-
     public State getState() {
         return state;
     }
@@ -185,5 +179,26 @@ public abstract class AbstractAttachment extends EntityWithTenant implements Att
     @Override
     public void setState(State state) {
         this.state = state;
+    }
+
+    public <T extends AbstractAttachment> T named(String guid) {
+        this.guid = guid;
+        return (T) this;
+    }
+
+    public String getMetaInf() {
+        return this.metaInf;
+    }
+
+    public void setMetaInf(String inf) {
+        this.metaInf = inf;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }
