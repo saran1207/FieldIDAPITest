@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.service.images;
 
 
+import com.google.common.base.Preconditions;
+import com.n4systems.fieldid.service.attachment.ImageOptions;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,4 +38,21 @@ public class ImageService {
 		}
 	}
 
+    public byte[] generateImage(byte[] bytes, ImageOptions options) {
+        Preconditions.checkNotNull(options);
+        try {
+            ByteArrayOutputStream newImageStream = new ByteArrayOutputStream();
+            Thumbnails
+                    .of(new ByteArrayInputStream(bytes))
+                    .width(options.getWidth())
+                    .height(options.getHeight())
+                    .keepAspectRatio(true)
+                    .useOriginalFormat()
+                    .outputQuality(0.8)
+                    .toOutputStream(newImageStream);
+            return newImageStream.toByteArray();
+        } catch (IOException e) {
+            throw new ImageProcessingException("Failed resizing image", e);
+        }
+    }
 }

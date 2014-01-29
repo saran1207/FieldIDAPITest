@@ -64,6 +64,8 @@ public class GpsModel<T extends HasGpsLocation> extends LoadableDetachableModel<
     @Override
     public void detach() {
         super.detach();
-        model.detach();
+        if (model!=null) {
+            model.detach();
+        }
     }
 }

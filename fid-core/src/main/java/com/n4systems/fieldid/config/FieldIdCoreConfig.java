@@ -22,11 +22,14 @@ import com.n4systems.fieldid.service.SecurityContextInitializer;
 import com.n4systems.fieldid.service.SecurityService;
 import com.n4systems.fieldid.service.admin.AdminSecurityService;
 import com.n4systems.fieldid.service.admin.AdminUserService;
-import com.n4systems.fieldid.service.attachment.FileAttachmentHandler;
+import com.n4systems.fieldid.service.amazon.S3AttachmentHandler;
 import com.n4systems.fieldid.service.amazon.S3ImageAttachmentHandler;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.*;
 import com.n4systems.fieldid.service.attachment.AttachmentService;
+import com.n4systems.fieldid.service.attachment.FileAttachmentHandler;
+import com.n4systems.fieldid.service.attachment.FlavourFactory;
+import com.n4systems.fieldid.service.attachment.ImageFlavour;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.event.*;
@@ -773,4 +776,20 @@ public class FieldIdCoreConfig {
     public PerformPlaceEventHelperService performPlaceEventHelperService() {
         return new PerformPlaceEventHelperService();
     }
+
+    @Bean
+    @Scope("prototype")
+    public ImageFlavour imageFlavour() {
+        return new ImageFlavour();
+    }
+
+	@Bean
+	public S3AttachmentHandler s3AttachmentHandler() {
+		return new S3AttachmentHandler();
+	}
+
+	@Bean
+	public FlavourFactory flavourFactory() {
+		return new FlavourFactory();
+	}
 }

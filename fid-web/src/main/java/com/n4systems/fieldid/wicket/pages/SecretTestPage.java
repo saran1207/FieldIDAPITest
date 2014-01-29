@@ -2,12 +2,10 @@ package com.n4systems.fieldid.wicket.pages;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.amazon.S3ImageAttachmentHandler;
 import com.n4systems.fieldid.service.attachment.AttachmentService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.EventType;
-import com.n4systems.model.attachment.S3ImageAttachment;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.search.AssetFullTextSearchService;
 import com.n4systems.services.search.AssetIndexerService;
@@ -62,13 +60,13 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
             protected void onSubmit(AjaxRequestTarget target) {
                 FileUpload fileUpload = upload.getFileUpload();
                 String fileName = fileUpload.getClientFileName();
-                S3ImageAttachment bogusImageAttachment = attachmentService.createBogusImageAttachment(getCurrentUser().getTenant(), fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes());
-                attachmentService.save(bogusImageAttachment);
-
-                bogusImageAttachment = attachmentService.find(bogusImageAttachment.getId());
-                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment));
-                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment, S3ImageAttachmentHandler.MediumFlavour.class));
-                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment, S3ImageAttachmentHandler.ThumbnailFlavour.class));
+//                S3ImageAttachment bogusImageAttachment = attachmentService.createBogusImageAttachment(getCurrentUser().getTenant(), fileUpload.getClientFileName(), fileUpload.getContentType(), fileUpload.getBytes());
+//                attachmentService.save(bogusImageAttachment);
+//
+//                bogusImageAttachment = attachmentService.find(bogusImageAttachment.getId());
+//                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment));
+//                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment, S3ImageAttachmentHandler.MediumFlavour.class));
+//                System.out.println(attachmentService.getAttachmentUrl(bogusImageAttachment, S3ImageAttachmentHandler.ThumbnailFlavour.class));
 
 
 
