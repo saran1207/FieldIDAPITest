@@ -40,7 +40,9 @@ public class GpsModel<T extends HasGpsLocation> extends LoadableDetachableModel<
         model = new Model<MappedResults<T>>() {
             @Override public MappedResults<T> getObject() {
                 MappedResults<T> data = new MappedResults();
-                data.add(Lists.newArrayList(gpsLocation.getObject()));
+                if(gpsLocation.getObject() != null) {
+                    data.add(Lists.newArrayList(gpsLocation.getObject()));
+                }
                 return data;
             }
 

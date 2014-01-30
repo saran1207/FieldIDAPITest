@@ -169,8 +169,8 @@ public class PlaceSummaryPage extends PlacePage {
             defaultTimeZone = ((InternalOrg)getOrg()).getDefaultTimeZone();
         }
 
-        final IModel<String> timeZoneIdModel = new PropertyModel(this,"defaultTimeZone");
-        PropertyModel addressModel = new PropertyModel(this, "addressInfo");
+        final IModel<String> timeZoneIdModel = new PropertyModel<String>(this,"defaultTimeZone");
+        PropertyModel<AddressInfo>addressModel = new PropertyModel<AddressInfo>(this, "addressInfo");
         final IModel<Country> countryModel = new CountryFromAddressModel(addressModel);
         final IModel<Region> regionModel = new RegionModel(timeZoneIdModel,countryModel);
 
@@ -188,11 +188,11 @@ public class PlaceSummaryPage extends PlacePage {
                 javascriptUtil.fadeFeedback(target,".message");
             }
         }.withSaveCancelEditLinks();
-        form.add(new TextField("name", ProxyModel.of(contact, on(Contact.class).getName())))
-            .add(new TextField("email", ProxyModel.of(contact, on(Contact.class).getEmail())))
-            .add(new TextField("phone", new PropertyModel(addressModel, "phone1")))
-            .add(new TextField("phone2", new PropertyModel(addressModel, "phone2")))
-            .add(new TextField("fax", new PropertyModel(addressModel, "fax1")))
+        form.add(new TextField<String>("name", ProxyModel.of(contact, on(Contact.class).getName())))
+            .add(new TextField<String>("email", ProxyModel.of(contact, on(Contact.class).getEmail())))
+            .add(new TextField<String>("phone", new PropertyModel(addressModel, "phone1")))
+            .add(new TextField<String>("phone2", new PropertyModel(addressModel, "phone2")))
+            .add(new TextField<String>("fax", new PropertyModel(addressModel, "fax1")))
             .add(address = new AddressPanel("address", addressModel) {
                 @Override
                 protected void onCountryChange(AjaxRequestTarget target) {

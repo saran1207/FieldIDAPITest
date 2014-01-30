@@ -20,8 +20,6 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     private static final String GOOGLE_MAP_WITH_LOCATION_JS = "%s = googleMapFactory.createAndShowWithLocation('%s',%s );";
     private static final String GOOGLE_MAP_NO_LOCATION_JS = "%s = googleMapFactory.createAndShow('%s',%s, %d);";
 
-    private Gson gson;
-
     private GpsModel model;
     private GpsLocation centre = new GpsLocation(43.548548, -96.987305); // centre of north america is default location.
     private int defaultZoom = 5;
@@ -75,13 +73,9 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     }
 
     private Gson getGson() {
-        if (gson==null) {
-            gson = new GsonBuilder().
+        return new GsonBuilder().
                     registerTypeAdapter(MappedResults.class, new MappedResultsSerializer()).
                     create();
-
-        }
-        return gson;
     }
 
 
@@ -93,7 +87,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         if (model.isEmpty()) {
             response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_NO_LOCATION_JS, getJsVar(), getMarkupId(), centre.toString(), defaultZoom));
         } else {
-            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_WITH_LOCATION_JS, getJsVar(), getMarkupId(),getGson().toJson(model.getObject())));
+            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_WITH_LOCATION_JS, getJsVar(), getMarkupId(), getGson().toJson(model.getObject())));
         }
     }
 
