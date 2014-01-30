@@ -25,26 +25,28 @@
 var googleMapFactory = (function() {
 
 	 var defaultOptions = {
-		 zoom: 14
+		 zoom: 14,
+		 mapTypeId:google.maps.MapTypeId.ROADMAP
 	 };
 
-	 var create = function(id) {
-		 defaultOptions.mapTypeId=google.maps.MapTypeId.ROADMAP;
-		 return googleMap(id, defaultOptions);
+	 var create = function(options) {
+		 if (!options.id) {
+		 	throw "you must specify id for GoogleMap element";
+		 }
+		 if (options.latitude && options.longitude) {
+			 options.center = new google.maps.LatLng(options.latitude,options.longitude);
+		 }
+		 return googleMap(options.id, $.extend(defaultOptions, options));
 	 };
 
-	 var createAndShow = function(id, lat, lng, zoom) {
-		 var map = googleMap(id, {zoom:zoom, mapTypeId:google.maps.MapTypeId.ROADMAP, center:new google.maps.LatLng(lat,lng)});
-		 map.show();
-		 return map;
-	 };
-
-	 var createAndShowWithLocation = function(id,data) {
-		var map = create(id, defaultOptions);
-		var results = data.results;
-        for (var i=0;i<results.length;i++) {
-		    map.addLocation(results[i].latitude, results[i].longitude, results[i].desc);
-        }
+	 var createAndShow = function(opts) {
+		var map = create(opts);
+		if (opts.data) {
+			var results = opts.data.results;
+        	for (var i=0;i<results.length;i++) {
+			    map.addLocation(results[i].latitude, results[i].longitude, results[i].desc);
+	        }
+		}
 		map.show();
 		return map;
 	};
@@ -193,6 +195,8 @@ var googleMapFactory = (function() {
 		var markers = [];
 		var options = opt;
 		var infowindow;
+		var currBounds;
+		var timeout;
 		
 		function showInfoWindow(marker, map) {
 			if (this.updateContentWithAddress && !marker.address) {
@@ -228,6 +232,40 @@ var googleMapFactory = (function() {
 				result += ',' + address.address_components[2].short_name;
 			}
 			return result;   
+		}
+
+		function mapChanged() {
+			if (!currBounds) return;
+			var bounds = asBounds(map.getBounds());
+			if (needsRefresh(bounds)) {   // skip the refresh if user has zoomed in UNLESS the previous result was a "grouped" result.
+				currBounds = bounds;
+				var url =  options.callbackUrl + "&s="+bounds.s+"&w="+bounds.w+"&n="+bounds.n+"&e="+bounds.e;
+				if (timeout) {
+					window.clearTimeout(timeout);
+				}
+				timeout = window.setTimeout(function() {
+												wicketAjaxGet(url, function() {}, function() {});
+											}, 1500);
+			}
+		}
+
+		function needsRefresh(bounds) {
+			if (bounds.s>currBounds.s || bounds.w<currBounds.w || bounds.e!=currBounds.e || bounds.n!=currBounds.n) {
+				// note : this doesn't take into consideration wrapping of coordinates.
+				// for example, if the bounds is near equator then it might mistakenly not refresh.
+				// TODO : if data.results.grouped=true then return true?
+				return (Math.abs(bounds.n-bounds.s)>Math.abs(currBounds.n-currBounds.s) || Math.abs(bounds.w-bounds.e)>Math.abs(currBounds.w-currBounds.e));
+			}
+			return false;
+		}
+
+		function asBounds(bounds) {
+			return {
+				s: bounds.getSouthWest().lat(),
+				w: bounds.getSouthWest().lng(),
+				n: bounds.getNorthEast().lat(),
+				e: bounds.getNorthEast().lng()
+				}
 		}
 
 		/* public methods exposed */
@@ -293,8 +331,8 @@ var googleMapFactory = (function() {
 					throw "can't find element '" + id + "' for google map.";
 				}
 				map = new google.maps.Map(element, options);
-				
-				var bounds = new google.maps.LatLngBounds();				
+
+				var bounds = new google.maps.LatLngBounds();
 				var count = locations.length;
 
 				for (var i=0; i<count; i++) {
@@ -316,6 +354,14 @@ var googleMapFactory = (function() {
 				} else if (count==0) {
 					map.setZoom(options.zoom);
 				}
+
+				if (options.callbackUrl) {
+					google.maps.event.addListener(map,'bounds_changed',mapChanged);
+					google.maps.event.addListenerOnce(map,'idle',function() {
+						currBounds = asBounds(map.getBounds());
+					});
+				}
+
 			}
 
 		};
@@ -379,8 +425,7 @@ var googleMapFactory = (function() {
 		create : create,
 		createAndShow : createAndShow,
 		createAutoCompleteAddress : createAutoCompleteAddress,
-		createAndShowWithLocation : createAndShowWithLocation,
-		makeMarkerForStatus : makeMarkerForStatus	
+		makeMarkerForStatus : makeMarkerForStatus
 	};
 
 	

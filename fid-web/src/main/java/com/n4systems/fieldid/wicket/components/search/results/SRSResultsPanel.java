@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.GpsModel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
+import com.n4systems.model.GpsBounds;
 import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.loader.ColumnMappingLoader;
@@ -104,8 +105,12 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
             @Override protected String getCssForEmptyMap() {
                 return "";
             }
+
+            @Override protected void onMapChange(AjaxRequestTarget target, GpsBounds bounds ) {
+                SRSResultsPanel.this.onMapChange(target,bounds);
+            }
         });
-        map.setVisible(true);
+        map.withZoomPanNotifications().setVisible(true);
 
         resultButtons = new WebMarkupContainer("resultButtons");
         resultButtons.add(new IndicatingAjaxLink("table") {
@@ -119,6 +124,9 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
             }
         });
         add(resultButtons.setVisible(true));
+    }
+
+    protected void onMapChange(AjaxRequestTarget target, GpsBounds bounds) {
     }
 
     protected abstract GpsModel<? extends HasGpsLocation> createMapModel(IModel<T> criteriaModel);

@@ -3,29 +3,42 @@ package com.n4systems.fieldid.wicket.components;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
+import com.n4systems.model.GpsBounds;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.services.search.MappedResults;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.IRequestParameters;
+import org.apache.wicket.request.cycle.RequestCycle;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.List;
 
 public class GoogleMap<T extends HasGpsLocation> extends Panel {
     public static final String GOOGLE_MAPS_JS_ID = "googleMaps";
     public static final String GOOGLE_MAP_API_ID = "google-map-api";
-    private static final String GOOGLE_MAP_WITH_LOCATION_JS = "%s = googleMapFactory.createAndShowWithLocation('%s',%s );";
-    private static final String GOOGLE_MAP_NO_LOCATION_JS = "%s = googleMapFactory.createAndShow('%s',%s, %d);";
+    private static final String CREATE_AND_SHOW_JS = "%s = googleMapFactory.createAndShow(%s);";
 
-    private GpsModel model;
+    private Gson gson;
+
+    private GpsModel<T> model;
     private GpsLocation centre = new GpsLocation(43.548548, -96.987305); // centre of north america is default location.
     private int defaultZoom = 5;
+    private AbstractDefaultAjaxBehavior ajax;
 
-    public GoogleMap(String id) {
-        super(id);
+//    public GoogleMap(String id) {
+//        super(id);
+//    }
+
+    public GoogleMap(String id, final GpsModel<T> model) {
+        super(id,model);
+        this.model = model;
         setOutputMarkupId(true);
         add(new AttributeAppender("class",new Model<String>() {
             @Override public String getObject() {
@@ -34,29 +47,42 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         }, " "));
     }
 
-    public GoogleMap(String id, GpsModel<?> model) {
-        this(id);
-        this.model = model;
-    }
-
     public GoogleMap(String id, Double latitude, Double longitude) {
-        this(id);
-        model = new GpsModel(new GpsLocation(latitude, longitude));
+        this(id, new GpsModel(new GpsLocation(latitude, longitude)));
     }
 
     public GoogleMap(String id, GpsLocation location) {
-        this(id);
-        model = new GpsModel(location);
+        this(id, new GpsModel(location));
     }
 
     public GoogleMap(String id, List<? extends HasGpsLocation> entities) {
-        this(id);
-        model = new GpsModel(entities);
+        this(id, new GpsModel(entities));
     }
 
     public GoogleMap(String id, HasGpsLocation entity) {
-        this(id);
-        model = new GpsModel(entity.getGpsLocation());
+        this(id, new GpsModel(entity.getGpsLocation()));
+    }
+
+    public GoogleMap withZoomPanNotifications() {
+        if (ajax==null) {
+            ajax =  new AbstractDefaultAjaxBehavior() {
+                protected void respond(final AjaxRequestTarget target) {
+                    IRequestParameters params = RequestCycle.get().getRequest().getRequestParameters();
+                    double south = params.getParameterValue("s").toDouble();
+                    double west = params.getParameterValue("w").toDouble();
+                    double north = params.getParameterValue("n").toDouble();
+                    double east = params.getParameterValue("e").toDouble();
+                    // stuff these into the criteria.
+                    onMapChange(target, new GpsBounds(south, west, north, east));
+                    target.add(GoogleMap.this);
+                }
+            };
+            add(ajax);
+        }
+        return this;
+    }
+
+    protected void onMapChange(AjaxRequestTarget target, GpsBounds gpsBounds) {
     }
 
     protected String getCss() {
@@ -83,12 +109,8 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GOOGLE_MAP_API_ID);
-        response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS_ID);
-        if (model.isEmpty()) {
-            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_NO_LOCATION_JS, getJsVar(), getMarkupId(), centre.toString(), defaultZoom));
-        } else {
-            response.renderOnDomReadyJavaScript(String.format(GOOGLE_MAP_WITH_LOCATION_JS, getJsVar(), getMarkupId(), getGson().toJson(model.getObject())));
-        }
+        response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS_ID);       
+        response.renderOnDomReadyJavaScript(String.format(CREATE_AND_SHOW_JS, getJsVar(), getGson().toJson(new GoogleMapOptions())));
     }
 
     public String getJsVar() {
@@ -126,6 +148,24 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     protected String getEmptyDescription() {
         return "";
     }
+
+
+    class GoogleMapOptions implements Serializable {
+        private int zoom;
+        private String id = GoogleMap.this.getMarkupId();
+        private Double latitude = centre!=null ? centre.getLatitude().doubleValue() : null;
+        private Double longitude = centre!=null ? centre.getLatitude().doubleValue() : null;
+        //mapTypeId:google.maps.MapTypeId.ROADMAP
+        private MappedResults<T> data = model.getObject();
+        private String callbackUrl;
+
+        GoogleMapOptions() {
+            if (ajax!=null) {
+                callbackUrl = ajax.getCallbackUrl().toString();
+            }
+        }
+    }
+
 
     class MappedResultsSerializer implements JsonSerializer<MappedResults<T>> {
 
