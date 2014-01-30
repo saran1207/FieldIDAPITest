@@ -68,6 +68,8 @@ section {
 // Single page heading
 .page-header {
 	position: relative;
+	border-bottom: 1px solid @gray-medium;
+	margin-bottom: 15px;
 
 	.action-group {
 		position: absolute;
@@ -83,6 +85,7 @@ section {
 // Single page content
 .page-content {
 	.clearfix;
+	position: relative;
 
 	> hr {
 		margin-bottom: 15px;
@@ -101,7 +104,6 @@ section {
 .column-left,
 .column-right {
 	.width(4,3);
-	float: left;
 
 	.upload {
 		margin-bottom: 40px;
@@ -121,9 +123,11 @@ section {
 }
 .column-left {
 	margin-right: @gutter;
+	float: left;
 }
 .column-right {
 	margin-left: @gutter;
+	float: right;
 }
 
 // Second column used with the above sidebar style columns
