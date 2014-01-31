@@ -470,4 +470,10 @@ input.wavy-underline {
   content: '\e818';
   padding-right: 0;
 }
+.fontello-map:before {
+	content: '\e837';
+}
+.fontello-menu:before {
+	content: '\e803';
+}
 

@@ -32,7 +32,7 @@ public class Wide extends FieldIDTemplatePage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, "Two Column: Equal Width");
+        return new Label(labelId, "Wide Page Layout");
     }
 
     @Override

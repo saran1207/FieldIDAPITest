@@ -1,10 +1,10 @@
-/*--------------------------------------- 
-  IMAGES, VIDEO AND OTHER MEDIA FILES
------------------------------------------*/
+//---------------------------
+// IMAGES, VIDEO, MEDIA
+//---------------------------
 
 
-/* THUMBNAILS with description
----------------------------------*/
+// THUMBNAILS with description
+// ----------------------------
 figure {
 	overflow: hidden;
 
@@ -17,16 +17,32 @@ figure {
 	}
 }
 
-// expands feature image to the width of the sidebar column
+
+// Sidebar image
+// ----------------------------
 .column-left,
 .column-right {
 	.feature-image {
+		//Center align images & sets max-height
+		//of image to restrict the overall size.
 		img {
 			max-width: 100%;
 			max-height: 250px;
 			display: block;
 			margin: 0 auto;
 		}
+		//Image expands to the width of the container.
+		//The height of the image will scale and maintain
+		//the aspect ration of the image.
+		&.fluid {
+			img {
+				width: 100%;
+				max-height: inherit;
+			}
+		}
+
+		&.border {
+			padding: 8px;
+		}
 	}
 }
-
