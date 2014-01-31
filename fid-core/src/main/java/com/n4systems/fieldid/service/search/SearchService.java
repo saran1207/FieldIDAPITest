@@ -154,19 +154,19 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         return persistenceService.count(searchBuilder);
     }
 
-    public QueryBuilder<S> createBaseMappedSearchQueryBuilder(T criteriaModel) {
-        QueryBuilder<S> searchBuilder = createAppropriateMappedQueryBuilder(criteriaModel);
-        augmentSearchBuilder(criteriaModel, searchBuilder);
+    public QueryBuilder<M> createBaseMappedSearchQueryBuilder(T criteriaModel) {
+        QueryBuilder<M> searchBuilder = createAppropriateMappedQueryBuilder(criteriaModel);
+        augmentSearchBuilder(criteriaModel, searchBuilder, true);
         return searchBuilder;
     }
 
     public QueryBuilder<M> createBaseSearchQueryBuilder(T criteriaModel) {
 		// create our QueryBuilder, note the type will be the same as our selectClass
 		QueryBuilder<M> searchBuilder = createAppropriateQueryBuilder(criteriaModel, searchClass);
-        return augmentSearchBuilder(criteriaModel, searchBuilder);
+        return augmentSearchBuilder(criteriaModel, searchBuilder, false);
     }
 
-    private <E> QueryBuilder<E> augmentSearchBuilder(T criteriaModel, QueryBuilder<E> searchBuilder) {
+    private <E> QueryBuilder<E> augmentSearchBuilder(T criteriaModel, QueryBuilder<E> searchBuilder, boolean includeGps) {
         ColumnMappingView sortColumn = criteriaModel.getSortColumn();
 
         if (sortColumn != null && sortColumn.getJoinExpression() != null) {
@@ -181,7 +181,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         List<SearchTermDefiner> searchTerms = new ArrayList<SearchTermDefiner>();
         List<JoinTerm> joinTerms = new ArrayList<JoinTerm>();
 
-        addSearchTerms(criteriaModel, searchTerms);
+        addSearchTerms(criteriaModel, searchTerms, includeGps);
         addJoinTerms(criteriaModel, joinTerms);
 
         // convert all our search terms to where parameters
@@ -212,8 +212,8 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         }
     }
 
-    protected QueryBuilder<S> createAppropriateMappedQueryBuilder(T criteria) {
-        return new QueryBuilder<S>(searchClass, securityContext.getUserSecurityFilter());
+    protected QueryBuilder<M> createAppropriateMappedQueryBuilder(T criteria) {
+        return new QueryBuilder<M>(searchClass, securityContext.getUserSecurityFilter());
     }
 
     protected <E> QueryBuilder<E> createAppropriateQueryBuilder(T criteria, Class<E> searchClass) {
@@ -222,7 +222,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
 
     protected void addJoinTerms(T criteriaModel, List<JoinTerm> joinTerms) { }
-    protected abstract void addSearchTerms(T criteriaModel, List<SearchTermDefiner> search);
+    protected abstract void addSearchTerms(T criteriaModel, List<SearchTermDefiner> search, boolean includeGps);
 
     protected boolean isIntegrationEnabled() {
     	PrimaryOrg primaryOrg = getPrimaryOrg();

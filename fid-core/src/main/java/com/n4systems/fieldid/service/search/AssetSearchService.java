@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.service.search;
 
-import com.google.common.collect.Lists;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
@@ -30,7 +29,7 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
     }
 
     @Override
-    protected void addSearchTerms(AssetSearchCriteria criteriaModel, List<SearchTermDefiner> search) {
+    protected void addSearchTerms(AssetSearchCriteria criteriaModel, List<SearchTermDefiner> search, boolean includeGps) {
         User user = getCurrentUser();
         TimeZone timeZone = user.getTimeZone();
 
@@ -52,8 +51,10 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 		addPredefinedLocationTerm(search, criteriaModel);
 		addAssignedUserTerm(search, criteriaModel);
 
-        addGpsLocationTerm(search, criteriaModel);
         addHasGpsTerm(search, criteriaModel);
+        if (includeGps) {
+            addGpsLocationTerm(search, criteriaModel);
+        }
     }
 
     private void addHasGpsTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
@@ -142,20 +143,20 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 
     @Transactional(readOnly = true)
     public MappedResults<AssetSearchRecord> performMapSearch(AssetSearchCriteria criteriaModel) {
-        QueryBuilder<AssetSearchRecord> query = createBaseMappedSearchQueryBuilder(criteriaModel);
+        QueryBuilder<Asset> query = createBaseMappedSearchQueryBuilder(criteriaModel);
 
         int totalResultCount = findCount(query).intValue();
 
-        NewObjectSelect select = new NewObjectSelect(AssetSearchRecord.class);
-        select.setConstructorArgs(Lists.newArrayList("id", "gpsLocation", "type.name", "identifier", "assetStatus.name"));
-        query.setSelectArgument(select);
-
         MappedResults<AssetSearchRecord> searchResult = new MappedResults<AssetSearchRecord>();
-        searchResult.setCount(totalResultCount);
+        if (totalResultCount>criteriaModel.getMaxItemsBeforeGrouping()) {
+            searchResult.setGroupedResult(new AssetSearchRecord((long) totalResultCount, criteriaModel.getBounds().getCentre()));
+            return searchResult;
+        }
 
-        List<AssetSearchRecord> queryResults;
-        queryResults = persistenceService.findAll(query);
-        searchResult.addLocations(queryResults);
+        List<Asset> queryResults = persistenceService.findAll(query);
+        for (Asset asset:queryResults) {
+            searchResult.add(new AssetSearchRecord(asset));
+        }
 
         return searchResult;
     }

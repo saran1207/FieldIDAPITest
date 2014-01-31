@@ -10,14 +10,14 @@ import com.n4systems.util.views.RowView;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.IModel;
 
-public class ProcedureResultsPanel extends SRSResultsPanel<ProcedureCriteria> {
+public class ProcedureResultsPanel extends SRSResultsPanel<ProcedureCriteria,HasGpsLocation> {
 
     public ProcedureResultsPanel(String id, IModel<ProcedureCriteria> criteriaModel) {
         super(id, criteriaModel);
     }
 
     @Override
-    protected GpsModel<? extends HasGpsLocation> createMapModel(IModel<ProcedureCriteria> criteriaModel) {
+    protected GpsModel<HasGpsLocation> createMapModel(IModel<ProcedureCriteria> criteriaModel) {
         throw new UnsupportedOperationException("maps not supported in " + getClass().getSimpleName());
     }
 

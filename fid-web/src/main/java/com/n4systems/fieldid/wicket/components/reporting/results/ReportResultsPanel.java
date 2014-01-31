@@ -13,14 +13,14 @@ import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 
 @SuppressWarnings("serial")
-public class ReportResultsPanel extends SRSResultsPanel<EventReportCriteria> {
+public class ReportResultsPanel extends SRSResultsPanel<EventReportCriteria,HasGpsLocation> {
 
     public ReportResultsPanel(String id, final IModel<EventReportCriteria> eventCriteriaModel) {
         super(id, eventCriteriaModel);
     }
 
     @Override
-    protected GpsModel<? extends HasGpsLocation> createMapModel(IModel<EventReportCriteria> criteriaModel) {
+    protected GpsModel<HasGpsLocation> createMapModel(IModel<EventReportCriteria> criteriaModel) {
         throw new UnsupportedOperationException("maps not supported in " + getClass().getSimpleName());
     }
 

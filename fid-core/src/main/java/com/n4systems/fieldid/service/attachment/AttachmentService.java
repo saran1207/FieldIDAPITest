@@ -11,7 +11,11 @@ import com.n4systems.model.orgs.BaseOrg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 
 @Transactional
@@ -24,6 +28,18 @@ public class AttachmentService extends FieldIdPersistenceService {
 
     private static List<SupportedFlavour> imageFlavoursToCache = Lists.newArrayList(SupportedFlavour.imageFlavours);
 
+
+    public void get(Attachment attachment) {
+        URL url = getAttachmentUrl(attachment);
+        try {
+            URLConnection connection = url.openConnection();
+            BufferedImage image = ImageIO.read(url);
+
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+
+    }
 
     public void upload(Attachment attachment) {
         getAttachmentHandler(attachment).upload(attachment);
