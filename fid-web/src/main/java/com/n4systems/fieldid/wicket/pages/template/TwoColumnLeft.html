@@ -3,12 +3,15 @@
 
         <!-- Left Column -->
         <div class="column-left">
-            <div class="feature-image">
+            <h3>Feature image with border</h3>
+            <div class="feature-image border">
                 <img wicket:id="featureImage" alt="">
             </div>
-            <!-- <div class="feature-image fluid">
+
+            <h3>Feature image, fluid width & height</h3>
+            <div class="feature-image fluid">
                 <img src="/fieldid/img/examples/test-image.jpg">
-            </div> -->
+            </div>
         </div>
         
         <!-- Right Content -->
@@ -20,13 +23,32 @@
                         <td>Lorem ipsum dolor sit amet.</td>
                         <td>Dolor harum totam accusamus.</td>
                         <td>07/24/13</td>
-                        <td><span class="btn-secondary">Edit</span></td>
+                        <td><span class="btn-secondary">button</span></td>
                     </tr>
                     <tr>
                         <td>Lorem ipsum dolor sit amet.</td>
                         <td>Dolor harum totam accusamus.</td>
                         <td>07/24/13</td>
-                        <td><span class="btn-secondary btn-link">Edit</span></td>
+                        <td>
+                            <div class="split-btn">
+                                <a class="btn-secondary" href="#">View</a>
+                                <div class="dropdown">
+                                    <button class="btn-secondary">
+                                        <span class="icon">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="pull-right">
+                                        <li><a href="#">Edit</a></li>
+                                        <li><a href="#">Action 2</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Lorem ipsum dolor sit amet.</td>
+                        <td>Dolor harum totam accusamus.</td>
+                        <td>07/24/13</td>
+                        <td><span class="btn-secondary btn-link">link</span></td>
                     </tr>
                 </table>
             </section>
