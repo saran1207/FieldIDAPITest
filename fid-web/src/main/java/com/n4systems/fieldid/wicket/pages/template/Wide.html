@@ -1,16 +1,74 @@
 <html xmlns:wicket="http://wicket.apache.org">
-<wicket:extend>
-        <hr>
+    <wicket:extend>
 
         <div class="page-content">
-            <div class="columns-two">
-                <h3>columns-two</h3>
-                <p>Horribilem walking dead resurgere de crazed sepulcris creaturis, zombie sicut de grave feeding iride et serpens. Pestilentia, shaun ofthe dead scythe animated corpses ipsa screams. Pestilentia est plague haec decaying ambulabat mortuos. Sicut zeder apathetic malus voodoo. Aenean a dolor plan et terror soulless vulnerum contagium accedunt, mortui iam vivam unlife. Qui tardius moveri, brid eof reanimator sed in magna copia sint terribiles undeath legionis. Alii missing oculis aliorum sicut serpere crabs nostram. Putridi braindead odores kill and infect, aere implent left four dead.</p>
-            </div>
-            <div class="columns-two">
-                <h3>columns-two</h3>
-                <p>Candy apple pie candy liquorice pudding biscuit jujubes. Candy jujubes fruitcake fruitcake lollipop. Tiramisu marshmallow pudding. Marzipan liquorice cake liquorice jelly-o bear claw ice cream bonbon. Icing dragée caramels donut cookie dessert pastry cake. Macaroon pastry biscuit. Ice cream dessert gummi bears pudding dessert sweet gummi bears jelly-o. Tart dessert bear claw. Sweet gummies jujubes pie candy marzipan muffin. Lemon drops muffin halvah fruitcake soufflé. Liquorice ice cream liquorice cupcake bear claw. Muffin soufflé tiramisu. Wafer biscuit unerdwear.com bear claw gummi bears gummies oat cake pudding unerdwear.com.</p>
-            </div>
+            <section class="clearfix">
+                <div class="columns-two">
+                    <h3>columns-two</h3>
+                    <p>Horribilem walking dead resurgere de crazed sepulcris creaturis, zombie sicut de grave feeding iride et serpens. Pestilentia, shaun ofthe dead scythe animated corpses ipsa screams. Pestilentia est plague haec decaying ambulabat mortuos. Sicut zeder apathetic malus voodoo. Aenean a dolor plan et terror soulless vulnerum contagium accedunt, mortui iam vivam unlife. Qui tardius moveri, brid eof reanimator sed in magna copia sint terribiles undeath legionis. Alii missing oculis aliorum sicut serpere crabs nostram. Putridi braindead odores kill and infect, aere implent left four dead.</p>
+                </div>
+                <div class="columns-two">
+                    <h3>columns-two</h3>
+                    <p>Candy apple pie candy liquorice pudding biscuit jujubes. Candy jujubes fruitcake fruitcake lollipop. Tiramisu marshmallow pudding. Marzipan liquorice cake liquorice jelly-o bear claw ice cream bonbon. Icing dragée caramels donut cookie dessert pastry cake. Macaroon pastry biscuit. Ice cream dessert gummi bears pudding dessert sweet gummi bears jelly-o. Tart dessert bear claw. Sweet gummies jujubes pie candy marzipan muffin. Lemon drops muffin halvah fruitcake soufflé. Liquorice ice cream liquorice cupcake bear claw. Muffin soufflé tiramisu. Wafer biscuit unerdwear.com bear claw gummi bears gummies oat cake pudding unerdwear.com.</p>
+                </div>
+            </section>
+           
+            <section class="clearfix">
+                <!-- Left Column -->
+                <div class="column-left">
+                    <h3>Feature image</h3>
+                    <div class="feature-image">
+                        <img src="/fieldid/img/examples/test-image.jpg">
+                    </div>
+                </div>
+        
+                <!-- Right Content -->
+                <div class="column-wide">
+                    <section>
+                        <h3>Table Heading</h3>
+                        <table>
+                            <tr>
+                                <td>Lorem ipsum dolor sit amet.</td>
+                                <td>Dolor harum totam accusamus.</td>
+                                <td>07/24/13</td>
+                                <td><span class="btn-secondary">button</span></td>
+                            </tr>
+                            <tr>
+                                <td>Lorem ipsum dolor sit amet.</td>
+                                <td>Dolor harum totam accusamus.</td>
+                                <td>07/24/13</td>
+                                <td>
+                                    <div class="split-btn">
+                                        <a class="btn-secondary" href="#">View</a>
+                                        <div class="dropdown">
+                                            <button class="btn-secondary">
+                                                <span class="icon">Toggle Dropdown</span>
+                                            </button>
+                                            <ul class="pull-right">
+                                                <li><a href="#">Edit</a></li>
+                                                <li><a href="#">Action 2</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Lorem ipsum dolor sit amet.</td>
+                                <td>Dolor harum totam accusamus.</td>
+                                <td>07/24/13</td>
+                                <td><span class="btn-secondary btn-link">link</span></td>
+                            </tr>
+                            <tr>
+                                <td>Lorem ipsum dolor sit amet.</td>
+                                <td>Dolor harum totam accusamus.</td>
+                                <td>07/24/13</td>
+                                <td><span class="btn-secondary">button</span><span class="btn-secondary">button</span></td>
+                            </tr>
+                        </table>
+                    </section>
+                </div>
+            </section>
+
         </div>
 
         <wicket:fragment wicket:id="actions">
@@ -27,6 +85,7 @@
                 <a wicket:id="primaryLink" class="btn-primary">Primary</a>
             </div>
         </wicket:fragment>
+
     </wicket:extend>
 </html>
 

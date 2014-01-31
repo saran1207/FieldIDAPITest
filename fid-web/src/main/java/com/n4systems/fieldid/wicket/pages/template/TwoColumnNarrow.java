@@ -25,17 +25,17 @@ public class TwoColumnNarrow extends FieldIDTemplatePage {
     private static List LEVELS = Lists.newArrayList("Level 5", "Level 4", "Level 3", "Level 2", "Level 1");
     private static List WARNINGS = Lists.newArrayList("Use this for fall arrest only", "Use this for restraint only");
 
-    public TwoColumnNarrow() {
-        add(new Image("featureImage", new ContextRelativeResource("/img/_temp/hoist.jpg")));
+    // public TwoColumnNarrow() {
+    //     add(new Image("featureImage", new ContextRelativeResource("/img/_temp/hoist.jpg")));
 
-        Form simpleForm;
-        add(simpleForm = new Form<Void>("form"));
+    //     Form simpleForm;
+    //     add(simpleForm = new Form<Void>("form"));
 
-        simpleForm.add(new FileUploadField("fileUploadField"));
-        simpleForm.add(new TextField<String>("textField"));
-        simpleForm.add(new FidDropDownChoice<String>("clearanceLevels", LEVELS));
-        simpleForm.add(new FidDropDownChoice<String>("warnings", WARNINGS));
-    }
+    //     simpleForm.add(new FileUploadField("fileUploadField"));
+    //     simpleForm.add(new TextField<String>("textField"));
+    //     simpleForm.add(new FidDropDownChoice<String>("clearanceLevels", LEVELS));
+    //     simpleForm.add(new FidDropDownChoice<String>("warnings", WARNINGS));
+    // }
 
         @Override
     protected void addBreadCrumbBar(String breadCrumbBarId) {
@@ -48,7 +48,7 @@ public class TwoColumnNarrow extends FieldIDTemplatePage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, "Two Column: Narrow Option");
+        return new Label(labelId, "Two Column: Narrow & Fixed Options");
     }
 
     @Override
