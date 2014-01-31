@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.n4systems.model.GpsBounds;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.api.HasGpsLocation;
 
@@ -19,7 +20,7 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
     // TODO : aggregate locations that are within say, 2% of each other.  for this i'd need to know the bounds of all results first.
     // i.e. go through all adding to sorted map, keep a running tab on min/max lat/lng then go through and find all
     private Map<GpsLocation,MappedResult<T>> results = Maps.newHashMap();
-    private boolean grouped = false;
+    private boolean grouped;
 
     public MappedResults(ArrayList<GpsLocation> locations) {
         add(locations);
@@ -82,13 +83,20 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         return result==null ? null : result.getEntities();
     }
 
-    public void setGroupedResult(T hasGpsLocation) {
-        Preconditions.checkState(results.isEmpty(),"you can't add grouped results after individual results have already been added. " + results.values());
-        Preconditions.checkState(!grouped,"a grouped result has already been set" + results.values().iterator().next());
-        add(hasGpsLocation.getGpsLocation(), hasGpsLocation);
-        this.grouped = true;
+    public void setGroupedResult(List<? extends HasGpsLocation> hasGpsLocations) {
+        Preconditions.checkState(results.isEmpty(), "you can't add grouped results after individual results have already been added. " + results.values());
+        GpsBounds bounds = new GpsBounds();
+        for (HasGpsLocation has:hasGpsLocations) {
+            bounds.extend(has.getGpsLocation());
+        }
+        results.put(bounds.getCentre(), new MappedResult(bounds.getCentre()));
+        count = hasGpsLocations.size();
+        grouped = true;
     }
 
+    public boolean isGrouped() {
+        return grouped;
+    }
 
     public class MappedResult<E extends HasGpsLocation> implements Serializable {
         List<E> entities = Lists.newArrayList();

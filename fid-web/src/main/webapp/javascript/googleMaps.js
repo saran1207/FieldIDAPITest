@@ -196,6 +196,7 @@ var googleMapFactory = (function() {
 		var options = opt;
 		var infowindow;
 		var currBounds;
+		var currZoom;
 		var timeout;
 		
 		function showInfoWindow(marker, map) {
@@ -235,10 +236,12 @@ var googleMapFactory = (function() {
 		}
 
 		function mapChanged() {
-			if (!currBounds) return;
+			if (!currBounds ||!currZoom) return;
 			var bounds = asBounds(map.getBounds());
-			if (needsRefresh(bounds)) {   // skip the refresh if user has zoomed in UNLESS the previous result was a "grouped" result.
+			var zoom = map.getZoom();
+			if (needsRefresh(bounds,zoom)) {
 				currBounds = bounds;
+				currZoom = zoom;
 				var url =  options.callbackUrl + "&s="+bounds.s+"&w="+bounds.w+"&n="+bounds.n+"&e="+bounds.e;
 				if (timeout) {
 					window.clearTimeout(timeout);
@@ -249,22 +252,20 @@ var googleMapFactory = (function() {
 			}
 		}
 
-		function needsRefresh(bounds) {
-			if (bounds.s>currBounds.s || bounds.w<currBounds.w || bounds.e!=currBounds.e || bounds.n!=currBounds.n) {
-				// note : this doesn't take into consideration wrapping of coordinates.
-				// for example, if the bounds is near equator then it might mistakenly not refresh.
-				// TODO : if data.results.grouped=true then return true?
-				return (Math.abs(bounds.n-bounds.s)>Math.abs(currBounds.n-currBounds.s) || Math.abs(bounds.w-bounds.e)>Math.abs(currBounds.w-currBounds.e));
+		function needsRefresh(bounds,zoom) {
+			var changed = bounds.s<currBounds.s || bounds.w<currBounds.w || bounds.e>currBounds.e || bounds.n>currBounds.n;
+			if (zoom>currZoom && !changed) {
+				return options.data.grouped;   // if you zoom in then refresh results when current results are grouped.
 			}
-			return false;
+			return changed;
 		}
 
 		function asBounds(bounds) {
 			return {
-				s: bounds.getSouthWest().lat(),
-				w: bounds.getSouthWest().lng(),
-				n: bounds.getNorthEast().lat(),
-				e: bounds.getNorthEast().lng()
+				s: bounds.getSouthWest().lng(),
+				w: bounds.getSouthWest().lat(),
+				n: bounds.getNorthEast().lng(),
+				e: bounds.getNorthEast().lat()
 				}
 		}
 
@@ -350,6 +351,7 @@ var googleMapFactory = (function() {
 				if (count>1) {
 					map.fitBounds(bounds);
 				} else if (count==1) {
+					map.setZoom(options.zoom);
 					map.setCenter(locations[0]);
 				} else if (count==0) {
 					map.setZoom(options.zoom);
@@ -359,6 +361,7 @@ var googleMapFactory = (function() {
 					google.maps.event.addListener(map,'bounds_changed',mapChanged);
 					google.maps.event.addListenerOnce(map,'idle',function() {
 						currBounds = asBounds(map.getBounds());
+						currZoom = map.getZoom();
 					});
 				}
 
@@ -371,8 +374,15 @@ var googleMapFactory = (function() {
 	function prefixed(prefix,url) {
 		return prefix ? prefix+url : url;
 	}
-			
-	var makeMarkerForStatus = function(loc) {
+
+	 // TODO
+	var makeAssetMarker = function(loc) {
+	}
+
+	function makeColoredMarker(loc, color) {
+	}
+
+	 var makeMarkerForStatus = function(loc) {
 		var content = loc.args[0];   // assumes that these *might* be passed to addLocation in this order.  [content,status,prefix]
 		var status = loc.args[1];
 		var prefix = loc.args[2];
@@ -415,10 +425,76 @@ var googleMapFactory = (function() {
 			  shape: shape,
 			  position: loc
 			});
-		
+
 		marker.content = content;
 		return marker;		
 	};
+
+
+//	 var makeMarkerForStatus = function(loc) {
+//		 var content = loc.args[0];   // assumes that these *might* be passed to addLocation in this order.  [content,status,prefix]
+//		 var status = loc.args[1];
+//		 var prefix = loc.args[2];
+//		 if (status.toLowerCase()=='fail') {
+//			 return makeColoredMarker('red');
+//		 } else if (status.toLowerCase()=='pass') {
+//			 return makeColoredMarker('green');
+//		 } else if (status.toLowerCase()=='na') {
+//			 return makeColoredMarker('gray');
+//		 }
+//	 };
+
+
+	 var makeColouredMarker = function(loc,colour) {
+		 if (colour.toLowerCase()=='red') {
+			 return new google.maps.Marker({     /* note that red is default icon which is what we currently use for fail */
+				 draggable : false,
+				 position: loc
+			 });
+		 }
+
+		 var icon = '';
+		 if (status.toLowerCase()=='green') {
+			 icon = prefixed(prefix,'images/marker-images/greenMapIcon.png');
+		 } else if (status.toLowerCase()=='gray') {
+			 icon =  prefixed(prefix,'images/marker-images/grayMapIcon.png');
+		 } else if (status.toLowerCase()=='yellow') {
+			 icon =  prefixed(prefix,'images/marker-images/yellowMapIcon.png');
+		 } else if (status.toLowerCase()=='gray') {
+			 icon =  prefixed(prefix,'images/marker-images/blueMapIcon.png');
+		 }
+		 var image = new google.maps.MarkerImage(
+			 icon,
+			 new google.maps.Size(32,32),
+			 new google.maps.Point(0,0),
+			 new google.maps.Point(16,32)
+		 );
+
+		 var shadow = new google.maps.MarkerImage(
+			 prefixed(prefix,'images/marker-images/mapIconShadow.png'),
+			 new google.maps.Size(52,32),
+			 new google.maps.Point(0,0),
+			 new google.maps.Point(16,32)
+		 );
+
+		 var shape = {
+			 coord: [19,0,20,1,21,2,22,3,23,4,24,5,24,6,24,7,24,8,24,9,24,10,24,11,24,12,23,13,23,14,22,15,21,16,20,17,20,18,19,19,19,20,18,21,18,22,17,23,17,24,17,25,17,26,16,27,16,28,16,29,16,30,16,31,14,31,14,30,14,29,14,28,14,27,14,26,13,25,13,24,13,23,12,22,12,21,12,20,11,19,10,18,10,17,9,16,8,15,7,14,7,13,6,12,6,11,6,10,6,9,6,8,6,7,6,6,7,5,7,4,8,3,9,2,10,1,11,0,19,0],
+			 type: 'poly'
+		 };
+
+		 var marker =  new google.maps.Marker({
+			 draggable: false,
+			 icon: image,
+			 shadow: shadow,
+			 shape: shape,
+			 position: loc
+		 });
+
+		 marker.content = content;
+		 return marker;
+	 };
+
+
 
 		
 	return { 

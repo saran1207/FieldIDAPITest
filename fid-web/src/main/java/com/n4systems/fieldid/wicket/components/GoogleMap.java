@@ -3,11 +3,10 @@ package com.n4systems.fieldid.wicket.components;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
-import com.n4systems.model.GpsBounds;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.GpsBounds;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.api.HasGpsLocation;
-import com.n4systems.model.api.HasGroupedGpsLocation;
 import com.n4systems.services.search.MappedResults;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -31,7 +30,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
 
     private GpsModel<T> model;
     private GpsLocation centre = new GpsLocation(43.548548, -96.987305); // centre of north america is default location.
-    private Integer defaultZoom = null;
+    private Integer defaultZoom = 10;
     private AbstractDefaultAjaxBehavior ajax;
 
     public GoogleMap(String id, final GpsModel<T> model) {
@@ -133,12 +132,14 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         return entity==null ? null : entity.getId()+"";
     }
 
-    protected String getDescription(List<T> entitiesAtLocation) {
-        if (entitiesAtLocation.isEmpty()) {
+    protected String getDescription(MappedResults<T> results, GpsLocation gpsLocation) {
+        List<T> entitiesAtLocation = results.getEntitiesAtLocation(gpsLocation);
+        if (results.isGrouped()) {
+            return getGroupedDescription(results.getCount());
+        } else if (entitiesAtLocation.isEmpty()) {
             return getEmptyDescription();
         } else if (entitiesAtLocation.size()==1) {
-            T entity = entitiesAtLocation.get(0);
-            return entity instanceof HasGroupedGpsLocation && ((HasGroupedGpsLocation)entity).getCountAtLocation()>1 ? getGroupedDescription((HasGroupedGpsLocation)entity) : getDescription(entity);
+            return getDescription(entitiesAtLocation.get(0));
         } else {
             return getMultipleDescription(entitiesAtLocation);
         }
@@ -152,8 +153,8 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         return entity==null ? "" : entity.toString();
     }
 
-    protected String getGroupedDescription(HasGroupedGpsLocation entity) {
-        return new FIDLabelModel("label.mapped_count",entity.getCountAtLocation()).getObject();
+    protected String getGroupedDescription(int count) {
+        return new FIDLabelModel("label.mapped_count",count).getObject();
     }
 
     protected String getEmptyDescription() {
@@ -165,7 +166,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         private Integer zoom = defaultZoom;
         private String id = GoogleMap.this.getMarkupId();
         private Double latitude = centre!=null ? centre.getLatitude().doubleValue() : null;
-        private Double longitude = centre!=null ? centre.getLatitude().doubleValue() : null;
+        private Double longitude = centre!=null ? centre.getLongitude().doubleValue() : null;
         private MappedResults<T> data = model.getObject();
         private String callbackUrl;
 
@@ -183,14 +184,14 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         public JsonElement serialize(MappedResults<T> results, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject object = new JsonObject();
             object.addProperty("count",results.getCount());
+            object.addProperty("grouped",results.isGrouped());
             JsonArray data = new JsonArray();
             for (GpsLocation location:results.getLocations()) {
-                List<T> entitiesAtLocation = results.getEntitiesAtLocation(location);
                 JsonObject o = new JsonObject();
                 o.addProperty("latitude",location.getLatitude());
                 o.addProperty("longitude",location.getLongitude());
-                o.addProperty("id", getClickId(entitiesAtLocation));
-                o.addProperty("desc", getDescription(entitiesAtLocation));
+                o.addProperty("id", getClickId(results.getEntitiesAtLocation(location)));
+                o.addProperty("desc", getDescription(results,location));
                 data.add(o);
             }
             object.add("results",data);

@@ -145,17 +145,16 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
     public MappedResults<AssetSearchRecord> performMapSearch(AssetSearchCriteria criteriaModel) {
         QueryBuilder<Asset> query = createBaseMappedSearchQueryBuilder(criteriaModel);
 
-        int totalResultCount = findCount(query).intValue();
-
-        MappedResults<AssetSearchRecord> searchResult = new MappedResults<AssetSearchRecord>();
-        if (totalResultCount>criteriaModel.getMaxItemsBeforeGrouping()) {
-            searchResult.setGroupedResult(new AssetSearchRecord((long) totalResultCount, criteriaModel.getBounds().getCentre()));
-            return searchResult;
-        }
-
+        int limit = criteriaModel.getMaxItemsBeforeGrouping() + 1;
+        query.setLimit(limit);
         List<Asset> queryResults = persistenceService.findAll(query);
-        for (Asset asset:queryResults) {
-            searchResult.add(new AssetSearchRecord(asset));
+        MappedResults<AssetSearchRecord> searchResult = new MappedResults<AssetSearchRecord>();
+        if (queryResults.size()==limit) {
+            searchResult.setGroupedResult(queryResults);
+        } else {
+            for (Asset asset:queryResults) {
+                searchResult.add(new AssetSearchRecord(asset));
+            }
         }
 
         return searchResult;
