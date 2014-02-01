@@ -31,7 +31,9 @@ public class GpsModel<T extends HasGpsLocation> extends LoadableDetachableModel<
     public GpsModel(List<? extends HasGpsLocation> entities) {
         ArrayList<GpsLocation> locations = Lists.newArrayList();
         for (HasGpsLocation entity:entities) {
-            locations.add(entity.getGpsLocation());
+            if (entity.getGpsLocation()!=null) {
+                locations.add(entity.getGpsLocation());
+            }
         }
         this.model = Model.of(new MappedResults<T>(locations));
     }

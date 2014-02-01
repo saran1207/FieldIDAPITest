@@ -1,3 +1,4 @@
+
 package com.n4systems.fieldid.wicket.pages.template;
 
 import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
@@ -16,7 +17,7 @@ import org.apache.wicket.request.resource.ContextRelativeResource;
 public class TwoColumnLeft extends FieldIDTemplatePage {
 
     public TwoColumnLeft() {
-        add(new Image("featureImage", new ContextRelativeResource("/img/_temp/hoist.jpg")));
+        add(new Image("featureImage", new ContextRelativeResource("/img/examples/hoist.jpg")));
     }
 
     @Override

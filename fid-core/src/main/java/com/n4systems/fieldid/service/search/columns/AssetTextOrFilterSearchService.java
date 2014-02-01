@@ -105,7 +105,7 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
     }
 
     @Override
-    protected MappedResults<AssetSearchRecord> filterSearch(AssetSearchCriteria criteriaModel) {
+    protected MappedResults<AssetSearchRecord> filterMapSearch(AssetSearchCriteria criteriaModel) {
         return searchService.performMapSearch(criteriaModel);
     }
 

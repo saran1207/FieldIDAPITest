@@ -1,20 +1,26 @@
 package com.n4systems.services.search;
 
 import com.google.common.base.Joiner;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.n4systems.model.GpsBounds;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.api.HasGpsLocation;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class MappedResults<T extends HasGpsLocation> implements Serializable {
 
-    private Integer count;
+    private Integer count = 0;
     // TODO : aggregate locations that are within say, 2% of each other.  for this i'd need to know the bounds of all results first.
     // i.e. go through all adding to sorted map, keep a running tab on min/max lat/lng then go through and find all
     private Map<GpsLocation,MappedResult<T>> results = Maps.newHashMap();
+    private boolean grouped;
 
     public MappedResults(ArrayList<GpsLocation> locations) {
         add(locations);
@@ -27,10 +33,6 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         return count;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
     protected String getDescription(T entity) {
         return entity==null ? "" : "desc = " + entity.getGpsLocation().toPointString();
     }
@@ -39,12 +41,10 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         return groupCount + "";
     }
 
-    public MappedResults<T> addLocations(List<T> locations) {
-        for (T hasGpsLocation:locations) {
-            GpsLocation gpsLocation = hasGpsLocation.getGpsLocation();
-            add(gpsLocation, hasGpsLocation);
-        }
-        setCount(locations.size());
+    public MappedResults<T> add(T hasGpsLocation) {
+        Preconditions.checkState(!grouped,"can't add single locations after you have already added grouped result ");
+        GpsLocation gpsLocation = hasGpsLocation.getGpsLocation();
+        add(gpsLocation, hasGpsLocation);
         return this;
     }
 
@@ -55,16 +55,19 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         return this;
     }
 
-    private void add(GpsLocation gpsLocation, T entity) {
+    public void add(GpsLocation gpsLocation, T entity) {
+        Preconditions.checkState(!grouped,"can't add single locations after you have already added grouped result ");
+        if (gpsLocation==null) {
+            return;
+        }
         MappedResult<T> result = results.get(gpsLocation);
         if (result==null) {
             results.put(gpsLocation,result = new MappedResult(gpsLocation));
         }
-        result.add(entity);
-    }
-
-    public Collection<MappedResult<T>> getMappedResults() {
-        return results.values();
+        if (entity!=null) {
+            result.add(entity);
+        }
+        count++;
     }
 
     public boolean isEmpty() {
@@ -80,6 +83,20 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
         return result==null ? null : result.getEntities();
     }
 
+    public void setGroupedResult(List<? extends HasGpsLocation> hasGpsLocations) {
+        Preconditions.checkState(results.isEmpty(), "you can't add grouped results after individual results have already been added. " + results.values());
+        GpsBounds bounds = new GpsBounds();
+        for (HasGpsLocation has:hasGpsLocations) {
+            bounds.extend(has.getGpsLocation());
+        }
+        results.put(bounds.getCentre(), new MappedResult(bounds.getCentre()));
+        count = hasGpsLocations.size();
+        grouped = true;
+    }
+
+    public boolean isGrouped() {
+        return grouped;
+    }
 
     public class MappedResult<E extends HasGpsLocation> implements Serializable {
         List<E> entities = Lists.newArrayList();

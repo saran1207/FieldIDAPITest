@@ -31,7 +31,7 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
     }
 
     @Override
-    protected void addSearchTerms(EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
+    protected void addSearchTerms(EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms, boolean includeGps) {
         User user = getCurrentUser();
         TimeZone timeZone = user.getTimeZone();
 
@@ -152,6 +152,7 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
             addOrgJoinTerms(status, "customerOrg", "assetCustomerOrg", "eventCustomerOrg", joinTerms);
         }
     }
+
 
     private void addOrgJoinTerms(WorkflowStateCriteria status, String basePath, String assetJoinAlias, String eventJoinAlias, List<JoinTerm> joinTerms) {
         if (status.includesIncomplete()) {

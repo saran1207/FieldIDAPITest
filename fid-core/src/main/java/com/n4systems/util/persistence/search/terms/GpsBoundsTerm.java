@@ -24,12 +24,15 @@ public class GpsBoundsTerm implements SearchTermDefiner {
 
     public List<WhereClause<?>> getWhereParameters() {
         List<WhereClause<?>> params = new ArrayList<WhereClause<?>>();
+        String fieldName = StringUtils.pathToName(field+".latitude");
         if (bounds!=null && !bounds.isEmpty()) {
-            String fieldName = StringUtils.pathToName(field+".latitude");
             params.add(new WhereParameter<BigDecimal>(WhereParameter.Comparator.GE, "south_"+fieldName, field+".latitude", bounds.getSwBounds().getLatitude(), null, false, WhereClause.ChainOp.AND));
             params.add(new WhereParameter<BigDecimal>(WhereParameter.Comparator.LE, "north_"+fieldName, field+".latitude", bounds.getNeBounds().getLatitude(), null, false, WhereClause.ChainOp.AND));
             params.add(new WhereParameter<BigDecimal>(WhereParameter.Comparator.GE, "west_"+fieldName, field+".longitude", bounds.getSwBounds().getLongitude(), null, false, WhereClause.ChainOp.AND));
             params.add(new WhereParameter<BigDecimal>(WhereParameter.Comparator.LE, "east_"+fieldName, field+".longitude", bounds.getNeBounds().getLongitude(), null, false, WhereClause.ChainOp.AND));
+        } else {
+            params.add(new WhereParameter<BigDecimal>(WhereParameter.Comparator.NOTNULL, "south_"+fieldName, field+".latitude", null, null, false, WhereClause.ChainOp.AND));
+            params.add(new WhereParameter<BigDecimal>(WhereParameter.Comparator.NOTNULL, "north_"+fieldName, field+".longitude", null, null, false, WhereClause.ChainOp.AND));
         }
         return params;
     }

@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.GpsModel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
+import com.n4systems.model.GpsBounds;
 import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.loader.ColumnMappingLoader;
@@ -27,7 +28,7 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
 
-public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
+public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGpsLocation> extends Panel {
 
     protected SimpleDataTable<RowView> dataTable;
     protected FieldIdAPIDataProvider provider;
@@ -98,14 +99,22 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
         dataTable.getTable().setCurrentPage(criteriaModel.getObject().getPageNumber());
         selectUnselectRowColumn.setDataTable(dataTable.getTable());
 
-        GpsModel<? extends HasGpsLocation> mapModel = createMapModel(criteriaModel);
+        GpsModel<S> mapModel = createMapModel(criteriaModel);
 
-        add(map = new GoogleMap("resultsMap",mapModel) {
+        add(map = new GoogleMap<S>("resultsMap",mapModel) {
             @Override protected String getCssForEmptyMap() {
                 return "";
             }
+
+            @Override protected void onMapChange(AjaxRequestTarget target, GpsBounds bounds ) {
+                SRSResultsPanel.this.onMapChange(target,bounds);
+            }
+
+            @Override protected String getDescription(S entity) {
+                return getMapMarkerText(entity);
+            }
         });
-        map.setVisible(true);
+        map.withZoomPanNotifications().setVisible(true);
 
         resultButtons = new WebMarkupContainer("resultButtons");
         resultButtons.add(new IndicatingAjaxLink("table") {
@@ -121,7 +130,14 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
         add(resultButtons.setVisible(true));
     }
 
-    protected abstract GpsModel<? extends HasGpsLocation> createMapModel(IModel<T> criteriaModel);
+    protected void onMapChange(AjaxRequestTarget target, GpsBounds bounds) {
+    }
+
+    protected String getMapMarkerText(S entity) {
+        return entity!=null ? entity.toString() : "";
+    }
+
+    protected abstract GpsModel<S> createMapModel(IModel<T> criteriaModel);
 
     protected void showTable(AjaxRequestTarget target) {
         map.setVisible(false);

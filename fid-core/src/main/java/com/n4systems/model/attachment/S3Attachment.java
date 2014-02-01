@@ -6,14 +6,15 @@ import com.n4systems.model.Tenant;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.util.Collection;
 import java.util.List;
 
-//@Entity
-//@DiscriminatorValue(value= "S3_FILE") // === Type.toString()
+@Entity
+@DiscriminatorValue(value= "S3_FILE") // === Type.toString()
 public class S3Attachment extends AbstractAttachment implements CacheableAttachment {
 
-    private List<SupportedFlavour> flavourRequests = Lists.newArrayList();
+    private @Transient List<SupportedFlavour> flavourRequests = Lists.newArrayList();
 
     public S3Attachment(Tenant tenant) {
         super(Type.S3_FILE,tenant);

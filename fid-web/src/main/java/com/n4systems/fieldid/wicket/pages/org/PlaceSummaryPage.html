@@ -5,7 +5,7 @@
     <div class="column-left">
         <!-- profile summary image -->
         <div wicket:id="imageContainer" class="uploads">
-            <div class="feature-image">
+            <div class="feature-image border">
                 <img wicket:id="img">
             </div>
             <form wicket:id="imageUploadForm" class="input-combo file-upload fluid">
@@ -18,7 +18,7 @@
         </div>
 
         <!-- Contact info -->
-        <form wicket:id="contact" class="editable-inputs form-horizontal">
+        <form wicket:id="contact" class="editable-inputs form-horizontal narrow">
             <h3><wicket:message key="label.contact"/></h3>
             <span class="actions">
                 <a wicket:id="save"><wicket:message key="label.save"/></a>
@@ -70,7 +70,7 @@
         </form>
 
         <!-- General form -->
-        <form wicket:id="general"  class="editable-inputs form-horizontal">
+        <form wicket:id="general"  class="editable-inputs form-horizontal narrow">
             <h3><wicket:message key="label.general"/></h3>
             <span class="actions">
                 <a wicket:id="save"><wicket:message key="label.save"/></a>
@@ -106,7 +106,7 @@
             <label wicket:for="certImageUploadField"><wicket:message key="label.pdf_report_image"/></label>
 
             <div class="controls">
-                <div class="feature-image">
+                <div class="feature-image border">
                     <img wicket:id="certImg">
                 </div>
                 <form wicket:id="certImageUploadForm" class="input-combo file-upload fluid">

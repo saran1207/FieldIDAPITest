@@ -2,8 +2,8 @@ package com.n4systems.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-// TEST??
 @Embeddable
 public class GpsBounds implements Serializable {
 
@@ -47,5 +47,34 @@ public class GpsBounds implements Serializable {
 
     public boolean isEmpty() {
         return swBounds==null || neBounds==null;
+    }
+
+    public GpsLocation getCentre() {
+        if (isEmpty()) {
+            return null;
+        }
+        BigDecimal lat = swBounds.getLatitude().add(neBounds.getLatitude()).divide(new BigDecimal(2.0));
+        BigDecimal lng = swBounds.getLongitude().add(neBounds.getLongitude()).divide(new BigDecimal(2.0));
+        return new GpsLocation(lat,lng);
+    }
+
+    public GpsBounds extend(GpsLocation gpsLocation) {
+        if (gpsLocation!=null && !gpsLocation.isEmpty()) {
+            if (swBounds==null) swBounds = new GpsLocation(Integer.MAX_VALUE,Integer.MAX_VALUE);
+            if (neBounds==null) neBounds = new GpsLocation(Integer.MIN_VALUE,Integer.MIN_VALUE);
+            if (gpsLocation.getLatitude().compareTo(swBounds.getLatitude())<0) {
+                swBounds.setLatitude(gpsLocation.getLatitude());
+            }
+            if (gpsLocation.getLatitude().compareTo(neBounds.getLatitude())>0) {
+                neBounds.setLatitude(gpsLocation.getLatitude());
+            }
+            if (gpsLocation.getLongitude().compareTo(swBounds.getLongitude())<0) {
+                swBounds.setLongitude(gpsLocation.getLongitude());
+            }
+            if (gpsLocation.getLongitude().compareTo(neBounds.getLongitude())>0) {
+                neBounds.setLongitude(gpsLocation.getLongitude());
+            }
+        }
+        return this;
     }
 }

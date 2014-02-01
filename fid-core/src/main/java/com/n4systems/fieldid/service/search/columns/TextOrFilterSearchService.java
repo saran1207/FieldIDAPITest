@@ -41,9 +41,9 @@ public abstract class TextOrFilterSearchService<T extends SearchCriteria, M exte
         }
     }
 
-    public MappedResults<K> performSearch(T criteriaModel) {
+    public MappedResults<K> performMapSearch(T criteriaModel) {
         Preconditions.checkArgument(criteriaModel.getQuery() == null, "map searching not supported for Advanced Search queries!");
-        return filterSearch(criteriaModel);
+        return filterMapSearch(criteriaModel);
     }
 
 
@@ -84,5 +84,5 @@ public abstract class TextOrFilterSearchService<T extends SearchCriteria, M exte
 
     protected abstract SearchResult<M> textSearch(T criteriaModel, Integer pageNumber, Integer pageSize);
     protected abstract SearchResult<M> filterSearch(T criteriaModel, Integer pageNumber, Integer pageSize);
-    protected abstract MappedResults<K> filterSearch(T criteriaModel);
+    protected abstract MappedResults<K> filterMapSearch(T criteriaModel);
 }

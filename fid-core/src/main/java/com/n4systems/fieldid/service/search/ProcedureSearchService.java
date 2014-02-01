@@ -24,7 +24,7 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
     }
 
     @Override
-    protected void addSearchTerms(ProcedureCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
+    protected void addSearchTerms(ProcedureCriteria criteriaModel, List<SearchTermDefiner> searchTerms, boolean includeGps) {
         addSimpleTerm(searchTerms, "asset.type", criteriaModel.getAssetType());
         addSimpleTerm(searchTerms, "asset.type.group", criteriaModel.getAssetTypeGroup());
         addSimpleTerm(searchTerms, "assignee", criteriaModel.getAssignee());

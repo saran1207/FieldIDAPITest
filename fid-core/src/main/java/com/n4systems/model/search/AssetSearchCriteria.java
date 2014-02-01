@@ -56,13 +56,10 @@ public class AssetSearchCriteria extends SearchCriteria {
     @Column(name="column_id")
 	private List<String> columns = new ArrayList<String>();
 
-    // 0...1.  defines ratio of map to break into quadrants when grouping
-    private @Transient Double horizLocationGrouping = 1/5.0;
-    private @Transient Double verticalLocationGrouping = 1/3.0;
-    private @Transient Integer maxItemsBeforeGrouping = 100;
+    private @Transient Integer maxItemsBeforeGrouping = 10;
 
     @Embedded
-    private GpsBounds bounds = new GpsBounds(0.548548, -146.987305,543.548548, +96.987305);
+    private GpsBounds bounds;
 
     @Column
     private Boolean hasGps;
@@ -73,22 +70,6 @@ public class AssetSearchCriteria extends SearchCriteria {
 
     public void setBounds(GpsBounds bounds) {
         this.bounds = bounds;
-    }
-
-    public Double getHorizLocationGrouping() {
-        return horizLocationGrouping;
-    }
-
-    public Double getVerticalLocationGrouping() {
-        return verticalLocationGrouping;
-    }
-
-    public void setHorizLocationGrouping(Double horizLocationGrouping) {
-        this.horizLocationGrouping = horizLocationGrouping;
-    }
-
-    public void setVerticalLocationGrouping(Double verticalLocationGrouping) {
-        this.verticalLocationGrouping = verticalLocationGrouping;
     }
 
     public Boolean getHasGps() {

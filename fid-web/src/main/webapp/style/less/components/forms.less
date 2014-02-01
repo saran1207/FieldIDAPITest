@@ -170,10 +170,12 @@ input[type="checkbox"] {
 
 // Editable inputs - for inline editing
 // ------------------------------------
-input:disabled {
+input:disabled,
+textarea:disabled {
 	border: none;
 	background: @white;
 	color: @gray-darkest;
+	padding: 0;
 }
 
 .editable-inputs {
@@ -182,12 +184,9 @@ input:disabled {
 	input[type="text"]:disabled {
 		height: auto;
 		margin: 0;
-		padding-left: 0;
 	}
-	.form-horizontal {
-		label {
-			text-align: left;
-		}
+	.form-horizontal label {
+		text-align: left;
 	}
 	.actions {
 		position: absolute;
@@ -336,6 +335,26 @@ legend + p {
 		input[type="radio"] {
 			float: none;
 		}
+	}
+}
+
+// Form overrides for narrow styles
+.narrow .form-horizontal,
+.form-horizontal.narrow {
+	label {
+		width: 32%;
+	}
+	input[type="text"], 
+	select, 
+	textarea, 
+	.input-combo {
+		width: 65%;
+	}
+	.chzn-container {
+		width: 65%!important;
+	}
+	.text-block {
+		margin-left: 30%;
 	}
 }
 

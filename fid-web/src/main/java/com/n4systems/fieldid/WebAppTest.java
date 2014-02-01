@@ -25,7 +25,7 @@ public class WebAppTest {
     }
 
     public List<File> getWebAppFiles(String... extensions) {
-        return getWebAppFiles((FileFilter)null, extensions);
+        return getWebAppFiles(null, extensions);
     }
 
     public List<File> getWebAppFiles(FileFilter filter, String... extensions) {
