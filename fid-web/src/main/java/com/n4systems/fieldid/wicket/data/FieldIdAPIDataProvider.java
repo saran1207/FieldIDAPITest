@@ -111,14 +111,16 @@ public abstract class FieldIdAPIDataProvider<T extends EntityWithTenant> extends
             results = pageHolder.getPageResults().getRows();
             storeIdList();
         }
+
         return results;
     }
 
-    private void storeIdList() {
+    protected void storeIdList() {
         currentPageIdList = new ArrayList<Long>(results.size());
         for (RowView result : results) {
             currentPageIdList.add(result.getId());
         }
+
     }
 
     protected ResultTransformer<TableView> createResultTransformer() {

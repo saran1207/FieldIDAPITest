@@ -14,6 +14,8 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.List;
+
 public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria> {
 
     private @SpringBean
@@ -40,8 +42,17 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
 
     @Override
     protected FieldIdAPIDataProvider createDataProvider(IModel<AssetSearchCriteria> criteriaModel) {
-        return new AssetSearchDataProvider(criteriaModel.getObject());
+        return new AssetSearchDataProvider(criteriaModel.getObject()) {
+            @Override protected void storeIdList() {
+                super.storeIdList();
+                selectedRows.clearIndexes();
+                selectedRows.validateIndexes( dataTable.getTable().getCurrentPage(), dataTable.getTable().getItemsPerPage(), getCurrentPageIdList());
+            }
+        };
     }
+
+
+
 
 }
 
