@@ -80,7 +80,9 @@ public class ProcedureDefinitionBuilder extends EntityWithTenantBuilder<Procedur
         ProcedureDefinition procedureDefinition = assignAbstractFields(new ProcedureDefinition());
         procedureDefinition.setAsset(asset);
         procedureDefinition.setProcedureCode(procedureCode);
-        procedureDefinition.setIsolationPoints(isolationPoints);
+        for (IsolationPoint isolationPoint : isolationPoints) {
+            procedureDefinition.addIsolationPoint(isolationPoint);
+        }
         procedureDefinition.setImages(Lists.newArrayList(images.iterator()));
         procedureDefinition.setRevisionNumber(revisionNumber);
         return procedureDefinition;

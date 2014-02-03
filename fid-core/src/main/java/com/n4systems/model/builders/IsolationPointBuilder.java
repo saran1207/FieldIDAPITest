@@ -105,6 +105,8 @@ public class IsolationPointBuilder extends EntityWithTenantBuilder<IsolationPoin
         isolationPoint.setSourceType(sourceType);
         isolationPoint.setSourceText(sourceText);
         isolationPoint.setAnnotation(annotation);
+        isolationPoint.setFwdIdx(0);
+        isolationPoint.setRevIdx(0);
         return isolationPoint;
     }
 
