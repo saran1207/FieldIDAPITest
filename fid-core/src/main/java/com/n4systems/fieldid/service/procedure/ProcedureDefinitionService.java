@@ -156,7 +156,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     public void deleteProcedureDefinition(ProcedureDefinition procedureDefinition) {
         Preconditions.checkArgument(procedureDefinition.getPublishedState().isPreApproval(), "can't delete a procedure that has been published");
         s3Service.removeProcedureDefinitionImages(procedureDefinition);
-        for (IsolationPoint isolationPoint: procedureDefinition.getIsolationPoints()) {
+        for (IsolationPoint isolationPoint: procedureDefinition.getLockIsolationPoints()) {
             ImageAnnotation imageAnnotation = isolationPoint.getAnnotation();
             isolationPoint.setAnnotation(null);
             persistenceService.update(isolationPoint);
@@ -183,9 +183,9 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         Map<String, ProcedureDefinitionImage> clonedImages = cloneImages(source,to);
         to.setImages(Lists.newArrayList(clonedImages.values()));
 
-        for(IsolationPoint isolationPoint: source.getIsolationPoints()) {
+        for(IsolationPoint isolationPoint: source.getLockIsolationPoints()) {
             IsolationPoint copiedIsolationPoint = cloneIsolationPoint(isolationPoint, clonedImages);
-            to.getIsolationPoints().add(copiedIsolationPoint);
+            to.addIsolationPoint(copiedIsolationPoint);
         }
 
         return to;
@@ -212,6 +212,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         if(source.getAnnotation() != null) {
             isolationPoint.setAnnotation(cloneImageAnnotation(source.getAnnotation(), clonedImages));
         }
+        isolationPoint.setFwdIdx(source.getFwdIdx());
+        isolationPoint.setRevIdx(source.getRevIdx());
         return isolationPoint;
     }
 
@@ -288,6 +290,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setDeviceDefinition(from.getDeviceDefinition());
         to.setLockDefinition(from.getLockDefinition());
         to.setElectronicIdentifier(from.getElectronicIdentifier());
+        to.setFwdIdx(from.getFwdIdx());
+        to.setRevIdx(from.getRevIdx());
 
         return to;
     }

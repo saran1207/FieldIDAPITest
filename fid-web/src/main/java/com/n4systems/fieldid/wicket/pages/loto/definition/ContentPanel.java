@@ -55,11 +55,14 @@ public class ContentPanel extends Panel {
             }
 
             @Override protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint isolationPoint, int index) {
-                List<IsolationPoint> isolationPoints = getProcedureDefinition().getIsolationPoints();
-                int i = isolationPoints.indexOf(isolationPoint);
-                isolationPoints.set(i,null);
-                isolationPoints.add(index,isolationPoint);
-                isolationPoints.remove(null);
+                List<IsolationPoint> isolationPointList = getProcedureDefinition().getLockIsolationPoints();
+
+                int oldIndex = isolationPointList.indexOf(isolationPoint);
+                isolationPointList.set(oldIndex, null);
+                isolationPointList.add(index, isolationPoint);
+                isolationPointList.remove(null);
+
+                getProcedureDefinition().reindexLockIsolationPoints(isolationPointList);
             }
         });
 
@@ -99,7 +102,7 @@ public class ContentPanel extends Panel {
     }
 
     private void addIsolationPoint() {
-        getProcedureDefinition().getIsolationPoints().add(editor.getEditedIsolationPoint());
+        getProcedureDefinition().addIsolationPoint(editor.getEditedIsolationPoint());
     }
 
     private ProcedureDefinition getProcedureDefinition() {
@@ -117,12 +120,14 @@ public class ContentPanel extends Panel {
         isolationPoint.setIdentifier(getNextIdentifier(sourceType));
         isolationPoint.setSourceType(sourceType);
         isolationPoint.setTenant(getProcedureDefinition().getTenant());
+        isolationPoint.setFwdIdx(getProcedureDefinition().getLockIsolationPoints().size());
+        isolationPoint.setRevIdx(0);
         return isolationPoint;
     }
 
     private String getNextIdentifier(IsolationPointSourceType sourceType) {
         TreeMap<Long, IsolationPoint> reservedSourceNumbers=new TreeMap<Long,IsolationPoint>();
-        for (IsolationPoint isolationPoint:getProcedureDefinition().getIsolationPoints()) {
+        for (IsolationPoint isolationPoint:getProcedureDefinition().getLockIsolationPoints()) {
             if (isolationPoint.getSourceType().equals(sourceType)) {
                 Long number = parseNumber(isolationPoint.getIdentifier());
                 if (number!=null) {

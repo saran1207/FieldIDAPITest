@@ -53,7 +53,7 @@ public class IsolationPointListPanel extends Panel {
             }
         });
 
-        ListView<IsolationPoint> listView = new ListView<IsolationPoint>("list",new PropertyModel(model,"isolationPoints")) {
+        ListView<IsolationPoint> listView = new ListView<IsolationPoint>("list", new PropertyModel(model,"lockIsolationPoints")) {
             @Override protected void populateItem(ListItem<IsolationPoint> item) {
                 populateIsolationPoint(item);
                 item.setOutputMarkupId(true);
@@ -152,7 +152,7 @@ public class IsolationPointListPanel extends Panel {
     @Override
     protected void onBeforeRender() {
         super.onBeforeRender();
-        boolean showBlankSlate = model.getObject().getIsolationPoints().size()==0;
+        boolean showBlankSlate = model.getObject().getLockIsolationPoints().size()==0;
         blankSlate.setVisible(showBlankSlate);
     }
 

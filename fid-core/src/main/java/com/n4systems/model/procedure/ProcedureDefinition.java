@@ -1,15 +1,17 @@
 package com.n4systems.model.procedure;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.n4systems.model.Asset;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.user.User;
-import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "procedure_definitions")
@@ -54,9 +56,8 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
     private PublishedState publishedState;
 
     @OneToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL, orphanRemoval = true)
-    @IndexColumn(name="orderIdx")
     @JoinTable(name="procedure_definitions_isolation_points", joinColumns = @JoinColumn(name = "procedure_definition_id"), inverseJoinColumns = @JoinColumn(name = "isolation_point_id"))
-    private List<IsolationPoint> isolationPoints = Lists.newArrayList();
+    private Set<IsolationPoint> isolationPoints = Sets.newHashSet();
 
     @OneToMany(mappedBy = "procedureDefinition", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ProcedureDefinitionImage> images = Lists.newArrayList();
@@ -146,12 +147,54 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         this.equipmentDescription = equipmentDescription;
     }
 
+    @Deprecated
     public List<IsolationPoint> getIsolationPoints() {
-        return isolationPoints;
+        return getLockIsolationPoints();
     }
 
     public void setIsolationPoints(List<IsolationPoint> isolationPoints) {
-        this.isolationPoints = isolationPoints;
+        this.isolationPoints = Sets.newHashSet(isolationPoints);
+    }
+
+    public List<IsolationPoint> getLockIsolationPoints() {
+        List<IsolationPoint> lockIsolationPoints = Lists.newArrayList(isolationPoints);
+        Collections.sort(lockIsolationPoints, IsolationPoint.LOCK_ORDER);
+        return lockIsolationPoints;
+    }
+
+    public List<IsolationPoint> getUnlockIsolationPoints() {
+        List<IsolationPoint> unlockIsolationPoints = Lists.newArrayList(isolationPoints);
+        Collections.sort(unlockIsolationPoints, IsolationPoint.UNLOCK_ORDER);
+        return unlockIsolationPoints;
+    }
+
+    public void addIsolationPoint(IsolationPoint isolationPoint) {
+        int index = 1;
+        for (IsolationPoint point: getUnlockIsolationPoints()) {
+            point.setRevIdx(index++);
+        }
+        isolationPoint.setFwdIdx(isolationPoints.size());
+        isolationPoints.add(isolationPoint);
+    }
+
+    public void reindexUnlockIsolationPoints(List<IsolationPoint> isolationPointList) {
+        int i = 0;
+        for(IsolationPoint point: isolationPointList) {
+            point.setRevIdx(i++);
+        }
+
+        isolationPoints.clear();
+        isolationPoints.addAll(isolationPointList);
+    }
+
+    public void reindexLockIsolationPoints(List<IsolationPoint> isolationPointList) {
+        int i = 0;
+        for(IsolationPoint point: isolationPointList) {
+            point.setFwdIdx(i++);
+        }
+
+        isolationPoints.clear();
+        isolationPoints.addAll(isolationPointList);
     }
 
     public List<ProcedureDefinitionImage> getImages() {
@@ -233,7 +276,12 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     public void removeIsolationPoint(IsolationPoint isolationPoint) {
         softDeleteImage(isolationPoint.getAnnotation());
-        getIsolationPoints().remove(isolationPoint);
+
+        List<IsolationPoint> isolationPointList = getLockIsolationPoints();
+        isolationPointList.remove(isolationPoint);
+
+        reindexLockIsolationPoints(isolationPointList);
+        reindexUnlockIsolationPoints(getUnlockIsolationPoints());
     }
 
     public void softDeleteImage(ImageAnnotation annotation) {
@@ -244,7 +292,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
         ProcedureDefinitionImage image = (ProcedureDefinitionImage) annotation.getImage();
 
-        for (IsolationPoint isolationPoint:getIsolationPoints()) {
+        for (IsolationPoint isolationPoint:getLockIsolationPoints()) {
             if (null != isolationPoint.getAnnotation() && !annotation.equals(isolationPoint.getAnnotation()) && annotation.getImage().equals(isolationPoint.getAnnotation().getImage())) {
                 usedInOtherIsolationPoint = true;
             }

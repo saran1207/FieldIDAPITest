@@ -64,7 +64,7 @@ public class PublishPanel extends Panel {
             SubmitLink submitLink = new SubmitLink("publish") {
                 @Override
                 public void onSubmit() {
-                    if (model.getObject().getIsolationPoints().isEmpty()) {
+                    if (model.getObject().getLockIsolationPoints().isEmpty()) {
                         error(getString("message.isolation_point_required"));
                     } else if (procedureService.hasActiveProcedure(model.getObject().getAsset())) {
                         error(getString("message.cant_publish_with_active_procedure"));
