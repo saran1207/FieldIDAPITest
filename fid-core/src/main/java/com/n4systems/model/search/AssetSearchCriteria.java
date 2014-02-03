@@ -56,7 +56,7 @@ public class AssetSearchCriteria extends SearchCriteria {
     @Column(name="column_id")
 	private List<String> columns = new ArrayList<String>();
 
-    private @Transient Integer maxItemsBeforeGrouping = 10;
+    private @Transient Integer maxItemsBeforeGrouping = 199;
 
     @Embedded
     private GpsBounds bounds;
