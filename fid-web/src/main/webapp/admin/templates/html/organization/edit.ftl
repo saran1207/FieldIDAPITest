@@ -67,11 +67,11 @@
 		<div class="infoSet"><label>Assets Last 30 Days:</label><span>${action.getTotal30DayAssets(primaryOrg)?string.number}</span></div>
 		<div class="infoSet"><label>Total Events</label> <span>${action.getTotalEvents(primaryOrg)?string.number}</span></div>
 		<div class="infoSet"><label>Events Last 30 Days:</label><span>${action.getTotal30DayEvents(primaryOrg)?string.number}</span></div>
-		<#if action.getLastActiveSession(primaryOrg)?exists>
-            <#assign lastActiveSession = action.getLastActiveSession(primaryOrg)/>
-            <#if lastActiveSession.user.userID?exists && lastActiveSession.user.userID != 'n4systems'>
-                <div class="infoSet"><label>Last Login Date:</label><span>${action.convertDateTime(lastActiveSession.lastTouched)}</span></div>
-                <div class="infoSet"><label>Last Login User:</label><span>${lastActiveSession.user.userID}</span></div>
+		<#if action.getLastLoggedInUser(primaryOrg)?exists>
+            <#assign lastLoggedInUser = action.getLastLoggedInUser(primaryOrg)/>
+            <#if lastLoggedInUser.userID?exists && lastLoggedInUser.userID != 'n4systems'>
+                <div class="infoSet"><label>Last Login Date:</label><span>${action.convertDateTime(lastLoggedInUser.lastLogin)}</span></div>
+                <div class="infoSet"><label>Last Login User:</label><span>${lastLoggedInUser.userID}</span></div>
             </#if>
 		<#else>
 			<div class="infoSet"><label>Last Login Date:</label><span>--</span></div>

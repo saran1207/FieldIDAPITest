@@ -11,8 +11,6 @@ import com.n4systems.fieldid.actions.utils.PasswordEntry;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.validators.HasDuplicateRfidValidator;
 import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
-import com.n4systems.model.activesession.ActiveSession;
-import com.n4systems.model.activesession.ActiveSessionLoader;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.downloadlink.DownloadLink;
 import com.n4systems.model.orgs.BaseOrg;
@@ -632,8 +630,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	public Date dateCreated(User user) {
-		ActiveSession session = new ActiveSessionLoader().setId(user.getId()).load();
-		return (session != null) ? session.getDateCreated() : null;
+		return user.getLastLogin();
 	}
 
 	public String getUserBelongsToFilter() {

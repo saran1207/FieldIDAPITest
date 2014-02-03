@@ -21,7 +21,8 @@ import java.util.*;
 @SuppressWarnings({ "unchecked", "serial" })
 public class WebSessionMap extends AbstractMap<String, Object> implements Serializable {
 	private final HttpSession session;
-	
+
+	public static final String USER_ID = "userId";
 	public static final String KEY_SESSION_USER = "sessionUser";
 	public static final String KEY_SECURITY_GUARD = "securityGaurd";
 	public static final String KEY_USER_SECURITY_GUARD = "userSecurityGuard";
@@ -43,6 +44,9 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
     public static final String LOGIN_FAILURE_INFO = "loginFailureInfo";
 	public static final String ADMIN_AUTHENTICATED = "adminAuthenticated";
 	public static final String ADMIN_USER = "adminUser";
+	public static final String BOOTED = "booted";
+	public static final String SUDO_AUTH = "sudoAuth";
+	public static final String CONCURRENT_SESSION_ID = "concurrentSessionId";
 	
 	public WebSessionMap() {
 		this(ServletActionContext.getRequest().getSession(false));
@@ -65,6 +69,14 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	
 	private <T> T get(String key, Class<T> clazz) {
 		return (T)get(key);
+	}
+
+	public Long getUserId() {
+		return get(USER_ID, Long.class);
+	}
+
+	public void setUserId(Long userId) {
+		put(USER_ID, userId);
 	}
 	
 	public SystemSecurityGuard getSecurityGuard() {
@@ -376,12 +388,12 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	}
 
 
-	public void setUserAuthHolder(Long id) {
-		put("userAthHolder", id);
+	public void setConcurrentSessionId(String sessionId) {
+		put(CONCURRENT_SESSION_ID, sessionId);
 	}
 	
-	public Long getUserAuthHolder() {
-		return (Long)get("userAthHolder");
+	public String getConcurrentSessionId() {
+		return get(CONCURRENT_SESSION_ID, String.class);
 	}
 
     public LoginFailureInfo getLoginFailureInfo() {
@@ -411,4 +423,41 @@ public class WebSessionMap extends AbstractMap<String, Object> implements Serial
 	public void setAdminUser(AdminUser adminUser) {
 		put(ADMIN_USER, adminUser);
 	}
+
+	public void setBooted(boolean booted) {
+		if (booted) {
+			put(BOOTED, true);
+		} else {
+			remove(BOOTED);
+		}
+	}
+
+	public boolean isBooted() {
+		return containsKey(BOOTED);
+	}
+
+	public void setSudoAuth(boolean sudoAuth) {
+		if (sudoAuth) {
+			put(SUDO_AUTH, true);
+		} else {
+			remove(SUDO_AUTH);
+		}
+	}
+
+	public boolean isSudoAuth() {
+		return containsKey(SUDO_AUTH);
+	}
+
+	// A user is considered logged in if it has a session user, a security guard and the session users tenant matches that of the security guard
+	public boolean isLoggedIn() {
+		SessionUser user = getSessionUser();
+		SystemSecurityGuard securityGuard = getSecurityGuard();
+		return (user != null && securityGuard != null && user.getTenant().getId().equals(securityGuard.getTenant().getId()));
+	}
+
+	// A session is considered valid if it is logged in and is not set to booted
+	public boolean isValid() {
+		return (isLoggedIn() && !isBooted());
+	}
+
 }

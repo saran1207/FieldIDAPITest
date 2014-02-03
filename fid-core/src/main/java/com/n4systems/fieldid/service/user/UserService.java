@@ -3,7 +3,6 @@ package com.n4systems.fieldid.service.user;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.SendSavedItemSchedule;
-import com.n4systems.model.activesession.ActiveSession;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
@@ -86,13 +85,6 @@ public class UserService extends FieldIdPersistenceService {
     public Long countOrgUsers(BaseOrg org, String nameOrUserIdSearch, UserType typeFilter) {
 		QueryBuilder<User> builder = createOrgUserQuery(org, nameOrUserIdSearch, typeFilter);
         return persistenceService.count(builder);
-    }
-
-    public Date getLastLogin(Long userId) {
-        QueryBuilder<ActiveSession> builder = new QueryBuilder<ActiveSession>(ActiveSession.class);
-        builder.addSimpleWhere("user.id", userId);
-        ActiveSession activeSession = persistenceService.find(builder);
-        return activeSession != null ? activeSession.getDateCreated() : null;
     }
 
     private QueryBuilder<User> createUserQueryBuilder(boolean registered, boolean includeSystem) {

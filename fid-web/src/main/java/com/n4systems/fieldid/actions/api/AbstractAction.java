@@ -14,14 +14,11 @@ import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.utils.CookieFactory;
-import com.n4systems.fieldid.utils.SessionUserInUse;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.fieldid.viewhelpers.BaseActionHelper;
 import com.n4systems.fieldid.viewhelpers.navigation.NavOptionsController;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.activesession.ActiveSessionLoader;
-import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.admin.AdminUserType;
 import com.n4systems.model.downloadlink.DownloadCoordinator;
 import com.n4systems.model.orgs.BaseOrg;
@@ -40,7 +37,6 @@ import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.util.*;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.time.SystemClock;
 import com.n4systems.util.uri.ActionURLBuilder;
 import freemarker.template.utility.StringUtil;
 import org.apache.commons.io.FileUtils;
@@ -129,10 +125,7 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	}
 
 	protected boolean isLoggedIn() {
-
-		return (getSessionUser() != null &&
-				getSessionUser().getTenant().equals(getTenant()) &&
-				new SessionUserInUse(new ActiveSessionLoader(), getConfigContext(), new SystemClock(), new ActiveSessionSaver()).doesActiveSessionBelongTo(getSessionUserId(), getSession().getId()));
+		return (getSessionUser() != null && getSessionUser().getTenant().equals(getTenant()) && !getSession().isBooted());
 	}
 
 	protected void refreshSessionUser() {

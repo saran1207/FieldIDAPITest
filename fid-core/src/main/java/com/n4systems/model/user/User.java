@@ -107,6 +107,9 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
     @Column(length=20)
     private String identifier;
+
+	@Column(name = "last_login")
+	private Date lastLogin;
 	
 	@Override
 	protected void onCreate() {
@@ -582,4 +585,12 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
     public void setLanguage(Locale language) {
         this.language = language;
     }
+
+	public Date getLastLogin() {
+		return lastLogin;
+	}
+
+	public void setLastLogin(Date lastLogin) {
+		this.lastLogin = lastLogin;
+	}
 }

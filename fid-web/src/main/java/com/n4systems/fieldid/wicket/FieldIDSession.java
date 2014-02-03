@@ -63,6 +63,10 @@ public class FieldIDSession extends WebSession {
         return session;
     }
 
+	private WebSessionMap getWebSessionMap() {
+		return new WebSessionMap(getHttpSession());
+	}
+
     @Deprecated // for testing only.
     public void setUser(User user) {
         getHttpSession().setAttribute(WebSessionMap.KEY_SESSION_USER, new SessionUser(user));
@@ -184,4 +188,8 @@ public class FieldIDSession extends WebSession {
     public void setUserLocale(Locale userLocale) {
         this.userLocale = userLocale;
     }
+
+	public boolean isBooted() {
+		return getWebSessionMap().isBooted();
+	}
 }

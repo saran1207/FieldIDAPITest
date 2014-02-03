@@ -7,8 +7,7 @@ import com.n4systems.fieldid.validators.HasDuplicateValueValidator;
 import com.n4systems.fieldidadmin.utils.TenantPathUpdater;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.activesession.ActiveSession;
-import com.n4systems.model.activesession.LastActiveSessionLoader;
+import com.n4systems.model.activesession.LastLoggedInUserByTenantLoader;
 import com.n4systems.model.asset.AssetCountLoader;
 import com.n4systems.model.event.EventCountLoader;
 import com.n4systems.model.orgs.AllPrimaryOrgsPaginatedLoader;
@@ -18,6 +17,7 @@ import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantNameAvailabilityChecker;
 import com.n4systems.model.tenant.TenantSaver;
 import com.n4systems.model.tenant.UserLimits;
+import com.n4systems.model.user.User;
 import com.n4systems.services.TenantFinder;
 import com.n4systems.services.search.AssetIndexerService;
 import com.n4systems.services.search.CriteriaTrendsIndexerService;
@@ -61,7 +61,7 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
 	private AssetCountLoader assetCountLoader = new AssetCountLoader();
 	private EventCountLoader eventCountLoader = new EventCountLoader();
-	private LastActiveSessionLoader lastActiveSessionLoader = new LastActiveSessionLoader();
+	private LastLoggedInUserByTenantLoader lastLoggedInUserByTenantLoader = new LastLoggedInUserByTenantLoader();
 
 	private String nameFilter;
 	private String sortColumn;
@@ -399,8 +399,8 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 		return loadTotalEvents(id, true);
 	}
 
-	public ActiveSession getLastActiveSession(PrimaryOrg org) {
-		return lastActiveSessionLoader.setTenant(org.getTenant().getId()).excludeN4User().load();
+	public User getLastLoggedInUser(PrimaryOrg org) {
+		return lastLoggedInUserByTenantLoader.setTenant(org.getTenant().getId()).excludeN4User().load();
 	}
 
 	public void setSortColumn(String sortColumn) {
