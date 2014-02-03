@@ -101,7 +101,6 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
                     create();
     }
 
-
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);

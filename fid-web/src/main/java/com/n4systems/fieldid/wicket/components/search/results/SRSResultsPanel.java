@@ -20,6 +20,7 @@ import com.n4systems.util.views.RowView;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -29,6 +30,8 @@ import org.apache.wicket.model.PropertyModel;
 import java.util.List;
 
 public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGpsLocation> extends Panel {
+
+    private static final String TOGGLE_PANEL_JS = "$('.tipsy').remove();";  // TODO : add js to show loading bar/text.
 
     protected SimpleDataTable<RowView> dataTable;
     protected FieldIdAPIDataProvider provider;
@@ -114,19 +117,21 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
                 return getMapMarkerText(entity);
             }
         });
-        map.withZoomPanNotifications().setVisible(true);
+        map.withZoomPanNotifications().setOutputMarkupPlaceholderTag(true).setVisible(false);
 
         resultButtons = new WebMarkupContainer("resultButtons");
         resultButtons.add(new IndicatingAjaxLink("table") {
             @Override public void onClick(AjaxRequestTarget target) {
+                target.appendJavaScript(TOGGLE_PANEL_JS);
                 showTable(target);
             }
-        });
+        }.setOutputMarkupId(true));
         resultButtons.add(new IndicatingAjaxLink("map") {
             @Override public void onClick(AjaxRequestTarget target) {
+                target.appendJavaScript(TOGGLE_PANEL_JS);
                 showMap(target);
             }
-        });
+        }.setOutputMarkupId(true));
         add(resultButtons.setVisible(true));
     }
 
@@ -201,4 +206,9 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
         return dataTable;
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
+    }
 }

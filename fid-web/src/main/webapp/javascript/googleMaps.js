@@ -500,8 +500,8 @@ var googleMapFactory = (function() {
 	return { 
 		create : create,
 		createAndShow : createAndShow,
-		createAutoCompleteAddress : createAutoCompleteAddress,
-		makeMarkerForStatus : makeMarkerForStatus
+		makeMarkerForStatus : makeMarkerForStatus,
+		createAutoCompleteAddress : createAutoCompleteAddress
 	};
 
 	

@@ -1,8 +1,12 @@
 <wicket:panel>
 
-    <div wicket:id="resultButtons">
-        <a wicket:id="table"><h1>TABLE</h1></a>
-        <a wicket:id="map"><h1>MAP</h1></a>
+    <div wicket:id="resultButtons" class="button-group result-panel-buttons">
+        <span wicket:id="table" class="btn-icon btn-secondary tipsy-tooltip" title="List">
+            <span class="fontello-menu">menu</span>
+        </span>
+        <a wicket:id="map" class="btn-icon btn-secondary tipsy-tooltip" title="Map">
+            <span class="fontello-map"/>
+        </a>
     </div>
 
     <div wicket:id="resultsTable">
