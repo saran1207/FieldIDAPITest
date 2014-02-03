@@ -152,6 +152,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         return getLockIsolationPoints();
     }
 
+    @Deprecated
     public void setIsolationPoints(List<IsolationPoint> isolationPoints) {
         this.isolationPoints = Sets.newHashSet(isolationPoints);
     }
