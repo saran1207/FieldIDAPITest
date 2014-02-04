@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.authentication;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
 import com.n4systems.fieldid.ws.v1.resources.user.ApiUser;
@@ -25,6 +26,7 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 	@Autowired protected UserService userService;
 	@Autowired protected ApiUserResource apiUserResource;
 	@Autowired protected SecurityContext securityContext;
+	@Autowired protected AdminUserService adminUserService;
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
@@ -42,6 +44,9 @@ public class AuthenticationResource extends FieldIdPersistenceService {
 		}
 
 		User user = userService.authenticateUserByPassword(tenantName, userId, password);
+		if (user == null) {
+			user = adminUserService.attemptSudoAuthentication(tenantName, userId, password);
+		}
 		return authenticateUser(user);
 	}
 	

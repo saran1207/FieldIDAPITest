@@ -26,8 +26,8 @@ import java.util.List;
 
 import static com.n4systems.model.builders.UserBuilder.aUser;
 import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
 
@@ -141,7 +141,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
         ProcedureDefinition source = ProcedureDefinitionBuilder.aProcedureDefinition().withIsolationPoints(isolationPoints).build();
         ProcedureDefinition result = procedureDefinitionService.cloneProcedureDefinition(source);
 
-        List<IsolationPoint> pts = result.getIsolationPoints();
+        List<IsolationPoint> pts = result.getLockIsolationPoints();
         assertEquals(3, pts.size());
         for (int i = 0; i<3; i++) {
             assertIsolationPoint(isolationPoints, pts, i);
@@ -171,7 +171,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
 
         ProcedureDefinition result = procedureDefinitionService.cloneProcedureDefinition(source);
 
-        List<IsolationPoint> pts = result.getIsolationPoints();
+        List<IsolationPoint> pts = result.getLockIsolationPoints();
         assertEquals(1, pts.size());
         ImageAnnotation actual = pts.get(0).getAnnotation();
         assertEquals(.1,actual.getX(),.000001);

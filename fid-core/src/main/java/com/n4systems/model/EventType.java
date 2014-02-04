@@ -1,27 +1,22 @@
 package com.n4systems.model;
 
-import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.persistence.localization.Localized;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "eventtypes")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class EventType extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable {
+public abstract class EventType<T extends EventType> extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Saveable, SecurityEnhanced<T> {
 	private static final long serialVersionUID = 1L;
 	public static final long DEFAULT_FORM_VERSION = 1;
 	
@@ -62,6 +57,12 @@ public abstract class EventType extends ArchivableEntityWithTenant implements Na
 
     @Column(nullable=false, name="display_score_percentage")
     private boolean displayScorePercentage;
+
+    // Hibernate's implementation of jpql's TYPE(field) operator seems completely busted for at least
+    // join table inheritance. This is unfortunately necessary as a workaround so our queries can be able to
+    // separate actions from events.
+    @Column(name="action_type")
+    private boolean actionType = false;
 
 	private Long legacyEventId;
 
@@ -220,6 +221,28 @@ public abstract class EventType extends ArchivableEntityWithTenant implements Na
 
     public void setDisplayScorePercentage(boolean displayScorePercentage) {
         this.displayScorePercentage = displayScorePercentage;
+    }
+
+    public boolean isThingEventType() {
+        return false;
+    }
+
+    public boolean isPlaceEventType() {
+        return false;
+    }
+
+    public boolean isActionEventType() {
+        return false;
+    }
+
+    @Deprecated // remove when TYPE() works. See field comment.
+    public boolean isActionType() {
+        return actionType;
+    }
+
+    @Deprecated
+    public void setActionType(boolean actionType) {
+        this.actionType = actionType;
     }
 
 }

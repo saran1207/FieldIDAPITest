@@ -7,9 +7,11 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.SecretTestPage;
 import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
+import com.n4systems.fieldid.wicket.pages.admin.adminusers.AdminUserPage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
+import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.*;
@@ -26,8 +28,7 @@ import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPri
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
-import com.n4systems.fieldid.wicket.pages.org.OrgSummaryPage;
-import com.n4systems.fieldid.wicket.pages.org.PlacesPage;
+import com.n4systems.fieldid.wicket.pages.org.*;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
@@ -47,7 +48,7 @@ import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedL
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.ReassignEventTypeGroupPage;
-import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
+import com.n4systems.fieldid.wicket.pages.setup.prioritycode.ConfirmArchivePage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
@@ -58,6 +59,7 @@ import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.user.*;
 import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
+import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
 import com.n4systems.fieldid.wicket.resources.CustomerLanguageResourceLoader;
 import com.n4systems.fieldid.wicket.resources.TenantOverridesResourceLoader;
@@ -96,6 +98,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/scoreGroups", ScoreGroupsPage.class);
         mountPage("setup/scoreResults", ScoreResultConfigurationPage.class);
         mountPage("setup/priorityCodes", PriorityCodePage.class);
+        mountPage("setup/archivePriorityCode", ConfirmArchivePage.class);
         mountPage("setup/reassignEventTypeGroups", ReassignEventTypeGroupPage.class);
         mountPage("setup/userGroups", UserGroupsPage.class);
         mountPage("setup/archiveUserGroup", ArchiveUserGroupPage.class);
@@ -113,8 +116,12 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
         mountPage("places", OrgViewPage.class);
-        mountPage("orgSummary", OrgSummaryPage.class);
-        mountPage("orgSummary2", PlacesPage.class);
+        mountPage("placeSummary", PlaceSummaryPage.class);
+        mountPage("placeEvents", PlaceEventsPage.class);
+        mountPage("placePeople", PlacePeoplePage.class);
+        mountPage("placeEventTypes", PlaceEventTypesPage.class);
+        mountPage("placeDescendants", PlaceDescendantsPage.class);
+        mountPage("placeRecurringEvents", PlaceRecurringSchedulesPage.class);
 
         mountPage("dashboard", DashboardPage.class);
 
@@ -132,6 +139,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("startEvent", StartRegularOrMasterEventPage.class);
         mountPage("performEvent", PerformEventPage.class);
         mountPage("editEvent", EditEventPage.class);
+
+        mountPage("performPlaceEvent", PerformPlaceEventPage.class);
+        mountPage("editPlaceEvent", EditPlaceEventPage.class);
 
         mountPage("closeEvent", CloseEventPage.class);
 
@@ -157,8 +167,10 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("runLastReport", RunLastReportPage.class);
 
         mountPage("admin/addTenant", AddTenantPage.class);
+		mountPage("admin/users", AdminUserPage.class);
 		mountPage("admin/connections", ConnectionViewPage.class);
         mountPage("admin/configureLanguages", ConfigureLanguagesPage.class);
+		mountPage("admin/tenantUsers", TenantUserListPage.class);
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);
@@ -195,12 +207,21 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
         mountPage("userOfflineProfile", UserOfflineProfilePage.class);
 
+        mountPage("userAccountSearch", UserAccountSearchPage.class);
+
         mountPage("template", TemplatePage.class);
         mountPage("template/assetSummary", TemplateAssetSummaryPage.class);
         mountPage("template/twoColumnLeft", TwoColumnLeft.class);
         mountPage("template/twoColumnRight", TwoColumnRight.class);
+        mountPage("template/twoColumnEqual", TwoColumnEqual.class);
+        mountPage("template/twoColumnNarrow", TwoColumnNarrow.class);
+        mountPage("template/wide", Wide.class);
         mountPage("template/noColumns", FirstTab.class);
         mountPage("template/noColumnsTab", SecondTab.class);
+        mountPage("template/allTemplates", AllTemplates.class);
+
+
+        mountPage("oops", OopsPage.class);
 
         mountResource("/signature/${eventId}/${criteriaId}", new SignatureResourceReference());
         mountResource("/temporarySignature/${fileId}", new TemporarySignatureResourceReference());

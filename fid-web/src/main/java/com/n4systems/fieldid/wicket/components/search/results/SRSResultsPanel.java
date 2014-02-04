@@ -2,9 +2,13 @@ package com.n4systems.fieldid.wicket.components.search.results;
 
 import com.n4systems.fieldid.permissions.SerializableSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.GpsModel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
+import com.n4systems.model.GpsBounds;
+import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.columns.ColumnMapping;
 import com.n4systems.model.columns.loader.ColumnMappingLoader;
 import com.n4systems.model.search.ColumnMappingConverter;
@@ -14,25 +18,32 @@ import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
 import com.n4systems.util.views.RowView;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
+public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGpsLocation> extends Panel {
+
+    private static final String TOGGLE_PANEL_JS = "$('.tipsy').remove();";  // TODO : add js to show loading bar/text.
 
     protected SimpleDataTable<RowView> dataTable;
     protected FieldIdAPIDataProvider provider;
     protected MultiIdSelection selectedRows;
     protected IModel<T> criteriaModel;
+    protected GoogleMap map;
+    protected WebMarkupContainer resultButtons;
 
     public SRSResultsPanel(String id, final IModel<T> criteriaModel) {
         super(id);
         this.criteriaModel = criteriaModel;
+        setOutputMarkupId(true);
 
         selectedRows = criteriaModel.getObject().getSelection();
 
@@ -90,8 +101,61 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
 
         dataTable.getTable().setCurrentPage(criteriaModel.getObject().getPageNumber());
         selectUnselectRowColumn.setDataTable(dataTable.getTable());
+
+        GpsModel<S> mapModel = createMapModel(criteriaModel);
+
+        add(map = new GoogleMap<S>("resultsMap",mapModel) {
+            @Override protected String getCssForEmptyMap() {
+                return "";
+            }
+
+            @Override protected void onMapChange(AjaxRequestTarget target, GpsBounds bounds ) {
+                SRSResultsPanel.this.onMapChange(target,bounds);
+            }
+
+            @Override protected String getDescription(S entity) {
+                return getMapMarkerText(entity);
+            }
+        });
+        map.withZoomPanNotifications().setOutputMarkupPlaceholderTag(true).setVisible(false);
+
+        resultButtons = new WebMarkupContainer("resultButtons");
+        resultButtons.add(new IndicatingAjaxLink("table") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                target.appendJavaScript(TOGGLE_PANEL_JS);
+                showTable(target);
+            }
+        }.setOutputMarkupId(true));
+        resultButtons.add(new IndicatingAjaxLink("map") {
+            @Override public void onClick(AjaxRequestTarget target) {
+                target.appendJavaScript(TOGGLE_PANEL_JS);
+                showMap(target);
+            }
+        }.setOutputMarkupId(true));
+        add(resultButtons.setVisible(true));
     }
-    
+
+    protected void onMapChange(AjaxRequestTarget target, GpsBounds bounds) {
+    }
+
+    protected String getMapMarkerText(S entity) {
+        return entity!=null ? entity.toString() : "";
+    }
+
+    protected abstract GpsModel<S> createMapModel(IModel<T> criteriaModel);
+
+    protected void showTable(AjaxRequestTarget target) {
+        map.setVisible(false);
+        dataTable.setVisible(true);
+        target.add(this);
+    }
+
+    protected void showMap(AjaxRequestTarget target) {
+        map.setVisible(true);
+        dataTable.setVisible(false);
+        target.add(this);
+    }
+
     // package protected method is extract/overridden for testing purposes
     protected SerializableSecurityGuard getSecurityGuard() {
 		return new SerializableSecurityGuard(FieldIDSession.get().getTenant());
@@ -140,5 +204,11 @@ public abstract class SRSResultsPanel<T extends SearchCriteria> extends Panel {
 
     public SimpleDataTable<RowView> getDataTable() {
         return dataTable;
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
+        response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);
     }
 }

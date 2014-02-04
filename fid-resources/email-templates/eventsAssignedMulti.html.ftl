@@ -73,15 +73,19 @@
     <#list events as event>
         <div class="event">
             <div class="info">
-                ${event.asset.type.name} / ${event.asset.identifier}
-                <br/>
-                ${event.owner.displayName}
+                <#if event.asset?exists>
+                    ${event.asset.type.name} / ${event.asset.identifier}
+                    <br/>
+                    ${event.owner.displayName}
+                <#elseif event.place?exists>
+                    ${event.place.displayName}
+                </#if>
                 <br/>
                 <br/>
                 ${event.type.name}
                 <br/>
                 <br/>
-                <#if event.type.group.action && event.priority?exists>
+                <#if event.type.actionEventType && event.priority?exists>
                     ${event.priority.name}
                     <br/>
                     <p>
@@ -94,7 +98,7 @@
                 </a>
                 <br/>
                 <br/>
-                <#if event.type.group.action>
+                <#if event.type.actionEventType>
                     Assigned by ${event.modifiedBy.fullName}
                 </#if>
             </div>

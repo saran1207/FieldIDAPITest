@@ -24,13 +24,15 @@ import java.util.List;
 
 public class ActionsListPage extends FieldIDAuthenticatedPage {
 
+    protected Class<? extends Event> eventClass;
     protected boolean readOnly = false;
 
-    public ActionsListPage(final IModel<CriteriaResult> criteriaResultModel) {
-        this(criteriaResultModel, false);
+    public ActionsListPage(final IModel<CriteriaResult> criteriaResultModel, Class<? extends Event> eventClass) {
+        this(criteriaResultModel, eventClass, false);
     }
 
-    public ActionsListPage(final IModel<CriteriaResult> criteriaResultModel, boolean readOnly) {
+    public ActionsListPage(final IModel<CriteriaResult> criteriaResultModel, final Class<? extends Event> eventClass, boolean readOnly) {
+        this.eventClass = eventClass;
         this.readOnly = readOnly;
         add(new ContextImage("blankSlate", "images/add-action-slate.png") {
             @Override public boolean isVisible() {
@@ -38,7 +40,7 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
             }
         });
 
-        add(new ListView<Event>("actionsList", new PropertyModel<List<? extends Event>>(criteriaResultModel, "actions")) {
+        add(new ListView<Event>("actionsList", new PropertyModel<List<Event>>(criteriaResultModel, "actions")) {
             @Override
             protected void populateItem(final ListItem<Event> item) {
                 item.add(new EventStateIcon("eventStateIcon", item.getModel()));
@@ -52,7 +54,7 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
                 item.add(new AjaxEventBehavior("onclick") {
                     @Override
                     protected void onEvent(AjaxRequestTarget target) {
-                        setResponsePage(new ActionDetailsPage(criteriaResultModel, item.getModel()) {
+                        setResponsePage(new ActionDetailsPage(criteriaResultModel, eventClass, item.getModel()) {
                             @Override protected boolean isEditable() {
                                 return !isReadOnly();
                             }
@@ -75,7 +77,7 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
         issueActionSection.add(new Link<Void>("addActionLink") {
             @Override
             public void onClick() {
-                setResponsePage(new AddEditActionPage(criteriaResultModel));
+                setResponsePage(new AddEditActionPage(criteriaResultModel, eventClass));
             }
         });
         issueActionSection.add(new AjaxLink("finishedLink") {
@@ -92,7 +94,7 @@ public class ActionsListPage extends FieldIDAuthenticatedPage {
     }
 
     protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
-        setResponsePage(new ActionsListPage(criteriaResultModel));
+        setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
     }
 
     protected boolean isReadOnly() {

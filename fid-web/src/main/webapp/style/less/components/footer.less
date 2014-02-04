@@ -1,0 +1,34 @@
+/*--------------------------------------- 
+  FOOTER
+-----------------------------------------*/
+.footer-global {
+	background: #f3f3f3;
+	padding-top: 15px;
+
+	img {
+		float: right;
+	}
+}
+
+/*
+Sticky Footer based on:
+Ryan Fait http://ryanfait.com/
+Chris Coyier http://css-tricks.com/snippets/css/sticky-footer/
+*/
+html, body {
+	height: 100%;
+}
+.wrapper {
+	min-height: 100%;
+	*height: auto !important;
+	*height: 100%;
+	margin: 0 auto -125px; //the bottom margin is the negative value of the footer's height
+}
+.wrapper:after {
+	content: "";
+	display: block;
+}
+.footer-global, 
+.wrapper:after {
+	height: 125px; //must be the same height as footer
+}

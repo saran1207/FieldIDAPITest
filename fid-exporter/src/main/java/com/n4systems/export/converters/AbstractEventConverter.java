@@ -5,10 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Criteria;
-import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.CriteriaSection;
+import com.n4systems.model.*;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
@@ -16,12 +13,10 @@ public abstract class AbstractEventConverter<T extends AbstractEvent> extends Ab
 
 	@Override
 	protected void marshalEntity(T event, HierarchicalStreamWriter writer, MarshallingContext context) {
-		writeNode(writer, context, "AssetId", event.getAsset().getMobileGUID());
 		writeNode(writer, context, "EventType", event.getType());
 		
 		super.marshalEntity(event, writer, context);
 		
-		writeNode(writer, context, "AssetStatus", event.getAssetStatus());
 		writeNode(writer, context, "Comments", event.getComments());
 		
 		writeAttributes(writer, event);
@@ -49,7 +44,7 @@ public abstract class AbstractEventConverter<T extends AbstractEvent> extends Ab
 		writer.endNode();
 	}
 
-	private void writeAttributes(HierarchicalStreamWriter writer, AbstractEvent<?> event) {
+	private void writeAttributes(HierarchicalStreamWriter writer, AbstractEvent<?,?> event) {
 		writer.startNode("Attributes");
 		for (Map.Entry<String, String> attrib: event.getInfoOptionMap().entrySet()) {
 			writer.startNode("Attribute");

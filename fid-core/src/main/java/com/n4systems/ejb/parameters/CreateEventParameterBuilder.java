@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.n4systems.ejb.impl.CreateEventParameter;
 import com.n4systems.ejb.impl.EventScheduleBundle;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ThingEvent;
@@ -18,7 +19,7 @@ public class CreateEventParameterBuilder {
 	private Date nextEventDate = null;
 	private FileDataContainer proofTestData = null;
 	private List<FileAttachment> uploadedImages = null;
-	private ArrayList<EventScheduleBundle> schedules = new ArrayList<EventScheduleBundle>();
+	private ArrayList<EventScheduleBundle<Asset>> schedules = new ArrayList<EventScheduleBundle<Asset>>();
     private Long scheduleId;
 
     public CreateEventParameterBuilder(ThingEvent event, long userId) {

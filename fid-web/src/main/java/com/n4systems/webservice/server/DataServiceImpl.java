@@ -495,14 +495,14 @@ public class DataServiceImpl implements DataService {
 	public RequestResponse createInspectionSchedule(InspectionScheduleRequest request) throws ServiceException {
 		try {
 			ServiceDTOBeanConverter converter = WsServiceLocator.getServiceDTOBeanConverter(request.getTenantId());
-			Event openEvent = converter.convert(request.getScheduleService(), request.getTenantId());
+            ThingEvent openEvent = converter.convert(request.getScheduleService(), request.getTenantId());
 
 			TenantOnlySecurityFilter securityFilter = new TenantOnlySecurityFilter(request.getTenantId());
 			securityFilter.setShowArchived(true);
 			
 			new InspectionScheduleCreateHandler(new AssetByMobileGuidLoader(securityFilter), 
 					new FilteredIdLoader<Asset>(securityFilter, Asset.class), 
-					new FilteredIdLoader<EventType>(securityFilter, EventType.class), 
+					new FilteredIdLoader<ThingEventType>(securityFilter, ThingEventType.class),
 					new SimpleEventSaver())
 					.createNewInspectionSchedule(openEvent, request.getScheduleService());
 

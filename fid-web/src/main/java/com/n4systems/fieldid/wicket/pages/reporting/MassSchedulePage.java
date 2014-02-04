@@ -14,7 +14,10 @@ import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
-import com.n4systems.model.*;
+import com.n4systems.model.AssetType;
+import com.n4systems.model.Event;
+import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import com.n4systems.model.search.AssetSearchCriteria;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -60,7 +63,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
 
         scheduleSummary = assetService.getAssetScheduleSummary(selectedIds);
         List<AssetType> assetTypesList = getAssetTypeList(scheduleSummary);
-        IModel<List<ThingEventType>> commonEventTypesModel = new CommonEventTypesModel(assetTypesList);
+        IModel<List<? extends EventType>> commonEventTypesModel = new CommonEventTypesModel(assetTypesList);
 
         assetTypesListContainer = new WebMarkupContainer("assetTypesListContainer");
         add(assetTypesListContainer.setOutputMarkupId(true));
@@ -86,7 +89,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
                 final WebMarkupContainer schedulesContainer = createScheduleListView("schedulesContainer", item.getModel());
                 item.add(schedulesContainer);
 
-                IModel<List<ThingEventType>> eventTypesForAssetType = new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(item.getModel(), "assetType"));
+                IModel<List<? extends EventType>> eventTypesForAssetType = new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(item.getModel(), "assetType"));
 
                 final SchedulePicker schedulePicker = createSchedulePicker(item, eventTypesForAssetType, jobsOptions);
                 item.add(new SimpleAjaxButton("openSchedulePickerButton", new FIDLabelModel("label.add_a_schedule")) {
@@ -131,9 +134,9 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         response.renderCSSReference("style/newCss/schedule/mass_schedule.css");
     }
 
-    private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<ThingEventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {
+    private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<? extends EventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {
         final Model<ThingEvent> eventScheduleModel = new Model<ThingEvent>(new ThingEvent());
-        return new SchedulePicker("schedulePicker", eventScheduleModel, eventTypesForAssetType, jobsOptions) {
+        return new SchedulePicker<ThingEvent>("schedulePicker", eventScheduleModel, eventTypesForAssetType, jobsOptions) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 item.getModelObject().getSchedules().add(eventScheduleModel.getObject());
@@ -143,8 +146,8 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         };
     }
 
-    private SchedulePicker createScheduleAllPicker(final IModel<List<ThingEventType>> commonEventTypesModel, final EventJobsForTenantModel jobsOptions) {
-        return new SchedulePicker("scheduleAllPicker", new PropertyModel<ThingEvent>(this, "scheduleForAll"), commonEventTypesModel, jobsOptions) {
+    private SchedulePicker createScheduleAllPicker(final IModel<List<? extends EventType>> commonEventTypesModel, final EventJobsForTenantModel jobsOptions) {
+        return new SchedulePicker<ThingEvent>("scheduleAllPicker", new PropertyModel<ThingEvent>(this, "scheduleForAll"), commonEventTypesModel, jobsOptions) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 for (ScheduleSummaryEntry scheduleSummaryEntry : scheduleSummary) {
@@ -223,4 +226,8 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
         return false;
     }
 
+    @Override
+    protected Label createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("label.mass_schedule"));
+    }
 }

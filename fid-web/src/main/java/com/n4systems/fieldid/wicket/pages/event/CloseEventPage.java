@@ -1,15 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventCreationService;
-import com.n4systems.fieldid.service.event.EventEnum;
-import com.n4systems.fieldid.service.event.EventScheduleService;
-import com.n4systems.fieldid.service.event.EventStatusService;
+import com.n4systems.fieldid.service.event.*;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
@@ -36,11 +34,12 @@ public class CloseEventPage extends FieldIDFrontEndPage {
     private @SpringBean EventStatusService eventStatusService;
     private @SpringBean UserService userService;
     private @SpringBean PersistenceService persistenceService;
-    private  @SpringBean EventScheduleService eventScheduleService;
-    private  @SpringBean EventCreationService eventCreationService;
+    private @SpringBean EventScheduleService eventScheduleService;
+    private @SpringBean ThingEventCreationService eventCreationService;
+    private @SpringBean PlaceEventCreationService placeEventCreationService;
 
     protected IModel<Event> openEventModel;
-    private FieldIDFrontEndPage returnPage;
+    private FieldIDAuthenticatedPage returnPage;
 
     public CloseEventPage(PageParameters params) {
         super(params);
@@ -51,7 +50,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
         add(new ResolveForm("form"));
     }
 
-    public CloseEventPage(PageParameters params, FieldIDFrontEndPage returnPage) {
+    public CloseEventPage(PageParameters params, FieldIDAuthenticatedPage returnPage) {
         this(params);
         this.returnPage = returnPage;
     }
@@ -113,21 +112,26 @@ public class CloseEventPage extends FieldIDFrontEndPage {
         @Override
         protected void onSubmit() {
             Event openEvent = openEventModel.getObject();
-            Asset asset = openEvent.getAsset();
             openEvent.setEventResult(EventResult.VOID);
             openEvent.setWorkflowState(WorkflowState.CLOSED);
             openEvent.setDate(new Date());
             openEvent.setPerformedBy(resolvedBy);
             openEvent.setEventStatus(eventStatus);
             openEvent.setComments(comment);
-            openEvent.setOwner(asset.getOwner());
-            openEvent.setAdvancedLocation(asset.getAdvancedLocation());
-            openEvent.setAssignedTo(AssignedToUpdate.assignAssetToUser(asset.getAssignedUser()));
+            if (openEvent instanceof ThingEvent) {
+                Asset asset = ((ThingEvent)openEvent).getAsset();
+                openEvent.setOwner(asset.getOwner());
+                openEvent.setAdvancedLocation(asset.getAdvancedLocation());
+                openEvent.setAssignedTo(AssignedToUpdate.assignAssetToUser(asset.getAssignedUser()));
+                eventCreationService.assignNextEventInSeries((ThingEvent) openEvent, EventEnum.CLOSE);
+            } else if (openEvent instanceof PlaceEvent) {
+                openEvent.setOwner(((PlaceEvent)openEvent).getPlace());
+                placeEventCreationService.assignNextEventInSeries((PlaceEvent)openEvent, EventEnum.CLOSE);
+            }
 
             persistenceService.update(openEvent);
             FieldIDSession.get().info(getString("message.event_closed"));
 
-            eventCreationService.updateRecurringAssetTypeEvent(openEvent, EventEnum.CLOSE);
 
             if (returnPage!=null) {
                 setResponsePage(returnPage);
@@ -146,6 +150,5 @@ public class CloseEventPage extends FieldIDFrontEndPage {
     private List<EventStatus> getActiveStatuses() {
         return eventStatusService.getActiveStatuses();
     }
-
 
 }

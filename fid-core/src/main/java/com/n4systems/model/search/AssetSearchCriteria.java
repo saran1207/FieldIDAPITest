@@ -2,6 +2,7 @@ package com.n4systems.model.search;
 
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
+import com.n4systems.model.GpsBounds;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
@@ -54,7 +55,31 @@ public class AssetSearchCriteria extends SearchCriteria {
     @JoinTable(name="saved_searches_columns", joinColumns = {@JoinColumn(name="saved_search_id")})
     @Column(name="column_id")
 	private List<String> columns = new ArrayList<String>();
-    
+
+    private @Transient Integer maxItemsBeforeGrouping = 199;
+
+    @Embedded
+    private GpsBounds bounds;
+
+    @Column
+    private Boolean hasGps;
+
+    public GpsBounds getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(GpsBounds bounds) {
+        this.bounds = bounds;
+    }
+
+    public Boolean getHasGps() {
+        return hasGps;
+    }
+
+    public void setHasGps(Boolean hasGps) {
+        this.hasGps = hasGps;
+    }
+
     public String getRfidNumber() {
         return rfidNumber;
     }
@@ -119,16 +144,6 @@ public class AssetSearchCriteria extends SearchCriteria {
         this.assetType = assetType;
     }
 
-
-    ///????? need to resolve this one????
-//    public Date getIdentifiedFromDate() {
-//    	return dateRange.calculateFromDate();
-//    }
-//
-//    public Date getIdentifiedToDate() {
-//		return dateRange.calculateToDate();
-//	}
-
     public User getAssignedTo() {
         return assignedTo;
     }
@@ -151,6 +166,10 @@ public class AssetSearchCriteria extends SearchCriteria {
 
     public void setColumns(List<String> columns) {
         this.columns = columns;
+    }
+
+    public Integer getMaxItemsBeforeGrouping() {
+        return maxItemsBeforeGrouping;
     }
 
     @Transient

@@ -33,7 +33,7 @@ public class EventHelper {
 	 * @param user 
 	 * @return				A List of ordered CriteriaResults.  Returns an empty List if the event's results are empty.
 	 */
-	public List<CriteriaResultWebModel> orderCriteriaResults(AbstractEvent<?> event, SessionUser user) {
+	public List<CriteriaResultWebModel> orderCriteriaResults(AbstractEvent<?,?> event, SessionUser user) {
 		List<CriteriaResult> orderedResults = new ArrayList<CriteriaResult>();
 		
 		// don't go through all the trouble if the event has no results.

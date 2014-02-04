@@ -4,14 +4,13 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.EventType;
-import com.n4systems.model.ThingEventType;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.WorkflowStateCriteria;
+import com.n4systems.model.search.EventSearchType;
 import com.n4systems.model.search.IncludeDueDateRange;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.utils.DateRange;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -24,6 +23,7 @@ import java.util.List;
 public class ReportingFilterPanel extends Panel {
 
     private EventStatusAndDateRangePanel eventStatusAndDateRangePanel;
+    private EventDetailsCriteriaPanel eventDetailsCriteriaPanel;
 
 	public ReportingFilterPanel(final String id, final IModel<EventReportCriteria> model) {
 		super(id,model);
@@ -31,8 +31,8 @@ public class ReportingFilterPanel extends Panel {
         add(new CollapsiblePanel("eventDetailsCriteriaPanel", new StringResourceModel("label.event_details", this, null)) {
             @Override
             protected Panel createContainedPanel(String id) {
-                return new EventDetailsCriteriaPanel(id, model) {
-                    @Override protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, ThingEventType selectedEventType, List<ThingEventType> availableEventTypes) {
+                return eventDetailsCriteriaPanel = new EventDetailsCriteriaPanel(id, model) {
+                    @Override protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<? extends EventType> availableEventTypes) {
                         ReportingFilterPanel.this.onEventTypeOrGroupUpdated(target, selectedEventType, availableEventTypes);
                     }
                 };
@@ -51,6 +51,7 @@ public class ReportingFilterPanel extends Panel {
         });
 
         final PropertyModel<WorkflowStateCriteria> workflowStateModel = new PropertyModel<WorkflowStateCriteria>(model, "workflowState");
+        final PropertyModel<EventSearchType> searchTypeModel = new PropertyModel<EventSearchType>(model, "eventSearchType");
 
         add( new CollapsiblePanel("eventStatusAndDateRangePanel", new StringResourceModel("label.dates_and_times",this,null)) {
             @Override protected Panel createContainedPanel(String id) {
@@ -62,6 +63,11 @@ public class ReportingFilterPanel extends Panel {
         workflowStateSelect.setNullValid(false);
         add(workflowStateSelect);
 
+        FidDropDownChoice<EventSearchType> searchTypeSelect = new FidDropDownChoice<EventSearchType>("searchTypeSelect", searchTypeModel, Arrays.asList(EventSearchType.values()), new ListableLabelChoiceRenderer<EventSearchType>());
+        searchTypeSelect.setNullValid(false);
+        add(searchTypeSelect);
+
+
         workflowStateSelect.add(new OnChangeAjaxBehavior() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
@@ -70,8 +76,19 @@ public class ReportingFilterPanel extends Panel {
             }
         });
 
-        add( new CollapsiblePanel("ownershipCriteriaPanel", new StringResourceModel("label.ownership",this,null)) {
-            @Override protected Panel createContainedPanel(String id) {
+        searchTypeSelect.add(new OnChangeAjaxBehavior() {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                model.getObject().setEventTypeGroup(null);
+                model.getObject().setEventType(null);
+                onEventTypeOrGroupUpdated(target, null, eventDetailsCriteriaPanel.getAvailableEventTypesModel().getObject());
+                target.add(eventDetailsCriteriaPanel);
+            }
+        });
+
+        add(new CollapsiblePanel("ownershipCriteriaPanel", new StringResourceModel("label.ownership", this, null)) {
+            @Override
+            protected Panel createContainedPanel(String id) {
                 return new OwnershipCriteriaPanel(id, model);
             }
         });
@@ -116,7 +133,7 @@ public class ReportingFilterPanel extends Panel {
         };
     }
 
-    protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, ThingEventType selectedEventType, List<ThingEventType> availableEventTypes) {}
+    protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<? extends EventType> availableEventTypes) {}
 
     protected void onAssetTypeOrGroupUpdated(AjaxRequestTarget target, AssetType selectedAssetType, List<AssetType> availableAssetTypes) {}
 

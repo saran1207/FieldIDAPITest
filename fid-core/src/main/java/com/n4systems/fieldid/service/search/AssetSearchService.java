@@ -7,26 +7,29 @@ import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.user.User;
+import com.n4systems.services.reporting.AssetSearchRecord;
+import com.n4systems.services.search.MappedResults;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.terms.GpsBoundsTerm;
+import com.n4systems.util.persistence.search.terms.HasGpsTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset> {
-
-
+public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset, AssetSearchRecord> {
 
     public AssetSearchService() {
         super(Asset.class);
     }
 
     @Override
-    protected void addSearchTerms(AssetSearchCriteria criteriaModel, List<SearchTermDefiner> search) {
+    protected void addSearchTerms(AssetSearchCriteria criteriaModel, List<SearchTermDefiner> search, boolean includeGps) {
         User user = getCurrentUser();
         TimeZone timeZone = user.getTimeZone();
 
@@ -47,11 +50,25 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
 
 		addPredefinedLocationTerm(search, criteriaModel);
 		addAssignedUserTerm(search, criteriaModel);
+
+        addHasGpsTerm(search, criteriaModel);
+        if (includeGps) {
+            addGpsLocationTerm(search, criteriaModel);
+        }
+    }
+
+    private void addHasGpsTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
+        if(criteriaModel.getHasGps() != null) {
+            search.add(new HasGpsTerm(criteriaModel.getHasGps()));
+        }
+    }
+
+    private void addGpsLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
+        search.add(new GpsBoundsTerm("gpsLocation",criteriaModel.getBounds()));
     }
 
 
-
-	private void addPredefinedLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
+    private void addPredefinedLocationTerm(List<SearchTermDefiner> search, AssetSearchCriteria criteriaModel) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
         if (predefLocationId != null) {
 			search.add(new PredefinedLocationSearchTerm("preLocSearchId", predefLocationId));
@@ -123,5 +140,25 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
         }
         return super.convertResults(criteriaModel, results);
     }
+
+    @Transactional(readOnly = true)
+    public MappedResults<AssetSearchRecord> performMapSearch(AssetSearchCriteria criteriaModel) {
+        QueryBuilder<Asset> query = createBaseMappedSearchQueryBuilder(criteriaModel);
+
+        int limit = criteriaModel.getMaxItemsBeforeGrouping() + 1;
+        query.setLimit(limit);
+        List<Asset> queryResults = persistenceService.findAll(query);
+        MappedResults<AssetSearchRecord> searchResult = new MappedResults<AssetSearchRecord>();
+        if (queryResults.size()==limit) {
+            searchResult.setGroupedResult(queryResults);
+        } else {
+            for (Asset asset:queryResults) {
+                searchResult.add(new AssetSearchRecord(asset));
+            }
+        }
+
+        return searchResult;
+    }
+
 
 }

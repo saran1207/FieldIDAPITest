@@ -1,6 +1,6 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-
-    <table class="list">
+    <table>
         <tr>
             <th><wicket:message key="label.priority_code" /></th>
             <th><wicket:message key="label.created" /></th>
@@ -16,9 +16,10 @@
             <td><span wicket:enclosure="modifiedBy"><span wicket:id="modifiedBy"/>, </span><span wicket:id="lastModified"/></td>
             <td><span wicket:id="autoSchedule"/></td>
             <td>
-                <a class="mattButton tipsy-tooltip" wicket:id="archive"><img src="/fieldid/images/archive.png"/></a>
-                <a class="mattButton tipsy-tooltip" wicket:id="edit"><img src="/fieldid/images/edit.png"/></a>
+                <a class="btn-link" wicket:id="edit"><wicket:message key="label.edit"/></a>
+                <a class="btn-link" wicket:id="archive"><wicket:message key="label.archive"/></a>
             </td>
         </tr>
     </table>
 </wicket:panel>
+</html>

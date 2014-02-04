@@ -4,14 +4,15 @@ function showDropDown() {
     savedItemsDropBoxShown = true;
     jQuery('#mySavedItemsBox').load("/fieldid/w/savedItems", function() { jQuery(this).slideDown(80) } );
     var boxSelector = "#mySavedItemsBox";
-    var linkSelector = "#pageActions";
-    var withinSelector = "#pageHeader";
+    var linkSelector = ".js-page-actions";
+    var withinSelector = ".js-page-header";
     if (typeof(Prototype) == 'object') {
         boxSelector = 'mySavedItemsBox';
         linkSelector = 'pageActions';
         withinSelector = "pageHeader";
     }
-    translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 70, 673);
+    //translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 70, 673);
+    translateWithin($(boxSelector), $(linkSelector), $(withinSelector), 30);
 }
 
 function hideDropDown() {
@@ -32,4 +33,22 @@ function listenForSavedItemsClick() {
     jQuery('#mySavedItemsLink').parents('#pageActions').mouseleave(hideDropDown);
 }
 
-jQuery(document).ready(function() { listenForSavedItemsClick(); });
+function listenForSavedItemsHover() {
+    jQuery("#mySavedItemsLink").hover(
+        function() {
+            showDropDown(); 
+        }, 
+        function() {
+            jQuery(this).parents('#pageActions').mouseleave(hideDropDown);
+
+            // new template/framework header
+            jQuery(this).parents('.js-nav-user').mouseleave(hideDropDown);
+        }
+    );
+}
+
+//jQuery(document).ready(function() { listenForSavedItemsClick(); });
+jQuery(document).ready(function() { listenForSavedItemsHover(); });
+
+
+

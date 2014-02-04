@@ -1,6 +1,8 @@
 package com.n4systems.model.orgs;
 
 import com.n4systems.model.AddressInfo;
+import com.n4systems.model.Contact;
+import com.n4systems.model.PlaceEventType;
 import com.n4systems.model.api.*;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
@@ -11,12 +13,14 @@ import com.n4systems.model.utils.GlobalID;
 import com.n4systems.persistence.localization.Localized;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "org_base")
 @Inheritance(strategy = InheritanceType.JOINED)
 @Localized(ignore =true)
-public abstract class BaseOrg extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable {
+public abstract class BaseOrg extends ArchivableEntityWithTenant implements NamedEntity, Listable<Long>, Comparable<BaseOrg>, NetworkEntity<BaseOrg>, Exportable, Archivable, HasOwner {
 
 	private static final long serialVersionUID = 1L;
 	public static final String SECONDARY_ID_FILTER_PATH = "secondaryOrg.id";
@@ -26,7 +30,30 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	public static SecurityDefiner createSecurityDefiner() {
 		return new SecurityDefiner("tenant.id", "", null, "state");
 	}
-	
+
+    @Column(name="code")
+    private String code;
+
+    @ManyToMany(fetch= FetchType.LAZY, cascade= CascadeType.ALL)
+    @JoinTable(name="orgs_place_event_types", joinColumns = @JoinColumn(name="org_id"), inverseJoinColumns = @JoinColumn(name="place_event_type_id"))
+    private Set<PlaceEventType> eventTypes = new HashSet<PlaceEventType>();
+
+    // NOTE : for later?
+/*    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "image_id")
+    private PlaceAttachment image;
+
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "report_image_id")
+    private PlaceAttachment reportImage;*/
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="name", column = @Column(name="contactname")),
+            @AttributeOverride(name="email", column = @Column(name="contactemail"))
+    })
+    private Contact contact = new Contact();
+
 	@Column(name="name", nullable = false, length = 255)
 	private String name;
 
@@ -130,6 +157,19 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
 	public void setAddressInfo(AddressInfo addressInfo) {
 		this.addressInfo = addressInfo;
 	}
+
+    public void copyAddressInfo(AddressInfo addressInfo) {
+        this.addressInfo.setCountry(addressInfo.getCountry());
+        this.addressInfo.setFax1(addressInfo.getFax1());
+        this.addressInfo.setGpsLocation(addressInfo.getGpsLocation());
+        this.addressInfo.setPhone1(addressInfo.getPhone1());
+        this.addressInfo.setPhone2(addressInfo.getPhone2());
+        this.addressInfo.setState(addressInfo.getState());
+        this.addressInfo.setStreetAddress(addressInfo.getStreetAddress());
+        this.addressInfo.setZip(addressInfo.getZip());
+        this.addressInfo.setCity(addressInfo.getCity());
+        this.addressInfo.setFormattedAddress(addressInfo.getFormattedAddress());
+    }
 
 	@Override
 	public void setGlobalId(String globalId) {
@@ -281,4 +321,57 @@ public abstract class BaseOrg extends ArchivableEntityWithTenant implements Name
         return false;
     }
 
+    public Set<PlaceEventType> getEventTypes() {
+        return eventTypes;
+    }
+
+    public void setEventTypes(Set<PlaceEventType> eventTypes) {
+        this.eventTypes = eventTypes;
+    }
+
+
+    @AllowSafetyNetworkAccess
+    public Contact getContact() {
+        return contact;
+    }
+
+    public void setContact(Contact contact) {
+        this.contact = contact;
+    }
+
+/*    public PlaceAttachment getImage() {
+        return image;
+    }
+
+    public void setImage(PlaceAttachment image) {
+        this.image = image;
+    }*/
+
+    @Override
+    public BaseOrg getOwner() {
+        return this;
+    }
+
+    @Override
+    public void setOwner(BaseOrg owner) {
+        throw new UnsupportedOperationException("Can't set owner");
+    }
+
+    @AllowSafetyNetworkAccess
+    @DenyReadOnlyUsersAccess
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+/*    public PlaceAttachment getReportImage() {
+        return reportImage;
+    }
+
+    public void setReportImage(PlaceAttachment reportImage) {
+        this.reportImage = reportImage;
+    }*/
 }

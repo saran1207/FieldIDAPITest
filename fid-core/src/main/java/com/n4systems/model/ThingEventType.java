@@ -13,7 +13,7 @@ import java.util.Set;
 @Entity
 @Table(name = "thing_event_types")
 @PrimaryKeyJoinColumn(name="id")
-public class ThingEventType extends EventType implements SecurityEnhanced<ThingEventType> {
+public class ThingEventType extends EventType<ThingEventType> {
 
     public ThingEventType() {}
 
@@ -23,7 +23,7 @@ public class ThingEventType extends EventType implements SecurityEnhanced<ThingE
 
     @ElementCollection(fetch= FetchType.LAZY)
     @Enumerated(EnumType.STRING)
-    @JoinTable(name="eventtypes_supportedprooftests", joinColumns = {@JoinColumn(name="eventtypes_id")})
+    @JoinTable(name="thing_event_types_supported_proof_tests", joinColumns = {@JoinColumn(name="thing_event_id")})
     @Column(name="element")
     private Set<ProofTestType> supportedProofTests = new HashSet<ProofTestType>();
 
@@ -57,4 +57,8 @@ public class ThingEventType extends EventType implements SecurityEnhanced<ThingE
         return EntitySecurityEnhancer.enhanceEntity(this, level);
     }
 
+    @Override
+    public boolean isThingEventType() {
+        return true;
+    }
 }

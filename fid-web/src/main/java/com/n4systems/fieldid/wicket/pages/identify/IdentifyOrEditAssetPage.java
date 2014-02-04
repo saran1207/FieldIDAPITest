@@ -219,6 +219,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             setChildFormsToMultipart(locationPicker);
             add(locationPicker);
 
+            locationPicker.setOwner(assetModel.getObject().getOwner());
+
             OrgLocationPicker ownerPicker = new OrgLocationPicker("ownerPicker", new PropertyModel(assetModel,"owner")) {
                 @Override protected void onChanged(AjaxRequestTarget target) {
                     locationPicker.setOwner(getOwner());
@@ -239,7 +241,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             nonIntegrationOrderContainer.setVisible(!primaryOrgForTenant.hasExtendedFeature(ExtendedFeature.Integration));
             nonIntegrationOrderContainer.add(new TextField<String>("orderNumber", ProxyModel.of(assetModel, on(Asset.class).getNonIntergrationOrderNumber())));
 
-            add(new DropDownChoice<AssetStatus>("assetStatusSelect", ProxyModel.of(assetModel, on(Asset.class).getAssetStatus()), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()));
+            add(new DropDownChoice<AssetStatus>("assetStatusSelect", ProxyModel.of(assetModel, on(Asset.class).getAssetStatus()), new AssetStatusesForTenantModel(), new ListableChoiceRenderer<AssetStatus>()).setNullValid(true));
 
             add(new Comment("comments", ProxyModel.of(assetModel, on(Asset.class).getComments())));
 
@@ -493,7 +495,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     }
 
     private SchedulePicker createSchedulePicker(IModel<AssetType> assetTypeModel) {
-        return new SchedulePicker("schedulePicker", new PropertyModel<ThingEvent>(this, "currentEventSchedule"), new EventTypesForAssetTypeModel(assetTypeModel), new EventJobsForTenantModel()) {
+        return new SchedulePicker<ThingEvent>("schedulePicker", new PropertyModel<ThingEvent>(this, "currentEventSchedule"), new EventTypesForAssetTypeModel(assetTypeModel), new EventJobsForTenantModel()) {
             {
                 setWindowClosedCallback(new WindowClosedCallback() {
                     @Override

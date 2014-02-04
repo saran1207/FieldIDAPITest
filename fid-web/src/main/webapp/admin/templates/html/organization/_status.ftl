@@ -6,9 +6,11 @@
 	<#else> 
 		<@s.hidden name="tenant.disabled" value="true"/>
 	</#if>
-	<label class="bold">Status: </label>${tenant.disabled?string("Inactive", "Active")} 
+	<label class="bold">Status: </label>${tenant.disabled?string("Inactive", "Active")}
+	<#if superUser>
 	| 
 	<a href="javascript:void(0);" onClick="updateStatus();">
 		<#if tenant.disabled>Activate<#else>Make Inactive</#if>
 	</a>
+	</#if>
 </@s.form>

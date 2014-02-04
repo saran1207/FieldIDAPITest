@@ -1,22 +1,22 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-    <div class="header">
+    <div wicket:id="priorityCodeList"/>
+    <div wicket:id="priorityCodeArchivedList"/>
 
-        <form class="openForm" wicket:id="openForm">
-            <a class="mattButton blueButton" wicket:id="addPriorityCodeButton"><wicket:message key="label.add_priority_code"/></a>
-        </form>
+    <div wicket:id="priorityCodeModalWindow"/>
 
-        <div class="mattBar">
-            <a class="mattButtonLeft" wicket:id="viewAll"><wicket:message key="label.active"/></a>
-            <a class="mattButtonRight" wicket:id="viewArchived"><wicket:message key="label.archived"/></a>
+    <wicket:fragment wicket:id="priorityCodesActionGroup">
+        <div class="button-group">
+            <a class="btn-secondary selected" wicket:id="viewAll"><wicket:message key="label.active"/></a>
+            <a class="btn-secondary" wicket:id="viewArchived"><wicket:message key="label.archived"/></a>
         </div>
+        <a class="btn-primary" wicket:id="addPriorityCodeButton"><wicket:message key="label.add_priority_code"/></a>
+    </wicket:fragment>
 
-    </div>
-
-    <div class="pageSection" wicket:id="priorityCodeList"/>
-    <div class="pageSection" wicket:id="priorityCodeArchivedList"/>
-
-    <div wicket:id="priorityCodeModalWindow">
-    </div>
+    <wicket:fragment wicket:id="priorityCodesTitleLabel">
+        <wicket:message key="label.priority_codes"/>&nbsp;<img class="tooltip tipsy-tooltip" wicket:id="tooltip"/>
+    </wicket:fragment>
 
 </wicket:extend>
+</html>

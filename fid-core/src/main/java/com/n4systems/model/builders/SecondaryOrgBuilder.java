@@ -1,16 +1,22 @@
 package com.n4systems.model.builders;
 
+import com.n4systems.model.AddressInfo;
+import com.n4systems.model.Contact;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.orgs.SecondaryOrg;
-import static com.n4systems.model.builders.PrimaryOrgBuilder.*;
+
+import static com.n4systems.model.builders.PrimaryOrgBuilder.aPrimaryOrg;
 
 
 public class SecondaryOrgBuilder extends BaseBuilder<SecondaryOrg> {
 
 	private String name;
 	private PrimaryOrg primaryOrg;
-	
+    private String code;
+    private AddressInfo address;
+    private Contact contact;
+
 	public static SecondaryOrgBuilder aSecondaryOrg() {
 		return new SecondaryOrgBuilder(null, "Some Org", aPrimaryOrg().build());
 	}

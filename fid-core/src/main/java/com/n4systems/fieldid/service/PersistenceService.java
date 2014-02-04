@@ -3,7 +3,6 @@ package com.n4systems.fieldid.service;
 import com.google.common.base.Preconditions;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.BaseEntity;
-import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.api.NamedEntity;
 import com.n4systems.model.api.Saveable;
@@ -131,9 +130,14 @@ public class PersistenceService extends FieldIdService {
 
     @Transactional(readOnly = true)
 	public <T> List<T> findAll(QueryBuilder<T> queryBuilder, int page, int pageSize) throws InvalidQueryException {
-        Query query = queryBuilder.createQuery(em).setFirstResult(page*pageSize).setMaxResults(pageSize);
-        return query.getResultList();
+        return findAllPaginated(queryBuilder, page*pageSize, pageSize);
     }
+
+	@Transactional(readOnly = true)
+	public <T> List<T> findAllPaginated(QueryBuilder<T> queryBuilder, int first, int count) throws InvalidQueryException {
+		Query query = queryBuilder.createQuery(em).setFirstResult(first).setMaxResults(count);
+		return query.getResultList();
+	}
 
 	@Transactional
 	public <T> List<T> findAllNonSecure(Class<T> clazz) throws InvalidQueryException {

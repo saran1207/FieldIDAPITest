@@ -2,6 +2,8 @@ package com.n4systems.model.safetynetwork;
 
 import javax.persistence.EntityManager;
 
+import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.asset.AssetWithNetworkIdExistsLoader;
@@ -22,9 +24,9 @@ public class SafetyNetworkRegisteredAssetEventLoader extends SafetyNetworkEventL
 	}
 
 	@Override
-	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Event event) {
+	protected boolean accessAllowed(EntityManager em, SecurityFilter filter, AbstractEvent<?,Asset> event) {
 		// Access is allowed to this event if we have an asset that is linked to its asset
-		assetExistsLoader.setNetworkId(event.getAsset().getNetworkId());
+		assetExistsLoader.setNetworkId(event.getTarget().getNetworkId());
 		
 		boolean accessAllowed = assetExistsLoader.load(em, filter);
 		return accessAllowed;

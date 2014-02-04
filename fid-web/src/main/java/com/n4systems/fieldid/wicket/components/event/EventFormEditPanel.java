@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.event;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.Event;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -23,7 +24,7 @@ public class EventFormEditPanel extends Panel {
     private int totalSections;
     private IModel<List<AbstractEvent.SectionResults>> results;
 
-    public EventFormEditPanel(String id, final IModel<List<AbstractEvent.SectionResults>> results) {
+    public EventFormEditPanel(String id, final Class<? extends Event> eventClass, final IModel<List<AbstractEvent.SectionResults>> results) {
         super(id);
         this.results = results;
         setOutputMarkupId(true);
@@ -47,7 +48,7 @@ public class EventFormEditPanel extends Panel {
                 };
 
                 sectionContainer.add(new Label("sectionName", new PropertyModel<String>(item.getModel(), "section.title")));
-                sectionContainer.add(new CriteriaSectionEditPanel("criteriaEditPanel", new PropertyModel<List<CriteriaResult>>(item.getModel(), "results")));
+                sectionContainer.add(new CriteriaSectionEditPanel("criteriaEditPanel", eventClass, new PropertyModel<List<CriteriaResult>>(item.getModel(), "results")));
                 
                 item.add(sectionContainer);
             }

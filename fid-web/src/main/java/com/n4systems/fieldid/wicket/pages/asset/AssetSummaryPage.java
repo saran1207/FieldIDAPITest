@@ -29,7 +29,6 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -99,7 +98,7 @@ public class AssetSummaryPage extends AssetPage {
 
 
         if(asset.getGpsLocation() != null) {
-            add(new GoogleMap("map").addLocation(asset.getGpsLocation().getLatitude().doubleValue(), asset.getGpsLocation().getLongitude().doubleValue()));
+            add(new GoogleMap("map",asset));
         } else {
             WebMarkupContainer map;
             add(map = new WebMarkupContainer("map"));

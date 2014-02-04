@@ -1,14 +1,16 @@
 package com.n4systems.model;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.persistence.Embeddable;
-
 @Embeddable
-public class GpsLocation implements Serializable{
+public class GpsLocation implements Serializable {
 
-	private BigDecimal latitude = null;    
+    @Column(name="latitude")
+	private BigDecimal latitude = null;
+    @Column(name="longitude")
 	private BigDecimal longitude = null;
 	
 	public GpsLocation(){}
@@ -17,6 +19,10 @@ public class GpsLocation implements Serializable{
 		setLatitude(latitude);
 		setLongitude(longitude);
 	}
+
+    public boolean isEmpty() {
+        return latitude==null && longitude==null;
+    }
 	
 	// CAVEAT : be careful about changing this...javascript code makes assumptions.
 	@Override

@@ -46,7 +46,11 @@
     <filter-mapping>
         <filter-name>session-in-view</filter-name>
         <url-pattern>/w/*</url-pattern>
-        <url-pattern>/eventTypes.action</url-pattern>
+        <!--<url-pattern>/eventTypes.action</url-pattern>-->
+        <!--<url-pattern>/eventType.action</url-pattern>-->
+        <!--<url-pattern>/eventTypeEdit.action</url-pattern>-->
+        <!--<url-pattern>/eventTypeUpdate.action</url-pattern>-->
+        <url-pattern>/event.action</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>log-exceptions</filter-name>
@@ -84,6 +88,9 @@
 	<listener>
 		<listener-class>com.n4systems.fieldid.servlets.UnexportRMIOnShutdownListener</listener-class>
 	</listener>
+    <listener>
+        <listener-class>com.n4systems.fieldid.servlets.ConcurrentLoginSessionListener</listener-class>
+    </listener>
 
     <servlet>
         <servlet-name>imageUploadHandler</servlet-name>

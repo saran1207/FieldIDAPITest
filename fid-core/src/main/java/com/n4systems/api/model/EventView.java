@@ -25,7 +25,7 @@ public class EventView extends ExternalModelView {
 	@SerializableField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
 	private final String[] owners = new String[3];
 
-    @SerializableField(title = "", order = 450, handler = NewOwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
+    @SerializableField(title = "", order = 450, handler = NewOwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerIsBlankOrExistsValidator.class })
     private final String[] newOwners = new String[3];
 
 	@SerializableField(title = "Performed By", order = 500, validators = { NotNullValidator.class, FullNameUserValidator.class })

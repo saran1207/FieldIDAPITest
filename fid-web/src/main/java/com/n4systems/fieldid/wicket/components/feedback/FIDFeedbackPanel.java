@@ -33,10 +33,4 @@ public class FIDFeedbackPanel extends Panel {
         });
         add(feedbackPanelContainer);
     }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.renderCSSReference("style/newCss/layout/feedback_errors.css");
-    }
 }

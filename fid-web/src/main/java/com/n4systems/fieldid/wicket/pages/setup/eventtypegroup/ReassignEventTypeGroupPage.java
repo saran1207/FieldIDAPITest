@@ -9,7 +9,6 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.ThingEventType;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -48,8 +47,8 @@ public class ReassignEventTypeGroupPage extends FieldIDFrontEndPage{
             @Override
             protected void onSubmit() {
                 EventTypeGroup newGroup = newEventTypeGroupModel.getObject();
-                List<ThingEventType> eventTypes = eventTypeService.getEventTypesIncludingActions(eventTypeGroupId);
-                for (ThingEventType type: eventTypes) {
+                List<EventType> eventTypes = eventTypeService.getAllEventTypes(eventTypeGroupId);
+                for (EventType type: eventTypes) {
                     type.setGroup(newGroup);
                     eventTypeService.update(type, getCurrentUser());
                 }

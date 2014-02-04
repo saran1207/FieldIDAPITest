@@ -2,6 +2,12 @@ ${action.setPageType('event_type', 'list')!}
 
 <head>
 	<@n4.includeStyle href="listFilter" type="page"/>
+    <@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+    <style>
+        #typeFilter {
+            width:80px;
+        }
+    </style>
 </head>
 
 <div class="listFilter quickForm" >
@@ -12,6 +18,7 @@ ${action.setPageType('event_type', 'list')!}
 	</div>
 	<@s.form id="listFilterForm" method="get">
 		<@s.textfield key="label.name" name="nameFilter" id="nameFilter" labelposition="left" />
+        <@s.select key="label.type" name="typeFilter" id="typeFilter" list="types" headerKey="" headerValue="All" labelposition="left"/>
 		<@s.select key="label.eventtypegroup" name="groupFilter" id="groupFilter" list="eventTypeGroups" listKey="id" listValue="name" headerKey="" headerValue="All" labelposition="left"/>
 		<div class="formAction filterAction">
 			<@s.submit key="hbutton.filter" />
@@ -37,7 +44,15 @@ ${action.setPageType('event_type', 'list')!}
 			<tr>
 				<td><a href="<@s.url action="eventType" uniqueID="${eventType.id}" />">${eventType.name}</a></td>
 				<td>
-					<#if eventType.master > ${action.getText('label.master')} <#else> ${action.getText('label.standard')} </#if>
+					<#if eventType.thingEventType >
+                        <@s.text name="label.asset_event"/>
+					</#if>
+                    <#if eventType.placeEventType >
+                        <@s.text name="label.place_event"/>
+                    </#if>
+                    <#if eventType.actionEventType >
+                        <@s.text name="label.action"/>
+                    </#if>
 				</td>
 				<td><#if eventType.group?exists><a href="<@s.url action="eventTypeGroup" uniqueID="${eventType.group.id}" />">${eventType.group.name!}</a></#if></td>
 				<td><#if eventType.createdBy?exists>${eventType.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(eventType.created)}</td>

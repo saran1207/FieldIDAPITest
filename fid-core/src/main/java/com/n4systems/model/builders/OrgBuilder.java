@@ -3,16 +3,11 @@ package com.n4systems.model.builders;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.Tenant;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.orgs.CustomerOrg;
-import com.n4systems.model.orgs.DivisionOrg;
-import com.n4systems.model.orgs.ExternalOrg;
-import com.n4systems.model.orgs.InternalOrg;
-import com.n4systems.model.orgs.PrimaryOrg;
-import com.n4systems.model.orgs.SecondaryOrg;
+import com.n4systems.model.orgs.*;
 
 public class OrgBuilder extends BaseBuilder<BaseOrg> {
-	private enum OrgType { PRIMARY, SECONDARY, CUSTOMER, DIVISION }
+
+    private enum OrgType { PRIMARY, SECONDARY, CUSTOMER, DIVISION }
 
 	private String name;
 	private Tenant tenant;
@@ -21,27 +16,28 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	private String code;
 	private Contact contact;
 	private BaseOrg parent;
-	
+    private String notes;
+
 	public static OrgBuilder aPrimaryOrg() {
-		return new OrgBuilder(OrgType.PRIMARY, TenantBuilder.aTenant().build(), "first_primary", null, null, null, null);
+		return new OrgBuilder(OrgType.PRIMARY, TenantBuilder.aTenant().build(), "first_primary", null, null, null, null, null);
 	}
 	
 	public static OrgBuilder aSecondaryOrg() {
 		BaseOrg parent = aPrimaryOrg().build();
-		return new OrgBuilder(OrgType.SECONDARY, parent.getTenant(), "first_secondary", null, null, null, parent);
+		return new OrgBuilder(OrgType.SECONDARY, parent.getTenant(), "first_secondary", null, null, null, parent, null);
 	}
 	
 	public static OrgBuilder aCustomerOrg() {
 		BaseOrg parent = aPrimaryOrg().build();
-		return new OrgBuilder(OrgType.CUSTOMER, parent.getTenant(), "first_customer", null, "fcust", null, parent);
+		return new OrgBuilder(OrgType.CUSTOMER, parent.getTenant(), "first_customer", null, "fcust", null, parent, null);
 	}
 	
 	public static OrgBuilder aDivisionOrg() {
 		BaseOrg parent = aCustomerOrg().build();
-		return new OrgBuilder(OrgType.DIVISION, parent.getTenant(), "first_division", null, "fdiv", null, parent);
+		return new OrgBuilder(OrgType.DIVISION, parent.getTenant(), "first_division", null, "fdiv", null, parent, null);
 	}
 	
-	public OrgBuilder(OrgType type, Tenant tenant, String name, AddressInfo addressInfo, String code, Contact contact, BaseOrg parent) {
+	public OrgBuilder(OrgType type, Tenant tenant, String name, AddressInfo addressInfo, String code, Contact contact, BaseOrg parent, String notes) {
 		this.type = type;
 		this.tenant = tenant;
 		this.name = name;
@@ -52,30 +48,47 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	}
 	
 	public OrgBuilder withParent(BaseOrg parent) {
-		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent));
+		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
 	}
 	
 	public OrgBuilder withName(String name) {
-		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent));
+		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
 	}
 	
 	public OrgBuilder withTestAddress() {
-		return makeBuilder(new OrgBuilder(type, tenant, name, AddressInfoBuilder.anAddressWithTestData().build(), code, contact, parent));
+		return makeBuilder(new OrgBuilder(type, tenant, name, AddressInfoBuilder.anAddressWithTestData().build(), code, contact, parent, null));
 	}
 	
 	public OrgBuilder withTestContact() {
-		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent));
+		return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent, null));
 	}
 
     public OrgBuilder tenant(Tenant tenant) {
-        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().build(), parent));
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
     }
 
-	public OrgBuilder withAllTestData() {
+    public OrgBuilder withAddress(AddressInfo addressInfo) {
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
+    }
+
+    public OrgBuilder withCode(String code) {
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, null));
+    }
+
+    public OrgBuilder withAllTestData() {
 		return withTestContact().withTestAddress();
 	}
-	
-	@Override
+
+    public OrgBuilder withContact(String contactName, String email) {
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, ContactBuilder.aContact().withName(contactName).withEmail(email).build(), parent, null));
+    }
+
+    public OrgBuilder withNotes(String notes) {
+        return makeBuilder(new OrgBuilder(type, tenant, name, addressInfo, code, contact, parent, notes));
+    }
+
+
+    @Override
 	public BaseOrg createObject() {
 		BaseOrg org = null;
 		
@@ -101,6 +114,9 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 		org.setId(getId());
 		org.setName(name);
 		org.setAddressInfo(addressInfo);
+        org.setCode(code);
+        org.setContact(contact);
+        org.setNotes(notes);
 	}
 	
 	public PrimaryOrg buildPrimary() {
@@ -122,8 +138,6 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	public CustomerOrg buildCustomer() {
 		CustomerOrg org = new CustomerOrg();
 		build(org);
-		org.setCode(code);
-		org.setContact(contact);
 		org.setParent((InternalOrg)parent);
 		org.setTenant(parent.getTenant());
 		return org;
@@ -132,8 +146,6 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 	public DivisionOrg buildDivision() {
 		DivisionOrg org = new DivisionOrg();
 		build(org);
-		org.setCode(code);
-		org.setContact(contact);
 		org.setParent((CustomerOrg)parent);
 		org.setTenant(parent.getTenant());
 		return org;
@@ -151,5 +163,6 @@ public class OrgBuilder extends BaseBuilder<BaseOrg> {
 		this.addressInfo = addressInfo;
 		return this;
 	}
-	
+
+
 }

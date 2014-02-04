@@ -8,9 +8,11 @@
 			<@s.hidden name="tenant.settings.secondaryOrgsEnabled" value="true" />
 		</#if>
 
+		<#if superUser>
 		<a href="javascript:void(0);" onClick="saveSecondaryOrgs();">
 			<#if secondaryOrgsEnabled>on<#else>off</#if>
 		</a>
+		</#if>
 	</@s.form>
 </td>
 <td class="featureLabel"><@s.text name="label.secondaryOrgs"/></td>

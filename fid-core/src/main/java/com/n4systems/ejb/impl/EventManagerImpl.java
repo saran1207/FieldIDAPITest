@@ -96,6 +96,9 @@ public class EventManagerImpl implements EventManager {
 				// now we need to postfetch the rec/def lists on the results. We
 				// can't do this above since the results themselvs are a list.
 				persistenceManager.postFetchFields(event.getResults(), "recommendations", "deficiencies");
+                if (event.getType().isThingEventType()) {
+                    persistenceManager.postFetchFields(event, Event.THING_TYPE_PATHS);
+                }
 
 			}
 
@@ -136,10 +139,12 @@ public class EventManagerImpl implements EventManager {
 
 
 
-	public ThingEvent retireEvent(ThingEvent event, Long userId) {
+	public Event retireEvent(Event event, Long userId) {
 		event.retireEntity();
 		event = persistenceManager.update(event, userId);
-		event.setAsset(persistenceManager.update(event.getAsset()));
+        if (event instanceof ThingEvent) {
+            ((ThingEvent)event).setAsset(persistenceManager.update(((ThingEvent)event).getAsset()));
+        }
         persistenceManager.update(event);
 		return event;
 	}

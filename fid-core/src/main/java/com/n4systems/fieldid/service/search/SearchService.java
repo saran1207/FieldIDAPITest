@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.ExtendedFeature;
+import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.parents.EntityWithTenant;
@@ -13,6 +14,7 @@ import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.services.date.DateService;
+import com.n4systems.services.search.MappedResults;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.QueryFilter;
 import com.n4systems.util.persistence.WhereClause;
@@ -28,7 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public abstract class SearchService<T extends SearchCriteria, M extends EntityWithTenant & NetworkEntity> extends FieldIdPersistenceService {
+public abstract class SearchService<T extends SearchCriteria, M extends EntityWithTenant & NetworkEntity, S extends HasGpsLocation> extends FieldIdPersistenceService {
 
 	public @Autowired OrgService orgService;
     protected @Autowired DateService dateService;
@@ -68,7 +70,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         List<M> entities;
         Integer totalResultCount;
         if (selectedOnly) {
-            entities = findItemsInSelection(criteriaModel);
+            entities = findItemsInSelection(criteriaModel, pageNumber, pageSize);
             totalResultCount = criteriaModel.getSelection().getNumSelectedIds();
         } else {
             SearchResult<M> eventSearchResult = performRegularSearch(criteriaModel, pageNumber, pageSize);
@@ -83,13 +85,25 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         return new PageHolder<K>(pageResults, totalResultCount);
     }
 
-    private List<M> findItemsInSelection(T criteriaModel) {
-        List<M> items = new ArrayList<M>(criteriaModel.getSelection().getNumSelectedIds());
-        for (Long id : criteriaModel.getSelection().getSelectedIds()) {
+    // TODO: This is redundant and needs to be refactored back to the TextOrFilterSearchService only.
+    private List<M> findItemsInSelection(T criteriaModel, int pageNumber, int pageSize) {
+
+        int beginIndex = pageNumber * pageSize;
+        List<Long> selectedIdList = criteriaModel.getSelection().getSelectedIds();
+        List<Long> currentPageOfSelectedIds = selectedIdList.subList(beginIndex, Math.min(selectedIdList.size(), beginIndex + pageSize));
+
+
+        List<M> items = new ArrayList<M>(pageSize);
+        for (Long id : currentPageOfSelectedIds) {
             items.add(persistenceService.find(searchClass, id));
         }
 
         return items;
+    }
+
+    @Transactional(readOnly = true)
+    public SearchResult<M> performRegularSearch(T criteriaModel) {
+        return performFilterSearch(criteriaModel, null, null);
     }
 
     @Transactional(readOnly = true)
@@ -114,7 +128,12 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         SearchResult<M> searchResult = new SearchResult<M>();
         searchResult.setTotalResultCount(totalResultCount);
 
-        List<M> queryResults = persistenceService.findAll(searchBuilder, pageNumber, pageSize);
+        List<M> queryResults;
+        if (pageNumber!=null && pageSize!=null) {
+            queryResults = persistenceService.findAll(searchBuilder, pageNumber, pageSize);
+        } else {
+            queryResults = persistenceService.findAll(searchBuilder);
+        }
 
         queryResults = convertResults(criteriaModel, queryResults);
 
@@ -122,18 +141,32 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         return searchResult;
     }
 
+    @Transactional(readOnly = true)
+    public MappedResults<S> performMapSearch(T criteriaModel) {
+        throw new UnsupportedOperationException("map searching not supported for this service " + getClass().getSimpleName());
+    }
+
     protected List<M> convertResults(T criteriaModel, List results) {
         return results;
     }
 
-    private Long findCount(QueryBuilder<?> searchBuilder) {
+    protected Long findCount(QueryBuilder<?> searchBuilder) {
         return persistenceService.count(searchBuilder);
+    }
+
+    public QueryBuilder<M> createBaseMappedSearchQueryBuilder(T criteriaModel) {
+        QueryBuilder<M> searchBuilder = createAppropriateMappedQueryBuilder(criteriaModel);
+        augmentSearchBuilder(criteriaModel, searchBuilder, true);
+        return searchBuilder;
     }
 
     public QueryBuilder<M> createBaseSearchQueryBuilder(T criteriaModel) {
 		// create our QueryBuilder, note the type will be the same as our selectClass
 		QueryBuilder<M> searchBuilder = createAppropriateQueryBuilder(criteriaModel, searchClass);
+        return augmentSearchBuilder(criteriaModel, searchBuilder, false);
+    }
 
+    private <E> QueryBuilder<E> augmentSearchBuilder(T criteriaModel, QueryBuilder<E> searchBuilder, boolean includeGps) {
         ColumnMappingView sortColumn = criteriaModel.getSortColumn();
 
         if (sortColumn != null && sortColumn.getJoinExpression() != null) {
@@ -148,10 +181,10 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         List<SearchTermDefiner> searchTerms = new ArrayList<SearchTermDefiner>();
         List<JoinTerm> joinTerms = new ArrayList<JoinTerm>();
 
-        addSearchTerms(criteriaModel, searchTerms);
+        addSearchTerms(criteriaModel, searchTerms, includeGps);
         addJoinTerms(criteriaModel, joinTerms);
 
-		// convert all our search terms to where parameters
+        // convert all our search terms to where parameters
         for (SearchTermDefiner term : searchTerms) {
             for (WhereClause<?> param: term.getWhereParameters()) {
                 searchBuilder.addWhere(param);
@@ -164,10 +197,10 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
         applyOwnerFilter(criteriaModel, searchBuilder);
 
-		return searchBuilder;
+        return searchBuilder;
     }
 
-    protected void applyOwnerFilter(T criteriaModel, QueryBuilder<M> searchBuilder) {
+    protected void applyOwnerFilter(T criteriaModel, QueryBuilder<?> searchBuilder) {
         List<QueryFilter> searchFilters = new ArrayList<QueryFilter>();
 
         if (criteriaModel.getOwner() != null) {
@@ -179,12 +212,17 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         }
     }
 
+    protected QueryBuilder<M> createAppropriateMappedQueryBuilder(T criteria) {
+        return new QueryBuilder<M>(searchClass, securityContext.getUserSecurityFilter());
+    }
+
     protected <E> QueryBuilder<E> createAppropriateQueryBuilder(T criteria, Class<E> searchClass) {
         return createUserSecurityBuilder(searchClass);
     }
 
+
     protected void addJoinTerms(T criteriaModel, List<JoinTerm> joinTerms) { }
-    protected abstract void addSearchTerms(T criteriaModel, List<SearchTermDefiner> search);
+    protected abstract void addSearchTerms(T criteriaModel, List<SearchTermDefiner> search, boolean includeGps);
 
     protected boolean isIntegrationEnabled() {
     	PrimaryOrg primaryOrg = getPrimaryOrg();

@@ -5,10 +5,25 @@ import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;
+import java.util.Comparator;
 
 @Entity
 @Table(name = "isolation_points")
 public class IsolationPoint extends EntityWithTenant {
+
+    public static Comparator<IsolationPoint> LOCK_ORDER = new Comparator<IsolationPoint>() {
+        @Override
+        public int compare(IsolationPoint o1, IsolationPoint o2) {
+            return o1.getFwdIdx().compareTo(o2.getFwdIdx());
+        }
+    };
+
+    public static Comparator<IsolationPoint> UNLOCK_ORDER = new Comparator<IsolationPoint>() {
+        @Override
+        public int compare(IsolationPoint o1, IsolationPoint o2) {
+            return o1.getRevIdx().compareTo(o2.getRevIdx());
+        }
+    };
 
     @Column(name="electronic_identifier")
     private String electronicIdentifier;
@@ -43,6 +58,12 @@ public class IsolationPoint extends EntityWithTenant {
 
     @Column(name="check_str")
     private String check;
+
+    @Column(name="fwd_idx")
+    private Integer fwdIdx;
+
+    @Column(name="rev_idx")
+    private Integer revIdx;
 
     public String getIdentifier() {
         return identifier;
@@ -122,5 +143,21 @@ public class IsolationPoint extends EntityWithTenant {
 
     public void setElectronicIdentifier(String electronicIdentifier) {
         this.electronicIdentifier = electronicIdentifier;
+    }
+
+    public Integer getFwdIdx() {
+        return fwdIdx;
+    }
+
+    public void setFwdIdx(Integer fwdIdx) {
+        this.fwdIdx = fwdIdx;
+    }
+
+    public Integer getRevIdx() {
+        return revIdx;
+    }
+
+    public void setRevIdx(Integer revIdx) {
+        this.revIdx = revIdx;
     }
 }

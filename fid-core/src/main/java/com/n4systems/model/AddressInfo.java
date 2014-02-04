@@ -1,15 +1,21 @@
 package com.n4systems.model;
 
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
+import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.parents.AbstractEntity;
+import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "addressinfo")
-public class AddressInfo extends AbstractEntity {
-	private static final long serialVersionUID = 1L;
-	
+public class AddressInfo extends AbstractEntity implements HasGpsLocation {
+
 	private String streetAddress = "";
 	private String city = "";
 	private String state = "";
@@ -18,10 +24,13 @@ public class AddressInfo extends AbstractEntity {
 	private String phone1 = "";
 	private String phone2 = "";
 	private String fax1 = "";
-	
-	public AddressInfo() {}
-	
-	public AddressInfo(AddressInfo addressInfo) {
+    private GpsLocation gpsLocation = new GpsLocation();
+
+    private @Transient String formattedAddress;
+
+    public AddressInfo() { }
+
+    public AddressInfo(AddressInfo addressInfo) {
 		streetAddress = addressInfo.streetAddress;
 		city = addressInfo.city;
 		state = addressInfo.state;
@@ -30,6 +39,8 @@ public class AddressInfo extends AbstractEntity {
 		phone1 = addressInfo.phone1;
 		phone2 = addressInfo.phone2;
 		fax1 = addressInfo.fax1;
+        formattedAddress = addressInfo.formattedAddress;
+        gpsLocation = addressInfo.gpsLocation;
 	}
 
 	public String getStreetAddress() {
@@ -150,10 +161,44 @@ public class AddressInfo extends AbstractEntity {
 		other.fax1 = fax1;
 	}
 
-	@Override
-	public String toString() {
-		return "AddressInfo [city=" + city + ", country=" + country + ", fax1=" + fax1 + ", phone1=" + phone1 + ", phone2=" + phone2 + ", state=" + state + ", streetAddress=" + streetAddress
-				+ ", zip=" + zip + "]";
-	}
-	
+    public GpsLocation getGpsLocation() {
+        return gpsLocation;
+    }
+
+    public void setGpsLocation(GpsLocation gpsLocation) {
+        this.gpsLocation = gpsLocation;
+    }
+
+    public String getFormattedAddress() {
+        if (formattedAddress==null) {
+            Predicate<String> skipBlank = new Predicate<String>() {
+                @Override public boolean apply(String input) {
+                    return StringUtils.isNotBlank(input);
+                }
+            };
+            Iterable<String> nonBlankFields = Iterables.filter(Lists.newArrayList(streetAddress, city, state, country, zip), skipBlank);
+            return Joiner.on(',').join(nonBlankFields);
+        }
+        return formattedAddress;
+    }
+
+    public void setFormattedAddress(String formattedAddress) {
+        this.formattedAddress = formattedAddress;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressInfo{" +
+                "city='" + city + '\'' +
+                ", streetAddress='" + streetAddress + '\'' +
+                ", state='" + state + '\'' +
+                ", country='" + country + '\'' +
+                ", zip='" + zip + '\'' +
+                ", phone1='" + phone1 + '\'' +
+                ", phone2='" + phone2 + '\'' +
+                ", fax1='" + fax1 + '\'' +
+                ", gpsLocation=" + gpsLocation +
+                '}';
+    }
+
 }

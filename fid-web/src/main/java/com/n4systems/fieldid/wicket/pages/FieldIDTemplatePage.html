@@ -18,11 +18,12 @@
 	<link rel="shortcut icon" href="/fieldid/images/favicon.ico" type="image/x-icon" />
 
 	<!-- Global CSS files used for all pages -->
-	<link rel="stylesheet" href="/fieldid/style/normalize.css">
-	<link rel="stylesheet" href="/fieldid/style/plugins/chosen/chosen.css">
 	<link rel="stylesheet" href="/fieldid/style/global.css">
 	<!--[if IE]>
-		<link rel="stylesheet" href="/fieldid/style/ie.css">
+        <link rel="stylesheet" href="/fieldid/style/ie-all.css">
+    <![endif]-->
+    <!--[if lte IE 8]>
+		<link rel="stylesheet" href="/fieldid/style/ie-lte8.css">
 		<link rel="stylesheet" href="/fieldid/style/fontello-ie7.css">
 	<![endif]-->
 
@@ -30,24 +31,28 @@
 	<script src="/fieldid/javascript/vendors/modernizr-2.6.2.js"></script>
 	<!-- Custom javascript configured by tenant -->
 	<span wicket:id="customJsPanel"></span>
+
 </head>
 
-<body>
-	<div class="wrapper">
+<body class="fieldid-framework">
+	<div class="wrapper"><!-- creates a wrapper for the sticky footer -->
 		
 		<div wicket:id="debugBar"/>
 		<div wicket:id="languageSelectionModalWindow"/>
-		<header class="global-header" wicket:id="mainHeader"/>
+		<header class="global-header js-page-header" wicket:id="mainHeader"/>
 		
 		<main class="" role="main">
 			
-			<!--TODO : REFACTOR OUT A COUPLE OF PAGE HEADERS.   -->
 			<header class="page-header">
 
-				<nav wicket:id="breadCrumbBar" class="bread-crumb"/>
+                <div wicket:id="topFeedbackPanel" class="feedback-panel" />
 
-				<h1><span wicket:id="titleLabel"/></h1>
-				
+				<nav wicket:id="breadCrumbBar" class="breadcrumb"/>
+
+				<h1 class="js-title-label"><span wicket:id="titleLabel"/></h1>
+
+                <a wicket:id="backToLink" class="btn-secondary btn-back btn-sml"><span wicket:id="backToLinkLabel"/></a>
+
 				<div wicket:id="subHeader" class="page-sub-header"/>
 
 				<nav wicket:id="navBar" class="nav-tabs"/>
@@ -63,8 +68,8 @@
 	</div><!-- cls .wrapper-->
 
 	<footer class="footer-global">
-		<span wicket:id="versionLabel"></span>
 		<div class="content-wrap">
+            <span wicket:id="versionLabel"></span>
 			<img src="/fieldid/img/logo-fieldid-powered-by.png" alt="powered by Field ID">
 		</div>  
 	</footer>
@@ -83,28 +88,32 @@
 	</div>
 </body>
 
-<!-- Global header fragment -->
+
 <wicket:fragment wicket:id="globalHeader">
     <div class="content-wrap tenant-logo">
         <img wicket:id="tenantLogo" alt="logo">
     </div>
-    <nav class="nav-user js-nav-user">
+    <nav class="nav-user js-nav-user js-page-actions">
         <ul class="content-wrap nav-list">
-            <li class="dropdown username">
-                <wicket:message key="label.welcome"/>, <span wicket:id="loggedInUsernameLabel">N4 Systems</span>
-                <ul>
-                    <li><a href="/fieldid/myAccount.action">My Account</a></li>
-                    <li wicket:enclosure="languageSelection"><a wicket:id="languageSelection"><wicket:message key="label.language"/></a></li>
-                    <li><a wicket:id="support" target="_blank">Support</a></li>
-                    <li><a href="/fieldid/logout.action"><wicket:message key="label.logout"/></a></li>
-                </ul>
+            <li class="username">
+                <wicket:message key="label.welcome"/>,  <a href="/fieldid/myAccount.action"><span wicket:id="loggedInUsernameLabel">N4 Systems</span></a>
             </li>
-            <li class="dropdown">
+            <li wicket:enclosure="languageSelection">
+                <a wicket:id="languageSelection"><wicket:message key="label.language"/></a>
+            </li>
+            <li>
+                <a wicket:id="support" target="_blank"></a>
+            </li>
+            <li>
+                <a href="/fieldid/logout.action"><wicket:message key="label.logout"/></a>
+            </li>
+            <li class="saved-items">
                 <span wicket:id="savedItemsDropdown"></span>
             </li>
         </ul>
     </nav>
-    <nav class="nav-main js-sticky-nav">
+
+    <nav class="nav-main">
         <div class="content-wrap">
             <ul class="nav-list">
                 <li class="home">
@@ -117,15 +126,7 @@
                     <a href="/fieldid/startEvent.action"><wicket:message key="speed.event"/></a>
                 </li>
                 <li>
-                    <a wicket:id="placesLink"><wicket:message key="speed.places"/></a>
-                </li>
-                <li class="dropdown">
                     <a wicket:id="assetSearchLink"><wicket:message key="speed.search"/></a>
-                    <wicket:enclosure child="newAssetSearchLink">
-                        <ul>
-                            <li><a wicket:id="newAssetSearchLink"><wicket:message key="nav.new_search"/></a></li>
-                        </ul>
-                    </wicket:enclosure>
                 </li>
                 <li class="dropdown">
                     <a wicket:id="reportingLink"><wicket:message key="speed.reporting"/></a>
@@ -138,13 +139,22 @@
                         </wicket:enclosure>
                     </ul>
                 </li>
+                <li>
+                    <a wicket:id="placesLink"><wicket:message key="speed.places"/></a>
+                </li>
                 <wicket:enclosure>
                     <li><a wicket:id="procedureLink"><wicket:message key="speed.procedures"/></a></li>
                 </wicket:enclosure>
+                <li wicket:id="safetyNetworkLinkContainer">
+                    <a href="/fieldid/safetyNetwork.action"><wicket:message key="speed.safety_network"/></a>
+                </li>
+                <li wicket:id="jobsLinkContainer">
+                    <a href="/fieldid/jobs.action"><wicket:message key="speed.projects"/></a>
+                </li>
                 <li class="dropdown" wicket:id="setupLinkContainer">
                     <a wicket:id="setupLink"><wicket:message key="label.setup"/></a>
                     <ul wicket:id="setupSubMenuContainer">
-                        <li class="secondary-dropdown">
+                        <li class="dropdown-secondary">
                             <a wicket:id="settingsLink"><wicket:message key="nav.settings"/></a>
                             <ul wicket:id="settingsSubMenuContainer">
                                 <li><a href="/fieldid/organizations.action"><wicket:message key="title.manage_organizational_units.plural"/></a></li>
@@ -154,7 +164,7 @@
                                 <li><a wicket:id="yourPlanLink" ><wicket:message key="title.manage_field_id_plan.plural"/></a></li>
                             </ul>
                         </li>
-                        <li class="secondary-dropdown">
+                        <li class="dropdown-secondary">
                             <a wicket:id="ownersUsersLocLink"><wicket:message key="nav.owners_users_loc"/></a>
                             <ul wicket:id="ownersSubMenuContainer">
                                 <li wicket:id="manageCustomersContainer"><a href="/fieldid/customerList.action" ><wicket:message key="label.customers"/></a></li>
@@ -166,7 +176,7 @@
                                 <li wicket:id="managePredefinedLocationsContainer"><a href="/fieldid/predefinedLocations.action"><wicket:message key="title.manage_predefined_locations.plural"/></a></li>
                             </ul>
                         </li>
-                        <li class="secondary-dropdown">
+                        <li class="dropdown-secondary">
                             <a wicket:id="assetsEventsLink"><wicket:message key="nav.assets_and_events"/></a>
                             <ul wicket:id="assetsEventsSubMenuContainer">
                                 <li><a href="/fieldid/eventTypeGroups.action"><wicket:message key="title.manage_event_type_groups.plural"/></a></li>
@@ -179,7 +189,7 @@
                                 <li><a wicket:id="priorityCodeListLink" ><wicket:message key="title.manage_priority_code.plural"/></a></li>
                             </ul>
                         </li>
-                        <li class="secondary-dropdown">
+                        <li class="dropdown-secondary">
                             <a wicket:id="importLink"><wicket:message key="nav.import"/></a>
                             <ul>
                                 <li><a href="/fieldid/customerImportExport.action"><wicket:message key="label.import_owners"/></a></li>
@@ -189,7 +199,7 @@
                                 <li><a href="/fieldid/userImportExport.action"><wicket:message key="label.import_users"/></a></li>
                             </ul>
                         </li>
-                        <li class="secondary-dropdown">
+                        <li class="dropdown-secondary">
                             <a wicket:id="templatesLink"><wicket:message key="nav.templates"/></a>
                             <ul wicket:id="templatesSubMenuContainer">
                                 <li><a href="/fieldid/autoAttributeCriteriaList.action"><wicket:message key="title.auto_attribute_wizard.plural" /></a></li>
@@ -200,7 +210,7 @@
                             </ul>
                         </li>
                         <li><a wicket:id="widgetsLink"><wicket:message key="nav.widgets"/></a></li>
-                        <li class="secondary-dropdown">
+                        <li class="dropdown-secondary">
                             <a wicket:id="securityLink"><wicket:message key="nav.security"/></a>
                             <ul>
                                 <li><a wicket:id="passwordPolicyLink"><wicket:message key="title.password_policy"/></a></li>
@@ -210,20 +220,23 @@
                         <li><a wicket:id="translationsLink"><wicket:message key="title.translations"/></a></li>
                     </ul>
                 </li>
-                <li wicket:id="jobsLinkContainer">
-                    <a href="/fieldid/jobs.action"><wicket:message key="speed.projects"/></a>
-                </li>
-                <li wicket:id="safetyNetworkLinkContainer">
-                    <a href="/fieldid/safetyNetwork.action"><wicket:message key="speed.safety_network"/></a>
-                </li>
             </ul>
 
-            <form class="search" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
+            <form class="search js-smart-search" name="assetInformation" onsubmit="return true;" action="/fieldid/assetInformation.action" method="get">
                 <input type="hidden" name="useContext" value="true" id="smartSearch_useContext">
                 <input type="hidden" name="usePagination" value="true" id="smartSearch_usePagination">
-                <input type="text" name="search" wicket:message="value:label.search">
-                <span class="fontello-search">search</span>
+                <input type="text" name="search" class="js-search-text js-description" wicket:message="value:label.search">
+                <!-- <span class="fontello-search">search</span> -->
             </form>
+
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('.js-search-text').bind('focus', clearDescription);
+                    $('.js-search-text').bind('blur', replaceDescription);
+                    $('.js-smart-search').bind('submit', submitSmartSearch);
+                });
+            </script>
+
         </div><!-- /.content-wrap -->
     </nav><!-- /.nav-main -->
 </wicket:fragment>

@@ -1,19 +1,28 @@
 package com.n4systems.fieldid.wicket.pages.asset;
 
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.components.asset.events.EventMapPanel;
+import com.n4systems.fieldid.wicket.components.asset.events.table.ActionsColumn;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.data.EventByNetworkIdProvider;
+import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -33,6 +42,8 @@ public class AssetEventsPage extends AssetPage{
 
     @SpringBean
     private MixpanelService mixpanelService;
+    @SpringBean
+    private EventService eventService;
 
     private boolean open = true;
     private boolean completed = true;
@@ -90,8 +101,20 @@ public class AssetEventsPage extends AssetPage{
             mapLink.setVisible(false);
         }
 
-        add(eventPanel = new EventListPanel("eventPanel", assetModel, getWorkflowStates()));
-        add(mapPanel = new EventMapPanel("mapPanel", assetModel));
+        FieldIDDataProvider<Event> dataProvider = new EventByNetworkIdProvider(asset.getNetworkId(), "completedDate", SortOrder.DESCENDING, getWorkflowStates());
+
+        add(eventPanel = new EventListPanel("eventPanel", dataProvider) {
+            @Override
+            protected void addCustomColumns(List<IColumn<? extends Event>> columns) {
+                columns.add(new PropertyColumn<ThingEvent>(new FIDLabelModel("label.assetstatus"), "assetStatus", "assetStatus.displayName"));
+            }
+
+            @Override
+            protected void addActionColumn(List<IColumn<? extends Event>> columns) {
+                columns.add(new ActionsColumn("id", this));
+            }
+        });
+        add(mapPanel = new EventMapPanel("mapPanel", eventService.getEventsByNetworkId(asset.getNetworkId())));
         eventPanel.setOutputMarkupPlaceholderTag(true);
         mapPanel.setOutputMarkupPlaceholderTag(true);
         mapPanel.setVisible(false);
@@ -129,8 +152,7 @@ public class AssetEventsPage extends AssetPage{
 	}
 
     private void updateEventListPanel(AjaxRequestTarget target) {
-        eventPanel.getDataProvider().setStates(getWorkflowStates());
-        eventPanel.getDefaultModel().detach();
+        ((EventByNetworkIdProvider) eventPanel.getDataProvider()).setStates(getWorkflowStates());
         target.add(eventPanel);
         target.appendJavaScript("$('.tipsy').remove(); $('.tipsy-tooltip').tipsy({gravity: 'nw', fade:true, delayIn:150})");
 
@@ -145,7 +167,6 @@ public class AssetEventsPage extends AssetPage{
             states.add(WorkflowState.COMPLETED);
         if(closed)
             states.add(WorkflowState.CLOSED);
-
 
         if (states.size() == 0) {
             states.add(WorkflowState.NONE);

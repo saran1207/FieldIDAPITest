@@ -48,7 +48,7 @@ public class EventFormHelper {
 		return currentCriteriaSections;
 	}
 
-	public Map<CriteriaSection, List<CriteriaResult>> getVisibleResults(AbstractEvent<ThingEventType> event) {
+	public Map<CriteriaSection, List<CriteriaResult>> getVisibleResults(AbstractEvent<ThingEventType,Asset> event) {
 		if (sections.get(event) == null) {
 			sections.put(event, new HashMap<CriteriaSection, List<CriteriaResult>>());
             EventForm eventForm = event.getEventForm();
@@ -156,11 +156,26 @@ public class EventFormHelper {
 
     public Double getEventFormScorePercentage(AbstractEvent event) {
         double total = calculateMaxScoreForEvent(event);
+        Map<CriteriaSection, Double> sectionScores = getScoresForSections(event);
 
-        if (total <= 0.0)
+        Double scoreTotal = getSectionsTotal(sectionScores);
+
+        if (total <= 0.0) {
             return 0.0;
-        else
-            return event.getScore() / total;
+        } else {
+            return scoreTotal /total;
+        }
+    }
+
+    private Double getSectionsTotal(Map<CriteriaSection, Double> sectionScores) {
+        Double scoreTotal = 0.0d;
+        if (null != sectionScores && sectionScores.size() > 0 ) {
+            for (Map.Entry<CriteriaSection, Double> entry : sectionScores.entrySet())
+            {
+                scoreTotal += entry.getValue();
+            }
+        }
+        return scoreTotal;
     }
 
     private Double getMaxScoreValue(ScoreGroup group) {

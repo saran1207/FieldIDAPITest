@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventAudit;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.user.User;
 import com.n4systems.util.mail.MailMessage;
 import org.apache.log4j.Logger;
@@ -22,7 +23,7 @@ public class MassUpdateEventService extends FieldIdPersistenceService{
     private Logger logger = Logger.getLogger(MassUpdateEventService.class);
 
     @Transactional
-    public Long updateEvents(List<Long> ids, Event eventChanges, Map<String, Boolean> fieldMap, Long userId) {
+    public Long updateEvents(List<Long> ids, ThingEvent eventChanges, Map<String, Boolean> fieldMap, Long userId) {
         if (ids.isEmpty()) {
             return 0L;
         }
@@ -31,7 +32,7 @@ public class MassUpdateEventService extends FieldIdPersistenceService{
 
         Set<String> updateKeys = getEnabledKeys(fieldMap);
 
-        Event changeTarget;
+        ThingEvent changeTarget;
         Set<Event> eventsUpdated = Sets.newHashSet();
         EventAudit audit = new EventAudit();
         audit.setModified(new Date());
@@ -39,7 +40,7 @@ public class MassUpdateEventService extends FieldIdPersistenceService{
         audit.setTenant(user.getTenant());
 
         for (Long id : ids) {
-            changeTarget = persistenceService.find(Event.class, id);
+            changeTarget = persistenceService.find(ThingEvent.class, id);
             eventsUpdated.add(changeTarget);
 
             for (String updateKey : updateKeys) {

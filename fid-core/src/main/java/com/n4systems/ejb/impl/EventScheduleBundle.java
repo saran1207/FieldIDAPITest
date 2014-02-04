@@ -3,7 +3,8 @@ package com.n4systems.ejb.impl;
 import com.n4systems.model.Asset;
 import com.n4systems.model.EventType;
 import com.n4systems.model.Project;
-import com.n4systems.model.ThingEventType;
+import com.n4systems.model.api.HasOwner;
+import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.Assignable;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
@@ -11,19 +12,19 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.Date;
 
-public class EventScheduleBundle {	
-	private final Asset asset;
-	private final ThingEventType type;
+public class EventScheduleBundle<T extends EntityWithTenant & HasOwner> {
+	private final T target;
+	private final EventType type;
 	private final Project job;
 	private final Date scheduledDate;
     private final Assignable assginee;
 	
-	public EventScheduleBundle(Asset asset, ThingEventType type, Project job, Date scheduledDate) {
-        this(asset, type, job, scheduledDate, null);
+	public EventScheduleBundle(T target, EventType type, Project job, Date scheduledDate) {
+        this(target, type, job, scheduledDate, null);
     }
 
-    public EventScheduleBundle(Asset asset, ThingEventType type, Project job, Date scheduledDate, Assignable assignee) {
-        this.asset = asset;
+    public EventScheduleBundle(T target, EventType type, Project job, Date scheduledDate, Assignable assignee) {
+        this.target = target;
         this.type = type;
         this.job = job;
         this.scheduledDate = scheduledDate;
@@ -33,7 +34,7 @@ public class EventScheduleBundle {
     }
 
 	private void guard() {
-		if (asset == null) {
+		if (target == null) {
 			throw new NullPointerException("asset");
 		}
 		
@@ -46,11 +47,11 @@ public class EventScheduleBundle {
 		}
 	}
 	
-	public Asset getAsset() {
-		return asset;
+	public T getTarget() {
+		return target;
 	}
 
-	public ThingEventType getType() {
+	public EventType getType() {
 		return type;
 	}
 

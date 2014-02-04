@@ -38,6 +38,6 @@ public abstract class TransientCriteriaResultPopulator {
         event.setSectionResults(transientResults);
     }
 
-    protected abstract CriteriaResult getCriteriaResultFor(AbstractEvent<ThingEventType> event, Criteria criteria);
+    protected abstract CriteriaResult getCriteriaResultFor(AbstractEvent<ThingEventType,Asset> event, Criteria criteria);
 
 }

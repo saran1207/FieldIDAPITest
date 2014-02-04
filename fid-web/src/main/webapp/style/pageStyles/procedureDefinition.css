@@ -1,4 +1,4 @@
-@import url('/fieldid/style/chosen/chosen.css');
+@import url('/fieldid/style/plugins/chosen/chosen.css');
 
 /* WORK AROUND FOR EXISTING CSS
 **********************************************************/
@@ -419,7 +419,7 @@ h3 {
 	margin-top: 20px;
 }
 	.isolation-point-editor .label-button .mattButton {
-		margin-left:80px;
+		margin-left:20px;
         float:left;
 	}
 .isolation-point-editor .buttons {

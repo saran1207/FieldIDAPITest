@@ -24,6 +24,7 @@ import com.n4systems.persistence.loaders.ListLoader;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ArrayUtils;
 import com.n4systems.util.DateHelper;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
 
 import java.io.ByteArrayInputStream;
@@ -37,8 +38,8 @@ import java.util.*;
 public class EventImportAction extends AbstractImportAction {
 	private Logger logger = Logger.getLogger(EventImportAction.class);
 	
-	private EventType type;
-	private List<EventType> eventTypes;
+	private ThingEventType type;
+	private List<ThingEventType> eventTypes;
 	private InputStream exampleExportFileStream;
 	private String exampleExportFileSize;
 	private boolean includeRecommendationsAndDeficiencies;
@@ -168,7 +169,7 @@ public class EventImportAction extends AbstractImportAction {
 
 	public void setUniqueID(Long id) {
 		if (type == null || !type.getId().equals(id)) {
-			type = getLoaderFactory().createFilteredIdLoader(EventType.class).setPostFetchFields("eventForm.sections").setId(id).load();
+			type = getLoaderFactory().createFilteredIdLoader(ThingEventType.class).setPostFetchFields("eventForm.sections").setId(id).load();
 		}
 	}
 	
@@ -204,9 +205,11 @@ public class EventImportAction extends AbstractImportAction {
 		return includeRecommendationsAndDeficiencies;
 	}
 	
-	public List<EventType> getEventTypes() {
+	public List<ThingEventType> getEventTypes() {
 		if (eventTypes == null) {
-			eventTypes = getLoaderFactory().createEventTypeListLoader().load();
+            QueryBuilder<ThingEventType> thingEventTypeQueryBuilder = new QueryBuilder<ThingEventType>(ThingEventType.class, getSecurityFilter());
+            thingEventTypeQueryBuilder.addOrder("name");
+            eventTypes = persistenceManager.findAll(thingEventTypeQueryBuilder);
 		}
 		return eventTypes;
 	}

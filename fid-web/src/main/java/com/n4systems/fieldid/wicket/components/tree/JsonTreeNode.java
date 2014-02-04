@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.tree;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.org.OrgLocationTree;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
@@ -17,14 +18,34 @@ public class JsonTreeNode {
     Map<String,String> attr;
     String state = "closed";
     JsonTreeNode[] children = null;
+    String id;
 
     public JsonTreeNode(OrgLocationTree.OrgLocationTreeNode node, JsonTreeNode parent) {
         this.data = node.getName();
+        this.id = node.getId() + "";
         addAttribute("id", node.getId() + "");
         addAttribute("data", node.getType().name());
-        addAttribute("class", CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_HYPHEN, node.getType().name()));
+        addAttribute("class", getClass(node));
         this.parent = parent;
         this.isLeaf = node.isLeaf();
+    }
+
+    private String getClass(OrgLocationTree.OrgLocationTreeNode node) {
+        String cssClass = CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_HYPHEN, node.getType().name());
+
+        boolean canManageCustomers = FieldIDSession.get().getUserSecurityGuard().isAllowedManageEndUsers();
+
+        if (OrgLocationTree.NodeType.INTERNAL_ORG.equals(node.getType())) {
+            cssClass += Boolean.TRUE.equals(node.isPrimary()) ? " primary" : " secondary";
+        }
+
+        if(node.isLinked()) {
+            cssClass += " safety-network";
+        }
+
+        if(!canManageCustomers)
+            cssClass += " no-permission";
+        return cssClass;
     }
 
     public void setChildren(List<JsonTreeNode> nodes) {

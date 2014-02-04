@@ -3,6 +3,7 @@ package com.n4systems.model.procedure;
 import com.n4systems.model.Asset;
 import com.n4systems.model.GpsLocation;
 import com.n4systems.model.ProcedureWorkflowState;
+import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
@@ -19,7 +20,7 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "procedures")
-public class Procedure extends ArchivableEntityWithTenant implements NetworkEntity<Procedure> {
+public class Procedure extends ArchivableEntityWithTenant implements NetworkEntity<Procedure>, HasGpsLocation {
 
     @ManyToOne
     @JoinColumn(name = "type_id")

@@ -32,19 +32,22 @@
                     <span wicket:id="dateTime" class="date-time"/>
                 </div>
             </div>
-            <div class="clearfix">
+            <div wicket:enclosure="organization" class="clearfix">
                 <label class="left"><wicket:message key="label.for"/></label>
                 <div class="right">
                     <div wicket:id="organization" class="organization clearfix"></div>
-                    <div class="checkbox">
-                        <label><wicket:message key="label.affect_all"/><input type="checkbox" wicket:id="ownerAndDown"><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/></label>
-                    </div>
-                    <div class="checkbox">
-                        <label><wicket:message key="label.auto_assign"/><input type="checkbox" wicket:id="autoassign"><img class="tooltip tipsy-tooltip" wicket:id="autotooltip"/></label>
-                    </div>
                 </div>
             </div>
-            <a class="btn btn-blue btn-sml" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
+            <div class="right">
+                <div wicket:enclosure="ownerAndDown" class="checkbox">
+                    <label><wicket:message key="label.affect_all"/><input type="checkbox" wicket:id="ownerAndDown"><img class="tooltip tipsy-tooltip" wicket:id="tooltip"/></label>
+                </div>
+                <div wicket:enclosure="autoassign" class="checkbox">
+                    <label><wicket:message key="label.auto_assign_recurring_schedule"/><input type="checkbox" wicket:id="autoassign"><img class="tooltip tipsy-tooltip" wicket:id="autotooltip"/></label>
+                </div>
+            </div>
+
+            <a class="btn btn-blue btn-sml btn-primary" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
         </div>
     </form>
 

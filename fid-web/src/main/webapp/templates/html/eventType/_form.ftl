@@ -37,10 +37,7 @@
 <div class="infoSet">
 	<@s.label cssClass="label" value="${action.getText('label.group')}:" />
 	<span class="fieldHolder">
-		<@s.select emptyOption="true" name="group">
-            <@s.optgroup label="Event Groups" list="eventGroups" listKey="id" listValue="name"/>
-		    <@s.optgroup label="Action Groups" list="actionGroups" listKey="id" listValue="name" />
-        </@s.select>
+		<@s.select emptyOption="true" name="group" list="eventGroups" listValue="name" listKey="id" />
 	</span>
 </div>
 <div class="infoSet">
@@ -50,7 +47,7 @@
 	</span>
 </div>
 
-<#if !action.isAction()>
+<#if eventType.thingEventType>
     <div class="infoSet">
         <@s.label cssClass="label" value="${action.getText('label.masterevent')}:" />
         <span class="fieldHolder">
@@ -67,7 +64,7 @@
         </div>
     </#if>
 </#if>
-<#if securityGuard.proofTestIntegrationEnabled>
+<#if securityGuard.proofTestIntegrationEnabled && eventType.thingEventType>
 	<table class="list">
 		<tr>
 			<th><@s.text name="label.supportedprooftesttype"/></th>
@@ -104,9 +101,9 @@
 	<#if !uniqueID?exists >
 		<@s.text name="label.or"/>
 		<@s.submit key="hbutton.saveandaddeventform" name="saveAndAdd"/> 
-	<#else >
+	<#elseif eventType.thingEventType>
 		<@s.text name="label.or"/>
-		<@s.url id="deleteConfirmUrl" action="eventTypeDeleteConfirm" uniqueID="${uniqueID}"/>
+        <@s.url id="deleteConfirmUrl" action="eventTypeDeleteConfirm" uniqueID="${uniqueID}"/>
 		<a href="#" onclick="return redirect('${deleteConfirmUrl}');"><@s.text name="label.delete"/></a>
 	</#if>
 		<@s.text name="label.or"/> <a href="${cancelUrl}"><@s.text name="label.cancel"/></a>

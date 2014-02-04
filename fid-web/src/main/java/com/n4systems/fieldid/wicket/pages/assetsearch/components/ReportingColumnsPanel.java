@@ -9,6 +9,7 @@ import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.ThingEventType;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.search.EventSearchType;
 import com.n4systems.model.search.ReportConfiguration;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.model.IModel;
@@ -32,7 +33,7 @@ public class ReportingColumnsPanel extends AbstractColumnsPanel<EventReportCrite
     protected void updateColumns(IModel<List<ColumnMappingGroupView>> dynamicAssetColumnsModel, IModel<List<ColumnMappingGroupView>> dynamicEventColumnsModel) {
         super.updateColumns(dynamicAssetColumnsModel, dynamicEventColumnsModel);
         final IModel<EventTypeGroup> eventTypeGroupModel = new PropertyModel<EventTypeGroup>(getDefaultModel(), "eventTypeGroup");
-        EventTypesForTenantModel availableEventTypesModel  = new EventTypesForTenantModel(eventTypeGroupModel);
+        EventTypesForTenantModel availableEventTypesModel  = new EventTypesForTenantModel(eventTypeGroupModel, new PropertyModel<EventSearchType>(getDefaultModel(), "eventSearchType"));
         if (!model.getObject().isReportAlreadyRun()) {
             updateDynamicEventColumns(null, availableEventTypesModel.getObject());
         }
@@ -48,7 +49,7 @@ public class ReportingColumnsPanel extends AbstractColumnsPanel<EventReportCrite
     }
 
     @Override
-    protected List<ColumnMappingGroupView> getDynamicEventColumns(ThingEventType eventType, List<ThingEventType> availableEventTypes) {
+    protected List<ColumnMappingGroupView> getDynamicEventColumns(EventType eventType, List<? extends EventType> availableEventTypes) {
         return dynamicColumnsService.getDynamicEventColumnsForReporting(eventType, availableEventTypes);
     }
 
@@ -57,7 +58,7 @@ public class ReportingColumnsPanel extends AbstractColumnsPanel<EventReportCrite
 		target.add(this);
 	}
 
-    public void onEventTypeOrGroupUpdated(AjaxRequestTarget target, ThingEventType selectedEventType, List<ThingEventType> availableEventTypes) {
+    public void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<? extends EventType> availableEventTypes) {
         updateDynamicEventColumns(selectedEventType,availableEventTypes);
         target.add(this);
     }

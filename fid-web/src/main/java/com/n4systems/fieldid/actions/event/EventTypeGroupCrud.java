@@ -208,10 +208,6 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 	public String getName() {
 		return eventTypeGroup.getName();
 	}
-    
-    public boolean isAction() {
-        return eventTypeGroup.isAction();
-    }
 
 	public String getReportTitle() {
 		return eventTypeGroup.getReportTitle();
@@ -223,10 +219,6 @@ public class EventTypeGroupCrud extends AbstractPaginatedCrud<EventTypeGroup> im
 		eventTypeGroup.setName(name);
 	}
 
-    public void setAction(boolean action) {
-        eventTypeGroup.setAction(action);
-    }
-	
 	@RequiredStringValidator(message="", key="error.reporttitlerequired")
 	public void setReportTitle(String reportTitle) {
 		eventTypeGroup.setReportTitle(reportTitle);

@@ -14,7 +14,7 @@ import com.n4systems.util.DateHelper;
 
 public class MassUpdateEventModel implements Serializable {
 
-    private Event event;
+    private ThingEvent event;
 
     private Map<String, Boolean> select;
 
@@ -23,11 +23,11 @@ public class MassUpdateEventModel implements Serializable {
         select = new HashMap<String, Boolean>();
     }
 
-    public Event getEvent() {
+    public ThingEvent getEvent() {
         return event;
     }
 
-    public void setEvent(Event event) {
+    public void setEvent(ThingEvent event) {
         this.event = event;
     }
 

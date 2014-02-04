@@ -16,7 +16,7 @@ import com.n4systems.fieldid.actions.helpers.EventCrudHelper;
 import com.n4systems.fieldid.actions.helpers.MasterEvent;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.event.ThingEventCreationService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
@@ -50,7 +50,7 @@ public class SubEventCrud extends EventCrud {
     private String overrideResult;
 
 	public SubEventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
-			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService,
+			AssetManager assetManager, EventScheduleManager eventScheduleManager, ThingEventCreationService eventCreationService,
             PersistenceService persistenceService) {
 
 		super(persistenceManager, eventManager, userManager, legacyAssetManager, assetManager, eventScheduleManager, eventCreationService, persistenceService);
@@ -86,7 +86,7 @@ public class SubEventCrud extends EventCrud {
                 overrideResult = masterEventHelper.getOverrideResult();
 
 				setType(event.getType().getId());
-				setAssetId(event.getAsset().getId());
+				setAssetId(((ThingEvent) event).getAsset().getId());
 			}
 		} else {
 			masterEventHelper = null;
@@ -123,7 +123,7 @@ public class SubEventCrud extends EventCrud {
 		setUpSupportedProofTestTypes();
 		encodeInfoOptionMapForUseInForm();
 		setUpAssignTo();
-		event.setAssetStatus(masterEventHelper.getAssetStatus());
+        ((ThingEvent)event).setAssetStatus(masterEventHelper.getAssetStatus());
 		
 //		setScheduleId(masterEventHelper.getScheduleId());
 		reattachUploadedFiles();
@@ -152,7 +152,7 @@ public class SubEventCrud extends EventCrud {
 		for (CriteriaSection criteriaSection : availbleSections) {
 			for (Criteria criteria : criteriaSection.getCriteria()) {
 				boolean found = false;
-				for (CriteriaResult result : event.getResults()) {
+                for (CriteriaResult result : ((ThingEvent)event).getResults()) {
 					if (result.getCriteria().equals(criteria)) {
 						criteriaResults.add(converter.convertToWebModel(result, getSessionUser()));
 						found = true;
@@ -213,15 +213,15 @@ public class SubEventCrud extends EventCrud {
 		}
 
 		event.setTenant(getTenant());
-		event.setAsset(asset);
-		getModifiableEvent().pushValuesTo(event);
+        ((ThingEvent)event).setAsset(asset);
+		getModifiableEvent().pushValuesTo(((ThingEvent)event));
         if (overrideResult != null && !"auto".equals(overrideResult)) {
             event.setEventResult(EventResult.valueOf(overrideResult));
         }
 
 		User modifiedBy = fetchCurrentUser();
 
-		SubEvent subEvent = masterEventHelper.createSubEventFromEvent(event);
+		SubEvent subEvent = masterEventHelper.createSubEventFromEvent(((ThingEvent)event));
 		subEvent.setInfoOptionMap(decodeMapKeys(getEncodedInfoOptionMap()));
 
 		if (!masterEventHelper.isNewOrScheduled()) {
@@ -275,7 +275,7 @@ public class SubEventCrud extends EventCrud {
             event.setBook(eventBook);
 			findEventBook();
 			processProofTestFile();
-			getModifiableEvent().pushValuesTo(event);
+			getModifiableEvent().pushValuesTo(((ThingEvent)event));
             setOverrideResult(getModifiableEvent().getOverrideResult());
 			masterEventHelper.setProofTestFile(fileData);
 			masterEventHelper.setAssignToUpdate(getAssignedTo(), isAssignToSomeone());
@@ -283,9 +283,9 @@ public class SubEventCrud extends EventCrud {
 
 			if (masterEventHelper.isNewOrScheduled()) {
 				event.setTenant(getTenant());
-				event.setAsset(asset);
+                ((ThingEvent)event).setAsset(asset);
 
-				masterEventHelper.setAssetStatus(event.getAssetStatus());
+				masterEventHelper.setAssetStatus(((ThingEvent)event).getAssetStatus());
 
 				if (event.isEditable()) {
 					eventHelper.processFormCriteriaResults(event, criteriaResults, modifiedBy, getSessionUser());
@@ -307,7 +307,7 @@ public class SubEventCrud extends EventCrud {
 //			masterEventHelper.setSchedule(openEvent);
 //			masterEventHelper.setScheduleId(eventScheduleId);
 			masterEventHelper.setUploadedFiles(getUploadedFiles());
-			masterEventHelper.setEvent(event);
+			masterEventHelper.setEvent(((ThingEvent)event));
 
 		} catch (ProcessingProofTestException e) {
 			addActionErrorText("error.processingprooftest");
@@ -331,11 +331,11 @@ public class SubEventCrud extends EventCrud {
 		super.processProofTestFile();
 
 		if (fileData != null) {
-			if (event.getProofTestInfo() == null) {
-				event.setProofTestInfo(new ProofTestInfo());
+			if (((ThingEvent)event).getProofTestInfo() == null) {
+                ((ThingEvent)event).setProofTestInfo(new ProofTestInfo());
 			}
-			event.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
-			event.getProofTestInfo().setDuration(fileData.getTestDuration());
+            ((ThingEvent)event).getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
+            ((ThingEvent)event).getProofTestInfo().setDuration(fileData.getTestDuration());
 		}
 
 	}

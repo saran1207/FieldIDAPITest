@@ -1,0 +1,41 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div wicket:id="addRecurrence"/>
+
+    <div wicket:id="blankSlate" class="info">
+        <p><wicket:message key="label.places.event.noresults"/></p>
+    </div>
+    <div wicket:id="noEventTypes" class="info">
+        <p><wicket:message key="label.places.event.noeventtypes"/>&nbsp;<a wicket:id="eventTypesLink"><wicket:message key="label.here"/>.</a></p>
+    </div>
+
+    <table wicket:id="scheduleList" class="borders clear">
+        <thead>
+        <tr>
+            <th class="schedule"><wicket:message key="label.schedule_type"/></th>
+            <th class="event"><wicket:message key="label.event_type"/></th>
+            <th class="frequency"><wicket:message key="label.frequency"/></th>
+            <th class="for"><wicket:message key="title.for"/></th>
+            <th class="schedule-options"><wicket:message key="label.options"/></th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr wicket:id="recurringEvent">
+                <td class="schedule"><wicket:message key="label.recurring"/></td>
+                <td class="event" wicket:id="eventType"></td>
+                <td class="frequency"><span wicket:id="recurrence"/> @ <span wicket:id="time"/></td>
+                <td class="for" wicket:id="org"></td>
+                <td class="schedule-options"><span wicket:id="autoAssign"/></td>
+                <td><a class="mattButton remove" wicket:id="remove"><wicket:message key="label.remove"/></a></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <wicket:fragment wicket:id="addRecurrenceActionGroup">
+        <a wicket:id="addRecurrenceLink" class="btn-primary"><wicket:message key="label.create_new_rule"/></a>
+    </wicket:fragment>
+
+</wicket:extend>
+</html>

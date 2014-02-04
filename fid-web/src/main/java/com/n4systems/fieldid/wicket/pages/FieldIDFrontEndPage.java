@@ -14,16 +14,17 @@ import com.n4systems.fieldid.wicket.components.localization.SelectLanguagePanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
+import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
-import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
@@ -135,7 +136,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
 
-        add(createHeaderLink("headerLink", "headerLinkLabel"));
         add(createBackToLink("backToLink", "backToLinkLabel"));
         add(createRelogLink());
     }
@@ -238,10 +238,6 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     protected Component createBackToLink(String linkId, String linkLabelId) {
         return new WebMarkupContainer(linkId).setVisible(false);
     }
-    
-    protected Component createHeaderLink(String id, String label) {
-		return new WebMarkupContainer(id).setVisible(false);
-	}
 
     private Component createSetupLinkContainer(SessionUser sessionUser) {
         boolean hasSetupAccess = sessionUser.hasSetupAccess();
@@ -477,18 +473,16 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
             add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
 
-            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class).setVisible(getConfigurationProvider().getBoolean(ConfigEntry.PLACES_ENABLED)));
+            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class));
 
             BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
             procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
             add(procedureLink);
 
-            add(new ExternalLink("support", getSupportUrl(), getString("label.support") ));
+            add(new ExternalLink("support", getSupportUrl(), new FIDLabelModel("label.support").getObject()));
 
             addSpeedIdentifyLinks(sessionUser);
 
-            add(createHeaderLink("headerLink", "headerLinkLabel"));
-            add(createBackToLink("backToLink", "backToLinkLabel"));
             add(new Label("loggedInUsernameLabel", sessionUser.getName()));
             add(new AjaxLink<Void>("languageSelection") {
                 @Override

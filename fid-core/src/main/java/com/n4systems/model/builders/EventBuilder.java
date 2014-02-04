@@ -33,6 +33,7 @@ public class EventBuilder extends BaseBuilder<ThingEvent> {
     private final Date dueDate;
     private final WorkflowState workflowState;
     private final EventStatus eventStatus;
+    private GpsLocation gpsLocation;
 
     public static EventBuilder anEvent() {
         return anEvent(anEventType());
@@ -43,7 +44,7 @@ public class EventBuilder extends BaseBuilder<ThingEvent> {
     }
 
     public static EventBuilder aClosedEvent() {
-        return aFailedEvent(anEventType());
+        return aClosedEvent(anEventType());
     }
 
     public static EventBuilder anOpenEvent() {
@@ -51,22 +52,22 @@ public class EventBuilder extends BaseBuilder<ThingEvent> {
     }
 
     public static EventBuilder anEvent(EventTypeBuilder eventTypeBuilder) {
-		return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.PASS, null, new HashSet<CriteriaResult>(), WorkflowState.COMPLETED, null, null);
+		return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.PASS, null, new HashSet<CriteriaResult>(), WorkflowState.COMPLETED, null, null, null);
 	}
 
     public static EventBuilder anOpenEvent(EventTypeBuilder eventTypeBuilder) {
-        return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.PASS, null, new HashSet<CriteriaResult>(), WorkflowState.OPEN, null, null);
+        return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.PASS, null, new HashSet<CriteriaResult>(), WorkflowState.OPEN, null, null, null);
     }
 
     public static EventBuilder aFailedEvent(EventTypeBuilder eventTypeBuilder) {
-        return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.FAIL, null, new HashSet<CriteriaResult>(), WorkflowState.COMPLETED, null, null);
+        return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.FAIL, null, new HashSet<CriteriaResult>(), WorkflowState.COMPLETED, null, null, null);
     }
 
     public static EventBuilder aClosedEvent(EventTypeBuilder eventTypeBuilder) {
-        return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.FAIL, null, new HashSet<CriteriaResult>(), WorkflowState.CLOSED, null, null);
+        return new EventBuilder(eventTypeBuilder.build(), anAsset().build(), new ArrayList<SubEvent>(), new Date(), new ArrayList<FileAttachment>(), true, null, aPrimaryOrg().build(), aUser().build(), aTenant().build(), EventResult.FAIL, null, new HashSet<CriteriaResult>(), WorkflowState.CLOSED, null, null, null);
     }
 
-	protected EventBuilder(ThingEventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, EventResult eventResult, AssetStatus assetStatus, Set<CriteriaResult> results, WorkflowState workflowState, Date dueDate, EventStatus eventStatus) {
+	protected EventBuilder(ThingEventType type, Asset asset, List<SubEvent> subEvents, Date datePerformed, List<FileAttachment> attachements, boolean printable, AssignedToUpdate assignedTo, BaseOrg owner, User performedBy, Tenant tenant, EventResult eventResult, AssetStatus assetStatus, Set<CriteriaResult> results, WorkflowState workflowState, Date dueDate, EventStatus eventStatus, GpsLocation gpsLocation) {
 		this.eventType = type;
 		this.asset = asset;
 		this.subEvents = subEvents;
@@ -83,70 +84,75 @@ public class EventBuilder extends BaseBuilder<ThingEvent> {
         this.workflowState = workflowState;
         this.dueDate = dueDate;
         this.eventStatus = eventStatus;
+        this.gpsLocation = gpsLocation;
 	}
 
     public EventBuilder withWorkflowState(WorkflowState state) {
-        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, state, dueDate, eventStatus));
+        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, state, dueDate, eventStatus, gpsLocation));
     }
 
     public EventBuilder ofType(ThingEventType type) {
-        return makeBuilder(new EventBuilder(type, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+        return makeBuilder(new EventBuilder(type, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
     }
 	
 	public EventBuilder on(Asset asset) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 	
 	public EventBuilder withSubEvents(List<SubEvent> subEvents) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 
 	public EventBuilder performedOn(Date datePerformed) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 	
 	public EventBuilder withAttachment(List<FileAttachment> attachments) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 
 	public EventBuilder withNoAssignedToUpdate() {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, null, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, null, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 
 	public EventBuilder withAssignedToUpdate(AssignedToUpdate assignToUpdate) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignToUpdate, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignToUpdate, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 	
 	public EventBuilder withOwner(BaseOrg owner) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 	
 	public EventBuilder withPerformedBy(User performedBy) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 	
 	public EventBuilder withTenant(Tenant tenant) {
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 	
 	public EventBuilder withResult(EventResult eventResult){
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 
 	public EventBuilder withAssetStatus(AssetStatus assetStatus){
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
 	}
 
 	public EventBuilder withCriteriaResults(CriteriaResult... results){
-		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, setOf(results), workflowState, dueDate, eventStatus));
+		return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, setOf(results), workflowState, dueDate, eventStatus, gpsLocation));
 	}
 
     public EventBuilder scheduledFor(Date nextDate){
-        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, nextDate, eventStatus));
+        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, nextDate, eventStatus, gpsLocation));
     }
 
     public EventBuilder withEventStatus(EventStatus eventStatus) {
-        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus));
+        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
+    }
+
+    public EventBuilder withGpsLocation(GpsLocation gpsLocation) {
+        return makeBuilder(new EventBuilder(eventType, asset, subEvents, datePerformed, attachments, printable, assignedTo, owner, performedBy, tenant, eventResult, assetStatus, results, workflowState, dueDate, eventStatus, gpsLocation));
     }
 
     @Override
@@ -169,6 +175,7 @@ public class EventBuilder extends BaseBuilder<ThingEvent> {
         event.setWorkflowState(workflowState);
         event.setDueDate(dueDate);
         event.setEventStatus(eventStatus);
+        event.setGpsLocation(gpsLocation);
         
 		return event;
 	}

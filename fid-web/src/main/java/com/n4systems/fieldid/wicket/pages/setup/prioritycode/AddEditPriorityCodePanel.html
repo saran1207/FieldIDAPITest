@@ -9,23 +9,17 @@
             <label><wicket:message key="label.name"/></label>
             <input type="text" wicket:id="name">
 
-            <div class="auto-schedule-description">
-                <wicket:message key="message.when_priority_occurs_auto_schedule"/>
-            </div>
+            <p><wicket:message key="message.when_priority_occurs_auto_schedule"/></p>
 
-            <select class="auto-schedule" wicket:id="autoSchedule">
-            </select>
+            <select wicket:id="autoSchedule"></select>
 
             <div wicket:id="customDaysContainer">
                 <wicket:message key="label.in"/>
-                <input type="text" wicket:id="autoScheduleCustomDays" class="custom-days">
+                <input type="text" wicket:id="autoScheduleCustomDays" class="input-xsml">
                 <wicket:message key="label.days"/>
             </div>
-
-            <div class="formActions">
-                <a class="mattButton mattButtonBlue" wicket:id="saveButton"><wicket:message key="label.save"/></a>
-            </div>
-
+            <a class="btn-primary" wicket:id="saveButton"><wicket:message key="label.save"/></a>
+            
         </div>
     </form>
 

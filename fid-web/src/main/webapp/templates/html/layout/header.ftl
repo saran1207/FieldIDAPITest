@@ -7,6 +7,9 @@
 
     <@n4.includeScript src="jquery.dropdown.js"/>
 
+    <script type="text/javascript" src="//use.typekit.net/usa4tou.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
 	<script type="text/javascript">
 		document.observe("dom:loaded", function() {
 			$('searchText').observe('focus', clearDescription);
@@ -15,25 +18,26 @@
 		});
 	</script>
 
+	<!--[if lte IE 8]>
+        <link wicket:id="dropDownIECss" type="text/css" href="/fieldid/style/dropdown/ie.css" rel="stylesheet" media="all"/>
+    <![endif]-->
     <script type="text/javascript">
         ${action.getCustomJs()}
     </script>
 
 </head>
-<div id="pageHeader" class="frontPageHeader">
+<div id="pageHeader" class="frontPageHeader struts-header">
 
-	<div id="pageActions" style="float:none;">
+	<div id="pageActions" class="clearfix content-wrap">
 		<#include "_companyLogo.ftl"/>
 		<div id="listContainer">
 			<ul class="listOfLinks">				
 				<li class="first">
-					<span class="welcome"><@s.text name="label.welcome"/>,</span> <a href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a>
-                    <span class="separator">|</span>
+					<@s.text name="label.welcome"/>, <a href="<@s.url action="myAccount" namespace="/"/>">${sessionUser.name}</a>
                 </li>
                 <#if action.isMultiLanguage()>
                     <li>
                         <a id="selectLanguageLink" href="javascript:void(0);"><@s.text name="label.language"/></a>
-                        <span class="separator">|</span>
 
                         <script type="text/javascript">
 
@@ -46,16 +50,14 @@
                 </#if>
 				<li>
 		  			<a href="${action.supportUrl}" target="_blank"><@s.text name="label.support"/></a>
-		  			<span class="separator">|</span>
 				</li>
 		  		<li>
 					<a href="<@s.url action="logout"  namespace="/"/>" ><@s.text name="label.logout"/></a>
-					<span class="darkseparator">|</span>
 				</li>
                 <li class="last">
                     <span>
                         <a href="javascript:void(0);" id="mySavedItemsLink"><@s.text name="label.my_saved_items"/></a>
-                        <img src="<@s.url value='/images/down-arrow.png'/>" class="downArrow">
+                        <!-- <img src="<@s.url value='/images/down-arrow.png'/>" class="downArrow"> -->
                         <div id="mySavedItemsBox" class="mySavedItemsBox" style="display:none;"></div>
                     </span>
                 </li>
@@ -64,12 +66,11 @@
   	</div> 
 
 	<div id="pageNavigation">
-		<div id="navigationContent">
+		<div id="navigationContent" class="content-wrap">
 			<div id="navigationLinks">
-				<ul class="dropdown">
+				<ul class="dropdown clearfix">
 					<li>
-						<a href="/fieldid/w/dashboard" class="speedLink" id="menuHome">
-						</a>
+						<a href="/fieldid/w/dashboard" class="speedLink" id="menuHome"><span class="fontello-home">Dashboard</span></a>
 					</li>
 				
 					<#if sessionUser.hasAccess("tag") == true >
@@ -104,9 +105,9 @@
 
 
                     <li>
-                        <a href="/fieldid/w/reporting" class="speedLink textLink" id="menuReport"><@s.text name="speed.reporting" />
+                        <a href="/fieldid/w/reporting" class="speedLink textLink struts" id="menuReport"><@s.text name="speed.reporting" />
                             <#if securityGuard.isCriteriaTrendsEnabled() || securityGuard.isAdvancedEventSearchEnabled()>
-                                <img src="/fieldid/images/down-arrow.png" />
+                                <!-- <img src="/fieldid/images/down-arrow.png" /> -->
                             </#if>
                         </a>
 
@@ -128,9 +129,7 @@
                     </li>
 
                     <li>
-                        <#if action.isPlacesEnabled()>
-                            <a href="/fieldid/w/places" class="speedLink textLink" id="menuPlaces"><@s.text name="speed.places" /></a>
-                        </#if>
+                        <a href="/fieldid/w/places" class="speedLink textLink" id="menuPlaces"><@s.text name="speed.places" /></a>
                     </li>
 
                     <#if securityGuard.lotoProceduresEnabled>
@@ -154,7 +153,7 @@
 							<li>
 								<a href="<@s.url value="/w/setup/settings"/>" class="speedLink textLink" id="menuSetup">
 									<@s.text name="label.setup" />
-									<img src="/fieldid/images/down-arrow.png" />
+									<!-- <img src="/fieldid/images/down-arrow.png" /> -->
 								</a>
 								<ul class="sub_menu">
 									<li>

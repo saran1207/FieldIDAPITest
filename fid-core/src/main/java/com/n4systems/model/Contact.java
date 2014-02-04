@@ -1,9 +1,5 @@
 package com.n4systems.model;
 
-import java.io.Serializable;
-
-import javax.persistence.Embeddable;
-
 import com.n4systems.model.api.Copyable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
@@ -11,13 +7,15 @@ import com.n4systems.model.security.DenyReadOnlyUsersAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityLevel;
 
+import javax.persistence.Embeddable;
+import java.io.Serializable;
+
 /**
  * A simple embeddable entity representing a contact.
  */
 @Embeddable
 public class Contact implements Serializable, SecurityEnhanced<Contact>, Copyable {
-	private static final long serialVersionUID = 1L;
-	
+
 	private String name;
 	private String email;
 	
@@ -28,7 +26,14 @@ public class Contact implements Serializable, SecurityEnhanced<Contact>, Copyabl
 		this.email = email;
 	}
 
-	@AllowSafetyNetworkAccess
+    public Contact(Contact contact) {
+        if (contact!=null) {
+            this.name=contact.getName();
+            this.email=contact.getEmail();
+        }
+    }
+
+    @AllowSafetyNetworkAccess
     @DenyReadOnlyUsersAccess
 	public String getName() {
 		return name;

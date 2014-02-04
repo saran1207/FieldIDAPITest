@@ -1,0 +1,18 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div class="info">
+        <p wicket:id="message"/>
+    </div>
+
+    <div wicket:id="feedbackPanel"/>
+
+    <form wicket:id="form">
+        <select wicket:id="priorityCodes"/>
+        <br/>
+        <a class="btn-primary" wicket:id="save"><wicket:message key="label.archive"/></a>
+        <a class="btn-link" wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+    </form>
+
+</wicket:extend>
+</html>

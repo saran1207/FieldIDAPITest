@@ -19,13 +19,22 @@ import com.n4systems.ejb.wrapper.ProofTestHandlerEJBContainer;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.SecurityContextInitializer;
+import com.n4systems.fieldid.service.SecurityService;
+import com.n4systems.fieldid.service.admin.AdminSecurityService;
+import com.n4systems.fieldid.service.admin.AdminUserService;
+import com.n4systems.fieldid.service.amazon.S3AttachmentHandler;
 import com.n4systems.fieldid.service.amazon.S3ImageAttachmentHandler;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.*;
 import com.n4systems.fieldid.service.attachment.AttachmentService;
+import com.n4systems.fieldid.service.attachment.FileAttachmentHandler;
+import com.n4systems.fieldid.service.attachment.FlavourFactory;
+import com.n4systems.fieldid.service.attachment.ImageFlavour;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.event.*;
+import com.n4systems.fieldid.service.event.perform.PerformPlaceEventHelperService;
+import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
 import com.n4systems.fieldid.service.export.EventTypeExportService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.job.JobService;
@@ -52,10 +61,7 @@ import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.transaction.TransactionService;
-import com.n4systems.fieldid.service.user.SendWelcomeEmailService;
-import com.n4systems.fieldid.service.user.UserGroupService;
-import com.n4systems.fieldid.service.user.UserLimitService;
-import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.service.user.*;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.persistence.listeners.LocalizationListener;
@@ -77,6 +83,7 @@ import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.lucene.analysis.util.CharArraySet;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
@@ -91,10 +98,19 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.io.StringReader;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.security.Security;
+import java.util.Random;
 
 @Configuration
 @EnableCaching
 public class FieldIdCoreConfig {
+
+	static {
+		Security.addProvider(new BouncyCastleProvider());
+	}
 
     @Bean
     public AmazonS3Client amazonS3Client() {
@@ -159,8 +175,13 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
-    public EventCreationService eventCreationService() {
-        return new EventCreationService();
+    public ThingEventCreationService eventCreationService() {
+        return new ThingEventCreationService();
+    }
+
+    @Bean
+    public PlaceEventCreationService placeEventCreationService() {
+        return new PlaceEventCreationService();
     }
 
     @Bean
@@ -312,6 +333,11 @@ public class FieldIdCoreConfig {
     @Bean
     public PlaceService placeService() {
         return new PlaceService();
+    }
+
+    @Bean
+    public PlaceEventScheduleService placeEventScheduleService() {
+        return new PlaceEventScheduleService();
     }
 
     @Bean
@@ -700,4 +726,70 @@ public class FieldIdCoreConfig {
         return new S3ImageAttachmentHandler();
     }
 
+    @Bean
+    public FileAttachmentHandler fileAttachmentHandler() {
+        return new FileAttachmentHandler();
+    }
+
+    @Bean
+	@Scope("singleton")
+	public Random secureRandom() {
+		return new SecureRandom();
+	}
+
+	@Bean
+	public SecurityService securityService() {
+		return new SecurityService();
+	}
+
+	@Bean
+	public AdminUserService adminUserService() {
+		return new AdminUserService();
+	}
+
+	@Bean
+	@Scope("prototype")
+	public MessageDigest sha512Digest() {
+		try {
+			return MessageDigest.getInstance("SHA-512", "BC");
+		} catch (GeneralSecurityException e) {
+			throw new SecurityException("Unable to create SHA-512 MessageDigest", e);
+		}
+	}
+
+	@Bean
+	public AdminSecurityService adminSecurityService() {
+		return new AdminSecurityService();
+	}
+
+    @Bean
+    public SendForgotUserEmailService sendForgotUserEmailService() {
+        return new SendForgotUserEmailService();
+    }
+
+    @Bean
+    public PerformThingEventHelperService performThingEventHelperService() {
+        return new PerformThingEventHelperService();
+    }
+
+    @Bean
+    public PerformPlaceEventHelperService performPlaceEventHelperService() {
+        return new PerformPlaceEventHelperService();
+    }
+
+    @Bean
+    @Scope("prototype")
+    public ImageFlavour imageFlavour() {
+        return new ImageFlavour();
+    }
+
+	@Bean
+	public S3AttachmentHandler s3AttachmentHandler() {
+		return new S3AttachmentHandler();
+	}
+
+	@Bean
+	public FlavourFactory flavourFactory() {
+		return new FlavourFactory();
+	}
 }

@@ -126,7 +126,7 @@ public class HeaderPanel extends Panel {
 
         scheduleToAdd = createNewSchedule(asset);
 
-        final SchedulePicker schedulePicker = new SchedulePicker("schedulePicker", new PropertyModel<ThingEvent>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel()) {
+        final SchedulePicker schedulePicker = new SchedulePicker<ThingEvent>("schedulePicker", new PropertyModel<ThingEvent>(HeaderPanel.this, "scheduleToAdd"), new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(asset, "type")), new EventJobsForTenantModel()) {
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
                 scheduleToAdd.setTenant(FieldIDSession.get().getSessionUser().getTenant());

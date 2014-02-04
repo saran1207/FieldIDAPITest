@@ -1,10 +1,13 @@
 package com.n4systems.fieldid.wicket.data;
 
 import com.n4systems.ejb.PageHolder;
-import com.n4systems.fieldid.service.download.*;
+import com.n4systems.fieldid.service.download.StringRowPopulator;
+import com.n4systems.fieldid.service.download.TableGenerationContext;
+import com.n4systems.fieldid.service.download.TableGenerationContextImpl;
 import com.n4systems.fieldid.service.event.util.ResultTransformerFactory;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.RowModel;
+import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.search.ColumnMappingGroupView;
 import com.n4systems.model.search.ColumnMappingView;
 import com.n4systems.model.search.SearchCriteria;
@@ -20,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public abstract class FieldIdAPIDataProvider extends FieldIDDataProvider<RowView> implements ListableSortableDataProvider<RowView> {
+public abstract class FieldIdAPIDataProvider<T extends EntityWithTenant> extends FieldIDDataProvider<RowView> implements ListableSortableDataProvider<RowView> {
 
     private List<RowView> results;
     private Integer size;
@@ -108,14 +111,16 @@ public abstract class FieldIdAPIDataProvider extends FieldIDDataProvider<RowView
             results = pageHolder.getPageResults().getRows();
             storeIdList();
         }
+
         return results;
     }
 
-    private void storeIdList() {
+    protected void storeIdList() {
         currentPageIdList = new ArrayList<Long>(results.size());
         for (RowView result : results) {
             currentPageIdList.add(result.getId());
         }
+
     }
 
     protected ResultTransformer<TableView> createResultTransformer() {
@@ -125,5 +130,6 @@ public abstract class FieldIdAPIDataProvider extends FieldIDDataProvider<RowView
     public List<Long> getCurrentPageIdList() {
         return currentPageIdList;
     }
+
 
 }

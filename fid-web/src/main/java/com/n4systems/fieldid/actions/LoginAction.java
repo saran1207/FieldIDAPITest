@@ -8,21 +8,19 @@ import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.n4systems.fieldid.handler.password.PasswordHelper;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
+import com.n4systems.fieldid.service.admin.AdminUserService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
-import com.n4systems.fieldid.utils.SessionUserInUse;
+import com.n4systems.fieldid.servlets.ConcurrentLoginSessionListener;
 import com.n4systems.fieldid.utils.UrlArchive;
-import com.n4systems.model.activesession.ActiveSession;
-import com.n4systems.model.activesession.ActiveSessionLoader;
-import com.n4systems.model.activesession.ActiveSessionSaver;
 import com.n4systems.model.user.User;
-import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
-import com.n4systems.util.time.SystemClock;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import rfid.web.helper.SessionEulaAcceptance;
+
+import java.util.Date;
 
 public class LoginAction extends AbstractAction {
 
@@ -42,6 +40,9 @@ public class LoginAction extends AbstractAction {
 
     @Autowired
     private MixpanelService mixpanelService;
+
+	@Autowired
+	private AdminUserService adminUserService;
 	
 	public LoginAction(UserManager userManager, PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -83,15 +84,34 @@ public class LoginAction extends AbstractAction {
 			handleFailedLoginAttempt(e);				
 			return INPUT;
 		}
-		if (signInWillKickAnotherSessionOut(loginUser)) {
-			storeUserAuthenticationForConfirmOfSessionKick(loginUser);
-			return "confirmKick";
+
+		WebSessionMap currentSession = getSession();
+		currentSession.setUserId(loginUser.getId());
+
+		// we never check for concurrent sessions on sudo logins or system users
+		if (!currentSession.isSudoAuth() && !loginUser.isSystem()) {
+			WebSessionMap concurrentSession = getConcurrentSession(loginUser, currentSession);
+			if (concurrentSession != null) {
+				currentSession.setConcurrentSessionId(concurrentSession.getId());
+				return "confirmKick";
+			}
 		}
 		return signIn(loginUser);
 	}
 
-	private void storeUserAuthenticationForConfirmOfSessionKick(User loginUser) {
-		getSession().setUserAuthHolder(loginUser.getId());
+	private WebSessionMap getConcurrentSession(User loginUser, WebSessionMap currentSession) {
+		WebSessionMap concurrentSession = null;
+		for(WebSessionMap userSession: ConcurrentLoginSessionListener.getValidSessionsForUser(loginUser.getId())) {
+			// a session is not concurrent if: it is the current session or was authenticated via sudo
+			if (userSession.getId().equals(currentSession.getId()) || userSession.isSudoAuth()) {
+				continue;
+			} else {
+				// we will stop after finding the first concurrent session as there can only ever be 1
+				concurrentSession = userSession;
+				break;
+			}
+		}
+		return concurrentSession;
 	}
 
 	private User findUser() throws LoginException {
@@ -104,7 +124,21 @@ public class LoginAction extends AbstractAction {
 	}
 
 	private User findUserByPw() throws LoginException {
-		return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
+		// this is pretty ugly and should be pushed back to the user manager once moved to struts
+		try {
+			// findUserByPw will never return a null user.  Any authentication failure will throw a LoginException
+			return userManager.findUserByPw(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
+		} catch (LoginException e) {
+			User user = adminUserService.attemptSudoAuthentication(getSecurityGuard().getTenantName(), signIn.getUserName(), signIn.getPassword());
+
+			// if admin auth is successful, return the user, otherwise re-throw the exception
+			if (user != null) {
+				getSession().setSudoAuth(true);
+				return user;
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	private String getFailedLoginText(LoginFailureInfo info) {
@@ -147,11 +181,6 @@ public class LoginAction extends AbstractAction {
         }
 	}
 
-	private boolean signInWillKickAnotherSessionOut(User loginUser) {
-		SessionUserInUse sessionUserInUse = new SessionUserInUse(new ActiveSessionLoader(), ConfigContext.getCurrentContext(), new SystemClock(), new ActiveSessionSaver());
-		return sessionUserInUse.isThereAnActiveSessionFor(loginUser.getId()) && !sessionUserInUse.doesActiveSessionBelongTo(loginUser.getId(), getSession().getId());
-	}
-
 	private String signIn(User loginUser) {		
 		// if password expired, jump to reset password page (which requires username & resetkey)
 		PasswordHelper passwordHelper = new PasswordHelper(tenantSettingsService.getTenantSettings().getPasswordPolicy());
@@ -170,12 +199,15 @@ public class LoginAction extends AbstractAction {
 	}
 
 	public String doConfirmKick() {
-		Long userId = getSession().getUserAuthHolder();
-		if (userId == null) {
-			return ERROR;
+		WebSessionMap concurrentSession = ConcurrentLoginSessionListener.getSessionById(getSession().getConcurrentSessionId());
+
+		// it's possible (but unlikely) that the concurrent user logged out between the login attempt and now
+		if (concurrentSession != null) {
+			// boot the concurrent session
+			concurrentSession.setBooted(true);
 		}
 
-		User loginUser = persistenceManager.find(User.class, userId);
+		User loginUser = persistenceManager.find(User.class, getSession().getUserId());
 		if (loginUser != null) {
 			return signIn(loginUser);
 		}
@@ -191,19 +223,11 @@ public class LoginAction extends AbstractAction {
 
 	@SkipValidation
 	public String doDelete() {
-		expireActiveSession();
 		clearSession();
         if(getLogoutUrl() != null)
             return "redirect";
         else
 		    return SUCCESS;
-	}
-
-	private void expireActiveSession() {
-		if (isLoggedIn()) {
-			SessionUserInUse sessionUserInUse = new SessionUserInUse(new ActiveSessionLoader(), ConfigContext.getCurrentContext(), new SystemClock(), new ActiveSessionSaver());
-			sessionUserInUse.expireSession(getSessionUserId());
-		}
 	}
 
 	private void clearSession() {
@@ -226,18 +250,20 @@ public class LoginAction extends AbstractAction {
 		loadSessionUser(loginUser.getId());
 		loadEULAInformation();
 		rememberMe();
-		registerActiveSession(loginUser, getSession().getId());
         recordLoginOnMixPanel(loginUser);
+		updateLastLoginDate(loginUser);
+
 		logger.info(getLogLinePrefix() + "Login: " + signIn.getUserName() + " of " + getSecurityGuard().getTenantName());
 	}
 
-    private void recordLoginOnMixPanel(User user) {
+	private void updateLastLoginDate(User loginUser) {
+		loginUser.setLastLogin(new Date());
+		userManager.updateUser(loginUser);
+	}
+
+	private void recordLoginOnMixPanel(User user) {
         mixpanelService.sendEvent(MixpanelService.LOGGED_IN, user);
     }
-
-    private void registerActiveSession(User loginUser, String sessionId) {
-		new ActiveSessionSaver().save(new ActiveSession(loginUser, sessionId));
-	}
 
 	private void loadEULAInformation() {
 		getSession().setEulaAcceptance(new SessionEulaAcceptance(getLoaderFactory().createCurrentEulaLoader(), getLoaderFactory().createLatestEulaAcceptanceLoader()));

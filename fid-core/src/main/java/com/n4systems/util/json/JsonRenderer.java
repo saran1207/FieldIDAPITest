@@ -17,7 +17,7 @@ public class JsonRenderer implements Serializable {
                                 registerTypeAdapter(ImageAnnotation.class, new ImageAnnotationSerializer()).
                                 create();
 
-	public String render(Object bean) {		
+	public String render(Object bean) {
 		String json = gson.toJson(bean);
 		return json;
 	}

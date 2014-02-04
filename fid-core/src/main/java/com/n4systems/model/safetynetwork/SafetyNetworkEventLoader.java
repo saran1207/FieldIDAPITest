@@ -2,9 +2,7 @@ package com.n4systems.model.safetynetwork;
 
 import javax.persistence.EntityManager;
 
-import com.n4systems.model.Event;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.persistence.PersistenceManager;
@@ -24,7 +22,7 @@ abstract public class SafetyNetworkEventLoader extends SecurityFilteredLoader<Th
 		this(filter, new NonSecureIdLoader<ThingEvent>(ThingEvent.class));
 	}
 
-	abstract protected boolean accessAllowed(EntityManager em, SecurityFilter filter, Event event);
+	abstract protected boolean accessAllowed(EntityManager em, SecurityFilter filter, AbstractEvent<?,Asset> event);
 	
 	@Override
 	public ThingEvent load(EntityManager em, SecurityFilter filter) {

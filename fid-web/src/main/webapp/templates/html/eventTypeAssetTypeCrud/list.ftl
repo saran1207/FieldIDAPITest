@@ -1,3 +1,7 @@
+<head>
+    <@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+</head>
+
 <script type="text/javascript">
 	function selectAll(){
 		$$('input[type="checkbox"]').each(function(checkBox){

@@ -33,8 +33,10 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
     private S3Service s3Service;
 
     private boolean assetSummaryContext = false;
+    private Class<? extends Event> eventClass;
 
-    public ActionDetailsPage(final IModel<CriteriaResult> criteriaResultModel, final IModel<Event> actionModel) {
+    public ActionDetailsPage(final IModel<CriteriaResult> criteriaResultModel, final Class<? extends Event> eventClass, final IModel<Event> actionModel) {
+        this.eventClass = eventClass;
         add(new Label("priority", new PropertyModel<String>(actionModel, "priority.name")));
         add(new Label("notes", new PropertyModel<String>(actionModel, "notes")));
         if (actionModel.getObject().getAssignee() != null) {
@@ -101,7 +103,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
     }
 
     protected void setActionsListResponsePage(IModel<CriteriaResult> criteriaResultModel) {
-        setResponsePage(new ActionsListPage(criteriaResultModel));
+        setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
     }
 
     protected boolean isStartable(IModel<CriteriaResult> criteriaResultModel) {

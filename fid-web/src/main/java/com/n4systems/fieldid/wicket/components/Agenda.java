@@ -9,15 +9,12 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.event.PerformEventPage;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationForAgenda;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.search.IncludeDueDateRange;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
@@ -298,11 +295,11 @@ public class Agenda extends Panel  {
 
         @Override
         protected List<EventDay> load() {
-            List<Event> events = eventService.getWork(getDateRange(), getUser(), getOrg(), getAssetType(), getEventType(), WORK_EVENT_LIMIT);
+            List<ThingEvent> events = eventService.getWork(getDateRange(), getUser(), getOrg(), getAssetType(), getEventType(), WORK_EVENT_LIMIT);
             eventsLoaded = events.size();
             Map<LocalDate,EventDay> map = Maps.newTreeMap();
 
-            for (Event event:events) {
+            for (ThingEvent event:events) {
                 LocalDate date = new LocalDate(event.getDueDate().getTime());
                 EventDay eventDay = map.get(date);
                 if (eventDay==null) {
@@ -321,15 +318,16 @@ public class Agenda extends Panel  {
         public EventDayPanel(String id, EventDay eventDay) {
             super(id, "dayPanel", Agenda.this);
             add(new Label("date", DateUtil.getDayString(eventDay.getDate())));
-            ListView<Event> eventDayList = new ListView<Event>("list", eventDay.events) {
-                @Override protected void populateItem(ListItem<Event> item) {
-                    addEvent(item, item.getModelObject());
+            ListView<ThingEvent> eventDayList = new ListView<ThingEvent>("list", eventDay.events) {
+                @Override protected void populateItem(ListItem<ThingEvent> item) {
+                    addEvent(item);
                 }
             };
             add(eventDayList);
         }
 
-        private void addEvent(ListItem<Event> item, final Event event) {
+        private void addEvent(ListItem<ThingEvent> item) {
+            final ThingEvent event = item.getModelObject();
             String image = event.isAssigned() ? "images/event-open-assigned.png" : "images/event-open.png";
             final Asset asset = event.getAsset();
             AssetLabelModel model = new AssetLabelModel(asset);
@@ -362,12 +360,12 @@ public class Agenda extends Panel  {
 
     class EventDay implements Serializable, Comparable<EventDay> {
         LocalDate date;
-        List<Event> events = Lists.newArrayList();
+        List<ThingEvent> events = Lists.newArrayList();
 
         public EventDay(LocalDate date) {
             this.date = date;
         }
-        public EventDay add(Event event) {
+        public EventDay add(ThingEvent event) {
             events.add(event);
             return this;
         }

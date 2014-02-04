@@ -9,9 +9,11 @@
 			<@s.hidden name="featureOn" value="true" />
 		</#if>
 
+		<#if superUser>
 		<a href="javascript:void(0);" onClick="saveExtendedFeature('${feature}');">
 			<#if action.getExtendedFeatureState(feature)>on<#else>off</#if>
 		</a>
+		</#if>
 	</@s.form>
 </td>
 <td class="featureLabel"><@s.text name="${featureLabel}"/></td>

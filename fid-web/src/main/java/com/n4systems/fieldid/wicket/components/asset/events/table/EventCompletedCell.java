@@ -11,7 +11,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 public class EventCompletedCell extends Panel {
-    public EventCompletedCell(String id, IModel<ThingEvent> eventModel) {
+    public EventCompletedCell(String id, IModel<? extends Event> eventModel) {
         super(id);
 
         Event event = eventModel.getObject();

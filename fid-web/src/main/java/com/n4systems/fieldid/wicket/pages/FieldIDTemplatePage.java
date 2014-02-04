@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages;
 
-import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.UIConstants;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserLimitService;
@@ -15,17 +14,17 @@ import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.saveditems.SavedItemsDropdown;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
-import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
+import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
-import com.n4systems.fieldid.wicket.pages.setup.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
@@ -79,14 +78,12 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
     @SpringBean
     private S3Service s3Service;
 
-    private Component titleLabel;
-	private Component topTitleLabel;
+    protected Component titleLabel;
+	protected Component topTitleLabel;
     private ConfigurationProvider configurationProvider;
     private TopFeedbackPanel topFeedbackPanel;
     private ModalWindow languageSelectionModalWindow;
     private final SelectLanguagePanel selectLanguagePanel;
-
-    private String mainCss;
 
     public FieldIDTemplatePage() {
         this(null, null);
@@ -124,10 +121,10 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         // TODO DD : refactor this...override
         addCssContainers();
 
+        add(topFeedbackPanel = new TopFeedbackPanel("topFeedbackPanel"));
         add(new Label("versionLabel", FieldIdVersion.getVersion()));
 
         add(createHeaderLink("headerLink", "headerLinkLabel"));
-        add(createBackToLink("backToLink", "backToLinkLabel"));
         add(createRelogLink());
     }
 
@@ -146,6 +143,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         add(topTitleLabel = useTopTitleLabel() ? createTopTitleLabel("topTitleLabel") : createTitleLabel("topTitleLabel"));
         topTitleLabel.setRenderBodyOnly(true);
 
+        add(createBackToLink("backToLink", "backToLinkLabel"));
         add(createSubHeader("subHeader"));
 
         add(createActionGroup("actionGroup"));
@@ -366,8 +364,9 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             response.renderJavaScript(apptegicTemplate.asString(apptegicParams), null);
         }
 
-        if(getMainCss() != null)
+        if(!getMainCss().isEmpty())
             response.renderOnDomReadyJavaScript("$('main[role=\"main\"]').addClass('"+getMainCss()+"');");
+
     }
 
     protected void renderJqueryJavaScriptReference(IHeaderResponse response) {
@@ -433,7 +432,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
                 }
             }.setVisible(selectLanguagePanel.hasLanguagesToDisplay()));
 
-            add(new ExternalLink("support", getSupportUrl(), getString("label.support")));
+            add(new ExternalLink("support", getSupportUrl(), new FIDLabelModel("label.support").getObject()));
 
             add(new SavedItemsDropdown("savedItemsDropdown"));
 
@@ -441,11 +440,9 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
             add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent")));
 
-            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class).setVisible(getConfigurationProvider().getBoolean(ConfigEntry.PLACES_ENABLED)));
+            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class));
 
             add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
-
-            add(new BookmarkablePageLink<Void>("newAssetSearchLink", AdvancedAssetSearchPage.class));
 
             add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class));
 
@@ -459,9 +456,6 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
             procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
             add(procedureLink);
-
-            add(createHeaderLink("headerLink", "headerLinkLabel"));
-            add(createBackToLink("backToLink", "backToLinkLabel"));
 
             add(createSetupLinkContainer(sessionUser));
             add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));
@@ -497,11 +491,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         }
     }
 
-    public String getMainCss() {
-        return mainCss;
-    }
-
-    public void setMainCss(String mainCss) {
-        this.mainCss = mainCss;
+    protected String getMainCss() {
+        return "";
     }
 }

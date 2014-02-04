@@ -1,4 +1,5 @@
 <ul class="options "">
+
     <li class=" <#if action.isPageName('tenants')>selected</#if>">
         <#if action.isPageName('tenants')>
             Tenants
@@ -6,6 +7,12 @@
             <a href="/fieldid/admin/organizations.action">Tenants</a>
         </#if>
     </li>
+
+	<#if superUser>
+	<li>
+	    <a href="/fieldid/w/admin/users">Users</a>
+	</li>
+
     <li class=" <#if action.isPageName('eulas')>selected</#if>">
         <#if action.isPageName('eulas')>
             EULA
@@ -13,6 +20,7 @@
             <a href="/fieldid/admin/eulas.action">EULA</a>
         </#if>
     </li>
+
     <li class=" <#if action.isPageName('orderMapping')>selected</#if>">
         <#if action.isPageName('orderMapping')>
             Order Mappings
@@ -61,5 +69,6 @@
     <li>
         <a href="/fieldid/w/admin/configureLanguages">Languages</a>
     </li>
+	</#if>
 
 </ul>

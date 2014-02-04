@@ -8,7 +8,6 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.model.Attachment;
-import com.n4systems.model.attachment.S3Attachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
@@ -113,6 +112,10 @@ public class S3Service extends FieldIdPersistenceService {
         uploadResource(file, null, CUSTOMER_LOGO_PATH, customerOrgId);
     }
 
+    public void uploadCustomerLogo(Long customerOrgId, String contentType, byte[] bytes) {
+        uploadResource(bytes, contentType, null, CUSTOMER_LOGO_PATH, customerOrgId);
+    }
+
     public void removeCustomerLogo(Long customerOrgId) {
         removeResource(null, CUSTOMER_LOGO_PATH, customerOrgId);
     }
@@ -151,8 +154,16 @@ public class S3Service extends FieldIdPersistenceService {
         uploadResource(file, null, PRIMARY_CERTIFICATE_LOGO_PATH);
     }
 
+    public void uploadPrimaryOrgCertificateLogo(String contentType, byte[] bytes) {
+        uploadResource(bytes, contentType, null, PRIMARY_CERTIFICATE_LOGO_PATH);
+    }
+
     public void uploadSecondaryOrgCertificateLogo(File file, Long secondaryOrgId) {
         uploadResource(file, null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
+    }
+
+    public void uploadSecondaryOrgCertificateLogo(Long secondaryOrgId, String contentType, byte[] bytes) {
+        uploadResource(bytes, contentType, null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
     }
 
     public void removePrimaryOrgCertificateLogo() {
@@ -640,35 +651,65 @@ public class S3Service extends FieldIdPersistenceService {
         expirationDays = null;
     }
 
-    public void uploadTempAttachment(S3Attachment attachment) {
-        for (S3Attachment attachmentFlavour:getS3AttachmentHandler(attachment).getFlavours(attachment)) {
-            putObject(attachmentFlavour.getTempPath(), attachmentFlavour.getBytes(), attachmentFlavour.getContentType());
-        }
-    }
+//    public void uploadTempAttachment(S3Attachment attachment) {
+//        for (S3Attachment attachmentFlavour:getS3AttachmentHandler(attachment).createFlavours(attachment)) {
+//            putObject(attachmentFlavour.getTempPath(), attachmentFlavour.getBytes(), attachmentFlavour.getContentType());
+//        }
+//    }
+//
+//    public void uploadAttachment(S3Attachment attachment) {
+//        for (S3Attachment attachmentFlavour:getS3AttachmentHandler(attachment).createFlavours(attachment)) {
+//            putObject(attachmentFlavour.getPath(), attachmentFlavour.getBytes(), attachmentFlavour.getContentType());
+//        }
+//    }
 
-    private S3AttachmentHandler getS3AttachmentHandler(S3Attachment attachment) {
-        // TODO : check meta-data for content-type and return appropriate handler.
-        // also, make these spring beans.
-        return s3ImageAttachmentHandler;
-    }
+//    private S3AttachmentHandler getS3AttachmentHandler(S3Attachment attachment) {
+//        // TODO : check meta-data for content-type and return appropriate handler.
+//        // for now we only have one type of attachments running through this code.
+//        return s3ImageAttachmentHandler;
+//    }
+//
+//    public void finalize(S3Attachment attachment) {
+//        List<S3Attachment> flavours = getS3AttachmentHandler(attachment).createFlavours(attachment);
+//        for (S3Attachment flavour:flavours) {
+//            finalizeImpl(flavour);
+//        }
+//    }
 
-    public void finalize(S3Attachment attachment) {
-        List<S3Attachment> flavours = getS3AttachmentHandler(attachment).getFlavours(attachment);
-        for (S3Attachment flavour:flavours) {
-            finalizeImpl(flavour);
-        }
-    }
-
-    private void finalizeImpl(S3Attachment attachment) {
-        CopyObjectRequest copyObjectRequest = new CopyObjectRequest(
-                getBucket(),
-                    attachment.getTempPath(),
-                getBucket(),
-                    attachment.getPath());
-
-        getClient().copyObject(copyObjectRequest);
-        // what about removing from temp? when should this be done.
-    }
+//    private void finalizeImpl(S3Attachment attachment) {
+//        CopyObjectRequest copyObjectRequest = new CopyObjectRequest(
+//                getBucket(),
+//                    attachment.getTempPath(),
+//                getBucket(),
+//                    attachment.getPath());
+//
+//        getClient().copyObject(copyObjectRequest);
+//        // what about removing from temp? when should this be done.
+//    }
+//
+//    public URL getAttachmentUrl(S3Attachment attachment, String suffix) {
+//        if (attachment==null || StringUtils.isBlank(attachment.getPath())) {
+//            return null;
+//        }
+//        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+//
+//        String path = attachment.getPath();
+//        if (StringUtils.isNotBlank(suffix)) {
+//            path = suffix.startsWith(".") ? path+suffix : path + "." + suffix;
+//        }
+//        URL url = generatePresignedUrl(path, expires, HttpMethod.GET);
+//        return url;
+//    }
+//    public URL getAttachmentUrl(S3Attachment attachment) {
+//        return getAttachmentUrl(attachment,null);
+//    }
+//
+//    public void removeAttachment(S3Attachment attachment) {
+//        List<S3Attachment> flavours = getS3AttachmentHandler(attachment).getFlavours(attachment);
+//        for (S3Attachment flavour:flavours) {
+//            deleteObject(flavour.getPath());
+//        }
+//    }
 
     public class S3ImagePath {
         private String origPath;

@@ -1,52 +1,54 @@
 <html xmlns:wicket="http://wicket.apache.org">
     <wicket:extend>
-        <hr>
 
-        <!-- Left column: narrow -->
-        <div class="column-narrow-left">
+        <!-- Left Column -->
+        <div class="column-left">
+            <h3 class="no-border">Feature image with border</h3>
+            <div class="feature-image border">
+                <img wicket:id="featureImage" alt="">
+            </div>
 
-            <!-- Sample content. Refer to style guide documentation for all available styles. -->
-            <img wicket:id="featureImage" class="feature-img" alt="air hoist">
-
-            <section>
-                <h3>Two column table</h3>
-                <table class="two-columns">
-                    <tr>
-                        <td>Reference Number</td>
-                        <td>I1445</td>
-                    </tr>
-                    <tr>
-                        <td>Visibility</td>
-                        <td>false</td>
-                    </tr>
-                    <tr>
-                        <td>Created By</td>
-                        <td>12/09/09 4:58 PM EST</td>
-                    </tr>
-                    <tr>
-                        <td>Modified By</td>
-                        <td>N4 Systems 10/26/12 1:56 PM EDT</td>
-                    </tr>
-                </table>
-            </section>
+            <h3>Feature image, fluid width & height</h3>
+            <div class="feature-image fluid">
+                <img src="/fieldid/img/examples/test-image.jpg">
+            </div>
         </div>
-
-        <!-- Right column: wide -->
+        
+        <!-- Right Content -->
         <div class="column-wide">
-            <section class="schedules">
-                <h3>Table listing</h3>
-                <table class="borders">
+            <section>
+                <h3>Table Heading</h3>
+                <table>
                     <tr>
                         <td>Lorem ipsum dolor sit amet.</td>
                         <td>Dolor harum totam accusamus.</td>
                         <td>07/24/13</td>
-                        <td><span class="btn-secondary btn-sml pull-right">Edit</span></td>
+                        <td><span class="btn-secondary">button</span></td>
                     </tr>
                     <tr>
                         <td>Lorem ipsum dolor sit amet.</td>
                         <td>Dolor harum totam accusamus.</td>
                         <td>07/24/13</td>
-                        <td><span class="btn-secondary btn-sml pull-right">Edit</span></td>
+                        <td>
+                            <div class="split-btn">
+                                <a class="btn-secondary" href="#">View</a>
+                                <div class="dropdown">
+                                    <button class="btn-secondary">
+                                        <span class="icon">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="pull-right">
+                                        <li><a href="#">Edit</a></li>
+                                        <li><a href="#">Action 2</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Lorem ipsum dolor sit amet.</td>
+                        <td>Dolor harum totam accusamus.</td>
+                        <td>07/24/13</td>
+                        <td><span class="btn-secondary btn-link">link</span></td>
                     </tr>
                 </table>
             </section>
@@ -77,10 +79,10 @@
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, in, maiores ipsa deleniti omnis animi temporibus blanditiis suscipit maxime ex necessitatibus quis tenetur magni sed iusto praesentium debitis expedita ut.</p>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, in, maiores ipsa deleniti omnis animi temporibus blanditiis suscipit maxime ex necessitatibus quis tenetur magni sed iusto praesentium debitis expedita ut.</p>
             </section>
-        </div><!-- cls .column-wide -->
+        </div>
 
         <wicket:fragment wicket:id="actions">
-            <!-- Any combination of button styles can be contain within here. Refer to style guide documentaton. Example of single and grouped buttons below. -->
+            <!-- Any combination of button styles can be added here. Refer to style guide documentaton for all options. -->
             <a wicket:id="secondaryLink" class="btn-secondary">Secondary</a>
             <div class="button-group">
                 <div class="dropdown">

@@ -34,7 +34,7 @@ public class EventAttributeDynamicGroupGenerator {
 			// Retrieve attributes over this EventType.
 			if (eventTypeId != null) {
 				// when an event type has been selected, we will use all the infofields from the event type
-				EventType eventType = persistenceManager.find(EventType.class, eventTypeId, filter, "infoFieldNames");
+				EventType<?> eventType = persistenceManager.find(EventType.class, eventTypeId, filter, "infoFieldNames");
 
                 if (eventType != null) {
                     // construct and add our field mappings

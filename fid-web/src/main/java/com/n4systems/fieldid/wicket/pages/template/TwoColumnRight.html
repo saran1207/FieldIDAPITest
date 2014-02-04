@@ -1,28 +1,19 @@
 <html xmlns:wicket="http://wicket.apache.org">
     <wicket:extend>
 
-    <hr>
-
-    <!-- Right column: wide -->
-    <div class="column-wide">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
-    </div><!-- cls .column-wide -->
-
-    <!-- Right column: narrow MUST come after .column-wide -->
-    <div class="column-narrow-right">
+    <!-- right column -->
+    <div class="column-right">
         <!-- Sample form styles. Refer to documentation for all features. -->
         <form wicket:id="form">
             <fieldset>
                 <legend>Form section title</legend>
                 <p>Upload an image of the asset to be displayed on the profile page. The image should be 300px wide.</p>
-                <div class="input-combo">
-                    <input wicket:id="fileUploadField" type="file" class="file-input js-file-input">
-                    <input wicket:id="textField" type="text" class="file-uploaded js-file-uploaded">
-                    <span class="btn-secondary btn-sml">Browse</span>
-                </div>
+
+                <div class="input-combo file-upload fluid">
+                    <input wicket:id="fileUploadField" type="file">
+                    <input wicket:id="textField" type="text">
+                    <span class="btn-secondary">Browse</span>
+                </div> 
             </fieldset>
 
             <fieldset>
@@ -34,6 +25,20 @@
                 <select wicket:id="warnings" data-placeholder="" class="chzn-select-no-search"/>
             </fieldset>
         </form>
+
+        <form class="input-combo" method="post" action="">
+            <input type="text">
+            <button class="btn-secondary">button</button>
+        </form>
     </div>
+
+    <!-- wide column -->
+    <div class="column-wide">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia, fugit, iure, voluptatum veritatis vitae eligendi distinctio dignissimos odit velit hic eaque alias labore consectetur quis repudiandae eos quaerat possimus iste.</p>
+    </div>
+
     </wicket:extend>
 </html>

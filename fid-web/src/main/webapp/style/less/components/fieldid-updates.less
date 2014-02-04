@@ -1,0 +1,155 @@
+// ----------------------------------------------------------------------------------------
+// The CSS here is used for overriding the framework's global styles *or* adding styles 
+// that the framework does not need, to work with *old components* that have not been 
+// rewritten using the new framework markup and css but need to be displayed on pages that 
+// use the new structure. 
+
+// The css here will only affect the styling of old components displayed on the new pages
+// and will not affect the styling of existing pre-framework pages. As components are moved
+// over to the new framework, the styles here may need to be rewritten or deleted.
+// ----------------------------------------------------------------------------------------
+
+
+// Existing wicket modal 
+// ----------------------
+.wicket-modal {
+	a {
+		color: @blue;
+	}
+	a.mattButton {
+		padding: 5px 12px;
+		.border-radius(2px);
+		font-size: @base-font-size;
+		width: auto;
+		cursor: pointer;
+		margin: 0;
+		.shadow(none);
+		font-family: @proxima-nova;
+		-webkit-font-smoothing: auto;
+	}
+	[class^="btn"] {
+		color: @white;
+	}
+	.btn-secondary {
+		color: @gray-darkest;
+	}
+
+	div.dialog-modal {
+		.shadow(0px 1px 5px @gray-medium);
+	}
+
+	//FORM STYLES
+	//aligns the label and input on one line
+	.left, .right {
+		float: left;
+	}
+	.left {
+		width: 110px;
+		text-align: right;
+		padding: 10px 10px 0 0;
+	}
+	.right {
+		//checkbox input and label are both in right div
+		.checkbox {
+			margin-left: 109px;
+		}
+	}
+	// aligns tooltip image
+	img.tooltip {
+		padding-left: 5px;
+		vertical-align: middle;
+	}
+	.btn {
+		float: right;
+		margin: 20px 30px 0 0;
+	}
+
+	//Chosen plugin
+	.chzn-drop {
+		.box-sizing(content-box);
+	}
+	
+	//Add Schedule form
+	.newScheduleForm {
+		.schedulePickerTitle {
+			font-size: @base-font-size + 2;
+			border-bottom: 1px solid @gray;
+			padding-bottom: 4px;
+			font-weight: @bold;
+			color: @gray-darkest;
+			margin-bottom: 5px;
+		}
+		//aligning Set Due Date options
+		.scheduleRow {
+			padding-top: 0;
+
+			.datetimepicker { // input
+				float: left;
+				border: 1px solid #c7c7c9;
+			}
+			.ui-datepicker-trigger { // calendar image
+				float: left;
+				margin-top: 6px;
+			}
+			input[type="checkbox"] {
+				margin: 8px 5px 0 12px;
+			}
+			label { // all day label
+				float: left;
+				margin-top: 6px;
+			}
+			.dateQuickLinks {
+				font-size: @xsmall-font-size;
+				
+				a { 
+					padding: 0 1px;
+				}
+			}
+		}
+		.scheduleRow label,
+		.assignmentSection .assignmentSectionTitle {
+			color: @gray-darkest;
+			font-size: @base-font-size;
+		}
+		.formActions {
+			padding: 10px 0;
+
+			.blueButton {
+				background: @blue;
+				border: 1px solid darken(@blue, 5%);
+			}
+		}
+	}
+	// Removes list spacing in error messages. 
+	// Overriding style in feedback_errors.css
+	.error ul {
+		margin-left: 15px;
+	}
+}
+
+
+// cbox overlay
+// -------------
+#colorbox, #cboxOverlay, #cboxWrapper {
+	// Applies a natural box layout model to all elements.
+	// Need to set it back to the default
+	.box-sizing(content-box);
+}
+
+
+// .fieldid-framework selector only affects the new template styles.
+.fieldid-framework { 
+
+	// Removes list spacing in error messages. 
+	// Overriding style in feedback_errors.css
+	.error ul {
+		margin-left: 0;
+	}
+}
+
+
+
+
+
+
+

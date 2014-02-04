@@ -1,10 +1,7 @@
 package com.n4systems.fieldid.service.search;
 
-import com.n4systems.model.Event;
-import com.n4systems.model.search.ColumnMappingView;
-import com.n4systems.model.search.EventReportCriteria;
-import com.n4systems.model.search.WorkflowStateCriteria;
-import com.n4systems.model.search.IncludeDueDateRange;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.search.*;
 import com.n4systems.model.security.NetworkIdSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.date.DateService;
@@ -24,19 +21,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
-public class ReportService extends SearchService<EventReportCriteria, Event> {
+public class ReportService extends SearchService<EventReportCriteria, ThingEvent, ThingEvent> {
 
     @Autowired
     private DateService dateService;
 
     public ReportService() {
-        super(Event.class);
+        super(ThingEvent.class);
     }
 
     @Override
-    protected void addSearchTerms(EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
+    protected void addSearchTerms(EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms, boolean includeGps) {
         User user = getCurrentUser();
         TimeZone timeZone = user.getTimeZone();
+
+        addSimpleTerm(searchTerms, "type.actionType", criteriaModel.getEventSearchType().equals(EventSearchType.ACTIONS));
 
         addWildcardOrStringTerm(searchTerms, "asset.rfidNumber", criteriaModel.getRfidNumber());
         addWildcardOrStringTerm(searchTerms, "asset.identifier", criteriaModel.getIdentifier());
@@ -153,6 +152,7 @@ public class ReportService extends SearchService<EventReportCriteria, Event> {
             addOrgJoinTerms(status, "customerOrg", "assetCustomerOrg", "eventCustomerOrg", joinTerms);
         }
     }
+
 
     private void addOrgJoinTerms(WorkflowStateCriteria status, String basePath, String assetJoinAlias, String eventJoinAlias, List<JoinTerm> joinTerms) {
         if (status.includesIncomplete()) {

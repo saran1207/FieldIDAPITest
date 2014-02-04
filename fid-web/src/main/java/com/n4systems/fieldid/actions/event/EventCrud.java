@@ -25,7 +25,7 @@ import com.n4systems.fieldid.permissions.UserPermissionFilter;
 import com.n4systems.fieldid.security.NetworkAwareAction;
 import com.n4systems.fieldid.security.SafetyNetworkAware;
 import com.n4systems.fieldid.service.PersistenceService;
-import com.n4systems.fieldid.service.event.EventCreationService;
+import com.n4systems.fieldid.service.event.ThingEventCreationService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ui.OptionLists;
@@ -46,6 +46,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import com.n4systems.model.utils.AssetEvent;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.tools.FileDataContainer;
@@ -78,9 +79,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	protected final ProductionEventPersistenceFactory eventPersistenceFactory;
 	protected final EventHelper eventHelper;
 	protected final EventFormHelper eventFormHelper;
-    private final EventCreationService eventCreationService;
+    private final ThingEventCreationService eventCreationService;
 	protected Asset asset;
-	protected ThingEvent event;
+	protected Event event;
 
     protected EventBook eventBook;
 
@@ -132,7 +133,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
     private MixpanelService mixpanelService;
 
     public EventCrud(PersistenceManager persistenceManager, EventManager eventManager, UserManager userManager, LegacyAsset legacyAssetManager,
-			AssetManager assetManager, EventScheduleManager eventScheduleManager, EventCreationService eventCreationService, PersistenceService persistenceService) {
+			AssetManager assetManager, EventScheduleManager eventScheduleManager, ThingEventCreationService eventCreationService, PersistenceService persistenceService) {
 		super(persistenceManager);
 		this.eventManager = eventManager;
 		this.legacyAssetManager = legacyAssetManager;
@@ -149,7 +150,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	@Override
 	protected void initMemberFields() {
         if (openEventId != null && !openEventId.equals(0L)) {
-            event = persistenceManager.find(ThingEvent.class, openEventId, getTenant(), "asset", "eventForm.sections", "results", "results.criteriaImages", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
+            event = persistenceManager.find(Event.class, openEventId, getTenant(), "asset", "eventForm.sections", "results", "results.criteriaImages", "attachments", "infoOptionMap", "type.supportedProofTests", "type.infoFieldNames", "subEvents", "type.eventForm.sections");
             event.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
             event.setEventForm(event.getType().getEventForm());
         } else {
@@ -164,15 +165,23 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
         Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
         try {
             ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(getCurrentUser().getLanguage());
-			if (allowNetworkResults) {
-				
-				// if we're in a vendor context we need to look events for assigned assets rather than registered assets
-				event = getLoaderFactory().createSafetyNetworkEventLoader(isInVendorContext()).setId(uniqueId).load();
-				
-			} else {
-				event = eventManager.findAllFields(uniqueId, getSecurityFilter());
-			}
-			
+
+            Event testEvent = persistenceService.find(Event.class, uniqueId);
+
+            if (testEvent instanceof PlaceEvent) {
+                event = persistenceManager.find(Event.class, uniqueId, Event.PLACE_FIELD_PATHS);
+            } else {
+                if (allowNetworkResults) {
+
+                    // if we're in a vendor context we need to look events for assigned assets rather than registered assets
+                    event = getLoaderFactory().createSafetyNetworkEventLoader(isInVendorContext()).setId(uniqueId).load();
+
+                } else {
+                    event = eventManager.findAllFields(uniqueId, getSecurityFilter());
+                }
+            }
+
+
 			if (event != null && !event.isActive()) {
 				event = null;
 			}
@@ -197,7 +206,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			throw new MissingEntityException();
 		}
 
-		if (asset == null) {
+		if (event instanceof AssetEvent && asset == null) {
 			addActionError(getText("error.noasset"));
 			throw new MissingEntityException();
 		}
@@ -238,7 +247,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		}
 		
 		if (!event.isNew()) {
-			setAssetId(event.getAsset().getId());
+            Long id = ((ThingEvent) event).getAsset().getId();
+            setAssetId(id);
 		}
 		
 		if (asset == null) {
@@ -246,7 +256,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			return MISSING;
 		}
 
-		if (event.getType().isMaster()) {
+		if (event.getEventType().isThingEventType() && ((ThingEvent)event).getThingType().isMaster()) {
 			return "master";
 		}
 		
@@ -261,7 +271,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		testDependencies();
 
 		// set defaults.
-		event.setAssetStatus(asset.getAssetStatus());
+        if (event instanceof ThingEvent) {
+            ((ThingEvent)event).setAssetStatus(asset.getAssetStatus());
+        }
 		event.setOwner(asset.getOwner());
 		event.setAdvancedLocation(asset.getAdvancedLocation());
 		event.setDate(DateHelper.getTodayWithTime());
@@ -298,7 +310,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	@SkipValidation
 	@NetworkAwareAction
 	public String doShow() {
-		asset = event != null ? event.getAsset() : null;
+		asset = event != null ? !(event instanceof ThingEvent) ? null : ((ThingEvent)event).getAsset() : null;
 		testDependencies();
         mixpanelService.sendEvent(MixpanelService.VIEWED_COMPLETED_EVENT);
 		return SUCCESS;
@@ -309,7 +321,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	public String doEdit() {
 		isEditing = true;
 		try {
-			setAssetId(event.getAsset().getId());
+			setAssetId(((ThingEvent)event).getAsset().getId());
 			testDependencies();
 		} catch (NullPointerException e) {
 			return MISSING;
@@ -320,11 +332,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		encodeInfoOptionMapForUseInForm();
 		
 
-		if (event.getProofTestInfo() != null) {
-			peakLoad = event.getProofTestInfo().getPeakLoad();
-			testDuration = event.getProofTestInfo().getDuration();
-			peakLoadDuration = event.getProofTestInfo().getPeakLoadDuration();
-		}
+        if (event instanceof ThingEvent) {
+            if (((ThingEvent)event).getProofTestInfo() != null) {
+                peakLoad = ((ThingEvent)event).getProofTestInfo().getPeakLoad();
+                testDuration = ((ThingEvent)event).getProofTestInfo().getDuration();
+                peakLoadDuration = ((ThingEvent)event).getProofTestInfo().getPeakLoadDuration();
+            }
+
+        }
 
 		setUpSupportedProofTestTypes();
 		
@@ -344,10 +359,13 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	protected void setUpSupportedProofTestTypes() {
-		if (event.getProofTestInfo() != null && event.getProofTestInfo().getProofTestType() != null) {
-			proofTestType = event.getProofTestInfo().getProofTestType();
-		} else if (!getEventType().getSupportedProofTests().isEmpty()) {
-			proofTestType = getEventType().getSupportedProofTests().iterator().next();
+        if (!(event instanceof ThingEvent)) {
+            return;
+        }
+		if (((ThingEvent)event).getProofTestInfo() != null && ((ThingEvent)event).getProofTestInfo().getProofTestType() != null) {
+			proofTestType = ((ThingEvent)event).getProofTestInfo().getProofTestType();
+		} else if (!((ThingEventType)getEventType()).getSupportedProofTests().isEmpty()) {
+			proofTestType = ((ThingEventType)getEventType()).getSupportedProofTests().iterator().next();
 		}
 	}
 
@@ -376,9 +394,15 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			findEventBook();
 			
 			//Set asset on the event before pushing other details.
-			event.setAsset(asset);
-			modifiableEvent.pushValuesTo(event);
-		
+            if (event instanceof ThingEvent) {
+                ((ThingEvent)event).setAsset(asset);
+                ((ThingEvent) event).getAsset().setAssetStatus(((ThingEvent) event).getAssetStatus());
+            }
+
+            if (event instanceof ThingEvent) {
+                modifiableEvent.pushValuesTo((ThingEvent)event);
+            }
+
 			event.getInfoOptionMap().putAll(decodeMapKeys(encodedInfoOptionMap));
 
 			event.setTenant(getTenant());
@@ -403,7 +427,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 				EventResult eventEventResult = (modifiableEvent.getOverrideResult() != null && !"auto".equals(modifiableEvent.getOverrideResult())) ? EventResult.valueOf(modifiableEvent.getOverrideResult()) : null;
                 event.setEventResult(eventEventResult);
 
-                event = eventCreationService.createEventWithSchedules(event, 0L, fileData, getUploadedFiles(), createEventScheduleBundles());
+                event = eventCreationService.createEventWithSchedules((ThingEvent)event, 0L, fileData, getUploadedFiles(), createEventScheduleBundles());
 				uniqueID = event.getId();
 				
 			} else {
@@ -413,9 +437,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 				}
 				// when updating, we need to remove any files that should no longer be attached
 				updateAttachmentList(event, modifiedBy);
-				event = eventManager.updateEvent(event, null, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
-
-                completeSchedule();
+				event = eventManager.updateEvent((ThingEvent)event, null, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
 			}
 
 			
@@ -439,8 +461,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		return SUCCESS;
 	}
 
-    protected List<EventScheduleBundle> createEventScheduleBundles() {
-		List<EventScheduleBundle> scheduleBundles = new ArrayList<EventScheduleBundle>();
+    protected List<EventScheduleBundle<Asset>> createEventScheduleBundles() {
+		List<EventScheduleBundle<Asset>> scheduleBundles = new ArrayList<EventScheduleBundle<Asset>>();
 		StrutsListHelper.clearNulls(nextSchedules);
 		
 		WebEventScheduleToEventScheduleBundleConverter converter = createWebEventScheduleToEventScheduleBundleConverter();
@@ -486,48 +508,24 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		}
 	}
 	
-	private void completeSchedule() {
-        //TODO: How to complete schedule now?
-//		if (!event.getSchedule().wasScheduled()) {
-//			try {
-//				if (eventScheduleId.equals(EventScheduleSuggestion.NEW_SCHEDULE)) {
-//                    EventSchedule oldSchedule = event.getSchedule();
-//
-//					eventSchedule = new EventSchedule(event);
-//                    persistenceManager.save(eventSchedule);
-//
-//                    eventSchedule.getAsset().touch();
-//                    persistenceManager.update(eventSchedule.getAsset());
-//                    persistenceManager.update(event);
-//                    persistenceManager.delete(oldSchedule);
-//				} else if (eventSchedule != null) {
-//					eventSchedule.completed(event);
-//                    eventScheduleManager.update(eventSchedule);
-//                    persistenceManager.update(event);
-//				}
-//				if (eventSchedule != null) {
-//					addFlashMessageText("message.schedulecompleted");
-//				}
-//			} catch (Exception e) {
-//				logger.error("could not complete the schedule", e);
-//				addFlashErrorText("error.completingschedule");
-//			}
-//		}
-	}
-
 	protected void processProofTestFile() throws ProcessingProofTestException {
-		if (newFile == true && proofTestDirectory != null && proofTestDirectory.length() != 0) {
-			File tmpDirectory = PathHandler.getTempRoot();
-			proofTest = new File(tmpDirectory.getAbsolutePath() + '/' + proofTestDirectory);
-		}
+        if (!getEventType().isThingEventType()) {
+            return;
+        }
+        ThingEvent thingEvent = (ThingEvent) event;
 
-		if (proofTest != null && proofTestType != ProofTestType.OTHER) {
-			event.setProofTestInfo(new ProofTestInfo());
-			event.getProofTestInfo().setProofTestType(proofTestType);
+        if (newFile == true && proofTestDirectory != null && proofTestDirectory.length() != 0) {
+            File tmpDirectory = PathHandler.getTempRoot();
+            proofTest = new File(tmpDirectory.getAbsolutePath() + '/' + proofTestDirectory);
+        }
+
+        if (proofTest != null && proofTestType != ProofTestType.OTHER) {
+            thingEvent.setProofTestInfo(new ProofTestInfo());
+            thingEvent.getProofTestInfo().setProofTestType(proofTestType);
 			fileData = createFileDataContainer();
 		} else if (proofTestType == ProofTestType.OTHER) {
-			event.setProofTestInfo(new ProofTestInfo());
-			event.getProofTestInfo().setProofTestType(proofTestType);
+            thingEvent.setProofTestInfo(new ProofTestInfo());
+            thingEvent.getProofTestInfo().setProofTestType(proofTestType);
 			fileData = new FileDataContainer();
 			fileData.setFileType(proofTestType);
 			fileData.setPeakLoad(peakLoad);
@@ -538,15 +536,18 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
 	private FileDataContainer createFileDataContainer() throws ProcessingProofTestException {
 
-		FileDataContainer fileData;
-		try {
-			fileData = event.getProofTestInfo().getProofTestType().getFileProcessorInstance().processFile(proofTest);
-		} catch (Exception e) {
-			throw new ProcessingProofTestException(e);
-		} finally {
-			// clean up the temp proof test file
-			proofTest.delete();
-		}
+		FileDataContainer fileData = null;
+        if (getEventType().isThingEventType()) {
+            try {
+                fileData = ((ThingEvent)event).getProofTestInfo().getProofTestType().getFileProcessorInstance().processFile(proofTest);
+            } catch (Exception e) {
+                throw new ProcessingProofTestException(e);
+            } finally {
+                // clean up the temp proof test file
+                proofTest.delete();
+            }
+
+        }
 
 		return fileData;
 	}
@@ -578,7 +579,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		return (event.getType() != null) ? event.getType().getId() : null;
 	}
 
-	public ThingEventType getEventType() {
+	public EventType getEventType() {
 		return event.getType();
 	}
 
@@ -641,8 +642,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	public List<AssetStatus> getAssetStatuses() {
 		List<AssetStatus> assetStatuses = getLoaderFactory().createAssetStatusListLoader().load();
 	
-		if(isEditing && !assetStatuses.contains(event.getAssetStatus())) {
-			assetStatuses.add(event.getAssetStatus());
+		if (getEventType().isThingEventType() && isEditing && !assetStatuses.contains(((ThingEvent)event).getAssetStatus())) {
+			assetStatuses.add(((ThingEvent) event).getAssetStatus());
 		}
 		
 		return assetStatuses;
@@ -664,14 +665,21 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	public Long getAssetStatus() {
-		return (event.getAssetStatus() != null) ? event.getAssetStatus().getId() : null;
+        if (!getEventType().isThingEventType()) {
+            return 0L;
+        }
+		return (((ThingEvent)event).getAssetStatus() != null) ? ((ThingEvent)event).getAssetStatus().getId() : null;
 	}
 
 	public void setAssetStatus(Long assetStatus) {
+//        if(!getEventType().isThingEventType()) {
+//            return;
+//        }
+
 		if (assetStatus == null) {
-			event.setAssetStatus(null);
-		} else if (event.getAssetStatus() == null || !assetStatus.equals(event.getAssetStatus().getId())) {
-			event.setAssetStatus(legacyAssetManager.findAssetStatus(assetStatus, getTenantId()));
+            ((ThingEvent)event).setAssetStatus(null);
+		} else if (((ThingEvent)event).getAssetStatus() == null || !assetStatus.equals(((ThingEvent)event).getAssetStatus().getId())) {
+            ((ThingEvent)event).setAssetStatus(legacyAssetManager.findAssetStatus(assetStatus, getTenantId()));
 		} 
 	}
 
@@ -732,8 +740,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	public ProofTestType getProofTestTypeEnum() {
-		if (proofTestType == null) {
-			proofTestType = (event.getProofTestInfo() != null) ? event.getProofTestInfo().getProofTestType() : null;
+		if (getEventType().isThingEventType() && proofTestType == null) {
+            ProofTestInfo proofTestInfo = ((ThingEvent) event).getProofTestInfo();
+            proofTestType = (proofTestInfo != null) ? proofTestInfo.getProofTestType() : null;
 		}
 		return proofTestType;
 	}
@@ -805,9 +814,11 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
 	public Map<String, Boolean> getProofTestTypesUpload() {
 		Map<String, Boolean> uploadFlags = new HashMap<String, Boolean>();
-		for (ProofTestType proofTestType : event.getType().getSupportedProofTests()) {
-			uploadFlags.put(proofTestType.name(), proofTestType.isUploadable());
-		}
+        if (getEventType().isThingEventType()) {
+            for (ProofTestType proofTestType : ((ThingEvent)event).getThingType().getSupportedProofTests()) {
+                uploadFlags.put(proofTestType.name(), proofTestType.isUploadable());
+            }
+        }
 
 		return uploadFlags;
 	}
@@ -833,10 +844,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	public List<SubEvent> getSubEvents() {
-		if (subEvents == null) {
+		if (getEventType().isThingEventType() && subEvents == null) {
 			if (!event.getSubEvents().isEmpty()) {
 				Set<Long> ids = new HashSet<Long>();
-				for (SubEvent subEvent : event.getSubEvents()) {
+				for (SubEvent subEvent : ((ThingEvent)event).getSubEvents()) {
 					ids.add(subEvent.getId());
 				}
 				subEvents = persistenceManager.findAll(SubEvent.class, ids, getTenant(), SubEvent.ALL_FIELD_PATHS);

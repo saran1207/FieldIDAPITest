@@ -15,7 +15,9 @@ public class SubEventConverter extends AbstractEventConverter<SubEvent> {
 	@Override
 	protected void marshalEntity(SubEvent event, HierarchicalStreamWriter writer, MarshallingContext context) {
 		writer.startNode("SubEvent");
-		super.marshalEntity(event, writer, context);
+        writeNode(writer, context, "AssetId", event.getAsset().getMobileGUID());
+        super.marshalEntity(event, writer, context);
+        writeNode(writer, context, "AssetStatus", event.getAssetStatus());
 		writer.endNode();
 	}
 }

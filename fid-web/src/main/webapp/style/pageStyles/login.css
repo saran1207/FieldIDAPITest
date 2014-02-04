@@ -39,10 +39,28 @@
     text-align: center;
     font-size:17px;
 }
-/* for login page only, make button big. */
+
+/* for login page only */
 #signInForm .blue-submit {
     width: 110px;
+    height: 35px;
+    float: left;
+    margin: 0 5px 0 0;
 }
+#signInForm a {
+    line-height: 1.5;
+}
+    #signInForm a:hover {
+        text-decoration: none;
+    }
+#signInForm .links {
+    clear: both;
+    margin-top: 15px;
+}
+    #signInForm .links a {
+        display: block;
+        padding-top: 10px;
+    }
 
 .login-form {
     margin-left:175px;
@@ -52,6 +70,11 @@
 .forgot-login-form {
     margin-left:125px;
     width:350px;
+}
+.forgot-login-form.minForm input[type="text"] {
+    width: auto;
+    padding: 10px;
+    border: 1px solid #ddd;
 }
 
 #pageFooter .logo {
@@ -92,18 +115,11 @@
     margin-top:20px;
 }
 
-.actions {
-    margin-top:15px;
-}
 
 .actions input {
     margin-top:5px;
 }
 
-.login-help {
-    padding-left: 10px;
-    font-size:11px;
-}
 
 #companyLogo, #systemLogo {
     margin-top: 5px;
@@ -118,19 +134,19 @@
     margin-right:auto;
     width:50%;
 }
+#notifications .error {
+    border: 1px solid #FFC2C2;
+    background-color: #FFEBEB;
+    text-align: center;
+    font-weight: bold;
+    font-size: 12px;
+}
 
 #password.passwordBox, #userName.textbox {
     width:84%;
     padding:10px;
     border:1px solid #ddd;
 }
-
-.request {
-    margin-top:25px;
-    margin-top:25px;
-}
-
-.request a { padding-left:5px; }
 
 #sslCert, #sslCert a, #sslCert a:hover, #sslCert a:visited, #sslCert a:active, .logo a {
     color: #999;

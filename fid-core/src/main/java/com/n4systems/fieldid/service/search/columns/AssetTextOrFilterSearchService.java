@@ -1,12 +1,15 @@
 package com.n4systems.fieldid.service.search.columns;
 
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.service.search.SearchResult;
 import com.n4systems.model.Asset;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.SearchCriteria;
+import com.n4systems.services.reporting.AssetSearchRecord;
 import com.n4systems.services.search.AssetFullTextSearchService;
+import com.n4systems.services.search.MappedResults;
 import com.n4systems.services.search.SearchResults;
 import com.n4systems.services.search.field.AssetIndexField;
 import org.apache.lucene.search.highlight.Formatter;
@@ -16,11 +19,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<AssetSearchCriteria, Asset> {
+public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<AssetSearchCriteria, Asset, AssetSearchRecord> {
 
     private @Autowired AssetFullTextSearchService fullTextSearchService;
     private @Autowired AssetSearchService searchService;
     private @Autowired LastEventDateService lastEventDateService;
+    private @Autowired AssetService assetService;
 
     public AssetTextOrFilterSearchService() {
         super(Asset.class);
@@ -78,6 +82,31 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
         result.setResults(assetsList);
         result.setTotalResultCount(getResultCount(criteria));
         return result;
+    }
+
+    @Override
+    protected SearchResult<Asset> findSelectedEntities(AssetSearchCriteria criteriaModel, int pageNumber, int pageSize) {
+        int beginIndex = pageNumber * pageSize;
+        List<Long> selectedIdList = criteriaModel.getSelection().getSelectedIds();
+        List<Long> currentPageOfSelectedIds = selectedIdList.subList(beginIndex, Math.min(selectedIdList.size(), beginIndex + pageSize));
+
+        List<Asset> entities = new ArrayList<Asset>(pageSize);
+        Asset asset = null;
+        for (Long id : currentPageOfSelectedIds) {
+            asset = assetService.findAssetWithInfoOptions(id);
+            fillInVirtualColumns(asset, criteriaModel);
+            entities.add(asset);
+        }
+
+        SearchResult<Asset> searchResult = new SearchResult<Asset>();
+        searchResult.setResults(entities);
+        searchResult.setTotalResultCount(entities.size());
+        return searchResult;
+    }
+
+    @Override
+    protected MappedResults<AssetSearchRecord> filterMapSearch(AssetSearchCriteria criteriaModel) {
+        return searchService.performMapSearch(criteriaModel);
     }
 
     @Override

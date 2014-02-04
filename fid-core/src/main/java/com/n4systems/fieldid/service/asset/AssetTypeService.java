@@ -129,13 +129,13 @@ public class AssetTypeService extends FieldIdPersistenceService {
     }
 
     private void removeScheduledEvents(RecurringAssetTypeEvent recurringEvent) {
-        QueryBuilder<Event> builder = new QueryBuilder<Event>(Event.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
+        QueryBuilder<ThingEvent> builder = new QueryBuilder<ThingEvent>(ThingEvent.class, new TenantOnlySecurityFilter(recurringEvent.getAssetType().getTenant().getId()));
 
         builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
         builder.addSimpleWhere("recurringEvent", recurringEvent);
 
-        List<Event> events = persistenceService.findAll(builder);
-        for (Event event:events) {
+        List<ThingEvent> events = persistenceService.findAll(builder);
+        for (ThingEvent event:events) {
             logger.debug("removing scheduled event for asset " + event.getAsset().getIdentifier() + " on " + event.getDueDate());
             persistenceService.delete(event);
         }

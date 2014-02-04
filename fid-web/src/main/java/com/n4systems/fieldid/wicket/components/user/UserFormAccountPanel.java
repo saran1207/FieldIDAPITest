@@ -40,7 +40,7 @@ public class UserFormAccountPanel extends Panel {
 
     private WebMarkupContainer welcomeEmailMessageContainer;
 
-    public UserFormAccountPanel(String id, final IModel<User> user, final Form form) {
+    public UserFormAccountPanel(String id, final IModel<User> user) {
         super(id, user);
 
         add(userID = new RequiredTextField<String>("username", new PropertyModel<String>(user, "userID")));

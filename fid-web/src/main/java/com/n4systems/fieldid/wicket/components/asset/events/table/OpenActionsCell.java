@@ -42,8 +42,8 @@ public class OpenActionsCell extends Panel {
         super(id);
 
         add(modalWindow = createModalWindow(eventModel, eventDisplayPanel));
-        IModel<List<ThingEventType>> eventTypesModel = createEventTypesModelForEvent(eventModel);
-        add(schedulePicker = new SchedulePicker("schedulePickerWindow", eventModel, eventTypesModel, new EventJobsForTenantModel()) {
+        IModel<List<? extends EventType>> eventTypesModel = createEventTypesModelForEvent(eventModel);
+        add(schedulePicker = new SchedulePicker<ThingEvent>("schedulePickerWindow", eventModel, eventTypesModel, new EventJobsForTenantModel()) {
             { setSaveButtonLabel(new FIDLabelModel("label.save")); }
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
@@ -54,7 +54,7 @@ public class OpenActionsCell extends Panel {
 
         setVisible(FieldIDSession.get().getSessionUser().hasAccess("createevent") && FieldIDSession.get().getSessionUser().hasAccess("editevent"));
         
-        final Event schedule = eventModel.getObject();
+        final ThingEvent schedule = eventModel.getObject();
 
         String startAction = "selectEventAdd.action?scheduleId=" + schedule.getId() + "&assetId=" + schedule.getAsset().getId() + "&type=" + schedule.getType().getId();
         add(new NonWicketLink("startLink", startAction, new AttributeModifier("class", "mattButtonLeft")));
@@ -76,7 +76,6 @@ public class OpenActionsCell extends Panel {
                     target.add(((AssetEventsPage)getPage()).getFeedbackPanel());
                 }
                 info(new FIDLabelModel("message.eventdeleted").getObject());
-                eventDisplayPanel.getDefaultModel().detach();
                 target.add(eventDisplayPanel);
                 target.add(((FieldIDFrontEndPage) getPage()).getTopFeedbackPanel());
             }
@@ -100,8 +99,8 @@ public class OpenActionsCell extends Panel {
         add(editLink);
     }
 
-    private IModel<List<ThingEventType>> createEventTypesModelForEvent(IModel<ThingEvent> eventModel) {
-        if (eventModel.getObject().getType() == null || !eventModel.getObject().getType().getGroup().isAction()) {
+    private IModel<List<? extends EventType>> createEventTypesModelForEvent(IModel<ThingEvent> eventModel) {
+        if (eventModel.getObject().getType() == null || !eventModel.getObject().getType().isActionEventType()) {
             return new EventTypesForAssetTypeModel(new PropertyModel<AssetType>(eventModel, "asset.type"));
         } else {
             return new ActionTypesForTenantModel();
@@ -114,7 +113,7 @@ public class OpenActionsCell extends Panel {
             @Override
             public Page createPage() {
                 IModel<Event> entityModel = new EntityModel<Event>(Event.class, eventModel.getObject().getId());
-                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), entityModel)
+                return new ActionDetailsPage(new PropertyModel<CriteriaResult>(entityModel, "sourceCriteriaResult"), ThingEvent.class, entityModel)
                         .setAssetSummaryContext(true);
             }
         });

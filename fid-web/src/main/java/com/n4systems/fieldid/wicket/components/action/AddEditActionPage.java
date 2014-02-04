@@ -51,12 +51,21 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
     private boolean editMode = false;
     private boolean immediateSaveMode = false;
+    private Class<? extends Event> eventClass;
 
-    public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel) {
-        add(new AddActionForm("addActionForm", new Model<Event>(new ThingEvent()), criteriaResultModel));
+    public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel, Class<? extends Event> eventClass) {
+        this.eventClass = eventClass;
+        Event event = null;
+        try {
+            event = eventClass.newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        add(new AddActionForm("addActionForm", new Model<Event>(event), criteriaResultModel));
     }
 
     public AddEditActionPage(IModel<CriteriaResult> criteriaResultModel, IModel<Event> eventModel) {
+        this.eventClass = (Class<Event>) eventModel.getObject().getClass();
         editMode = true;
         add(new AddActionForm("addActionForm", eventModel, criteriaResultModel));
     }
@@ -109,7 +118,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     if (immediateSaveMode) {
                         persistenceService.update(getModelObject());
-                        setResponsePage(new ActionDetailsPage(criteriaResultModel, eventModel));
+                        setResponsePage(new ActionDetailsPage(criteriaResultModel, eventClass, eventModel));
 
                     } else {
                         Event addedAction = getModelObject();
@@ -120,7 +129,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                         }
 
                         FieldIDSession.get().setActionsForCriteria(criteriaResultModel.getObject(), criteriaResultModel.getObject().getActions());
-                        setResponsePage(new ActionsListPage(criteriaResultModel));
+                        setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
                     }
                 }
 
@@ -139,7 +148,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
             Link cancelLink = new  Link("cancelLink") {
                 @Override public void onClick() {
-                    setResponsePage(new ActionsListPage(criteriaResultModel));
+                    setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
                 }
             };
             add(cancelLink);
@@ -157,7 +166,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                     }
 
                     FieldIDSession.get().setActionsForCriteria(criteriaResultModel.getObject(), criteriaResultModel.getObject().getActions());
-                    setResponsePage(new ActionsListPage(criteriaResultModel));
+                    setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
                 }
 
                 @Override
@@ -174,6 +183,7 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                     }
                 });
             }
+            deleteLink.setVisible(editMode);
             add(deleteLink);
         }
 
@@ -249,6 +259,9 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
         super.renderHead(response);
         response.renderCSSReference("style/newCss/component/event_actions.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        
+        //Old CSS file - remove when site is completely moved over to framework styles.
+        response.renderCSSReference("style/newCss/layout/feedback_errors.css");
     }
 
     public void setImmediateSaveMode(boolean immediateSaveMode) {

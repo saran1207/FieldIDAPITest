@@ -5,13 +5,19 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.procedure.IsolationPoint;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebComponent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -30,9 +36,12 @@ public class IsolationPointImagePanel extends Panel {
     private final WebMarkupContainer blankSlate;
     private final WebMarkupContainer outer;
 
+    public final IsolationPoint isolationPoint;
 
-    public IsolationPointImagePanel(String id) {
+
+    public IsolationPointImagePanel(String id, final IsolationPoint isolationPoint) {
         super(id);
+        this.isolationPoint = isolationPoint;
         add(blankSlate = new WebMarkupContainer("blankSlate"));
         WebMarkupContainer annotatedImage, container;
         add(annotatedImage = new WebMarkupContainer("annotatedImage"));
@@ -53,6 +62,30 @@ public class IsolationPointImagePanel extends Panel {
         });
 
         annotatedImage.add(new WebMarkupContainer("labelButton").add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.label_image"), TipsyBehavior.Gravity.N)));
+
+        annotatedImage.add(new AjaxLink("remove") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                ImageAnnotation annotation = getImageAnnotation();
+
+                if (null != annotation && null != annotation.getImage()) {
+                    ProcedureDefinitionImage procedureDefinitionImage = (ProcedureDefinitionImage) annotation.getImage();
+
+                    ProcedureDefinition procedureDefinition = procedureDefinitionImage.getProcedureDefinition();
+                    isolationPoint.setAnnotation(null);
+
+                    procedureDefinition.softDeleteImage(annotation);
+                }
+
+
+                target.add(IsolationPointImagePanel.this);
+
+
+
+            }
+        });
+
     }
 
     protected Model<String> getImageUrl() {

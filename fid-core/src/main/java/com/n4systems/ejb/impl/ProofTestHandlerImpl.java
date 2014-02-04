@@ -175,7 +175,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 			
 			// now we need to find the event, supporting out ProofTestType, and does not already have a chart
 			for (ThingEvent insp: events) {
-				if(insp.getType().supports(fileData.getFileType()) && !chartImageExists(insp)) {
+				if(((ThingEventType)insp.getType()).supports(fileData.getFileType()) && !chartImageExists(insp)) {
 					// we have found our event, move on
 					event = insp;
 					break;

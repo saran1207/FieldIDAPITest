@@ -1,7 +1,6 @@
 package com.n4systems.ws.resources;
 
 
-import com.n4systems.model.EventType;
 import com.n4systems.model.ThingEventType;
 import com.n4systems.model.lastmodified.LastModifiedListLoader;
 import com.n4systems.model.safetynetwork.IdLoader;
@@ -22,7 +21,7 @@ public class EventTypeResourceDefiner implements ResourceDefiner<ThingEventType,
 	@Override
 	public LastModifiedListLoader getLastModifiedLoader(LoaderFactory loaderFactory) {
 		Long tenantId = loaderFactory.getSecurityFilter().getTenantId();
-		return new LastModifiedListLoader(new TenantOnlySecurityFilter(tenantId), EventType.class);
+		return new LastModifiedListLoader(new TenantOnlySecurityFilter(tenantId), ThingEventType.class);
 	}
 
 	@Override

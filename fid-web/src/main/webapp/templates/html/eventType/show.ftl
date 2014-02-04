@@ -1,4 +1,7 @@
 ${action.setPageType('event_type', 'show')!}
+<head>
+    <@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+</head>
 <style>
 	p.criteria span {
 		width:auto;
@@ -38,7 +41,7 @@ ${action.setPageType('event_type', 'show')!}
 		</span>
 	</p>
 
-    <#if !action.isAction()>
+    <#if eventType.thingEventType>
         <p>
             <label><@s.text name="label.type"/></label>
             <span class="fieldValue">
@@ -53,7 +56,7 @@ ${action.setPageType('event_type', 'show')!}
         </#if>
     </#if>
 	
-	<#if securityGuard.proofTestIntegrationEnabled>
+	<#if securityGuard.proofTestIntegrationEnabled && eventType.thingEventType>
 		<h2><@s.text name="label.supportedprooftesttypes"/></h2>
 		<#if eventType.supportedProofTests?size != 0 >
 			<#list eventType.supportedProofTests as proofTestType >

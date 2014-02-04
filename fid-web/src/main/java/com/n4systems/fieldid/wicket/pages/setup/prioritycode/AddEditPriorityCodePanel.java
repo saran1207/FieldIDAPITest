@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.prioritycode;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
@@ -10,7 +11,6 @@ import com.n4systems.model.PriorityCodeAutoScheduleType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -56,7 +56,7 @@ public class AddEditPriorityCodePanel extends Panel {
             customDaysContainer.add(customDaysField);
             formContainer.add(customDaysContainer);
 
-            formContainer.add(new DropDownChoice<PriorityCodeAutoScheduleType>("autoSchedule", ProxyModel.of(model, on(PriorityCode.class).getAutoSchedule()), Arrays.asList(PriorityCodeAutoScheduleType.values()), new ListableLabelChoiceRenderer<PriorityCodeAutoScheduleType>()) {
+            formContainer.add(new FidDropDownChoice<PriorityCodeAutoScheduleType>("autoSchedule", ProxyModel.of(model, on(PriorityCode.class).getAutoSchedule()), Arrays.asList(PriorityCodeAutoScheduleType.values()), new ListableLabelChoiceRenderer<PriorityCodeAutoScheduleType>()) {
                 {
                     setNullValid(true);
                     add(new UpdateComponentOnChange() {

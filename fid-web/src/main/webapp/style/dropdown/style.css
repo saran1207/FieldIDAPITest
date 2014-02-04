@@ -2,6 +2,10 @@
 	HEADER DROP DOWN STYLING
 */
 
+#menuReport:after {
+	padding-left: 4px;
+}
+
 /* 
 	LEVEL ONE
 */
@@ -10,7 +14,7 @@ ul.dropdown							{ position: relative; }
 ul.dropdown li                      { float: left; }
 ul.dropdown a:hover		            { color: #000; }
 ul.dropdown a:active                { color: #ffa500; }
-ul.dropdown li a                    { display: block; padding: 4px 11px; text-decoration:none; }
+ul.dropdown li a                    { display: block; padding: 8px 16px; text-decoration:none; }
 ul.dropdown li:last-child a         { border-right: none; } /* Doesn't work in IE */
 ul.dropdown li.hover,
 ul.dropdown li:hover                { color: black; position: relative; }
@@ -20,13 +24,13 @@ ul.dropdown li.hover a              { color: #000; }
 /* 
 	LEVEL TWO
 */
-ul.dropdown ul 						{ z-index:300; visibility: hidden; position: absolute; top: 100%; left: 0; list-style: disc outside none; width: 200px; border: 1px solid #AAA; margin-left: 10px; }
-ul.dropdown ul li 					{ font-weight: normal; background-color: #FFF; color: #000; float: none; padding: 5px 0;}
+ul.dropdown ul 						{ z-index:300; visibility: hidden; position: absolute; top: 100%; left: 0; list-style: disc outside none; width: 215px; border: 1px solid #AAA; /*margin-left: 10px;*/ margin-left: -1px; }
+ul.dropdown ul li 					{ font-weight: normal; background-color: #FFF; color: #000; float: none; /*padding: 5px 0;*/}
 ul.dropdown ul li a,
-ul.dropdown ul li.hover a           { color: #000; }
+ul.dropdown ul li.hover a           { color: #000;}
 									  
                                     /* IE 6 & 7 Needs Inline Block */
-ul.dropdown ul li a					{ border-right: none; padding-right: 0; width: 188px; display: inline-block; }
+ul.dropdown ul li a					{ border-right: none; padding-right: 0; /*width: 188px;*/ display: inline-block; }
 
 ul.dropdown li ul li.hover,
 ul.dropdown li ul li:hover          { background: #F5F5F5; position: relative; }
@@ -35,7 +39,7 @@ ul.dropdown li ul li:hover          { background: #F5F5F5; position: relative; }
 /* 
 	LEVEL THREE
 */
-ul.dropdown ul ul 					{ left: 100%; top: 0; margin-left: 0;}
+ul.dropdown ul ul 					{ left: 100%; top: -1px; margin-left: 0;}
 ul.dropdown li:hover > ul 			{ visibility: visible; }
 
 /*
@@ -68,3 +72,57 @@ ul.floatingDropdown li ul li:hover          { background: #1b5ccd; position: rel
 */
 ul.floatingDropdown ul ul 					{ left: 100%; top: 0; }
 ul.floatingDropdown li:hover > ul 			{ visibility: visible; }
+
+
+/*--------------------------------------- 
+	FONTELLO ICON FONTS
+-----------------------------------------*/
+/* 
+	Generated from http://fontello.com (all available icons listed here)
+	Icons are from the Entypo and Font Awesome icon set.
+	http://www.entypo.com/
+	http://fortawesome.github.io/Font-Awesome/
+
+	Also included in site_wide.css for pages that do not have that stylesheet
+*/
+@font-face {
+  font-family: 'fontello';
+  src: url('../../fonts/fontello.eot?10576970');
+  src: url('../../fonts/fontello.eot?10576970#iefix') format('embedded-opentype'), 
+  	   url('../../fonts/fontello.woff?10576970') format('woff'), 
+  	   url('../../fonts/fontello.ttf?10576970') format('truetype'), 
+  	   url('../../fonts/fontello.svg?10576970#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+[class^="fontello-"] {
+  cursor: pointer;
+  font-size: 0;
+}
+[class^="fontello-"]:before {
+  font-size: 14px;
+  font-family: "fontello", sans-serif;
+  speak: none;
+  text-decoration: inherit;
+  padding-right: 4px;
+  line-height: 1;
+  font-variant: normal;
+  text-transform: none;
+}
+
+.fontello-home:before {
+  content: '\e818';
+  padding-right: 0;
+}
+
+/*--------------------------------------- 
+  MEDIA QUERIES for the global header
+-----------------------------------------*/
+@media (max-width: 1150px) {
+  #pageHeader #navigationLinks .dropdown > li > a {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+

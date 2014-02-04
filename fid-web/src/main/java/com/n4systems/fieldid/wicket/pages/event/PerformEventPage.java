@@ -3,10 +3,10 @@ package com.n4systems.fieldid.wicket.pages.event;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.*;
-import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,25 +17,18 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
 
-public class PerformEventPage extends EventPage {
+public class PerformEventPage extends ThingEventPage {
 
     @SpringBean private EventService eventService;
     @SpringBean private PersistenceService persistenceService;
     @SpringBean private EventScheduleService eventScheduleService;
 
+    @SpringBean private PerformThingEventHelperService thingEventHelperService;
+
     private PerformEventPage(Long scheduleId, Long assetId, Long typeId) {
         try {
-            if (scheduleId != null) {
-                ThingEvent openEvent = eventService.createEventFromOpenEvent(scheduleId);
-                PostFetcher.postFetchFields(openEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
-                ThingEvent clonedEvent = (ThingEvent) openEvent.clone();
-                eventService.populateNewEvent(clonedEvent);
-                event = Model.of(clonedEvent);
-            } else {
-                ThingEvent newMasterEvent = eventService.createNewMasterEvent(assetId, typeId);
-                eventService.populateNewEvent(newMasterEvent);
-                event = Model.of(newMasterEvent);
-            }
+            ThingEvent thingEvent = thingEventHelperService.createEvent(scheduleId, assetId, typeId);
+            event = Model.of(thingEvent);
 
             setEventResult(event.getObject().getEventResult());
             fileAttachments = new ArrayList<FileAttachment>();
@@ -46,7 +39,7 @@ public class PerformEventPage extends EventPage {
         }
     }
 
-    public PerformEventPage(Event event, Asset asset) {
+    public PerformEventPage(ThingEvent event, Asset asset) {
         this(event.getId(), asset.getId(), event.getType().getId());
     }
 
@@ -71,7 +64,10 @@ public class PerformEventPage extends EventPage {
         event.getObject().storeTransientCriteriaResults();
         event.getObject().setEventResult(getEventResult());
 
-        FileDataContainer fileDataContainer = proofTestEditPanel.getFileDataContainer();
+        FileDataContainer fileDataContainer = null;
+        if (event.getObject().getType().isThingEventType()) {
+            fileDataContainer = proofTestEditPanel.getFileDataContainer();
+        }
 
         Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, fileAttachments, createEventScheduleBundles());
 

@@ -59,11 +59,11 @@ public abstract class UserPage extends FieldIDFrontEndPage {
 
     protected abstract User doSave();
 
-    protected abstract Component createAccountPanel(String id, Form form);
+    protected abstract Component createAccountPanel(String id);
 
     protected abstract Component createPermissionsPanel(String id);
 
-   protected UserFormIdentifiersPanel identifiersPanel;
+    protected UserFormIdentifiersPanel identifiersPanel;
     protected Component accountPanel;
     protected Component permissionsPanel;
 
@@ -135,7 +135,7 @@ public abstract class UserPage extends FieldIDFrontEndPage {
 
             add(new UserFormLocalizationPanel("localizationPanel", user));
 
-            add(accountPanel = createAccountPanel("accountPanel", this));
+            add(accountPanel = createAccountPanel("accountPanel"));
 
             add(permissionsPanel = createPermissionsPanel("permissionsPanel"));
 

@@ -91,7 +91,6 @@ public enum ConfigEntry {
     TRENDS_INDEX_ENABLED                         (   "true"),
     TRENDS_INDEX_SIZE                            (   "50"),
 
-    PLACES_ENABLED                               ( "false" ),
     MIXPANEL_ENABLED                            ( "false" ),
     MIXPANEL_TOKEN                              ( "4c3e64a8211844a634f163b8b1eb5844" ),
     EVENT_INDEX_ENABLED                         (   "true"),

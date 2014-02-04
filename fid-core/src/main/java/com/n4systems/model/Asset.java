@@ -1,10 +1,7 @@
 package com.n4systems.model;
 
 import com.google.common.base.Joiner;
-import com.n4systems.model.api.Exportable;
-import com.n4systems.model.api.HasCreatedModifiedPlatform;
-import com.n4systems.model.api.Listable;
-import com.n4systems.model.api.NetworkEntity;
+import com.n4systems.model.api.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.orgs.BaseOrg;
@@ -21,7 +18,7 @@ import java.util.*;
 
 @Entity
 @Table(name = "assets")
-public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer, HasCreatedModifiedPlatform {
+public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, NetworkEntity<Asset>, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasGpsLocation {
 	private static final long serialVersionUID = 1L;
 	public static final String[] POST_FETCH_ALL_PATHS = { "infoOptions", "type.infoFields", "type.eventTypes", "type.attachments", "type.subTypes", "projects", "modifiedBy.displayName" };
 

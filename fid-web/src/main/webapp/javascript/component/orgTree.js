@@ -26,7 +26,8 @@ var orgTreeFactory = (function() {
 
 		var defaults = {
 			delay:500,
-			minLength:0
+			minLength:0,
+			vernacular:'customer'
 		};
 		var options = $.extend(defaults, opts);
 
@@ -43,6 +44,23 @@ var orgTreeFactory = (function() {
 				jQuery.jstree._reference(getTree()).refresh(-1);
 			}
 		}
+
+		var updateBranch = function(parentNodeId,nodeId) {
+			jQuery.jstree._reference(getTree()).open_node(parentNodeId,null,true);
+			jQuery.jstree._reference(getTree()).load_node_json(parentNodeId,null,null);
+			setTimeout(function() {
+					$(nodeId).addClass('added');
+				}
+				,500);
+			setTimeout(function() {
+					$(nodeId).removeClass('added');
+				}
+				,2000);
+		}
+
+        var refresh = function() {
+            jQuery.jstree._reference(getTree()).refresh(-1);
+        }
 
 		function showNoResultsMsg() {
 			var noResults = $tree.siblings('.no-results');
@@ -62,11 +80,57 @@ var orgTreeFactory = (function() {
 			}
 		}
 
+		var postUpdate = function(event,data) {
+			if (data.rslt.obj==-1) {
+				postUpdateNodes($tree.find('ul>li>a'));
+			} else {
+				postUpdateNodes($(data.rslt.obj[0]).find('ul li a'));
+			}
+		}
+
+		var addChild = function(event,args) {
+			if (options.menuCallback) {
+				var orgId = $(event.target).data('id');
+				var url = options.menuCallback+'&orgId='+orgId;
+				wicketAjaxGet(url,function(){}, function(){});
+			}
+		}
+
+		function postUpdateNodes($nodes) {
+			$nodes.each(function(index,child) {
+				var addText = getAddText($(child));
+				if (addText) {
+					var actionsMenu = $('<span class="action">'+ addText + '</span>').data('id',child.parentNode.id);
+					actionsMenu.insertAfter(child);
+					actionsMenu.click(addChild);
+				}
+			});
+		}
+
+		function getAddText($node) {
+			var $li = $node.closest('li');
+			// TODO : check for safety network stuff here.
+			if ($li.hasClass('internal-org')) {
+				// TODO : localize this text. pass it in from wicket.
+				return $li.hasClass('primary') ? 'Add Descendant' : 'Add ' + options.vernacular;
+			} else if ($li.hasClass('customer-org')) {
+				return 'Add Division';
+			} else {
+				return null;
+			}
+		}
+
 		function lazyInit() {
 			if (!initialized) {
 				initialized = true;
 				$tree = $('#'+options.id);
-				$text = $tree.prev('input[type=text]');
+				$text = $(options.filter);
+
+				$tree.bind("load_node.jstree", function (event, data) {
+					postUpdate(event,data);
+				});
+
+
 				$tree.jstree({
 					core:{animation:100, html_titles:true},
 					themes :  { dots:false },
@@ -75,7 +139,7 @@ var orgTreeFactory = (function() {
 							type : 'GET',
 							url : function(node) {
 								$node = node;
-								var base = new String(options.updateCallback);
+								var base = new String(options.url);
 								if (node!=-1) {
 									// search for a particular branch under the specified node.
 									return base +'&nodeId='+node.attr('id')+'&nodeType='+node.attr('data');
@@ -95,20 +159,13 @@ var orgTreeFactory = (function() {
 					plugins : [ 'themes', 'json_data', 'ui', 'hotkeys' ]
 				});
 
-				$tree.bind('refresh.jstree', function (e, data) {
-					$('.timeago').timeago();
-				});
-
-				$tree.bind('load_node.jstree', function (e, data) {
-					$('.timeago').timeago();
-				});
-
 				$tree.bind("click.jstree", function (event, data) {
 					if (!$(event.currentTarget).is('a')) { return; }
 					var $link = $(event.target);
 					if ($link.hasClass('jstree-loading')) {return;}
 					var node = $link.closest('li');
-					var url = options.clickCallback + '?id=' + node.attr('id') + '&type=' + node.attr('data');
+                    if (node.hasClass('safety-network')) {return;}
+					var url = options.clickCallback + '?id=' + node.attr('id');
 					window.location = url;
 				});
 
@@ -116,7 +173,7 @@ var orgTreeFactory = (function() {
 
 				// may need to use delegate here???
 				var keyTimer;
-				if (!$text) return;
+				if (!$text || $text.size()==0) return;
 				$text.bind('keyup', function(e,d) {
 					if (keyTimer) {
 						window.clearTimeout(keyTimer);
@@ -134,7 +191,9 @@ var orgTreeFactory = (function() {
 
 
 		return {
-			update : update
+			update : update,
+			updateBranch : updateBranch,
+            refresh: refresh
 		}
 
 	}

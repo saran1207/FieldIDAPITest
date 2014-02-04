@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+
+<wicket:extend>
+
+    <div id="page">
+
+        <div id="pageHeader">
+            <div id="companyLogo">
+
+                <img wicket:id="tenantLogo"/>
+            </div>
+
+        </div>
+
+        <div wicket:id="feedbackPanel"></div>
+
+        <div id="contentHeader">
+            <div wicket:id="topFeedbackPanel" />
+        </div>
+
+        <div id="pageContent" class="brandedContainer public pageContent">
+
+    <div id="mainContent" class="login-page">
+
+        <div class="titleBlock">
+            <wicket:message key="label.forgot_username"/>
+        </div>
+
+    <form wicket:id="GetUsernameForm" class="minForm forgot-login-form">
+
+
+        <p class="actionInstructions">
+            <wicket:message key="label.forgot_username_instructions"/>
+        </p>
+
+
+        <div class="infoSet">
+            <input wicket:id="userEmail" id="userEmail" type="text" size="40"/>
+        </div>
+
+        <div class="actions">
+            <a wicket:id="sendUsername" class="blue-submit"><wicket:message key="label.send_email_now"/></a>
+            <span style="color:#999;"><wicket:message key="label.or"/></span>
+            <a wicket:id="cancel"><wicket:message key="label.return_to_sign_in" /></a>
+        </div>
+
+
+    </form>
+
+    </div>
+
+
+    <script type="text/javascript">
+        jQuery('#userEmail').watermark('userEmail');
+    </script>
+    </div>
+    <div id="pageFooter">
+
+        <div id="sslCert">
+            <img wicket:id="password-icon"/>
+           <wicket:message key="label.aboutssl-prefix"/>&nbsp<a target="_blank" href="http://www.thawte.com/digital-certificates/"><wicket:message key="label.aboutssllabel"/></a>
+        </div>
+
+
+
+        <div class="logo">
+            <div>
+                <img wicket:id="logo-icon"/>
+            </div>
+            <div style="margin-top:4px;margin-left:4px;">
+                <a href="http://www.fieldid.com/" target="_blank"><wicket:message key="label.copyright"/>&nbsp;<wicket:message key="label.n4systems"/></a>
+            </div>
+        </div>
+
+
+</div>
+    </div>
+</wicket:extend>
+
+
+
+</html>

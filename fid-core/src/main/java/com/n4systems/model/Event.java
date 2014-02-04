@@ -5,11 +5,8 @@ import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.location.LocationContainer;
 import com.n4systems.model.notification.AssigneeNotification;
-import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.EntitySecurityEnhancer;
-import com.n4systems.model.security.SecurityDefiner;
-import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -20,19 +17,20 @@ import com.n4systems.util.StringUtils;
 import org.hibernate.annotations.IndexColumn;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 @Entity
 @Table(name = "masterevents")
 @PrimaryKeyJoinColumn(name="event_id")
-public abstract class Event<T extends EventType> extends AbstractEvent<T> implements Comparable<Event>, HasOwner, Archivable, NetworkEntity<ThingEvent>, Exportable, LocationContainer, HasCreatedModifiedPlatform {
+public abstract class Event<T extends EventType, V extends Event, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, Archivable, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasOwner, HasGpsLocation {
 	private static final long serialVersionUID = 1L;
-	public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
-	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.supportedProofTests", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.modifiedBy", "subEvents.eventForm.sections", "subEvents.type.supportedProofTests", "subEvents.type.infoFieldNames", "subEvents.attachments", "subEvents.results", "subEvents.asset.infoOptions", "subEvents.infoOptionMap"};
-	
-	public static final SecurityDefiner createSecurityDefiner() {
-		return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
-	}
+	public static final String[] PLACE_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "infoOptionMap", "subEvents", "place" };
+    public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
+	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.eventForm.sections"};
+    public static final String[] THING_TYPE_PATHS = { "type.supportedProofTests" };
 
     public enum WorkflowStateGrouping {
         NON_COMPLETE(WorkflowState.OPEN, WorkflowState.CLOSED), COMPLETE(WorkflowState.COMPLETED);
@@ -90,10 +88,6 @@ public abstract class Event<T extends EventType> extends AbstractEvent<T> implem
     @JoinColumn(name="assigned_group_id")
     private UserGroup assignedGroup;
 
-    @ManyToOne(fetch=FetchType.EAGER, optional=false)
-	@JoinColumn(name="owner_id", nullable = false)
-	private BaseOrg owner;
-	
 	@OneToMany(fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	@IndexColumn(name="orderidx")
     @JoinTable(name = "masterevents_subevents", joinColumns = @JoinColumn(name="masterevents_event_id"), inverseJoinColumns = @JoinColumn(name="subevents_event_id"))
@@ -125,10 +119,6 @@ public abstract class Event<T extends EventType> extends AbstractEvent<T> implem
 
     @Transient
     private boolean resultFromCriteriaAvailable = false;
-
-    @ManyToOne()
-    @JoinColumn(name="recurring_event_id")
-    private RecurringAssetTypeEvent recurringEvent;
 
     @Column(name="notes", length = 500)
     private String notes;
@@ -197,17 +187,6 @@ public abstract class Event<T extends EventType> extends AbstractEvent<T> implem
 
 	public void setBook(EventBook book) {
 		this.book = book;
-	}
-
-	@Override
-	@AllowSafetyNetworkAccess
-	public BaseOrg getOwner() {
-		return owner;
-	}
-	
-	@Override
-	public void setOwner(BaseOrg owner) {
-		this.owner = owner;
 	}
 
 	@AllowSafetyNetworkAccess
@@ -329,19 +308,12 @@ public abstract class Event<T extends EventType> extends AbstractEvent<T> implem
 	    		"\nAssigned To: " + assignedTo +
 	    		"\nState: " + state + 
 	    		"\nDate: " + getDate() +
-	    		"\nOwner: " + getOwner() +
 	    		"\nBook: " + getBook() +
 	    		"\nPerformed By: " + getPerformedBy() + 
 	    		"\nResult: " + getEventResult() +
 	    		"\nSubEvents: " + StringUtils.indent(subEventString, 1);
     }
 
-	@Override
-	@AllowSafetyNetworkAccess
-	public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
-		return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
-	}
-	
 	// Events are never exported
 	@Override
 	public String getGlobalId() {
@@ -542,14 +514,6 @@ public abstract class Event<T extends EventType> extends AbstractEvent<T> implem
         return getType();
     }
 
-    public RecurringAssetTypeEvent getRecurringEvent() {
-        return recurringEvent;
-    }
-
-    public void setRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
-        this.recurringEvent = recurringEvent;
-    }
-
     public EntityState getState() {
         return state;
     }
@@ -693,3 +657,4 @@ public abstract class Event<T extends EventType> extends AbstractEvent<T> implem
         }
     }
 }
+

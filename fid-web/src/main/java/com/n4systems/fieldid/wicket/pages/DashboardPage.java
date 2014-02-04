@@ -91,7 +91,7 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
         response.renderCSSReference("style/dashboard/dashboard.css");
         response.renderCSSReference("style/dashboard/widgetconfig.css");
-        response.renderCSSReference("style/chosen/chosen.css");
+        response.renderCSSReference("style/plugins/chosen/chosen.css");
         response.renderCSSReference("style/newCss/component/matt_buttons.css");
         response.renderCSSReference("style/newCss/component/buttons.css");
     }
@@ -104,6 +104,11 @@ public class DashboardPage extends FieldIDFrontEndPage {
         add(headerPanel = new DashboardHeaderPanel("headerPanel") {
             @Override
             protected void onManageDashboard(AjaxRequestTarget target) {
+
+                if (activeDashboardWindow ) {
+                    return;
+                }
+
                 configurationWindow.setContent(new ManageDashboardPanel(configurationWindow.getContentId()){
                     @Override
                     public void onSelectedWidgetConfig(AjaxRequestTarget target) {
@@ -120,11 +125,9 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
                 });
 
-
-                if (activeDashboardWindow == false) {
                     configurationWindow.show(target);
                     activeDashboardWindow = true;
-                }
+
             }
 
             @Override
@@ -145,6 +148,14 @@ public class DashboardPage extends FieldIDFrontEndPage {
         configurationWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
             @Override
             public void onClose(AjaxRequestTarget target) {
+                if (activeWindow) {
+                    activeWindow = false;
+                }
+
+                if (activeDashboardWindow) {
+                    activeDashboardWindow = false;
+                }
+
                 target.add(headerPanel);
                 target.appendJavaScript("listenForLayoutListClick()");
             }
@@ -172,6 +183,11 @@ public class DashboardPage extends FieldIDFrontEndPage {
 	}
 
     private void onAddWidgets(AjaxRequestTarget target) {
+
+        if (activeWindow) {
+            return;
+        }
+
         configurationWindow.setContent(new AddWidgetPanel(configurationWindow.getContentId(), currentLayoutModel){
             @Override
             protected void onWidgetTypeSelected(AjaxRequestTarget target, WidgetType type) {
@@ -190,10 +206,10 @@ public class DashboardPage extends FieldIDFrontEndPage {
 
         });
 
-        if (activeWindow == false) {
+
             configurationWindow.show(target);
             activeWindow = true;
-        }
+
 
     }
 

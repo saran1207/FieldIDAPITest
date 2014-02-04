@@ -1,34 +1,20 @@
 package com.n4systems.model.orgs;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
+import com.n4systems.model.AddressInfo;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
+
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 
-import com.n4systems.model.AddressInfo;
-import com.n4systems.model.Contact;
-import com.n4systems.model.security.AllowSafetyNetworkAccess;
-import com.n4systems.model.security.DenyReadOnlyUsersAccess;
-
 
 @SuppressWarnings("serial")
 @MappedSuperclass
 abstract public class ExternalOrg extends BaseOrg {
-	
-	private String code;
-	
-	@Embedded
-	@AttributeOverrides({ 
-		@AttributeOverride(name="name", column = @Column(name="contactname")),
-		@AttributeOverride(name="email", column = @Column(name="contactemail"))
-	})
-	private Contact contact = new Contact();
-	
-	@ManyToOne(optional = true, fetch = FetchType.EAGER)
+
+
+    @ManyToOne(optional = true, fetch = FetchType.EAGER)
 	@JoinColumn(name="linked_id")
 	private BaseOrg linkedOrg;
 	
@@ -63,26 +49,7 @@ abstract public class ExternalOrg extends BaseOrg {
 			setAddressInfo(null);
 		}
 	}
-	
-	@AllowSafetyNetworkAccess
-    @DenyReadOnlyUsersAccess
-	public String getCode() {
-		return code;
-	}
 
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	@AllowSafetyNetworkAccess
-	public Contact getContact() {
-		return contact;
-	}
-	
-	public void setContact(Contact contact) {
-		this.contact = contact;
-	}
-	
 	@AllowSafetyNetworkAccess
 	public InternalOrg getLinkedOrg() {
 		return (InternalOrg)linkedOrg;

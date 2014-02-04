@@ -1,0 +1,177 @@
+/*--------------------------------------- 
+	FONTELLO ICON FONTS
+-----------------------------------------*/
+/* 
+	Generated from http://fontello.com (all available icons listed here)
+	Icons are from the Entypo and Font Awesome icon set.
+	http://www.entypo.com/
+	http://fortawesome.github.io/Font-Awesome/
+*/
+
+// http://www.evotech.net/articles/testjsentities.html - entity conversion
+
+@font-face {
+  font-family: 'fontello';
+  src: url('../fonts/fontello.eot?10576970');
+  src: url('../fonts/fontello.eot?10576970#iefix') format('embedded-opentype'),
+       url('../fonts/fontello.woff?10576970') format('woff'),
+       url('../fonts/fontello.ttf?10576970') format('truetype'),
+       url('../fonts/fontello.svg?10576970#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="fontello-"],
+[class*="fontello-"] {
+	cursor: pointer;
+	font-size: 0; //hides text
+
+	&:before {
+		font-size: @base-font-size; //shows icon
+		font-family: @fontello;
+		speak: none; //determines whether or not to render text aurally
+		text-decoration: inherit;
+		padding-right: 4px;
+		//vertical-align: middle;
+		line-height: 1;
+		//reset parent styles, that can break glyph codes
+		font-variant: normal;
+		text-transform: none;
+	}
+}
+
+// These styles are attached to the class name and can be added to any HTML element.
+// To use as a mixin, see mixins.less
+.fontello-plus-squared-small:before { content: '\e836'; }
+.fontello-flow-cascade:before { content: '\e83a'; }
+.fontello-calendar:before { content: '\e81d'; }
+.fontello-calendar-empty:before { content: '\e820'; }
+.fontello-down-dir:before { content: '\e811'; }
+.fontello-up-dir:before { content: '\e813'; }
+.fontello-left-dir:before { content: '\e814'; }
+.fontello-right-dir:before { content: '\e817'; }
+.fontello-angle-double-left:before { content: '\e821'; }
+.fontello-angle-double-left-sml:before { content: '\00AB'; } // ascii
+.fontello-angle-double-right:before { content: '\e822'; }
+.fontello-angle-double-right-sml:before { content: '\00BB'; } // ascii
+.fontello-angle-double-up:before { content: '\e827'; }
+.fontello-angle-double-down:before { content: '\e829'; }
+.fontello-table:before { content: '\e82c'; }
+.fontello-columns:before { content: '\e82b'; }
+.fontello-filter:before { content: '\e831'; }
+.fontello-sort:before { content: '\e832'; }
+.fontello-sort-down:before { content: '\e833'; }
+.fontello-sort-up:before { content: '\e834'; }
+.fontello-search:before { content: '\e801'; }
+.fontello-mail:before { content: '\e800'; }
+.fontello-user:before { content: '\e812'; }
+.fontello-users:before { content: '\e839'; }
+.fontello-user-add:before { content: '\e838'; }
+.fontello-picture:before { content: '\e816'; }
+.fontello-camera:before { content: '\e815'; }
+.fontello-layout:before { content: '\e802'; }
+.fontello-menu:before { content: '\e803'; }
+.fontello-check:before { content: '\e804'; }
+.fontello-cancel:before { content: '\e805'; } 
+.fontello-plus:before { content: '\e808'; }
+.fontello-plus-squared:before { content: '\e83d'; } 
+.fontello-minus:before { content: '\e80b'; }
+.fontello-minus-squared:before { content: '\e83e'; }
+.fontello-help:before { content: '\e80e'; }
+.fontello-minus-squared-small:before { content: '\e835'; }
+.fontello-home:before { content: '\e818'; }
+.fontello-link:before { content: '\e819'; }
+.fontello-attach:before { content: '\e81a'; } 
+.fontello-lock:before { content: '\e81b'; }
+.fontello-lock-open:before { content: '\e81c'; }
+.fontello-download:before { content: '\e81e'; }
+.fontello-upload:before { content: '\e81f'; }
+.fontello-export:before { content: '\e823'; }
+.fontello-pencil:before { content: '\e824'; }
+.fontello-print:before { content: '\e825'; }
+.fontello-comment:before { content: '\e826'; }
+.fontello-attention:before { content: '\e828'; }
+.fontello-location:before { content: '\e82a'; }
+.fontello-map:before { content: '\e837'; }
+.fontello-trash:before { content: '\e806'; }
+.fontello-cog:before { content: '\e807'; }
+.fontello-arrow-combo:before { content: '\e809'; }
+.fontello-down-open:before { content: '\e82d'; }
+.fontello-left-open:before { content: '\e82e'; }
+.fontello-right-open:before { content: '\e82f'; }
+.fontello-up-open:before { content: '\e830'; }
+.fontello-down-open-mini:before { content: '\e80a'; }
+.fontello-left-open-mini:before { content: '\e80c'; }
+.fontello-right-open-mini:before { content: '\e80d'; }
+.fontello-up-open-mini:before { content: '\e80f'; }
+.fontello-down-thin:before { content: '\e841'; }
+.fontello-left-thin:before { content: '\e842'; }
+.fontello-right-thin:before { content: '\e843'; }
+.fontello-up-thin:before { content: '\e844'; }
+.fontello-ccw:before { content: '\e845'; }
+.fontello-cw:before { content: '\e846'; }
+.fontello-arrows-ccw:before { content: '\e847'; }
+.fontello-target:before { content: '\e848'; }
+.fontello-info:before { content: '\e810'; }
+
+// Options for different sized icons
+.icon-lrg,
+[class^="fontello-"].icon-lrg:before {
+	font-size: @large-font-size;
+}
+[class^="fontello-"].icon-lrg {
+	font-size: 0;
+}
+.icon-lrg {
+	height: 24px;
+	width: 24px;
+}
+
+// IMAGE ICONS - default 16px height & width
+// ------------------------------------------
+[class^="icon-"] {
+	vertical-align: middle;
+	cursor: pointer;
+	display: inline-block;
+	height: 16px;
+	width: 16px;
+	background-repeat: no-repeat;
+}
+// Hides text when replacing text with icons
+[class^="icon-"] {
+	.text-hide();
+
+	&:before {
+		color: @gray-darkest;
+		font-size: @base-font-size;
+	}
+}
+.icon-calendar {
+	background-image: url(/img/icon-calendar.png);
+}
+.icon-database {
+	background-image: url(/img/icon-database.png);
+}
+
+
+// EVENT ICON SPRITE 
+// ------------------
+[class^="icon-event"] {
+	width: 26px;
+	height: 28px;
+	background-image: url(/img/sprite-event-status.png);
+}
+.icon-event-open {
+	background-position: 0 0;
+}
+.icon-event-open-overdue {
+	background-position: -26px 0;
+}
+.icon-event-completed-pass {
+	background-position: -52px 0;
+}
+.icon-event-completed-fail {
+	background-position: -78px 0;
+}
+
+

@@ -11,15 +11,15 @@ import org.apache.wicket.model.IModel;
 
 import java.util.List;
 
-public class GroupedEventTypePicker extends GroupedDropDownChoice<ThingEventType, EventTypeGroup>{
+public class GroupedEventTypePicker extends GroupedDropDownChoice<EventType, EventTypeGroup>{
 
     private boolean useJChosen;
 
-    public GroupedEventTypePicker(String id, IModel<ThingEventType> eventTypeIModel, IModel<List<ThingEventType>> eventTypesModel) {
+    public GroupedEventTypePicker(String id, IModel<EventType> eventTypeIModel, IModel<List<? extends EventType>> eventTypesModel) {
         this(id, eventTypeIModel, eventTypesModel, true);
     }
 
-    public GroupedEventTypePicker(String id, IModel<ThingEventType> eventTypeIModel, IModel<List<ThingEventType>> eventTypesModel, boolean useJChosen) {
+    public GroupedEventTypePicker(String id, IModel<EventType> eventTypeIModel, IModel<List<? extends EventType>> eventTypesModel, boolean useJChosen) {
         super(id, eventTypeIModel, eventTypesModel, new EventTypeChoiceRenderer());
         setOutputMarkupId(true);
         this.useJChosen = useJChosen;
@@ -27,7 +27,7 @@ public class GroupedEventTypePicker extends GroupedDropDownChoice<ThingEventType
 
 
     @Override
-    protected EventTypeGroup getGroup(ThingEventType choice) {
+    protected EventTypeGroup getGroup(EventType choice) {
         return choice.getGroup();
     }
 

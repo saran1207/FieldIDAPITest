@@ -10,13 +10,13 @@ public class InspectionScheduleCreateHandler {
 
 	private final AssetByMobileGuidLoader assetByMobileGuidLoader;
 	private final FilteredIdLoader<Asset> filteredProductLoader;
-	private final FilteredIdLoader<EventType> inspectionTypeLoader;
+	private final FilteredIdLoader<ThingEventType> inspectionTypeLoader;
 	private final SimpleEventSaver saver;
 
 	public InspectionScheduleCreateHandler(
 			AssetByMobileGuidLoader assetByMobileGuidLoader,
 			FilteredIdLoader<Asset> filteredProductLoader,
-			FilteredIdLoader<EventType> inspectionTypeLoader,
+			FilteredIdLoader<ThingEventType> inspectionTypeLoader,
 			SimpleEventSaver saver) {
 		super();
 		this.assetByMobileGuidLoader = assetByMobileGuidLoader;
@@ -25,7 +25,7 @@ public class InspectionScheduleCreateHandler {
 		this.saver = saver;
 	}
 
-	public void createNewInspectionSchedule(Event openEvent, InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
+	public void createNewInspectionSchedule(ThingEvent openEvent, InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
         Asset asset = loadProduct(openEvent, inspectionScheduleServiceDTO);
         openEvent.setAsset(asset);
 		
@@ -49,7 +49,7 @@ public class InspectionScheduleCreateHandler {
 		return asset;
 	}
 	
-	private EventType loadInspectionType(Event openEvent,
+	private ThingEventType loadInspectionType(Event openEvent,
 			InspectionScheduleServiceDTO inspectionScheduleServiceDTO) {
 		return inspectionTypeLoader.setId(inspectionScheduleServiceDTO.getInspectionTypeId()).load();
 		

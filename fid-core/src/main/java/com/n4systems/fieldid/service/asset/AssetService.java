@@ -292,15 +292,17 @@ public class AssetService extends FieldIdPersistenceService {
     }
 
     private void updateSchedulesOwnership(Asset asset) {
+        // just load the list because in order to paginate
         QueryBuilder<Long> schedules = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(asset.getTenant().getId()))
                 .setSimpleSelect("id")
                 .addSimpleWhere("asset", asset)
+                .addSimpleWhere("state", Archivable.EntityState.ACTIVE)
                 .addWhere(Comparator.EQ, "workflowState", "workflowState", WorkflowState.OPEN);
 
         for (Long id : persistenceService.findAll(schedules)) {
             // We must find with tenant here otherwise users in groups may not be able to update some schedules ownership
-            QueryBuilder<Event> builder = createTenantSecurityBuilder(Event.class).addSimpleWhere("id", id);
-            Event schedule = persistenceService.find(builder);
+            QueryBuilder<ThingEvent> builder = createTenantSecurityBuilder(ThingEvent.class).addSimpleWhere("id", id);
+            ThingEvent schedule = persistenceService.find(builder);
 
             schedule.setOwner(asset.getOwner());
             schedule.setAdvancedLocation(asset.getAdvancedLocation());
@@ -723,4 +725,10 @@ public class AssetService extends FieldIdPersistenceService {
         return asset;
     }
 
+    public Asset findAssetWithInfoOptions(Long id) {
+        Asset asset =  persistenceService.find(Asset.class, id);
+        List<InfoOptionBean> infoList = asset.getOrderedInfoOptionList();
+
+        return asset;
+    }
 }

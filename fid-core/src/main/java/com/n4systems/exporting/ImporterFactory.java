@@ -14,7 +14,7 @@ import com.n4systems.handlers.creator.EventPersistenceFactory;
 import com.n4systems.handlers.creator.events.factory.ProductionEventPersistenceFactory;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AutoAttributeCriteria;
-import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.infooption.InfoOptionMapConverter;
 import com.n4systems.model.orders.NonIntegrationOrderManager;
 import com.n4systems.model.orgs.CustomerOrg;
@@ -89,7 +89,7 @@ public class ImporterFactory {
 		return new ProductionEventPersistenceFactory();
 	}
 
-	protected EventToModelConverter createEventToModelConverter(EventType type, TimeZone timeZone) {
+	protected EventToModelConverter createEventToModelConverter(ThingEventType type, TimeZone timeZone) {
 		EventToModelConverter converter = new EventToModelConverter(
 				loaderFactory.createOrgByNameLoader(), 
 				loaderFactory.createAssetByIdOwnerTypeLoader(), 
@@ -121,7 +121,7 @@ public class ImporterFactory {
 		return new AssetImporter(reader, createViewValidator(), createAssetSaveService(identifiedBy), createAssetToModelConverter(identifiedBy, type));
 	}
 
-	public EventImporter createEventImporter(MapReader reader, User modifiedBy, EventType type) {
+	public EventImporter createEventImporter(MapReader reader, User modifiedBy, ThingEventType type) {
 		EventImporter importer = new EventImporter(reader, createViewValidator(), createEventPersistenceFactory(), createEventToModelConverter(type, modifiedBy.getTimeZone()));
 		importer.setModifiedBy(modifiedBy.getId());
 		return importer;

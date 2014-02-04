@@ -1,7 +1,17 @@
 <wicket:panel>
 
+    <div wicket:id="resultButtons" class="button-group result-panel-buttons">
+        <span wicket:id="table" class="btn-icon btn-secondary tipsy-tooltip" title="List">
+            <span class="fontello-menu">menu</span>
+        </span>
+        <a wicket:id="map" class="btn-icon btn-secondary tipsy-tooltip" title="Map">
+            <span class="fontello-map"/>
+        </a>
+    </div>
+
     <div wicket:id="resultsTable">
     </div>
 
+    <div wicket:id="resultsMap" style="width:100%;height:600px;"/>
 
 </wicket:panel>

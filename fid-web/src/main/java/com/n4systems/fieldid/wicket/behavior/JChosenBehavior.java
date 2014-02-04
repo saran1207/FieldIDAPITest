@@ -27,7 +27,7 @@ public class JChosenBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/chosen/chosen.jquery.js");
-        response.renderCSSReference("style/chosen/chosen.css");
+        response.renderCSSReference("style/plugins/chosen/chosen.css");
         response.renderOnDomReadyJavaScript("$('#"+component.getMarkupId()+"_chzn').remove();");
         response.renderOnDomReadyJavaScript("$('#"+component.getMarkupId()+"').chosen({ disable_search_threshold: 15, allow_single_deselect:"+isNullValidFor(component)+"});");
     }

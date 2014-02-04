@@ -1,0 +1,1 @@
+insert into thing_event_types_supported_proof_tests (select eventtypes_id, element from eventtypes_supportedprooftests);

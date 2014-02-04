@@ -4,35 +4,7 @@
 
     <form wicket:id="outerEventForm">
 
-        <div>
-
-            <h2><span wicket:id="assetTypeName"/> <wicket:message key="label.summary"/></h2>
-
-            <div class="infoSet">
-                <label class="label"><wicket:message key="label.description"/></label>
-                <span class="fieldHolder" wicket:id="description">
-                </span>
-            </div>
-
-            <div class="infoSet">
-                <label class="label"><span wicket:id="identifierLabel"/></label>
-                <span class="fieldHolder">
-                    <a wicket:id="assetLink"><span wicket:id="identifier"></span></a>
-                </span>
-            </div>
-
-            <div class="infoSet">
-                <label class="label"><wicket:message key="label.rfidnumber"/></label>
-                <span class="fieldHolder" wicket:id="rfidNumber">
-                </span>
-            </div>
-
-            <div class="infoSet">
-                <label class="label"><wicket:message key="label.reference_number"/></label>
-                <span class="fieldHolder" wicket:id="referenceNumber">
-                </span>
-            </div>
-
+        <div wicket:id="targetDetailsPanel">
         </div>
 
         <div>
@@ -67,7 +39,7 @@
                 </span>
             </div>
 
-            <div class="infoSet">
+            <div class="infoSet" wicket:id="eventBookContainer">
                 <label class="label"><wicket:message key="label.eventbook"/></label>
                 <span class="fieldHolder">
                     <div wicket:id="newOrExistingEventBook"/>
@@ -78,7 +50,7 @@
 
         </div>
 
-        <div>
+        <div wicket:id="ownerSection">
 
             <h2><wicket:message key="label.owner"/></h2>
 
@@ -89,17 +61,21 @@
                 </span>
             </div>
 
-            <div class="infoSet" style="overflow:visible">
-                <!-- blargh : why is overflow hidden for infoSet? hack so i can see popups in this div.-->
-                <label class="label">* <wicket:message key="label.owner"/></label>
+            <div>
 
-                <span wicket:id="orgPicker"></span>
-            </div>
+                <div class="infoSet" style="overflow:visible">
+                    <!-- blargh : why is overflow hidden for infoSet? hack so i can see popups in this div.-->
+                    <label class="label">* <wicket:message key="label.owner"/></label>
 
-            <div class="infoSet">
-                <label class="label"><wicket:message key="label.location"/></label>
+                    <span wicket:id="orgPicker"></span>
+                </div>
 
-                <span wicket:id="locationPicker"></span>
+                <div class="infoSet">
+                    <label class="label"><wicket:message key="label.location"/></label>
+
+                    <span wicket:id="locationPicker"></span>
+                </div>
+
             </div>
 
         </div>
@@ -144,13 +120,8 @@
                 </span>
             </div>
 
-            <div class="infoSet">
-                <label class="label"><wicket:message key="label.assetstatus"/></label>
 
-                <span class="fieldHolder">
-                    <select wicket:id="assetStatus"/>
-                </span>
-            </div>
+            <div wicket:id="postEventPanel"></div>
 
         </div>
 

@@ -11,7 +11,7 @@ import org.apache.wicket.model.IModel;
 
 public class GpsIconCell extends Panel {
 
-    public GpsIconCell(String id, IModel<ThingEvent> eventModel) {
+    public GpsIconCell(String id, IModel<? extends Event> eventModel) {
         super(id);
 
         GpsLocation gpsLocation = eventModel.getObject().getGpsLocation();

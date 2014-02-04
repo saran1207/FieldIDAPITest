@@ -110,11 +110,11 @@ public abstract class AbstractColumnsPanel<T extends SearchCriteria> extends Pan
         return Lists.newArrayList();
     }
 
-    protected List<ColumnMappingGroupView> getDynamicEventColumns(ThingEventType eventType, List<ThingEventType> availableEventTypes) {
+    protected List<ColumnMappingGroupView> getDynamicEventColumns(EventType eventType, List<? extends EventType> availableEventTypes) {
         return Lists.newArrayList();
     }
 
-    protected void updateDynamicEventColumns(ThingEventType eventType, List<ThingEventType> availableEventTypes) {
+    protected void updateDynamicEventColumns(EventType eventType, List<? extends EventType> availableEventTypes) {
         dynamicEventColumnsModel.setObject(getDynamicEventColumns(eventType,  availableEventTypes));
     }
 

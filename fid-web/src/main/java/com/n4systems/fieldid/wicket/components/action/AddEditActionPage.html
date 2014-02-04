@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
     <form wicket:id="addActionForm" class="addActionForm actionPage">
@@ -38,9 +39,10 @@
             <a wicket:id="submitLink" class="mattButton blueButton save"><span wicket:id="saveLabel"></span></a>
             <wicket:message key="label.or"/>
             <a wicket:id="cancelLink" class="cancel"><wicket:message key="label.cancel"/></a>
-            <wicket:message key="label.or"/>
+            <span wicket:enclosure="deleteLink"><wicket:message key="label.or"/></span>
             <a wicket:id="deleteLink" class="delete"><wicket:message key="label.delete"/></a>
         </div>
     </form>
 
 </wicket:extend>
+</html>

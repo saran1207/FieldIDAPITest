@@ -1,0 +1,44 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    <h3><wicket:message key="label.filter"/>&nbsp;<wicket:message key="label.by"/>:</h3>
+    <ul class="checkbox">
+        <li>
+            <label wicket:for="openCheckbox">
+                <input wicket:id="openCheckbox" type="checkbox">
+                <wicket:message key="label.open"/>
+            </label>
+        </li>
+        <li>
+            <label wicket:for="completedCheckbox">
+                <input wicket:id="completedCheckbox" type="checkbox">
+                <wicket:message key="label.completed"/>
+            </label>
+        </li>
+        <li>
+            <label wicket:for="closedCheckbox">
+                <input wicket:id="closedCheckbox" type="checkbox">
+                <wicket:message key="label.closed"/>
+            </label>
+        </li>
+    </ul>
+
+    <ul wicket:id="completedFilterOptions" class="divider">
+        <li wicket:id="completedScheduleState">
+            <input type="radio" wicket:id="state">
+            <label wicket:id="stateLabel"/>
+        </li>
+    </ul>
+
+    <ul wicket:id="openFilterOptions" class="divider">
+        <li wicket:id="openDueDateState">
+            <input type="radio" wicket:id="state">
+            <label wicket:id="stateLabel"/>
+        </li>
+    </ul>
+    
+    <div wicket:id="typeFilterOptions" class="control-group divider">
+        <label wicket:for="eventTypeSelect"><wicket:message key="label.title.event"/></label>
+        <select wicket:id="eventTypeSelect"/>
+    </div>
+</wicket:panel>
+</html>

@@ -41,9 +41,9 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
 
     private final TimeZone timeZone;
 	
-	private EventType type;
+	private ThingEventType type;
 	
-	public EventToModelConverter(OrgByNameLoader orgLoader, AssetsByIdOwnerTypeLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventStatusByNameLoader eventStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, PredefinedLocationTreeLoader predefinedLocationTreeLoader, EventType type, TimeZone timeZone) {
+	public EventToModelConverter(OrgByNameLoader orgLoader, AssetsByIdOwnerTypeLoader assetLoader, AssetStatusByNameLoader assetStatusLoader, EventStatusByNameLoader eventStatusLoader, EventBookFindOrCreateLoader eventBookLoader, UserByFullNameLoader userLoader, PredefinedLocationTreeLoader predefinedLocationTreeLoader, ThingEventType type, TimeZone timeZone) {
 		this.orgLoader = orgLoader;
 		this.assetLoader = assetLoader;
 		this.assetStatusLoader = assetStatusLoader;
@@ -89,7 +89,7 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
 		return model;
 	}
 
-    protected void resolveLocation(EventView view, Event model, Transaction transaction) {
+    protected void resolveLocation(EventView view, ThingEvent model, Transaction transaction) {
         PrimaryOrg org = model.getOwner().getPrimaryOrg();
         if (org.hasExtendedFeature(ExtendedFeature.AdvancedLocation)) {
             PredefinedLocationTree predefinedLocationTree = predefinedLocationTreeLoader.load(transaction);
@@ -260,12 +260,12 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
 		return result;
 	}
 
-	protected void resolveType(Event model) {
+	protected void resolveType(ThingEvent model) {
 		model.setType(type);
 		model.setTenant(type.getTenant());
 	}
 	
-	protected void resolveStatus(String statusName, Event model) {
+	protected void resolveStatus(String statusName, ThingEvent model) {
 		String cleanStatus = statusName.toUpperCase();
 		
 		EventResult eventResult = EventResult.NA;
@@ -278,18 +278,18 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
 		model.setEventResult(eventResult);
 	}
 
-	protected void resolveAsset(EventView view, Event model, Transaction transaction) {		
+	protected void resolveAsset(EventView view, ThingEvent model, Transaction transaction) {
 		Asset asset = assetLoader.setIdentifier(view.getIdentifier()).setOwner(view.getOrganization(), view.getCustomer(), view.getDivision()).load(transaction).get(0);
-		model.setAsset(asset);
+		model.setTarget(asset);
 	}
 
-	protected void resolvePerformedBy(EventView view, Event model, Transaction transaction) {
+	protected void resolvePerformedBy(EventView view, ThingEvent model, Transaction transaction) {
 		// the validator will ensure this returns exactly 1 user
 		User performedBy = userLoader.setFullName(view.getPerformedBy()).load(transaction).get(0);
 		model.setPerformedBy(performedBy);
 	}
 
-	protected void resolvePrintable(EventView view, Event model) {
+	protected void resolvePrintable(EventView view, ThingEvent model) {
 		if (view.isPrintable() != null) {
 			model.setPrintable(view.isPrintable());
 		} else {
@@ -297,7 +297,7 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
 		}
 	}
 
-	protected void resolveEventBook(EventView view, Event model, Transaction transaction) {
+	protected void resolveEventBook(EventView view, ThingEvent model, Transaction transaction) {
 		if (view.getEventBook() != null) {
 			eventBookLoader.setName(view.getEventBook());
 			eventBookLoader.setOwner(model.getOwner());
@@ -306,7 +306,7 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
 		}
 	}
 
-	protected void resolveAssetStatus(EventView view, Event model, Transaction transaction) {
+	protected void resolveAssetStatus(EventView view, ThingEvent model, Transaction transaction) {
 		if (view.getAssetStatus() != null) {
 			AssetStatus status = assetStatusLoader.setName(view.getAssetStatus()).load(transaction);
 			model.setAssetStatus(status);
@@ -320,13 +320,22 @@ public class EventToModelConverter implements ViewToModelConverter<ThingEvent, E
         }
     }
 
-	protected void resolveOwner(EventView view, Event model, Transaction transaction) {
+	protected void resolveOwner(EventView view, ThingEvent model, Transaction transaction) {
 		orgLoader.setOrganizationName(view.getNewOrganization());
 		orgLoader.setCustomerName(view.getNewCustomer());
 		orgLoader.setDivision(view.getNewDivision());
 		
 		BaseOrg owner = orgLoader.load(transaction);
-		model.setOwner(owner);
+        //If New Owner fields are blank set it to the original owner.
+        if(owner == null) {
+            orgLoader.setOrganizationName(view.getOrganization());
+            orgLoader.setCustomerName(view.getCustomer());
+            orgLoader.setDivision(view.getDivision());
+            owner = orgLoader.load(transaction);
+            model.setOwner(owner);
+        } else {
+		    model.setOwner(owner);
+        }
 	}
 	
 	public EventType getType() {

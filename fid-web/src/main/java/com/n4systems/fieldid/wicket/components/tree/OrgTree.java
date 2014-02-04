@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.tree;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.org.OrgLocationTree;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.util.StringUtils;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -12,16 +13,16 @@ import java.util.Set;
 
 public class OrgTree extends Tree {
 
-    private static final String INIT_ORGTREE_JS = "var %s = orgTreeFactory.create(%s);";
+    private static final String INIT_ORGTREE_JS = "%s = orgTreeFactory.create(%s);";
     public static final String NODE_NAME_HTML = "<span>%s</span>";
     public static final String NODE_NAME_HIGHTLIGHTED_HTML = "%s<span class='match'>%s</span>%s";
-    public static final String NODE_HTML = "<a href='www.google.com' class='%s'>%s</a>" +
-            "%s" +
-            "<span class='timeago' title='%s'>xx</span>" +
-            "<span class='timeago' title='%s'>xx</span>";
+    public static final String NODE_HTML = "<span class='org' >%s</span>";
 
     private @SpringBean OrgService orgService;
     private String lastSearch = null;
+    private String customerTerm = new FIDLabelModel("label.customer").getObject();
+
+
 
     public OrgTree(String id) {
         super(id);
@@ -41,8 +42,6 @@ public class OrgTree extends Tree {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/component/orgTree.js");
-        response.renderJavaScriptReference("javascript/jquery.timeago.js");
-        response.renderOnDomReadyJavaScript("jQuery.timeago.settings.allowFuture = true;");
     }
 
     protected OrgLocationTree getOrgTree(String search) {
@@ -92,8 +91,9 @@ public class OrgTree extends Tree {
         } else {
             name = String.format(NODE_NAME_HIGHTLIGHTED_HTML, name.substring(0, index), name.substring(index, index + lastSearch.length()), name.substring(index + lastSearch.length()));
         }
+        // TODO : is "linked" information needed???
         String cssClass = node.isLinked() ? "linked" : "";
-        return String.format(NODE_HTML, cssClass, name, node.getIdentifier(), node.getCreated(), node.getModified());
+        return String.format(NODE_HTML, name);
     }
 
     private void openParents(JsonTreeNode parent) {
@@ -104,17 +104,22 @@ public class OrgTree extends Tree {
     }
 
     protected String getInitTreeJs() {
-        return String.format(INIT_ORGTREE_JS,getJsVariableName(),convertToJson(new TreeOptions()));
+        return String.format(INIT_ORGTREE_JS,getJsVariableName(),convertToJson(createTreeOptions()));
+    }
+
+    protected TreeOptions createTreeOptions() {
+        return new OrgTreeOptions();
     }
 
     // ------------------------------------------------------------
 
-    class TreeOptions {
-        String updateCallback = ajaxBehavior.getCallbackUrl().toString();
-        String id = OrgTree.this.getMarkupId();
-        String clickCallback = getWebRequest().getContextPath() + "/w/orgSummary";
+    class OrgTreeOptions extends TreeOptions {
+        String clickCallback = getWebRequest().getContextPath() + "/w/placeSummary";
+        String vernacular = customerTerm;
+
+        OrgTreeOptions() {
+            super();
+        }
     }
-
-
 
 }

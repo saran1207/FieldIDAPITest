@@ -28,6 +28,8 @@ public class LocalizationListener implements PostLoadEventListener, PreUpdateEve
 
     private static final Logger logger=Logger.getLogger(LocalizationListener.class);
 
+    // TODO : change this to a spring InitializingBean that afterPropertiesSet() reads its values from database.
+    // will make it easier to share, refactor, test.
     private static Map<Class<?>, List<LocalizedProperty>> cache = Maps.newHashMap();
 
 

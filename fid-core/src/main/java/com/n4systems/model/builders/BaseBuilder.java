@@ -3,11 +3,7 @@ package com.n4systems.model.builders;
 import com.n4systems.model.builders.context.BuilderCallback;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public abstract class BaseBuilder<K> implements Builder<K> {
 

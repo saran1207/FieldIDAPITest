@@ -1,10 +1,9 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.ThingEventType;
+import com.n4systems.model.*;
 import com.n4systems.model.user.User;
+import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import org.apache.commons.lang.StringUtils;
@@ -18,27 +17,59 @@ import java.util.List;
 @Transactional
 public class EventTypeService extends FieldIdPersistenceService {
 
-    public List<ThingEventType> getEventTypesIncludingActions(Long eventTypeGroupId) {
-        return getEventTypesIncludingActions(eventTypeGroupId, null);
+    public List<ActionEventType> getActionEventTypes(Long eventTypeGroupId) {
+        return getActionEventTypes(eventTypeGroupId, null);
     }
 
-    public List<ThingEventType> getAllEventTypesExcludingActions() {
-        return getEventTypesExcludingActions(null, null);
+    public List<ThingEventType> getThingEventTypes() {
+        return getThingEventTypes(null, null);
     }
 
-    public List<ThingEventType> getEventTypesExcludingActions(Long eventTypeGroupId, String nameFilter) {
-        QueryBuilder<ThingEventType> query = createEventTypeQuery(eventTypeGroupId, nameFilter);
-        query.addSimpleWhere("group.action", false);
-        return persistenceService.findAll(query);
+    public List<PlaceEventType> getPlaceEventTypes(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<PlaceEventType> query = createEventTypeQuery(PlaceEventType.class, eventTypeGroupId, nameFilter);
+        return postFetchForStruts(persistenceService.findAll(query));
     }
 
-    public List<ThingEventType> getEventTypesIncludingActions(Long eventTypeGroupId, String nameFilter) {
-        QueryBuilder<ThingEventType> builder = createEventTypeQuery(eventTypeGroupId, nameFilter);
-        return persistenceService.findAll(builder);
+    public List<ThingEventType> getThingEventTypes(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<ThingEventType> query = createEventTypeQuery(ThingEventType.class, eventTypeGroupId, nameFilter);
+        return postFetchForStruts(persistenceService.findAll(query));
     }
 
-    private QueryBuilder<ThingEventType> createEventTypeQuery(Long eventTypeGroupId, String nameFilter) {
-        QueryBuilder<ThingEventType> builder = createUserSecurityBuilder(ThingEventType.class);
+    public List<ActionEventType> getActionEventTypes(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<ActionEventType> builder = createEventTypeQuery(ActionEventType.class, eventTypeGroupId, nameFilter);
+        return postFetchForStruts(persistenceService.findAll(builder));
+    }
+
+    public List<EventType> getAllEventTypes(Long eventTypeGroupId) {
+        return getAllEventTypes(eventTypeGroupId, null);
+    }
+
+    public List<EventType> getAllEventTypes(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<EventType> builder = createEventTypeQuery(EventType.class, eventTypeGroupId, nameFilter);
+        return postFetchForStruts(persistenceService.findAll(builder));
+    }
+
+    // XXX: Not sure why adding post fetch paths to the created builder isn't solving this issue, but it isn't...
+    private <T extends EventType> List<T> postFetchForStruts(List<T> results) {
+        for (T eventType : results) {
+            PostFetcher.postFetchFields(eventType, "modifiedBy", "modifiedBy.fullName", "createdBy", "createdBy.fullName");
+        }
+        return results;
+    }
+
+    public EventType getEventType(Long id) {
+        QueryBuilder<EventType> query = createUserSecurityBuilder(EventType.class);
+        query.addSimpleWhere("id", id);
+        EventType eventType = persistenceService.find(query);
+        PostFetcher.postFetchFields(eventType, "eventForm.sections", "infoFieldNames");
+        if (eventType.isThingEventType()) {
+            PostFetcher.postFetchFields(eventType, "supportedProofTests");
+        }
+        return eventType;
+    }
+
+    private <T extends EventType> QueryBuilder<T> createEventTypeQuery(Class<T> clazz, Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<T> builder = createUserSecurityBuilder(clazz);
 
         if (eventTypeGroupId != null) {
             builder.addSimpleWhere("group.id", eventTypeGroupId);
@@ -76,8 +107,8 @@ public class EventTypeService extends FieldIdPersistenceService {
     }
 
 	public void touchEventTypesForGroup(Long eventTypeGroupId, User modifiedBy) {
-		List<ThingEventType> eventTypes = getEventTypesIncludingActions(eventTypeGroupId);
-		for (ThingEventType eventType: eventTypes) {
+		List<EventType> eventTypes = getAllEventTypes(eventTypeGroupId, null);
+		for (EventType eventType: eventTypes) {
 			update(eventType, modifiedBy);
 		}
 	}

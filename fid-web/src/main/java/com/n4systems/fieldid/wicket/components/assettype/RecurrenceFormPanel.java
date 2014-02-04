@@ -10,7 +10,10 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
-import com.n4systems.model.*;
+import com.n4systems.model.EventType;
+import com.n4systems.model.Recurrence;
+import com.n4systems.model.RecurrenceTimeOfDay;
+import com.n4systems.model.RecurrenceType;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.services.date.DateService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -49,7 +52,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
         // private fields used to back form components.
         private RecurrenceTimeOfDay time = RecurrenceTimeOfDay.NINE_AM;
         private List<RecurrenceTimeOfDay> times = Lists.newArrayList(RecurrenceTimeOfDay.NINE_AM);
-        private ThingEventType eventType = null;
+        private EventType eventType = null;
         private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
         private BaseOrg owner;
         private Date dateTime = dateService.nowInUsersTimeZone().toDate();
@@ -59,6 +62,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
         private final FIDFeedbackPanel feedback;
         private Boolean ownerAndDown;
         private Boolean autoassign;
+        List<EventType> eventTypes;
 
         public RecurringEventsForm(String id) {
             super(id);
@@ -67,7 +71,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
 
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
 
-            final List<ThingEventType> eventTypes = Lists.newArrayList(getEventTypes());
+            eventTypes = Lists.newArrayList(getEventTypes());
             // set default value if one available.
             eventType = (eventTypes.size()>0) ? eventTypes.get(0) : null;
 
@@ -145,11 +149,10 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
 
         protected void onCreate(AjaxRequestTarget target, RecurringEventsForm form) {
             RecurrenceFormPanel.this.onCreateRecurrence(target, form);
+            resetForm();
         }
 
-
-
-        protected Recurrence createRecurrence() {
+        public Recurrence createRecurrence() {
             if ( type.requiresDate() ) {
                 return new Recurrence(type).withDayAndTime(dateTime);
             } else if (type.canHaveMultipleTimes()) {
@@ -157,6 +160,13 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
             } else {
                 return new Recurrence(type).withTime(time);
             }
+        }
+
+        private void resetForm() {
+            time = RecurrenceTimeOfDay.NINE_AM;
+            eventType = (eventTypes.size()>0) ? eventTypes.get(0) : null;
+            type = RecurrenceType.MONTHLY_1ST;
+            //private Date dateTime = dateService.nowInUsersTimeZone().toDate();
         }
 
         private TimeContainer createTimePicker() {
@@ -265,7 +275,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
             return autoassign;
         }
 
-        public ThingEventType getEventType() {
+        public EventType getEventType() {
             return eventType;
         }
 
@@ -302,7 +312,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
         return true;
     }
 
-    protected abstract List<ThingEventType> getEventTypes();
+    protected abstract List<? extends EventType> getEventTypes();
 
     protected abstract void onCreateRecurrence(AjaxRequestTarget target, RecurringEventsForm form);
 

@@ -10,12 +10,12 @@ import com.n4systems.fieldid.service.event.EventTypeGroupService;
 import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
-import com.n4systems.model.*;
+import com.n4systems.model.EventResult;
+import com.n4systems.model.EventType;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.search.*;
-import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
@@ -174,8 +174,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         criteria.setDueDateRange(config.getDateRange());
         criteria.setPriority(priorityCodeService.getPriorityCodeByName(priorityName));
         criteria.setWorkflowState(WorkflowStateCriteria.OPEN);
+        criteria.setEventSearchType(EventSearchType.ACTIONS);
         criteria.setEventType(config.getActionType());
-        criteria.setEventTypeGroup(eventTypeGroupService.getDefaultActionGroup());
         return criteria;
     }
 

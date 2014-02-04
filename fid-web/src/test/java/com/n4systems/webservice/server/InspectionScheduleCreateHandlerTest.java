@@ -1,32 +1,31 @@
 package com.n4systems.webservice.server;
 
-import static com.n4systems.model.builders.EventBuilder.anOpenEvent;
-import static com.n4systems.model.builders.EventTypeBuilder.*;
-import static com.n4systems.model.builders.AssetBuilder.*;
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
-
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
-import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEvent;
+import com.n4systems.model.ThingEventType;
 import com.n4systems.model.asset.AssetByMobileGuidLoader;
 import com.n4systems.model.event.SimpleEventSaver;
+import com.n4systems.persistence.loaders.FilteredIdLoader;
+import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.n4systems.persistence.loaders.FilteredIdLoader;
-import com.n4systems.webservice.dto.InspectionScheduleServiceDTO;
+import static com.n4systems.model.builders.AssetBuilder.anAsset;
+import static com.n4systems.model.builders.EventBuilder.anOpenEvent;
+import static com.n4systems.model.builders.EventTypeBuilder.anEventType;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class InspectionScheduleCreateHandlerTest {
 	
 	private Asset asset;
-	private EventType eventType;
-	private Event openEvent;
+	private ThingEventType eventType;
+	private ThingEvent openEvent;
 	private SimpleEventSaver saver;
 	private AssetByMobileGuidLoader assetByMobileGuidLoader;
 	private FilteredIdLoader<Asset> filteredProductLoader;
-	private FilteredIdLoader<EventType> filteredInspectionTypeLoader;
+	private FilteredIdLoader<ThingEventType> filteredInspectionTypeLoader;
 	
 	
 	@Before

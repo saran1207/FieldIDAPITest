@@ -7,7 +7,10 @@ import org.apache.wicket.model.PropertyModel;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
 
 public class InfoOptionBeanPropertyModel extends PropertyModel<String> {
 
@@ -39,6 +42,7 @@ public class InfoOptionBeanPropertyModel extends PropertyModel<String> {
         try {
             long ms = Long.parseLong(value);
             // Flat date without times should not be timezone converted
+
             return new FieldIdDateFormatter(new Date(ms),dateTimeDefinition, includeTime, includeTime).format();
         } catch (NumberFormatException e) {
             logger.error("can't parse date from expected MS string '" + value + "'");

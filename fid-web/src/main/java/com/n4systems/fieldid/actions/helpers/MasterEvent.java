@@ -156,7 +156,7 @@ public class MasterEvent {
 		return subEvent;
 	}
 
-	private String findLabelOfSubAsset(Event event) {
+	private String findLabelOfSubAsset(ThingEvent event) {
 		Asset asset = event.getAsset();
 		if (asset == null) {
 			return null;

@@ -27,7 +27,7 @@ public class TestCssJavaScript extends WebAppTest {
 
     private String dangerousCss = "css";
     private String dangerousJavascript = "src";
-    private String safeJavascript = "https://maps.googleapis";
+    private String[] safeJavascript = {"https://maps.googleapis","use.typekit.net/usa4tou.js"};
 
     private String[] filesToSkip = {
             "includeStyle.ftl",   // valid low level use.
@@ -72,7 +72,7 @@ public class TestCssJavaScript extends WebAppTest {
         return getCharBuffer(file).toString();
     }
 
-    private String matchesAny(File file, Pattern pattern, String dangerous, String safe) throws IOException {
+    private String matchesAny(File file, Pattern pattern, String dangerous, String... safe) throws IOException {
         if (!file.isFile()) {
             return null;
         }
@@ -80,9 +80,12 @@ public class TestCssJavaScript extends WebAppTest {
         String contents = getCharBuffer(file).toString();
         CharBuffer cbuf = getCharBuffer(file);
         Matcher matcher = pattern.matcher(cbuf);
-        while (matcher.find()) {
+        scan: while (matcher.find()) {
             String match = contents.substring(matcher.start(), matcher.end());
-            if (match.contains(dangerous) && !match.contains(safe)) {
+            for (String safeText:safe) {
+                if (match.contains(safeText)) continue scan;
+            }
+            if (match.contains(dangerous)) {
                 return match;
             }
         }

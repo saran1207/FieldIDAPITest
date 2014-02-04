@@ -170,7 +170,7 @@ public class EventSummaryGenerator {
 		return jasperPrint;
 	}
 
-	private String getOrderNumber(Event event) {
+	private String getOrderNumber(ThingEvent event) {
 		if (event.getAsset().getShopOrder() != null) {
 			return event.getAsset().getShopOrder().getOrder().getOrderNumber();
 		} else if(event.getAsset().getNonIntergrationOrderNumber() != null) {

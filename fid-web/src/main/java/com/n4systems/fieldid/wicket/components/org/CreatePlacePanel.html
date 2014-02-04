@@ -1,0 +1,65 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    
+    <!-- Show on page load - hide when form is open -->
+    <form wicket:id="form" class="add-descendants-form">
+        <div wicket:id="feedback"/>
+
+        <h2 wicket:id="title" class="border-bottom"/>
+        <wicket:enclosure child="level">
+            <fieldset class="primary-selection form-horizontal narrow">
+                <div class="columns-two narrow">
+                    <label>*<wicket:message key="label.select_level"/></label>
+                    <select wicket:id="level"/>
+                </div>
+            </fieldset>
+        </wicket:enclosure>
+
+        <div class="columns-two narrow">
+            <fieldset class="form-horizontal">
+                <legend><wicket:message key="label.details"/></legend>
+                <div class="control-group">
+                    <label>*<wicket:message key="label.id"/></label>
+                    <input wicket:id="code" type="text"/>
+                </div>
+                <div class="control-group">
+                    <label>*<wicket:message key="label.name"/></label>
+                    <input wicket:id="name" type="text"/>
+                </div>
+                <div class="control-group">
+                    <label><wicket:message key="label.notes"/></label>
+                    <textarea wicket:id="notes"/>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="columns-two narrow">
+            <fieldset class="form-horizontal">
+                <legend><wicket:message key="label.contact_information"/></legend>
+                <div class="control-group">
+                    <label><wicket:message key="label.contactname"/></label>
+                    <input wicket:id="contactName" type="text">
+                </div>
+                <div class="control-group">
+                    <label><wicket:message key="label.email_address"/></label>
+                    <input wicket:id="email" type="text">
+                </div>
+                <div class="control-group">
+                    <label><wicket:message key="label.address"/></label>
+                    <div wicket:id="address"/>
+                </div>
+                <div wicket:id="timeZoneContainer" class="control-group timezone">
+                    <label wicket:for="timeZone"><wicket:message key="label.timezone"/></label>
+                    <select wicket:id="timeZone"/>
+                </div>
+            </fieldset>
+        </div>
+
+        <div class="action-group clear border-top text-right">
+            <a wicket:id="submit" class="btn-primary" type="submit"><wicket:message key="label.save"/></a>
+            <a wicket:id="cancel" class="btn-link" href="#"><wicket:message key="label.cancel"/></a>
+        </div>
+    </form>
+
+</wicket:panel>
+</html>

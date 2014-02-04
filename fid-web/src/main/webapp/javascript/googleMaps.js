@@ -26,34 +26,33 @@ var googleMapFactory = (function() {
 
 	 var defaultOptions = {
 		 zoom: 14,
-		 mapTypeId: google.maps.MapTypeId.ROADMAP
+		 mapTypeId:google.maps.MapTypeId.ROADMAP
 	 };
 
-	 var create = function(id) {
-		 return googleMap(id, defaultOptions);
+	 var create = function(options) {
+		 if (!options.id) {
+		 	throw "you must specify id for GoogleMap element";
+		 }
+		 if (options.latitude && options.longitude) {
+			 options.center = new google.maps.LatLng(options.latitude,options.longitude);
+		 }
+		 return googleMap(options.id, $.extend(defaultOptions, options));
 	 };
 
-	 var createAndShow = function(id, lat, lng, zoom) {
-		 var map = googleMap(id, {zoom:zoom, mapTypeId:google.maps.MapTypeId.ROADMAP, center:new google.maps.LatLng(lat,lng)});
-		 map.show();
-		 return map;
-	 };
-
-	 var createAndShowWithLocation = function(id) {
-		var map = create(id, defaultOptions);
-        if (arguments.length>1 && (arguments.length-1)%2!=0) {
-            throw "you must specify latitude & longitude in pairs but you've only passed " + arguments.length-1 + "coordinates";
-        }
-        // note that this method doesn't support additional args that "addLocation" can handle.  just the latitude/longitude.
-        for (var i=1;i<arguments.length;i+=2) {
-		    map.addLocation(arguments[i], arguments[i+1]);
-        }
+	 var createAndShow = function(opts) {
+		var map = create(opts);
+		if (opts.data) {
+			var results = opts.data.results;
+        	for (var i=0;i<results.length;i++) {
+			    map.addLocation(results[i].latitude, results[i].longitude, results[i].desc);
+	        }
+		}
 		map.show();
 		return map;
 	};
 
-	 var createAutoCompleteAddress = function($address,options) {
-		 var widget = autoCompleteAddress($address,options);
+	 var createAutoCompleteAddress = function(options) {
+		 var widget = autoCompleteAddress(options);
 		 widget.updateContentWithAddress = false;
 		 return widget;
 	 }
@@ -62,16 +61,27 @@ var googleMapFactory = (function() {
 	 /**
 	  * autocomplete text field with built in map returned by factory.
 	  */
-	 function autoCompleteAddress($address,opts) {
+	 function autoCompleteAddress(opts) {
 		 var defaults = {
 			lat : 44,
 			lng : -77
 		 };
 		 var options = $.extend(defaults, opts);
-		 var $text = $address.children('.txt');
+		 var $address = $(options.id);
+		 var $text = $address.find('.txt');
 		 var $lat = $address.children('.lat');
 		 var $lng = $address.children('.lng');
-		 var $map = (options.mapVar) ? window[options.mapVar] : createAndShowWithLocation($address.children('.map').attr('id'), options.lat, options.lng);
+		 var $street_address = $address.children('.street-address');
+		 var $city = $address.children('.city');
+		 var $country = $address.children('.country');
+		 var $postalCode = $address.children('.postal-code');
+		 var $state = $address.children('.state');
+		 var $map;
+		 var currentInput;
+
+		 if (!options.noMap) {
+			 $map = (options.mapVar) ? window[options.mapVar] : createAndShowWithLocation($address.children('.map').attr('id'), options.lat, options.lng);
+		 }
 
 		 function getAddresses(request,response) {
 			 new google.maps.Geocoder().geocode( {'address': request.term}, function(results, status) {
@@ -81,11 +91,9 @@ var googleMapFactory = (function() {
 					 } else if (results.length>1) {
 						 //alert('multiple address found - just taking the first one for now.');   // TODO : create a menu with list of all possibilities.   "did you mean....A/B/C...?"
 						 response(results);
-						 //response($.map(results,function(value,i) {return value.formatted_address;}));
 					 }
 					 else {
 						 response(results);
-						 //response($.map(results,function(value,i) {return value.formatted_address;}));
 					 }
 				 } else {
 					 response([]);
@@ -94,37 +102,78 @@ var googleMapFactory = (function() {
 
 		 };
 
-		 function update(item) {
-			$text.val(item.formatted_address);
-			var latLng = item.geometry.location;
-			$lat.val(latLng.lat());
-			$lng.val(latLng.lng());
-			$map.setLocation(latLng.lat(), latLng.lng(), item.formatted_address);
+		 function extractFromGeoCode(components, type) {
+			 for (var i=0; i<components.length; i++) {
+				 for (var j=0; j<components[i].types.length; j++) {
+					 if (components[i].types[j] == type) return components[i].long_name;
+				 }
+			 }
+			 return "";
 		 }
 
+		 function updateNonAddress(textInput) {
+		 	update(textInput);
+		 }
+
+		 function updateAddress(item) {
+		 	update(item.formatted_address, item.geometry.location, item.address_components);
+		 }
+
+		 function update(formattedAddress, latLng, addressInfo) {
+			$text.val(formattedAddress);
+			if (latLng) {
+				$lat.val(latLng.lat());
+				$lng.val(latLng.lng());
+				if ($map) {
+					$map.setLocation(latLng.lat(), latLng.lng(), formattedAddress);
+				}
+			}
+
+			if (addressInfo) {
+				$street_address.val(extractFromGeoCode(addressInfo,'street_number') + ' ' + extractFromGeoCode(addressInfo,'route'));
+				$city.val(extractFromGeoCode(addressInfo,'locality'));
+				$country.val(extractFromGeoCode(addressInfo,'country'));
+				$postalCode.val(extractFromGeoCode(addressInfo,'postal_code'));
+				$state.val(extractFromGeoCode(addressInfo,'administrative_area_level_1'));
+			} else {
+				$street_address.val(null);
+				$city.val(null);
+				$country.val(null);
+				$postalCode.val(null);
+				$state.val(null);
+			}
+
+			currentInput = $text.val();
+		}
 
 		 var textOptions = {
 			 delay:500,
 			 minLength:1,
 			 source: function(request,response) { getAddresses(request,response); },
-			 focus: function(event,ui) {
-				 update(ui.item);
+			 select: function(event,ui) {
+				 updateAddress(ui.item);
+				 $country.change();
 				 return false;
 			 },
-			 select: function(event,ui) {
-				 update(ui.item);
-				 return false;
-			 }
-
+			 change : function(a,b) {
+				 		// address is NOT a selected value, just some random input so we'll remove any gps, postal code, country etc... values.
+				 		if (currentInput!=$text.val()) {
+						 	updateNonAddress($text.val());
+							 $country.change();
+						 }
+				 		return false;
+					 }
 		 };
 
-		 $text.autocomplete(textOptions).data('autocomplete')._renderItem =
-			 function(ul,item) {
-				 return $("<li></li>")
-					 .data("item.autocomplete", item)
-					 .append("<a>" + item.formatted_address + "</a>")
-					 .appendTo(ul);
-			 };
+		 if ($text.size()>0) {
+			 $text.autocomplete(textOptions).data('autocomplete')._renderItem =
+				 function(ul,item) {
+					 return $("<li></li>")
+						 .data("item.autocomplete", item)
+						 .append("<a>" + item.formatted_address + "</a>")
+						 .appendTo(ul);
+				 };
+	 	}
 
 
 		 return {
@@ -146,6 +195,9 @@ var googleMapFactory = (function() {
 		var markers = [];
 		var options = opt;
 		var infowindow;
+		var currBounds;
+		var currZoom;
+		var timeout;
 		
 		function showInfoWindow(marker, map) {
 			if (this.updateContentWithAddress && !marker.address) {
@@ -183,37 +235,87 @@ var googleMapFactory = (function() {
 			return result;   
 		}
 
+		function mapChanged() {
+			if (!currBounds ||!currZoom) return;
+			var bounds = asBounds(map.getBounds());
+			var zoom = map.getZoom();
+			if (needsRefresh(bounds,zoom)) {
+				currBounds = bounds;
+				currZoom = zoom;
+				var url =  options.callbackUrl + "&s="+bounds.s+"&w="+bounds.w+"&n="+bounds.n+"&e="+bounds.e;
+				if (timeout) {
+					window.clearTimeout(timeout);
+				}
+				timeout = window.setTimeout(function() {
+												wicketAjaxGet(url, function() {}, function() {});
+											}, 1500);
+			}
+		}
+
+		function needsRefresh(bounds,zoom) {
+			var changed = bounds.s<currBounds.s || bounds.w<currBounds.w || bounds.e>currBounds.e || bounds.n>currBounds.n;
+			if (zoom>currZoom && !changed) {
+				return options.data.grouped;   // if you zoom in then refresh results when current results are grouped.
+			}
+			return changed;
+		}
+
+		function asBounds(bounds) {
+			return {
+				s: bounds.getSouthWest().lng(),
+				w: bounds.getSouthWest().lat(),
+				n: bounds.getNorthEast().lng(),
+				e: bounds.getNorthEast().lat()
+				}
+		}
+
 		/* public methods exposed */
-		return { 		
+		function removeMarkers() {
+			for (var i = 0; i < markers.length; i++) {
+				markers[i].setMap(null);
+			}
+			markers = [];
+		}
+
+		return {
 			
 			makeMarker : function(loc) {
-				return new google.maps.Marker({
+				var desc = loc.desc;
+				var marker = new google.maps.Marker({
 					draggable : false,
 					position: loc,
 					map: map
 				});
+				marker.content = desc;
+				return marker;
 			},
 
-			addLocation : function(latitude,longitude) {
+			addLocation : function(latitude,longitude,desc) {
 				var loc = new google.maps.LatLng(latitude,longitude);
+				if (desc) { loc.desc = desc; }
 				locations.push(loc);  				
 				loc.args =  [].slice.call(arguments, 2); /* attach any additional args possibly passed to location. may be used by makeMarker() */
 				if (infowindow) infowindow.close();
 				return loc;
 			},
 
-			setLocation : function(latitude, longitude, title) {
+			setLocation : function(latitude, longitude, title, address) {
 				locations = [];
 				var loc = new google.maps.LatLng(latitude,longitude);
 				locations.push(loc);
 				loc.args = [].slice.call(arguments, 2);
+				removeMarkers();
+				var marker = this.makeMarker(loc);
+				marker.setMap(map);
 				map.setCenter(loc);
-				if (markers.length==1) {
-					markers[0].setPosition(loc);
-					if (title) {
-						markers[0].address = 'hello';
-						markers[0].content = title;
-					}
+				markers.push(marker);
+				marker.setPosition(loc);
+				marker.address = address ? address : null;
+				marker.content = title ? title : null;
+				if (marker.content || this.updateContentWithAddress) {
+					google.maps.event.addListener(marker, 'click', function() {
+						showInfoWindow(this, map);
+					});
 				}
 				if (infowindow) infowindow.close();
 				return loc;
@@ -227,11 +329,11 @@ var googleMapFactory = (function() {
 				}
 				var element = document.getElementById(id);
 				if (!element) { 
-					throw "can't find element " + id + " for google map.";
+					throw "can't find element '" + id + "' for google map.";
 				}
 				map = new google.maps.Map(element, options);
-				
-				var bounds = new google.maps.LatLngBounds();				
+
+				var bounds = new google.maps.LatLngBounds();
 				var count = locations.length;
 
 				for (var i=0; i<count; i++) {
@@ -242,26 +344,45 @@ var googleMapFactory = (function() {
 					if (marker.content || this.updateContentWithAddress) {
 						google.maps.event.addListener(marker, 'click', function() {
 							showInfoWindow(this, map);
-						});						
+						});
 					}
-					bounds.extend(loc);							
+					bounds.extend(loc);
 				}
-				if (count>1) { 
+				if (count>1) {
 					map.fitBounds(bounds);
-				} else if (count==1) { 
+				} else if (count==1) {
+					map.setZoom(options.zoom);
 					map.setCenter(locations[0]);
-				}			
-			}		
-			
+				} else if (count==0) {
+					map.setZoom(options.zoom);
+				}
+
+				if (options.callbackUrl) {
+					google.maps.event.addListener(map,'bounds_changed',mapChanged);
+					google.maps.event.addListenerOnce(map,'idle',function() {
+						currBounds = asBounds(map.getBounds());
+						currZoom = map.getZoom();
+					});
+				}
+
+			}
+
 		};
 		
 	}
-	
+
 	function prefixed(prefix,url) {
 		return prefix ? prefix+url : url;
 	}
-			
-	var makeMarkerForStatus = function(loc) {
+
+	 // TODO
+	var makeAssetMarker = function(loc) {
+	}
+
+	function makeColoredMarker(loc, color) {
+	}
+
+	 var makeMarkerForStatus = function(loc) {
 		var content = loc.args[0];   // assumes that these *might* be passed to addLocation in this order.  [content,status,prefix]
 		var status = loc.args[1];
 		var prefix = loc.args[2];
@@ -304,18 +425,83 @@ var googleMapFactory = (function() {
 			  shape: shape,
 			  position: loc
 			});
-		
+
 		marker.content = content;
 		return marker;		
 	};
+
+
+//	 var makeMarkerForStatus = function(loc) {
+//		 var content = loc.args[0];   // assumes that these *might* be passed to addLocation in this order.  [content,status,prefix]
+//		 var status = loc.args[1];
+//		 var prefix = loc.args[2];
+//		 if (status.toLowerCase()=='fail') {
+//			 return makeColoredMarker('red');
+//		 } else if (status.toLowerCase()=='pass') {
+//			 return makeColoredMarker('green');
+//		 } else if (status.toLowerCase()=='na') {
+//			 return makeColoredMarker('gray');
+//		 }
+//	 };
+
+
+	 var makeColouredMarker = function(loc,colour) {
+		 if (colour.toLowerCase()=='red') {
+			 return new google.maps.Marker({     /* note that red is default icon which is what we currently use for fail */
+				 draggable : false,
+				 position: loc
+			 });
+		 }
+
+		 var icon = '';
+		 if (status.toLowerCase()=='green') {
+			 icon = prefixed(prefix,'images/marker-images/greenMapIcon.png');
+		 } else if (status.toLowerCase()=='gray') {
+			 icon =  prefixed(prefix,'images/marker-images/grayMapIcon.png');
+		 } else if (status.toLowerCase()=='yellow') {
+			 icon =  prefixed(prefix,'images/marker-images/yellowMapIcon.png');
+		 } else if (status.toLowerCase()=='gray') {
+			 icon =  prefixed(prefix,'images/marker-images/blueMapIcon.png');
+		 }
+		 var image = new google.maps.MarkerImage(
+			 icon,
+			 new google.maps.Size(32,32),
+			 new google.maps.Point(0,0),
+			 new google.maps.Point(16,32)
+		 );
+
+		 var shadow = new google.maps.MarkerImage(
+			 prefixed(prefix,'images/marker-images/mapIconShadow.png'),
+			 new google.maps.Size(52,32),
+			 new google.maps.Point(0,0),
+			 new google.maps.Point(16,32)
+		 );
+
+		 var shape = {
+			 coord: [19,0,20,1,21,2,22,3,23,4,24,5,24,6,24,7,24,8,24,9,24,10,24,11,24,12,23,13,23,14,22,15,21,16,20,17,20,18,19,19,19,20,18,21,18,22,17,23,17,24,17,25,17,26,16,27,16,28,16,29,16,30,16,31,14,31,14,30,14,29,14,28,14,27,14,26,13,25,13,24,13,23,12,22,12,21,12,20,11,19,10,18,10,17,9,16,8,15,7,14,7,13,6,12,6,11,6,10,6,9,6,8,6,7,6,6,7,5,7,4,8,3,9,2,10,1,11,0,19,0],
+			 type: 'poly'
+		 };
+
+		 var marker =  new google.maps.Marker({
+			 draggable: false,
+			 icon: image,
+			 shadow: shadow,
+			 shape: shape,
+			 position: loc
+		 });
+
+		 marker.content = content;
+		 return marker;
+	 };
+
+
 
 		
 	return { 
 		create : create,
 		createAndShow : createAndShow,
-		createAutoCompleteAddress : createAutoCompleteAddress,
-		createAndShowWithLocation : createAndShowWithLocation,
-		makeMarkerForStatus : makeMarkerForStatus	
+		makeMarkerForStatus : makeMarkerForStatus,
+		createAutoCompleteAddress : createAutoCompleteAddress
 	};
 
 	

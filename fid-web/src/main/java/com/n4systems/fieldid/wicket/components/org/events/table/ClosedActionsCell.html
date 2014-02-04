@@ -1,0 +1,13 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    <div class="split-btn">
+        <a wicket:id="viewLink"><wicket:message key="label.view"/></a>
+        <div wicket:enclosure="deleteLink" class="dropdown">
+            <button class="btn-secondary">Toggle Dropdown</button>
+            <ul class="pull-right">
+                <li><a wicket:id="deleteLink"><wicket:message key="label.delete"/></a></li>
+            </ul>
+        </div>
+    </div>
+</wicket:panel>
+</html>

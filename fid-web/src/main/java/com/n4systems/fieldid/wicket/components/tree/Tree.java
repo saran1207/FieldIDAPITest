@@ -16,9 +16,12 @@ import java.util.List;
 public abstract class Tree extends Panel {
 
     private static final String INIT_TREE_JS = "%s = treeFactory.create('%s',%s);";
+    private static final String UPDATE_TREE_JS = "%s.updateBranch('#%d','#%d')";
+    private static final String REFRESH_TREE_JS = "%s.refresh()";
 
     protected final AbstractDefaultAjaxBehavior ajaxBehavior;
     private String search = null;
+    private AbstractDefaultAjaxBehavior actionsBehavior;
 
 
     public Tree(String id) {
@@ -27,6 +30,10 @@ public abstract class Tree extends Panel {
         add(ajaxBehavior = createAjaxHandler());
         // CAVEAT : if you change class, be forewarned that you may have to change CSS!
         add(new AttributeAppender("class", CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_HYPHEN, getClass().getSimpleName().toString())));
+    }
+
+    public String getFilterComponent() {
+        return null;
     }
 
     @Override
@@ -57,13 +64,15 @@ public abstract class Tree extends Panel {
 
         };
     }
-
     protected String getInitTreeJs() {
-        String url = ajaxBehavior.getCallbackUrl().toString();
         return String.format(INIT_TREE_JS,
                 getJsVariableName(),
                 getParentMarkupId(),
-                convertToJson(new TreeOptions(url)));
+                convertToJson(createTreeOptions()));
+    }
+
+    protected TreeOptions createTreeOptions() {
+        return new TreeOptions();
     }
 
     private String getParentMarkupId() {
@@ -82,15 +91,27 @@ public abstract class Tree extends Panel {
 
     protected abstract List<JsonTreeNode> getChildNodes(Long parentNodeId,String type);
 
+    public <T extends Tree> T withMenuCallback(AbstractDefaultAjaxBehavior actionsBehavior) {
+        this.actionsBehavior = actionsBehavior;
+        add(actionsBehavior);
+        return (T) this;
+    }
+
+    public void updateBranch(Long parentOrgId, Long orgId, AjaxRequestTarget target) {
+        target.appendJavaScript(String.format(UPDATE_TREE_JS, getJsVariableName(), parentOrgId, orgId));
+    }
+
+    public void refresh(AjaxRequestTarget target) {
+        target.appendJavaScript(String.format(REFRESH_TREE_JS, getJsVariableName()));
+    }
+
     // ----------------------------------------------------------------------------------------
 
     public class TreeOptions {
-        String url;
-
-        TreeOptions(String url) {
-            this.url = url;
-        }
-
+        String url = ajaxBehavior.getCallbackUrl().toString();
+        String id = Tree.this.getMarkupId();
+        String filter = getFilterComponent();
+        String menuCallback = actionsBehavior==null ? null : actionsBehavior.getCallbackUrl().toString();
     }
 
 }

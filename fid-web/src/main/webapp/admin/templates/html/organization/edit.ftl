@@ -43,6 +43,18 @@
 	<div id="orgStatus">
 		<#include "_status.ftl"/>
 	</div>
+
+	<#if superUser>
+	<div>
+		<a href='<@s.url namespace="/admin" action="rebuildIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_index"/></a>
+	</div>
+	<div>
+		<a href='<@s.url namespace="/admin" action="rebuildEventIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_event_index"/></a>
+    </div>
+	<div>
+		<a href='<@s.url namespace="/admin" action="rebuildCriteriaTrendsIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_criteria_trends_index"/></a>
+	</div>
+	</#if>
 </div>
 
 <div id="orgPlan">
@@ -55,11 +67,11 @@
 		<div class="infoSet"><label>Assets Last 30 Days:</label><span>${action.getTotal30DayAssets(primaryOrg)?string.number}</span></div>
 		<div class="infoSet"><label>Total Events</label> <span>${action.getTotalEvents(primaryOrg)?string.number}</span></div>
 		<div class="infoSet"><label>Events Last 30 Days:</label><span>${action.getTotal30DayEvents(primaryOrg)?string.number}</span></div>
-		<#if action.getLastActiveSession(primaryOrg)?exists>
-            <#assign lastActiveSession = action.getLastActiveSession(primaryOrg)/>
-            <#if lastActiveSession.user.userID?exists && lastActiveSession.user.userID != 'n4systems'>
-                <div class="infoSet"><label>Last Login Date:</label><span>${action.convertDateTime(lastActiveSession.lastTouched)}</span></div>
-                <div class="infoSet"><label>Last Login User:</label><span>${lastActiveSession.user.userID}</span></div>
+		<#if action.getLastLoggedInUser(primaryOrg)?exists>
+            <#assign lastLoggedInUser = action.getLastLoggedInUser(primaryOrg)/>
+            <#if lastLoggedInUser.userID?exists && lastLoggedInUser.userID != 'n4systems'>
+                <div class="infoSet"><label>Last Login Date:</label><span>${action.convertDateTime(lastLoggedInUser.lastLogin)}</span></div>
+                <div class="infoSet"><label>Last Login User:</label><span>${lastLoggedInUser.userID}</span></div>
             </#if>
 		<#else>
 			<div class="infoSet"><label>Last Login Date:</label><span>--</span></div>
@@ -83,24 +95,6 @@
 			<#include "_extendedFeatures.ftl"/>
 		</tr>
 	</#list>
-    <tr>
-        <td colspan="2">&nbsp;</td>
-        <td>
-            <a href='<@s.url namespace="/admin" action="rebuildIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_index"/></a>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">&nbsp;</td>
-        <td>
-            <a href='<@s.url namespace="/admin" action="rebuildEventIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_event_index"/></a>
-        </td>
-    </tr>
-    <tr>
-        <td colspan="2">&nbsp;</td>
-        <td>
-            <a href='<@s.url namespace="/admin" action="rebuildCriteriaTrendsIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_criteria_trends_index"/></a>
-        </td>
-    </tr>
 	<tr><td colspan = "4">&nbsp;</td></tr>
 	<tr id="plansAndPricingRow">
 		<#include "_plansAndPricing.ftl"/>		

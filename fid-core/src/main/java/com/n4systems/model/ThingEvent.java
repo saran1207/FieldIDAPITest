@@ -1,9 +1,13 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.api.SecurityEnhanced;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
+import com.n4systems.model.utils.AssetEvent;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,26 +16,42 @@ import java.util.List;
 @Entity
 @Table(name="thing_events")
 @PrimaryKeyJoinColumn(name="id")
-public class ThingEvent extends Event<ThingEventType> {
+public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implements AssetEvent, NetworkEntity<ThingEvent> {
 
-    @ManyToOne
-    @JoinColumn(name="thing_event_type_id")
-    private ThingEventType type;
+    public static final SecurityDefiner createSecurityDefiner() {
+        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
+    }
 
     private ProofTestInfo proofTestInfo;
 
+    @ManyToOne(fetch=FetchType.LAZY, optional = false)
+    @JoinColumn(name="asset_id")
+    private Asset asset;
+
+    @ManyToOne(optional = true)
+    @JoinColumn(name="asset_status_id")
+    private AssetStatus assetStatus;
+
+    @ManyToOne(fetch=FetchType.EAGER, optional=false)
+    @JoinColumn(name="owner_id", nullable = false)
+    private BaseOrg owner;
+
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name="recurring_event_id")
+    private RecurringAssetTypeEvent recurringEvent;
+
     @Override
-    public ThingEventType getType() {
-        return type;
+    public Asset getTarget() {
+        return getAsset();
     }
 
     @Override
-    public void setType(ThingEventType type) {
-        this.type = type;
+    public void setTarget(Asset target) {
+        setAsset(target);
     }
 
     public ThingEvent copyDataFrom(ThingEvent event) {
-        SecurityEnhanced x = (Event)this;
+        SecurityEnhanced x = this;
         setAsset(event.getAsset());
         setType(event.getType());
         setTenant(event.getTenant());
@@ -70,4 +90,52 @@ public class ThingEvent extends Event<ThingEventType> {
         return enhanced;
     }
 
+    public Asset getAsset() {
+        return asset;
+    }
+
+    public void setAsset(Asset asset) {
+        this.asset = asset;
+    }
+
+    public AssetStatus getAssetStatus() {
+        return assetStatus;
+    }
+
+    public void setAssetStatus(AssetStatus assetStatus) {
+        this.assetStatus = assetStatus;
+    }
+
+    public BaseOrg getOwner() {
+        return owner;
+    }
+
+    public void setOwner(BaseOrg owner) {
+        this.owner = owner;
+    }
+
+    @Override
+    protected void copyDataIntoResultingAction(AbstractEvent<?,?> event) {
+        ThingEvent action = (ThingEvent) event;
+        action.setAsset(getAsset());
+        action.setOwner(getOwner());
+    }
+
+    public ThingEventType getThingType() {
+        return (ThingEventType) getType();
+    }
+
+    @Override
+    @AllowSafetyNetworkAccess
+    public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
+        return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
+    }
+
+    public RecurringAssetTypeEvent getRecurringEvent() {
+        return recurringEvent;
+    }
+
+    public void setRecurringEvent(RecurringAssetTypeEvent recurringEvent) {
+        this.recurringEvent = recurringEvent;
+    }
 }

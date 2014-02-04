@@ -1,0 +1,92 @@
+.pagination {
+	padding: 8px;
+	overflow: hidden;
+	text-align: right;
+
+	ul {
+		display: inline-block;
+
+		li {
+			display: inline-block;
+
+			a {
+				padding: 5px 8px;
+				text-decoration: none;
+				border: 1px solid @gray;
+				display: block;
+				color: @blue;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+	form {
+		display: inline-block;
+		margin-left: 5px;
+		padding-bottom: 0;
+
+		label {
+			display: inline-block;
+		}
+		input[type="text"] {
+			width: 50px;
+			margin: 0;
+		}
+	}
+}
+.pagination-compact {
+	display: inline-block;
+
+	.count {
+		margin-right: 5px;
+	}
+}
+
+//Pagination for wicket component
+.navigation {
+	td {
+		padding: 0;
+	}
+
+	// item count
+	.navigatorLabel {
+		float: left;
+		margin-right: 10px;
+		border-right: 1px solid @gray-medium;
+		padding-right: 10px;
+
+		span {
+			display: inline-block;
+			padding: 6px 0;
+		}
+	}
+
+	// number & arrow links
+	.navigator {		
+		a {
+			display: inline-block;
+			padding: 5px 8px;
+			text-decoration: none;
+			border: 1px solid @gray;
+			color: @blue;
+		}
+		em {
+			display: inline-block;
+			padding: 5px 8px;
+			font-style: normal;
+		}
+		.first, .prev, .next, .last {
+			em {
+				display: none;
+			}
+		}
+	}
+}
+
+
+
+
+
+

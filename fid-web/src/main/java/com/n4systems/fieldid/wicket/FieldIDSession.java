@@ -10,6 +10,7 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.ThingEvent;
+import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.builders.PrimaryOrgBuilder;
 import com.n4systems.model.builders.TenantBuilder;
 import com.n4systems.model.orgs.PrimaryOrg;
@@ -62,6 +63,10 @@ public class FieldIDSession extends WebSession {
         return session;
     }
 
+	private WebSessionMap getWebSessionMap() {
+		return new WebSessionMap(getHttpSession());
+	}
+
     @Deprecated // for testing only.
     public void setUser(User user) {
         getHttpSession().setAttribute(WebSessionMap.KEY_SESSION_USER, new SessionUser(user));
@@ -82,6 +87,10 @@ public class FieldIDSession extends WebSession {
     public SessionUser getSessionUser() {
         return (SessionUser) getHttpSession().getAttribute(WebSessionMap.KEY_SESSION_USER);
     }
+
+	public AdminUser getAdminUser() {
+		return (AdminUser) getHttpSession().getAttribute(WebSessionMap.ADMIN_USER);
+	}
 
     public Map<String, String> getTenantLangOverrides() {
         return (Map<String, String>) getHttpSession().getAttribute(WebSessionMap.KEY_TENANT_LANG_OVERRIDES);
@@ -179,4 +188,8 @@ public class FieldIDSession extends WebSession {
     public void setUserLocale(Locale userLocale) {
         this.userLocale = userLocale;
     }
+
+	public boolean isBooted() {
+		return getWebSessionMap().isBooted();
+	}
 }

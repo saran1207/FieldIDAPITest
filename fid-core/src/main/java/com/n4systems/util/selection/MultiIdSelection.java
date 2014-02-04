@@ -7,6 +7,8 @@ public class MultiIdSelection implements Serializable {
 
     private Set<Long> ids = new HashSet<Long>();
     private Map<Integer,Long> indexIdSelectionMap = new TreeMap<Integer, Long>();
+    public boolean isSorted = false;
+
 
     public void addId(int index, Long id) {
         indexIdSelectionMap.put(index, id);
@@ -33,4 +35,56 @@ public class MultiIdSelection implements Serializable {
         indexIdSelectionMap.clear();
     }
 
+    public void clearIndexes() {
+
+        isSorted = true;
+
+        // create a new Map
+        Map<Integer,Long> newIndexIdSelectionMap = new TreeMap<Integer, Long>();
+
+        // loop through old map
+        // set variable to new Map
+        Iterator it = indexIdSelectionMap.entrySet().iterator();
+        int i = 0;
+
+        while(it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            newIndexIdSelectionMap.put(new Integer(--i), (Long)pairs.getValue());
+            it.remove();
+        }
+
+        indexIdSelectionMap.clear();
+        indexIdSelectionMap = newIndexIdSelectionMap;
+    }
+
+    public void validateIndexes(int currentPage, int itemsPerPage, List<Long> currentPageIdList) {
+
+        Map<Integer, Long> addValues = new TreeMap<Integer, Long>();
+        List<Integer> removeValues = new ArrayList<Integer>();
+        Set<Integer> keySet = indexIdSelectionMap.keySet();
+
+        for (Integer keyVal: keySet) {
+            if (keyVal >= 0) {
+                continue;
+            }
+
+            Long id = indexIdSelectionMap.get(keyVal);
+            int currindex = currentPageIdList.indexOf(id) ;
+            if (currindex >=0) {
+                addValues.put(currindex, id + (currentPage*itemsPerPage));
+                removeValues.add(keyVal);
+            }
+        }
+
+        // add new changed values and remove old changed values
+        if (addValues.size() > 0) {
+            indexIdSelectionMap.putAll(addValues);
+
+            for (Integer rVal: removeValues) {
+                indexIdSelectionMap.remove(rVal);
+            }
+
+        }
+
+    }
 }

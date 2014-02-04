@@ -36,7 +36,7 @@ public class OrgService extends FieldIdPersistenceService {
         
         return persistenceService.findAll(query);
     }
-    
+
     @Transactional(readOnly = true)
     public List<CustomerOrg> getCustomersUnder(BaseOrg org) {
         QueryBuilder<CustomerOrg> query = createUserSecurityBuilder(CustomerOrg.class);
@@ -222,6 +222,7 @@ public class OrgService extends FieldIdPersistenceService {
         builder.setOrder("name",true);
         return builder;
     }
+
 }
 
 

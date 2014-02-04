@@ -6,7 +6,6 @@ import com.n4systems.model.user.User;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
@@ -45,7 +44,7 @@ public class EditPersonPage extends UserPage{
     }
 
     @Override
-    protected Component createAccountPanel(String id, Form form) {
+    protected Component createAccountPanel(String id) {
         return new WebMarkupContainer(id).setVisible(false);
     }
 
