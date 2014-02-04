@@ -64,6 +64,8 @@ public class ApiProcedureDefinitionResource extends SetupDataResource<ApiProcedu
             apiIsolationPoint.setAnnotation(convertAnnotation(isolationPoint.getAnnotation()));
             apiIsolationPoint.setLocation(isolationPoint.getLocation());
             apiIsolationPoint.setMethod(isolationPoint.getMethod());
+			apiIsolationPoint.setFwdIdx(isolationPoint.getFwdIdx());
+			apiIsolationPoint.setRevIdx(isolationPoint.getRevIdx());
             apiIsolationPoints.add(apiIsolationPoint);
         }
         return apiIsolationPoints;
