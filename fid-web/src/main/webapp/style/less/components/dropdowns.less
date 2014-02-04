@@ -27,7 +27,7 @@
 		.shadow(0px 6px 20px -10px @gray-dark);
 		
 		li a {
-			padding: 8px 16px;
+			padding: 8px 14px;
 			display: inline-block;
 			white-space: nowrap; //keeps the text from wrapping, the width of the dropdown will be as long as the longest line of copy
 			width: 100%; //makes the link stretch all the way across to expand hover area
@@ -80,7 +80,7 @@
 }
 
 // Dropdown within a dropdown
-.secondary-dropdown {
+.dropdown-secondary {
 	position: relative;
 
 	ul {
@@ -97,11 +97,10 @@
 		}
 	}
 	> a:after {
-		//content: "\00BB";
 		.fontello-icon('\00BB');
 	}
 }
-.pull-right .secondary-dropdown {
+.pull-right .dropdown-secondary {
 	ul {
 		right: 100%;
 		left: auto;
@@ -127,8 +126,3 @@
 		color: @blue;
 	}
 }
-
-
-
-
-

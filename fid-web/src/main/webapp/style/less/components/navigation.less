@@ -13,23 +13,41 @@ nav {
 
 // HORIZONTAL NAVIGATION
 // ----------------------
-.nav-horizontal {
-	font-size: 0; /* Removes default space from between list items (caused by line break) when using display: inline-block; font-size to be redeclared in <li>. */
-	
+// TODO: change class name
+.nav-list {
+	font-size: 0; // Removes default space from between list items (caused by line break) when using display: inline-block; font-size to be redeclared in <li>.
+	padding: 0;
+
 	> li {
 		display: inline-block;
-		position: relative;
-		font-size: @base-font-size + 1;
+		font-size: @base-font-size;
 
 		> a {
-			padding: 8px 0 6px; 
-			margin: 0 16px;
 			display: inline-block;
-			display: block;
+			padding: 10px 14px;
+			text-decoration: none;
+		}
+	}
+	.dropdown {
+		// Add icons for dropdowns
+		> a:after,
+		> span:after {
+			font-family: @fontello;
+			content: '\e82d';
+			font-size: @small-font-size;
+			padding-left: 4px;
+		}
+		&:hover > a:after,
+		&:hover > span:after  {
+			content: '\e830';
+			padding-right: 0;
+		}
+		// Adds border between nav items
+		ul li {
+			border-top: 1px solid @gray-light;
 		}
 	}
 }
-
 
 // BREADCRUMB
 // -----------

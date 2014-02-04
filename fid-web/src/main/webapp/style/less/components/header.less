@@ -1,8 +1,10 @@
-/*---------------------------------------
-  GLOBAL HEADER STYLES
------------------------------------------*/
+@import "../variables.less";
+@import "../mixins.less";
+
+//---------------------------
+// GLOBAL HEADER STYLES
+//---------------------------
 .global-header {
-	//position: relative;
 	position: fixed;
 	width: 100%;
 	z-index: @z-index-header;
@@ -18,37 +20,11 @@
 
 	// Shared styles for navigation list
 	.nav-list {
-		font-size: 0; // Removes default space from between list items (caused by line break) when using display: inline-block; font-size to be redeclared in <li>.
-	
-		> li {
-			display: inline-block;
-			font-size: @base-font-size;
+		a {
+			color: @gray-darkest;
 
-			> a {
-				display: inline-block;
-			}
-		}
-		.dropdown {
-			> a:after,
-			> span:after {
-				.fontello-icon('\e82d');
-				font-size: @small-font-size;
-				padding-right: 0;
-			}
-			&:hover > a:after,
-			&:hover > span:after  {
-				content: '\e830';
-				padding-right: 0;
-			}
-			ul li {
-				border-top: 1px solid @gray-light;
-				
-				a {
-					color: @gray-darkest;
-				}
-				&:hover > a {
-					color: @red;
-				}
+			&:hover {
+				color: @red;
 			}
 		}
 	}
@@ -95,11 +71,6 @@
 			> a {
 				padding-left: 0;
 			}
-			// ul {
-			// 	min-width: inherit;
-			// 	right: 2px;
-			// 	left: auto;
-			// }
 		}
 
 		//My Saved items overrides
@@ -147,23 +118,23 @@
 		
 		.nav-list {
 			float: left;
+			
+			.dropdown > ul {
+				left: -1px;
+			}
 
+			// Navbar hover styles
 			> li > a {
 				border-top: 2px solid transparent;
 				color: @gray-light;
-				padding: 10px 14px;
 			}
 			> li:hover > a {
 				border-top: 2px solid @red;
 				background: lighten(@gray, 2%);
 				color: @gray-darkest;
-			}
-			.dropdown > ul {
-				left: -1px;
-			}
+			}	
 		}
 		.fontello-home:before {
-			vertical-align: baseline;
 			padding-right: 0;
 		}		
 		.search {
@@ -174,15 +145,14 @@
 				border: 1px solid #999;
 				margin: 5px 0;
 			}
-		}
-		
+		}	
 	}
 }
 
 
-/*--------------------------------------- 
-  MEDIA QUERIES for the global header
------------------------------------------*/
+//---------------------------
+// MEDIA QUERIES
+//---------------------------
 @media (max-width: 1150px) {
 	.global-header {
 		.nav-main .nav-list {
