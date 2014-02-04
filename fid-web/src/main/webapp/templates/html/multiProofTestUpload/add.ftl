@@ -75,7 +75,7 @@ ${action.setPageType('event', 'multi_proof_test')!}
 	
 	<p>
 		<label><@s.text name="label.customer"/></label>
-		<span><@n4.orgPicker name="owner" required="true" orgType="customer"/></span>
+		<span><@n4.orgPicker name="owner" required="true" id="owner"/></span>
 	</p>
 	
 	<p>
