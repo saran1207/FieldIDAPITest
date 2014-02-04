@@ -1,14 +1,18 @@
 @import "components/variables.less";
 @import "components/mixins.less";
 
-//Created a separate IE stylesheet so IE version specific CSS can be grouped together and be deleted as they become unsupported. Note that IE 10 and up DO NOT support conditional comments at all.
+//---------------------------
+// IE8 and below
+//---------------------------
 
-//*background: green; /* IE 7 and below */
-//_background: blue; /* IE 6 */
+// This stylesheet is included using a conditional comment in the  
+// FieldIDTemplatePage.html since the IE8 hack was not reliable and
+// therefore could not be included in the stylesheet targeting IE9.
+// Note that IE 10+ DO NOT support conditional comments at all.
 
 
-/* IE8 and below
------------------*/
+// IE8 and below
+// --------------
 body, input[type="text"], textarea {
 	font-family: @helvetica-neue;
 }
@@ -25,8 +29,8 @@ body, input[type="text"], textarea {
 }
 
 
-/* IE7 and below
------------------*/
+// IE7 and below
+// --------------
 .global-header .nav-list > li {
 	*display: inline;
 }
