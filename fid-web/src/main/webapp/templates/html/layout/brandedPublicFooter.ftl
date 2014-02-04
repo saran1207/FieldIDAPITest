@@ -10,7 +10,7 @@
                 <img src="<@s.url value="/images/logo-icon.png"/>"/>
             </div>
             <div style="margin-top:4px;margin-left:4px;">
-                 <a href="http://www.fieldid.com/" target="_blank"><@s.text name="label.copyright"/>,&nbsp;<@s.text name="label.n4systems"/></a>
+                 <a href="http://www.fieldid.com/" target="_blank"><@s.text name="label.copyright"/>&nbsp;<@s.text name="label.masterlock"/></a>
             </div>
         </div>
 </div>
