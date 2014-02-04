@@ -120,6 +120,11 @@
 			}
 		}
 	}
+	// Removes list spacing in error messages. 
+	// Overriding style in feedback_errors.css
+	.error ul {
+		margin-left: 15px;
+	}
 }
 
 
@@ -129,6 +134,17 @@
 	// Applies a natural box layout model to all elements.
 	// Need to set it back to the default
 	.box-sizing(content-box);
+}
+
+
+// .fieldid-framework selector only affects the new template styles.
+.fieldid-framework { 
+
+	// Removes list spacing in error messages. 
+	// Overriding style in feedback_errors.css
+	.error ul {
+		margin-left: 0;
+	}
 }
 
 
