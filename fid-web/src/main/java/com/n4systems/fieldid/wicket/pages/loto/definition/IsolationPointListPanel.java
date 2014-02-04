@@ -21,12 +21,13 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
 import java.net.URL;
+import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
@@ -39,9 +40,14 @@ public class IsolationPointListPanel extends Panel {
     private final Component blankSlate;
     private final EditableImageList<ProcedureDefinitionImage> images;
 
-    public IsolationPointListPanel(String id, final IModel<ProcedureDefinition> model) {
+    private ListView<IsolationPoint> listView;
+    private boolean isLockDirection;
+
+
+    public IsolationPointListPanel(String id, final IModel<ProcedureDefinition> model, boolean isLockDirection) {
         super(id, model);
         this.model = model;
+        this.isLockDirection = isLockDirection;
         setOutputMarkupPlaceholderTag(true);
 
         add(new AttributeAppender("class", "isolation-point-list"));
@@ -53,7 +59,7 @@ public class IsolationPointListPanel extends Panel {
             }
         });
 
-        ListView<IsolationPoint> listView = new ListView<IsolationPoint>("list", new PropertyModel(model,"lockIsolationPoints")) {
+        listView = new ListView<IsolationPoint>("list", getIsolationPointList()) {
             @Override protected void populateItem(ListItem<IsolationPoint> item) {
                 populateIsolationPoint(item);
                 item.setOutputMarkupId(true);
@@ -67,6 +73,7 @@ public class IsolationPointListPanel extends Panel {
 
             @Override public void onUpdate(Component sortedComponent, int index, AjaxRequestTarget target) {
                 reorderIsolationPoint(target, (IsolationPoint)sortedComponent.getDefaultModelObject(), index);
+                listView.detach();
                 target.add(sortableAjaxWicket);
             }
 
@@ -162,4 +169,15 @@ public class IsolationPointListPanel extends Panel {
 
     protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint defaultModelObject, int index) { }
 
+    public LoadableDetachableModel<List<IsolationPoint>> getIsolationPointList() {
+        return new LoadableDetachableModel<List<IsolationPoint>>() {
+            @Override
+            protected List<IsolationPoint> load() {
+                if(isLockDirection)
+                    return model.getObject().getLockIsolationPoints();
+                else
+                    return model.getObject().getUnlockIsolationPoints();
+            }
+        };
+    }
 }

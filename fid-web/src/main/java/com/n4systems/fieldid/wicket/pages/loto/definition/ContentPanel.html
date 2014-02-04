@@ -1,8 +1,13 @@
+<html xmlns:wicket="http://wicket.apache.org">
+
 <wicket:panel>
 
     <div wicket:id="addButton" class="add-isolation-point menu-button"/>
+    <a class="show-unlock-order menu-button mattButtonRight" wicket:id="showUnlockOrder"><wicket:message key="label.show_unlock_order"/></a>
+    <a class="show-lock-order menu-button mattButtonLeft mattButtonPressed" wicket:id="showLockOrder"><wicket:message key="label.show_lock_order"/></a>
 
-    <div wicket:id="isolationPoints"/>
+    <div wicket:id="lockIsolationPoints"/>
+    <div wicket:id="unlockIsolationPoints"/>
     <div wicket:id="isolationPointEditor"/>
 
     <hr />
@@ -12,3 +17,5 @@
     </div>
 
 </wicket:panel>
+
+</html>

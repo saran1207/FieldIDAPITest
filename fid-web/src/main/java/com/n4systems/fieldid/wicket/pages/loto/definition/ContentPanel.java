@@ -26,7 +26,8 @@ public class ContentPanel extends Panel {
     private final Pattern numberPattern = Pattern.compile(".*(\\d+)");
 
     private IsolationPointEditor editor;
-    private IsolationPointListPanel list;
+    private IsolationPointListPanel lockList;
+    private IsolationPointListPanel unlockList;
 
     private boolean openEditor = true;
 
@@ -42,7 +43,7 @@ public class ContentPanel extends Panel {
 
         add(new AttributeAppender("class", "content"));
 
-        add(list = new IsolationPointListPanel("isolationPoints", model) {
+        add(lockList = new IsolationPointListPanel("lockIsolationPoints", model, true) {
 
             @Override protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
                editor.edit(isolationPoint);
@@ -51,32 +52,80 @@ public class ContentPanel extends Panel {
 
             @Override protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) {
                 getProcedureDefinition().removeIsolationPoint(isolationPoint);
-                target.add(list);
+                target.add(lockList, unlockList);
             }
 
             @Override protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint isolationPoint, int index) {
                 List<IsolationPoint> isolationPointList = getProcedureDefinition().getLockIsolationPoints();
 
-                int oldIndex = isolationPointList.indexOf(isolationPoint);
-                isolationPointList.set(oldIndex, null);
-                isolationPointList.add(index, isolationPoint);
-                isolationPointList.remove(null);
+                isolationPointList.remove(isolationPoint);
+                isolationPointList.add(index - 1, isolationPoint);
 
                 getProcedureDefinition().reindexLockIsolationPoints(isolationPointList);
             }
         });
+        lockList.setOutputMarkupPlaceholderTag(true);
 
-        add(editor = new IsolationPointEditor("isolationPointEditor",getProcedureDefinition()) {
-            @Override protected void doDone(AjaxRequestTarget target,Form<?> form) {
+        add(unlockList = new IsolationPointListPanel("unlockIsolationPoints", model, false) {
+
+            @Override
+            protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
+                editor.edit(isolationPoint);
+                editor.openEditor(target);
+            }
+
+            @Override
+            protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) {
+                getProcedureDefinition().removeIsolationPoint(isolationPoint);
+                target.add(lockList, unlockList);
+            }
+
+            @Override
+            protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint isolationPoint, int index) {
+                List<IsolationPoint> isolationPointList = getProcedureDefinition().getUnlockIsolationPoints();
+
+                isolationPointList.remove(isolationPoint);
+                isolationPointList.add(index - 1, isolationPoint);
+
+                getProcedureDefinition().reindexUnlockIsolationPoints(isolationPointList);
+            }
+        });
+        unlockList.setOutputMarkupPlaceholderTag(true);
+        unlockList.setVisible(false);
+
+        add(new AjaxLink<Void>("showLockOrder") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                lockList.setVisible(true);
+                unlockList.setVisible(false);
+                target.add(lockList, unlockList);
+                target.appendJavaScript("$('.show-unlock-order').removeClass('mattButtonPressed');$('.show-lock-order').addClass('mattButtonPressed');");
+            }
+        });
+
+        add(new AjaxLink<Void>("showUnlockOrder") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                lockList.setVisible(false);
+                unlockList.setVisible(true);
+                target.add(lockList, unlockList);
+                target.appendJavaScript("$('.show-lock-order').removeClass('mattButtonPressed');$('.show-unlock-order').addClass('mattButtonPressed');");
+            }
+        });
+
+        add(editor = new IsolationPointEditor("isolationPointEditor", getProcedureDefinition()) {
+            @Override
+            protected void doDone(AjaxRequestTarget target, Form<?> form) {
                 if (editor.isEditing()) {
                     updateIsolationPoint();
                 } else {
                     addIsolationPoint();
                 }
-                target.add(list);
+                target.add(lockList, unlockList);
             }
 
-            @Override protected void doCancel(AjaxRequestTarget target) {
+            @Override
+            protected void doCancel(AjaxRequestTarget target) {
             }
         });
 

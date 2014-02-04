@@ -205,6 +205,7 @@ h3 {
 	width: 153px;
 	float: right;
 	z-index: 5; /* makes the dropdown go over the images */
+    margin-left: 10px;
 }
 .menu-button .imageButton img {
 	vertical-align: middle;
@@ -237,6 +238,12 @@ h3 {
         text-align: center;
     }
 
+/* SHOW LOCK/UNLOCK ORDER BUTTONS
+----------------------------*/
+.show-lock-order.menu-button, .show-unlock-order.menu-button {
+    float: right;
+    z-index: 5;
+}
 
 /* ISOLATION POINTS TABLE
 --------------------------*/

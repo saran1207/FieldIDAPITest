@@ -183,9 +183,6 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         for(IsolationPoint point: isolationPointList) {
             point.setRevIdx(i++);
         }
-
-        isolationPoints.clear();
-        isolationPoints.addAll(isolationPointList);
     }
 
     public void reindexLockIsolationPoints(List<IsolationPoint> isolationPointList) {
@@ -193,9 +190,6 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         for(IsolationPoint point: isolationPointList) {
             point.setFwdIdx(i++);
         }
-
-        isolationPoints.clear();
-        isolationPoints.addAll(isolationPointList);
     }
 
     public List<ProcedureDefinitionImage> getImages() {
