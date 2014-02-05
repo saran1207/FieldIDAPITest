@@ -104,7 +104,7 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
                 eventMap.put("orderNumber", getOrderNumber(event));
                 eventMap.put("PONumber", event.getAsset().getPurchaseOrder());
                 eventMap.put("attributes", produceInfoOptionLP(event.getAsset().getOrderedInfoOptionList()));
-                eventMap.put("productStatus", event.getAsset().getAssetStatus()!=null ? event.getAsset().getAssetStatus().getName() : "");
+                eventMap.put("productStatus", event.getAssetStatus() !=null ? event.getAssetStatus().getName() : "");
 
                 eventMap.put("eventTypeGroup", event.getType().getGroup() !=null ? event.getType().getGroup().getName() : "");
                 eventMap.put("location", event.getAdvancedLocation() != null ? event.getAdvancedLocation().getFullName() : "");
