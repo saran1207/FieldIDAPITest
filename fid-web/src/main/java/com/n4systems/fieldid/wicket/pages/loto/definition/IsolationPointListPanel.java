@@ -59,6 +59,22 @@ public class IsolationPointListPanel extends Panel {
             }
         });
 
+        add(new AjaxLink<Void>("showLockOrder") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                toggleList(target, false);
+                target.appendJavaScript("$('.show-unlock-order').removeClass('mattButtonPressed');$('.show-lock-order').addClass('mattButtonPressed');");
+            }
+        });
+
+        add(new AjaxLink<Void>("showUnlockOrder") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                toggleList(target, true);
+                target.appendJavaScript("$('.show-lock-order').removeClass('mattButtonPressed');$('.show-unlock-order').addClass('mattButtonPressed');");
+            }
+        });
+
         listView = new ListView<IsolationPoint>("list", getIsolationPointList()) {
             @Override protected void populateItem(ListItem<IsolationPoint> item) {
                 populateIsolationPoint(item);
@@ -168,6 +184,8 @@ public class IsolationPointListPanel extends Panel {
     protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) { }
 
     protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint defaultModelObject, int index) { }
+
+    protected void toggleList(AjaxRequestTarget target, boolean isLockDirection) {}
 
     public LoadableDetachableModel<List<IsolationPoint>> getIsolationPointList() {
         return new LoadableDetachableModel<List<IsolationPoint>>() {

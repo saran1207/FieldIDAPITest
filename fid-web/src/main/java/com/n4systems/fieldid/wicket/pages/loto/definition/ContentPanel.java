@@ -45,17 +45,20 @@ public class ContentPanel extends Panel {
 
         add(lockList = new IsolationPointListPanel("lockIsolationPoints", model, true) {
 
-            @Override protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
+            @Override
+            protected void doEdit(AjaxRequestTarget target, IsolationPoint isolationPoint) {
                editor.edit(isolationPoint);
                editor.openEditor(target);
             }
 
-            @Override protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) {
+            @Override
+            protected void doDelete(AjaxRequestTarget target, IsolationPoint isolationPoint) {
                 getProcedureDefinition().removeIsolationPoint(isolationPoint);
                 target.add(lockList, unlockList);
             }
 
-            @Override protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint isolationPoint, int index) {
+            @Override
+            protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint isolationPoint, int index) {
                 List<IsolationPoint> isolationPointList = getProcedureDefinition().getLockIsolationPoints();
 
                 isolationPointList.remove(isolationPoint);
@@ -63,7 +66,13 @@ public class ContentPanel extends Panel {
 
                 getProcedureDefinition().reindexLockIsolationPoints(isolationPointList);
             }
+
+            @Override
+            protected void toggleList(AjaxRequestTarget target, boolean isLockDirection) {
+                ContentPanel.this.toggleList(target, isLockDirection);
+            }
         });
+
         lockList.setOutputMarkupPlaceholderTag(true);
 
         add(unlockList = new IsolationPointListPanel("unlockIsolationPoints", model, false) {
@@ -89,29 +98,14 @@ public class ContentPanel extends Panel {
 
                 getProcedureDefinition().reindexUnlockIsolationPoints(isolationPointList);
             }
+
+            @Override
+            protected void toggleList(AjaxRequestTarget target, boolean isLockDirection) {
+                ContentPanel.this.toggleList(target, isLockDirection);
+            }
         });
         unlockList.setOutputMarkupPlaceholderTag(true);
         unlockList.setVisible(false);
-
-        add(new AjaxLink<Void>("showLockOrder") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                lockList.setVisible(true);
-                unlockList.setVisible(false);
-                target.add(lockList, unlockList);
-                target.appendJavaScript("$('.show-unlock-order').removeClass('mattButtonPressed');$('.show-lock-order').addClass('mattButtonPressed');");
-            }
-        });
-
-        add(new AjaxLink<Void>("showUnlockOrder") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                lockList.setVisible(false);
-                unlockList.setVisible(true);
-                target.add(lockList, unlockList);
-                target.appendJavaScript("$('.show-lock-order').removeClass('mattButtonPressed');$('.show-unlock-order').addClass('mattButtonPressed');");
-            }
-        });
 
         add(editor = new IsolationPointEditor("isolationPointEditor", getProcedureDefinition()) {
             @Override
@@ -162,6 +156,12 @@ public class ContentPanel extends Panel {
         editor.editNew(createIsolationPoint(sourceType));
         editor.openEditor(target);
 
+    }
+
+    private void toggleList(AjaxRequestTarget target, boolean isLockDirection) {
+        lockList.setVisible(!isLockDirection);
+        unlockList.setVisible(isLockDirection);
+        target.add(lockList, unlockList);
     }
 
     private IsolationPoint createIsolationPoint(IsolationPointSourceType sourceType) {

@@ -1,10 +1,16 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
 	<h3><wicket:message key="label.images"/></h3>
 
 	<div wicket:id="images"/>
-	
-	<ul wicket:id="sortableList" class="isolation-point-table">
+
+    <div class="lock-unlock-action-group">
+        <a class="show-unlock-order menu-button mattButtonRight" wicket:id="showUnlockOrder"><wicket:message key="label.show_unlock_order"/></a>
+        <a class="show-lock-order menu-button mattButtonLeft mattButtonPressed" wicket:id="showLockOrder"><wicket:message key="label.show_lock_order"/></a>
+    </div>
+
+    <ul wicket:id="sortableList" class="isolation-point-table">
 		 <li class="headings">
 			<span class="identifier">Identifier</span>
 			<span class="source">Source</span>
@@ -36,3 +42,4 @@
     </div>
 
 </wicket:panel>
+</html>
