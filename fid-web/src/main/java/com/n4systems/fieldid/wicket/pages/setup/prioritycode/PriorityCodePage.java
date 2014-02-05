@@ -44,7 +44,7 @@ public class PriorityCodePage extends FieldIDTemplatePage {
     private ModalWindow addOrEditPriorityCodeWindow;
 
     public PriorityCodePage() {
-        add(addOrEditPriorityCodeWindow = new DialogModalWindow("priorityCodeModalWindow").setInitialWidth(365).setInitialHeight(200));
+        add(addOrEditPriorityCodeWindow = new DialogModalWindow("priorityCodeModalWindow").setInitialWidth(365).setInitialHeight(260));
         addOrEditPriorityCodeWindow.setContent(createAddEditPanel(Model.of(new PriorityCode())));
 
         add(priorityCodeListPanel = new PriorityCodeListPanel("priorityCodeList") {
