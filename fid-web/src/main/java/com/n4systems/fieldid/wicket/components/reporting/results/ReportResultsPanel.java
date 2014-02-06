@@ -25,7 +25,13 @@ public class ReportResultsPanel extends SRSResultsPanel<EventReportCriteria,HasG
 
     @Override
     protected FieldIdAPIDataProvider createDataProvider(IModel<EventReportCriteria> criteriaModel) {
-        return new EventReportDataProvider(criteriaModel.getObject());
+        return new EventReportDataProvider(criteriaModel.getObject()) {
+            @Override protected void storeIdList() {
+                super.storeIdList();
+                selectedRows.clearIndexes();
+                selectedRows.validateIndexes( dataTable.getTable().getCurrentPage(), dataTable.getTable().getItemsPerPage(), getCurrentPageIdList());
+            }
+        };
     }
 
     @Override

@@ -7,11 +7,10 @@ import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
-import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.ReportConfiguration;
 import com.n4systems.util.persistence.search.SortDirection;
-import org.apache.wicket.Page;
+import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.link.Link;
@@ -20,6 +19,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
@@ -64,10 +65,14 @@ public class EventTextSearchActionsPanel extends Panel {
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(FieldIDSession.get().getSessionUser().getSecurityFilter());
 
         criteria.setSortDirection(SortDirection.DESC);
-        int i = 0;
+
+        List<Long> ids = new ArrayList<Long>();
         for (String id : selectedIds.getObject()) {
-            criteria.getSelection().addId(i++, Long.parseLong(id));
+            ids.add(Long.parseLong(id));
         }
+
+        MultiIdSelection multiIdSelection = new MultiIdSelection();
+        criteria.setSelection(multiIdSelection);
 
         criteria.setColumnGroups(reportConfiguration.getColumnGroups());
         return Model.of(criteria);
