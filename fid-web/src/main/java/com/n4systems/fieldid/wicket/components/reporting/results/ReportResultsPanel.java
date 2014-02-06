@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components.reporting.results;
 
-import com.n4systems.fieldid.wicket.components.GpsModel;
 import com.n4systems.fieldid.wicket.components.search.results.SRSResultsPanel;
 import com.n4systems.fieldid.wicket.components.table.HighlightPastDueSchedulesBehavior;
 import com.n4systems.fieldid.wicket.data.EventReportDataProvider;
@@ -18,12 +17,6 @@ public class ReportResultsPanel extends SRSResultsPanel<EventReportCriteria,HasG
     public ReportResultsPanel(String id, final IModel<EventReportCriteria> eventCriteriaModel) {
         super(id, eventCriteriaModel);
     }
-
-    @Override
-    protected GpsModel<HasGpsLocation> createMapModel(IModel<EventReportCriteria> criteriaModel) {
-        throw new UnsupportedOperationException("maps not supported in " + getClass().getSimpleName());
-    }
-
 
     @Override
     protected IColumn<RowView> createActionsColumn() {
