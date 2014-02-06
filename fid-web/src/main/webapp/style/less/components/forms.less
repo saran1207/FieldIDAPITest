@@ -47,27 +47,8 @@ input:focus {
 	border-color: @gray-dark;
 }
 
-form .action-group {
-	padding-top: 5px;
-}
-
-//label with no associated input
-.label {
-	font-weight: @semi-bold;
-
-	&.inline {
-		margin-right: 8px;
-	}
-}
-.inline .label {
-	margin-right: 8px;
-	display: inline-block;
-}
-
-
 // checkboxes & radio boxes
-// -------------------------
-//input inside of a label
+// input inside of the label
 label {
 	input[type="radio"], 
 	input[type="checkbox"] {
@@ -75,13 +56,14 @@ label {
 	}
 }
 
-// text input size options
-// ------------------------
-input[type=text].input-xsml {
-	width: 50px;
+input[type="radio"],
+input[type="checkbox"] {
+	float: left;
+	//margin: 1px 4px 1px 1px;
+	line-height: 1;
 }
 
-//TODO used on asset-events.php in prototype, may need to refactor
+//TODO may need to refactor
 .checkbox {
 	overflow: hidden;
 	
@@ -98,17 +80,34 @@ input[type=text].input-xsml {
 		}
 	}
 }
-input[type="radio"],
-input[type="checkbox"] {
-	float: left;
-	margin: 1px 4px 1px 1px;
-	line-height: 1;
+
+
+//label with no associated input - TODO
+.label {
+	font-weight: @semi-bold;
+
+	&.inline {
+		margin-right: 8px;
+	}
+}
+.inline .label {
+	margin-right: 8px;
+	display: inline-block;
 }
 
 
-// text input with button combo 
-// -----------------------------
+// text input size options - TODO
+// ------------------------
+input[type=text].input-xsml {
+	width: 50px;
+}
 
+
+
+
+
+// text input with button combo - TODO
+// -----------------------------
 .input-combo {
 	display: inline-block;
 	position: relative;
@@ -157,7 +156,7 @@ input[type="checkbox"] {
 }
 
 
-// Adding a block of text under a form control
+// Adding a block of text under a form control - TODO
 // --------------------------------------------
 
 // ex. warning, error message, or help text
@@ -168,7 +167,7 @@ input[type="checkbox"] {
 }
 
 
-// Editable inputs - for inline editing
+// Editable inputs - for inline editing - TODO
 // ------------------------------------
 input:disabled,
 textarea:disabled {
@@ -218,7 +217,7 @@ legend + p {
 	margin-top: 20px;
 }
 
-// Search box
+// Search box - TODO
 // -----------
 .search-box {
 	.border-radius(3px);
@@ -238,7 +237,7 @@ legend + p {
 	}
 }
 
-// Text search, no button needed
+// Text search, no button needed - TODO
 // -----------------------------
 .text-search {
 	border: 1px solid @gray-medium;
@@ -256,7 +255,7 @@ legend + p {
 	}
 }
 
-// For using multiple controls with one label
+// For using multiple controls with one label - TODO
 // -------------------------------------------
 .control-combo {
 	label {
@@ -273,7 +272,7 @@ legend + p {
 }
 
 
-// Prominent/Primary form control
+// Prominent/Primary form control - TODO
 // -------------------------------
 
 //add class to the <fieldset> that contains the primary selection to create more prominence
@@ -295,7 +294,6 @@ legend + p {
 
 // Horizontal form
 // ----------------
-
 // Label on the left, input on the right
 .form-horizontal {
 	fieldset {
@@ -336,9 +334,17 @@ legend + p {
 			float: none;
 		}
 	}
+	
+	// Left align label text
+	&.text-left,
+	.text-left {
+		label {
+			text-align: left;
+		}
+	}
 }
 
-// Form overrides for narrow styles
+// Form overrides for narrow styles - TODO
 .narrow .form-horizontal,
 .form-horizontal.narrow {
 	label {
@@ -359,7 +365,7 @@ legend + p {
 }
 
 
-// Compact form controls - shorter widths
+// Compact form controls - shorter widths - TODO
 // ---------------------------------------
 .form-horizontal.compact {
 	padding: 0 15px;
