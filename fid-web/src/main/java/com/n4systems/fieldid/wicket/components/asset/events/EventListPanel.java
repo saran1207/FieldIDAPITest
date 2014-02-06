@@ -33,10 +33,10 @@ public class EventListPanel extends Panel {
         SimpleDefaultDataTable table;
         add(table = new SimpleDefaultDataTable<Event>("eventsTable", getEventTableColumns(), dataProvider, EVENTS_PER_PAGE));
 
-        table.add(new AttributeAppender("class", getTableStyle(table.getPageCount())).setSeparator(" "));
+        table.add(new AttributeAppender("class", getTableStyle()).setSeparator(" "));
     }
 
-    private IModel<String> getTableStyle(final int pageCount) {
+    private IModel<String> getTableStyle() {
 
         return  new Model<String>() {
             @Override
@@ -44,7 +44,7 @@ public class EventListPanel extends Panel {
                 String attribute = "";
                 if(dataProvider.size() == 0) {
                     attribute = "no_records";
-                }else if (pageCount < 2) {
+                }else if ( (dataProvider.size()/EVENTS_PER_PAGE) == 0) {
                     attribute = "no_paging";
                 }
                 return attribute;
