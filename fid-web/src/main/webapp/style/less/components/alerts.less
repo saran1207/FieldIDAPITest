@@ -3,18 +3,21 @@
 //---------------------------
 // Error/warning messages, notes, notifications
 
-// For inline messages
+// Red messages
 .error {
 	border: 1px solid #FFC2C2;
 	background-color: #FFEBEB;
 	font-size: @small-font-size;
 }
+// Yellow messages
 .warning {
 	.border-bg(darken(@yellow, 40%), 40%);
 }
+// Gray messages
 .info {
 	.border-bg(@gray, 8%);
 }
+// Green messages
 .success {
 	.border-bg(@green, 45%);
 }
@@ -64,8 +67,8 @@ div.info {
 	}
 
 
-/* Top Feedback panel - success messaging
-------------------------------------------*/
+// Top Feedback panel - success messaging
+//---------------------------------------
 .feedback-panel {
 	margin-top: 10px;
 	
@@ -81,8 +84,8 @@ div.info {
 }
 
 
-/* FID Feedback panel - error messaging
-----------------------------------------*/
+// FID Feedback panel - error messaging
+// -------------------------------------
 .error {
 	h3 {
 		border-bottom: none;
