@@ -32,7 +32,7 @@ public class FailedEventListLoader extends ListLoader<ThingEvent>{
 
 	@Override
 	protected List<ThingEvent> load(EntityManager em, SecurityFilter filter) {
-		QueryBuilder<ThingEvent> builder = new QueryBuilder<ThingEvent>(Event.class, filter);
+		QueryBuilder<ThingEvent> builder = new QueryBuilder<ThingEvent>(ThingEvent.class, filter);
 		
 		builder.addWhere(WhereClauseFactory.create("eventResult", EventResult.FAIL));
 		builder.addWhere(Comparator.GE, "date", "completedDate", getFromDate());  // this needs to be converted toUTC(timeZone)!!!

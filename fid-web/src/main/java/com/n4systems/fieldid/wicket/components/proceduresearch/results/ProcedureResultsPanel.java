@@ -22,7 +22,13 @@ public class ProcedureResultsPanel extends SRSResultsPanel<ProcedureCriteria,Has
 
     @Override
     protected FieldIdAPIDataProvider createDataProvider(IModel<ProcedureCriteria> criteriaModel) {
-        return new ProcedureDataProvider(criteriaModel.getObject());
+        return new ProcedureDataProvider(criteriaModel.getObject()) {
+            @Override protected void storeIdList() {
+                super.storeIdList();
+                selectedRows.clearIndexes();
+                selectedRows.validateIndexes( dataTable.getTable().getCurrentPage(), dataTable.getTable().getItemsPerPage(), getCurrentPageIdList());
+            }
+        };
     }
 
 }

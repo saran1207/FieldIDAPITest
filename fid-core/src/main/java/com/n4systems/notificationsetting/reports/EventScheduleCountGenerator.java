@@ -136,8 +136,10 @@ public class EventScheduleCountGenerator {
 		message.getTemplateMap().put("upcomingEvents", upcomingEventCounts);
 		message.getTemplateMap().put("overdueEvents", overdueEvents);
 		message.getTemplateMap().put("overdueDate", new PlainDate());
-		message.getTemplateMap().put("failedEvents", failedEvents);		
-		message.getTemplateMap().put("failedReportStart", getReportStartDate(setting.getFrequency(), new PlainDate()));
+		message.getTemplateMap().put("failedEvents", failedEvents);
+
+        Date reportStartDate = getReportStartDate(setting.getFrequency(), new PlainDate());
+		message.getTemplateMap().put("failedReportStart", reportStartDate != null ? reportStartDate : new PlainDate() );
 		message.getTemplateMap().put("failedReportEnd", new PlainDate());
 		message.getTemplateMap().put("upcomingReportStart", start);
 		message.getTemplateMap().put("upcomingReportEnd", DateUtils.addDays(end, -1));
