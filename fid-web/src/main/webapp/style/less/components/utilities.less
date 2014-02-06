@@ -1,6 +1,6 @@
-/*--------------------------------------- 
-  UTILITY AND HELPER CLASSES
------------------------------------------*/
+//---------------------------
+// UTILITY & HELPER CLASSES
+//---------------------------
 // Quick floats
 .pull-right {
   float: right;
@@ -15,6 +15,23 @@
 }
 .show {
   display: block;
+}
+
+// Text styles
+.text-center {
+	text-align: center;
+}
+.text-right {
+	text-align: right;
+}
+.text-left {
+	text-align: left;
+}
+
+// Used for filtered searches to show which part of the text matches the search string.
+.match {
+	background: @yellow;
+	font-weight: @bold;
 }
 
 // border options
@@ -67,15 +84,4 @@
 	}
 }
 
-.text-center {
-	text-align: center;
-}
-.text-right {
-	text-align: right;
-}
 
-// Used for filtered searches to show which part of the text matches the search string.
-.match {
-	background: @yellow;
-	font-weight: @bold;
-}

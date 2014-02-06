@@ -27,7 +27,7 @@
 		.shadow(0px 6px 20px -10px @gray-dark);
 		
 		li a {
-			padding: 8px 14px;
+			padding: 8px 12px;
 			display: inline-block;
 			white-space: nowrap; //keeps the text from wrapping, the width of the dropdown will be as long as the longest line of copy
 			width: 100%; //makes the link stretch all the way across to expand hover area
@@ -80,6 +80,7 @@
 }
 
 // Dropdown within a dropdown
+// Secondary dropdown flies out to the right
 .dropdown-secondary {
 	position: relative;
 
@@ -97,32 +98,42 @@
 		}
 	}
 	> a:after {
-		.fontello-icon('\00BB');
+		font-family: @fontello;
+		content: '\00BB';
+		padding-left: 4px;
 	}
-}
-.pull-right .dropdown-secondary {
-	ul {
-		right: 100%;
-		left: auto;
-	}
-	> a:after {
-		content: "";
-	}
-	> a:before {
-		.fontello-icon('\e82e');
+
+	// Right floated dropdown but secondary
+	// flies out to the left
+	.pull-right & {
+		ul {
+			right: 100%;
+			left: auto;
+		}
+		> a:after {
+			display: none;
+		}
+		> a:before {
+			font-family: @fontello;
+			content: '\00AB';
+			padding-right: 4px;
+		}
 	}
 }
 
 // Dropdown with icon only
+// Example on Places TODO
 .dropdown.icon {
 	padding: 8px 8px 10px;
 	cursor: pointer;
 
-	[class^="fontello-"]:before {
+	[class^="icon-"]:before,
+	[class*=" icon-"]:before {
 		font-size: @large-font-size;
 	}
 	// Changes colour of icon on hover
-	&:hover [class^="fontello-"]:before {
+	&:hover [class^="icon-"]:before,
+	[class*=" icon-"]:before {
 		color: @blue;
 	}
 }

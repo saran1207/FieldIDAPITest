@@ -18,31 +18,27 @@ figure {
 }
 
 
-// Sidebar image
+// Feature image
 // ----------------------------
-.column-left,
-.column-right {
-	.feature-image {
-		//Center align images & sets max-height
-		//of image to restrict the overall size.
+.feature-image {
+	//Center align images & sets max-height
+	//of image to restrict the overall size.
+	img {
+		max-width: 100%;
+		max-height: 250px;
+		display: block;
+		margin: 0 auto;
+	}
+	//Image expands to the width of the container.
+	//The height of the image will scale and maintain
+	//the aspect ration of the image.
+	&.fluid {
 		img {
-			max-width: 100%;
-			max-height: 250px;
-			display: block;
-			margin: 0 auto;
+			width: 100%;
+			max-height: inherit;
 		}
-		//Image expands to the width of the container.
-		//The height of the image will scale and maintain
-		//the aspect ration of the image.
-		&.fluid {
-			img {
-				width: 100%;
-				max-height: inherit;
-			}
-		}
-
-		&.border {
-			padding: 8px;
-		}
+	}
+	&.border {
+		padding: 8px;
 	}
 }
