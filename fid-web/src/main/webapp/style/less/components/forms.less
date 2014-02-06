@@ -205,9 +205,6 @@ textarea:disabled {
 	.chzn-container {
 		margin: 0;
 	}
-	input + [class^="fontello-"]:before {
-		padding-left: 0;
-	}
 }
 legend + .control-group {
 	margin: 25px 0 6px;
@@ -232,7 +229,7 @@ legend + p {
 		margin: 0;
 		width: 260px;
 	}
-	.fontello-search:before {
+	.icon-search:before {
 		font-size: 17px;		
 	}
 }
@@ -242,7 +239,7 @@ legend + p {
 .text-search {
 	border: 1px solid @gray-medium;
 	
-	.fontello-search:before {
+	.icon-search:before {
 		color: @gray-medium;
 		padding-left: 6px;
 	}
@@ -315,9 +312,6 @@ legend + p {
 	.text-block {
 		margin-left: 194px;
 	}
-	[class^="fontello-"]:before {
-		font-size: 16px;
-	}
 	.input-combo {
 		width: auto;
 	
@@ -365,8 +359,9 @@ legend + p {
 }
 
 
-// Compact form controls - shorter widths - TODO
+// Compact form controls - shorter widths 
 // ---------------------------------------
+// not currently being used
 .form-horizontal.compact {
 	padding: 0 15px;
 
@@ -398,8 +393,7 @@ legend + p {
 		text-align: left;
 		margin-left: 44%;
 	}
-	input + [class^="icon-"],
-	input + [class^="fontello-"] {
+	input + [class^="icon-"] {
 		position: absolute;
 		right: 6px;
 		top: 5px;

@@ -122,15 +122,18 @@
 }
 
 // Dropdown with icon only
+// Example on Places TODO
 .dropdown.icon {
 	padding: 8px 8px 10px;
 	cursor: pointer;
 
-	[class^="fontello-"]:before {
+	[class^="icon-"]:before,
+	[class*=" icon-"]:before {
 		font-size: @large-font-size;
 	}
 	// Changes colour of icon on hover
-	&:hover [class^="fontello-"]:before {
+	&:hover [class^="icon-"]:before,
+	[class*=" icon-"]:before {
 		color: @blue;
 	}
 }

@@ -111,10 +111,14 @@
 		//primary icons
 		.primary {
 			&.jstree-open > ins:before {
-				.fontello-minus-squared(0 3px);
+				font-family: @fontello;
+				padding: 0 3px; 
+				content: '\e83e'; //icon-minus-squared
 			}
 			&.jstree-closed > ins:before  {
-				.fontello-plus-squared(0 3px);
+				font-family: @fontello;
+				padding: 0 3px;
+				content: '\e83d'; //icon-plus-squared
 			}
 			> a .org {
 				font-weight: @bold;
@@ -124,10 +128,14 @@
 		.secondary,
 		.customer-org {
 			&.jstree-open > ins:before  {
-				.fontello-minus-squared-small;
+				font-family: @fontello;
+				padding: 0 4px;
+				content: '\e835'; //icon-minus-squared-small
 			}
 			&.jstree-closed > ins:before  {
-				.fontello-plus-squared-small;
+				font-family: @fontello;
+				padding: 0 4px;
+				content: '\e836'; //icon-plus-squared-small
 			}
 		}	
 
