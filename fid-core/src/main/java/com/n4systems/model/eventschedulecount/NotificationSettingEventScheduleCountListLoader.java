@@ -1,6 +1,7 @@
 package com.n4systems.model.eventschedulecount;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.notificationsettings.NotificationSetting;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
@@ -80,7 +81,7 @@ public abstract class NotificationSettingEventScheduleCountListLoader extends Li
 	}
 
 	protected QueryBuilder<EventScheduleCount> getQueryBuilder(SecurityFilter filter) {
-        QueryBuilder<EventScheduleCount> openEventQueryBuilder = new QueryBuilder<EventScheduleCount>(Event.class, filter);
+        QueryBuilder<EventScheduleCount> openEventQueryBuilder = new QueryBuilder<EventScheduleCount>(ThingEvent.class, filter);
         return openEventQueryBuilder;
 	}
 
