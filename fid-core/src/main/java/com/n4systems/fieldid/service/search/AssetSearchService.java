@@ -142,10 +142,10 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
     }
 
     @Transactional(readOnly = true)
-    public MappedResults<AssetSearchRecord> performMapSearch(AssetSearchCriteria criteriaModel) {
-        QueryBuilder<Asset> query = createBaseMappedSearchQueryBuilder(criteriaModel);
+    public MappedResults<AssetSearchRecord> performMapSearch(AssetSearchCriteria criteria) {
+        QueryBuilder<Asset> query = createBaseMappedSearchQueryBuilder(criteria);
 
-        int limit = criteriaModel.getMaxItemsBeforeGrouping() + 1;
+        int limit = criteria.getMaxItemsBeforeGrouping() + 1;
         query.setLimit(limit);
         List<Asset> queryResults = persistenceService.findAll(query);
         MappedResults<AssetSearchRecord> searchResult = new MappedResults<AssetSearchRecord>();

@@ -25,7 +25,7 @@
 var googleMapFactory = (function() {
 
 	 var defaultOptions = {
-		 zoom: 14,
+		 zoom: 10,
 		 mapTypeId:google.maps.MapTypeId.ROADMAP
 	 };
 
@@ -236,19 +236,23 @@ var googleMapFactory = (function() {
 		}
 
 		function mapChanged() {
-			if (!currBounds ||!currZoom) return;
+			google.maps.event.addListenerOnce(map,'idle',mapChanged);
+			if (!currBounds ||!currZoom) {
+				return;
+			}
 			var bounds = asBounds(map.getBounds());
 			var zoom = map.getZoom();
+			var centre = map.getCenter();
 			if (needsRefresh(bounds,zoom)) {
 				currBounds = bounds;
 				currZoom = zoom;
-				var url =  options.callbackUrl + "&s="+bounds.s+"&w="+bounds.w+"&n="+bounds.n+"&e="+bounds.e;
+				var url =  options.callbackUrl + "&s="+bounds.s+"&w="+bounds.w+"&n="+bounds.n+"&e="+bounds.e+"&zoom="+zoom+"&lat="+centre.lat()+"&lng="+centre.lng();
 				if (timeout) {
 					window.clearTimeout(timeout);
 				}
 				timeout = window.setTimeout(function() {
 												wicketAjaxGet(url, function() {}, function() {});
-											}, 1500);
+											}, 1000);
 			}
 		}
 
@@ -262,10 +266,10 @@ var googleMapFactory = (function() {
 
 		function asBounds(bounds) {
 			return {
-				s: bounds.getSouthWest().lng(),
-				w: bounds.getSouthWest().lat(),
-				n: bounds.getNorthEast().lng(),
-				e: bounds.getNorthEast().lat()
+				w: bounds.getSouthWest().lng(),
+				s: bounds.getSouthWest().lat(),
+				e: bounds.getNorthEast().lng(),
+				n: bounds.getNorthEast().lat()
 				}
 		}
 
@@ -348,20 +352,21 @@ var googleMapFactory = (function() {
 					}
 					bounds.extend(loc);
 				}
-				if (count>1) {
+
+				if (options.zoom) {
+					map.setZoom(options.zoom);
+				}
+				if (options.center) {
+					map.setCenter(options.center);
+				} else if (count>=1) {
 					map.fitBounds(bounds);
-				} else if (count==1) {
-					map.setZoom(options.zoom);
-					map.setCenter(locations[0]);
-				} else if (count==0) {
-					map.setZoom(options.zoom);
 				}
 
 				if (options.callbackUrl) {
-					google.maps.event.addListener(map,'bounds_changed',mapChanged);
 					google.maps.event.addListenerOnce(map,'idle',function() {
 						currBounds = asBounds(map.getBounds());
 						currZoom = map.getZoom();
+						google.maps.event.addListenerOnce(map,'idle',mapChanged);
 					});
 				}
 

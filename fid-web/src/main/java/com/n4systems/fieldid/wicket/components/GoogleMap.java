@@ -29,8 +29,8 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     private Gson gson;
 
     private GpsModel<T> model;
-    private GpsLocation centre = new GpsLocation(43.548548, -96.987305); // centre of north america is default location.
-    private Integer defaultZoom = 10;
+    private GpsLocation centre = null;
+    private Integer defaultZoom = null;
     private AbstractDefaultAjaxBehavior ajax;
 
     public GoogleMap(String id, final GpsModel<T> model) {
@@ -69,8 +69,11 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
                     double west = params.getParameterValue("w").toDouble();
                     double north = params.getParameterValue("n").toDouble();
                     double east = params.getParameterValue("e").toDouble();
+                    int zoom  = params.getParameterValue("zoom").toInt();
+                    double lat = params.getParameterValue("lat").toDouble();
+                    double lng = params.getParameterValue("lng").toDouble();
                     // stuff these into the criteria.
-                    onMapChange(target, new GpsBounds(south, west, north, east));
+                    onMapChange(target, new GpsBounds(south, west, north, east), zoom, new GpsLocation(lat,lng));
                     target.add(GoogleMap.this);
                 }
             };
@@ -79,7 +82,9 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         return this;
     }
 
-    protected void onMapChange(AjaxRequestTarget target, GpsBounds gpsBounds) {
+    protected void onMapChange(AjaxRequestTarget target, GpsBounds gpsBounds, int zoom, GpsLocation gpsLocation) {
+        defaultZoom = zoom;
+        centre = gpsLocation;
     }
 
     protected String getCss() {
@@ -175,7 +180,6 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
             }
         }
     }
-
 
     class MappedResultsSerializer implements JsonSerializer<MappedResults<T>> {
 
