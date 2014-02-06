@@ -275,6 +275,8 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         List<IsolationPoint> isolationPointList = getLockIsolationPoints();
         isolationPointList.remove(isolationPoint);
 
+        isolationPoints.remove(isolationPoint);
+
         reindexLockIsolationPoints(isolationPointList);
         reindexUnlockIsolationPoints(getUnlockIsolationPoints());
     }
