@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.table;
 
 import com.n4systems.fieldid.wicket.components.search.results.SelectionStatusPanel;
+import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.util.persistence.search.SortDirection;
@@ -72,6 +73,13 @@ public class SimpleDataTable<T> extends Panel {
                 return cellItem;
             }
 
+            @Override
+            protected void onBeforeRender() {
+                super.onBeforeRender();    //To change body of overridden methods use File | Settings | File Templates.
+                multiIdSelection.clearIndexes();
+                multiIdSelection.validateIndexes(table.getCurrentPage(), table.getItemsPerPage(), ((FieldIdAPIDataProvider) table.getDataProvider()).getCurrentPageIdList());
+
+            }
         };
         table.setOutputMarkupPlaceholderTag(true);
         table.add(new AttributeAppender("class", new PropertyModel<String>(this, "cssClass"), " "));
@@ -195,5 +203,10 @@ public class SimpleDataTable<T> extends Panel {
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/selectionNew.js");
     }
+
+    public MultiIdSelection getMultiIdSelection() {
+        return multiIdSelection;
+    }
+
 
 }

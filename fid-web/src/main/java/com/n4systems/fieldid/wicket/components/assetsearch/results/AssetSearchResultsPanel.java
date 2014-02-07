@@ -47,13 +47,7 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
 
     @Override
     protected FieldIdAPIDataProvider createDataProvider(IModel<AssetSearchCriteria> criteriaModel) {
-        return new AssetSearchDataProvider(criteriaModel.getObject()) {
-            @Override protected void storeIdList() {
-                super.storeIdList();
-                selectedRows.clearIndexes();
-                selectedRows.validateIndexes( dataTable.getTable().getCurrentPage(), dataTable.getTable().getItemsPerPage(), getCurrentPageIdList());
-            }
-        };
+        return new AssetSearchDataProvider(criteriaModel.getObject());
     }
 
     @Override

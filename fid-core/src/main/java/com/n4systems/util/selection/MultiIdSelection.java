@@ -71,7 +71,7 @@ public class MultiIdSelection implements Serializable {
             Long id = indexIdSelectionMap.get(keyVal);
             int currindex = currentPageIdList.indexOf(id) ;
             if (currindex >=0) {
-                addValues.put(currindex, id + (currentPage*itemsPerPage));
+                addValues.put(currindex  + (currentPage*itemsPerPage), id);
                 removeValues.add(keyVal);
             }
         }
