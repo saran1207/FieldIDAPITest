@@ -22,11 +22,11 @@ public class MappedResults<T extends HasGpsLocation> implements Serializable {
     private Map<GpsLocation,MappedResult<T>> results = Maps.newHashMap();
     private boolean grouped;
 
-    public MappedResults(ArrayList<GpsLocation> locations) {
-        add(locations);
+    public MappedResults() {
     }
 
-    public MappedResults() {
+    public MappedResults(ArrayList<GpsLocation> locations) {
+        add(locations);
     }
 
     public Integer getCount() {

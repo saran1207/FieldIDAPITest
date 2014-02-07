@@ -115,8 +115,16 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
                 target.appendJavaScript(TOGGLE_PANEL_JS);
                 showMap(target);
             }
+
+            @Override public boolean isVisible() {
+                return isMapButtonVisible();
+            }
         }.setOutputMarkupId(true));
         add(resultButtons.setVisible(true));
+    }
+
+    protected boolean isMapButtonVisible() {
+        return false;
     }
 
     protected Component createMap(String id) {

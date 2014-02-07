@@ -11,7 +11,6 @@ import java.util.List;
 
 public class GpsBoundsTerm implements SearchTermDefiner {
 
-
     private String field;
     private GpsBounds bounds;
 
@@ -25,6 +24,19 @@ public class GpsBoundsTerm implements SearchTermDefiner {
     public List<WhereClause<?>> getWhereParameters() {
         List<WhereClause<?>> params = new ArrayList<WhereClause<?>>();
         String fieldName = StringUtils.pathToName(field+".latitude");
+
+        //  lng,lat
+        // NW = 90 lat,-180 long
+        // NE = 90 lat, 180 long
+        // SW = -90 lat, -180 long
+        // SE = -90 lat, 180 long
+        //  - +     |    + +
+        //          |
+        // ---------------------
+        //  - -     |    + -
+        //          |
+
+        // if south<0
         if (bounds!=null && !bounds.isEmpty()) {
             params.add(new WhereParameter<BigDecimal>(WhereParameter.Comparator.GE, "south_"+fieldName, field+".latitude", bounds.getSwBounds().getLatitude(), null, false, WhereClause.ChainOp.AND));
             params.add(new WhereParameter<BigDecimal>(WhereParameter.Comparator.LE, "north_"+fieldName, field+".latitude", bounds.getNeBounds().getLatitude(), null, false, WhereClause.ChainOp.AND));

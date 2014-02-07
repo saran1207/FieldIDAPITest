@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.GpsBounds;
+import com.n4systems.model.GpsLocation;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.services.reporting.AssetSearchRecord;
 import com.n4systems.services.search.MappedResults;
@@ -40,7 +41,7 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
         resultButtons.setVisible(true);
     }
 
-      @Override
+    @Override
     protected IColumn<RowView> createActionsColumn() {
         return new AssetActionsColumn();
     }
@@ -62,7 +63,8 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
             @Override protected String getCssForEmptyMap() {
                 return "";
             }
-            @Override protected void onMapChange(AjaxRequestTarget target, GpsBounds bounds) {
+            @Override protected void onMapChange(AjaxRequestTarget target, GpsBounds bounds, int zoom, GpsLocation centre) {
+                super.onMapChange(target, bounds, zoom, centre);
                 criteriaModel.getObject().setBounds(bounds);
                 target.add(AssetSearchResultsPanel.this.map);
             }
@@ -79,5 +81,9 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
         return String.format(MARKER_FORMAT, entity.getType(), entity.getSerialNumber(), entity.getStatus(), entity.getOwner(), url, linkLabel );
     }
 
+    @Override
+    protected boolean isMapButtonVisible() {
+        return true;
+    }
 }
 
