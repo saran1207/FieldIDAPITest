@@ -87,5 +87,9 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
         return String.format(MARKER_FORMAT, entity.getType(), entity.getSerialNumber(), entity.getStatus(), entity.getOwner(), url, linkLabel );
     }
 
+    @Override
+    protected boolean isMapButtonVisible() {
+        return true;
+    }
 }
 
