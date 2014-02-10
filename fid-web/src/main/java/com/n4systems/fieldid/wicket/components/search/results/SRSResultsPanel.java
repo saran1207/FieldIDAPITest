@@ -111,13 +111,15 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
                 target.appendJavaScript(TOGGLE_PANEL_JS);
                 showTable(target);
             }
+            @Override public boolean isVisible() {
+                return isTableButtonVisible();
+            }
         }.setOutputMarkupId(true));
         resultButtons.add(new IndicatingAjaxLink("map") {
             @Override public void onClick(AjaxRequestTarget target) {
                 target.appendJavaScript(TOGGLE_PANEL_JS);
                 showMap(target);
             }
-
             @Override public boolean isVisible() {
                 return isMapButtonVisible();
             }
@@ -126,6 +128,10 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
     }
 
     protected boolean isMapButtonVisible() {
+        return false;
+    }
+
+    protected boolean isTableButtonVisible() {
         return false;
     }
 

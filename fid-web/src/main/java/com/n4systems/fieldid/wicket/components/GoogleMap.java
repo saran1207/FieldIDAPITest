@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components;
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.gson.*;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -31,6 +30,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     private GpsModel<T> model;
     private GpsLocation centre = null;
     private Integer defaultZoom = null;
+    private int threshold = 3;
     private AbstractDefaultAjaxBehavior ajax;
 
     public GoogleMap(String id, final GpsModel<T> model) {
@@ -88,7 +88,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     }
 
     protected String getCss() {
-        return "";
+        return "googleMap";
     }
 
     protected String getCssForEmptyMap() {
@@ -156,8 +156,20 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         }
     }
 
-    protected String getMultipleDescription(List<T> entitiesAtLocation) {
-        return Joiner.on(" , " ).skipNulls().join(entitiesAtLocation);
+    private final String getMultipleDescription(List<T> entitiesAtLocation) {
+        int limit = entitiesAtLocation.size()>threshold ? threshold : entitiesAtLocation.size();
+        StringBuilder builder = new StringBuilder();
+        for (int i=0;i<limit;i++) {
+            builder.append(getMultipleDescription(entitiesAtLocation.get(i)));
+        }
+        if (limit<entitiesAtLocation.size()) {
+            builder.append(String.format("<p class='others'>and %d others.</p>", entitiesAtLocation.size()-limit));
+        }
+        return builder.toString();
+    }
+
+    protected String getMultipleDescription(T entity) {
+        return entity.toString();
     }
 
     protected String getDescription(T entity) {
