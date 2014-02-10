@@ -1,0 +1,1 @@
+ALTER TABLE procedure_definitions_isolation_points DROP COLUMN orderIdx;
