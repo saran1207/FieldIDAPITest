@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIdAPIDataProvider;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.util.ReportFormatConverter;
 import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.columns.ColumnMapping;
@@ -98,6 +99,7 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
             }
         });
 
+        dataTable.setOutputMarkupPlaceholderTag(true);
         dataTable.getTable().setCurrentPage(criteriaModel.getObject().getPageNumber());
         selectUnselectRowColumn.setDataTable(dataTable.getTable());
 
@@ -134,13 +136,19 @@ public abstract class SRSResultsPanel<T extends SearchCriteria, S extends HasGps
     protected void showTable(AjaxRequestTarget target) {
         map.setVisible(false);
         dataTable.setVisible(true);
-        target.add(this);
+        getBottomPanelContent().setVisible(true);
+        target.add(dataTable, map, getBottomPanelContent());
     }
 
     protected void showMap(AjaxRequestTarget target) {
         map.setVisible(true);
         dataTable.setVisible(false);
-        target.add(this);
+        getBottomPanelContent().setVisible(false);
+        target.add(dataTable,map, getBottomPanelContent());
+    }
+
+    private Component getBottomPanelContent() {
+        return getPage().get(FieldIDFrontEndPage.BOTTOM_PANEL_ID);
     }
 
     // package protected method is extract/overridden for testing purposes

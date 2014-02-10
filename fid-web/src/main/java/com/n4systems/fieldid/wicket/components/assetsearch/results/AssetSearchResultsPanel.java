@@ -66,9 +66,6 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
         };
 
         GoogleMap<AssetSearchRecord>map = new GoogleMap<AssetSearchRecord>("resultsMap",mapModel) {
-            @Override protected String getCssForEmptyMap() {
-                return "";
-            }
             @Override protected void onMapChange(AjaxRequestTarget target, GpsBounds bounds, int zoom, GpsLocation centre) {
                 super.onMapChange(target, bounds, zoom, centre);
                 criteriaModel.getObject().setBounds(bounds);
@@ -76,6 +73,9 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
             }
             @Override protected String getDescription(AssetSearchRecord entity) {
                 return getMapMarkerText(entity);
+            }
+            @Override protected String getCssForEmptyMap() {
+                return "no-locations";
             }
         };
         map.withZoomPanNotifications().setOutputMarkupPlaceholderTag(true).setVisible(false);

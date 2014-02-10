@@ -32,7 +32,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
 		super(id);
         this.simpleDataTable = simpleDataTable;
         this.table = simpleDataTable.getTable();
-        setOutputMarkupId(true);
+        setOutputMarkupPlaceholderTag(true);
 
         paginationContainer = new WebMarkupContainer("paginationContainer") {
             @Override

@@ -480,3 +480,8 @@ input.wavy-underline {
 	content: '\e803';
 }
 
+.googleMap+.no-locations {
+    font-size:18px;
+    color:lightgrey;
+    padding:20px;
+}

@@ -434,6 +434,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         return c;
     }
 
+    protected Component getBottomPanelContent() {
+        return get(BOTTOM_PANEL_ID);
+    }
+
     protected Component setBottomPanelContent(Component c) {
         Preconditions.checkArgument(BOTTOM_PANEL_ID.equals(c.getId()), " you must use '" + BOTTOM_PANEL_ID + "' as your bottom panel id");
         replace(c.setVisible(true));

@@ -110,8 +110,15 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GOOGLE_MAP_API_ID);
-        response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS_ID);       
-        response.renderOnDomReadyJavaScript(String.format(CREATE_AND_SHOW_JS, getJsVar(), getGson().toJson(new GoogleMapOptions())));
+        response.renderJavaScriptReference("javascript/googleMaps.js", GOOGLE_MAPS_JS_ID);
+        if (isMapVisible()) {
+            response.renderOnDomReadyJavaScript(String.format(CREATE_AND_SHOW_JS, getJsVar(), getGson().toJson(new GoogleMapOptions())));
+        }
+    }
+
+    protected boolean isMapVisible() {
+        MappedResults<T> results = model.getObject();
+        return !results.isEmpty();
     }
 
     public String getJsVar() {
