@@ -485,3 +485,16 @@ input.wavy-underline {
     color:lightgrey;
     padding:20px;
 }
+
+.googleMap .marker .title {
+    font-weight: bold;
+}
+.googleMap .marker .link {
+    padding-top:5px;
+}
+.googleMap .marker .owner {
+    padding-left: 11px;
+}
+.googleMap .others {
+    font-style: italic;
+}
