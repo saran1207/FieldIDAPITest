@@ -396,7 +396,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 			//Set asset on the event before pushing other details.
             if (event instanceof ThingEvent) {
                 ((ThingEvent)event).setAsset(asset);
-                ((ThingEvent) event).getAsset().setAssetStatus(((ThingEvent) event).getAssetStatus());
+
+                if (null != ((ThingEvent) event).getAssetStatus()) {
+                 ((ThingEvent) event).getAsset().setAssetStatus(((ThingEvent) event).getAssetStatus());
+                }
             }
 
             if (event instanceof ThingEvent) {
