@@ -554,7 +554,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
 
         BaseOrg org = OrgBuilder.aPrimaryOrg().build();
         EventTypeGroup eventTypeGroup = EventTypeGroupBuilder.anEventTypeGroup().withName("eventTypeGroup").build();
-        ThingEventType eventType = EventTypeBuilder.anEventType().named("eventType").withGroup(eventTypeGroup).build();
+        ActionEventType eventType = ActionEventTypeBuilder.anEventType().named("eventType").withGroup(eventTypeGroup).build();
         User user = UserBuilder.aFullUser().withId(33L).build();
         PriorityCode priority = new PriorityCode();
         priority.setName("priority");
