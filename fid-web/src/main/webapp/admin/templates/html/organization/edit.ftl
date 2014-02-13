@@ -70,7 +70,7 @@
 		<#if action.getLastLoggedInUser(primaryOrg)?exists>
             <#assign lastLoggedInUser = action.getLastLoggedInUser(primaryOrg)/>
             <#if lastLoggedInUser.userID?exists && lastLoggedInUser.userID != 'n4systems'>
-                <div class="infoSet"><label>Last Login Date:</label><span>${action.convertDateTime(lastLoggedInUser.lastLogin)}</span></div>
+
                 <div class="infoSet"><label>Last Login User:</label><span>${lastLoggedInUser.userID}</span></div>
             </#if>
 		<#else>

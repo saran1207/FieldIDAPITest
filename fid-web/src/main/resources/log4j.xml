@@ -47,7 +47,7 @@
 	</appender>
 	<appender name="FIELDID_TASK" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/fieldid-task.log" />
-		<param name="Append" value="true" />
+        <param name="Append" value="true" />
 		<param name="MaxFileSize" value="500MB" />
 		<param name="MaxBackupIndex" value="10" />
 		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
