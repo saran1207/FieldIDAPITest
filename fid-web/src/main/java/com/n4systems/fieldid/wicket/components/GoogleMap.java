@@ -24,7 +24,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     public static final String GOOGLE_MAPS_JS_ID = "googleMaps";
     public static final String GOOGLE_MAP_API_ID = "google-map-api";
     private static final String CREATE_AND_SHOW_JS = "%s = googleMapFactory.createAndShow(%s);";
-
+    private static final GpsLocation defaultCentre = new GpsLocation(43.548548, -96.987305);
     private Gson gson;
 
     private GpsModel<T> model;
@@ -117,8 +117,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     }
 
     protected boolean isMapVisible() {
-        MappedResults<T> results = model.getObject();
-        return !results.isEmpty();
+        return true;
     }
 
     public String getJsVar() {
@@ -196,6 +195,11 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         GoogleMapOptions() {
             if (ajax!=null) {
                 callbackUrl = ajax.getCallbackUrl().toString();
+            }
+            if (data.getCount()==0 && zoom==null) {
+                latitude = defaultCentre.getLatitude().doubleValue();
+                longitude = defaultCentre.getLongitude().doubleValue();
+                zoom = 4;
             }
         }
     }
