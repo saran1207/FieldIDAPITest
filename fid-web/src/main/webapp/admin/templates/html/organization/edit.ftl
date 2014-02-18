@@ -73,6 +73,8 @@
 
                 <#if lastLoggedInUser.lastLogin?exists>
                     <div class="infoSet"><label>Last Login Date:</label><span>${action.convertDateTime(lastLoggedInUser.lastLogin)}</span></div>
+                <#else>
+                    <div class="infoSet"><label>Last Login Date:</label><span>--</span></div>
                 </#if>
 
                 <div class="infoSet"><label>Last Login User:</label><span>${lastLoggedInUser.userID}</span></div>
