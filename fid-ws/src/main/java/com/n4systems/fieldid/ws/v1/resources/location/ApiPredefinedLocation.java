@@ -1,17 +1,18 @@
 package com.n4systems.fieldid.ws.v1.resources.location;
 
+import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 
 public class ApiPredefinedLocation extends ApiReadonlyModel {
 	private String name;
 	private String levelName;
 	private Long parentId;
 	private List<Long> searchIds = new ArrayList<Long>();
+    private Long ownerId;
 
-	public String getName() {
+    public String getName() {
 		return name;
 	}
 
@@ -43,4 +44,11 @@ public class ApiPredefinedLocation extends ApiReadonlyModel {
 		this.searchIds = searchIds;
 	}
 
+    public void setOwnerId(Long id) {
+        this.ownerId = id;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
 }

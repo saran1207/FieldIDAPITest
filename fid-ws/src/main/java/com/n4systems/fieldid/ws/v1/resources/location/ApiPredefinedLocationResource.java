@@ -1,12 +1,11 @@
 package com.n4systems.fieldid.ws.v1.resources.location;
 
-import javax.ws.rs.Path;
-
-import org.springframework.stereotype.Component;
-
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.location.PredefinedLocationLevels;
+import org.springframework.stereotype.Component;
+
+import javax.ws.rs.Path;
 
 @Component
 @Path("location")
@@ -24,7 +23,12 @@ public class ApiPredefinedLocationResource extends SetupDataResource<ApiPredefin
 		apiLocation.setModified(location.getModified());
 		apiLocation.setName(location.getName());
 		apiLocation.setSearchIds(location.getSearchIds());
-		
+
+        System.out.println("setting owner ID " + location.getOwner());
+        if (location.getOwner()!=null) {
+            apiLocation.setOwnerId(location.getOwner().getId());
+        }
+
 		if (location.getParent() != null) {
 			apiLocation.setParentId(location.getParent().getId());
 		}
