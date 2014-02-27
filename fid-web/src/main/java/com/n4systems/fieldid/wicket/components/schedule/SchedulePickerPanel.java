@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.LocalizeModel;
+import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
@@ -88,6 +89,19 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             }
 
             add(jobSelectContainer);
+
+            //priority
+            DropDownChoice<PriorityCode> priorityChoice = new FidDropDownChoice<PriorityCode>("priority", ProxyModel.of(getModel(), on(Event.class).getPriority()), new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>());
+            add(priorityChoice);
+
+            if (eventScheduleModel.getObject().getType().isActionEventType()) {
+                priorityChoice.setVisible(true);
+
+            } else {
+                priorityChoice.setVisible(false);
+            }
+
+
 
             ExaminersModel usersModel = new ExaminersModel();
             VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
