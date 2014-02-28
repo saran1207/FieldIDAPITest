@@ -34,13 +34,17 @@ public class AssetToViewConverter implements ModelToViewConverter<Asset, AssetVi
 		view.setPurchaseOrder(model.getPurchaseOrder());
 		view.setComments(model.getComments());
 		view.setIdentified(model.getIdentified());
-		
+
 		convertOwnerFields(model.getOwner(), view);
 		
 		if (model.getAssetStatus() != null) {
 			view.setStatus(model.getAssetStatus().getName());
 		}
-		
+
+        if(model.getAssignedUser() != null) {
+            view.setAssignedUser(model.getAssignedUser().getFullName());
+        }
+
 		// integration customers cannot use the 'Order Number' field as it would be impossible
 		// to resolve the order number to a line item on import
 		if (!primaryOrg.hasExtendedFeature(ExtendedFeature.Integration)) {

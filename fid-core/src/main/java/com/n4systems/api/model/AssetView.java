@@ -24,6 +24,9 @@ public class AssetView extends ExternalModelView {
 	@SerializableField(title = "", order = 400, handler = OwnerSerializationHandler.class, validators = { NotNullValidator.class, OwnerExistsValidator.class })
 	private final String[] owners = new String[3];
 
+    @SerializableField(title = "Assigned To", order = 500, validators = { FullNameUserValidator.class })
+    private String assignedUser;
+
 	@SerializableField(title = "Location", order = 600, validators = {LocationValidator.class})
 	private String location;
 
@@ -101,8 +104,16 @@ public class AssetView extends ExternalModelView {
 	public String getDivision() {
 		return owners[OwnerSerializationHandler.DIVISION_INDEX];
 	}
-	
-	public String getLocation() {
+
+    public String getAssignedUser() {
+        return assignedUser;
+    }
+
+    public void setAssignedUser(String assignedUser) {
+        this.assignedUser = assignedUser;
+    }
+
+    public String getLocation() {
 		return location;
 	}
 
