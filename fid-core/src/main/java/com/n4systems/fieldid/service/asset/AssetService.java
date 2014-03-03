@@ -726,7 +726,8 @@ public class AssetService extends FieldIdPersistenceService {
     }
 
     public Asset findAssetWithInfoOptions(Long id) {
-        Asset asset =  persistenceService.find(Asset.class, id);
+
+        Asset asset = getAsset(id, Asset.POST_FETCH_ALL_PATHS);
         List<InfoOptionBean> infoList = asset.getOrderedInfoOptionList();
 
         return asset;
