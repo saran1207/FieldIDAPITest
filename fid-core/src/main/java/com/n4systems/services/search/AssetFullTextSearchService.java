@@ -7,6 +7,7 @@ import com.n4systems.services.search.field.IndexField;
 import com.n4systems.services.search.writer.AssetIndexWriter;
 import org.apache.lucene.search.BooleanClause;
 import org.apache.lucene.search.BooleanQuery;
+import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,8 +28,14 @@ public class AssetFullTextSearchService extends FullTextSearchService {
     @Override
     protected void addSecondaryOrgSecurity(BaseOrg owner, BooleanQuery securityQuery) {
         Long id = owner.getId();  // secondary can see primary, and this secondary
-        securityQuery.add(new BooleanClause(NumericRangeQuery.newLongRange("_secondaryOrgId", id, id, true, true), BooleanClause.Occur.SHOULD));
-        securityQuery.add(NumericRangeQuery.newLongRange(AssetIndexField.SECONDARY_ID.getField(), 0L, null, true, true), BooleanClause.Occur.MUST_NOT);  // tricky way of saying "should be null"
+
+        BooleanQuery secondaryIsNullQuery = new BooleanQuery();
+
+        secondaryIsNullQuery.add(new MatchAllDocsQuery(), BooleanClause.Occur.MUST);
+        secondaryIsNullQuery.add(NumericRangeQuery.newLongRange(AssetIndexField.SECONDARY_ID.getField(), 0L, null, true, true), BooleanClause.Occur.MUST_NOT);
+
+        securityQuery.add(new BooleanClause(NumericRangeQuery.newLongRange(AssetIndexField.SECONDARY_ID.getField(), id, id, true, true), BooleanClause.Occur.SHOULD));
+        securityQuery.add(secondaryIsNullQuery, BooleanClause.Occur.SHOULD);
     }
 
     @Override

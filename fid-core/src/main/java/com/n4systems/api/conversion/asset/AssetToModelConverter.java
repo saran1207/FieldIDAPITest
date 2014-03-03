@@ -17,6 +17,7 @@ import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.OrgByNameLoader;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserByFullNameLoader;
 import com.n4systems.persistence.Transaction;
 import rfid.ejb.entity.InfoOptionBean;
 
@@ -28,17 +29,22 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 	private final NonIntegrationOrderManager nonIntegrationOrderManager;
 	private final AssetStatusByNameLoader assetStatusLoader;
 	private final InfoOptionMapConverter optionConverter;
-	
-	private AssetType type;
+    private final UserByFullNameLoader userLoader;
+
+
+    private AssetType type;
 	private User identifiedBy;
     private final PredefinedLocationTreeLoader predefinedLocationTreeLoader;
 
-    public AssetToModelConverter(OrgByNameLoader orgLoader, NonIntegrationOrderManager nonIntegrationOrderManager, AssetStatusByNameLoader assetStatusLoader, InfoOptionMapConverter optionConverter, PredefinedLocationTreeLoader predefinedLocationTreeLoader) {
+    public AssetToModelConverter(OrgByNameLoader orgLoader, NonIntegrationOrderManager nonIntegrationOrderManager,
+                                 AssetStatusByNameLoader assetStatusLoader, InfoOptionMapConverter optionConverter,
+                                 PredefinedLocationTreeLoader predefinedLocationTreeLoader, UserByFullNameLoader userLoader) {
 		this.orgLoader = orgLoader;
 		this.nonIntegrationOrderManager = nonIntegrationOrderManager;
 		this.assetStatusLoader = assetStatusLoader;
 		this.optionConverter = optionConverter;
         this.predefinedLocationTreeLoader = predefinedLocationTreeLoader;
+        this.userLoader = userLoader;
 	}
 	
 	@Override
@@ -70,7 +76,9 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		model.setAssetStatus(resolveAssetStatus(view.getStatus(), transaction));
 		model.setInfoOptions(new TreeSet<InfoOptionBean>());
 		model.setPublished(primaryOrg.isAutoPublish());
-
+        if(view.getAssignedUser() != null) {
+            model.setAssignedUser(resolveAssignedUser(view, transaction));
+        }
         boolean integrationEnabled = primaryOrg.hasExtendedFeature(ExtendedFeature.Integration);
         boolean orderDetailsEnabled = primaryOrg.hasExtendedFeature(ExtendedFeature.OrderDetails);
 
@@ -123,7 +131,11 @@ public class AssetToModelConverter implements ViewToModelConverter<Asset, AssetV
 		
 		return orgLoader.load(transaction);
 	}
-	
+
+    private User resolveAssignedUser(AssetView view,Transaction transaction) {
+        return userLoader.setFullName(view.getAssignedUser()).load(transaction).get(0);
+    }
+
 	public void setType(AssetType type) {
 		this.type = type;
 	}
