@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.search;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.WorkflowState;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.location.PredefinedLocationSearchTerm;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.ColumnMappingView;
@@ -100,6 +101,7 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
             QueryBuilder<Event> subQuery = createUserSecurityBuilder(Event.class);
             subQuery.setMaxSelect("completedDate");
             subQuery.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
+            subQuery.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
             NoVariableClause eventMatchesOuterAssetClause = new NoVariableClause("outerAssetClause", WhereParameter.Comparator.EQ, "evt.asset", "obj", WhereClause.ChainOp.AND);
             eventMatchesOuterAssetClause.setDropAlias(true);
             subQuery.addWhere(eventMatchesOuterAssetClause);
