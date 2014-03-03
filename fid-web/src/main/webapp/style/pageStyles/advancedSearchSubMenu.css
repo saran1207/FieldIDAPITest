@@ -1,0 +1,48 @@
+.syntax-help {
+    position: relative;
+    right: 150px;
+    top: 16px;
+    z-index: 5;
+}
+.syntax-help .question,
+.syntax-help .close {
+    font-size: 14px;
+    padding: 6px 16px;
+    height: 42px;
+    position: absolute;
+    right: -80px;
+    cursor: pointer;
+    top: -42px;
+}
+.syntax-help .close {
+    background: #343434;
+    color: #fff;
+    display: none;
+}
+.syntax-details {
+    display: none;
+    width: 318px;
+    padding: 25px 20px;
+    /*margin-top: 42px;*/
+    background: #343434;
+    color: #cccccc;
+    -webkit-border-radius: 12px 0 12px 12px;
+    border-radius: 12px 0 12px 12px;
+    font-size: 13px;
+    position: absolute;
+    right: -80px;
+    top: -15px;
+}
+.syntax-details h3 {
+    color: #cccccc;
+}
+
+ul.syntax-terms {
+    margin: 10px 0;
+    overflow: hidden;
+}
+ul.syntax-terms > li {
+    width: 50%;
+    float: left;
+    margin: 15px 0;
+}

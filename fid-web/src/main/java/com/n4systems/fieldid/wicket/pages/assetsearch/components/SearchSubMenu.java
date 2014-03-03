@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.pages.print.ExportSearchToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintAllCertificatesPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.search.help.AssetSearchHelpPanel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.search.AssetSearchCriteria;
@@ -69,6 +70,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         queryForm.setOutputMarkupPlaceholderTag(true);
         queryForm.setVisible(filtersDisabled);
         queryForm.add(new TextField<String>("query", ProxyModel.of(searchCriteria, on(AssetSearchCriteria.class).getQuery())));
+        queryForm.add(new AssetSearchHelpPanel("helpPanel"));
         queryForm.add(new Button("submitQueryButton"));
         final LoadableDetachableModel<Long> remainingAssetsIndexModel = remainingAssetsIndexModel();
         queryForm.add(remainingAssetsWarning = new WebMarkupContainer("remainingAssetsWarning") {
@@ -168,6 +170,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         if (filtersDisabled) {
             response.renderOnDomReadyJavaScript("fieldIdWidePage.updateConfig(false);");
         }
+        response.renderCSSReference("style/pageStyles/advancedSearchSubMenu.css");
     }
 
     protected void updateMenuBeforeRender(AssetSearchCriteria criteria) {
