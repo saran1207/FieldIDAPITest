@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
 	<div class="search-options-wrap">
@@ -5,6 +6,7 @@
 		<form wicket:id="queryForm" class="advanced-search-form">
 			<div class="input-combo">
 				<input type="text" wicket:id="query" style="">
+                <div class="syntax-help" wicket:id="helpPanel"/>
 				<input type="submit" wicket:id="submitQueryButton" wicket:message="value:label.search" class="btn btn-secondary btn-search btn-sml">
 			</div>
 
@@ -39,5 +41,22 @@
 
 	<!-- TO BE MOVED TO RESULTS TABLE -->
    	<span wicket:id="msg" class="msg" style="display: none;"/>
+
+
+    <script>
+        $(function() {
+
+            // Show/hide syntax help dropdown
+            $(".syntax-help .question").live("click",function(){
+                $(".syntax-help .close, .syntax-details").fadeIn(200);
+                $(this).hide();
+            });
+            $(".syntax-help .close").live("click",function(){
+                $(".syntax-help .close, .syntax-details").fadeOut(200);
+                $(".syntax-help .question").show();
+            });
+        });
+    </script>
 </wicket:extend>
+</html>
 		
