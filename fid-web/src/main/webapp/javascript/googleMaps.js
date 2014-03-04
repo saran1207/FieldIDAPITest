@@ -34,7 +34,7 @@ var googleMapFactory = (function() {
 		 	throw "you must specify id for GoogleMap element";
 		 }
 
-		 return googleMap(elementId, defaultOptions));
+		 return googleMap(elementId, defaultOptions);
 	 };
 
 	 var createAndShow = function(opts) {
