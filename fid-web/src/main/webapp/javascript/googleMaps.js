@@ -29,20 +29,12 @@ var googleMapFactory = (function() {
 		 mapTypeId:google.maps.MapTypeId.ROADMAP
 	 };
 
-	 var create = function(elementId, latitude, longitude) {
+	 var create = function(elementId) {
 		 if (!elementId) {
 		 	throw "you must specify id for GoogleMap element";
 		 }
 
-		 var options = {
-		 	 latitude: latitude,
-		 	 longitude: longitude
-		 };
-
-		 if (options.latitude && options.longitude) {
-			 options.center = new google.maps.LatLng(options.latitude,options.longitude);
-		 }
-		 return googleMap(elementId, $.extend(defaultOptions, options));
+		 return googleMap(elementId, defaultOptions));
 	 };
 
 	 var createAndShow = function(opts) {
