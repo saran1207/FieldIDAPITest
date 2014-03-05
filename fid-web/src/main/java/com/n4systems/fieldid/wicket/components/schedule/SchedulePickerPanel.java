@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
+import com.n4systems.fieldid.wicket.model.user.UsersForTenantModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
@@ -101,14 +102,18 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
                 priorityChoice.setVisible(false);
             }
 
-
-
             ExaminersModel usersModel = new ExaminersModel();
             VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
-            add(new AssignedUserOrGroupSelect("assignee",
+            AssignedUserOrGroupSelect assignedUserOrGroupSelect = new AssignedUserOrGroupSelect("assignee",
                     ProxyModel.of(eventScheduleModel, on(Event.class).getAssignedUserOrGroup()),
                     usersModel, userGroupsModel,
-                    new AssigneesModel(userGroupsModel, usersModel)));
+                    new AssigneesModel(userGroupsModel, usersModel));
+
+            if (eventScheduleModel.getObject().getType().isActionEventType()) {
+                assignedUserOrGroupSelect.setNullVoid(false);
+            }
+
+            add(assignedUserOrGroupSelect);
 
             AjaxSubmitLink addScheduleButton =  new AjaxSubmitLink("addScheduleButton") {
                 @Override

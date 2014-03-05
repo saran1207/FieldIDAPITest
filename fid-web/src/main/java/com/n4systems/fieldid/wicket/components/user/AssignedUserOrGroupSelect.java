@@ -76,4 +76,11 @@ public class AssignedUserOrGroupSelect extends Panel {
         return this;
     }
 
+    public Component setNullVoid(boolean nullvoid) {
+        DropDownChoice assigneeSelect = (DropDownChoice) get("assigneeSelect");
+        assigneeSelect.setNullValid(nullvoid);
+        return this;
+    }
+
+
 }
