@@ -167,6 +167,10 @@ public class EditDetailsPanel extends AbstractMassUpdatePanel {
             }.withAutoUpdate());
 
 
+            final CheckBox assetOwnerCheck = new CheckBox("assetOwnerCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[assetOwner]"));
+            assetOwnerCheck.setOutputMarkupId(true);
+            add(assetOwnerCheck);
+
             final CheckBox performedByCheck = new CheckBox("performedByCheck", new PropertyModel<Boolean>(massUpdateEventModel, "select[performedBy]"));
             performedByCheck.setOutputMarkupId(true);
             FormComponent<User> performedBy = new DropDownChoice<User>("performedBy",new PropertyModel<User>(massUpdateEventModel, "event.performedBy"), new UsersForTenantModel(), new ListableChoiceRenderer<User>()).setNullValid(true);

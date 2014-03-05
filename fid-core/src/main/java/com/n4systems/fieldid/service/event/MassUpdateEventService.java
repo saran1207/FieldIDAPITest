@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.event;
 import com.google.common.collect.Sets;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.mail.MailService;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventAudit;
 import com.n4systems.model.ThingEvent;
@@ -19,6 +20,8 @@ public class MassUpdateEventService extends FieldIdPersistenceService{
 
     @Autowired
     private MailService mailService;
+
+
 
     private Logger logger = Logger.getLogger(MassUpdateEventService.class);
 
@@ -47,6 +50,13 @@ public class MassUpdateEventService extends FieldIdPersistenceService{
                 if (updateKey.equals("owner")) {
                     audit.setOwner(eventChanges.getOwner().getDisplayName());
                     changeTarget.setOwner(eventChanges.getOwner());
+                }
+
+                if (updateKey.equals("assetOwner")) {
+                    Asset asset = changeTarget.getAsset();
+                    asset.setOwner(eventChanges.getOwner());
+                    persistenceService.update(asset);
+
                 }
 
                 if (updateKey.equals("eventBook")) {
