@@ -82,6 +82,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
     private WebMarkupContainer schedulesContainer;
 
+    private Boolean assetOwnerUpdate;
+
+
     @Override
     protected void onInitialize() {
         super.onInitialize();
@@ -107,6 +110,14 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     }
 
     protected abstract T createNewOpenEvent();
+
+    public Boolean getAssetOwnerUpdate() {
+        return assetOwnerUpdate;
+    }
+
+    public void setAssetOwnerUpdate(Boolean assetOwnerUpdate) {
+        this.assetOwnerUpdate = assetOwnerUpdate;
+    }
 
     class OuterEventForm extends Form {
 
@@ -137,6 +148,10 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 					target.add(newOrExistingEventBook);
                 }
             }.withAutoUpdate());
+
+            // checkbox
+            ownerSection.add(new CheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(EventPage.this, "assetOwnerUpdate")).add(new UpdateComponentOnChange()));
+
 
             schedulesContainer = new WebMarkupContainer("schedulesContainer");
             schedulesContainer.setOutputMarkupPlaceholderTag(true);
@@ -258,6 +273,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                 error(getString("error.asset_has_been_archived"));
                 return;
             }
+
+            boolean flag = getAssetOwnerUpdate();
+
             event.getObject().setSectionResults(sectionResults);
             onPreSave(event.getObject());
             onPreSave(event.getObject());

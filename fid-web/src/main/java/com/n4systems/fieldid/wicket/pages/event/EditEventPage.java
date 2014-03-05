@@ -58,6 +58,15 @@ public class EditEventPage extends ThingEventPage {
         editedEvent.setEventResult(getEventResult());
         criteriaEditService.storeCriteriaChanges(editedEvent);
         editedEvent.storeTransientCriteriaResults();
+
+        boolean assetOwnerUpdate = getAssetOwnerUpdate();
+
+        if (assetOwnerUpdate) {
+            eventCreationService.updateAssetOwner(editedEvent);
+
+        }
+
+
         return eventCreationService.updateEvent(editedEvent, proofTestEditPanel.getFileDataContainer(), fileAttachments);
     }
 

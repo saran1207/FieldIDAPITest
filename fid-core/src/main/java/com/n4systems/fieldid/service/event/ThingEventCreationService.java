@@ -117,6 +117,24 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         }
     }
 
+    public void updateAssetOwner(ThingEvent event) {
+        User modifiedBy = getCurrentUser();
+        Asset asset = persistenceService.findUsingTenantOnlySecurityWithArchived(Asset.class, event.getAsset().getId());
+        asset.setSubAssets(assetService.findSubAssets(asset));
+
+
+        ownershipUpdates(event, asset);
+
+        try {
+            assetService.update(asset, modifiedBy);
+        } catch (SubAssetUniquenessException e) {
+            logger.error("received a subasset uniquness error this should not be possible form this type of update.", e);
+            throw new RuntimeException(e);
+        }
+    }
+
+
+
     private void assignedToUpdates(Event event, Asset asset) {
         if (event.hasAssignToUpdate()) {
             asset.setAssignedUser(event.getAssignedTo().getAssignedUser());
