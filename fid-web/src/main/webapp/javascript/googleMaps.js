@@ -29,14 +29,32 @@ var googleMapFactory = (function() {
 		 mapTypeId:google.maps.MapTypeId.ROADMAP
 	 };
 
-	 var create = function(options) {
+	 var create = function(options, lat, lng) {
+		 // for legacy callers, needs to be fixed in next release
+		 if (typeof options === "string") {
+			options = {
+				id: options,
+				latitude: lat,
+				longitude: lng
+			}
+		 }
+		
 		 if (!options.id) {
 		 	throw "you must specify id for GoogleMap element";
 		 }
 		 if (options.latitude && options.longitude) {
 			 options.center = new google.maps.LatLng(options.latitude,options.longitude);
 		 }
-		 return googleMap(options.id, $.extend(defaultOptions, options));
+		
+		 if (typeof options.zoom === "undefined") {
+			options.zoom = defaultOptions.zoom;
+		 }
+		 if (typeof options.mapTypeId === "undefined") {
+			options.mapTypeId = defaultOptions.mapTypeId;
+		  }
+		 
+		 
+		 return googleMap(options.id, options);
 	 };
 
 	 var createAndShow = function(opts) {
