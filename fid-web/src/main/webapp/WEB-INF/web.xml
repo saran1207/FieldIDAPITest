@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        >
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
 	<!-- Struts 2.0 -->
     <filter>
         <filter-name>session-in-view</filter-name>
@@ -15,22 +16,21 @@
         <filter-name>interaction-context-cleanup</filter-name>
         <filter-class>com.n4systems.fieldid.web.filter.InteractionContextClearingFilter</filter-class>
     </filter>
-	<filter>
-		<filter-name>struts-cleanup</filter-name>
-		<filter-class>org.apache.struts2.dispatcher.ActionContextCleanUp</filter-class>
-	</filter>
-	<filter>
-		<filter-name>sitemesh</filter-name>
-		<filter-class>org.apache.struts2.sitemesh.FreeMarkerPageFilter</filter-class>
-	</filter>
-	<filter>
-		<filter-name>struts2</filter-name>
-		<filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class>
-		<init-param>
-			<param-name>actionPackages</param-name>
-			<param-value>com.n4systems.fieldid.actions,com.n4systems.fieldidadmin.actions</param-value>
-		</init-param>
-	</filter>
+    <filter>
+        <filter-name>struts-prepare</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareFilter</filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>sitemesh</filter-name>
+        <filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
+    </filter>
+
+    <filter>
+        <filter-name>struts-execute</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsExecuteFilter</filter-class>
+    </filter>
+
 	<filter>
 		<filter-name>wicket.fieldid</filter-name>
  		<filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
@@ -43,6 +43,7 @@
             <param-value>deployment</param-value>
         </init-param>
  	</filter>
+
     <filter-mapping>
         <filter-name>session-in-view</filter-name>
         <url-pattern>/w/*</url-pattern>
@@ -60,22 +61,28 @@
         <filter-name>interaction-context-cleanup</filter-name>
         <url-pattern>*</url-pattern>
     </filter-mapping>
+
 	<filter-mapping>
-		<filter-name>struts-cleanup</filter-name>
+		<filter-name>struts-prepare</filter-name>
 		<url-pattern>*.action</url-pattern>
 	</filter-mapping>
 	<filter-mapping>
 		<filter-name>sitemesh</filter-name>
 		<url-pattern>*.action</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
 	</filter-mapping>
 	<filter-mapping>
-		<filter-name>struts2</filter-name>
+		<filter-name>struts-execute</filter-name>
 		<url-pattern>*.action</url-pattern>
 	</filter-mapping>
+
     <filter-mapping>
        <filter-name>wicket.fieldid</filter-name>
 	   <url-pattern>/w/*</url-pattern>
     </filter-mapping>
+
     <listener>
         <listener-class>com.n4systems.fieldid.servlets.ApplicationBootstrap</listener-class>
     </listener>
@@ -90,6 +97,9 @@
 	</listener>
     <listener>
         <listener-class>com.n4systems.fieldid.servlets.ConcurrentLoginSessionListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.apache.struts2.dispatcher.ng.listener.StrutsListener</listener-class>
     </listener>
 
     <servlet>
@@ -148,6 +158,21 @@
 			<param-value>com.n4systems.fieldid.config.ApiSecurityRequestFilter,com.n4systems.fieldid.config.ServerInformationResponseFilter</param-value>
 		</init-param>
 	</servlet>
+
+    <servlet>
+        <servlet-name>sitemesh-freemarker</servlet-name>
+        <servlet-class>org.apache.struts2.sitemesh.FreemarkerDecoratorServlet</servlet-class>
+        <init-param>
+            <param-name>default_encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>sitemesh-freemarker</servlet-name>
+        <url-pattern>*.ftl</url-pattern>
+    </servlet-mapping>
 
 	<servlet-mapping>
 		<servlet-name>Field ID WS</servlet-name>

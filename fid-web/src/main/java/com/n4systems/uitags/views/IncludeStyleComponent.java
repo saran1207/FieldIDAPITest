@@ -2,7 +2,7 @@ package com.n4systems.uitags.views;
 
 import com.opensymphony.xwork2.util.ValueStack;
 import org.apache.struts2.components.UIBean;
-import org.apache.struts2.views.util.UrlHelper;
+import org.apache.struts2.util.StrutsUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,7 +27,8 @@ public class IncludeStyleComponent extends UIBean {
 	private String href;
 	private String media;
 	private StyleType type = StyleType.DEFAULT;
-	
+
+    private StrutsUtil strutsUtil;
 	
 	protected IncludeStyleComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 		super(stack, request, response);
@@ -44,10 +45,18 @@ public class IncludeStyleComponent extends UIBean {
 	private void buildCssSource() {
 		if (href != null) {
         	formatSrc();
-			String result = UrlHelper.buildUrl(href, request, response, null);
+
+			String result = getStrutsUtil().buildUrl(href);
             addParameter("href", result);
         }
 	}
+
+    private StrutsUtil getStrutsUtil() {
+        if(strutsUtil == null) {
+            strutsUtil = new StrutsUtil(stack, request, response);
+        }
+        return strutsUtil;
+    }
 	
 	private void formatSrc() {
 		if (href.startsWith("/") || href.toLowerCase().startsWith("http")) {
