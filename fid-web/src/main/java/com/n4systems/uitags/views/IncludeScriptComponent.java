@@ -2,7 +2,7 @@ package com.n4systems.uitags.views;
 
 import com.opensymphony.xwork2.util.ValueStack;
 import org.apache.struts2.components.ClosingUIBean;
-import org.apache.struts2.views.util.UrlHelper;
+import org.apache.struts2.util.StrutsUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,9 +15,8 @@ public class IncludeScriptComponent extends ClosingUIBean {
 	private static final String JAVASCRIPT_EXTENSION = "js";
 	
 	private String src;
-	
-		
-	
+	private StrutsUtil strutsUtil;
+
 	public IncludeScriptComponent(ValueStack stack, HttpServletRequest request, HttpServletResponse response) {
 		super(stack, request, response);
 	}
@@ -31,11 +30,18 @@ public class IncludeScriptComponent extends ClosingUIBean {
 	private void buildScriptSource() {
 		if (src != null) {
         	formateSrc();
-			String result = UrlHelper.buildUrl(src, request, response, null);
+			String result = getStrutsUtil().buildUrl(src);
             addParameter("src", result);
         }
 	}
-	
+
+    private StrutsUtil getStrutsUtil() {
+        if(strutsUtil == null) {
+            strutsUtil = new StrutsUtil(stack, request, response);
+        }
+        return strutsUtil;
+    }
+
 	private void formateSrc() {
 		if (src.startsWith("/") || src.toLowerCase().startsWith("http")) {
 			return;
