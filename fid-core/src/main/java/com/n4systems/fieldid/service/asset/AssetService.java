@@ -25,6 +25,7 @@ import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
 import com.n4systems.services.tenant.Tenant30DayCountRecord;
@@ -162,10 +163,7 @@ public class AssetService extends FieldIdPersistenceService {
     public Asset getAsset(Long id, String... postFetchFields) {
         QueryBuilder<Asset> query = createTenantSecurityBuilder(Asset.class);
         query.addSimpleWhere("id", id);
-        if(postFetchFields != null && postFetchFields.length > 0) {
-            query.addPostFetchPaths(postFetchFields);
-        }
-        return persistenceService.find(query);
+        return PostFetcher.postFetchFields(persistenceService.find(query), postFetchFields);
     }
 
 	public Asset fillInSubAssetsOnAsset(Asset asset) {
@@ -726,7 +724,6 @@ public class AssetService extends FieldIdPersistenceService {
     }
 
     public Asset findAssetWithInfoOptions(Long id) {
-
         Asset asset = getAsset(id, Asset.POST_FETCH_ALL_PATHS);
         List<InfoOptionBean> infoList = asset.getOrderedInfoOptionList();
 
