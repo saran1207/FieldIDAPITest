@@ -1,4 +1,4 @@
-<title><@s.text name="label.start_event"/>
+<title><@s.text name="label.start_event"/></title>
 <head>
 	<@n4.includeStyle type="page" href="events"/>
 </head>
