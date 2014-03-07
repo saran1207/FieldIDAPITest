@@ -7,6 +7,10 @@ import com.n4systems.fieldid.wicket.components.asset.events.EventListPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
+import com.n4systems.fieldid.wicket.pages.event.EditPlaceEventPage;
+import com.n4systems.fieldid.wicket.pages.event.EventPage;
+import com.n4systems.fieldid.wicket.pages.event.PlaceEventPage;
+import com.n4systems.fieldid.wicket.pages.org.PlaceEventsPage;
 import com.n4systems.model.PlaceEvent;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,14 +39,8 @@ public class ClosedActionsCell extends Panel {
                     //eventService.retireEvent(event);
                 } catch (Exception e) {
                     error(new FIDLabelModel("error.eventdeleting").getObject());
-                    target.add(((AssetEventsPage)getPage()).getFeedbackPanel());
-
+                    target.add(((PlaceEventsPage) getPage()).getFeedbackPanel());
                 }
-                info(new FIDLabelModel("message.eventdeleted").getObject());
-                eventListPanel.getDefaultModel().detach();
-                target.add(eventListPanel);
-                target.add(((FieldIDFrontEndPage) getPage()).getTopFeedbackPanel());
-
             }
         });
         deleteLink.setVisible(FieldIDSession.get().getUserSecurityGuard().isAllowedEditEvent());
