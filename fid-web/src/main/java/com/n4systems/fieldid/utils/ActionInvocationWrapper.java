@@ -1,19 +1,16 @@
 package com.n4systems.fieldid.utils;
 
-import java.lang.reflect.Method;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.struts2.StrutsStatics;
-
-import rfid.web.helper.SessionUser;
-
 import com.n4systems.fieldid.actions.api.AbstractAction;
 import com.n4systems.fieldid.actions.utils.WebSessionMap;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionInvocation;
 import com.opensymphony.xwork2.ActionProxy;
+import org.apache.struts2.StrutsStatics;
+import rfid.web.helper.SessionUser;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 
 
 public class ActionInvocationWrapper implements StrutsStatics {
@@ -60,15 +57,7 @@ public class ActionInvocationWrapper implements StrutsStatics {
 	}
 	
 	public String getMethodName() {
-		String methodName = getProxy().getMethod();
-		if (!methodName.equals("execute")) {
-			return convertNameToDoMethod(methodName);
-		}
-		return methodName;
+		return getProxy().getMethod();
 	}
 
-	private String convertNameToDoMethod(String methodName) {
-		return "do" + String.valueOf(methodName.charAt(0)).toUpperCase() + methodName.substring(1);
-	}
-	
 }

@@ -42,21 +42,21 @@
 		</action>
 
 
-		<action name="assetTypes" method="list" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
+		<action name="assetTypes" method="doList" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeCrud/list.ftl</result>
 		</action>
 
-		<action name="assetType" method="show" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
+		<action name="assetType" method="doShow" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeCrud/show.ftl</result>
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 		</action>
 
-		<action name="assetTypeEdit" method="loadEdit" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
+		<action name="assetTypeEdit" method="doLoadEdit" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
 			<result name="input" type="freemarker">/templates/html/assetTypeCrud/form.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetTypeCrud/form.ftl</result>
 		</action>
 
-		<action name="assetTypeUpdate" method="save" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
+		<action name="assetTypeUpdate" method="doSave" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
 			<result name="input" type="freemarker">/templates/html/assetTypeCrud/form.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">assetType</param>
@@ -65,28 +65,28 @@
 			<result name="error" type="freemarker">/templates/html/assetTypeCrud/form.ftl</result>
 		</action>
 
-		<action name="assetTypeCopy" method="loadCopy" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
+		<action name="assetTypeCopy" method="doLoadCopy" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
 			<result name="input" type="freemarker">/templates/html/assetTypeCrud/form.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetTypeCrud/form.ftl</result>
 
 		</action>
 
-		<action name="assetTypeConfirmDelete" method="confirmDelete" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
+		<action name="assetTypeConfirmDelete" method="doConfirmDelete" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeCrud/confirmDelete.ftl</result>
 		</action>
 
-		<action name="assetTypeDelete" method="delete" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
+		<action name="assetTypeDelete" method="doDelete" class="com.n4systems.fieldid.actions.asset.AssetTypeCrud">
             <result name="success" type="redirect">/w/setup/assetTypes</result>
 		</action>
 
 
-		<action name="assetTypeConfiguration" method="edit"
+		<action name="assetTypeConfiguration" method="doEdit"
 			class="com.n4systems.fieldid.actions.asset.AssetTypeConfigurationCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeConfiguration/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 		</action>
 
-		<action name="assetTypeConfigurationUpdate" method="save"
+		<action name="assetTypeConfigurationUpdate" method="doSave"
 			class="com.n4systems.fieldid.actions.asset.AssetTypeConfigurationCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">assetTypeConfiguration</param>
@@ -97,12 +97,12 @@
 
 		</action>
 
-		<action name="eventFrequencies" method="list" class="com.n4systems.fieldid.actions.asset.AssetTypeScheduleCrud">
+		<action name="eventFrequencies" method="doList" class="com.n4systems.fieldid.actions.asset.AssetTypeScheduleCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeScheduleCrud/list.ftl</result>
 		</action>
 		
 
-		<action name="eventFrequencyOverrideCreate" method="save" class="com.n4systems.fieldid.actions.asset.AssetTypeScheduleCrud">
+		<action name="eventFrequencyOverrideCreate" method="doSave" class="com.n4systems.fieldid.actions.asset.AssetTypeScheduleCrud">
 			<result name="input" type="freemarker">/templates/html/assetTypeScheduleCrud/list.ftl</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">eventFrequencies</param>
@@ -114,37 +114,37 @@
 			</result>
 		</action>
 
-		<action name="eventScheduleList" method="list" class="com.n4systems.fieldid.actions.EventScheduleCrud">
+		<action name="eventScheduleList" method="doList" class="com.n4systems.fieldid.actions.EventScheduleCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/eventScheduleCrud/list.ftl</result>
 		</action>
 
-		<action name="eventScheduleAdd" method="list" class="com.n4systems.fieldid.actions.EventScheduleCrud">
+		<action name="eventScheduleAdd" method="doList" class="com.n4systems.fieldid.actions.EventScheduleCrud">
 			<result name="error" type="freemarker">/templates/html/eventScheduleCrud/add.ftl</result>
 			<result name="success" type="freemarker">/templates/html/eventScheduleCrud/add.ftl</result>
 		</action>
 		
-		<action name="eventScheduleDelete" method="delete" class="com.n4systems.fieldid.actions.EventScheduleCrud">
+		<action name="eventScheduleDelete" method="doDelete" class="com.n4systems.fieldid.actions.EventScheduleCrud">
             <result name="error" type="redirect">/w/runLastReport</result>
             <result name="success" type="redirect">/w/runLastReport</result>
 		</action>
 
-		<action name="commentTemplateList" method="list" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
+		<action name="commentTemplateList" method="doList" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
 			<result name="success" type="freemarker">/templates/html/commentTemplateCrud/commentTemplateList.ftl</result>
 		</action>
 
-		<action name="commentTemplateEdit" method="loadEdit" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
+		<action name="commentTemplateEdit" method="doLoadEdit" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
 			<result name="input" type="freemarker">/templates/html/commentTemplateCrud/commentTemplateForm.ftl</result>
 			<result name="success" type="redirectAction">commentTemplateList</result>
 			<result name="error" type="redirectAction">commentTemplateList</result>
 		</action>
 
-		<action name="commentTemplateRemove" method="remove" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
+		<action name="commentTemplateRemove" method="doRemove" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
 			<result name="success" type="redirectAction">commentTemplateList</result>
 			<result name="error" type="redirectAction">commentTemplateList</result>
 		</action>
 
-		<action name="customerShow" method="show" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+		<action name="customerShow" method="doShow" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="freemarker">/templates/html/customerCrud/show.ftl</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">customerList</param>
@@ -154,7 +154,7 @@
 			</result>
 		</action>
 
-		<action name="customerEdit" method="loadEdit" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+		<action name="customerEdit" method="doLoadEdit" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="input" type="freemarker">/templates/html/customerCrud/customerForm.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">customerShow</param>
@@ -171,17 +171,17 @@
 			</result>
 		</action>
 
-		<action name="customerList" method="list" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+		<action name="customerList" method="doList" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
 			<result name="input" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
 		</action>
 
-		<action name="archivedCustomerList" method="listArchived" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+		<action name="archivedCustomerList" method="doListArchived" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="freemarker">/templates/html/customerCrud/archivedCustomerList.ftl</result>
 			<result name="input" type="freemarker">/templates/html/customerCrud/archivedCustomerList.ftl</result>
 		</action>
 		
-		<action name="customerArchive" method="archive" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+		<action name="customerArchive" method="doArchive" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">customerList</param>
 				<param name="currentPage">${currentPage}</param>
@@ -195,7 +195,7 @@
 			</result>
 		</action>
 		
-		<action name="customerUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+		<action name="customerUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">customerList</param>
 				<param name="currentPage">${currentPage}</param>
@@ -209,111 +209,111 @@
 			</result>
 		</action>
 
-		<action name="customerImportExport" method="showImportExport" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+		<action name="customerImportExport" method="doShowImportExport" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="freemarker">/templates/html/customerCrud/importExport.ftl</result>
 		</action>
 		
-		<action name="userImportExport" method="show" class="com.n4systems.fieldid.actions.users.UserImportAction">
+		<action name="userImportExport" method="doShow" class="com.n4systems.fieldid.actions.users.UserImportAction">
 			<result name="success" type="freemarker">/templates/html/userCrud/importExport.ftl</result>
 		</action>
 				
-		<action name="assetStatusEdit" method="loadEdit" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
+		<action name="assetStatusEdit" method="doLoadEdit" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
 			<result name="input" type="freemarker">/templates/html/assetStatusCrud/assetStatusForm.ftl</result>
 			<result name="success" type="redirectAction">assetStatusList</result>
 			<result name="error" type="redirectAction">assetStatusList</result>
 		</action>
 
-		<action name="assetStatusList" method="list" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
+		<action name="assetStatusList" method="doList" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
 			<result name="success" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
 		</action>
 
-		<action name="assetStatusArchivedList" method="list" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
+		<action name="assetStatusArchivedList" method="doList" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
 			<result name="success" type="freemarker">/templates/html/assetStatusCrud/assetStatusArchivedList.ftl</result>
 		</action>
 
 
-		<action name="assetStatusRemove" method="remove" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
+		<action name="assetStatusRemove" method="doRemove" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">assetStatusList</param>
 			</result>			
 			<result name="error" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
 		</action>
 
-		<action name="assetStatusArchive" method="archive" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
+		<action name="assetStatusArchive" method="doArchive" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
 			<result name="success" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
 		</action>
 
-		<action name="assetStatusUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
+		<action name="assetStatusUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
 			<result name="success" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
 		</action>
 
 
-		<action name="notificationSettings" method="list"
+		<action name="notificationSettings" method="doList"
 			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
 			<result name="success" type="freemarker">/templates/html/notificationSettings/list.ftl</result>
 		</action>
 
-		<action name="notificationSettingAdd" method="add"
+		<action name="notificationSettingAdd" method="doAdd"
 			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
 			<result name="input" type="freemarker">/templates/html/notificationSettings/add.ftl</result>
 			<result name="success" type="freemarker">/templates/html/notificationSettings/add.ftl</result>
 			<result name="error" type="chain">notificationSettings</result>
 		</action>
 
-		<action name="notificationSettingEdit" method="edit"
+		<action name="notificationSettingEdit" method="doEdit"
 			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
 			<result name="input" type="freemarker">/templates/html/notificationSettings/edit.ftl</result>
 			<result name="success" type="freemarker">/templates/html/notificationSettings/edit.ftl</result>
 			<result name="error" type="redirectAction">notificationSettings</result>
 		</action>
 
-		<action name="notificationSettingCreate" method="save"
+		<action name="notificationSettingCreate" method="doSave"
 			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
 			<result name="input" type="freemarker">/templates/html/notificationSettings/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/notificationSettings/add.ftl</result>
 			<result name="success" type="redirectAction">notificationSettings</result>
 		</action>
 
-		<action name="notificationSettingUpdate" method="save"
+		<action name="notificationSettingUpdate" method="doSave"
 			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
 			<result name="input" type="freemarker">/templates/html/notificationSettings/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/notificationSettings/edit.ftl</result>
 			<result name="success" type="redirectAction">notificationSettings</result>
 		</action>
 
-		<action name="notificationSettingDelete" method="delete"
+		<action name="notificationSettingDelete" method="doDelete"
 			class="com.n4systems.fieldid.actions.notifications.NotificationSettingsCrud">
 			<result name="success" type="redirectAction">notificationSettings</result>
 			<result name="error" type="redirectAction">notificationSettings</result>
 		</action>
 
 
-		<action name="assetCodeMappingEdit" method="edit" class="com.n4systems.fieldid.actions.AssetCodeMappingCrud">
+		<action name="assetCodeMappingEdit" method="doEdit" class="com.n4systems.fieldid.actions.AssetCodeMappingCrud">
 			<result name="input" type="freemarker">/templates/html/assetCodeMappingCrud/form.ftl</result>
 			<result name="success" type="chain">assetCodeMappingList</result>
 			<result name="error" type="chain">assetCodeMappingList</result>
 		</action>
 
-		<action name="assetCodeMappingList" method="list" class="com.n4systems.fieldid.actions.AssetCodeMappingCrud">
+		<action name="assetCodeMappingList" method="doList" class="com.n4systems.fieldid.actions.AssetCodeMappingCrud">
 			<result name="success" type="freemarker">/templates/html/assetCodeMappingCrud/list.ftl</result>
 		</action>
 
-		<action name="assetCodeMappingRemove" method="remove" class="com.n4systems.fieldid.actions.AssetCodeMappingCrud">
+		<action name="assetCodeMappingRemove" method="doRemove" class="com.n4systems.fieldid.actions.AssetCodeMappingCrud">
 			<result name="success" type="freemarker">/templates/html/assetCodeMappingCrud/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetCodeMappingCrud/list.ftl</result>
 		</action>
 
 
 
-		<action name="autoAttributeCriteriaList" method="list" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
+		<action name="autoAttributeCriteriaList" method="doList" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
 
 			<result name="success" type="freemarker">/templates/html/autoAttributeCriteria/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/autoAttributeCriteria/list.ftl</result>
 		</action>
 
-		<action name="autoAttributeCriteriaOpen" method="open" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
+		<action name="autoAttributeCriteriaOpen" method="doOpen" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
 			<result name="new" type="redirectAction">
 				<param name="actionName">autoAttributeCriteriaEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -325,7 +325,7 @@
 			<result name="error" type="redirectAction">autoAttributeCriteriaList</result>
 		</action>
 
-		<action name="autoAttributeCriteriaEdit" method="edit" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
+		<action name="autoAttributeCriteriaEdit" method="doEdit" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
 			<result name="error" type="redirectAction">autoAttributeCriteriaList</result>
 			<result name="success" type="freemarker">/templates/html/autoAttributeCriteria/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/autoAttributeCriteria/form.ftl</result>
@@ -336,7 +336,7 @@
 
 		</action>
 
-		<action name="autoAttributeCriteriaRemove" method="remove" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
+		<action name="autoAttributeCriteriaRemove" method="doRemove" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
 
 			<result name="success" type="redirectAction">
 				<param name="actionName">autoAttributeCriteriaList</param>
@@ -348,12 +348,12 @@
 		</action>
 
 
-		<action name="autoAttributeDefinitionList" method="list" class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
+		<action name="autoAttributeDefinitionList" method="doList" class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
 
 			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/list.ftl</result>
 		</action>
 
-		<action name="autoAttributeDefinitionEdit" method="edit" class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
+		<action name="autoAttributeDefinitionEdit" method="doEdit" class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
 
 			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/autoAttributeDefinition/form.ftl</result>
@@ -364,7 +364,7 @@
 
 		</action>
 
-		<action name="autoAttributeDefinitionSave" method="save" class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
+		<action name="autoAttributeDefinitionSave" method="doSave" class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
 
 			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/autoAttributeDefinition/form.ftl</result>
@@ -386,7 +386,7 @@
 
 		</action>
 
-		<action name="autoAttributeDefinitionRemove" method="remove" class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
+		<action name="autoAttributeDefinitionRemove" method="doRemove" class="com.n4systems.fieldid.actions.AutoAttributeDefinitionCrud">
 
 			<result name="success" type="redirectAction">
 				<param name="actionName">autoAttributeDefinitionList</param>
@@ -400,7 +400,7 @@
 
 
 
-		<action name="assetInformation" method="list" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetInformation" method="doList" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">/templates/html/assetCrud/list.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/list.ftl</result>
 			<result name="oneFound" type="redirect">/w/assetSummary?uniqueID=${uniqueID}</result>
@@ -412,34 +412,34 @@
 			</result>
 		</action>
 
-		<action name="assetEvents" method="events" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetEvents" method="doEvents" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/events.ftl</result>
 		</action>
 
-		<action name="asset" method="show" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="asset" method="doShow" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/show.ftl</result>
 
 		</action>
 
-		<action name="assetTraceability" method="traceability" class="com.n4systems.fieldid.actions.asset.TraceabilityCrud">
+		<action name="assetTraceability" method="doTraceability" class="com.n4systems.fieldid.actions.asset.TraceabilityCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/traceability.ftl</result>
 		</action>
 
-		<action name="assetAdd" method="add" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetAdd" method="doAdd" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/add.ftl</result>
 		</action>
 
-		<action name="assetAddWithOrder" method="addWithOrder" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetAddWithOrder" method="doAddWithOrder" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetCrud/add.ftl</result>
 		</action>
 
-		<action name="assetCreate" method="create" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetCreate" method="doCreate" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="input" type="freemarker">/templates/html/assetCrud/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetCrud/add.ftl</result>
 			<result name="saved" type="redirectAction">
@@ -464,23 +464,23 @@
 			</result>
 		</action>
 
-		<action name="assetPrint" method="print" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetPrint" method="doPrint" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="input" type="freemarker">/templates/html/assetCrud/add.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/print.ftl</result>
 
 		</action>
 
-		<action name="assetEdit" method="edit" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetEdit" method="doEdit" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetCrud/edit.ftl</result>
 		</action>
 
-		<action name="assetConfirmDelete" method="confirmDelete" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetConfirmDelete" method="doConfirmDelete" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="success" type="freemarker">/templates/html/assetCrud/confirmDelete.ftl</result>
 		</action>
 
-		<action name="assetDelete" method="delete" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetDelete" method="doDelete" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="redirectAction">
 				<param name="actionName">assetEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -492,7 +492,7 @@
 			</result>
 		</action>
 
-		<action name="assetUpdate" method="update" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assetUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetCrud/edit.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetCrud/edit.ftl</result>
@@ -505,21 +505,21 @@
 		</action>
 
 
-		<action name="subAssetConfiguration" method="show" class="com.n4systems.fieldid.actions.asset.SubAssetCrud">
+		<action name="subAssetConfiguration" method="doShow" class="com.n4systems.fieldid.actions.asset.SubAssetCrud">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/subAssetCrud/show.ftl</result>
 			<result name="input" type="freemarker">/templates/html/subAssetCrud/show.ftl</result>
 		</action>
 
 
-		<action name="registerUser" method="add" class="com.n4systems.fieldid.actions.users.UserRegistrationCrud">
+		<action name="registerUser" method="doAdd" class="com.n4systems.fieldid.actions.users.UserRegistrationCrud">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="error" type="redirect">/</result>
 			<result name="input" type="freemarker">templates/html/userRequest/add.ftl</result>
 			<result name="success" type="freemarker">templates/html/userRequest/add.ftl</result>
 		</action>
 
-		<action name="registerUserCreate" method="save" class="com.n4systems.fieldid.actions.users.UserRegistrationCrud">
+		<action name="registerUserCreate" method="doSave" class="com.n4systems.fieldid.actions.users.UserRegistrationCrud">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="error" type="freemarker">/templates/html/userRequest/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/userRequest/add.ftl</result>
@@ -528,52 +528,52 @@
 		</action>
 
 
-		<action name="userRequestList" method="list" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
+		<action name="userRequestList" method="doList" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
 			<result name="input" type="freemarker">/templates/html/userRequest/list.ftl</result>
 			<result name="success" type="freemarker">/templates/html/userRequest/list.ftl</result>
 		</action>
 
-		<action name="userRequestView" method="show" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
+		<action name="userRequestView" method="doShow" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
 			<result name="error" type="redirectAction">userRequestList</result>
 			<result name="success" type="freemarker">/templates/html/userRequest/show.ftl</result>
 		</action>
 
-		<action name="userRequestDeny" method="deny" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
+		<action name="userRequestDeny" method="doDeny" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
 			<result name="error" type="redirectAction">userRequestList</result>
 			<result name="input" type="freemarker">templates/html/userRequest/deny.ftl</result>
 			<result name="success" type="redirectAction">userRequestList</result>
 		</action>
 
-		<action name="userRequestAccept" method="acceptRequest" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
+		<action name="userRequestAccept" method="doAcceptRequest" class="com.n4systems.fieldid.actions.users.UserRequestCrud">
 			<result name="error" type="redirectAction">userRequestList</result>
 			<result name="input" type="freemarker">templates/html/userRequest/accept.ftl</result>
 			<result name="success" type="redirectAction">userRequestList</result>
 		</action>
 
 
-		<action name="userList" method="list" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="userList" method="doList" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/list.ftl</result>
 		</action>
 		
-		<action name="archivedUserList" method="archivedList" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="archivedUserList" method="doArchivedList" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
 		</action>
 		
-		<action name="viewUser" method="show" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="viewUser" method="doShow" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/show.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/show.ftl</result>
 		</action>
 
-		<action name="unlockUser" method="unlock" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="unlockUser" method="doUnlock" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/show.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/show.ftl</result>
 		</action>
 
-		<action name="upgradeUser" method="upgrade" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+		<action name="upgradeUser" method="doUpgrade" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/upgrade.ftl</result>
 		</action>
 		
-		<action name="changeToFull" method="changeToFull" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+		<action name="changeToFull" method="doChangeToFull" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">employeeUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -581,7 +581,7 @@
 			<result name="error" type="freemarker">templates/html/userCrud/upgrade.ftl</result>
 		</action>
 		
-		<action name="changeToLite" method="changeToLite" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+		<action name="changeToLite" method="doChangeToLite" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">liteUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -589,25 +589,25 @@
 			<result name="error" type="freemarker">templates/html/userCrud/upgrade.ftl</result>
 		</action>
 		
-		<action name="changeToReadOnly" method="changeToReadOnly" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+		<action name="changeToReadOnly" method="doChangeToReadOnly" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">readOnlyUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
 
-        <action name="changeToPerson" method="changeToPerson" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+        <action name="changeToPerson" method="doChangeToPerson" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
             <result name="success" type="redirectAction">
                 <param name="actionName">viewUser</param>
                 <param name="uniqueID">${uniqueID}</param>
             </result>
         </action>
 
-        <action name="changeToUsageBased" method="changeToUsageBased" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
+        <action name="changeToUsageBased" method="doChangeToUsageBased" class="com.n4systems.fieldid.actions.users.UserUpgradeCrud">
             <result name="success" type="redirect">/w/editUsageBasedUser?uniqueID=${uniqueID}</result>
         </action>
 
-        <action name="addReadOnlyUser" method="add" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+        <action name="addReadOnlyUser" method="doAdd" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/addReadOnly.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/addReadOnly.ftl</result>
 			<result name="error" type="redirectAction">
@@ -617,7 +617,7 @@
 			</result>
 		</action>
 
-		<action name="readOnlyUserCreate" method="create" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+		<action name="readOnlyUserCreate" method="doCreate" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="input" type="freemarker">templates/html/userCrud/addReadOnly.ftl</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">userList</param>
@@ -633,7 +633,7 @@
 
 		</action>
 		
-		<action name="addUser" method="show" class="com.n4systems.fieldid.actions.users.UserCrudSelection">
+		<action name="addUser" method="doShow" class="com.n4systems.fieldid.actions.users.UserCrudSelection">
 			<result name="success" type="freemarker">templates/html/userSelection/add.ftl</result>
 			<result name="input" type="freemarker">templates/html/userSelection/add.ftl</result>
 			<result name="error" type="redirectAction">
@@ -643,7 +643,7 @@
 			</result>
 		</action>
 
-		<action name="addLiteUser" method="add" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+		<action name="addLiteUser" method="doAdd" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/addLite.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/addLite.ftl</result>
 			<result name="error" type="redirectAction">
@@ -653,7 +653,7 @@
 			</result>
 		</action>
 		
-		<action name="liteUserCreate" method="create" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+		<action name="liteUserCreate" method="doCreate" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
 			<result name="input" type="freemarker">templates/html/userCrud/addLite.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>
@@ -670,7 +670,7 @@
 		</action>
 		
 
-		<action name="addEmployeeUser" method="add" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="addEmployeeUser" method="doAdd" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="error" type="redirectAction">
@@ -680,7 +680,7 @@
 			</result>
 		</action>
 
-		<action name="employeeUserCreate" method="create" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="employeeUserCreate" method="doCreate" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="input" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="error" type="freemarker">templates/html/employee/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -691,7 +691,7 @@
 			</result>
 		</action>
 
-		<action name="employeeUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="employeeUserEdit" method="doEdit" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="input" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="error" type="redirectAction">
@@ -701,7 +701,7 @@
 			</result>
 		</action>
 
-		<action name="employeeUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="employeeUserUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="input" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="error" type="freemarker">templates/html/employee/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -710,7 +710,7 @@
 			</result>
 		</action>
 		
-		<action name="liteUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+		<action name="liteUserEdit" method="doEdit" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/liteUserEdit.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/liteUserEdit.ftl</result>
 			<result name="error" type="redirectAction">
@@ -721,7 +721,7 @@
 			</result>
 		</action>
 
-		<action name="liteUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+		<action name="liteUserUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
 			<result name="input" type="freemarker">templates/html/userCrud/liteUserEdit.ftl</result>
 			<result name="success" type="redirectAction">
 			<param name="actionName">viewUser</param>
@@ -729,7 +729,7 @@
 			</result>
 		</action>
 
-		<action name="readOnlyUserEdit" method="edit" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+		<action name="readOnlyUserEdit" method="doEdit" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
 			<result name="input" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
 			<result name="error" type="redirectAction">
@@ -740,7 +740,7 @@
 			</result>
 		</action>
 
-		<action name="readOnlyUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+		<action name="readOnlyUserUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="input" type="freemarker">templates/html/userCrud/readOnlyUserEdit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">viewUser</param>
@@ -748,7 +748,7 @@
 			</result>
 		</action>
 
-		<action name="employeeUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="employeeUserArchive" method="doArchive" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
@@ -761,7 +761,7 @@
 			</result>						
 		</action>
 		
-		<action name="liteUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+		<action name="liteUserArchive" method="doArchive" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
@@ -774,7 +774,7 @@
 			</result>						
 		</action>
 		
-		<action name="readOnlyUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+		<action name="readOnlyUserArchive" method="doArchive" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">userList</param>
 				<param name="currentPage">${currentPage}</param>
@@ -787,7 +787,7 @@
 			</result>						
 		</action>
 
-        <action name="personArchive" method="archive" class="com.n4systems.fieldid.actions.users.PersonCrud">
+        <action name="personArchive" method="doArchive" class="com.n4systems.fieldid.actions.users.PersonCrud">
             <result name="success" type="redirectAction">
                 <param name="actionName">userList</param>
                 <param name="currentPage">${currentPage}</param>
@@ -800,7 +800,7 @@
             </result>
         </action>
 
-        <action name="usageBasedUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.UsageBasedUserCrud">
+        <action name="usageBasedUserArchive" method="doArchive" class="com.n4systems.fieldid.actions.users.UsageBasedUserCrud">
             <result name="success" type="redirectAction">
                 <param name="actionName">userList</param>
                 <param name="currentPage">${currentPage}</param>
@@ -814,7 +814,7 @@
         </action>
 
 
-		<action name="employeeUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="employeeUserUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">employeeUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -822,14 +822,14 @@
 			<result name="error" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
 		</action>
 		
-		<action name="liteUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
+		<action name="liteUserUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.users.LiteUserCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">liteUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
 			</result>
 		</action>
 		
-		<action name="readOnlyUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+		<action name="readOnlyUserUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">readOnlyUserEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -837,7 +837,7 @@
 			<result name="error" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
 		</action>
 
-        <action name="personUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.PersonCrud">
+        <action name="personUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.users.PersonCrud">
             <result name="success" type="redirectAction">
                 <param name="actionName">userList</param>
                 <param name="currentPage">${currentPage}</param>
@@ -846,7 +846,7 @@
             <result name="error" type="freemarker">templates/html/userCrud/archivedList.ftl</result>
         </action>
 
-        <action name="usageBasedUserUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.users.UsageBasedUserCrud">
+        <action name="usageBasedUserUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.users.UsageBasedUserCrud">
             <result name="success" type="redirectAction">
                 <param name="actionName">userList</param>
                 <param name="currentPage">${currentPage}</param>
@@ -856,7 +856,7 @@
         </action>
 		
 
-		<action name="sendWelcomeEmail" method="sendWelcomeMessage" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
+		<action name="sendWelcomeEmail" method="doSendWelcomeMessage" class="com.n4systems.fieldid.actions.users.EmployeeCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">viewUser</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -867,19 +867,19 @@
 			</result>
 		</action>
 
-		<action name="selectEventTypes" method="list"
+		<action name="selectEventTypes" method="doList"
 			class="com.n4systems.fieldid.actions.asset.AssociatedEventTypeCrud">
 			<result name="error" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
 		</action>
 		
-		<action name="selectAssetTypes" method="list"
+		<action name="selectAssetTypes" method="doList"
 			class="com.n4systems.fieldid.actions.asset.AssociatedEventTypeCrud">
 			<result name="error" type="freemarker">/templates/html/eventTypeAssetTypeCrud/list.ftl</result>
 			<result name="success" type="freemarker">/templates/html/eventTypeAssetTypeCrud/list.ftl</result>
 		</action>
 		
-		<action name="assetTypeEventTypesSave" method="save"
+		<action name="assetTypeEventTypesSave" method="doSave"
 			class="com.n4systems.fieldid.actions.asset.AssociatedEventTypeCrud">
 			<result name="error" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetTypeEventTypeCrud/list.ftl</result>
@@ -889,7 +889,7 @@
 			</result>
 		</action>
 		
-		<action name="eventTypeAssetTypesSave" method="saveAssetTypes"
+		<action name="eventTypeAssetTypesSave" method="doSaveAssetTypes"
 			class="com.n4systems.fieldid.actions.asset.AssociatedEventTypeCrud">
 			<result name="error" type="freemarker">/templates/html/eventTypeAssetTypeCrud/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventTypeAssetTypeCrud/list.ftl</result>
@@ -900,26 +900,26 @@
 		</action>
 
 
-		<action name="eventTypes" method="list" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
+		<action name="eventTypes" method="doList" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
 			<result name="success" type="freemarker">/templates/html/eventType/list.ftl</result>
 		</action>
 
-		<action name="eventType" method="show" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
+		<action name="eventType" method="doShow" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
 			<result name="success" type="freemarker">/templates/html/eventType/show.ftl</result>
 		</action>
 
-		<action name="eventTypeAdd" method="add" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
+		<action name="eventTypeAdd" method="doAdd" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
 			<result name="success" type="freemarker">/templates/html/eventType/add.ftl</result>
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 		</action>
 
-		<action name="eventTypeCopy" method="copy" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
+		<action name="eventTypeCopy" method="doCopy" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
 			<result name="input" type="redirectAction">eventTypes</result>
 			<result name="success" type="redirectAction">eventTypes</result>
 			<result name="error" type="redirectAction">eventTypes</result>
 		</action>
 
-		<action name="eventTypeCreate" method="create" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
+		<action name="eventTypeCreate" method="doCreate" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
 
 			<result name="input" type="freemarker">/templates/html/eventType/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -931,11 +931,11 @@
 			<result name="error" type="freemarker">/templates/html/eventType/add.ftl</result>
 		</action>
 
-		<action name="eventTypeEdit" method="edit" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
+		<action name="eventTypeEdit" method="doEdit" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/eventType/edit.ftl</result>
 		</action>
-		<action name="eventTypeUpdate" method="update" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
+		<action name="eventTypeUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
 			<result name="input" type="freemarker">/templates/html/eventType/edit.ftl</result>
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventType</param>
@@ -943,12 +943,12 @@
 			</result>
 			<result name="error" type="freemarker">/templates/html/eventType/edit.ftl</result>
 		</action>
-		<action name="eventTypeDeleteConfirm" method="deleteConfirm" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
+		<action name="eventTypeDeleteConfirm" method="doDeleteConfirm" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
 			<result name="input" type="freemarker">/templates/html/eventType/confirmDelete.ftl</result>
 			<result name="error" type="freemarker">/templates/html/eventType/confirmDelete.ftl</result>
 			<result name="success" type="freemarker">/templates/html/eventType/confirmDelete.ftl</result>
 		</action>
-		<action name="eventTypeDelete" method="delete" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
+		<action name="eventTypeDelete" method="doDelete" class="com.n4systems.fieldid.actions.event.EventTypeCrud">
 			<result name="error" type="redirectAction">
 				<param name="actionName">eventTypeDeleteConfirm</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -960,11 +960,11 @@
 			<result name="success" type="redirectAction">eventTypes</result>
 		</action>
 
-		<action name="buttonGroups" method="list" class="com.n4systems.fieldid.actions.event.ButtonGroupCrud">
+		<action name="buttonGroups" method="doList" class="com.n4systems.fieldid.actions.event.ButtonGroupCrud">
 			<result name="success" type="freemarker">/templates/html/buttonGroupCrud/list.ftl</result>
 		</action>
 
-		<action name="eventTypeForm" method="edit" class="com.n4systems.fieldid.actions.event.EventFormCrud">
+		<action name="eventTypeForm" method="doEdit" class="com.n4systems.fieldid.actions.event.EventFormCrud">
 			<result name="missing" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/eventFormCrud/form.ftl</result>
 		</action>
@@ -973,11 +973,11 @@
 			<result name="success" type="freemarker">/templates/html/events/select.ftl</result>
 		</action>
 
-		<action name="quickEvent" method="quickEvent" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="quickEvent" method="doQuickEvent" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="success" type="freemarker">/templates/html/eventCrud/quickEvent.ftl</result>
 		</action>
 
-		<action name="selectEventAdd" method="select" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="selectEventAdd" method="doSelect" class="com.n4systems.fieldid.actions.event.EventCrud">
             <result name="regular" type="redirect">/w/performEvent?assetId=${assetId}&amp;type=${type}&amp;scheduleId=${scheduleId}</result>
 			<result name="master" type="redirectAction">
 				<param name="actionName">masterEventAdd</param>
@@ -988,7 +988,7 @@
 			</result>
 		</action>
 
-		<action name="selectEventEdit" method="select" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="selectEventEdit" method="doSelect" class="com.n4systems.fieldid.actions.event.EventCrud">
             <result name="regular" type="redirect">/w/editEvent?uniqueID=${uniqueID}</result>
 			<result name="master" type="redirectAction">
 				<param name="actionName">masterEventEdit</param>
@@ -997,7 +997,7 @@
 		</action>
 
 
-		<action name="eventAdd" method="add" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="eventAdd" method="doAdd" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="success" type="freemarker">/templates/html/eventCrud/add.ftl</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">event</param>
@@ -1005,7 +1005,7 @@
 			</result>
 		</action>
 
-		<action name="eventCreate" method="create" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="eventCreate" method="doCreate" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="error" type="freemarker">/templates/html/eventCrud/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1014,15 +1014,15 @@
 			</result>
 		</action>
 
-		<action name="event" method="show" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="event" method="doShow" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="success" type="freemarker">/templates/html/eventCrud/show.ftl</result>
 		</action>
-		<action name="eventEdit" method="edit" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="eventEdit" method="doEdit" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="success" type="freemarker">/templates/html/eventCrud/edit.ftl</result>
 
 		</action>
 
-		<action name="eventUpdate" method="update" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="eventUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="error" type="freemarker">/templates/html/eventCrud/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1031,7 +1031,7 @@
 			</result>
 		</action>
 
-		<action name="eventDelete" method="delete" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="eventDelete" method="doDelete" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="error" type="redirectAction">
 				<param name="actionName">eventEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -1039,11 +1039,11 @@
 			<result name="success" type="redirect">/w/assetEvents?uniqueID=${event.asset.id}</result>
 		</action>
 
-		<action name="masterEventAdd" method="add" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
+		<action name="masterEventAdd" method="doAdd" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
 			<result name="success" type="freemarker">/templates/html/masterEventCrud/add.ftl</result>
 		</action>
 
-		<action name="masterEventCreate" method="create" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
+		<action name="masterEventCreate" method="doCreate" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
 			<result name="error" type="freemarker">/templates/html/masterEventCrud/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/masterEventCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1052,11 +1052,11 @@
 			</result>
 		</action>
 
-		<action name="masterEventEdit" method="edit" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
+		<action name="masterEventEdit" method="doEdit" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
 			<result name="success" type="freemarker">/templates/html/masterEventCrud/edit.ftl</result>
 		</action>
 
-		<action name="masterEventUpdate" method="update" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
+		<action name="masterEventUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
 			<result name="error" type="freemarker">/templates/html/masterEventCrud/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/masterEventCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1066,12 +1066,12 @@
 		</action>
 
 
-		<action name="subEventAdd" method="add" class="com.n4systems.fieldid.actions.event.SubEventCrud">
+		<action name="subEventAdd" method="doAdd" class="com.n4systems.fieldid.actions.event.SubEventCrud">
 			<result name="success" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
 		</action>
 
 
-		<action name="baseEventCreate" method="storeNewMasterEvent" class="com.n4systems.fieldid.actions.event.SubEventCrud">
+		<action name="baseEventCreate" method="doStoreNewMasterEvent" class="com.n4systems.fieldid.actions.event.SubEventCrud">
 			<result name="input" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1081,7 +1081,7 @@
 			</result>
 		</action>
 
-		<action name="subEventCreate" method="storeNewSubEvent" class="com.n4systems.fieldid.actions.event.SubEventCrud">
+		<action name="subEventCreate" method="doStoreNewSubEvent" class="com.n4systems.fieldid.actions.event.SubEventCrud">
 			<result name="input" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subEventCrud/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1091,11 +1091,11 @@
 			</result>
 		</action>
 
-		<action name="subEventEdit" method="edit" class="com.n4systems.fieldid.actions.event.SubEventCrud">
+		<action name="subEventEdit" method="doEdit" class="com.n4systems.fieldid.actions.event.SubEventCrud">
 			<result name="success" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
 		</action>
 
-		<action name="baseEventUpdate" method="storeNewMasterEvent" class="com.n4systems.fieldid.actions.event.SubEventCrud">
+		<action name="baseEventUpdate" method="doStoreNewMasterEvent" class="com.n4systems.fieldid.actions.event.SubEventCrud">
 			<result name="input" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1105,7 +1105,7 @@
 			</result>
 		</action>
 
-		<action name="subEventUpdate" method="storeExistingSubEvent" class="com.n4systems.fieldid.actions.event.SubEventCrud">
+		<action name="subEventUpdate" method="doStoreExistingSubEvent" class="com.n4systems.fieldid.actions.event.SubEventCrud">
 			<result name="input" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/subEventCrud/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1115,7 +1115,7 @@
 			</result>
 		</action>
 
-		<action name="masterEventDelete" method="delete" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="masterEventDelete" method="doDelete" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="error" type="redirectAction">
 				<param name="actionName">masterEventEdit</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -1123,19 +1123,19 @@
             <result name="success" type="redirect">/w/assetEvents?uniqueID=${assetId}</result>
 		</action>
 
-		<action name="eventBooks" method="list" class="com.n4systems.fieldid.actions.event.EventBookCrud">
+		<action name="eventBooks" method="doList" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/html/eventBook/list.ftl</result>
 		</action>
 		
-		<action name="archivedEventBooks" method="archivedList" class="com.n4systems.fieldid.actions.event.EventBookCrud">
+		<action name="archivedEventBooks" method="doArchivedList" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/html/eventBook/listArchived.ftl</result>
 		</action>
 
-		<action name="eventBookAdd" method="add" class="com.n4systems.fieldid.actions.event.EventBookCrud">
+		<action name="eventBookAdd" method="doAdd" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/html/eventBook/add.ftl</result>
 		</action>
 
-		<action name="eventBookCreate" method="save" class="com.n4systems.fieldid.actions.event.EventBookCrud">
+		<action name="eventBookCreate" method="doSave" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="error" type="freemarker">/templates/html/eventBook/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventBook/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1144,12 +1144,12 @@
 			</result>
 		</action>
 
-		<action name="eventBookEdit" method="edit" class="com.n4systems.fieldid.actions.event.EventBookCrud">
+		<action name="eventBookEdit" method="doEdit" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="freemarker">/templates/html/eventBook/edit.ftl</result>
 
 		</action>
 
-		<action name="eventBookUpdate" method="save" class="com.n4systems.fieldid.actions.event.EventBookCrud">
+		<action name="eventBookUpdate" method="doSave" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="error" type="freemarker">/templates/html/eventBook/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventBook/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1158,44 +1158,44 @@
 			</result>
 		</action>
 		
-		<action name="eventBookArchive" method="archive" class="com.n4systems.fieldid.actions.event.EventBookCrud">
+		<action name="eventBookArchive" method="doArchive" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventBooks</param>
 				<param name="currentPage">${currentPage}</param>
 			</result>
 		</action>
 		
-		<action name="eventBookUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.event.EventBookCrud">
+		<action name="eventBookUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.event.EventBookCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">eventBooks</param>
 				<param name="currentPage">${currentPage}</param>
 			</result>
 		</action>
 
-		<action name="multiProofTest" method="add" class="com.n4systems.fieldid.actions.event.MultiProofTestUpload">
+		<action name="multiProofTest" method="doAdd" class="com.n4systems.fieldid.actions.event.MultiProofTestUpload">
 			<result name="error" type="freemarker">/templates/html/multiProofTestUpload/add.ftl</result>
 			<result name="success" type="freemarker">/templates/html/multiProofTestUpload/add.ftl</result>
 		</action>
 
-		<action name="multiProofTestCreate" method="save" class="com.n4systems.fieldid.actions.event.MultiProofTestUpload">
+		<action name="multiProofTestCreate" method="doSave" class="com.n4systems.fieldid.actions.event.MultiProofTestUpload">
 			<result name="error" type="freemarker">/templates/html/multiProofTestUpload/results.ftl</result>
 			<result name="input" type="freemarker">/templates/html/multiProofTestUpload/results.ftl</result>
 			<result name="success" type="freemarker">/templates/html/multiProofTestUpload/results.ftl</result>
 		</action>
 
-		<action name="multiProofTestUpload" method="upload" class="com.n4systems.fieldid.actions.event.MultiProofTestUpload">
+		<action name="multiProofTestUpload" method="doUpload" class="com.n4systems.fieldid.actions.event.MultiProofTestUpload">
 			<result name="success" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
 			<result name="error" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
 			<result name="sessionBooted" type="freemarker">/templates/html/multiProofTestUpload/upload.ftl</result>
 		</action>
 
-		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="login" method="doAdd" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="freemarker">/templates/html/login/form.ftl</result>
 			<result name="alreadyLoggedIn" type="redirect">/w/dashboard</result>
 		</action>
 		
-		<action name="confirmKick" method="confirmKick" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="confirmKick" method="doConfirmKick" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="error" type="freemarker">/templates/html/login/form.ftl</result>
 			<result name="success" type="redirect">/w/dashboard</result>
@@ -1204,7 +1204,7 @@
 			</result>
 		</action>
 
-		<action name="logIntoSystem" method="create" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="logIntoSystem" method="doCreate" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="input" type="freemarker">/templates/html/login/form.ftl</result>
 			<result name="redirect_to_url" type="redirectAction">
@@ -1220,12 +1220,12 @@
 			<result name="confirmKick" type="freemarker">/templates/html/login/confirmKick.ftl</result>
 		</action>
 
-		<action name="booted" method="booted" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="booted" method="doBooted" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="redirectAction">login</result>
 		</action>
 
-		<action name="logout" method="delete" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="logout" method="doDelete" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
             <result name="redirect" type="redirect">
                 <param name="location">${logoutUrl}</param>
@@ -1238,19 +1238,19 @@
 			<result name="success" type="freemarker">/templates/html/home/show.ftl</result>
 		</action>
 
-		<action name="error" method="error" class="com.n4systems.fieldid.actions.HomeAction">
+		<action name="error" method="doError" class="com.n4systems.fieldid.actions.HomeAction">
 			<result name="error" type="freemarker">/templates/html/home/error.ftl</result>
 		</action>
 
-		<action name="pageNotFound" method="pageNotFound" class="com.n4systems.fieldid.actions.HomeAction">
+		<action name="pageNotFound" method="doPageNotFound" class="com.n4systems.fieldid.actions.HomeAction">
 			<result name="error" type="freemarker">/templates/html/home/pageNotFound.ftl</result>
 		</action>
 
-		<action name="restricted" method="restricted" class="com.n4systems.fieldid.actions.HomeAction">
+		<action name="restricted" method="doRestricted" class="com.n4systems.fieldid.actions.HomeAction">
 			<result name="error" type="freemarker">/templates/html/home/restricted.ftl</result>
 		</action>
 
-		<action name="chooseCompany" method="add" class="com.n4systems.fieldid.actions.SelectTenantAction">
+		<action name="chooseCompany" method="doAdd" class="com.n4systems.fieldid.actions.SelectTenantAction">
 			<interceptor-ref name="nonBrandedFlashStack" />
 			<result name="success" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
@@ -1258,33 +1258,33 @@
 		</action>
 
 
-		<action name="signInToCompany" method="create" class="com.n4systems.fieldid.actions.SelectTenantAction">
+		<action name="signInToCompany" method="doCreate" class="com.n4systems.fieldid.actions.SelectTenantAction">
 			<interceptor-ref name="nonBrandedFlashStack" />
 			<result name="success" type="freemarker">/templates/html/chooseCompany/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 		</action>
 		
-		<action name="findCompany" method="find" class="com.n4systems.fieldid.actions.SelectTenantAction">
+		<action name="findCompany" method="doFind" class="com.n4systems.fieldid.actions.SelectTenantAction">
 			<interceptor-ref name="nonBrandedFlashStack" />
 			<result name="success" type="freemarker">/templates/html/chooseCompany/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/chooseCompany/form.ftl</result>
 		</action>
 		
-		<action name="forgotPassword" method="add" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+		<action name="forgotPassword" method="doAdd" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="freemarker">/templates/html/forgotPassword/forgot.ftl</result>
 		</action>
 
-		<action name="sendPassword" method="create" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+		<action name="sendPassword" method="doCreate" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="freemarker">/templates/html/forgotPassword/forgot.ftl</result>
 			<result name="input" type="freemarker">/templates/html/forgotPassword/forgot.ftl</result>
 			<result name="error" type="freemarker">/templates/html/forgotPassword/forgot.ftl</result>
 		</action>
 
-		<action name="adminSendResetPassword" method="create" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+		<action name="adminSendResetPassword" method="doCreate" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<result name="success" type="redirectAction">
 				<param name="actionName">adminEditPassword</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -1293,31 +1293,31 @@
 			<result name="error" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 		</action>
 
-		<action name="resetPassword" method="prepare" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+		<action name="resetPassword" method="doPrepare" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="missing" type="freemarker">/templates/html/forgotPassword/missing.ftl</result>
             <result name="success" type="freemarker">/templates/html/resetPassword/form.ftl</result>
 		</action>
 		
-		<action name="firstTimeLogin" method="prepare" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+		<action name="firstTimeLogin" method="doPrepare" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="missing" type="freemarker">/templates/html/forgotPassword/missing.ftl</result>
             <result name="success" type="freemarker">/templates/html/resetPassword/form.ftl</result>
 		</action>
 
-		<action name="expiredPasswordLogin" method="expiredPasswordPrepare" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+		<action name="expiredPasswordLogin" method="doExpiredPasswordPrepare" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="missing" type="freemarker">/templates/html/forgotPassword/missing.ftl</result>
             <result name="success" type="freemarker">/templates/html/resetPassword/form.ftl</result>
 		</action>
 		
-		<action name="finalizeExpiredPassword" method="resetExpiredPassword" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+		<action name="finalizeExpiredPassword" method="doResetExpiredPassword" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="input" type="freemarker">/templates/html/resetPassword/form.ftl</result>
 			<result name="success" type="redirectAction">login</result>
 		</action>
 
-		<action name="finalizeReset" method="reset" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
+		<action name="finalizeReset" method="doReset" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
 			<interceptor-ref name="brandedFlashPublicStack" />		
 			<result name="missing" type="freemarker">/templates/html/forgotPassword/missing.ftl</result>				
 			<result name="input" type="redirectAction">
@@ -1328,40 +1328,40 @@
 			<result name="success" type="redirectAction">login</result>
 		</action>
 
-		<action name="viewMobilePasscode" method="show" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
+		<action name="viewMobilePasscode" method="doShow" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
 			<result name="success" type="freemarker">/templates/html/changeSecurityCard/show.ftl</result>
 		</action>
 
-		<action name="editMobilePasscode" method="edit" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
+		<action name="editMobilePasscode" method="doEdit" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
 			<result name="success" type="freemarker">/templates/html/changeSecurityCard/form.ftl</result>
 		</action>
 
-		<action name="updateMobilePasscode" method="update" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
+		<action name="updateMobilePasscode" method="doUpdate" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
 			<result name="input" type="freemarker">/templates/html/changeSecurityCard/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/changeSecurityCard/form.ftl</result>
 			<result name="success" type="redirectAction">viewMobilePasscode</result>
 		</action>
 		
-		<action name="removeMobilePasscode" method="remove" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
+		<action name="removeMobilePasscode" method="doRemove" class="com.n4systems.fieldid.actions.user.ChangeMobilePasscode">
 			<result name="success" type="freemarker">/templates/html/changeSecurityCard/show.ftl</result>
 		</action>
 
-		<action name="editPassword" method="edit" class="com.n4systems.fieldid.actions.users.ChangePasswordCrud">
+		<action name="editPassword" method="doEdit" class="com.n4systems.fieldid.actions.users.ChangePasswordCrud">
 			<result name="success" type="freemarker">/templates/html/changePassword/form.ftl</result>
 		</action>
 
-		<action name="updatePassword" method="update" class="com.n4systems.fieldid.actions.users.ChangePasswordCrud">
+		<action name="updatePassword" method="doUpdate" class="com.n4systems.fieldid.actions.users.ChangePasswordCrud">
 			<result name="input" type="freemarker">/templates/html/changePassword/form.ftl</result>
 			<result name="error" type="freemarker">/templates/html/changePassword/form.ftl</result>
 			<result name="success" type="redirectAction">editPassword</result>
 		</action>
 
-		<action name="adminEditPassword" method="edit" class="com.n4systems.fieldid.actions.users.AdminChangePasswordCrud">
+		<action name="adminEditPassword" method="doEdit" class="com.n4systems.fieldid.actions.users.AdminChangePasswordCrud">
 			<result name="success" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 		</action>
 		
 				
-		<action name="adminMobilePasscode" method="show" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
+		<action name="adminMobilePasscode" method="doShow" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
 			<result name="success" type="freemarker">/templates/html/changeSecurityCard/adminShow.ftl</result>
 			<result name="input" type="redirectAction">
 				<param name="actionName">adminEditMobilePasscode</param>
@@ -1369,11 +1369,11 @@
 			</result>
 		</action>
 
-		<action name="adminEditMobilePasscode" method="edit" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
+		<action name="adminEditMobilePasscode" method="doEdit" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
 			<result name="success" type="freemarker">/templates/html/changeSecurityCard/adminForm.ftl</result>
 		</action>
 		
-		<action name="adminUpdateMobilePasscode" method="update" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
+		<action name="adminUpdateMobilePasscode" method="doUpdate" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
 			<result name="input" type="freemarker">/templates/html/changeSecurityCard/adminForm.ftl</result>
 			<result name="error" type="freemarker">/templates/html/changeSecurityCard/adminForm.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1382,7 +1382,7 @@
 			</result>
 		</action>
 		
-		<action name="adminRemoveMobilePasscode" method="remove" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
+		<action name="adminRemoveMobilePasscode" method="doRemove" class="com.n4systems.fieldid.actions.users.AdminChangeMobilePasscode">
 			<result name="success" type="redirectAction">
 				<param name="actionName">adminEditMobilePasscode</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -1390,7 +1390,7 @@
 		</action>
 		
 
-		<action name="adminUpdatePassword" method="update" class="com.n4systems.fieldid.actions.users.AdminChangePasswordCrud">
+		<action name="adminUpdatePassword" method="doUpdate" class="com.n4systems.fieldid.actions.users.AdminChangePasswordCrud">
 			<result name="input" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 			<result name="error" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1399,25 +1399,25 @@
 			</result>
 		</action>
 
-		<action name="instructionalVideos" method="list" class="com.n4systems.fieldid.actions.InstructionalVideoAction">
+		<action name="instructionalVideos" method="doList" class="com.n4systems.fieldid.actions.InstructionalVideoAction">
 			<result name="success" type="freemarker">/templates/html/instructionalVideos/list.ftl</result>
 		</action>
 
-		<action name="jobs" method="list" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+		<action name="jobs" method="doList" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
 			<result name="success" type="freemarker">/templates/html/projects/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/projects/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/projects/list.ftl</result>
 		</action>
 
-		<action name="job" method="show" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+		<action name="job" method="doShow" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
 			<result name="success" type="freemarker">/templates/html/projects/show.ftl</result>
 		</action>
 
-		<action name="jobAdd" method="add" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+		<action name="jobAdd" method="doAdd" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
 			<result name="success" type="freemarker">/templates/html/projects/add.ftl</result>
 		</action>
 
-		<action name="jobCreate" method="create" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+		<action name="jobCreate" method="doCreate" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
 			<result name="error" type="freemarker">/templates/html/projects/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/projects/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1426,11 +1426,11 @@
 			</result>
 		</action>
 
-		<action name="jobEdit" method="edit" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+		<action name="jobEdit" method="doEdit" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
 			<result name="success" type="freemarker">/templates/html/projects/edit.ftl</result>
 		</action>
 
-		<action name="jobUpdate" method="update" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+		<action name="jobUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
 			<result name="input" type="freemarker">/templates/html/projects/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/projects/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1439,7 +1439,7 @@
 			</result>
 		</action>
 		
-		<action name="jobsSearch" method="search" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+		<action name="jobsSearch" method="doSearch" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
 			<result name="input" type="freemarker">/templates/html/projects/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/projects/list.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1448,19 +1448,19 @@
 			</result>
 		</action>
 
-		<action name="identify" method="search" class="com.n4systems.fieldid.actions.identify.IdentifyCrud">
+		<action name="identify" method="doSearch" class="com.n4systems.fieldid.actions.identify.IdentifyCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/identifyCrud/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/identifyCrud/form.ftl</result>
 		</action>
 
-		<action name="searchOrder" method="showOrder" class="com.n4systems.fieldid.actions.identify.IdentifyCrud">
+		<action name="searchOrder" method="doShowOrder" class="com.n4systems.fieldid.actions.identify.IdentifyCrud">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/identifyCrud/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/identifyCrud/form.ftl</result>
 		</action>
 
-		<action name="jobDelete" method="delete" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
+		<action name="jobDelete" method="doDelete" class="com.n4systems.fieldid.actions.projects.ProjectCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">jobs</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -1473,15 +1473,15 @@
 			</result>
 		</action>
 
-		<action name="jobNotes" method="list" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
+		<action name="jobNotes" method="doList" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
 			<result name="success" type="freemarker">/templates/html/projectNotes/list.ftl</result>
 		</action>
 
-		<action name="jobNoteAdd" method="add" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
+		<action name="jobNoteAdd" method="doAdd" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
 			<result name="success" type="freemarker">/templates/html/projectNotes/add.ftl</result>
 		</action>
 
-		<action name="jobNoteCreate" method="create" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
+		<action name="jobNoteCreate" method="doCreate" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
 			<result name="input" type="freemarker">/templates/html/projectNotes/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/projectNotes/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1490,14 +1490,14 @@
 			</result>
 		</action>
 
-		<action name="jobNoteDelete" method="delete" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
+		<action name="jobNoteDelete" method="doDelete" class="com.n4systems.fieldid.actions.projects.ProjectNoteCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">jobNotes</param>
 				<param name="projectId">${action.getProjectId()}</param>
 			</result>
 		</action>
 
-		<action name="jobEvents" method="list" class="com.n4systems.fieldid.actions.projects.ProjectEventCrud">
+		<action name="jobEvents" method="doList" class="com.n4systems.fieldid.actions.projects.ProjectEventCrud">
 			<result name="success" type="freemarker">/templates/html/projectEvents/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/projectEvents/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/projectEvents/list.ftl</result>
@@ -1505,18 +1505,18 @@
 
 
 
-		<action name="jobAssets" method="list" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
+		<action name="jobAssets" method="doList" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
 			<result name="success" type="freemarker">/templates/html/projectAssets/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/projectAssets/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/projectAssets/list.ftl</result>
 		</action>
 
-		<action name="jobAssetAdd" method="add" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
+		<action name="jobAssetAdd" method="doAdd" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
 			<result name="success" type="freemarker">/templates/html/projectAssets/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/projectAssets/add.ftl</result>
 		</action>
 
-		<action name="jobAssetCreate" method="create" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
+		<action name="jobAssetCreate" method="doCreate" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
 			<result name="input" type="freemarker">/templates/html/projectAssets/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/projectAssets/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1525,7 +1525,7 @@
 			</result>
 		</action>
 
-		<action name="jobAssetDelete" method="delete" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
+		<action name="jobAssetDelete" method="doDelete" class="com.n4systems.fieldid.actions.projects.ProjectAssetCrud">
 			<result name="input" type="redirectAction">
 				<param name="actionName">jobAssets</param>
 				<param name="projectId">${action.getProjectId()}</param>
@@ -1540,19 +1540,19 @@
 			</result>
 		</action>
 
-		<action name="saveEventExportDownloadName" method="confirmDownloadName" class="com.n4systems.fieldid.actions.export.ExportAction">
+		<action name="saveEventExportDownloadName" method="doConfirmDownloadName" class="com.n4systems.fieldid.actions.export.ExportAction">
 			<result name="success" type="redirectAction">
 				<param name="actionName">showDownloads</param>
 			</result>
 		</action>
 		
 
-		<action name="exportEvent" method="show" class="com.n4systems.fieldid.actions.export.ExportAction">
+		<action name="exportEvent" method="doShow" class="com.n4systems.fieldid.actions.export.ExportAction">
 			<result name="success" type="freemarker">/templates/html/export/show.ftl</result>			
 			<result name="input" type="freemarker">/templates/html/export/show.ftl</result>			
 		</action>
 
-		<action name="exportEventUpdate" method="export" class="com.n4systems.fieldid.actions.export.ExportAction">
+		<action name="exportEventUpdate" method="doExport" class="com.n4systems.fieldid.actions.export.ExportAction">
 			<result name="success" type="redirectAction">
 				<param name="actionName">exportEvent</param>
 				<param name="eventTypeId">${eventTypeId}</param>
@@ -1562,40 +1562,40 @@
 			<result name="error" type="freemarker">/templates/html/export/show.ftl</result>			
 		</action>
 
-		<action name="myAccount" method="edit" class="com.n4systems.fieldid.actions.user.MyAccount">
+		<action name="myAccount" method="doEdit" class="com.n4systems.fieldid.actions.user.MyAccount">
 			<result name="success" type="freemarker">/templates/html/myAccount/edit.ftl</result>
 		</action>
 
-		<action name="myAccountUpdate" method="create" class="com.n4systems.fieldid.actions.user.MyAccount">
+		<action name="myAccountUpdate" method="doCreate" class="com.n4systems.fieldid.actions.user.MyAccount">
 			<result name="input" type="freemarker">/templates/html/myAccount/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/myAccount/edit.ftl</result>
 			<result name="success" type="redirectAction">myAccount</result>
 		</action>
 
 
-		<action name="eventTypeGroups" method="list" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+		<action name="eventTypeGroups" method="doList" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/eventTypeGroup/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/eventTypeGroup/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventTypeGroup/list.ftl</result>
 		</action>
 
-        <action name="archivedEventTypeGroups" method="listArchived" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+        <action name="archivedEventTypeGroups" method="doListArchived" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
             <result name="success" type="freemarker">/templates/html/eventTypeGroup/listArchived.ftl</result>
             <result name="error" type="freemarker">/templates/html/eventTypeGroup/listArchived.ftl</result>
             <result name="input" type="freemarker">/templates/html/eventTypeGroup/listArchived.ftl</result>
         </action>
 
-		<action name="eventTypeGroup" method="show" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+		<action name="eventTypeGroup" method="doShow" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/eventTypeGroup/show.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventTypeGroup/show.ftl</result>
 		</action>
 
-		<action name="eventTypeGroupAdd" method="add" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+		<action name="eventTypeGroupAdd" method="doAdd" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/eventTypeGroup/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventTypeGroup/add.ftl</result>
 		</action>
 
-		<action name="eventTypeGroupCreate" method="create" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+		<action name="eventTypeGroupCreate" method="doCreate" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
 			<result name="input" type="freemarker">/templates/html/eventTypeGroup/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/eventTypeGroup/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1604,12 +1604,12 @@
 			</result>
 		</action>
 
-		<action name="eventTypeGroupEdit" method="edit" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+		<action name="eventTypeGroupEdit" method="doEdit" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/eventTypeGroup/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eventTypeGroup/edit.ftl</result>
 		</action>
 
-		<action name="eventTypeGroupUpdate" method="update" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+		<action name="eventTypeGroupUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
 			<result name="input" type="freemarker">/templates/html/eventTypeGroup/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/eventTypeGroup/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1618,45 +1618,45 @@
 			</result>
 		</action>
 
-		<action name="eventTypeGroupDelete" method="delete" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+		<action name="eventTypeGroupDelete" method="doDelete" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
 			<result name="input" type="freemarker">/templates/html/eventTypeGroup/delete.ftl</result>
 			<result name="error" type="freemarker">/templates/html/eventTypeGroup/delete.ftl</result>
 			<result name="success" type="redirectAction">eventTypeGroups</result>
 		</action>
 
-        <action name="eventTypeGroupArchive" method="archive" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+        <action name="eventTypeGroupArchive" method="doArchive" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
             <result name="error" type="redirectAction">eventTypeGroups</result>
             <result name="success" type="redirectAction">eventTypeGroups</result>
         </action>
 
-        <action name="eventTypeGroupUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
+        <action name="eventTypeGroupUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.event.EventTypeGroupCrud">
             <result name="error" type="redirectAction">archivedEventTypeGroups</result>
             <result name="success" type="redirectAction">eventTypeGroups</result>
         </action>
 
-		<action name="assetTypeGroups" method="list" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
+		<action name="assetTypeGroups" method="doList" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeGroup/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetTypeGroup/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetTypeGroup/list.ftl</result>
 		</action>
 
-		<action name="reorderAssetTypeGroups" method="list" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
+		<action name="reorderAssetTypeGroups" method="doList" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeGroup/reorder.ftl</result>
 			<result name="error" type="redirectAction">assetTypeGroups</result>
 			<result name="input" type="redirectAction">assetTypeGroups</result>
 		</action>
 
-		<action name="assetTypeGroup" method="show" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
+		<action name="assetTypeGroup" method="doShow" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeGroup/show.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetTypeGroup/show.ftl</result>
 		</action>
 
-		<action name="assetTypeGroupAdd" method="add" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
+		<action name="assetTypeGroupAdd" method="doAdd" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeGroup/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetTypeGroup/add.ftl</result>
 		</action>
 
-		<action name="assetTypeGroupCreate" method="create" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
+		<action name="assetTypeGroupCreate" method="doCreate" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="input" type="freemarker">/templates/html/assetTypeGroup/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetTypeGroup/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1665,18 +1665,18 @@
 			</result>
 		</action>
 		
-		<action name="assetTypeGroupCreateFromList" method="create" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
+		<action name="assetTypeGroupCreateFromList" method="doCreate" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="input" type="freemarker">/templates/html/assetTypeGroup/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetTypeGroup/list.ftl</result>
 			<result name="success" type="redirectAction">assetTypeGroups</result>
 		</action>
 
-		<action name="assetTypeGroupEdit" method="edit" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
+		<action name="assetTypeGroupEdit" method="doEdit" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="success" type="freemarker">/templates/html/assetTypeGroup/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetTypeGroup/edit.ftl</result>
 		</action>
 
-		<action name="assetTypeGroupUpdate" method="update" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
+		<action name="assetTypeGroupUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="input" type="freemarker">/templates/html/assetTypeGroup/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetTypeGroup/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1685,14 +1685,14 @@
 			</result>
 		</action>
 
-		<action name="assetTypeGroupDeleteConfirm" method="deleteConfirm"
+		<action name="assetTypeGroupDeleteConfirm" method="doDeleteConfirm"
 			class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="input" type="freemarker">/templates/html/assetTypeGroup/deleteConfirm.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetTypeGroup/deleteConfirm.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetTypeGroup/deleteConfirm.ftl</result>
 		</action>
 
-		<action name="assetTypeGroupDelete" method="delete" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
+		<action name="assetTypeGroupDelete" method="doDelete" class="com.n4systems.fieldid.actions.asset.AssetTypeGroupCrud">
 			<result name="input" type="redirectAction">
 				<param name="actionName">assetTypeGroupDeleteConfirm</param>
 				<param name="uniqueID">${uniqueID}</param>
@@ -1705,54 +1705,54 @@
 		</action>
 
 
-		<action name="catalog" method="edit" class="com.n4systems.fieldid.actions.safetyNetwork.CatalogCrud">
+		<action name="catalog" method="doEdit" class="com.n4systems.fieldid.actions.safetyNetwork.CatalogCrud">
 			<result name="success" type="freemarker">/templates/html/catalog/publish.ftl</result>
 			<result name="input" type="freemarker">/templates/html/catalog/publish.ftl</result>
 		</action>
-		<action name="publishCatalog" method="update" class="com.n4systems.fieldid.actions.safetyNetwork.CatalogCrud">
+		<action name="publishCatalog" method="doUpdate" class="com.n4systems.fieldid.actions.safetyNetwork.CatalogCrud">
 			<result name="success" type="redirectAction">catalog</result>
 			<result name="input" type="freemarker">/templates/html/catalog/publish.ftl</result>
 		</action>
 
-		<action name="publishedCatalog" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+		<action name="publishedCatalog" method="doShow" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
 			<result name="success" type="freemarker">/templates/html/publishedCatalog/show.ftl</result>
 			<result name="input" type="freemarker">/templates/html/publishedCatalog/show.ftl</result>
 		</action>
 
-		<action name="customerCatalog" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+		<action name="customerCatalog" method="doShow" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
 			<result name="success" type="freemarker">/templates/html/publishedCatalog/show_customer.ftl</result>
 			<result name="input" type="freemarker">/templates/html/publishedCatalog/show_customer.ftl</result>
 		</action>
 
-		<action name="vendorCatalog" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+		<action name="vendorCatalog" method="doShow" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
 			<result name="success" type="freemarker">/templates/html/publishedCatalog/show_vendor.ftl</result>
 			<result name="input" type="freemarker">/templates/html/publishedCatalog/show_vendor.ftl</result>
 		</action>
 
-        <action name="publishedCatalog" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
+        <action name="publishedCatalog" method="doShow" class="com.n4systems.fieldid.actions.safetyNetwork.PublishedCatalogCrud">
             <result name="success" type="freemarker">/templates/html/publishedCatalog/show.ftl</result>
             <result name="input" type="freemarker">/templates/html/publishedCatalog/show.ftl</result>
         </action>
         
-		<action name="organizations" method="list" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+		<action name="organizations" method="doList" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="freemarker">/templates/html/organization/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/organization/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/organization/list.ftl</result>
 		</action>
 		
-		<action name="archivedOrganizations" method="archivedList" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+		<action name="archivedOrganizations" method="doArchivedList" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="freemarker">/templates/html/organization/archived.ftl</result>
 			<result name="error" type="freemarker">/templates/html/organization/archived.ftl</result>
 			<result name="input" type="freemarker">/templates/html/organization/archived.ftl</result>
 		</action>
 
 
-		<action name="organizationAdd" method="add" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+		<action name="organizationAdd" method="doAdd" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="freemarker">/templates/html/organization/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/organization/add.ftl</result>
 		</action>
 
-		<action name="organizationCreate" method="create" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+		<action name="organizationCreate" method="doCreate" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="input" type="freemarker">/templates/html/organization/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/organization/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1760,23 +1760,23 @@
 			</result>
 		</action>
 
-		<action name="organizationEdit" method="edit" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+		<action name="organizationEdit" method="doEdit" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="freemarker">/templates/html/organization/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/organization/edit.ftl</result>
 		</action>
 
-		<action name="organizationConfirmArchive" method="confirmArchive" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+		<action name="organizationConfirmArchive" method="doConfirmArchive" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="freemarker">/templates/html/organization/confirmArchive.ftl</result>
 		</action>
 		
 
-		<action name="organizationArchive" method="archive" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+		<action name="organizationArchive" method="doArchive" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">organizations</param>
 			</result>
 		</action>
 
-		<action name="organizationUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+		<action name="organizationUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">organizations</param>
 			</result>
@@ -1785,7 +1785,7 @@
             </result>
 		</action>
 
-		<action name="organizationUpdate" method="update" class="com.n4systems.fieldid.actions.OrganizationalCrud">
+		<action name="organizationUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.OrganizationalCrud">
 			<result name="input" type="freemarker">/templates/html/organization/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/organization/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1793,39 +1793,39 @@
 			</result>
 		</action>
 
-		<action name="dataLog" method="add" class="com.n4systems.fieldid.actions.DataLogAction">
+		<action name="dataLog" method="doAdd" class="com.n4systems.fieldid.actions.DataLogAction">
 			<result name="success" type="freemarker">/templates/html/dataLog/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/dataLog/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/dataLog/add.ftl</result>
 		</action>
 
-		<action name="dataLogSearch" method="list" class="com.n4systems.fieldid.actions.DataLogAction">
+		<action name="dataLogSearch" method="doList" class="com.n4systems.fieldid.actions.DataLogAction">
 			<result name="success" type="freemarker">/templates/html/dataLog/list.ftl</result>
 			<result name="success" type="freemarker">/templates/html/dataLog/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/dataLog/list.ftl</result>
 		</action>
 
-		<action name="assetMergeAdd" method="add" class="com.n4systems.fieldid.actions.asset.AssetMergeAction">
+		<action name="assetMergeAdd" method="doAdd" class="com.n4systems.fieldid.actions.asset.AssetMergeAction">
 			<result name="success" type="freemarker">/templates/html/assetMerge/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetMerge/add.ftl</result>
 		</action>
 
-		<action name="assetMergeCreate" method="create" class="com.n4systems.fieldid.actions.asset.AssetMergeAction">
+		<action name="assetMergeCreate" method="doCreate" class="com.n4systems.fieldid.actions.asset.AssetMergeAction">
 			<result name="success" type="freemarker">/templates/html/assetMerge/create.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetMerge/add.ftl</result>
 		</action>
 
-		<action name="assetMultiAdd" method="form" class="com.n4systems.fieldid.actions.asset.MultiAddAssetCrud">
+		<action name="assetMultiAdd" method="doForm" class="com.n4systems.fieldid.actions.asset.MultiAddAssetCrud">
 			<result name="success" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
 		</action>
 		
-		<action name="assetMultiAddWithOrder" method="addWithOrder" class="com.n4systems.fieldid.actions.asset.MultiAddAssetCrud">
+		<action name="assetMultiAddWithOrder" method="doAddWithOrder" class="com.n4systems.fieldid.actions.asset.MultiAddAssetCrud">
 			<result name="success" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
 			<result name="input" type="freemarker">/templates/html/multiAssetCrud/form.ftl</result>
 		</action>
 		
-		<action name="assetMultiAddCreate" method="create" class="com.n4systems.fieldid.actions.asset.MultiAddAssetCrud">
+		<action name="assetMultiAddCreate" method="doCreate" class="com.n4systems.fieldid.actions.asset.MultiAddAssetCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">assetMultiAdd</param>
 			</result>
@@ -1839,68 +1839,68 @@
 			</result>
 		</action>
 
-		<action name="systemSettingsEdit" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+		<action name="systemSettingsEdit" method="doEdit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
 			<result name="success" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
 		</action>
 		
-		<action name="yourPlan" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+		<action name="yourPlan" method="doEdit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
 			<result name="success" type="freemarker">/templates/html/systemSettings/yourPlan.ftl</result>
 		</action>
 		
-		<action name="branding" method="edit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+		<action name="branding" method="doEdit" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
 			<result name="success" type="freemarker">/templates/html/systemSettings/branding.ftl</result>
 		</action>
 
-		<action name="systemSettingsUpdate" method="update" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+		<action name="systemSettingsUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
 			<result name="input" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/systemSettings/edit.ftl</result>
 			<result name="success" type="redirectAction">systemSettingsEdit</result>
 		</action>
 		
-				<action name="brandingUpdate" method="updateBranding" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
+				<action name="brandingUpdate" method="doUpdateBranding" class="com.n4systems.fieldid.actions.SystemSettingsCrud">
 			<result name="input" type="freemarker">/templates/html/systemSettings/branding.ftl</result>
 			<result name="error" type="freemarker">/templates/html/systemSettings/branding.ftl</result>
 			<result name="success" type="redirectAction">branding</result>
 		</action>
 
-		<action name="customerInformationEdit" method="edit" class="com.n4systems.fieldid.actions.asset.CustomerInformationCrud">
+		<action name="customerInformationEdit" method="doEdit" class="com.n4systems.fieldid.actions.asset.CustomerInformationCrud">
 			<result name="success" type="freemarker">/templates/html/assetCrud/customerInformationEdit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/assetCrud/customerInformationEdit.ftl</result>
 		</action>
 
-		<action name="customerInformationUpdate" method="update" class="com.n4systems.fieldid.actions.asset.CustomerInformationCrud">
+		<action name="customerInformationUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.asset.CustomerInformationCrud">
 			<result name="input" type="freemarker">/templates/html/assetCrud/customerInformationEdit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetCrud/customerInformationEdit.ftl</result>
             <result name="success" type="redirect">/w/assetSummary?uniqueID=${uniqueID}</result>
 		</action>
 
-		<action name="eulaAcceptanceAdd" method="add" class="com.n4systems.fieldid.actions.eula.EulaAcceptanceAction">
+		<action name="eulaAcceptanceAdd" method="doAdd" class="com.n4systems.fieldid.actions.eula.EulaAcceptanceAction">
 			<interceptor-ref name="loggedInStack" />
 			<result name="success" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="alreadyAccepted" type="redirect">/w/dashboard</result>
 		</action>
 
-		<action name="eulaAcceptanceCreate" method="create" class="com.n4systems.fieldid.actions.eula.EulaAcceptanceAction">
+		<action name="eulaAcceptanceCreate" method="doCreate" class="com.n4systems.fieldid.actions.eula.EulaAcceptanceAction">
 			<interceptor-ref name="loggedInStack" />
 			<result name="input" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/eulaAcceptance/add.ftl</result>
 			<result name="success" type="redirect">/w/dashboard</result>
 		</action>
 
-		<action name="divisions" method="list" class="com.n4systems.fieldid.actions.DivisionCrud">
+		<action name="divisions" method="doList" class="com.n4systems.fieldid.actions.DivisionCrud">
 			<result name="success" type="freemarker">/templates/html/division/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/division/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/division/list.ftl</result>
 		</action>
 
-		<action name="divisionAdd" method="add" class="com.n4systems.fieldid.actions.DivisionCrud">
+		<action name="divisionAdd" method="doAdd" class="com.n4systems.fieldid.actions.DivisionCrud">
 			<result name="success" type="freemarker">/templates/html/division/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/division/add.ftl</result>
 		</action>
 
-		<action name="divisionCreate" method="create" class="com.n4systems.fieldid.actions.DivisionCrud">
+		<action name="divisionCreate" method="doCreate" class="com.n4systems.fieldid.actions.DivisionCrud">
 			<result name="input" type="freemarker">/templates/html/division/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/division/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1909,12 +1909,12 @@
 			</result>
 		</action>
 
-		<action name="divisionEdit" method="edit" class="com.n4systems.fieldid.actions.DivisionCrud">
+		<action name="divisionEdit" method="doEdit" class="com.n4systems.fieldid.actions.DivisionCrud">
 			<result name="success" type="freemarker">/templates/html/division/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/division/edit.ftl</result>
 		</action>
 
-		<action name="divisionUpdate" method="update" class="com.n4systems.fieldid.actions.DivisionCrud">
+		<action name="divisionUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.DivisionCrud">
 			<result name="input" type="freemarker">/templates/html/division/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/division/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1924,7 +1924,7 @@
 		</action>
 
 
-		<action name="divisionDelete" method="delete" class="com.n4systems.fieldid.actions.DivisionCrud">
+		<action name="divisionDelete" method="doDelete" class="com.n4systems.fieldid.actions.DivisionCrud">
 			<result name="input" type="redirectAction">
 				<param name="actionName">divisions</param>
 				<param name="customerId">${customerId}</param>
@@ -1939,7 +1939,7 @@
 			</result>
 		</action>
 		
-		<action name="divisionArchive" method="archive" class="com.n4systems.fieldid.actions.DivisionCrud">
+		<action name="divisionArchive" method="doArchive" class="com.n4systems.fieldid.actions.DivisionCrud">
 			<result name="input" type="redirectAction">
 				<param name="actionName">divisions</param>
 				<param name="customerId">${customerId}</param>
@@ -1954,7 +1954,7 @@
 			</result>
 		</action>
 		
-		<action name="divisionUnarchive" method="unarchive" class="com.n4systems.fieldid.actions.DivisionCrud">
+		<action name="divisionUnarchive" method="doUnarchive" class="com.n4systems.fieldid.actions.DivisionCrud">
 			<result name="input" type="redirectAction">
 				<param name="actionName">divisions</param>
 				<param name="customerId">${customerId}</param>
@@ -1970,18 +1970,18 @@
 		</action>
 		
 
-		<action name="customersUsers" method="list" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+		<action name="customersUsers" method="doList" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
 			<result name="success" type="freemarker">/templates/html/customersUser/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/customersUser/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/customersUser/list.ftl</result>
 		</action>
 
-		<action name="customersUserAdd" method="add" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+		<action name="customersUserAdd" method="doAdd" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
 			<result name="success" type="freemarker">/templates/html/customersUser/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/customersUser/add.ftl</result>
 		</action>
 
-		<action name="customersUserCreate" method="create" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+		<action name="customersUserCreate" method="doCreate" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
 			<result name="input" type="freemarker">/templates/html/customersUser/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/customersUser/add.ftl</result>
 			<result name="success" type="redirectAction">
@@ -1990,7 +1990,7 @@
 			</result>
 		</action>
 
-		<action name="customersUserUpdate" method="update" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+		<action name="customersUserUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
 			<result name="input" type="freemarker">/templates/html/customersUser/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/customersUser/edit.ftl</result>
 			<result name="success" type="redirectAction">
@@ -2000,7 +2000,7 @@
 		</action>
 
 
-		<action name="customersUserArchive" method="archive" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
+		<action name="customersUserArchive" method="doArchive" class="com.n4systems.fieldid.actions.users.CustomersUserCrud">
 			<result name="input" type="redirectAction">
 				<param name="actionName">customersUsers</param>
 				<param name="customerId">${customerId}</param>
@@ -2015,14 +2015,14 @@
 			</result>
 		</action>
 
-		<action name="connectionInvitationAdd" method="add"
+		<action name="connectionInvitationAdd" method="doAdd"
 			class="com.n4systems.fieldid.actions.safetyNetwork.ConnectionInvitationAction">
 			<result name="input" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
 			<result name="success" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
 		</action>
 
-		<action name="connectionInvitationCreate" method="create"
+		<action name="connectionInvitationCreate" method="doCreate"
 			class="com.n4systems.fieldid.actions.safetyNetwork.ConnectionInvitationAction">
 			<result name="input" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
 			<result name="error" type="freemarker">/templates/html/connectionInvitation/add.ftl</result>
@@ -2032,38 +2032,38 @@
 			</result>
 		</action>
 
-        <action name="safetyNetwork" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetwork">
+        <action name="safetyNetwork" method="doShow" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetwork">
             <result name="success" type="freemarker">/templates/html/safetyNetwork/show.ftl</result>
         </action>
 
-        <action name="findConnections" method="search" class="com.n4systems.fieldid.actions.safetyNetwork.FindConnectionsAction">
+        <action name="findConnections" method="doSearch" class="com.n4systems.fieldid.actions.safetyNetwork.FindConnectionsAction">
             <result name="success" type="freemarker">/templates/html/findConnections/list.ftl</result>
         </action>
 
-		<action name="messages" method="list" class="com.n4systems.fieldid.actions.message.MessageCrud">
+		<action name="messages" method="doList" class="com.n4systems.fieldid.actions.message.MessageCrud">
 			<result name="success" type="freemarker">/templates/html/messages/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/messages/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/messages/list.ftl</result>
 		</action>
 
-		<action name="message" method="show" class="com.n4systems.fieldid.actions.message.MessageCrud">
+		<action name="message" method="doShow" class="com.n4systems.fieldid.actions.message.MessageCrud">
 			<result name="success" type="freemarker">/templates/html/messages/show.ftl</result>
 			<result name="input" type="freemarker">/templates/html/messages/show.ftl</result>
 		</action>
 
-		<action name="invite" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SendInvitationAction">
+		<action name="invite" method="doShow" class="com.n4systems.fieldid.actions.safetyNetwork.SendInvitationAction">
 			<result name="success" type="freemarker">/templates/html/messages/invite.ftl</result>
 			<result name="input" type="freemarker">/templates/html/messages/invite.ftl</result>
 		</action>
 
-		<action name="sendInvite" method="send" class="com.n4systems.fieldid.actions.safetyNetwork.SendInvitationAction">
+		<action name="sendInvite" method="doSend" class="com.n4systems.fieldid.actions.safetyNetwork.SendInvitationAction">
 			<result name="success" type="redirectAction">
 				<param name="actionName">invite</param>
 			</result>
 			<result name="input" type="freemarker">/templates/html/messages/invite.ftl</result>
 		</action>
 
-		<action name="messageUpdate" method="update" class="com.n4systems.fieldid.actions.message.MessageCrud">
+		<action name="messageUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.message.MessageCrud">
 			<result name="input" type="freemarker">/templates/html/messages/show.ftl</result>
 			<result name="error" type="freemarker">/templates/html/messages/show.ftl</result>
 			<result name="success" type="redirectAction">
@@ -2072,23 +2072,23 @@
 		</action>
 
 
-		<action name="messageDelete" method="delete" class="com.n4systems.fieldid.actions.message.MessageCrud">
+		<action name="messageDelete" method="doDelete" class="com.n4systems.fieldid.actions.message.MessageCrud">
 			<result name="input" type="redirectAction">messages</result>
 			<result name="error" type="redirectAction">messages</result>
 			<result name="success" type="redirectAction">messages</result>
 		</action>
 
-		<action name="privacySettings" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.PrivacySettingsAction">
+		<action name="privacySettings" method="doShow" class="com.n4systems.fieldid.actions.safetyNetwork.PrivacySettingsAction">
 			<result name="success" type="freemarker">/templates/html/privacy/show.ftl</result>
 		</action>
 
-		<action name="privacySettingsSave" method="save" class="com.n4systems.fieldid.actions.safetyNetwork.PrivacySettingsAction">
+		<action name="privacySettingsSave" method="doSave" class="com.n4systems.fieldid.actions.safetyNetwork.PrivacySettingsAction">
 			<result name="success" type="redirectAction">
 				<param name="actionName">privacySettings</param>
 			</result>
 		</action>
 
-		<action name="downloadFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+		<action name="downloadFile" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="success" type="stream">
 				<param name="contentType">${contentType}</param>
 				<param name="inputName">fileStream</param>
@@ -2098,71 +2098,71 @@
 			<result name="error" type="redirectAction">showDownloads</result>
 		</action>
 	
-		<action name="showDownloads" method="show" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+		<action name="showDownloads" method="doShow" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="input" type="freemarker">/templates/html/downloads/show.ftl</result>
 			<result name="success" type="freemarker">/templates/html/downloads/show.ftl</result>
 			<result name="error" type="freemarker">/templates/html/downloads/show.ftl</result>
 		</action>
 
-		<action name="deleteDownload" method="delete" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+		<action name="deleteDownload" method="doDelete" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="input" type="freemarker">/templates/html/downloads/show.ftl</result>
 			<result name="success" type="freemarker">/templates/html/downloads/show.ftl</result>
 			<result name="error" type="freemarker">/templates/html/downloads/show.ftl</result>
 		</action>
 
-		<action name="importCustomers" method="import" class="com.n4systems.fieldid.actions.customers.CustomerImportAction">
+		<action name="importCustomers" method="doImport" class="com.n4systems.fieldid.actions.customers.CustomerImportAction">
 			<result name="input" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 			<result name="error" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 			<result name="success" type="freemarker">/templates/html/customerCrud/import.ftl</result>
 		</action>
 		
-		<action name="importUsers" method="import" class="com.n4systems.fieldid.actions.users.UserImportAction">
+		<action name="importUsers" method="doImport" class="com.n4systems.fieldid.actions.users.UserImportAction">
 			<result name="input" type="freemarker">/templates/html/userCrud/import.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/userCrud/import.ftl</result>
 			<result name="error" type="freemarker">/templates/html/userCrud/import.ftl</result>
 			<result name="success" type="freemarker">/templates/html/userCrud/import.ftl</result>
 		</action>
 		
-		<action name="autoAttributeImportExport" method="show" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+		<action name="autoAttributeImportExport" method="doShow" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
 			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/importExport.ftl</result>
 		</action>
 		
-		<action name="showImportAutoAttributes" method="show" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+		<action name="showImportAutoAttributes" method="doShow" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
 			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/import.ftl</result>
 		</action>
 
-		<action name="importAutoAttributes" method="import" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+		<action name="importAutoAttributes" method="doImport" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
 			<result name="input" type="freemarker">/templates/html/autoAttributeDefinition/import.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/autoAttributeDefinition/import.ftl</result>
 			<result name="error" type="freemarker">/templates/html/autoAttributeDefinition/import.ftl</result>
 			<result name="success" type="freemarker">/templates/html/autoAttributeDefinition/import.ftl</result>
 		</action>
 		
-		<action name="assetImportExport" method="show" class="com.n4systems.fieldid.actions.asset.AssetImportAction">
+		<action name="assetImportExport" method="doShow" class="com.n4systems.fieldid.actions.asset.AssetImportAction">
 			<result name="success" type="freemarker">/templates/html/assetImport/importExport.ftl</result>
 		</action>
 		
-		<action name="showImportAssets" method="show" class="com.n4systems.fieldid.actions.asset.AssetImportAction">
+		<action name="showImportAssets" method="doShow" class="com.n4systems.fieldid.actions.asset.AssetImportAction">
 			<result name="success" type="freemarker">/templates/html/assetImport/import.ftl</result>
 		</action>
 
-		<action name="importAssets" method="import" class="com.n4systems.fieldid.actions.asset.AssetImportAction">
+		<action name="importAssets" method="doImport" class="com.n4systems.fieldid.actions.asset.AssetImportAction">
 			<result name="input" type="freemarker">/templates/html/assetImport/import.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/assetImport/import.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetImport/import.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetImport/import.ftl</result>
 		</action>
 		
-		<action name="eventImportExport" method="show" class="com.n4systems.fieldid.actions.event.EventImportAction">
+		<action name="eventImportExport" method="doShow" class="com.n4systems.fieldid.actions.event.EventImportAction">
 			<result name="success" type="freemarker">/templates/html/eventImport/importExport.ftl</result>
 		</action>
 		
-		<action name="showImportEvents" method="show" class="com.n4systems.fieldid.actions.event.EventImportAction">
+		<action name="showImportEvents" method="doShow" class="com.n4systems.fieldid.actions.event.EventImportAction">
 			<result name="success" type="freemarker">/templates/html/eventImport/import.ftl</result>
 		</action>
 
-		<action name="importEvents" method="import" class="com.n4systems.fieldid.actions.event.EventImportAction">
+		<action name="importEvents" method="doImport" class="com.n4systems.fieldid.actions.event.EventImportAction">
 			<result name="input" type="freemarker">/templates/html/eventImport/import.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/eventImport/import.ftl</result>
 			<result name="error" type="freemarker">/templates/html/eventImport/import.ftl</result>
@@ -2170,25 +2170,25 @@
 		</action>
 		
 		
-		<action name="assetSelection" method="selection" class="com.n4systems.fieldid.actions.event.AssetSelectionAction">
+		<action name="assetSelection" method="doSelection" class="com.n4systems.fieldid.actions.event.AssetSelectionAction">
 			<result name="input" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
 			<result name="error" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
 			<result name="success" type="freemarker">/templates/html/assetSelection/selection.ftl</result>
 		</action>		
 
-		<action name="preAssignedAssets" method="listPreAssigned" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
+		<action name="preAssignedAssets" method="doListPreAssigned" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
 			<result name="success" type="freemarker">/templates/html/vendor/listPreAssigned.ftl</result>		
 		</action>
 
-        <action name="bulkReg" method="bulkRegister" class="com.n4systems.fieldid.actions.asset.BulkRegisterSafetyNetwork">
+        <action name="bulkReg" method="doBulkRegister" class="com.n4systems.fieldid.actions.asset.BulkRegisterSafetyNetwork">
             <result name="success" type="freemarker">/templates/html/bulkRegister/bulkRegister.ftl</result>
         </action>
 
-        <action name="bulkRegList" method="bulkRegisterList" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
+        <action name="bulkRegList" method="doBulkRegisterList" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
             <result name="success" type="freemarker">/templates/html/vendor/bulkRegisterList.ftl</result>
         </action>
 
-		<action name="searchNetworkAsset" method="search" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
+		<action name="searchNetworkAsset" method="doSearch" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
 			<result name="input" type="freemarker">/templates/html/vendor/show.ftl</result>
 			<result name="success" type="freemarker">/templates/html/vendor/listSearchResult.ftl</result>
 			<result name="error" type="freemarker">/templates/html/vendor/show.ftl</result>	
@@ -2198,70 +2198,70 @@
 			</result>	
 		</action>
 
-		<action name="showVendor" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
+		<action name="showVendor" method="doShow" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkVendor">
 			<result name="success" type="freemarker">/templates/html/vendor/show.ftl</result>		
 		</action>
 
-		<action name="showCustomer" method="show" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkCustomer">
+		<action name="showCustomer" method="doShow" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkCustomer">
 			<result name="success" type="freemarker">/templates/html/customer/show.ftl</result>
 		</action>
 		
-		<action name="showNetworkAsset" method="traceability" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
+		<action name="showNetworkAsset" method="doTraceability" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/networkAsset/show.ftl</result>
 		</action>
 		
-		<action name="networkAssetEvents" method="events" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
+		<action name="networkAssetEvents" method="doEvents" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
 			<result name="error" type="freemarker">/templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/networkAsset/events.ftl</result>
 		</action>
 
-		<action name="networkEventScheduleList" method="schedules" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
+		<action name="networkEventScheduleList" method="doSchedules" class="com.n4systems.fieldid.actions.safetyNetwork.SafetyNetworkAsset">
 			<result name="error" type="freemarker">templates/html/common/error.ftl</result>
 			<result name="success" type="freemarker">/templates/html/networkAsset/schedules.ftl</result>
 		</action>
 
-		<action name="editAssetColumnLayout" method="edit" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+		<action name="editAssetColumnLayout" method="doEdit" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
 			<result name="success" type="freemarker">/templates/html/columnLayout/layout.ftl</result>
             <param name="layoutType">ASSET</param>
 		</action>
 
-        <action name="editEventColumnLayout" method="edit" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+        <action name="editEventColumnLayout" method="doEdit" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
             <result name="success" type="freemarker">/templates/html/columnLayout/layout.ftl</result>
             <param name="layoutType">EVENT</param>
         </action>
 
-        <action name="editScheduleColumnLayout" method="edit" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+        <action name="editScheduleColumnLayout" method="doEdit" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
             <result name="success" type="freemarker">/templates/html/columnLayout/layout.ftl</result>
             <param name="layoutType">SCHEDULE</param>
         </action>
 
-		<action name="sign" method="sign" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+		<action name="sign" method="doSign" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
             <result name="success" type="freemarker">/templates/html/signature/sign2.ftl</result>
         </action>
 
-        <action name="submitSignature" method="submitSignature" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
+        <action name="submitSignature" method="doSubmitSignature" class="com.n4systems.fieldid.actions.columnlayout.EditColumnLayoutAction">
             <result name="success" type="freemarker">/templates/html/signature/sign2.ftl</result>
         </action>
 		
 		
-		<action name="mergeCustomers" method="show" class="com.n4systems.fieldid.actions.customers.CustomerMergeAction">
+		<action name="mergeCustomers" method="doShow" class="com.n4systems.fieldid.actions.customers.CustomerMergeAction">
 			<result name="success" type="freemarker">/templates/html/customerMerge/add.ftl</result>
 		</action>
 		
-		<action name="customerMergeCreate" method="create" class="com.n4systems.fieldid.actions.customers.CustomerMergeAction">
+		<action name="customerMergeCreate" method="doCreate" class="com.n4systems.fieldid.actions.customers.CustomerMergeAction">
 			<result name="success" type="freemarker">/templates/html/customerMerge/create.ftl</result>
 			<result name="input" type="freemarker">/templates/html/customerMerge/add.ftl</result>
 		</action>
 
-		<action name="bulkRegFinalize" method="register" class="com.n4systems.fieldid.actions.asset.BulkRegisterSafetyNetwork">
+		<action name="bulkRegFinalize" method="doRegister" class="com.n4systems.fieldid.actions.asset.BulkRegisterSafetyNetwork">
             <result name="success" type="redirectAction">
                 <param name="actionName">showVendor</param>
                 <param name="vendorId">${vendorId}</param>
             </result>
 		</action>
 
-        <action name="saveDownloadName" method="confirmDownloadName" class="com.n4systems.fieldid.actions.DownloadNameAction">
+        <action name="saveDownloadName" method="doConfirmDownloadName" class="com.n4systems.fieldid.actions.DownloadNameAction">
             <result name="success" type="redirectAction">
                 <param name="actionName">showDownloads</param>
             </result>

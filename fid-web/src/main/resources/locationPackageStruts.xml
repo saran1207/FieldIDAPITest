@@ -6,18 +6,18 @@
 
 	<package name="location" extends="web" namespace="/">
 	
-		<action name="predefinedLocations" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+		<action name="predefinedLocations" method="doList" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
 			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
 		</action>		
 
 
-		<action name="predefinedLocationAdd" method="add" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+		<action name="predefinedLocationAdd" method="doAdd" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
 			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/location/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/list.ftl</result>
 		</action>
 		
-		<action name="predefinedLocationCreate" method="create" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+		<action name="predefinedLocationCreate" method="doCreate" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">predefinedLocationAdd</param>
 				<param name="parentId">${parentId}</param>
@@ -26,13 +26,13 @@
 			<result name="error" type="freemarker">/templates/html/location/list.ftl</result>
 		</action>
 		
-		<action name="predefinedLocationEdit" method="edit" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+		<action name="predefinedLocationEdit" method="doEdit" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
 			<result name="success" type="freemarker">/templates/html/location/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/location/edit.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/edit.ftl</result>
 		</action>
 		
-		<action name="predefinedLocationUpdate" method="update" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+		<action name="predefinedLocationUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
 			<result name="success" type="redirectAction">
 				<param name="actionName">predefinedLocations</param>
 			</result>
@@ -40,32 +40,32 @@
 			<result name="error" type="freemarker">/templates/html/location/edit.ftl</result>
 		</action>
 		
-		<action name="predefinedLocationDelete" method="delete" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
+		<action name="predefinedLocationDelete" method="doDelete" class="com.n4systems.fieldid.actions.location.PredefinedLocationCrud">
 			<result name="success" type="freemarker">/templates/html/location/list.ftl</result>
 			<result name="input" type="freemarker">/templates/html/location/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/list.ftl</result>
 		</action>
 		
 	
-		<action name="predefinedLocationLevels" method="list" class="com.n4systems.fieldid.actions.location.PredefinedLocationLevelsCrud">
+		<action name="predefinedLocationLevels" method="doList" class="com.n4systems.fieldid.actions.location.PredefinedLocationLevelsCrud">
 			<result name="input" type="freemarker">/templates/html/location/edit_level.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/edit_level.ftl</result>
 			<result name="success" type="freemarker">/templates/html/location/edit_level.ftl</result>
 		</action>
 		
-		<action name="predefinedLocationLevelCreate" method="create" class="com.n4systems.fieldid.actions.location.PredefinedLocationLevelsCrud">
+		<action name="predefinedLocationLevelCreate" method="doCreate" class="com.n4systems.fieldid.actions.location.PredefinedLocationLevelsCrud">
 			<result name="input" type="freemarker">/templates/html/location/level/list.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/level/list.ftl</result>
 			<result name="success" type="redirectAction">predefinedLocations</result>
 		</action>
 		
-		<action name="predefinedLocationLevelDelete" method="delete" class="com.n4systems.fieldid.actions.location.PredefinedLocationLevelsCrud">
+		<action name="predefinedLocationLevelDelete" method="doDelete" class="com.n4systems.fieldid.actions.location.PredefinedLocationLevelsCrud">
 			<result name="input" type="freemarker">/templates/html/location/edit_level.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/edit_level.ftl</result>
 			<result name="success" type="redirectAction">predefinedLocations</result>
 		</action>
 		
-		<action name="predefinedLocationLevelUpdate" method="update" class="com.n4systems.fieldid.actions.location.PredefinedLocationLevelsCrud">
+		<action name="predefinedLocationLevelUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.location.PredefinedLocationLevelsCrud">
 			<result name="input" type="freemarker">/templates/html/location/edit_level.ftl</result>
 			<result name="error" type="freemarker">/templates/html/location/edit_level.ftl</result>
 			<result name="success" type="redirectAction">predefinedLocations</result>

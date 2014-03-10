@@ -12,13 +12,13 @@
 			<result name="invalid_security" type="freemarker">/templates/html/common/error.ftl</result>
 		</global-results>
 		
-		<action name="publicDownload" method="publicDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+		<action name="publicDownload" method="doPublicDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="error" type="freemarker">/templates/html/public/downloads/downloadExpired.ftl</result>
 			<result name="input" type="freemarker">/templates/html/public/downloads/publicDownload.ftl</result>
 			<result name="success" type="freemarker">/templates/html/public/downloads/publicDownload.ftl</result>
 		</action>	
 		
-		<action name="downloadFile" method="downloadPublicFile" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+		<action name="downloadFile" method="doDownloadPublicFile" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="success" type="stream">
 				<param name="contentType">${contentType}</param>
 				<param name="inputName">fileStream</param>
@@ -28,7 +28,7 @@
 			<result name="error" type="redirectAction">publicDownloadExpired</result>
 		</action>
 		
-		<action name="publicDownloadExpired" method="show" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+		<action name="publicDownloadExpired" method="doShow" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="success" type="freemarker">/templates/html/public/downloads/downloadExpired.ftl</result>
 		</action>
 		
@@ -43,7 +43,7 @@
 			<result name="input" type="freemarker">/templates/ajax/ajax/error.ftl</result>
 		</global-results>
 		
-		<action name="getRegions" method="list" class="com.n4systems.fieldid.actions.user.RegionListAction">
+		<action name="getRegions" method="doList" class="com.n4systems.fieldid.actions.user.RegionListAction">
 			<result name="success" type="freemarker">/templates/ajax/userCrud/regions.ftl</result>
 		</action>
 	</package>

@@ -16,47 +16,47 @@
 			<result name="sessionBooted" type="freemarker">/templates/aHtml/common/sessionKick.ftl</result>
 		</global-results>
 
-		<action name="exportEvents" method="export" class="com.n4systems.fieldid.actions.export.ExportAction">
+		<action name="exportEvents" method="doExport" class="com.n4systems.fieldid.actions.export.ExportAction">
 			<result name="success" type="freemarker">/templates/aHtml/download/exportEventdownloadNotificationLightBox.ftl</result>
 			<result name="error" type="freemarker">/templates/aHtml/download/exportEventdownloadNotificationLightBox.ftl</result>
 		</action>
 
-		<action name="customerExport" method="export" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+		<action name="customerExport" method="doExport" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 		</action>
 
-		<action name="userExport" method="export" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
+		<action name="userExport" method="doExport" class="com.n4systems.fieldid.actions.users.ReadOnlyUserCrud">
 			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 		</action>
 
-		<action name="autoAttributeExport" method="export" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
+		<action name="autoAttributeExport" method="doExport" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction">
 			<result name="success" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 			<result name="error" type="freemarker">/templates/aHtml/download/downloadNotificationLightBox.ftl</result>
 		</action>
 		
-		<action name="event" method="show" class="com.n4systems.fieldid.actions.event.EventCrud">
+		<action name="event" method="doShow" class="com.n4systems.fieldid.actions.event.EventCrud">
 			<result name="success" type="freemarker">/templates/aHtml/eventCrud/show.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
 		</action>
 
-		<action name="networkEvent" method="show" class="com.n4systems.fieldid.actions.event.NetworkEventCrud">
+		<action name="networkEvent" method="doShow" class="com.n4systems.fieldid.actions.event.NetworkEventCrud">
 			<result name="success" type="freemarker">/templates/aHtml/eventCrud/show.ftl</result>
 			<result name="missing" type="freemarker">/templates/html/common/error.ftl</result>
 		</action>
 
-        <action name="assetTraceability" method="traceability" class="com.n4systems.fieldid.actions.asset.TraceabilityCrud">
+        <action name="assetTraceability" method="doTraceability" class="com.n4systems.fieldid.actions.asset.TraceabilityCrud">
             <result name="success" type="freemarker">/templates/aHtml/traceabilityCrud/show.ftl</result>
             <result name="error" type="freemarker">/templates/html/common/error.ftl</result>
         </action>
 
-		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="login" method="doAdd" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedPublicStack" />
 			<result name="success" type="freemarker">/templates/aHtml/login/form.ftl</result>
 		</action>
 		
-		<action name="createSession" method="create" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="createSession" method="doCreate" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedPublicStack" />
 			<result name="input" type="freemarker">/templates/aHtml/login/form.ftl</result>
 			<result name="redirect" type="freemarker">/templates/aHtml/login/complete.ftl</result>
@@ -64,7 +64,7 @@
 			<result name="eula" type="freemarker">/templates/aHtml/login/complete.ftl</result>
 			<result name="confirmKick" type="freemarker">/templates/aHtml/login/confirmKick.ftl</result>
 		</action>
-		<action name="confirmKick" method="confirmKick" class="com.n4systems.fieldid.actions.LoginAction">
+		<action name="confirmKick" method="doConfirmKick" class="com.n4systems.fieldid.actions.LoginAction">
 			<interceptor-ref name="brandedPublicStack" />
 			<result name="error" type="freemarker">/templates/aHtml/login/form.ftl</result>
 			<result name="success" type="freemarker">/templates/aHtml/login/complete.ftl</result>
@@ -74,41 +74,41 @@
 			<result name="success" type="freemarker">/templates/aHtml/common/sessionKick.ftl</result>
 		</action>
 		
-		<action name="assets" method="list" class="com.n4systems.fieldid.actions.asset.AssetCrud">
+		<action name="assets" method="doList" class="com.n4systems.fieldid.actions.asset.AssetCrud">
 			<result name="error" type="freemarker">/templates/aHtml/assetCrud/list.ftl</result>
 			<result name="success" type="freemarker">/templates/aHtml/assetCrud/list.ftl</result>
 			<result name="oneFound" type="freemarker">/templates/aHtml/assetCrud/list.ftl</result>
 		</action>
 		
-		<action name="orders" method="list" class="com.n4systems.fieldid.actions.integration.OrderUtilAction">
+		<action name="orders" method="doList" class="com.n4systems.fieldid.actions.integration.OrderUtilAction">
 			<result name="success" type="freemarker">/templates/html/orders/list.ftl</result>
 		</action>
 		
-		<action name="regNetworkAsset" method="add" class="com.n4systems.fieldid.actions.safetyNetwork.RegisterAsset">
+		<action name="regNetworkAsset" method="doAdd" class="com.n4systems.fieldid.actions.safetyNetwork.RegisterAsset">
 			<result name="success" type="freemarker">/templates/aHtml/registerAsset/add.ftl</result>
 		</action>
 		
-		<action name="saveRegNetworkAsset" method="save" class="com.n4systems.fieldid.actions.safetyNetwork.RegisterAsset">
+		<action name="saveRegNetworkAsset" method="doSave" class="com.n4systems.fieldid.actions.safetyNetwork.RegisterAsset">
 			<result name="error" type="freemarker">/templates/aHtml/registerAsset/add.ftl</result>
 			<result name="input" type="freemarker">/templates/aHtml/registerAsset/add.ftl</result>
 			<result name="success" type="freemarker">/templates/aHtml/registerAsset/save.ftl</result>
 		</action>
 		
-		<action name="emailDownload" method="show" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+		<action name="emailDownload" method="doShow" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="success" type="freemarker">/templates/aHtml/download/emailDownloadOptions.ftl</result>
 		</action>
 		
-		<action name="emailDownloadLinkForm" method="show" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+		<action name="emailDownloadLinkForm" method="doShow" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="success" type="freemarker">/templates/aHtml/download/emailDownloadForm.ftl</result>
 		</action>
 				
-		<action name="emailDownloadLink" method="email" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
+		<action name="emailDownloadLink" method="doEmail" class="com.n4systems.fieldid.actions.downloaders.DownloadLinkAction">
 			<result name="input" type="freemarker">/templates/html/downloads/show.ftl</result>
 			<result name="success" type="freemarker">/templates/html/downloads/show.ftl</result>
 			<result name="error" type="freemarker">/templates/html/downloads/show.ftl</result>
 		</action>
 
-        <action name="sign" method="sign" class="com.n4systems.fieldid.actions.signature.SignatureAction">
+        <action name="sign" method="doSign" class="com.n4systems.fieldid.actions.signature.SignatureAction">
             <result name="success" type="freemarker">/templates/html/signature/sign.ftl</result>
         </action>
 	</package>
@@ -120,21 +120,21 @@
 			<result name="sessionBooted" type="freemarker">/templates/aHtml/common/fileUploadSessionKick.ftl</result>
 		</global-results>
 
-		<action name="uploadForm" method="form"	class="com.n4systems.fieldid.actions.shared.UploadFileAction">
+		<action name="uploadForm" method="doForm"	class="com.n4systems.fieldid.actions.shared.UploadFileAction">
 			<result name="success" type="freemarker">/templates/aHtml/uploadFile/form.ftl</result>
 		</action>
 
-		<action name="uploadFile" method="upload" class="com.n4systems.fieldid.actions.shared.UploadFileAction">
+		<action name="uploadFile" method="doUpload" class="com.n4systems.fieldid.actions.shared.UploadFileAction">
 			<result name="error" type="freemarker">/templates/aHtml/uploadFile/form.ftl</result>
 			<result name="input" type="freemarker">/templates/aHtml/uploadFile/form.ftl</result>
 			<result name="success" type="freemarker">/templates/aHtml/uploadFile/uploaded.ftl</result>
 		</action>
 		
-		<action name="uploadImageForm" method="form" class="com.n4systems.fieldid.actions.shared.UploadFileAction">
+		<action name="uploadImageForm" method="doForm" class="com.n4systems.fieldid.actions.shared.UploadFileAction">
 			<result name="success" type="freemarker">/templates/aHtml/uploadFile/imageForm.ftl</result>
 		</action>
 
-		<action name="uploadImage" method="upload" class="com.n4systems.fieldid.actions.shared.UploadFileAction">
+		<action name="uploadImage" method="doUpload" class="com.n4systems.fieldid.actions.shared.UploadFileAction">
 			<result name="error" type="freemarker">/templates/aHtml/uploadFile/imageForm.ftl</result>
 			<result name="input" type="freemarker">/templates/aHtml/uploadFile/imageForm.ftl</result>
 			<result name="success" type="freemarker">/templates/aHtml/uploadFile/imageUploaded.ftl</result>

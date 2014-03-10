@@ -123,7 +123,7 @@
 	</package>
 
 	<package name="embedded" extends="default" namespace="/embedded">
-		<action name="login" method="add" class="com.n4systems.fieldid.actions.LoginAction" >
+		<action name="login" method="doAdd" class="com.n4systems.fieldid.actions.LoginAction" >
 			<interceptor-ref name="brandedFlashPublicStack" />
 			<result name="success" type="freemarker">/templates/html/login/embedded.ftl</result>
 			<result name="alreadyLoggedIn" type="freemarker">/templates/html/login/embedded.ftl</result>
@@ -173,44 +173,44 @@
 				<param name="error">404</param>
 			</result>
 		</global-results>
-		<action name="downloadAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
-        <action name="downloadAllAttachedFiles" method="downloadAll" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
-		<action name="downloadSubAttachedFile" method="downloadSubEvent" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
-		<action name="downloadProofTestChart" method="downloadChart" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
-		<action name="downloadJobNoteFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadProjectNoteFile" />
-        <action name="downloadEventCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadEventCert" />
-		<action name="downloadAssetTypeAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeAttachedFile" />
-		<action name="downloadAssetTypeAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetTypeAttachedFile" />
-		<action name="downloadAssetTypeImage" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeImage" />
+		<action name="downloadAttachedFile" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
+        <action name="downloadAllAttachedFiles" method="doDownloadAll" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
+		<action name="downloadSubAttachedFile" method="doDownloadSubEvent" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
+		<action name="downloadProofTestChart" method="doDownloadChart" class="com.n4systems.fieldid.actions.downloaders.DownloadAttachedEventFile" />
+		<action name="downloadJobNoteFile" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadProjectNoteFile" />
+        <action name="downloadEventCert" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadEventCert" />
+		<action name="downloadAssetTypeAttachedFile" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeAttachedFile" />
+		<action name="downloadAssetTypeAttachedFileSafetyNetwork" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetTypeAttachedFile" />
+		<action name="downloadAssetTypeImage" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetTypeImage" />
 		
-		<action name="downloadAssetTypeImageSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetTypeImage" />
-		<action name="downloadPrintOutPreview" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
-		<action name="downloadPrintOutThumb" method="downloadThumb" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
-		<action name="downloadAssetAttachedFile" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetAttachmentFile" />
-		<action name="downloadAssetImage" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetImage" />
-		<action name="downloadAssetAttachedFileSafetyNetwork" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetAttachmentFile" />
-		<action name="downloadExampleCustomerExport" method="download" class="com.n4systems.fieldid.actions.customers.ExampleCustomerExportAction" />
-		<action name="downloadExampleAutoAttributeExport" method="downloadExample" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction" />
-		<action name="downloadExampleAssetExport" method="downloadExample" class="com.n4systems.fieldid.actions.asset.AssetImportAction" />
-		<action name="downloadExampleEventExport" method="downloadExample" class="com.n4systems.fieldid.actions.event.EventImportAction" />
-		<action name="downloadUserSignature" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />		
-		<action name="downloadExampleUserExport" method="download" class="com.n4systems.fieldid.actions.users.ExampleUserExportAction" />
+		<action name="downloadAssetTypeImageSafetyNetwork" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetTypeImage" />
+		<action name="downloadPrintOutPreview" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
+		<action name="downloadPrintOutThumb" method="doDownloadThumb" class="com.n4systems.fieldid.actions.downloaders.DownloadPrintOutPreview" />
+		<action name="downloadAssetAttachedFile" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetAttachmentFile" />
+		<action name="downloadAssetImage" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadAssetImage" />
+		<action name="downloadAssetAttachedFileSafetyNetwork" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadSafetyNetworkAssetAttachmentFile" />
+		<action name="downloadExampleCustomerExport" method="doDownload" class="com.n4systems.fieldid.actions.customers.ExampleCustomerExportAction" />
+		<action name="downloadExampleAutoAttributeExport" method="doDownloadExample" class="com.n4systems.fieldid.actions.autoattribute.AutoAttributeExportAction" />
+		<action name="downloadExampleAssetExport" method="doDownloadExample" class="com.n4systems.fieldid.actions.asset.AssetImportAction" />
+		<action name="downloadExampleEventExport" method="doDownloadExample" class="com.n4systems.fieldid.actions.event.EventImportAction" />
+		<action name="downloadUserSignature" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadUserSignature" />
+		<action name="downloadExampleUserExport" method="doDownload" class="com.n4systems.fieldid.actions.users.ExampleUserExportAction" />
 
 
 
-        <action name="downloadTemporarySignature" method="downloadTemporary" class="com.n4systems.fieldid.actions.signature.SignatureAction" />
-        <action name="downloadSignature" method="download" class="com.n4systems.fieldid.actions.signature.SignatureAction" />
+        <action name="downloadTemporarySignature" method="doDownloadTemporary" class="com.n4systems.fieldid.actions.signature.SignatureAction" />
+        <action name="downloadSignature" method="doDownload" class="com.n4systems.fieldid.actions.signature.SignatureAction" />
 
-        <action name="downloadManufacturerCert" method="download" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
+        <action name="downloadManufacturerCert" method="doDownload" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
 			<result name="cantprint" type="httpheader"><param name="error">404</param></result>
 		</action>
-		<action name="downloadLinkedManufacturerCert" method="downloadLinked" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
+		<action name="downloadLinkedManufacturerCert" method="doDownloadLinked" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
 			<result name="cantprint" type="httpheader"><param name="error">404</param></result>
 		</action>
-        <action name="downloadSafetyNetworkManufacturerCert" method="downloadSafetyNetwork" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
+        <action name="downloadSafetyNetworkManufacturerCert" method="doDownloadSafetyNetwork" class="com.n4systems.fieldid.actions.downloaders.DownloadManufacturerCert" >
             <result name="cantprint" type="httpheader"><param name="error">404</param></result>
         </action>
-		<action name="currentEula" method="show" class="com.n4systems.fieldid.actions.eula.CurrentEulaAction" >
+		<action name="currentEula" method="doShow" class="com.n4systems.fieldid.actions.eula.CurrentEulaAction" >
 			<interceptor-ref name="loggedInStack" />
 			<result name="success" type="freemarker">/templates/html/currentEula/show.ftl</result>
 		</action>

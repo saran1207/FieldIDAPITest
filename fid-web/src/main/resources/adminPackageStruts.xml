@@ -30,14 +30,14 @@
 			</result>
 		</global-results>
 
-		<action name="signIn" method="add"
+		<action name="signIn" method="doAdd"
 			class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
 			<result name="success" type="freemarker">/admin/templates/html/login.ftl
 			</result>
 			<interceptor-ref name="defaultStack" />
 		</action>
 
-		<action name="signOut" method="delete"
+		<action name="signOut" method="doDelete"
 			class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
@@ -45,7 +45,7 @@
 			</result>
 		</action>
 
-		<action name="signIntoSystem" method="create"
+		<action name="signIntoSystem" method="doCreate"
 			class="com.n4systems.fieldidadmin.actions.AuthenticationAction">
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
@@ -55,13 +55,13 @@
 		</action>
 
 
-		<action name="organizations" method="list"
+		<action name="organizations" method="doList"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/html/organization/list.ftl
 			</result>
 		</action>
 
-		<action name="organizationEdit" method="edit"
+		<action name="organizationEdit" method="doEdit"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="input" type="freemarker">/admin/templates/html/organization/edit.ftl
 			</result>
@@ -71,7 +71,7 @@
 			</result>
 		</action>
 
-		<action name="organizationUpdate" method="update"
+		<action name="organizationUpdate" method="doUpdate"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="input" type="freemarker">/admin/templates/html/organization/edit.ftl
 			</result>
@@ -83,7 +83,7 @@
 			</result>
 		</action>
 
-		<action name="organization" method="show"
+		<action name="organization" method="doShow"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/html/organization/show.ftl
 			</result>
@@ -93,7 +93,7 @@
 			</result>
 		</action>
 
-        <action name="rebuildIndex" method="rebuildIndex"
+        <action name="rebuildIndex" method="doRebuildIndex"
                 class="com.n4systems.fieldidadmin.actions.OrganizationAction">
             <result name="success" type="redirectAction">
                 <param name="actionName">organizationEdit</param>
@@ -102,7 +102,7 @@
             </result>
         </action>
 
-        <action name="rebuildCriteriaTrendsIndex" method="rebuildCriteriaTrendsIndex"
+        <action name="rebuildCriteriaTrendsIndex" method="doRebuildCriteriaTrendsIndex"
                 class="com.n4systems.fieldidadmin.actions.OrganizationAction">
             <result name="success" type="redirectAction">
                 <param name="actionName">organizationEdit</param>
@@ -111,7 +111,7 @@
             </result>
         </action>
 
-        <action name="rebuildEventIndex" method="rebuildEventIndex"
+        <action name="rebuildEventIndex" method="doRebuildEventIndex"
                 class="com.n4systems.fieldidadmin.actions.OrganizationAction">
             <result name="success" type="redirectAction">
                 <param name="actionName">organizationEdit</param>
@@ -120,13 +120,13 @@
             </result>
         </action>
 
-		<action name="orderMappingList" method="list"
+		<action name="orderMappingList" method="doList"
 			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
 			<result name="success" type="freemarker">/admin/templates/html/ordermapping/list.ftl
 			</result>
 		</action>
 
-		<action name="uploadOrderMappingXml" method="fileFormInput"
+		<action name="uploadOrderMappingXml" method="doFileFormInput"
 			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
 			<interceptor-ref name="fileUpload" />
 			<interceptor-ref name="basicStack" />
@@ -142,7 +142,7 @@
 			</result>
 		</action>
 
-		<action name="orderMappingCrud" method="formInput"
+		<action name="orderMappingCrud" method="doFormInput"
 			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
 			<result name="input" type="freemarker">/admin/templates/html/ordermapping/orderMappingForm.ftl
 			</result>
@@ -152,14 +152,14 @@
 			</result>
 		</action>
 
-		<action name="orderMappingDelete" method="delete"
+		<action name="orderMappingDelete" method="doDelete"
 			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
 				<param name="actionName">orderMappingList</param>
 			</result>
 		</action>
-		<action name="mailTest" method="input"
+		<action name="mailTest" method="doInput"
 			class="com.n4systems.fieldidadmin.actions.MailAction">
 			<result name="input" type="freemarker">/admin/templates/html/mail/mail.ftl
 			</result>
@@ -169,7 +169,7 @@
 			</result>
 		</action>
 
-		<action name="configCrud" method="load"
+		<action name="configCrud" method="doLoad"
 			class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
 			<result name="success" type="freemarker">/admin/templates/html/config/config.ftl
 			</result>
@@ -182,7 +182,7 @@
 			</result>
 		</action>
 
-		<action name="defaultPrintOuts" method="list"
+		<action name="defaultPrintOuts" method="doList"
 			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
 			<result name="success" type="freemarker">/admin/templates/html/defaultPrintOuts/list.ftl
 			</result>
@@ -190,19 +190,19 @@
 			</result>
 		</action>
 
-		<action name="defaultPrintOutAdd" method="add"
+		<action name="defaultPrintOutAdd" method="doAdd"
 			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
 			<result name="success" type="freemarker">/admin/templates/html/defaultPrintOuts/add.ftl
 			</result>
 		</action>
 
-		<action name="defaultPrintOutEdit" method="edit"
+		<action name="defaultPrintOutEdit" method="doEdit"
 			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
 			<result name="success" type="freemarker">/admin/templates/html/defaultPrintOuts/edit.ftl
 			</result>
 		</action>
 
-		<action name="defaultPrintOutCreate" method="create"
+		<action name="defaultPrintOutCreate" method="doCreate"
 			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
 			<result name="error" type="freemarker">/admin/templates/html/defaultPrintOuts/add.ftl
 			</result>
@@ -214,7 +214,7 @@
 			</result>
 		</action>
 
-		<action name="defaultPrintOutUpdate" method="update"
+		<action name="defaultPrintOutUpdate" method="doUpdate"
 			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
 			<result name="error" type="freemarker">/admin/templates/html/defaultPrintOuts/edit.ftl
 			</result>
@@ -225,7 +225,7 @@
 				<param name="actionName">defaultPrintOuts</param>
 			</result>
 		</action>
-		<action name="defaultPrintOutDelete" method="delete"
+		<action name="defaultPrintOutDelete" method="doDelete"
 			class="com.n4systems.fieldidadmin.actions.DefaultPrintOutCrud">
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
@@ -237,7 +237,7 @@
 			</result>
 		</action>
 
-		<action name="customPrintOuts" method="list"
+		<action name="customPrintOuts" method="doList"
 			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
 			<result name="success" type="freemarker">/admin/templates/html/customPrintOuts/list.ftl
 			</result>
@@ -245,19 +245,19 @@
 			</result>
 		</action>
 
-		<action name="customPrintOutAdd" method="add"
+		<action name="customPrintOutAdd" method="doAdd"
 			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
 			<result name="success" type="freemarker">/admin/templates/html/customPrintOuts/add.ftl
 			</result>
 		</action>
 
-		<action name="customPrintOutEdit" method="edit"
+		<action name="customPrintOutEdit" method="doEdit"
 			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
 			<result name="success" type="freemarker">/admin/templates/html/customPrintOuts/edit.ftl
 			</result>
 		</action>
 
-		<action name="customPrintOutCreate" method="create"
+		<action name="customPrintOutCreate" method="doCreate"
 			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
 			<result name="error" type="freemarker">/admin/templates/html/customPrintOuts/add.ftl
 			</result>
@@ -269,7 +269,7 @@
 			</result>
 		</action>
 
-		<action name="customPrintOutUpdate" method="update"
+		<action name="customPrintOutUpdate" method="doUpdate"
 			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
 			<result name="error" type="freemarker">/admin/templates/html/customPrintOuts/edit.ftl
 			</result>
@@ -280,7 +280,7 @@
 				<param name="actionName">customPrintOuts</param>
 			</result>
 		</action>
-		<action name="customPrintOutDelete" method="delete"
+		<action name="customPrintOutDelete" method="doDelete"
 			class="com.n4systems.fieldidadmin.actions.CustomPrintOutCrud">
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
@@ -292,7 +292,7 @@
 			</result>
 		</action>
 
-		<action name="taskCrud" method="load"
+		<action name="taskCrud" method="doLoad"
 			class="com.n4systems.fieldidadmin.actions.TaskAction">
 			<result name="success" type="freemarker">/admin/templates/html/tasks/tasks.ftl
 			</result>
@@ -300,7 +300,7 @@
 			</result>
 		</action>
 
-		<action name="enableDisableTask" method="enableDisableTask"
+		<action name="enableDisableTask" method="doEnableDisableTask"
 			class="com.n4systems.fieldidadmin.actions.TaskAction">
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
@@ -312,7 +312,7 @@
 			</result>
 		</action>
 
-        <action name="runTask" method="runTask"
+        <action name="runTask" method="doRunTask"
                 class="com.n4systems.fieldidadmin.actions.TaskAction">
             <result name="success" type="redirectAction">
                 <param name="namespace">/admin</param>
@@ -324,7 +324,7 @@
             </result>
         </action>
 
-		<action name="enableDisableScheduler" method="enableDisableScheduler"
+		<action name="enableDisableScheduler" method="doEnableDisableScheduler"
 			class="com.n4systems.fieldidadmin.actions.TaskAction">
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
@@ -336,7 +336,7 @@
 			</result>
 		</action>
 
-		<action name="reloadScheduler" method="reloadScheduler"
+		<action name="reloadScheduler" method="doReloadScheduler"
 			class="com.n4systems.fieldidadmin.actions.TaskAction">
 			<result name="success" type="redirectAction">
 				<param name="namespace">/admin</param>
@@ -348,7 +348,7 @@
 			</result>
 		</action>
 
-		<action name="changeAdminPass" method="load"
+		<action name="changeAdminPass" method="doLoad"
 			class="com.n4systems.fieldidadmin.actions.ChangeSystemPasswordAction">
 			<result name="success" type="freemarker">/admin/templates/html/changeadminpass/form.ftl
 			</result>
@@ -356,7 +356,7 @@
 			</result>
 		</action>
 
-		<action name="eulas" method="list"
+		<action name="eulas" method="doList"
 			class="com.n4systems.fieldidadmin.actions.EulaCrud">
 			<result name="success" type="freemarker">/admin/templates/html/eula/list.ftl
 			</result>
@@ -367,7 +367,7 @@
 		</action>
 
 
-		<action name="eulaAdd" method="add"
+		<action name="eulaAdd" method="doAdd"
 			class="com.n4systems.fieldidadmin.actions.EulaCrud">
 			<result name="success" type="freemarker">/admin/templates/html/eula/add.ftl
 			</result>
@@ -375,7 +375,7 @@
 			</result>
 		</action>
 
-		<action name="eulaCreate" method="create"
+		<action name="eulaCreate" method="doCreate"
 			class="com.n4systems.fieldidadmin.actions.EulaCrud">
 			<result name="input" type="freemarker">/admin/templates/html/eula/add.ftl
 			</result>
@@ -387,7 +387,7 @@
 			</result>
 		</action>
 
-		<action name="eulaEdit" method="edit"
+		<action name="eulaEdit" method="doEdit"
 			class="com.n4systems.fieldidadmin.actions.EulaCrud">
 			<result name="success" type="freemarker">/admin/templates/html/eula/edit.ftl
 			</result>
@@ -395,7 +395,7 @@
 			</result>
 		</action>
 
-		<action name="eulaUpdate" method="update"
+		<action name="eulaUpdate" method="doUpdate"
 			class="com.n4systems.fieldidadmin.actions.EulaCrud">
 			<result name="input" type="freemarker">/admin/templates/html/eula/edit.ftl
 			</result>
@@ -408,7 +408,7 @@
 		</action>
 
 
-		<action name="eulaDelete" method="delete"
+		<action name="eulaDelete" method="doDelete"
 			class="com.n4systems.fieldidadmin.actions.EulaCrud">
 			<result name="input" type="redirectAction">
 				<param name="namespace">/admin</param>
@@ -427,98 +427,98 @@
 
 
 	<package name="adminAjaxAction" extends="admin" namespace="/adminAjax">
-		<action name="getConfigValue" method="getConfiguration"
+		<action name="getConfigValue" method="doGetConfiguration"
 			class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
 			<result name="success" type="freemarker">/admin/templates/html/config/ajaxConfigValue.ftl</result>
 		</action>
 
-		<action name="editNote" method="editNote"
+		<action name="editNote" method="doEditNote"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/editNote.ftl</result>
 		</action>
 
-		<action name="updateOrg" method="updateOrg"
+		<action name="updateOrg" method="doUpdateOrg"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayNote.ftl</result>
 		</action>
 
-		<action name="updateTenantStatus" method="updateTenantStatus"
+		<action name="updateTenantStatus" method="doUpdateTenantStatus"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/updateStatus.ftl</result>
 		</action>
 
-		<action name="editTenantName" method="editTenantName"
+		<action name="editTenantName" method="doEditTenantName"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
 		</action>
 
-		<action name="cancelTenantName" method="cancelTenantName"
+		<action name="cancelTenantName" method="doCancelTenantName"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayName.ftl</result>
 		</action>
 
-		<action name="editSignUp" method="editSignUp"
+		<action name="editSignUp" method="doEditSignUp"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/editSignUp.ftl</result>
 		</action>
 
-		<action name="cancelSignUp" method="cancelSignUp"
+		<action name="cancelSignUp" method="doCancelSignUp"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/displaySignUp.ftl</result>
 		</action>
 
-		<action name="updateSignUp" method="updateSignUp"
+		<action name="updateSignUp" method="doUpdateSignUp"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/displaySignUp.ftl</result>
 		</action>
 
-		<action name="updateTenantName" method="updateTenantName"
+		<action name="updateTenantName" method="doUpdateTenantName"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
             <result name="success" type="freemarker">/admin/templates/ajax/organization/displayName.ftl</result>
             <result name="input" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
             <result name="error" type="freemarker">/admin/templates/ajax/organization/editName.ftl</result>
 		</action>
 
-		<action name="cancelNote" method="cancelNote"
+		<action name="cancelNote" method="doCancelNote"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayNote.ftl</result>
 		</action>
 
-		<action name="editPlan" method="editPlan"
+		<action name="editPlan" method="doEditPlan"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/editPlan.ftl</result>
 		</action>
 
-		<action name="savePlan" method="savePlan"
+		<action name="savePlan" method="doSavePlan"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayPlan.ftl</result>
 		</action>
 
-		<action name="cancelPlan" method="cancelPlan"
+		<action name="cancelPlan" method="doCancelPlan"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/displayPlan.ftl</result>
 		</action>
 
-		<action name="updateExtendedFeature" method="updateExtendedFeature"
+		<action name="updateExtendedFeature" method="doUpdateExtendedFeature"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/updateExtendedFeature.ftl</result>
 		</action>
 
-		<action name="updatePlansAndPricing" method="updatePlansAndPricing"
+		<action name="updatePlansAndPricing" method="doUpdatePlansAndPricing"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/updatePlansAndPricing.ftl</result>
 		</action>
 
-		<action name="updateSecondaryOrgs" method="updateSecondaryOrgs"
+		<action name="updateSecondaryOrgs" method="doUpdateSecondaryOrgs"
 			class="com.n4systems.fieldidadmin.actions.OrganizationAction">
 			<result name="success" type="freemarker">/admin/templates/ajax/organization/updateSecondaryOrgsButton.ftl</result>
 		</action>
 
-        <action name="assets30Day" method="ajax" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+        <action name="assets30Day" method="doAjax" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
             <result name="success" type="freemarker">/admin/templates/ajax/organization/assets30Day.ftl</result>
         </action>
 
-        <action name="events30Day" method="ajax" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+        <action name="events30Day" method="doAjax" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
             <result name="success" type="freemarker">/admin/templates/ajax/organization/events30Day.ftl</result>
         </action>
 		
