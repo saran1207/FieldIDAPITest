@@ -64,7 +64,7 @@ public class ApiSynchronizationResource extends FieldIdPersistenceService {
     @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
     public void storePlatform() {
-        OfflineProfile profile = offlineProfileService.find(getCurrentUser());
+        OfflineProfile profile = offlineProfileService.findOrCreate(getCurrentUser());
 
         profile.setCurrentPlatform(ThreadLocalInteractionContext.getInstance().getCurrentPlatform());
         profile.setCurrentPlatformType(ThreadLocalInteractionContext.getInstance().getCurrentPlatformType());
