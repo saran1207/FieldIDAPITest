@@ -33,7 +33,7 @@ ${action.setPageType('my_account', 'exportEvent')!}
 		<div style="height:54px"></div>
 				
 		<div class="formAction borderLessFormAction">
-			<@s.submit theme="ajax" key="label.exportNow" id="exportButton"/>
+			<@s.submit key="label.exportNow" id="exportButton"/>
 			<@s.text name="label.or"/> <a href="<@s.url action="myAccount"/>"><@s.text name="label.cancel"/></a>
 		</div>
 		
