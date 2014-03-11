@@ -31,6 +31,7 @@ public class PersonCrud extends UserCrud {
         testRequiredEntities(true);
         user.activateEntity();
         new UserSaver().update(user);
+        addFlashMessageText("message.user_unarchived");
         return SUCCESS;
 	}
 
