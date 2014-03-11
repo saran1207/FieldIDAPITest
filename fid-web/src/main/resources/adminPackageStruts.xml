@@ -126,7 +126,7 @@
 			</result>
 		</action>
 
-		<action name="uploadOrderMappingXml" method="doFileFormInput"
+		<action name="uploadOrderMappingXml" method="doXmlUpload"
 			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
 			<interceptor-ref name="fileUpload" />
 			<interceptor-ref name="basicStack" />
@@ -152,6 +152,16 @@
 			</result>
 		</action>
 
+        <action name="orderMappingSave" method="doSave"
+                class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
+            <result name="input" type="freemarker">/admin/templates/html/ordermapping/orderMappingForm.ftl
+            </result>
+            <result name="success" type="redirectAction">
+                <param name="namespace">/admin</param>
+                <param name="actionName">orderMappingList</param>
+            </result>
+        </action>
+
 		<action name="orderMappingDelete" method="doDelete"
 			class="com.n4systems.fieldidadmin.actions.OrderMappingAction">
 			<result name="success" type="redirectAction">
@@ -159,23 +169,32 @@
 				<param name="actionName">orderMappingList</param>
 			</result>
 		</action>
-		<action name="mailTest" method="doInput"
-			class="com.n4systems.fieldidadmin.actions.MailAction">
-			<result name="input" type="freemarker">/admin/templates/html/mail/mail.ftl
-			</result>
-			<result name="success" type="freemarker">/admin/templates/html/mail/mail.ftl
-			</result>
-			<result name="error" type="freemarker">/admin/templates/html/mail/mail.ftl
-			</result>
+
+		<action name="mailTest" method="doInput" class="com.n4systems.fieldidadmin.actions.MailAction">
+			<result name="success" type="freemarker">/admin/templates/html/mail/mail.ftl</result>
 		</action>
 
-		<action name="configCrud" method="doLoad"
+        <action name="sendMailTest" method="doSend" class="com.n4systems.fieldidadmin.actions.MailAction">
+            <result name="input" type="freemarker">/admin/templates/html/mail/mail.ftl</result>
+            <result name="success" type="freemarker">/admin/templates/html/mail/mail.ftl</result>
+            <result name="error" type="freemarker">/admin/templates/html/mail/mail.ftl</result>
+        </action>
+
+        <action name="configCrud" method="doLoad"
 			class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
 			<result name="success" type="freemarker">/admin/templates/html/config/config.ftl
 			</result>
 			<result name="error" type="freemarker">/admin/templates/html/config/config.ftl
 			</result>
 		</action>
+
+        <action name="configCrudSave" method="doSave"
+                class="com.n4systems.fieldidadmin.actions.ConfigurationAction">
+            <result name="success" type="freemarker">/admin/templates/html/config/config.ftl
+            </result>
+            <result name="error" type="freemarker">/admin/templates/html/config/config.ftl
+            </result>
+        </action>
 
 		<action name="certSelection" class="com.n4systems.fieldidadmin.actions.SimpleAction">
 			<result name="success" type="freemarker">/admin/templates/html/certSelection/show.ftl
@@ -348,13 +367,23 @@
 			</result>
 		</action>
 
-		<action name="changeAdminPass" method="doLoad"
-			class="com.n4systems.fieldidadmin.actions.ChangeSystemPasswordAction">
-			<result name="success" type="freemarker">/admin/templates/html/changeadminpass/form.ftl
+		<action name="changeAdminPass" method="doLoad" class="com.n4systems.fieldidadmin.actions.ChangeSystemPasswordAction">
+			<result name="success" type="freemarker">
+                /admin/templates/html/changeadminpass/form.ftl
 			</result>
-			<result name="error" type="freemarker">/admin/templates/html/changeadminpass/form.ftl
+			<result name="error" type="freemarker">
+                /admin/templates/html/changeadminpass/form.ftl
 			</result>
 		</action>
+
+        <action name="saveAdminPass" method="doSave" class="com.n4systems.fieldidadmin.actions.ChangeSystemPasswordAction">
+            <result name="success" type="freemarker">
+                /admin/templates/html/changeadminpass/form.ftl
+            </result>
+            <result name="error" type="freemarker">
+                /admin/templates/html/changeadminpass/form.ftl
+            </result>
+        </action>
 
 		<action name="eulas" method="doList"
 			class="com.n4systems.fieldidadmin.actions.EulaCrud">

@@ -12,7 +12,7 @@
 		</#if>
 	</title>
 </head>
-<@s.form action="commentTemplateEdit!save" cssClass="crudForm inputForm oneColumn" theme="css_xhtml">
+<@s.form action="commentTemplateSave" cssClass="crudForm inputForm oneColumn" theme="css_xhtml">
 	<@s.hidden name="uniqueID" />
 	<@s.url id="cancelUrl" action="commentTemplateList"/>
 		

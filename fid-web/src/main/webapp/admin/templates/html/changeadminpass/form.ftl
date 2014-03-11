@@ -2,7 +2,7 @@
 ${action.setPageName('systemPass')!}
 <@s.actionerror />
 <@s.actionmessage />
-<@s.form action="changeAdminPass!save" namespace="/admin" method="post" theme="xhtml">
+<@s.form action="saveAdminPass" namespace="/admin" method="post" theme="xhtml">
 <div>
 	<@s.password name="pass1" label="Password" />
 	<@s.password name="pass2" label="Again" />

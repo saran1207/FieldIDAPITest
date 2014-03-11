@@ -31,7 +31,7 @@ ${action.setPageName('config')!}
 
 <@s.actionerror />
 <@s.actionmessage />
-<@s.form action="configCrud!save" method="post" theme="simple">
+<@s.form action="configCrudSave" method="post" theme="simple">
 	<table>
 		<tr>
 			<th>Config Entry</th>

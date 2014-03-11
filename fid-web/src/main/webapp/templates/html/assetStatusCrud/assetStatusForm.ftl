@@ -13,7 +13,7 @@
 	</title>
 </head>
 
-<@s.form action="assetStatusEdit!save" cssClass="crudForm" theme="simple">
+<@s.form action="assetStatusSave" cssClass="crudForm" theme="simple">
 	<#include "/templates/html/common/_formErrors.ftl" />
 	<@s.hidden name="uniqueID" />
 	<div class="infoSet">

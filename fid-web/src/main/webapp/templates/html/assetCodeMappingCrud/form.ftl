@@ -10,7 +10,8 @@
 <#else>
 	${action.setPageType('asset_code_mapping','add')!}
 </#if>
-<@s.form action="assetCodeMappingEdit!save" cssClass="fullForm" theme="fieldid" >
+<#include "/templates/html/common/_formErrors.ftl" />
+<@s.form action="assetCodeMappingSave" cssClass="fullForm" theme="fieldid" >
 	<@s.hidden name="uniqueID"/>
 	<div class="fluidSets">
 		<div class="infoSet">

@@ -7,7 +7,7 @@ ${action.setPageType('auto_attribute', 'edit')!}
 <@n4.includeScript src="scriptaculous"/>
 <@n4.includeScript src="effects"/>
 <@n4.includeScript src="dragdrop"/>
-<@s.form action="autoAttributeCriteriaEdit!save" cssClass="inputForm" theme="css_xhtml" >
+<@s.form action="autoAttributeCriteriaSave" cssClass="inputForm" theme="css_xhtml" >
 	<@s.hidden name="uniqueID" id="uniqueId"/>
 	
 	<h2> <@s.text name="label.assettype" /> : <@s.text name="${assetType.name?html!}" /> </h2>

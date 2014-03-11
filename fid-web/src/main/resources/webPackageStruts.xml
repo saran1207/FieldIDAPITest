@@ -135,9 +135,14 @@
 
 		<action name="commentTemplateEdit" method="doLoadEdit" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
 			<result name="input" type="freemarker">/templates/html/commentTemplateCrud/commentTemplateForm.ftl</result>
-			<result name="success" type="redirectAction">commentTemplateList</result>
 			<result name="error" type="redirectAction">commentTemplateList</result>
 		</action>
+
+        <action name="commentTemplateSave" method="doSave" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
+            <result name="input" type="freemarker">/templates/html/commentTemplateCrud/commentTemplateForm.ftl</result>
+            <result name="success" type="redirectAction">commentTemplateList</result>
+            <result name="error" type="redirectAction">commentTemplateList</result>
+        </action>
 
 		<action name="commentTemplateRemove" method="doRemove" class="com.n4systems.fieldid.actions.CommentTemplateCrud">
 			<result name="success" type="redirectAction">commentTemplateList</result>
@@ -156,13 +161,6 @@
 
 		<action name="customerEdit" method="doLoadEdit" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="input" type="freemarker">/templates/html/customerCrud/customerForm.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">customerShow</param>
-				<param name="uniqueID">${uniqueID}</param>
-				<param name="currentPage">${currentPage}</param>
-				<param name="listFilter">${listFilter}</param>
-				<param name="withLinkedCustomers">${withLinkedCustomers}</param>
-			</result>
 			<result name="error" type="redirectAction">
 				<param name="actionName">customerList</param>
 				<param name="currentPage">${currentPage}</param>
@@ -170,6 +168,23 @@
 				<param name="withLinkedCustomers">${withLinkedCustomers}</param>
 			</result>
 		</action>
+
+        <action name="customerSave" method="doSave" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
+            <result name="input" type="freemarker">/templates/html/customerCrud/customerForm.ftl</result>
+            <result name="success" type="redirectAction">
+                <param name="actionName">customerShow</param>
+                <param name="uniqueID">${uniqueID}</param>
+                <param name="currentPage">${currentPage}</param>
+                <param name="listFilter">${listFilter}</param>
+                <param name="withLinkedCustomers">${withLinkedCustomers}</param>
+            </result>
+            <result name="error" type="redirectAction">
+                <param name="actionName">customerList</param>
+                <param name="currentPage">${currentPage}</param>
+                <param name="listFilter">${listFilter}</param>
+                <param name="withLinkedCustomers">${withLinkedCustomers}</param>
+            </result>
+        </action>
 
 		<action name="customerList" method="doList" class="com.n4systems.fieldid.actions.customers.CustomerCrud">
 			<result name="success" type="freemarker">/templates/html/customerCrud/customerList.ftl</result>
@@ -218,10 +233,15 @@
 		</action>
 				
 		<action name="assetStatusEdit" method="doLoadEdit" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
-			<result name="input" type="freemarker">/templates/html/assetStatusCrud/assetStatusForm.ftl</result>
-			<result name="success" type="redirectAction">assetStatusList</result>
+            <result name="input" type="freemarker">/templates/html/assetStatusCrud/assetStatusForm.ftl</result>
 			<result name="error" type="redirectAction">assetStatusList</result>
 		</action>
+
+        <action name="assetStatusSave" method="doSave" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
+            <result name="input" type="freemarker">/templates/html/assetStatusCrud/assetStatusForm.ftl</result>
+            <result name="success" type="redirectAction">assetStatusList</result>
+            <result name="error" type="redirectAction">assetStatusList</result>
+        </action>
 
 		<action name="assetStatusList" method="doList" class="com.n4systems.fieldid.actions.asset.AssetStatusCrud">
 			<result name="success" type="freemarker">/templates/html/assetStatusCrud/assetStatusList.ftl</result>
@@ -292,9 +312,14 @@
 
 		<action name="assetCodeMappingEdit" method="doEdit" class="com.n4systems.fieldid.actions.AssetCodeMappingCrud">
 			<result name="input" type="freemarker">/templates/html/assetCodeMappingCrud/form.ftl</result>
-			<result name="success" type="chain">assetCodeMappingList</result>
 			<result name="error" type="chain">assetCodeMappingList</result>
 		</action>
+
+        <action name="assetCodeMappingSave" method="doSave" class="com.n4systems.fieldid.actions.AssetCodeMappingCrud">
+            <result name="input" type="freemarker">/templates/html/assetCodeMappingCrud/form.ftl</result>
+            <result name="success" type="chain">assetCodeMappingList</result>
+            <result name="error" type="chain">assetCodeMappingList</result>
+        </action>
 
 		<action name="assetCodeMappingList" method="doList" class="com.n4systems.fieldid.actions.AssetCodeMappingCrud">
 			<result name="success" type="freemarker">/templates/html/assetCodeMappingCrud/list.ftl</result>
@@ -328,13 +353,17 @@
 		<action name="autoAttributeCriteriaEdit" method="doEdit" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
 			<result name="error" type="redirectAction">autoAttributeCriteriaList</result>
 			<result name="success" type="freemarker">/templates/html/autoAttributeCriteria/form.ftl</result>
-			<result name="input" type="freemarker">/templates/html/autoAttributeCriteria/form.ftl</result>
-			<result name="saved" type="redirectAction">
-				<param name="actionName">autoAttributeDefinitionList</param>
-				<param name="criteriaId">${autoAttributeCriteria.id}</param>
-			</result>
-
 		</action>
+
+        <action name="autoAttributeCriteriaSave" method="doSave" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
+            <result name="error" type="redirectAction">autoAttributeCriteriaList</result>
+            <result name="success" type="freemarker">/templates/html/autoAttributeCriteria/form.ftl</result>
+            <result name="input" type="freemarker">/templates/html/autoAttributeCriteria/form.ftl</result>
+            <result name="saved" type="redirectAction">
+                <param name="actionName">autoAttributeDefinitionList</param>
+                <param name="criteriaId">${autoAttributeCriteria.id}</param>
+            </result>
+        </action>
 
 		<action name="autoAttributeCriteriaRemove" method="doRemove" class="com.n4systems.fieldid.actions.AutoAttributeCriteriaCrud">
 

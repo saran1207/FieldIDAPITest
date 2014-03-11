@@ -51,7 +51,7 @@
 	</script>
 </head>
 
-<@s.form action="customerEdit!save" cssClass="fullForm fluidSets" theme="fieldid" id="customerForm">
+<@s.form action="customerSave" cssClass="fullForm fluidSets" theme="fieldid" id="customerForm">
 	<#include "../common/_formErrors.ftl"/>
 	<@s.hidden name="uniqueID" />
 	<@s.hidden name="currentPage" />

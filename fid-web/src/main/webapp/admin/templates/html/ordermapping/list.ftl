@@ -1,5 +1,5 @@
 ${action.setPageName('orderMapping')!}
-<table>
+<table class="list" style="clear:both">
 <tr><th>Organization ID</th><th>External Source ID</th><th>Order Key</th><th>Source Order Key</th><th>&nbsp;</th><th>&nbsp;</th></tr>
 <@s.iterator id="orderMapping" value="orderMappings">
 	<tr>
@@ -14,7 +14,7 @@ ${action.setPageName('orderMapping')!}
 </table>
 <a href="orderMappingCrud.action">Add New Order Mapping</a>
 <br /><br /><br />
-<@s.form action="uploadOrderMappingXml!xmlUpload" method="post" namespace="/admin" enctype="multipart/form-data">
+<@s.form action="uploadOrderMappingXml" method="post" namespace="/admin" enctype="multipart/form-data">
 	<@s.file name="orderMappingXml"  label="Upload Order Mapping XML" />
 	<@s.submit />
 </@s.form>
