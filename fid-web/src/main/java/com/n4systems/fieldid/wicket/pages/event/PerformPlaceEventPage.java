@@ -38,6 +38,7 @@ public class PerformPlaceEventPage extends PlaceEventPage {
             fileAttachments = new ArrayList<FileAttachment>();
 
             doAutoSchedule();
+            setAssetOwnerUpdate(false);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
