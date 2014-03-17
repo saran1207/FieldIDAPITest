@@ -1,0 +1,52 @@
+@import "../components/variables.less";
+@import "../components/mixins.less";
+
+.one-click {
+  span {
+    vertical-align: super;
+  }
+}
+
+.event-form {
+
+  .event-section-title {
+    padding: 15px 0;
+  }
+
+  .pagination {
+
+    float: right;
+    margin-top: 15px;
+
+    label {
+      display:inline-block;
+      vertical-align: top;
+      font-size: small;
+      vertical-align: super;
+      font-weight: @regular;
+    }
+
+  }
+
+  .display-horizontal {
+
+    .control-group {
+      border-bottom: 1px solid @gray-light;
+      padding: 15px;
+    }
+
+    .label, .value {
+      width: 40%;
+    }
+  }
+
+  .jumpto {
+    font-size: small;
+    float: right;
+
+    select {
+      width: 200px;
+    }
+  }
+
+}
