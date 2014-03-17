@@ -75,9 +75,13 @@ public class SimpleDataTable<T> extends Panel {
 
             @Override
             protected void onBeforeRender() {
-                super.onBeforeRender();    //To change body of overridden methods use File | Settings | File Templates.
-                multiIdSelection.clearIndexes();
-                multiIdSelection.validateIndexes(table.getCurrentPage(), table.getItemsPerPage(), ((FieldIdAPIDataProvider) table.getDataProvider()).getCurrentPageIdList());
+                super.onBeforeRender();
+
+                if (table.getDataProvider() instanceof FieldIdAPIDataProvider ) {
+                    multiIdSelection.clearIndexes();
+                    multiIdSelection.validateIndexes(table.getCurrentPage(), table.getItemsPerPage(), ((FieldIdAPIDataProvider) table.getDataProvider()).getCurrentPageIdList());
+
+                }
 
             }
         };
