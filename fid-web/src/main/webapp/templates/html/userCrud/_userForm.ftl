@@ -87,7 +87,7 @@
 		
 			<div class="infoSet">
 				 <label class="label" for="userId"><#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.username"/></label>
-				<@s.textfield name="userId"/>
+				<@s.textfield name="userId" required="true"/>
 			</div>
 			
 			<#if user.new >
