@@ -1,16 +1,15 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
+import com.google.common.base.CaseFormat;
+import com.n4systems.model.dashboard.WidgetDefinition;
+import com.n4systems.model.dashboard.WidgetType;
+import org.apache.log4j.Logger;
+
 import java.io.Serializable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
-
-import com.google.common.base.CaseFormat;
-import com.n4systems.model.dashboard.WidgetDefinition;
-import com.n4systems.model.dashboard.WidgetType;
 
 @SuppressWarnings("serial")
 public class WidgetFactory implements Serializable {
@@ -23,17 +22,21 @@ public class WidgetFactory implements Serializable {
 
 
 	public Widget createWidget(final WidgetDefinition widgetDefinition) {
-		return createWidget(widgetDefinition, WIDGET_ID, true);
-	}		
-	
-	public Widget createWidget(final WidgetDefinition widgetDefinition, String id, boolean checkForLazy) {
-		Class<? extends Widget> clazz = getWidgetClass(widgetDefinition.getWidgetType());
-		return createWidget(clazz, widgetDefinition, id);
+        return createWidget(WIDGET_ID, widgetDefinition, true);
 	}
+
+    public Widget createWidget(String id, final WidgetDefinition widgetDefinition, boolean checkForLazy) {
+		Class<? extends Widget> clazz = getWidgetClass(widgetDefinition.getWidgetType());
+        try {
+            return createWidget(clazz, widgetDefinition, id);
+        } catch (Exception e) {
+            return new ErrorLoadingWidget(id, widgetDefinition, clazz);
+        }
+    }
 	
-	private Widget createWidget(Class<? extends Widget> clazz, WidgetDefinition widgetDefinition, String id) {		
-		try {
-			Constructor<? extends Widget> constructor = clazz.getDeclaredConstructor(String.class, WidgetDefinition.class);
+	private Widget createWidget(Class<? extends Widget> clazz, WidgetDefinition widgetDefinition, String id)  {
+        try {
+          Constructor<? extends Widget> constructor = clazz.getDeclaredConstructor(String.class, WidgetDefinition.class);
 			return constructor.newInstance(id, widgetDefinition);
 		} catch (InvocationTargetException e) {
 			logger.error(e.getTargetException());

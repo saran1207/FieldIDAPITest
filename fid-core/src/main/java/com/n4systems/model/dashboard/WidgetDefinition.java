@@ -1,16 +1,9 @@
 package com.n4systems.model.dashboard;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.parents.AbstractEntity;
+
+import javax.persistence.*;
 
 @SuppressWarnings("serial")
 @Entity

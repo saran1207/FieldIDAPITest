@@ -207,6 +207,7 @@ public abstract class ChartWidget<X extends Comparable,T extends WidgetConfigura
 	
 	protected FlotOptions<X> createOptions() {
 		LineGraphOptions<X> options = new LineGraphOptions<X>();
+        //override stuff here....
         return options;
 	}
 

@@ -47,14 +47,14 @@ public enum WidgetType implements Listable<String> {
         return description;
     }
 
-    public WidgetConfiguration createConfiguration() {
+    public <T extends WidgetConfiguration> T createConfiguration() {
         try {
             WidgetConfiguration widgetConfiguration = configurationClass.newInstance();
             widgetConfiguration.setName(name);
-            return widgetConfiguration;
+            return (T) widgetConfiguration;
         } catch (Exception e) {
             throw new RuntimeException("Unable to create instance of configuration class: " + configurationClass);
-        }
+         }
     }
 
     public String getCamelCase() { 
