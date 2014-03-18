@@ -42,7 +42,7 @@
                         <script type="text/javascript">
 
                             jQuery(document).ready(function(){
-                                jQuery("#selectLanguageLink").colorbox({iframe: true, href: '<@s.url value="w/selectLanguage" />', width: '500px', height:'380px'});
+                                jQuery("#selectLanguageLink").colorbox({iframe: true, href: '<@s.url value="/w/selectLanguage" />', width: '500px', height:'380px'});
                             });
 
                         </script>
