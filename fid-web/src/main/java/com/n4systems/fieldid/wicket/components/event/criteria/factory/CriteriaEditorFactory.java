@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.components.event.criteria.factory;
 
-import com.n4systems.fieldid.wicket.components.event.criteria.*;
+import com.n4systems.fieldid.wicket.components.event.criteria.edit.*;
 import com.n4systems.model.*;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;

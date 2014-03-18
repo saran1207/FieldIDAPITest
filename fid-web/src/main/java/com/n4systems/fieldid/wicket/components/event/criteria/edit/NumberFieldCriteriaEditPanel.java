@@ -1,10 +1,8 @@
-package com.n4systems.fieldid.wicket.components.event.criteria;
+package com.n4systems.fieldid.wicket.components.event.criteria.edit;
 
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.model.NumberFieldCriteria;
 import com.n4systems.model.NumberFieldCriteriaResult;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;

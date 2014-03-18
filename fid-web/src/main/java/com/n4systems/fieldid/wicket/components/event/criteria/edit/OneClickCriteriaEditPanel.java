@@ -1,9 +1,9 @@
-package com.n4systems.fieldid.wicket.components.event.criteria;
+package com.n4systems.fieldid.wicket.components.event.criteria.edit;
 
 import com.n4systems.fieldid.wicket.util.ProxyModel;
+import com.n4systems.model.Button;
 import com.n4systems.model.OneClickCriteria;
 import com.n4systems.model.OneClickCriteriaResult;
-import com.n4systems.model.Button;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.basic.Label;

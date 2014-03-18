@@ -1,0 +1,25 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div class="column-left">
+        <div class="display-horizontal" wicket:id="detailsPanel"/>
+
+        <div class="display-horizontal" wicket:id="eventInfoPanel"/>
+
+        <div wicket:id="eventAttachmentsPanel"/>
+    </div>
+
+    <div class="column-wide">
+        <div class="event-form" wicket:id="eventFormPanel"/>
+
+        <div wicket:id="eventResultPanel"/>
+
+        <div wicket:id="eventLocationPanel"/>
+    </div>
+
+    <wicket:fragment wicket:id="viewEventsActionGroup">
+        <a class="btn-secondary" wicket:id="editLink"><wicket:message key="label.edit"/></a>
+    </wicket:fragment>
+
+</wicket:extend>
+</html>

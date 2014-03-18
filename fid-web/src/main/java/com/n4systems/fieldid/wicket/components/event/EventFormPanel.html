@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
     <h2>
@@ -20,7 +21,7 @@
     </h2>
 
     <h3>
-        <span class="eventSectionIndex" wicket:id="topSectionPager"></span>
+        <span class="eventSectionIndex pagination" wicket:id="topSectionPager"></span>
     </h3>
 
     <div wicket:id="criteriaSections">
@@ -28,12 +29,11 @@
 
         <div wicket:id="sectionContainer">
 
-            <h3>
+            <h3 class="event-section-title">
                 <span class="eventSectionTitle" wicket:id="sectionName"></span>
             </h3>
 
-            <div wicket:id="criteriaEditPanel">
-            </div>
+            <div class="display-horizontal" wicket:id="criteriaPanel"/>
 
         </div>
 
@@ -41,9 +41,8 @@
     </div>
 
     <h3>
-        <span class="eventSectionIndex" wicket:id="bottomSectionPager"></span>
+        <span class="eventSectionIndex pagination" wicket:id="bottomSectionPager"></span>
     </h3>
 
-
-
 </wicket:panel>
+</html>

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.components.event.criteria;
+package com.n4systems.fieldid.wicket.components.event.criteria.edit;
 
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.ComboBox;

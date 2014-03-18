@@ -9,15 +9,15 @@ import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
 
-public class EventFormEditPanel extends EventFormPanel {
+public class EventFormViewPanel extends EventFormPanel {
 
 
-    public EventFormEditPanel(String id, Class<? extends Event> eventClass, IModel<List<AbstractEvent.SectionResults>> results) {
+    public EventFormViewPanel(String id, Class<? extends Event> eventClass, IModel<List<AbstractEvent.SectionResults>> results) {
         super(id, eventClass, results);
     }
 
     @Override
     protected Panel getCriteriaSectionPanel(Class<? extends Event> eventClass, PropertyModel<List<CriteriaResult>> results) {
-        return new CriteriaSectionEditPanel("criteriaPanel", eventClass, results);
+        return new CriteriaSectionViewPanel("criteriaPanel", eventClass, results);
     }
 }

@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.action.ActionsListPage;
-import com.n4systems.fieldid.wicket.components.event.criteria.CriteriaActionButton;
+import com.n4systems.fieldid.wicket.components.event.criteria.edit.CriteriaActionButton;
 import com.n4systems.fieldid.wicket.components.event.criteria.factory.CriteriaEditorFactory;
 import com.n4systems.fieldid.wicket.components.event.observations.DeficienciesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.observations.RecommendationsEditPanel;
