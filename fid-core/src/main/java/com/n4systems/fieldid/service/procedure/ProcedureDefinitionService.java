@@ -160,7 +160,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             ImageAnnotation imageAnnotation = isolationPoint.getAnnotation();
             isolationPoint.setAnnotation(null);
             persistenceService.update(isolationPoint);
-            persistenceService.delete(imageAnnotation);
+
+            if (null != imageAnnotation) {
+                persistenceService.delete(imageAnnotation);
+            }
+
         }
         persistenceService.delete(procedureDefinition);
     }
