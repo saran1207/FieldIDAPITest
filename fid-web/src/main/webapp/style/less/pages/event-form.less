@@ -1,0 +1,82 @@
+@import "../components/variables.less";
+@import "../components/mixins.less";
+
+.one-click {
+  span {
+    vertical-align: super;
+  }
+}
+
+.event-form {
+
+  .event-section-title {
+    padding: 15px 0;
+  }
+
+  .pagination {
+
+    float: right;
+    margin-top: 15px;
+
+    label {
+      display:inline-block;
+      vertical-align: top;
+      font-size: small;
+      vertical-align: super;
+      font-weight: @regular;
+    }
+
+  }
+
+  .display-horizontal {
+
+    .control-group {
+      border-bottom: 1px solid @gray-light;
+      padding: 10px;
+    }
+
+    .label, .value {
+      width: 40%;
+      vertical-align: super;
+    }
+
+    .actions {
+      width: 19%;
+      display: inline-block;
+      text-align: right;
+
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .jumpto {
+    font-size: small;
+    float: right;
+
+    select {
+      width: 200px;
+    }
+  }
+
+}
+
+.observation-dialog p.def-selected, .observation-dialog p.rec-selected {
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding-left: 45px;
+  height: 25px;
+}
+
+.observation-dialog p.def-selected {
+  background-image: url(../../images/deficient.gif);
+}
+
+.observation-dialog p.rec-selected {
+  background-image: url(../../images/recommendation.gif);
+}
+
+.observation-dialog p.def-selected span, .observation-dialog p.rec-selected span {
+    vertical-align: sub;
+}

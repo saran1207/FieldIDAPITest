@@ -68,6 +68,7 @@ public class ThingEventSummaryPage extends EventSummaryPage {
 
     protected ThingEvent loadExistingEvent() {
         ThingEvent existingEvent = eventService.lookupExistingEvent(ThingEvent.class, uniqueId);
+        PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS);
         PostFetcher.postFetchFields(existingEvent, Event.THING_TYPE_PATHS);
         return existingEvent;
     }

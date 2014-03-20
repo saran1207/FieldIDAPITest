@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.event.criteriaimage;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -27,7 +26,7 @@ public class CriteriaImageViewPage extends FieldIDAuthenticatedPage {
         add(new Link<Void>("back") {
             @Override
             public void onClick() {
-                setResponsePage(new CriteriaImageViewListPage(PageParametersBuilder.uniqueId(model.getObject().getId())));
+                setResponsePage(new CriteriaImageViewListPage(model));
             }
         });
     }
