@@ -95,7 +95,7 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             DropDownChoice<PriorityCode> priorityChoice = new FidDropDownChoice<PriorityCode>("priority", ProxyModel.of(getModel(), on(Event.class).getPriority()), new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>());
             add(priorityChoice);
 
-            if (eventScheduleModel.getObject().getType().isActionEventType()) {
+            if ((null != eventScheduleModel.getObject().getType()) && (eventScheduleModel.getObject().getType().isActionEventType())) {
                 priorityChoice.setVisible(true);
 
             } else {
