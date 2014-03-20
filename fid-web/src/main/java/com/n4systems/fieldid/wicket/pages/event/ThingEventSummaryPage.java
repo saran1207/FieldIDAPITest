@@ -1,10 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.wicket.components.event.EventDetailsPanel;
-import com.n4systems.fieldid.wicket.components.event.EventFormViewPanel;
-import com.n4systems.fieldid.wicket.components.event.HeaderPanel;
-import com.n4systems.fieldid.wicket.components.event.PostEventDetailsPanel;
+import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.event.*;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
@@ -48,7 +46,7 @@ public class ThingEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Panel getEventResultPanel(String id) {
-        return new EmptyPanel(id);
+        return new EventResultPanel(id, eventModel);
     }
 
     @Override
@@ -63,7 +61,7 @@ public class ThingEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Panel getEventLocationPanel(String id) {
-        return new EmptyPanel(id);
+        return new GoogleMap<Event>(id, eventModel.getObject());
     }
 
     protected ThingEvent loadExistingEvent() {

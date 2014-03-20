@@ -46,13 +46,30 @@
   padding-left: 45px;
   height: 25px;
 }
+.observation-dialog p.def-selected span,
+.observation-dialog p.rec-selected span {
+  vertical-align: sub;
+}
 .observation-dialog p.def-selected {
   background-image: url(../../images/deficient.gif);
 }
 .observation-dialog p.rec-selected {
   background-image: url(../../images/recommendation.gif);
 }
-.observation-dialog p.def-selected span,
-.observation-dialog p.rec-selected span {
-  vertical-align: sub;
+.result span {
+  padding: 5px 15px;
+  width: 45px;
+  text-align: center;
+}
+.result .na-color {
+  background-color: #E3E3E3;
+}
+.result .fail-color {
+  background-color: #E9BDBD;
+}
+.result .pass-color {
+  background-color: #DBF1BA;
+}
+.event-location {
+  height: 300px;
 }

@@ -62,21 +62,48 @@
 
 }
 
-.observation-dialog p.def-selected, .observation-dialog p.rec-selected {
-  background-position: left center;
-  background-repeat: no-repeat;
-  padding-left: 45px;
-  height: 25px;
+.observation-dialog {
+  p.def-selected, p.rec-selected {
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 45px;
+    height: 25px;
+
+    span {
+      vertical-align: sub;
+    }
+  }
+
+  p.def-selected {
+    background-image: url(../../images/deficient.gif);
+  }
+
+  p.rec-selected {
+    background-image: url(../../images/recommendation.gif);
+  }
 }
 
-.observation-dialog p.def-selected {
-  background-image: url(../../images/deficient.gif);
+.result {
+  span {
+    padding: 5px 15px;
+    width: 45px;
+    text-align: center;
+  }
+
+  .na-color {
+    background-color: #E3E3E3;
+  }
+
+  .fail-color {
+    background-color: #E9BDBD;
+  }
+
+  .pass-color {
+    background-color:#DBF1BA;
+  }
 }
 
-.observation-dialog p.rec-selected {
-  background-image: url(../../images/recommendation.gif);
+.event-location {
+  height: 300px;
 }
 
-.observation-dialog p.def-selected span, .observation-dialog p.rec-selected span {
-    vertical-align: sub;
-}
