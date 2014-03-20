@@ -109,7 +109,7 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
                     usersModel, userGroupsModel,
                     new AssigneesModel(userGroupsModel, usersModel));
 
-            if (eventScheduleModel.getObject().getType().isActionEventType()) {
+            if ((null != eventScheduleModel.getObject().getType()) && (eventScheduleModel.getObject().getType().isActionEventType())) {
                 assignedUserOrGroupSelect.setNullVoid(false);
             }
 
