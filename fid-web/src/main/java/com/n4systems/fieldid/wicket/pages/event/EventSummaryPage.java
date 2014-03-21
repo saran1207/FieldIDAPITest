@@ -57,7 +57,7 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/pages/event-form.css");
+        response.renderCSSReference("style/pages/event-summary.css");
     }
 
     protected abstract Panel getDetailsPanel(String id);
