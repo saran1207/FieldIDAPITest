@@ -9,7 +9,6 @@ import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.panel.EmptyPanel;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -56,7 +55,7 @@ public class ThingEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Panel getEventAttachmentsPanel(String id) {
-        return new EmptyPanel(id);
+        return new EventAttachmentsPanel(id, eventModel);
     }
 
     @Override

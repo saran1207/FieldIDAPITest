@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+
+<wicket:panel>
+    <h3><wicket:message key="label.attachments"/> | <a wicket:id="downloadAllLink" class="download-all"><wicket:message key="label.download_all"/></a></h3>
+    <table class="attachments-table">
+        <tr wicket:id="attachments">
+            <td class="image-column"><img wicket:id="attachmentImage"></td>
+            <td>
+                <a class="attachment-link" wicket:id="attachmentLink"><span wicket:id="attachmentName"/></a>
+                <div class="attachment-text" wicket:id="attachmentNote"/>
+            </td>
+        </tr>
+    </table>
+</wicket:panel>
+
+</html>
