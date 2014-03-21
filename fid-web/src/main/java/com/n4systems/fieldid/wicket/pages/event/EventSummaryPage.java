@@ -37,6 +37,9 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
         add(getEventAttachmentsPanel("eventAttachmentsPanel"));
 
         add(getEventLocationPanel("eventLocationPanel"));
+
+        add(getProofTestPanel("proofTestPanel"));
+
     }
 
     @Override
@@ -71,6 +74,8 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
     protected abstract Panel getEventAttachmentsPanel(String id);
 
     protected abstract Panel getEventLocationPanel(String id);
+
+    protected abstract Panel getProofTestPanel(String id);
 
     private class ActionGroup extends Fragment {
 
