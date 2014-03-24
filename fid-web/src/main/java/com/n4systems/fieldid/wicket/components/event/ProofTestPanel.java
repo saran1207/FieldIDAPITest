@@ -1,7 +1,10 @@
 package com.n4systems.fieldid.wicket.components.event;
 
+import com.n4systems.fieldid.wicket.components.ExternalImage;
+import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.ThingEvent;
+import com.n4systems.reporting.PathHandler;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -19,5 +22,9 @@ public class ProofTestPanel extends Panel {
         add(new Label("duration", new PropertyModel<String>(eventModel, "proofTestInfo.duration")));
         add(new Label("peakLoadDuration", new PropertyModel<String>(eventModel, "proofTestInfo.peakLoadDuration")));
 
+        String chartUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadProofTestChart.action?uniqueID=" + eventModel.getObject().getId());
+        Boolean chartExists = PathHandler.getChartImageFile(eventModel.getObject()).exists();
+
+        add(new ExternalImage("proofTestChart", chartUrl).setVisible(chartExists));
     }
 }
