@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.event.EditPlaceEventPage;
-import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
+import com.n4systems.fieldid.wicket.pages.event.PlaceEventSummaryPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.PlaceEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -18,7 +18,7 @@ public class EventActionsCell extends Panel {
         
         Event event = eventModel.getObject();
 
-        add(new BookmarkablePageLink<ThingEventSummaryPage>("viewLink", ThingEventSummaryPage.class, PageParametersBuilder.id(event.getID())));
+        add(new BookmarkablePageLink<PlaceEventSummaryPage>("viewLink", PlaceEventSummaryPage.class, PageParametersBuilder.id(event.getID())));
 
         WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
 
