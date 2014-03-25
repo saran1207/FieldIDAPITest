@@ -12,9 +12,8 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class CriteriaImageViewListPage extends FieldIDAuthenticatedPage {
@@ -25,13 +24,13 @@ public class CriteriaImageViewListPage extends FieldIDAuthenticatedPage {
     @SpringBean
     private PersistenceService persistenceService;
 
-    public CriteriaImageViewListPage(PageParameters params) {
+    private IModel<CriteriaResult> criteriaResultModel;
+
+    public CriteriaImageViewListPage(IModel<CriteriaResult> model) {
         super();
-        Long criteriaResultId = params.get("uniqueID").toLong();
-        final CriteriaResult criteriaResult = persistenceService.find(CriteriaResult.class, criteriaResultId);
+        this.criteriaResultModel = model;
 
-
-        add(new ListView<CriteriaResultImage>("images", criteriaResult.getCriteriaImages()) {
+        add(new ListView<CriteriaResultImage>("images", criteriaResultModel.getObject().getCriteriaImages()) {
             @Override
             protected void populateItem(ListItem<CriteriaResultImage> item) {
                 final CriteriaResultImage image = item.getModelObject();
@@ -40,7 +39,7 @@ public class CriteriaImageViewListPage extends FieldIDAuthenticatedPage {
                 item.add(viewLink = new AjaxLink<Void>("view") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        setResponsePage(new CriteriaImageViewPage(Model.of(criteriaResult), index));
+                        setResponsePage(new CriteriaImageViewPage(criteriaResultModel, index));
                     }
                 });
 
@@ -48,8 +47,6 @@ public class CriteriaImageViewListPage extends FieldIDAuthenticatedPage {
                 item.add(new Label("comments", new PropertyModel<String>(image, "comments")));
             }
         });
-
-        
     }
 
     @Override
@@ -60,4 +57,5 @@ public class CriteriaImageViewListPage extends FieldIDAuthenticatedPage {
         response.renderJavaScriptReference("javascript/jquery.ThreeDots.min.js");
         response.renderOnDomReadyJavaScript("$('.comments').ThreeDots({ allow_dangle: true })");
     }
+
 }

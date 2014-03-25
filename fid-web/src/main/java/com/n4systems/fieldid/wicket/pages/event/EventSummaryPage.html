@@ -10,11 +10,16 @@
     </div>
 
     <div class="column-wide">
-        <div class="event-form" wicket:id="eventFormPanel"/>
+        <div class="event-form clearfix" wicket:id="eventFormPanel"/>
 
-        <div wicket:id="eventResultPanel"/>
+        <div class="display-horizontal" wicket:id="eventResultPanel"/>
 
-        <div wicket:id="eventLocationPanel"/>
+        <div class="display-horizontal" wicket:id="proofTestPanel"/>
+
+        <div wicket:enclosure="eventLocationPanel">
+            <h3><wicket:message key="label.gpslocation"/></h3>
+            <div class="event-location" wicket:id="eventLocationPanel"/>
+        </div>
     </div>
 
     <wicket:fragment wicket:id="viewEventsActionGroup">

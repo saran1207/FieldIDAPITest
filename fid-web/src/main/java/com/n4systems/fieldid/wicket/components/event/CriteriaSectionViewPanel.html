@@ -4,7 +4,26 @@
     <div class="control-group" wicket:id="criteria">
         <label class="label" wicket:id="criteriaName"/>
         <div class="value" wicket:id="criteriaResult"/>
+        <div class="actions">
+            <a wicket:id="deficiencies"><img src="/fieldid/images/def-icon.png"/> </a>
+            <a wicket:id="recommendations"><img src="/fieldid/images/rec-icon.png"/> </a>
+            <a wicket:id="criteriaImages"><img src="/fieldid/images/camera-icon.png"/> </a>
+            <a wicket:id="actions"><img src="/fieldid/images/action-icon.png"/> </a>
+        </div>
+        <div wicket:id="deficienciesDialog" class="observation-dialog">
+            <p wicket:id="deficiency">
+                <span wicket:id="text"/>
+            </p>
+        </div>
+        <div wicket:id="recommendationsDialog" class="observation-dialog">
+            <p wicket:id="recommendation">
+                <span wicket:id="text"/>
+            </p>
+        </div>
     </div>
+
+    <div wicket:id="actionsModal" class="actions-modal"/>
+    <div wicket:id="imagesModal" class="observation-modal"/>
 
 </wicket:panel>
 </html>

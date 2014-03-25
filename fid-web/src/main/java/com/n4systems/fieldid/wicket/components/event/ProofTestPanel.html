@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns:wicket="http://wicket.apache.org">
+
+<wicket:panel>
+    <h3><wicket:message key="label.prooftest"/></h3>
+    <div class="control-group">
+        <label class="label"><wicket:message key="label.prooftesttype"/></label>
+        <span class="value" wicket:id="proofTestType"/>
+    </div>
+    <div class="control-group">
+        <label class="label"><wicket:message key="label.peakload"/></label>
+        <span class="value" wicket:id="peakLoad"/>
+    </div>
+    <div class="control-group">
+        <label class="label"><wicket:message key="label.duration"/></label>
+        <span class="value" wicket:id="duration"/>
+    </div>
+    <div class="control-group">
+        <label class="label"><wicket:message key="label.peakloadduration"/></label>
+        <span class="value" wicket:id="peakLoadDuration"/>
+    </div>
+    <div class="control-group">
+        <img class="proof-test-chart" wicket:id="proofTestChart"/>
+    </div>
+</wicket:panel>
+
+</html>

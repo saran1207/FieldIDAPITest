@@ -48,7 +48,7 @@ public class AssetAttachmentsPanel extends Panel {
                 try {
                     fileName = URLEncoder.encode(attachment.getFileName(), "UTF-8");
                 } catch (Exception e) {
-                    logger.warn("Could not conver to UTF-8", e);
+                    logger.warn("Could not convert to UTF-8", e);
                     fileName = attachment.getFileName().replace(" ", "+");
                 }
                 

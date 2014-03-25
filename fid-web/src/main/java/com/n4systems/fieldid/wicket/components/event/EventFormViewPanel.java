@@ -14,6 +14,7 @@ public class EventFormViewPanel extends EventFormPanel {
 
     public EventFormViewPanel(String id, Class<? extends Event> eventClass, IModel<List<AbstractEvent.SectionResults>> results) {
         super(id, eventClass, results);
+        setVisible(!results.getObject().isEmpty());
     }
 
     @Override

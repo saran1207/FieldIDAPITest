@@ -18,7 +18,7 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
     protected Boolean useContext;
 
     public EventSummaryPage(PageParameters parameters) {
-        uniqueId = parameters.get("uniqueID").toLong();
+        uniqueId = parameters.get("id").toLong();
         useContext = parameters.get("useContext").toBoolean();
     }
 
@@ -37,6 +37,9 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
         add(getEventAttachmentsPanel("eventAttachmentsPanel"));
 
         add(getEventLocationPanel("eventLocationPanel"));
+
+        add(getProofTestPanel("proofTestPanel"));
+
     }
 
     @Override
@@ -57,7 +60,7 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/pages/eventForm.css");
+        response.renderCSSReference("style/pages/event-summary.css");
     }
 
     protected abstract Panel getDetailsPanel(String id);
@@ -71,6 +74,8 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
     protected abstract Panel getEventAttachmentsPanel(String id);
 
     protected abstract Panel getEventLocationPanel(String id);
+
+    protected abstract Panel getProofTestPanel(String id);
 
     private class ActionGroup extends Fragment {
 

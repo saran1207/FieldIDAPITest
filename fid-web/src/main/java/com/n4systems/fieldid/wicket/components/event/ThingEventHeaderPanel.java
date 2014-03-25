@@ -13,14 +13,14 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public class HeaderPanel extends Panel {
+public class ThingEventHeaderPanel extends Panel {
 
     @SpringBean
     protected UserService userService;
     @SpringBean
     protected AssetService assetService;
 
-    public  HeaderPanel(String id, IModel<Asset> assetModel, Boolean isView) {
+    public ThingEventHeaderPanel(String id, IModel<Asset> assetModel, Boolean isView) {
         super(id, assetModel);
 
         final Asset asset = assetModel.getObject();

@@ -16,7 +16,6 @@
 
 .criteria-image-container .actions {
     padding-top: 20px;
-    float: left;
     width: 100%;
     font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
     font-size: 12px;
@@ -63,7 +62,6 @@
 }
 
 .image-container {
-    float:left;
     width: 160px;
     height: 205px;
     margin: 5px;
@@ -146,7 +144,6 @@ div.comments {
 label.label {
     color: #555555;
     display: block;
-    float: left;
     font-weight: bold;
     line-height: 17px;
     overflow: hidden;
