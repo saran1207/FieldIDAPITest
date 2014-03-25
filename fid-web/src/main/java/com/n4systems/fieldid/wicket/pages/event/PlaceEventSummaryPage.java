@@ -126,7 +126,7 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
             navItems.add(aNavItem().label(new PropertyModel<String>(org.getDivisionOrg(), "name")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(org.getDivisionOrg().getId())).build());
         }
 
-        navItems.add(aNavItem().label(new PropertyModel<String>(eventModel, "type.displayName")).page(PlaceEventSummaryPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build());
+        navItems.add(aNavItem().label(new PropertyModel<String>(eventModel, "type.displayName")).page(PlaceEventSummaryPage.class).params(PageParametersBuilder.id(uniqueId)).build());
 
         return navItems;
     }

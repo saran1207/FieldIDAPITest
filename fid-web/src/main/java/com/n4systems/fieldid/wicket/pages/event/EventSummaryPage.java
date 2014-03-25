@@ -18,7 +18,7 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
     protected Boolean useContext;
 
     public EventSummaryPage(PageParameters parameters) {
-        uniqueId = parameters.get("uniqueID").toLong();
+        uniqueId = parameters.get("id").toLong();
         useContext = parameters.get("useContext").toBoolean();
     }
 
