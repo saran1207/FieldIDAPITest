@@ -84,7 +84,6 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
 
     protected PlaceEvent loadExistingEvent() {
         PlaceEvent existingEvent = eventService.lookupExistingEvent(PlaceEvent.class, uniqueId);
-        PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS);
         PostFetcher.postFetchFields(existingEvent, Event.PLACE_FIELD_PATHS);
         return existingEvent;
     }
@@ -98,7 +97,7 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
                 aNavItem().label(new FIDLabelModel("label.summary")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(placeModel.getObject().getId())).build(),
-                aNavItem().label(new FIDLabelModel("label.event")).page(PlaceEventSummaryPage.class).params(PageParametersBuilder.id(uniqueId)).build()
+                aNavItem().label(new FIDLabelModel("label.event_summary")).page(PlaceEventSummaryPage.class).params(PageParametersBuilder.id(uniqueId)).build()
         ));
     }
 
@@ -127,7 +126,7 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
             navItems.add(aNavItem().label(new PropertyModel<String>(org.getDivisionOrg(), "name")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(org.getDivisionOrg().getId())).build());
         }
 
-        navItems.add(aNavItem().label("label.event").page(PlaceEventSummaryPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build());
+        navItems.add(aNavItem().label(new PropertyModel<String>(eventModel, "type.displayName")).page(PlaceEventSummaryPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build());
 
         return navItems;
     }
