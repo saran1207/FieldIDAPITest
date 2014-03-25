@@ -284,7 +284,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             if (doPostSubmitValidation()) {
                 AbstractEvent savedEvent = doSave();
                 FieldIDSession.get().storeInfoMessageForStruts(getString("message.eventsaved"));
-                throw new RedirectToUrlException("/event.action?uniqueID="+savedEvent.getId());
+                throw new RedirectToUrlException("w/event.action?uniqueID="+savedEvent.getId());
             }
         }
     }

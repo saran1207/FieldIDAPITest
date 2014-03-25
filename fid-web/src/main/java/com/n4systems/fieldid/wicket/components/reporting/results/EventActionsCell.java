@@ -9,9 +9,9 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
+import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.model.Asset;
-import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.SecurityLevel;
@@ -106,7 +106,7 @@ public class EventActionsCell extends Panel {
         WebMarkupContainer completeEventActionsList = new WebMarkupContainer("completeEventActionsList");
         completeEventActionsList.setOutputMarkupId(true);
 
-        NonWicketLink viewLink = new NonWicketLink("viewLink", "event.action?uniqueID="+eventId);
+        BookmarkablePageLink viewLink = new BookmarkablePageLink<ThingEventSummaryPage>("viewLink", ThingEventSummaryPage.class, PageParametersBuilder.id(event.getID()));
 
         NonWicketLink editLink = new NonWicketLink("editLink", "selectEventEdit.action?uniqueID="+eventId);
         NonWicketLink printReportLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID="+eventId + "&reportType=INSPECTION_CERT");
@@ -143,7 +143,7 @@ public class EventActionsCell extends Panel {
 
         Asset networkAsset = event.getAsset();
 
-        NonWicketLink viewLink = new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getId());
+        BookmarkablePageLink viewLink = new BookmarkablePageLink<ThingEventSummaryPage>("viewLink", ThingEventSummaryPage.class, PageParametersBuilder.id(event.getID()));
         viewLink.setVisible(event.getWorkflowState() == WorkflowState.COMPLETED);
         safetyNetworkActionsList.add(viewLink);
 
