@@ -67,7 +67,10 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
                 if (actionModel.getObject().getWorkflowState() == WorkflowState.OPEN) {
                     url = String.format("/fieldid/w/performEvent?type=%d&assetId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getId(), actionModel.getObject().getId());
                 } else {
-                    url = String.format("/fieldid/event.action?uniqueID=%d", actionModel.getObject().getId());
+                    if(actionModel.getObject().getType().isThingEventType())
+                        url = String.format("/fieldid/w/thingEventSummary?=%d", actionModel.getObject().getId());
+                    else
+                        url = String.format("/fieldid/w/placeEventSummary?=%d", actionModel.getObject().getId());
                 }
 
                 target.appendJavaScript("parent.window.location='"+url+"';");
