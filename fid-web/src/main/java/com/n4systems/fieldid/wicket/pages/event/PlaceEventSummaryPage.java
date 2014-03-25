@@ -38,12 +38,12 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
     private IModel<PlaceEvent> eventModel;
     private IModel<BaseOrg> placeModel;
 
-
     public PlaceEventSummaryPage(PageParameters parameters) {
         super(parameters);
 
         eventModel = Model.of(loadExistingEvent());
         placeModel = new PropertyModel<BaseOrg>(eventModel, "place");
+        eventSummaryType = EventSummaryType.PLACE_EVENT;
     }
 
     @Override

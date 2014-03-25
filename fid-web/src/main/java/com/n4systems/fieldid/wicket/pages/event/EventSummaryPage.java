@@ -16,6 +16,9 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
 
     protected long uniqueId;
     protected Boolean useContext;
+    protected EventSummaryType eventSummaryType;
+
+    protected enum EventSummaryType {THING_EVENT, PLACE_EVENT};
 
     public EventSummaryPage(PageParameters parameters) {
         uniqueId = parameters.get("id").toLong();
@@ -82,7 +85,10 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
         public ActionGroup(String id) {
             super(id, "viewEventsActionGroup", EventSummaryPage.this);
 
-            add(new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
+            if(eventSummaryType.equals(EventSummaryType.THING_EVENT))
+                add(new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
+            else
+                add(new BookmarkablePageLink<EditEventPage>("editLink", EditPlaceEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
         }
     }
 

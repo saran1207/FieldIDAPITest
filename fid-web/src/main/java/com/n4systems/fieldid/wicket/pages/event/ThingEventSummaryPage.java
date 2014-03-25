@@ -31,6 +31,7 @@ public class ThingEventSummaryPage extends EventSummaryPage {
 
         eventModel = Model.of(loadExistingEvent());
         assetModel = new PropertyModel<Asset>(eventModel, "asset");
+        eventSummaryType = EventSummaryType.THING_EVENT;
     }
 
     @Override
