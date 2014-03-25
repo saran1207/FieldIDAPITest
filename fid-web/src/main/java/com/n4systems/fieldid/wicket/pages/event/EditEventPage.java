@@ -2,8 +2,8 @@ package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.event.EventCriteriaEditService;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.FileAttachment;
@@ -11,6 +11,7 @@ import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -47,7 +48,7 @@ public class EditEventPage extends ThingEventPage {
 
     @Override
     protected Component createCancelLink(String id) {
-        return new NonWicketLink(id, "event.action?uniqueID="+event.getObject().getId());
+        return new BookmarkablePageLink<ThingEventSummaryPage>(id, ThingEventSummaryPage.class, PageParametersBuilder.id(uniqueId));
     }
 
     @Override
