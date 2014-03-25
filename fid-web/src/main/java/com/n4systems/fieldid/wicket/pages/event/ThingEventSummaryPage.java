@@ -3,6 +3,10 @@ package com.n4systems.fieldid.wicket.pages.event;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.event.*;
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Asset;
 import com.n4systems.model.Event;
@@ -17,6 +21,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
+
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 public class ThingEventSummaryPage extends EventSummaryPage {
 
@@ -69,8 +75,7 @@ public class ThingEventSummaryPage extends EventSummaryPage {
         return new ProofTestPanel(id, eventModel);
     }
 
-
-    protected ThingEvent loadExistingEvent() {
+    private ThingEvent loadExistingEvent() {
         ThingEvent existingEvent = eventService.lookupExistingEvent(ThingEvent.class, uniqueId);
         PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS);
         PostFetcher.postFetchFields(existingEvent, Event.THING_TYPE_PATHS);
@@ -80,6 +85,14 @@ public class ThingEventSummaryPage extends EventSummaryPage {
     @Override
     protected Component createTitleLabel(String labelId) {
         return new ThingEventHeaderPanel(labelId, assetModel, true);
+    }
+
+    @Override
+    protected void addNavBar(String navBarId) {
+        add(new NavigationBar(navBarId,
+                aNavItem().label(new FIDLabelModel("label.summary")).page(AssetSummaryPage.class).params(PageParametersBuilder.uniqueId(assetModel.getObject().getId())).build(),
+                aNavItem().label(new FIDLabelModel("label.event_summary")).page(ThingEventSummaryPage.class).params(PageParametersBuilder.id(uniqueId)).build()
+        ));
     }
 
 

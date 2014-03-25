@@ -81,8 +81,7 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
         return new EmptyPanel(id);
     }
 
-
-    protected PlaceEvent loadExistingEvent() {
+    private PlaceEvent loadExistingEvent() {
         PlaceEvent existingEvent = eventService.lookupExistingEvent(PlaceEvent.class, uniqueId);
         PostFetcher.postFetchFields(existingEvent, Event.PLACE_FIELD_PATHS);
         return existingEvent;

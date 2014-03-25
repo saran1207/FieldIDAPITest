@@ -2,13 +2,10 @@ package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.user.UserService;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -31,8 +28,6 @@ public class ThingEventHeaderPanel extends Panel {
         BaseOrg owner = asset.getOwner();
 
         add(new Label("ownerInfo", getOwnerLabel(owner, asset.getAdvancedLocation())));
-
-        add(new BookmarkablePageLink<AssetSummaryPage>("assetSummary", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
     }
 
