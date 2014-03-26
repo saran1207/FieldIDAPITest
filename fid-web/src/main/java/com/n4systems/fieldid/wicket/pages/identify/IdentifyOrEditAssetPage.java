@@ -65,10 +65,8 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
 
 import static ch.lambdaj.Lambda.on;
 
@@ -85,6 +83,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     EventSchedulesPanel eventSchedulesPanel;
     AttributesEditPanel attributesEditPanel;
     AssetAttachmentsPanel assetAttachmentsPanel;
+    AssetGpsPanel assetGpsPanel;
     AssetImagePanel assetImagePanel;
     WebMarkupContainer rfidContainer;
     WebMarkupContainer actionsContainer;
@@ -127,10 +126,42 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         add(new NonWicketLink("importPageLink", "assetImportExport.action", new AttributeModifier("class", "mattButton")));
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(schedulePicker = createSchedulePicker(ProxyModel.of(assetModel, on(Asset.class).getType())));
-        add(new IdentifyOrEditAssetForm("identifyAssetForm", assetModel));
+        add(new IdentifyOrEditAssetForm("identifyAssetForm", assetModel) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onValidate() {
+                super.onValidate();
+
+                Asset asset1 = assetModel.getObject();
+
+                BigDecimal latField = latitude.getConvertedInput();
+                BigDecimal longField = longitude.getConvertedInput();
+
+                if (null != latField) {
+                    if (null == longField) {
+
+                        error(new FIDLabelModel("error.longitude").getObject());
+                    }
+                }
+
+                if (null != longField) {
+                    if (null == latField) {
+                        error(new FIDLabelModel("error.latitude").getObject());
+                    }
+                }
+            }
+
+        });
     }
 
     class IdentifyOrEditAssetForm extends Form<Asset> {
+
+        TextField<BigDecimal> latitude;
+        TextField<BigDecimal> longitude;
+
+
         public IdentifyOrEditAssetForm(String id, final IModel<Asset> assetModel) {
             super(id, assetModel);
             setMultiPart(true);
@@ -253,6 +284,26 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             add(assetImagePanel = new AssetImagePanel("assetImagePanel", assetModel));
 
             add(assetAttachmentsPanel = new AssetAttachmentsPanel("assetAttachmentsPanel", assetModel));
+
+
+            WebMarkupContainer gpsContainer = new WebMarkupContainer("gpsContainer");
+            add(gpsContainer);
+
+            latitude = new TextField<BigDecimal>("latitude", ProxyModel.of(assetModel, on(Asset.class).getGpsLocation().getLatitude()));
+            longitude = new TextField<BigDecimal>("longitude", ProxyModel.of(assetModel, on(Asset.class).getGpsLocation().getLongitude()));
+
+            gpsContainer.add(latitude);
+            gpsContainer.add(longitude);
+
+            add(gpsContainer);
+
+            gpsContainer.setOutputMarkupId(true);
+            gpsContainer.setVisible(assetModel.getObject().getGpsLocation() !=null);
+
+//            add(assetGpsPanel = new AssetGpsPanel("assetGPSPanel", assetModel));
+
+
+
 
             eventSchedulesPanel = new EventSchedulesPanel("eventSchedulesPanel", schedulePicker, new PropertyModel<List<Event>>(IdentifyOrEditAssetPage.this, "schedulesToAdd"));
             eventSchedulesPanel.setVisible(assetModel.getObject().isNew());
