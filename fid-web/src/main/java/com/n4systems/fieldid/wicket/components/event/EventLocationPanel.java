@@ -12,7 +12,7 @@ public class EventLocationPanel extends Panel {
     public EventLocationPanel(String id, IModel<? extends Event> eventModel) {
         super(id);
 
-        setVisible(!eventModel.getObject().getGpsLocation().isEmpty());
+        setVisible(eventModel.getObject().getGpsLocation() != null && !eventModel.getObject().getGpsLocation().isEmpty());
 
         add(new GoogleMap<Event>("eventLocation", eventModel.getObject()));
 
