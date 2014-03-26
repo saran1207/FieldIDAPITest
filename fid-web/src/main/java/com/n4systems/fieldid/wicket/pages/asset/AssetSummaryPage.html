@@ -40,6 +40,19 @@
                 <div wicket:id="assetImageModalWindow"/>
                 <div wicket:id="map" class="googleMap assetMap"></div>
 
+
+                <div class="assetDetails" wicket:enclosure align="latitude">
+                    <label><wicket:message key="label.latitude"/></label>
+                    <span wicket:id="latitude"/>
+                </div>
+
+                <div class="assetDetails" wicket:enclosure align="longitude">
+                    <label><wicket:message key="label.longitude"/></label>
+                    <span wicket:id="longitude"/>
+                </div>
+
+
+
                 <div class="assetDetails" wicket:id="assetAttributeDetailsPanel"/>
 
                 <div class="linkedAssetPanel" wicket:id="linkedAssetPanel"/>

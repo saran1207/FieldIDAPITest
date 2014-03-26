@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.fieldid.wicket.util.ZipFileUtil;
 import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
@@ -36,6 +37,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
+
+import static ch.lambdaj.Lambda.on;
 
 public class AssetSummaryPage extends AssetPage {
 
@@ -97,12 +100,23 @@ public class AssetSummaryPage extends AssetPage {
         });
 
 
+        Label latitude = new Label("latitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLatitude()));
+        Label longitude = new Label("longitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLongitude()));
+
+        add(latitude);
+        add(longitude);
+
+
         if(asset.getGpsLocation() != null) {
             add(new GoogleMap("map",asset));
+
+
         } else {
             WebMarkupContainer map;
             add(map = new WebMarkupContainer("map"));
             map.setVisible(false);
+            latitude.setVisible(false);
+            longitude.setVisible(false);
         }
 
         add(new AssetAttributeDetailsPanel("assetAttributeDetailsPanel", assetModel));
