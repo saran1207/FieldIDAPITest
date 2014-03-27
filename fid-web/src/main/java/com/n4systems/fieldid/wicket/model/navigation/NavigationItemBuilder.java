@@ -1,9 +1,12 @@
 package com.n4systems.fieldid.wicket.model.navigation;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import java.util.List;
 
 public class NavigationItemBuilder {
 
@@ -13,6 +16,7 @@ public class NavigationItemBuilder {
     private String nonWicketUrl;
     private boolean display = true;
     private boolean onRight = false;
+    private List<String> ignoreParams;
 
     public static NavigationItemBuilder aNavItem() {
         return new NavigationItemBuilder();
@@ -48,6 +52,11 @@ public class NavigationItemBuilder {
         return this;
     }
 
+    public NavigationItemBuilder ignoreParams(String... params) {
+        this.ignoreParams = Lists.newArrayList(params);
+        return this;
+    }
+
     public NavigationItemBuilder onRight() {
         onRight = true;
         return this;
@@ -63,6 +72,7 @@ public class NavigationItemBuilder {
         item.setDisplay(display);
         item.setParameters(parameters);
         item.setOnRight(onRight);
+        item.setIgnoreParams(ignoreParams);
         return item;
     }
 

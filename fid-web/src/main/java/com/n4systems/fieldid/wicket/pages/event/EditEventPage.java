@@ -9,6 +9,7 @@ import com.n4systems.model.EventResult;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.persistence.utils.PostFetcher;
+import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -67,8 +68,12 @@ public class EditEventPage extends ThingEventPage {
 
         }
 
+        FileDataContainer fileDataContainer = null;
+        if(proofTestEditPanel != null) {
+            fileDataContainer = proofTestEditPanel.getFileDataContainer();
+        }
 
-        return eventCreationService.updateEvent(editedEvent, proofTestEditPanel.getFileDataContainer(), fileAttachments);
+        return eventCreationService.updateEvent(editedEvent, fileDataContainer, fileAttachments);
     }
 
     @Override
