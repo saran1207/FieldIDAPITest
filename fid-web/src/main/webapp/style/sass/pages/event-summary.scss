@@ -1,0 +1,146 @@
+@import "../components/_variables.scss";
+@import "../components/_mixins.scss";
+
+.one-click {
+  span {
+    vertical-align: super;
+  }
+}
+
+.event-form {
+
+  .event-section-title {
+    padding: 15px 0;
+  }
+
+  .pagination {
+
+    float: right;
+    margin-top: 15px;
+
+    label {
+      display:inline-block;
+      vertical-align: top;
+      font-size: small;
+      vertical-align: super;
+      font-weight: $regular;
+    }
+
+  }
+
+  .display-horizontal {
+
+    .control-group {
+      border-bottom: 1px solid $gray-light;
+      padding: 10px;
+    }
+
+    .label, .value {
+      width: 40%;
+      vertical-align: super;
+    }
+
+    .actions {
+      width: 19%;
+      display: inline-block;
+      text-align: right;
+
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+
+  .jumpto {
+    font-size: small;
+    float: right;
+
+    select {
+      width: 200px;
+    }
+  }
+
+}
+
+.observation-dialog {
+  p.def-selected, p.rec-selected {
+    background-position: left center;
+    background-repeat: no-repeat;
+    padding-left: 45px;
+    height: 25px;
+
+    span {
+      vertical-align: sub;
+    }
+  }
+
+  p.def-selected {
+    background-image: url(../../images/deficient.gif);
+  }
+
+  p.rec-selected {
+    background-image: url(../../images/recommendation.gif);
+  }
+}
+
+.result {
+  span {
+    padding: 5px 15px;
+    width: 45px;
+    text-align: center;
+  }
+
+  .na-color {
+    background-color: #E3E3E3;
+  }
+
+  .fail-color {
+    background-color: #E9BDBD;
+  }
+
+  .pass-color {
+    background-color:#DBF1BA;
+  }
+}
+
+.event-location {
+  height: 300px;
+}
+
+a.download-all {
+  font-size: $small-font-size;
+}
+
+.attachments-table {
+
+  tr {
+    border-bottom: none;
+  }
+
+  td.image-column {
+    width: 100px;
+  }
+
+  img.attachment-image {
+    width: 70px;
+  }
+
+  img.attachment-image, img.attachment-icon {
+    padding: 0 10px;
+  }
+}
+
+.column-wide {
+
+  .display-horizontal {
+
+     &.narrow {
+       .control-group {
+          .label, .value {
+            width: 20%;
+          }
+       }
+     }
+  }
+}
+

@@ -1,0 +1,85 @@
+//---------------------------
+// UTILITY & HELPER CLASSES
+//---------------------------
+// Quick floats
+.pull-right {
+  float: right;
+}
+.pull-left {
+  float: left;
+}
+
+// For toggling content
+.hide {
+  display: none;
+}
+.show {
+  display: block;
+}
+
+// Text styles
+.text-center {
+	text-align: center;
+}
+.text-right {
+	text-align: right;
+}
+.text-left {
+	text-align: left;
+}
+
+// Used for filtered searches to show which part of the text matches the search string.
+.match {
+	background: $yellow;
+	font-weight: $bold;
+}
+
+// border options
+.border {
+	border: 1px solid $gray-medium;
+}
+.border-top {
+	border-top: 1px solid $gray-medium;
+}
+.border-bottom {
+	border-bottom: 1px solid $gray-medium;
+}
+.no-border {
+	border: none;
+}
+.vertical-divider {
+	border-left: 1px solid $gray-medium;
+	padding-left: 10px;
+	margin-bottom: 10px;
+}
+
+// inline and block styles
+.inline {
+	display: inline-block;
+}
+.block {
+	display: block;
+}
+
+// simple clear floats
+.clear {
+	clear: both;
+}
+// For clearing floats h5bp.com/q
+// Can also be used as a mixin. Found in mixins.scss
+.clearfix {
+	*zoom: 1;
+	position: relative;
+	
+	&:before,
+	&:after {
+		display: table;
+		content: "";
+		// Fixes Opera/contenteditable bug:
+		// http://nicolasgallagher.com/micro-clearfix-hack/#comment-36952
+		line-height: 0;
+	}
+	&:after {
+		clear: both;
+	}
+}

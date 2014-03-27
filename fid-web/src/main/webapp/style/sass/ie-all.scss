@@ -1,0 +1,21 @@
+@import "components/_variables.scss";
+@import "components/_mixins.scss";
+
+//---------------------------
+// IE9 and below
+//---------------------------
+
+// This stylesheet is included using a conditional comment in the  
+// FieldIDTemplatePage.html. The IE8 hack was not reliable and
+// therefore had to be in a separate stylesheet (ie-lte8.scss).
+// Note that IE 10+ DO NOT support conditional comments at all.
+
+//overrides dropdown color for chosen plugin
+.chzn-container .chzn-results .highlighted {
+	filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+// Search/Filter left column
+form.filters {
+	overflow: scroll;
+}
