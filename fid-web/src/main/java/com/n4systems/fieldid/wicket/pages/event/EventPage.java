@@ -27,6 +27,7 @@ import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
@@ -52,7 +53,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.request.flow.RedirectToUrlException;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
@@ -284,7 +284,10 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             if (doPostSubmitValidation()) {
                 AbstractEvent savedEvent = doSave();
                 FieldIDSession.get().storeInfoMessageForStruts(getString("message.eventsaved"));
-                throw new RedirectToUrlException("/event.action?uniqueID="+savedEvent.getId());
+                if(savedEvent.getType().isPlaceEventType())
+                    setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+                else
+                    setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
             }
         }
     }
