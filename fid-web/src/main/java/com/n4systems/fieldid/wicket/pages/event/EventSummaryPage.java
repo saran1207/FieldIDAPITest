@@ -1,11 +1,14 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 
+import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.model.Event;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Fragment;
@@ -80,6 +83,8 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
 
     protected abstract Panel getProofTestPanel(String id);
 
+    protected abstract Event getEvent();
+
     private class ActionGroup extends Fragment {
 
         public ActionGroup(String id) {
@@ -89,6 +94,13 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
                 add(new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
             else
                 add(new BookmarkablePageLink<EditEventPage>("editLink", EditPlaceEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
+
+            WebMarkupContainer printDropDown;
+            add(printDropDown = new WebMarkupContainer("printDropDown"));
+            printDropDown.add(new NonWicketLink("printInspectionCertLink", "file/downloadEventCert.action?uniqueID="+uniqueId+"&reportType=INSPECTION_CERT")
+                    .add(new Label("label", new FIDLabelModel("label.pdfreport", getEvent().getType().getGroup().getReportTitle()))).setVisible(getEvent().isEventCertPrintable()));
+            printDropDown.add(new NonWicketLink("printObservationCertLink", "file/downloadEventCert.action?uniqueID="+uniqueId+"&reportType=OBSERVATION_CERT").setVisible(getEvent().isObservationCertPrintable()));
+            printDropDown.setVisible(getEvent().getType().isThingEventType() && (getEvent().isEventCertPrintable() || getEvent().isObservationCertPrintable()));
         }
     }
 
