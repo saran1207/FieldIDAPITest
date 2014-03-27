@@ -112,18 +112,30 @@ public class NavigationBar extends Panel {
         return new AttributeModifier("class", "selected") {
             @Override
             public boolean isEnabled(Component component) {
+                PageParameters pageParameters = getFilteredPageParameters(component, navItem);
                 return component.getPage().getClass() == navItem.getPageClass()
-                        && component.getPage().getPageParameters().equals(navItem.getParameters());
+                        && pageParameters.equals(navItem.getParameters());
             }
         };
+    }
+
+    private PageParameters getFilteredPageParameters(Component component, NavigationItem navItem) {
+        PageParameters pageParameters = component.getPage().getPageParameters();
+        if(navItem.getIgnoreParams() != null) {
+            for (String param: navItem.getIgnoreParams()) {
+                pageParameters.remove(param);
+            }
+        }
+        return pageParameters;
     }
 
     private AttributeModifier createRightSelectedAttributeModifier(final NavigationItem navItem) {
             return new AttributeModifier("class", "selected add") {
                 @Override
                 public boolean isEnabled(Component component) {
+                    PageParameters pageParameters = getFilteredPageParameters(component, navItem);
                     return component.getPage().getClass() == navItem.getPageClass()
-                            && component.getPage().getPageParameters().equals(navItem.getParameters());
+                            && pageParameters.equals(navItem.getParameters());
                 }
             };
     }
