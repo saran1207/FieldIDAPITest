@@ -35,7 +35,7 @@ public class AdvancedEventSearchPage extends AdvancedSearchPage {
     }
 
     @Override
-    protected Component createActionsPanel(String id, IModel<Set<String>> selectedItemsModel) {
+    protected Component createActionsPanel(String id, IModel<Set<Long>> selectedItemsModel) {
         return new EventTextSearchActionsPanel(id, selectedItemsModel);
     }
 

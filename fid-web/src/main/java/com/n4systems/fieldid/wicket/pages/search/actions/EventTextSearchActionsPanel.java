@@ -19,18 +19,16 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Callable;
 
 public class EventTextSearchActionsPanel extends Panel {
 
-    private IModel<Set<String>> selectedIds;
+    private IModel<Set<Long>> selectedIds;
 
     private static final String COLORBOX_CLASS = "event_text_search_colorbox";
 
-    public EventTextSearchActionsPanel(String id, final IModel<Set<String>> selectedIds) {
+    public EventTextSearchActionsPanel(String id, final IModel<Set<Long>> selectedIds) {
         super(id);
         this.selectedIds = selectedIds;
 
@@ -66,12 +64,12 @@ public class EventTextSearchActionsPanel extends Panel {
 
         criteria.setSortDirection(SortDirection.DESC);
 
-        List<Long> ids = new ArrayList<Long>();
-        for (String id : selectedIds.getObject()) {
-            ids.add(Long.parseLong(id));
+        MultiIdSelection multiIdSelection = new MultiIdSelection();
+        int index = 0;
+        for (Long id : selectedIds.getObject()) {
+            multiIdSelection.addId(index++, id);
         }
 
-        MultiIdSelection multiIdSelection = new MultiIdSelection();
         criteria.setSelection(multiIdSelection);
 
         criteria.setColumnGroups(reportConfiguration.getColumnGroups());
