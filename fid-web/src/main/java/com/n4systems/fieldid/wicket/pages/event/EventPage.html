@@ -7,6 +7,32 @@
         <div wicket:id="targetDetailsPanel">
         </div>
 
+
+        <!--<div wicket:id="GPSPanel"></div>-->
+        <wicket:enclosure child="gpsContainer">
+          <div>
+                <h2>GPS</h2>
+                <div wicket:id="gpsContainer" class="uploads attributes">
+                    <div class="infoSet">
+                        <label class="label"><wicket:message key="label.latitude"/></label>
+                         <span class="fieldHolder">
+                            <input wicket:id="latitude"/>
+                        </span>
+                    </div>
+
+                    <div class="infoSet">
+                        <label class="label"><wicket:message key="label.longitude"/></label>
+                       <span class="fieldHolder">
+                            <input wicket:id="longitude"/>
+                        </span>
+                    </div>
+                </div>
+          </div>
+        </wicket:enclosure>
+
+
+
+
         <div>
 
             <h2><span wicket:id="eventTypeName"/> <wicket:message key="label.details"/></h2>
@@ -188,8 +214,14 @@
             </wicket:enclosure>
         </div>
 
+
+
+
     </form>
 
     <div wicket:id="schedulePicker"></div>
+
+
+
 
 </wicket:extend>

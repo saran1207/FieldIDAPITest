@@ -31,6 +31,9 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.identify.components.AssetGpsPanel;
+import com.n4systems.fieldid.wicket.pages.identify.components.EventGpsPanel;
+import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
@@ -44,10 +47,8 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -55,9 +56,12 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import static ch.lambdaj.Lambda.on;
 
 public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
@@ -95,7 +99,32 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
         }
         add(schedulePicker = createSchedulePicker());
         add(new FIDFeedbackPanel("feedbackPanel"));
-        add(new OuterEventForm("outerEventForm"));
+        add(new OuterEventForm("outerEventForm"){
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onValidate() {
+                super.onValidate();
+
+                BigDecimal latField = latitude.getConvertedInput();
+                BigDecimal longField = longitude.getConvertedInput();
+
+                if (null != latField) {
+                    if (null == longField) {
+
+                        error(new FIDLabelModel("error.longitude").getObject());
+                    }
+                }
+
+                if (null != longField) {
+                    if (null == latField) {
+                        error(new FIDLabelModel("error.latitude").getObject());
+                    }
+                }
+            }
+
+        });
     }
 
     protected abstract SchedulePicker<T> createSchedulePicker();
@@ -123,6 +152,10 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
         private LocationPicker locationPicker;
 		private NewOrExistingEventBook newOrExistingEventBook;
+        TextField<BigDecimal> latitude;
+        TextField<BigDecimal> longitude;
+
+
 
         public OuterEventForm(String id) {
             super(id);
@@ -247,6 +280,23 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             EventForm form = event.getObject().getEventForm();
             add(new EventFormEditPanel("eventFormPanel", event.getObject().getClass(), new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(form!=null && form.getAvailableSections().size()>0));
             add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(EventPage.this, "fileAttachments")));
+//            add(new EventGpsPanel("GPSPanel", event));
+
+
+            WebMarkupContainer gpsContainer = new WebMarkupContainer("gpsContainer");
+            add(gpsContainer);
+
+            latitude = new TextField<BigDecimal>("latitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLatitude()));
+            longitude = new TextField<BigDecimal>("longitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLongitude()));
+
+            gpsContainer.add(latitude);
+            gpsContainer.add(longitude);
+
+            add(gpsContainer);
+
+            gpsContainer.setOutputMarkupId(true);
+            gpsContainer.setVisible(event.getObject().getGpsLocation() !=null);
+            gpsContainer.setVisible(FieldIDSession.get().getTenant().getSettings().isGpsCapture());
 
             Button saveButton = new Button("saveButton");
             saveButton.add(new DisableButtonBeforeSubmit());
