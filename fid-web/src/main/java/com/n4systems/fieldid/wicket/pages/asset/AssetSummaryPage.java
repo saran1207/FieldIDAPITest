@@ -37,6 +37,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
@@ -101,8 +103,13 @@ public class AssetSummaryPage extends AssetPage {
             }
         });
 
-        BigDecimalFmtLabel latitude = new BigDecimalFmtLabel("latitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLatitude()));
-        BigDecimalFmtLabel longitude = new BigDecimalFmtLabel("longitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLongitude()));
+        // GPS - set to 6 or 10 digits?  Go with 6 but db stores 10
+        NumberFormat numberFormat = new DecimalFormat();
+        numberFormat.setMaximumFractionDigits(6);
+        numberFormat.setMinimumFractionDigits(0);
+
+        BigDecimalFmtLabel latitude = new BigDecimalFmtLabel("latitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLatitude()), numberFormat);
+        BigDecimalFmtLabel longitude = new BigDecimalFmtLabel("longitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLongitude()), numberFormat);
 
         add(latitude);
         add(longitude);
