@@ -5,7 +5,6 @@ import java.util.*;
 
 public class MultiIdSelection implements Serializable {
 
-    private Set<Long> ids = new HashSet<Long>();
     private Map<Integer,Long> indexIdSelectionMap = new TreeMap<Integer, Long>();
     public boolean isSorted = false;
 
@@ -31,7 +30,6 @@ public class MultiIdSelection implements Serializable {
     }
 
     public void clear() {
-        ids.clear();
         indexIdSelectionMap.clear();
     }
 

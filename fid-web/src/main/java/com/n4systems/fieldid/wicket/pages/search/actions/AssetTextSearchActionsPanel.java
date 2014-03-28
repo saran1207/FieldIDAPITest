@@ -25,9 +25,9 @@ import java.util.Set;
 
 public class AssetTextSearchActionsPanel extends Panel {
 
-    private IModel<Set<String>> selectedItemsModel;
+    private IModel<Set<Long>> selectedItemsModel;
 
-    public AssetTextSearchActionsPanel(String id, final IModel<Set<String>> selectedItemsModel) {
+    public AssetTextSearchActionsPanel(String id, final IModel<Set<Long>> selectedItemsModel) {
         super(id, selectedItemsModel);
         this.selectedItemsModel = selectedItemsModel;
 
@@ -68,8 +68,8 @@ public class AssetTextSearchActionsPanel extends Panel {
     private AssetSearchCriteria createAssetSearchCriteria() {
         List<Long> ids = new ArrayList<Long>();
 
-        for (String selectedId : selectedItemsModel.getObject()) {
-            ids.add(Long.parseLong(selectedId));
+        for (Long selectedId : selectedItemsModel.getObject()) {
+            ids.add(selectedId);
         }
 
         AssetSearchCriteria assetSearchCriteria = new AssetSearchCriteria();

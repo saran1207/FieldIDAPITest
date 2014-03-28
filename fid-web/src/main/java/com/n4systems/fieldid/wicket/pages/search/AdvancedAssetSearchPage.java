@@ -9,7 +9,6 @@ import com.n4systems.services.search.field.AssetIndexField;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.SimpleHTMLFormatter;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 
@@ -36,7 +35,7 @@ public class AdvancedAssetSearchPage extends AdvancedSearchPage {
     }
 
     @Override
-    protected Component createActionsPanel(String id, IModel<Set<String>> selectedItemsModel) {
+    protected Component createActionsPanel(String id, IModel<Set<Long>> selectedItemsModel) {
         return new AssetTextSearchActionsPanel(id, selectedItemsModel);
     }
 
