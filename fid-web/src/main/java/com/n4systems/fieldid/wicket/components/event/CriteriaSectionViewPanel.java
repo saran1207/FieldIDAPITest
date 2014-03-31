@@ -4,7 +4,10 @@ import com.n4systems.fieldid.wicket.components.action.ViewActionsListPage;
 import com.n4systems.fieldid.wicket.components.event.criteria.factory.CriteriaResultFactory;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
-import com.n4systems.model.*;
+import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.Deficiency;
+import com.n4systems.model.Observation;
+import com.n4systems.model.Recommendation;
 import org.apache.wicket.Page;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -26,7 +29,7 @@ public class CriteriaSectionViewPanel extends Panel {
     private DialogModalWindow criteriaImagesModalWindow;
     private DialogModalWindow actionsWindow;
 
-    public CriteriaSectionViewPanel(String id, final Class<? extends Event> eventClass, IModel<List<CriteriaResult>> results) {
+    public CriteriaSectionViewPanel(String id, IModel<List<CriteriaResult>> results) {
         super(id);
 
         add(criteriaImagesModalWindow = new DialogModalWindow("imagesModal"));

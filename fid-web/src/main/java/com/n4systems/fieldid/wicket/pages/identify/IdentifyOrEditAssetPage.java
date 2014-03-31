@@ -8,10 +8,7 @@ import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
-import com.n4systems.fieldid.wicket.components.Comment;
-import com.n4systems.fieldid.wicket.components.DateTimePicker;
-import com.n4systems.fieldid.wicket.components.IdentifierLabel;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.assettype.GroupedAssetTypePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.feedback.classy.AssetCreatedFeedbackMessage;
@@ -66,6 +63,8 @@ import org.apache.wicket.util.visit.IVisitor;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 
 import static ch.lambdaj.Lambda.on;
@@ -289,8 +288,14 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             WebMarkupContainer gpsContainer = new WebMarkupContainer("gpsContainer");
             add(gpsContainer);
 
-            latitude = new TextField<BigDecimal>("latitude", ProxyModel.of(assetModel, on(Asset.class).getGpsLocation().getLatitude()));
-            longitude = new TextField<BigDecimal>("longitude", ProxyModel.of(assetModel, on(Asset.class).getGpsLocation().getLongitude()));
+
+            // GPS - set to 6 or 10 digits?  Go with 6 but db stores 10
+            NumberFormat numberFormat = new DecimalFormat();
+            numberFormat.setMaximumFractionDigits(6);
+            numberFormat.setMinimumFractionDigits(0);
+
+            latitude = new BigDecimalFmtTextField<BigDecimal>("latitude", ProxyModel.of(assetModel, on(Asset.class).getGpsLocation().getLatitude()), numberFormat);
+            longitude = new BigDecimalFmtTextField<BigDecimal>("longitude", ProxyModel.of(assetModel, on(Asset.class).getGpsLocation().getLongitude()), numberFormat);
 
             gpsContainer.add(latitude);
             gpsContainer.add(longitude);
@@ -300,11 +305,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             gpsContainer.setOutputMarkupId(true);
             gpsContainer.setVisible(assetModel.getObject().getGpsLocation() !=null);
             gpsContainer.setVisible(FieldIDSession.get().getTenant().getSettings().isGpsCapture());
-
-
 //            add(assetGpsPanel = new AssetGpsPanel("assetGPSPanel", assetModel));
-
-
 
 
             eventSchedulesPanel = new EventSchedulesPanel("eventSchedulesPanel", schedulePicker, new PropertyModel<List<Event>>(IdentifyOrEditAssetPage.this, "schedulesToAdd"));

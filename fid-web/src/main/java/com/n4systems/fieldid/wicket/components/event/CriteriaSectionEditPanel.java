@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.components.popup.Popup;
 import com.n4systems.fieldid.wicket.components.richText.RichTextDisplay;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageListPage;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -45,7 +46,7 @@ public class CriteriaSectionEditPanel extends Panel {
     private Popup popup;
     private RichTextDisplay richTextDisplay;
 
-    public CriteriaSectionEditPanel(String id, final Class<? extends Event> eventClass, IModel<List<CriteriaResult>> results) {
+    public CriteriaSectionEditPanel(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results) {
         super(id);
         setOutputMarkupPlaceholderTag(true);
         add(new CriteriaEditForm("criteriaEditForm", eventClass, results));
@@ -87,7 +88,7 @@ public class CriteriaSectionEditPanel extends Panel {
 
     class CriteriaEditForm extends Form<List<CriteriaResult>> {
 
-        public CriteriaEditForm(String id, final Class<? extends Event> eventClass, IModel<List<CriteriaResult>> results) {
+        public CriteriaEditForm(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results) {
             super(id, results);
 
             add(new ListView<CriteriaResult>("criteria", results) {
@@ -175,7 +176,7 @@ public class CriteriaSectionEditPanel extends Panel {
                             actionsWindow.setPageCreator(new ModalWindow.PageCreator() {
                                 @Override
                                 public Page createPage() {
-                                    return new ActionsListPage(item.getModel(), eventClass);
+                                    return new ActionsListPage(item.getModel(), (Class<? extends Event>) eventClass);
                                 }
 
                                 ;

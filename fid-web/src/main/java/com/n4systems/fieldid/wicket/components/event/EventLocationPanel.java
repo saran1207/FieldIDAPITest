@@ -8,6 +8,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 
 public class EventLocationPanel extends Panel {
 
@@ -18,7 +20,13 @@ public class EventLocationPanel extends Panel {
 
         add(new GoogleMap<Event>("eventLocation", eventModel.getObject()));
 
-        add(new BigDecimalFmtLabel("latitude", new PropertyModel<BigDecimal>(eventModel, "gpsLocation.latitude")));
-        add(new BigDecimalFmtLabel("longitude", new PropertyModel<BigDecimal>(eventModel, "gpsLocation.longitude")));
+
+        // GPS - set to 6 or 10 digits?  Go with 6 but db stores 10
+        NumberFormat numberFormat = new DecimalFormat();
+        numberFormat.setMaximumFractionDigits(6);
+        numberFormat.setMinimumFractionDigits(0);
+
+        add(new BigDecimalFmtLabel("latitude", new PropertyModel<BigDecimal>(eventModel, "gpsLocation.latitude"), numberFormat));
+        add(new BigDecimalFmtLabel("longitude", new PropertyModel<BigDecimal>(eventModel, "gpsLocation.longitude"), numberFormat));
     }
 }
