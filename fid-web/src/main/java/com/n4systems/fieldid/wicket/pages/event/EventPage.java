@@ -7,6 +7,8 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
+import com.n4systems.fieldid.wicket.components.BigDecimalFmtTextField;
+import com.n4systems.fieldid.wicket.components.BigDecimalFmtLabel;
 import com.n4systems.fieldid.wicket.components.Comment;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
@@ -55,6 +57,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -139,6 +143,11 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     protected abstract T createNewOpenEvent();
 
     public Boolean getAssetOwnerUpdate() {
+
+        if (null == assetOwnerUpdate) {
+            return false;
+        }
+
         return assetOwnerUpdate;
     }
 
@@ -284,8 +293,14 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             WebMarkupContainer gpsContainer = new WebMarkupContainer("gpsContainer");
             add(gpsContainer);
 
-            latitude = new TextField<BigDecimal>("latitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLatitude()));
-            longitude = new TextField<BigDecimal>("longitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLongitude()));
+            // GPS - set to 6 or 10 digits?  Go with 6 but db stores 10
+            NumberFormat numberFormat = new DecimalFormat();
+            numberFormat.setMaximumFractionDigits(6);
+            numberFormat.setMinimumFractionDigits(0);
+
+
+            latitude = new BigDecimalFmtTextField<BigDecimal>("latitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLatitude()), numberFormat);
+            longitude = new BigDecimalFmtTextField<BigDecimal>("longitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLongitude()), numberFormat);
 
             gpsContainer.add(latitude);
             gpsContainer.add(longitude);
