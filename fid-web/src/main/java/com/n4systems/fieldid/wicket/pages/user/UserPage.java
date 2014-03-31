@@ -103,9 +103,9 @@ public abstract class UserPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/pageStyles/user.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/newCss/layout/feedback_errors.css");
+        response.renderCSSReference("style/legacy/pageStyles/user.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/layout/feedback_errors.css");
     }
 
     @Override

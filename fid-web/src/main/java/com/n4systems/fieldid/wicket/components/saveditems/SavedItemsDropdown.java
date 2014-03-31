@@ -17,7 +17,7 @@ public class SavedItemsDropdown extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference("javascript/my_saved_items.js");
-        response.renderCSSReference("style/newCss/component/my_saved_items.css");
+        response.renderCSSReference("style/legacy/newCss/component/my_saved_items.css");
     }
 
 }

@@ -34,9 +34,9 @@ public class CriteriaImageViewPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/layout/layout.css");
-        response.renderCSSReference("style/newCss/event/criteria_images.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/layout/layout.css");
+        response.renderCSSReference("style/legacy/newCss/event/criteria_images.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
     
 }

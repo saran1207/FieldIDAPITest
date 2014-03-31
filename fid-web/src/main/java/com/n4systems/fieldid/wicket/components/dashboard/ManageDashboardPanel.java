@@ -177,7 +177,7 @@ public class ManageDashboardPanel extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/dashboard/manage_dashboard.css");
+        response.renderCSSReference("style/legacy/dashboard/manage_dashboard.css");
     }
 
     private DashboardLayout createNewDasboardLayout(String name) {

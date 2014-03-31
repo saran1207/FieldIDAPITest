@@ -231,7 +231,7 @@ public class HeaderPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/asset/header.css");
+        response.renderCSSReference("style/legacy/newCss/asset/header.css");
     }
 
     public boolean isInVendorContext() {

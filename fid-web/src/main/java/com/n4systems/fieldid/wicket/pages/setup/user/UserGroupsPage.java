@@ -277,7 +277,7 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/setup/prettyItemList.css");
+        response.renderCSSReference("style/legacy/newCss/setup/prettyItemList.css");
     }
 
     private void redrawTable(AjaxRequestTarget target) {

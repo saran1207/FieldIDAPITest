@@ -35,9 +35,9 @@ public abstract class LotoPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/loto/layout.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/newCss/loto/procedures.css");
+        response.renderCSSReference("style/legacy/newCss/loto/layout.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/loto/procedures.css");
     }
 
     public Long getAssetId() {

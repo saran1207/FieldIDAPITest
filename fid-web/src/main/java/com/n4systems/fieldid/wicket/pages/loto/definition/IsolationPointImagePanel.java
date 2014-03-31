@@ -111,7 +111,7 @@ public class IsolationPointImagePanel extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/component/imageList.css");
+        response.renderCSSReference("style/legacy/component/imageList.css");
         response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
         response.renderOnLoadJavaScript(String.format(INIT_JS, getMarkupId(),jsonRenderer.render(new EditableImageOptions())));
     }

@@ -19,7 +19,7 @@
 	</script>
 
 	<!--[if lte IE 8]>
-        <link wicket:id="dropDownIECss" type="text/css" href="/fieldid/style/dropdown/ie.css" rel="stylesheet" media="all"/>
+        <link wicket:id="dropDownIECss" type="text/css" href="/fieldid/style/legacy/dropdown/ie.css" rel="stylesheet" media="all"/>
     <![endif]-->
     <script type="text/javascript">
         ${action.getCustomJs()}

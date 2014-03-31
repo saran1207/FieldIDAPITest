@@ -62,6 +62,6 @@ public abstract class CriteriaActionButton extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 }

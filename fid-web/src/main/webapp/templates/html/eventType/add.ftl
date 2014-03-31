@@ -1,6 +1,6 @@
 ${action.setPageType('event_type', 'add')!}
 <head>
-<@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+<@n4.includeStyle href="/style/legacy/newCss/component/buttons.css" type="page"/>
 </head>
 
 <@s.form action="eventTypeCreate" method="post" theme="simple" cssClass="crudForm largeForm" >

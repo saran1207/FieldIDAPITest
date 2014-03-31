@@ -121,7 +121,7 @@ public class ColumnsLayoutPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/columnlayout/column_layout.css");
+        response.renderCSSReference("style/legacy/columnlayout/column_layout.css");
     }
 
     private void storeAndSortSortableColumns() {

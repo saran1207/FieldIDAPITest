@@ -257,11 +257,11 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/event_actions.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/component/event_actions.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
         
         //Old CSS file - remove when site is completely moved over to framework styles.
-        response.renderCSSReference("style/newCss/layout/feedback_errors.css");
+        response.renderCSSReference("style/legacy/newCss/layout/feedback_errors.css");
     }
 
     public void setImmediateSaveMode(boolean immediateSaveMode) {

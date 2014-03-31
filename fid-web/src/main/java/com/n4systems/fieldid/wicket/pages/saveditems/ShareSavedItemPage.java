@@ -41,7 +41,7 @@ public class ShareSavedItemPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/share_saved_item.css");
+        response.renderCSSReference("style/legacy/newCss/component/share_saved_item.css");
     }
 
     @Override

@@ -36,7 +36,7 @@ public class ScoreResultConfigurationPage extends EventTypePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/scoreResult.css");
+        response.renderCSSReference("style/legacy/scoreResult.css");
     }
 
     @Override

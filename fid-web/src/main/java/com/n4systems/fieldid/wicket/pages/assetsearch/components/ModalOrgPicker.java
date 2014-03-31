@@ -57,7 +57,7 @@ public class ModalOrgPicker extends Panel {
 
 	@Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/featureStyles/orgPickerNew.css");
+        response.renderCSSReference("style/legacy/featureStyles/orgPickerNew.css");
         response.renderJavaScriptReference("javascript/modalWindow.js");
     }
 

@@ -85,7 +85,7 @@ public abstract class CollapsiblePanel extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-    	response.renderCSSReference("style/component/collapsiblePanel.css");    	
+    	response.renderCSSReference("style/legacy/component/collapsiblePanel.css");    	
     	super.renderHead(response);
     }    
 

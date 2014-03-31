@@ -39,7 +39,7 @@ public class FIDModalWindow extends ModalWindow {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/modal/fid_modal.css");
+        response.renderCSSReference("style/legacy/modal/fid_modal.css");
     }
 
 }

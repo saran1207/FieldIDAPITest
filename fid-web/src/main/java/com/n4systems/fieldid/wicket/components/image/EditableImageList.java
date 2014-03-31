@@ -23,7 +23,7 @@ public class EditableImageList<T extends EditableImage> extends ImageList<T> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/component/annotated-image.css");
+        response.renderCSSReference("style/legacy/component/annotated-image.css");
         response.renderJavaScriptReference("javascript/jquery.annotate.js");
 
     }

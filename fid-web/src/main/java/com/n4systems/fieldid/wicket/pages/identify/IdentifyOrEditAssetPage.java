@@ -584,9 +584,9 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/asset/header.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/newCss/asset/identify_asset.css"); 
+        response.renderCSSReference("style/legacy/newCss/asset/header.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/asset/identify_asset.css"); 
     }
 
 }

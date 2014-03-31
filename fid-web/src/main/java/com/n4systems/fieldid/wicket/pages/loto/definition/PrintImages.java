@@ -73,7 +73,7 @@ public class PrintImages extends Panel {
         response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
         response.renderJavaScriptReference("javascript/jquery.annotate.js");
 
-        response.renderCSSReference("style/component/annotated-image.css");
+        response.renderCSSReference("style/legacy/component/annotated-image.css");
 
 
 

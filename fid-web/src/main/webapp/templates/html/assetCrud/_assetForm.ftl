@@ -10,7 +10,7 @@
 	<@n4.includeScript src="lockSubmitButtons.js"/>
 	<@n4.includeStyle type="page" href="asset"/>
 	<@n4.includeScript src="safetyNetworkSmartSearch.js" />
-	<@n4.includeStyle href="safetyNetworkSmartSearch.css" type="feature"/>
+	<@n4.includeStyle href="featureStyles/safetyNetworkSmartSearch.css" type="feature"/>
 	<@n4.includeStyle href="newCss/event/event_schedule"/>
     <@n4.includeScript src="chosen/chosen.jquery.js" />
 

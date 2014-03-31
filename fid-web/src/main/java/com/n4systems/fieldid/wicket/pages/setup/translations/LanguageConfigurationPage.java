@@ -99,8 +99,8 @@ public class LanguageConfigurationPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/buttons.css");
-        response.renderCSSReference("style/pageStyles/localization.css");
+        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
+        response.renderCSSReference("style/legacy/pageStyles/localization.css");
     }
 
     @Override

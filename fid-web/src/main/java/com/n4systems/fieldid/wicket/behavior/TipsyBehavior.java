@@ -50,7 +50,7 @@ public class TipsyBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
-        response.renderCSSReference("style/tipsy/tipsy.css");
+        response.renderCSSReference("style/legacy/tipsy/tipsy.css");
         response.renderOnDomReadyJavaScript(String.format(TIPSY_JS, getSelector(component), gravity.toString().toLowerCase()));
         if (hideTooltipsOnLinkClick) {
             response.renderOnDomReadyJavaScript("$('a.tipsy-tooltip').click(function() { $('.tipsy').remove(); })");

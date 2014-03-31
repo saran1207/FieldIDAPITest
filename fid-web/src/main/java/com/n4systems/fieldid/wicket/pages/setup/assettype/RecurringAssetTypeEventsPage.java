@@ -118,9 +118,9 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/event/recurring.css");
-        response.renderCSSReference("style/site_wide.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/event/recurring.css");
+        response.renderCSSReference("style/legacy/site_wide.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
     public Long getAssetTypeId() {

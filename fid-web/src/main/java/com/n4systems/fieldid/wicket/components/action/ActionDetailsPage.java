@@ -142,8 +142,8 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/event_actions.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/component/event_actions.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
     public WebPage setAssetSummaryContext(boolean assetSummaryContext) {

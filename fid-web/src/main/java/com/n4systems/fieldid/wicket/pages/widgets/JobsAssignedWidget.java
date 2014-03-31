@@ -66,7 +66,7 @@ public class JobsAssignedWidget extends Widget<WidgetConfiguration> {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/dashboard/widgets/jobsassigned.css");
+        response.renderCSSReference("style/legacy/dashboard/widgets/jobsassigned.css");
     }
 
     private IColumn<Project> createLinkColumn() {

@@ -208,8 +208,8 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/manage_saved_items.css");
-        response.renderCSSReference("style/newCss/component/header_reorder_link_button.css");
+        response.renderCSSReference("style/legacy/newCss/component/manage_saved_items.css");
+        response.renderCSSReference("style/legacy/newCss/component/header_reorder_link_button.css");
         response.renderOnDomReadyJavaScript(HIGHLIGHT_REORDER_JS);
         response.renderOnDomReadyJavaScript(UNHIGHLIGHT_REORDER_JS);
     }

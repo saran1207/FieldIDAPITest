@@ -348,7 +348,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         response.renderJavaScriptReference("javascript/jquery.colorbox.js");
         response.renderJavaScriptReference("javascript/jquery.dropdown.js");
 
-        response.renderCSSReference("style/colorbox.css");
+        response.renderCSSReference("style/legacy/colorbox.css");
 
         if (configService.getBoolean(ConfigEntry.APPTEGIC_ENABLED)) {
             SessionUser sessionUser = getSessionUser();

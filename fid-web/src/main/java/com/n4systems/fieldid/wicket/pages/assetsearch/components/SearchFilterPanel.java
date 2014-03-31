@@ -65,7 +65,7 @@ public class SearchFilterPanel extends Panel {
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
-		response.renderCSSReference("style/newCss/component/simple-advanced-search.css");
+		response.renderCSSReference("style/legacy/newCss/component/simple-advanced-search.css");
 		super.renderHead(response);
 	}
 	
