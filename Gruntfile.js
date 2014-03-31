@@ -12,7 +12,7 @@ function buildScssFileMap(/* scss_base_dir, css_base_dir, scss_file_1, ... scss_
         // if target ends with '/' then treat as directory
         if (/\/$/.test(style)) {
             glob.sync(scssDir + style + '**/*.scss').forEach(function (scssFile) {
-                scssFileMap[scssFile.replace(scssDir, cssDir).replace(/sass$/, 'css')] = scssFile;
+                scssFileMap[scssFile.replace(scssDir, cssDir).replace(/scss$/, 'css')] = scssFile;
             });
         } else {
             scssFileMap[cssDir + style + '.css'] = scssDir + style + '.scss';
