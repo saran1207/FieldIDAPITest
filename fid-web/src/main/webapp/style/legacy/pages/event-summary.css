@@ -1,0 +1,95 @@
+.one-click span {
+  vertical-align: super;
+}
+.event-form .event-section-title {
+  padding: 15px 0;
+}
+.event-form .pagination {
+  float: right;
+  margin-top: 15px;
+}
+.event-form .pagination label {
+  display: inline-block;
+  vertical-align: top;
+  font-size: small;
+  vertical-align: super;
+  font-weight: 400;
+}
+.event-form .display-horizontal .control-group {
+  border-bottom: 1px solid #ececec;
+  padding: 10px;
+}
+.event-form .display-horizontal .label,
+.event-form .display-horizontal .value {
+  width: 40%;
+  vertical-align: super;
+}
+.event-form .display-horizontal .actions {
+  width: 19%;
+  display: inline-block;
+  text-align: right;
+}
+.event-form .display-horizontal .actions a {
+  text-decoration: none;
+}
+.event-form .jumpto {
+  font-size: small;
+  float: right;
+}
+.event-form .jumpto select {
+  width: 200px;
+}
+.observation-dialog p.def-selected,
+.observation-dialog p.rec-selected {
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding-left: 45px;
+  height: 25px;
+}
+.observation-dialog p.def-selected span,
+.observation-dialog p.rec-selected span {
+  vertical-align: sub;
+}
+.observation-dialog p.def-selected {
+  background-image: url(../../images/deficient.gif);
+}
+.observation-dialog p.rec-selected {
+  background-image: url(../../images/recommendation.gif);
+}
+.result span {
+  padding: 5px 15px;
+  width: 45px;
+  text-align: center;
+}
+.result .na-color {
+  background-color: #E3E3E3;
+}
+.result .fail-color {
+  background-color: #E9BDBD;
+}
+.result .pass-color {
+  background-color: #DBF1BA;
+}
+.event-location {
+  height: 300px;
+}
+a.download-all {
+  font-size: 13px;
+}
+.attachments-table tr {
+  border-bottom: none;
+}
+.attachments-table td.image-column {
+  width: 100px;
+}
+.attachments-table img.attachment-image {
+  width: 70px;
+}
+.attachments-table img.attachment-image,
+.attachments-table img.attachment-icon {
+  padding: 0 10px;
+}
+.column-wide .display-horizontal.narrow .control-group .label,
+.column-wide .display-horizontal.narrow .control-group .value {
+  width: 20%;
+}

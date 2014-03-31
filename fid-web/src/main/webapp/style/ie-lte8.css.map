@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAeA,kCAAmC;EAClC,WAAW,ECgBY,8CAAgB;;;ADbxC,+BAA+B;EAC9B,MAAM,EAAE,IAAI;;;AAIZ,6CAA6B;EAC3B,gBAAgB,EAAC,WAAW;EAC5B,WAAW,ECMU,8CAAgB;;;ADCxC,6BAA8B;EAC7B,QAAQ,EAAE,MAAM;;;AAGjB,gBAAiB;EAChB,UAAU,ECXa,IAAI;;;ADe5B;OACQ;EACP,QAAQ,EAAE,MAAM;;AAEhB;eAAQ;EACP,QAAQ,EAAE,MAAM;;;AAKlB;aACc;EACb,MAAM,EAAE,IAAI",
-"sources": ["sass/ie-lte8.scss","sass/components/_variables.scss"],
-"names": [],
-"file": "ie-lte8.css"
-}
