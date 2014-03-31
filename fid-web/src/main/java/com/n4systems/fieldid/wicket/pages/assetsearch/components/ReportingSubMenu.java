@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.summary.EventResolutionPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.search.EventSearchType;
 import com.n4systems.model.search.WorkflowStateCriteria;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
@@ -90,7 +91,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         int selected = criteria.getSelection().getNumSelectedIds();
 
         exportLink.setVisible(selected > 0 && selected < maxExport);
-        print.setVisible(selected > 0 && selected < maxPrint && !isSearchForClosed(criteria));
+        print.setVisible(selected > 0 && selected < maxPrint && !isSearchForClosed(criteria) && !isSearchForActions(criteria));
         
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
         boolean searchIncludesSafetyNetwork = model.getObject().isIncludeSafetyNetwork();
@@ -106,6 +107,10 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
     private boolean isSearchForClosed(EventReportCriteria criteria) {
         return WorkflowStateCriteria.CLOSED.equals(criteria.getWorkflowState());
+    }
+
+    private boolean isSearchForActions(EventReportCriteria criteria) {
+        return EventSearchType.ACTIONS.equals(criteria.getEventSearchType());
     }
 
     @Override
