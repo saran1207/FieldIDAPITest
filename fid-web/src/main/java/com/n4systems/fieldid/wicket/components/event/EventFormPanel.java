@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.components.event;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.CriteriaResult;
-import com.n4systems.model.Event;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -24,7 +23,7 @@ public abstract class EventFormPanel extends Panel {
     private int totalSections;
     private IModel<List<AbstractEvent.SectionResults>> results;
 
-    public EventFormPanel(String id, final Class<? extends Event> eventClass, final IModel<List<AbstractEvent.SectionResults>> results) {
+    public EventFormPanel(String id, final Class<? extends AbstractEvent> eventClass, final IModel<List<AbstractEvent.SectionResults>> results) {
         super(id);
         this.results = results;
         setOutputMarkupId(true);
@@ -69,7 +68,7 @@ public abstract class EventFormPanel extends Panel {
 
     }
 
-    protected abstract Panel getCriteriaSectionPanel(Class<? extends Event> eventClass, PropertyModel<List<CriteriaResult>> results);
+    protected abstract Panel getCriteriaSectionPanel(Class<? extends AbstractEvent> eventClass, PropertyModel<List<CriteriaResult>> results);
 
     private IChoiceRenderer<AbstractEvent.SectionResults> sectionChoiceRenderer() {
         return new IChoiceRenderer<AbstractEvent.SectionResults>() {

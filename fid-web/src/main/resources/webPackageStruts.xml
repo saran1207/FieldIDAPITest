@@ -1075,10 +1075,7 @@
 		<action name="masterEventCreate" method="doCreate" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
 			<result name="error" type="freemarker">/templates/html/masterEventCrud/add.ftl</result>
 			<result name="input" type="freemarker">/templates/html/masterEventCrud/add.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">event</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
+            <result name="success" type="redirect">/w/thingEventSummary?id=${uniqueID}</result>
 		</action>
 
 		<action name="masterEventEdit" method="doEdit" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
@@ -1088,11 +1085,8 @@
 		<action name="masterEventUpdate" method="doUpdate" class="com.n4systems.fieldid.actions.event.MasterEventCrud">
 			<result name="error" type="freemarker">/templates/html/masterEventCrud/edit.ftl</result>
 			<result name="input" type="freemarker">/templates/html/masterEventCrud/edit.ftl</result>
-			<result name="success" type="redirectAction">
-				<param name="actionName">event</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
-		</action>
+            <result name="success" type="redirect">/w/thingEventSummary?id=${uniqueID}</result>
+        </action>
 
 
 		<action name="subEventAdd" method="doAdd" class="com.n4systems.fieldid.actions.event.SubEventCrud">

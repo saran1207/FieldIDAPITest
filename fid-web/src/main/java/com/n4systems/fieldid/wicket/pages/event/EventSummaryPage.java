@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.Event;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -46,6 +47,8 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
 
         add(getProofTestPanel("proofTestPanel"));
 
+        add(getSubEventPanel("subEventsPanel"));
+
     }
 
     @Override
@@ -83,6 +86,8 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
 
     protected abstract Panel getProofTestPanel(String id);
 
+    protected abstract Panel getSubEventPanel(String id);
+
     protected abstract Event getEvent();
 
     private class ActionGroup extends Fragment {
@@ -90,11 +95,11 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
         public ActionGroup(String id) {
             super(id, "viewEventsActionGroup", EventSummaryPage.this);
 
-            if(eventSummaryType.equals(EventSummaryType.THING_EVENT))
-                add(new BookmarkablePageLink<EditEventPage>("editLink", EditEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
-            else
+            if(eventSummaryType.equals(EventSummaryType.THING_EVENT)) {
+                add(new NonWicketLink("editLink", "selectEventEdit.action?uniqueID=" + uniqueId, new AttributeModifier("class", "btn-secondary")));
+            } else {
                 add(new BookmarkablePageLink<EditEventPage>("editLink", EditPlaceEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
-
+            }
             WebMarkupContainer printDropDown;
             add(printDropDown = new WebMarkupContainer("printDropDown"));
             printDropDown.add(new NonWicketLink("printInspectionCertLink", "file/downloadEventCert.action?uniqueID="+uniqueId+"&reportType=INSPECTION_CERT")
