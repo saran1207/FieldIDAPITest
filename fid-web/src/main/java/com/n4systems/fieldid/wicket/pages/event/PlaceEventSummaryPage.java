@@ -82,6 +82,11 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
     }
 
     @Override
+    protected Panel getSubEventPanel(String id) {
+        return new EmptyPanel(id);
+    }
+
+    @Override
     protected Event getEvent() {
         return eventModel.getObject();
     }

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
+import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import org.apache.log4j.Logger;
@@ -23,10 +24,18 @@ public class EventAttachmentsPanel extends Panel {
 
     private static final Logger logger = Logger.getLogger(EventAttachmentsPanel.class);
 
-    public EventAttachmentsPanel(String id, IModel<? extends Event> eventModel) {
+    private String downloadAction;
+
+    public EventAttachmentsPanel(String id, IModel<? extends AbstractEvent> eventModel) {
         super(id);
 
-        final Event event = eventModel.getObject();
+        final AbstractEvent event = eventModel.getObject();
+
+        if (event instanceof Event) {
+            downloadAction = "downloadAttachedFile";
+        } else {
+            downloadAction = "downloadSubAttachedFile";
+        }
 
         List<FileAttachment> attachments = eventModel.getObject().getAttachments();
 
@@ -50,7 +59,7 @@ public class EventAttachmentsPanel extends Panel {
                     fileName = fileAttachment.getFileName().replace(" ", "+");
                 }
 
-                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAttachedFile.action?fileName=" + fileName + "&uniqueID=" + event.getId() + "&attachmentID=" + fileAttachment.getId());
+                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/" + downloadAction + ".action?fileName=" + fileName + "&uniqueID=" + event.getId() + "&attachmentID=" + fileAttachment.getId());
 
                 WebComponent image;
                 if(fileAttachment.isImage()) {
