@@ -5,7 +5,6 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.form.IndicatingAjaxSubmitLink;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.services.search.SearchResult;
 import com.n4systems.services.search.field.IndexField;
@@ -58,7 +57,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
     private FIDFeedbackPanel feedbackPanel = null;
     private WebMarkupContainer actions;
     private Form resultForm;
-    private Set<String> selectedIds = new HashSet<String>();
+    private Set<Long> selectedIds = new HashSet<Long>();
     private TextSearchDataProvider provider;
     private Component blankSlate;
     private DataView<SearchResult> dataView;
@@ -175,7 +174,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
 
                 List<Long> idList = provider.getIdList();
                 for (Long id : idList) {
-                    selectedIds.add(Long.toString(id));
+                    selectedIds.add(id);
                 }
 
                 target.add(listViewContainer, actions, groupSelector);
@@ -203,13 +202,13 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
             }
         };
 
-        actions.add(createActionsPanel("actions", new PropertyModel<Set<String>>(this, "selectedIds")));
+        actions.add(createActionsPanel("actions", new PropertyModel<Set<Long>>(this, "selectedIds")));
 
         resultForm.add(actions);
     }
 
     protected abstract Component createDetailsPanel(String id, IModel<SearchResult> resultModel);
-    protected abstract Component createActionsPanel(String id, IModel<Set<String>> selectedItemsModel);
+    protected abstract Component createActionsPanel(String id, IModel<Set<Long>> selectedItemsModel);
     protected abstract Component createHelpPanel(String id);
     protected abstract Component createSelectItemsLabel(String id);
 
@@ -237,7 +236,7 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
                 int currentPage = dataView.getCurrentPage();
                 int itemsPerPage = dataView.getItemsPerPage();
                 for (Iterator<? extends SearchResult> it = dataProvider.iterator(currentPage * itemsPerPage, itemsPerPage);it.hasNext();) {
-                    String idFieldString = it.next().get(idField.getField());
+                    Long idFieldString = it.next().getLong(idField.getField());
                     if (object) {
                         selectedIds.add(idFieldString);
                     } else {
@@ -259,15 +258,15 @@ public abstract class AdvancedSearchPage extends FieldIDFrontEndPage {
 
         @Override
         public Boolean getObject() {
-            return selectedIds.contains(resultModel.getObject().get(idField.getField()));
+            return selectedIds.contains(resultModel.getObject().getLong(idField.getField()));
         }
 
         @Override
         public void setObject(Boolean object) {
             if (object) {
-                selectedIds.add(resultModel.getObject().get(idField.getField()));
+                selectedIds.add(resultModel.getObject().getLong(idField.getField()));
             } else {
-                selectedIds.remove(resultModel.getObject().get(idField.getField()));
+                selectedIds.remove(resultModel.getObject().getLong(idField.getField()));
             }
         }
 

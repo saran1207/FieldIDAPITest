@@ -299,6 +299,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
             gpsContainer.setOutputMarkupId(true);
             gpsContainer.setVisible(assetModel.getObject().getGpsLocation() !=null);
+            gpsContainer.setVisible(FieldIDSession.get().getTenant().getSettings().isGpsCapture());
+
 
 //            add(assetGpsPanel = new AssetGpsPanel("assetGPSPanel", assetModel));
 

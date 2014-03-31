@@ -74,6 +74,11 @@ public class ThingEventSummaryPage extends EventSummaryPage {
         return new ProofTestPanel(id, eventModel);
     }
 
+    @Override
+    protected Event getEvent() {
+        return eventModel.getObject();
+    }
+
     private ThingEvent loadExistingEvent() {
         ThingEvent existingEvent = eventService.lookupExistingEvent(ThingEvent.class, uniqueId);
         PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS);

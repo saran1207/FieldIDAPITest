@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.asset;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.BigDecimalFmtLabel;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
@@ -35,6 +36,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.zip.ZipOutputStream;
 
@@ -99,9 +103,13 @@ public class AssetSummaryPage extends AssetPage {
             }
         });
 
+        // GPS - set to 6 or 10 digits?  Go with 6 but db stores 10
+        NumberFormat numberFormat = new DecimalFormat();
+        numberFormat.setMaximumFractionDigits(6);
+        numberFormat.setMinimumFractionDigits(0);
 
-        Label latitude = new Label("latitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLatitude()));
-        Label longitude = new Label("longitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLongitude()));
+        BigDecimalFmtLabel latitude = new BigDecimalFmtLabel("latitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLatitude()), numberFormat);
+        BigDecimalFmtLabel longitude = new BigDecimalFmtLabel("longitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLongitude()), numberFormat);
 
         add(latitude);
         add(longitude);

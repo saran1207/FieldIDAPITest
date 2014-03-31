@@ -407,7 +407,6 @@ legend + p {
 	}
 }
 
-
 //--------
 
 .display-horizontal {
@@ -417,17 +416,17 @@ legend + p {
 
     .label {
       font-weight: $semi-bold;
-      width: 40%;
+      width: 30%;
       text-align: left;
       display: inline-block;
-      vertical-align: middle;
+      vertical-align: top;
       padding-right: 10px;
     }
 
     .value {
       display:inline-block;
       text-align: right;
-      width: 59%;
+      width: 69%;
     }
 
   }

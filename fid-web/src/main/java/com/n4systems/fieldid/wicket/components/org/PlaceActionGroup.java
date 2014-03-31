@@ -106,7 +106,7 @@ public class PlaceActionGroup extends Panel {
                 PlaceEvent event = item.getModelObject();
                 ScheduledEventsMenuModel listModel = (ScheduledEventsMenuModel) getModel();
                 if (event == null) {
-                    item.add(new BookmarkablePageLink<PlaceEventsPage>("event", PlaceEventsPage.class, PageParametersBuilder.id(getOrg().getId()))
+                    item.add(new BookmarkablePageLink<PlaceEventsPage>("event", PlaceEventsPage.class, PageParametersBuilder.id(getOrg().getId()).add(PlaceEventsPage.OPEN_PARAM, true))
                             .add(new Label("name", "View All " + listModel.getTotalEvents()))
                             .add(new Label("note", " ").setVisible(false)));
                 } else {
