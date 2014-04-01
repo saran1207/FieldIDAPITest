@@ -389,12 +389,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     }
     
     protected void saveAssignedToIfNecessary() {
-        if(event.getObject().hasAssignToUpdate()) {
+        if (assignedTo != null || event.getObject().hasAssignToUpdate()) {
             event.getObject().setAssignedTo(AssignedToUpdate.assignAssetToUser(assignedTo));
         }
-//        if (assignedTo != null) {
-//            event.getObject().setAssignedTo(AssignedToUpdate.assignAssetToUser(assignedTo));
-//        }
     }
 
     protected abstract AbstractEvent doSave();
