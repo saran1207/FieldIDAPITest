@@ -396,11 +396,11 @@ h2 a {
 	display: block;
 	width: 35px;
 	height: 22px;
-	background: url(../images/home.png) no-repeat scroll center center transparent;
+	background: url(../../images/home.png) no-repeat scroll center center transparent;
 }
 
 #menuHome:hover {
-	background: url(../images/home-over.png) no-repeat scroll center center transparent;
+	background: url(../../images/home-over.png) no-repeat scroll center center transparent;
 }*/
 
 .speedLink img {
@@ -509,11 +509,11 @@ table.list tr.multiSelected {
 }
 
 .list th.down {
-	background-image: url(../images/sort_arrow_down.gif);
+	background-image: url(../../images/sort_arrow_down.gif);
 }
 
 .list th.up {
-	background-image: url(../images/sort_arrow_up.gif);
+	background-image: url(../../images/sort_arrow_up.gif);
 }
 
 .list .limitWidth{
@@ -1075,15 +1075,15 @@ tr.selectedEvent:hover, tr.selectedAsset:hover{
 }
 
 #compliancePassed {
-	background-image: url(../images/pass.jpg);
+	background-image: url(../../images/pass.jpg);
 }
 
 #complianceFailed {
-	background-image: url(../images/fail.jpg);
+	background-image: url(../../images/fail.jpg);
 }
 
 #noCompliance {
-	background-image: url(../images/unknown.jpg);
+	background-image: url(../../images/unknown.jpg);
 }
 
 .complianceMessage {
@@ -1918,7 +1918,7 @@ input.description {
 }
 
 .schedulesTextContainer{
-	background-image: url(../images/schedules-blank-slate-icon.png);
+	background-image: url(../../images/schedules-blank-slate-icon.png);
 	background-repeat: no-repeat;
 	margin-left: 240px;
 	padding-left: 75px;
@@ -1926,7 +1926,7 @@ input.description {
 	}
 
 .textContainer{
-	background-image: url(../images/reporting-bs-icon.png);
+	background-image: url(../../images/reporting-bs-icon.png);
 	background-repeat: no-repeat;
 	background-position: left 11.5px;
 	margin-left: 90px;
@@ -2135,15 +2135,15 @@ div.unitOfMeasureName {
 }
 
 #startEvent{
-	background-image: url(../images/quick-event-plus-icon.png);
+	background-image: url(../../images/quick-event-plus-icon.png);
 }
 	
 #newScheduleButton{
-	background-image: url(../images/calendar-icon.png);
+	background-image: url(../../images/calendar-icon.png);
 }
 
 #manageEvent {
-	background-image: url(../images/calendar-icon.png);
+	background-image: url(../../images/calendar-icon.png);
 	margin-left: 20px;
 }
 
@@ -2226,7 +2226,7 @@ div.unitOfMeasureName {
 }
 
 #errorList {
-	background: no-repeat url(../images/caution.png) 10px center;
+	background: no-repeat url(../../images/caution.png) 10px center;
 	border-style: solid;
 	border-width: 1px;
 	border-color: #FFD700;
@@ -2284,27 +2284,27 @@ div.unitOfMeasureName {
 }
 
 .delete{
-	background-image: url(../images/delete-icon.png);
+	background-image: url(../../images/delete-icon.png);
 }
 
 .changeaccount{
-	background-image: url(../images/upgrade-icon.png);
+	background-image: url(../../images/upgrade-icon.png);
 }
 
 .email{
-	background-image: url(../images/welcome-email-icon.png);
+	background-image: url(../../images/welcome-email-icon.png);
 }
 
 .addUser{
-	background-image: url(../images/add-user.png);
+	background-image: url(../../images/add-user.png);
 }
 
 .merge {
-	background-image: url(../images/merge-icon.png);
+	background-image: url(../../images/merge-icon.png);
 }
 
 .addicon {
-	background-image: url(../images/add-division-icon.png);
+	background-image: url(../../images/add-division-icon.png);
 }
 
 .crudForm .infoSet label .required {
@@ -2320,7 +2320,7 @@ th.wicket_orderUp {
 	background-position: right;
 	background-color: #CCCCCC;
 	overflow: hidden;
-    background-image: url(../images/sort_arrow_down.gif);
+    background-image: url(../../images/sort_arrow_down.gif);
 }
 
 th.wicket_orderDown {
@@ -2329,7 +2329,7 @@ th.wicket_orderDown {
 	background-position: right;
 	background-color: #CCCCCC;
 	overflow: hidden;
-    background-image: url(../images/sort_arrow_up.gif);
+    background-image: url(../../images/sort_arrow_up.gif);
 }
  
 

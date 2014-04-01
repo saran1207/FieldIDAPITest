@@ -57,12 +57,12 @@ em {
 }
 
 .secondaryNav li.button a {
-	background: #fff repeat-x url(../images/button_background.jpg);
+	background: #fff repeat-x url(../../images/button_background.jpg);
 	border:1px solid #ddd;
 }
 
 .secondaryNav li.button a.activated {
-	background: #fff repeat-x url(../images/button_background_activated.jpg);	
+	background: #fff repeat-x url(../../images/button_background_activated.jpg);	
 }
 
 .secondaryNav a {

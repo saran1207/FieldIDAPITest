@@ -164,7 +164,7 @@ div.oneLine {
 	display: block;
 	width: 252px;
 	height: 62px;
-	background-image: url(../images/request_account_button.png);
+	background-image: url(../../images/request_account_button.png);
 	background-repeat: no-repeat;
 }
 
@@ -178,7 +178,7 @@ div.oneLine {
 	display: block;
 	width: 252px;
 	height: 62px;
-	background-image: url(../images/plans_and_pricing_button.png);
+	background-image: url(../../images/plans_and_pricing_button.png);
 	background-repeat: no-repeat;
 }
 
@@ -192,7 +192,7 @@ div.oneLine {
 	float: right;
 	width: 183px;
 	height: 30px;
-	background-image: url(../images/see-plans-pricing-button.png);
+	background-image: url(../../images/see-plans-pricing-button.png);
 	background-repeat: no-repeat;
 }
 
