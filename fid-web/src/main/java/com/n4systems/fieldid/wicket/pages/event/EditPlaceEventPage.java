@@ -45,7 +45,7 @@ public class EditPlaceEventPage extends PlaceEventPage {
 
     @Override
     protected Component createCancelLink(String id) {
-        return new BookmarkablePageLink<ThingEventSummaryPage>(id, ThingEventSummaryPage.class, PageParametersBuilder.id(uniqueId));
+        return new BookmarkablePageLink<PlaceEventSummaryPage>(id, PlaceEventSummaryPage.class, PageParametersBuilder.id(uniqueId));
     }
 
     @Override
