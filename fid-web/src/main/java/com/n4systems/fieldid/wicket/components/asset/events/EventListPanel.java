@@ -44,7 +44,7 @@ public class EventListPanel extends Panel {
                 String attribute = "";
                 if(dataProvider.size() == 0) {
                     attribute = "no_records";
-                }else if ( (dataProvider.size()/EVENTS_PER_PAGE) == 0  || (dataProvider.size()/EVENTS_PER_PAGE) == 1) {
+                }else if ( (dataProvider.size()/EVENTS_PER_PAGE) == 0 || dataProvider.size() == EVENTS_PER_PAGE) {
                     attribute = "no_paging";
                 }
                 return attribute;
