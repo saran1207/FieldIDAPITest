@@ -21,4 +21,14 @@ public class RunLastReportPage extends FieldIDFrontEndPage {
         }
     }
 
+    public RunLastReportPage(String message){
+        final EventReportCriteria lastReport = savedReportService.retrieveLastSearch();
+        if (lastReport != null) {
+            setResponsePage(new ReportPage(lastReport).withSavedItemNamed("My Last Report"));
+            info(message);
+        } else {
+            setResponsePage(DashboardPage.class);
+        }
+    }
+
 }
