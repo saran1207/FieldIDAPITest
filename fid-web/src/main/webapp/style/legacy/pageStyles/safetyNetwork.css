@@ -1,10 +1,10 @@
 
 #help_link {
-	background: no-repeat url(../../images/info.png);
+	background: no-repeat url(../../../images/info.png);
 }
 
 #video_link {
-	background: no-repeat url(../../images/info.png);
+	background: no-repeat url(../../../images/info.png);
 }
 
 .infoSet {
@@ -122,7 +122,7 @@
 }
 
 #yourConnections{
-	background: no-repeat url(../../images/connections-small.png) left center;
+	background: no-repeat url(../../../images/connections-small.png) left center;
 	border-top: 1px solid #999999;
 	border-bottom: 1px solid #999999;
 	padding: 0.8em 0 0.8em 2.7em;
@@ -188,7 +188,7 @@
 #findConnections p{
 	display:block;
 	float:left;
-	background: no-repeat url(../../images/connections.png) -12px center;
+	background: no-repeat url(../../../images/connections.png) -12px center;
 	width: 30em;
 	padding: 1.4em 0 2em 5em;
 }
@@ -198,7 +198,7 @@
 }
 
 #inviteCompany{
-	background: no-repeat url(../../images/inbox-safety-network.png) left 15px;
+	background: no-repeat url(../../../images/inbox-safety-network.png) left 15px;
 	display: block;
 	float: left;
 	max-width: 25em;
@@ -234,7 +234,7 @@
 }
 
 div#sendAnInvite {
-    background: url("../../images/search-invite-company-icon.png") no-repeat scroll 0.5em 1em #EDEDED;
+    background: url("../../../images/search-invite-company-icon.png") no-repeat scroll 0.5em 1em #EDEDED;
     padding: 0.5em 0 0.5em 2.8em;
     width: 60em;
 }

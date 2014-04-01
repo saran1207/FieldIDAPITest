@@ -171,7 +171,7 @@ div.userLimitWarning{
 	font-size: 13px;
 	padding: 5px 0px 0px 45px;
 	height: 50px;
-	background: no-repeat url(../../images/warning-icon.png);
+	background: no-repeat url(../../../images/warning-icon.png);
 }
 
 .viewRow {

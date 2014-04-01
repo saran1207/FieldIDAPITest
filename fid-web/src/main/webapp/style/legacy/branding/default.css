@@ -26,12 +26,12 @@ body {
 }
 
 .percentBarUsed {
-	background: #79c5e5 url(../../images/barForeground.png) repeat-x;
+	background: #79c5e5 url(../../../images/barForeground.png) repeat-x;
 }
 .percentBar {
 	border: 1px solid #79C5E5;
     padding: 2px;
-	background: url(../../images/barBackground.png) repeat-x;
+	background: url(../../../images/barBackground.png) repeat-x;
 }
 
 .limitWarning {

@@ -91,12 +91,12 @@
 }
 
 .edit-thumbnail-container:hover {
-    background: url("../../../images/icon-edit-large.png") no-repeat top left;
+    background: url("../../../../images/icon-edit-large.png") no-repeat top left;
     cursor: pointer;
 }
 
 .view-thumbnail-container:hover {
-    background: url("../../../images/icon-view-large.png") no-repeat top left;
+    background: url("../../../../images/icon-view-large.png") no-repeat top left;
     cursor: pointer;
 }
 

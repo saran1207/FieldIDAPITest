@@ -16,7 +16,7 @@ div.dialog-modal div.w_silver a.w_close {
     background-position:0;
     width:11px;
     height:11px;
-    background-image: url('../../images/modal-close.png');
+    background-image: url('../../../images/modal-close.png');
     margin-right:10px;
     margin-top:3px;
 }

@@ -1,7 +1,7 @@
 .print ul {
 	display:none;
 	position:absolute;
-	background-image: url(../../images/dropdownArrow-bottom-left.gif);
+	background-image: url(../../../images/dropdownArrow-bottom-left.gif);
 	padding-bottom:11px;
 	background-position:bottom left;
 	background-repeat: no-repeat;

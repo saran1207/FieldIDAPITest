@@ -83,7 +83,7 @@ div.wicket-modal div.w_caption {
 }
 
 .newScheduleButton{
-	background-image: url(../../../images/calendar-icon.png);
+	background-image: url(../../../../images/calendar-icon.png);
 }
 
 .newScheduleForm .scheduleRow .label {

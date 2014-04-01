@@ -5,7 +5,7 @@
 
 .columnHeader .twoStateLink a {
     font-size: 0.8em;
-    background: #fff repeat-x url(../../../images/button_background.jpg);
+    background: #fff repeat-x url(../../../../images/button_background.jpg);
     border:1px solid #ddd;
     padding: 5px 15px 5px 15px;
     text-decoration:none;
@@ -13,7 +13,7 @@
 }
 
 .columnHeader .twoStateLink a.activated {
-    background: #fff repeat-x url(../../../images/button_background_activated.jpg);
+    background: #fff repeat-x url(../../../../images/button_background_activated.jpg);
 }
 
 .columnHeader .twoStateLink a:hover {

@@ -1,7 +1,7 @@
 .eventTypes ul{
 	display:none;
 	position:absolute;
-	background-image: url(../../images/dropdownArrow-top-left.gif);
+	background-image: url(../../../images/dropdownArrow-top-left.gif);
 	padding-top:11px;
 	background-position:top center;
 	background-repeat: no-repeat;
@@ -14,7 +14,7 @@
 }
 .eventTypesLeft ul{
 	background-position:top left;
-	background-image: url(../../images/dropdownArrow-left.gif);
+	background-image: url(../../../images/dropdownArrow-left.gif);
 }
 .eventTypes ul li{
 	background-color: #333;
@@ -328,14 +328,14 @@ div.eventInIframe{
 	width: 380px;
 	border: 2px solid #E8EDFF;
 	padding: 10px 10px 10px 40px;
-	background-image: url(../../images/addObservation.gif);
+	background-image: url(../../../images/addObservation.gif);
 	background-repeat: no-repeat;
 	background-position: top left;
 }
 
 .observationsShow p.defRepairedOnSite, .defRepairedOnSite {
 	border-color: #9fe8b7;
-	background-image: url(../../images/repairedOnSite.gif);
+	background-image: url(../../../images/repairedOnSite.gif);
 }
 
 .observationsShow p.defRepairedOnSite:hover, .defRepairedOnSite:hover {
@@ -344,7 +344,7 @@ div.eventInIframe{
 
 .observationsShow p.defRepaired, .defRepaired  {
 	border-color: #9fb7e8;
-	background-image: url(../../images/repaired.gif);
+	background-image: url(../../../images/repaired.gif);
 }
 
 .observationsShow p.defRepaired:hover, .defRepaired:hover {
@@ -353,7 +353,7 @@ div.eventInIframe{
 
 .observationsShow p.recSelected, .recSelected {
 	border-color: #ff9f40;
-	background-image: url(../../images/recommendation.gif);
+	background-image: url(../../../images/recommendation.gif);
 }
 
 .observationsShow p.recSelected:hover, .recSelected:hover {
@@ -362,7 +362,7 @@ div.eventInIframe{
 
 .observationsShow p.defSelected, .defSelected {
 	border-color: #ff4f4f;
-	background-image: url(../../images/deficient.gif);
+	background-image: url(../../../images/deficient.gif);
 }
 
 .observationsShow p.defSelected:hover, .defSelected:hover  {
@@ -370,7 +370,7 @@ div.eventInIframe{
 }
 
 .observationsShow p.obsCommentShow, .obsCommentShow {
-	background-image: url(../../images/observationComment.gif);
+	background-image: url(../../../images/observationComment.gif);
 }
 
 .observationsShow {
@@ -427,7 +427,7 @@ div.eventInIframe{
 .print ul {
 	display: none;
 	position: absolute;
-	background-image: url(../../images/dropdownArrow-top-right.gif);
+	background-image: url(../../../images/dropdownArrow-top-right.gif);
 	padding-top: 11px;
 	background-position: top right;
 	background-repeat: no-repeat;

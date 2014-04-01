@@ -53,11 +53,11 @@ a.vendorLink {
 }
 
 #registerAssets{
-	background: no-repeat url(../../images/search-connection-assets.png) left top;
+	background: no-repeat url(../../../images/search-connection-assets.png) left top;
 }
 
 #preAssignedAssets{
-	background: no-repeat url(../../images/view-pre-assigned-assets.png) left top;
+	background: no-repeat url(../../../images/view-pre-assigned-assets.png) left top;
 }
 
 #registerAssets h3{
@@ -77,7 +77,7 @@ a.vendorLink {
 }
 
 #companyInfo{
-	background: no-repeat url(../../images/company-info-icon.png) left;
+	background: no-repeat url(../../../images/company-info-icon.png) left;
 	border-top: 1px solid #999999;
 	border-bottom: 1px solid #999999;
 	padding: 0.8em 2em 0.8em 2.7em;

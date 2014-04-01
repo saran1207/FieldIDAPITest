@@ -42,11 +42,11 @@ fieldset td{
 }
 
 .schedule {
-	background-image: url(../../images/quick-event-calendar-small.png);
+	background-image: url(../../../images/quick-event-calendar-small.png);
 }
 
 .adhoc {
-	background-image: url(../../images/quick-event-plus-icon.png);
+	background-image: url(../../../images/quick-event-plus-icon.png);
 }
 
 p.footer{

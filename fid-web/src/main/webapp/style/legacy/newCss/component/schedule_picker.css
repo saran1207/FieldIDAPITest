@@ -47,7 +47,7 @@
 }
 
 .newScheduleButton{
-	background-image: url(../../../images/calendar-icon.png);
+	background-image: url(../../../../images/calendar-icon.png);
 }
 
 .newScheduleForm .infoSet select {

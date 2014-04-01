@@ -64,7 +64,7 @@ div.uploadAction{
 	padding-left: 30px;
 	font-size: 14px;
 	height: 24px;
-	background-image: url("../../images/attachment.png");
+	background-image: url("../../../images/attachment.png");
 	background-repeat: no-repeat;
 	background-position: left -7px;
 	}
@@ -83,7 +83,7 @@ p.fileUploadShow label{
 	padding: 20px 0;
 	width: 60px;
 	background-repeat: no-repeat;
-	background-image: url("../../images/default-filetype.png");
+	background-image: url("../../../images/default-filetype.png");
 	background-position: 7px -3px;
 }
 

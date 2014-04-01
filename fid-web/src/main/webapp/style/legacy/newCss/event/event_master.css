@@ -2,7 +2,7 @@
 .eventTypes ul{
 	display:none;
 	position:absolute;
-	background-image: url(../../../images/dropdownArrow-top-left.gif);
+	background-image: url(../../../../images/dropdownArrow-top-left.gif);
 	padding-top:11px;
     margin-left:-60px;
 	background-position:top center;
@@ -15,7 +15,7 @@
 }
 .eventTypesLeft ul{
 	background-position:top left;
-	background-image: url(../../../images/dropdownArrow-left.gif);
+	background-image: url(../../../../images/dropdownArrow-left.gif);
 }
 
 .eventTypes ul li{

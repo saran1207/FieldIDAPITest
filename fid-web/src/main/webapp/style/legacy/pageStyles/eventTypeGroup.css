@@ -35,7 +35,7 @@
 
 
 .printOutDetails a {
-	background: no-repeat url(../../images/pdf_small.gif) left 7px;
+	background: no-repeat url(../../../images/pdf_small.gif) left 7px;
 	display: block;
 	border-top: 1px solid #D0DAFD;
 	margin-top: 5px;
@@ -74,7 +74,7 @@
 }
 
 .noImage {
-	background: no-repeat url(../../images/nopreview.png) center center;
+	background: no-repeat url(../../../images/nopreview.png) center center;
 	background-color: none;
 	height: 100%;
 	width: 100%;

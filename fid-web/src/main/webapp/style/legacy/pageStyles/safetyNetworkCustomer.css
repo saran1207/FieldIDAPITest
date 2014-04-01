@@ -10,12 +10,12 @@ div.assetsCount {
 }
 
 div.registeredAssetsCount {
-  background: url("../../images/assets-registered-bg.png") no-repeat scroll 0 0 transparent;
+  background: url("../../../images/assets-registered-bg.png") no-repeat scroll 0 0 transparent;
   color: #777777;
 }
 
 div.preassignedAssetsCount {
-  background: url("../../images/assets-preassigned-bg.png") no-repeat scroll 0 0 transparent;
+  background: url("../../../images/assets-preassigned-bg.png") no-repeat scroll 0 0 transparent;
   color: #3D91B3;
 }
 

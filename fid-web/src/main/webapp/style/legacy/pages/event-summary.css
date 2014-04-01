@@ -51,10 +51,10 @@
   vertical-align: sub;
 }
 .observation-dialog p.def-selected {
-  background-image: url(../../images/deficient.gif);
+  background-image: url(../../../images/deficient.gif);
 }
 .observation-dialog p.rec-selected {
-  background-image: url(../../images/recommendation.gif);
+  background-image: url(../../../images/recommendation.gif);
 }
 .result span {
   padding: 5px 15px;

@@ -42,11 +42,11 @@
 }
 
 #importBox {
-	background:no-repeat url(../../images/green-arrow-right.png);
+	background:no-repeat url(../../../images/green-arrow-right.png);
 }
 
 #exportBox {
-	background:no-repeat url(../../images/green-arrow-left.png);
+	background:no-repeat url(../../../images/green-arrow-left.png);
 }
 
 .faqSection {

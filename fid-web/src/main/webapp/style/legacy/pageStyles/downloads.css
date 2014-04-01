@@ -1,5 +1,5 @@
 .textContainer{
-	background-image: url(../../images/download-icon.png);
+	background-image: url(../../../images/download-icon.png);
 }
 
 .bold{
@@ -58,7 +58,7 @@
 	color: #666;
 	font-size:14px;
 	margin: 5px 5px 5px 0;
-	background-image: url(../../images/link-box.png);
+	background-image: url(../../../images/link-box.png);
 	background-repeat: no-repeat;
 	}
 
@@ -67,7 +67,7 @@
 	display: block;
 	width: 220px;
 	height: 50px;
-	background-image: url(../../images/share-email-button.png);
+	background-image: url(../../../images/share-email-button.png);
 	background-repeat: no-repeat;
 }
 
@@ -76,14 +76,14 @@
 }
 
 .correctExample{
-	background-image: url(../../images/checkmark-icon.png);
+	background-image: url(../../../images/checkmark-icon.png);
 	background-position: left center;
 	background-repeat: no-repeat;	
 	padding-left: 15px;
 }
 
 .incorrectExample{
-	background-image: url(../../images/dash-icon.png);
+	background-image: url(../../../images/dash-icon.png);
 	background-position: left center;
 	background-repeat: no-repeat;
 	padding-left: 15px;

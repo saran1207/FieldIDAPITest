@@ -56,13 +56,13 @@
 }
 
 .accountUsage .ui-progressbar {  
-    background: url("../../images/barBackground.png") repeat scroll 0 0 transparent;
+    background: url("../../../images/barBackground.png") repeat scroll 0 0 transparent;
     border: 1px solid #79C5E5;
     padding: 2px;
 }
 
 .accountUsage .ui-progressbar-value {
-	background: url("../../images/barForeground.png") repeat scroll 0 0 #79C5E5;
+	background: url("../../../images/barForeground.png") repeat scroll 0 0 #79C5E5;
 }
 
 .accountUsage .ui-progressbar .ui-progressbar-value {

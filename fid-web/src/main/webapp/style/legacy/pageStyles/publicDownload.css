@@ -15,7 +15,7 @@
 }
 
 #pageContent.publicContainer{
-	background-image: url(../../images/bg-download.png);
+	background-image: url(../../../images/bg-download.png);
 	background-repeat:repeat-x;
 	background-position: center top;
 	border-style: none;
@@ -95,7 +95,7 @@
 	width: 300px;
 	height: 55px;
 	border-style: none;
-	background-image: url(../../images/file-icon.png);
+	background-image: url(../../../images/file-icon.png);
 	background-repeat: no-repeat;
 	margin-left: 15px;
 	margin-top: 10px;
@@ -103,7 +103,7 @@
 	padding-left: 65px;
 }
 .downloadBox .expiredBoxContent{
-	background-image: url(../../images/download-icon-invalid.png);
+	background-image: url(../../../images/download-icon-invalid.png);
 }
 
 .boxContent h2 a{
@@ -134,6 +134,6 @@
 	float:right;
 	width: 220px;
 	height: 50px;
-	background-image: url(../../images/download-button.png);
+	background-image: url(../../../images/download-button.png);
 	background-repeat: no-repeat;	
 }

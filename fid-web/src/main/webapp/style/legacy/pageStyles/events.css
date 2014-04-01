@@ -1,17 +1,17 @@
 .multipleEvents{
-	background: no-repeat url(../../images/multiple-event-small.png) 5px 0;
+	background: no-repeat url(../../../images/multiple-event-small.png) 5px 0;
 }
 
 .singleEvent{
-	background: no-repeat url(../../images/single-event.png) 5px 0;
+	background: no-repeat url(../../../images/single-event.png) 5px 0;
 }
 
 .multipleProofTests{
-	background: no-repeat url(../../images/multi-proof-icon-small.png) 5px 0;
+	background: no-repeat url(../../../images/multi-proof-icon-small.png) 5px 0;
 }
 
 .import{
-	background: no-repeat url(../../images/small-xls-icon.png) 5px 0;
+	background: no-repeat url(../../../images/small-xls-icon.png) 5px 0;
 }
 
 .import img {

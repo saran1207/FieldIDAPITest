@@ -74,7 +74,7 @@
 }
 
 #suggestedAttributes {
-	background: no-repeat url(../../images/arrow.png) 0% 12%;
+	background: no-repeat url(../../../images/arrow.png) 0% 12%;
 	padding: 0 0 0 30px;
 }
 
@@ -110,7 +110,7 @@
 }
 
 #confirm {
-	background: no-repeat url(../../images/register-conf-bg.png) center center;
+	background: no-repeat url(../../../images/register-conf-bg.png) center center;
 	margin-top: 15px;
 	padding: 30px;
 	height: 390px;

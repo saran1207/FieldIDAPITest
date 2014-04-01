@@ -61,10 +61,10 @@
 }
 
 #referralStep1 {
-	background:no-repeat url(../../images/mail-send.png);
+	background:no-repeat url(../../../images/mail-send.png);
 	
 }
 #referralStep2 {
-	background:no-repeat url(../../images/mail-receive.png);
+	background:no-repeat url(../../../images/mail-receive.png);
 	
 }

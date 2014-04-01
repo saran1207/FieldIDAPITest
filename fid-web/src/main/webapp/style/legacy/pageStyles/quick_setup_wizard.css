@@ -8,7 +8,7 @@
 	}
 
 #allDone{
-	background-image: url(../../images/setup-wizard-checkmark.png);
+	background-image: url(../../../images/setup-wizard-checkmark.png);
 	background-repeat: no-repeat;
 	background-position: left 10px;
 	padding: 15px 0 0 50px;
@@ -79,7 +79,7 @@
 }
 
 .quickSetupHeader {
-	background-image: url(../../images/setup-wizard-gear.png);
+	background-image: url(../../../images/setup-wizard-gear.png);
 	background-repeat: no-repeat;
 	background-position: left 10px;
 	padding: 15px 0 0 50px;
