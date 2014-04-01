@@ -7,12 +7,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
-import com.n4systems.fieldid.wicket.components.BigDecimalFmtTextField;
-import com.n4systems.fieldid.wicket.components.BigDecimalFmtLabel;
-import com.n4systems.fieldid.wicket.components.Comment;
-import com.n4systems.fieldid.wicket.components.DateTimePicker;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.SimpleAjaxButton;
+import com.n4systems.fieldid.wicket.components.*;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.event.attributes.AttributesEditPanel;
 import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook;
@@ -293,14 +288,10 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             WebMarkupContainer gpsContainer = new WebMarkupContainer("gpsContainer");
             add(gpsContainer);
 
-            // GPS - set to 6 or 10 digits?  Go with 6 but db stores 10
-            NumberFormat numberFormat = new DecimalFormat();
-            numberFormat.setMaximumFractionDigits(6);
-            numberFormat.setMinimumFractionDigits(0);
 
+            latitude = new GpsTextField<BigDecimal>("latitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLatitude()));
+            longitude = new GpsTextField<BigDecimal>("longitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLongitude()));
 
-            latitude = new BigDecimalFmtTextField<BigDecimal>("latitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLatitude()), numberFormat);
-            longitude = new BigDecimalFmtTextField<BigDecimal>("longitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLongitude()), numberFormat);
 
             gpsContainer.add(latitude);
             gpsContainer.add(longitude);
@@ -398,9 +389,12 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     }
     
     protected void saveAssignedToIfNecessary() {
-        if (assignedTo != null) {
+        if(event.getObject().hasAssignToUpdate()) {
             event.getObject().setAssignedTo(AssignedToUpdate.assignAssetToUser(assignedTo));
         }
+//        if (assignedTo != null) {
+//            event.getObject().setAssignedTo(AssignedToUpdate.assignAssetToUser(assignedTo));
+//        }
     }
 
     protected abstract AbstractEvent doSave();

@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.event;
 
 import com.n4systems.fieldid.wicket.components.BigDecimalFmtLabel;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.GpsFmtLabel;
 import com.n4systems.model.Event;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -20,13 +21,7 @@ public class EventLocationPanel extends Panel {
 
         add(new GoogleMap<Event>("eventLocation", eventModel.getObject()));
 
-
-        // GPS - set to 6 or 10 digits?  Go with 6 but db stores 10
-        NumberFormat numberFormat = new DecimalFormat();
-        numberFormat.setMaximumFractionDigits(6);
-        numberFormat.setMinimumFractionDigits(0);
-
-        add(new BigDecimalFmtLabel("latitude", new PropertyModel<BigDecimal>(eventModel, "gpsLocation.latitude"), numberFormat));
-        add(new BigDecimalFmtLabel("longitude", new PropertyModel<BigDecimal>(eventModel, "gpsLocation.longitude"), numberFormat));
+        add(new GpsFmtLabel<BigDecimal>("latitude", new PropertyModel<BigDecimal>(eventModel, "gpsLocation.latitude")));
+        add(new GpsFmtLabel<BigDecimal>("longitude", new PropertyModel<BigDecimal>(eventModel, "gpsLocation.longitude")));
     }
 }

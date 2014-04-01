@@ -9,9 +9,9 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-public class BigDecimalFmtLabel extends Label {
+public class BigDecimalFmtLabel<BigDecimal> extends Label {
 
-    NumberFormat numberFormat;
+    private NumberFormat numberFormat;
 
     public BigDecimalFmtLabel(final String id, IModel<?> model)
     {
@@ -43,5 +43,11 @@ public class BigDecimalFmtLabel extends Label {
     }
 
 
+    public NumberFormat getNumberFormat() {
+        return numberFormat;
+    }
 
+    public void setNumberFormat(NumberFormat numberFormat) {
+        this.numberFormat = numberFormat;
+    }
 }

@@ -43,4 +43,12 @@ public class BigDecimalFmtTextField<T> extends TextField {
 
     }
 
+    public NumberFormat getNumberFormat() {
+        return numberFormat;
+    }
+
+    public void setNumberFormat(NumberFormat numberFormat) {
+        this.numberFormat = numberFormat;
+    }
+
 }
