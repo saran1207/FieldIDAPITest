@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.components.org.events.table;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.event.EditPlaceEventPage;
 import com.n4systems.fieldid.wicket.pages.event.PlaceEventSummaryPage;
@@ -25,12 +24,6 @@ public class EventActionsCell extends Panel {
         BookmarkablePageLink editLink;
         optionsContainer.add(editLink = new BookmarkablePageLink<Void>("editLink", EditPlaceEventPage.class, PageParametersBuilder.uniqueId(event.getID())));
         editLink.setVisible(FieldIDSession.get().getSessionUser().hasAccess("editevent"));
-        
-        NonWicketLink printLink;
-        optionsContainer.add(printLink = new NonWicketLink("printReportLink", "file/downloadEventCert.action?uniqueID=" + event.getID() + "&reportType=INSPECTION_CERT"));
-        printLink.setVisible(event.isEventCertPrintable());
-
-        optionsContainer.setVisible(editLink.isVisible() || printLink.isVisible());
 
         add(optionsContainer);
     }
