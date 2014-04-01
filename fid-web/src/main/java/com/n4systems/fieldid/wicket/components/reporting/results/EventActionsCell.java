@@ -1,21 +1,27 @@
 package com.n4systems.fieldid.wicket.components.reporting.results;
 
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
+import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.util.views.RowView;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -28,6 +34,9 @@ public class EventActionsCell extends Panel {
 
     @SpringBean
     private AssetService assetService;
+
+    @SpringBean
+    private EventService eventService;
 
     public EventActionsCell(String id, IModel<RowView> rowModel) {
         super(id);
@@ -70,15 +79,29 @@ public class EventActionsCell extends Panel {
         incompleteEventActionsList.setOutputMarkupId(true);
 
         Link resolveEventLink = new Link("closeEventLink") {
-            @Override public void onClick() {
+            @Override
+            public void onClick() {
                 setResponsePage(new CloseEventPage(PageParametersBuilder.uniqueId(event.getId()), (FieldIDFrontEndPage) getPage()));
             }
         };
 
-        NonWicketLink startEventLink = new NonWicketLink("startEventLink", "selectEventAdd.action?scheduleId="+event.getId()+"&type="+event.getType().getId()+"&assetId="+event.getAsset().getId());
+        NonWicketLink startEventLink = new NonWicketLink("startEventLink", "selectEventAdd.action?scheduleId=" + event.getId() + "&type=" + event.getType().getId() + "&assetId=" + event.getAsset().getId());
         BookmarkablePageLink viewSchedulesLink = new BookmarkablePageLink("viewLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
 
-        NonWicketLink deleteScheduleLink = new NonWicketLink("deleteScheduleLink", "eventScheduleDelete.action?uniqueID="+event.getId() +"&assetId="+event.getAsset().getId());
+        AjaxLink deleteScheduleLink = new AjaxLink<Void>("deleteScheduleLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                try {
+                    ThingEvent ev = eventService.lookupExistingEvent(ThingEvent.class, event.getId());
+                    eventService.retireEvent(ev);
+                    target.add(new RunLastReportPage(new FIDLabelModel("message.eventdeleted").getObject()));
+                } catch (Exception e) {
+                    //error("TEST");
+                    error(new FIDLabelModel("error.eventdeleting").getObject());
+                    target.add(((FieldIDFrontEndPage) getPage()).getTopFeedbackPanel());
+                }
+            }
+        };
 
         BookmarkablePageLink viewAssetLink = new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(event.getAsset().getId()));
 
