@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.BigDecimalFmtLabel;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.GoogleMap;
+import com.n4systems.fieldid.wicket.components.GpsFmtLabel;
 import com.n4systems.fieldid.wicket.components.asset.HeaderPanel;
 import com.n4systems.fieldid.wicket.components.asset.summary.*;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
@@ -103,13 +104,8 @@ public class AssetSummaryPage extends AssetPage {
             }
         });
 
-        // GPS - set to 6 or 10 digits?  Go with 6 but db stores 10
-        NumberFormat numberFormat = new DecimalFormat();
-        numberFormat.setMaximumFractionDigits(6);
-        numberFormat.setMinimumFractionDigits(0);
-
-        BigDecimalFmtLabel latitude = new BigDecimalFmtLabel("latitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLatitude()), numberFormat);
-        BigDecimalFmtLabel longitude = new BigDecimalFmtLabel("longitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLongitude()), numberFormat);
+        GpsFmtLabel latitude = new GpsFmtLabel("latitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLatitude()));
+        GpsFmtLabel longitude = new GpsFmtLabel("longitude", ProxyModel.of(asset, on(Asset.class).getGpsLocation().getLongitude()));
 
         add(latitude);
         add(longitude);

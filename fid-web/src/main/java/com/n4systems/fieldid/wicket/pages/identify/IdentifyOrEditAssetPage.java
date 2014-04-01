@@ -135,8 +135,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
                 Asset asset1 = assetModel.getObject();
 
-                BigDecimal latField = latitude.getConvertedInput();
-                BigDecimal longField = longitude.getConvertedInput();
+                BigDecimal latField = (BigDecimal)latitude.getConvertedInput();
+                BigDecimal longField = (BigDecimal)longitude.getConvertedInput();
 
                 if (null != latField) {
                     if (null == longField) {
@@ -157,8 +157,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
     class IdentifyOrEditAssetForm extends Form<Asset> {
 
-        TextField<BigDecimal> latitude;
-        TextField<BigDecimal> longitude;
+        GpsTextField<BigDecimal> latitude;
+        GpsTextField<BigDecimal> longitude;
 
 
         public IdentifyOrEditAssetForm(String id, final IModel<Asset> assetModel) {
@@ -288,14 +288,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             WebMarkupContainer gpsContainer = new WebMarkupContainer("gpsContainer");
             add(gpsContainer);
 
-
-            // GPS - set to 6 or 10 digits?  Go with 6 but db stores 10
-            NumberFormat numberFormat = new DecimalFormat();
-            numberFormat.setMaximumFractionDigits(6);
-            numberFormat.setMinimumFractionDigits(0);
-
-            latitude = new BigDecimalFmtTextField<BigDecimal>("latitude", ProxyModel.of(assetModel, on(Asset.class).getGpsLocation().getLatitude()), numberFormat);
-            longitude = new BigDecimalFmtTextField<BigDecimal>("longitude", ProxyModel.of(assetModel, on(Asset.class).getGpsLocation().getLongitude()), numberFormat);
+            latitude = new GpsTextField<BigDecimal>("latitude", ProxyModel.of(assetModel, on(Asset.class).getGpsLocation().getLatitude()));
+            longitude = new GpsTextField<BigDecimal>("longitude", ProxyModel.of(assetModel, on(Asset.class).getGpsLocation().getLongitude()));
 
             gpsContainer.add(latitude);
             gpsContainer.add(longitude);
