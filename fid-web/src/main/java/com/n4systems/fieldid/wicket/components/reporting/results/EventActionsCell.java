@@ -117,7 +117,7 @@ public class EventActionsCell extends Panel {
 
         viewLink.setVisible(localEndUser);
         editLink.setVisible(hasEditEvent);
-        printReportLink.setVisible(printable);
+        printReportLink.setVisible(printable && !event.getType().isActionEventType());
 
         startEventLink.setVisible(hasCreateEvent);
         editAssetLink.setVisible(hasTag);
