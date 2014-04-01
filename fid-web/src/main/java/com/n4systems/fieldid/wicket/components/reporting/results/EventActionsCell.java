@@ -94,11 +94,9 @@ public class EventActionsCell extends Panel {
                 try {
                     ThingEvent ev = eventService.lookupExistingEvent(ThingEvent.class, event.getId());
                     eventService.retireEvent(ev);
-                    target.add(new RunLastReportPage(new FIDLabelModel("message.eventdeleted").getObject()));
+                    new RunLastReportPage(new FIDLabelModel("message.eventdeleted").getObject(), false);
                 } catch (Exception e) {
-                    //error("TEST");
-                    error(new FIDLabelModel("error.eventdeleting").getObject());
-                    target.add(((FieldIDFrontEndPage) getPage()).getTopFeedbackPanel());
+                    new RunLastReportPage(new FIDLabelModel("error.eventdeleting").getObject(), true);
                 }
             }
         };
