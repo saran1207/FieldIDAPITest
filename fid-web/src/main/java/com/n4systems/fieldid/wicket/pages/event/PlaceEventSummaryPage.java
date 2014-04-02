@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.event;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.wicket.components.GoogleMap;
 import com.n4systems.fieldid.wicket.components.event.*;
 import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -73,7 +72,7 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Panel getEventLocationPanel(String id) {
-        return new GoogleMap<Event>(id, eventModel.getObject());
+        return new EventLocationPanel(id, eventModel);
     }
 
     @Override

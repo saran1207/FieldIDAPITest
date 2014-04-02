@@ -28,6 +28,10 @@ public class GpsModel<T extends HasGpsLocation> extends LoadableDetachableModel<
         this(Lists.newArrayList(location));
     }
 
+    public GpsModel(GpsLocation... location) {
+        this(Lists.newArrayList(location));
+    }
+
     public GpsModel(List<? extends HasGpsLocation> entities) {
         ArrayList<GpsLocation> locations = Lists.newArrayList();
         for (HasGpsLocation entity:entities) {
