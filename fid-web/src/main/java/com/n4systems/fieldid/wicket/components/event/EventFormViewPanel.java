@@ -33,8 +33,15 @@ public class EventFormViewPanel extends EventFormPanel {
 
     @Override
     protected Component getSectionScorePercentage(String id, IModel<CriteriaSection> criteriaSectionModel) {
+        Label percentageLabel;
         Double percentage = getScorePercentageForSections().get(criteriaSectionModel.getObject());
-        return new Label(id, NumberFormat.getPercentInstance().format(percentage))
-                .setVisible(event.getObject().getType().isDisplayScorePercentage());
+
+        if(percentage != null)
+            percentageLabel = new Label(id, NumberFormat.getPercentInstance().format(percentage));
+        else
+            percentageLabel = new Label(id);
+        percentageLabel.setVisible(event.getObject().getType().isDisplayScorePercentage());
+
+        return percentageLabel;
     }
 }
