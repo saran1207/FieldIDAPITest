@@ -52,8 +52,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -280,10 +278,8 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(new CheckBox("printable", new PropertyModel<Boolean>(event, "printable")).add(new UpdateComponentOnChange()));
 
             EventForm form = event.getObject().getEventForm();
-            add(new EventFormEditPanel("eventFormPanel", event.getObject().getClass(), new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(form!=null && form.getAvailableSections().size()>0));
+            add(new EventFormEditPanel("eventFormPanel", event, new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(form!=null && form.getAvailableSections().size()>0));
             add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(EventPage.this, "fileAttachments")));
-//            add(new EventGpsPanel("GPSPanel", event));
-
 
             WebMarkupContainer gpsContainer = new WebMarkupContainer("gpsContainer");
             add(gpsContainer);

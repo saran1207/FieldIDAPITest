@@ -1,8 +1,11 @@
 package com.n4systems.fieldid.wicket.components.event;
 
+import com.n4systems.fieldid.util.EventFormHelper;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.CriteriaResult;
+import com.n4systems.model.CriteriaSection;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -15,17 +18,24 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 
 import java.util.List;
+import java.util.Map;
 
 public abstract class EventFormPanel extends Panel {
+
 
     private AbstractEvent.SectionResults currentSection;
     private int currentSectionIndex = 0;
     private int totalSections;
     private IModel<List<AbstractEvent.SectionResults>> results;
+    protected IModel<? extends AbstractEvent> event;
 
-    public EventFormPanel(String id, final Class<? extends AbstractEvent> eventClass, final IModel<List<AbstractEvent.SectionResults>> results) {
+    private Map<CriteriaSection, Double> sectionScores;
+    private Map<CriteriaSection, Double> sectionScorePercentages;
+
+    public EventFormPanel(String id, final IModel<? extends AbstractEvent> event, final IModel<List<AbstractEvent.SectionResults>> results) {
         super(id);
         this.results = results;
+        this.event = event;
         setOutputMarkupId(true);
 
         totalSections = results.getObject().size();
@@ -47,8 +57,9 @@ public abstract class EventFormPanel extends Panel {
                 };
 
                 sectionContainer.add(new Label("sectionName", new PropertyModel<String>(item.getModel(), "section.title")));
-                sectionContainer.add(getCriteriaSectionPanel(eventClass, new PropertyModel<List<CriteriaResult>>(item.getModel(), "results")));
-
+                sectionContainer.add(getCriteriaSectionPanel(event.getObject().getClass(), new PropertyModel<List<CriteriaResult>>(item.getModel(), "results")));
+                sectionContainer.add(getSectionScore("sectionScore", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
+                sectionContainer.add(getSectionScorePercentage("sectionScorePercentage", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
                 item.add(sectionContainer);
             }
         });
@@ -66,6 +77,14 @@ public abstract class EventFormPanel extends Panel {
         add(createCriteriaSectionPager("topSectionPager", currentSectionModel, totalSectionsModel));
         add(createCriteriaSectionPager("bottomSectionPager", currentSectionModel, totalSectionsModel));
 
+    }
+
+    protected Component getSectionScore(String id, IModel<CriteriaSection> criteriaSectionModel) {
+        return new Label(id).setVisible(false);
+    }
+
+    protected Component getSectionScorePercentage(String id, IModel<CriteriaSection> criteriaSectionModel) {
+        return new Label(id).setVisible(false);
     }
 
     protected abstract Panel getCriteriaSectionPanel(Class<? extends AbstractEvent> eventClass, PropertyModel<List<CriteriaResult>> results);
@@ -107,6 +126,17 @@ public abstract class EventFormPanel extends Panel {
 
     public int getCurrentSectionNumber() {
         return currentSectionIndex + 1;
+    }
+
+    protected Map<CriteriaSection, Double> getScoresForSections() {
+        if(sectionScores == null)
+            sectionScores = new EventFormHelper().getScoresForSections(event.getObject());
+        return sectionScores;
+    }
+    public Map<CriteriaSection, Double> getScorePercentageForSections() {
+       if(sectionScorePercentages == null)
+           sectionScorePercentages = new EventFormHelper().getScorePercentageForSections(event.getObject());
+        return sectionScorePercentages;
     }
 
 }

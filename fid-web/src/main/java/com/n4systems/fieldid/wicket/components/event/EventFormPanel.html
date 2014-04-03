@@ -35,6 +35,16 @@
 
             <div class="display-horizontal" wicket:id="criteriaPanel"/>
 
+            <div class="display-horizontal" wicket:enclosure="sectionScore">
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.section_score"/></label>
+                    <div class="value">
+                        <span wicket:id="sectionScore"/>&nbsp;
+                        <span wicket:enclosure="sectionScorePercentage">(<span wicket:id="sectionScorePercentage"/>)</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
 

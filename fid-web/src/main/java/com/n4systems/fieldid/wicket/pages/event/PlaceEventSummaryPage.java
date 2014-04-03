@@ -13,7 +13,6 @@ import com.n4systems.fieldid.wicket.pages.org.PlaceSummaryPage;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.PlaceEvent;
-import com.n4systems.model.ThingEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
@@ -52,7 +51,7 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Panel getEventFormPanel(String id) {
-        return new EventFormViewPanel(id, ThingEvent.class, new PropertyModel<List<AbstractEvent.SectionResults>>(eventModel, "sectionResults"));
+        return new EventFormViewPanel(id, eventModel, new PropertyModel<List<AbstractEvent.SectionResults>>(eventModel, "sectionResults"));
     }
 
     @Override

@@ -46,7 +46,7 @@ public class ThingEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Panel getEventFormPanel(String id) {
-        return new EventFormViewPanel(id, ThingEvent.class, new PropertyModel<List<AbstractEvent.SectionResults>>(eventModel, "sectionResults"));
+        return new EventFormViewPanel(id, eventModel, new PropertyModel<List<AbstractEvent.SectionResults>>(eventModel, "sectionResults"));
     }
 
     @Override
