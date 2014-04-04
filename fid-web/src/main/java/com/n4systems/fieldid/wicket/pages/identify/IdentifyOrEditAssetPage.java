@@ -96,6 +96,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     IModel<MultipleAssetConfiguration> multiAssetConfigModel = new PropertyModel<MultipleAssetConfiguration>(this, "multiAssetConfig");
     DialogModalWindow multipleWindow;
 
+    private FIDFeedbackPanel feedbackPanel;
+
     List<Long> createdAssetIds;
     Asset createdOrEditedAsset;
 
@@ -123,7 +125,9 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         modalContainerForm.add(multipleWindow = new DialogModalWindow("multiAssetConfigurationWindow", Model.of("Multiple Assets...")));
         add(modalContainerForm);
         add(new NonWicketLink("importPageLink", "assetImportExport.action", new AttributeModifier("class", "mattButton")));
-        add(new FIDFeedbackPanel("feedbackPanel"));
+        feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
+
+        add(feedbackPanel);
         add(schedulePicker = createSchedulePicker(ProxyModel.of(assetModel, on(Asset.class).getType())));
         add(new IdentifyOrEditAssetForm("identifyAssetForm", assetModel) {
 
@@ -153,6 +157,14 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             }
 
         });
+    }
+
+    public FIDFeedbackPanel getFeedbackPanel() {
+        return feedbackPanel;
+    }
+
+    public void setFeedbackPanel(FIDFeedbackPanel feedbackPanel) {
+        this.feedbackPanel = feedbackPanel;
     }
 
     class IdentifyOrEditAssetForm extends Form<Asset> {
