@@ -11,8 +11,8 @@ import java.util.List;
 public class EventFormEditPanel extends EventFormPanel {
 
 
-    public EventFormEditPanel(String id, Class<? extends AbstractEvent> eventClass, IModel<List<AbstractEvent.SectionResults>> results) {
-        super(id, eventClass, results);
+    public EventFormEditPanel(String id, final IModel<? extends AbstractEvent> event, IModel<List<AbstractEvent.SectionResults>> results) {
+        super(id, event, results);
     }
 
     @Override

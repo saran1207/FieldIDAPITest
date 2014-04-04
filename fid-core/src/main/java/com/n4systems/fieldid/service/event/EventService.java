@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.event;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.asset.AssetService;
@@ -263,9 +264,26 @@ public class EventService extends FieldIdPersistenceService {
 	}
 
     public <T extends AbstractEvent> T lookupExistingEvent(Class<T> clazz, Long eventId) {
-        T event = persistenceService.find(clazz, eventId);
+        return lookupExistingEvent(clazz, eventId, false);
+    }
 
-        new ExistingEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(event);
+    public <T extends AbstractEvent> T lookupExistingEvent(Class<T> clazz, Long eventId, boolean withLocalization) {
+        T event;
+
+        Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
+        try {
+            if (withLocalization) {
+                Locale language = getCurrentUser().getLanguage();
+                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
+            }
+            event = persistenceService.find(clazz, eventId);
+            new ExistingEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(event);
+        } finally {
+            if (withLocalization) {
+                ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(previousLanguage);
+            }
+        }
+
 
         return event;
     }

@@ -4,6 +4,8 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.components.event.*;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.LocalizeAround;
+import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.AbstractEvent;
@@ -20,6 +22,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
@@ -34,8 +37,8 @@ public class ThingEventSummaryPage extends EventSummaryPage {
     public ThingEventSummaryPage(PageParameters parameters) {
         super(parameters);
 
-        eventModel = Model.of(loadExistingEvent());
-        assetModel = new PropertyModel<Asset>(eventModel, "asset");
+        eventModel = new LocalizeModel<ThingEvent>(Model.of(loadExistingEvent()));
+        assetModel = new LocalizeModel<Asset>(new PropertyModel<Asset>(eventModel, "asset"));
         eventSummaryType = EventSummaryType.THING_EVENT;
     }
 
@@ -46,7 +49,7 @@ public class ThingEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Panel getEventFormPanel(String id) {
-        return new EventFormViewPanel(id, ThingEvent.class, new PropertyModel<List<AbstractEvent.SectionResults>>(eventModel, "sectionResults"));
+        return new EventFormViewPanel(id, eventModel, new PropertyModel<List<AbstractEvent.SectionResults>>(eventModel, "sectionResults"));
     }
 
     @Override
@@ -85,9 +88,16 @@ public class ThingEventSummaryPage extends EventSummaryPage {
     }
 
     private ThingEvent loadExistingEvent() {
-        ThingEvent existingEvent = eventService.lookupExistingEvent(ThingEvent.class, uniqueId);
-        PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS);
-        PostFetcher.postFetchFields(existingEvent, Event.THING_TYPE_PATHS);
+        final ThingEvent event = eventService.lookupExistingEvent(ThingEvent.class, uniqueId, true);
+
+        ThingEvent existingEvent = new LocalizeAround<ThingEvent>(new Callable<ThingEvent>() {
+            @Override
+            public ThingEvent call() throws Exception {
+                PostFetcher.postFetchFields(event, Event.ALL_FIELD_PATHS);
+                return PostFetcher.postFetchFields(event, Event.THING_TYPE_PATHS);
+            }
+        }).call();
+
         return existingEvent;
     }
 

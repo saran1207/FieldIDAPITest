@@ -6,6 +6,8 @@ import com.n4systems.fieldid.wicket.components.event.*;
 import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.LocalizeAround;
+import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.navigation.NavigationItem;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
@@ -13,7 +15,6 @@ import com.n4systems.fieldid.wicket.pages.org.PlaceSummaryPage;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.PlaceEvent;
-import com.n4systems.model.ThingEvent;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
@@ -27,6 +28,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
@@ -40,8 +42,8 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
     public PlaceEventSummaryPage(PageParameters parameters) {
         super(parameters);
 
-        eventModel = Model.of(loadExistingEvent());
-        placeModel = new PropertyModel<BaseOrg>(eventModel, "place");
+        eventModel = new LocalizeModel<PlaceEvent>(Model.of(loadExistingEvent()));
+        placeModel = new LocalizeModel<BaseOrg>(new PropertyModel<BaseOrg>(eventModel, "place"));
         eventSummaryType = EventSummaryType.PLACE_EVENT;
     }
 
@@ -52,7 +54,7 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Panel getEventFormPanel(String id) {
-        return new EventFormViewPanel(id, ThingEvent.class, new PropertyModel<List<AbstractEvent.SectionResults>>(eventModel, "sectionResults"));
+        return new EventFormViewPanel(id, eventModel, new PropertyModel<List<AbstractEvent.SectionResults>>(eventModel, "sectionResults"));
     }
 
     @Override
@@ -91,8 +93,14 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
     }
 
     private PlaceEvent loadExistingEvent() {
-        PlaceEvent existingEvent = eventService.lookupExistingEvent(PlaceEvent.class, uniqueId);
-        PostFetcher.postFetchFields(existingEvent, Event.PLACE_FIELD_PATHS);
+        final PlaceEvent event = eventService.lookupExistingEvent(PlaceEvent.class, uniqueId, true);
+        PlaceEvent existingEvent = new LocalizeAround<PlaceEvent>(new Callable<PlaceEvent>() {
+            @Override
+            public PlaceEvent call() throws Exception {
+                return PostFetcher.postFetchFields(event, Event.PLACE_FIELD_PATHS);
+            }
+        }).call();
+
         return existingEvent;
     }
 
