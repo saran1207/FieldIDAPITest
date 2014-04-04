@@ -308,7 +308,6 @@
         <dependency>
             <groupId>com.fieldid</groupId>
             <artifactId>fid-connection-monitor</artifactId>
-            <version>1.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
