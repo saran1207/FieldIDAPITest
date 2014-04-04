@@ -94,6 +94,10 @@
 			<groupId>com.fieldid</groupId>
 			<artifactId>fid-ws</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>com.fieldid</groupId>
+            <artifactId>fid-connection-monitor</artifactId>
+        </dependency>
 		<dependency>
 			<groupId>com.fieldid</groupId>
 			<artifactId>fid-test-utils</artifactId>
@@ -305,11 +309,6 @@
       		<version>1.7.1</version>
       		<scope>compile</scope>
     	</dependency>
-        <dependency>
-            <groupId>com.fieldid</groupId>
-            <artifactId>fid-connection-monitor</artifactId>
-            <scope>provided</scope>
-        </dependency>
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat-jdbc</artifactId>
