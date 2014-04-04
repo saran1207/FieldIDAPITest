@@ -102,7 +102,7 @@
 				<div id="passwords">
 					<div class="infoSet">
 						<label class="label" for="passwordEntry.password"> <#include "/templates/html/common/_requiredMarker.ftl"/><@s.text name="label.password"/></label>
-						<@s.password name="passwordEntry.password" required="true"/><@s.password name="passwordEntry.passwordVerify" required="true"/>
+						<@s.password name="passwordEntry.password"/><@s.password name="passwordEntry.passwordVerify"/>
 						<div class="labelContainers increasedMargin"><@s.text name="label.password"/></div><div class="labelContainers"><@s.text name="label.vpassword"/></div>
 					</div>
 				</div>	
