@@ -7,16 +7,19 @@ import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
+import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.model.Attachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
+import com.n4systems.model.user.User;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,9 +32,15 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import sun.misc.BASE64Encoder;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
+
+    private static final Logger logger = Logger.getLogger(S3Service.class);
+
     private static final int DEFAULT_EXPIRATION_DAYS = 1;
 
     private Integer expirationDays = null;
@@ -53,6 +62,8 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String ASSET_PROFILE_IMAGE_PATH_ORIG = "/assets/%d/profile/%s";
     public static final String ASSET_PROFILE_IMAGE_PATH_THUMB = "/assets/%d/profile/%s.thumbnail";
     public static final String ASSET_PROFILE_IMAGE_PATH_MEDIUM = "/assets/%d/profile/%s.medium";
+
+    public static final String ASSET_ATTACHMENTS_PATH = "/assets/%s/attachments/%s/";
 
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP = "/temp/procedure_definition_images/%s";
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM = "/temp/procedure_definition_images/%s.medium";
@@ -639,6 +650,26 @@ public class S3Service extends FieldIdPersistenceService {
         return bucket;
     }
 
+    private String getAccessKey() {
+        String accessKey = configService.getString(ConfigEntry.AMAZON_ACCESS_KEY_ID);
+        return accessKey;
+    }
+
+    private String getSecretKey() {
+        String secretKey = configService.getString(ConfigEntry.AMAZON_SECRET_ACCESS_KEY);
+        return secretKey;
+    }
+
+    protected String getUploadTimeoutMilliseconds() {
+        String uploadTimeoutMilliseconds = configService.getString(ConfigEntry.AMAZON_S3_UPLOAD_TIMEOUT_MILLISECONDS);
+        return uploadTimeoutMilliseconds;
+    }
+
+    public String getUploadMaxFileSizeBytes() {
+        String uploadMaxFileSizeBytes = configService.getString(ConfigEntry.AMAZON_S3_UPLOAD_MAX_FILE_SIZE_BYTES);
+        return uploadMaxFileSizeBytes;
+    }
+
     protected int getExpiryInDays() {
         return expirationDays==null ? DEFAULT_EXPIRATION_DAYS : expirationDays;
     }
@@ -649,6 +680,139 @@ public class S3Service extends FieldIdPersistenceService {
 
     public void resetExpiryInDays() {
         expirationDays = null;
+    }
+
+    protected String getBucketHostname() {
+        String bucketHostname = configService.getString(ConfigEntry.AMAZON_S3_BUCKET) + "." + configService.getString(ConfigEntry.AMAZON_S3_SERVER_HOSTNAME);
+        return bucketHostname;
+    }
+
+    public String getBucketPolicySigned(String bucketPolicyBase64){
+        try {
+            Mac hmac = Mac.getInstance("HmacSHA1");
+            hmac.init(new SecretKeySpec(getSecretKey().getBytes("UTF-8"), "HmacSHA1"));
+
+            String bucketPolicySignature = (new BASE64Encoder()).encode(hmac.doFinal(bucketPolicyBase64.getBytes("UTF-8"))).replaceAll("\n", "");
+            return bucketPolicySignature;
+        }
+        catch(Exception e){
+            logger.warn(e);
+            return "";
+        }
+    }
+
+    public String getBucketPolicyBase64(){
+        try {
+            return (new BASE64Encoder()).encode(
+                    this.getBucketPolicy().getBytes("UTF-8")).replaceAll("\n","").replaceAll("\r","");
+        }
+        catch(Exception e){
+            logger.warn(e);
+            return "";
+        }
+    }
+
+    public String getBucketPolicy(){
+        String policyDocument = " {" +
+            "'expiration': '" + new DateTime().plusDays(getExpiryInDays()).toString() + "'," +
+            "'conditions': [" +
+            "   {'bucket': '" + this.getBucket() + "'}," +
+            "   {'acl': 'private'}," +
+            "   ['starts-with', '$key', '']," +
+            "   ['starts-with', '$Content-Type', '']," +
+            "   ['starts-with', '$User-Agent', '']," +
+            "   ['starts-with', '$Referer', '']," +
+            "   ['starts-with', '$Server', '']," +
+            "   ['starts-with', '$x-amz-meta-fieldid-user-userid', '']," +
+            "   ['starts-with', '$x-amz-meta-fieldid-user-type', '']," +
+            "   ['starts-with', '$x-amz-meta-fieldid-user-permissions', '']," +
+            "   ['starts-with', '$x-amz-meta-fieldid-user-guid', '']," +
+            "   ['starts-with', '$x-amz-meta-fieldid-user-owner-guid', '']," +
+            "   ['content-length-range', 1, " + this.getUploadMaxFileSizeBytes() + "] ] }";
+        return policyDocument;
+    }
+
+    public String getAssetAttachmentsUploadJavascript(String assetUuid, String assetAttachmentUuid, String docElementId){
+
+        String uploadJavascript = getUploadJavascript(ASSET_ATTACHMENTS_PATH, assetUuid, assetAttachmentUuid, docElementId);
+        return uploadJavascript;
+    }
+
+    public String getAssetAttachmentsFolderUrl(String assetUuid, String assetAttachmentUuid){
+        String assetAttachmentsUploadPath = createResourcePath(null, ASSET_ATTACHMENTS_PATH, assetUuid, assetAttachmentUuid);
+        String assetAttachmentsFolderUrl = "https://" + this.getBucketHostname() + "/" + assetAttachmentsUploadPath;
+        return assetAttachmentsFolderUrl;
+    }
+
+    protected String getUploadJavascript(String pathPattern, String parentUuid, String childUuid, String docElementId){
+        String path = createResourcePath(null, pathPattern, parentUuid, childUuid);
+        User user = getCurrentUser();
+        String bucketPolicyBase64 = this.getBucketPolicyBase64();
+
+        String uploadJavascript =
+            "var control = document.getElementById('" + docElementId + "');" +
+            "if(!window.uploadsInProgress){" +
+            "   window.uploadsInProgress = 0;" +
+            "   window.setInterval(function(){" +
+            "       var buttons = document.querySelectorAll('[name=\"actionsContainer:saveButton\"],[name=\"actionsContainer:saveAndStartEventButton\"]');" +
+            "       for(var i = 0; i < buttons.length; i++){" +
+            "           buttons[i].disabled = (window.uploadsInProgress > 0);" +
+            "       }" +
+            "   }, 1000);" +
+            "}" +
+            "console.log('control:');console.log(control);" +
+            "for(var i = 0; i < control.files.length; i++){" +
+            "   var file = control.files[i];" +
+            //if file size is bigger than allowed, just skip it, the panel will show error message to user
+            "   if(file.size >= " + this.getUploadMaxFileSizeBytes() + "){" +
+            "       continue;" +
+            "   }" +
+            "   var xhr = new XMLHttpRequest();" +
+            "   xhr.onreadystatechange = function(ev){" +
+            "       console.log(xhr);" +
+            "       console.log('xhr.readyState: ' + xhr.readyState);" +
+            "       console.log('xhr.status: ' + xhr.status);" +
+            "       console.log('xhr.statusText: ' + xhr.statusText);" +
+            "       console.log('xhr.timeout: ' + xhr.timeout);" +
+            "       console.log('xhr.responseXML: ' + xhr.responseXML);" +
+            "       if(xhr.readyState === 1){" +
+            "           window.uploadsInProgress += 1;" +
+            "       }"+
+            "       else if(xhr.readyState === 4){" +
+            "           window.uploadsInProgress -= 1;" +
+            "           if(xhr.status<200 || xhr.status>=300){" +
+            "               alert('Upload FAILED!')" +
+            "           }" +
+            "       }" +
+            "   };" +
+            //"   xhr.upload.addEventListener('progress', function(evt){console.log('progress:'+JSON.stringify(evt));}, false);" +
+            "   xhr.upload.addEventListener('load', function(evt){console.log('load:'+JSON.stringify(evt));}, false);" +
+            "   xhr.upload.addEventListener('error', function(evt){console.log('error:'+JSON.stringify(evt));}, false);" +
+            "   var fd = new FormData();" +
+            "   console.log('file:');console.log(file);" +
+            "   console.log('this:');console.log(this);" +
+            "   var key = '" + path + "' + file.name;" +
+            // Populate the Post paramters.
+            "   fd.append('key', key);" +
+            "   fd.append('Content-Type', mimeLookup.getContentType(mimeLookup.getExt(file.name)));" +
+            "   fd.append('User-Agent', navigator.userAgent);" +
+            "   fd.append('Referer', document.URL);" +
+            "   fd.append('Server', '" + FieldIdVersion.getWebVersionDescription() + "');" +
+            "   fd.append('AWSAccessKeyId', '" + this.getAccessKey() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-userid', '" + user.getUserID() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-type', '" + user.getUserType().getLabel() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-permissions', '" + user.getPermissions() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-guid', '" + user.getGlobalId() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-owner-guid', '" + user.getOwner().getGlobalId() + "');" +
+            "   fd.append('acl', 'private');" +
+            "   fd.append('policy', '" + bucketPolicyBase64 + "');" +
+            "   fd.append('signature','" + this.getBucketPolicySigned(bucketPolicyBase64) + "');" +
+            //This file object is retrieved from a file input
+            "   fd.append('file', file );" +
+            "   xhr.open('POST', 'https://" + this.getBucketHostname() + "', true);" +    //TODO here i was
+            "   xhr.send(fd);" +
+            "}";
+        return uploadJavascript;
     }
 
 //    public void uploadTempAttachment(S3Attachment attachment) {

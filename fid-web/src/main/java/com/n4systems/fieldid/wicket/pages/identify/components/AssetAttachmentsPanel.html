@@ -1,4 +1,5 @@
 <wicket:panel>
+    <script type="text/javascript" src="/fieldid/javascript/mimeLookup.js"></script>
 
     <div wicket:id="existingAttachmentsContainer">
 
@@ -13,6 +14,7 @@
 
 
     <form wicket:id="uploadAttachmentForm">
+        <div wicket:id="feedbackPanel"></div>
         <wicket:message key="message.attachment"/>
         <div>
             <input type="file" wicket:id="attachmentUpload">
