@@ -306,7 +306,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             gpsContainer.add(latitude);
             gpsContainer.add(longitude);
 
-            add(gpsContainer);
+            gpsContainer.add(new AttributeModifier("class", "control-group"));
 
             gpsContainer.setOutputMarkupId(true);
             gpsContainer.setVisible(assetModel.getObject().getGpsLocation() !=null);
