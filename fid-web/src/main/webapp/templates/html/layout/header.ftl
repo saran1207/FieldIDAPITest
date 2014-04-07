@@ -134,7 +134,7 @@
 
                     <#if securityGuard.lotoProceduresEnabled>
                         <li>
-                            <a href="/fieldid/w/procedure" class="speedLink textLink" id="menuProcedure"><@s.text name="speed.procedures" /></a>
+                            <a href="/fieldid/w/procedure" class="speedLink textLink" id="menuProcedure"><@s.text name="speed.lockout_tagout" /></a>
                         </li>
                     </#if>
 
