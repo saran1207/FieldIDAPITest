@@ -47,6 +47,13 @@ label.label {
     width: 260px;
     padding: 4px;
 }
+.pageContent .fieldHolder input {
+    border: 1px solid #9c9c9c;
+    color: #555;
+    width: 260px;
+    padding: 4px;
+}
+
 
 label.eventFormLabel {
     width: 50%;

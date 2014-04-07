@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.components;
 
-import com.google.common.collect.Lists;
 import com.google.gson.*;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.GpsBounds;
@@ -96,7 +95,7 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     }
 
     public GoogleMap setLocation(GpsLocation... locations) {
-        model = new GpsModel(Lists.newArrayList(locations));
+        model = new GpsModel(locations);
         return this;
     }
 

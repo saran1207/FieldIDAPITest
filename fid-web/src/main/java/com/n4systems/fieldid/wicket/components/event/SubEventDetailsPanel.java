@@ -33,10 +33,10 @@ public class SubEventDetailsPanel extends Panel {
             }
         });
 
-        add(new EventFormViewPanel("eventFormPanel", SubEvent.class, new PropertyModel<List<AbstractEvent.SectionResults>>(subEventModel, "sectionResults")));
+        add(new EventFormViewPanel("eventFormPanel", model, new PropertyModel<List<AbstractEvent.SectionResults>>(subEventModel, "sectionResults")));
 
         add(new Label("comments", new PropertyModel<String>(subEventModel, "comments")));
 
-        add(new EventAttachmentsPanel("eventAttachmentsPanel", model));
+        add(new EventAttachmentsPanel("eventAttachmentsPanel", subEventModel));
     }
 }

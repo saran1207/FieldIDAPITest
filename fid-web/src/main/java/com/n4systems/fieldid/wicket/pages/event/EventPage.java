@@ -35,6 +35,7 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import org.apache.commons.lang.StringUtils;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -52,8 +53,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -104,8 +103,8 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             protected void onValidate() {
                 super.onValidate();
 
-                BigDecimal latField = latitude.getConvertedInput();
-                BigDecimal longField = longitude.getConvertedInput();
+                BigDecimal latField = (BigDecimal)latitude.getConvertedInput();
+                BigDecimal longField = (BigDecimal)longitude.getConvertedInput();
 
                 if (null != latField) {
                     if (null == longField) {
@@ -154,8 +153,8 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
         private LocationPicker locationPicker;
 		private NewOrExistingEventBook newOrExistingEventBook;
-        TextField<BigDecimal> latitude;
-        TextField<BigDecimal> longitude;
+        GpsTextField<BigDecimal> latitude;
+        GpsTextField<BigDecimal> longitude;
 
 
 
@@ -280,19 +279,15 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(new CheckBox("printable", new PropertyModel<Boolean>(event, "printable")).add(new UpdateComponentOnChange()));
 
             EventForm form = event.getObject().getEventForm();
-            add(new EventFormEditPanel("eventFormPanel", event.getObject().getClass(), new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(form!=null && form.getAvailableSections().size()>0));
+            add(new EventFormEditPanel("eventFormPanel", event, new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(form!=null && form.getAvailableSections().size()>0));
             add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(EventPage.this, "fileAttachments")));
-//            add(new EventGpsPanel("GPSPanel", event));
-
 
             WebMarkupContainer gpsContainer = new WebMarkupContainer("gpsContainer");
-            add(gpsContainer);
 
+            add(gpsContainer);
 
             latitude = new GpsTextField<BigDecimal>("latitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLatitude()));
             longitude = new GpsTextField<BigDecimal>("longitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLongitude()));
-
-
             gpsContainer.add(latitude);
             gpsContainer.add(longitude);
 
