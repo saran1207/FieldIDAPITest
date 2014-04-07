@@ -456,8 +456,8 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/event/event_base.css");
-        response.renderCSSReference("style/newCss/event/event_schedule.css");
+        response.renderCSSReference("style/legacy/newCss/event/event_base.css");
+        response.renderCSSReference("style/legacy/newCss/event/event_schedule.css");
     }
 
     @Override

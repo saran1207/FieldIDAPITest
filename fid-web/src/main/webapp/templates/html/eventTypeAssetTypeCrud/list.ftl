@@ -1,5 +1,5 @@
 <head>
-    <@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+    <@n4.includeStyle href="/style/legacy/newCss/component/buttons.css" type="page"/>
 </head>
 
 <script type="text/javascript">

@@ -84,9 +84,9 @@ public class SecretTestPage extends FieldIDAuthenticatedPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderJavaScriptReference(CoreJavaScriptResourceReference.get());
-        response.renderCSSReference("style/reset.css");
-        response.renderCSSReference("style/site_wide.css");
-        response.renderCSSReference("style/fieldid.css");
+        response.renderCSSReference("style/legacy/reset.css");
+        response.renderCSSReference("style/legacy/site_wide.css");
+        response.renderCSSReference("style/legacy/fieldid.css");
     }
 
 }

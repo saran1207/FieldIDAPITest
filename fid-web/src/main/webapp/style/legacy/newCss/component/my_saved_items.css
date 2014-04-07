@@ -1,0 +1,86 @@
+.mySavedItemsBox {
+    display:none;
+    width: 275px;
+    position:absolute;
+    right: 12px;
+    background-color:#fff;
+    text-align:right;
+    overflow-y:auto;
+    max-height: 500px;
+    z-index:1;  /** make sure this is above any FlotCharts that may appear below.   > 0 */
+    -webkit-box-shadow: 0px 6px 20px -10px #666666;
+    box-shadow: 0px 6px 20px -10px #666666;
+    border: 1px solid #c7c7c9;
+}
+.mySavedItemsBox a {
+    padding: 0;
+}
+
+.mySavedItemsBox .savedItem {
+    padding: 6px 0;
+    overflow:hidden;
+    clear:left;
+    display:block;
+}
+
+.mySavedItemsBox .savedItem .itemName {
+    display:block;
+    margin-right: 48px;
+}
+.mySavedItemsBox .savedItem img {
+    float: right;
+    padding: 0 10px;
+}
+
+.mySavedItemsBox div.savedItem:hover {
+    background-color:#f0f0f0;
+}
+
+#pageHeader #mySavedItemsBox .savedItemContainer a, #pageHeader #mySavedItemsBox .savedItemContainer a:hover, #pageHeader #mySavedItemsBox .savedItemContainer a:visited {
+    text-decoration: none;
+    color: #444;
+}
+
+#pageHeader #mySavedItemsBox .manageLinkSection a {
+    color:#356CA2;
+    line-height:32px;
+    padding-right: 14px;  
+}
+
+#pageHeader #mySavedItemsBox .manageLinkSection:hover {
+    background-color:#f0f0f0;
+}
+
+
+.mySavedItemsBox .manageLinkSection {
+    border-bottom:1px solid #ebebeb;
+}
+
+.mySavedItemsBox .blankSlateContainer {
+    font-style: italic;
+    padding: 16px;
+    color: gray;
+}
+
+
+.listOfLinks img.divider {
+    height: 8px;
+    padding-left:8px;
+}
+
+.listOfLinks img.downArrow {
+    padding-top:2px;
+    vertical-align: middle;
+}
+
+.savedReports {
+	background-image: url("../../../../images/reporting-bs-icon.png");
+	background-position: left 5.5px;
+    background-repeat: no-repeat;
+    margin: 30px;
+    padding: 0 50px 0 100px;
+}
+
+.savedReports .message {
+	padding: 5px 0;
+}

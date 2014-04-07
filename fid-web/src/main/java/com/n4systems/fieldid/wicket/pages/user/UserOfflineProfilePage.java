@@ -44,7 +44,7 @@ public class UserOfflineProfilePage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
     @Override

@@ -2,7 +2,7 @@ ${action.setPageType('event_type', 'button_groups')!}
 <title><@s.text name="title.buttonsetup"/></title>
 <head>
 	<@n4.includeStyle href="buttonGroups" type="page" />
-    <@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+    <@n4.includeStyle href="/style/legacy/newCss/component/buttons.css" type="page"/>
 
 <style>
 		.rowName{ width:220px; }

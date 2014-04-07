@@ -1,0 +1,362 @@
+
+#assetTypeIndicator{
+	padding: 0;
+	margin-top: 6px;
+	margin-left: 10px;
+}
+
+.identifierStatus {
+	margin-left: 25px;
+	font-weight: bold;
+	padding:0px
+}
+
+.subAssetAdd {
+	margin-left: 15px;
+}
+
+#commentTemplateSelection {
+	margin-bottom:5px;
+}
+
+#registerOverNetworkLinkContainer {
+	padding: 5px;
+}
+
+.assetFormGroup .infoSet{
+	padding-left: 50px;
+	padding-top: 5px;
+	border: none;
+}
+
+.assetFormGroup .infoSet label{
+	text-align:right;
+	padding: 5px;
+	color: #555555;
+}
+
+.locationTree{
+	display:block;
+	float:left;
+	padding-bottom:5px;
+	padding-left:5px;
+	padding-top:5px;
+	width:270px;
+}
+
+.infoSet .locationTree .textbox{
+	border:1px solid #9C9C9C;
+	color:#555555;
+	padding:4px;
+}
+
+.assetFormGroup .infoSet select{
+	border: 1px solid #9C9C9C;
+	color: #555555;
+	width: 250px;
+}
+
+.infoSet .fieldHolder .unitOfMeasure input{
+	width: 230px;                            
+}
+
+.fluidSets .increasedWidthFieldHolder .fieldHolder{
+	width: 320px;
+}
+
+.assetFormGroup .infoSet select{
+    width: 260px;
+	padding: 4px;
+}
+
+.assetFormGroup .assignedTo {
+    height:50px;
+}
+
+.assetFormGroup .infoSet chzn-container {
+    height:50px;
+
+}
+
+.fluidSets .assetFormGroup .infoSet label{
+	width: 110px;
+	padding-top: 7px;
+}
+
+.fluidSets .assetFormGroup .reducedPaddingInfoSet label{
+	padding-top: 5px;
+}
+
+.fullForm .fieldHolder, .fullForm .label {
+    line-height: 22px;
+}
+
+.assetFormGroup h2{
+	margin-bottom: 5px;
+	font-size: 1.1em;
+	background-color:#eeeeee;
+	border-bottom:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+	padding-top:3px;
+	padding-bottom:3px;
+}
+
+.assetFormGroup .enlarged{
+	font-size: 16px;
+}
+
+.assetFormGroup .withAdditionalContent .fieldHolder{
+	padding: 0px;
+}
+
+.unitMeasureDiv input[type="submit"]{
+	margin-left: 100px;
+	width: 100px;
+}
+
+.columnLeft, .columnCenter, .colummRight {
+	display: block;
+}
+
+.columnCenter {
+	border-right: 1px solid #E2E2E2;
+	margin-right: 5px;
+	padding-right: 5px;
+	border-left: 1px solid #E2E2E2;
+	margin-left: 5px;
+	padding-left: 5px;
+}
+
+.columnLeft, .columnRight{
+	width: 264px;
+}
+
+.subheading {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	font-size: 1.0em;	
+	color: #222;
+}
+
+.columnCenter{
+	float: left;
+}
+
+.topBorder {
+	border-top: 1px solid #E2E2E2;
+}
+
+.leftViewSection, .rightViewSection {
+	padding-bottom: 10px;
+	color: #555;
+}
+
+.leftViewSection{
+	padding-left: 15px;
+}
+
+.leftViewSection h3{
+	font-size: 12px; 
+}
+.columnRight p, .columnRight h3{
+	padding-left: 15px;
+}
+	
+.leftViewSection p {
+	overflow: hidden;
+}
+
+.leftViewSection p, .columnRight p{
+	line-height: 1.6em;
+}
+
+.viewAssetComponents{
+	padding-bottom: 25px;
+}
+
+.viewAssetComponents label, .viewAssetComponents span{
+	display: block;
+	float: left;
+	width: 120px;
+}
+
+.viewAssetComponents p span {
+	text-align: right;
+}
+
+#attachedfiles {
+	padding-left: 15px;
+}
+
+#attachedfiles img {
+	border: 1px solid #E2E2E2;
+	padding-left: 5px;
+	margin-right: 5px;
+}
+
+#attachedfiles p {
+	padding-left: 0;
+}
+
+.smallBr{
+	font-size: 1px; 
+	line-height: 0; 
+}
+
+#attachedfiles .fileUploadShow{
+	clear:left;
+	}
+
+.fileUploadShow {
+	padding-top: 5px;
+	padding-bottom: 5px;
+	display: block;
+	float: left;
+}
+
+.fileUploadShow label, .fileUploadShow div{
+	display: block;
+	float: left;
+}
+
+.fileUploadShow div{
+	padding-left: 5px;
+	width: 180px;
+}
+
+#more {
+	border-top: 1px solid #E2E2E2;
+	border-bottom: 1px solid #E2E2E2;	
+	background-repeat: no-repeat;
+	background-position: 12px center;
+	height: 20px;
+	padding-left: 25px;
+	padding-top: 5px;
+	background-image: url(../../../images/www.png);	
+	padding-bottom: 3px;
+}
+
+.viewSection {
+	margin: 0;
+}
+
+.viewSection p label{
+	text-align:right;
+	color: #222;
+	width: 155px;
+	font-weight:bold;
+	word-wrap: break-word;
+}
+
+.viewSection p {
+	padding: 7px;
+}
+
+.viewSection p span{
+	color: #555;
+	text-align: left;
+	margin-left: 18px;
+}
+
+.assetComments p{
+	margin-left: 10px;
+	color: #555;
+	}
+
+.details{
+	min-height: 65px;
+}
+
+#cancelAction {
+	padding-left: 5px;
+}
+
+#lastEvent, #nextEvent {
+	line-height: 2.2em;
+}
+
+.failColor p, .passColor p, .naColor p{
+	margin-right: 5px;
+}
+
+#nextEvent .failColor p, #nextEvent .passColor p{
+	padding: 5px 10px;
+}
+
+#nextEvent .passColor p{
+	width: 60px;
+}
+.twoColumnLeft, .twoColumnRight {
+	float : left;
+}
+
+.twoColumnLeft {
+ 	width: 670px
+}
+
+.twoColumnRight{
+	padding-left: 10px;
+	width: 320px
+}
+
+#attachments h2 {
+	margin-bottom: 0;
+}
+
+.assetTypeSelection {
+	background-color: #F8F8F8;
+	padding: 25px 5px 15px 5px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.uploadFileForm {
+	padding: 20px 10px 0 10px;
+	background-color: #F5FBFF;
+	height: 80px;
+	margin-bottom: 5px;
+}
+
+.uploadedForm {
+	padding: 20px 5px;
+	background-color: #FFFFFF;
+	height: 40px;
+	margin-bottom: 5px;
+}
+.uploadFileForm p {
+	padding-bottom: 10px;
+}			
+.uploadMessage{
+	margin-bottom: 5px;
+}
+
+.assetMap { 
+	height: 300px;
+}
+
+.assetTypeLabel label {
+	display : inline;
+	padding-right : 10px;	
+	padding-left : 5px;
+	float : left;
+	text-align : right;
+	width : 105px;
+	color : #555;
+	font-size : 16px;
+	font-weight : bold;	
+	line-height : 22px;
+	height : 22px;
+}
+
+.assetTypeLabel .fieldHolder { 
+	height : 28px !important;
+	display: inline !important;
+}
+
+.assetTypeLabel {
+	padding-left : 50px;
+}
+
+.assetFormGroup .showOverflow {
+    overflow: visible;
+}

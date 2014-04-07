@@ -116,9 +116,9 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/pageStyles/procedureDefinition.css");
+        response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
         response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
     private void sectionChanged(AjaxRequestTarget target) {

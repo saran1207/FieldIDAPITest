@@ -152,7 +152,7 @@ public class ImageEditor extends Panel {
         //  i.e. renderJavaScriptReference(CoreUIJavaScriptResourceReference.get());
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
 
-        response.renderCSSReference("style/component/annotated-image.css");
+        response.renderCSSReference("style/legacy/component/annotated-image.css");
         response.renderJavaScriptReference("javascript/jquery.annotate.js");
         response.renderJavaScriptReference("javascript/imageEditor.js");
         response.renderOnLoadJavaScript(String.format(IMAGE_EDITOR_FORMAT, getMarkupId(),getJsonAnnotations(),behavior.getCallbackUrl()));

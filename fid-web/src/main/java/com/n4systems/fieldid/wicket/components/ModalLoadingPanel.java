@@ -29,7 +29,7 @@ public class ModalLoadingPanel extends Panel {
 		String js = getJavascript(modalPanel.getMarkupId(), componentToCover.getMarkupId());
         response.renderOnLoadJavaScript(js);
 
-        response.renderCSSReference("style/ModalLoadingPanel.css");
+        response.renderCSSReference("style/legacy/ModalLoadingPanel.css");
         response.renderJavaScriptReference("javascript/ModalLoadingPanel.js");
 	}
 

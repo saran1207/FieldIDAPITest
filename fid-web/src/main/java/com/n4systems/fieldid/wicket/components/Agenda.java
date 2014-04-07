@@ -196,7 +196,7 @@ public class Agenda extends Panel  {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/component/agenda.css");
+        response.renderCSSReference("style/legacy/component/agenda.css");
 
         response.renderOnDomReadyJavaScript(String.format(INIT_CALENDAR_JS, getJsVariableName(), getMarkupId(), getJsonMonthlyWorkSummary(), behavior.getCallbackUrl()));
 
@@ -207,7 +207,7 @@ public class Agenda extends Panel  {
         //  i.e. renderJavaScriptReference(CoreUIJavaScriptResourceReference.get());
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
 
-        response.renderCSSReference("style/jquery-redmond/jquery-ui-1.8.13.custom.css");
+        response.renderCSSReference("style/legacy/jquery-redmond/jquery-ui-1.8.13.custom.css");
         response.renderJavaScriptReference("javascript/jquery-ui-timepicker-addon.js");
         response.renderJavaScriptReference("javascript/component/agenda.js");
     }

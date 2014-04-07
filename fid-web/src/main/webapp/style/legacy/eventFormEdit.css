@@ -1,0 +1,490 @@
+body {
+    padding: 0 0 0 0;
+    margin: 0;
+}
+
+.verticalEditPanel {
+    display: block;
+    float: left;
+    border: 1px solid #dddddd;
+    overflow: auto;
+    height: 550px;
+    width: 33%;
+}
+
+div.criteriaSectionsTitle a.sectionLink, a.sectionLink:hover {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-decoration: none;
+    color: #000000;
+    width: 100%;
+    display:block;
+}
+
+div.criteriaSectionsTitle {
+    display: block;
+    width:70%;
+    float:left;
+}
+
+div.criteriaSections {
+    display: block;
+    border-bottom: 1px solid #cccccc;
+    font-size: 1.2em;
+}
+
+div.selectedSection {
+    background: #C8E4FF;
+}
+
+div.selectedCriteria {
+    background: #DFEFFF;
+}
+
+div.addCriteriaForm {
+    padding: 10px 10px 10px 10px;
+    background: #eeeeee;
+    border-bottom: 1px solid #cccccc;
+}
+
+div.addCriteriaTitle {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+div.criteriaSections div.itemLinkTitle {
+    width: 63%;
+    display: block;
+    float: left;
+    padding-left: 5px;
+}
+
+div.criteriaSections div.itemLinkTitle a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-decoration: none;
+    color: #000000;
+    width: 100%;
+    display:block;
+    outline: none;
+}
+
+div.editCopyLinks {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    display: block;
+    width: 30%;
+    float: left;
+    font-size: 10px;
+}
+
+div.deleteLinkSection {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 3px;
+    display: block;
+    float: left;
+}
+
+div.criteriaSections div.editForm, div.criteria div.editForm {
+    padding-top: 10px;
+}
+
+div.selectedSection div.itemLinkTitle {
+    font-weight: bold;
+}
+
+div.criteria div.itemLinkTitle {
+    width: 60%;
+    display: block;
+    float: left;
+    padding-left: 5px;
+}
+
+div.criteria div.itemLinkTitle a {
+    text-decoration: none;
+    color: #000000;
+    width: 100%;
+    display:block;
+    outline: none;
+    font-size: 1em;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+div.criteria div.itemLinkTitle a div.subTitle {
+    color: #666;
+    display: inline;
+}
+
+div.criteria {
+    display: block;
+    border-bottom: 1px solid #cccccc;
+}
+
+.buttonImage {
+    display: block;
+    float: left;
+    padding: 1px 3px 0 0;
+}
+
+.buttonLabel {
+    display: block;
+    float: left;
+    padding-top: 9px;
+}
+
+.buttonImageDiv {
+    padding-left: 15px;
+    padding-top:10px;
+}
+
+div.observationSectionTitle {
+    padding-top: 5px;
+    padding-left: 15px;
+    font-size: 1.0em;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 3px;
+    font-weight: bold;
+}
+
+div.observation {
+    padding-left: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+div.columnHeader {
+    border-bottom: 1px solid #ddd;
+    font-size: 1.2em;
+    text-align: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    background-color: #f8f8f8;
+}
+
+div.addStringForm {
+    padding: 10px 10px 10px 10px;
+    background: #eeeeee;
+    border-bottom: 1px solid #cccccc;
+}
+
+div.addStringForm input {
+    width: 250px;
+}
+
+div.stringListItem {
+    border-bottom: 1px solid #cccccc;
+}
+
+div.stringListItem div.itemLinkTitle {
+    display: block;
+    float: left;
+    width: 55%;
+}
+
+div.stringListItem div.itemLinkTitle a {
+    text-decoration: none;
+    display: block;
+    float: left;
+    color: #000000;
+    outline: none;
+    font-size: 1em;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px;
+}
+
+div.stringListItem div.deleteLinkSection {
+    padding-left: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+div.stringListItem div.editCopyLinks {
+    width: 30%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+div.buttonGroupDetails {
+    padding-bottom: 10px;
+    clear: both;
+}
+
+/*Reorder button form*/
+form.twoStateForm {
+    margin-bottom: 0;
+}
+
+div.reorderLinkSection {
+    padding: 10px 5px 10px 0;
+    display: block;
+    float: right;
+}
+
+div.criteriaDetailsEditor div.reorderLinkSection {
+    padding-top:3px;
+    padding-bottom:3px;
+}
+
+div.detailsHeader {
+    padding-top: 14px;
+    padding-bottom: 13px;
+}
+
+.verticalEditPanel .feedbackPanel {
+    border: 1px #ff0000 solid;
+    background-color: #ffdddd;
+    margin: 2px 2px 2px 2px;
+    list-style-type:none;
+    padding-top: 9px;
+    padding-bottom: 9px;
+    padding-left: 12px;
+}
+
+a.glossyButtonLink {
+    font-size: 0.8em;
+    background: #fff repeat-x url(../../images/button_background.jpg);
+    border:1px solid #ddd;
+    padding: 5px 15px 5px 15px;
+    text-decoration:none;
+    color: #333;
+}
+
+a.glossyButtonLink.activated {
+	background: #fff repeat-x url(../../images/button_background_activated.jpg);
+}
+
+a.glossyButtonLink:hover {
+    border-color: #999;
+}
+
+div.savePanel {
+    display: block;
+    min-height: 25px;
+}
+
+div.warningPanel {
+    display: block;
+    float: left;
+    width: 77%;
+    background-color: #ffffe0;
+    border: 1px #e4df52 solid;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+
+div.savePanel {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    width: 100%;
+}
+
+div.savePanel a.glossyButtonLink {
+    float: left;
+    display: block;
+    font-size: 1.0em;
+    margin-left: 31px;
+}
+
+div.criteriaDetailsEditor div.stringListItem input[type="text"] {
+    width: 150px;
+    margin-left: 10px;
+}
+
+div.criteriaDetailsEditor {
+    background: #eee;
+}
+
+div.criteriaDetailsEditor form {
+    padding: 0 0 0 0;
+    margin: 0 0 0 0;
+}
+
+div.buttonGroupConfiguration {
+    padding-left: 15px;
+    padding-top: 5px;
+}
+
+div.buttonGroupConfiguration select {
+    padding: 4px 4px 4px 1px;
+    margin-top:6px;
+    margin-bottom:6px;
+    margin-right:10px;
+    float:left;
+    display:inline;
+}
+
+div.buttonGroupConfiguration label {
+    display:inline;
+    padding-left:6px;
+}
+
+div.buttonGroupConfiguration label input {
+    float: left;
+}
+
+div.addItemTitle {
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+input.newCriteriaSectionName {
+    width: 250px;
+}
+
+input.newCriteriaName {
+    width: 250px;
+}
+
+div.unitOfMeasureConfiguration {
+    padding-left: 15px;
+    padding-top: 5px;
+}
+
+div.unitDescriptor {
+    padding-top: 3px;
+    display: block;
+    float: left;
+    width: 120px;
+}
+
+.dateFieldConfiguration {
+	padding : 20px 10px;
+	clear: both;
+	float: none;
+}
+
+.dateFieldConfiguration input {
+	clear: left;
+	display: block;
+	float: left;
+	text-align: right;
+}
+
+.dateFieldConfiguration label {
+	clear: right;
+	float: left;
+	margin-left: 10px;
+}
+
+
+div.verticalEditPanel * {
+    zoom: 0;
+}
+
+.numberFieldConfiguration{
+	padding: 10px 0;
+}
+
+.numberFieldLabel{
+    padding-left: 15px;
+}
+
+.numberFieldInput{
+	width: 30px;
+}
+
+.scoreGroupConfiguration {
+    padding-left: 15px;
+    padding-top: 5px;
+}
+
+.scoreGroupConfiguration select {
+    font-size:12px;
+    padding:2px;
+}
+
+.scoreGroupDetails {
+    font-size: 12px;
+    padding: 3px 0 10px 18px;
+    border-bottom: 2px solid #ccc;
+}
+
+.scoreGroupDetails .score {
+    padding:2px;
+}
+
+
+.tab-buttons {
+    display:block;
+    background: #f8f8f8;
+    height:30px;
+}
+
+.tab-buttons span {
+    width:50px;
+    height:30px;
+    background-repeat: no-repeat;
+    display:inline-block;
+    padding:0px;
+    border-right:1px solid #ccc;
+    margin-right: -3px;
+}
+
+.tab-buttons .settings.active {
+    background: #eee url(../../images/eventForm/icon-criteria-settings-dark.png) no-repeat center;
+}
+
+.tab-buttons .settings {
+    background: url(../../images/eventForm/icon-criteria-settings-light.png) no-repeat center;
+}
+
+.tab-buttons .instructs.active {
+    background: #eee url(../../images/eventForm/icon-criteria-instructions-dark.png) no-repeat center;
+}
+
+.tab-buttons .instructs {
+    background: url(../../images/eventForm/icon-criteria-instructions-light.png) no-repeat center;
+}
+
+.tab-buttons .observations.active {
+    background: #eee url(../../images/eventForm/icon-observations-dark.png) no-repeat center;
+}
+
+.tab-buttons .observations {
+    background: url(../../images/eventForm/icon-observations-light.png) no-repeat center;
+}
+
+.instructs.rich-text div:first-child + div {
+    background:#fff;
+}
+
+.instructs.rich-text textarea {
+    height:350px;
+}
+
+.criteriaDetailsEditor .addStringForm input[type=text] {
+    padding:4px;
+    border:1px solid #aaa;
+}
+
+.criteriaDetailsEditor .addStringForm button {
+    background: #ececec;
+    background: -moz-linear-gradient(top, #ececec 0%, #dadada 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ececec), color-stop(100%,#dadada));
+    background: -webkit-linear-gradient(top, #ececec 0%,#dadada 100%);
+    background: -o-linear-gradient(top, #ececec 0%,#dadada 100%);
+    background: -ms-linear-gradient(top, #ececec 0%,#dadada 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ececec', endColorstr='#dadada',GradientType=0 );
+    background: linear-gradient(top, #ececec 0%,#dadada 100%);
+    color:#333;
+    border:1px solid #aaa;
+    padding:3px 8px;
+}
+
+
+.criteria-header {
+    text-align:left;
+    padding:10px 5px 15px 5px;
+    font-size:14px;
+    color: #777;
+    background: #eee;
+}
+
+.sub-heading {
+    padding:5px 5px 5px 15px;
+    color : #777;
+    font-size: 13px;
+}

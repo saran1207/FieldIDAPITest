@@ -208,7 +208,7 @@ public class EventResolutionPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/event_resolution/event_resolution.css");
+        response.renderCSSReference("style/legacy/newCss/event_resolution/event_resolution.css");
     }
 
     private EventReportCriteria copyOfCriteria() {

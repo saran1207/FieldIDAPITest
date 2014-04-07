@@ -1,0 +1,116 @@
+//---------------------------
+// NAVIGATION
+//---------------------------
+nav {
+	ul, ol {
+		padding: 0;
+	}
+	a {
+		text-decoration: none;
+	}
+}
+
+
+// HORIZONTAL NAVIGATION
+// ----------------------
+// TODO: update class name?
+.nav-list {
+	font-size: 0; // Removes default space from between list items (caused by line break) when using display: inline-block; font-size to be redeclared in <li>.
+	padding: 0;
+
+	> li {
+		display: inline-block;
+		font-size: $base-font-size;
+
+		> a {
+			display: inline-block;
+			padding: 10px 14px;
+			text-decoration: none;
+		}
+	}
+	.dropdown {
+		// Add icons for dropdowns
+		> a:after,
+		> span:after {
+			font-family: $fontello;
+			content: '\e82d';
+			font-size: $small-font-size;
+			padding-left: 4px;
+		}
+		&:hover > a:after,
+		&:hover > span:after  {
+			content: '\e830';
+			padding-right: 0;
+		}
+		// Adds border between nav items
+		ul li {
+			border-top: 1px solid $gray-light;
+		}
+	}
+}
+
+// BREADCRUMB
+// -----------
+.breadcrumb {
+	font-family: $helvetica-neue;
+	margin: 10px 0 0;
+
+	a {
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+	ol {
+		font-size: 0;
+
+		li {
+			display: inline;
+			font-size: 12px;
+		}
+		li + li:before {
+			font-family: $fontello;
+			content: '\e82f';
+			padding: 0 2px;
+		}
+	}
+}
+
+
+// TABBED NAVIGATION
+// ------------------
+.nav-tabs {
+	position: relative;
+	margin-top: 10px;
+
+	> ul {
+		overflow: hidden;
+		margin-bottom: -2px;
+
+		> li {
+			float: left;
+			border: 1px solid transparent;
+			cursor: pointer;
+
+			&.selected {
+				border-color: $gray-medium;
+				border-bottom-color: transparent;
+				background: #fff;
+				@include border-radius(2px);
+
+				a {
+					color: $gray-darkest;
+				}
+			}
+			span {
+				padding: 10px 20px;
+				display: inline-block;
+
+				&:hover {
+					color: $gray-dark;
+				}
+			}
+		}
+	}
+}

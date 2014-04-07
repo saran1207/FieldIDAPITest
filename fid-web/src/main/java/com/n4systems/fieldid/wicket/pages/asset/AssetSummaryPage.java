@@ -211,8 +211,8 @@ public class AssetSummaryPage extends AssetPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/asset/asset.css");
-        response.renderCSSReference("style/newCss/asset/actions-menu.css");
+        response.renderCSSReference("style/legacy/newCss/asset/asset.css");
+        response.renderCSSReference("style/legacy/newCss/asset/actions-menu.css");
 
         response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");

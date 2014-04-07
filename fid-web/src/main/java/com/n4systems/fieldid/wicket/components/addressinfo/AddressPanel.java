@@ -69,8 +69,8 @@ public class AddressPanel extends Panel implements ILabelProvider<String> {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/jquery-redmond/jquery-ui-1.8.13.custom.css");
-        response.renderCSSReference("style/component/address.css");
+        response.renderCSSReference("style/legacy/jquery-redmond/jquery-ui-1.8.13.custom.css");
+        response.renderCSSReference("style/legacy/component/address.css");
         response.renderJavaScriptReference(WiQueryAutocompleteJavaScriptResourceReference.get());
         response.renderJavaScriptReference("https://maps.googleapis.com/maps/api/js?sensor=false", GoogleMap.GOOGLE_MAP_API_ID);
         response.renderJavaScriptReference("javascript/googleMaps.js", GoogleMap.GOOGLE_MAPS_JS_ID);

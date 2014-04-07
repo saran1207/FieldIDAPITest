@@ -23,8 +23,8 @@ public class MobileOfflineProfilePage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/buttons.css");
-        response.renderCSSReference("style/newCss/user/mobile-offline.css");
+        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
+        response.renderCSSReference("style/legacy/newCss/user/mobile-offline.css");
     }
 
     @Override

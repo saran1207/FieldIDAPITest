@@ -118,8 +118,8 @@ public class EventTypeAssociationsPage extends FieldIDFrontEndPage {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/newCss/component/buttons.css");
-        response.renderCSSReference("style/newCss/assetType/assetType.css");
+        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
+        response.renderCSSReference("style/legacy/newCss/assetType/assetType.css");
     }
 
 

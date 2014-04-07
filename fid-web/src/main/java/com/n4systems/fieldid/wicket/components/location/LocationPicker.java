@@ -91,7 +91,7 @@ public class LocationPicker extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/featureStyles/locationPicker.css");
+        response.renderCSSReference("style/legacy/featureStyles/locationPicker.css");
     }
 
     public LocationPicker setOwner(BaseOrg owner) {

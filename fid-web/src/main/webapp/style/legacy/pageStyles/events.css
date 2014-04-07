@@ -1,0 +1,71 @@
+.multipleEvents{
+	background: no-repeat url(../../../images/multiple-event-small.png) 5px 0;
+}
+
+.singleEvent{
+	background: no-repeat url(../../../images/single-event.png) 5px 0;
+}
+
+.multipleProofTests{
+	background: no-repeat url(../../../images/multi-proof-icon-small.png) 5px 0;
+}
+
+.import{
+	background: no-repeat url(../../../images/small-xls-icon.png) 5px 0;
+}
+
+.import img {
+
+}
+
+.heading h2{
+	padding-left: 40px;
+}
+
+.heading{
+	padding-bottom: 5px;
+}
+
+#assetSearchForm label{
+	display: none;
+}
+
+#assetSearch{
+	border-style: none;
+	padding-top: 10px;
+}
+
+#assetSearch input[type="text"]{
+	width: 205px;
+	margin-bottom: 5px;
+}
+
+.eventRow{
+	margin-left: 20px;
+}
+
+.eventOption {
+	float: left;
+	border: 1px solid #CCCCCC;
+	width: 445px;
+	margin: 15px;
+	height: 105px;
+	overflow: hidden;
+}
+
+.optionContent {
+	padding: 10px;
+}
+
+.eventAction, #assetSearch {
+	background-color: #EEEEEE;
+	min-height: 30px;
+}
+
+.eventAction {
+	padding: 5px;
+}
+
+button {
+	margin: 5px;
+}

@@ -166,8 +166,8 @@ public class DateTimePicker extends Panel {
         //  i.e. renderJavaScriptReference(CoreUIJavaScriptResourceReference.get());
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.20.no-autocomplete.min.js");
 
-        response.renderCSSReference("style/datetimepicker.css");
-        response.renderCSSReference("style/jquery-redmond/jquery-ui-1.8.13.custom.css");
+        response.renderCSSReference("style/legacy/datetimepicker.css");
+        response.renderCSSReference("style/legacy/jquery-redmond/jquery-ui-1.8.13.custom.css");
         response.renderJavaScriptReference("javascript/jquery-ui-timepicker-addon.js");
     }
 

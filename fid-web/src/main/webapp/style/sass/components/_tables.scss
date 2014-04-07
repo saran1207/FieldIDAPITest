@@ -1,0 +1,228 @@
+//---------------------------
+// TABLE STYLES
+//---------------------------
+
+// Base Styles
+// ------------
+table {
+	width: 100%;
+}
+th {
+	text-align: left;
+	background: $gray;
+	border-bottom: 1px solid $gray-medium;
+	padding: 8px 6px;
+}
+td {
+	padding: 4px 6px;
+
+	&:last-child {
+		padding-right: 0;
+	}
+}
+td,
+td p,
+td h4 {
+	font-size: $small-font-size;
+}
+tr {
+	//Each row has a bottom border except the last
+	border-bottom: 1px solid $gray-light;
+	margin-left: 5px;
+
+	&:last-child {
+		border-bottom: none;
+	}
+}
+
+
+// Table headings that contain sortable links
+// -------------------------------------------
+// th {
+// 	a {
+// 		color: $gray-darkest;
+// 		display: inline-block;
+// 	}
+// }
+// th.active {
+// 	background: $gray-medium;
+
+// 	a {
+// 		text-decoration: none;
+// 	}
+// }
+
+
+// A list that displays data in a table style
+// -------------------------------------------
+.list-table {
+	list-style-type: none;
+	padding-left: 0;
+
+	> li {
+		padding: 5px 0;
+		@include clearfix();
+		border-bottom: 1px solid $gray-light;
+		
+		&:last-child {
+			border-bottom: none;
+		}
+		> div {
+			float: left;
+			padding: 2px 6px;
+		}
+		&.header {
+			text-align: left;
+			background: $gray;
+			border-bottom: 1px solid $gray-medium;
+			font-weight: $bold;
+		}
+	}
+}
+
+
+// Shared styles between tables and lists
+// ---------------------------------------
+table,
+.list-table {
+	margin-bottom: 20px;
+
+	h3, h4, p {
+		margin: 0;
+	}
+	h3 {
+		border-bottom: none;
+		font-size: $base-font-size;
+	}
+
+	// equal columnn size options
+	&.two-columns {
+		th, td, li > div {
+			width: 100%/2;	
+		}
+	}
+	&.three-columns {
+		th, td, li > div {
+			width: 100%/3;	
+		}
+	}
+	&.four-columns {
+		th, td, li > div {
+			width: 100%/4;	
+		}
+	}
+	&.five-columns {
+		th, td, li > div {
+			width: 100%/5;	
+		}	
+	}
+	&.six-columns {
+		th, td, li > div {
+			width: 100%/6;	
+		}
+	}
+	&.seven-columns {
+		th, td, li > div {
+			width: 100%/7;	
+		}
+	}
+	&.eight-columns {
+		th, td, li > div {
+			width: 100%/8;	
+		}
+	}
+	&.nine-columns {
+		th, td, li > div {
+			width: 100%/9;	
+		}
+	}
+	&.ten-columns {
+		th, td, li > div {
+			width: 100%/10;	
+		}
+	}
+}
+
+
+// Customization options
+// ----------------------
+table {
+	// Remove table row borders
+	&.no-borders {
+		tr {
+			border-bottom: none;
+		}
+	}
+	// Every other row has a bg color
+	&.striped {
+		tr:nth-child(odd) {
+			background: $gray-light;
+		}
+	}
+	// Extra spacing between rows
+	&.comfortable {
+		th, td {
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}		
+	}
+	td.pull-right {
+		float: none;
+		text-align: right;
+	}
+}
+
+.list-table {
+	// Remove list row borders
+	&.no-border > li,
+	&.no-borders > li { //TODO -fix
+		border-bottom: none;
+	}
+	// Every other row has a bg color
+	&.striped {
+		li:nth-child(odd) {
+			background: $gray-light;
+		}
+	}
+	// Extra spacing between rows
+	&.comfortable {
+		> li {
+			padding-top: 10px;
+			padding-bottom: 10px;
+		}
+	}
+	> li .pull-right {
+		text-align: right;
+		float: right;
+	}
+}
+
+// Directional Arrows for sortable tables
+//----
+
+.wicket_orderUp {
+  background-repeat: no-repeat;
+  background-position: right;
+  overflow: hidden;
+  background-image: url(../images/sort_arrow_down.gif);
+}
+
+.wicket_orderDown {
+  background-repeat: no-repeat;
+  background-position: right;
+  overflow: hidden;
+  background-image: url(../images/sort_arrow_up.gif);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

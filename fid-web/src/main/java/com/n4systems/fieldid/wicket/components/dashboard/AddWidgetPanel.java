@@ -95,7 +95,7 @@ public class AddWidgetPanel extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/dashboard/add_widget.css");
+        response.renderCSSReference("style/legacy/dashboard/add_widget.css");
     }
 
     private List<WidgetType> getSelectedWidgets(DashboardLayout layout) {

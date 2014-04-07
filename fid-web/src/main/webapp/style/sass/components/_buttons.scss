@@ -1,0 +1,283 @@
+//---------------------------
+// BUTTONS
+//---------------------------
+
+// Base Styles
+// ------------
+// This style applies to any class containing "btn-" so be mindful 
+// of creating new class names using this prefix. Pattern matching 
+// is used to attach the base button styles to the various button
+// styles without adding another class.
+[class*="btn-"] {
+	text-decoration: none;
+	display: inline-block;
+	padding: 6px 12px;
+	@include border-radius(2px);
+	border: 1px solid $gray-medium;
+	font-size: $base-font-size;
+	color: #fff;
+	@include transition(all 0.3s ease-out);
+	width: auto;
+	cursor: pointer;
+	margin: 0;
+	white-space: nowrap;
+	line-height: $base-line-height;
+	text-align: center;
+	
+	&:hover {
+		color: #fff;
+	}
+
+	// Disabled buttons
+	// -----------------
+	&.disabled {
+		@include opacity(50);
+
+		&:hover {
+			@include shadow(none); //overrides and removes hover styles
+			cursor: not-allowed;
+		}
+	}
+	&.selected:hover {
+		cursor: default;
+	}
+	&.hide {
+		display: none;
+	}
+}
+
+
+// Button colours
+// ---------------
+.btn-primary {
+	background: $blue;
+	border-color: darken($blue, 5%);
+}
+	.dropdown:hover .btn-primary,
+	.btn-primary:hover,
+	.btn-primary.selected {
+		@include btn-hover($blue, 20%);
+	}
+
+.btn-secondary {
+	background: $white;
+	color: $gray-darkest;
+}
+	.dropdown:hover .btn-secondary,
+	.btn-secondary:hover {
+		color: $gray-dark;
+		@include shadow(inset 0 0 8px darken($gray-light, 15%));
+	}
+	.btn-secondary.selected {
+		background: $white;
+		color: $gray-darkest;
+		@include shadow(inset 0 0 8px darken($gray-light, 15%));
+	}
+
+.btn-success {
+	background: $green;
+	border-color: darken($green, 5%);
+}
+	.dropdown:hover .btn-success,
+	.btn-success:hover,
+	.btn-success.selected {
+		@include btn-hover($green, 15%);
+	}
+
+.btn-danger {
+	background: $red;
+	border-color: darken($red, 5%);
+}
+	.dropdown:hover .btn-danger,
+	.btn-danger:hover,
+	.btn-danger.selected {
+		@include btn-hover($red, 20%);
+	}
+
+
+// Button styled as link
+// ----------------------
+.btn-link {
+	border: 0;
+	color: $blue;
+	text-decoration: underline;
+	background: transparent;
+
+	&:hover {
+		color: $blue;
+		text-decoration: none;
+	}
+}
+
+
+// Back button
+// ------------
+.btn-back {
+	// adds double left arrow before text
+	&:before { 
+		font-size: $base-font-size;
+		font-family: $fontello;
+		content: '\00AB';
+		padding-right: 4px;
+	} 
+}
+.btn-next {
+	// adds double right arrow before text
+	&:after { 
+		font-size: $base-font-size;
+		font-family: $fontello;
+		content: '\00BB';
+		padding-left: 4px;
+	} 
+}
+
+
+// Button sizes
+// -------------
+.btn-lrg {
+	padding: 8px 16px;
+	font-size: $large-font-size;
+}
+.btn-sml {
+	padding: 4px 8px;
+	font-size: $small-font-size;
+	@include border-radius(3px);
+}
+
+
+// Button icons
+// -------------
+.btn-icon {
+	padding: 8px 12px;
+
+	&.btn-sml {
+		padding: 5px;
+	}
+}
+
+
+// Dropdown & Dropup buttons
+// --------------------------
+// CSS for a dropdown list is shared between navigation
+// & button dropdowns and can be found in dropdowns.scss
+.dropdown,
+.dropup {
+
+	> [class*="btn-"]:after {
+		font-size: $base-font-size;
+		font-family: $fontello;
+		padding-left: 5px;
+	}
+	.btn-link {
+		text-decoration: none;
+		color: $blue;
+		margin-bottom: 2px;
+
+		&:after {
+			color: $gray-darkest;
+		}
+	}
+
+	// Disabled styles
+	// ----------------
+	&.disabled {
+		@include opacity(50);
+
+		ul {
+			display: none;
+		}
+		&:hover [class*="btn-"]{
+			@include shadow(none); //overrides and removes hover styles
+			cursor: not-allowed;
+
+			&:after {
+				content: '\e811';
+			}
+		}
+	}
+}
+.dropdown {
+	> [class*="btn-"]:after {
+		content: '\e811';
+	}
+	&:hover [class*="btn-"]:after {
+		content: '\e813';
+	}
+}
+.dropup {
+	> [class*="btn-"]:after {
+		content: '\e813';
+	}
+	&:hover [class*="btn-"]:after {
+		content: '\e811';
+	}
+}
+
+
+// Groups buttons in a single line
+// --------------------------------
+// Creates a connected navbar style
+.button-group {
+	font-size: 0;
+	display: inline-block;
+
+	> [class*="btn-"],
+	> .split-btn,
+	> .dropdown {
+		margin-right: -1px;
+	}
+	.dropdown {
+		font-size: $base-font-size;
+	}
+	// removes border radius of buttons not 
+	// at the beggining or end of the group
+	> [class*="btn-"]:not(:last-child),
+	.dropdown:not(:last-child) [class*="btn-"],
+	.split-btn:not(:last-child) [class*="btn-"] {
+		@include border-right-radius(0px);
+	}
+	> [class*="btn-"]:not(:first-child),
+	.dropdown:not(:first-child) [class*="btn-"],
+	.split-btn:not(:first-child) [class*="btn-"] {
+		@include border-left-radius(0px);
+	}
+	.input-combo {
+		display: inline-block;
+	}
+}
+
+
+// Split button with dropdowns
+// ----------------------------
+// Combines the base buttong with a dropdown
+.split-btn {
+	display: inline-block;
+	position: relative;
+	white-space: nowrap;
+	font-size: 0;
+	
+	> [class*="btn-"] {
+		margin-bottom: 1px;
+		margin-right: -1px;
+		@include border-right-radius(0px);
+	}
+	.dropdown,
+	.dropup {
+		position: static;
+		font-size: $base-font-size;
+
+		> [class*="btn-"] {
+			//reduces padding for dropdown button with arrow icon
+			padding-left: 5px;
+			padding-right: 10px;
+			//hides text - only show icon
+			font-size: 0;
+		}
+	}
+	.dropdown {
+		vertical-align: top;
+	}
+}
+
+
+

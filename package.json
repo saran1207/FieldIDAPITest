@@ -11,10 +11,11 @@
     "url": "git://github.com/Field-ID/web.git"
   },
   "devDependencies": {
-    "grunt": "0.4.x",
+    "grunt": "~0.4.4",
     "grunt-contrib-less": "0.9.x",
     "grunt-contrib-watch": "0.5.x",
     "grunt-contrib-clean": "0.5.x",
-    "glob": "3.2.x"
+    "glob": "3.2.x",
+    "grunt-contrib-sass": "~0.7.3"
   }
 }

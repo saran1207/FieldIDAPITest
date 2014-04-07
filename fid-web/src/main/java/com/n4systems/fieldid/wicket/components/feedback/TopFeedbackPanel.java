@@ -43,7 +43,7 @@ public class TopFeedbackPanel extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         //Old CSS file - remove when site is completely moved over to framework styles.
-        response.renderCSSReference("style/newCss/layout/feedback_errors.css"); 
+        response.renderCSSReference("style/legacy/newCss/layout/feedback_errors.css"); 
     }
 
 }

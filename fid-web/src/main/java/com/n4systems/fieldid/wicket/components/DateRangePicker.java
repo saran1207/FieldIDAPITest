@@ -75,7 +75,7 @@ public class DateRangePicker extends Panel {
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
-        //response.renderCSSReference("style/newCss/component/dateRange.css");
+        //response.renderCSSReference("style/legacy/newCss/component/dateRange.css");
         super.renderHead(response);
 	}
 

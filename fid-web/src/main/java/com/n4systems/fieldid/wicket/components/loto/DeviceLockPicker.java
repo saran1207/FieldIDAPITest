@@ -172,7 +172,7 @@ public class DeviceLockPicker extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/device_lock_picker.css");
+        response.renderCSSReference("style/legacy/newCss/component/device_lock_picker.css");
     }
 
     public void onPickerUpdated() {}

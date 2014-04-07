@@ -43,7 +43,7 @@ public abstract class SetupPage extends FieldIDFrontEndPage {
 
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/pageStyles/settings.css");
+        response.renderCSSReference("style/legacy/pageStyles/settings.css");
     }
 
 

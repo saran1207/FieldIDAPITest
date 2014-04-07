@@ -83,6 +83,6 @@ public class YourPlanPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/setup/your_plan.css");
+        response.renderCSSReference("style/legacy/setup/your_plan.css");
     }
 }

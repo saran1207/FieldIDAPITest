@@ -148,9 +148,9 @@ public class EventFormEditPage extends EventTypePage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/fieldid.css");
-        response.renderCSSReference("style/eventFormEdit.css");
-        response.renderCSSReference("style/newCss/component/header_reorder_link_button.css");
+        response.renderCSSReference("style/legacy/fieldid.css");
+        response.renderCSSReference("style/legacy/eventFormEdit.css");
+        response.renderCSSReference("style/legacy/newCss/component/header_reorder_link_button.css");
     }
 
     private SavePanel createSavePanel(String panelID) {

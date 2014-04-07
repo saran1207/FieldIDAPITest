@@ -204,7 +204,7 @@ public class JumpableNavigationBar extends Panel implements IAjaxIndicatorAware 
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/featureStyles/pagination.css");
+        response.renderCSSReference("style/legacy/featureStyles/pagination.css");
     }
 
     protected void onPageChanged(AjaxRequestTarget target) { }

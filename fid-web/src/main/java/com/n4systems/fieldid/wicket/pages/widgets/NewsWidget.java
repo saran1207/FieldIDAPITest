@@ -29,7 +29,7 @@ public class NewsWidget extends Widget<WidgetConfiguration> {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/dashboard/widgets/news.css");
+        response.renderCSSReference("style/legacy/dashboard/widgets/news.css");
         response.renderJavaScriptReference("javascript/jquery-ui-1.8.13.custom.min.js");
         response.renderJavaScriptReference("javascript/jquery.zrssfeed.js");
         response.renderOnDomReadyJavaScript(getRssSetUpScript());

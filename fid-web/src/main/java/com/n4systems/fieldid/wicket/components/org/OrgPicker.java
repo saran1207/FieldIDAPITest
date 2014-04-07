@@ -125,7 +125,7 @@ public class OrgPicker extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/featureStyles/orgPickerNew.css");
+        response.renderCSSReference("style/legacy/featureStyles/orgPickerNew.css");
     }
 
     private void addClearAndCloseLinks() {

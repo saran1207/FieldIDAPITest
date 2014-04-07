@@ -161,9 +161,9 @@ public class ProcedurePickerPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/wicket_schedule_picker.css");
-        response.renderCSSReference("style/newCss/component/wicket_procedure_picker.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/component/wicket_schedule_picker.css");
+        response.renderCSSReference("style/legacy/newCss/component/wicket_procedure_picker.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
     public void setSaveButtonLabel(IModel<String> saveButtonLabel) {
