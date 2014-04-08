@@ -100,7 +100,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 });
                 copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())
                         && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
-                copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.copy"), TipsyBehavior.Gravity.N));
+                copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
 
 
 
