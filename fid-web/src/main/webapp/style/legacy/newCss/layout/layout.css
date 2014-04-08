@@ -194,6 +194,7 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 
 #menuReport:after, 
 #menuSetup:after,
+#menuLoto:after,
 #mySavedItemsLink:after {
 	font-family: "fontello", sans-serif;
 	content: '\e82d';
@@ -208,9 +209,12 @@ a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
 }
 
 li:hover #menuReport:after, 
-li:hover #menuSetup:after {
+li:hover #menuSetup:after,
+li:hover #menuLoto:after{
 	content: '\e830';
 }
+
+/*Instead of hiding this image we should just remove it!!! */
 #menuReport img,
 #menuReport.speedLink img,
 #pageHeader .downArrow {

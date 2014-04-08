@@ -134,7 +134,12 @@
 
                     <#if securityGuard.lotoProceduresEnabled>
                         <li>
-                            <a href="/fieldid/w/procedure" class="speedLink textLink" id="menuProcedure"><@s.text name="speed.lockout_tagout" /></a>
+                            <a href="javascript:void(0)" class="speedLink textLink" id="menuLoto"><@s.text name="speed.lockout_tagout"/>&nbsp;</a>
+                            <ul class="sub_menu">
+                                <li>
+                                    <a href="/fieldid/w/procedure"><@s.text name="speed.lockout_tagout_activity" /></a>
+                                </li>
+                            </ul>
                         </li>
                     </#if>
 
@@ -153,7 +158,6 @@
 							<li>
 								<a href="<@s.url value="/w/setup/settings"/>" class="speedLink textLink" id="menuSetup">
 									<@s.text name="label.setup" />
-									<!-- <img src="/fieldid/images/down-arrow.png" /> -->
 								</a>
 								<ul class="sub_menu">
 									<li>

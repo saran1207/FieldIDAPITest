@@ -221,7 +221,8 @@ h2 a {
 	margin-top: 1px;
 }
 #pageHeader #menuReport:after, 
-#menuSetup:after, 
+#menuSetup:after,
+#menuLoto:after,
 #mySavedItemsLink:after {
 	font-family: "fontello", sans-serif;
 	content: '\e82d';
@@ -234,9 +235,12 @@ h2 a {
 	margin-left: -4px;
 }
 #pageHeader li:hover #menuReport:after, 
-#pageHeader li:hover #menuSetup:after {
+#pageHeader li:hover #menuSetup:after,
+#pageHeader li:hover #menuLoto:after {
 	content: '\e830';
 }
+
+/*Instead of hiding this image we should just remove it!!! */
 #menuReport.speedLink img,
 #pageHeader .downArrow {
 	display: none;
