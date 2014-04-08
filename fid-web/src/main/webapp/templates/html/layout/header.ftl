@@ -137,7 +137,7 @@
                             <a href="javascript:void(0)" class="speedLink textLink" id="menuLoto"><@s.text name="speed.lockout_tagout"/>&nbsp;</a>
                             <ul class="sub_menu">
                                 <li>
-                                    <a href="/fieldid/w/procedure"><@s.text name="speed.lockout_tagout_activity" /></a>
+                                    <a href="/fieldid/w/procedure"><@s.text name="speed.loto_log" /></a>
                                 </li>
                             </ul>
                         </li>
