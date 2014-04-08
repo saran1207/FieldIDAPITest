@@ -72,7 +72,7 @@ public class PerformEventPage extends ThingEventPage {
         if (event.getObject().getType().isThingEventType()) {
             Asset asset =  ((ThingEvent)event.getObject()).getAsset();
 
-            if (null != asset && null != event.getObject().getGpsLocation()) {
+            if (null != asset && null != event.getObject().getGpsLocation() && null != event.getObject().getGpsLocation().getLatitude() && null != event.getObject().getGpsLocation().getLongitude()) {
                 event.getObject().getGpsLocation().getLongitude();
                 asset.setGpsLocation(new GpsLocation(event.getObject().getGpsLocation().getLatitude(), event.getObject().getGpsLocation().getLongitude()));
             }
