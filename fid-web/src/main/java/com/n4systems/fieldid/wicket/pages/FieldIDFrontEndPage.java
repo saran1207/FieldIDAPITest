@@ -479,9 +479,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
             add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class));
 
-            BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
-            procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
-            add(procedureLink);
+            add(createLotoLinkContainer());
 
             add(new ExternalLink("support", getSupportUrl(), new FIDLabelModel("label.support").getObject()));
 
@@ -517,6 +515,15 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             }
 
             add(identifyMenuContainer);
+        }
+
+        private Component createLotoLinkContainer() {
+            WebMarkupContainer lotoLinkContainer = new WebMarkupContainer("lotoLinkContainer");
+
+            lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureSearchLink", ProcedureSearchPage.class));
+            lotoLinkContainer.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
+
+            return lotoLinkContainer;
         }
 
 

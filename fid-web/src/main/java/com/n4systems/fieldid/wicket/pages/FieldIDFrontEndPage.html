@@ -166,11 +166,13 @@
                                 <a wicket:id="placesLink" class="speedLink textLink" id="menuPlaces"><wicket:message key="speed.places"/></a>
                             </li>
 
-                            <wicket:enclosure>
-                                <li>
-                                    <a wicket:id="procedureLink" class="speedLink textLink" id="menuProcedure"><wicket:message key="speed.lockout_tagout"/></a>
-                                </li>
-                            </wicket:enclosure>
+                            <li class="dropdown" wicket:id="lotoLinkContainer">
+                                <a href="javascript:void(0)" class="speedLink textLink" id="menuLoto"><wicket:message key="speed.lockout_tagout"/>&nbsp;</a>
+                                <ul>
+                                    <li><a wicket:id="procedureSearchLink"><wicket:message key="speed.loto_log"/></a></li>
+                                </ul>
+                            </li>
+
                             <li wicket:id="safetyNetworkLinkContainer">
                                 <a href="/fieldid/safetyNetwork.action" class="speedLink textLink" id="menuSafetyNetwork"><wicket:message key="speed.safety_network"/></a>
                             </li>
