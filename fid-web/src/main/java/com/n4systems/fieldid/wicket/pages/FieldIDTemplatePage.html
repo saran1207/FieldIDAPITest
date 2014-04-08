@@ -142,9 +142,12 @@
                 <li>
                     <a wicket:id="placesLink"><wicket:message key="speed.places"/></a>
                 </li>
-                <wicket:enclosure>
-                    <li><a wicket:id="procedureLink"><wicket:message key="speed.lockout_tagout"/></a></li>
-                </wicket:enclosure>
+                <li class="dropdown" wicket:id="lotoLinkContainer">
+                    <a href="javascript:void(0)"><wicket:message key="speed.lockout_tagout"/></a>
+                    <ul>
+                        <li><a wicket:id="procedureSearchLink"><wicket:message key="speed.loto_log"/></a></li>
+                    </ul>
+                </li>
                 <li wicket:id="safetyNetworkLinkContainer">
                     <a href="/fieldid/safetyNetwork.action"><wicket:message key="speed.safety_network"/></a>
                 </li>

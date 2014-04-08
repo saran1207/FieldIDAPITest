@@ -453,10 +453,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             extraEventLinksContainer.add(new BookmarkablePageLink<Void>("advancedEventSearchLink", AdvancedEventSearchPage.class).setVisible(advancedEventSearchEnabled));
             extraEventLinksContainer.add(new BookmarkablePageLink<Void>("criteriaTrendsLink", CriteriaTrendsPage.class).setVisible(trendingEnabled));
 
-            BookmarkablePageLink<Void> procedureLink = new BookmarkablePageLink<Void>("procedureLink", ProcedureSearchPage.class);
-            procedureLink.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
-            add(procedureLink);
-
+            add(createLotoLinkContainer());
             add(createSetupLinkContainer(sessionUser));
             add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));
             add(new WebMarkupContainer("safetyNetworkLinkContainer").setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork()));
@@ -476,6 +473,15 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
             add(identifyMenuContainer);
         }
 
+    }
+
+    private Component createLotoLinkContainer() {
+        WebMarkupContainer lotoLinkContainer = new WebMarkupContainer("lotoLinkContainer");
+
+        lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureSearchLink", ProcedureSearchPage.class));
+        lotoLinkContainer.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
+
+        return lotoLinkContainer;
     }
 
     static class StaticImage extends WebComponent {

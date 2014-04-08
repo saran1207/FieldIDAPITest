@@ -10,6 +10,8 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
+import com.n4systems.util.persistence.search.terms.GpsBoundsTerm;
+import com.n4systems.util.persistence.search.terms.HasGpsTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import com.n4systems.util.persistence.search.terms.completedordue.AssetStatusTerm;
 import com.n4systems.util.persistence.search.terms.completedordue.AssignedUserTerm;
@@ -89,6 +91,12 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
             }
         }
 
+        addHasGpsTerm(searchTerms, criteriaModel);
+        if (includeGps) {
+            addGpsLocationTerm(searchTerms, criteriaModel);
+        }
+
+
         if (criteriaModel.getDateRange() != null && !criteriaModel.getDateRange().isEmptyCustom()) {
             if (criteriaModel.getWorkflowState() == WorkflowStateCriteria.COMPLETE || criteriaModel.getWorkflowState()== WorkflowStateCriteria.CLOSED) {
                 Date from = dateService.calculateFromDateWithTimeZone(criteriaModel.getDateRange(), timeZone);
@@ -115,6 +123,18 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
         }
 
     }
+
+
+    private void addHasGpsTerm(List<SearchTermDefiner> search, EventReportCriteria criteriaModel) {
+        if(criteriaModel.getHasGps() != null) {
+            search.add(new HasGpsTerm(criteriaModel.getHasGps()));
+        }
+    }
+
+    private void addGpsLocationTerm(List<SearchTermDefiner> search, EventReportCriteria criteriaModel) {
+        search.add(new GpsBoundsTerm("gpsLocation",criteriaModel.getBounds()));
+    }
+
 
     private void addAssignedUserTerm(Long assignedUserId, EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
         searchTerms.add(new AssignedUserTerm(criteriaModel.getWorkflowState(), assignedUserId));

@@ -45,7 +45,7 @@ public class ProcedureSearchPage extends AbstractSearchPage<ProcedureCriteria> {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.procedures"));
+        return new Label(labelId, new FIDLabelModel("label.loto_log"));
     }
 
     @Override
@@ -95,7 +95,7 @@ public class ProcedureSearchPage extends AbstractSearchPage<ProcedureCriteria> {
     }
 
     public String getPageLabel() {
-        IModel<String> pageLabelModel = new FIDLabelModel("label.procedures");
+        IModel<String> pageLabelModel = new FIDLabelModel("label.loto_log");
         if (searchCriteria.getSavedReportName() != null) {
             pageLabelModel = new Model<String>(pageLabelModel.getObject() + " for - " + searchCriteria.getSavedReportName());
         }
