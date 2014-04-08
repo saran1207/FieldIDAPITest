@@ -22,7 +22,7 @@ public class ReadOnlyUserCrud extends UserCrud {
 	protected void testRequiredEntities(boolean existing) {
 		super.testRequiredEntities(existing);
 		if (existing && !user.isReadOnly()) {
-			throw new MissingEntityException("another user was loaded for when a read-only user was expected.");
+			throw new MissingEntityException("another user was loaded for when a Reporting user was expected.");
 		}
 	}
 	
