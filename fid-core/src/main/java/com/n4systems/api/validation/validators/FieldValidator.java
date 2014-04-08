@@ -50,9 +50,9 @@ public interface FieldValidator {
 	public static final String CriteriaValidatorSignatureFail = "Importing of signatures not supported";
 	public static final String CriteriaValidatorSelectFail = "Can't find option '%s' for select criteria %s. Expecting one of %s.";
 	public static final String CriteriaOneClickFail = "Can't find option '%s' for one click criteria %s. Expecting one of %s.";
-	public static final String MaxLiteUsersFail = "You can not import more than %d lite users. (Attempted to import %d)";
-	public static final String MaxReadOnlyUsersFail = "You can not import more than %d read only users. (Attempted to import %d)";
-	public static final String MaxEmployeeUersFail = "You can not import more than %d employee (full) users. (Attempted to import %d)";
+	public static final String MaxLiteUsersFail = "You can not import more than %d inspection users. (Attempted to import %d)";
+	public static final String MaxReadOnlyUsersFail = "You can not import more than %d reporting users. (Attempted to import %d)";
+	public static final String MaxEmployeeUersFail = "You can not import more than %d administration (full) users. (Attempted to import %d)";
     public static final String NotANumberFail = "'%s' is not a valid number for criteria '%s'";
 	public static final String InvalidScoreFail = "You must enter a valid score for criteria '%s'. Value was '%s' but expecting one of %s";
 	

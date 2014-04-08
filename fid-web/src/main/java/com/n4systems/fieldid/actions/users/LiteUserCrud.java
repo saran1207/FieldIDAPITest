@@ -109,7 +109,7 @@ public class LiteUserCrud extends UserCrud {
 	protected void testRequiredEntities(boolean existing) {
 		super.testRequiredEntities(existing);
 		if (existing && !user.isLiteUser()) {
-			throw new MissingEntityException("Failed to load Lite user.");
+			throw new MissingEntityException("Failed to load Inspection user.");
 		}
 	}
 	

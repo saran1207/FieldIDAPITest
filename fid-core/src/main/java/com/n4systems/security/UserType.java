@@ -9,9 +9,9 @@ public enum UserType {
 	ALL( "All", PermissionType.allPermissions() ),
 	ADMIN( "Admin", PermissionType.allPermissions() ),
 	SYSTEM( "System", PermissionType.allPermissions() ),
-	FULL( "Full", PermissionType.values() ),
-	LITE( "Lite", PermissionType.CreateEvent, PermissionType.EditEvent ),
-	READONLY( "Read-Only" /*no permissions*/ ),
+    FULL( "Administration", PermissionType.values() ),
+    LITE( "Inspection", PermissionType.CreateEvent, PermissionType.EditEvent ),
+    READONLY( "Reporting" /*no permissions*/ ),
     PERSON("Person" /*no permissions*/),
     USAGE_BASED("Usage Based", PermissionType.CreateEvent, PermissionType.EditEvent);
 
