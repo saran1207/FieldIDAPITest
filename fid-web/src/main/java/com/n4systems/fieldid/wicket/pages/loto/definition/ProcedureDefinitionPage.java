@@ -181,6 +181,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
                 @Override
                 protected void doReject(String message) {
                     FieldIDSession.get().info(getString("message.rejection_notification_sent"));
+                    procedureDefinitionService.saveProcedureDefinitionRejection(model.getObject(), message);
                     notifyService.notifyProcedureRejection(model.getObject(), message);
                     gotoProceduresPage();
                 }

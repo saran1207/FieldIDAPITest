@@ -75,6 +75,17 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
     @Column(name="auth_notification_sent")
     private boolean authorizationNotificationSent = false;
 
+    @Column(name="rejected_date")
+    private Date rejectedDate;
+
+    @ManyToOne
+    @JoinColumn(name = "rejected_by_id")
+    private User rejectedBy;
+
+    @Column(name="rejected_reason")
+    private String rejectedReason;
+
+
     public String getProcedureCode() {
         return procedureCode;
     }
@@ -299,5 +310,29 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         if (!usedInOtherIsolationPoint) {
             getImages().remove(image);
         }
+    }
+
+    public User getRejectedBy() {
+        return rejectedBy;
+    }
+
+    public void setRejectedBy(User rejectedBy) {
+        this.rejectedBy = rejectedBy;
+    }
+
+    public Date getRejectedDate() {
+        return rejectedDate;
+    }
+
+    public void setRejectedDate(Date rejectedDate) {
+        this.rejectedDate = rejectedDate;
+    }
+
+    public String getRejectedReason() {
+        return rejectedReason;
+    }
+
+    public void setRejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
     }
 }

@@ -78,6 +78,18 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
     }
 
+    public void saveProcedureDefinitionRejection(ProcedureDefinition procedureDefinition, String rejectedReason) {
+
+      procedureDefinition.setPublishedState(PublishedState.REJECTED);
+      procedureDefinition.setRejectedBy(getCurrentUser());
+      procedureDefinition.setRejectedDate(dateService.nowUTC().toDate());
+      procedureDefinition.setRejectedReason(rejectedReason);
+      persistenceService.update(procedureDefinition);
+
+    }
+
+
+
     /*package protected for testing purposes*/
     Long generateRevisionNumber(Asset asset) {
         QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
