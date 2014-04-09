@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.components.loto;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
-import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
+import com.n4systems.fieldid.wicket.components.menuButton.MenuButton2;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.loto.PrintOptions;
@@ -17,7 +17,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-public class ViewPrintProcedureDefMenuButton extends MenuButton<PrintOptions> {
+public class ViewPrintProcedureDefMenuButton extends MenuButton2<PrintOptions> {
 
     private IModel<ProcedureDefinition> procedureDefinition;
 

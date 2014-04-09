@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
-import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
-import com.n4systems.fieldid.wicket.components.menuButton.MenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -17,7 +15,6 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.PopupSettings;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -44,13 +41,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
     public ProcedureDefinitionListPage(PageParameters params) {
         super(params);
 
-        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.active"), TipsyBehavior.Gravity.N)));
-        add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.previously_published"), TipsyBehavior.Gravity.N)));
-        add(new BookmarkablePageLink<ProceduresListPage>("proceduresListLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(new FIDLabelModel("message.procedures.completed_inprogress"), TipsyBehavior.Gravity.N)));
-
         listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupPlaceholderTag(true);
 
@@ -65,29 +55,27 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 item.add(new Label("created", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "created"), true, getCurrentUser().getTimeZone())));
                 item.add(new Label("approvedBy", new PropertyModel<String>(procedureDefinition, "approvedBy")));
                 item.add(new Label("publishedState", new PropertyModel<String>(procedureDefinition, "publishedState.label")));
-                item.add(new MenuButton<FIDLabelModel>("edit", new FIDLabelModel("label.edit"), Lists.newArrayList(new FIDLabelModel("label.delete"))){
+
+                item.add(new AjaxLink<Void>("editLink") {
 
                     @Override
-                    protected WebMarkupContainer populateLink(String linkId, String labelId, ListItem<FIDLabelModel> item) {
-                        return (WebMarkupContainer) new AjaxLink(linkId) {
-                            @Override
-                            public void onClick(AjaxRequestTarget target) {
-                                procedureDefinitionService.deleteProcedureDefinition(procedureDefinition.getObject());
-                                listView.detach();
-                                listContainer.setVisible(!getList().isEmpty());
-                                blankSlate.setVisible(getList().isEmpty());
-                                target.add(listContainer);
-                                target.add(blankSlate);
-                            }
-                        }.add(new Label(labelId, item.getModelObject()));
-                    }
-
-                    @Override
-                    protected void buttonClicked(AjaxRequestTarget target) {
+                    public void onClick(AjaxRequestTarget target) {
                         editProcedureDefinition(procedureDefinition.getObject());
                     }
-
                 }.setVisible(procedureDefinition.getObject().getPublishedState().isPreApproval()));
+
+                item.add(new AjaxLink<Void>("deleteLink") {
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        procedureDefinitionService.deleteProcedureDefinition(procedureDefinition.getObject());
+                        listView.detach();
+                        listContainer.setVisible(!getList().isEmpty());
+                        blankSlate.setVisible(getList().isEmpty());
+                        target.add(listContainer);
+                        target.add(blankSlate);
+                    }
+                });
 
                 Link copyLink;
                 item.add(copyLink = new Link("copyProcedureDefLink") {
@@ -123,12 +111,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
 
         blankSlate = new WebMarkupContainer("blankSlate");
         blankSlate.add(new Label("blankSlateMessage", new FIDLabelModel("message.no_published_procedures", assetModel.getObject().getType().getDisplayName())));
-        blankSlate.add(new AjaxLink("authorLink") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                doNewProcedureDef();
-            }
-        });
         blankSlate.setVisible(listView.getList().isEmpty());
         blankSlate.setOutputMarkupPlaceholderTag(true);
         add(blankSlate);
@@ -136,10 +118,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
 
     private void editProcedureDefinition(ProcedureDefinition procedureDefinition) {
         setResponsePage(new ProcedureDefinitionPage(new PageParameters().add("id", procedureDefinition.getId())));
-    }
-
-    private void doNewProcedureDef() {
-        setResponsePage(new ProcedureDefinitionPage(assetModel.getObject()));
     }
 
     @Override
