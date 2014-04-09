@@ -29,6 +29,9 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 	@Transient
 	private byte[] data;
 
+    @Transient
+    private boolean uploadInProgress;
+
 	public AssetAttachment() {
 	}
 
@@ -111,4 +114,11 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 		this.data = data;
 	}
 
+    public boolean isUploadInProgress() {
+        return uploadInProgress;
+    }
+
+    public void setUploadInProgress(boolean uploadInProgress) {
+        this.uploadInProgress = uploadInProgress;
+    }
 }

@@ -732,19 +732,19 @@ public class S3Service extends FieldIdPersistenceService {
         return policyDocument;
     }
 
-    public String getAssetAttachmentsUploadJavascript(String assetUuid, String assetAttachmentUuid, String uploadFormMarkupId, String callbackUrlVar){
+    public String getAssetAttachmentsUploadJavascript(String assetUuid, String assetAttachmentUuid, String uploadFormMarkupId, String callbackContainerMarkupId){
 
-        String uploadJavascript = getUploadJavascript(ASSET_ATTACHMENTS_PATH, assetUuid, assetAttachmentUuid, uploadFormMarkupId, callbackUrlVar);
+        String uploadJavascript = getUploadJavascript(ASSET_ATTACHMENTS_PATH, assetUuid, assetAttachmentUuid, uploadFormMarkupId, callbackContainerMarkupId);
         return uploadJavascript;
     }
 
     public String getAssetAttachmentsFolderUrl(String assetUuid, String assetAttachmentUuid){
         String assetAttachmentsUploadPath = createResourcePath(null, ASSET_ATTACHMENTS_PATH, assetUuid, assetAttachmentUuid);
-        String assetAttachmentsFolderUrl = "https://" + this.getBucketHostname() + "/" + assetAttachmentsUploadPath;
+        String assetAttachmentsFolderUrl = "https:////" + this.getBucketHostname() + "/" + assetAttachmentsUploadPath;
         return assetAttachmentsFolderUrl;
     }
 
-    protected String getUploadJavascript(String pathPattern, String parentUuid, String childUuid, String uploadFormMarkupId, String callbackUrlVar){
+    protected String getUploadJavascript(String pathPattern, String parentUuid, String childUuid, String uploadFormMarkupId, String callbackContainerMarkupId){
         String path = createResourcePath(null, pathPattern, parentUuid, childUuid);
         User user = getCurrentUser();
         String bucketPolicyBase64 = this.getBucketPolicyBase64();
@@ -754,9 +754,13 @@ public class S3Service extends FieldIdPersistenceService {
             "if(!window.uploadsInProgress){" +
             "   window.uploadsInProgress = 0;" +
             "   window.setInterval(function(){" +
-            "       var buttons = document.querySelectorAll('[name=\"actionsContainer:saveButton\"],[name=\"actionsContainer:saveAndStartEventButton\"]');" +
+            "       var buttons = document.querySelectorAll('[name=\"actionsContainer:saveButton\"],[name=\"actionsContainer:saveAndStartEventButton\"],[name=\"actionsContainer:saveAndPrintButton\"],[name=\"actionsContainer:mergeLink\"]');" +
             "       for(var i = 0; i < buttons.length; i++){" +
             "           buttons[i].disabled = (window.uploadsInProgress > 0);" +
+            "       }" +
+            "       var indicators = document.querySelectorAll('.wicket-ajax-indicator');" +
+            "       for(var i = 0; i < indicators.length; i++){" +
+            "           indicators[i].style.display = (window.uploadsInProgress > 0 ? 'inline' : 'none');" +
             "       }" +
             "   }, 1000);" +
             "}" +
@@ -770,10 +774,11 @@ public class S3Service extends FieldIdPersistenceService {
             "   xhr.onreadystatechange = function(ev){" +
             "       if(xhr.readyState === 1){" +
             "           window.uploadsInProgress += 1;" +
+            "           wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=-1&uuid=" + childUuid + "', function() { }, function() { });" +
             "       }" +
             "       else if(xhr.readyState === 4){" +
             "           window.uploadsInProgress -= 1;" +
-            "           wicketAjaxGet(" + callbackUrlVar + " + '&filename=' + encodeURI(file.name) + '&status=' + xhr.status + '&uuid=" + childUuid + "', function() { }, function() { });" +
+            "           wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=' + xhr.status + '&uuid=" + childUuid + "', function() { }, function() { });" +
             "       }" +
             "   };" +
             //"   xhr.upload.addEventListener('progress', function(evt){console.log('progress:'+JSON.stringify(evt));}, false);" +

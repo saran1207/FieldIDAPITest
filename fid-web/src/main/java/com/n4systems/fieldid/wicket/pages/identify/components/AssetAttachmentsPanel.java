@@ -10,6 +10,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ConfigEntry;
+import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -44,6 +45,8 @@ import static ch.lambdaj.Lambda.as;
 import static ch.lambdaj.Lambda.on;
 
 public class AssetAttachmentsPanel extends Panel {
+
+    private static final Logger logger = Logger.getLogger(AssetAttachmentsPanel.class);
 
     @SpringBean
     private S3Service s3Service;
@@ -98,9 +101,14 @@ public class AssetAttachmentsPanel extends Panel {
             public void renderHead(Component component, IHeaderResponse response) {
                 super.renderHead(component, response);
                 StringBuilder javascript = new StringBuilder();
-                javascript.append("window." + existingAttachmentsContainer.getMarkupId() + "AjaxCallbackUrl = '" + getCallbackUrl() + "';\n");
+                javascript.append("if(!window.containerAjaxCallbackUrlLookup){" +
+                                  "    window.containerAjaxCallbackUrlLookup = {};" +
+                                  "}" +
+                                  "window.containerAjaxCallbackUrlLookup['" + existingAttachmentsContainer.getMarkupId() + "'] = '" + getCallbackUrl() + "';" +
+                                  "getAjaxCallbackUrl = function(containerMarkupId){" +
+                                  "    return window.containerAjaxCallbackUrlLookup[containerMarkupId];" +
+                                  "};");
                 response.renderOnDomReadyJavaScript(javascript.toString());
-                //response.renderOnEventJavaScript(
             }
 
             @Override
@@ -110,10 +118,16 @@ public class AssetAttachmentsPanel extends Panel {
                 Integer status = getRequest().getRequestParameters().getParameterValue("status").toInteger();
                 for(int index = 0; index < attachments.size(); index++){
                     if(attachments.get(index).getMobileId().equals(uuid)){
-                        if(status < 200 || status >= 300){
-                            attachments.remove(index);
-                            error(new FIDLabelModel("error.file_upload_failed", filename, status.toString()).getObject());
-                            target.add(((IdentifyOrEditAssetPage)getPage()).getFeedbackPanel(), existingAttachmentsContainer);
+                        if(status == -1){
+                            attachments.get(index).setUploadInProgress(true);
+                        }
+                        else {
+                            attachments.get(index).setUploadInProgress(false);
+                            if(status < 200 || status >= 300){
+                                attachments.remove(index);
+                                error(new FIDLabelModel("error.file_upload_failed", filename, status.toString()).getObject());
+                                target.add(((IdentifyOrEditAssetPage)getPage()).getFeedbackPanel(), existingAttachmentsContainer);
+                            }
                         }
                         break;
                     }
@@ -122,18 +136,18 @@ public class AssetAttachmentsPanel extends Panel {
         });
 
         add(existingAttachmentsContainer);
-        add(new UploadAttachmentForm("uploadAttachmentForm", assetModel, existingAttachmentsContainer.getMarkupId() + "AjaxCallbackUrl"));
+        add(new UploadAttachmentForm("uploadAttachmentForm", assetModel, existingAttachmentsContainer.getMarkupId()));
     }
 
 
     class UploadAttachmentForm extends Form {
         private IModel<Asset> assetModel;
-        protected String callbackUrlVar;
+        protected String callbackContainerMarkupId;
 
-        public UploadAttachmentForm(String id, IModel<Asset> assetModel_, String callbackUrlVar_) {
+        public UploadAttachmentForm(String id, IModel<Asset> assetModel_, String callbackContainerMarkupId_) {
             super(id);
             assetModel = assetModel_;
-            callbackUrlVar = callbackUrlVar_;
+            callbackContainerMarkupId = callbackContainerMarkupId_;
 
 
             final FileUploadField attachmentUpload = new FileUploadField("attachmentUpload");
@@ -146,8 +160,8 @@ public class AssetAttachmentsPanel extends Panel {
                     assetModel.getObject().ensureMobileGuidIsSet();
                     String assetUuid = assetModel.getObject().getMobileGUID();
                     String assetAttachmentUuid = UUID.randomUUID().toString();
-                    String docElementId = attachmentUpload.getMarkupId();
-                    String uploadJavascript = s3Service.getAssetAttachmentsUploadJavascript(assetUuid, assetAttachmentUuid, docElementId, callbackUrlVar);
+                    String uploadFormMarkupId = attachmentUpload.getMarkupId();
+                    String uploadJavascript = s3Service.getAssetAttachmentsUploadJavascript(assetUuid, assetAttachmentUuid, uploadFormMarkupId, callbackContainerMarkupId);
 
                     target.prependJavaScript(uploadJavascript);
 
