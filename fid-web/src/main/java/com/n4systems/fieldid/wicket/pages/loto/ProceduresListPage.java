@@ -1,9 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureService;
-import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.Procedure;
@@ -29,13 +27,6 @@ public class ProceduresListPage extends LotoPage {
 
     public ProceduresListPage(PageParameters params) {
         super(params);
-
-        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.active"), TipsyBehavior.Gravity.N)));
-        add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.previously_published"), TipsyBehavior.Gravity.N)));
-        add(new BookmarkablePageLink<ProceduresListPage>("proceduresListLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(new FIDLabelModel("message.procedures.completed_inprogress"), TipsyBehavior.Gravity.N)));
 
         WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
         WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
