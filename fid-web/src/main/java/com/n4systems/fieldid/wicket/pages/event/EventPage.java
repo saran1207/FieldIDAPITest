@@ -89,6 +89,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
     private String latVal = "";
     private String longVal = "";
+    boolean hasDefaultVal = false;
 
 
 
@@ -112,6 +113,8 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             numberFormat.setMinimumFractionDigits(0);
 
             if (null != asset && null != asset.getGpsLocation()) {
+
+                hasDefaultVal = true;
 
                 if (null != asset.getGpsLocation().getLongitude()) {
                     longVal = numberFormat.format(asset.getGpsLocation().getLongitude());
@@ -319,8 +322,11 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             latitude = new GpsTextField<BigDecimal>("latitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLatitude()));
             longitude = new GpsTextField<BigDecimal>("longitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLongitude()));
 
-            latitude.add(new SimpleAttributeModifier("value", (null == latVal)? "" : latVal ));
-            longitude.add(new SimpleAttributeModifier("value", (null == longVal) ? "" : longVal));
+            if (event.getObject().getEventType().isThingEventType() && hasDefaultVal) {
+                latitude.add(new SimpleAttributeModifier("value", (null == latVal)? "" : latVal ));
+                longitude.add(new SimpleAttributeModifier("value", (null == longVal) ? "" : longVal));
+            }
+
 
             gpsContainer.add(latitude);
             gpsContainer.add(longitude);
