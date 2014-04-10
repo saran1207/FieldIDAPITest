@@ -189,9 +189,9 @@ public class UserImporterTest {
 
 		assertEquals(3, results.size());
 
-		assertEquals("You can not import more than 0 employee (full) users. (Attempted to import 1)", results.get(2).getMessage());
-		assertEquals("You can not import more than 0 read only users. (Attempted to import 1)", results.get(1).getMessage());
-		assertEquals("You can not import more than 0 lite users. (Attempted to import 1)", results.get(0).getMessage());
+		assertEquals("You can not import more than 0 administration (full) users. (Attempted to import 1)", results.get(2).getMessage());
+		assertEquals("You can not import more than 0 reporting users. (Attempted to import 1)", results.get(1).getMessage());
+		assertEquals("You can not import more than 0 inspection users. (Attempted to import 1)", results.get(0).getMessage());
 
 		verify(validator);
 		verify(converter);
