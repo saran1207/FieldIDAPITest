@@ -5,6 +5,7 @@ import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
+import com.n4systems.model.Asset;
 import com.n4systems.model.builders.ImageAnnotationBuilder;
 import com.n4systems.model.builders.IsolationPointBuilder;
 import com.n4systems.model.builders.ProcedureDefinitionBuilder;
@@ -38,6 +39,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
     @TestMock private AtomicLongService atomicLongService;
 
     private Long expectedRevisionNumber;
+    private Long expectedFamilyId;
 
     @Before
     public void setup() {
@@ -50,6 +52,10 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
             @Override Long generateRevisionNumber(ProcedureDefinition procedureDefinition) {
                 return expectedRevisionNumber;
             }
+
+            @Override Long generateFamilyId(Asset asset) {
+                return expectedFamilyId;
+            }
         };
     }
 
@@ -57,6 +63,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
     public void test_saveProcedureDefinitionDraft_newRevision() {
         ProcedureDefinition procedureDefinition = ProcedureDefinitionBuilder.aProcedureDefinition().withRevisionNumber(null).build();
         expectedRevisionNumber = 22L;
+        expectedFamilyId = 1L;
 
         expect(persistenceService.saveOrUpdate(procedureDefinition)).andReturn(procedureDefinition);
         replay(persistenceService);
