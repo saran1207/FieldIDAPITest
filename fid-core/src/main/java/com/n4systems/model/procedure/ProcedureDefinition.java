@@ -3,6 +3,7 @@ package com.n4systems.model.procedure;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.n4systems.model.Asset;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.user.User;
@@ -15,7 +16,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "procedure_definitions")
-public class ProcedureDefinition extends ArchivableEntityWithTenant {
+public class ProcedureDefinition extends ArchivableEntityWithTenant implements Listable<Long> {
 
     @ManyToOne
     @JoinColumn(name = "asset_id")
@@ -84,6 +85,9 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     @Column(name="rejected_reason")
     private String rejectedReason;
+
+    @Column(name="family_id", nullable = false)
+    private Long familyId;
 
 
     public String getProcedureCode() {
@@ -334,5 +338,13 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     public void setRejectedReason(String rejectedReason) {
         this.rejectedReason = rejectedReason;
+    }
+
+    public Long getFamilyId() {
+        return familyId;
+    }
+
+    public void setFamilyId(Long familyId) {
+        this.familyId = familyId;
     }
 }

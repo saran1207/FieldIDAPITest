@@ -5,7 +5,6 @@ import com.n4systems.fieldid.junit.FieldIdServiceTest;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
-import com.n4systems.model.Asset;
 import com.n4systems.model.builders.ImageAnnotationBuilder;
 import com.n4systems.model.builders.IsolationPointBuilder;
 import com.n4systems.model.builders.ProcedureDefinitionBuilder;
@@ -48,7 +47,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
     @Override
     protected Object createSut(Field sutField) throws Exception {
         return new ProcedureDefinitionService() {
-            @Override Long generateRevisionNumber(Asset asset) {
+            @Override Long generateRevisionNumber(ProcedureDefinition procedureDefinition) {
                 return expectedRevisionNumber;
             }
         };
