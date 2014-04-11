@@ -48,7 +48,8 @@ public class ProcedureApproverPage extends FieldIDTemplatePage {
 
         IModel<List<User>> usersModel = createUsersModel();
         IModel<List<UserGroup>> userGroupsModel = createUserGroupsModel();
-        form.add(new AssignedUserOrGroupSelect("approver", new PropertyModel<Assignable>(systemSettingsModel, "procedureApprover"), usersModel, userGroupsModel, new AssigneesModel(userGroupsModel, usersModel)));
+        form.add(new AssignedUserOrGroupSelect("approver", new PropertyModel<Assignable>(systemSettingsModel, "procedureApprover"),
+                usersModel, userGroupsModel, new AssigneesModel(userGroupsModel, usersModel)));
 
         form.add(new SubmitLink("save"));
         form.add(new BookmarkablePageLink<SettingsPage>("cancelLink", SettingsPage.class));
