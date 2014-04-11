@@ -27,7 +27,7 @@ public enum PublishedState implements DisplayEnum {
     }
 
     public boolean isPreApproval() {
-        return this == DRAFT || this == WAITING_FOR_APPROVAL;
+        return this == DRAFT || this == WAITING_FOR_APPROVAL || this == REJECTED;
     }
 
 }
