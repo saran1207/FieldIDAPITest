@@ -126,7 +126,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         query.addSimpleWhere("asset", asset);
         query.setSelectArgument(new MaxSelect("familyId"));
         Long lastFamilyId = persistenceService.find(query);
-        return lastFamilyId+1;
+        return lastFamilyId == null? 1: lastFamilyId + 1;
     }
 
     public List<ProcedureDefinition> getActiveProceduresForAsset(Asset asset) {
