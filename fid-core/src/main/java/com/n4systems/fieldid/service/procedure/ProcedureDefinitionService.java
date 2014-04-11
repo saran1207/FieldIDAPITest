@@ -42,24 +42,44 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.exists(getPublishedProcedureDefinitionQuery(asset));
     }
 
-    public ProcedureDefinition getPublishedProcedureDefinition(Asset asset) {
-        return persistenceService.find(getPublishedProcedureDefinitionQuery(asset));
+    public ProcedureDefinition getPublishedProcedureDefinition(Asset asset, Long familyId) {
+        return persistenceService.find(getPublishedProcedureDefinitionQuery(asset, familyId));
+    }
+
+    public List<ProcedureDefinition> getAllPublishedProcedures(Asset asset) {
+          return persistenceService.findAll(getPublishedProcedureDefinitionQuery(asset));
+    }
+
+    public Boolean hasPublishedProcedureCode(ProcedureDefinition procedureDefinition) {
+        QueryBuilder<ProcedureDefinition> query = getPublishedProcedureDefinitionQuery(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
+        query.addSimpleWhere("procedureCode", procedureDefinition.getProcedureCode());
+        return persistenceService.exists(query);
     }
 
     private QueryBuilder<ProcedureDefinition> getPublishedProcedureDefinitionQuery(Asset asset) {
+        return getPublishedProcedureDefinitionQuery(asset, null);
+    }
+
+    private QueryBuilder<ProcedureDefinition> getPublishedProcedureDefinitionQuery(Asset asset, Long familyId) {
         QueryBuilder<ProcedureDefinition> query = createTenantSecurityBuilder(ProcedureDefinition.class);
 
         query.addSimpleWhere("asset", asset);
+        if(familyId != null) {
+            query.addSimpleWhere("familyId", familyId);
+        }
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
 
         return query;
     }
 
-
     public void saveProcedureDefinitionDraft(ProcedureDefinition procedureDefinition) {
         if (procedureDefinition.getRevisionNumber() == null) {
-            procedureDefinition.setRevisionNumber(generateRevisionNumber(procedureDefinition.getAsset()));
+            procedureDefinition.setRevisionNumber(generateRevisionNumber(procedureDefinition));
         }
+        if (procedureDefinition.getFamilyId() == null) {
+            procedureDefinition.setFamilyId(generateFamilyId(procedureDefinition.getAsset()));
+        }
+
         persistenceService.saveOrUpdate(procedureDefinition);
         for (ProcedureDefinitionImage image:procedureDefinition.getImages()) {
             s3Service.finalizeProcedureDefinitionImageUpload(image);
@@ -88,15 +108,25 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
     }
 
-
-
     /*package protected for testing purposes*/
-    Long generateRevisionNumber(Asset asset) {
+    Long generateRevisionNumber(ProcedureDefinition procedureDefinition) {
+        QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
+        query.addSimpleWhere("asset", procedureDefinition.getAsset());
+        if(procedureDefinition.getFamilyId() != null) {
+            query.addSimpleWhere("familyId", procedureDefinition.getFamilyId());
+            query.setSelectArgument(new MaxSelect("revisionNumber"));
+            Long biggestRevision = persistenceService.find(query);
+            return biggestRevision+1;
+        } else
+            return 1L;
+    }
+
+    Long generateFamilyId(Asset asset) {
         QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
         query.addSimpleWhere("asset", asset);
-        query.setSelectArgument(new MaxSelect("revisionNumber"));
-        Long biggestRevision = persistenceService.find(query);
-        return biggestRevision==null ? 1 :  biggestRevision+1;
+        query.setSelectArgument(new MaxSelect("familyId"));
+        Long lastFamilyId = persistenceService.find(query);
+        return lastFamilyId == null? 1: lastFamilyId + 1;
     }
 
     public List<ProcedureDefinition> getActiveProceduresForAsset(Asset asset) {
@@ -131,7 +161,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     public void publishProcedureDefinition(ProcedureDefinition definition) {
-        ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset());
+        ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset(), definition.getFamilyId());
         if (previousDefinition != null) {
             previousDefinition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
             previousDefinition.setRetireDate(dateService.nowUTC().toDate());
@@ -195,6 +225,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setBuilding(source.getBuilding());
         to.setEquipmentDescription(source.getEquipmentDescription());
         to.setPublishedState(PublishedState.DRAFT);
+        to.setFamilyId(source.getFamilyId());
 
         Map<String, ProcedureDefinitionImage> clonedImages = cloneImages(source,to);
         to.setImages(Lists.newArrayList(clonedImages.values()));

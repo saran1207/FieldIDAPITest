@@ -80,7 +80,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 Link copyLink;
                 item.add(copyLink = new Link("copyProcedureDefLink") {
                     @Override public void onClick() {
-                        ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(assetModel.getObject());
+                        ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(assetModel.getObject(), procedureDefinition.getObject().getFamilyId());
                         ProcedureDefinition copiedDefinition = procedureDefinitionService.cloneProcedureDefinition(publishedDef);
                         copiedDefinition.setPublishedState(PublishedState.DRAFT);
                         setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));

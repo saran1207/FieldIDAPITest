@@ -68,6 +68,8 @@ public class PublishPanel extends Panel {
                         error(getString("message.isolation_point_required"));
                     } else if (procedureService.hasActiveProcedure(model.getObject().getAsset())) {
                         error(getString("message.cant_publish_with_active_procedure"));
+                    } else if (procedureDefinitionService.hasPublishedProcedureCode(model.getObject())) {
+                        error(new FIDLabelModel("message.procedure_code_exists", model.getObject().getProcedureCode()).getObject());
                     } else {
                         doPublish();
                     }

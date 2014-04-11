@@ -53,7 +53,7 @@ public class ApiProcedureResource extends FieldIdPersistenceService {
         procedure.setLockedBy(getCurrentUser());
         procedure.setLockDate(convertedResults.get(convertedResults.size() - 1).getCheckCheckTime());
         procedure.setWorkflowState(ProcedureWorkflowState.LOCKED);
-        procedure.setType(procedureDefinitionService.getPublishedProcedureDefinition(procedure.getAsset()));
+        procedure.setType(procedureDefinitionService.getPublishedProcedureDefinition(procedure.getAsset(), procedure.getType().getFamilyId()));
         convertGpsLocation(apiProcedure, procedure);
 
         if(getCurrentUser().isUsageBasedUser()) {

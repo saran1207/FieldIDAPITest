@@ -21,7 +21,7 @@ public class ProcedurePicker extends DialogModalWindow {
             }
         });
         setInitialWidth(370);
-        setInitialHeight(360);
+        setInitialHeight(400);
 
     }
 

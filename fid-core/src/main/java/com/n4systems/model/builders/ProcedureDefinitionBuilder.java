@@ -35,6 +35,7 @@ public class ProcedureDefinitionBuilder extends EntityWithTenantBuilder<Procedur
     private Date retireDate;
     private User approvedBy;
     private boolean authorizationNotificationSent = false;
+    private Long familyId;
 
 
     public static ProcedureDefinitionBuilder aProcedureDefinition() {
@@ -85,6 +86,7 @@ public class ProcedureDefinitionBuilder extends EntityWithTenantBuilder<Procedur
         }
         procedureDefinition.setImages(Lists.newArrayList(images.iterator()));
         procedureDefinition.setRevisionNumber(revisionNumber);
+        procedureDefinition.setFamilyId(familyId);
         return procedureDefinition;
     }
 
