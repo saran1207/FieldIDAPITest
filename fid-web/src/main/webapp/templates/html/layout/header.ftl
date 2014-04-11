@@ -236,6 +236,12 @@
 										</ul>
 									</li>
                                     <li>
+                                        <a href="javascript:void(0)" ><@s.text name="speed.lockout_tagout"/> » </a>
+                                        <ul class="sub_menu">
+                                            <li><a href="<@s.url value='/w/setup/procedureApprover'/>"><@s.text name="title.set_procedure_approver"/></a></li>
+                                        </ul>
+                                    </li>
+                                    <li>
                                         <a href="<@s.url value="/w/setup/assetTypeGroupTranslations" />" ><@s.text name="title.translations"/></a>
                                     </li>
 								</ul>

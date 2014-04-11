@@ -25,6 +25,7 @@ import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
@@ -242,6 +243,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(createTemplatesSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("securityLink", SecurityPage.class));
+        subMenuContainer.add(createLotoSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("translationsLink", AssetTypeGroupTranslationsPage.class));
         createSecuritySubMenu(subMenuContainer);
         
@@ -474,6 +476,15 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         }
 
     }
+
+    private Component createLotoSubMenu() {
+        WebMarkupContainer container = new WebMarkupContainer("lotoSubMenuContainer");
+        container.add(new BookmarkablePageLink<ProcedureApproverPage>("procedureApproverLink", ProcedureApproverPage.class));
+
+        container.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
+        return container;
+    }
+
 
     private Component createLotoLinkContainer() {
         WebMarkupContainer lotoLinkContainer = new WebMarkupContainer("lotoLinkContainer");
