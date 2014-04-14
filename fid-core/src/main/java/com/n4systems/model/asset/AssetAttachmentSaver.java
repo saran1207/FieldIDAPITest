@@ -101,7 +101,6 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 		entity.setTenant(asset.getTenant());
 	}
 	
-	//TODO move to a file Deleter.
 	/*arezafar: private void deleteFile(AssetAttachment attachment) {
 		File attachedFile = PathHandler.getAssetAttachmentFile(attachment);
 		
