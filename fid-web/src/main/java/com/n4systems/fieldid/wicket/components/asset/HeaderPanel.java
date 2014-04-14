@@ -78,7 +78,8 @@ public class HeaderPanel extends Panel {
         BookmarkablePageLink summaryLink;
         BookmarkablePageLink eventHistoryLink;
         NonWicketIframeLink traceabilityLink;
-        boolean hasProcedures = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures);
+        boolean hasProcedures = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures) &&
+                asset.getType().hasProcedures();
 
         add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
@@ -148,8 +149,8 @@ public class HeaderPanel extends Panel {
         boolean showScheduleProcedureLink;
 
         if (isLotoEnabled) {
-            showScheduleEventLink = false;
-            showScheduleProcedureLink = !hasAssociatedEventTypes;
+            showScheduleEventLink = hasAssociatedEventTypes && !asset.getType().hasProcedures();
+            showScheduleProcedureLink = !hasAssociatedEventTypes && asset.getType().hasProcedures();
         } else {
             showScheduleEventLink = hasCreateEvent && hasAssociatedEventTypes;
             showScheduleProcedureLink = false;
@@ -184,7 +185,7 @@ public class HeaderPanel extends Panel {
             }
         });
 
-        scheduleMenu.setVisible(hasCreateEvent && isLotoEnabled && hasAssociatedEventTypes);
+        scheduleMenu.setVisible(hasCreateEvent && isLotoEnabled && hasAssociatedEventTypes && asset.getType().hasProcedures());
 
         add(scheduleMenu);
 
