@@ -25,6 +25,7 @@ import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
@@ -277,6 +278,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
     private Component createLotoSubMenu() {
         WebMarkupContainer container = new WebMarkupContainer("lotoSubMenuContainer");
         container.add(new BookmarkablePageLink<ProcedureApproverPage>("procedureApproverLink", ProcedureApproverPage.class));
+        container.add(new BookmarkablePageLink<EnableByAssetTypePage>("enableByAssetTypeLink", EnableByAssetTypePage.class));
 
         container.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
         return container;

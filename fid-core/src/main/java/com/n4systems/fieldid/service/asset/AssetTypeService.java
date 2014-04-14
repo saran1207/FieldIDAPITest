@@ -55,6 +55,10 @@ public class AssetTypeService extends FieldIdPersistenceService {
         return persistenceService.exists(builder);
     }
 
+    public List<AssetType> getAssetTypes() {
+        return getAssetTypes(null, null);
+    }
+
     public List<AssetType> getAssetTypes(Long assetTypeGroupId, String name) {
         QueryBuilder<AssetType> queryBuilder = createUserSecurityBuilder(AssetType.class);
 

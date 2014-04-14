@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.setup.loto;
 
 import com.n4systems.fieldid.service.tenant.SystemSettingsService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
-import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
@@ -42,7 +41,7 @@ public class ProcedureApproverPage extends FieldIDTemplatePage {
             @Override
             protected void onSubmit() {
                 systemSettingsService.saveSystemSettings(systemSettingsModel.getObject());
-                FieldIDSession.get().info(new FIDLabelModel("message.system_settings_updated").getObject());
+                FieldIDSession.get().info(new FIDLabelModel("message.set_procedure_approver").getObject());
             }
         });
 
@@ -53,13 +52,6 @@ public class ProcedureApproverPage extends FieldIDTemplatePage {
 
         form.add(new SubmitLink("save"));
         form.add(new BookmarkablePageLink<SettingsPage>("cancelLink", SettingsPage.class));
-    }
-
-    @Override
-    protected Component createBackToLink(String linkId, String linkLabelId) {
-        BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, SettingsPage.class);
-        pageLink.add(new FlatLabel(linkLabelId, new FIDLabelModel("label.back_to_setup")));
-        return pageLink;
     }
 
     @Override

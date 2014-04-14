@@ -239,6 +239,7 @@
                                         <a href="javascript:void(0)" ><@s.text name="speed.lockout_tagout"/> » </a>
                                         <ul class="sub_menu">
                                             <li><a href="<@s.url value='/w/setup/procedureApprover'/>"><@s.text name="title.set_procedure_approver"/></a></li>
+                                            <li><a href="<@s.url value='/w/setup/enableByAssetType'/>"><@s.text name="title.enable_by_asset_type"/></a></li>
                                         </ul>
                                     </li>
                                     <li>
