@@ -138,6 +138,7 @@
                             <ul class="sub_menu">
                                 <li>
                                     <a href="/fieldid/w/procedure"><@s.text name="speed.loto_log" /></a>
+                                    <a href="/fieldid/w/publishedListAllPage"><@s.text name="speed.loto_list" /></a>
                                 </li>
                             </ul>
                         </li>
@@ -235,6 +236,13 @@
 											<li><a href="<@s.url value='/w/setup/accountPolicy'/>"><@s.text name="title.account_lockout_policy"/></a></li>
 										</ul>
 									</li>
+                                    <li>
+                                        <a href="javascript:void(0)" ><@s.text name="speed.lockout_tagout"/> » </a>
+                                        <ul class="sub_menu">
+                                            <li><a href="<@s.url value='/w/setup/procedureApprover'/>"><@s.text name="title.set_procedure_approver"/></a></li>
+                                            <li><a href="<@s.url value='/w/setup/enableByAssetType'/>"><@s.text name="title.enable_by_asset_type"/></a></li>
+                                        </ul>
+                                    </li>
                                     <li>
                                         <a href="<@s.url value="/w/setup/assetTypeGroupTranslations" />" ><@s.text name="title.translations"/></a>
                                     </li>

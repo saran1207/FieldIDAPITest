@@ -19,12 +19,18 @@ import com.n4systems.fieldid.wicket.pages.assetsearch.ProcedureSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.SearchPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresAllListPage;
+import com.n4systems.fieldid.wicket.pages.loto.PublishedListAllPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
+import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
@@ -242,6 +248,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         subMenuContainer.add(createTemplatesSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("widgetsLink", WidgetsPage.class));
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("securityLink", SecurityPage.class));
+        subMenuContainer.add(createLotoSubMenu());
         subMenuContainer.add(new BookmarkablePageLink<WebPage>("translationsLink", AssetTypeGroupTranslationsPage.class));
         createSecuritySubMenu(subMenuContainer);
         
@@ -475,10 +482,22 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
     }
 
+    private Component createLotoSubMenu() {
+        WebMarkupContainer container = new WebMarkupContainer("lotoSubMenuContainer");
+        container.add(new BookmarkablePageLink<ProcedureApproverPage>("procedureApproverLink", ProcedureApproverPage.class));
+        container.add(new BookmarkablePageLink<EnableByAssetTypePage>("enableByAssetTypeLink", EnableByAssetTypePage.class));
+
+        container.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
+        return container;
+    }
+
+
     private Component createLotoLinkContainer() {
         WebMarkupContainer lotoLinkContainer = new WebMarkupContainer("lotoLinkContainer");
 
         lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureSearchLink", ProcedureSearchPage.class));
+        lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureList", PublishedListAllPage.class));
+
         lotoLinkContainer.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
 
         return lotoLinkContainer;

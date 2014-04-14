@@ -19,10 +19,7 @@ import com.n4systems.fieldid.wicket.pages.event.*;
 import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewListPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.identify.LimitedEditAsset;
-import com.n4systems.fieldid.wicket.pages.loto.PreviouslyPublishedListPage;
-import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
-import com.n4systems.fieldid.wicket.pages.loto.ProcedureResultsPage;
-import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
+import com.n4systems.fieldid.wicket.pages.loto.*;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
@@ -48,6 +45,8 @@ import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedL
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.ReassignEventTypeGroupPage;
+import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
+import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.ConfirmArchivePage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
@@ -115,6 +114,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventTypeGroupTranslations", EventTypeGroupTranslationsPage.class);
         mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
+        mountPage("setup/procedureApprover", ProcedureApproverPage.class);
+        mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
+
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
         mountPage("placeEvents", PlaceEventsPage.class);
@@ -134,6 +136,10 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("advancedEventSearch", AdvancedEventSearchPage.class);
 
         mountPage("procedureDef", ProcedureDefinitionPage.class);
+
+        mountPage("publishedListAllPage", PublishedListAllPage.class);
+        mountPage("draftListAllPage", DraftListAllPage.class);
+        mountPage("previouslyPublishedListAllPage", PreviouslyPublishedListAllPage.class);
 
         mountPage("quickEvent", QuickEventPage.class);
         mountPage("startEvent", StartRegularOrMasterEventPage.class);

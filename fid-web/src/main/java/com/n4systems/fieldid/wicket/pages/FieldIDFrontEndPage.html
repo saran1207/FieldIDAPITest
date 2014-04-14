@@ -170,6 +170,7 @@
                                 <a href="javascript:void(0)" class="speedLink textLink" id="menuLoto"><wicket:message key="speed.lockout_tagout"/>&nbsp;</a>
                                 <ul>
                                     <li><a wicket:id="procedureSearchLink"><wicket:message key="speed.loto_log"/></a></li>
+                                    <li><a wicket:id="procedureList"><wicket:message key="speed.loto_list"/></a></li>
                                 </ul>
                             </li>
 
@@ -227,6 +228,7 @@
                                             <li><a href="/fieldid/userImportExport.action"><wicket:message key="label.import_users"/></a></li>
                                         </ul>
                                     </li>
+
                                     <li><a wicket:id="templatesLink"><wicket:message key="nav.templates"/></a>
                                         <ul wicket:id="templatesSubMenuContainer" class="sub_menu">
                                             <li><a href="/fieldid/autoAttributeCriteriaList.action"><wicket:message key="title.auto_attribute_wizard.plural" /></a></li>
@@ -243,6 +245,15 @@
                                             <li><a wicket:id="accountPolicyLink"><wicket:message key="title.account_lockout_policy" /></a></li>
                                         </ul>
                                     </li>
+
+                                    <li wicket:id="lotoSubMenuContainer">
+                                        <a href="javascript:void(0)"><wicket:message key="speed.lockout_tagout"/>&nbsp;</a>
+                                        <ul class="sub_menu">
+                                            <li><a wicket:id="procedureApproverLink"><wicket:message key="title.set_procedure_approver"/>&nbsp;</a></li>
+                                            <li><a wicket:id="enableByAssetTypeLink"><wicket:message key="title.enable_by_asset_type"/>&nbsp;</a></li>
+                                        </ul>
+                                    </li>
+
                                     <li><a wicket:id="translationsLink"><wicket:message key="title.translations"/></a></li>
                                 </ul>
                             </li>

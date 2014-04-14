@@ -1,0 +1,24 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <p><wicket:message key="message.enable_by_asset_type"/></p>
+
+    <form wicket:id="form">
+        <table class="striped comfortable">
+            <tr>
+                <th style="width: 150px"><wicket:message key="label.author_procedures"/></th>
+                <th><wicket:message key="label.assettype"/></th>
+            </tr>
+            <tr wicket:id="assetType">
+                <td><input wicket:id="enableProceduresCheck" type="checkbox"/></td>
+                <td><span wicket:id="name"/></td>
+            </tr>
+
+        </table>
+
+        <a class="btn-success" wicket:id="save"><wicket:message key="label.save"/></a>
+        <a class="btn-link" wicket:id="cancel"><wicket:message key="label.cancel"/></a>
+    </form>
+
+</wicket:extend>
+</html>
