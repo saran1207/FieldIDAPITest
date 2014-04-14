@@ -7,18 +7,21 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
-import com.n4systems.model.Asset;
-import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.*;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.*;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.SortTerm;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.ArrayList;
@@ -172,6 +175,13 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         persistenceService.update(definition);
     }
 
+    public boolean isCurrentUserAuthor(ProcedureDefinition definition) {
+        if (definition.getDevelopedBy().equals(getCurrentUser())) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean isProcedureApprovalRequiredForCurrentUser() {
         Assignable approvalUserOrGroup = getCurrentTenant().getSettings().getApprovalUserOrGroup();
         if (approvalUserOrGroup == null) {
@@ -204,11 +214,14 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             persistenceService.update(isolationPoint);
 
             if (null != imageAnnotation) {
-                persistenceService.delete(imageAnnotation);
+               persistenceService.delete(imageAnnotation);
             }
 
         }
-        persistenceService.delete(procedureDefinition);
+
+        procedureDefinition.archiveEntity();
+        persistenceService.update(procedureDefinition);
+
     }
 
     public ProcedureDefinition cloneProcedureDefinition(ProcedureDefinition source) {
@@ -353,4 +366,76 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         annotation.setTenant(image.getTenant());
         return annotation;
     }
+
+
+    @Transactional(readOnly=true)
+    public List<ProcedureDefinition> findByPublishedState(PublishedState publishedState) {
+        QueryBuilder<ProcedureDefinition> procedureDefinitionQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionQuery.addSimpleWhere("publishedState", publishedState);
+        return persistenceService.findAll(procedureDefinitionQuery);
+    }
+
+
+    @Transactional(readOnly=true)
+    public Long getWaitingApprovalsCount() {
+        QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.WAITING_FOR_APPROVAL);
+        return persistenceService.count(procedureDefinitionCountQuery);
+    }
+
+    @Transactional(readOnly=true)
+    public Long getRejectedApprovalsCount() {
+        QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.REJECTED);
+        return persistenceService.count(procedureDefinitionCountQuery);
+    }
+
+
+    public List<ProcedureDefinition> getProcedureDefinitionsFor(PublishedState publishedState, String order, boolean ascending, int first, int count) {
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        query.addSimpleWhere("publishedState", publishedState);
+
+        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
+        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
+        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
+        // will not be returned in the result list.
+        // this should be handled more elegantly in the future but i'm fixing at the last second.
+        boolean needsSortJoin = false;
+        boolean needsRejectedSortJoin = false;
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("developedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    query.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+
+                } else if (subOrder.startsWith("rejectedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    query.getOrderArguments().add(sortTerm.toSortField());
+                    needsRejectedSortJoin = true;
+
+                } else {
+                    query.addOrder(subOrder, ascending);
+                }
+            }
+        }
+
+        if (needsSortJoin) {
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
+        }
+
+        if (needsRejectedSortJoin) {
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "rejectedBy", "sortJoin", true));
+        }
+
+        return persistenceService.findAllPaginated(query,first,count);
+    }
+
 }
