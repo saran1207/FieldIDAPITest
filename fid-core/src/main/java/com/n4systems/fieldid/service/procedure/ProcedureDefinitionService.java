@@ -53,7 +53,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     public Boolean hasPublishedProcedureCode(ProcedureDefinition procedureDefinition) {
-        QueryBuilder<ProcedureDefinition> query = getPublishedProcedureDefinitionQuery(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
+        QueryBuilder<ProcedureDefinition> query = getPublishedProcedureDefinitionQuery(procedureDefinition.getAsset());
         query.addSimpleWhere("procedureCode", procedureDefinition.getProcedureCode());
         return persistenceService.exists(query);
     }
