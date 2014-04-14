@@ -23,6 +23,7 @@ import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProceduresAllListPage;
 import com.n4systems.fieldid.wicket.pages.loto.PublishedListAllPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProcedureWaitingApprovalsPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
@@ -539,6 +540,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureSearchLink", ProcedureSearchPage.class));
             lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureList", PublishedListAllPage.class));
 
+            lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureAwaitingApprovalLink", ProcedureWaitingApprovalsPage.class));
             lotoLinkContainer.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
 
             return lotoLinkContainer;
@@ -547,6 +549,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
 
     }
+
 
     static class StaticImage extends WebComponent {
         public StaticImage(String id, IModel<String> urlModel) {

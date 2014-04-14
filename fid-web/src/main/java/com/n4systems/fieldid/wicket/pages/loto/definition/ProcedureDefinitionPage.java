@@ -99,7 +99,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-            return new ProcedureTitleLabel(labelId, new PropertyModel<Asset>(model, "asset"));
+        return new ProcedureTitleLabel(labelId, new PropertyModel<Asset>(model, "asset"));
     }
 
     @Override

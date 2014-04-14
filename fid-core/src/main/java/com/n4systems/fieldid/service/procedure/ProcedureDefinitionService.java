@@ -264,17 +264,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.count(procedureDefinitionCountQuery);
     }
 
-
-    public boolean isCurrentUserAuthor(ProcedureDefinition definition) {
-        if (definition.getDevelopedBy().equals(getCurrentUser())) {
-            return true;
-        }
-        return false;
-    }
-
-
-
-
     public List<String> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
         QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredDevice.class);
         query.setSimpleSelect("device");
