@@ -9,12 +9,14 @@ import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.model.Attachment;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.user.User;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.commons.io.FileUtils;
@@ -25,13 +27,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.activation.MimetypesFileTypeMap;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+
+import org.springframework.util.Assert;
 import sun.misc.BASE64Encoder;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -63,7 +64,8 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String ASSET_PROFILE_IMAGE_PATH_THUMB = "/assets/%d/profile/%s.thumbnail";
     public static final String ASSET_PROFILE_IMAGE_PATH_MEDIUM = "/assets/%d/profile/%s.medium";
 
-    public static final String ASSET_ATTACHMENTS_PATH = "/assets/%s/attachments/%s/";
+    public static final String ASSET_ATTACHMENT_FOLDER = "/assets/%s/attachments/%s/";
+    public static final String ASSET_ATTACHMENT_PATH = ASSET_ATTACHMENT_FOLDER + "%s";
 
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP = "/temp/procedure_definition_images/%s";
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM = "/temp/procedure_definition_images/%s.medium";
@@ -687,6 +689,73 @@ public class S3Service extends FieldIdPersistenceService {
         return bucketHostname;
     }
 
+    public String getAssetAttachmentPath(AssetAttachment assetAttachment){
+        String getAssetAttachmentPath = getAssetAttachmentPath(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName());
+        return getAssetAttachmentPath;
+    }
+
+    public String getAssetAttachmentPath(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename){
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(assetAttachmentUuid);
+        Assert.hasLength(assetAttachmentFilename);
+        String assetAttachmentsUploadPath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+        return assetAttachmentsUploadPath;
+        //String assetAttachmentsFolderUrl = "/" + this.getBucketHostname() + "/" + assetAttachmentsUploadPath;
+        //return assetAttachmentsFolderUrl;
+    }
+
+    public URL getAssetAttachmentUrl(AssetAttachment assetAttachment){
+        URL getAssetAttachmentUrl = getAssetAttachmentUrl(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName());
+        return getAssetAttachmentUrl;
+    }
+
+    public URL getAssetAttachmentUrl(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename) {
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(assetAttachmentUuid);
+        Assert.hasLength(assetAttachmentFilename);
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+        String fullResourcePath = assetAttachmentFilename;
+        //if the path is not the full path (ie. its just the filename)
+        if(fullResourcePath.indexOf('/') == -1){
+            fullResourcePath = getAssetAttachmentPath(assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+        }
+        URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public File downloadAssetAttachmentFile(AssetAttachment attachment){
+        File assetAttachmentFile = null;
+        try {
+            byte[] assetAttachmentBytes = downloadAssetAttachmentBytes(attachment);
+            String assetAttachmentFileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
+            assetAttachmentFile = PathHandler.getUserFile(getCurrentUser(), assetAttachmentFileName);
+            System.out.println("assetAttachmentFile.getAbsolutePath: " + assetAttachmentFile.getAbsolutePath());
+            FileOutputStream assetAttachmentFos = new FileOutputStream(assetAttachmentFile);
+            assetAttachmentFos.write(assetAttachmentBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp attachment file at: " + assetAttachmentFile, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download asset attachment from S3: " + attachment, e);
+        }
+        return assetAttachmentFile;
+    }
+
+    public byte[] downloadAssetAttachmentBytes(AssetAttachment attachment) throws IOException {
+        //the attachment Filename field is overloaded to house full URL instead of just the filename
+        String assetAttachmentFileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
+        byte[] assetAttachmentData = downloadAssetAttachmentBytes(attachment.getAsset().getMobileGUID(), attachment.getMobileId(), assetAttachmentFileName);
+        return assetAttachmentData;
+    }
+
+    public byte[] downloadAssetAttachmentBytes(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename) throws IOException {
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(assetAttachmentUuid);
+        Assert.hasLength(assetAttachmentFilename);
+        return downloadResource(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+    }
+
     public String getBucketPolicySigned(String bucketPolicyBase64){
         try {
             Mac hmac = Mac.getInstance("HmacSHA1");
@@ -734,14 +803,8 @@ public class S3Service extends FieldIdPersistenceService {
 
     public String getAssetAttachmentsUploadJavascript(String assetUuid, String assetAttachmentUuid, String uploadFormMarkupId, String callbackContainerMarkupId){
 
-        String uploadJavascript = getUploadJavascript(ASSET_ATTACHMENTS_PATH, assetUuid, assetAttachmentUuid, uploadFormMarkupId, callbackContainerMarkupId);
+        String uploadJavascript = getUploadJavascript(ASSET_ATTACHMENT_FOLDER, assetUuid, assetAttachmentUuid, uploadFormMarkupId, callbackContainerMarkupId);
         return uploadJavascript;
-    }
-
-    public String getAssetAttachmentsFolderUrl(String assetUuid, String assetAttachmentUuid){
-        String assetAttachmentsUploadPath = createResourcePath(null, ASSET_ATTACHMENTS_PATH, assetUuid, assetAttachmentUuid);
-        String assetAttachmentsFolderUrl = "https:////" + this.getBucketHostname() + "/" + assetAttachmentsUploadPath;
-        return assetAttachmentsFolderUrl;
     }
 
     protected String getUploadJavascript(String pathPattern, String parentUuid, String childUuid, String uploadFormMarkupId, String callbackContainerMarkupId){
@@ -771,6 +834,7 @@ public class S3Service extends FieldIdPersistenceService {
             "       continue;" +
             "   }" +
             "   var xhr = new XMLHttpRequest();" +
+            "   xhr.timeout = " + getUploadTimeoutMilliseconds() + ";" +
             "   xhr.onreadystatechange = function(ev){" +
             "       if(xhr.readyState === 1){" +
             "           window.uploadsInProgress += 1;" +

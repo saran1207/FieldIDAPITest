@@ -8,7 +8,6 @@ import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ConfigEntry;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -87,14 +86,6 @@ public class AssetAttachmentsPanel extends Panel {
                 });
             }
         });
-
-        /*existingAttachmentsContainer.add(new AjaxEventBehavior("onerror") {
-            protected void onEvent(AjaxRequestTarget target) {
-                System.out.println("ajax onerror: ");
-                attachments.remove(0); //TODO fix this!
-                target.add(existingAttachmentsContainer);
-            }
-        });*/
 
         existingAttachmentsContainer.add(new AbstractDefaultAjaxBehavior() {
             @Override
@@ -182,10 +173,12 @@ public class AssetAttachmentsPanel extends Panel {
                     FileUpload fileUpload = attachmentUpload.getFileUpload();
                     if(fileUpload.getSize() < uploadMaxFileSizeBytes){
                         String fileName = fileUpload.getClientFileName();
-                        String getAssetAttachmentsFolderUrl = s3Service.getAssetAttachmentsFolderUrl(assetUuid, assetAttachmentUuid);
                         AssetAttachment attachment = new AssetAttachment();
                         attachment.setMobileId(assetAttachmentUuid);
-                        attachment.setFileName(getAssetAttachmentsFolderUrl + fileName);
+                        attachment.setAsset(assetModel.getObject());
+                        attachment.setFileName(fileName);
+                        String getAssetAttachmentPath = s3Service.getAssetAttachmentPath(attachment);
+                        attachment.setFileName(getAssetAttachmentPath); //set the filename to be a full path
                         attachments.add(attachment);
                     }
                     else {

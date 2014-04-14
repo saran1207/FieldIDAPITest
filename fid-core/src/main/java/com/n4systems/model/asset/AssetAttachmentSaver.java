@@ -5,7 +5,7 @@ import com.n4systems.exceptions.InvalidArgumentException;
 import com.n4systems.model.Asset;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.ModifiedBySaver;
-import com.n4systems.reporting.PathHandler;
+//arezafar: import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.FileUtils;
 
 import javax.persistence.EntityManager;
@@ -38,19 +38,21 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 		fillInConnectionFields(entity);
 
 		// this must be captured prior to merge as data is a transient field
-		byte[] attachmentData = entity.getData();
+		//arezafar: byte[] attachmentData = entity.getData();
         entity = em.merge(entity);
-		saveAttachmentData(entity, attachmentData);
+        assert(entity.isRemote());
+        //arezafar: saveAttachmentData(entity, attachmentData);
 	}
 	
 	@Override
 	public AssetAttachment update(EntityManager em, AssetAttachment entity) {
 		fillInConnectionFields(entity);
-		byte[] attachmentData = entity.getData();
+        //arezafar: byte[] attachmentData = entity.getData();
 		AssetAttachment attachment =  em.merge(entity);
-		if (attachmentData != null) {
+        assert(entity.isRemote());
+        /*arezafar: if (attachmentData != null) {
 			writeAttachmentDataToFileSystem(attachment, attachmentData);
-		}
+		} */
 		return attachment;
 	}
 
@@ -61,18 +63,18 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 		}
 		
 		em.remove(entity);
-		deleteFile(entity);
+		//arezafar: deleteFile(entity);
 	}
 
-	private void saveAttachmentData(AssetAttachment attachment, byte[] attachmentData) {
+	/*arezafar: private void saveAttachmentData(AssetAttachment attachment, byte[] attachmentData) {
 		if (attachmentData != null) {
 			writeAttachmentDataToFileSystem(attachment, attachmentData);
 		} else {
 			moveAttachmentFromTempDir(attachment);
 		}
-	}
+	}*/
 
-	private void moveAttachmentFromTempDir(AssetAttachment entity) {
+	/*arezafar: private void moveAttachmentFromTempDir(AssetAttachment entity) {
 		try {
 			File attachmentDir = PathHandler.getAssetAttachmentDir(entity);
 			File tmpDirectory = PathHandler.getTempRoot();
@@ -83,16 +85,16 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 		} catch (IOException e) {
 			throw new FileAttachmentException(e);
 		}
-	}
+	}*/
 
-	private void writeAttachmentDataToFileSystem(AssetAttachment entity, byte[] attachmentData) {
+	/*arezafar: private void writeAttachmentDataToFileSystem(AssetAttachment entity, byte[] attachmentData) {
 		try {
 			File attachmentFile = PathHandler.getAssetAttachmentFile(entity);
 			FileUtils.writeByteArrayToFile(attachmentFile, attachmentData);
 		} catch (IOException e) {
 			throw new FileAttachmentException(e);
 		}
-	}
+	}*/
 
 	private void fillInConnectionFields(AssetAttachment entity) {
 		entity.setAsset(asset);
@@ -100,12 +102,12 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	}
 	
 	//TODO move to a file Deleter.
-	private void deleteFile(AssetAttachment attachment) {
+	/*arezafar: private void deleteFile(AssetAttachment attachment) {
 		File attachedFile = PathHandler.getAssetAttachmentFile(attachment);
 		
 		if (attachedFile.exists()) {
 			attachedFile.delete();
 		}
 		
-	}
+	}*/
 }

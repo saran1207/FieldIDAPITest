@@ -352,7 +352,6 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             actionsContainer.add(new Button("saveButton") {
                 @Override
                 public void onSubmit() {performSingleOrMultiSave(assetModel);
-                    System.out.println("onSubmit");
                     if (assetModel.getObject().isNew()) {
                         setResponsePage(IdentifyOrEditAssetPage.class);
                     } else {
@@ -402,7 +401,6 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                 { setVisible(getSessionUser().hasAccess("createevent")); }
                 @Override
                 public void onSubmit() {
-                    System.out.println("saveAndStartEventButton");
                     performSingleOrMultiSave(assetModel);
                     if (multiAssetConfig.isConfigurationComplete()) {
                         setResponsePage(new PerformMultiEventOnIdentifiedAssetsPage(createdAssetIds));

@@ -8,6 +8,8 @@ import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
 
 import javax.persistence.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
 
 @Entity
@@ -77,6 +79,7 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 		return note.getComments();
 	}
 
+    //the attachment Filename field is overloaded to house full URL instead of just the filename
 	public String getFileName() {
 		return note.getFileName();
 	}
@@ -92,6 +95,11 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 	public boolean isImage() {
 		return note.isImage();
 	}
+
+    public boolean isRemote() {
+        //the local files only contain the filename, whereas the files on s3 have a full path
+        return getFileName().indexOf('/') != -1;
+    }
 
 	@Override
 	public boolean hasAttachedFile() {
