@@ -17,6 +17,8 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.SortTerm;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.InfoOptionBean;
@@ -145,6 +147,133 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
+    public List<ProcedureDefinition> getAllPublishedProcedures(String order, boolean ascending, int first, int count) {
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
+        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
+        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
+        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
+        // will not be returned in the result list.
+        // this should be handled more elegantly in the future but i'm fixing at the last second.
+        boolean needsSortJoin = false;
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("developedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    query.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+                } else {
+                    query.addOrder(subOrder, ascending);
+                }
+            }
+        }
+
+        if (needsSortJoin) {
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
+        }
+
+        return persistenceService.findAllPaginated(query,first,count);
+    }
+
+    public List<ProcedureDefinition> getAllPreviouslyPublishedProcedures(String order, boolean ascending, int first, int count) {
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        //query.addSimpleWhere("tenant", tenant);
+        query.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
+        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
+        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
+        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
+        // will not be returned in the result list.
+        // this should be handled more elegantly in the future but i'm fixing at the last second.
+        boolean needsSortJoin = false;
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("developedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    query.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+                } else {
+                    query.addOrder(subOrder, ascending);
+                }
+            }
+        }
+
+        if (needsSortJoin) {
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
+        }
+
+        return persistenceService.findAllPaginated(query,first,count);
+    }
+
+    public List<ProcedureDefinition> getAllDraftProcedures(String order, boolean ascending, int first, int count) {
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        //query.addSimpleWhere("tenant", tenant);
+        query.addSimpleWhere("publishedState", PublishedState.DRAFT);
+        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
+        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
+        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
+        // will not be returned in the result list.
+        // this should be handled more elegantly in the future but i'm fixing at the last second.
+        boolean needsSortJoin = false;
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("developedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    query.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+                } else {
+                    query.addOrder(subOrder, ascending);
+                }
+            }
+        }
+
+        if (needsSortJoin) {
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
+        }
+
+        return persistenceService.findAllPaginated(query,first,count);
+    }
+
+    public Long getPublishedCount() {
+        QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
+        return persistenceService.count(procedureDefinitionCountQuery);
+    }
+
+    public Long getDraftCount() {
+        QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.DRAFT);
+        return persistenceService.count(procedureDefinitionCountQuery);
+    }
+
+    public Long getPreviouslyPublishedCount() {
+        QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
+        return persistenceService.count(procedureDefinitionCountQuery);
+    }
+
+
+    public boolean isCurrentUserAuthor(ProcedureDefinition definition) {
+        if (definition.getDevelopedBy().equals(getCurrentUser())) {
+            return true;
+        }
+        return false;
+    }
+
+
+
+
     public List<String> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
         QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredDevice.class);
         query.setSimpleSelect("device");
@@ -208,6 +337,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             }
 
         }
+
         persistenceService.delete(procedureDefinition);
     }
 

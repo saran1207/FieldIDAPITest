@@ -138,6 +138,7 @@
                             <ul class="sub_menu">
                                 <li>
                                     <a href="/fieldid/w/procedure"><@s.text name="speed.loto_log" /></a>
+                                    <a href="/fieldid/w/publishedListAllPage"><@s.text name="speed.loto_list" /></a>
                                 </li>
                             </ul>
                         </li>
