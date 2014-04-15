@@ -7,6 +7,8 @@ import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.AssetType;
 import org.apache.wicket.Component;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
@@ -27,13 +29,13 @@ public class EnableByAssetTypePage extends FieldIDTemplatePage {
     private AssetTypeService assetTypeService;
 
     private IModel<List<AssetType>> assetTypesList;
+    private Form<Void> form;
 
     public EnableByAssetTypePage() {
         super();
 
         assetTypesList = new ListModel<AssetType>(assetTypeService.getAssetTypes());
 
-        Form<Void> form;
         add(form = new Form<Void>("form") {
             @Override
             protected void onSubmit() {
@@ -51,12 +53,30 @@ public class EnableByAssetTypePage extends FieldIDTemplatePage {
                 setResponsePage(EnableByAssetTypePage.class);
             }
         });
+
+        form.setOutputMarkupId(true);
         form.add(new ListView<AssetType>("assetType", assetTypesList) {
 
             @Override
             protected void populateItem(ListItem<AssetType> item) {
                 item.add(new CheckBox("enableProceduresCheck", new PropertyModel<Boolean>(item.getModel(), "hasProcedures")));
                 item.add(new Label("name", new PropertyModel<String>(item.getModel(), "displayName")));
+            }
+        });
+
+        form.add(new AjaxLink<Void>("all") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setAllAssetTypes(true);
+                target.add(form);
+            }
+        });
+
+        form.add(new AjaxLink<Void>("none") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setAllAssetTypes(false);
+                target.add(form);
             }
         });
 
@@ -67,5 +87,11 @@ public class EnableByAssetTypePage extends FieldIDTemplatePage {
     @Override
     protected Component createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("title.enable_by_asset_type"));
+    }
+
+    private void setAllAssetTypes(Boolean enabled) {
+          for (AssetType assetType: assetTypesList.getObject()) {
+              assetType.setHasProcedures(enabled);
+          }
     }
 }

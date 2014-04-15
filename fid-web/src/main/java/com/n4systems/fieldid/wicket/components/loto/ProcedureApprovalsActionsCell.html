@@ -1,24 +1,23 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
     <div class="split-btn">
-
-           <span wicket:enclosure="editLink">
-                <a wicket:id="editLink" class="btn-secondary"><wicket:message key="label.edit"/></a>
-           </span>
-
-           <span wicket:enclosure="startApprovalLink">
-                <a wicket:id="startApprovalLink" class="btn-secondary"><wicket:message key="label.start_approval"/></a>
-           </span>
-
+        <a wicket:id="viewLink" class="btn-secondary"><wicket:message key="label.view"/></a>
         <div wicket:enclosure="actionsList" class="dropdown">
             <button class="btn-secondary">Toggle Dropdown</button>
             <ul wicket:id="actionsList" class="pull-right">
+                <span wicket:enclosure="editLink">
+                    <li>
+                        <a wicket:id="editLink" class="btn-secondary"><wicket:message key="label.edit"/></a>
+                    </li>
+                </span>
 
-                <li>
-                    <a wicket:id="viewLink"><wicket:message key="label.view"/></a>
-                </li>
+                <span wicket:enclosure="startApprovalLink">
+                    <li>
+                        <a wicket:id="startApprovalLink" class="btn-secondary"><wicket:message key="label.start_approval"/></a>
+                    </li>
+                </span>
 
-                  <span wicket:enclosure="deleteLink">
+                <span wicket:enclosure="deleteLink">
                     <li>
                         <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
                     </li>
@@ -28,4 +27,3 @@
     </div>
 </wicket:panel>
 </html>
-
