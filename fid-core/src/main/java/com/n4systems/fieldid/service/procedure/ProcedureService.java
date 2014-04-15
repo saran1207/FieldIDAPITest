@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter;
@@ -47,6 +48,14 @@ public class ProcedureService extends FieldIdPersistenceService {
         query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
         query.setLimit(1);
         return persistenceService.find(query);
+    }
+
+    public Boolean hasOpenProcedure(ProcedureDefinition procedureDefinition) {
+        QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
+        query.addSimpleWhere("type", procedureDefinition);
+        query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
+        query.setLimit(1);
+        return persistenceService.exists(query);
     }
 
     public List<Procedure> getAllProcedures(Asset asset) {
