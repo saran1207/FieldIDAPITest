@@ -334,7 +334,9 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             }
 
         }
-        persistenceService.delete(procedureDefinition);
+
+        procedureDefinition.archiveEntity();
+        persistenceService.update(procedureDefinition);
     }
 
     public ProcedureDefinition cloneProcedureDefinition(ProcedureDefinition source) {

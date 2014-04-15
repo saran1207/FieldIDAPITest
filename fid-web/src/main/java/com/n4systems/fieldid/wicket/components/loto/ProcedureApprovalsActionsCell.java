@@ -40,33 +40,30 @@ public class ProcedureApprovalsActionsCell extends Panel {
     public ProcedureApprovalsActionsCell(String id, IModel<ProcedureDefinition> procedureDefinitionModel, final ProcedureListPanel procedureListPanel) {
         super(id);
 
+        final AjaxLink<Void> deleteLink;
+        final BookmarkablePageLink<Void> startApprovalLink;
+        final BookmarkablePageLink<Void> editLink;
+        final BookmarkablePageLink<Void> viewLink;
+
         final ProcedureDefinition procedureDefinition = (ProcedureDefinition) procedureDefinitionModel.getObject();
 
-
-        WebMarkupContainer actionsList = new WebMarkupContainer("actionsList");
-        actionsList.setOutputMarkupId(true);
-
-        BookmarkablePageLink<Void> viewLink = new BookmarkablePageLink<Void>("viewLink", ProcedureDefinitionPrintPage.class, PageParametersBuilder.id(procedureDefinitionModel.getObject().getId()));
+        viewLink = new BookmarkablePageLink<Void>("viewLink", ProcedureDefinitionPrintPage.class, PageParametersBuilder.id(procedureDefinitionModel.getObject().getId()));
 //        viewLink.setVisible(procedure.getWorkflowState() == ProcedureWorkflowState.UNLOCKED || procedure.getWorkflowState() == ProcedureWorkflowState.LOCKED);
-        actionsList.add(viewLink);
+        add(viewLink);
 
-        BookmarkablePageLink<Void> editLink = new BookmarkablePageLink<Void>("editLink", ProcedureDefinitionPage.class, PageParametersBuilder.id(procedureDefinitionModel.getObject().getId())) {
+        editLink = new BookmarkablePageLink<Void>("editLink", ProcedureDefinitionPage.class, PageParametersBuilder.id(procedureDefinitionModel.getObject().getId())) {
             public boolean isVisible() {
                 return ( isAuthor(procedureDefinition) || ( isApprover(procedureDefinition) && isRejected(procedureDefinition) ) );
             }
         };
-        add(editLink);
 
-
-        BookmarkablePageLink<Void> startApprovalLink = new BookmarkablePageLink<Void>("startApprovalLink", ProcedureDefinitionPage.class, PageParametersBuilder.id(procedureDefinitionModel.getObject().getId())) {
+        startApprovalLink = new BookmarkablePageLink<Void>("startApprovalLink", ProcedureDefinitionPage.class, PageParametersBuilder.id(procedureDefinitionModel.getObject().getId())) {
             public boolean isVisible() {
                 return (isApprover(procedureDefinition) && !isRejected(procedureDefinition));
             }
         };
-        add(startApprovalLink);
 
-        actionsList.add(new AjaxLink<Void>("deleteLink") {
-
+        deleteLink =  new AjaxLink<Void>("deleteLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
 
@@ -87,11 +84,23 @@ public class ProcedureApprovalsActionsCell extends Panel {
                 return ((isAuthor(procedureDefinition) || isApprover(procedureDefinition)) );
             }
 
-        });
+        };
 
+
+        WebMarkupContainer actionsList = new WebMarkupContainer("actionsList") {
+            public boolean isVisible() {
+                return ( editLink.isVisible() || startApprovalLink.isVisible() ||  deleteLink.isVisible());
+            }
+
+        };
+        actionsList.setOutputMarkupId(true);
+
+        actionsList.add(editLink);
+        actionsList.add(startApprovalLink);
+        actionsList.add(deleteLink);
 //        actionsList.add(new BookmarkablePageLink<Void>("viewAssetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(procedure.getAsset().getId())));
-
         add(actionsList);
+
     }
 
 
