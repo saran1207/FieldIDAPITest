@@ -200,6 +200,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("editUsageBasedUser", EditUsageBasedUserPage.class);
 
         mountPage("procedureWaitingApprovals", ProcedureWaitingApprovalsPage.class);
+        mountPage("procedureRejected", ProcedureRejectedPage.class);
 
 
         mountPage("procedureDefinitions", ProcedureDefinitionListPage.class);
