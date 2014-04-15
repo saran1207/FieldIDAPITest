@@ -50,7 +50,14 @@ public class PublishedProcedureActionsCell extends Panel {
         WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer"){
         };
 
-        optionsContainer.setVisible(!procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED));
+        if(procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED)){
+            optionsContainer.setVisible(true);
+        } else if (isAuthor(procedureDefinition) && procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)) {
+            optionsContainer.setVisible(true);
+        } else {
+            optionsContainer.setVisible(false);
+        }
+        //optionsContainer.setVisible(isAuthor(procedureDefinition) && !procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED) && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
 
         Link copyLink;
         copyLink = new Link("copyProcedureDefLink") {
@@ -68,6 +75,8 @@ public class PublishedProcedureActionsCell extends Panel {
         copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
 
         optionsContainer.add(copyLink);
+
+
 
         BookmarkablePageLink<Void> editLink = new BookmarkablePageLink<Void>("editLink", ProcedureDefinitionPage.class, PageParametersBuilder.id(procedureDefinition.getId())) {
         };
@@ -98,7 +107,7 @@ public class PublishedProcedureActionsCell extends Panel {
 
         };
 
-        deleteLink.setVisible(procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));
+        deleteLink.setVisible(isAuthor(procedureDefinition) && procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));
 
         optionsContainer.add(deleteLink);
 

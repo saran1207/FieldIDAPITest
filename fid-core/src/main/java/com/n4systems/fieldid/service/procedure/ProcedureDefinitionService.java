@@ -7,10 +7,10 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
-import com.n4systems.model.*;
+import com.n4systems.model.Asset;
+import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.*;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
@@ -334,7 +334,9 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             }
 
         }
-        persistenceService.delete(procedureDefinition);
+
+        procedureDefinition.archiveEntity();
+        persistenceService.update(procedureDefinition);
     }
 
     public ProcedureDefinition cloneProcedureDefinition(ProcedureDefinition source) {
