@@ -67,6 +67,7 @@ public class ProcedureListPanel extends Panel {
         columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.developed_by"),"developedBy.firstName", "developedBy.fullName"));
         columns.add(new ProcedureDateColumn(new FIDLabelModel("label.created"), "created", "created"));
 
+        addCustomColumns(columns);
         addActionColumn(columns);
         return columns;
     }
