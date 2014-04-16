@@ -168,6 +168,7 @@ public class ContentPanel extends Panel {
         IsolationPoint isolationPoint = new IsolationPoint();
         isolationPoint.setIdentifier(getNextIdentifier(sourceType));
         isolationPoint.setSourceType(sourceType);
+        isolationPoint.setSourceText(sourceType.getIdentifier());
         isolationPoint.setTenant(getProcedureDefinition().getTenant());
         isolationPoint.setFwdIdx(getProcedureDefinition().getLockIsolationPoints().size());
         isolationPoint.setRevIdx(0);

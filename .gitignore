@@ -3,3 +3,10 @@
 **/target/
 node_modules/
 .sass-cache
+fid-web/src/main/webapp/style/global.css.map
+fid-web/src/main/webapp/style/ie-all.css.map
+fid-web/src/main/webapp/style/ie-lte8.css.map
+fid-web/src/main/webapp/style/pages/event-summary.css.map
+fid-web/src/main/webapp/style/pages/places.css.map
+fid-web/src/main/webapp/style/plugins/chosen/chosen.css.map
+fid-web/src/main/webapp/style/plugins/jquery-ui-dialog/jquery-ui.custom.css.map

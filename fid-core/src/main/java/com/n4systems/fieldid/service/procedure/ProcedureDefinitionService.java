@@ -54,7 +54,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     public Boolean hasPublishedProcedureCode(ProcedureDefinition procedureDefinition) {
-        QueryBuilder<ProcedureDefinition> query = getPublishedProcedureDefinitionQuery(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
+        QueryBuilder<ProcedureDefinition> query = getPublishedProcedureDefinitionQuery(procedureDefinition.getAsset());
         query.addSimpleWhere("procedureCode", procedureDefinition.getProcedureCode());
         return persistenceService.exists(query);
     }
@@ -330,6 +330,13 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
         definition.setPublishedState(PublishedState.PUBLISHED);
         definition.setOriginDate(dateService.nowUTC().toDate());
+        persistenceService.update(definition);
+    }
+
+    public void unpublishProcedureDefinition(ProcedureDefinition definition) {
+        definition.setPublishedState(PublishedState.DRAFT);
+        definition.setOriginDate(null);
+        definition.setApprovedBy(null);
         persistenceService.update(definition);
     }
 

@@ -80,7 +80,7 @@ public class PrintList extends Panel {
         final IsolationPoint isolationPoint = item.getModelObject();
 
         item.add(new Label("id", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getIdentifier())));
-        item.add(new Label("source", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getSourceType())));
+        item.add(new Label("source", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getSourceText())));
         if (isolationPoint.getDeviceDefinition() == null) {
             item.add(new Label("device"));
         } else if(isolationPoint.getDeviceDefinition().isFreeform()) {

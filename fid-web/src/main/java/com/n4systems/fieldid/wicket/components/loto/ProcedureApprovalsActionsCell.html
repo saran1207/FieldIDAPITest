@@ -5,23 +5,22 @@
         <div wicket:enclosure="actionsList" class="dropdown">
             <button class="btn-secondary">Toggle Dropdown</button>
             <ul wicket:id="actionsList" class="pull-right">
-                <span wicket:enclosure="editLink">
-                    <li>
-                        <a wicket:id="editLink" class="btn-secondary"><wicket:message key="label.edit"/></a>
-                    </li>
-                </span>
 
-                <span wicket:enclosure="startApprovalLink">
-                    <li>
-                        <a wicket:id="startApprovalLink" class="btn-secondary"><wicket:message key="label.start_approval"/></a>
-                    </li>
-                </span>
+                    <li><span wicket:enclosure="editLink">
+                        <a wicket:id="editLink"><wicket:message key="label.edit"/></a>
+                     </span></li>
 
-                <span wicket:enclosure="deleteLink">
-                    <li>
-                        <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+                    <li> <span wicket:enclosure="startApprovalLink">
+                        <a wicket:id="startApprovalLink"><wicket:message key="label.start_approval"/></a>
+                        </span>
                     </li>
-                </span>
+
+                    <li>
+                         <span wicket:enclosure="deleteLink">
+                            <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+                         </span>
+                    </li>
+
             </ul>
         </div>
     </div>

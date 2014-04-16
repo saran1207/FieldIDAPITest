@@ -1,7 +1,7 @@
 .newProcedureForm .newScheduleForm {
-    overflow:hidden;
     width:320px;
-    height:360px;
+    height: 100%;
+    overflow: visible;
 }
 
 .blankSlate h2 {

@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -31,15 +33,22 @@ import java.util.List;
 
 public class ProcedureDefinitionListPage extends LotoPage {
 
-    private @SpringBean
-    ProcedureDefinitionService procedureDefinitionService;
+    @SpringBean
+    private ProcedureDefinitionService procedureDefinitionService;
+
+    @SpringBean
+    private ProcedureService procedureService;
 
     private WebMarkupContainer listContainer;
     private WebMarkupContainer blankSlate;
     private ListView listView;
+    private FIDFeedbackPanel feedbackPanel;
 
     public ProcedureDefinitionListPage(PageParameters params) {
         super(params);
+
+        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
+        feedbackPanel.setOutputMarkupId(true);
 
         listContainer = new WebMarkupContainer("listContainer");
         listContainer.setOutputMarkupPlaceholderTag(true);
@@ -53,14 +62,15 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 item.add(new Label("revisionNumber", new PropertyModel<String>(procedureDefinition, "revisionNumber")));
                 item.add(new Label("developedBy", new PropertyModel<String>(procedureDefinition, "developedBy.displayName")));
                 item.add(new Label("created", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "created"), true, getCurrentUser().getTimeZone())));
-                item.add(new Label("approvedBy", new PropertyModel<String>(procedureDefinition, "approvedBy")));
+                item.add(new Label("approvedBy", new PropertyModel<String>(procedureDefinition, "approvedBy.displayName")));
                 item.add(new Label("publishedState", new PropertyModel<String>(procedureDefinition, "publishedState.label")));
 
-                item.add(new AjaxLink<Void>("editLink") {
+                item.add(new Link<Void>("editLink") {
 
                     @Override
-                    public void onClick(AjaxRequestTarget target) {
-                        editProcedureDefinition(procedureDefinition.getObject());
+                    public void onClick() {
+                        setResponsePage(new ProcedureDefinitionPage(new PageParameters().add("id", procedureDefinition.getObject().getId())));
+
                     }
                 }.setVisible(procedureDefinition.getObject().getPublishedState().isPreApproval()));
 
@@ -78,7 +88,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 });
 
                 Link copyLink;
-                item.add(copyLink = new Link("copyProcedureDefLink") {
+                item.add(copyLink = new Link("reviseLink") {
                     @Override public void onClick() {
                         ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(assetModel.getObject(), procedureDefinition.getObject().getFamilyId());
                         ProcedureDefinition copiedDefinition = procedureDefinitionService.cloneProcedureDefinition(publishedDef);
@@ -90,7 +100,19 @@ public class ProcedureDefinitionListPage extends LotoPage {
                         && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
                 copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
 
+                item.add(new AjaxLink<Void>("unpublishLink") {
 
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        if(procedureService.hasOpenProcedure(procedureDefinition.getObject())) {
+                            error(new FIDLabelModel("error.unpublish").getObject());
+                            target.add(feedbackPanel);
+                        } else {
+                            procedureDefinitionService.unpublishProcedureDefinition(procedureDefinition.getObject());
+                            target.add(listContainer, feedbackPanel);
+                        }
+                    }
+                });
 
                 Link printLink;
                 item.add(printLink = new Link("print") {
@@ -114,10 +136,6 @@ public class ProcedureDefinitionListPage extends LotoPage {
         blankSlate.setVisible(listView.getList().isEmpty());
         blankSlate.setOutputMarkupPlaceholderTag(true);
         add(blankSlate);
-    }
-
-    private void editProcedureDefinition(ProcedureDefinition procedureDefinition) {
-        setResponsePage(new ProcedureDefinitionPage(new PageParameters().add("id", procedureDefinition.getId())));
     }
 
     @Override
