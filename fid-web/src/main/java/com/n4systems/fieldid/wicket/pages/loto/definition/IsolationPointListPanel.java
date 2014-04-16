@@ -152,11 +152,13 @@ public class IsolationPointListPanel extends Panel {
 
     private String getSourceTypeDescription(IsolationPoint isolationPoint) {
         StringBuilder description = new StringBuilder();
-        description.append(isolationPoint.getSourceType().getIdentifier());
+
         if(isolationPoint.getSourceText() != null){
-            description.append(" ");
             description.append(isolationPoint.getSourceText());
+        } else {
+            description.append(isolationPoint.getSourceType().getIdentifier());
         }
+
         return description.toString();
     }
 
