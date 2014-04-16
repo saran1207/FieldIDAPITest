@@ -294,6 +294,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     public void unpublishProcedureDefinition(ProcedureDefinition definition) {
         definition.setPublishedState(PublishedState.DRAFT);
         definition.setOriginDate(null);
+        definition.setApprovedBy(null);
         persistenceService.update(definition);
     }
 
