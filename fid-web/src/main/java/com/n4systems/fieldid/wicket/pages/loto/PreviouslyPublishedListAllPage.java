@@ -6,8 +6,14 @@ import com.n4systems.fieldid.wicket.components.loto.PublishedProcedureActionsCol
 import com.n4systems.fieldid.wicket.data.ProcedureDefinitionDataProvider;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.util.time.Duration;
 
 import java.util.List;
 
@@ -20,6 +26,7 @@ public class PreviouslyPublishedListAllPage extends ProceduresAllListPage{
     private ProcedureDefinitionDataProvider dataProvider;
     private FIDFeedbackPanel feedbackPanel;
 
+    private String textFilter = null;
 
     @Override
     protected void onInitialize() {
@@ -29,18 +36,40 @@ public class PreviouslyPublishedListAllPage extends ProceduresAllListPage{
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
-        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.PREVIOUSLY_PUBLISHED);
+        Form<Void> form = new Form<Void>("form");
+        add(form);
+
+        final TextField<String> field = new TextField<String>("field", new Model<String>(""));
+        form.add(field);
+
+
+        OnChangeAjaxBehavior onChangeAjaxBehavior = new OnChangeAjaxBehavior()
+        {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target)
+            {
+                PreviouslyPublishedListAllPage.this.dataProvider.setSearchTerm(field.getDefaultModelObjectAsString());
+                target.add(procedureDefinitionListPanel);
+            }
+        };
+        onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));
+        field.add(onChangeAjaxBehavior);
+
+        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.PREVIOUSLY_PUBLISHED){
+            @Override protected String getTextFilter() {
+                return textFilter;
+            }
+        };
+
         add(procedureDefinitionListPanel = new ProcedureListPanel("procedureDefinitionListPanel", dataProvider) {
             @Override
             protected void addCustomColumns(List<IColumn<? extends ProcedureDefinition>> columns) {
-                //TODO add place status
             }
 
             @Override
             protected void addActionColumn(List<IColumn<? extends ProcedureDefinition>> columns) {
                 columns.add(new PublishedProcedureActionsColumn(this));
             }
-
 
         });
         procedureDefinitionListPanel.setOutputMarkupPlaceholderTag(true);

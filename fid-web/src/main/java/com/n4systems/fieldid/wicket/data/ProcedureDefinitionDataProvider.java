@@ -21,21 +21,28 @@ public class ProcedureDefinitionDataProvider extends FieldIDDataProvider<Procedu
 
     private PublishedState state;
 
+    private List<? extends ProcedureDefinition> results;
+    private Long size;
+
+    private String searchTerm;
+
     public ProcedureDefinitionDataProvider(String order, SortOrder sortOrder, PublishedState state) {
         setSort(order, sortOrder);
         this.state = state;
+        searchTerm = "";
     }
+
 
     @Override
     public Iterator<? extends ProcedureDefinition> iterator(int first, int count) {
         List<? extends ProcedureDefinition> procedureDefinitionList = null;
 
         if(state.equals(PublishedState.DRAFT)) {
-            procedureDefinitionList = procedureDefinitionService.getAllDraftProcedures(getSort().getProperty(), getSort().isAscending(), first, count);
+            procedureDefinitionList = procedureDefinitionService.getAllDraftProcedures(searchTerm, getSort().getProperty(), getSort().isAscending(), first, count);
         } else if (state.equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
-            procedureDefinitionList = procedureDefinitionService.getAllPreviouslyPublishedProcedures(getSort().getProperty(), getSort().isAscending(), first, count);
+            procedureDefinitionList = procedureDefinitionService.getAllPreviouslyPublishedProcedures(searchTerm, getSort().getProperty(), getSort().isAscending(), first, count);
         } else if (state.equals(PublishedState.PUBLISHED)) {
-            procedureDefinitionList = procedureDefinitionService.getAllPublishedProcedures(getSort().getProperty(), getSort().isAscending(), first, count);
+            procedureDefinitionList = procedureDefinitionService.getAllPublishedProcedures(searchTerm, getSort().getProperty(), getSort().isAscending(), first, count);
         }
 
         return procedureDefinitionList.iterator();
@@ -43,11 +50,24 @@ public class ProcedureDefinitionDataProvider extends FieldIDDataProvider<Procedu
 
     @Override
     public int size() {
-        int size = procedureDefinitionService.getDraftCount().intValue();
+        int size = 0;
+
+        if(state.equals(PublishedState.DRAFT)) {
+            size = procedureDefinitionService.getDraftCount(searchTerm).intValue();
+        } else if (state.equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
+            size = procedureDefinitionService.getPreviouslyPublishedCount(searchTerm).intValue();
+        } else if (state.equals(PublishedState.PUBLISHED)) {
+            size = procedureDefinitionService.getPublishedCount(searchTerm).intValue();
+        }
+
         return size;
     }
 
     protected String getTextFilter() {
+        return null;
+    }
+
+    protected Class<? extends ProcedureDefinition> getTypeFilter() {
         return null;
     }
 
@@ -59,6 +79,16 @@ public class ProcedureDefinitionDataProvider extends FieldIDDataProvider<Procedu
                 return object;
             }
         };
+    }
+
+    @Override
+    public void detach() {
+        results = null;
+        size = null;
+    }
+
+    public void setSearchTerm(String sTerm) {
+        searchTerm = sTerm;
     }
 
 }

@@ -4,10 +4,12 @@
 
     <div wicket:id="feedbackPanel" class="filter" />
     <div class="text-search pull-right">
-        <span class="icon-search"></span>
-        <input wicket:id="filter" type="text" placeholder="Search by Procedure Code or Equipment #">
+        <form wicket:id="form">
+            <span class="icon-search"></span>
+            <input wicket:id="field" type="text" placeholder="Search by Procedure Code or Equipment #"/><br/>
+        </form>
     </div>
-    <div></div>
+
     <div wicket:id="procedureDefinitionListPanel" class="event-panel" />
 
 </wicket:extend>
