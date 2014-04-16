@@ -3,9 +3,9 @@ div.wicket-modal div.w_caption {
 }
 
 .newScheduleForm {
-	overflow:hidden;
     width:320px;
-    height:450px;
+    height:100%;
+    overflow: visible;
 }
 
 .newScheduleForm .assignmentSection {
@@ -107,13 +107,7 @@ div.wicket-modal div.w_caption {
     font-size:1.2em;
 }
 
-.newScheduleForm .chzn-container .chzn-results {
-    height:150px !important;
-    overflow-y: auto;
-}
-
 .newProcedureForm .newScheduleForm {
-    overflow:hidden;
     width:320px;
-    height:360px;
+    height:100%;
 }
