@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
@@ -10,8 +11,10 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.PopupSettings;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -48,7 +51,10 @@ public class ProcedureApprovalsActionsCell extends Panel {
         final ProcedureDefinition procedureDefinition = (ProcedureDefinition) procedureDefinitionModel.getObject();
 
         viewLink = new BookmarkablePageLink<Void>("viewLink", ProcedureDefinitionPrintPage.class, PageParametersBuilder.id(procedureDefinitionModel.getObject().getId()));
-//        viewLink.setVisible(procedure.getWorkflowState() == ProcedureWorkflowState.UNLOCKED || procedure.getWorkflowState() == ProcedureWorkflowState.LOCKED);
+        viewLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print"), TipsyBehavior.Gravity.W));
+        viewLink.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
+        PopupSettings popupSettings = new PopupSettings("popupWindow", PopupSettings.SCROLLBARS).setWidth(1000).setTop(1);
+        viewLink.setPopupSettings(popupSettings);
         add(viewLink);
 
         editLink = new BookmarkablePageLink<Void>("editLink", ProcedureDefinitionPage.class, PageParametersBuilder.id(procedureDefinitionModel.getObject().getId())) {
