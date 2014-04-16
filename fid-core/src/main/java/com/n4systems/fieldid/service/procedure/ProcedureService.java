@@ -16,8 +16,16 @@ import java.util.List;
 public class ProcedureService extends FieldIdPersistenceService {
 
     public boolean hasActiveProcedure(Asset asset) {
+        return hasActiveProcedure(asset, null);
+    }
+
+    public boolean hasActiveProcedure(Asset asset, ProcedureDefinition procedureDefinition) {
         QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
         query.addSimpleWhere("asset", asset);
+
+        if(procedureDefinition != null) {
+            query.addSimpleWhere("type.familyId", procedureDefinition.getFamilyId());
+        }
 
         query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.ACTIVE_STATES));
         return persistenceService.exists(query);
