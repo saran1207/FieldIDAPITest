@@ -291,6 +291,12 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         persistenceService.update(definition);
     }
 
+    public void unpublishProcedureDefinition(ProcedureDefinition definition) {
+        definition.setPublishedState(PublishedState.DRAFT);
+        definition.setOriginDate(null);
+        persistenceService.update(definition);
+    }
+
     public boolean isCurrentUserAuthor(ProcedureDefinition definition) {
         if (definition.getDevelopedBy().equals(getCurrentUser())) {
             return true;

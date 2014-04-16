@@ -5,6 +5,7 @@
       lang="en">
 
 <wicket:extend>
+    <div wicket:id="feedbackPanel"/>
     <div wicket:id="listContainer" class="content">
         <table class="list">
             <tbody>
@@ -26,7 +27,7 @@
                     <td wicket:id="publishedState"/>
                     <td>
                         <div wicket:enclosure="editLink" class="split-btn">
-                            <a wicket:id="editLink" class="btn-secondary"><wicket:message key="label.edit"/></a>
+                            <a style="min-width: 68px" wicket:id="editLink" class="btn-secondary"><wicket:message key="label.edit"/></a>
                             <div class="dropdown">
                                 <button class="btn-secondary">Toggle Dropdown</button>
                                 <ul>
@@ -34,7 +35,15 @@
                                 </ul>
                             </div>
                         </div>
-                        <a wicket:id="copyProcedureDefLink" class="btn-secondary right tipsy-tooltip"><wicket:message key="label.revise"/></a>
+                        <div wicket:enclosure="reviseLink" class="split-btn">
+                            <a wicket:id="reviseLink" class="btn-secondary tipsy-tooltip"><wicket:message key="label.revise"/></a>
+                            <div class="dropdown">
+                                <button class="btn-secondary">Toggle Dropdown</button>
+                                <ul>
+                                    <li><a wicket:id="unpublishLink"><wicket:message key="label.unpublish"/></a></li>
+                                </ul>
+                            </div>
+                        </div>
                         <a wicket:id="print" class="btn-secondary right tipsy-tooltip"><wicket:message key="label.view_print"/></a>
                     </td>
                 </tr>
