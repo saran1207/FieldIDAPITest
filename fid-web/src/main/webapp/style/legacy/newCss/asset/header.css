@@ -162,3 +162,9 @@
 .feedbackPanel {
     margin-bottom: 10px;
 }
+
+/* hack */
+.w_content_container {
+    overflow: visible!important;
+    height: 100% !important;
+}
