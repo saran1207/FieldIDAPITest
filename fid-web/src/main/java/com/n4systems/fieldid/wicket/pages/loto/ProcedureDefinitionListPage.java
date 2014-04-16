@@ -62,7 +62,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                 item.add(new Label("revisionNumber", new PropertyModel<String>(procedureDefinition, "revisionNumber")));
                 item.add(new Label("developedBy", new PropertyModel<String>(procedureDefinition, "developedBy.displayName")));
                 item.add(new Label("created", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "created"), true, getCurrentUser().getTimeZone())));
-                item.add(new Label("approvedBy", new PropertyModel<String>(procedureDefinition, "approvedBy")));
+                item.add(new Label("approvedBy", new PropertyModel<String>(procedureDefinition, "approvedBy.displayName")));
                 item.add(new Label("publishedState", new PropertyModel<String>(procedureDefinition, "publishedState.label")));
 
                 item.add(new Link<Void>("editLink") {
