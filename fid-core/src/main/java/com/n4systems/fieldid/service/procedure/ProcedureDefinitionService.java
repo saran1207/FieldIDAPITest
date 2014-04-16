@@ -148,9 +148,23 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public List<ProcedureDefinition> getAllPublishedProcedures(String order, boolean ascending, int first, int count) {
+    public List<ProcedureDefinition> getAllPublishedProcedures(String sTerm, String order, boolean ascending, int first, int count) {
+        String searchTerm = "";
+
+        if(sTerm != null) {
+            searchTerm = sTerm;
+        }
+
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
+
+        if(!searchTerm.trim().equals("")) {
+            WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "procedureCode", "procedureCode", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "equipmentNumber", "equipmentNumber", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            query.addWhere(group);
+        }
+
         // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
         // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
         // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
@@ -180,10 +194,24 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAllPaginated(query,first,count);
     }
 
-    public List<ProcedureDefinition> getAllPreviouslyPublishedProcedures(String order, boolean ascending, int first, int count) {
+    public List<ProcedureDefinition> getAllPreviouslyPublishedProcedures(String sTerm, String order, boolean ascending, int first, int count) {
+
+        String searchTerm = "";
+
+        if(sTerm != null) {
+            searchTerm = sTerm;
+        }
+
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
-        //query.addSimpleWhere("tenant", tenant);
         query.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
+
+        if(!searchTerm.trim().equals("")) {
+            WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "procedureCode", "procedureCode", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "equipmentNumber", "equipmentNumber", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            query.addWhere(group);
+        }
+
         // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
         // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
         // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
@@ -213,10 +241,24 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAllPaginated(query,first,count);
     }
 
-    public List<ProcedureDefinition> getAllDraftProcedures(String order, boolean ascending, int first, int count) {
+    public List<ProcedureDefinition> getAllDraftProcedures(String sTerm, String order, boolean ascending, int first, int count) {
+
+        String searchTerm = "";
+
+        if(sTerm != null) {
+            searchTerm = sTerm;
+        }
+
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
-        //query.addSimpleWhere("tenant", tenant);
         query.addSimpleWhere("publishedState", PublishedState.DRAFT);
+
+        if(!searchTerm.trim().equals("")) {
+            WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "procedureCode", "procedureCode", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "equipmentNumber", "equipmentNumber", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            query.addWhere(group);
+        }
+
         // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
         // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
         // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
@@ -246,19 +288,19 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAllPaginated(query,first,count);
     }
 
-    public Long getPublishedCount() {
+    public Long getPublishedCount(String searchTerm) {
         QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
         procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
         return persistenceService.count(procedureDefinitionCountQuery);
     }
 
-    public Long getDraftCount() {
+    public Long getDraftCount(String searchTerm) {
         QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
         procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.DRAFT);
         return persistenceService.count(procedureDefinitionCountQuery);
     }
 
-    public Long getPreviouslyPublishedCount() {
+    public Long getPreviouslyPublishedCount(String searchTerm) {
         QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
         procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
         return persistenceService.count(procedureDefinitionCountQuery);
