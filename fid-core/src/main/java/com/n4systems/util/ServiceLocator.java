@@ -15,6 +15,8 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.event.NotifyEventAssigneeService;
 import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.fieldid.service.user.UserGroupService;
@@ -166,7 +168,16 @@ public class ServiceLocator implements ApplicationContextAware {
         return getBean(LocalizationService.class);
     }
 
-	@SuppressWarnings("unchecked")
+    public static ProcedureService getProcedureService() {
+        return getBean(ProcedureService.class);
+    }
+
+    public static ProcedureDefinitionService getProcedureDefinitionService() {
+        return getBean(ProcedureDefinitionService.class);
+    }
+
+
+    @SuppressWarnings("unchecked")
 	public static <T> T getBean(String name, Class<T> type) {
 		return (T) applicationContext.getBean(name);
 	}

@@ -9,7 +9,11 @@ import java.util.Map.Entry;
 import javax.mail.MessagingException;
 import javax.mail.NoSuchProviderException;
 
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.model.Asset;
+import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.log4j.Logger;
 
 
@@ -44,10 +48,15 @@ public class ArchiveAssetTypeTask implements Runnable {
 	private AssetType type;
 	private AssetManager assetManager;
 	private PersistenceManager persistenceManager;
+    private ProcedureService procedureService;
+    private ProcedureDefinitionService procedureDefinitionService;
 
 	public ArchiveAssetTypeTask() {
 		persistenceManager = ServiceLocator.getPersistenceManager();
 		assetManager = ServiceLocator.getAssetManager();
+        procedureService = ServiceLocator.getProcedureService();
+        procedureDefinitionService = ServiceLocator.getProcedureDefinitionService();
+
 	}
 
 	public void run() {
@@ -69,6 +78,9 @@ public class ArchiveAssetTypeTask implements Runnable {
 		deleteRelatedAssetCodeMappings();
 		logger.debug("completed asset code mappings " + (subAssetTypeDetachFailed ? " failed" : "passed"));
 
+//        deleteProcedures();
+//        deleteProcedureDefinitions();
+
 		logger.info("packing up results for deletion of asset type " + getAssetTypeName());
 		try {
 			sendResultNotifications();
@@ -78,6 +90,17 @@ public class ArchiveAssetTypeTask implements Runnable {
 
 		logger.info("completed deletion of asset type " + getAssetTypeName());
 	}
+
+
+    private void deleteProcedures() throws InvalidQueryException {
+        procedureService.archiveProceduresForAssetType(type);
+    }
+
+
+    private void deleteProcedureDefinitions() throws InvalidQueryException {
+        procedureDefinitionService.archiveProcedureDefinitionsForAssetType(type);
+    }
+
 
 	private void sendResultNotifications() throws NoSuchProviderException, MessagingException {
 		String subject = "Asset Type Deleted [" + getAssetTypeName() + "]";

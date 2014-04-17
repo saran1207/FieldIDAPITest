@@ -66,6 +66,10 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
         add(new Label("subAssetsToDetach", new PropertyModel<Long>(summary, "subAssetsToDetach")));
         add(new Label("assetsToDetachFromProjects", new PropertyModel<Long>(summary, "assetsToDetachFromProjects")).setVisible(getSecurityGuard().isProjectsEnabled()));
 
+        add(new Label("proceduresToDelete", new PropertyModel<Long>(summary, "proceduresToDelete")).setVisible(getSecurityGuard().isLotoProceduresEnabled()));
+        add(new Label("procedureDefinitionsToDelete", new PropertyModel<Long>(summary, "procedureDefinitionsToDelete")).setVisible(getSecurityGuard().isLotoProceduresEnabled()));
+
+
         Form form;
         add(form = new Form<Void>("form") {
             @Override

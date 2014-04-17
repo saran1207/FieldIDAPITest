@@ -17,6 +17,8 @@ public class AssetTypeRemovalSummary implements Serializable {
 	private Long assetTypesToDetachFrom = 0L;
 	private Long assetCodeMappingsToDelete = 0L;
 	private Long masterAssetsToDetach = 0L;
+    private Long proceduresToDelete = 0L;
+    private Long procedureDefinitionsToDelete = 0L;
 
 	public AssetTypeRemovalSummary(AssetType assetType) {
 		this.assetType = assetType;
@@ -102,4 +104,19 @@ public class AssetTypeRemovalSummary implements Serializable {
 		this.masterAssetsToDetach = masterAssetsToDetach;
 	}
 
+    public Long getProceduresToDelete() {
+        return proceduresToDelete;
+    }
+
+    public void setProceduresToDelete(Long proceduresToDelete) {
+        this.proceduresToDelete = proceduresToDelete;
+    }
+
+    public Long getProcedureDefinitionsToDelete() {
+        return procedureDefinitionsToDelete;
+    }
+
+    public void setProcedureDefinitionsToDelete(Long procedureDefinitionsToDelete) {
+        this.procedureDefinitionsToDelete = procedureDefinitionsToDelete;
+    }
 }

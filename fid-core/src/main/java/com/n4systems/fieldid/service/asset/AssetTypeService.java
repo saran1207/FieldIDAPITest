@@ -5,7 +5,10 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
+import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
@@ -44,6 +47,11 @@ public class AssetTypeService extends FieldIdPersistenceService {
     private @Autowired RecurringScheduleService recurringScheduleService;
     private @Autowired AssetCodeMappingService assetCodeMappingService;
     private @Autowired AutoAttributeService autoAttributeService;
+    @Autowired
+    private ProcedureService procedureService;
+    @Autowired
+    private ProcedureDefinitionService procedureDefinitionService;
+
 
     public AssetType getAssetType(Long id) {
         return persistenceService.find(AssetType.class, id);
@@ -382,6 +390,12 @@ public class AssetTypeService extends FieldIdPersistenceService {
             QueryBuilder<AssetCodeMapping> assetCodeMappingCount = createTenantSecurityBuilder(AssetCodeMapping.class);
             assetCodeMappingCount.setCountSelect().addSimpleWhere("assetInfo", assetType);
             summary.setAssetCodeMappingsToDelete(persistenceService.count(assetCodeMappingCount));
+
+            summary.setProceduresToDelete(procedureService.getAllProceduresForAssetTypeCount(assetType));
+
+            summary.setProcedureDefinitionsToDelete(procedureDefinitionService.getAllProcedureDefinitionsForAssetTypeCount(assetType));
+
+
 
         } catch (InvalidQueryException e) {
             logger.error("bad summary query", e);
