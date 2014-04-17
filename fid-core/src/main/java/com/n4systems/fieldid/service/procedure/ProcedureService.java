@@ -71,4 +71,9 @@ public class ProcedureService extends FieldIdPersistenceService {
         query.addSimpleWhere("asset", asset);
         return persistenceService.findAll(query);
     }
+
+    public void archiveProcedure(Procedure procedure) {
+        procedure.archiveEntity();
+        persistenceService.update(procedure);
+    }
 }

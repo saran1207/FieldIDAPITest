@@ -132,7 +132,14 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return lastFamilyId == null? 1: lastFamilyId + 1;
     }
 
-    public List<ProcedureDefinition> getActiveProceduresForAsset(Asset asset) {
+    public List<ProcedureDefinition> getAllProcedureDefinitionsForAsset(Asset asset) {
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        query.addSimpleWhere("asset", asset);
+        return persistenceService.findAll(query);
+    }
+
+
+    public List<ProcedureDefinition> getActiveProcedureDefinitionsForAsset(Asset asset) {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("asset", asset);
         query.addWhere(WhereParameter.Comparator.IN, "publishedState", "publishedState", Arrays.asList(PublishedState.ACTIVE_STATES));
@@ -384,8 +391,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
         }
 
-        procedureDefinition.archiveEntity();
-        persistenceService.update(procedureDefinition);
+        archiveProcedureDefinition(procedureDefinition);
     }
 
     public ProcedureDefinition cloneProcedureDefinition(ProcedureDefinition source) {
@@ -520,7 +526,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return to;
     }
 
-
     public ImageAnnotation addImageAnnotationToImage(EditableImage image, ImageAnnotation annotation) {
         if(annotation.getImage()!=null && annotation.getImage()!=image) {
             annotation.getImage().removeAnnotation(annotation);
@@ -531,14 +536,12 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return annotation;
     }
 
-
     @Transactional(readOnly=true)
     public List<ProcedureDefinition> findByPublishedState(PublishedState publishedState) {
         QueryBuilder<ProcedureDefinition> procedureDefinitionQuery = createUserSecurityBuilder(ProcedureDefinition.class);
         procedureDefinitionQuery.addSimpleWhere("publishedState", publishedState);
         return persistenceService.findAll(procedureDefinitionQuery);
     }
-
 
     @Transactional(readOnly=true)
     public Long getWaitingApprovalsCount() {
@@ -553,7 +556,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.REJECTED);
         return persistenceService.count(procedureDefinitionCountQuery);
     }
-
 
     public List<ProcedureDefinition> getProcedureDefinitionsFor(PublishedState publishedState, String order, boolean ascending, int first, int count) {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
@@ -600,6 +602,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
 
         return persistenceService.findAllPaginated(query,first,count);
+    }
+
+    public void archiveProcedureDefinition(ProcedureDefinition procedureDefinition) {
+        procedureDefinition.archiveEntity();
+        persistenceService.update(procedureDefinition);
     }
 
 }

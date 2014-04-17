@@ -148,7 +148,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
 
         @Override
         protected List<ProcedureDefinition> load() {
-            return procedureDefinitionService.getActiveProceduresForAsset(assetModel.getObject());
+            return procedureDefinitionService.getActiveProcedureDefinitionsForAsset(assetModel.getObject());
         }
 
         @Override

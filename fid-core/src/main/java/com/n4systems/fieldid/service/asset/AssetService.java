@@ -2,9 +2,7 @@ package com.n4systems.fieldid.service.asset;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.n4systems.exceptions.InvalidArgumentException;
-import com.n4systems.exceptions.SubAssetUniquenessException;
-import com.n4systems.exceptions.TransactionAlreadyProcessedException;
+import com.n4systems.exceptions.*;
 import com.n4systems.fieldid.LegacyMethod;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
@@ -12,6 +10,9 @@ import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
+import com.n4systems.fieldid.service.project.ProjectService;
 import com.n4systems.fieldid.service.transaction.TransactionService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
@@ -20,15 +21,19 @@ import com.n4systems.model.asset.AssetSaver;
 import com.n4systems.model.asset.ScheduleSummaryEntry;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
+import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.persistence.archivers.EventListArchiver;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.services.reporting.AssetsIdentifiedReportRecord;
 import com.n4systems.services.reporting.AssetsStatusReportRecord;
 import com.n4systems.services.tenant.Tenant30DayCountRecord;
+import com.n4systems.util.AssetRemovalSummary;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.collections.PrioritizedList;
@@ -59,6 +64,9 @@ public class AssetService extends FieldIdPersistenceService {
     @Autowired private AssetTypeService assetTypeService;
     @Autowired private OrgService orgService;
     @Autowired private MixpanelService mixpanelService;
+    @Autowired private ProjectService projectService;
+    @Autowired private ProcedureDefinitionService procedureDefinitionService;
+    @Autowired private ProcedureService procedureService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -728,5 +736,111 @@ public class AssetService extends FieldIdPersistenceService {
         List<InfoOptionBean> infoList = asset.getOrderedInfoOptionList();
 
         return asset;
+    }
+
+    public Asset archive(Asset asset, User archivedBy) throws UsedOnMasterEventException {
+        asset = persistenceService.reattach(asset);
+        asset = fillInSubAssetsOnAsset(asset);
+        if (!testArchive(asset).validToDelete()) {
+            throw new UsedOnMasterEventException();
+        }
+
+        if (asset.isMasterAsset()) {
+            for (SubAsset subAsset : asset.getSubAssets()) {
+                persistenceService.delete(subAsset);
+            }
+            asset.getSubAssets().clear();
+        }
+
+        Asset parentAsset = parentAsset(asset);
+        if (parentAsset != null) {
+            SubAsset subAssetToRemove = parentAsset.getSubAssets().get(parentAsset.getSubAssets().indexOf(new SubAsset(asset, parentAsset)));
+            persistenceService.delete(subAssetToRemove);
+            parentAsset.getSubAssets().remove(subAssetToRemove);
+            save(parentAsset, archivedBy);
+        }
+
+        asset.archiveEntity();
+        asset.archiveIdentifier();
+
+        archiveEvents(asset, archivedBy);
+        detachFromProjects(asset);
+
+        //archiveProcedures(asset);
+
+        return save(asset, archivedBy);
+    }
+
+    private void archiveProcedures(Asset asset) {
+        if(asset.getType().hasProcedures()) {
+
+            for (ProcedureDefinition procedureDefinition: procedureDefinitionService.getAllProcedureDefinitionsForAsset(asset)) {
+                procedureDefinitionService.archiveProcedureDefinition(procedureDefinition);
+            }
+
+            for (Procedure procedure: procedureService.getAllProcedures(asset)) {
+                 procedureService.archiveProcedure(procedure);
+            }
+        }
+    }
+
+    protected Asset save(Asset asset, User modifiedBy) {
+        AssetSaver assetSaver = new AssetSaver();
+        assetSaver.setModifiedBy(modifiedBy);
+
+        asset = assetSaver.update(getEntityManager(), asset);
+
+        return asset;
+    }
+
+    public AssetRemovalSummary testArchive(Asset asset) {
+        AssetRemovalSummary summary = new AssetRemovalSummary(asset);
+        try {
+            QueryBuilder<Event> eventCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+            eventCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+            summary.setEventsToDelete(persistenceService.count(eventCount));
+
+            QueryBuilder<Event> scheduleCount = new QueryBuilder<Event>(Event.class, new OpenSecurityFilter());
+            scheduleCount.setCountSelect().addSimpleWhere("asset", asset).addSimpleWhere("state", Archivable.EntityState.ACTIVE).addSimpleWhere("workflowState", WorkflowState.OPEN);
+            summary.setSchedulesToDelete(persistenceService.count(scheduleCount));
+
+            String subEventQuery = "select count(event) From " + Event.class.getName() + " event, IN( event.subEvents ) subEvent WHERE subEvent.asset = :asset AND event.state = :activeState ";
+            Query subEventCount = getEntityManager().createQuery(subEventQuery);
+            subEventCount.setParameter("asset", asset).setParameter("activeState", Archivable.EntityState.ACTIVE);
+            summary.setAssetUsedInMasterEvent((Long) subEventCount.getSingleResult());
+            asset = fillInSubAssetsOnAsset(asset);
+            summary.setSubAssetsToDetach((long) asset.getSubAssets().size());
+
+            summary.setDetachFromMaster(parentAsset(asset) != null);
+
+            String partOfProjectQuery = "select count(p) From Project p, IN( p.assets ) s WHERE s = :asset";
+            Query partOfProjectCount = getEntityManager().createQuery(partOfProjectQuery);
+            partOfProjectCount.setParameter("asset", asset);
+            summary.setProjectToDetachFrom((Long) partOfProjectCount.getSingleResult());
+
+        } catch (InvalidQueryException e) {
+            logger.error("bad summary query", e);
+            summary = null;
+        }
+        return summary;
+    }
+
+    private void archiveEvents(Asset asset, User archivedBy) {
+        EventListArchiver archiver = new EventListArchiver(getEventIdsForAsset(asset));
+        archiver.archive(getEntityManager());
+    }
+
+    private Set<Long> getEventIdsForAsset(Asset asset) {
+        QueryBuilder<Long> idBuilder = new QueryBuilder<Long>(Event.class, new OpenSecurityFilter());
+        idBuilder.setSimpleSelect("id");
+        idBuilder.addWhere(WhereClauseFactory.create("asset.id", asset.getId()));
+
+        return new TreeSet<Long>(persistenceService.findAll(idBuilder));
+    }
+
+    private void detachFromProjects(Asset asset) {
+        for (Project project : asset.getProjects()) {
+            projectService.detachAsset(asset, project);
+        }
     }
 }
