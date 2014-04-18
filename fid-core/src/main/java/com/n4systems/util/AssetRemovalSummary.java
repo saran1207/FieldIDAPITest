@@ -11,6 +11,8 @@ public class AssetRemovalSummary {
 	private Long schedulesToDelete = 0L;
 	private Long assetUsedInMasterEvent = 0L;
 	private Long projectToDetachFrom = 0L;
+    private Long procedureDefinitionsToDelete = 0L;
+    private Long proceduresToDelete = 0L;
 	
 
 	public AssetRemovalSummary( Asset asset) {
@@ -73,4 +75,19 @@ public class AssetRemovalSummary {
 		return asset;
 	}
 
+    public Long getProcedureDefinitionsToDelete() {
+        return procedureDefinitionsToDelete;
+    }
+
+    public void setProcedureDefinitionsToDelete(Long procedureDefinitionsToDelete) {
+        this.procedureDefinitionsToDelete = procedureDefinitionsToDelete;
+    }
+
+    public Long getProceduresToDelete() {
+        return proceduresToDelete;
+    }
+
+    public void setProceduresToDelete(Long proceduresToDelete) {
+        this.proceduresToDelete = proceduresToDelete;
+    }
 }

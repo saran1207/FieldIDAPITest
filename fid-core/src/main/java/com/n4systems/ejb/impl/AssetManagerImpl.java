@@ -33,7 +33,10 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
-import java.util.*;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @Deprecated
 @CopiedToService(AssetService.class)
@@ -306,12 +309,12 @@ public class AssetManagerImpl implements AssetManager {
 		asset.archiveIdentifier();
 
 		archiveEvents(asset, archivedBy);
-		detatachFromProjects(asset, archivedBy);
+		detachFromProjects(asset, archivedBy);
 
 		return save(asset, archivedBy);
 	}
 
-	private void detatachFromProjects(Asset asset, User archivedBy) {
+	private void detachFromProjects(Asset asset, User archivedBy) {
 		for (Project project : asset.getProjects()) {
 			projectManager.detachAsset(asset, project, archivedBy.getId());
 		}
