@@ -33,7 +33,7 @@ public abstract class ProceduresAllListPage extends FieldIDTemplatePage {
 
         add(new NavigationBar(navBarId,
                 aNavItem().label(new FIDLabelModel("label.procedures_published")).page(PublishedListAllPage.class).build(),
-                aNavItem().label(new FIDLabelModel("label.procedures_drafts", procedureDefinitionService.getDraftCount(""))).page(DraftListAllPage.class).build(),
+                aNavItem().label(new FIDLabelModel("label.procedures_drafts_count", procedureDefinitionService.getDraftCount(""))).page(DraftListAllPage.class).build(),
                 aNavItem().label(new FIDLabelModel("label.procedures_previously_published")).page(PreviouslyPublishedListAllPage.class).build()
         ));
     }
@@ -45,26 +45,4 @@ public abstract class ProceduresAllListPage extends FieldIDTemplatePage {
         response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
         response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
-
-    /*
-    *
-    * TO DO:  Use this component to create the search box
-    *
-    *
-    @Override
-    protected Component createActionGroup(String actionGroupId) {
-
-        SEARCH BOX
-
-    }
-
-
-    protected IColumn<RowView> createActionsColumn() {
-        return new ProcedureActionsColumn();
-    }
-
-    */
-
-
-
 }

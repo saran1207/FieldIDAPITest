@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.loto.ProcedureListPanel;
 import com.n4systems.fieldid.wicket.components.loto.PublishedProcedureActionsColumn;
 import com.n4systems.fieldid.wicket.data.ProcedureDefinitionDataProvider;
+import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -28,7 +29,22 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
     private ProcedureDefinitionDataProvider dataProvider;
     private FIDFeedbackPanel feedbackPanel;
 
+    private String procedureCodeString = null;
+    private Asset asset = null;
+    private boolean isProcedureCode = false;
+
     private String textFilter = null;
+
+    public DraftListAllPage(){
+        super();
+    }
+
+    public DraftListAllPage(String procedureCodeString, Asset asset){
+        super();
+        this.procedureCodeString = procedureCodeString;
+        this.asset = asset;
+        this.isProcedureCode = true;
+    }
 
     @Override
     public String getAjaxIndicatorMarkupId(){
@@ -62,7 +78,7 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
 
         field.add(onChangeAjaxBehavior);
 
-        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.DRAFT){
+        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.DRAFT, procedureCodeString, asset, isProcedureCode){
             @Override protected String getTextFilter() {
                 return textFilter;
             }

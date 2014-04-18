@@ -194,6 +194,44 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAllPaginated(query,first,count);
     }
 
+    public List<ProcedureDefinition> getSelectedPublishedProcedures(String searchTerm, String procedureCode, Asset asset, String order, boolean ascending, int first, int count) {
+
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
+
+        query.addSimpleWhere("asset", asset);
+
+        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
+        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
+        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
+        // will not be returned in the result list.
+        // this should be handled more elegantly in the future but i'm fixing at the last second.
+        boolean needsSortJoin = false;
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("developedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    query.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+                } else {
+                    query.addOrder(subOrder, ascending);
+                }
+            }
+        }
+
+        if (needsSortJoin) {
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
+        }
+
+        return persistenceService.findAllPaginated(query,first,count);
+    }
+
+
+
     public List<ProcedureDefinition> getAllPreviouslyPublishedProcedures(String sTerm, String order, boolean ascending, int first, int count) {
 
         String searchTerm = "";
@@ -211,6 +249,42 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "equipmentNumber", "equipmentNumber", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
             query.addWhere(group);
         }
+
+        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
+        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
+        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
+        // will not be returned in the result list.
+        // this should be handled more elegantly in the future but i'm fixing at the last second.
+        boolean needsSortJoin = false;
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("developedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    query.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+                } else {
+                    query.addOrder(subOrder, ascending);
+                }
+            }
+        }
+
+        if (needsSortJoin) {
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
+        }
+
+        return persistenceService.findAllPaginated(query,first,count);
+    }
+
+    public List<ProcedureDefinition> getSelectedPreviouslyPublishedProcedures(String searchTerm, String procedureCode, Asset asset, String order, boolean ascending, int first, int count) {
+
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        query.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
+
+        query.addSimpleWhere("asset", asset);
 
         // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
         // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
@@ -288,6 +362,43 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAllPaginated(query,first,count);
     }
 
+    public List<ProcedureDefinition> getSelectedDraftProcedures(String searchTerm, String procedureCode, Asset asset, String order, boolean ascending, int first, int count) {
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        query.addSimpleWhere("publishedState", PublishedState.DRAFT);
+
+        query.addSimpleWhere("asset", asset);
+        query.addSimpleWhere("procedureCode", procedureCode.trim());
+
+        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
+        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
+        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
+        // will not be returned in the result list.
+        // this should be handled more elegantly in the future but i'm fixing at the last second.
+        boolean needsSortJoin = false;
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("developedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    query.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+                } else {
+                    query.addOrder(subOrder, ascending);
+                }
+            }
+        }
+
+        if (needsSortJoin) {
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
+        }
+
+        return persistenceService.findAllPaginated(query,first,count);
+    }
+
+
     public Long getPublishedCount(String searchTerm) {
         QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
         procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
@@ -305,6 +416,42 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
         return persistenceService.count(procedureDefinitionCountQuery);
     }
+
+    public Long getSelectedPublishedCount(String searchTerm, String procedureCode, Asset asset){
+
+        QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
+
+        procedureDefinitionCountQuery.addSimpleWhere("asset", asset);
+        procedureDefinitionCountQuery.addSimpleWhere("procedureCode", procedureCode.trim());
+
+        return persistenceService.count(procedureDefinitionCountQuery);
+    }
+
+    public Long getSelectedDraftCount(String searchTerm, String procedureCode, Asset asset){
+
+        QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.DRAFT);
+
+        procedureDefinitionCountQuery.addSimpleWhere("asset", asset);
+        procedureDefinitionCountQuery.addSimpleWhere("procedureCode", procedureCode.trim());
+
+        return persistenceService.count(procedureDefinitionCountQuery);
+    }
+
+    public Long getSelectedPreviouslyPublishedCount(String searchTerm, String procedureCode, Asset asset){
+
+        QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
+
+        procedureDefinitionCountQuery.addSimpleWhere("asset", asset);
+        procedureDefinitionCountQuery.addSimpleWhere("procedureCode", procedureCode.trim());
+
+        return persistenceService.count(procedureDefinitionCountQuery);
+    }
+
+
+
 
     public List<String> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
         QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredDevice.class);
