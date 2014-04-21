@@ -35,9 +35,9 @@
                                 </ul>
                             </div>
                         </div>
-                        <div wicket:enclosure="reviseLink" class="split-btn">
+                        <div wicket:enclosure="reviseLink" class="split-btn" style="min-width: 100px">
                             <a wicket:id="reviseLink" class="btn-secondary tipsy-tooltip"><wicket:message key="label.revise"/></a>
-                            <div class="dropdown">
+                            <div class="dropdown" wicket:enclosure="unpublishLink">
                                 <button class="btn-secondary">Toggle Dropdown</button>
                                 <ul>
                                     <li><a wicket:id="unpublishLink"><wicket:message key="label.unpublish"/></a></li>

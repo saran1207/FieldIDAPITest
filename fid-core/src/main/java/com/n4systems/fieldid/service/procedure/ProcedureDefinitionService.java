@@ -558,6 +558,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return false;
     }
 
+    public boolean isApprovalRequired() {
+        return getCurrentTenant().getSettings().getApprovalUserOrGroup() != null;
+    }
+
     public void deleteProcedureDefinition(ProcedureDefinition procedureDefinition) {
         Preconditions.checkArgument(procedureDefinition.getPublishedState().isPreApproval(), "can't delete a procedure that has been published");
         s3Service.removeProcedureDefinitionImages(procedureDefinition);
