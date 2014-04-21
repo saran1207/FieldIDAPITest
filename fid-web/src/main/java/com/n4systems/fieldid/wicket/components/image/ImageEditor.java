@@ -107,6 +107,7 @@ public class ImageEditor extends Panel {
     }
 
     private void save() {
+        throw new UnsupportedOperationException("Not Implemented");
 //        s3Service.saveEditableImage(imageModel.getObject());
    //     persistenceService.save(imageModel.getObject());
     }

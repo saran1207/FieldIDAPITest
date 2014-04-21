@@ -176,9 +176,9 @@ div.dialog-modal div.w_caption {
 	}
     .form-horizontal .uploads span {
         display: inline-block;
-        overflow: hidden;
+        /*overflow: hidden;
         text-overflow: ellipsis;
-        white-space: nowrap;
+        white-space: nowrap;*/
         width: 200px;
     }
     .form-horizontal .uploads.attributes span {

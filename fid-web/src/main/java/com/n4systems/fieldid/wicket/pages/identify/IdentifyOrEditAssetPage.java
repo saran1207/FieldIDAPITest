@@ -41,9 +41,13 @@ import com.n4systems.services.date.DateService;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -106,6 +110,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     IModel<Asset> assetModel;
 
     public IdentifyOrEditAssetPage(PageParameters params) {
+
         Asset asset;
         if (!params.get("lineItemId").isEmpty()) {
             lineItemId = params.get("lineItemId").toLongObject();
@@ -168,10 +173,11 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     }
 
     class IdentifyOrEditAssetForm extends Form<Asset> {
+        private static final String HIDE_LIST_JS = "$('#%s').hide();";
+        private static final String SHOW_LIST_JS = "$('#%s').show();";
 
         GpsTextField<BigDecimal> latitude;
         GpsTextField<BigDecimal> longitude;
-
 
         public IdentifyOrEditAssetForm(String id, final IModel<Asset> assetModel) {
             super(id, assetModel);
@@ -331,9 +337,37 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
             add(actionsContainer = new WebMarkupContainer("actionsContainer"));
 
+            /*final AjaxCallDecorator ajaxCallDecorator = new AjaxCallDecorator() {
+                @Override public CharSequence decorateScript(Component c, CharSequence script) {
+                    return String.format(HIDE_LIST_JS, listViewContainer.getMarkupId()) + super.decorateScript(c, script);
+                }
+                @Override public CharSequence decorateOnSuccessScript(Component c, CharSequence script) {
+                    return String.format(SHOW_LIST_JS, listViewContainer.getMarkupId()) + super.decorateOnSuccessScript(c, script);
+                }
+                @Override public CharSequence decorateOnFailureScript(Component c, CharSequence script) {
+                    return String.format(SHOW_LIST_JS, listViewContainer.getMarkupId()) + super.decorateOnSuccessScript(c, script);
+                }
+            };  */
+
             actionsContainer.add(new Button("saveButton") {
                 @Override
-                public void onSubmit() {
+                public void onSubmit() {performSingleOrMultiSave(assetModel);
+                    if (assetModel.getObject().isNew()) {
+                        setResponsePage(IdentifyOrEditAssetPage.class);
+                    } else {
+                        setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetModel.getObject().getId()));
+                    }
+                }
+
+            }.add(new AjaxIndicatorAppender()));
+
+            /*actionsContainer.add(new IndicatingAjaxButton("saveButton") {
+                List<AssetAttachment> attachments = assetAttachmentsPanel.getAttachments();
+
+                @Override
+                public void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                    System.out.println("onSubmit");
+
                     performSingleOrMultiSave(assetModel);
                     if (assetModel.getObject().isNew()) {
                         setResponsePage(IdentifyOrEditAssetPage.class);
@@ -341,7 +375,25 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                         setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetModel.getObject().getId()));
                     }
                 }
-            });
+                @Override
+                protected void onError(AjaxRequestTarget target, Form<?> form) {
+                    //todo
+                }
+
+                @Override
+                protected IAjaxCallDecorator getAjaxCallDecorator() {
+                    return new AjaxCallDecorator() {
+                        @Override
+                        public CharSequence decorateScript(Component component, CharSequence script) {
+                            for(int index = 0; index < attachments.size(); index++){
+                                System.out.println("attachments.get(index).isUploadInProgress(): "+attachments.get(index).isUploadInProgress());
+                            }
+                            return "alert('here!');" + script;
+                            //return "document.getElementById(\'"+id+"\').style.display = 'none';"+script;
+                        }
+                    };
+                }
+            });     */
 
             final boolean isNew = assetModel.getObject().isNew();
 
