@@ -766,7 +766,7 @@ public class AssetService extends FieldIdPersistenceService {
         archiveEvents(asset, archivedBy);
         detachFromProjects(asset);
 
-        //archiveProcedures(asset);
+        archiveProcedures(asset);
 
         return save(asset, archivedBy);
     }
@@ -817,6 +817,14 @@ public class AssetService extends FieldIdPersistenceService {
             Query partOfProjectCount = getEntityManager().createQuery(partOfProjectQuery);
             partOfProjectCount.setParameter("asset", asset);
             summary.setProjectToDetachFrom((Long) partOfProjectCount.getSingleResult());
+
+            QueryBuilder<ProcedureDefinition> procedureDefCount = createTenantSecurityBuilder(ProcedureDefinition.class);
+            procedureDefCount.addSimpleWhere("asset", asset);
+            summary.setProcedureDefinitionsToDelete(persistenceService.count(procedureDefCount));
+
+            QueryBuilder<Procedure> procedureCount = createTenantSecurityBuilder(Procedure.class);
+            procedureDefCount.addSimpleWhere("asset", asset);
+            summary.setProceduresToDelete(persistenceService.count(procedureCount));
 
         } catch (InvalidQueryException e) {
             logger.error("bad summary query", e);
