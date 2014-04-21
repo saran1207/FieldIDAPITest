@@ -43,6 +43,17 @@ ${action.setPageType('asset', 'edit')!}
 				<span><@s.text name="label.assetsbeingdetachedfromproject"/></span>
 			</div>
 		</#if>
+
+    <#if asset.type.hasProcedures()>
+        <div class="infoSet">
+            <label>${removalSummary.procedureDefinitionsToDelete}</label>
+            <span><@s.text name="label.procedure_definitions_to_be_deleted"/></span>
+        </div>
+        <div class="infoSet">
+            <label>${removalSummary.proceduresToDelete}</label>
+            <span><@s.text name="label.procedures_to_be_deleted"/></span>
+        </div>
+    </#if>
 		
 	</div>
 	<div class="formAction">
