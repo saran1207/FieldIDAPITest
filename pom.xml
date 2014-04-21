@@ -121,7 +121,11 @@
                 <artifactId>fid-migrations</artifactId>
                 <version>${pom.version}</version>
             </dependency>
+<<<<<<< HEAD
             <dependency>
+=======
+			<dependency>
+>>>>>>> 	modified:   ../fid-core/src/main/java/com/n4systems/fieldid/service/amazon/S3Service.java
                 <groupId>com.fieldid</groupId>
                 <artifactId>fid-connection-monitor</artifactId>
                 <version>${pom.version}</version>

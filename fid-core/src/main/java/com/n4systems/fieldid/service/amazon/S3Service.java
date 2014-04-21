@@ -732,9 +732,9 @@ public class S3Service extends FieldIdPersistenceService {
         return policyDocument;
     }
 
-    public String getAssetAttachmentsUploadJavascript(String assetUuid, String assetAttachmentUuid, String docElementId){
+    public String getAssetAttachmentsUploadJavascript(String assetUuid, String assetAttachmentUuid, String uploadFormMarkupId, String callbackUrlVar){
 
-        String uploadJavascript = getUploadJavascript(ASSET_ATTACHMENTS_PATH, assetUuid, assetAttachmentUuid, docElementId);
+        String uploadJavascript = getUploadJavascript(ASSET_ATTACHMENTS_PATH, assetUuid, assetAttachmentUuid, uploadFormMarkupId, callbackUrlVar);
         return uploadJavascript;
     }
 
@@ -744,13 +744,13 @@ public class S3Service extends FieldIdPersistenceService {
         return assetAttachmentsFolderUrl;
     }
 
-    protected String getUploadJavascript(String pathPattern, String parentUuid, String childUuid, String docElementId){
+    protected String getUploadJavascript(String pathPattern, String parentUuid, String childUuid, String uploadFormMarkupId, String callbackUrlVar){
         String path = createResourcePath(null, pathPattern, parentUuid, childUuid);
         User user = getCurrentUser();
         String bucketPolicyBase64 = this.getBucketPolicyBase64();
 
         String uploadJavascript =
-            "var control = document.getElementById('" + docElementId + "');" +
+            "var control = document.getElementById('" + uploadFormMarkupId + "');" +
             "if(!window.uploadsInProgress){" +
             "   window.uploadsInProgress = 0;" +
             "   window.setInterval(function(){" +
@@ -760,7 +760,6 @@ public class S3Service extends FieldIdPersistenceService {
             "       }" +
             "   }, 1000);" +
             "}" +
-            "console.log('control:');console.log(control);" +
             "for(var i = 0; i < control.files.length; i++){" +
             "   var file = control.files[i];" +
             //if file size is bigger than allowed, just skip it, the panel will show error message to user
@@ -769,28 +768,20 @@ public class S3Service extends FieldIdPersistenceService {
             "   }" +
             "   var xhr = new XMLHttpRequest();" +
             "   xhr.onreadystatechange = function(ev){" +
-            "       console.log(xhr);" +
-            "       console.log('xhr.readyState: ' + xhr.readyState);" +
-            "       console.log('xhr.status: ' + xhr.status);" +
-            "       console.log('xhr.statusText: ' + xhr.statusText);" +
-            "       console.log('xhr.timeout: ' + xhr.timeout);" +
-            "       console.log('xhr.responseXML: ' + xhr.responseXML);" +
             "       if(xhr.readyState === 1){" +
             "           window.uploadsInProgress += 1;" +
-            "       }"+
+            "       }" +
             "       else if(xhr.readyState === 4){" +
             "           window.uploadsInProgress -= 1;" +
-            "           if(xhr.status<200 || xhr.status>=300){" +
-            "               alert('Upload FAILED!')" +
-            "           }" +
+            "           wicketAjaxGet(" + callbackUrlVar + " + '&filename=' + encodeURI(file.name) + '&status=' + xhr.status + '&uuid=" + childUuid + "', function() { }, function() { });" +
             "       }" +
             "   };" +
             //"   xhr.upload.addEventListener('progress', function(evt){console.log('progress:'+JSON.stringify(evt));}, false);" +
-            "   xhr.upload.addEventListener('load', function(evt){console.log('load:'+JSON.stringify(evt));}, false);" +
-            "   xhr.upload.addEventListener('error', function(evt){console.log('error:'+JSON.stringify(evt));}, false);" +
+            //"   xhr.upload.addEventListener('load', function(evt){console.log('load:'+JSON.stringify(evt));}, false);" +
+            //"   xhr.upload.addEventListener('error', function(evt){" +
+            //"       wicketAjaxGet(" + callbackUrlVar + " + '&filename=' + encodeURI(file.name) + '&status=' + xhr.status + '&uuid=" + childUuid + "', function() { }, function() { });" +
+            //"   }, false);" +
             "   var fd = new FormData();" +
-            "   console.log('file:');console.log(file);" +
-            "   console.log('this:');console.log(this);" +
             "   var key = '" + path + "' + file.name;" +
             // Populate the Post paramters.
             "   fd.append('key', key);" +

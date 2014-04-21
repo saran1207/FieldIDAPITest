@@ -5,16 +5,20 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.ConfigEntry;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -48,6 +52,7 @@ public class AssetAttachmentsPanel extends Panel {
     private AssetService assetService;
 
     List<AssetAttachment> attachments = new ArrayList<AssetAttachment>();
+    //protected String wicketAjaxCall = "wicketAjaxCall";
     private WebMarkupContainer existingAttachmentsContainer;
 
     public AssetAttachmentsPanel(String id, IModel<Asset> assetModel) {
@@ -67,7 +72,8 @@ public class AssetAttachmentsPanel extends Panel {
                 item.add(comments);
                 comments.add(new AjaxFormComponentUpdatingBehavior("onblur") {
                     @Override
-                    protected void onUpdate(AjaxRequestTarget target) { } });
+                    protected void onUpdate(AjaxRequestTarget target) { }
+                });
                 item.add(new Label("fileName", new NameAfterLastFileSeparatorModel(ProxyModel.of(item.getModel(), on(AssetAttachment.class).getFileName()))));
                 item.add(new AjaxLink("removeLink") {
                     @Override
@@ -79,19 +85,56 @@ public class AssetAttachmentsPanel extends Panel {
             }
         });
 
+        /*existingAttachmentsContainer.add(new AjaxEventBehavior("onerror") {
+            protected void onEvent(AjaxRequestTarget target) {
+                System.out.println("ajax onerror: ");
+                attachments.remove(0); //TODO fix this!
+                target.add(existingAttachmentsContainer);
+            }
+        });*/
+
+        existingAttachmentsContainer.add(new AbstractDefaultAjaxBehavior() {
+            @Override
+            public void renderHead(Component component, IHeaderResponse response) {
+                super.renderHead(component, response);
+                StringBuilder javascript = new StringBuilder();
+                javascript.append("window." + existingAttachmentsContainer.getMarkupId() + "AjaxCallbackUrl = '" + getCallbackUrl() + "';\n");
+                response.renderOnDomReadyJavaScript(javascript.toString());
+                //response.renderOnEventJavaScript(
+            }
+
+            @Override
+            protected void respond(AjaxRequestTarget target) {
+                String filename = getRequest().getRequestParameters().getParameterValue("filename").toString();
+                String uuid = getRequest().getRequestParameters().getParameterValue("uuid").toString();
+                Integer status = getRequest().getRequestParameters().getParameterValue("status").toInteger();
+                for(int index = 0; index < attachments.size(); index++){
+                    if(attachments.get(index).getMobileId().equals(uuid)){
+                        if(status < 200 || status >= 300){
+                            attachments.remove(index);
+                            error(new FIDLabelModel("error.file_upload_failed", filename, status.toString()).getObject());
+                            target.add(((IdentifyOrEditAssetPage)getPage()).getFeedbackPanel(), existingAttachmentsContainer);
+                        }
+                        break;
+                    }
+                }
+            }
+        });
+
         add(existingAttachmentsContainer);
-        add(new UploadAttachmentForm("uploadAttachmentForm", assetModel));
+        add(new UploadAttachmentForm("uploadAttachmentForm", assetModel, existingAttachmentsContainer.getMarkupId() + "AjaxCallbackUrl"));
     }
 
 
     class UploadAttachmentForm extends Form {
         private IModel<Asset> assetModel;
-        FIDFeedbackPanel feedbackPanel;
+        protected String callbackUrlVar;
 
-        public UploadAttachmentForm(String id, IModel<Asset> assetModel_) {
+        public UploadAttachmentForm(String id, IModel<Asset> assetModel_, String callbackUrlVar_) {
             super(id);
             assetModel = assetModel_;
-            add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
+            callbackUrlVar = callbackUrlVar_;
+
 
             final FileUploadField attachmentUpload = new FileUploadField("attachmentUpload");
             attachmentUpload.setOutputMarkupId(true);
@@ -104,7 +147,7 @@ public class AssetAttachmentsPanel extends Panel {
                     String assetUuid = assetModel.getObject().getMobileGUID();
                     String assetAttachmentUuid = UUID.randomUUID().toString();
                     String docElementId = attachmentUpload.getMarkupId();
-                    String uploadJavascript = s3Service.getAssetAttachmentsUploadJavascript(assetUuid, assetAttachmentUuid, docElementId);
+                    String uploadJavascript = s3Service.getAssetAttachmentsUploadJavascript(assetUuid, assetAttachmentUuid, docElementId, callbackUrlVar);
 
                     target.prependJavaScript(uploadJavascript);
 
@@ -135,14 +178,12 @@ public class AssetAttachmentsPanel extends Panel {
                         Long humanReadableFileLimit = uploadMaxFileSizeBytes/(1024*1024);
                         error(new FIDLabelModel("error.file_size_limit", fileUpload.getClientFileName(), humanReadableFileLimit.toString()).getObject());
                     }
-                    target.add(((IdentifyOrEditAssetPage)getPage()).getFeedbackPanel());
 
-                    target.add(feedbackPanel, existingAttachmentsContainer, attachmentUpload);
+                    target.add(((IdentifyOrEditAssetPage)getPage()).getFeedbackPanel(), existingAttachmentsContainer, attachmentUpload);
                 }
 
                 @Override
                 protected void onError(AjaxRequestTarget target) {
-                    //target.add(feedbackPanel);
                 }
             });
         }
