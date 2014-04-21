@@ -100,6 +100,11 @@ public class ProcedureDefinitionListPage extends LotoPage {
                         && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
                 copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
 
+                boolean showUnpublished = true;
+
+                if(procedureDefinitionService.isApprovalRequired())
+                    showUnpublished = procedureDefinitionService.canCurrentUserApprove();
+
                 item.add(new AjaxLink<Void>("unpublishLink") {
 
                     @Override
@@ -112,7 +117,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                             target.add(listContainer, feedbackPanel);
                         }
                     }
-                });
+                }.setVisible(showUnpublished));
 
                 Link printLink;
                 item.add(printLink = new Link("print") {

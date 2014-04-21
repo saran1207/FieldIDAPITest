@@ -2,13 +2,11 @@ package com.n4systems.fieldid.service.procedure;
 
 import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.Asset;
-import com.n4systems.model.ProcedureWorkflowState;
+import com.n4systems.model.*;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.util.persistence.*;
 
 import java.util.Arrays;
 import java.util.List;
@@ -71,6 +69,34 @@ public class ProcedureService extends FieldIdPersistenceService {
         query.addSimpleWhere("asset", asset);
         return persistenceService.findAll(query);
     }
+
+    public Long getAllProceduresForAssetTypeCount(AssetType assetType) {
+        QueryBuilder<Long> query = new QueryBuilder<Long>(Procedure.class, securityContext.getTenantSecurityFilter());
+        WhereParameterGroup wpg = new WhereParameterGroup();
+        wpg.addClause( WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()) );
+        query.addWhere(wpg);
+
+        return persistenceService.count(query);
+    }
+
+
+    public List<Procedure> getAllProceduresForAssetType(AssetType assetType) {
+        QueryBuilder<Procedure> query = new QueryBuilder<Procedure>(Procedure.class, securityContext.getTenantSecurityFilter());
+        WhereParameterGroup wpg = new WhereParameterGroup();
+        wpg.addClause( WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()) );
+        query.addWhere(wpg);
+        return persistenceService.findAll(query);
+    }
+
+    public void archiveProceduresForAssetType(AssetType assetType) {
+        List<Procedure> procedureList;
+        procedureList = getAllProceduresForAssetType(assetType);
+
+        for (Procedure procedure : procedureList) {
+            archiveProcedure(procedure);
+        }
+    }
+
 
     public void archiveProcedure(Procedure procedure) {
         procedure.archiveEntity();

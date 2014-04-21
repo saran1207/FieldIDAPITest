@@ -8,6 +8,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.model.Asset;
+import com.n4systems.model.AssetType;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
@@ -135,7 +136,40 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     public List<ProcedureDefinition> getAllProcedureDefinitionsForAsset(Asset asset) {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("asset", asset);
+
+
         return persistenceService.findAll(query);
+    }
+
+    public Long getAllProcedureDefinitionsForAssetTypeCount(AssetType assetType) {
+        QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
+        WhereParameterGroup wpg = new WhereParameterGroup();
+        wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()));
+        query.addWhere(wpg);
+
+        return persistenceService.count(query);
+    }
+
+
+    public List<ProcedureDefinition> getAllProcedureDefinitionsForAssetType(AssetType assetType) {
+        QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
+        WhereParameterGroup wpg = new WhereParameterGroup();
+        wpg.addClause( WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()) );
+        query.addWhere(wpg);
+
+        return persistenceService.findAll(query);
+    }
+
+
+    public void archiveProcedureDefinitionsForAssetType(AssetType assetType) {
+        List<ProcedureDefinition> procedureDefinitionList;
+        procedureDefinitionList = getAllProcedureDefinitionsForAssetType(assetType);
+
+        for (ProcedureDefinition procedureDefinition : procedureDefinitionList) {
+            procedureDefinition.archiveEntity();
+            persistenceService.update(procedureDefinition);
+        }
+
     }
 
 
@@ -522,6 +556,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             return true;
         }
         return false;
+    }
+
+    public boolean isApprovalRequired() {
+        return getCurrentTenant().getSettings().getApprovalUserOrGroup() != null;
     }
 
     public void deleteProcedureDefinition(ProcedureDefinition procedureDefinition) {
