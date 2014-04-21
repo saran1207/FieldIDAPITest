@@ -79,7 +79,7 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 		return note.getComments();
 	}
 
-    //the attachment Filename field is overloaded to house full URL instead of just the filename
+    //the attachment Filename field is overloaded to house full path instead of just the filename
 	public String getFileName() {
 		return note.getFileName();
 	}

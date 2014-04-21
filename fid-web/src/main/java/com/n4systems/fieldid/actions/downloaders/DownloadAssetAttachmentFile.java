@@ -47,8 +47,13 @@ public class DownloadAssetAttachmentFile extends AbstractDownloadAction {
 
 	@Override
 	public File getFile() {
-        File assetAttachmentFile = s3Service.downloadAssetAttachmentFile(attachment);
-        return assetAttachmentFile;
+        if(attachment.isRemote()){
+            File assetAttachmentFile = s3Service.downloadAssetAttachmentFile(attachment);
+            return assetAttachmentFile;
+        }
+        else {
+            return PathHandler.getAssetAttachmentFile(attachment);
+        }
 	}
 
 	@Override

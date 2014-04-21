@@ -56,8 +56,14 @@ public class AssetAttachmentsPanel extends Panel {
                     logger.warn("Could not convert to UTF-8", e);
                     fileName = attachment.getFileName().replace(" ", "+");
                 }
-                
-                URL downloadUrl = s3Service.getAssetAttachmentUrl(attachment);
+
+                String downloadUrl;
+                if(attachment.isRemote()){
+                    downloadUrl = s3Service.getAssetAttachmentUrl(attachment).toString();
+                }
+                else {
+                    downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ fileName + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
+                }
 
                 WebComponent image;
                 if(attachment.isImage()) {

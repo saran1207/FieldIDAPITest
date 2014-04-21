@@ -209,8 +209,12 @@ public class TemplateAssetSummaryPage extends AssetPage {
                 try {
                     ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(getFile(filename)));
                     for (AssetAttachment assetAttachment: assetAttachments) {
-                        File assetAttachmentFile = s3Service.downloadAssetAttachmentFile(assetAttachment);
-                        ZipFileUtil.addToZipFile(assetAttachmentFile, zipOut);
+                        if(assetAttachment.isRemote()){
+                            ZipFileUtil.addToZipFile(s3Service.downloadAssetAttachmentFile(assetAttachment), zipOut);
+                        }
+                        else {
+                            ZipFileUtil.addToZipFile(PathHandler.getAssetAttachmentFile(assetAttachment), zipOut);
+                        }
                     }
                     for (FileAttachment fileAttachment: typeAttachments) {
                         ZipFileUtil.addToZipFile(PathHandler.getAssetTypeAttachmentFile(fileAttachment, assetType.getId()), zipOut);
