@@ -62,7 +62,7 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
         onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));
         field.add(onChangeAjaxBehavior);
 
-        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.PUBLISHED){
+        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.PUBLISHED, "", null, false){
             @Override protected String getTextFilter() {
                 return textFilter;
             }

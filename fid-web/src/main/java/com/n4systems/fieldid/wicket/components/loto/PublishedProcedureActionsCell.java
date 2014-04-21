@@ -5,6 +5,8 @@ import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.loto.DraftListAllPage;
+import com.n4systems.fieldid.wicket.pages.loto.PreviouslyPublishedListAllPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
@@ -78,12 +80,41 @@ public class PublishedProcedureActionsCell extends Panel {
 
 
 
+        Link draftLink;
+        draftLink = new Link("draftLink") {
+            @Override
+            public void onClick() {
+                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(proDef.getObject().getAsset(), proDef.getObject().getFamilyId());
+                setResponsePage(new DraftListAllPage(publishedDef.getProcedureCode(), publishedDef.getAsset()));
+            }
+        };
+        draftLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(proDef.getObject().getAsset())
+                && proDef.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
+
+
+        optionsContainer.add(draftLink);
+
+
+        Link previouslyPublishedLink;
+        previouslyPublishedLink = new Link("previouslyPublishedLink") {
+            @Override
+            public void onClick() {
+                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(proDef.getObject().getAsset(), proDef.getObject().getFamilyId());
+                setResponsePage(new PreviouslyPublishedListAllPage(publishedDef.getProcedureCode(), publishedDef.getAsset()));
+            }
+        };
+        previouslyPublishedLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(proDef.getObject().getAsset())
+                && proDef.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
+
+
+        optionsContainer.add(previouslyPublishedLink);
+
+
         BookmarkablePageLink<Void> editLink = new BookmarkablePageLink<Void>("editLink", ProcedureDefinitionPage.class, PageParametersBuilder.id(procedureDefinition.getId())) {
         };
         editLink.setVisible(isAuthor(procedureDefinition) && procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));
 
         optionsContainer.add(editLink);
-
 
 
 

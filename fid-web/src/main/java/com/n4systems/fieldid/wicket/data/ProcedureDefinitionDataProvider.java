@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.data;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -26,10 +27,18 @@ public class ProcedureDefinitionDataProvider extends FieldIDDataProvider<Procedu
 
     private String searchTerm;
 
-    public ProcedureDefinitionDataProvider(String order, SortOrder sortOrder, PublishedState state) {
+    private String procedureCode;
+    private Asset asset;
+    private boolean isProcedureCode;
+
+    public ProcedureDefinitionDataProvider(String order, SortOrder sortOrder, PublishedState state, String procedureCode, Asset asset, boolean isProcedureCode) {
         setSort(order, sortOrder);
         this.state = state;
         searchTerm = "";
+        this.procedureCode = procedureCode;
+        this.asset = asset;
+        this.isProcedureCode = isProcedureCode;
+
     }
 
 
@@ -37,12 +46,22 @@ public class ProcedureDefinitionDataProvider extends FieldIDDataProvider<Procedu
     public Iterator<? extends ProcedureDefinition> iterator(int first, int count) {
         List<? extends ProcedureDefinition> procedureDefinitionList = null;
 
-        if(state.equals(PublishedState.DRAFT)) {
-            procedureDefinitionList = procedureDefinitionService.getAllDraftProcedures(searchTerm, getSort().getProperty(), getSort().isAscending(), first, count);
-        } else if (state.equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
-            procedureDefinitionList = procedureDefinitionService.getAllPreviouslyPublishedProcedures(searchTerm, getSort().getProperty(), getSort().isAscending(), first, count);
-        } else if (state.equals(PublishedState.PUBLISHED)) {
-            procedureDefinitionList = procedureDefinitionService.getAllPublishedProcedures(searchTerm, getSort().getProperty(), getSort().isAscending(), first, count);
+        if(isProcedureCode) {
+            if(state.equals(PublishedState.DRAFT)) {
+                procedureDefinitionList = procedureDefinitionService.getSelectedDraftProcedures(searchTerm, procedureCode, asset, getSort().getProperty(), getSort().isAscending(), first, count);
+            } else if (state.equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
+                procedureDefinitionList = procedureDefinitionService.getSelectedPreviouslyPublishedProcedures(searchTerm, procedureCode, asset, getSort().getProperty(), getSort().isAscending(), first, count);
+            } else if (state.equals(PublishedState.PUBLISHED)) {
+                procedureDefinitionList = procedureDefinitionService.getSelectedPublishedProcedures(searchTerm, procedureCode, asset, getSort().getProperty(), getSort().isAscending(), first, count);
+            }
+        } else {
+            if (state.equals(PublishedState.DRAFT)) {
+                procedureDefinitionList = procedureDefinitionService.getAllDraftProcedures(searchTerm, getSort().getProperty(), getSort().isAscending(), first, count);
+            } else if (state.equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
+                procedureDefinitionList = procedureDefinitionService.getAllPreviouslyPublishedProcedures(searchTerm, getSort().getProperty(), getSort().isAscending(), first, count);
+            } else if (state.equals(PublishedState.PUBLISHED)) {
+                procedureDefinitionList = procedureDefinitionService.getAllPublishedProcedures(searchTerm, getSort().getProperty(), getSort().isAscending(), first, count);
+            }
         }
 
         return procedureDefinitionList.iterator();
@@ -52,12 +71,22 @@ public class ProcedureDefinitionDataProvider extends FieldIDDataProvider<Procedu
     public int size() {
         int size = 0;
 
-        if(state.equals(PublishedState.DRAFT)) {
-            size = procedureDefinitionService.getDraftCount(searchTerm).intValue();
-        } else if (state.equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
-            size = procedureDefinitionService.getPreviouslyPublishedCount(searchTerm).intValue();
-        } else if (state.equals(PublishedState.PUBLISHED)) {
-            size = procedureDefinitionService.getPublishedCount(searchTerm).intValue();
+        if(isProcedureCode) {
+            if(state.equals(PublishedState.DRAFT)) {
+                size = procedureDefinitionService.getSelectedDraftCount(searchTerm, procedureCode, asset).intValue();
+            } else if (state.equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
+                size = procedureDefinitionService.getSelectedPreviouslyPublishedCount(searchTerm, procedureCode, asset).intValue();
+            } else if (state.equals(PublishedState.PUBLISHED)) {
+                size = procedureDefinitionService.getSelectedPublishedCount(searchTerm, procedureCode, asset).intValue();
+            }
+        } else {
+            if(state.equals(PublishedState.DRAFT)) {
+                size = procedureDefinitionService.getDraftCount(searchTerm).intValue();
+            } else if (state.equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
+                size = procedureDefinitionService.getPreviouslyPublishedCount(searchTerm).intValue();
+            } else if (state.equals(PublishedState.PUBLISHED)) {
+                size = procedureDefinitionService.getPublishedCount(searchTerm).intValue();
+            }
         }
 
         return size;
