@@ -97,7 +97,7 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
             }
         };
 
-        add(new ContextImage("loadingImage", "images/loading-small.gif"));
+        formContainer.add(new ContextImage("loadingImage", "images/loading-small.gif"));
 
         add(procedureDefinitionListPanel = new ProcedureListPanel("procedureDefinitionListPanel", dataProvider) {
             @Override

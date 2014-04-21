@@ -97,7 +97,7 @@ public class PreviouslyPublishedListAllPage extends ProceduresAllListPage implem
             }
         };
 
-        add(new ContextImage("loadingImage", "images/loading-small.gif"));
+        formContainer.add(new ContextImage("loadingImage", "images/loading-small.gif"));
 
         add(procedureDefinitionListPanel = new ProcedureListPanel("procedureDefinitionListPanel", dataProvider) {
             @Override
