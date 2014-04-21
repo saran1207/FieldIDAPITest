@@ -125,17 +125,14 @@ public class PublishedProcedureActionsCell extends Panel {
 
                 try {
                     procedureDefinitionService.deleteProcedureDefinition(procedureDefinition);
+                    info(new FIDLabelModel("message.procedure_definitions.delete").getObject());
+                    target.add(procedureListPanel);
+                    target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
                 } catch (Exception e) {
-                    error(new FIDLabelModel("error.eventdeleting").getObject());
+                    error(new FIDLabelModel("error.delete_procedure_definition").getObject());
                     target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
                 }
-
-                info(new FIDLabelModel("message.procedure_definitions.delete").getObject());
-                target.add(procedureListPanel);
-                target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
-
             }
-
         };
 
         deleteLink.setVisible(isAuthor(procedureDefinition) && procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));

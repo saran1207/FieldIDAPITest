@@ -629,7 +629,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public String doConfirmDelete() {
 		testExistingAsset();
 		try {
-			removalSummary = assetManager.testArchive(asset);
+			removalSummary = assetService.testArchive(asset);
 		} catch (Exception e) {
 			return ERROR;
 		}

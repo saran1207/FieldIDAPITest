@@ -12,6 +12,7 @@ import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
@@ -28,6 +29,8 @@ public class PreviouslyPublishedListAllPage extends ProceduresAllListPage implem
     private ProcedureListPanel procedureDefinitionListPanel;
     private ProcedureDefinitionDataProvider dataProvider;
     private FIDFeedbackPanel feedbackPanel;
+
+    private WebMarkupContainer formContainer;
 
     private String procedureCodeString = null;
     private Asset asset = null;
@@ -59,8 +62,18 @@ public class PreviouslyPublishedListAllPage extends ProceduresAllListPage implem
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
+        formContainer = new WebMarkupContainer("formContainer"){
+            @Override
+            public boolean isVisible()
+            {
+                return !isProcedureCode;
+            }
+        };
+
+        add(formContainer);
+
         Form<Void> form = new Form<Void>("form");
-        add(form);
+        formContainer.add(form);
 
         final TextField<String> field = new TextField<String>("field", new Model<String>(""));
         form.add(field);

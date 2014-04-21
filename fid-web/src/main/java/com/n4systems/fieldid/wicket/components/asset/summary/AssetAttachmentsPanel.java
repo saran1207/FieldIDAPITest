@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.asset.summary;
 
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
@@ -20,6 +21,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.net.URL;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -29,6 +31,9 @@ public class AssetAttachmentsPanel extends Panel {
 
     @SpringBean
     protected AssetService assetService;
+
+    @SpringBean
+    private S3Service s3Service;
 
     @SpringBean
     private UserService userService;
@@ -51,8 +56,14 @@ public class AssetAttachmentsPanel extends Panel {
                     logger.warn("Could not convert to UTF-8", e);
                     fileName = attachment.getFileName().replace(" ", "+");
                 }
-                
-                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ fileName + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
+
+                String downloadUrl;
+                if(attachment.isRemote()){
+                    downloadUrl = s3Service.getAssetAttachmentUrl(attachment).toString();
+                }
+                else {
+                    downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ fileName + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
+                }
 
                 WebComponent image;
                 if(attachment.isImage()) {
@@ -63,8 +74,12 @@ public class AssetAttachmentsPanel extends Panel {
                     image.add(new AttributeModifier("class", "attachmentIcon"));
                 }
                 ExternalLink attachmentLink;
-                item.add(attachmentLink = new ExternalLink("attachmentLink", downloadUrl));
-                attachmentLink.add(new Label("attachmentName", attachment.getFileName()));
+                item.add(attachmentLink = new ExternalLink("attachmentLink", downloadUrl.toString()));
+
+                String assetAttachmentFilePath = attachment.getFileName();
+                String assetAttachmentFileName = assetAttachmentFilePath.substring(assetAttachmentFilePath.lastIndexOf('/') + 1);
+
+                attachmentLink.add(new Label("attachmentName", assetAttachmentFileName));
                 item.add(new Label("attachmentNote", attachment.getNote().getComments()));
             }
         });

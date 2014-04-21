@@ -3,13 +3,14 @@
 <wicket:extend>
 
     <div wicket:id="feedbackPanel" class="filter" />
-
-    <div class="text-search pull-right procedure-text-search">
-        <form wicket:id="form">
-            <span class="icon-search"></span>
-            <input wicket:id="field" type="text" placeholder="Search by Procedure Code or Equipment #"/><br/>
-        </form>
-    </div>
+    <wicket:enclosure child="formContainer">
+        <div wicket:id="formContainer" class="text-search pull-right procedure-text-search">
+            <form wicket:id="form">
+                <span class="icon-search"></span>
+                <input wicket:id="field" type="text" placeholder="Search by Procedure Code or Equipment #"/><br/>
+            </form>
+        </div>
+    </wicket:enclosure>
     <img class="loadingAnimationImage pull-right procedure-search-loading" wicket:id="loadingImage" id="loadingImage" style="display: none;"/>
     <div wicket:id="procedureDefinitionListPanel" class="event-panel" />
 

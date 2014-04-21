@@ -52,7 +52,13 @@ public enum ConfigEntry {
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_ATTACHMENT_IN_KB	(	"2048"				), 
 	UPLOAD_FILE_SIZE_LIMIT_PRODUCT_TYPE_IMAGE_IN_KB (	"500"				),
     USAGE_BASED_EVENT_COUNT_THRESHOLD           (	"500"			    	),
-	
+
+    AMAZON_ACCESS_KEY_ID                        (   "AKIAJYAZBOFFRZAZSIGA"),
+    AMAZON_SECRET_ACCESS_KEY                    (   "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"),
+    AMAZON_S3_SERVER_HOSTNAME                   (   "s3.amazonaws.com"), //only overwritten if a tenant can't use amazon s3
+    AMAZON_S3_BUCKET                            (   "fieldid_dev"),      //overwritten depending on environment
+    AMAZON_S3_UPLOAD_TIMEOUT_MILLISECONDS       (   "120000"),
+    AMAZON_S3_UPLOAD_MAX_FILE_SIZE_BYTES        (   "10485760"),
 	
 	// ones below here are never overridden by the tenant.
 	ACTIVE_SESSION_TIME_OUT						(	"30"				),
@@ -79,9 +85,6 @@ public enum ConfigEntry {
     GOOGLE_ANALYTICS_ENABLED                    (   "false" ),
     APPTEGIC_ENABLED                            (   "false" ),
     APPTEGIC_DATASET                            (   "test" ),
-    AMAZON_S3_BUCKET                            (   "fieldid_dev"),
-    AMAZON_ACCESS_KEY_ID                        (   "AKIAJYAZBOFFRZAZSIGA"),
-    AMAZON_SECRET_ACCESS_KEY                    (   "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"),
     FIELDID_SALES_MANAGERS_EMAIL                (   "salesmanagers@fieldid.com"),
     CUSTOM_JS                                   (   ""),
 
