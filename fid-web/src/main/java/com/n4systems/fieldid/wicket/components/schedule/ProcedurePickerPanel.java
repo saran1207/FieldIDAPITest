@@ -34,6 +34,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
+import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
@@ -99,14 +100,20 @@ public class ProcedurePickerPanel extends Panel {
 
             Date dueDate = procedureScheduleModel.getObject().getDueDate();
 
+            final List<ProcedureDefinition> choices = procedureDefinitionService.getAllPublishedProcedures(procedureScheduleModel.getObject().getAsset());
+
+            setDefaultEventType(procedureScheduleModel, choices);
+
             add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
             add(new DropDownChoice<ProcedureDefinition>("procedureDefSelect",
                     new PropertyModel<ProcedureDefinition>(procedureScheduleModel, "type"),
-                    procedureDefinitionService.getAllPublishedProcedures(procedureScheduleModel.getObject().getAsset()),
+                    choices,
                     new ListableChoiceRenderer<ProcedureDefinition>())
+                    .setNullValid(false)
                     .setRequired(true)
                     .add(new JChosenBehavior()));
+
 
             add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(procedureScheduleModel, "dueDate"), true));
             dateTimePicker.getDateTextField().setRequired(true);
@@ -148,6 +155,13 @@ public class ProcedurePickerPanel extends Panel {
                 }
             });
 
+        }
+
+        private void setDefaultEventType(IModel<Procedure> eventScheduleModel, List<ProcedureDefinition> eventTypeOptions) {
+            Procedure eventSchedule = eventScheduleModel.getObject();
+            if (eventSchedule.getType() == null && eventTypeOptions.size() > 0) {
+                eventSchedule.setType(eventTypeOptions.get(0));
+            }
         }
 
         private AjaxLink createQuickDateLink(String id, final int daysFromNow, final int monthsFromNow, final int yearsFromNow) {
