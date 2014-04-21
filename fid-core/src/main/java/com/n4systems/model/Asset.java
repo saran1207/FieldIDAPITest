@@ -147,9 +147,9 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 		synchronizeNetworkId();
 	}
 	
-	private void ensureMobileGuidIsSet() {
-		if (mobileGUID == null) {
-			mobileGUID = UUID.randomUUID().toString();
+	public void ensureMobileGuidIsSet() {
+		if (this.getMobileGUID() == null) {
+            this.setMobileGUID(UUID.randomUUID().toString());
 		}
 	}
 	

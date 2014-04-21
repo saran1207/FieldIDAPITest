@@ -121,7 +121,7 @@
                 <artifactId>fid-migrations</artifactId>
                 <version>${pom.version}</version>
             </dependency>
-            <dependency>
+			<dependency>
                 <groupId>com.fieldid</groupId>
                 <artifactId>fid-connection-monitor</artifactId>
                 <version>${pom.version}</version>
