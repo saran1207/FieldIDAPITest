@@ -166,7 +166,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         procedureDefinitionList = getAllProcedureDefinitionsForAssetType(assetType);
 
         for (ProcedureDefinition procedureDefinition : procedureDefinitionList) {
-            archiveProcedureDefinition(procedureDefinition);
+            procedureDefinition.archiveEntity();
+            persistenceService.update(procedureDefinition);
         }
 
     }

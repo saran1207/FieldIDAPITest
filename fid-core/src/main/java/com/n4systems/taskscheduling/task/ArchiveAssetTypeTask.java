@@ -14,6 +14,9 @@ import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.util.persistence.WhereClauseFactory;
+import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.WhereParameterGroup;
 import org.apache.log4j.Logger;
 
 
@@ -78,8 +81,8 @@ public class ArchiveAssetTypeTask implements Runnable {
 		deleteRelatedAssetCodeMappings();
 		logger.debug("completed asset code mappings " + (subAssetTypeDetachFailed ? " failed" : "passed"));
 
-//        deleteProcedures();
-//        deleteProcedureDefinitions();
+        deleteProcedures();
+        deleteProcedureDefinitions();
 
 		logger.info("packing up results for deletion of asset type " + getAssetTypeName());
 		try {
@@ -93,12 +96,41 @@ public class ArchiveAssetTypeTask implements Runnable {
 
 
     private void deleteProcedures() throws InvalidQueryException {
-        procedureService.archiveProceduresForAssetType(type);
+//        procedureService.archiveProceduresForAssetType(type);
+
+        List<Procedure> procedureList;
+
+        QueryBuilder<Procedure> query = new QueryBuilder<Procedure>(Procedure.class, new OpenSecurityFilter());
+        WhereParameterGroup wpg = new WhereParameterGroup();
+        wpg.addClause( WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", type.getId()) );
+        query.addWhere(wpg);
+        procedureList = persistenceManager.findAll(query);
+
+
+        for (Procedure procedure : procedureList) {
+            procedure.archiveEntity();
+            persistenceManager.update(procedure);
+        }
+
     }
 
 
     private void deleteProcedureDefinitions() throws InvalidQueryException {
-        procedureDefinitionService.archiveProcedureDefinitionsForAssetType(type);
+//        procedureDefinitionService.archiveProcedureDefinitionsForAssetType(type);
+
+        QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, new OpenSecurityFilter());
+        WhereParameterGroup wpg = new WhereParameterGroup();
+        wpg.addClause( WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", type.getId()) );
+        query.addWhere(wpg);
+
+        List<ProcedureDefinition> procedureDefinitionList;
+        procedureDefinitionList = persistenceManager.findAll(query);
+
+        for (ProcedureDefinition procedureDefinition : procedureDefinitionList) {
+            procedureDefinition.archiveEntity();
+            persistenceManager.update(procedureDefinition);
+        }
+
     }
 
 
