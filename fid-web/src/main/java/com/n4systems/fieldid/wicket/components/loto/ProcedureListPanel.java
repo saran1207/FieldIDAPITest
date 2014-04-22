@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.loto;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -111,6 +112,8 @@ public class ProcedureListPanel extends Panel {
     protected void addActionColumn(List<IColumn<? extends ProcedureDefinition>> columns) {}
 
     protected void addCustomColumns(List<IColumn<? extends ProcedureDefinition>> columns) {}
+
+    protected FIDFeedbackPanel getErrorFeedbackPanel() { return null; }
 
     public FieldIDDataProvider<ProcedureDefinition> getDataProvider() {
         return dataProvider;

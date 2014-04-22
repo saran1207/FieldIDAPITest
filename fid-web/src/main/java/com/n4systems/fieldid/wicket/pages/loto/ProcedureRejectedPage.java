@@ -63,6 +63,11 @@ public class ProcedureRejectedPage extends ProcedureApprovalsPage {
                 columns.add(new ProcedureApprovalsActionsColumn(this));
             }
 
+            @Override
+            protected FIDFeedbackPanel getErrorFeedbackPanel() {
+                return feedbackPanel;
+            }
+
         });
         procedureListPanel.setOutputMarkupPlaceholderTag(true);
 

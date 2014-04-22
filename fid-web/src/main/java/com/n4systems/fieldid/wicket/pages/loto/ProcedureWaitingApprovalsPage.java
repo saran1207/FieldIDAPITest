@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 
-import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.loto.ProcedureApprovalsActionsColumn;
@@ -58,6 +57,11 @@ public class ProcedureWaitingApprovalsPage extends ProcedureApprovalsPage {
             protected void addActionColumn(List<IColumn<? extends ProcedureDefinition>> columns) {
 
                 columns.add(new ProcedureApprovalsActionsColumn(this));
+            }
+
+            @Override
+            protected FIDFeedbackPanel getErrorFeedbackPanel() {
+                return feedbackPanel;
             }
 
         });

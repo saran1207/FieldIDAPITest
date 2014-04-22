@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
@@ -29,8 +30,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class PublishedProcedureActionsCell extends Panel {
 
-    private @SpringBean
-    ProcedureDefinitionService procedureDefinitionService;
+    @SpringBean
+    private ProcedureDefinitionService procedureDefinitionService;
+
+    @SpringBean
+    private ProcedureService procedureService;
 
     public PublishedProcedureActionsCell(String id, final IModel<ProcedureDefinition> proDef, final ProcedureListPanel procedureListPanel) {
         super(id);
@@ -65,31 +69,49 @@ public class PublishedProcedureActionsCell extends Panel {
         copyLink = new Link("copyProcedureDefLink") {
             @Override
             public void onClick() {
-                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(proDef.getObject().getAsset(), proDef.getObject().getFamilyId());
+                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
                 ProcedureDefinition copiedDefinition = procedureDefinitionService.cloneProcedureDefinition(publishedDef);
                 copiedDefinition.setPublishedState(PublishedState.DRAFT);
                 setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
             }
         };
-        copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(proDef.getObject().getAsset())
-              && proDef.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
+        copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
+              && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
 
         copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
 
         optionsContainer.add(copyLink);
 
+        boolean showUnpublished = procedureDefinitionService.isApprovalRequired() ? procedureDefinitionService.canCurrentUserApprove() : true;
 
+        AjaxLink unpublishLink = new AjaxLink<Void>("unpublishLink") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if(procedureService.hasOpenProcedure(procedureDefinition)) {
+                    error(new FIDLabelModel("error.unpublish").getObject());
+                    target.add(procedureListPanel.getErrorFeedbackPanel());
+                } else {
+                    procedureDefinitionService.unpublishProcedureDefinition(procedureDefinition);
+                    info(new FIDLabelModel("message.unpublish", procedureDefinition.getProcedureCode()).getObject());
+                    target.add(procedureListPanel);
+                    target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
+                }
+            }
+        };
+        unpublishLink.setVisible(showUnpublished  && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
+        optionsContainer.add(unpublishLink);
 
         Link draftLink;
         draftLink = new Link("draftLink") {
             @Override
             public void onClick() {
-                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(proDef.getObject().getAsset(), proDef.getObject().getFamilyId());
+                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
                 setResponsePage(new DraftListAllPage(publishedDef.getProcedureCode(), publishedDef.getAsset()));
             }
         };
-        draftLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(proDef.getObject().getAsset())
-                && proDef.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
+        draftLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
+                && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
 
 
         optionsContainer.add(draftLink);
@@ -99,12 +121,12 @@ public class PublishedProcedureActionsCell extends Panel {
         previouslyPublishedLink = new Link("previouslyPublishedLink") {
             @Override
             public void onClick() {
-                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(proDef.getObject().getAsset(), proDef.getObject().getFamilyId());
+                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
                 setResponsePage(new PreviouslyPublishedListAllPage(publishedDef.getProcedureCode(), publishedDef.getAsset()));
             }
         };
-        previouslyPublishedLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(proDef.getObject().getAsset())
-                && proDef.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
+        previouslyPublishedLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
+                && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
 
 
         optionsContainer.add(previouslyPublishedLink);
@@ -130,7 +152,7 @@ public class PublishedProcedureActionsCell extends Panel {
                     target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
                 } catch (Exception e) {
                     error(new FIDLabelModel("error.delete_procedure_definition").getObject());
-                    target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
+                    target.add(procedureListPanel.getErrorFeedbackPanel());
                 }
             }
         };

@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
@@ -100,10 +101,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                         && procedureDefinition.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
                 copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
 
-                boolean showUnpublished = true;
-
-                if(procedureDefinitionService.isApprovalRequired())
-                    showUnpublished = procedureDefinitionService.canCurrentUserApprove();
+                boolean showUnpublished = procedureDefinitionService.isApprovalRequired() ? procedureDefinitionService.canCurrentUserApprove() : true;
 
                 item.add(new AjaxLink<Void>("unpublishLink") {
 
@@ -114,7 +112,8 @@ public class ProcedureDefinitionListPage extends LotoPage {
                             target.add(feedbackPanel);
                         } else {
                             procedureDefinitionService.unpublishProcedureDefinition(procedureDefinition.getObject());
-                            target.add(listContainer, feedbackPanel);
+                            info(new FIDLabelModel("message.unpublish", procedureDefinition.getObject().getProcedureCode()).getObject());
+                            target.add(listContainer, ((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
                         }
                     }
                 }.setVisible(showUnpublished));

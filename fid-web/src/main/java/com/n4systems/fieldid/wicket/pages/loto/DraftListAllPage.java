@@ -109,6 +109,11 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
                 columns.add(new PublishedProcedureActionsColumn(this));
             }
 
+            @Override
+            protected FIDFeedbackPanel getErrorFeedbackPanel() {
+                return feedbackPanel;
+            }
+
         });
         procedureDefinitionListPanel.setOutputMarkupPlaceholderTag(true);
 

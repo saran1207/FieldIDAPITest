@@ -80,6 +80,10 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
                 columns.add(new PublishedProcedureActionsColumn(this));
             }
 
+            @Override
+            protected FIDFeedbackPanel getErrorFeedbackPanel() {
+                return feedbackPanel;
+            }
         });
         procedureDefinitionListPanel.setOutputMarkupPlaceholderTag(true);
 

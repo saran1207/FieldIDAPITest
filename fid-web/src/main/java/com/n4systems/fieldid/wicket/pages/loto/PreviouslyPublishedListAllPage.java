@@ -109,6 +109,11 @@ public class PreviouslyPublishedListAllPage extends ProceduresAllListPage implem
                 columns.add(new PublishedProcedureActionsColumn(this));
             }
 
+            @Override
+            protected FIDFeedbackPanel getErrorFeedbackPanel() {
+                return feedbackPanel;
+            }
+
         });
         procedureDefinitionListPanel.setOutputMarkupPlaceholderTag(true);
 
