@@ -89,6 +89,11 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     @Column(name="family_id", nullable = false)
     private Long familyId;
 
+    @Column(name="unpublished_date")
+    private Date unpublishedDate;
+    @ManyToOne
+    @JoinColumn(name = "unpublished_by_id")
+    private User unpublishedBy;
 
     public String getProcedureCode() {
         return procedureCode;
@@ -346,5 +351,21 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
     public void setFamilyId(Long familyId) {
         this.familyId = familyId;
+    }
+
+    public Date getUnpublishedDate() {
+        return unpublishedDate;
+    }
+
+    public void setUnpublishedDate(Date unpublishedDate) {
+        this.unpublishedDate = unpublishedDate;
+    }
+
+    public User getUnpublishedBy() {
+        return unpublishedBy;
+    }
+
+    public void setUnpublishedBy(User unpublishedBy) {
+        this.unpublishedBy = unpublishedBy;
     }
 }
