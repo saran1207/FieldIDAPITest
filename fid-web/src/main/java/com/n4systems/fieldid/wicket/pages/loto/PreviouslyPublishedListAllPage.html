@@ -9,10 +9,9 @@
                 <span class="icon-search"></span>
                 <input wicket:id="field" type="text" placeholder="Search by Procedure Code or Equipment #"/><br/>
             </form>
+            <img class="loadingAnimationImage pull-right procedure-search-loading" wicket:id="loadingImage" id="loadingImage" style="display: none;"/>
         </div>
-        <img class="loadingAnimationImage pull-right procedure-search-loading" wicket:id="loadingImage" id="loadingImage" style="display: none;"/>
     </wicket:enclosure>
     <div wicket:id="procedureDefinitionListPanel" class="event-panel" />
-
 </wicket:extend>
 </html>
