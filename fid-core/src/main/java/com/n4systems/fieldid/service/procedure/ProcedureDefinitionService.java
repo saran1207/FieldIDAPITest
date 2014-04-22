@@ -577,11 +577,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     public void unpublishProcedureDefinition(ProcedureDefinition definition) {
-        definition.setPublishedState(PublishedState.DRAFT);
+        definition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
+        definition.setRetireDate(dateService.nowUTC().toDate());
         definition.setUnpublishedDate(dateService.nowUTC().toDate());
         definition.setUnpublishedBy(getCurrentUser());
-        definition.setOriginDate(null);
-        definition.setApprovedBy(null);
         persistenceService.update(definition);
     }
 

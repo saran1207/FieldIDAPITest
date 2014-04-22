@@ -113,6 +113,7 @@ public class ProcedureDefinitionListPage extends LotoPage {
                         } else {
                             procedureDefinitionService.unpublishProcedureDefinition(procedureDefinition.getObject());
                             info(new FIDLabelModel("message.unpublish", procedureDefinition.getObject().getProcedureCode()).getObject());
+                            listView.detach();
                             target.add(listContainer, ((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
                         }
                     }
