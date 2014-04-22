@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
@@ -12,11 +13,15 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.*;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import com.n4systems.services.date.DateService;
+import com.n4systems.util.DateHelper;
+import com.n4systems.util.chart.ChartGranularity;
+import com.n4systems.util.chart.DateChartable;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
@@ -25,17 +30,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
+import java.util.*;
 
 
 public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
     private static final Logger logger=Logger.getLogger(ProcedureDefinitionService.class);
 
+    @Autowired private ReportServiceHelper reportServiceHelper;
     @Autowired private UserGroupService userGroupService;
     @Autowired private S3Service s3Service;
     @Autowired private DateService dateService;
@@ -154,7 +156,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     public List<ProcedureDefinition> getAllProcedureDefinitionsForAssetType(AssetType assetType) {
         QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
         WhereParameterGroup wpg = new WhereParameterGroup();
-        wpg.addClause( WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()) );
+        wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()));
         query.addWhere(wpg);
 
         return persistenceService.findAll(query);
@@ -188,6 +190,59 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
         return persistenceService.findAll(query);
     }
+
+    @Transactional(readOnly = true)
+    public List<DateChartable> getPublishedProceduresForWidget(Date fromDate, Date toDate, BaseOrg org, ChartGranularity granularity) {
+        // UGGH : hack.   this is a small, focused approach to fixing yet another time zone bug.
+        // this should be reverted when a complete, system wide approach to handling time zones is implemented.
+        // see WEB-2836
+        TimeZone timeZone = getCurrentUser().getTimeZone();
+
+        QueryBuilder<DateChartable> builder = new QueryBuilder<DateChartable>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
+        //QueryBuilder builder = createUserSecurityBuilder(ProcedureDefinition.class);
+
+        NewObjectSelect select = new NewObjectSelect(DateChartable.class);
+        List<String> args = Lists.newArrayList("COUNT(*)");
+        args.addAll(reportServiceHelper.getSelectConstructorArgsForGranularityTimezoneAdjusted("created", granularity, timeZone, fromDate));
+        select.setConstructorArgs(args);
+        builder.setSelectArgument(select);
+
+        builder.addWhere(whereFromToForCompletedEvents(fromDate, toDate, "created", timeZone));
+        //builder.addSimpleWhere("publishedState", WorkflowState.COMPLETED);
+
+        builder.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
+
+        Date sampleDate = fromDate;
+        builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity, "created", timeZone, sampleDate));
+        //builder.applyFilter(new OwnerAndDownFilter(org));
+
+        builder.addOrder("created");
+
+        return persistenceService.findAll(builder);
+    }
+
+    // XXX : converting to UTC is probably the correct way.  other widgets might want to use this...
+    private WhereClause<?> whereFromToForCompletedEvents(Date fromDate, Date toDate, String property, TimeZone timeZone) {
+        if (timeZone!=null) {
+            fromDate = DateHelper.convertToUTC(fromDate, timeZone);
+            toDate = DateHelper.convertToUTC(toDate, timeZone);
+        }
+
+        if (fromDate!=null && toDate!=null) {
+            WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
+            filterGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.GE, "fromDate", property, fromDate, null, WhereClause.ChainOp.AND));
+            filterGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LT, "toDate", property, toDate, null, WhereClause.ChainOp.AND));
+            return filterGroup;
+        } else if (fromDate!=null) {
+            return new WhereParameter<Date>(WhereParameter.Comparator.GE, property, fromDate);
+        } else if (toDate!=null) {
+            return new WhereParameter<Date>(WhereParameter.Comparator.LT, property, toDate);
+        }
+        // CAVEAT : we don't want results to include values with null dates. they are ignored.  (this makes sense for EventSchedules
+        //   because null dates are used when representing AdHoc events).
+        return new WhereParameter<Date>(WhereParameter.Comparator.NOTNULL, property);
+    }
+
 
     public List<ProcedureDefinition> getAllPublishedProcedures(String sTerm, String order, boolean ascending, int first, int count) {
         String searchTerm = "";
@@ -317,7 +372,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
         }
 
-        return persistenceService.findAllPaginated(query,first,count);
+        return persistenceService.findAllPaginated(query, first, count);
     }
 
     public List<ProcedureDefinition> getSelectedPreviouslyPublishedProcedures(String searchTerm, String procedureCode, Asset asset, String order, boolean ascending, int first, int count) {
@@ -353,7 +408,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
         }
 
-        return persistenceService.findAllPaginated(query,first,count);
+        return persistenceService.findAllPaginated(query, first, count);
     }
 
     public List<ProcedureDefinition> getAllDraftProcedures(String sTerm, String order, boolean ascending, int first, int count) {
@@ -436,7 +491,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
             query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
         }
 
-        return persistenceService.findAllPaginated(query,first,count);
+        return persistenceService.findAllPaginated(query, first, count);
     }
 
 
