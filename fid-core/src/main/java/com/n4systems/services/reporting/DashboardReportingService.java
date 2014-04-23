@@ -89,23 +89,16 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 	}
 
 
-    public List<ChartSeries<LocalDate>> getProceduresPublished(DateRange dateRange, ChartGranularity granularity, BaseOrg org) {
+    public List<ChartSeries<LocalDate>> getProceduresPublished(DateRange dateRange, ChartGranularity granularity) {
         Preconditions.checkArgument(dateRange !=null);
         List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
 
         Date from = getFrom(granularity, dateRange);
         Date to = getTo(granularity, dateRange);
-        List<DateChartable> completedEvents = procedureDefinitionService.getPublishedProceduresForWidget(from, to, org, granularity);
-
+        List<DateChartable> completedEvents = procedureDefinitionService.getPublishedProceduresForWidget(from, to, granularity);
 
         results.add(new ChartSeries<LocalDate>(PublishedState.PUBLISHED, PublishedState.PUBLISHED.getLabel(), completedEvents));
 
-        /*
-        for (EventResult eventResult : EventResult.getValidEventResults()) {
-            completedEvents = eventService.getCompletedEvents(from, to, org, eventResult, granularity);
-            results.add(new ChartSeries<LocalDate>(eventResult, eventResult.getDisplayName(), completedEvents));
-        }
-        */
         return results;
     }
 

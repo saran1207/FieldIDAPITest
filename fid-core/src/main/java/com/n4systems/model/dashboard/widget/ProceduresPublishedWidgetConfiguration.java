@@ -1,8 +1,6 @@
 package com.n4systems.model.dashboard.widget;
 
 import com.n4systems.model.dashboard.widget.interfaces.ConfigurationWithGranularity;
-import com.n4systems.model.orgs.BaseOrg;
-import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.ChartGranularity;
 import com.n4systems.util.chart.RangeType;
@@ -18,10 +16,6 @@ import javax.persistence.*;
 @PrimaryKeyJoinColumn(name="id")
 public class ProceduresPublishedWidgetConfiguration extends WidgetConfiguration implements ConfigurationWithGranularity {
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "org_id")
-    private BaseOrg org;
-
     @Enumerated(EnumType.STRING)
     @Column(name="date_range", nullable=false)
     private RangeType rangeType = RangeType.THIS_QUARTER;
@@ -29,15 +23,6 @@ public class ProceduresPublishedWidgetConfiguration extends WidgetConfiguration 
     @Enumerated(EnumType.STRING)
     @Column(name="granularity", nullable=false)
     private ChartGranularity granularity = ChartGranularity.WEEK;
-
-    @AllowSafetyNetworkAccess
-    public BaseOrg getOrg() {
-        return org;
-    }
-
-    public void setOrg(BaseOrg org) {
-        this.org = org;
-    }
 
     public void setDateRangeType(RangeType rangeType) {
         this.rangeType = rangeType;
@@ -50,7 +35,6 @@ public class ProceduresPublishedWidgetConfiguration extends WidgetConfiguration 
     @Override
     public ProceduresPublishedWidgetConfiguration copy() {
         ProceduresPublishedWidgetConfiguration copy = (ProceduresPublishedWidgetConfiguration) super.copy();
-        copy.setOrg(getOrg());
         copy.setDateRangeType(getDateRangeType());
         return copy;
     }

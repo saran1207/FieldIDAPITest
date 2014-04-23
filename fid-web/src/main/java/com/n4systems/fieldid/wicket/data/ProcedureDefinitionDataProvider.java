@@ -48,11 +48,11 @@ public class ProcedureDefinitionDataProvider extends FieldIDDataProvider<Procedu
 
         if(isProcedureCode) {
             if(state.equals(PublishedState.DRAFT)) {
-                procedureDefinitionList = procedureDefinitionService.getSelectedDraftProcedures(searchTerm, procedureCode, asset, getSort().getProperty(), getSort().isAscending(), first, count);
+                procedureDefinitionList = procedureDefinitionService.getSelectedDraftProcedures(procedureCode, asset, getSort().getProperty(), getSort().isAscending(), first, count);
             } else if (state.equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
-                procedureDefinitionList = procedureDefinitionService.getSelectedPreviouslyPublishedProcedures(searchTerm, procedureCode, asset, getSort().getProperty(), getSort().isAscending(), first, count);
+                procedureDefinitionList = procedureDefinitionService.getSelectedPreviouslyPublishedProcedures(procedureCode, asset, getSort().getProperty(), getSort().isAscending(), first, count);
             } else if (state.equals(PublishedState.PUBLISHED)) {
-                procedureDefinitionList = procedureDefinitionService.getSelectedPublishedProcedures(searchTerm, procedureCode, asset, getSort().getProperty(), getSort().isAscending(), first, count);
+                procedureDefinitionList = procedureDefinitionService.getSelectedPublishedProcedures(procedureCode, asset, getSort().getProperty(), getSort().isAscending(), first, count);
             }
         } else {
             if (state.equals(PublishedState.DRAFT)) {
@@ -81,11 +81,11 @@ public class ProcedureDefinitionDataProvider extends FieldIDDataProvider<Procedu
             }
         } else {
             if(state.equals(PublishedState.DRAFT)) {
-                size = procedureDefinitionService.getDraftCount(searchTerm).intValue();
+                size = procedureDefinitionService.getDraftCount().intValue();
             } else if (state.equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
-                size = procedureDefinitionService.getPreviouslyPublishedCount(searchTerm).intValue();
+                size = procedureDefinitionService.getPreviouslyPublishedCount().intValue();
             } else if (state.equals(PublishedState.PUBLISHED)) {
-                size = procedureDefinitionService.getPublishedCount(searchTerm).intValue();
+                size = procedureDefinitionService.getPublishedCount().intValue();
             }
         }
 

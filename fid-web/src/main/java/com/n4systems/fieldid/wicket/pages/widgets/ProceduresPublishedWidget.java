@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.widgets;
 import com.n4systems.fieldid.wicket.pages.widgets.config.ProceduresPublishedConfigPanel;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.ProceduresPublishedWidgetConfiguration;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.*;
 import org.apache.wicket.Component;
@@ -30,7 +29,6 @@ public class ProceduresPublishedWidget extends ChartWidget<LocalDate, Procedures
         addGranularityButton(ChartGranularity.MONTH);
         addGranularityButton(ChartGranularity.WEEK);
         addGranularityButton(ChartGranularity.DAY);
-        //setClickThruHandler(new ReportClickThruHandler(this, widgetDefinition.getId()));
     }
 
     @Override
@@ -45,13 +43,8 @@ public class ProceduresPublishedWidget extends ChartWidget<LocalDate, Procedures
         //TODO - LOOK AT THIS!!!
 
         ChartManager chartManager = new DateChartManager(granularity, getDateRange());
-        List<ChartSeries<LocalDate>> results = dashboardReportingService.getProceduresPublished(getDateRange(), granularity, getOrg());
+        List<ChartSeries<LocalDate>> results = dashboardReportingService.getProceduresPublished(getDateRange(), granularity);
         return new ChartData<LocalDate>(chartManager, results);
-    }
-
-    private BaseOrg getOrg() {
-        ProceduresPublishedWidgetConfiguration config = getWidgetDefinition().getObject().getConfig();
-        return config.getOrg();
     }
 
     @Override
@@ -72,7 +65,7 @@ public class ProceduresPublishedWidget extends ChartWidget<LocalDate, Procedures
 
     @Override
     protected IModel<String> getSubTitleModel() {
-        OrgSubtitleHelper.SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), getOrg(), getDateRange().getRangeType());
+        OrgSubtitleHelper.SubTitleModelInfo info = orgDateRangeSubtitleHelper.getSubTitleModel(getWidgetDefinition(), null, getDateRange().getRangeType());
         return new StringResourceModel(info.getKey(), this, null, info.getModels().toArray() );
 
     }

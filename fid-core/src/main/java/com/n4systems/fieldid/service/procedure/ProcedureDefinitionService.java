@@ -13,7 +13,6 @@ import com.n4systems.model.AssetType;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
-import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.*;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
@@ -192,14 +191,13 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     @Transactional(readOnly = true)
-    public List<DateChartable> getPublishedProceduresForWidget(Date fromDate, Date toDate, BaseOrg org, ChartGranularity granularity) {
+    public List<DateChartable> getPublishedProceduresForWidget(Date fromDate, Date toDate, ChartGranularity granularity) {
         // UGGH : hack.   this is a small, focused approach to fixing yet another time zone bug.
         // this should be reverted when a complete, system wide approach to handling time zones is implemented.
         // see WEB-2836
         TimeZone timeZone = getCurrentUser().getTimeZone();
 
         QueryBuilder<DateChartable> builder = new QueryBuilder<DateChartable>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
-        //QueryBuilder builder = createUserSecurityBuilder(ProcedureDefinition.class);
 
         NewObjectSelect select = new NewObjectSelect(DateChartable.class);
         List<String> args = Lists.newArrayList("COUNT(*)");
@@ -208,13 +206,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         builder.setSelectArgument(select);
 
         builder.addWhere(whereFromToForCompletedEvents(fromDate, toDate, "created", timeZone));
-        //builder.addSimpleWhere("publishedState", WorkflowState.COMPLETED);
-
         builder.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
 
         Date sampleDate = fromDate;
         builder.addGroupByClauses(reportServiceHelper.getGroupByClausesByGranularity(granularity, "created", timeZone, sampleDate));
-        //builder.applyFilter(new OwnerAndDownFilter(org));
 
         builder.addOrder("created");
 
@@ -290,12 +285,13 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAllPaginated(query,first,count);
     }
 
-    public List<ProcedureDefinition> getSelectedPublishedProcedures(String searchTerm, String procedureCode, Asset asset, String order, boolean ascending, int first, int count) {
+    public List<ProcedureDefinition> getSelectedPublishedProcedures(String procedureCode, Asset asset, String order, boolean ascending, int first, int count) {
 
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
 
         query.addSimpleWhere("asset", asset);
+        query.addSimpleWhere("procedureCode", procedureCode.trim());
 
         // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
         // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
@@ -375,12 +371,13 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAllPaginated(query, first, count);
     }
 
-    public List<ProcedureDefinition> getSelectedPreviouslyPublishedProcedures(String searchTerm, String procedureCode, Asset asset, String order, boolean ascending, int first, int count) {
+    public List<ProcedureDefinition> getSelectedPreviouslyPublishedProcedures(String procedureCode, Asset asset, String order, boolean ascending, int first, int count) {
 
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
 
         query.addSimpleWhere("asset", asset);
+        query.addSimpleWhere("procedureCode", procedureCode.trim());
 
         // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
         // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
@@ -458,7 +455,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAllPaginated(query,first,count);
     }
 
-    public List<ProcedureDefinition> getSelectedDraftProcedures(String searchTerm, String procedureCode, Asset asset, String order, boolean ascending, int first, int count) {
+    public List<ProcedureDefinition> getSelectedDraftProcedures(String procedureCode, Asset asset, String order, boolean ascending, int first, int count) {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("publishedState", PublishedState.DRAFT);
 
@@ -495,19 +492,19 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
 
-    public Long getPublishedCount(String searchTerm) {
+    public Long getPublishedCount() {
         QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
         procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
         return persistenceService.count(procedureDefinitionCountQuery);
     }
 
-    public Long getDraftCount(String searchTerm) {
+    public Long getDraftCount() {
         QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
         procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.DRAFT);
         return persistenceService.count(procedureDefinitionCountQuery);
     }
 
-    public Long getPreviouslyPublishedCount(String searchTerm) {
+    public Long getPreviouslyPublishedCount() {
         QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
         procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.PREVIOUSLY_PUBLISHED);
         return persistenceService.count(procedureDefinitionCountQuery);
