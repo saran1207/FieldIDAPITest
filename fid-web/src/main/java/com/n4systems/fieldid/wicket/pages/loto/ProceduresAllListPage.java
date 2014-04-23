@@ -32,7 +32,7 @@ public abstract class ProceduresAllListPage extends FieldIDTemplatePage {
     protected void addNavBar(String navBarId) {
 
         add(new NavigationBar(navBarId,
-                aNavItem().label(new FIDLabelModel("label.procedures_published")).page(PublishedListAllPage.class).build(),
+                aNavItem().label(new FIDLabelModel("label.procedures_published_count", procedureDefinitionService.getPublishedCount())).page(PublishedListAllPage.class).build(),
                 aNavItem().label(new FIDLabelModel("label.procedures_drafts_count", procedureDefinitionService.getDraftCount())).page(DraftListAllPage.class).build(),
                 aNavItem().label(new FIDLabelModel("label.procedures_previously_published")).page(PreviouslyPublishedListAllPage.class).build()
         ));
