@@ -789,15 +789,99 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     @Transactional(readOnly=true)
+    public Long getSelectedWaitingApprovalsCount(String searchTerm) {
+        QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.WAITING_FOR_APPROVAL);
+
+        if(!searchTerm.trim().equals("")) {
+            WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "procedureCode", "procedureCode", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "equipmentNumber", "equipmentNumber", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            procedureDefinitionCountQuery.addWhere(group);
+        }
+
+        return persistenceService.count(procedureDefinitionCountQuery);
+    }
+
+    @Transactional(readOnly=true)
     public Long getRejectedApprovalsCount() {
         QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
         procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.REJECTED);
         return persistenceService.count(procedureDefinitionCountQuery);
     }
 
+    @Transactional(readOnly=true)
+    public Long getSelectedRejectedApprovalsCount(String searchTerm) {
+        QueryBuilder<ProcedureDefinition> procedureDefinitionCountQuery = createUserSecurityBuilder(ProcedureDefinition.class);
+        procedureDefinitionCountQuery.addSimpleWhere("publishedState", PublishedState.REJECTED);
+
+        if(!searchTerm.trim().equals("")) {
+            WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "procedureCode", "procedureCode", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "equipmentNumber", "equipmentNumber", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            procedureDefinitionCountQuery.addWhere(group);
+        }
+
+        return persistenceService.count(procedureDefinitionCountQuery);
+    }
+
     public List<ProcedureDefinition> getProcedureDefinitionsFor(PublishedState publishedState, String order, boolean ascending, int first, int count) {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("publishedState", publishedState);
+
+        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
+        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
+        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
+        // will not be returned in the result list.
+        // this should be handled more elegantly in the future but i'm fixing at the last second.
+        boolean needsSortJoin = false;
+        boolean needsRejectedSortJoin = false;
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("developedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    query.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+
+                } else if (subOrder.startsWith("rejectedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    query.getOrderArguments().add(sortTerm.toSortField());
+                    needsRejectedSortJoin = true;
+
+                } else {
+                    query.addOrder(subOrder, ascending);
+                }
+            }
+        }
+
+        if (needsSortJoin) {
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
+        }
+
+        if (needsRejectedSortJoin) {
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "rejectedBy", "sortJoin", true));
+        }
+
+        return persistenceService.findAllPaginated(query,first,count);
+    }
+
+    public List<ProcedureDefinition> getSelectedProcedureDefinitionsFor(String searchTerm, PublishedState publishedState, String order, boolean ascending, int first, int count) {
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        query.addSimpleWhere("publishedState", publishedState);
+
+        if(!searchTerm.trim().equals("")) {
+            WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "procedureCode", "procedureCode", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "equipmentNumber", "equipmentNumber", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            query.addWhere(group);
+        }
 
         // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
         // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
