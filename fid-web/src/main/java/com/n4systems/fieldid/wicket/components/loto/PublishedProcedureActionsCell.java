@@ -16,6 +16,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.link.PopupSettings;
@@ -53,34 +54,27 @@ public class PublishedProcedureActionsCell extends Panel {
         printLink.setPopupSettings(popupSettings);
         add(printLink);
 
-        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer"){
-        };
+        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
 
-        if(procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED)){
-            optionsContainer.setVisible(true);
-        } else if (isAuthor(procedureDefinition) && procedureDefinition.getPublishedState().equals(PublishedState.DRAFT)) {
-            optionsContainer.setVisible(true);
-        } else {
-            optionsContainer.setVisible(false);
-        }
-        //optionsContainer.setVisible(isAuthor(procedureDefinition) && !procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED) && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
-
-        Link copyLink;
-        copyLink = new Link("copyProcedureDefLink") {
+        Link reviseLink = new Link("reviseLink") {
             @Override
             public void onClick() {
-                ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
-                ProcedureDefinition copiedDefinition = procedureDefinitionService.cloneProcedureDefinition(publishedDef);
+                ProcedureDefinition copiedDefinition = procedureDefinitionService.cloneProcedureDefinition(procedureDefinition);
                 copiedDefinition.setPublishedState(PublishedState.DRAFT);
                 setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
             }
         };
-        copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
-              && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
+        reviseLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
+              && (procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED) || procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED)));
 
-        copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
+        reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
 
-        optionsContainer.add(copyLink);
+        if(procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED))
+            reviseLink.add(new Label("label", new FIDLabelModel("label.revise")));
+        else
+            reviseLink.add(new Label("label", new FIDLabelModel("label.restore")));
+
+        optionsContainer.add(reviseLink);
 
         boolean showUnpublished = procedureDefinitionService.isApprovalRequired() ? procedureDefinitionService.canCurrentUserApprove() : true;
 
@@ -102,8 +96,7 @@ public class PublishedProcedureActionsCell extends Panel {
         unpublishLink.setVisible(showUnpublished  && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
         optionsContainer.add(unpublishLink);
 
-        Link draftLink;
-        draftLink = new Link("draftLink") {
+        Link draftLink = new Link("draftLink") {
             @Override
             public void onClick() {
                 ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
@@ -117,8 +110,7 @@ public class PublishedProcedureActionsCell extends Panel {
         optionsContainer.add(draftLink);
 
 
-        Link previouslyPublishedLink;
-        previouslyPublishedLink = new Link("previouslyPublishedLink") {
+        Link previouslyPublishedLink = new Link("previouslyPublishedLink") {
             @Override
             public void onClick() {
                 ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
