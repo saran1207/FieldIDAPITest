@@ -76,6 +76,20 @@ public class PublishedProcedureActionsCell extends Panel {
 
         optionsContainer.add(reviseLink);
 
+        Link copyLink = new Link("copyLink") {
+            @Override
+            public void onClick() {
+                ProcedureDefinition copiedDefinition = procedureDefinitionService.cloneProcedureDefinitionForCopy(procedureDefinition);
+                copiedDefinition.setPublishedState(PublishedState.DRAFT);
+                setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
+            }
+        };
+        copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
+                && (procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED) || procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED)));
+        copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.copy"), TipsyBehavior.Gravity.N));
+        copyLink.add(new Label("label", new FIDLabelModel("label.copy")));
+        optionsContainer.add(copyLink);
+
         boolean showUnpublished = procedureDefinitionService.isApprovalRequired() ? procedureDefinitionService.canCurrentUserApprove() : true;
 
         AjaxLink unpublishLink = new AjaxLink<Void>("unpublishLink") {

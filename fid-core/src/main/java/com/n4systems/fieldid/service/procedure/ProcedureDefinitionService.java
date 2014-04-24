@@ -659,6 +659,35 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return to;
     }
 
+    public ProcedureDefinition cloneProcedureDefinitionForCopy(ProcedureDefinition source) {
+        Preconditions.checkArgument(source != null, "can't use null procedure definitions when cloning.");
+        ProcedureDefinition to = new ProcedureDefinition();
+        to.setAsset(source.getAsset());
+        to.setTenant(source.getTenant());
+        to.setProcedureCode(source.getProcedureCode()+" Copy");
+        to.setElectronicIdentifier(source.getElectronicIdentifier());
+        to.setWarnings(source.getWarnings());
+        to.setDevelopedBy(getCurrentUser());
+        to.setEquipmentNumber(source.getEquipmentNumber());
+        to.setEquipmentLocation(source.getEquipmentLocation());
+        to.setBuilding(source.getBuilding());
+        to.setEquipmentDescription(source.getEquipmentDescription());
+        to.setPublishedState(PublishedState.DRAFT);
+
+        to.setFamilyId(generateFamilyId(source.getAsset()));
+        to.setRevisionNumber(1L);
+
+        Map<String, ProcedureDefinitionImage> clonedImages = cloneImages(source,to);
+        to.setImages(Lists.newArrayList(clonedImages.values()));
+
+        for(IsolationPoint isolationPoint: source.getLockIsolationPoints()) {
+            IsolationPoint copiedIsolationPoint = cloneIsolationPoint(isolationPoint, clonedImages);
+            to.addIsolationPoint(copiedIsolationPoint);
+        }
+
+        return to;
+    }
+
     private IsolationPoint cloneIsolationPoint(IsolationPoint source, Map<String, ProcedureDefinitionImage> clonedImages) {
         Preconditions.checkArgument(source != null , "can't use null isolation points when cloning.");
 
