@@ -85,7 +85,7 @@ public class PublishedProcedureActionsCell extends Panel {
             }
         };
         copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
-                && (procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED) || procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED)));
+                && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
         copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.copy"), TipsyBehavior.Gravity.N));
         copyLink.add(new Label("label", new FIDLabelModel("label.copy")));
         optionsContainer.add(copyLink);
