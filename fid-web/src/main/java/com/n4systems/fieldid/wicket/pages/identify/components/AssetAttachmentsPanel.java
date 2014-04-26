@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
+import com.n4systems.reporting.PathHandler; //kept for IE8 compatibility
 import com.n4systems.util.ConfigEntry;
 import org.apache.log4j.Logger;
 import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
@@ -30,7 +31,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.protocol.http.ClientProperties;
+import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
@@ -54,12 +59,12 @@ public class AssetAttachmentsPanel extends Panel {
     private AssetService assetService;
 
     List<AssetAttachment> attachments = new ArrayList<AssetAttachment>();
-    //protected String wicketAjaxCall = "wicketAjaxCall";
     private WebMarkupContainer existingAttachmentsContainer;
 
     public AssetAttachmentsPanel(String id, IModel<Asset> assetModel) {
         super(id);
 
+        assetModel.getObject().ensureMobileGuidIsSet();
         if (!assetModel.getObject().isNew()) {
             attachments.addAll(assetService.findAssetAttachments(assetModel.getObject()));
         }
@@ -148,25 +153,13 @@ public class AssetAttachmentsPanel extends Panel {
 
                 @Override
                 protected void onSubmit(AjaxRequestTarget target) {
-                    assetModel.getObject().ensureMobileGuidIsSet();
+                    Assert.notNull(assetModel.getObject().getMobileGUID());
                     String assetUuid = assetModel.getObject().getMobileGUID();
                     String assetAttachmentUuid = UUID.randomUUID().toString();
                     String uploadFormMarkupId = attachmentUpload.getMarkupId();
                     String uploadJavascript = s3Service.getAssetAttachmentsUploadJavascript(assetUuid, assetAttachmentUuid, uploadFormMarkupId, callbackContainerMarkupId);
 
                     target.prependJavaScript(uploadJavascript);
-
-                    /*FileUpload fileUpload = attachmentUpload.getFileUpload();
-
-                    File tempDir = PathHandler.getTempDir();
-                    String fileName =  fileUpload.getClientFileName();
-                    File file = new File(tempDir, fileName);
-
-                    try {
-                        FileCopyUtils.copy(fileUpload.getInputStream(), new FileOutputStream(file));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }     */
 
                     Long uploadMaxFileSizeBytes = Long.parseLong(s3Service.getUploadMaxFileSizeBytes());
 
@@ -177,8 +170,33 @@ public class AssetAttachmentsPanel extends Panel {
                         attachment.setMobileId(assetAttachmentUuid);
                         attachment.setAsset(assetModel.getObject());
                         attachment.setFileName(fileName);
-                        String getAssetAttachmentPath = s3Service.getAssetAttachmentPath(attachment);
-                        attachment.setFileName(getAssetAttachmentPath); //set the filename to be a full path
+                        System.out.println("fileName:" + fileName);
+
+                        ClientProperties clientProp = WebSession.get().getClientInfo().getProperties();
+                        boolean FileUploadSupported = clientProp.isBrowserChrome() ||
+                            (clientProp.isBrowserSafari() && clientProp.getBrowserVersionMajor() >= 5) ||
+                            (clientProp.isBrowserMozillaFirefox() && clientProp.getBrowserVersionMajor() >= 4) ||
+                            (clientProp.isBrowserOpera() && clientProp.getBrowserVersionMajor() >= 12) ||
+                            (clientProp.isBrowserInternetExplorer() && clientProp.getBrowserVersionMajor() >= 10);
+                        //if the browser does not support direct upload to S3
+                        if(FileUploadSupported){
+                            System.out.println("FileUploadSupported");
+                            String getAssetAttachmentPath = s3Service.getAssetAttachmentPath(assetUuid, assetAttachmentUuid, fileName);
+                            attachment.setFileName(getAssetAttachmentPath); //set the filename to be a full path
+                        }
+                        else {
+                            System.out.println("FileUploadSupported NOT");
+                            File tempDir = PathHandler.getTempDir();
+                            File file = new File(tempDir, fileName);
+                            System.out.println("getClientFileName:"+ fileUpload.getClientFileName());
+
+                            try {
+                                FileCopyUtils.copy(fileUpload.getInputStream(), new FileOutputStream(file));
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            attachment.setFileName(tempDir.getName() + File.separator + fileName);
+                        }
                         attachments.add(attachment);
                     }
                     else {

@@ -232,6 +232,14 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
+    public boolean assetAttachmentExists(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename){
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(assetAttachmentUuid);
+        //Assert.hasLength(assetAttachmentFilename);
+        boolean exists = resourceExists(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+        return exists;
+    }
+
     public byte[] downloadProcedureDefinitionMediumImage(ProcedureDefinitionImage image) throws IOException {
         byte[] imageData = downloadResource(null, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
                 image.getProcedureDefinition().getAsset().getId(),
@@ -689,11 +697,6 @@ public class S3Service extends FieldIdPersistenceService {
         return bucketHostname;
     }
 
-    public String getAssetAttachmentPath(AssetAttachment assetAttachment){
-        String getAssetAttachmentPath = getAssetAttachmentPath(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName());
-        return getAssetAttachmentPath;
-    }
-
     public String getAssetAttachmentPath(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename){
         Assert.hasLength(assetUuid);
         Assert.hasLength(assetAttachmentUuid);
@@ -813,83 +816,73 @@ public class S3Service extends FieldIdPersistenceService {
         String bucketPolicyBase64 = this.getBucketPolicyBase64();
 
         String uploadJavascript =
-                "var control = document.getElementById('" + uploadFormMarkupId + "');" +
-                        "if(!window.uploadsInProgress){" +
-                        "   window.uploadsInProgress = 0;" +
-                        "   window.setInterval(function(){" +
-                        "       var buttons = document.querySelectorAll('[name=\"actionsContainer:saveButton\"],[name=\"actionsContainer:saveAndStartEventButton\"],[name=\"actionsContainer:saveAndPrintButton\"],[name=\"actionsContainer:mergeLink\"]');" +
-                        "       for(var i = 0; i < buttons.length; i++){" +
-                        "           buttons[i].disabled = (window.uploadsInProgress > 0);" +
-                        "       }" +
-                        "       var indicators = document.querySelectorAll('.wicket-ajax-indicator');" +
-                        "       for(var i = 0; i < indicators.length; i++){" +
-                        "           indicators[i].style.display = (window.uploadsInProgress > 0 ? 'inline' : 'none');" +
-                        "       }" +
-                        "   }, 1000);" +
-                        "}" +
-                        "for(var i = 0; i < control.files.length; i++){" +
-                        "   var file = control.files[i];" +
-                        //if file size is bigger than allowed, just skip it, the panel will show error message to user
-                        "   if(file.size >= " + this.getUploadMaxFileSizeBytes() + "){" +
-                        "       continue;" +
-                        "   }" +
-                        //"   var xhr = new XMLHttpRequest();" +
-                        //"   xhr.timeout = " + getUploadTimeoutMilliseconds() + ";" +
-                        //"   xhr.onreadystatechange = function(ev){" +
-                        //"       if(xhr.readyState === 1){" +
-                        "   var uploadStarted = function(){" +
-                        "       window.uploadsInProgress += 1;" +
-                        "       wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=-1&uuid=" + childUuid + "', function() { }, function() { });" +
-                        "   };" +
-                        //"       else if(xhr.readyState === 4){" +
-                        "   var uploadFinished = function(xhr){" +
-                        "       window.uploadsInProgress -= 1;" +
-                        "       wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=' + xhr.status + '&uuid=" + childUuid + "', function() { }, function() { });" +
-                        "   };" +
-                        //"   xhr.upload.addEventListener('progress', function(evt){console.log('progress:'+JSON.stringify(evt));}, false);" +
-                        //"   xhr.upload.addEventListener('load', function(evt){console.log('load:'+JSON.stringify(evt));}, false);" +
-                        //"   xhr.upload.addEventListener('error', function(evt){" +
-                        //"       wicketAjaxGet(" + callbackUrlVar + " + '&filename=' + encodeURI(file.name) + '&status=' + xhr.status + '&uuid=" + childUuid + "', function() { }, function() { });" +
-                        //"   }, false);" +
-                        "   var fd = new FormData();" +
-                        "   var key = '" + path + "' + file.name;" +
-                        // Populate the Post paramters.
-                        "   fd.append('key', key);" +
-                        "   fd.append('Content-Type', mimeLookup.getContentType(mimeLookup.getExt(file.name)));" +
-                        "   fd.append('User-Agent', navigator.userAgent);" +
-                        "   fd.append('Referer', document.URL);" +
-                        "   fd.append('Server', '" + FieldIdVersion.getWebVersionDescription() + "');" +
-                        "   fd.append('AWSAccessKeyId', '" + this.getAccessKey() + "');" +
-                        "   fd.append('x-amz-meta-fieldid-user-userid', '" + user.getUserID() + "');" +
-                        "   fd.append('x-amz-meta-fieldid-user-type', '" + user.getUserType().getLabel() + "');" +
-                        "   fd.append('x-amz-meta-fieldid-user-permissions', '" + user.getPermissions() + "');" +
-                        "   fd.append('x-amz-meta-fieldid-user-guid', '" + user.getGlobalId() + "');" +
-                        "   fd.append('x-amz-meta-fieldid-user-owner-guid', '" + user.getOwner().getGlobalId() + "');" +
-                        "   fd.append('acl', 'private');" +
-                        "   fd.append('policy', '" + bucketPolicyBase64 + "');" +
-                        "   fd.append('signature','" + this.getBucketPolicySigned(bucketPolicyBase64) + "');" +
-                        //This file object is retrieved from a file input
-                        "   fd.append('file', file );" +
-                        "   var url = 'https://" + this.getBucketHostname() + "';" +
-                        "   var timeout = " + getUploadTimeoutMilliseconds() + ";" +
-                        "   $.ajax({" +
-                        "       url: url," +
-                        "       data: fd," +
-                        "       processData: false," +
-                        "       type: 'POST'," +
-                        "       dataType: 'json'," +
-                        "       crossDomain: true," +
-                        "       contentType: false," +
-                        //"       contentType: 'multipart/form-data'," +
-                        //"       mimeType: 'multipart/form-data'," +
-                        "       timeout: timeout," +
-                        "       beforeSend: function(jqXHR, settings){ uploadStarted(); console.log('beforeSend:');console.log(jqXHR); }," +
-                        "       success: function(data, textStatus, jqXHR){ uploadFinished(jqXHR); console.log('success: '+textStatus);console.log(jqXHR); }, " +
-                        "       error: function(jqXHR, textStatus, errorThrown){ uploadFinished(jqXHR); console.log('error: '+textStatus);console.log(jqXHR);console.log(errorThrown); } " +
-                        "   });" +
-                        //"   xhr.open('POST', 'https://" + this.getBucketHostname() + "', true);" +
-                        //"   xhr.send(fd);" +
-                        "}";
+            "var control = document.getElementById('" + uploadFormMarkupId + "');" +
+            "if(!window.uploadsInProgress){" +
+            "   window.uploadsInProgress = 0;" +
+            "   window.setInterval(function(){" +
+            "       var buttons = document.querySelectorAll('[name=\"actionsContainer:saveButton\"],[name=\"actionsContainer:saveAndStartEventButton\"],[name=\"actionsContainer:saveAndPrintButton\"],[name=\"actionsContainer:mergeLink\"]');" +
+            "       for(var i = 0; i < buttons.length; i++){" +
+            "           buttons[i].disabled = (window.uploadsInProgress > 0);" +
+            "       }" +
+            "       var indicators = document.querySelectorAll('.wicket-ajax-indicator');" +
+            "       for(var i = 0; i < indicators.length; i++){" +
+            "           indicators[i].style.display = (window.uploadsInProgress > 0 ? 'inline' : 'none');" +
+            "       }" +
+            "   }, 1000);" +
+            "}" +
+            "for(var i = 0; control.files && i < control.files.length; i++){" +
+            "   var file = control.files[i];" +
+            //if file size is bigger than allowed, just skip it, the panel will show error message to user
+            "   if(file.size >= " + this.getUploadMaxFileSizeBytes() + "){" +
+            "       continue;" +
+            "   }" +
+            "   var uploadStarted = function(){" +
+            "       window.uploadsInProgress += 1;" +
+            "       wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=-1&uuid=" + childUuid + "', function() { }, function() { });" +
+            "   };" +
+            "   var uploadFinished = function(xhr){" +
+            "       window.uploadsInProgress -= 1;" +
+            "       wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=' + xhr.status + '&uuid=" + childUuid + "', function() { }, function() { });" +
+            "   };" +
+            "   var fd = new FormData();" +
+            "   var key = '" + path + "' + file.name;" +
+            // Populate the Post paramters.
+            "   fd.append('key', key);" +
+            "   fd.append('Content-Type', mimeLookup.getContentType(mimeLookup.getExt(file.name)));" +
+            "   fd.append('User-Agent', navigator.userAgent);" +
+            "   fd.append('Referer', document.URL);" +
+            "   fd.append('Server', '" + FieldIdVersion.getWebVersionDescription() + "');" +
+            "   fd.append('AWSAccessKeyId', '" + this.getAccessKey() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-userid', '" + user.getUserID() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-type', '" + user.getUserType().getLabel() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-permissions', '" + user.getPermissions() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-guid', '" + user.getGlobalId() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-owner-guid', '" + user.getOwner().getGlobalId() + "');" +
+            "   fd.append('acl', 'private');" +
+            "   fd.append('policy', '" + bucketPolicyBase64 + "');" +
+            "   fd.append('signature','" + this.getBucketPolicySigned(bucketPolicyBase64) + "');" +
+            //This file object is retrieved from a file input
+            "   fd.append('file', file );" +
+            "   var url = 'https://" + this.getBucketHostname() + "';" +
+            "   var timeout = " + getUploadTimeoutMilliseconds() + ";" +
+            "   $.ajax({" +
+            "       url: url," +
+            "       data: fd," +
+            "       processData: false," +
+            "       type: 'POST'," +
+            "       dataType: 'json'," +
+            "       crossDomain: true," +
+            "       contentType: false," +
+            //"       contentType: 'multipart/form-data'," +
+            //"       mimeType: 'multipart/form-data'," +
+            "       timeout: timeout," +
+            "       beforeSend: function(jqXHR, settings){ uploadStarted(); }," +
+            "       success: function(data, textStatus, jqXHR){ uploadFinished(jqXHR); }, " +
+            "       error: function(jqXHR, textStatus, errorThrown){ uploadFinished(jqXHR); } " +
+            "   });" +
+            //"   xhr.open('POST', 'https://" + this.getBucketHostname() + "', true);" +
+            //"   xhr.send(fd);" +
+            "}";
         return uploadJavascript;
     }
 

@@ -173,8 +173,6 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     }
 
     class IdentifyOrEditAssetForm extends Form<Asset> {
-        private static final String HIDE_LIST_JS = "$('#%s').hide();";
-        private static final String SHOW_LIST_JS = "$('#%s').show();";
 
         GpsTextField<BigDecimal> latitude;
         GpsTextField<BigDecimal> longitude;
@@ -337,18 +335,6 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
             add(actionsContainer = new WebMarkupContainer("actionsContainer"));
 
-            /*final AjaxCallDecorator ajaxCallDecorator = new AjaxCallDecorator() {
-                @Override public CharSequence decorateScript(Component c, CharSequence script) {
-                    return String.format(HIDE_LIST_JS, listViewContainer.getMarkupId()) + super.decorateScript(c, script);
-                }
-                @Override public CharSequence decorateOnSuccessScript(Component c, CharSequence script) {
-                    return String.format(SHOW_LIST_JS, listViewContainer.getMarkupId()) + super.decorateOnSuccessScript(c, script);
-                }
-                @Override public CharSequence decorateOnFailureScript(Component c, CharSequence script) {
-                    return String.format(SHOW_LIST_JS, listViewContainer.getMarkupId()) + super.decorateOnSuccessScript(c, script);
-                }
-            };  */
-
             actionsContainer.add(new Button("saveButton") {
                 @Override
                 public void onSubmit() {performSingleOrMultiSave(assetModel);
@@ -360,42 +346,6 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
                 }
 
             }.add(new AjaxIndicatorAppender()));
-
-            /*actionsContainer.add(new IndicatingAjaxButton("saveButton") {
-                List<AssetAttachment> attachments = assetAttachmentsPanel.getAttachments();
-
-                @Override
-                public void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    System.out.println("onSubmit");
-
-                    performSingleOrMultiSave(assetModel);
-                    if (assetModel.getObject().isNew()) {
-                        setResponsePage(IdentifyOrEditAssetPage.class);
-                    } else {
-                        setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetModel.getObject().getId()));
-                    }
-                }
-                @Override
-                protected void onError(AjaxRequestTarget target, Form<?> form) {
-                    //todo
-                }
-
-                @Override
-                protected IAjaxCallDecorator getAjaxCallDecorator() {
-                    return new AjaxCallDecorator() {
-                        @Override
-                        public CharSequence decorateScript(Component component, CharSequence script) {
-                            for(int index = 0; index < attachments.size(); index++){
-                                System.out.println("attachments.get(index).isUploadInProgress(): "+attachments.get(index).isUploadInProgress());
-                            }
-                            return "alert('here!');" + script;
-                            //return "document.getElementById(\'"+id+"\').style.display = 'none';"+script;
-                        }
-                    };
-                }
-            });     */
-
-            final boolean isNew = assetModel.getObject().isNew();
 
             actionsContainer.add(new Button("saveAndStartEventButton") {
                 { setVisible(getSessionUser().hasAccess("createevent")); }

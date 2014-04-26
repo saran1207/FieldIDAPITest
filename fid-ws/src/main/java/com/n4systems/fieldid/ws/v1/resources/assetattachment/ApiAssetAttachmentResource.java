@@ -148,7 +148,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		apiAttachment.setModified(attachment.getModified());
 		apiAttachment.setAssetId(attachment.getAsset().getMobileGUID());
 		apiAttachment.setComments(attachment.getComments());
-		apiAttachment.setFileName(attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1));
+		//arezafar apiAttachment.setFileName(attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1));
+        apiAttachment.setFileName(attachment.getFileName());
 		apiAttachment.setImage(attachment.isImage());
 		if (attachment.isImage()) {
 			apiAttachment.setData(loadAttachmentData(attachment));
@@ -166,7 +167,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 			attachment.setTenant(asset.getTenant());
 		}
 		attachment.setComments(apiAttachment.getComments());
-		attachment.setFileName(apiAttachment.getFileName().substring(apiAttachment.getFileName().lastIndexOf('/') + 1));
+		//arezafar attachment.setFileName(apiAttachment.getFileName().substring(apiAttachment.getFileName().lastIndexOf('/') + 1));
+        attachment.setFileName(apiAttachment.getFileName());
 		attachment.setData(apiAttachment.getData());
 		return attachment;
 	}

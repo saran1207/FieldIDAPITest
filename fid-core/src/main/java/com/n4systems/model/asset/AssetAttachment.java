@@ -6,6 +6,7 @@ import com.n4systems.model.api.Note;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
 import java.net.MalformedURLException;
@@ -98,7 +99,8 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 
     public boolean isRemote() {
         //the local files only contain the filename, whereas the files on s3 have a full path
-        return getFileName().indexOf('/') != -1;
+        //files in temp folder will have one /, so we are counting if there is more than 1
+        return StringUtils.countOccurrencesOf(getFileName(), "/") > 1;
     }
 
 	@Override
