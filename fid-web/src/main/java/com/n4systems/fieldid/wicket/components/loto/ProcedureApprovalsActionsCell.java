@@ -51,7 +51,7 @@ public class ProcedureApprovalsActionsCell extends Panel {
         final ProcedureDefinition procedureDefinition = (ProcedureDefinition) procedureDefinitionModel.getObject();
 
         viewLink = new BookmarkablePageLink<Void>("viewLink", ProcedureDefinitionPrintPage.class, PageParametersBuilder.id(procedureDefinitionModel.getObject().getId()));
-        viewLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print"), TipsyBehavior.Gravity.W));
+        viewLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print"), TipsyBehavior.Gravity.E));
         viewLink.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
         PopupSettings popupSettings = new PopupSettings("popupWindow", PopupSettings.SCROLLBARS).setWidth(1000).setTop(1);
         viewLink.setPopupSettings(popupSettings);

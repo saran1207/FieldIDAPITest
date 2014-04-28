@@ -48,7 +48,7 @@ public class PublishedProcedureActionsCell extends Panel {
                 setResponsePage(new ProcedureDefinitionPrintPage(PageParametersBuilder.id(procedureDefinition.getId())));
             }
         };
-        printLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print"), TipsyBehavior.Gravity.W));
+        printLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print"), TipsyBehavior.Gravity.E));
         printLink.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
         PopupSettings popupSettings = new PopupSettings("popupWindow", PopupSettings.SCROLLBARS).setWidth(1000).setTop(1);
         printLink.setPopupSettings(popupSettings);
@@ -67,7 +67,7 @@ public class PublishedProcedureActionsCell extends Panel {
         reviseLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
               && (procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED) || procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED)));
 
-        reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
+        reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.E));
 
         if(procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED))
             reviseLink.add(new Label("label", new FIDLabelModel("label.revise")));
@@ -86,7 +86,7 @@ public class PublishedProcedureActionsCell extends Panel {
         };
         copyLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
                 && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
-        copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.copy"), TipsyBehavior.Gravity.N));
+        copyLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.copy"), TipsyBehavior.Gravity.E));
         copyLink.add(new Label("label", new FIDLabelModel("label.copy")));
         optionsContainer.add(copyLink);
 
