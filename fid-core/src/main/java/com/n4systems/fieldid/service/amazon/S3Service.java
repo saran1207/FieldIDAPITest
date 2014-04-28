@@ -732,7 +732,6 @@ public class S3Service extends FieldIdPersistenceService {
             byte[] assetAttachmentBytes = downloadAssetAttachmentBytes(attachment);
             String assetAttachmentFileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
             assetAttachmentFile = PathHandler.getUserFile(getCurrentUser(), assetAttachmentFileName);
-            System.out.println("assetAttachmentFile.getAbsolutePath: " + assetAttachmentFile.getAbsolutePath());
             FileOutputStream assetAttachmentFos = new FileOutputStream(assetAttachmentFile);
             assetAttachmentFos.write(assetAttachmentBytes);
         }

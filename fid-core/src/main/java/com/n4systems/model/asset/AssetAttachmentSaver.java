@@ -36,7 +36,6 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	@Override
 	public void save(EntityManager em, AssetAttachment entity) {
 		fillInConnectionFields(entity);
-        System.out.println("save: "+entity.getFileName());
 
 		// this must be captured prior to merge as data is a transient field
 		byte[] attachmentData = new byte[0];
@@ -52,7 +51,6 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	@Override
 	public AssetAttachment update(EntityManager em, AssetAttachment entity) {
 		fillInConnectionFields(entity);
-        System.out.println("update: "+entity.getFileName());
         byte[] attachmentData = new byte[0];
         if(!entity.isRemote()){
             attachmentData = entity.getData();
@@ -78,7 +76,6 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	}
 
 	private void saveAttachmentData(AssetAttachment attachment, byte[] attachmentData) {
-        System.out.println("saveAttachmentData: "+attachment.getFileName());
 		if (attachmentData != null) {
 			writeAttachmentDataToFileSystem(attachment, attachmentData);
 		} else if(!attachment.isRemote()) {
@@ -87,7 +84,6 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	}
 
 	private void moveAttachmentFromTempDir(AssetAttachment entity) {
-        System.out.println("moveAttachmentFromTempDir: "+entity.getFileName());
 		try {
 			File attachmentDir = PathHandler.getAssetAttachmentDir(entity);
 			File tmpDirectory = PathHandler.getTempRoot();
@@ -101,10 +97,8 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	}
 
 	private void writeAttachmentDataToFileSystem(AssetAttachment entity, byte[] attachmentData) {
-        System.out.println("writeAttachmentDataToFileSystem: "+entity.getFileName());
 		try {
 			File attachmentFile = PathHandler.getAssetAttachmentFile(entity);
-            System.out.println("writeAttachmentDataToFileSystem: "+entity.getFileName());
 			FileUtils.writeByteArrayToFile(attachmentFile, attachmentData);
 		} catch (IOException e) {
 			throw new FileAttachmentException(e);
@@ -114,7 +108,6 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	private void fillInConnectionFields(AssetAttachment entity) {
 		entity.setAsset(asset);
 		entity.setTenant(asset.getTenant());
-        System.out.println("fillInConnectionFields: "+entity.getFileName());
 	}
 	
 	private void deleteFile(AssetAttachment attachment) {

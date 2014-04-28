@@ -170,7 +170,6 @@ public class AssetAttachmentsPanel extends Panel {
                         attachment.setMobileId(assetAttachmentUuid);
                         attachment.setAsset(assetModel.getObject());
                         attachment.setFileName(fileName);
-                        System.out.println("fileName:" + fileName);
 
                         ClientProperties clientProp = WebSession.get().getClientInfo().getProperties();
                         boolean FileUploadSupported = clientProp.isBrowserChrome() ||
@@ -180,15 +179,12 @@ public class AssetAttachmentsPanel extends Panel {
                             (clientProp.isBrowserInternetExplorer() && clientProp.getBrowserVersionMajor() >= 10);
                         //if the browser does not support direct upload to S3
                         if(FileUploadSupported){
-                            System.out.println("FileUploadSupported");
                             String getAssetAttachmentPath = s3Service.getAssetAttachmentPath(assetUuid, assetAttachmentUuid, fileName);
                             attachment.setFileName(getAssetAttachmentPath); //set the filename to be a full path
                         }
                         else {
-                            System.out.println("FileUploadSupported NOT");
                             File tempDir = PathHandler.getTempDir();
                             File file = new File(tempDir, fileName);
-                            System.out.println("getClientFileName:"+ fileUpload.getClientFileName());
 
                             try {
                                 FileCopyUtils.copy(fileUpload.getInputStream(), new FileOutputStream(file));
