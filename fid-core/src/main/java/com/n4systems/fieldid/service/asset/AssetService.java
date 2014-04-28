@@ -823,7 +823,7 @@ public class AssetService extends FieldIdPersistenceService {
             summary.setProcedureDefinitionsToDelete(persistenceService.count(procedureDefCount));
 
             QueryBuilder<Procedure> procedureCount = createTenantSecurityBuilder(Procedure.class);
-            procedureDefCount.addSimpleWhere("asset", asset);
+            procedureCount.addSimpleWhere("asset", asset);
             summary.setProceduresToDelete(persistenceService.count(procedureCount));
 
         } catch (InvalidQueryException e) {
