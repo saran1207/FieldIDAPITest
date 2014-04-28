@@ -9,6 +9,7 @@ import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventTypeGroupService;
 import com.n4systems.fieldid.service.event.PriorityCodeService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
 import com.n4systems.model.EventResult;
@@ -36,6 +37,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
     private @Autowired AssetService assetService;
 	private @Autowired EventService eventService;
+    private @Autowired ProcedureService procedureService;
 	private @Autowired AssetStatusService assetStatusService;
     private @Autowired DateService dateService;
     private @Autowired PriorityCodeService priorityCodeService;
@@ -55,6 +57,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		List<UpcomingScheduledEventsRecord> results = eventService.getUpcomingScheduledEvents(period, owner);
 		return new ChartSeries<LocalDate>(results);
 	}
+
+    @Transactional(readOnly = true)
+    public ChartSeries<LocalDate> getUpcomingScheduledLoto(Integer period) {
+        Preconditions.checkArgument(period!=null);
+        List<UpcomingScheduledLotoRecord> results = procedureService.getUpcomingScheduledLotos(period);
+        return new ChartSeries<LocalDate>(results);
+    }
 
     @Transactional(readOnly = true)
     public List<ChartSeries<String>> getActions(DateRange dateRange, BaseOrg owner, User assignee, EventType actionType) {

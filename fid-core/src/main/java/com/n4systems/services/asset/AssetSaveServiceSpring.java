@@ -118,7 +118,6 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
         List<AssetAttachment> existingAttachments = assetService.findAssetAttachments(asset);
         for (AssetAttachment existingAttachment : existingAttachments) {
             if (!assetAttachments.contains(existingAttachment)) {
-                /* arezafar no need to delete the file from S3, just removing the db reference is enough
                 File attachedFile = PathHandler.getAssetAttachmentFile(existingAttachment);
 
                 if (attachedFile.exists()) {
@@ -126,7 +125,7 @@ public class AssetSaveServiceSpring extends FieldIdPersistenceService {
                     if (!successfulDelete) {
                         logger.error("Couldn't delete asset attachment: " + attachedFile.getAbsolutePath());
                     }
-                }*/
+                }
 
                 persistenceService.delete(existingAttachment);
             }
