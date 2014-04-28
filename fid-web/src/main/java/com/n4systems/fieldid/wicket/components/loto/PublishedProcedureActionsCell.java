@@ -69,10 +69,13 @@ public class PublishedProcedureActionsCell extends Panel {
 
         reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.E));
 
-        if(procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED))
+        if(procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED)) {
             reviseLink.add(new Label("label", new FIDLabelModel("label.revise")));
-        else
+            reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
+        } else {
             reviseLink.add(new Label("label", new FIDLabelModel("label.restore")));
+            reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.restore"), TipsyBehavior.Gravity.N));
+        }
 
         optionsContainer.add(reviseLink);
 
@@ -144,8 +147,6 @@ public class PublishedProcedureActionsCell extends Panel {
 
         optionsContainer.add(editLink);
 
-
-
         AjaxLink<Void> deleteLink = new AjaxLink<Void>("deleteLink") {
 
             @Override
@@ -168,6 +169,9 @@ public class PublishedProcedureActionsCell extends Panel {
         optionsContainer.add(deleteLink);
 
         add(optionsContainer);
+
+        optionsContainer.setVisible(reviseLink.isVisible() || copyLink.isVisible() || unpublishLink.isVisible()
+                || draftLink.isVisible() || previouslyPublishedLink.isVisible() || editLink.isVisible() || deleteLink.isVisible());
 
     }
 
