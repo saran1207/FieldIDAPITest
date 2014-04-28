@@ -1,0 +1,37 @@
+AlTER TABLE saved_items ADD COLUMN procedures_id BIGINT DEFAULT NULL;
+
+ALTER TABLE users ADD COLUMN lastRunProceduresId BIGINT DEFAULT NULL AFTER lastRunReportId;
+
+CREATE TABLE saved_procedures (
+  id bigINT(21) NOT NULL AUTO_INCREMENT,
+  created DATETIME NOT NULL,
+  modified DATETIME NOT NULL,
+  modifiedby BIGINT DEFAULT NULL,
+  createdby BIGINT DEFAULT NULL,
+  assetType BIGINT DEFAULT NULL,
+  assetTypeGroup BIGINT DEFAULT NULL,
+  assignee BIGINT DEFAULT NULL,
+  assignedUserGroup BIGINT DEFAULT NULL,
+  unassignedOnly TINYINT NOT NULL DEFAULT '0',
+  lockDateRange VARCHAR(255) NULL,
+  lockFromDate DATE DEFAULT NULL,
+  lockToDate DATE DEFAULT NULL,
+  unlockDateRange VARCHAR(255) NULL,
+  unlockFromDate DATE DEFAULT NULL,
+  unlockToDate DATE DEFAULT NULL,
+  dueDateRange VARCHAR(255) NULL,
+  dueFromDate DATE DEFAULT NULL,
+  dueToDate DATE DEFAULT NULL,  assetStatus BIGINT DEFAULT NULL,
+  rfidNumber VARCHAR(255) DEFAULT NULL,
+  identifier VARCHAR(255) DEFAULT NULL,
+  referenceNumber VARCHAR(255) DEFAULT NULL,
+  orderNumber VARCHAR(255) DEFAULT NULL,
+  purchaseOrderNumber VARCHAR(255) DEFAULT NULL,
+  performedBy BIGINT DEFAULT NULL,
+  workflow_state VARCHAR(255) DEFAULT NULL,
+  ownerId BIGINT DEFAULT NULL,
+  sortDirection VARCHAR(255) DEFAULT NULL,
+  sortColumnId BIGINT DEFAULT NULL,
+  query VARCHAR(1024) DEFAULT NULL,
+  PRIMARY KEY (id)
+);

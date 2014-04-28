@@ -404,7 +404,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition);
         replay(persistenceService);
 
-        EventReportCriteria result = dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, "unusedParameter", statusString );
+        EventReportCriteria result = (EventReportCriteria) dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, "unusedParameter", statusString );
 
         assertEquals(EventResult.PASS,result.getEventResult());
         assertEquals(jan1_2011, result.getDateRange().getFrom());
@@ -434,7 +434,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition);
         replay(persistenceService);
 
-        EventReportCriteria result = dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, "unusedParameter", statusString );
+        EventReportCriteria result = (EventReportCriteria) dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, "unusedParameter", statusString );
 
         assertEquals(jan1_2011, result.getDueDateRange().getFrom());
         assertEquals(jan1_2011, result.getDueDateRange().getTo());
@@ -463,7 +463,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition).anyTimes();
         replay(persistenceService);
 
-        EventReportCriteria result = dashboardService.convertWidgetDefinitionToReportCriteria(id, xIndex, "unusedParameter", KpiType.NA.getLabel() );
+        EventReportCriteria result = (EventReportCriteria) dashboardService.convertWidgetDefinitionToReportCriteria(id, xIndex, "unusedParameter", KpiType.NA.getLabel() );
 
         assertEquals(org2, result.getOwner());
         assertEquals(IncludeDueDateRange.SELECT_DUE_DATE_RANGE, result.getIncludeDueDateRange());
@@ -472,7 +472,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         assertEquals(new DateRange(RangeType.FOREVER), result.getDateRange());
         assertEquals(EventResult.NA, result.getEventResult());
 
-        result = dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.CLOSED.getLabel() );
+        result = (EventReportCriteria) dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.CLOSED.getLabel() );
         assertEquals(org1, result.getOwner());
         assertEquals(IncludeDueDateRange.SELECT_DUE_DATE_RANGE, result.getIncludeDueDateRange());
         assertEquals(jan1_2011, result.getDueDateRange().getFrom());
@@ -481,7 +481,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         assertEquals(WorkflowStateCriteria.CLOSED, result.getWorkflowState());
 
 
-        result = dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.FAILED.getLabel() );
+        result = (EventReportCriteria) dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.FAILED.getLabel() );
         assertEquals(org1, result.getOwner());
         assertEquals(IncludeDueDateRange.SELECT_DUE_DATE_RANGE, result.getIncludeDueDateRange());
         assertEquals(jan1_2011, result.getDueDateRange().getFrom());
@@ -490,7 +490,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         assertEquals(EventResult.FAIL, result.getEventResult());
 
 
-        result = dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.INCOMPLETE.getLabel() );
+        result = (EventReportCriteria) dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.INCOMPLETE.getLabel() );
         assertEquals(org1, result.getOwner());
         assertEquals(IncludeDueDateRange.SELECT_DUE_DATE_RANGE, result.getIncludeDueDateRange());
         assertEquals(jan1_2011, result.getDueDateRange().getFrom());
@@ -499,7 +499,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         assertEquals(WorkflowStateCriteria.OPEN, result.getWorkflowState());
 
 
-        result = dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.PASSED.getLabel() );
+        result = (EventReportCriteria) dashboardService.convertWidgetDefinitionToReportCriteria(id, 0L, "unusedParameter", KpiType.PASSED.getLabel() );
         assertEquals(org1, result.getOwner());
         assertEquals(IncludeDueDateRange.SELECT_DUE_DATE_RANGE, result.getIncludeDueDateRange());
         assertEquals(jan1_2011, result.getDueDateRange().getFrom());
@@ -535,7 +535,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         expect(persistenceService.findNonSecure(WidgetDefinition.class, id)).andReturn(widgetDefinition);
         replay(persistenceService);
 
-        EventReportCriteria result = dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, "unusedParameter", statusString);
+        EventReportCriteria result = (EventReportCriteria) dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, "unusedParameter", statusString);
 
         assertEquals(assetType, result.getAssetType());
         assertEquals(eventType, result.getEventType());
@@ -575,7 +575,7 @@ public class DashboardReportingServiceTest extends FieldIdServiceTest {
         expect(priorityCodeService.getPriorityCodeByName(priorityString)).andReturn(priority);
         replay(priorityCodeService);
 
-        EventReportCriteria result = dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, priorityString, "OVERDUE");
+        EventReportCriteria result = (EventReportCriteria) dashboardService.convertWidgetDefinitionToReportCriteria(id, xAsDateInMs, priorityString, "OVERDUE");
 
         assertEquals(jan1_2011, result.getDueDateRange().getFrom());
         assertEquals(feb1_2011, result.getDueDateRange().getTo());
