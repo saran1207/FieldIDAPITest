@@ -287,6 +287,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public SavedProcedureSearchService savedProcedureSearchService() {
+        return new SavedProcedureSearchService();
+    }
+
+    @Bean
     public DynamicColumnsService dynamicColumnsService() {
         return new DynamicColumnsService();
     }

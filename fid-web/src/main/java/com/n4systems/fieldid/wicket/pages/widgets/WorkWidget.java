@@ -21,7 +21,7 @@ public class WorkWidget extends Widget<WorkWidgetConfiguration> {
 		super(id, new Model<WidgetDefinition<WorkWidgetConfiguration>>(widgetDefinition));
         add(new Agenda("agenda", new PropertyModel<WorkWidgetConfiguration>(widgetDefinition, "config")) {
             @Override protected EventReportCriteria createCriteria() {
-                EventReportCriteria criteria = dashboardReportingService.convertWidgetDefinitionToReportCriteria(getWidgetDefinition().getObject().getId(), 0L, "","");
+                EventReportCriteria criteria = (EventReportCriteria) dashboardReportingService.convertWidgetDefinitionToReportCriteria(getWidgetDefinition().getObject().getId(), 0L, "","");
                 return criteria;
             }
         });

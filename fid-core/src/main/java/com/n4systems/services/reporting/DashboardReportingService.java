@@ -12,6 +12,7 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
+import com.n4systems.fieldid.service.search.columns.ProcedureColumnsService;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.EventType;
 import com.n4systems.model.dashboard.WidgetDefinition;
@@ -97,7 +98,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return results;
 	}
 
-
     public List<ChartSeries<LocalDate>> getProceduresPublished(DateRange dateRange, ChartGranularity granularity) {
         Preconditions.checkArgument(dateRange !=null);
         List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
@@ -110,8 +110,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
         return results;
     }
-
-
 
 	public EventKpiRecord getEventKpi(BaseOrg owner, DateRange dateRange) {
 		Preconditions.checkArgument(dateRange !=null);
@@ -144,13 +142,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return (from==null) ? null : granularity.roundDown(from).toDate();
 	}
 
-
 	// ------------------------------------------------------------------------------------------------
 	//
 	// NOTE : methods used by widgets to convert configuration into criteria.
 	//
 	
-	public EventReportCriteria convertWidgetDefinitionToReportCriteria(Long widgetDefinitionId, Long x, String y, String series) {
+	public SearchCriteria convertWidgetDefinitionToReportCriteria(Long widgetDefinitionId, Long x, String y, String series) {
 		WidgetDefinition<?> widgetDefinition = getWidgetDefinition(widgetDefinitionId);
 		switch (widgetDefinition.getWidgetType()) {
 			case EVENT_COMPLETENESS:
@@ -159,6 +156,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 				return getCriteriaDefaults(((CompletedEventsWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
 			case UPCOMING_SCHEDULED_EVENTS: 
 				return getCriteriaDefaults(((UpcomingEventsWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
+            case UPCOMING_SCHEDULED_LOTO:
+                return getCriteriaDefaults(((UpcomingLotoWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
             case EVENT_KPI:
                 return getCriteriaDefaults((EventKPIWidgetConfiguration) widgetDefinition.getConfig(), series, x.intValue()/*assumed to be org index*/);
             case WORK:
@@ -169,6 +168,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 				throw new IllegalArgumentException("Can't convert widget of type " + widgetDefinition.getWidgetType() + " into report criteria");
 		}
 	}
+
+    private ProcedureCriteria getCriteriaDefaults(UpcomingLotoWidgetConfiguration config, String series, LocalDate localDate) {
+        ProcedureCriteria criteria = getDefaultProcedureCriteria();
+        criteria.setDueDateRange(new DateRange(localDate, localDate));
+        criteria.setWorkflowState(ProcedureWorkflowStateCriteria.OPEN);
+        return criteria;
+    }
 
     private EventReportCriteria getCriteriaDefaults() {
     	EventReportCriteria criteria = getDefaultReportCriteria();
@@ -283,8 +289,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         }
     }
 
-
-
     /**
      * asset widget related config --> criteria methods.
      */
@@ -336,6 +340,16 @@ public class DashboardReportingService extends FieldIdPersistenceService {
     public EventReportCriteria getDefaultReportCriteria() {
         EventReportCriteria criteria = new EventReportCriteria();
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
+        criteria.setColumnGroups(reportConfiguration.getColumnGroups());
+        criteria.setSortColumn(reportConfiguration.getSortColumn());
+        criteria.setSortDirection(reportConfiguration.getSortDirection());
+        criteria.setReportAlreadyRun(true);
+        return criteria;
+    }
+
+    public ProcedureCriteria getDefaultProcedureCriteria() {
+        ProcedureCriteria criteria = new ProcedureCriteria();
+        ReportConfiguration reportConfiguration = new ProcedureColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
         criteria.setColumnGroups(reportConfiguration.getColumnGroups());
         criteria.setSortColumn(reportConfiguration.getSortColumn());
         criteria.setSortDirection(reportConfiguration.getSortDirection());
