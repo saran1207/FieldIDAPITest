@@ -64,8 +64,13 @@ public class PublishedProcedureActionsCell extends Panel {
                 setResponsePage(new ProcedureDefinitionPage(Model.of(copiedDefinition)));
             }
         };
-        reviseLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
-              && (procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED) || procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED)));
+
+        if (procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED)) {
+            reviseLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset()));
+        } else if (procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
+            reviseLink.setVisible(true);
+        } else
+            reviseLink.setVisible(false);
 
         reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.E));
 
