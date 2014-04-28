@@ -9,7 +9,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.loto.ProcedureTitleLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.ProcedureDefinition;
@@ -215,7 +215,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     }
 
     private void gotoProceduresPage() {
-        setResponsePage(new ProcedureDefinitionListPage(new PageParameters().add("uniqueID", model.getObject().getAsset().getId())));
+        setResponsePage(new ProceduresListPage(new PageParameters().add("uniqueID", model.getObject().getAsset().getId())));
     }
 
     private void doCancel(AjaxRequestTarget target) {

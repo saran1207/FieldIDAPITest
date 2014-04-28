@@ -2,9 +2,7 @@
 
 <wicket:extend>
 
-    <div wicket:id="feedbackPanel" class="filter" />
-    <wicket:enclosure child="formContainer">
-        <div wicket:id="formContainer">
+    <div wicket:id="feedbackPanel"/>
             <div class="text-search pull-right procedure-text-search">
                 <form wicket:id="form">
                     <span class="icon-search"></span>
@@ -12,8 +10,6 @@
                 </form>
             </div>
             <img class="loadingAnimationImage pull-right procedure-search-loading" wicket:id="loadingImage" id="loadingImage" style="display: none;"/>
-        </div>
-    </wicket:enclosure>
     <div wicket:id="procedureDefinitionListPanel" class="event-panel" />
 </wicket:extend>
 </html>

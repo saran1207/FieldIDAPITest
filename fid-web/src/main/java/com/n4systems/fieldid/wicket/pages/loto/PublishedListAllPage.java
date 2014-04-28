@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.loto.ProcedureListPanel;
 import com.n4systems.fieldid.wicket.components.loto.PublishedProcedureActionsColumn;
 import com.n4systems.fieldid.wicket.data.ProcedureDefinitionDataProvider;
+import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -14,6 +15,7 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
@@ -28,7 +30,54 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
     private ProcedureDefinitionDataProvider dataProvider;
     private FIDFeedbackPanel feedbackPanel;
 
+    private String procedureCodeString = null;
+    private Asset asset = null;
+    private boolean isProcedureCode = false;
+    private boolean isAsset = false;
+
+    private String searchTerm = "";
     private String textFilter = null;
+
+    public PublishedListAllPage() {super(new IModel<PublishedState>() {
+        @Override
+        public PublishedState getObject() {
+            return PublishedState.PUBLISHED;
+        }
+
+        @Override
+        public void setObject(PublishedState object) {
+
+        }
+
+        @Override
+        public void detach() {
+
+        }
+    }); }
+
+    public PublishedListAllPage(String procedureCodeString, Asset asset, boolean isProcedureCode, boolean isAsset){
+        super(new IModel<PublishedState>() {
+            @Override
+            public PublishedState getObject() {
+                return PublishedState.PUBLISHED;
+            }
+
+            @Override
+            public void setObject(PublishedState object) {
+
+            }
+
+            @Override
+            public void detach() {
+
+            }
+        });
+        this.procedureCodeString = procedureCodeString;
+        this.asset = asset;
+        this.isProcedureCode = isProcedureCode;
+        this.isAsset = isAsset;
+        this.searchTerm = asset.getDisplayName();
+    }
 
     @Override
     public String getAjaxIndicatorMarkupId(){
@@ -46,7 +95,7 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
         Form<Void> form = new Form<Void>("form");
         add(form);
 
-        final TextField<String> field = new TextField<String>("field", new Model<String>(""));
+        final TextField<String> field = new TextField<String>("field", new Model<String>(searchTerm));
         form.add(field);
 
 
@@ -56,13 +105,15 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
             protected void onUpdate(AjaxRequestTarget target)
             {
                 PublishedListAllPage.this.dataProvider.setSearchTerm(field.getDefaultModelObjectAsString());
+                PublishedListAllPage.this.dataProvider.resetProcedureCodeFlag();
+                PublishedListAllPage.this.dataProvider.resetAssetCodeFlag();
                 target.add(procedureDefinitionListPanel);
             }
         };
         onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));
         field.add(onChangeAjaxBehavior);
 
-        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.PUBLISHED, "", null, false){
+        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.PUBLISHED, procedureCodeString, asset, isProcedureCode, isAsset){
             @Override protected String getTextFilter() {
                 return textFilter;
             }

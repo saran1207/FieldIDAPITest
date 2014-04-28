@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.components.loto.ProcedureListPanel;
 import com.n4systems.fieldid.wicket.components.loto.ProcedureRejectedDateColumn;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -36,6 +37,23 @@ public class ProcedureRejectedPage extends ProcedureApprovalsPage implements IAj
     private ProcedureDefinitionDataProvider dataProvider;
     private FIDFeedbackPanel feedbackPanel;
 
+    private String procedureCodeString = null;
+    private Asset asset = null;
+    private boolean isProcedureCode = false;
+    private boolean isAsset = false;
+    private String searchTerm = "";
+
+    public ProcedureRejectedPage() {super(); }
+
+    public ProcedureRejectedPage(String procedureCodeString, Asset asset, boolean isProcedureCode, boolean isAsset){
+        super();
+        this.procedureCodeString = procedureCodeString;
+        this.asset = asset;
+        this.isProcedureCode = isProcedureCode;
+        this.isAsset = isAsset;
+        this.searchTerm = asset.getDisplayName();
+    }
+
     public UserState getUserState() {
         return userState;
     }
@@ -63,7 +81,7 @@ public class ProcedureRejectedPage extends ProcedureApprovalsPage implements IAj
         Form<Void> form = new Form<Void>("form");
         add(form);
 
-        final TextField<String> field = new TextField<String>("field", new Model<String>(""));
+        final TextField<String> field = new TextField<String>("field", new Model<String>(searchTerm));
         form.add(field);
 
 
@@ -73,6 +91,8 @@ public class ProcedureRejectedPage extends ProcedureApprovalsPage implements IAj
             protected void onUpdate(AjaxRequestTarget target)
             {
                 ProcedureRejectedPage.this.dataProvider.setSearchTerm(field.getDefaultModelObjectAsString());
+                ProcedureRejectedPage.this.dataProvider.resetProcedureCodeFlag();
+                ProcedureRejectedPage.this.dataProvider.resetAssetCodeFlag();
                 target.add(procedureListPanel);
             }
         };
@@ -80,7 +100,7 @@ public class ProcedureRejectedPage extends ProcedureApprovalsPage implements IAj
         field.add(onChangeAjaxBehavior);
 
 
-        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING);
+        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, procedureCodeString, asset, isProcedureCode, isAsset);
 
         add(new ContextImage("loadingImage", "images/loading-small.gif"));
 
@@ -111,32 +131,39 @@ public class ProcedureRejectedPage extends ProcedureApprovalsPage implements IAj
     private class ProcedureDefinitionDataProvider extends FieldIDDataProvider<ProcedureDefinition> {
 
         String searchTerm;
+        private String procedureCode;
+        private Asset asset;
+        private boolean isProcedureCode;
+        private boolean isAsset;
 
-        public ProcedureDefinitionDataProvider(String order, SortOrder sortOrder) {
+
+        public ProcedureDefinitionDataProvider(String order, SortOrder sortOrder, String procedureCode, Asset asset, boolean isProcedureCode, boolean isAsset) {
             setSort(order, sortOrder);
             searchTerm = "";
+            this.procedureCode = procedureCode;
+            this.asset = asset;
+            this.isProcedureCode = isProcedureCode;
+            this.isAsset = isAsset;
         }
 
         @Override
         public Iterator<? extends ProcedureDefinition> iterator(int first, int count) {
-            if(searchTerm.equalsIgnoreCase("")) {
-                List<? extends ProcedureDefinition> procedureDefinitionList = procedureDefinitionService.getProcedureDefinitionsFor(PublishedState.REJECTED, getSort().getProperty(), getSort().isAscending(), first, count);
+            if(isAsset || isProcedureCode) {
+                List<? extends ProcedureDefinition> procedureDefinitionList = procedureDefinitionService.getSelectedProcedureDefinitionsFor(procedureCode, asset, isAsset, PublishedState.REJECTED, getSort().getProperty(), getSort().isAscending(), first, count);
                 return procedureDefinitionList.iterator();
             } else {
-                List<? extends ProcedureDefinition> procedureDefinitionList = procedureDefinitionService.getSelectedProcedureDefinitionsFor(searchTerm, PublishedState.REJECTED, getSort().getProperty(), getSort().isAscending(), first, count);
+                List<? extends ProcedureDefinition> procedureDefinitionList = procedureDefinitionService.getProcedureDefinitionsFor(searchTerm, PublishedState.REJECTED, getSort().getProperty(), getSort().isAscending(), first, count);
                 return procedureDefinitionList.iterator();
             }
         }
 
         @Override
         public int size() {
-            int size = 0;
-
-            if(searchTerm.equalsIgnoreCase("")) {
-                Long waitingApprovalsCount = procedureDefinitionService.getRejectedApprovalsCount();
+            if(isAsset || isProcedureCode) {
+                Long waitingApprovalsCount = procedureDefinitionService.getSelectedRejectedApprovalsCount(procedureCode, asset, isAsset);
                 return waitingApprovalsCount.intValue();
             } else {
-                Long waitingApprovalsCount = procedureDefinitionService.getSelectedRejectedApprovalsCount(searchTerm);
+                Long waitingApprovalsCount = procedureDefinitionService.getRejectedApprovalsCount(searchTerm);
                 return waitingApprovalsCount.intValue();
             }
         }
@@ -153,6 +180,14 @@ public class ProcedureRejectedPage extends ProcedureApprovalsPage implements IAj
 
         public void setSearchTerm(String sTerm) {
             searchTerm = sTerm;
+        }
+
+        public void resetProcedureCodeFlag(){
+            isProcedureCode = false;
+        }
+
+        public void resetAssetCodeFlag(){
+            isAsset = false;
         }
     }
 

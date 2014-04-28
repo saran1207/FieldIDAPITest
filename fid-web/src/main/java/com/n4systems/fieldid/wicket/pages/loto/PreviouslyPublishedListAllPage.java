@@ -16,6 +16,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
@@ -35,18 +36,53 @@ public class PreviouslyPublishedListAllPage extends ProceduresAllListPage implem
     private String procedureCodeString = null;
     private Asset asset = null;
     private boolean isProcedureCode = false;
+    private boolean isAsset = false;
+
+    private String searchTerm = "";
 
     private String textFilter = null;
 
     public PreviouslyPublishedListAllPage(){
-        super();
+        super(new IModel<PublishedState>() {
+            @Override
+            public PublishedState getObject() {
+                return PublishedState.PREVIOUSLY_PUBLISHED;
+            }
+
+            @Override
+            public void setObject(PublishedState object) {
+
+            }
+
+            @Override
+            public void detach() {
+
+            }
+        });
     }
 
-    public PreviouslyPublishedListAllPage(String procedureCodeString, Asset asset){
-        super();
+    public PreviouslyPublishedListAllPage(String procedureCodeString, Asset asset, boolean isProcedureCode, boolean isAsset){
+        super(new IModel<PublishedState>() {
+            @Override
+            public PublishedState getObject() {
+                return PublishedState.PREVIOUSLY_PUBLISHED;
+            }
+
+            @Override
+            public void setObject(PublishedState object) {
+
+            }
+
+            @Override
+            public void detach() {
+
+            }
+        });
         this.procedureCodeString = procedureCodeString;
         this.asset = asset;
-        this.isProcedureCode = true;
+        this.isProcedureCode = isProcedureCode;
+        this.isAsset = isAsset;
+        this.searchTerm = asset.getDisplayName();
     }
 
     @Override
@@ -62,20 +98,10 @@ public class PreviouslyPublishedListAllPage extends ProceduresAllListPage implem
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
-        formContainer = new WebMarkupContainer("formContainer"){
-            @Override
-            public boolean isVisible()
-            {
-                return !isProcedureCode;
-            }
-        };
-
-        add(formContainer);
-
         Form<Void> form = new Form<Void>("form");
-        formContainer.add(form);
+        add(form);
 
-        final TextField<String> field = new TextField<String>("field", new Model<String>(""));
+        final TextField<String> field = new TextField<String>("field", new Model<String>(searchTerm));
         form.add(field);
 
 
@@ -85,19 +111,22 @@ public class PreviouslyPublishedListAllPage extends ProceduresAllListPage implem
             protected void onUpdate(AjaxRequestTarget target)
             {
                 PreviouslyPublishedListAllPage.this.dataProvider.setSearchTerm(field.getDefaultModelObjectAsString());
+                PreviouslyPublishedListAllPage.this.dataProvider.resetProcedureCodeFlag();
+                PreviouslyPublishedListAllPage.this.dataProvider.resetAssetCodeFlag();
                 target.add(procedureDefinitionListPanel);
             }
         };
         onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));
         field.add(onChangeAjaxBehavior);
 
-        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.PREVIOUSLY_PUBLISHED, procedureCodeString, asset, isProcedureCode){
+        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.PREVIOUSLY_PUBLISHED, procedureCodeString, asset, isProcedureCode, isAsset){
             @Override protected String getTextFilter() {
                 return textFilter;
             }
         };
 
-        formContainer.add(new ContextImage("loadingImage", "images/loading-small.gif"));
+        //formContainer.add(new ContextImage("loadingImage", "images/loading-small.gif"));
+        add(new ContextImage("loadingImage", "images/loading-small.gif"));
 
         add(procedureDefinitionListPanel = new ProcedureListPanel("procedureDefinitionListPanel", dataProvider) {
             @Override

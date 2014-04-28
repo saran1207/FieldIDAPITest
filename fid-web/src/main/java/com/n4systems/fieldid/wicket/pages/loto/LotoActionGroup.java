@@ -5,6 +5,7 @@ import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.model.Asset;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -18,9 +19,11 @@ public class LotoActionGroup extends Panel {
     public LotoActionGroup(String id, final IModel<Asset> assetModel) {
         super(id);
 
-        add(new Link("authorLink") {
+        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
+
+        optionsContainer.add(new Link("authorLink") {
             {
-                if(procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())) {
+                if (procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())) {
                     add(new ConfirmBehavior(new FIDLabelModel("message.author_procedure_warning")));
                 }
             }
@@ -29,6 +32,43 @@ public class LotoActionGroup extends Panel {
                 setResponsePage(new ProcedureDefinitionPage(assetModel.getObject()));
             }
         });
+
+        optionsContainer.add(new Link("viewPublishedLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new PublishedListAllPage(assetModel.getObject().getDisplayName(), assetModel.getObject(), false, true));
+            }
+        });
+
+        optionsContainer.add(new Link("draftsLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new DraftListAllPage(assetModel.getObject().getDisplayName(), assetModel.getObject(), false, true));
+            }
+        });
+
+        optionsContainer.add(new Link("waitingForApprovalLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new ProcedureWaitingApprovalsPage(assetModel.getObject().getDisplayName(), assetModel.getObject(), false, true));
+            }
+        });
+
+        optionsContainer.add(new Link("rejectedLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new ProcedureRejectedPage(assetModel.getObject().getDisplayName(), assetModel.getObject(), false, true));
+            }
+        });
+
+        optionsContainer.add(new Link("previouslyPublishedLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new PreviouslyPublishedListAllPage(assetModel.getObject().getDisplayName(), assetModel.getObject(), false, true));
+            }
+        });
+
+        add(optionsContainer);
 
     }
 }

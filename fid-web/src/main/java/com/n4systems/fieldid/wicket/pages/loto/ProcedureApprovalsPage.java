@@ -25,8 +25,8 @@ public abstract class ProcedureApprovalsPage extends FieldIDTemplatePage {
     protected void addNavBar(String navBarId) {
 
         // get count
-        Long waitingApprovalsCount = procedureDefinitionService.getWaitingApprovalsCount();
-        Long rejectedApprovalsCount = procedureDefinitionService.getRejectedApprovalsCount();
+        Long waitingApprovalsCount = procedureDefinitionService.getWaitingApprovalsCount("");
+        Long rejectedApprovalsCount = procedureDefinitionService.getRejectedApprovalsCount("");
 
         add(new NavigationBar(navBarId,
                 aNavItem().label(new FIDLabelModel("label.procedure_waiting_approvals", waitingApprovalsCount)).page(ProcedureWaitingApprovalsPage.class).build(),

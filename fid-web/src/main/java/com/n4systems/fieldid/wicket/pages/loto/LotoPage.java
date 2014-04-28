@@ -68,8 +68,8 @@ public abstract class LotoPage extends FieldIDTemplatePage {
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label(new FIDLabelModel("label.active")).page(ProcedureDefinitionListPage.class).params(PageParametersBuilder.uniqueId(getAssetId())).build(),
-                aNavItem().label(new FIDLabelModel("label.previously_published")).page(PreviouslyPublishedListPage.class).params(PageParametersBuilder.uniqueId(getAssetId())).build(),
+                //aNavItem().label(new FIDLabelModel("label.active")).page(ProcedureDefinitionListPage.class).params(PageParametersBuilder.uniqueId(getAssetId())).build(),
+                //aNavItem().label(new FIDLabelModel("label.previously_published")).page(PreviouslyPublishedListPage.class).params(PageParametersBuilder.uniqueId(getAssetId())).build(),
                 aNavItem().label(new FIDLabelModel("label.completed_inprogress")).page(ProceduresListPage.class).params(PageParametersBuilder.uniqueId(getAssetId())).build())
         );
     }

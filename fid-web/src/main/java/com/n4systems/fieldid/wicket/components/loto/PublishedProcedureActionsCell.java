@@ -114,7 +114,7 @@ public class PublishedProcedureActionsCell extends Panel {
             @Override
             public void onClick() {
                 ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
-                setResponsePage(new DraftListAllPage(publishedDef.getProcedureCode(), publishedDef.getAsset()));
+                setResponsePage(new DraftListAllPage(publishedDef.getProcedureCode(), publishedDef.getAsset(), true, false));
             }
         };
         draftLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
@@ -128,7 +128,7 @@ public class PublishedProcedureActionsCell extends Panel {
             @Override
             public void onClick() {
                 ProcedureDefinition publishedDef = procedureDefinitionService.getPublishedProcedureDefinition(procedureDefinition.getAsset(), procedureDefinition.getFamilyId());
-                setResponsePage(new PreviouslyPublishedListAllPage(publishedDef.getProcedureCode(), publishedDef.getAsset()));
+                setResponsePage(new PreviouslyPublishedListAllPage(publishedDef.getProcedureCode(), publishedDef.getAsset(), true, false));
             }
         };
         previouslyPublishedLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())

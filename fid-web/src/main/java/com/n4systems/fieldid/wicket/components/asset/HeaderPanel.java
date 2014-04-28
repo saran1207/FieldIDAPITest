@@ -20,7 +20,7 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.identify.LimitedEditAsset;
-import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
@@ -88,7 +88,7 @@ public class HeaderPanel extends Panel {
 
         add(eventHistoryLink = new BookmarkablePageLink<Void>("eventHistoryLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
-        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("lotoProceduresLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(asset.getId()))
+        add(new BookmarkablePageLink<ProceduresListPage>("lotoProceduresLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(asset.getId()))
                 .setVisible(hasProcedures));
 
         if (isView) {

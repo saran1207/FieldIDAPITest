@@ -12,10 +12,10 @@ import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.image.ContextImage;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.util.time.Duration;
 
@@ -30,23 +30,56 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
     private ProcedureDefinitionDataProvider dataProvider;
     private FIDFeedbackPanel feedbackPanel;
 
-    private WebMarkupContainer formContainer;
-
     private String procedureCodeString = null;
     private Asset asset = null;
     private boolean isProcedureCode = false;
+    private boolean isAsset = false;
+
+    private String searchTerm = "";
 
     private String textFilter = null;
 
     public DraftListAllPage(){
-        super();
+        super(new IModel<PublishedState>() {
+            @Override
+            public PublishedState getObject() {
+                return PublishedState.DRAFT;
+            }
+
+            @Override
+            public void setObject(PublishedState object) {
+
+            }
+
+            @Override
+            public void detach() {
+
+            }
+        });
     }
 
-    public DraftListAllPage(String procedureCodeString, Asset asset){
-        super();
+    public DraftListAllPage(String procedureCodeString, Asset asset, boolean isProcedureCode, boolean isAsset){
+        super(new IModel<PublishedState>() {
+            @Override
+            public PublishedState getObject() {
+                return PublishedState.DRAFT;
+            }
+
+            @Override
+            public void setObject(PublishedState object) {
+
+            }
+
+            @Override
+            public void detach() {
+
+            }
+        });
         this.procedureCodeString = procedureCodeString;
         this.asset = asset;
-        this.isProcedureCode = true;
+        this.isProcedureCode = isProcedureCode;
+        this.isAsset = isAsset;
+        this.searchTerm = asset.getDisplayName();
     }
 
     @Override
@@ -62,20 +95,10 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
 
-        formContainer = new WebMarkupContainer("formContainer"){
-            @Override
-            public boolean isVisible()
-            {
-                return !isProcedureCode;
-            }
-        };
-
-        add(formContainer);
-
         Form<Void> form = new Form<Void>("form");
-        formContainer.add(form);
+        add(form);
 
-        final TextField<String> field = new TextField<String>("field", new Model<String>(""));
+        final TextField<String> field = new TextField<String>("field", new Model<String>(searchTerm));
         form.add(field);
 
         OnChangeAjaxBehavior onChangeAjaxBehavior = new OnChangeAjaxBehavior()
@@ -84,6 +107,8 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
             protected void onUpdate(AjaxRequestTarget target)
             {
                 DraftListAllPage.this.dataProvider.setSearchTerm(field.getDefaultModelObjectAsString());
+                DraftListAllPage.this.dataProvider.resetProcedureCodeFlag();
+                DraftListAllPage.this.dataProvider.resetAssetCodeFlag();
                 target.add(procedureDefinitionListPanel);
             }
         };
@@ -91,13 +116,13 @@ public class DraftListAllPage extends ProceduresAllListPage implements IAjaxIndi
 
         field.add(onChangeAjaxBehavior);
 
-        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.DRAFT, procedureCodeString, asset, isProcedureCode){
+        dataProvider = new ProcedureDefinitionDataProvider("created", SortOrder.DESCENDING, PublishedState.DRAFT, procedureCodeString, asset, isProcedureCode, isAsset){
             @Override protected String getTextFilter() {
                 return textFilter;
             }
         };
 
-        formContainer.add(new ContextImage("loadingImage", "images/loading-small.gif"));
+        add(new ContextImage("loadingImage", "images/loading-small.gif"));
 
         add(procedureDefinitionListPanel = new ProcedureListPanel("procedureDefinitionListPanel", dataProvider) {
             @Override
