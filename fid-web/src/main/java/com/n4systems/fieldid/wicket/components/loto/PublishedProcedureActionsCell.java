@@ -69,8 +69,9 @@ public class PublishedProcedureActionsCell extends Panel {
             reviseLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset()));
         } else if (procedureDefinition.getPublishedState().equals(PublishedState.PREVIOUSLY_PUBLISHED)) {
             reviseLink.setVisible(true);
-        } else
+        } else {
             reviseLink.setVisible(false);
+        }
 
         reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.E));
 
