@@ -6,6 +6,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.User;
 
 import javax.persistence.*;
@@ -17,6 +18,10 @@ import java.util.Set;
 @Entity
 @Table(name = "procedure_definitions")
 public class ProcedureDefinition extends ArchivableEntityWithTenant implements Listable<Long> {
+
+    public static final SecurityDefiner createSecurityDefiner() {
+        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
+    }
 
     @ManyToOne
     @JoinColumn(name = "asset_id")
