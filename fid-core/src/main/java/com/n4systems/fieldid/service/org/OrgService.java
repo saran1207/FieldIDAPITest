@@ -47,10 +47,7 @@ public class OrgService extends FieldIdPersistenceService {
     public boolean secondaryNameExists(BaseOrg org, String name) {
         QueryBuilder<SecondaryOrg> query = createUserSecurityBuilder(SecondaryOrg.class);
         query.addSimpleWhere("primaryOrg", org);
-
-        WhereParameterGroup group = new WhereParameterGroup("nameSearch");
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name", "name", name.trim(), WhereParameter.WILDCARD_LEFT, WhereClause.ChainOp.OR));
-        query.addWhere(group);
+        query.addSimpleWhere("name", name.trim());
 
         List<SecondaryOrg> resultSet = persistenceService.findAll(query);
 
