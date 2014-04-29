@@ -157,7 +157,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 			case UPCOMING_SCHEDULED_EVENTS: 
 				return getCriteriaDefaults(((UpcomingEventsWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
             case UPCOMING_SCHEDULED_LOTO:
-                return getCriteriaDefaults(((UpcomingLotoWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
+                return getCriteriaDefaults(new LocalDate(x));
             case EVENT_KPI:
                 return getCriteriaDefaults((EventKPIWidgetConfiguration) widgetDefinition.getConfig(), series, x.intValue()/*assumed to be org index*/);
             case WORK:
@@ -169,7 +169,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		}
 	}
 
-    private ProcedureCriteria getCriteriaDefaults(UpcomingLotoWidgetConfiguration config, String series, LocalDate localDate) {
+    private ProcedureCriteria getCriteriaDefaults(LocalDate localDate) {
         ProcedureCriteria criteria = getDefaultProcedureCriteria();
         criteria.setDueDateRange(new DateRange(localDate, localDate));
         criteria.setWorkflowState(ProcedureWorkflowStateCriteria.OPEN);
