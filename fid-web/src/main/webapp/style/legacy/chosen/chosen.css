@@ -411,3 +411,72 @@
     }
 }
 /* @end */
+
+
+/*--------------------------
+  FIELD ID CUSTOM OVERRIDES 
+----------------------------*/
+.fieldid-framework .chzn-container {
+  margin: 4px 0 10px;
+  font-size: 14px;
+  vertical-align: middle;
+}
+.fieldid-framework .chzn-single.chzn-default,
+.fieldid-framework .chzn-container-single .chzn-single,
+.fieldid-framework .chzn-container-multi .chzn-choices {
+  border-radius: 0;
+  box-shadow: none;
+  background: none;
+  height: 29px;
+  padding-left: 4px;
+  border-color: #c7c7c9;
+}
+.fieldid-framework .chzn-container-single .chzn-single span,
+.fieldid-framework .chzn-container-single .chzn-default {
+  color: #7a7a7a;
+}
+.fieldid-framework .chzn-container-single .chzn-single {
+  line-height: 29px;
+}
+.fieldid-framework .chzn-container-single .chzn-single abbr {
+  top: 9px;
+}
+.fieldid-framework .chzn-container .chzn-results .highlighted {
+  background-color: #dddddd;
+  background-image: none;
+  color: #7a7a7a;
+}
+.fieldid-framework .chzn-container-single .chzn-drop {
+  -webkit-border-radius: 0;
+  -moz-border-radius: 0;
+  border-radius: 0;
+}
+.fieldid-framework .chzn-container-multi .chzn-choices {
+  min-height: 29px!important;
+}
+.fieldid-framework .chzn-container-multi .chzn-choices .search-field input {
+  height: auto;
+}
+.fieldid-framework .chzn-container-multi .chzn-choices .search-choice .search-choice-close:hover {
+  background-position: -48px 1px;
+}
+.fieldid-framework .control-group .chzn-container {
+  margin: 0;
+}
+.fieldid-framework .editable-inputs .chzn-disabled {
+  filter: alpha(opacity=1) !important;
+  opacity: 1!important;
+}
+.fieldid-framework .editable-inputs .chzn-container.chzn-disabled .chzn-single {
+  border-color: transparent;
+  padding-left: 0;
+}
+.fieldid-framework .editable-inputs .chzn-container.chzn-disabled .chzn-single span {
+  color: #3a3a3a;
+}
+.fieldid-framework .editable-inputs .chzn-container.chzn-disabled .chzn-single div b {
+  background: none;
+}
+.fieldid-framework .chzn-container .chzn-results .highlighted {
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
