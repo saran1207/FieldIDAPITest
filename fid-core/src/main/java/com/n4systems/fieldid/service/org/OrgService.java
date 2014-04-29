@@ -49,7 +49,7 @@ public class OrgService extends FieldIdPersistenceService {
         query.addSimpleWhere("primaryOrg", org);
 
         WhereParameterGroup group = new WhereParameterGroup("nameSearch");
-        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name", "name", name.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name", "name", name.trim(), WhereParameter.WILDCARD_LEFT, WhereClause.ChainOp.OR));
         query.addWhere(group);
 
         List<SecondaryOrg> resultSet = persistenceService.findAll(query);
