@@ -77,10 +77,10 @@ public class PublishedProcedureActionsCell extends Panel {
 
         if(procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED)) {
             reviseLink.add(new Label("label", new FIDLabelModel("label.revise")));
-            reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.N));
+            reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.revise"), TipsyBehavior.Gravity.E));
         } else {
             reviseLink.add(new Label("label", new FIDLabelModel("label.restore")));
-            reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.restore"), TipsyBehavior.Gravity.N));
+            reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.restore"), TipsyBehavior.Gravity.E));
         }
 
         optionsContainer.add(reviseLink);
