@@ -7,7 +7,6 @@ import com.n4systems.model.search.ProcedureCriteria;
 import com.n4systems.model.search.ProcedureWorkflowStateCriteria;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.search.terms.DateRangeTerm;
 import com.n4systems.util.persistence.search.terms.ProcedurePerformedByTerm;
 import com.n4systems.util.persistence.search.terms.SearchTermDefiner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +45,9 @@ public class ProcedureSearchService extends SearchService<ProcedureCriteria, Pro
             addSimpleTerm(searchTerms, "workflowState", ProcedureWorkflowState.OPEN);
         }
 
-        DateRangeTerm lockRangeTerm = new DateRangeTerm("unlockDate", dateService.calculateFromDate(criteriaModel.getUnlockDateRange()), dateService.calculateToDate(criteriaModel.getUnlockDateRange()));
-        DateRangeTerm unlockRangeTerm = new DateRangeTerm("lockDate", dateService.calculateFromDate(criteriaModel.getLockDateRange()), dateService.calculateToDate(criteriaModel.getLockDateRange()));
-        DateRangeTerm dueRangeTerm = new DateRangeTerm("dueDate", dateService.calculateFromDate(criteriaModel.getDueDateRange()), dateService.calculateToDate(criteriaModel.getDueDateRange()));
-
-        searchTerms.add(lockRangeTerm);
-        searchTerms.add(unlockRangeTerm);
-        searchTerms.add(dueRangeTerm);
+        addDateRangeTerm(searchTerms, "unlockDate", dateService.calculateFromDate(criteriaModel.getUnlockDateRange()), dateService.calculateInclusiveToDate(criteriaModel.getUnlockDateRange()));
+        addDateRangeTerm(searchTerms, "lockDate", dateService.calculateFromDate(criteriaModel.getLockDateRange()), dateService.calculateInclusiveToDate(criteriaModel.getLockDateRange()));
+        addDateRangeTerm(searchTerms, "dueDate", dateService.calculateFromDate(criteriaModel.getDueDateRange()), dateService.calculateInclusiveToDate(criteriaModel.getDueDateRange()));
     }
 
     public boolean hasProcedures() {
