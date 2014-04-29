@@ -9,7 +9,6 @@ import com.n4systems.fieldid.wicket.components.asset.events.table.OpenActionsCel
 import com.n4systems.fieldid.wicket.components.asset.events.table.ProcedureStateIcon;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.event.UpcomingEventsListModel;
 import com.n4systems.model.*;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.services.date.DateService;
@@ -73,6 +72,8 @@ public class UpcomingEventsPanel extends Panel {
             protected void populateItem(ListItem<Procedure> item) {
                 if(item.getModelObject() != null) {
                     item.add(new ProcedureStateIcon("scheduleIcon", item.getModel()));
+
+                    item.add(new Label("upcomingEventType", item.getModelObject().getType().getProcedureCode()));
 
                     DayDisplayModel upcomingProcedureDate = new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "dueDate")).includeTime();
 
