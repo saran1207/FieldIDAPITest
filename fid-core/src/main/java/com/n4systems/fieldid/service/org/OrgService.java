@@ -7,10 +7,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.*;
 import com.n4systems.util.collections.OrgList;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClause;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +41,24 @@ public class OrgService extends FieldIdPersistenceService {
         query.addOrder("name");
         
         return persistenceService.findAll(query);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean secondaryNameExists(BaseOrg org, String name) {
+        QueryBuilder<SecondaryOrg> query = createUserSecurityBuilder(SecondaryOrg.class);
+        query.addSimpleWhere("primaryOrg", org);
+
+        WhereParameterGroup group = new WhereParameterGroup("nameSearch");
+        group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name", "name", name.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+        query.addWhere(group);
+
+        List<SecondaryOrg> resultSet = persistenceService.findAll(query);
+
+        if(resultSet.size() > 0){
+            return true;
+        } else {
+            return false;
+        }
     }
     
     @Transactional(readOnly = true)
