@@ -4,10 +4,20 @@
         <div wicket:enclosure="optionsContainer" class="dropdown">
             <button class="btn-secondary">Manage Procedures</button>
             <ul wicket:id="optionsContainer" class="pull-right">
-                <li>
-                    <a wicket:id="authorLink">
-                        <wicket:message key="label.author_new"/>
-                    </a>
+                <li class="dropdown-secondary">
+                    <a href="#"><wicket:message key="label.author"/></a>
+                    <ul>
+                        <li>
+                            <a wicket:id="authorNewLink">
+                                <wicket:message key="label.new"/>
+                            </a>
+                        </li>
+                        <li>
+                            <a wicket:id="copyExistingLink">
+                                <wicket:message key="label.copy_existing"/>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
                 <hr>
                 <li>

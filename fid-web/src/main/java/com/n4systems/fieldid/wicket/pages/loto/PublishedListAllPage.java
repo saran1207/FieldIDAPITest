@@ -38,22 +38,24 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
     private String searchTerm = "";
     private String textFilter = null;
 
-    public PublishedListAllPage() {super(new IModel<PublishedState>() {
-        @Override
-        public PublishedState getObject() {
-            return PublishedState.PUBLISHED;
-        }
+    public PublishedListAllPage() {
+        super(new IModel<PublishedState>() {
+            @Override
+            public PublishedState getObject() {
+                return PublishedState.PUBLISHED;
+            }
 
-        @Override
-        public void setObject(PublishedState object) {
+            @Override
+            public void setObject(PublishedState object) {
 
-        }
+            }
 
-        @Override
-        public void detach() {
+            @Override
+            public void detach() {
 
-        }
-    }); }
+            }
+        });
+    }
 
     public PublishedListAllPage(String procedureCodeString, Asset asset, boolean isProcedureCode, boolean isAsset){
         super(new IModel<PublishedState>() {
@@ -128,7 +130,7 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
 
             @Override
             protected void addActionColumn(List<IColumn<? extends ProcedureDefinition>> columns) {
-                columns.add(new PublishedProcedureActionsColumn(this));
+                addActionsColumn(columns);
             }
 
             @Override
@@ -137,8 +139,11 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
             }
         });
         procedureDefinitionListPanel.setOutputMarkupPlaceholderTag(true);
-
     }
 
+
+    protected void addActionsColumn(List<IColumn<? extends ProcedureDefinition>> columns) {
+        columns.add(new PublishedProcedureActionsColumn(procedureDefinitionListPanel));
+    }
 }
 

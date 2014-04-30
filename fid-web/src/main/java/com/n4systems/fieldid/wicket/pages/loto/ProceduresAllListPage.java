@@ -57,7 +57,6 @@ public abstract class ProceduresAllListPage extends FieldIDTemplatePage {
         super.renderHead(response);
         response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
         response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
-        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
     @Override

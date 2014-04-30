@@ -20,6 +20,7 @@ import com.n4systems.fieldid.wicket.pages.event.criteriaimage.CriteriaImageViewL
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.identify.LimitedEditAsset;
 import com.n4systems.fieldid.wicket.pages.loto.*;
+import com.n4systems.fieldid.wicket.pages.loto.copy.CopyProceduresList;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
@@ -201,13 +202,11 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("procedureWaitingApprovals", ProcedureWaitingApprovalsPage.class);
         mountPage("procedureRejected", ProcedureRejectedPage.class);
-
-
-        //mountPage("procedureDefinitions", ProcedureDefinitionListPage.class);
         mountPage("procedureDefinitionPrint", ProcedureDefinitionPrintPage.class);
-        //mountPage("previouslyPublished", PreviouslyPublishedListPage.class);
         mountPage("completedProcedures", ProceduresListPage.class);
         mountPage("procedureResults", ProcedureResultsPage.class);
+        mountPage("copyProceduresList", CopyProceduresList.class);
+
         mountPage("identify", IdentifyOrEditAssetPage.class);
 
         mountPage("limitedEditAsset", LimitedEditAsset.class);

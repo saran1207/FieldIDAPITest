@@ -700,9 +700,13 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     }
 
     public ProcedureDefinition cloneProcedureDefinitionForCopy(ProcedureDefinition source) {
+        return cloneProcedureDefinitionForCopy(source, source.getAsset());
+    }
+
+    public ProcedureDefinition cloneProcedureDefinitionForCopy(ProcedureDefinition source, Asset asset) {
         Preconditions.checkArgument(source != null, "can't use null procedure definitions when cloning.");
         ProcedureDefinition to = new ProcedureDefinition();
-        to.setAsset(source.getAsset());
+        to.setAsset(asset);
         to.setTenant(source.getTenant());
         to.setProcedureCode(source.getProcedureCode()+" Copy");
         to.setElectronicIdentifier(source.getElectronicIdentifier());
@@ -727,6 +731,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
         return to;
     }
+
 
     private IsolationPoint cloneIsolationPoint(IsolationPoint source, Map<String, ProcedureDefinitionImage> clonedImages) {
         Preconditions.checkArgument(source != null , "can't use null isolation points when cloning.");
