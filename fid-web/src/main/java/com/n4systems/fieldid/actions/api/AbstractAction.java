@@ -38,16 +38,14 @@ import com.n4systems.services.SecurityContext;
 import com.n4systems.util.*;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.uri.ActionURLBuilder;
-import freemarker.template.utility.StringUtil;
 import org.apache.commons.io.FileUtils;
+import org.apache.wicket.util.crypt.Base64;
 import org.apache.wicket.util.string.interpolator.MapVariableInterpolator;
 import org.springframework.beans.factory.annotation.Autowired;
 import rfid.web.helper.SessionUser;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URI;
-import java.net.URLDecoder;
 import java.util.*;
 
 @SuppressWarnings("serial")
@@ -320,14 +318,9 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	protected Map<String, String> decodeMapKeys(Map<String, String> encodedMap) {
 		Map<String, String> decodedMap = new HashMap<String, String>();
 
-		try {
-			for (String key : encodedMap.keySet()) {
-				decodedMap.put(URLDecoder.decode(key, "UTF-8"), encodedMap.get(key));
-			}
-		} catch (UnsupportedEncodingException e) {
-			// this should never happen since we're hardcoded to UTF-8 and that's standard.
-			decodedMap = null;
-		}
+        for (String key : encodedMap.keySet()) {
+            decodedMap.put(new String(Base64.decodeBase64(key)), encodedMap.get(key));
+        }
 
 		return decodedMap;
 	}
@@ -335,19 +328,16 @@ abstract public class AbstractAction extends ExtendedTextProviderAction implemen
 	protected Map<String, String> encodeMapKeys(Map<String, String> rawMap) {
 		Map<String, String> encodedMap = new HashMap<String, String>();
 
-		try {
-			for (String key : rawMap.keySet()) {
-				encodedMap.put(StringUtil.URLEnc(key, "UTF-8"), rawMap.get(key));
-			}
-		} catch (UnsupportedEncodingException e) {
-			// this should never happen since we're hardcoded to UTF-8 and that's standard.
-			encodedMap = null;
-		}
+        for (String key : rawMap.keySet()) {
+            encodedMap.put(getBase64EncodedString(key), rawMap.get(key));
+        }
 
 		return encodedMap;
 	}
 
-
+    public String getBase64EncodedString(String key) {
+        return new String(Base64.encodeBase64(key.getBytes())).replace("=", "");
+    }
 
 	protected User fetchCurrentUser() {
 		if (getSessionUserId() == null) {
