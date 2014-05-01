@@ -27,7 +27,7 @@ public class EventDetailsPanel extends Panel {
         add(new Label("assignedTo", new PropertyModel(model, "assignedTo.assignedUser.userLabel")).setVisible(model.getObject().getType().isAssignedToAvailable()));
 
         add(new Label("scheduledOn", new DayDisplayModel(new PropertyModel<Date>(model, "dueDate"), true, timeZone)));
-        add(new Label("eventbook", new PropertyModel(model, "book")));
+        add(new Label("eventbook", new PropertyModel(model, "book.name")));
 
         add(new ListView<String>("eventAttribute", new PropertyModel<List<? extends String>>(model, "type.infoFieldNames")) {
             @Override
