@@ -43,6 +43,7 @@ public class EditLotoScheduleLink extends Panel {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     procedureService.deleteSchedule(procedureModel.getObject());
+                    info(new FIDLabelModel("message.eventdeleted").getObject());
                     onProcedureScheduleUpdated(target);
                 }
             });
