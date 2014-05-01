@@ -712,7 +712,11 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setElectronicIdentifier(source.getElectronicIdentifier());
         to.setWarnings(source.getWarnings());
         to.setDevelopedBy(getCurrentUser());
-        to.setEquipmentNumber(source.getEquipmentNumber());
+        if(source.getAsset().getId() == asset.getId()) {
+            to.setEquipmentNumber(source.getEquipmentNumber());
+        } else {
+            to.setEquipmentNumber(asset.getIdentifier());
+        }
         to.setEquipmentLocation(source.getEquipmentLocation());
         to.setBuilding(source.getBuilding());
         to.setEquipmentDescription(source.getEquipmentDescription());
