@@ -7,7 +7,6 @@ import com.n4systems.model.AssetTypeGroup;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -16,13 +15,24 @@ public class GroupedAssetTypesForTenantModel extends LoadableDetachableModel<Lis
 
     private IModel<AssetTypeGroup> assetTypeGroupModel;
 
+    private boolean filterForProcedures = false;
+
+    public GroupedAssetTypesForTenantModel(IModel<AssetTypeGroup> assetTypeGroupModel, boolean filterForProcedures) {
+        this.assetTypeGroupModel = assetTypeGroupModel;
+        this.filterForProcedures = filterForProcedures;
+    }
     public GroupedAssetTypesForTenantModel(IModel<AssetTypeGroup> assetTypeGroupModel) {
         this.assetTypeGroupModel = assetTypeGroupModel;
     }
 
     @Override
     protected List<AssetType> load() {
-        AssetTypesForTenantModel assetTypesForTenantModel = new AssetTypesForTenantModel(assetTypeGroupModel);
+        AssetTypesForTenantModel assetTypesForTenantModel = null;
+        if(!filterForProcedures) {
+            assetTypesForTenantModel = new AssetTypesForTenantModel(assetTypeGroupModel);
+        } else {
+            assetTypesForTenantModel = new AssetTypesForTenantModel(assetTypeGroupModel, filterForProcedures);
+        }
         List<AssetType> assetTypes = assetTypesForTenantModel.getObject();
         groupAssetTypes(assetTypes);
         return assetTypes;

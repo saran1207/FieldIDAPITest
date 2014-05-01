@@ -12,9 +12,23 @@ public class AssetTypeGroupsForTenantModel extends FieldIDSpringModel<List<Asset
     @SpringBean
     private AssetTypeService assetTypeService;
 
+    private boolean filterForProcedures = false;
+
+    public AssetTypeGroupsForTenantModel() {}
+
+    public AssetTypeGroupsForTenantModel(boolean filterForProcedures){
+        this.filterForProcedures = filterForProcedures;
+    }
+
     @Override
     protected List<AssetTypeGroup> load() {
-        return assetTypeService.getAssetTypeGroupsByOrder();
+
+        if(!filterForProcedures){
+            return assetTypeService.getAssetTypeGroupsByOrder();
+        } else {
+            return assetTypeService.getAssetTypeGroupsForProceduresByOrder();
+        }
+
     }
 
 }

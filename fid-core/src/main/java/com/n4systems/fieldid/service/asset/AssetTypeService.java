@@ -8,7 +8,6 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
-import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
@@ -90,6 +89,36 @@ public class AssetTypeService extends FieldIdPersistenceService {
         QueryBuilder<AssetTypeGroup> queryBuilder = createUserSecurityBuilder(AssetTypeGroup.class);
         queryBuilder.addOrder("orderIdx");
         return persistenceService.findAll(queryBuilder);
+    }
+
+    public List<AssetTypeGroup> getAssetTypeGroupsForProceduresByOrder() {
+        QueryBuilder<AssetType> builder = createUserSecurityBuilder(AssetType.class);
+
+        builder.setSimpleSelect("group");
+        builder.addSimpleWhere("hasProcedures", true);
+        builder.addOrder("name");
+        List<AssetType> listWithProcedures = persistenceService.findAll(builder);
+
+        List<AssetTypeGroup> groupList = (List<AssetTypeGroup>) (List<?>) listWithProcedures;
+
+        return groupList;
+    }
+
+    public List<AssetType> getAssetTypesFilteredForProcedures(Long assetTypeGroupId) {
+        QueryBuilder<AssetType> builder = createUserSecurityBuilder(AssetType.class);
+
+        builder.addSimpleWhere("hasProcedures", true);
+
+        if(assetTypeGroupId != null) {
+            if (assetTypeGroupId == -1)
+                builder.addWhere(WhereClauseFactory.createIsNull("group.id"));
+            else {
+                builder.addSimpleWhere("group.id", assetTypeGroupId);
+            }
+        }
+
+        builder.addOrder("name");
+        return persistenceService.findAll(builder);
     }
 
     public List<AssetType> getAssetTypes(Long assetTypeGroupId) {
