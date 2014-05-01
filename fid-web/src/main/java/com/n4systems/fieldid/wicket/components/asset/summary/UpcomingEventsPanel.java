@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.asset.events.table.OpenActionsCel
 import com.n4systems.fieldid.wicket.components.asset.events.table.ProcedureStateIcon;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.model.*;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.services.date.DateService;
@@ -98,6 +99,7 @@ public class UpcomingEventsPanel extends Panel {
                     public void onProcedureScheduleUpdated(AjaxRequestTarget target) {
                         UpcomingEventsPanel.this.detach();
                         target.add(UpcomingEventsPanel.this);
+                        target.add(((FieldIDFrontEndPage) getPage()).getTopFeedbackPanel());
                     }
                 });
             }
