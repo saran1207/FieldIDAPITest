@@ -75,7 +75,7 @@ public class OpenActionsCell extends Panel {
                     error(new FIDLabelModel("error.eventdeleting").getObject());
                     target.add(((AssetEventsPage)getPage()).getFeedbackPanel());
                 }
-                info(new FIDLabelModel("message.loto_deleted").getObject());
+                info(new FIDLabelModel("message.eventdeleted").getObject());
                 target.add(eventDisplayPanel);
                 target.add(((FieldIDFrontEndPage) getPage()).getTopFeedbackPanel());
             }
