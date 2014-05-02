@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto.copy;
 
+import com.n4systems.fieldid.wicket.components.loto.ProcedureListPanel;
 import com.n4systems.fieldid.wicket.components.navigation.BreadCrumbBar;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
@@ -10,14 +11,11 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
-import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-
-import java.util.List;
 
 public class CopyProceduresList extends PublishedListAllPage {
 
@@ -43,13 +41,13 @@ public class CopyProceduresList extends PublishedListAllPage {
     }
 
     @Override
-    protected void addActionsColumn(List<IColumn<? extends ProcedureDefinition>> columns) {
-        columns.add(new AbstractColumn<ProcedureDefinition>(Model.of("")) {
+    protected AbstractColumn getActionsColumn(ProcedureListPanel procedureDefinitionListPanel) {
+        return new AbstractColumn<ProcedureDefinition>(Model.of("")) {
             @Override
             public void populateItem(Item<ICellPopulator<ProcedureDefinition>> cellItem, String componentId, IModel<ProcedureDefinition> rowModel) {
                 cellItem.add(new CopyActionCell(componentId, rowModel,  assetModel));
             }
-        });
+        };
     }
 
     @Override

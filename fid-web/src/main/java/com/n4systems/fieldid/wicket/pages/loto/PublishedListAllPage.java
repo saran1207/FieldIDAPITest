@@ -11,6 +11,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -130,7 +131,7 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
 
             @Override
             protected void addActionColumn(List<IColumn<? extends ProcedureDefinition>> columns) {
-                addActionsColumn(columns);
+                columns.add(getActionsColumn(this));
             }
 
             @Override
@@ -141,9 +142,8 @@ public class PublishedListAllPage extends ProceduresAllListPage implements IAjax
         procedureDefinitionListPanel.setOutputMarkupPlaceholderTag(true);
     }
 
-
-    protected void addActionsColumn(List<IColumn<? extends ProcedureDefinition>> columns) {
-        columns.add(new PublishedProcedureActionsColumn(procedureDefinitionListPanel));
+    protected AbstractColumn getActionsColumn(ProcedureListPanel procedureDefinitionListPanel) {
+        return new PublishedProcedureActionsColumn(procedureDefinitionListPanel);
     }
 }
 
