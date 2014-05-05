@@ -129,11 +129,17 @@ public class CreatePlacePanel extends Panel {
                     //Checking for duplicate names in Secondary Orgs
                     boolean isPrimary = (newPlaceModel.getObject().parent instanceof PrimaryOrg);
                     boolean isChoosingSecondary = (newPlaceModel.getObject().level == Level.SECONDARY);
-                    boolean existsName = (orgService.secondaryNameExists(newPlaceModel.getObject().parent, childOrg.getName()));
 
-                    if(isPrimary && isChoosingSecondary && existsName){
-                        error(new FIDLabelModel("errors.secondary_organization_name_used").getObject());
-                        target.add(getTopFeedbackPanel(), feedback);
+                    if(isPrimary && isChoosingSecondary){
+                        boolean existsName = (orgService.secondaryNameExists(newPlaceModel.getObject().parent, childOrg.getName()));
+                        if(existsName) {
+                            error(new FIDLabelModel("errors.secondary_organization_name_used").getObject());
+                            target.add(getTopFeedbackPanel(), feedback);
+                        } else {
+                            onCreate(childOrg, target);
+                            info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
+                            target.add(getTopFeedbackPanel(), feedback);
+                        }
                     } else {
                         onCreate(childOrg, target);
                         info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
