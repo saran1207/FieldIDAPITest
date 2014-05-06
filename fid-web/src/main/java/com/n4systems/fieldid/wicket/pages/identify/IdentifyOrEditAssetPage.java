@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.identify;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
@@ -77,6 +78,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
     @SpringBean private AssetIdentifierService assetIdentifierService;
     @SpringBean private AssetService assetService;
+    @SpringBean private S3Service s3Service;
     @SpringBean private EventService eventService;
     @SpringBean private DateService dateService;
     @SpringBean private AssetSaveServiceSpring assetSaveService;
@@ -515,10 +517,11 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         Asset assetToCreate = newAssetModel.getObject();
         assetToCreate.setTenant(getTenant());
         List<InfoOptionBean> enteredInfoOptions = attributesEditPanel.getEnteredInfoOptions();
-        List<AssetAttachment> attachments = assetAttachmentsPanel.getAttachments();
         byte[] assetImageBytes = assetImagePanel.getAssetImageBytes();
         String clientFileName = assetImagePanel.getClientFileName();
         List<Long> createdAssetIds = new ArrayList<Long>();
+
+
 
         for (MultipleAssetConfiguration.AssetConfiguration assetConfig : assetConfigs) {
             assetToCreate.reset();
@@ -528,6 +531,20 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             assetToCreate.setIdentifier(assetConfig.getIdentifier());
             assetToCreate.setRfidNumber(assetConfig.getRfidNumber());
             assetToCreate.setCustomerRefNumber(assetConfig.getCustomerRefNumber());
+
+
+            //since multiple assets can't have the same GUID, we reset them here
+            assetToCreate.setMobileGUID(null);
+            assetToCreate.ensureMobileGuidIsSet();
+
+            //go over the attachments and copy them under each of the new asset attachments folder in S3
+            List<AssetAttachment> attachments = new ArrayList<AssetAttachment>(assetAttachmentsPanel.getAttachments());
+            for (AssetAttachment attachment : attachments){
+                attachment.setMobileId(UUID.randomUUID().toString());
+                String newFilename = s3Service.copyAssetAttachment(attachment.getFileName(), assetToCreate.getMobileGUID(), attachment.getMobileId());
+                attachment.setFileName(newFilename);
+            }
+
             Asset newAsset = assetSaveService.create(assetToCreate, attachments, assetImageBytes, clientFileName);
             createdAssetIds.add(newAsset.getId());
             saveSchedulesForAsset(newAsset);

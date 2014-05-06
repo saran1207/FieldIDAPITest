@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.amazon;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
@@ -883,6 +884,21 @@ public class S3Service extends FieldIdPersistenceService {
             //"   xhr.send(fd);" +
             "}";
         return uploadJavascript;
+    }
+
+    public String copyAssetAttachment(String assetAttachmentAbsPath, String targetAssetUuid, String targetAssetAttachmentUuid){
+
+        String sourceAssetAttachmentFileName = assetAttachmentAbsPath.substring(assetAttachmentAbsPath.lastIndexOf('/') + 1);
+        String targetAssetAttachmentPath = getAssetAttachmentPath(targetAssetUuid, targetAssetAttachmentUuid, sourceAssetAttachmentFileName);
+
+        try {
+            CopyObjectRequest copyObjectRequest = new CopyObjectRequest(getBucket(), assetAttachmentAbsPath, getBucket(), targetAssetAttachmentPath);
+            getClient().copyObject(copyObjectRequest);
+            return targetAssetAttachmentPath;
+        } catch(AmazonServiceException ase){
+            logger.warn("Unable to copy asset attachment file at: " + assetAttachmentAbsPath, ase);
+            return assetAttachmentAbsPath;
+        }
     }
 
 //    public void uploadTempAttachment(S3Attachment attachment) {
