@@ -4,7 +4,7 @@
 	<span class="projectEventType">${(event.eventType.name?html)!}</span>
 	<span class="projectEventType">
 		<#if event.workflowState.name() == "COMPLETED">
-			<@s.text name="label.completed"/> | <a href="<@s.url action="event" uniqueID="${event.id}"/>"><@s.text name="label.view"/></a>
+			<@s.text name="label.completed"/> | <a href="<@s.url namespace="/" value="w/thingEventSummary?id=${event.id}"/>"><@s.text name="label.view"/></a>
 		<#else>
 			
 			<@s.url id="eventUrl" action="selectEventAdd" namespace="/" assetId="${event.asset.id}" type="${event.eventType.id}" scheduleId="${event.id}" />
