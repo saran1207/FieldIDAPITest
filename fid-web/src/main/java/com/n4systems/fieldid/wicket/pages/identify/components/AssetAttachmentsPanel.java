@@ -164,40 +164,42 @@ public class AssetAttachmentsPanel extends Panel {
                     Long uploadMaxFileSizeBytes = Long.parseLong(s3Service.getUploadMaxFileSizeBytes());
 
                     FileUpload fileUpload = attachmentUpload.getFileUpload();
-                    if(fileUpload.getSize() < uploadMaxFileSizeBytes){
-                        String fileName = fileUpload.getClientFileName();
-                        AssetAttachment attachment = new AssetAttachment();
-                        attachment.setMobileId(assetAttachmentUuid);
-                        attachment.setAsset(assetModel.getObject());
-                        attachment.setFileName(fileName);
+                    if(fileUpload != null){
+                        if(fileUpload.getSize() < uploadMaxFileSizeBytes){
+                            String fileName = fileUpload.getClientFileName();
+                            AssetAttachment attachment = new AssetAttachment();
+                            attachment.setMobileId(assetAttachmentUuid);
+                            attachment.setAsset(assetModel.getObject());
+                            attachment.setFileName(fileName);
 
-                        ClientProperties clientProp = WebSession.get().getClientInfo().getProperties();
-                        boolean FileUploadSupported = clientProp.isBrowserChrome() ||
-                            (clientProp.isBrowserSafari() && clientProp.getBrowserVersionMajor() >= 5) ||
-                            (clientProp.isBrowserMozillaFirefox() && clientProp.getBrowserVersionMajor() >= 4) ||
-                            (clientProp.isBrowserOpera() && clientProp.getBrowserVersionMajor() >= 12) ||
-                            (clientProp.isBrowserInternetExplorer() && clientProp.getBrowserVersionMajor() >= 10);
-                        //if the browser does not support direct upload to S3
-                        if(FileUploadSupported){
-                            String getAssetAttachmentPath = s3Service.getAssetAttachmentPath(assetUuid, assetAttachmentUuid, fileName);
-                            attachment.setFileName(getAssetAttachmentPath); //set the filename to be a full path
+                            ClientProperties clientProp = WebSession.get().getClientInfo().getProperties();
+                            boolean FileUploadSupported = clientProp.isBrowserChrome() ||
+                                (clientProp.isBrowserSafari() && clientProp.getBrowserVersionMajor() >= 5) ||
+                                (clientProp.isBrowserMozillaFirefox() && clientProp.getBrowserVersionMajor() >= 4) ||
+                                (clientProp.isBrowserOpera() && clientProp.getBrowserVersionMajor() >= 12) ||
+                                (clientProp.isBrowserInternetExplorer() && clientProp.getBrowserVersionMajor() >= 10);
+                            //if the browser does not support direct upload to S3
+                            if(FileUploadSupported){
+                                String getAssetAttachmentPath = s3Service.getAssetAttachmentPath(assetUuid, assetAttachmentUuid, fileName);
+                                attachment.setFileName(getAssetAttachmentPath); //set the filename to be a full path
+                            }
+                            else {
+                                File tempDir = PathHandler.getTempDir();
+                                File file = new File(tempDir, fileName);
+
+                                try {
+                                    FileCopyUtils.copy(fileUpload.getInputStream(), new FileOutputStream(file));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                attachment.setFileName(tempDir.getName() + File.separator + fileName);
+                            }
+                            attachments.add(attachment);
                         }
                         else {
-                            File tempDir = PathHandler.getTempDir();
-                            File file = new File(tempDir, fileName);
-
-                            try {
-                                FileCopyUtils.copy(fileUpload.getInputStream(), new FileOutputStream(file));
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                            attachment.setFileName(tempDir.getName() + File.separator + fileName);
+                            Long humanReadableFileLimit = uploadMaxFileSizeBytes/(1024*1024);
+                            error(new FIDLabelModel("error.file_size_limit", fileUpload.getClientFileName(), humanReadableFileLimit.toString()).getObject());
                         }
-                        attachments.add(attachment);
-                    }
-                    else {
-                        Long humanReadableFileLimit = uploadMaxFileSizeBytes/(1024*1024);
-                        error(new FIDLabelModel("error.file_size_limit", fileUpload.getClientFileName(), humanReadableFileLimit.toString()).getObject());
                     }
 
                     target.add(((IdentifyOrEditAssetPage)getPage()).getFeedbackPanel(), existingAttachmentsContainer, attachmentUpload);
