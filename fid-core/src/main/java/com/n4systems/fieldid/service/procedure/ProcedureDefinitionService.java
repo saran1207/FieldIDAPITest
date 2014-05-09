@@ -655,20 +655,23 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return getCurrentTenant().getSettings().getApprovalUserOrGroup() != null;
     }
 
+    @Transactional(readOnly=true)
     public void deleteProcedureDefinition(ProcedureDefinition procedureDefinition) {
         Preconditions.checkArgument(procedureDefinition.getPublishedState().isPreApproval(), "can't delete a procedure that has been published");
         s3Service.removeProcedureDefinitionImages(procedureDefinition);
         for (IsolationPoint isolationPoint: procedureDefinition.getLockIsolationPoints()) {
             ImageAnnotation imageAnnotation = isolationPoint.getAnnotation();
-            isolationPoint.setAnnotation(null);
-            persistenceService.update(isolationPoint);
 
             if (null != imageAnnotation) {
-                persistenceService.delete(imageAnnotation);
+                //Making sure that the imageAnnotation object is not detached
+                if(!persistenceService.contains(imageAnnotation)) {
+                    imageAnnotation = (ImageAnnotation) persistenceService.merge(imageAnnotation);
+                }
+                persistenceService.remove(imageAnnotation);
             }
-
+            isolationPoint.setAnnotation(null);
+            persistenceService.update(isolationPoint);
         }
-
         archiveProcedureDefinition(procedureDefinition);
     }
 

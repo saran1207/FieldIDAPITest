@@ -309,4 +309,13 @@ public class PersistenceService extends FieldIdService {
         getHibernateSession().clear();
     }
 
+    @Transactional
+    public boolean contains(Object entity) {
+        return em.contains(entity);
+    }
+
+    @Transactional
+    public Object merge(Object entity) {
+        return em.merge(entity);
+    }
 }
