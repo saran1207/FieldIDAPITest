@@ -218,13 +218,13 @@ public abstract class AutoComplete<T> extends FormComponentPanel<T> {
         }
         response.renderJavaScriptReference("javascript/component/autoComplete.js");
         response.renderJavaScriptReference("javascript/tipsy/jquery.tipsy.js");
-        response.renderCSSReference("style/component/autoComplete.css");
+        response.renderCSSReference("style/legacy/component/autoComplete.css");
 
         if (WebSession.get().getClientInfo().getProperties().isBrowserInternetExplorer()) {
-            response.renderCSSReference("style/component/autoComplete-ie.css");
+            response.renderCSSReference("style/legacy/component/autoComplete-ie.css");
         }
 
-        response.renderCSSReference("style/tipsy/tipsy.css");
+        response.renderCSSReference("style/legacy/tipsy/tipsy.css");
         response.renderOnLoadJavaScript("autoCompleter.init('"+autocompleteField.getMarkupId()+"'" + args + ");");
     }
     

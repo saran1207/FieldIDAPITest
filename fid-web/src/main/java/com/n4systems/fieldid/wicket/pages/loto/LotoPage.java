@@ -2,9 +2,11 @@ package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.wicket.components.loto.ProcedureTitleLabel;
+import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.Asset;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -13,7 +15,9 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-public abstract class LotoPage extends FieldIDFrontEndPage {
+import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
+
+public abstract class LotoPage extends FieldIDTemplatePage {
 
     @SpringBean
     protected AssetService assetService;
@@ -35,9 +39,7 @@ public abstract class LotoPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/loto/layout.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/newCss/loto/procedures.css");
+        response.renderCSSReference("style/legacy/newCss/loto/procedures.css");
     }
 
     public Long getAssetId() {
@@ -63,5 +65,18 @@ public abstract class LotoPage extends FieldIDFrontEndPage {
         return true;
     }
 
+    @Override
+    protected void addNavBar(String navBarId) {
+        add(new NavigationBar(navBarId,
+                //aNavItem().label(new FIDLabelModel("label.active")).page(ProcedureDefinitionListPage.class).params(PageParametersBuilder.uniqueId(getAssetId())).build(),
+                //aNavItem().label(new FIDLabelModel("label.previously_published")).page(PreviouslyPublishedListPage.class).params(PageParametersBuilder.uniqueId(getAssetId())).build(),
+                aNavItem().label(new FIDLabelModel("label.completed_inprogress")).page(ProceduresListPage.class).params(PageParametersBuilder.uniqueId(getAssetId())).build())
+        );
+    }
+
+    @Override
+    protected Component createActionGroup(String actionGroupId) {
+        return new LotoActionGroup(actionGroupId, assetModel);
+    }
 
 }

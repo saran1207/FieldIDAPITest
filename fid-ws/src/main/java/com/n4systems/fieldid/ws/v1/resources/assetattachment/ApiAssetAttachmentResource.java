@@ -13,6 +13,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +31,8 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 
 @Path("assetAttachment")
 public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, AssetAttachment> {
-	private static Logger logger = Logger.getLogger(ApiAssetAttachmentResource.class);	
-	
+	private static Logger logger = Logger.getLogger(ApiAssetAttachmentResource.class);
+
 	@GET
 	@Path("{attachmentId}")
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -40,11 +42,16 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		if (attachment == null) {
 			throw new NotFoundException("Asset Attachment", attachmentId);
 		}
-		
-		File attachmentFile = PathHandler.getAssetAttachmentFile(attachment);
-		if (!attachmentFile.exists()) {
-			throw new NotFoundException("Attachment File", attachmentId);
-		}
+
+
+        S3Service s3Service = ServiceLocator.getS3Service();
+        File assetAttachmentFile = s3Service.downloadAssetAttachmentFile(attachment);
+        if (assetAttachmentFile == null || !assetAttachmentFile.exists()) {
+            assetAttachmentFile = PathHandler.getAssetAttachmentFile(attachment);
+            if (!assetAttachmentFile.exists()) {
+                throw new NotFoundException("Attachment File", attachmentId);
+            }
+        }
 
         // TODO: Why is MimetypesFileTypeMap ignoring the locations it's supposed to look? META-INF/mime.types exists,
         // but entries are not being respected.. Remove these lines when we get that working.
@@ -54,10 +61,10 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
         mimetypesFileTypeMap.addMimeTypes("image/png   png PNG");
         mimetypesFileTypeMap.addMimeTypes("application/vnd.ms-excel   xls XLS");
 
-        String mediaType = mimetypesFileTypeMap.getContentType(attachmentFile);
+        String mediaType = mimetypesFileTypeMap.getContentType(assetAttachmentFile);
 
 		Response response = Response
-				.ok(attachmentFile, mediaType)
+				.ok(assetAttachmentFile, mediaType)
 				//.header("Content-Disposition", "attachment; filename=\"" + attachment.getFileName() + "\"")
 				.build();
 		return response;
@@ -141,7 +148,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		apiAttachment.setModified(attachment.getModified());
 		apiAttachment.setAssetId(attachment.getAsset().getMobileGUID());
 		apiAttachment.setComments(attachment.getComments());
-		apiAttachment.setFileName(attachment.getFileName());
+		//arezafar apiAttachment.setFileName(attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1));
+        apiAttachment.setFileName(attachment.getFileName());
 		apiAttachment.setImage(attachment.isImage());
 		if (attachment.isImage()) {
 			apiAttachment.setData(loadAttachmentData(attachment));
@@ -159,7 +167,8 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 			attachment.setTenant(asset.getTenant());
 		}
 		attachment.setComments(apiAttachment.getComments());
-		attachment.setFileName(apiAttachment.getFileName());
+		//arezafar attachment.setFileName(apiAttachment.getFileName().substring(apiAttachment.getFileName().lastIndexOf('/') + 1));
+        attachment.setFileName(apiAttachment.getFileName());
 		attachment.setData(apiAttachment.getData());
 		return attachment;
 	}
@@ -186,12 +195,24 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	
 	private byte[] loadAttachmentData(AssetAttachment attachment) {
 		byte[] data = null;
+        if (attachment.isRemote()){
+            try {
+                S3Service s3Service = ServiceLocator.getS3Service();
+                data = s3Service.downloadAssetAttachmentBytes(attachment);
+
+                File test = s3Service.downloadAssetAttachmentFile(attachment);
+            } catch(Exception e) {
+                String assetAttachmentUrl = attachment.getFileName();
+                logger.warn("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);
+            }
+        }
+
 		File attachmentFile = PathHandler.getAssetAttachmentFile(attachment);
-		if (attachmentFile.exists()) {
+		if (data == null && attachmentFile.exists()) {
 			try {
 				data = FileUtils.readFileToByteArray(attachmentFile);
 			} catch(Exception e) {
-				logger.warn("Unable to load asset attachment at: " + attachmentFile, e);
+				logger.warn("Unable to load local asset attachment at: " + attachmentFile, e);
 			}
 		}
 		return data;

@@ -2,7 +2,6 @@ package com.n4systems.model.search;
 
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.AssetType;
-import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.UnassignedIndicator;
 import com.n4systems.model.user.User;
@@ -10,13 +9,14 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name="saved_procedures")
 public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria {
 
     private AssetType assetType;
-
-    private AssetTypeGroup assetTypeGroup;
 
     private User assignee;
 
@@ -24,10 +24,29 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
 
     private boolean unassignedOnly;
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="rangeType", column = @Column(name="lockDateRange")),
+            @AttributeOverride(name="fromDate", column = @Column(name="lockFromDate")),
+            @AttributeOverride(name="toDate", column = @Column(name="lockToDate"))
+    })
     private DateRange lockDateRange = new DateRange(RangeType.CUSTOM);
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="rangeType", column = @Column(name="unlockDateRange")),
+            @AttributeOverride(name="fromDate", column = @Column(name="unlockFromDate")),
+            @AttributeOverride(name="toDate", column = @Column(name="unlockToDate"))
+    })
     private DateRange unlockDateRange = new DateRange(RangeType.CUSTOM);
 
+
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name="rangeType", column = @Column(name="dueDateRange")),
+            @AttributeOverride(name="fromDate", column = @Column(name="dueFromDate")),
+            @AttributeOverride(name="toDate", column = @Column(name="dueToDate"))
+    })
     private DateRange dueDateRange = new DateRange(RangeType.CUSTOM);
 
     private AssetStatus assetStatus;
@@ -40,10 +59,13 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
 
     private String orderNumber;
 
+    @Column(name="purchaseOrderNumber")
     private String purchaseOrder;
 
     private User performedBy;
 
+    @Column(name="workflow_state")
+    @Enumerated(EnumType.STRING)
     private ProcedureWorkflowStateCriteria workflowState = ProcedureWorkflowStateCriteria.ALL;
 
     public AssetStatus getAssetStatus() {
@@ -174,14 +196,6 @@ public class ProcedureCriteria extends SearchCriteria implements PeopleCriteria 
     @Override
     public void setColumns(List<String> columns) {
         System.out.println("set column");
-    }
-
-    public AssetTypeGroup getAssetTypeGroup() {
-        return assetTypeGroup;
-    }
-
-    public void setAssetTypeGroup(AssetTypeGroup assetTypeGroup) {
-        this.assetTypeGroup = assetTypeGroup;
     }
 
     public void setAssignedUserOrGroup(Assignable assignee) {

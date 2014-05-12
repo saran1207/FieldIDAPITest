@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.org;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.addressinfo.AddressPanel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -39,6 +40,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 
 import java.io.Serializable;
@@ -73,6 +75,8 @@ public class CreatePlacePanel extends Panel {
     private AddressPanel address;
 
     private String defaultTimeZone;
+
+    private @SpringBean OrgService orgService;
 
     public CreatePlacePanel(String id) {
         super(id);
@@ -121,9 +125,26 @@ public class CreatePlacePanel extends Panel {
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     PlaceData data = (PlaceData) CreatePlacePanel.this.form.getDefaultModelObject();
                     BaseOrg childOrg = data.createNewChildOrg();
-                    onCreate(childOrg, target);
-                    info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
-                    target.add(getTopFeedbackPanel(), feedback);
+
+                    //Checking for duplicate names in Secondary Orgs
+                    boolean isPrimary = (newPlaceModel.getObject().parent instanceof PrimaryOrg);
+                    boolean isChoosingSecondary = (newPlaceModel.getObject().level == Level.SECONDARY);
+
+                    if(isPrimary && isChoosingSecondary){
+                        boolean existsName = (orgService.secondaryNameExists(newPlaceModel.getObject().parent, childOrg.getName()));
+                        if(existsName) {
+                            error(new FIDLabelModel("errors.secondary_organization_name_used").getObject());
+                            target.add(getTopFeedbackPanel(), feedback);
+                        } else {
+                            onCreate(childOrg, target);
+                            info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
+                            target.add(getTopFeedbackPanel(), feedback);
+                        }
+                    } else {
+                        onCreate(childOrg, target);
+                        info(new FIDLabelModel("label.create_place", childOrg.getName()).getObject());
+                        target.add(getTopFeedbackPanel(), feedback);
+                    }
                 }
 
                 @Override
@@ -156,8 +177,8 @@ public class CreatePlacePanel extends Panel {
     }
 
     public TopFeedbackPanel getTopFeedbackPanel() {
-        if ( getPage() instanceof FieldIDTemplatePage) {
-            return ((FieldIDTemplatePage)getPage()).getTopFeedbackPanel();
+        if (getPage() instanceof FieldIDTemplatePage) {
+            return ((FieldIDTemplatePage) getPage()).getTopFeedbackPanel();
         }
         throw new IllegalStateException("current page doesn't have " + TopFeedbackPanel.class.getSimpleName());
     }

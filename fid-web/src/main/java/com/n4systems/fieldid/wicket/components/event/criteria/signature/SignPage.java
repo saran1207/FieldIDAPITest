@@ -53,7 +53,7 @@ public class SignPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/fieldid.css");
+        response.renderCSSReference("style/legacy/fieldid.css");
         response.renderOnDomReadyJavaScript("setUpCopyPngDataToHiddenFieldListener('"+storeButton.getMarkupId()
                 +"', '"+pngDataField.getMarkupId()+"')");
     }

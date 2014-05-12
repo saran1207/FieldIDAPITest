@@ -39,10 +39,12 @@ public class AssignDetailsPanel extends AbstractMassUpdatePanel {
 
             ExaminersModel usersModel = new ExaminersModel();
             VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
-            add(new AssignedUserOrGroupSelect("assignee",
+            AssignedUserOrGroupSelect assignedUserOrGroupSelect = new AssignedUserOrGroupSelect("assignee",
                     ProxyModel.of(massUpdateEventModel, on(MassUpdateEventModel.class).getEvent().getAssignedUserOrGroup()),
                     usersModel, userGroupsModel,
-                    new AssigneesModel(userGroupsModel, usersModel)).setRequired(true));
+                    new AssigneesModel(userGroupsModel, usersModel));
+            assignedUserOrGroupSelect.setNullVoid(true);
+            add(assignedUserOrGroupSelect);
 
             add(new Button("assignButton"));
 
@@ -57,13 +59,8 @@ public class AssignDetailsPanel extends AbstractMassUpdatePanel {
         @Override
         protected void onSubmit() {
             MassUpdateEventModel model = (MassUpdateEventModel) this.getDefaultModelObject();
-            String errorMessage = checkRequiredFields(model);
-            if(errorMessage.isEmpty()) {
-                model.getSelect().put("assignee", true);
-                onNext(model);
-            }	else {
-                error(errorMessage);
-            }
+            model.getSelect().put("assignee", true);
+            onNext(model);
         }
     }
 

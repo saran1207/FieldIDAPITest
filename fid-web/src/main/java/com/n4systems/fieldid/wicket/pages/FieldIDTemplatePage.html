@@ -142,9 +142,14 @@
                 <li>
                     <a wicket:id="placesLink"><wicket:message key="speed.places"/></a>
                 </li>
-                <wicket:enclosure>
-                    <li><a wicket:id="procedureLink"><wicket:message key="speed.procedures"/></a></li>
-                </wicket:enclosure>
+                <li class="dropdown" wicket:id="lotoLinkContainer">
+                    <a href="javascript:void(0)"><wicket:message key="speed.lockout_tagout"/></a>
+                    <ul>
+                        <li><a wicket:id="procedureList"><wicket:message key="speed.loto_list"/></a></li>
+                        <li><a wicket:id="procedureAwaitingApprovalLink"><wicket:message key="speed.loto_procedure_approvals"/></a></li>
+                        <li><a wicket:id="procedureSearchLink"><wicket:message key="speed.loto_log"/></a></li>
+                    </ul>
+                </li>
                 <li wicket:id="safetyNetworkLinkContainer">
                     <a href="/fieldid/safetyNetwork.action"><wicket:message key="speed.safety_network"/></a>
                 </li>
@@ -215,6 +220,13 @@
                             <ul>
                                 <li><a wicket:id="passwordPolicyLink"><wicket:message key="title.password_policy"/></a></li>
                                 <li><a wicket:id="accountPolicyLink"><wicket:message key="title.account_lockout_policy" /></a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-secondary" wicket:id="lotoSubMenuContainer">
+                            <a href="javascript:void(0)"><wicket:message key="speed.lockout_tagout"/>&nbsp;</a>
+                            <ul class="sub_menu">
+                                <li><a wicket:id="procedureApproverLink"><wicket:message key="title.set_procedure_approver"/>&nbsp;</a></li>
+                                <li><a wicket:id="enableByAssetTypeLink"><wicket:message key="title.enable_by_asset_type"/>&nbsp;</a></li>
                             </ul>
                         </li>
                         <li><a wicket:id="translationsLink"><wicket:message key="title.translations"/></a></li>

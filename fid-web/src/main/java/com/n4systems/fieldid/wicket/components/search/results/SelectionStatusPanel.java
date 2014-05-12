@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.components.search.results;
 
 import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.data.AssetSearchDataProvider;
 import com.n4systems.fieldid.wicket.data.ListableSortableDataProvider;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -68,6 +70,13 @@ public class SelectionStatusPanel extends Panel {
         selectAllLink.add(new FlatLabel("totalAvailableItems", new PropertyModel<Integer>(this, "totalRows")));
 
         add(regularStateContainer);
+
+        if(dataProvider instanceof AssetSearchDataProvider){
+            add(new FlatLabel("selectAssetsOrAssets", new FIDLabelModel("label.select_assets")));
+        } else {
+            add(new FlatLabel("selectAssetsOrAssets", new FIDLabelModel("label.select_events")));
+        }
+
     }
 
     public Integer getTotalRows() {

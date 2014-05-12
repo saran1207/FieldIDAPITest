@@ -88,7 +88,7 @@ public abstract class PrintPage<T extends SearchCriteria> extends FieldIDAuthent
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/pageStyles/downloads.css");
-        response.renderCSSReference("style/fieldid.css");
+        response.renderCSSReference("style/legacy/pageStyles/downloads.css");
+        response.renderCSSReference("style/legacy/fieldid.css");
     }
 }

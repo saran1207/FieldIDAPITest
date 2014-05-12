@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
+import com.google.common.collect.Lists;
 import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.EventTypeChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.event.PrioritiesForTenantModel;
 import com.n4systems.fieldid.wicket.model.eventbook.EventBooksForTenantModel;
@@ -12,11 +14,13 @@ import com.n4systems.fieldid.wicket.model.eventtype.EventTypeGroupsForTenantMode
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForTenantModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.model.*;
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventSearchType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -63,6 +67,29 @@ public class EventDetailsCriteriaPanel extends Panel {
         jobContainer.add(new FidDropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 
         includeNetworkResultsContainer.add(new CheckBox("includeSafetyNetwork"));
+
+        PropertyModel<Boolean> gpsStateCriteriaPropertyModel = new PropertyModel<Boolean>(model, "hasGps");
+        FidDropDownChoice<Boolean> gpsStateCriteria = new FidDropDownChoice<Boolean>("hasGps",  new PropertyModel<Boolean>(model, "hasGps"),
+                Lists.newArrayList(Boolean.TRUE, Boolean.FALSE), new IChoiceRenderer<Boolean>() {
+
+            @Override
+            public Object getDisplayValue(Boolean object) {
+                if (object)
+                    return new FIDLabelModel("label.has_gps").getObject();
+                else
+                    return new FIDLabelModel("label.no_gps").getObject();
+            }
+
+            @Override
+            public String getIdValue(Boolean object, int index) {
+                return object.toString();
+            }
+
+        });
+        gpsStateCriteria.setNullValid(true);
+        gpsStateCriteria.setVisible( getDefaultModelObject().getClass().equals(EventReportCriteria.class) );
+        add(gpsStateCriteria);
+
     }
 
     private FidDropDownChoice<EventTypeGroup> createEventTypeGroupChoice(IModel<EventTypeGroup> eventTypeGroupModel, final IModel<EventType> eventTypeModel, final IModel<List<? extends EventType>> availableEventTypesModel) {

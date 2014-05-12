@@ -25,6 +25,12 @@ public abstract class OrgDateWidgetConfigPanel<T extends WidgetConfiguration> ex
 		addConfigElement(dateRangeSelect = createDateRangeSelect()); 
     }
 
+    public OrgDateWidgetConfigPanel(String id, final IModel<T> configModel, boolean isProceduresConfig) {
+        super(id, configModel);
+        this.configModel = configModel;
+        addConfigElement(dateRangeSelect = createDateRangeSelect());
+    }
+
 	protected Component createOrgPicker(String id, final IModel<T> configModel) {
         return new OrgLocationPicker(id, new PropertyModel<BaseOrg>(configModel, "org"));
 	}

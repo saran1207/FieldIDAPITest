@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.search;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
@@ -13,21 +14,25 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
 @Component
 @Path("search")
 public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
-	
+	private static Logger logger = Logger.getLogger(ApiSearchResource.class);
+
 	@Autowired private AssetSearchService assetSearchService;
 	@Autowired private EventScheduleService eventScheduleService;
+	@Autowired private S3Service s3service;
 	
 	@GET
 	@Consumes(MediaType.TEXT_PLAIN)
@@ -138,7 +143,8 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		apiResult.setInternalOwnerName(asset.getOwner().getInternalOrg().getName());
 		apiResult.setCustomerOwnerName(asset.getOwner().getCustomerOrg() != null ? asset.getOwner().getCustomerOrg().getName() : null);
 		apiResult.setDivisionOwnerName(asset.getOwner().getDivisionOrg() != null ? asset.getOwner().getDivisionOrg().getName() : null);
-		
+		apiResult.setImage(loadAssetImage(asset));
+
 		if(asset.getAdvancedLocation() != null) {
 			apiResult.setLocation(asset.getAdvancedLocation().getFreeformLocation());
 			if (asset.getAdvancedLocation().getPredefinedLocation() != null) {
@@ -152,5 +158,17 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		}
 		
 		return apiResult;
+	}
+
+	private byte[] loadAssetImage(Asset asset) {
+		byte[] image = null;
+		if(asset.getImageName() != null) {
+			try {
+				image = s3service.downloadAssetProfileMediumImage(asset.getId(), asset.getImageName());
+			} catch (IOException ex) {
+				logger.warn("Unable to load asset image for asset: " + asset.getIdentifier(), ex);
+			}
+		}
+		return image;
 	}
 }

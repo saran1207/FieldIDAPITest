@@ -195,10 +195,10 @@ public class ProcedureResultsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/pageStyles/procedureResults.css");
-        response.renderCSSReference("style/newCss/asset/header.css");
+        response.renderCSSReference("style/legacy/pageStyles/procedureResults.css");
+        response.renderCSSReference("style/legacy/newCss/asset/header.css");
 
-        response.renderCSSReference("style/component/annotated-image.css");
+        response.renderCSSReference("style/legacy/component/annotated-image.css");
         response.renderJavaScriptReference("javascript/jquery.annotate.js");
         response.renderJavaScriptReference("javascript/displayAnnotations.js");
 

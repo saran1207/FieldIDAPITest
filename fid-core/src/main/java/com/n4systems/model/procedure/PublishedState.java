@@ -7,9 +7,10 @@ public enum PublishedState implements DisplayEnum {
     DRAFT("Draft"),
     WAITING_FOR_APPROVAL("Waiting for Approval"),
     PUBLISHED("Published"),
-    PREVIOUSLY_PUBLISHED("Previously Published");
+    PREVIOUSLY_PUBLISHED("Previously Published"),
+    REJECTED("Rejected");
 
-    public static PublishedState [] ACTIVE_STATES = { DRAFT, WAITING_FOR_APPROVAL, PUBLISHED };
+    public static PublishedState [] ACTIVE_STATES = { DRAFT, WAITING_FOR_APPROVAL, PUBLISHED, REJECTED };
 
     private String label;
 
@@ -26,7 +27,7 @@ public enum PublishedState implements DisplayEnum {
     }
 
     public boolean isPreApproval() {
-        return this == DRAFT || this == WAITING_FOR_APPROVAL;
+        return this == DRAFT || this == WAITING_FOR_APPROVAL || this == REJECTED;
     }
 
 }

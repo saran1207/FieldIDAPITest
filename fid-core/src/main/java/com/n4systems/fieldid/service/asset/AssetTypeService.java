@@ -5,6 +5,8 @@ import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
@@ -44,6 +46,11 @@ public class AssetTypeService extends FieldIdPersistenceService {
     private @Autowired RecurringScheduleService recurringScheduleService;
     private @Autowired AssetCodeMappingService assetCodeMappingService;
     private @Autowired AutoAttributeService autoAttributeService;
+    @Autowired
+    private ProcedureService procedureService;
+    @Autowired
+    private ProcedureDefinitionService procedureDefinitionService;
+
 
     public AssetType getAssetType(Long id) {
         return persistenceService.find(AssetType.class, id);
@@ -53,6 +60,10 @@ public class AssetTypeService extends FieldIdPersistenceService {
         QueryBuilder<AssetType> builder = createTenantSecurityBuilder(AssetType.class);
         builder.addWhere(WhereClauseFactory.create("name", name));
         return persistenceService.exists(builder);
+    }
+
+    public List<AssetType> getAssetTypes() {
+        return getAssetTypes(null, null);
     }
 
     public List<AssetType> getAssetTypes(Long assetTypeGroupId, String name) {
@@ -78,6 +89,36 @@ public class AssetTypeService extends FieldIdPersistenceService {
         QueryBuilder<AssetTypeGroup> queryBuilder = createUserSecurityBuilder(AssetTypeGroup.class);
         queryBuilder.addOrder("orderIdx");
         return persistenceService.findAll(queryBuilder);
+    }
+
+    public List<AssetTypeGroup> getAssetTypeGroupsForProceduresByOrder() {
+        QueryBuilder<AssetType> builder = createUserSecurityBuilder(AssetType.class);
+
+        builder.setSimpleSelect("group");
+        builder.addSimpleWhere("hasProcedures", true);
+        builder.addOrder("name");
+        List<AssetType> listWithProcedures = persistenceService.findAll(builder);
+
+        List<AssetTypeGroup> groupList = (List<AssetTypeGroup>) (List<?>) listWithProcedures;
+
+        return groupList;
+    }
+
+    public List<AssetType> getAssetTypesFilteredForProcedures(Long assetTypeGroupId) {
+        QueryBuilder<AssetType> builder = createUserSecurityBuilder(AssetType.class);
+
+        builder.addSimpleWhere("hasProcedures", true);
+
+        if(assetTypeGroupId != null) {
+            if (assetTypeGroupId == -1)
+                builder.addWhere(WhereClauseFactory.createIsNull("group.id"));
+            else {
+                builder.addSimpleWhere("group.id", assetTypeGroupId);
+            }
+        }
+
+        builder.addOrder("name");
+        return persistenceService.findAll(builder);
     }
 
     public List<AssetType> getAssetTypes(Long assetTypeGroupId) {
@@ -378,6 +419,12 @@ public class AssetTypeService extends FieldIdPersistenceService {
             QueryBuilder<AssetCodeMapping> assetCodeMappingCount = createTenantSecurityBuilder(AssetCodeMapping.class);
             assetCodeMappingCount.setCountSelect().addSimpleWhere("assetInfo", assetType);
             summary.setAssetCodeMappingsToDelete(persistenceService.count(assetCodeMappingCount));
+
+            summary.setProceduresToDelete(procedureService.getAllProceduresForAssetTypeCount(assetType));
+
+            summary.setProcedureDefinitionsToDelete(procedureDefinitionService.getAllProcedureDefinitionsForAssetTypeCount(assetType));
+
+
 
         } catch (InvalidQueryException e) {
             logger.error("bad summary query", e);

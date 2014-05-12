@@ -1,0 +1,268 @@
+/* General form styles */
+.form-horizontal legend {
+	font-size: 12px;
+	font-weight: bold;
+	background-color: #eeeeee;
+	border-bottom: 1px solid #CCCCCC;
+	border-top: 1px solid #CCCCCC;
+	padding: 7px 2.5%;
+	width: 95%;
+}
+.form-horizontal label {
+	width: 175px;
+	display: inline-block;
+	text-align: right;
+	float: left;
+	font-weight: bold;
+	padding-right: 10px;
+}
+.form-horizontal textarea {
+	height: 100px;
+	resize: none;
+}
+/* error message */
+.duplicate-field p {
+    background-color: #FFFFB2;
+    margin-left: 185px;
+	padding: 10px;
+}
+
+
+/* Main selection option - Asset type */
+.form-horizontal .primary-selection {
+	background-color: #F8F8F8;
+	padding: 24px 0 14px;
+	margin: 5px 0;
+}
+	.form-horizontal .primary-selection label {
+		font-size: 16px;
+		font-weight: bold;
+		width: 175px;
+	}
+
+
+/* Column layout */
+.form-horizontal .column-left {
+	width: 670px;
+	float: left;
+}
+	.form-horizontal .column-left legend {
+		margin-bottom: 25px;
+	}
+.form-horizontal .column-right {
+	width: 310px;
+	float: right;
+}
+
+
+/* Styles for creating rows and aligning form fields */
+.form-horizontal .control-group {
+	margin-bottom: 20px;
+	position: relative;
+	clear: both;
+}	
+	.form-horizontal .control-group input,
+	.form-horizontal .control-group select,
+	.chzn-container {
+		margin-bottom: 3px;
+	}
+		.form-horizontal select {
+			width: 260px;
+		}
+		.chzn-container-single .chzn-single span {
+			font-size: 11px;
+		}
+	.form-horizontal .control-group label {
+		line-height: 23px;
+		padding-right: 10px;
+		margin-bottom: 15px;
+	}
+	.form-horizontal .control-group input {
+		padding: 4px;
+		border: 1px solid #9C9C9C;
+		color: #555555;
+		width: 250px;
+	}
+	.form-horizontal .control-group a.links {
+		display: inline;
+        position:absolute;
+        top:100%;
+        left:28%;
+	}
+
+
+/* Identify Multiple Assets modal window */
+.multiple-option {
+	position: absolute;
+	top: 5px;
+	left: 290px;
+}
+.multiple-option a {
+	margin-left: 10px;
+}
+.form-horizontal .control-group input.short {
+	width: 80px;
+}
+div.wicket-modal div.w_caption,
+div.dialog-modal div.w_caption {
+ 	padding: 0;
+}
+.step1 {
+	text-align: center;
+}
+	.step1 label {
+		display: block;
+	}
+	.step1 input[type=text] {
+		width: 40px;
+		padding: 1px 2px;
+		margin-top: 6px;
+	}
+.step2 {
+	padding: 0 10px;
+}
+.feedbackPanel {
+	margin-bottom: 0;
+}
+.formErrors ul li {
+	padding: 0;
+}
+.step2 hr {
+	border: none;
+	border-top: 1px solid gray;
+	margin: 8px 0;
+}
+	.method input[type=radio] {
+		float: left;
+		*float: none;
+		margin-right: 5px;
+	}
+	.method label {
+		font-weight: bold;
+		margin-right: 4px;
+	}
+	.method .title {
+		font-size: 12px;
+	}
+	.method p {
+		margin: 4px 18px;
+	}
+	.format-configuration input {
+		margin: 2px 0;
+	}
+	.format-configuration label {
+		width: 60px;
+		display: inline-block;
+		margin-left: 18px;
+	}
+.step3 th {
+	font-weight: bold;
+	padding-bottom: 4px;
+	font-size: 12px;
+}
+.step3 input {
+	margin-bottom: 4px;
+}
+
+
+/* Uploads/right column section */
+.form-horizontal .uploads {
+	padding: 20px 10px;
+	background-color: #F5FBFF;
+	margin-bottom: 5px;
+}
+	.form-horizontal .uploads p {
+		margin-bottom: 10px;
+	}
+    .form-horizontal .uploads span {
+        display: inline-block;
+        /*overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;*/
+        width: 200px;
+    }
+    .form-horizontal .uploads.attributes span {
+        width: auto;
+    }
+	.form-horizontal .event-schedules {
+		background-color: #fff;
+		padding: 20px 0;
+	}
+	.form-horizontal .event-schedules .current-schedule,
+	.form-horizontal .event-schedules p {
+		padding: 0 10px;
+	}
+	.form-horizontal .event-schedules .due-date {
+		background-color: #ccc;
+		padding: 6px 10px;
+		display: inline-block;
+        width:56px;
+        text-align: center;
+	}
+		.form-horizontal .event-schedules .remove-link {
+			float: right;
+			line-height: 28px;
+		}
+		.form-horizontal .add-schedule-form {
+			border-bottom: 1px solid #E2E2E2;
+			border-top: 1px solid #E2E2E2;
+			padding: 10px;
+			margin-top: 20px;
+		}
+	.form-horizontal .uploads.event-schedules .event-name {
+		font-weight: bold;
+        width:180px;
+	}
+
+
+/* bottom bar/save options */
+.form-horizontal .form-action {
+	clear: both;
+	border-top: 1px solid #E2E2E2;
+	border-bottom: 1px solid #E2E2E2;
+	background-color: #F8F8F8;
+	padding: 15px 10px;
+}
+
+table.identifiers-grid {
+    width:100%;
+}
+table.identifiers-grid tr {
+    padding:3px 0 3px 0;
+}
+
+
+/* TODO: nasty. We must refactor this into a common place instead of reusing this hack from the asset summary page */
+#page {
+    background: none;
+    border: none;
+    box-shadow: none;
+    -moz-box-shadow:none;
+    -webkit-box-shadow: none;
+    font-size: 11px;
+    padding: 0;
+}
+
+/* overriding default css */
+.header {
+	border-bottom: none;
+	padding-bottom: 0;
+	margin-top: 10px;
+}
+	.header h1 {
+		float: left;
+	}
+
+.realPage {
+    clear: both;
+    float: left;
+    overflow: hidden;
+    position: relative;
+    width: 988px;
+    -moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    -webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+    border:1px solid #CCC;
+    background:#FFF;
+    padding: 9px 5px 0 5px;;
+}

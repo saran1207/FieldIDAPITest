@@ -1,0 +1,40 @@
+html {
+	background-color: #f8f8f8;
+}
+
+body {
+	color: #333333;
+	background-color: #f8f8f8;
+}
+
+.brandedContainer, .publicContainer {
+	border: 6px solid #bbb;
+}
+
+#pageContent.public {
+	background: #F6F6F6;
+	min-height: 0;
+}
+
+#mainContent {
+	background: #FFF;
+}
+
+
+#sslCert a, #sslCert a:hover, #sslCert a:visited, #sslCert a:active {
+	color: #AD0034;
+}
+
+.percentBarUsed {
+	background: #79c5e5 url(../../../images/barForeground.png) repeat-x;
+}
+.percentBar {
+	border: 1px solid #79C5E5;
+    padding: 2px;
+	background: url(../../../images/barBackground.png) repeat-x;
+}
+
+.limitWarning {
+	background-color: #FFEBEB;
+	color: #FF0000;
+}

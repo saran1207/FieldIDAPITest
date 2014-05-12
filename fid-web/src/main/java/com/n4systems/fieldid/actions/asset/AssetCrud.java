@@ -13,6 +13,7 @@ import com.n4systems.fieldid.actions.event.viewmodel.WebEventScheduleToScheduleC
 import com.n4systems.fieldid.actions.helpers.*;
 import com.n4systems.fieldid.actions.utils.OwnerPicker;
 import com.n4systems.fieldid.permissions.UserPermissionFilter;
+import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.user.UserService;
@@ -65,6 +66,8 @@ public class AssetCrud extends UploadAttachmentSupport {
     protected UserGroupService userGroupService;
     @Autowired
     private RecurringScheduleService recurringScheduleService;
+    @Autowired
+    private AssetService assetService;
 
     // drop down lists
 	private List<CommentTemplate> commentTemplates;
@@ -626,7 +629,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public String doConfirmDelete() {
 		testExistingAsset();
 		try {
-			removalSummary = assetManager.testArchive(asset);
+			removalSummary = assetService.testArchive(asset);
 		} catch (Exception e) {
 			return ERROR;
 		}
@@ -638,7 +641,7 @@ public class AssetCrud extends UploadAttachmentSupport {
 	public String doDelete() {
 		testExistingAsset();
 		try {
-			assetManager.archive(asset, fetchCurrentUser());
+            assetService.archive(asset, fetchCurrentUser());
 			addFlashMessageText("message.assetdeleted");
 			return SUCCESS;
 		} catch (UsedOnMasterEventException e) {

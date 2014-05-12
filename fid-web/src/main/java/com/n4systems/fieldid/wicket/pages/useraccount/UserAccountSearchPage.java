@@ -76,23 +76,23 @@ public class UserAccountSearchPage extends FieldIDWicketPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
 
-        response.renderCSSReference("style/branding/default.css");
+        response.renderCSSReference("style/legacy/branding/default.css");
 
-        response.renderCSSReference("newCss/layout/layout.css");
+        response.renderCSSReference("style/legacy/newCss/layout/layout.css");
 
         response.renderJavaScriptReference("jquery/watermark/jquery.watermark.js");
 
-        response.renderCSSReference("style/colorbox.css");
-        response.renderCSSReference("style/fieldid.css");
-        response.renderCSSReference("style/public.css");
+        response.renderCSSReference("style/legacy/colorbox.css");
+        response.renderCSSReference("style/legacy/fieldid.css");
+        response.renderCSSReference("style/legacy/public.css");
 
-        response.renderCSSReference("style/pageStyles/login.css");
+        response.renderCSSReference("style/legacy/pageStyles/login.css");
 
 
-        response.renderCSSReference("style/reset.css");
-        response.renderCSSReference("style/site_wide.css");
+        response.renderCSSReference("style/legacy/reset.css");
+        response.renderCSSReference("style/legacy/site_wide.css");
 
-        response.renderCSSReference("style/jquery-redmond/jquery-ui-1.8.13.custom.css");
+        response.renderCSSReference("style/legacy/jquery-redmond/jquery-ui-1.8.13.custom.css");
 
     }
 

@@ -67,7 +67,7 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
                 if (actionModel.getObject().getWorkflowState() == WorkflowState.OPEN) {
                     url = String.format("/fieldid/w/performEvent?type=%d&assetId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getId(), actionModel.getObject().getId());
                 } else {
-                    if(actionModel.getObject().getType().isThingEventType())
+                    if(actionModel.getObject().getType().isThingEventType() || actionModel.getObject().getType().isActionEventType())
                         url = String.format("/fieldid/w/thingEventSummary?id=%d", actionModel.getObject().getId());
                     else
                         url = String.format("/fieldid/w/placeEventSummary?id=%d", actionModel.getObject().getId());
@@ -142,8 +142,8 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/event_actions.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/component/event_actions.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
     public WebPage setAssetSummaryContext(boolean assetSummaryContext) {

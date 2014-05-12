@@ -48,8 +48,8 @@ public class AutoCompleteUser extends AutoComplete<User> {
 
     protected String getCategory(User user) {
         String category = user.isAdmin() ? "Admin" :
-                user.isFullUser() ? "Full" :
-                user.isLiteUser() ? "Lite" : "Read Only";
+                user.isFullUser() ? "Administration" :
+                user.isLiteUser() ? "Inspection" : "Reporting";
         if (!categories.contains(category)) {
             categories.add(category);
             return category;

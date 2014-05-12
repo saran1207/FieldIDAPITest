@@ -20,7 +20,7 @@ public class IncludeStyleComponent extends UIBean {
 	}
 	
 	private static final String DEFAULT_STYLE_SHEET_MEDIA = "all";
-	private static final String STYLE_DIRECTORY = "style";
+	private static final String STYLE_DIRECTORY = "style/legacy";
 	private static final String STYLE_EXTENSION = "css";
 	
 	

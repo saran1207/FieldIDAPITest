@@ -18,14 +18,15 @@ public enum WidgetType implements Listable<String> {
     EVENT_COMPLETENESS("Event Completeness", "Number of open vs completed events", EventCompletenessWidgetConfiguration.class),
     WORK("Work", "A calendar view of work assigned to you", WorkWidgetConfiguration.class),
     ACTIONS("Open Actions by Priority", "A list of open actions graphed by priority", ActionsWidgetConfiguration.class),
-    EVENT_KPI("Event KPIs", "Compare completed events across multiple locations", EventKPIWidgetConfiguration.class);
+    EVENT_KPI("Event KPIs", "Compare completed events across multiple locations", EventKPIWidgetConfiguration.class),
+    PROCEDURES_PUBLISHED("Procedures Published", "A graph of all procedures published", ProceduresPublishedWidgetConfiguration.class),
+    UPCOMING_SCHEDULED_LOTO("Upcoming Lockouts", "Scheduled lockouts for the next 30,60 or 90 days", UpcomingLotoWidgetConfiguration.class);
 
     private static EnumSet<WidgetType> eventRelatedWidgets = EnumSet.of(EVENT_KPI,COMPLETED_EVENTS,EVENT_COMPLETENESS,UPCOMING_SCHEDULED_EVENTS, ACTIONS);
 
     private String name;
     private String description;
     private Class<? extends WidgetConfiguration> configurationClass;
-
 
     WidgetType(String name, String description, Class<? extends WidgetConfiguration> configurationClass) {
         this.name = name;

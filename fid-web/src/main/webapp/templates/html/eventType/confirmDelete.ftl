@@ -1,6 +1,6 @@
 ${action.setPageType('event_type', 'edit')!}
 <head>
-    <@n4.includeStyle href="/style/newCss/component/buttons.css" type="page"/>
+    <@n4.includeStyle href="/style/legacy/newCss/component/buttons.css" type="page"/>
 </head>
 
 <@s.form action="eventTypeDelete" id="mainContent" cssClass="fullForm fluidSets" theme="fieldid">

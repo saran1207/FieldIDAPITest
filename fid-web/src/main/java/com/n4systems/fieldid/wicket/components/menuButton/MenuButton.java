@@ -17,7 +17,8 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.io.Serializable;
 import java.util.List;
 
-
+@Deprecated
+//For new FieldIDTemplatePage use MenuButton2 with the new template markup
 public class MenuButton<T> extends Panel {
 
     private @SpringBean JsonRenderer jsonRenderer;
@@ -86,7 +87,7 @@ public class MenuButton<T> extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
         response.renderOnDomReadyJavaScript("fieldIdWidgets.createMenuButton('"+getMarkupId()+"',"+jsonRenderer.render(new MenuButtonOptions())+");");
     }
 

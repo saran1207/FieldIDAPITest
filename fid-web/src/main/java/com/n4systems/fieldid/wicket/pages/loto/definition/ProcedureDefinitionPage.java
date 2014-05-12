@@ -9,7 +9,7 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.loto.ProcedureTitleLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
-import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.ProcedureDefinition;
@@ -99,7 +99,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-            return new ProcedureTitleLabel(labelId, new PropertyModel<Asset>(model, "asset"));
+        return new ProcedureTitleLabel(labelId, new PropertyModel<Asset>(model, "asset"));
     }
 
     @Override
@@ -116,9 +116,9 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/pageStyles/procedureDefinition.css");
+        response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
         response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
     private void sectionChanged(AjaxRequestTarget target) {
@@ -181,6 +181,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
                 @Override
                 protected void doReject(String message) {
                     FieldIDSession.get().info(getString("message.rejection_notification_sent"));
+                    procedureDefinitionService.saveProcedureDefinitionRejection(model.getObject(), message);
                     notifyService.notifyProcedureRejection(model.getObject(), message);
                     gotoProceduresPage();
                 }
@@ -214,7 +215,7 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
     }
 
     private void gotoProceduresPage() {
-        setResponsePage(new ProcedureDefinitionListPage(new PageParameters().add("uniqueID", model.getObject().getAsset().getId())));
+        setResponsePage(new ProceduresListPage(new PageParameters().add("uniqueID", model.getObject().getAsset().getId())));
     }
 
     private void doCancel(AjaxRequestTarget target) {

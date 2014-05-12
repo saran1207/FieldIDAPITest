@@ -1,0 +1,52 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    <!--div class="split-btn"-->
+        <div wicket:enclosure="optionsContainer" class="dropdown">
+            <button class="btn-secondary">Manage Procedures</button>
+            <ul wicket:id="optionsContainer" class="pull-right">
+                <li class="dropdown-secondary">
+                    <a href="#"><wicket:message key="label.author"/></a>
+                    <ul>
+                        <li>
+                            <a wicket:id="authorNewLink">
+                                <wicket:message key="label.new"/>
+                            </a>
+                        </li>
+                        <li>
+                            <a wicket:id="copyExistingLink">
+                                <wicket:message key="label.copy_existing"/>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <hr>
+                <li>
+                    <a wicket:id="viewPublishedLink">
+                        <wicket:message key="label.procedures_view_published"/>
+                    </a>
+                </li>
+                <li>
+                    <a wicket:id="draftsLink">
+                        <wicket:message key="label.procedures_drafts"/>
+                    </a>
+                </li>
+                <li>
+                    <a wicket:id="waitingForApprovalLink">
+                        <wicket:message key="label.procedures_waiting_for_approval"/>
+                    </a>
+                </li>
+                <li>
+                    <a wicket:id="rejectedLink">
+                        <wicket:message key="label.procedures_rejected"/>
+                    </a>
+                </li>
+                <li>
+                    <a wicket:id="previouslyPublishedLink">
+                        <wicket:message key="label.procedures_previously_published"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    <!--/div-->
+</wicket:panel>
+</html>

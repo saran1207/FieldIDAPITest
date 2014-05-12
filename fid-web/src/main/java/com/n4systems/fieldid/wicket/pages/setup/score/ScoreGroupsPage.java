@@ -79,8 +79,8 @@ public class ScoreGroupsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/scoreGroups.css");
-        response.renderCSSReference("style/newCss/component/header_reorder_link_button.css");
+        response.renderCSSReference("style/legacy/scoreGroups.css");
+        response.renderCSSReference("style/legacy/newCss/component/header_reorder_link_button.css");
     }
 
     @Override

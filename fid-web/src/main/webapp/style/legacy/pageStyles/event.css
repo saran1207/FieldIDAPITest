@@ -1,0 +1,662 @@
+.eventTypes ul{
+	display:none;
+	position:absolute;
+	background-image: url(../../../images/dropdownArrow-top-left.gif);
+	padding-top:11px;
+	background-position:top center;
+	background-repeat: no-repeat;
+	width:200px;
+	z-index: 100;
+}
+
+.actionsContainer .floatingDropdown ul {
+	width : 200px;
+}
+.eventTypesLeft ul{
+	background-position:top left;
+	background-image: url(../../../images/dropdownArrow-left.gif);
+}
+.eventTypes ul li{
+	background-color: #333;
+	color:#cccccc;
+	padding: 10px;
+}
+
+.eventTypes ul li a, .eventTypes ul li a:visited {
+	color:#cccccc;
+}
+
+.eventTypes ul li:hover{
+	
+	background: #1b5ccd;
+}
+.eventTypes ul li:hover a, .eventTypes ul li:hover, .eventTypes ul li:hover a:visited {
+	color:#fff;
+}
+
+.eventTypes:hover ul{
+	display:block;
+	text-align:left;
+	font-size:1em;
+}
+
+.eventTypesRelative:hover ul a{
+	font-size:1em;
+}
+
+.eventTypes:hover ul li, .eventTypes ul:hover li{
+	display:block;
+	border:5px solid #333;
+}
+
+#resultsTable td {
+	vertical-align: top;
+}
+
+.eventForm h2 {
+	overflow: hidden;
+}
+
+#formTitle {
+	display:block;
+	float:left;
+}
+#jumpToSection {
+	font-weight: normal;
+	display:block;
+	float:right;
+	font-size: 0.8em;
+}
+
+.eventForm {
+	overflow:hidden;
+}
+
+.eventForm h3 {
+	border-bottom: 1px solid #dddddd;
+	overflow: hidden;
+	padding: 5px 15px;
+	font-size: 1.2em;
+	font-weight: normal;
+}
+
+.jumpto img {
+	padding-bottom: 2px;
+	padding-right: 2px;
+}
+
+.jumpto select {
+	overflow:hidden;
+	max-width:25em;	
+	width:15em;         
+}
+
+.jumpto select option {
+	overflow:hidden;
+	max-width:25em;	
+	width:15em;         
+}
+
+.eventForm div.infoSet {
+	border: none;
+	display: block;
+	float: left;
+	width: 100%;
+    border-bottom: 1px solid #dddddd;
+}
+
+.eventForm div.criteriaEditContainer {
+    display: block;
+    float: left;
+    width: 20%;
+}
+
+.eventForm div.textCriteriaContainer {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.eventForm div.textCriteriaDisplayContainer {
+    padding-top: 10px;
+    display:block;
+    float:left;
+    max-width: 400px;
+    padding-bottom: 10px;
+}
+
+.eventForm div.infoSet span, .eventForm div.infoSet div.simpleContainer {
+	padding-top: 10px;	
+	width:auto;
+}
+
+.eventForm div.infoSet span.criteriaButton, .eventForm div.infoSet div.criteriaButton {
+	padding-top:0px;
+	padding-bottom: 0px;
+	padding-right: 5px;
+	float:left;
+	display:block;
+}
+
+.eventForm div.infoSet span.criteriaText {
+	float:left;
+	display:block;
+}
+
+.youAreOn{
+	display: block;
+	float:left;	
+}
+
+.eventSectionTitle {
+	display: block;
+	float:left;
+	width:750px;
+	word-wrap:break-word;
+	font-weight : bold;
+	font-size : 12px;
+	padding-left:4px;		
+}
+
+.youAreOn, .eventSectionIndex {
+	padding-right: 5px;
+	font-weight: normal;
+}
+
+.eventSectionIndex {
+	float:right;
+	font-size: 1em;
+	vertical-align : middle;
+	font-size : 11px;
+	color : #666666;
+}
+
+.eventSectionIndex a img {
+	vertical-align:middle;
+}
+
+#orgBrowserForm label{
+	text-align: left;
+}
+
+#proofTestType {
+	width:145px;	
+	padding: 1px;
+}
+
+#proofTestUpload{
+	padding-top:4px;
+	}
+
+#assetSummary h2 {
+	overflow:hidden;
+	
+}
+#assetSummary h2 span {
+	display: block;
+	float:left;
+}
+
+#assetSummary h2 span#certLink {
+	display: block;
+	float:right;
+	border:none;
+	color: #333333;
+	font-weight:normal;
+}
+#certLink a, #certLink a:hover, #certLink a:visited, #certLink a:active {
+	color: #333333;
+}
+
+#chartImage {
+	width:500px;
+}
+
+.events {
+	margin-left: 30px;
+	border-left: 3px solid #CCC;
+	border-bottom: 1px solid #CCC;
+	overflow:hidden;
+	background-color: #F5F5F5;
+	padding:15px;
+	width:700px;
+}
+
+.eventList {
+	margin-top:5px;
+}
+
+.eventType, .datePerformed, .performedBy, .editEvent {
+	display: block;
+	float: left;
+	width: 200px;
+}
+.datePerformed {
+	width:150px;	
+}
+
+.performedBy {
+	width:250px;	
+}
+
+.editEvent {
+	width:60px;
+	float:right;
+}
+.addEventColumn {
+	width:170px;
+}
+
+#multiProofTestButton {
+	
+	float:right;
+	position:relative; 
+	top: -2.4em;
+	text-algin: right;
+	padding-right:15px;
+}
+
+#comments {
+	display:block;
+	margin-top: 5px;
+	width: 250px;
+}
+
+#proofTestManual{
+	padding: 0;
+}
+
+#proofTestManual label {
+	width:120px;
+	padding-left:0px;
+	clear:left;
+	text-align: left;
+}
+
+#proofTestUploadFile {
+	height:20px;
+}
+
+#proofTestManual input {
+	width:100px;
+}
+
+.recDefButtons {
+    display:block;
+    float:right;
+	padding-left: 10px;
+    margin-right: 95px;
+}
+
+.recDefButtons img {
+	padding-left: 5px;
+}
+
+div.eventInIframe .recDefButtons {
+    margin-right:5px;
+}
+
+div.eventInIframe{
+	padding: 0 10px;
+}
+
+.observationsShow p.observationTextShow   {
+	border: 2px solid #E8EDFF;
+	padding: 10px 0 10px 40px;
+	width: 320px;
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+
+.observationBox {
+	overflow: auto;
+	margin-left: auto;
+	margin-right: auto;
+	height: 320px;
+	width: 470px;
+} 
+
+.observationBox p, .observationActions{
+	margin-left: 10px;
+}
+
+.observationBox h1 {
+	padding-left: 10px;
+}
+
+.observationText {
+	margin-top: 5px;
+	width: 380px;
+	border: 2px solid #E8EDFF;
+	padding: 10px 10px 10px 40px;
+	background-image: url(../../../images/addObservation.gif);
+	background-repeat: no-repeat;
+	background-position: top left;
+}
+
+.observationsShow p.defRepairedOnSite, .defRepairedOnSite {
+	border-color: #9fe8b7;
+	background-image: url(../../../images/repairedOnSite.gif);
+}
+
+.observationsShow p.defRepairedOnSite:hover, .defRepairedOnSite:hover {
+	border-color: #8dcda2;
+}
+
+.observationsShow p.defRepaired, .defRepaired  {
+	border-color: #9fb7e8;
+	background-image: url(../../../images/repaired.gif);
+}
+
+.observationsShow p.defRepaired:hover, .defRepaired:hover {
+	border-color: #8da2cd;
+}
+
+.observationsShow p.recSelected, .recSelected {
+	border-color: #ff9f40;
+	background-image: url(../../../images/recommendation.gif);
+}
+
+.observationsShow p.recSelected:hover, .recSelected:hover {
+	border-color: #e08c38;
+}
+
+.observationsShow p.defSelected, .defSelected {
+	border-color: #ff4f4f;
+	background-image: url(../../../images/deficient.gif);
+}
+
+.observationsShow p.defSelected:hover, .defSelected:hover  {
+	border-color: #de4545;
+}
+
+.observationsShow p.obsCommentShow, .obsCommentShow {
+	background-image: url(../../../images/observationComment.gif);
+}
+
+.observationsShow {
+	background-color: #fff;
+	padding: 5px 0 5px 10px;
+	overflow: hidden;
+	border: 1px solid;
+	width:380px;
+}
+
+.observationsShow p.observationTextShow span   {
+	display: inline;
+	padding:0;
+}
+
+.observationTextShow {
+	margin-top: 5px;
+}
+
+.eventPreformed {
+	margin-left:200px;
+	clear:both;
+}
+
+.observationComment {
+	padding-top: 10px;
+	width:440px;
+}
+
+.observationComment span textarea{
+	width: 400px;
+	height: 200px;
+	padding: 4px;
+	font-size: 15px;
+	border:1px solid #9C9C9C;
+	color:#555555;
+}
+
+.observationComment label{
+	display: block;
+	font-size: 1.2em;
+	font-weight: bold;
+	padding-bottom: 10px;
+}
+
+.observationActions {
+	padding: 10px;
+}
+
+.print {
+	float: right;
+}
+
+.print ul {
+	display: none;
+	position: absolute;
+	background-image: url(../../../images/dropdownArrow-top-right.gif);
+	padding-top: 11px;
+	background-position: top right;
+	background-repeat: no-repeat;
+	width:200px;
+}
+
+.print:hover ul {
+	display: block;
+	text-align: right;
+	font-size: 1em;
+}
+
+.print:hover ul li {
+	display: block;
+	border: 5px solid #333;
+}
+
+.print:hover ul a {
+	font-size: 1em;
+}
+
+.print ul li {
+	background-color: #333;
+	color: #cccccc;
+	padding: 10px;
+}
+
+.print ul li:hover {
+	background: #1b5ccd;
+}
+
+.print ul li:hover a, .print ul li:hover {
+	font-weight: normal;
+	color: #fff;
+}
+
+.print ul li a {
+	font-weight: normal;
+	color: #cccccc;
+}
+
+.eventSchedule {
+	padding: 15px 5px;
+	border-bottom: 1px solid #E2E2E2;
+	float: left;
+}
+
+.addScheduleDate {
+	background-color: #E3E3E3;
+	padding: 5px 10px;
+    text-align: center;
+    width: 50px;
+    float: left;
+}
+
+.addScheduleJob p{
+	color: #999999;
+}
+
+.addScheduleLabel {
+	padding: 5px;
+	width: 215px;
+	float: left;
+}
+
+.attachments  {
+	margin-top:5px;
+}
+
+.locationTree{
+	display:block;
+	float:left;
+	padding-bottom:5px;
+	padding-left:5px;
+	padding-top:5px;
+	width:270px;
+}
+
+.crudForm .infoSet .locationFieldHolder{
+	width:260px;
+}
+
+.infoSet .locationTree .textbox{
+	border:1px solid #9C9C9C;
+	color:#555555;
+	padding:4px;
+}
+
+.component .fullForm .infoSet label{
+	text-align: left;
+}
+
+.fullForm .infoSet label, .fullForm .eventForm .infoSet label{
+	text-align:left;
+}
+
+.largeForm{
+	width:auto;
+}
+
+
+.crudForm .infoSet{
+	border-bottom: none;
+}
+
+ .crudForm .infoSet .eventFormLabel {
+	text-align:left;
+    width: 50%;
+}
+
+ .crudForm .infoSet label, .fullForm .infoSet label{
+	text-align:right;
+	padding-right: 10px;
+	color: #555555;
+}
+
+.crudForm .infoSet .fieldHolder select{
+	border: 1px solid #9C9C9C;
+	color: #555555;
+	width: 260px;
+	padding: 4px;
+}
+
+.crudForm .infoSet .orgPicker{
+	width: 260px;
+}
+
+.fieldHolder p{
+	display: inline;
+	padding-left: 5px;
+	border-style: none;
+}
+
+.crudForm .infoSet .commentsLabel, .crudForm .infoSet .commentContainer label{
+	display: block;
+	text-align: left;
+	line-height: auto;
+	padding: 0;
+	width: 180px;
+}
+
+.crudForm{
+	width:auto;
+}
+
+p.treeHeading{
+	display: block;
+}
+
+.fieldHolder label.checkBoxLabel{
+	position: relative;
+	top: -2px;
+}
+
+.fullForm .infoSet select{
+	width: 260px;
+	padding: 4px;
+}
+
+.crudForm .infoSet select.selectCriteria {
+    margin-top:6px;
+    width: 150px;
+}
+
+.crudForm .infoSet select.comboBoxCriteria {
+    margin-top:6px;
+    width: 150px;
+}
+
+.crudForm .infoSet input.comboBoxCriteria {
+    margin-top:6px;
+    width: 150px;
+}
+
+.crudForm .infoSet input.dateCriteria {
+    width: 165px;
+}
+
+.crudForm .infoSet span input.dateTime {
+    width: 139px;
+}
+
+.crudForm h2{
+	margin-top: 20px;
+	}
+
+.crudForm p label, .resultContainer label{
+	text-align:right;
+	color: #222;
+	font-weight:bold;
+}
+
+.largeForm p span{
+	color: #555;
+	text-align: left;
+}
+
+#event{
+	clear:both;
+}
+
+.resultContainer div{
+	margin-top: 4px;
+}
+
+a.signLink {
+    display:block;
+    padding-top: 10px;
+    padding-left: 2px;
+}
+
+a.clearSignatureLink {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+#pageContent {
+	overflow:visible;
+}
+
+.buttonBar a img {
+    padding-right: 5px;
+}
+
+.buttonBar a.mattButtonLeft,  .buttonBar a.mattButtonMiddle, .buttonBar a.mattButtonRight{
+    padding: 10px;
+    vertical-align: middle;
+}
+.buttonBar {
+    float: right;
+}
+

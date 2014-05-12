@@ -1,0 +1,2608 @@
+/* http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.clearfix {
+    *zoom: 1;
+}
+img {
+	vertical-align: text-bottom;
+}
+
+.datePicker {
+	padding-left: 5px;
+}
+
+.container {
+	overflow: hidden;
+}
+
+.hidden {
+	display: none;
+}
+
+#wicketDebugBar {
+    z-index:9999;
+}
+
+.inputError {
+	background-color: #FFEBEB;
+	color: #FF0000;
+}
+
+.clearBoth {
+	clear: both;
+}
+
+.clearLeft{
+	clear:left;
+}
+
+body {
+	text-align: left;
+	color: #333333;
+	background-color: #fff;
+	font-size: 11px;
+	font-family: "lucida grande", tahoma, verdana, arial, sans-serif;
+}
+
+.strong {
+	font-weight: bold;
+}
+
+.normal {
+	font-weight: normal;
+}
+a,a:hover,a:visited,a:active {
+	color: #356CA2;
+}
+
+a.disabled,a:hover .disabled,a:visited .disabled,a:active .disabled {
+	color: #999;
+}
+
+h1,h2,h3,h4 {
+	font-weight: bold;
+	color: #333;
+	text-align: left;
+}
+
+h1 {
+	font-size: 1.5em;
+}
+
+h2,h2.oldHeader {
+	font-size: 1.2em;
+	padding: 5px 15px;
+	line-height: 21px;
+}
+
+h2.decoratedHeader{
+	background-color: #EEEEEE;
+	border-bottom:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+}
+
+h2.clean {
+	padding: 0;
+	border-style: none;
+	background-color: transparent;
+}
+
+h2 a {
+	font-size: 0.9em;
+	font-weight: normal;
+}
+
+#page {
+	-moz-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+	-webkit-box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;
+	box-shadow: 5px 0px 2px -5px #CCC, -5px 0px 2px -5px #CCC, 0px 2px 5px 0px #CCC;		
+	border:1px solid #CCC;
+	padding:12px;
+	background:#FFF;
+}
+
+#page, .systemNotice {
+	width: 1000px;
+	margin: auto;
+	clear: both;
+	position:relative;
+	z-index: 1;
+}
+
+/*----------------------
+  Global header and nav 
+------------------------*/
+#pageHeader {
+	width: 100%;
+	position: fixed;
+	background: #FFFFFF;
+	z-index: 10;
+
+	font-family: "proxima-nova", Helvetica, Arial, sans-serif;
+	font-style: normal;
+	font-weight: 400;
+}
+#pageHeader #pageActions,
+#pageHeader #pageNavigation #navigationContent {
+	position: relative;
+	min-width: 1024px;
+	max-width: 1400px;
+	width: 98%;
+	margin: 0 auto;	
+}
+#pageHeader #pageActions #companyLogo {
+	float: left;
+}
+	#pageHeader #pageActions #companyLogo img,
+	.company-logo {
+		height: 55px;
+		width: auto;
+		padding: 10px 0;
+	}
+
+
+/* Top nav 
+-----------*/
+#pageHeader #pageActions #listContainer .listOfLinks {
+	margin: 9px 0 0;
+	padding: 0;
+	font-size: 13px;
+}
+#pageHeader #pageActions #listContainer .listOfLinks li {
+	display: inline-block;
+	border-left: 1px solid #c7c7c9;
+	padding: 0 10px;
+	float: left;
+}
+#pageHeader #pageActions #listContainer .listOfLinks li:first-child {
+	border: none;
+	padding-left: 0;
+}
+#pageHeader #pageActions #listContainer .listOfLinks a {
+	color: #e63300;
+	margin-right: 0;
+	text-decoration: none;
+}
+#pageHeader #pageActions #listContainer .listOfLinks a:hover {
+	color: #3a3a3a;
+}
+#pageHeader #pageActions #listContainer .manageLinkSection a {
+	color: #356CA2;
+}
+#pageHeader #mySavedItemsLink:after {
+	color: #666;
+}
+#pageHeader .mySavedItemsBox {
+	right: 7px;
+}
+#pageHeader #pageActions #listContainer .savedItemContainer a {
+	color: #3a3a3a;
+}
+
+
+/* Site Nav
+------------*/
+#pageHeader #navigationContent {
+	width: auto;
+}
+#pageHeader #navigationContent a {
+	font-size: 14px;
+	padding: 10px 14px 9px;	
+}
+#pageHeader #navigationLinks .dropdown > li > a {
+	color: #f5f5f5;
+}
+#pageHeader #navigationLinks .dropdown > li:hover > a {
+	border-top: 2px solid #e63300;
+	background: #e2e2e2;
+	color: #3a3a3a;
+}
+#pageHeader #pageNavigation #navigationContent #navigationLinks {
+	padding-top: 0;
+}
+
+#pageHeader #navigationLinks .dropdown ul li {
+	border-top: 1px solid #f5f5f5;
+}
+#navigationLinks .fontello-home {
+	height: 17px;
+	display: block;
+	margin-top: 1px;
+}
+#pageHeader #menuReport:after, 
+#menuSetup:after,
+#menuLoto:after,
+#mySavedItemsLink:after {
+	font-family: "fontello", sans-serif;
+	content: '\e82d';
+	font-size: 13px;
+}
+#mySavedItemsLink:after {
+	padding-left: 4px;
+}
+#menuReport.struts:after {
+	margin-left: -4px;
+}
+#pageHeader li:hover #menuReport:after, 
+#pageHeader li:hover #menuSetup:after,
+#pageHeader li:hover #menuLoto:after {
+	content: '\e830';
+}
+
+/*Instead of hiding this image we should just remove it!!! */
+#menuReport.speedLink img,
+#pageHeader .downArrow {
+	display: none;
+}
+
+
+/* Search box
+--------------*/
+#pageHeader #pageNavigation #navigationContent #smartSearchContainer {
+	padding: 0;
+	text-align: right;
+	margin-right: 14px;
+}
+
+
+
+
+#headerPadding {
+	display:block;
+	height:130px;
+}
+
+.frontPageHeader {
+	float : left;
+}
+
+#pageContent {
+	width: 100%;
+	margin-bottom: 10px;
+	text-align: left;
+	overflow: hidden;
+	min-height: 550px;
+	_height: auto !important;
+}
+
+#contentHeader {
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 5px;
+}
+
+#contentTitle {
+	overflow: hidden;
+	margin-bottom:5px;
+}
+
+#contentHeader h1 {
+	float: left;
+	padding: 10px 15px 0px 0;
+	text-align: left;
+}
+
+
+
+#pageActions .listOfLinks {
+	margin-bottom: 15px;
+	text-align: right;
+}
+
+#pageActions .listOfLinks li {
+	margin-bottom: 15px;
+	padding-right: .6em;
+    padding-left: .5em;
+}
+
+#pageActions .listOfLinks a,#pageActions .listOfLinks a:hover,#pageActions .listOfLinks a:visited,#pageActions .listOfLinks a:active
+	{
+	color: #333;
+}
+
+.listOfLinks .first .welcome {
+	color: #777;
+}
+
+.listOfLinks a, .listOfLinks span.linkTitle {
+	margin-right: 10px;
+}
+
+.listOfLinks .separator {
+	color:  #CCC;
+}
+
+.listOfLinks .darkseparator {
+	color:  #333;
+}
+
+#contentHeader #notifications {
+	text-align: center;
+}
+
+#contentHeader #notifications span {
+	line-height: 30px;
+	padding: 0px 10px;
+}
+
+#pageFooter {
+	margin-top: 10px;
+	border-top: 1px solid #999999;
+	padding-top: 5px;
+	width: 100%;
+	font-size: 10px;
+	overflow: hidden;
+	text-align: left;
+	
+}
+
+#pageFooter div {
+	float: left;
+}
+
+#pageFooter .poweredBy {
+	float: right;
+}
+
+/*#companyLogo, */
+#systemLogo {
+	float: left;
+	padding-left: 20px;
+	width: 215px;
+	margin-top: 5px;
+}
+
+#pageHeader #pageNavigation {
+	background-color: #666;
+	font-size: 14px;
+	-webkit-box-shadow: 0px 4px 8px -4px #666666;
+	box-shadow: 0px 4px 8px -4px #666666;
+}
+
+#pageNavigation a, #pageNavigation a:hover, #pageNavigation a:active, #pageNavigation a:visited
+{
+	text-decoration: none;
+	font-size: 1.1em;
+}
+
+#pageNavigation .speedLink, #pageNavigation .speedLink:hover, #pageNavigation .speedLink:active, #pageNavigation .speedLink:visited
+{
+	color: #FFFFFF;
+}
+
+#pageNavigation ul li .textLink{
+	padding-top: 7px;
+	padding-bottom: 14px;
+}
+
+#navigationContent {
+	width: 1000px;
+	margin: auto;
+}
+
+#navigationLinks{
+	padding-top: 10px;
+	float: left;
+}
+
+/*#menuHome {
+	display: block;
+	width: 35px;
+	height: 22px;
+	background: url(../../images/home.png) no-repeat scroll center center transparent;
+}
+
+#menuHome:hover {
+	background: url(../../images/home-over.png) no-repeat scroll center center transparent;
+}*/
+
+.speedLink img {
+	padding-left: 3px;
+	vertical-align: middle;
+}
+
+#smartSearchContainer {
+	padding-left: 758px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	*padding-left: 0;
+	*float : right;
+}
+
+.error, .errorMessage {
+	color: #F00;
+}
+
+.error ul {
+	/*border: 1px solid #FF3030;
+	background-color: #ffebeb;
+	font-weight: bold;*/
+}
+
+.message ul {
+	/*background-color: #EBF8CD;
+	border: 1px solid #CCCCCC;*/
+	font-weight: bold;
+	padding-top:10px;
+	padding-bottom:10px;
+
+	border: 1px solid #5fb336;
+	background-color: #e3f4db;
+	text-align: center;
+	font-size: 13px;
+}
+
+.largeText * {
+	font-size: 1.1em;
+}
+
+.list {
+	width: 100%;
+	margin: 5px 0px;
+	border-collapse: collapse;
+	border-bottom: 1px solid #CACACA;
+	emtpty-cells: show;
+    background-color: #fff;
+}
+
+/* workaround for IE because it doesn't respect min-width specified in  '.list td' css */
+td[class="actionsContainer"] {
+	width: 6em;
+}
+
+.list th,.list td {
+	padding: 9px 5px 9px 10px;
+	empty-cells: show;
+}
+
+.paged-table .select-column {
+    width:20px;
+}
+
+.list th {
+	background-color: #EEEEEE;
+	font-size: 1.1em;
+	font-weight: bold;
+}
+
+.list td {
+	border-top: 1px solid #CACACA;
+}
+
+table.list tr.multiSelected {
+    background-color: #D2E5FF;
+}
+
+.list tr:hover {
+	background-color: #EEEEEE;
+}
+
+.list tr:hover td {
+	color: #333;
+}
+
+.list td.name {
+	vertical-align: top;
+}
+
+.list th a,.list th a:visited,.list th a:hover {
+	color: #333333
+}
+
+.list th.checkBox, td.checkBox {
+    min-width: 0;
+}
+
+.list th.sorted {
+	padding-right: 17px;
+	background-repeat: no-repeat;
+	background-position: right;
+	background-color: #CCCCCC;
+	overflow: hidden;
+}
+
+.list th.down {
+	background-image: url(../../images/sort_arrow_down.gif);
+}
+
+.list th.up {
+	background-image: url(../../images/sort_arrow_up.gif);
+}
+
+.list .limitWidth{
+	max-width: 200px;
+}
+
+.simpleTable {
+	border-collapse: separate;
+	border-spacing: 0 2px;
+	border-bottom: 1px solid #ccc;
+	width: 100%;
+}
+
+.simpleTable th {
+	font-weight: bold;
+}
+
+.decorated th {
+	background-color: #eee;
+}
+
+.simpleTable td, .decorated th {
+	padding: 5px;
+}
+
+.simpleTable tr:hover {
+	background-color: #eee;
+}
+
+.rowName {
+	width: 300px;
+}
+
+
+.pastDue {
+	background-color: #ffebeb;
+}
+
+
+tr.pastDue:hover {
+	background-color: #ffe0e0;
+}
+
+.actions {
+	margin: 5px 0px 5px 0px;
+	font-size: 1.1em;
+}
+
+.inputForm table td {
+	padding: 2px 4px;
+	vertical-align: top;
+	overflow: visible;
+}
+
+.formLabel,.tdLabel {
+	font-weight: bold;
+}
+
+td.formAction {
+	text-align: right;
+}
+
+.infoFieldCol {
+	width: 250px;
+	float: left;
+	margin: 4px;
+}
+
+.selectBoxCol {
+	width: 150px;
+}
+
+.checkboxCol {
+	width: 70px;
+}
+
+.linkCol {
+	width: auto;
+}
+
+#infoFieldEditing {
+	padding: 2px;
+}
+
+.handle,.infoFieldHeader {
+	overflow: hidden;
+	clear: both;
+}
+
+.handle {
+	background-color: #F4FFFF;
+	margin: 4px 0px;
+	border: 2px solid #cfdddd;
+	zoom: 1;
+}
+
+.retired {
+	background-color: #E0E6E6;
+}
+
+.infoOptionContainer {
+	margin: 4px 2px;
+	border: 2px solid #cfdddd;
+	width: 400px;
+	overflow: auto;
+}
+
+.infoOptionHandle {
+	background-color: #F4FFFF;
+	margin: 4px 2px;
+	border: 2px solid #cfdddd;
+}
+
+.optional {
+	visibility: hidden;
+}
+
+.infoOptionContainer {
+	clear: both;
+}
+
+.adminLink {
+	margin-bottom: 1em;
+}
+
+.emptyList {
+	background-color:#e3e3e3;
+	text-align: center;
+	margin: 20px 0px;
+	border: 2px solid #666;
+	clear: both;
+}
+
+.emptyList h2 {
+	background-color: #666;
+	color: #FFF;
+}
+
+.emptyList p {
+	padding: 10px;
+}
+
+.contentTrim {
+	margin: 20px;
+}
+
+/*
+  page menu options
+ */
+.selected {
+	font-weight: bold;
+}
+
+#vendorContextForm {
+	float:right;
+	clear:both;
+	margin:5px 0;
+	margin-right:40px;
+}
+
+
+#vendorContextForm span {
+	margin: 0 5px;
+}
+
+
+.listOfLinks {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	width: 100%;
+	text-align: right;
+}
+
+.listOfLinks {
+	text-align: left;
+
+}
+
+.listOfLinks li {
+	display: inline;
+	border-left: 1px solid black;
+	padding-left: .8em;
+}
+
+.listOfLinks li.first {
+	border-left: none;
+	padding-left: 0;
+}
+
+.listOfLinks li.massUpdateIndicator {
+    border-left: none;
+}
+
+ul.navOptions {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	clear: both;
+	width: 100%;
+	text-align: left;
+	clear: both;
+}
+
+ul.navOptions li {
+	display: inline;
+	border-right: 1px solid black;
+	padding-right: .5em;
+	padding-left: .5em;
+}
+
+ul.navOptions li.last {
+	border-right: none;
+	padding-right: 0px;
+}
+
+table.inputForm tr {
+	background-image: url( ../images/grayline.gif );
+	
+}
+
+/* form styling */
+form.inputForm {
+	overflow: hidden;
+	width: 901px;
+}
+
+.inputForm p {
+	overflow: hidden;
+	width: 450px;
+	padding: 5px 0px;
+	border-bottom: 1px solid #D0DAFD;
+}
+
+.inputForm p label {
+	float: left;
+	display: block;
+	width: 200px;
+	font-weight: bold;
+}
+
+.inputForm p span {
+	float: left;
+	display: block;
+}
+
+.inputForm p span select,.inputForm p span textarea {
+	width: 229px;
+}
+
+.inputForm p span input[type="text"] {
+	width: 229px;
+}
+
+.inputForm p span  input.textbox {
+	width: 229px;
+}
+
+.inputForm p span  textarea {
+	height: 100px;
+}
+
+form.oneColumn,.oneColumn {
+	width: 651px;
+}
+
+.wwgrp,.dateSelector,.wwerr {
+	float: left;
+	width: 450px;
+	overflow: hidden;
+	padding: 10px 0px;
+	text-align: left;
+	/*height:2em;*/
+}
+
+.updating {
+	visibility : hidden;
+}
+
+.updating img {
+	margin-bottom : 5px; 
+}
+
+.wwerr .errorMessage {
+	padding-left: 200px;
+}
+
+.dates {
+	overflow: auto;
+}
+
+.dates .wwgrp {
+	width: 350px;
+}
+
+.oneColumn .wwgrp,.oneColumn .wwerr {
+	width: 650px;
+}
+
+.dateSelector {
+	width: 100px;
+}
+
+.wwlbl,.wwctrl {
+	display: block;
+	float: left;
+}
+
+.wwlbl {
+	font-weight: bold;
+	width: 200px;
+}
+
+div.formAction {
+	overflow: hidden;
+	clear: both;
+	padding: 10px 0px;
+	padding-right: 10px;
+}
+
+#archivedCustomerList div.formAction ,#customerList div.formAction{
+	clear: none;
+}
+
+.formRowHolder {
+	overflow: hidden;
+	width: 100%;
+	clear: both;
+	background-image: url( ../images/grayline.gif );
+	background-repeat: repeat-x;
+	background-position: bottom;
+}
+
+.wwctrl select,.wwctrl textarea,.listForm select,.listForm textarea {
+	width: 229px;
+}
+
+.wwctrl input[type="text"],.listForm input[type="text"] {
+	width: 229px;
+}
+
+.wwctrl input.textbox,.listForm input.textbox {
+	width: 229px;
+}
+
+.wwctrl textarea,.listForm textarea {
+	height: 100px;
+}
+
+.dates .wwctrl input[type="text"],.wwctrl input.dates {
+	width: 140px;
+}
+
+.formAction div {
+	padding: 0px 10px;
+	display: inline;
+}
+
+.unitMeasureDiv {
+	color: #000000;
+	background-color: white;
+	border: 2px solid gray;
+	width:360px;
+}
+
+.crudForm .unitMeasureDiv {
+	width: 350px;
+}
+
+.unitMeasureDiv * {
+	z-index: 102;
+}
+
+.quickForm {
+	width: 100%;
+	overflow: hidden;
+	padding: 2px 10px;
+}
+
+.quickForm input[type="text"], #userGroup, #userType{
+	width: 150px;
+	}
+
+.quickForm .wwgrp {
+	width: auto;
+}
+
+.quickForm .wwlbl,.quickForm .wwctrl {
+	width: auto;
+	margin-right: 10px;
+}
+
+.quickForm .filterActions {
+	float: left;
+	clear: none;
+	text-align: left;
+	width: 300px;
+}
+
+.filterActions div{
+	display: inline;
+	width: 50px;
+	margin-right: 7px;
+} 
+
+.filterActions{
+	padding: 5px;
+}
+
+.filterActions input{
+	clear: none;
+	padding: 2px;
+	float: left;
+	width: 50px;
+	margin-right: 7px;
+}
+
+.dropBox {
+	width: 250px;
+	margin: 0px 5px;
+	border: 1px solid #cfdddd;
+	float: left;
+}
+
+.dropBox .dropBoxPadding {
+	padding: 10px;
+}
+
+.dropBox h3,.dropBox .dragOption {
+	padding: 5px;
+	border: 1px solid #cfdddd;
+}
+
+.dropBox ul {
+	padding: 5px 15px;
+}
+
+.dropBox h3 {
+	background-color: #adbbbb
+}
+
+.dropBoxHolder {
+	padding: 10px;
+	border: 1px solid #cfdddd;
+	overflow: hidden;
+}
+
+.currentPage {
+	font-weight: bold;
+}
+
+table.legend {
+	margin: 10px;
+}
+
+table.legend th {
+	font-weight: bold;
+	width: 100px;
+}
+
+table.legend td,table.legend th {
+	padding: 10px;
+	border: 1px solid #cfdddd;
+}
+
+.help {
+	border: 2px solid #cfdddd;
+	padding: 10px;
+	margin: 5px 10px;
+}
+
+.help h4 {
+	font-weight: bold;
+	margin: 5px;
+}
+
+.total {
+	font-weight: bold;
+}
+
+.confirmMessage {
+	padding: 5px 10px;
+}
+
+.label {
+	font-weight: bold;
+}
+
+.view {
+	padding: 10px;
+}
+
+.view div {
+	margin: 10px 0px;
+	overflow: hidden;
+	background-image: url( ../images/grayline.gif );
+	background-repeat: repeat-x;
+	background-position: bottom;
+}
+
+.listForm .infoSet {
+	overflow: auto;
+}
+
+.view .label,.listForm .label {
+	display: block;
+	float: left;
+	width: 200px;
+	padding: 5px;
+}
+
+.view .field,.listForm .field {
+	display: block;
+	float: left;
+	clear: right;
+	padding: 5px;
+}
+
+.uploadHolder {
+	padding-bottom: 2px;
+}
+
+.modalBox {
+	min-height: 100px;
+}
+
+#modalBox_message {
+	margin: 10px 10px;
+}
+
+.modalHeader {
+	background-color: #0088BD;
+	color: white;
+	text-align: center;
+}
+
+.override,.overrideForm {
+	padding: 5px;
+	margin: 5px;
+	border: 1px solid #cfdddd;
+}
+
+.name {
+	font-weight: bold;
+}
+
+.infoField {
+	padding: 4px;
+}
+
+.checkboxRow {
+	width: 60px
+}
+
+.selectedEvent, .selectedAsset {
+	background-color: #D2E5FF;
+}
+
+tr.selectedEvent:hover, tr.selectedAsset:hover{
+	background-color: #D2E5FF;
+}
+
+#compliancePassed {
+	background-image: url(../../images/pass.jpg);
+}
+
+#complianceFailed {
+	background-image: url(../../images/fail.jpg);
+}
+
+#noCompliance {
+	background-image: url(../../images/unknown.jpg);
+}
+
+.complianceMessage {
+	padding: 5px 15px 5px 100px;
+	background-repeat: no-repeat;
+	min-height: 120px;
+}
+
+/* VIEW STYLES */
+.viewSection {
+	line-height: 1.4em;
+	margin: 5px 0px;
+}
+
+.viewSection p {
+	border-bottom: 1px solid #E2E2E2;
+	margin-top: 2px;
+	overflow: hidden;
+	padding: 5px 15px;
+}
+
+.viewSection p label,.viewSection h2 label {
+	display: block;
+	float: left;
+	width: 30%;
+}
+
+.viewSection p span,.viewSection h2 span {
+	display: block;
+	float: left;
+	width: 60%;
+	margin-left: 15px;
+	color: #333399;
+}
+
+.viewSection p span.heading {
+	color: #333;
+}
+
+.viewSection p span input {
+	width: 90px;
+}
+
+.viewSection p span input[type="button"] {
+	width: auto;
+}
+
+.smallViewSection {
+	width: 450px;
+}
+
+.smallViewSection p span {
+	width: 200px;
+}
+
+.smallViewSection p label {
+	width: 185px;
+}
+
+.fieldValue {
+	color: #333399;
+}
+
+.dropDownOption {
+	font-size: 0.8em;
+	display: none;
+}
+
+.viewSection h2 {
+	overflow: hidden;
+	padding: 5px 15px;
+	margin-bottom: 5px;
+	background-color: #EEEEEE;
+	border-bottom:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+}
+
+.setViewSection p span,.setViewSection h2 span {
+	color: #333;
+	width: 300px;
+}
+
+.setViewSection p label,.setViewSection h2 label {
+	width: 160px;
+}
+
+#assetAttributes {
+	clear: both;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+strong.pass {
+	color: green;
+}
+
+strong.fail {
+	color: #FE2C2D;
+}
+
+.columnLeft {
+	float: left;
+}
+
+.columnRight {
+	float: right;
+	clear: right;
+}
+
+#formErrors {
+	width: 100%;
+}
+
+.formErrors {
+	border:1px solid #FFC2C2;
+	background-color:#FFEBEB;
+	padding: 10px;
+	margin: 10px 0;
+}
+
+.formErrors ul li span {
+	width: auto;
+}
+
+.formErrors ul {
+	margin-left: 20px;
+}
+
+.formErrors ul li {
+	list-style-type: square;
+	padding: 5px;
+	vertical-align:middle;
+	margin-left:2em;
+}
+
+#formErrors h2 {
+	background-color: transparent;
+	padding: 0px;
+	margin: 0px;
+	border:none;
+}
+
+#formErrors * {
+	float: none;
+}
+
+.buttonGroup {
+	overflow: hidden;
+}
+
+.buttonGroup li {
+	margin: 0 2.5px;
+	float: left;
+	width: 60px;
+	text-align: center;
+	padding: 5px 15px;
+}
+
+.buttonGroup div {
+	height: 35px;
+	overflow: hidden;
+}
+
+div.eventButton {
+	height: 40px;
+}
+
+li.buttonGroupLabels {
+	width: 100px;
+	text-align: left;
+}
+
+.buttons input {
+	width: 150px;
+}
+
+.buttonGroup input {
+	width: 50px;
+}
+
+.buttonGroup select {
+	width: 65px;
+}
+
+.disabledInput {
+	display: none;
+}
+
+.buttonGroup input {
+	width: 50px;
+}
+
+.buttonGroup select {
+	width: 60px;
+}
+
+#assetSearch {
+	border-bottom: 1px solid #D0DAFD;
+	padding: 5px 15px;
+}
+
+#assetSearch input {
+	margin: 0px 5px;
+}
+
+#assetSearch label {
+	margin-right: 10px;
+}
+
+#assetSearch input[type="text"],#assetSearch input.textfield {
+	width: 350px;
+}
+
+.lightBoxView {
+	width: 500px;
+	height: 400px;
+	overflow: auto;
+}
+
+.crudForm {
+	width: 500px;
+}
+
+.crudForm .list {
+	width: 450px;
+}
+
+.crudForm h2 {
+	margin: 5px 0px;
+	background-color: #EEEEEE;
+	border-bottom:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+}
+
+.largeForm {
+	overflow: hidden;
+	width: 901px;
+}
+
+.largeForm .list {
+	width: 850px;
+}
+
+.crudForm p, .resultContainer {
+	padding: 5px 0px;
+	border-bottom: 1px solid #E2E2E2;
+}
+
+.crudForm p label, .resultContainer label{
+	float: left;
+	display: block;
+	width: 150px;
+	padding: 5px 15px;
+	padding-left: 30px;
+	color: #333;
+}
+
+.crudForm p span,.crudForm .infoSet div.simpleContainer {
+	float: left;
+	display: block;
+	padding: 5px 0px;
+	width: 305px;
+}
+
+.crudForm p span.unitOfMeasure,.crudForm p span.date {
+	width: 200px;
+}
+
+.crudForm p span.timeZone,.crudForm .infoSet span.timeZone {
+	display: inline;
+	float: none;
+	width: auto;
+}
+
+.crudForm .infoSet span input.dateTime {
+	width: 200px;
+}
+
+.crudForm p span.action {
+	width: auto;
+}
+
+.crudForm p  select {
+	width: 229px;
+}
+
+.crudForm p input[type="text"],.crudForm p input[type="password"],.crudForm p input.textbox
+	{
+	width: 229px;
+}
+
+.crudForm p span.unitOfMeasure input,.crudForm p span.date input {
+	width: 140px;
+}
+
+.crudForm p input.textbox {
+	width: 229px;
+}
+
+.crudForm p textarea {
+	height: 100px;
+}
+
+.crudForm .actions {
+	clear: both;
+	background-color: #EEE;
+}
+
+.formAction a, .formAction div{
+	margin-left: 2.5px;
+	margin-right: 2.5px;
+	}
+
+.crudForm .borderLessFormAction{
+	border-top: none;
+}
+
+.crudForm br {
+	margin: 5px 0px;
+}
+
+.largeForm p span {
+	width: 700px;
+}
+
+.crudForm .infoSet {
+	overflow: hidden;
+	padding: 5px 0px;
+	border-bottom: 1px solid #D0DAFD;
+}
+
+.crudForm .infoSet label {
+	float: left;
+	display: block;
+	width: 150px;
+	padding: 5px 15px;
+	padding-left: 20px;
+	color: #333;
+}
+
+.crudForm .infoSet label.line {
+	width: auto;
+}
+
+.crudForm .infoSet span,.crudForm .infoSet div.simpleContainer {
+	float: left;
+	display: block;
+	padding: 5px 0px;
+	width: 305px;
+	line-height: 18px;
+}
+
+.crudForm .infoSet label,.crudForm .infoSet span {
+	line-height: 18px;
+}
+
+.crudForm .infoSet span.unitOfMeasure,.crudForm .infoSet span.date {
+	width: 200px;
+}
+
+.crudForm .infoSet span.action {
+	width: auto;
+}
+
+.crudForm .infoSet  select,.crudForm .infoSet  textarea {
+	border: 1px solid #9C9C9C;
+	width: 260px;
+}
+
+.crudForm .infoSet input[type="text"],.crudForm .infoSet input.textbox {
+	width: 229px;
+}
+
+.infoSet {
+	min-height: 40px;
+}
+
+.crudForm .infoSet span.unitOfMeasure input,.crudForm .infoSet span.date input
+	{
+	width: 140px;
+}
+
+.crudForm .infoSet textarea {
+	height: 100px;
+}
+
+.largeForm .infoSet span {
+	width: 700px;
+}
+
+.ajaxWindow {
+	width: 800px;
+	text-align: left;
+}
+
+.ajaxWindow .list {
+	width: 750px;
+}
+
+#modalBoxHolder {
+	position: absolute;
+	left: -100000000px;
+	top: 1px;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+.easyForm {
+	width: 450px;
+	padding: 0 5px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.easyForm input,.easyForm button {
+	font-size: 1.2em;
+	padding: 5px 0;
+}
+
+.easyForm input[type="text"],.easyForm input[type="password"],.easyForm input.textbox,.easyForm input.passwordBox
+	{
+	width: 444px;
+}
+
+.easyForm input[type="submit"],.easyForm button {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+.easyForm .fieldHolder,.easyForm .label {
+	font-size: 1.2em;
+	display: block;
+	padding: 5px 0 0 0;
+}
+
+.easyForm .label {
+	font-weight: bold;
+}
+
+.easyForm .formAction {
+	padding: 5px 0 0 0;
+}
+
+.instructions {
+	color: #666;
+	padding: 5px 0 5px 5px;
+	font-size: 1.5em;
+}
+
+.smallInstructions {
+	font-size: 1em;
+	padding-left: 0;
+}
+
+.viewMore {
+	text-align: right;
+	font-weight: normal;
+}
+
+.pageSection {
+	width: 950px;
+	margin: 5px 0;
+}
+
+.sectionContent {
+	margin-top: 5px;
+	overflow: hidden;
+}
+
+pageSection.largeForm {
+	width: 950px;
+}
+
+.twoColumn {
+	float: left;
+	width: 470px;
+}
+
+.lastColumn {
+	float: right;
+}
+
+.twoColumn .infoSet span {
+	width: 270px;
+}
+
+.bigForm {
+	width: 950px;
+}
+
+.enlargedInput input{
+	 font-size: 16px;
+}
+
+.pageSection .infoSet, .pageSection .formAction {
+	border-bottom: 1px solid #e2e2e2;
+}
+
+.pageSection .infoSet label {
+	padding-left: 15px;
+	padding-right: 10px;
+	width: 170px;
+}
+
+.twoColumns {
+	width: 811px;
+}
+
+.twoColumns .infoSet {
+	float: left;
+}
+
+.twoColumns .container {
+	float: left;
+	clear: both;
+	width: 100%;
+}
+
+.twoColumns .infoSet label {
+	width: 150px;
+}
+
+.twoColumns .infoSet span,.twoColumns .infoSet div.simpleContainer {
+	width: 230px;
+}
+
+.twoColumns .infoSet  select,.twoColumns .infoSet  textarea,.twoColumns .infoSet input[type="text"],.twoColumns .infoSet input.textbox
+	{
+	width: 180px;
+}
+
+.twoColumns .infoSet span.unitOfMeasure input,.twoColumns .infoSet .fieldHolder input.date
+	{
+	width: 150px;
+}
+
+.box {
+	margin-top: 5px;
+	width: 180px;
+}
+
+.rightBox {
+	float: right;
+}
+
+.box h2 {
+	line-height: 21px;
+	padding-left: 5px;
+	background-color: #D0DAFA;
+}
+
+.boxContent {
+	border-color: #D0DAFD;
+	border-style: solid;
+	border-width: 0 1px 1px 1px;
+}
+
+.quickView {
+	border: 1px solid black;
+	background-color: #fff;
+	padding: 15px;
+	width: 300px;
+	height: auto;
+}
+
+.inline {
+	display: inline;
+	width: auto;
+}
+
+h3.inline {
+	padding-right: 10px;
+}
+
+.description {
+	font-size: 0.9em;
+	font-weight: lighter;
+}
+
+.suggested,.warning {
+	background-color: #FFFF66;
+}
+
+.columnSeperator {
+	text-align: center;
+	float: left;
+	font-size: 2.5em;
+	color: #999;
+	width: 65px;
+}
+
+.alternateActions {
+	background-color: #eee;
+	padding: 5px;
+}
+
+.alternateActions a.disabled,.alternateActions a.disabled:hover,.alternateActions a.disabled:active,.alternateActions a.disabled:visited
+	{
+	color: #333;
+}
+
+.timeZone {
+	display: auto;
+	width: auto;
+}
+
+.options {
+	float: left; /* needed to create the tab effect */
+	width: 100%;
+	clear: both;
+	padding-top: 8px;
+	border-bottom: 1px solid #999999;
+}
+
+.options li {
+	float: left;
+	margin-left: 10px;
+	border-left: 1px solid #999999;
+	border-right: 1px solid #999999;
+	border-top: 1px solid #999999;
+	font-size: 13px;
+	background-color: #eeeeee;
+}
+
+.options li.add {
+	float: right;
+	margin-left: 0px;
+	margin-right: 10px;
+}
+
+.options li a,.options li.selected {
+	padding: 5px 10px;
+	text-decoration: none;
+	display: block;
+}
+
+.options li a:hover {
+	text-decoration: underline;
+}
+
+.options li.selected,.options li:hover {
+	background-color: #fff;
+}
+
+.options li.selected {
+	position: relative;
+	bottom: -1px;
+	color:#333333;
+}
+
+.options a,.options a:hover,.options a:visited,.options a:active {
+	color: #333333;
+}
+
+#smartSearch {
+	height: 38px;
+}
+
+#smartSearch input {
+	font-size: 12px;
+	padding: 5px;
+}
+
+#smartSearch input[type="text"],#smartSearch input.textbox {
+	width: 230px;
+	border: 1px solid #999;
+	margin: 5px 0;
+}
+
+input.description {
+	color: #666;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.backToLink {
+	float: left;
+	margin-left: 5px;
+	margin-top: 1.2em;
+}
+
+.header-right {
+	float: right;
+	margin-top:10px;
+}
+
+.header-right a {
+	color:#999;
+}
+
+.assignToBox {	
+	background-color:#EAEAEA;
+	padding: 10px 10px 10px 0
+}
+
+.labelHeading {
+	padding-left: 9px;
+	position:relative;
+	top: -2px;
+	font-size:1.0em;
+	font-weight: bold;
+}
+
+#freeFormLabel{
+	display:inline;
+	float: none;
+	padding-left:0;
+	text-align:left;
+	width: 125px;
+}
+	
+#eventListTable tr:hover td{
+	background-color:white;
+	color:#333399;
+}
+
+.frequency input{
+	width:25px;
+
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
+.customer, .orgPickerFormActions a{
+	margin-left:1px;
+	margin-right:1px;
+}
+
+#orgFormContainer{
+	position:absolute;
+	width:550px;
+	border:2px solid #999999;
+	left: 1px; 
+	top: 1px;
+	background:#EAEAEA;
+	padding:12px;
+}
+
+.headerWithFootnote {
+	padding: 5px 0;
+	margin: 0;
+}
+
+.tipContainer{
+	padding-left: 15px;
+}
+
+.headerWithFootnote .headerText {
+	font-size: 1.2em;
+	line-height: 21px;
+	color: #333333;
+	font-weight: bold;
+	text-align: left;
+	padding-left: 5px;
+}
+
+.headerWithFootnote img{
+	float:left;
+}
+
+.headerWithFootnote .footnoteText {
+	font-size: 11px;
+	padding-left:5px;
+	padding-top: 5px;
+	float:left;
+}
+
+#listContainer {
+	float:right;
+    overflow: hidden;
+    display: inline-block;
+}
+
+#listContainer .listOfLinks {
+	padding: 0.5em 0 0.5em 0.5em;
+	margin: 40px 0 0.5em 0;
+	float:right;
+}
+
+#listContainer .listOfLinks a, #listContainer .listOfLinks a:visited {
+	color: #E28500;
+}
+
+#listContainer .listOfLinks a:hover {
+	color: #BC6F00;
+}
+
+#listContainer .listOfLinks li {
+	border:none;
+}
+
+#floatingDropdownStartEventLink{
+	border-top: 1px solid #cccccc;
+	border-bottom: 1px solid #cccccc;
+}
+
+#floatingDropdownStartEventLink a {
+	padding-top: 17px;
+	padding-bottom: 17px;
+}
+
+.dropDownLink{
+	text-decoration: none;
+	width : 55px;
+}
+
+.dropDownLink span{
+	text-decoration: underline;
+}
+
+.dropDownLink img {
+	padding: 6px 0px 2px 0px; 
+}
+
+#reducedLineHeightLabel{
+	line-height: normal;
+}
+
+.initialMessage{
+	border:1px solid #CCCCCC;
+	background-color: #EEEEEE;
+	padding: 30px;
+}
+
+.initialMessage input{
+	margin-top: 4px;
+	padding: 4px;
+	font-size: 14px;
+	margin-left: 183px;
+}
+
+.schedulesTextContainer{
+	background-image: url(../../images/schedules-blank-slate-icon.png);
+	background-repeat: no-repeat;
+	margin-left: 240px;
+	padding-left: 75px;
+	padding-bottom: 10px;
+	}
+
+.textContainer{
+	background-image: url(../../images/reporting-bs-icon.png);
+	background-repeat: no-repeat;
+	background-position: left 11.5px;
+	margin-left: 90px;
+	padding-left: 90px;
+}
+
+.textContainer p, .schedulesTextContainer p{
+	font-size: 14px;	
+	line-height: 20px;
+	padding: 5px 5px 5px 0;
+}
+
+.textContainer p{
+	padding: 5px;
+}
+
+.textContainer h1{
+	padding: 5px;
+}
+
+#savedReportCreate_name{
+	padding:3px;
+}
+
+#updatePassword, #updateSecurityCard{
+	padding-top: 10px;
+}
+
+.pageInstructions{
+	padding: 10px;
+}
+
+.selectionNotice {
+    text-align: center;
+    font-size: 1.1em;
+    margin: 10px 0 10px 0;
+}
+
+.decoratedHeaderAlternative{
+background-color: #EEEEEE;
+	padding:5px 15px;
+	border-top:1px solid #CCCCCC;
+	border-bottom:1px solid #CCCCCC;
+	font-size: 1em;
+}
+
+.decoratedHeaderAlternative img {
+	margin-top : 5px;
+}
+
+
+ul.borderLess{
+	border-style: none;
+}
+
+.crudForm .fieldGroup .infoSet, .fluidSets .fieldGroup .infoSet, .fieldGroup .infoSet{
+	border-top: none;
+	border-bottom: none;
+}
+
+.fieldGroup{
+	display:block;
+	float:left;
+	overflow: hidden;
+	width:495px;
+}
+
+.floatLeft{
+	float:left;
+	}
+
+.floatRight{
+	float:right;
+	}
+
+.fieldGroupGap{
+	margin-right: 10px;	
+}
+
+.infoSet .fieldHolder input[type="text"], .infoSet .fieldHolder input[type="password"], .fieldHolder textarea{
+	padding: 4px;
+	border: 1px solid #9C9C9C;
+	color: #555555;
+	width: 250px;
+}
+
+.infoSet .fieldHolder input[type="text"], .infoSet .fieldHolder input[type="password"]{
+	overflow: hidden;
+}
+
+.fieldGroup h2,.formGroup h2{
+	margin-bottom: 5px;
+	background-color:#eeeeee;
+	border-bottom:1px solid #CCCCCC;
+	border-top:1px solid #CCCCCC;
+	padding-top:3px;
+	padding-bottom:3px;
+}
+
+.infoSet .fieldHolder input[type="checkbox"]{
+	 vertical-align: bottom;
+}
+
+.fieldHolder label.checkBoxLabel{
+	text-align: left;	
+	width: auto;
+	padding: 10px 0 0 0;
+	line-height: 100%;
+}
+
+.fieldHolder label.checkBoxLabel input{
+	width: 13px;
+    height: 13px;
+    padding: 0;
+    margin:0;
+    vertical-align: bottom;
+    position: relative;
+    *overflow: hidden;
+	}
+	
+.instructionsBox{
+	background-color: #eee;
+	text-align: center;
+	font-size: 13px;
+	padding: 10px;
+	border: 2px solid #ccc;
+	margin: 5px 0;
+	}
+
+.crudForm .infoSet input.criteriaUnitOfMeasureField {
+    width: 60px;
+    display:block;
+    float:left;
+}
+
+div.unitOfMeasureName {
+    font-weight: bold;
+    display: block;
+    float: left;
+    padding-left: 5px;
+}
+
+#newScheduleForm {
+	overflow:hidden;
+	width:600px;
+	border:solid 1px #DDD;
+	background-color:#fff;
+	z-index: 1;
+}
+
+#newScheduleForm h2{
+	margin: 0;
+	border-top: 0 none;
+}
+
+#newScheduleForm button{
+	padding: 4px;
+}
+	
+#newScheduleForm .blockSeparated{
+	font-size: 1.1em;
+	padding: 5px;
+}
+
+#newScheduleForm .infoSet .fieldHolder{
+	width: 135px;
+}
+
+#newScheduleForm .infoSet .label{
+	width: 170px;
+	padding-left: 15px;
+	padding-right: 10px;
+	font-weight: normal;
+	text-align: right;
+}
+
+#newScheduleForm .infoSet select{
+	border: 1px solid #9C9C9C;
+    color: #555555;
+    padding: 4px;
+}
+
+#newScheduleForm .infoSet .egColor {
+	display: inline;
+	float: none;
+}
+
+#newSchedule_nextDate {
+	width: 150px;
+}
+
+.crudForm .infoSet .dateQuickLinks{
+	margin-left: 195px;
+	width: 340px;
+}
+
+.infoSet .dateQuickLinks {
+	margin-left: 200px;
+	width: 340px;
+	clear: both;
+	display: block;
+}
+
+#dueDate {
+	width: 95px;
+}
+
+#startEvent{
+	background-image: url(../../images/quick-event-plus-icon.png);
+}
+	
+#newScheduleButton{
+	background-image: url(../../images/calendar-icon.png);
+}
+
+#manageEvent {
+	background-image: url(../../images/calendar-icon.png);
+	margin-left: 20px;
+}
+
+.headerActions{
+ 	margin-top: 10px;
+}
+
+#startEvent, #manageEvent, #newScheduleButton{
+	font-size: 12px;
+	padding-left: 22px;
+	padding-bottom: 10px;
+	padding-top: 2px;
+	background-repeat: no-repeat;
+}
+
+.passColor p, .failColor p, .naColor p{
+	padding: 5px 15px;
+	width: 45px;
+	text-align: center;
+}
+
+
+.naColor p{
+	background-color: #E3E3E3;
+}
+
+.failColor p{
+	background-color: #E9BDBD;
+}
+
+.passColor p{
+	background-color:#DBF1BA;
+}
+
+#scheduleList th{
+	width: 200px;
+}
+
+.editEventSchedule{
+	width: 380px;
+}
+
+.editEventSchedule select, .editEventSchedule input{
+	width: 125px;
+}
+
+.eventScheduleEditActions{
+	margin-top: 3.5px;
+	margin-left: 5px;
+	width: 70px;
+	display: inline;
+}
+
+#scheduleList .reducedWidthTableHeading{
+	width: 100px;	
+}
+
+.scheduleDate{
+	float:left;
+	margin: 5px 0 0 15px;
+    width:66px;
+}
+
+.assignToMeLink{
+	float: left;
+	clear: left;
+	margin-left: 129px;
+	width: 75px;
+}
+
+#errorContainer {
+	background-color: #F5F5F5;	
+	border-style: solid;
+	border-width: 1px;
+	border-color: #E2E2E2;
+	width: 470px;
+	margin-left:auto;
+	margin-right:auto;
+	padding: 20px;
+}
+
+#errorList {
+	background: no-repeat url(../../images/caution.png) 10px center;
+	border-style: solid;
+	border-width: 1px;
+	border-color: #FFD700;
+	padding: 25px;	
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#errorList .errorMessage{
+	color: black;
+	margin-left: 50px;
+	font-size: 14px;
+	display: block;
+}
+#errorContainer h2 {
+	font-size: 20px;
+	padding : 10px 0;
+}
+
+#errorContainer p {
+	font-size: 14px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.egColor {
+	color: #999999;
+	padding : 0px 0px 0px 0px !important;
+}
+
+.labelDescription {
+	color: #666;
+}
+
+.useractions{
+	background-repeat: no-repeat;
+	background-position: left 1px;
+	padding-left: 25px;
+	padding-right: 40px;
+	margin-top: 10px;
+	float: left;
+	padding-bottom: 10px;
+}
+
+.viewactions {
+	display: block;
+	width: 100%;
+	padding: 0;
+	float: left;
+	height: 40px;
+}
+
+.useractions p {
+	line-height: 24px;
+}
+
+.delete{
+	background-image: url(../../images/delete-icon.png);
+}
+
+.changeaccount{
+	background-image: url(../../images/upgrade-icon.png);
+}
+
+.email{
+	background-image: url(../../images/welcome-email-icon.png);
+}
+
+.addUser{
+	background-image: url(../../images/add-user.png);
+}
+
+.merge {
+	background-image: url(../../images/merge-icon.png);
+}
+
+.addicon {
+	background-image: url(../../images/add-division-icon.png);
+}
+
+.crudForm .infoSet label .required {
+	display: inline;
+	float: none;
+    width:auto;
+    padding: 0 2px 0 0;
+}
+
+th.wicket_orderUp {
+	padding-right: 17px;
+	background-repeat: no-repeat;
+	background-position: right;
+	background-color: #CCCCCC;
+	overflow: hidden;
+    background-image: url(../../images/sort_arrow_down.gif);
+}
+
+th.wicket_orderDown {
+	padding-right: 17px;
+	background-repeat: no-repeat;
+	background-position: right;
+	background-color: #CCCCCC;
+	overflow: hidden;
+    background-image: url(../../images/sort_arrow_up.gif);
+}
+ 
+
+
+.policy {
+	overflow: hidden;
+	padding: 5px 0px;
+}
+
+.policy input {
+	padding-top: 4px;	
+	padding-bottom: 4px;	
+}
+
+.policy label {
+	float : left;
+	width : 25%;
+	display : block;
+ 	padding : 5px 15px 0px 20px;
+ 	line-height: 18px;
+	font-weight:bold;	
+}
+.pwPolicy input {
+	margin-top:15px;
+}	
+
+.pwPolicy label {
+	width : 375px;
+}
+
+.policy p {
+	border-bottom:0px;
+	font-weight:lighter;
+	color:#888;
+}
+
+
+.googleMap {
+	border: 2px;	
+}
+
+.allEventsMap {
+	height: 550px;
+}
+
+.all-events-map {
+    margin-top: 50px;
+    width: 100%;
+    height: 550px;
+    border: 2px;
+}
+
+.eventMap { 
+	height: 300px;
+}
+
+#assetSummary .infoSet {
+    min-height:20px;
+}
+
+.separatedField { 
+	border-bottom: 1px solid #e2e2e2;	
+}	
+
+.extendedOption {
+	display : block;
+	overflow: hidden;
+	margin: 5px 5px 5px 5px;
+	padding-bottom : 25px;
+	padding-top: 10px;
+}
+
+.extendedOption label input {
+	float:left;
+	width:30px;
+	vertical-align: middle;	
+}
+
+.extendedOption label {
+	color: #000;		
+	float : left;
+	display : block;	
+	font-weight : bold;
+	vertical-align: middle;
+}
+
+.extendedOption p {
+	clear: both;
+	border-bottom: 0px;
+	text-align : left;	
+	margin-left: 30px;	
+}
+
+.extendedOption div {
+	padding : 0px 0px 10px 10px;
+}
+
+.checkboxWithImageAndText { 
+	padding : 10px;
+}
+
+.checkboxWithImageAndText img { 
+	float : left;
+	margin-right : 10px;
+}
+
+.checkboxWithImageAndText span { 
+	padding-bottom: 8px;	
+	display : block;
+}
+
+.checkboxWithImageAndText label {
+	display : inline;
+	vertical-align:text-bottom;
+	line-height: 18px;
+} 
+
+.checkboxWithImageAndText input {
+	display: block;
+	float: left;
+	vertical-align: middle;
+	margin-right: 8px;
+} 
+
+.dateFormat select {
+	display:block;
+	margin-top: 10px; 
+	padding-top:4px;
+	padding-bottom: 4px;
+}
+
+.padded {
+	margin: 10px 10px;
+	padding-bottom: 10px; 
+	padding-top: 5px; 
+}
+
+.inputsWithLegend lablledInput {
+	 float: left;
+}
+
+.inputsWithLegend .legend div {
+	float: left;
+	display : block;
+	padding: 10px;
+}
+
+.inputsWithLegend .legend {
+	width : 50%;
+	float : right; 
+	display : block;
+	border: 1px solid #ccc;
+	background-color : #eee;
+	margin-top : 10px;
+	margin-bottom: 10px;
+}
+
+inputsWithLegend .legend span { 
+	
+}
+
+.labelledInput {
+	display : block;	
+	text-align : left;
+}
+ 
+.labelledInput div {
+	padding-bottom:10px;	 	 
+ }
+
+.labelledInput {
+	margin: 5px 5px 5px 5px;
+	padding-top:10px;	
+}
+
+.labelledInput label {
+	color: #000;
+	padding-right : 10px;
+	width : 150px;		
+	float : left;
+	font-weight : bold;
+	text-align: right;
+}
+
+.labelledInput input {
+	padding: 4px;
+	width: 150px;
+}
+
+/* .assetEvents .list {
+	margin-top: -3px;
+}
+ */
+.assetEvents {
+	position: relative;
+	top: 5px;	
+	clear:both;
+	float:none; 
+	width: 100%;
+}
+
+.assetEvents #resultsTable {
+	margin-top: 25px; 
+}
+
+.formAction {
+	clear: both;
+	border-top: 1px solid #E2E2E2;
+	margin-top: 5px;
+	background-color: #F8F8F8;
+	padding: 15px 10px;
+	border-bottom: 1px solid #E2E2E2;
+}
+
+.formAction button,.formAction input[type="submit"] {
+	margin-left: 10px;
+	margin-right: 2.5px;
+	padding: 0 2px;
+	font-size: 1.2em;
+}
+
+.formAction a {
+	font-size: 12px;
+}
+
+.identifierLabel {
+    display:inline;    
+    word-wrap:break-word;
+}
+
+
+/* ICONS */
+.entypo-icons {
+    background: url(/fieldid/images/icons/entypo.png) no-repeat;
+    width: 20px;
+    height: 20px;
+    text-indent: -9999px;
+    display: inline-block;
+    *display: block; /* lt IE7 */
+    margin-top: 4px;
+}
+.entypo-checkmark { background-position: 0 0;}
+.entypo-x { background-position: -20px 0;}
+.entypo-list { background-position: -40px 0;}
+.entypo-caret-down { background-position: -60px 0;}
+.entypo-caret-up { background-position: -80px 0;}
+.entypo-search { background-position: -100px 0;}
+
+/* http://nicolasgallagher.com/micro-clearfix-hack/ */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.clearfix {
+    *zoom: 1;
+}
+ /* UTILITY CLASSES */
+.pull-right {
+	float: right;
+}
+.pull-left {
+	float: left;
+}
+

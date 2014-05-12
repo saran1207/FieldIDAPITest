@@ -94,6 +94,8 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
 
     private boolean linkable = false;
 
+    private boolean hasProcedures = false;
+
     public AssetType() {
         this(null);
     }
@@ -565,5 +567,11 @@ public class AssetType extends ArchivableEntityWithTenant implements NamedEntity
         return allEventTypes;
     }
 
+    public boolean hasProcedures() {
+        return hasProcedures;
+    }
 
+    public void setHasProcedures(boolean hasProcedures) {
+        this.hasProcedures = hasProcedures;
+    }
 }

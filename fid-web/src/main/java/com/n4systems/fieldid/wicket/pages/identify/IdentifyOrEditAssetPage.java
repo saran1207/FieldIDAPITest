@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.identify;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
@@ -41,9 +42,13 @@ import com.n4systems.services.date.DateService;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxCallDecorator;
+import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
+import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -73,6 +78,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
     @SpringBean private AssetIdentifierService assetIdentifierService;
     @SpringBean private AssetService assetService;
+    @SpringBean private S3Service s3Service;
     @SpringBean private EventService eventService;
     @SpringBean private DateService dateService;
     @SpringBean private AssetSaveServiceSpring assetSaveService;
@@ -106,6 +112,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     IModel<Asset> assetModel;
 
     public IdentifyOrEditAssetPage(PageParameters params) {
+
         Asset asset;
         if (!params.get("lineItemId").isEmpty()) {
             lineItemId = params.get("lineItemId").toLongObject();
@@ -171,7 +178,6 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
         GpsTextField<BigDecimal> latitude;
         GpsTextField<BigDecimal> longitude;
-
 
         public IdentifyOrEditAssetForm(String id, final IModel<Asset> assetModel) {
             super(id, assetModel);
@@ -333,17 +339,15 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
             actionsContainer.add(new Button("saveButton") {
                 @Override
-                public void onSubmit() {
-                    performSingleOrMultiSave(assetModel);
+                public void onSubmit() {performSingleOrMultiSave(assetModel);
                     if (assetModel.getObject().isNew()) {
                         setResponsePage(IdentifyOrEditAssetPage.class);
                     } else {
                         setResponsePage(AssetSummaryPage.class, PageParametersBuilder.uniqueId(assetModel.getObject().getId()));
                     }
                 }
-            });
 
-            final boolean isNew = assetModel.getObject().isNew();
+            }.add(new AjaxIndicatorAppender()));
 
             actionsContainer.add(new Button("saveAndStartEventButton") {
                 { setVisible(getSessionUser().hasAccess("createevent")); }
@@ -513,10 +517,11 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
         Asset assetToCreate = newAssetModel.getObject();
         assetToCreate.setTenant(getTenant());
         List<InfoOptionBean> enteredInfoOptions = attributesEditPanel.getEnteredInfoOptions();
-        List<AssetAttachment> attachments = assetAttachmentsPanel.getAttachments();
         byte[] assetImageBytes = assetImagePanel.getAssetImageBytes();
         String clientFileName = assetImagePanel.getClientFileName();
         List<Long> createdAssetIds = new ArrayList<Long>();
+
+
 
         for (MultipleAssetConfiguration.AssetConfiguration assetConfig : assetConfigs) {
             assetToCreate.reset();
@@ -526,6 +531,20 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             assetToCreate.setIdentifier(assetConfig.getIdentifier());
             assetToCreate.setRfidNumber(assetConfig.getRfidNumber());
             assetToCreate.setCustomerRefNumber(assetConfig.getCustomerRefNumber());
+
+
+            //since multiple assets can't have the same GUID, we reset them here
+            assetToCreate.setMobileGUID(null);
+            assetToCreate.ensureMobileGuidIsSet();
+
+            //go over the attachments and copy them under each of the new asset attachments folder in S3
+            List<AssetAttachment> attachments = new ArrayList<AssetAttachment>(assetAttachmentsPanel.getAttachments());
+            for (AssetAttachment attachment : attachments){
+                attachment.setMobileId(UUID.randomUUID().toString());
+                String newFilename = s3Service.copyAssetAttachment(attachment.getFileName(), assetToCreate.getMobileGUID(), attachment.getMobileId());
+                attachment.setFileName(newFilename);
+            }
+
             Asset newAsset = assetSaveService.create(assetToCreate, attachments, assetImageBytes, clientFileName);
             createdAssetIds.add(newAsset.getId());
             saveSchedulesForAsset(newAsset);
@@ -591,9 +610,9 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/asset/header.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/newCss/asset/identify_asset.css"); 
+        response.renderCSSReference("style/legacy/newCss/asset/header.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/asset/identify_asset.css"); 
     }
 
 }

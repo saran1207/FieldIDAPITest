@@ -1,0 +1,48 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    <div class="split-btn">
+        <a wicket:id="viewLink" class="btn-secondary"><wicket:message key="label.view"/></a>
+        <div wicket:enclosure="optionsContainer" class="dropdown">
+            <button class="btn-secondary">Toggle Dropdown</button>
+            <ul wicket:id="optionsContainer" class="pull-right">
+
+                <li>
+                    <a wicket:id="reviseLink">
+                        <wicket:container wicket:id="label"/>
+                    </a>
+                </li>
+                <li>
+                    <a wicket:id="copyLink">
+                        <wicket:container wicket:id="label"/>
+                    </a>
+                </li>
+                <li wicket:enclosure="unpublishLink">
+                    <a wicket:id="unpublishLink">
+                        <wicket:message key="label.unpublish"/>
+                    </a>
+                </li>
+                <li>
+                    <a wicket:id="draftLink">
+                        <wicket:message key="label.procedures_drafts"/>
+                    </a>
+                </li>
+                <li>
+                    <a wicket:id="previouslyPublishedLink">
+                        <wicket:message key="label.previous_revisions"/>
+                    </a>
+                </li>
+                <li>
+                    <a wicket:id="editLink">
+                        <wicket:message key="label.edit"/>
+                    </a>
+                </li>
+                <li>
+                    <a wicket:id="deleteLink">
+                        <wicket:message key="label.delete"/>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</wicket:panel>
+</html>

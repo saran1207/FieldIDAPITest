@@ -2,14 +2,24 @@ package com.n4systems.fieldid.wicket.pages.identify.components;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
+import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.asset.AssetAttachment;
-import com.n4systems.reporting.PathHandler;
+import com.n4systems.reporting.PathHandler; //kept for IE8 compatibility
+import com.n4systems.util.ConfigEntry;
+import org.apache.log4j.Logger;
+import org.apache.wicket.ajax.AbstractDefaultAjaxBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.form.AjaxFormSubmitBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -21,7 +31,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.protocol.http.ClientProperties;
+import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.protocol.http.request.WebClientInfo;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.springframework.util.Assert;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
@@ -29,10 +43,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import static ch.lambdaj.Lambda.as;
 import static ch.lambdaj.Lambda.on;
 
 public class AssetAttachmentsPanel extends Panel {
+
+    private static final Logger logger = Logger.getLogger(AssetAttachmentsPanel.class);
 
     @SpringBean
     private S3Service s3Service;
@@ -46,6 +64,7 @@ public class AssetAttachmentsPanel extends Panel {
     public AssetAttachmentsPanel(String id, IModel<Asset> assetModel) {
         super(id);
 
+        assetModel.getObject().ensureMobileGuidIsSet();
         if (!assetModel.getObject().isNew()) {
             attachments.addAll(assetService.findAssetAttachments(assetModel.getObject()));
         }
@@ -60,7 +79,8 @@ public class AssetAttachmentsPanel extends Panel {
                 item.add(comments);
                 comments.add(new AjaxFormComponentUpdatingBehavior("onblur") {
                     @Override
-                    protected void onUpdate(AjaxRequestTarget target) { } });
+                    protected void onUpdate(AjaxRequestTarget target) { }
+                });
                 item.add(new Label("fileName", new NameAfterLastFileSeparatorModel(ProxyModel.of(item.getModel(), on(AssetAttachment.class).getFileName()))));
                 item.add(new AjaxLink("removeLink") {
                     @Override
@@ -72,38 +92,117 @@ public class AssetAttachmentsPanel extends Panel {
             }
         });
 
+        existingAttachmentsContainer.add(new AbstractDefaultAjaxBehavior() {
+            @Override
+            public void renderHead(Component component, IHeaderResponse response) {
+                super.renderHead(component, response);
+                StringBuilder javascript = new StringBuilder();
+                javascript.append("if(!window.containerAjaxCallbackUrlLookup){" +
+                                  "    window.containerAjaxCallbackUrlLookup = {};" +
+                                  "}" +
+                                  "window.containerAjaxCallbackUrlLookup['" + existingAttachmentsContainer.getMarkupId() + "'] = '" + getCallbackUrl() + "';" +
+                                  "getAjaxCallbackUrl = function(containerMarkupId){" +
+                                  "    return window.containerAjaxCallbackUrlLookup[containerMarkupId];" +
+                                  "};");
+                response.renderOnDomReadyJavaScript(javascript.toString());
+            }
+
+            @Override
+            protected void respond(AjaxRequestTarget target) {
+                String filename = getRequest().getRequestParameters().getParameterValue("filename").toString();
+                String uuid = getRequest().getRequestParameters().getParameterValue("uuid").toString();
+                Integer status = getRequest().getRequestParameters().getParameterValue("status").toInteger();
+                for(int index = 0; index < attachments.size(); index++){
+                    if(attachments.get(index).getMobileId().equals(uuid)){
+                        if(status == -1){
+                            attachments.get(index).setUploadInProgress(true);
+                        }
+                        else {
+                            attachments.get(index).setUploadInProgress(false);
+                            if(status < 200 || status >= 300){
+                                attachments.remove(index);
+                                error(new FIDLabelModel("error.file_upload_failed", filename, status.toString()).getObject());
+                                target.add(((IdentifyOrEditAssetPage)getPage()).getFeedbackPanel(), existingAttachmentsContainer);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+        });
+
         add(existingAttachmentsContainer);
-        add(new UploadAttachmentForm("uploadAttachmentForm"));
+        add(new UploadAttachmentForm("uploadAttachmentForm", assetModel, existingAttachmentsContainer.getMarkupId()));
     }
 
 
     class UploadAttachmentForm extends Form {
-        public UploadAttachmentForm(String id) {
+        private IModel<Asset> assetModel;
+        protected String callbackContainerMarkupId;
+
+        public UploadAttachmentForm(String id, IModel<Asset> assetModel_, String callbackContainerMarkupId_) {
             super(id);
+            assetModel = assetModel_;
+            callbackContainerMarkupId = callbackContainerMarkupId_;
+
 
             final FileUploadField attachmentUpload = new FileUploadField("attachmentUpload");
             attachmentUpload.setOutputMarkupId(true);
             add(attachmentUpload);
-            attachmentUpload.add(new AjaxFormSubmitBehavior("onchange") {
+            attachmentUpload.add(new AjaxFormSubmitBehavior("onChange") {
+
                 @Override
                 protected void onSubmit(AjaxRequestTarget target) {
+                    Assert.notNull(assetModel.getObject().getMobileGUID());
+                    String assetUuid = assetModel.getObject().getMobileGUID();
+                    String assetAttachmentUuid = UUID.randomUUID().toString();
+                    String uploadFormMarkupId = attachmentUpload.getMarkupId();
+                    String uploadJavascript = s3Service.getAssetAttachmentsUploadJavascript(assetUuid, assetAttachmentUuid, uploadFormMarkupId, callbackContainerMarkupId);
+
+                    target.prependJavaScript(uploadJavascript);
+
+                    Long uploadMaxFileSizeBytes = Long.parseLong(s3Service.getUploadMaxFileSizeBytes());
+
                     FileUpload fileUpload = attachmentUpload.getFileUpload();
+                    if(fileUpload != null){
+                        if(fileUpload.getSize() < uploadMaxFileSizeBytes){
+                            String fileName = fileUpload.getClientFileName();
+                            AssetAttachment attachment = new AssetAttachment();
+                            attachment.setMobileId(assetAttachmentUuid);
+                            attachment.setAsset(assetModel.getObject());
+                            attachment.setFileName(fileName);
 
-                    File tempDir = PathHandler.getTempDir();
-                    String fileName = fileUpload.getClientFileName();
-                    File file = new File(tempDir, fileName);
+                            ClientProperties clientProp = WebSession.get().getClientInfo().getProperties();
+                            boolean FileUploadSupported = clientProp.isBrowserChrome() ||
+                                (clientProp.isBrowserSafari() && clientProp.getBrowserVersionMajor() >= 5) ||
+                                (clientProp.isBrowserMozillaFirefox() && clientProp.getBrowserVersionMajor() >= 4) ||
+                                (clientProp.isBrowserOpera() && clientProp.getBrowserVersionMajor() >= 12) ||
+                                (clientProp.isBrowserInternetExplorer() && clientProp.getBrowserVersionMajor() >= 10);
+                            //if the browser does not support direct upload to S3
+                            if(FileUploadSupported){
+                                String getAssetAttachmentPath = s3Service.getAssetAttachmentPath(assetUuid, assetAttachmentUuid, fileName);
+                                attachment.setFileName(getAssetAttachmentPath); //set the filename to be a full path
+                            }
+                            else {
+                                File tempDir = PathHandler.getTempDir();
+                                File file = new File(tempDir, fileName);
 
-                    try {
-                        FileCopyUtils.copy(fileUpload.getInputStream(), new FileOutputStream(file));
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
+                                try {
+                                    FileCopyUtils.copy(fileUpload.getInputStream(), new FileOutputStream(file));
+                                } catch (IOException e) {
+                                    throw new RuntimeException(e);
+                                }
+                                attachment.setFileName(tempDir.getName() + File.separator + fileName);
+                            }
+                            attachments.add(attachment);
+                        }
+                        else {
+                            Long humanReadableFileLimit = uploadMaxFileSizeBytes/(1024*1024);
+                            error(new FIDLabelModel("error.file_size_limit", fileUpload.getClientFileName(), humanReadableFileLimit.toString()).getObject());
+                        }
                     }
 
-                    AssetAttachment attachment = new AssetAttachment();
-                    attachment.setFileName(tempDir.getName() + File.separator + fileName);
-
-                    attachments.add(attachment);
-                    target.add(existingAttachmentsContainer, attachmentUpload);
+                    target.add(((IdentifyOrEditAssetPage)getPage()).getFeedbackPanel(), existingAttachmentsContainer, attachmentUpload);
                 }
 
                 @Override

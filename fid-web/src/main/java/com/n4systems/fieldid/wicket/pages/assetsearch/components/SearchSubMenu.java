@@ -170,7 +170,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         if (filtersDisabled) {
             response.renderOnDomReadyJavaScript("fieldIdWidePage.updateConfig(false);");
         }
-        response.renderCSSReference("style/pageStyles/advancedSearchSubMenu.css");
+        response.renderCSSReference("style/legacy/pageStyles/advancedSearchSubMenu.css");
     }
 
     protected void updateMenuBeforeRender(AssetSearchCriteria criteria) {

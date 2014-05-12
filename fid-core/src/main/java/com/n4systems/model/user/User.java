@@ -8,6 +8,7 @@ import com.n4systems.model.parents.ArchivableEntityWithOwner;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.AssetSearchCriteria;
 import com.n4systems.model.search.EventReportCriteria;
+import com.n4systems.model.search.ProcedureCriteria;
 import com.n4systems.model.security.*;
 import com.n4systems.model.utils.GlobalID;
 import com.n4systems.persistence.localization.Localized;
@@ -63,6 +64,10 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
     @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "lastRunSearchId")
     private AssetSearchCriteria lastRunSearch;
+
+    @OneToOne(optional = true, fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "lastRunProceduresId")
+    private ProcedureCriteria lastRunProcedures;
 
 	@Column(nullable = false, unique = true)
 	private String authKey;
@@ -544,6 +549,14 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
     public void setLastRunSearch(AssetSearchCriteria lastRunSearch) {
         this.lastRunSearch = lastRunSearch;
+    }
+
+    public ProcedureCriteria getLastRunProcedures() {
+        return lastRunProcedures;
+    }
+
+    public void setLastRunProcedures(ProcedureCriteria lastRunProcedures) {
+        this.lastRunProcedures = lastRunProcedures;
     }
 
     @Override

@@ -1,0 +1,88 @@
+.newScheduleForm {
+    background-color:#FFFFFF;
+    box-shadow: 4px 4px 5px #CCCCCC;
+    -webkit-box-shadow: 4px 4px 5px #CCCCCC;
+    -moz-box-shadow: 4px 4px 5px #CCCCCC;
+    padding:24px;
+}
+
+.pageContent .newScheduleForm h2 {
+	margin: 0;
+	border-top: 0 none;
+}
+
+.newScheduleForm button{
+	padding: 4px;
+}
+
+.newScheduleForm .blockSeparated {
+	font-size: 1.1em;
+	padding: 5px;
+	border-top:1px solid #CCCCCC;
+}
+
+.newScheduleForm .infoSet .fieldHolder {
+	width: 295px;
+}
+
+.newScheduleForm .infoSet .label {
+	font-weight: normal;
+	width: 170px;
+	color: black;
+}
+
+.egColor {
+	color: #999999;
+}
+
+.newScheduleForm .infoSet .datepicker {
+	width: 150px;
+}
+
+.dateQuickLinks {
+	display: block;
+	padding: 5px 0;
+	margin-left: 200px;
+	clear: both;
+}
+
+.newScheduleButton{
+	background-image: url(../../../../images/calendar-icon.png);
+}
+
+.newScheduleForm .infoSet select {
+    border: 1px solid #9c9c9c;
+    color: #555;
+    padding:4px;
+    width:250px;
+}
+
+.newScheduleForm h2 {
+    margin:0;
+    border-top: 0 none;
+    background-color:#eee;
+    border-bottom:1px solid #ccc;
+}
+
+.newScheduleForm .infoSet .label {
+    width: 170px;
+    padding-left:15px;
+    padding-right:10px;
+    font-weight:normal;
+    text-align:right;
+    display:block;
+    float:left;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+
+.newScheduleForm .infoSet {
+    padding: 8px 0 2px 0;
+    border-bottom:1px solid #e2e2e2;
+    overflow:hidden;
+}
+
+.newScheduleForm input[type='submit'] {
+    padding:4px;
+    font-size:1.2em;
+}

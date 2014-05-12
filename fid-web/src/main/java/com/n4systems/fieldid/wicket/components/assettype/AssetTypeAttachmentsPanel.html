@@ -4,21 +4,21 @@
       xml:lang="en"
       lang="en">
 <wicket:panel>
-
+    <script type="text/javascript" src="/fieldid/javascript/mimeLookup.js"></script>
+    <script type='text/javascript' src="http://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxtransport-xdomainrequest/1.0.1/jquery.xdomainrequest.min.js"></script>
     <div wicket:id="existingAttachmentsContainer">
         <div wicket:id="existingAttachments" class="existing">
-            <img wicket:id="attachmentImage"/> 
+            <img wicket:id="attachmentImage"/>
             <p><span wicket:id="fileName"></span>
             <a wicket:id="removeLink"><wicket:message key="label.remove"/></a></p>
-            <textarea wicket:id="comments"></textarea>     
-        </div> 
+            <textarea wicket:id="comments"></textarea>
+        </div>
     </div>
 
     <form wicket:id="uploadAttachmentForm">
-        <input type="file" wicket:id="attachmentUpload">
+        <input type="file" wicket:id="attachmentUpload"/>
     </form>
 
     <wicket:message key="message.attachment"/>
-    
 </wicket:panel>
 </html>

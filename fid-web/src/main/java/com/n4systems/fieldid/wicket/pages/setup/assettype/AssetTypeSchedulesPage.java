@@ -317,8 +317,8 @@ public class AssetTypeSchedulesPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/buttons.css");
-        response.renderCSSReference("style/newCss/assetType/assetTypeSchedules.css");
+        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
+        response.renderCSSReference("style/legacy/newCss/assetType/assetTypeSchedules.css");
     }
 
     @Override

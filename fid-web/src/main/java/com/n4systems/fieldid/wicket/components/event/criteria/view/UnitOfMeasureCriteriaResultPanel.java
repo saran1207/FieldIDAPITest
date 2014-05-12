@@ -11,12 +11,16 @@ public class UnitOfMeasureCriteriaResultPanel extends Panel{
     public UnitOfMeasureCriteriaResultPanel(String id, IModel<UnitOfMeasureCriteriaResult> resultModel) {
         super(id);
 
-        add(new Label("primaryUnit", new PropertyModel<String>(resultModel, "primaryValue")));
-        add(new Label("primaryUnitLabel", new PropertyModel<String>(resultModel, "criteria.primaryUnit.name")));
+        boolean hasPrimaryUnit = ((UnitOfMeasureCriteria) resultModel.getObject().getCriteria()).getPrimaryUnit() != null;
+        boolean hasPrimaryValue = (resultModel.getObject().getPrimaryValue() != null) && !resultModel.getObject().getPrimaryValue().equals("");
+
+        add(new Label("primaryUnit", new PropertyModel<String>(resultModel, "primaryValue")).setVisible(hasPrimaryUnit && hasPrimaryValue));
+        add(new Label("primaryUnitLabel", new PropertyModel<String>(resultModel, "criteria.primaryUnit.name")).setVisible(hasPrimaryUnit && hasPrimaryValue));
 
         boolean hasSecondaryUnit = ((UnitOfMeasureCriteria) resultModel.getObject().getCriteria()).getSecondaryUnit() != null;
+        boolean hasSecondaryValue = (resultModel.getObject().getSecondaryValue() != null) && !resultModel.getObject().getSecondaryValue().equals("");
 
-        add(new Label("secondaryUnit", new PropertyModel<String>(resultModel, "secondaryValue")).setVisible(hasSecondaryUnit));
-        add(new Label("secondaryUnitLabel", new PropertyModel<String>(resultModel, "criteria.secondaryUnit.name")).setVisible(hasSecondaryUnit));
+        add(new Label("secondaryUnit", new PropertyModel<String>(resultModel, "secondaryValue")).setVisible(hasSecondaryUnit && hasSecondaryValue));
+        add(new Label("secondaryUnitLabel", new PropertyModel<String>(resultModel, "criteria.secondaryUnit.name")).setVisible(hasSecondaryUnit && hasSecondaryValue));
     }
 }

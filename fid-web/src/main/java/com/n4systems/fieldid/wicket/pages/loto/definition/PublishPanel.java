@@ -2,12 +2,15 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
+import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
+import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -24,8 +27,13 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class PublishPanel extends Panel {
 
-    @SpringBean private ProcedureDefinitionService procedureDefinitionService;
-    @SpringBean private ProcedureService procedureService;
+    @SpringBean
+    private ProcedureDefinitionService procedureDefinitionService;
+    @SpringBean
+    private ProcedureService procedureService;
+
+    @SpringBean
+    private UserService userService;
     private String rejectionText;
     private IModel<ProcedureDefinition> model;
 
@@ -61,14 +69,21 @@ public class PublishPanel extends Panel {
                 }
             }.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.save"), TipsyBehavior.Gravity.N)));
 
+            final boolean isWaitingForApproval = model.getObject().getPublishedState() == PublishedState.WAITING_FOR_APPROVAL && procedureDefinitionService.canCurrentUserApprove();
+
             SubmitLink submitLink = new SubmitLink("publish") {
                 @Override
                 public void onSubmit() {
                     if (model.getObject().getLockIsolationPoints().isEmpty()) {
                         error(getString("message.isolation_point_required"));
-                    } else if (procedureService.hasActiveProcedure(model.getObject().getAsset())) {
+                    } else if (!model.getObject().isNew() && procedureService.hasActiveProcedure(model.getObject().getAsset(), model.getObject())) {
                         error(getString("message.cant_publish_with_active_procedure"));
+                    } else if (procedureDefinitionService.hasPublishedProcedureCode(model.getObject())) {
+                        error(new FIDLabelModel("message.procedure_code_exists", model.getObject().getProcedureCode()).getObject());
                     } else {
+                        if (isWaitingForApproval || procedureDefinitionService.canCurrentUserApprove()) {
+                            model.getObject().setApprovedBy(getCurrentUser());
+                        }
                         doPublish();
                     }
                 }
@@ -97,7 +112,7 @@ public class PublishPanel extends Panel {
                     target.add(rejectionMessageContainer.setVisible(true));
                 }
             };
-            openRejectionMessageLink.setVisible(model.getObject().getPublishedState() == PublishedState.WAITING_FOR_APPROVAL && procedureDefinitionService.canCurrentUserApprove());
+            openRejectionMessageLink.setVisible(isWaitingForApproval);
 
             add(openRejectionMessageLink);
 
@@ -119,6 +134,10 @@ public class PublishPanel extends Panel {
 
             add(rejectionMessageContainer);
         }
+    }
+
+    private User getCurrentUser() {
+        return userService.getUser(FieldIDSession.get().getSessionUser().getUniqueID());
     }
 
     protected void doPublish() {}

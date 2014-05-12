@@ -211,8 +211,8 @@ public class AssetSummaryPage extends AssetPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/asset/asset.css");
-        response.renderCSSReference("style/newCss/asset/actions-menu.css");
+        response.renderCSSReference("style/legacy/newCss/asset/asset.css");
+        response.renderCSSReference("style/legacy/newCss/asset/actions-menu.css");
 
         response.renderJavaScriptReference("javascript/subMenu.js");
         response.renderOnDomReadyJavaScript("subMenu.init();");
@@ -227,7 +227,12 @@ public class AssetSummaryPage extends AssetPage {
                 try {
                     ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(getFile(filename)));
                     for (AssetAttachment assetAttachment: assetAttachments) {
-                        ZipFileUtil.addToZipFile(PathHandler.getAssetAttachmentFile(assetAttachment), zipOut);
+                        if(assetAttachment.isRemote()){
+                            ZipFileUtil.addToZipFile(s3Service.downloadAssetAttachmentFile(assetAttachment), zipOut);
+                        }
+                        else {
+                            ZipFileUtil.addToZipFile(PathHandler.getAssetAttachmentFile(assetAttachment), zipOut);
+                        }
                     }
                     for (FileAttachment fileAttachment: typeAttachments) {
                         ZipFileUtil.addToZipFile(PathHandler.getAssetTypeAttachmentFile(fileAttachment, assetType.getId()), zipOut);

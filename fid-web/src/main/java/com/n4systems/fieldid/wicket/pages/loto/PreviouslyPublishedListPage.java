@@ -1,19 +1,20 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
-import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.loto.ViewPrintProcedureDefMenuButton;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.PublishedState;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -29,13 +30,6 @@ public class PreviouslyPublishedListPage extends LotoPage{
     public PreviouslyPublishedListPage(PageParameters params) {
         super(params);
 
-        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("activeLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.active"), TipsyBehavior.Gravity.N)));
-        add(new BookmarkablePageLink<PreviouslyPublishedListPage>("previouslyPublishedListLink", PreviouslyPublishedListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.previously_published"), TipsyBehavior.Gravity.N)));
-        add(new BookmarkablePageLink<ProceduresListPage>("proceduresListLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(getAssetId()))
-                .add(new TipsyBehavior(new FIDLabelModel("message.procedures.completed_inprogress"), TipsyBehavior.Gravity.N)));
-
         WebMarkupContainer listContainer = new WebMarkupContainer("listContainer");
         WebMarkupContainer blankSlate = new WebMarkupContainer("blankSlate");
         ListView listView;
@@ -43,7 +37,7 @@ public class PreviouslyPublishedListPage extends LotoPage{
         listContainer.add(listView = new ListView<ProcedureDefinition>("list", new ProcedureDefinitionModel()) {
 
             @Override
-            protected void populateItem(ListItem<ProcedureDefinition> item) {
+            protected void populateItem(final ListItem<ProcedureDefinition> item) {
                 final IModel<ProcedureDefinition> procedureDefinition = item.getModel();
                 item.add(new Label("name", new PropertyModel<String>(procedureDefinition, "procedureCode")));
                 item.add(new Label("revisionNumber", new PropertyModel<String>(procedureDefinition, "revisionNumber")));
@@ -53,6 +47,14 @@ public class PreviouslyPublishedListPage extends LotoPage{
                 item.add(new Label("originDate", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "originDate"), true, getCurrentUser().getTimeZone())));
                 item.add(new Label("retireDate", new DayDisplayModel(new PropertyModel<Date>(procedureDefinition, "retireDate"), true, getCurrentUser().getTimeZone())));
                 item.add(new ViewPrintProcedureDefMenuButton("print", procedureDefinition));
+                item.add(new AjaxLink<Void>("restoreLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        ProcedureDefinition newRevision = procedureDefinitionService.cloneProcedureDefinition(item.getModelObject());
+                        newRevision.setPublishedState(PublishedState.DRAFT);
+                        setResponsePage(new ProcedureDefinitionPage(Model.of(newRevision)));
+                    }
+                });
             }
         });
         listContainer.setVisible(!listView.getList().isEmpty());

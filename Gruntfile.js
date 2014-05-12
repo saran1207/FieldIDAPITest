@@ -1,66 +1,69 @@
 var glob = require('glob'),
     util = require('util');
 
-function buildLessFileMap(/* less_base_dir, css_base_dir, less_file_1, ... less_file_n  */) {
+function buildScssFileMap(/* scss_base_dir, css_base_dir, scss_file_1, ... scss_file_n  */) {
     var args = Array.prototype.slice.call(arguments, 0);
 
-    var lessDir = args.shift();
+    var scssDir = args.shift();
     var cssDir = args.shift();
 
-    var lessFileMap = {};
+    var scssFileMap = {};
     args.forEach(function (style) {
         // if target ends with '/' then treat as directory
         if (/\/$/.test(style)) {
-            glob.sync(lessDir + style + '**/*.less').forEach(function (lessFile) {
-                lessFileMap[lessFile.replace(lessDir, cssDir).replace(/less$/, 'css')] = lessFile;
+            glob.sync(scssDir + style + '**/*.scss').forEach(function (scssFile) {
+                scssFileMap[scssFile.replace(scssDir, cssDir).replace(/scss$/, 'css')] = scssFile;
             });
         } else {
-            lessFileMap[cssDir + style + '.css'] = lessDir + style + '.less';
+            scssFileMap[cssDir + style + '.css'] = scssDir + style + '.scss';
         }
     });
-    return lessFileMap;
+    return scssFileMap;
 }
 module.exports = function(grunt) {
     var styleBase = "fid-web/src/main/webapp/style/";
-    var lessBase = styleBase + 'less/';
+    var scssBase = styleBase + 'sass/';
     var cssBase = styleBase;
 
-    var lessFileMap = buildLessFileMap(lessBase, cssBase, 'global', 'ie-all', 'ie-lte8', 'pages/', 'plugins/');
+    var scssFileMap = buildScssFileMap(scssBase, cssBase, 'global', 'ie-all', 'ie-lte8', 'pages/', 'plugins/');
 
-    util.print('Found Less root files: \n' + util.inspect(lessFileMap) + '\n\n');
+    util.print('Found scss root files: \n' + util.inspect(scssFileMap) + '\n\n');
 
     grunt.initConfig({
-        clean: Object.getOwnPropertyNames(lessFileMap),
-        less: {
+        clean: Object.getOwnPropertyNames(scssFileMap),
+        sass: {
             dev: {
                 options: {
-                    dumpLineNumbers: true
+                    style: 'expanded',
+                    sourcemap: true,
+                    // lineNumbers: true
                 },
-                files: lessFileMap
+                files: scssFileMap
             },
             prod: {
                 options: {
-                    compress: true,
-                    yuicompress: true,
-                    cleancss: true,
-                    optimization: 2
+                    style: 'compressed' 
+                    // compress: true,
+                    // yuicompress: true,
+                    // cleancss: true,
+                    // optimization: 2
                 },
-                files: lessFileMap
+                files: scssFileMap
             }
         },
         watch: {
             styles: {
-                files: [lessBase + '**/*.less'],
-                tasks: ['less:dev'],
+                files: [scssBase + '**/*.scss'],
+                tasks: ['sass:dev'],
                 options: { nospawn: true }
             }
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib-less');
+    grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-clean');
 
-    grunt.registerTask('default', ['clean', 'less:dev', 'watch']);
-    grunt.registerTask('package', ['less:prod']);
+    grunt.registerTask('default', ['clean', 'sass:dev', 'watch']);
+    grunt.registerTask('package', ['scss:prod']);
 };

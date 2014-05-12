@@ -42,7 +42,7 @@ public class ProcedureSubMenu extends SubMenu<ProcedureCriteria> {
     }
 
     @Override protected IModel<String> getHeaderModel() {
-        return new FIDLabelModel("label.procedures");
+        return new FIDLabelModel("label.loto_log");
     }
 
 }

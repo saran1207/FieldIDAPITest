@@ -134,6 +134,16 @@ public class MultipleAssetConfigurationPanel extends Panel {
                         target.add(feedbackPanel);
                         return;
                     }
+                    //The Start value has to be a number, doing a number check on it.
+                    if (generationMethod == GenerationMethod.RANGE){
+                        try{
+                            Integer.valueOf(config.getRangeConfiguration().getStart());
+                        } catch (NumberFormatException e) {
+                            error(getString("error.enter_a_start"));
+                            target.add(feedbackPanel);
+                            return;
+                        }
+                    }
                     List<MultipleAssetConfiguration.AssetConfiguration> assetConfigs = new ArrayList<MultipleAssetConfiguration.AssetConfiguration>(numAssets);
                     for (int i = 0; i < numAssets; i++) {
                         assetConfigs.add(new MultipleAssetConfiguration.AssetConfiguration());

@@ -147,8 +147,8 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/buttons.css");
-        response.renderCSSReference("style/pageStyles/localization.css");
+        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
+        response.renderCSSReference("style/legacy/pageStyles/localization.css");
     }
 
     protected boolean isFiltered(Object entity, Field field) {

@@ -19,7 +19,7 @@
 	</script>
 
 	<!--[if lte IE 8]>
-        <link wicket:id="dropDownIECss" type="text/css" href="/fieldid/style/dropdown/ie.css" rel="stylesheet" media="all"/>
+        <link wicket:id="dropDownIECss" type="text/css" href="/fieldid/style/legacy/dropdown/ie.css" rel="stylesheet" media="all"/>
     <![endif]-->
     <script type="text/javascript">
         ${action.getCustomJs()}
@@ -134,7 +134,18 @@
 
                     <#if securityGuard.lotoProceduresEnabled>
                         <li>
-                            <a href="/fieldid/w/procedure" class="speedLink textLink" id="menuProcedure"><@s.text name="speed.procedures" /></a>
+                            <a href="javascript:void(0)" class="speedLink textLink" id="menuLoto"><@s.text name="speed.lockout_tagout"/>&nbsp;</a>
+                            <ul class="sub_menu">
+                                <li>
+                                    <a href="/fieldid/w/publishedListAllPage"><@s.text name="speed.loto_list" /></a>
+                                </li>
+                                <li>
+                                    <a href="/fieldid/w/procedureWaitingApprovals"><@s.text name="speed.loto_procedure_approvals" /></a>
+                                </li>
+                                <li>
+                                    <a href="/fieldid/w/procedure"><@s.text name="speed.loto_log" /></a>
+                                </li>
+                            </ul>
                         </li>
                     </#if>
 
@@ -153,7 +164,6 @@
 							<li>
 								<a href="<@s.url value="/w/setup/settings"/>" class="speedLink textLink" id="menuSetup">
 									<@s.text name="label.setup" />
-									<!-- <img src="/fieldid/images/down-arrow.png" /> -->
 								</a>
 								<ul class="sub_menu">
 									<li>
@@ -231,6 +241,13 @@
 											<li><a href="<@s.url value='/w/setup/accountPolicy'/>"><@s.text name="title.account_lockout_policy"/></a></li>
 										</ul>
 									</li>
+                                    <li>
+                                        <a href="javascript:void(0)" ><@s.text name="speed.lockout_tagout"/> » </a>
+                                        <ul class="sub_menu">
+                                            <li><a href="<@s.url value='/w/setup/procedureApprover'/>"><@s.text name="title.set_procedure_approver"/></a></li>
+                                            <li><a href="<@s.url value='/w/setup/enableByAssetType'/>"><@s.text name="title.enable_by_asset_type"/></a></li>
+                                        </ul>
+                                    </li>
                                     <li>
                                         <a href="<@s.url value="/w/setup/assetTypeGroupTranslations" />" ><@s.text name="title.translations"/></a>
                                     </li>

@@ -156,8 +156,8 @@ public class CriteriaTrendsPage extends FieldIDFrontEndPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         JavascriptPackageResourceIE.renderJavaScriptReference(response, "javascript/flot/excanvas.min.js");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
-        response.renderCSSReference("style/newCss/trends/trending.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/trends/trending.css");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.min.js");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.stack.min.js");
         response.renderJavaScriptReference("javascript/flot/jquery.flot.navigate.min.js");

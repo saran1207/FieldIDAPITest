@@ -24,7 +24,7 @@ public class TextFieldHintBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         super.renderHead(component, response);
-        response.renderCSSReference("style/newCss/behavior/textfieldhint.css");
+        response.renderCSSReference("style/legacy/newCss/behavior/textfieldhint.css");
         response.renderJavaScriptReference("javascript/textfieldhint.js");
         String escapedHint = StringEscapeUtils.escapeJavaScript(hintModel.getObject());
         response.renderOnDomReadyJavaScript("prepareHintListeners('" + component.getMarkupId() + "', '"

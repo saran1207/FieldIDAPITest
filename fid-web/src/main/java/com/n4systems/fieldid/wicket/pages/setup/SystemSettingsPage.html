@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
 <form wicket:id="systemSettingsForm" class="crudForm pageSection largeForm">
@@ -7,7 +8,7 @@
 		
             <h2><wicket:message key="label.dateformat_heading"/></h2>
             <div class="dateFormat padded">
-				<label class="labelDescription" for="dateFormat">
+				<label class="labelDescription" wicket:for="dateFormat">
 					<wicket:message key="label.preferred_date_format" />
 				</label>
 	    		<select wicket:id="dateFormat"/>
@@ -51,36 +52,23 @@
 	            <img wicket:id="gpsLogo"/>
 	            <span class="labelDescription"><wicket:message key="label.captureGPS"/></span>
 				<input wicket:id="gpsCapture" type="checkbox"/>
-				<label for="gpsCapture">
+				<label wicket:f="gpsCapture">
 					<wicket:message key="label.gps_capture" />
 				</label>
 			</div>
 			
  			<h2><wicket:message key="label.support_url_header"/></h2>
             <div  class="labelledInput padded">
-                <label for="identifierLabel">
+                <label wicket:f="identifierLabel">
                     <wicket:message key="label.support_url" />
                 </label>
            		<input type="text" wicket:id="supportUrl" />
             </div>
             <div  class="labelledInput padded">
-                <label for="identifierLabel">
+                <label wicket:f="identifierLabel">
                     <wicket:message key="label.logout_url" />
                 </label>
                 <input type="text" wicket:id="logoutUrl" />
-            </div>
-
-            <div wicket:id="procedureApprovalContainer">
-                <h2><wicket:message key="label.procedure_approval"/></h2>
-                <div>
-                    <div class="padded">
-                        <label class="labelDescription" for="procedureApprover">
-                            <wicket:message key="message.procedure_approval" />
-                        </label>
-                        <div wicket:id="procedureApprover" style="padding-top:6px"/>
-                    </div>
-                </div>
-
             </div>
 
             <h2><wicket:message key="label.identifierFormat_heading"/></h2>
@@ -109,14 +97,14 @@
             	
 		            <div  class="labelledInput">
 			            <div class="labelDescription"><wicket:message key="label.identifierFormat_desc" /></div>
-		                <label for="identifierLabel">
+		                <label wicket:f="identifierLabel">
 		                    <wicket:message key="label.label" />
 		                </label>
 		           		<input type="text" wicket:id="identifierLabel" />
 		            </div>
 		
 		            <div  class="labelledInput">
-		                <label for="identifierFormat">
+		                <label wicket:f="identifierFormat">
 		                    <wicket:message key="label.auto_generated_format" />
 		                </label>
 		               	<input type="text" wicket:id="identifierFormat" />
@@ -142,3 +130,4 @@
 </form>
 
 </wicket:extend>
+</html>

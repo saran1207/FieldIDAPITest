@@ -110,7 +110,7 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/component/orgLocationPicker.css");
+        response.renderCSSReference("style/legacy/component/orgLocationPicker.css");
     }
 
     protected OrgLocationTree getOrgLocationTree(String search) {

@@ -23,7 +23,7 @@ public class TooltipBehavior extends Behavior {
     @Override
     public void renderHead(Component component, IHeaderResponse response) {
         response.renderJavaScriptReference("javascript/jquery.tools.min.js");
-        response.renderCSSReference("style/newCss/behavior/tooltip.css");
+        response.renderCSSReference("style/legacy/newCss/behavior/tooltip.css");
         response.renderOnDomReadyJavaScript("$('#" + component.getMarkupId() + "').tooltip();");
     }
 

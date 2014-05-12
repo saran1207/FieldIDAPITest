@@ -131,7 +131,7 @@ public class MassSchedulePage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/schedule/mass_schedule.css");
+        response.renderCSSReference("style/legacy/newCss/schedule/mass_schedule.css");
     }
 
     private SchedulePicker createSchedulePicker(final ListItem<ScheduleSummaryEntry> item, final IModel<List<? extends EventType>> eventTypesForAssetType, final EventJobsForTenantModel jobsOptions) {

@@ -71,10 +71,10 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/component/imageList.css");
-        response.renderCSSReference("style/pageStyles/procedureDefinition.css");
-        response.renderCSSReference("style/component/annotated-image.css");
-        response.renderCSSReference("style/pageStyles/procedureDefinitionPrint.css");
+        response.renderCSSReference("style/legacy/component/imageList.css");
+        response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
+        response.renderCSSReference("style/legacy/component/annotated-image.css");
+        response.renderCSSReference("style/legacy/pageStyles/procedureDefinitionPrint.css");
 
         response.renderJavaScriptReference("javascript/component/printimages.js");
         response.renderOnDomReadyJavaScript("setupPrintPage("+ getJsonPrintOptions() +")");

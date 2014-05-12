@@ -4,7 +4,6 @@ import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.model.search.ProcedureCriteria;
 import com.n4systems.model.search.ProcedureWorkflowStateCriteria;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -32,7 +31,7 @@ public class ProcedureFilterPanel extends Panel {
         add(new CollapsiblePanel("assetDetailsCriteriaPanel", new StringResourceModel("label.asset_details", this, null)) {
             @Override
             protected Panel createContainedPanel(String id) {
-                return new AssetDetailsCriteriaPanel(id, model);
+                return new AssetDetailsCriteriaPanel(id, model, true);
             }
         });
 

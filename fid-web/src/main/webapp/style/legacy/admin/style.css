@@ -1,0 +1,237 @@
+body {
+	margin: 0 0 20px 0;
+	padding: 0;
+	font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    font-size: 12px;
+	color: #000;
+	line-height: 1.5em;
+}
+
+#header {
+ width: 1350px;
+ background:transparent;
+ margin: 0 auto;
+ padding: 20px 0 0;
+ height: 101px;
+}
+
+#nav {
+	border-bottom: 1px solid #CACACA;
+	margin: 0 auto;
+	width: 1350px;
+	padding-bottom: 10px;
+}
+
+#nav label {
+	padding-left: 10px;
+	font-weight: bold;
+	font-size: 1.2em;
+}
+
+#nav select {
+	font-size: 1.2em;
+}
+
+#container {
+	width: 1350px;
+	margin: 0 auto;
+	padding: 0;
+}
+
+#footer {
+	background: transparent;
+	padding: 5px 10px 2px 0;
+	text-align: right;
+	font-size: 0.75em;
+	clear: both;
+	line-height: 1.15em;
+}
+
+a, a:visited {
+	background: transparent;
+	color: #356CA2;
+	border-bottom: 1px solid #356CA2;
+	text-decoration: none;
+}
+
+a:hover, a:active {
+	background: transparent;
+	color: #356CA2;
+}
+
+.fileList {
+	float: left;
+	margin-right: 10px;
+	min-width: 200px
+}
+
+.clearBoth {
+	clear: both;
+}
+
+.list {
+	width: 100%;
+	border-spacing: 2px;
+	background-color: #000;
+}
+
+.list td {
+	background-color: #e8e8e8;
+    vertical-align: top;
+}
+
+.list th {
+	background-color: #e0e0e0;
+}
+
+.list td pre {
+    max-height: 300px;
+    overflow: scroll;
+}
+
+#loginForm .label {
+	float: left;
+	padding: 4px 0;
+	width: 6em;
+	font-size: 1.2em;
+}
+
+.table {
+	border: 1px solid black;
+	border-collapse:collapse;	
+}
+.orgList {
+	border-spacing: 0;
+	width: 100%;
+}
+
+th a, th a:visited, th a:hover, th a:active {
+	color: #333;	
+}
+
+.orgList th, .orgList td {
+	padding: 15px 5px 15px 10px;
+}
+
+.orgList th {
+	text-align: left;
+}
+
+.orgList td {
+	border-bottom: 1px solid #CACACA;
+}
+
+.limitWidth {
+	max-width: 200px;
+}
+
+.pagination li {
+	list-style: none outside none;
+}
+
+.onIcon {
+	background-repeat: no-repeat;	
+	background-position: center;
+	background-image: url('../../../images/admin/on-icon.png');
+	min-width : 15px;
+}
+
+.offIcon {
+	background-repeat: no-repeat;
+	background-position: center;
+	background-image: url('../../../images/admin/off-icon.png');
+	min-width : 15px;	
+}
+
+input[type="text"] {
+    border: 1px solid #9C9C9C;
+    color: #555555;
+    overflow: hidden;
+    padding: 4px;
+    margin: 0 5px;
+}
+
+#nameFilter {
+	width : 700px;
+}
+
+#orgListFilter {
+	border-bottom: 1px solid #CACACA;
+	margin: 0 0 15px;
+	padding: 20px 10px;
+}
+
+.bold{
+	font-weight: bold;
+}
+
+.percentBarUsed {
+	background: #79c5e5 url(../../../images/barForeground.png) repeat-x;
+}
+.percentBar {
+	border: 2px solid #79c5e5;
+	background: url(../../../images/barBackground.png) repeat-x;
+	width : 300px;
+}
+
+.percentBarUsed, .percentBar {
+	height:18px;
+}
+
+#formErrors {
+	width: 100%;
+}
+
+.formErrors {
+	margin: 10px;
+	border: 2px solid #FF3030;
+	background-color: #ffebeb;
+	padding: 10px;
+}
+
+.formErrors ul li span {
+	width: auto;
+}
+
+#formErrors ul {
+	margin: 0;
+	padding: 0;
+}
+
+#formErrors li {
+	list-style : none outside none;
+}
+#formErrors h2 {
+	background-color: transparent;
+	color : black;
+	padding: 0px;
+	margin: 0px;
+	border:none;
+	font-size: 1.2em;
+    line-height: 21px;
+}
+
+#formErrors * {
+	float: none;
+}
+
+.errorMessage, .error {
+    color: #FF0000;
+}
+
+.formErrors {
+    margin: 10px 5px 10px 0;
+}
+
+ul.options a, ul.options a:visited {
+    border-bottom: none;
+}
+
+ul.options {
+    margin-bottom:20px;
+}
+
+floatRight {
+	float: right;
+}
+

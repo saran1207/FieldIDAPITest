@@ -40,6 +40,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.Behavior;
+import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -53,6 +54,8 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -84,6 +87,12 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
     private Boolean assetOwnerUpdate;
 
+    private String latVal = "";
+    private String longVal = "";
+    boolean hasDefaultVal = false;
+
+
+
 
     @Override
     protected void onInitialize() {
@@ -95,6 +104,30 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
         }
         add(schedulePicker = createSchedulePicker());
         add(new FIDFeedbackPanel("feedbackPanel"));
+
+        if (event.getObject().getType().isThingEventType()) {
+            Asset asset =  ((ThingEvent)event.getObject()).getAsset();
+
+            NumberFormat numberFormat = new DecimalFormat();
+            numberFormat.setMaximumFractionDigits(6);
+            numberFormat.setMinimumFractionDigits(0);
+
+            if (null != asset && null != asset.getGpsLocation()) {
+
+                hasDefaultVal = true;
+
+                if (null != asset.getGpsLocation().getLongitude()) {
+                    longVal = numberFormat.format(asset.getGpsLocation().getLongitude());
+                }
+
+                if (null != asset.getGpsLocation().getLatitude()) {
+                    latVal =  numberFormat.format(asset.getGpsLocation().getLatitude());
+                }
+
+            }
+        }
+
+
         add(new OuterEventForm("outerEventForm"){
 
             private static final long serialVersionUID = 1L;
@@ -288,6 +321,13 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
             latitude = new GpsTextField<BigDecimal>("latitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLatitude()));
             longitude = new GpsTextField<BigDecimal>("longitude", ProxyModel.of(event, on(Event.class).getGpsLocation().getLongitude()));
+
+            if (event.getObject().getEventType().isThingEventType() && hasDefaultVal) {
+                latitude.add(new SimpleAttributeModifier("value", (null == latVal)? "" : latVal ));
+                longitude.add(new SimpleAttributeModifier("value", (null == longVal) ? "" : longVal));
+            }
+
+
             gpsContainer.add(latitude);
             gpsContainer.add(longitude);
 
@@ -422,8 +462,8 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/event/event_base.css");
-        response.renderCSSReference("style/newCss/event/event_schedule.css");
+        response.renderCSSReference("style/legacy/newCss/event/event_base.css");
+        response.renderCSSReference("style/legacy/newCss/event/event_schedule.css");
     }
 
     @Override

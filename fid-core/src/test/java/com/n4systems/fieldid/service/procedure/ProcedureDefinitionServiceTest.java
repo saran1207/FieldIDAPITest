@@ -39,6 +39,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
     @TestMock private AtomicLongService atomicLongService;
 
     private Long expectedRevisionNumber;
+    private Long expectedFamilyId;
 
     @Before
     public void setup() {
@@ -48,8 +49,12 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
     @Override
     protected Object createSut(Field sutField) throws Exception {
         return new ProcedureDefinitionService() {
-            @Override Long generateRevisionNumber(Asset asset) {
+            @Override Long generateRevisionNumber(ProcedureDefinition procedureDefinition) {
                 return expectedRevisionNumber;
+            }
+
+            @Override Long generateFamilyId(Asset asset) {
+                return expectedFamilyId;
             }
         };
     }
@@ -58,6 +63,7 @@ public class ProcedureDefinitionServiceTest extends FieldIdServiceTest {
     public void test_saveProcedureDefinitionDraft_newRevision() {
         ProcedureDefinition procedureDefinition = ProcedureDefinitionBuilder.aProcedureDefinition().withRevisionNumber(null).build();
         expectedRevisionNumber = 22L;
+        expectedFamilyId = 1L;
 
         expect(persistenceService.saveOrUpdate(procedureDefinition)).andReturn(procedureDefinition);
         replay(persistenceService);

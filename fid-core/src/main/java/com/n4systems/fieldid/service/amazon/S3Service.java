@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.amazon;
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.HttpMethod;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
@@ -7,31 +8,41 @@ import com.google.common.base.Preconditions;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
+import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.model.Attachment;
+import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
+import com.n4systems.model.user.User;
+import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.activation.MimetypesFileTypeMap;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.util.Assert;
+import sun.misc.BASE64Encoder;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
+
+    private static final Logger logger = Logger.getLogger(S3Service.class);
+
     private static final int DEFAULT_EXPIRATION_DAYS = 1;
 
     private Integer expirationDays = null;
@@ -41,8 +52,8 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String CUSTOMER_LOGO_PATH = "/logos/customer_logo_%d.gif";
     public static final String PRIMARY_CERTIFICATE_LOGO_PATH = "/logos/primary_certificate_logo.gif";
     public static final String SECONDARY_CERTIFICATE_LOGO_PATH = "/logos/secondary_certificate_logo_%d.gif";
-	public static final String CRITERIA_RESULT_IMAGE_PATH_ORIG = "/events/%d/criteria_results/%d/criteria_images/%s";
-	public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
+    public static final String CRITERIA_RESULT_IMAGE_PATH_ORIG = "/events/%d/criteria_results/%d/criteria_images/%s";
+    public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
 
     public static final String CRITERIA_RESULT_IMAGE_TEMP = "/temp_criteria_result_images/%s";
@@ -53,6 +64,9 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String ASSET_PROFILE_IMAGE_PATH_ORIG = "/assets/%d/profile/%s";
     public static final String ASSET_PROFILE_IMAGE_PATH_THUMB = "/assets/%d/profile/%s.thumbnail";
     public static final String ASSET_PROFILE_IMAGE_PATH_MEDIUM = "/assets/%d/profile/%s.medium";
+
+    public static final String ASSET_ATTACHMENT_FOLDER = "/assets/%s/attachments/%s/";
+    public static final String ASSET_ATTACHMENT_PATH = ASSET_ATTACHMENT_FOLDER + "%s";
 
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP = "/temp/procedure_definition_images/%s";
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM = "/temp/procedure_definition_images/%s.medium";
@@ -72,7 +86,7 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String MEDIUM_EXTENSION = ".medium";
 
     @Autowired private ConfigService configService;
-	@Autowired private ImageService imageService;
+    @Autowired private ImageService imageService;
     @Autowired private AmazonS3Client s3client;
     @Autowired private UUIDService uuidService;
     @Autowired private S3AttachmentHandler s3ImageAttachmentHandler;
@@ -145,7 +159,7 @@ public class S3Service extends FieldIdPersistenceService {
         return logoData;
     }
 
-	private byte[] downloadSecondaryOrgCertificateLogo(Long secondaryOrgId) throws IOException {
+    private byte[] downloadSecondaryOrgCertificateLogo(Long secondaryOrgId) throws IOException {
         byte[] logoData = downloadResource(null, SECONDARY_CERTIFICATE_LOGO_PATH, secondaryOrgId);
         return logoData;
     }
@@ -219,6 +233,14 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
+    public boolean assetAttachmentExists(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename){
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(assetAttachmentUuid);
+        //Assert.hasLength(assetAttachmentFilename);
+        boolean exists = resourceExists(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+        return exists;
+    }
+
     public byte[] downloadProcedureDefinitionMediumImage(ProcedureDefinitionImage image) throws IOException {
         byte[] imageData = downloadResource(null, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
                 image.getProcedureDefinition().getAsset().getId(),
@@ -229,7 +251,7 @@ public class S3Service extends FieldIdPersistenceService {
 
     public void uploadAssetProfileImage(File file, Long assetId, String imageName) throws IOException {
         removePreviousAssetProfileImage(assetId);
-        
+
         byte[] imageData = FileUtils.readFileToByteArray(file);
         String contentType = new MimetypesFileTypeMap().getContentType(file);
         byte[] thumbnailImage = imageService.generateThumbnail(imageData);
@@ -237,7 +259,7 @@ public class S3Service extends FieldIdPersistenceService {
 
         uploadResource(file, null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
         uploadResource(thumbnailImage, contentType, null, ASSET_PROFILE_IMAGE_PATH_THUMB, assetId, imageName);
-        uploadResource(mediumImage, contentType, null, ASSET_PROFILE_IMAGE_PATH_MEDIUM, assetId, imageName);        
+        uploadResource(mediumImage, contentType, null, ASSET_PROFILE_IMAGE_PATH_MEDIUM, assetId, imageName);
     }
 
     private void removePreviousAssetProfileImage(Long assetId) {
@@ -367,7 +389,7 @@ public class S3Service extends FieldIdPersistenceService {
         CopyObjectRequest copyObjectRequest = new CopyObjectRequest(getBucket(),
                 createResourcePath(tenantId, tempFileNameTemplate, tempFileName), getBucket(),
                 createResourcePath(tenantId, finalFileNameTemplate,
-                    pathArgs));
+                        pathArgs));
 
         getClient().copyObject(copyObjectRequest);
     }
@@ -407,23 +429,23 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public URL getCriteriaResultImageMediumTempURL(CriteriaResultImage criteriaResultImage) {
-		return generateResourceUrl(null, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP,
-				criteriaResultImage.getTempFileName());
-	}
+        return generateResourceUrl(null, CRITERIA_RESULT_MEDIUM_IMAGE_TEMP,
+                criteriaResultImage.getTempFileName());
+    }
 
-	public URL getCriteriaResultImageMediumURL(CriteriaResultImage criteriaResultImage) {
-		return generateResourceUrl(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
-				criteriaResultImage.getCriteriaResult().getEvent().getId(),
-				criteriaResultImage.getCriteriaResult().getId(),
-				criteriaResultImage.getFileName());
-	}
+    public URL getCriteriaResultImageMediumURL(CriteriaResultImage criteriaResultImage) {
+        return generateResourceUrl(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
+    }
 
-	public URL getCriteriaResultImageThumbnailURL(CriteriaResultImage criteriaResultImage) {
-		return generateResourceUrl(null, CRITERIA_RESULT_IMAGE_PATH_THUMB,
-				criteriaResultImage.getCriteriaResult().getEvent().getId(),
-				criteriaResultImage.getCriteriaResult().getId(),
-				criteriaResultImage.getFileName());
-	}
+    public URL getCriteriaResultImageThumbnailURL(CriteriaResultImage criteriaResultImage) {
+        return generateResourceUrl(null, CRITERIA_RESULT_IMAGE_PATH_THUMB,
+                criteriaResultImage.getCriteriaResult().getEvent().getId(),
+                criteriaResultImage.getCriteriaResult().getId(),
+                criteriaResultImage.getFileName());
+    }
 
     public URL getCriteriaResultImageThumbnailURL(Long tenantId, CriteriaResultImage criteriaResultImage) {
         return generateResourceUrl(tenantId, CRITERIA_RESULT_IMAGE_PATH_THUMB,
@@ -461,10 +483,10 @@ public class S3Service extends FieldIdPersistenceService {
             removeProcedureDefinitionImage(image);
         }
         removeResource(procedureDefinition.getTenant().getId(),
-                       PROCEDURE_DEFINITION_IMAGE_PATH,
-                       procedureDefinition.getAsset().getId(),
-                       procedureDefinition.getId(),
-                       ""
+                PROCEDURE_DEFINITION_IMAGE_PATH,
+                procedureDefinition.getAsset().getId(),
+                procedureDefinition.getId(),
+                ""
         );
     }
 
@@ -495,11 +517,11 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public byte[] downloadCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
-		return downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
+        return downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
                 criteriaResultImage.getCriteriaResult().getEvent().getId(),
                 criteriaResultImage.getCriteriaResult().getId(),
                 criteriaResultImage.getFileName());
-	}
+    }
 
     public InputStream openCriteriaResultImageMedium(CriteriaResultImage criteriaResultImage) throws IOException {
         return new ByteArrayInputStream(downloadResource(null, CRITERIA_RESULT_IMAGE_PATH_MEDIUM,
@@ -605,13 +627,13 @@ public class S3Service extends FieldIdPersistenceService {
         return result;
     }
 
-	private PutObjectResult putObject(String path, byte[] data, String contentType) {
-		ObjectMetadata objectMeta = new ObjectMetadata();
-		objectMeta.setContentLength(data.length);
-		objectMeta.setContentType(contentType);
+    private PutObjectResult putObject(String path, byte[] data, String contentType) {
+        ObjectMetadata objectMeta = new ObjectMetadata();
+        objectMeta.setContentLength(data.length);
+        objectMeta.setContentType(contentType);
 
-		PutObjectResult result = getClient().putObject(new PutObjectRequest(getBucket(), path, new ByteArrayInputStream(data), objectMeta));
-		return result;
+        PutObjectResult result = getClient().putObject(new PutObjectRequest(getBucket(), path, new ByteArrayInputStream(data), objectMeta));
+        return result;
     }
 
     private void deleteObject(String path) {
@@ -639,6 +661,26 @@ public class S3Service extends FieldIdPersistenceService {
         return bucket;
     }
 
+    private String getAccessKey() {
+        String accessKey = configService.getString(ConfigEntry.AMAZON_ACCESS_KEY_ID);
+        return accessKey;
+    }
+
+    private String getSecretKey() {
+        String secretKey = configService.getString(ConfigEntry.AMAZON_SECRET_ACCESS_KEY);
+        return secretKey;
+    }
+
+    protected String getUploadTimeoutMilliseconds() {
+        String uploadTimeoutMilliseconds = configService.getString(ConfigEntry.AMAZON_S3_UPLOAD_TIMEOUT_MILLISECONDS);
+        return uploadTimeoutMilliseconds;
+    }
+
+    public String getUploadMaxFileSizeBytes() {
+        String uploadMaxFileSizeBytes = configService.getString(ConfigEntry.AMAZON_S3_UPLOAD_MAX_FILE_SIZE_BYTES);
+        return uploadMaxFileSizeBytes;
+    }
+
     protected int getExpiryInDays() {
         return expirationDays==null ? DEFAULT_EXPIRATION_DAYS : expirationDays;
     }
@@ -649,6 +691,214 @@ public class S3Service extends FieldIdPersistenceService {
 
     public void resetExpiryInDays() {
         expirationDays = null;
+    }
+
+    protected String getBucketHostname() {
+        String bucketHostname = configService.getString(ConfigEntry.AMAZON_S3_BUCKET) + "." + configService.getString(ConfigEntry.AMAZON_S3_SERVER_HOSTNAME);
+        return bucketHostname;
+    }
+
+    public String getAssetAttachmentPath(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename){
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(assetAttachmentUuid);
+        Assert.hasLength(assetAttachmentFilename);
+        String assetAttachmentsUploadPath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+        return assetAttachmentsUploadPath;
+        //String assetAttachmentsFolderUrl = "/" + this.getBucketHostname() + "/" + assetAttachmentsUploadPath;
+        //return assetAttachmentsFolderUrl;
+    }
+
+    public URL getAssetAttachmentUrl(AssetAttachment assetAttachment){
+        URL getAssetAttachmentUrl = getAssetAttachmentUrl(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName());
+        return getAssetAttachmentUrl;
+    }
+
+    public URL getAssetAttachmentUrl(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename) {
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(assetAttachmentUuid);
+        Assert.hasLength(assetAttachmentFilename);
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+        String fullResourcePath = assetAttachmentFilename;
+        //if the path is not the full path (ie. its just the filename)
+        if(fullResourcePath.indexOf('/') == -1){
+            fullResourcePath = getAssetAttachmentPath(assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+        }
+        URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public File downloadAssetAttachmentFile(AssetAttachment attachment){
+        File assetAttachmentFile = null;
+        try {
+            byte[] assetAttachmentBytes = downloadAssetAttachmentBytes(attachment);
+            String assetAttachmentFileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
+            assetAttachmentFile = PathHandler.getUserFile(getCurrentUser(), assetAttachmentFileName);
+            FileOutputStream assetAttachmentFos = new FileOutputStream(assetAttachmentFile);
+            assetAttachmentFos.write(assetAttachmentBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp attachment file at: " + assetAttachmentFile, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download asset attachment from S3: " + attachment, e);
+        }
+        return assetAttachmentFile;
+    }
+
+    public byte[] downloadAssetAttachmentBytes(AssetAttachment attachment) throws IOException {
+        //the attachment Filename field is overloaded to house full URL instead of just the filename
+        String assetAttachmentFileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
+        byte[] assetAttachmentData = downloadAssetAttachmentBytes(attachment.getAsset().getMobileGUID(), attachment.getMobileId(), assetAttachmentFileName);
+        return assetAttachmentData;
+    }
+
+    public byte[] downloadAssetAttachmentBytes(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename) throws IOException {
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(assetAttachmentUuid);
+        Assert.hasLength(assetAttachmentFilename);
+        return downloadResource(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+    }
+
+    public String getBucketPolicySigned(String bucketPolicyBase64){
+        try {
+            Mac hmac = Mac.getInstance("HmacSHA1");
+            hmac.init(new SecretKeySpec(getSecretKey().getBytes("UTF-8"), "HmacSHA1"));
+
+            String bucketPolicySignature = (new BASE64Encoder()).encode(hmac.doFinal(bucketPolicyBase64.getBytes("UTF-8"))).replaceAll("\n", "");
+            return bucketPolicySignature;
+        }
+        catch(Exception e){
+            logger.warn(e);
+            return "";
+        }
+    }
+
+    public String getBucketPolicyBase64(){
+        try {
+            return (new BASE64Encoder()).encode(
+                    this.getBucketPolicy().getBytes("UTF-8")).replaceAll("\n","").replaceAll("\r","");
+        }
+        catch(Exception e){
+            logger.warn(e);
+            return "";
+        }
+    }
+
+    public String getBucketPolicy(){
+        String policyDocument = " {" +
+                "'expiration': '" + new DateTime().plusDays(getExpiryInDays()).toString() + "'," +
+                "'conditions': [" +
+                "   {'bucket': '" + this.getBucket() + "'}," +
+                "   {'acl': 'private'}," +
+                "   ['starts-with', '$key', '']," +
+                "   ['starts-with', '$Content-Type', '']," +
+                "   ['starts-with', '$User-Agent', '']," +
+                "   ['starts-with', '$Referer', '']," +
+                "   ['starts-with', '$Server', '']," +
+                "   ['starts-with', '$x-amz-meta-fieldid-user-userid', '']," +
+                "   ['starts-with', '$x-amz-meta-fieldid-user-type', '']," +
+                "   ['starts-with', '$x-amz-meta-fieldid-user-permissions', '']," +
+                "   ['starts-with', '$x-amz-meta-fieldid-user-guid', '']," +
+                "   ['starts-with', '$x-amz-meta-fieldid-user-owner-guid', '']," +
+                "   ['content-length-range', 1, " + this.getUploadMaxFileSizeBytes() + "] ] }";
+        return policyDocument;
+    }
+
+    public String getAssetAttachmentsUploadJavascript(String assetUuid, String assetAttachmentUuid, String uploadFormMarkupId, String callbackContainerMarkupId){
+
+        String uploadJavascript = getUploadJavascript(ASSET_ATTACHMENT_FOLDER, assetUuid, assetAttachmentUuid, uploadFormMarkupId, callbackContainerMarkupId);
+        return uploadJavascript;
+    }
+
+    protected String getUploadJavascript(String pathPattern, String parentUuid, String childUuid, String uploadFormMarkupId, String callbackContainerMarkupId){
+        String path = createResourcePath(null, pathPattern, parentUuid, childUuid);
+        User user = getCurrentUser();
+        String bucketPolicyBase64 = this.getBucketPolicyBase64();
+
+        String uploadJavascript =
+            "var control = document.getElementById('" + uploadFormMarkupId + "');" +
+            "if(!window.uploadsInProgress){" +
+            "   window.uploadsInProgress = 0;" +
+            "   window.setInterval(function(){" +
+            "       var buttons = document.querySelectorAll('[name=\"actionsContainer:saveButton\"],[name=\"actionsContainer:saveAndStartEventButton\"],[name=\"actionsContainer:saveAndPrintButton\"],[name=\"actionsContainer:mergeLink\"]');" +
+            "       for(var i = 0; i < buttons.length; i++){" +
+            "           buttons[i].disabled = (window.uploadsInProgress > 0);" +
+            "       }" +
+            "       var indicators = document.querySelectorAll('.wicket-ajax-indicator');" +
+            "       for(var i = 0; i < indicators.length; i++){" +
+            "           indicators[i].style.display = (window.uploadsInProgress > 0 ? 'inline' : 'none');" +
+            "       }" +
+            "   }, 1000);" +
+            "}" +
+            "for(var i = 0; control.files && i < control.files.length; i++){" +
+            "   var file = control.files[i];" +
+            //if file size is bigger than allowed, just skip it, the panel will show error message to user
+            "   if(file.size >= " + this.getUploadMaxFileSizeBytes() + "){" +
+            "       continue;" +
+            "   }" +
+            "   var uploadStarted = function(){" +
+            "       window.uploadsInProgress += 1;" +
+            "       wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=-1&uuid=" + childUuid + "', function() { }, function() { });" +
+            "   };" +
+            "   var uploadFinished = function(xhr){" +
+            "       window.uploadsInProgress -= 1;" +
+            "       wicketAjaxGet(getAjaxCallbackUrl('" + callbackContainerMarkupId + "') + '&filename=' + encodeURI(file.name) + '&status=' + xhr.status + '&uuid=" + childUuid + "', function() { }, function() { });" +
+            "   };" +
+            "   var fd = new FormData();" +
+            "   var key = '" + path + "' + file.name;" +
+            // Populate the Post paramters.
+            "   fd.append('key', key);" +
+            "   fd.append('Content-Type', mimeLookup.getContentType(mimeLookup.getExt(file.name)));" +
+            "   fd.append('User-Agent', navigator.userAgent);" +
+            "   fd.append('Referer', document.URL);" +
+            "   fd.append('Server', '" + FieldIdVersion.getWebVersionDescription() + "');" +
+            "   fd.append('AWSAccessKeyId', '" + this.getAccessKey() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-userid', '" + user.getUserID() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-type', '" + user.getUserType().getLabel() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-permissions', '" + user.getPermissions() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-guid', '" + user.getGlobalId() + "');" +
+            "   fd.append('x-amz-meta-fieldid-user-owner-guid', '" + user.getOwner().getGlobalId() + "');" +
+            "   fd.append('acl', 'private');" +
+            "   fd.append('policy', '" + bucketPolicyBase64 + "');" +
+            "   fd.append('signature','" + this.getBucketPolicySigned(bucketPolicyBase64) + "');" +
+            //This file object is retrieved from a file input
+            "   fd.append('file', file );" +
+            "   var url = 'https://" + this.getBucketHostname() + "';" +
+            "   var timeout = " + getUploadTimeoutMilliseconds() + ";" +
+            "   $.ajax({" +
+            "       url: url," +
+            "       data: fd," +
+            "       processData: false," +
+            "       type: 'POST'," +
+            "       dataType: 'json'," +
+            "       crossDomain: true," +
+            "       contentType: false," +
+            //"       contentType: 'multipart/form-data'," +
+            //"       mimeType: 'multipart/form-data'," +
+            "       timeout: timeout," +
+            "       beforeSend: function(jqXHR, settings){ uploadStarted(); }," +
+            "       success: function(data, textStatus, jqXHR){ uploadFinished(jqXHR); }, " +
+            "       error: function(jqXHR, textStatus, errorThrown){ uploadFinished(jqXHR); } " +
+            "   });" +
+            //"   xhr.open('POST', 'https://" + this.getBucketHostname() + "', true);" +
+            //"   xhr.send(fd);" +
+            "}";
+        return uploadJavascript;
+    }
+
+    public String copyAssetAttachment(String assetAttachmentAbsPath, String targetAssetUuid, String targetAssetAttachmentUuid){
+
+        String sourceAssetAttachmentFileName = assetAttachmentAbsPath.substring(assetAttachmentAbsPath.lastIndexOf('/') + 1);
+        String targetAssetAttachmentPath = getAssetAttachmentPath(targetAssetUuid, targetAssetAttachmentUuid, sourceAssetAttachmentFileName);
+
+        try {
+            CopyObjectRequest copyObjectRequest = new CopyObjectRequest(getBucket(), assetAttachmentAbsPath, getBucket(), targetAssetAttachmentPath);
+            getClient().copyObject(copyObjectRequest);
+            return targetAssetAttachmentPath;
+        } catch(AmazonServiceException ase){
+            logger.warn("Unable to copy asset attachment file at: " + assetAttachmentAbsPath, ase);
+            return assetAttachmentAbsPath;
+        }
     }
 
 //    public void uploadTempAttachment(S3Attachment attachment) {

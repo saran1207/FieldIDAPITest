@@ -114,6 +114,13 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
     @Enumerated(EnumType.STRING)
     private IncludeDueDateRange includeDueDateRange;
 
+    @Column
+    private Boolean hasGps;
+
+    @Embedded
+    private GpsBounds bounds;
+
+
     @Embedded
 	@AttributeOverrides({
 		@AttributeOverride(name="rangeType", column = @Column(name="dueDateRange")),
@@ -399,5 +406,22 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
 
     public void setEventSearchType(EventSearchType eventSearchType) {
         this.eventSearchType = eventSearchType;
+    }
+
+
+    public GpsBounds getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(GpsBounds bounds) {
+        this.bounds = bounds;
+    }
+
+    public Boolean getHasGps() {
+        return hasGps;
+    }
+
+    public void setHasGps(Boolean hasGps) {
+        this.hasGps = hasGps;
     }
 }

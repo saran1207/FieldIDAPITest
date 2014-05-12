@@ -1,0 +1,100 @@
+//---------------------------
+// ALERTS
+//---------------------------
+// Error/warning messages, notes, notifications
+
+// Red messages
+.error {
+	border: 1px solid #FFC2C2;
+	background-color: #FFEBEB;
+	font-size: $small-font-size;
+}
+// Yellow messages
+.warning {
+	@include border-bg(darken($yellow, 40%), 40%);
+}
+// Gray messages
+.info {
+	@include border-bg($gray, 8%);
+}
+// Green messages
+.success {
+	@include border-bg($green, 45%);
+}
+
+// Block messages
+div.info,
+div.success,
+div.warning,
+div.error {
+	padding: 20px;
+	margin: 10px 0;
+	font-size: $base-font-size;
+
+	p {
+		margin-bottom: 0;
+	}
+	&:first-of-type {
+		margin-top: 0;
+	}
+}
+div.error {
+	padding: 10px 15px;
+}
+div.info {
+	h3 {
+		font-weight: $light;
+		font-size: $xlarge-font-size;
+		border: none;
+
+		strong {
+			font-weight: normal;
+		}
+	}
+	p {
+		color: $gray-dark;
+	}
+}
+
+.note {
+	display: inline-block;
+	font-style: italic;
+	color: $gray-dark;
+	font-size: $xsmall-font-size;
+}
+	label + .note {
+		margin-left: 12px;
+	}
+
+
+// Top Feedback panel - success messaging
+//---------------------------------------
+.feedback-panel {
+	margin-top: 10px;
+	
+	.success {
+		padding: 15px;
+
+		ul {
+			list-style-type: none;
+			text-align: center;
+			font-weight: $bold;
+		}
+	}
+}
+
+
+// FID Feedback panel - error messaging
+// -------------------------------------
+.error {
+	h3 {
+		border-bottom: none;
+	}
+	ul {
+		padding-left: 15px;
+
+		span.errorMessage {
+			color: $red;
+		}
+	}
+}

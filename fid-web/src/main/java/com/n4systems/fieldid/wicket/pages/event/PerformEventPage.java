@@ -69,6 +69,14 @@ public class PerformEventPage extends ThingEventPage {
             fileDataContainer = proofTestEditPanel.getFileDataContainer();
         }
 
+        if (event.getObject().getType().isThingEventType()) {
+            Asset asset =  ((ThingEvent)event.getObject()).getAsset();
+
+            if (null != asset && null != event.getObject().getGpsLocation() && null != event.getObject().getGpsLocation().getLatitude() && null != event.getObject().getGpsLocation().getLongitude()) {
+               asset.setGpsLocation(new GpsLocation(event.getObject().getGpsLocation().getLatitude(), event.getObject().getGpsLocation().getLongitude()));
+            }
+         }
+
         Event savedEvent = eventCreationService.createEventWithSchedules(event.getObject(), 0L, fileDataContainer, fileAttachments, createEventScheduleBundles());
 
         return savedEvent;

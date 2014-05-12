@@ -25,6 +25,6 @@ public class MassUpdateAssetsPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/massupdate/mass_update_assets.css");
+        response.renderCSSReference("style/legacy/newCss/massupdate/mass_update_assets.css");
     }
 }

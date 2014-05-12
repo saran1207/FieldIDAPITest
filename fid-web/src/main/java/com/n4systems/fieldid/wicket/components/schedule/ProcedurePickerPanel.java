@@ -2,8 +2,10 @@ package com.n4systems.fieldid.wicket.components.schedule;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
+import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
@@ -13,6 +15,7 @@ import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPag
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.time.DateUtil;
 import org.apache.commons.lang.time.DateUtils;
@@ -23,6 +26,7 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -30,6 +34,7 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
+import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
@@ -95,7 +100,20 @@ public class ProcedurePickerPanel extends Panel {
 
             Date dueDate = procedureScheduleModel.getObject().getDueDate();
 
+            final List<ProcedureDefinition> choices = procedureDefinitionService.getAllPublishedProcedures(procedureScheduleModel.getObject().getAsset());
+
+            setDefaultEventType(procedureScheduleModel, choices);
+
             add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
+
+            add(new DropDownChoice<ProcedureDefinition>("procedureDefSelect",
+                    new PropertyModel<ProcedureDefinition>(procedureScheduleModel, "type"),
+                    choices,
+                    new ListableChoiceRenderer<ProcedureDefinition>())
+                    .setNullValid(false)
+                    .setRequired(true)
+                    .add(new JChosenBehavior()));
+
 
             add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(procedureScheduleModel, "dueDate"), true));
             dateTimePicker.getDateTextField().setRequired(true);
@@ -139,6 +157,13 @@ public class ProcedurePickerPanel extends Panel {
 
         }
 
+        private void setDefaultEventType(IModel<Procedure> eventScheduleModel, List<ProcedureDefinition> eventTypeOptions) {
+            Procedure eventSchedule = eventScheduleModel.getObject();
+            if (eventSchedule.getType() == null && eventTypeOptions.size() > 0) {
+                eventSchedule.setType(eventTypeOptions.get(0));
+            }
+        }
+
         private AjaxLink createQuickDateLink(String id, final int daysFromNow, final int monthsFromNow, final int yearsFromNow) {
             return new AjaxLink(id) {
                 @Override
@@ -161,9 +186,9 @@ public class ProcedurePickerPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/component/wicket_schedule_picker.css");
-        response.renderCSSReference("style/newCss/component/wicket_procedure_picker.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/component/wicket_schedule_picker.css");
+        response.renderCSSReference("style/legacy/newCss/component/wicket_procedure_picker.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
     public void setSaveButtonLabel(IModel<String> saveButtonLabel) {

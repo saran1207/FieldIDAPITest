@@ -297,8 +297,8 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/saved_item/send_saved_item.css");
-        response.renderCSSReference("style/newCss/component/matt_buttons.css");
+        response.renderCSSReference("style/legacy/newCss/saved_item/send_saved_item.css");
+        response.renderCSSReference("style/legacy/newCss/component/matt_buttons.css");
     }
 
     @Override

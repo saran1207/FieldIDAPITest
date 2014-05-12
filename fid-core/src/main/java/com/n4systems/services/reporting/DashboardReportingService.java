@@ -8,22 +8,23 @@ import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventTypeGroupService;
 import com.n4systems.fieldid.service.event.PriorityCodeService;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
 import com.n4systems.fieldid.service.search.columns.EventColumnsService;
+import com.n4systems.fieldid.service.search.columns.ProcedureColumnsService;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.EventType;
 import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.widget.*;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.model.search.*;
 import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.EnumUtils;
-import com.n4systems.util.chart.ChartGranularity;
-import com.n4systems.util.chart.ChartSeries;
-import com.n4systems.util.chart.EventCompletenessChartSeries;
-import com.n4systems.util.chart.RangeType;
+import com.n4systems.util.chart.*;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,10 +38,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 
     private @Autowired AssetService assetService;
 	private @Autowired EventService eventService;
+    private @Autowired ProcedureService procedureService;
 	private @Autowired AssetStatusService assetStatusService;
     private @Autowired DateService dateService;
     private @Autowired PriorityCodeService priorityCodeService;
     private @Autowired EventTypeGroupService eventTypeGroupService;
+    private @Autowired ProcedureDefinitionService procedureDefinitionService;
 
     @Transactional(readOnly = true)
     public ChartSeries<LocalDate> getAssetsIdentified(DateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
@@ -55,6 +58,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		List<UpcomingScheduledEventsRecord> results = eventService.getUpcomingScheduledEvents(period, owner);
 		return new ChartSeries<LocalDate>(results);
 	}
+
+    @Transactional(readOnly = true)
+    public ChartSeries<LocalDate> getUpcomingScheduledLoto(Integer period) {
+        Preconditions.checkArgument(period!=null);
+        List<UpcomingScheduledLotoRecord> results = procedureService.getUpcomingScheduledLotos(period);
+        return new ChartSeries<LocalDate>(results);
+    }
 
     @Transactional(readOnly = true)
     public List<ChartSeries<String>> getActions(DateRange dateRange, BaseOrg owner, User assignee, EventType actionType) {
@@ -88,6 +98,19 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return results;
 	}
 
+    public List<ChartSeries<LocalDate>> getProceduresPublished(DateRange dateRange, ChartGranularity granularity) {
+        Preconditions.checkArgument(dateRange !=null);
+        List<ChartSeries<LocalDate>> results = new ArrayList<ChartSeries<LocalDate>>();
+
+        Date from = getFrom(granularity, dateRange);
+        Date to = getTo(granularity, dateRange);
+        List<DateChartable> completedEvents = procedureDefinitionService.getPublishedProceduresForWidget(from, to, granularity);
+
+        results.add(new ChartSeries<LocalDate>(PublishedState.PUBLISHED, PublishedState.PUBLISHED.getLabel(), completedEvents));
+
+        return results;
+    }
+
 	public EventKpiRecord getEventKpi(BaseOrg owner, DateRange dateRange) {
 		Preconditions.checkArgument(dateRange !=null);
         LocalDate from = dateRange.getFrom();
@@ -119,13 +142,12 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 		return (from==null) ? null : granularity.roundDown(from).toDate();
 	}
 
-
 	// ------------------------------------------------------------------------------------------------
 	//
 	// NOTE : methods used by widgets to convert configuration into criteria.
 	//
 	
-	public EventReportCriteria convertWidgetDefinitionToReportCriteria(Long widgetDefinitionId, Long x, String y, String series) {
+	public SearchCriteria convertWidgetDefinitionToReportCriteria(Long widgetDefinitionId, Long x, String y, String series) {
 		WidgetDefinition<?> widgetDefinition = getWidgetDefinition(widgetDefinitionId);
 		switch (widgetDefinition.getWidgetType()) {
 			case EVENT_COMPLETENESS:
@@ -134,6 +156,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 				return getCriteriaDefaults(((CompletedEventsWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
 			case UPCOMING_SCHEDULED_EVENTS: 
 				return getCriteriaDefaults(((UpcomingEventsWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
+            case UPCOMING_SCHEDULED_LOTO:
+                return getCriteriaDefaults(new LocalDate(x));
             case EVENT_KPI:
                 return getCriteriaDefaults((EventKPIWidgetConfiguration) widgetDefinition.getConfig(), series, x.intValue()/*assumed to be org index*/);
             case WORK:
@@ -144,6 +168,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 				throw new IllegalArgumentException("Can't convert widget of type " + widgetDefinition.getWidgetType() + " into report criteria");
 		}
 	}
+
+    private ProcedureCriteria getCriteriaDefaults(LocalDate localDate) {
+        ProcedureCriteria criteria = getDefaultProcedureCriteria();
+        criteria.setDueDateRange(new DateRange(localDate, localDate));
+        criteria.setWorkflowState(ProcedureWorkflowStateCriteria.OPEN);
+        return criteria;
+    }
 
     private EventReportCriteria getCriteriaDefaults() {
     	EventReportCriteria criteria = getDefaultReportCriteria();
@@ -258,8 +289,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         }
     }
 
-
-
     /**
      * asset widget related config --> criteria methods.
      */
@@ -311,6 +340,16 @@ public class DashboardReportingService extends FieldIdPersistenceService {
     public EventReportCriteria getDefaultReportCriteria() {
         EventReportCriteria criteria = new EventReportCriteria();
         ReportConfiguration reportConfiguration = new EventColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
+        criteria.setColumnGroups(reportConfiguration.getColumnGroups());
+        criteria.setSortColumn(reportConfiguration.getSortColumn());
+        criteria.setSortDirection(reportConfiguration.getSortDirection());
+        criteria.setReportAlreadyRun(true);
+        return criteria;
+    }
+
+    public ProcedureCriteria getDefaultProcedureCriteria() {
+        ProcedureCriteria criteria = new ProcedureCriteria();
+        ReportConfiguration reportConfiguration = new ProcedureColumnsService().getReportConfiguration(securityContext.getUserSecurityFilter());
         criteria.setColumnGroups(reportConfiguration.getColumnGroups());
         criteria.setSortColumn(reportConfiguration.getSortColumn());
         criteria.setSortDirection(reportConfiguration.getSortDirection());

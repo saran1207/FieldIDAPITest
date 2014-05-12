@@ -16,6 +16,8 @@ public class AssetTypesForTenantModel extends FieldIDSpringModel<List<AssetType>
 
     private IModel<AssetTypeGroup> assetTypeGroupModel;
 
+    private boolean filterForProcedures = false;
+
     public AssetTypesForTenantModel() {
         this(new Model<AssetTypeGroup>(null));
     }
@@ -24,10 +26,19 @@ public class AssetTypesForTenantModel extends FieldIDSpringModel<List<AssetType>
         this.assetTypeGroupModel = assetTypeGroupModel;
     }
 
+    public AssetTypesForTenantModel(IModel<AssetTypeGroup> assetTypeGroupModel, boolean filterForProcedures) {
+        this.assetTypeGroupModel = assetTypeGroupModel;
+        this.filterForProcedures = filterForProcedures;
+    }
+
     @Override
     protected List<AssetType> load() {
         AssetTypeGroup group = assetTypeGroupModel.getObject();
-        return assetTypeService.getAssetTypes(group == null ? null : group.getId());
+        if(!filterForProcedures) {
+            return assetTypeService.getAssetTypes(group == null ? null : group.getId());
+        } else {
+            return assetTypeService.getAssetTypesFilteredForProcedures(group == null ? null : group.getId());
+        }
     }
 
 }

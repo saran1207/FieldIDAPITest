@@ -8,7 +8,6 @@ import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.schedule.ProcedurePicker;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
 import com.n4systems.fieldid.wicket.model.LocalizeAround;
@@ -20,12 +19,12 @@ import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
-import com.n4systems.fieldid.wicket.pages.loto.ProcedureDefinitionListPage;
+import com.n4systems.fieldid.wicket.pages.identify.LimitedEditAsset;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.Procedure;
-import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.user.UserGroup;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -79,7 +78,8 @@ public class HeaderPanel extends Panel {
         BookmarkablePageLink summaryLink;
         BookmarkablePageLink eventHistoryLink;
         NonWicketIframeLink traceabilityLink;
-        boolean hasProcedures = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures);
+        boolean hasProcedures = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures) &&
+                asset.getType().hasProcedures();
 
         add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
@@ -88,7 +88,7 @@ public class HeaderPanel extends Panel {
 
         add(eventHistoryLink = new BookmarkablePageLink<Void>("eventHistoryLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId())));
 
-        add(new BookmarkablePageLink<ProcedureDefinitionListPage>("lotoProceduresLink", ProcedureDefinitionListPage.class, PageParametersBuilder.uniqueId(asset.getId()))
+        add(new BookmarkablePageLink<ProceduresListPage>("lotoProceduresLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(asset.getId()))
                 .setVisible(hasProcedures));
 
         if (isView) {
@@ -106,9 +106,7 @@ public class HeaderPanel extends Panel {
         if (FieldIDSession.get().getSessionUser().hasAccess("editevent") && !FieldIDSession.get().getSessionUser().isReadOnlyUser())
             add(new BookmarkablePageLink<Void>("editAssetLink", IdentifyOrEditAssetPage.class, PageParametersBuilder.id(asset.getId())));
         else
-            // TODO: replace with LimitedEditAsset wicket page link when that page is working
-            add(new NonWicketLink("editAssetLink", "customerInformationEdit.action?uniqueID=" + asset.getId(), new AttributeModifier("class", "mattButton")));
-
+            add(new BookmarkablePageLink<Void>("editAssetLink", LimitedEditAsset.class, PageParametersBuilder.id(asset.getId())));
         // Necessary for localization stuff to not break on this page.
         final IModel<Set<EventType>> assocEventTypesModel = new LocalizeModel<Set<EventType>>(new PropertyModel<Set<EventType>>(asset.getType(), "associatedEventTypes"));
         boolean hasAssociatedEventTypes = new LocalizeAround<Boolean>(new Callable<Boolean>() {
@@ -151,8 +149,8 @@ public class HeaderPanel extends Panel {
         boolean showScheduleProcedureLink;
 
         if (isLotoEnabled) {
-            showScheduleEventLink = false;
-            showScheduleProcedureLink = !hasAssociatedEventTypes;
+            showScheduleEventLink = hasAssociatedEventTypes && !asset.getType().hasProcedures();
+            showScheduleProcedureLink = !hasAssociatedEventTypes && asset.getType().hasProcedures();
         } else {
             showScheduleEventLink = hasCreateEvent && hasAssociatedEventTypes;
             showScheduleProcedureLink = false;
@@ -187,7 +185,7 @@ public class HeaderPanel extends Panel {
             }
         });
 
-        scheduleMenu.setVisible(hasCreateEvent && isLotoEnabled && hasAssociatedEventTypes);
+        scheduleMenu.setVisible(hasCreateEvent && isLotoEnabled && hasAssociatedEventTypes && asset.getType().hasProcedures());
 
         add(scheduleMenu);
 
@@ -196,9 +194,7 @@ public class HeaderPanel extends Panel {
     }
 
     private Procedure createNewProcedure(Asset asset) {
-        ProcedureDefinition procedureDefinition = procedureDefinitionService.getPublishedProcedureDefinition(asset);
         Procedure procedure = new Procedure();
-        procedure.setType(procedureDefinition);
         procedure.setAsset(asset);
         procedure.setTenant(FieldIDSession.get().getTenant());
         procedure.setWorkflowState(ProcedureWorkflowState.OPEN);
@@ -231,7 +227,7 @@ public class HeaderPanel extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/newCss/asset/header.css");
+        response.renderCSSReference("style/legacy/newCss/asset/header.css");
     }
 
     public boolean isInVendorContext() {

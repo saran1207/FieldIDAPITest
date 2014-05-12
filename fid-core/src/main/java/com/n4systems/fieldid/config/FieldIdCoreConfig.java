@@ -47,6 +47,7 @@ import com.n4systems.fieldid.service.org.PlaceService;
 import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
+import com.n4systems.fieldid.service.project.ProjectService;
 import com.n4systems.fieldid.service.schedule.AssetTypeScheduleService;
 import com.n4systems.fieldid.service.schedule.MassScheduleService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
@@ -283,6 +284,11 @@ public class FieldIdCoreConfig {
     @Bean
     public SavedReportService savedReportService() {
         return new SavedReportService();
+    }
+
+    @Bean
+    public SavedProcedureSearchService savedProcedureSearchService() {
+        return new SavedProcedureSearchService();
     }
 
     @Bean
@@ -792,4 +798,9 @@ public class FieldIdCoreConfig {
 	public FlavourFactory flavourFactory() {
 		return new FlavourFactory();
 	}
+
+    @Bean
+    public ProjectService projectService(){
+        return new ProjectService();
+    }
 }

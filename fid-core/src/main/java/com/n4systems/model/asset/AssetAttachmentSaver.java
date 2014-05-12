@@ -38,19 +38,30 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 		fillInConnectionFields(entity);
 
 		// this must be captured prior to merge as data is a transient field
-		byte[] attachmentData = entity.getData();
+		byte[] attachmentData = new byte[0];
+        if(!entity.isRemote()){
+            attachmentData = entity.getData();
+        }
+
         entity = em.merge(entity);
-		saveAttachmentData(entity, attachmentData);
+
+        saveAttachmentData(entity, attachmentData);
 	}
 	
 	@Override
 	public AssetAttachment update(EntityManager em, AssetAttachment entity) {
 		fillInConnectionFields(entity);
-		byte[] attachmentData = entity.getData();
+        byte[] attachmentData = new byte[0];
+        if(!entity.isRemote()){
+            attachmentData = entity.getData();
+        }
+
 		AssetAttachment attachment =  em.merge(entity);
-		if (attachmentData != null) {
-			writeAttachmentDataToFileSystem(attachment, attachmentData);
-		}
+
+        if(attachmentData != null && attachmentData.length > 0){
+            writeAttachmentDataToFileSystem(attachment, attachmentData);
+        }
+
 		return attachment;
 	}
 
@@ -67,7 +78,7 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	private void saveAttachmentData(AssetAttachment attachment, byte[] attachmentData) {
 		if (attachmentData != null) {
 			writeAttachmentDataToFileSystem(attachment, attachmentData);
-		} else {
+		} else if(!attachment.isRemote()) {
 			moveAttachmentFromTempDir(attachment);
 		}
 	}
@@ -99,7 +110,6 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 		entity.setTenant(asset.getTenant());
 	}
 	
-	//TODO move to a file Deleter.
 	private void deleteFile(AssetAttachment attachment) {
 		File attachedFile = PathHandler.getAssetAttachmentFile(attachment);
 		

@@ -3,8 +3,10 @@ package com.n4systems.model.procedure;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.n4systems.model.Asset;
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.User;
 
 import javax.persistence.*;
@@ -15,7 +17,11 @@ import java.util.Set;
 
 @Entity
 @Table(name = "procedure_definitions")
-public class ProcedureDefinition extends ArchivableEntityWithTenant {
+public class ProcedureDefinition extends ArchivableEntityWithTenant implements Listable<Long> {
+
+    public static final SecurityDefiner createSecurityDefiner() {
+        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
+    }
 
     @ManyToOne
     @JoinColumn(name = "asset_id")
@@ -74,6 +80,25 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
 
     @Column(name="auth_notification_sent")
     private boolean authorizationNotificationSent = false;
+
+    @Column(name="rejected_date")
+    private Date rejectedDate;
+
+    @ManyToOne
+    @JoinColumn(name = "rejected_by_id")
+    private User rejectedBy;
+
+    @Column(name="rejected_reason")
+    private String rejectedReason;
+
+    @Column(name="family_id", nullable = false)
+    private Long familyId;
+
+    @Column(name="unpublished_date")
+    private Date unpublishedDate;
+    @ManyToOne
+    @JoinColumn(name = "unpublished_by_id")
+    private User unpublishedBy;
 
     public String getProcedureCode() {
         return procedureCode;
@@ -299,5 +324,53 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant {
         if (!usedInOtherIsolationPoint) {
             getImages().remove(image);
         }
+    }
+
+    public User getRejectedBy() {
+        return rejectedBy;
+    }
+
+    public void setRejectedBy(User rejectedBy) {
+        this.rejectedBy = rejectedBy;
+    }
+
+    public Date getRejectedDate() {
+        return rejectedDate;
+    }
+
+    public void setRejectedDate(Date rejectedDate) {
+        this.rejectedDate = rejectedDate;
+    }
+
+    public String getRejectedReason() {
+        return rejectedReason;
+    }
+
+    public void setRejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
+    }
+
+    public Long getFamilyId() {
+        return familyId;
+    }
+
+    public void setFamilyId(Long familyId) {
+        this.familyId = familyId;
+    }
+
+    public Date getUnpublishedDate() {
+        return unpublishedDate;
+    }
+
+    public void setUnpublishedDate(Date unpublishedDate) {
+        this.unpublishedDate = unpublishedDate;
+    }
+
+    public User getUnpublishedBy() {
+        return unpublishedBy;
+    }
+
+    public void setUnpublishedBy(User unpublishedBy) {
+        this.unpublishedBy = unpublishedBy;
     }
 }

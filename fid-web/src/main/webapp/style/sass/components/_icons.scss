@@ -1,0 +1,51 @@
+//---------------------------
+// ICON FONTS & ICON IMAGES
+//---------------------------
+
+/* 
+	Fontello Icon font:
+	CSS file Generated from http://fontello.com and imported into global.scss
+	Icons are from the Entypo and Font Awesome icon set.
+	http://www.entypo.com/
+	http://fortawesome.github.io/Font-Awesome/
+*/
+// http://www.evotech.net/articles/testjsentities.html - entity conversion
+
+// Customizations for Fontello icon fonts
+// Generated CSS containing the icon classes can be found in fontello.scss
+[class^="icon-"],
+[class*=" icon-"] {
+	cursor: pointer;
+	font-size: 0; //hides text
+
+	&:before {
+		font-size: $base-font-size; //shows icon
+		line-height: 1; // overrides generated css
+		margin: 0; // overrides
+	}
+}
+
+// EVENT ICON SPRITE 
+// ------------------
+[class^="icon-event"],
+[class*=" icon-event"]{
+	width: 26px;
+	height: 28px;
+	display: inline-block;
+	vertical-align: middle;
+	background: url(/fieldid/img/sprite-event-status.png) no-repeat;
+}
+.icon-event-open {
+	background-position: 0 0;
+}
+.icon-event-open-overdue {
+	background-position: -26px 0;
+}
+.icon-event-completed-pass {
+	background-position: -52px 0;
+}
+.icon-event-completed-fail {
+	background-position: -78px 0;
+}
+
+
