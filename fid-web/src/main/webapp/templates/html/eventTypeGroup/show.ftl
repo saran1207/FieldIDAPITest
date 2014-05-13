@@ -1,4 +1,14 @@
 ${action.setPageType('event_type_group', 'show')!}
+
+<head>
+    <@n4.includeStyle href="/style/legacy/newCss/component/buttons.css" type="page"/>
+    <style type="text/css">
+        .sectionContent, .crudForm .infoSet {
+            overflow: visible;
+        }
+    </style>
+</head>
+
 <div class="crudForm bigForm pageSection">
 	<h2><@s.text name="label.groupdetails"/> <a href="<@s.url action="eventTypeGroupEdit" uniqueID="${group.id}"/>"><@s.text name="label.littleedit"/></a></h2>
 	<div class="sectionContent">
@@ -37,7 +47,14 @@ ${action.setPageType('event_type_group', 'show')!}
 			</div>
 		</#if>	
 		<div class="infoSet">
-			<label class="line"><a href="<@s.url action="eventTypeAdd" group="${group.id}"/>"><@s.text name="label.addneweventtype"/></a></label>
+            <div class="dropdown-btn">
+                <a class="btn btn-secondary btn-sml" href="#">Add Event Type<img src="/fieldid/images/menu-down.png"></a>
+                <ul class="pull-right">
+                    <li><a href="/fieldid/eventTypeAdd.action?newEventType=Asset&group=${group.id}">Asset Event</a></li>
+                    <li><a href="/fieldid/eventTypeAdd.action?newEventType=Place&group=${group.id}">Place Event</a></li>
+                    <li><a href="/fieldid/eventTypeAdd.action?newEventType=Action&group=${group.id}">Action</a></li>
+                </ul>
+            </div>
 		</div>
 		 
 	</div>
