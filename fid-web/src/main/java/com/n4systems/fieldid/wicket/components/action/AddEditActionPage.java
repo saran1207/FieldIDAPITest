@@ -78,7 +78,23 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
             final FIDFeedbackPanel feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
             add(feedbackPanel);
 
-            IModel<Date> scheduledDateModel = ProxyModel.of(getModel(), on(Event.class).getDueDate());
+            //We need to create our own IModel for the DueDate because it is one of the two objects that is being changed
+            //on the fly during the form editing.  We do not want these values to be overwritten if the user cancels the form
+            final IModel<Date> scheduledDateModel = new Model<Date>(){
+                private Date originalDate;
+
+                @Override
+                public Date getObject() {
+                    return originalDate;
+                }
+
+                @Override
+                public void setObject(Date object) {
+                    originalDate = object;
+                }
+            };
+            scheduledDateModel.setObject(eventModel.getObject().getDueDate());
+
             final DateTimePicker scheduledDatePicker = new DateTimePicker("dueDate", scheduledDateModel).withMonthsDisplayed(1).withNoAllDayCheckbox();
             scheduledDatePicker.getDateTextField().setRequired(true);
 
@@ -95,7 +111,24 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
 
             addQuickDateLinks(scheduledDatePicker, scheduledDateModel);
 
-            DropDownChoice<PriorityCode> priorityChoice = new DropDownChoice<PriorityCode>("priority", ProxyModel.of(getModel(), on(Event.class).getPriority()), new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>());
+            //We need to create our own IModel for the PriorityCode because it is one of the two objects that is being changed
+            //on the fly during the form editing.  We do not want these values to be overwritten if the user cancels the form
+            final IModel<PriorityCode> priorityCodeModel = new Model<PriorityCode>(){
+                private PriorityCode priorityCode;
+
+                @Override
+                public PriorityCode getObject() {
+                    return priorityCode;
+                }
+
+                @Override
+                public void setObject(PriorityCode object) {
+                    priorityCode = object;
+                }
+            };
+            priorityCodeModel.setObject(eventModel.getObject().getPriority());
+
+            final DropDownChoice<PriorityCode> priorityChoice = new DropDownChoice<PriorityCode>("priority", priorityCodeModel, new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>());
             priorityChoice.setRequired(true);
             priorityChoice.setNullValid(true);
             priorityChoice.add(new UpdateComponentOnChange() {
@@ -117,6 +150,10 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 @Override
                 protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     if (immediateSaveMode) {
+                        //Manually set the DueDate and the PriorityCode because we created our own IModels for them.
+                        //The other attributes are already set.
+                        getModelObject().setDueDate(scheduledDateModel.getObject());
+                        getModelObject().setPriority(priorityCodeModel.getObject());
                         persistenceService.update(getModelObject());
                         setResponsePage(new ActionDetailsPage(criteriaResultModel, eventClass, eventModel));
 
@@ -124,9 +161,18 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                         Event addedAction = getModelObject();
 
                         if (!editMode) {
+                            //Manually set the DueDate and the PriorityCode because we created our own IModels for them.
+                            //The other attributes are already set.
+                            addedAction.setDueDate(scheduledDateModel.getObject());
+                            addedAction.setPriority(priorityCodeModel.getObject());
                             addedAction.setTenant(FieldIDSession.get().getTenant());
                             criteriaResultModel.getObject().getActions().add(addedAction);
                         }
+
+                        //Manually set the DueDate and the PriorityCode because we created our own IModels for them.
+                        //The other attributes are already set.
+                        criteriaResultModel.getObject().getActions().get(criteriaResultModel.getObject().getActions().indexOf(addedAction)).setPriority(priorityCodeModel.getObject());
+                        criteriaResultModel.getObject().getActions().get(criteriaResultModel.getObject().getActions().indexOf(addedAction)).setDueDate(scheduledDateModel.getObject());
 
                         FieldIDSession.get().setActionsForCriteria(criteriaResultModel.getObject(), criteriaResultModel.getObject().getActions());
                         setResponsePage(new ActionsListPage(criteriaResultModel, eventClass));
