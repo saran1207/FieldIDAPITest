@@ -82,6 +82,7 @@ public class ReportingFilterPanel extends Panel {
                 model.getObject().setEventTypeGroup(null);
                 model.getObject().setEventType(null);
                 onEventTypeOrGroupUpdated(target, null, eventDetailsCriteriaPanel.getAvailableEventTypesModel().getObject());
+                eventDetailsCriteriaPanel.repaintPrioritySelect(target);
                 target.add(eventDetailsCriteriaPanel);
             }
         });
