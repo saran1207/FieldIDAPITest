@@ -405,8 +405,12 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
         for (String userGroupIdString : userGroupIdStrings) {
             userGroupIds.add(Long.valueOf(userGroupIdString));
         }
-        HashSet<UserGroup> newGroups = new HashSet<UserGroup>(userGroupService.getUserGroups(userGroupIds));
-        user.setGroups(newGroups);
+        if(userGroupIds.isEmpty()) {
+            user.setGroups(null);
+        } else {
+            HashSet<UserGroup> newGroups = new HashSet<UserGroup>(userGroupService.getUserGroups(userGroupIds));
+            user.setGroups(newGroups);
+        }
     }
 
 	public String getTimeZoneID() {
