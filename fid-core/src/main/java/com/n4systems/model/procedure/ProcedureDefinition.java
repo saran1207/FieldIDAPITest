@@ -100,6 +100,10 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     @JoinColumn(name = "unpublished_by_id")
     private User unpublishedBy;
 
+    @Column(name="procedure_type")
+    @Enumerated(EnumType.STRING)
+    private ProcedureType procedureType;
+
     public String getProcedureCode() {
         return procedureCode;
     }
@@ -373,4 +377,8 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     public void setUnpublishedBy(User unpublishedBy) {
         this.unpublishedBy = unpublishedBy;
     }
+
+    public ProcedureType getProcedureType() { return procedureType; }
+
+    public void setProcedureType(ProcedureType procedureType) { this.procedureType = procedureType; }
 }

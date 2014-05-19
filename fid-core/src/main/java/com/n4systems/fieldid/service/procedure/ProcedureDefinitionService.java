@@ -690,6 +690,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setEquipmentDescription(source.getEquipmentDescription());
         to.setPublishedState(PublishedState.DRAFT);
         to.setFamilyId(source.getFamilyId());
+        to.setProcedureType(source.getProcedureType());
 
         Map<String, ProcedureDefinitionImage> clonedImages = cloneImages(source,to);
         to.setImages(Lists.newArrayList(clonedImages.values()));
@@ -724,6 +725,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setBuilding(source.getBuilding());
         to.setEquipmentDescription(source.getEquipmentDescription());
         to.setPublishedState(PublishedState.DRAFT);
+        to.setProcedureType(ProcedureType.SUB);
 
         to.setFamilyId(generateFamilyId(source.getAsset()));
         to.setRevisionNumber(1L);
@@ -1030,5 +1032,22 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         procedureDefinition.archiveEntity();
         persistenceService.update(procedureDefinition);
     }
+
+    public boolean hasMainProcedureType(Asset asset){
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+
+        query.addSimpleWhere("procedureType", ProcedureType.MAIN);
+        query.addSimpleWhere("asset", asset);
+
+        List<ProcedureDefinition> list=persistenceService.findAll(query);
+
+        int count = list.size();
+
+        if(count == 0){
+            return false;
+        } else {
+            return true;
+        }
+   }
 
 }
