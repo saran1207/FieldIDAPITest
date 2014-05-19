@@ -1039,9 +1039,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         query.addSimpleWhere("procedureType", ProcedureType.MAIN);
         query.addSimpleWhere("asset", asset);
 
-        List<ProcedureDefinition> list=persistenceService.findAll(query);
-
-        int count = list.size();
+        Long count = persistenceService.count(query);
 
         if(count == 0){
             return false;
