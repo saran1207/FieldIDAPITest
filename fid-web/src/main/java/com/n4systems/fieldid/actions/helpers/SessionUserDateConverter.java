@@ -16,11 +16,11 @@ public class SessionUserDateConverter implements UserDateConverter {
 	}
 
 	public String convertDate(Date date) {
-		return DateHelper.date2String(getDateFormat(), date);
+		return DateHelper.date2String(getDateFormat(), date, getTimeZone());
 	}
 
     public Date convertDate(String date) {
-        return DateHelper.string2Date(getDateFormat(), date);
+        return DateHelper.string2Date(getDateFormat(), date, getTimeZone());
     }
 
     public Date convertDateWithOptionalTime(String date) {

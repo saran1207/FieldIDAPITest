@@ -269,9 +269,8 @@ h2 a {
 
 #pageContent {
 	width: 100%;
-	margin-bottom: 10px;
+	margin-bottom: 80px;
 	text-align: left;
-	overflow: hidden;
 	min-height: 550px;
 	_height: auto !important;
 }
