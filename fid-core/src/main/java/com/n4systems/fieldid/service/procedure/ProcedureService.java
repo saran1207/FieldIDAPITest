@@ -5,14 +5,17 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.ProcedureWorkflowState;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.UpcomingScheduledLotoRecord;
 import com.n4systems.util.persistence.*;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -141,5 +144,26 @@ public class ProcedureService extends FieldIdPersistenceService {
         // CAVEAT : we don't want results to include values with null dates. they are ignored.  (this makes sense for EventSchedules
         //   because null dates are used when representing AdHoc events).
         return new WhereParameter<Date>(WhereParameter.Comparator.NOTNULL, property);
+    }
+
+    public List<Procedure> getLockedAssignedTo(BaseOrg org) {
+        QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
+        query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.LOCKED));
+        if(org != null) {
+            query.applyFilter(new OwnerAndDownFilter(org));
+        }
+
+        List<Procedure> list = persistenceService.findAll(query);
+
+        List<Procedure> filteredList = new ArrayList<Procedure>();
+
+        for(Procedure l:list){
+            if(l.getType() != null)
+            {
+                filteredList.add(l);
+            }
+        }
+
+        return filteredList;
     }
 }

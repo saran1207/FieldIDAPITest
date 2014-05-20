@@ -7,6 +7,7 @@ import com.n4systems.model.api.HasGpsLocation;
 import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
@@ -21,6 +22,10 @@ import java.util.UUID;
 @Entity
 @Table(name = "procedures")
 public class Procedure extends ArchivableEntityWithTenant implements NetworkEntity<Procedure>, HasGpsLocation {
+
+    public static final SecurityDefiner createSecurityDefiner() {
+        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
+    }
 
     @ManyToOne
     @JoinColumn(name = "type_id")
