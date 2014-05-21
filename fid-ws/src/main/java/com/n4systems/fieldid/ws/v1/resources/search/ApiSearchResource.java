@@ -144,6 +144,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		apiResult.setCustomerOwnerName(asset.getOwner().getCustomerOrg() != null ? asset.getOwner().getCustomerOrg().getName() : null);
 		apiResult.setDivisionOwnerName(asset.getOwner().getDivisionOrg() != null ? asset.getOwner().getDivisionOrg().getName() : null);
 		apiResult.setImage(loadAssetImage(asset));
+		apiResult.setIdentified(asset.getIdentified());
 
 		if(asset.getAdvancedLocation() != null) {
 			apiResult.setLocation(asset.getAdvancedLocation().getFreeformLocation());
