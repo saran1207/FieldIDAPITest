@@ -19,6 +19,7 @@ import org.apache.wicket.markup.html.basic.EnclosureContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,9 @@ import java.util.List;
  * Created by rrana on 2014-05-19.
  */
 public class AssetsLockedOutWidget extends Widget<LockedoutProceduresWidgetConfiguration> {
+
+    @SpringBean
+    private OrgDateRangeSubtitleHelper orgDateRangeSubtitleHelper;
 
     public AssetsLockedOutWidget(String id, WidgetDefinition<LockedoutProceduresWidgetConfiguration> widgetDefinition) {
         super(id, new Model<WidgetDefinition<LockedoutProceduresWidgetConfiguration>>(widgetDefinition));
@@ -76,6 +80,15 @@ public class AssetsLockedOutWidget extends Widget<LockedoutProceduresWidgetConfi
     public Component createConfigPanel(String id) {
         IModel<LockedoutProceduresWidgetConfiguration> configModel = new Model<LockedoutProceduresWidgetConfiguration>(getWidgetDefinition().getObject().getConfig());
         return new AssetsLockedOutConfigPanel(id, configModel);
+    }
+
+    @Override
+    protected IModel<String> getSubTitleModel() {
+        if(getOrg() == null){
+            return Model.of("");
+        } else {
+            return Model.of("Currently locked out for " + getOrg().getDisplayName());
+        }
     }
 
 }
