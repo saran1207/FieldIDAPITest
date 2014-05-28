@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ExcelExportService<T extends SearchCriteria> extends DownloadService<T> {
+	private static final String SHEET_NAME = "Report";
 
     public ExcelExportService() {
         super("excelReportDownload", ContentType.EXCEL);
@@ -39,50 +40,27 @@ public abstract class ExcelExportService<T extends SearchCriteria> extends Downl
 
     @Transactional
     public void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize, boolean exceptionOnEmptyReport) throws ReportException {
-        User user = getCurrentUser();
+		int totalResults = calcTotalResults(useSelection, criteria, resultLimit);
+		if (exceptionOnEmptyReport && totalResults == 0) {
+			throw new EmptyReportException();
+		}
+
+		User user = getCurrentUser();
 
         TableGenerationContext exportContextProvider = new TableGenerationContextImpl(user.getTimeZone(), user.getOwner().getPrimaryOrg().getDateFormat(), user.getOwner().getPrimaryOrg().getDateFormat() + " h:mm a", user.getOwner());
+		TableViewExcelHandler tableHandler = new TableViewExcelHandler(createCellHandlers(criteria, exportContextProvider));
 
-        DateTimeDefiner dateTimeDefiner = new DateTimeDefiner(user);
+        ResultTransformer<TableView> resultTransformer = new ResultTransformerFactory().createResultTransformer(criteria);
 
-        int totalResults;
+		ExcelBuilder excelBuilder = new ExcelBuilder(new DateTimeDefiner(user));
+		excelBuilder.createSheet(SHEET_NAME);
+		excelBuilder.setSheetTitles(SHEET_NAME, getColumnTitles(criteria));
 
-        if (useSelection) {
-            totalResults = criteria.getSelection().getNumSelectedIds();
-        } else {
-            totalResults = countTotalResults(criteria, resultLimit);
-        }
+		int totalPages = (int)Math.ceil(totalResults / (double) pageSize);
+		for (int page = 0; page < totalPages; page++) {
+			excelBuilder.addSheetData(SHEET_NAME, getSearchPage(criteria, resultTransformer, page, pageSize, useSelection, tableHandler));
+		}
 
-        if (exceptionOnEmptyReport && totalResults == 0) {
-            throw new EmptyReportException();
-        }
-
-        int totalPages = (int)Math.ceil(totalResults / (double)pageSize);
-
-        final List<ColumnMappingView> sortedStaticAndDynamicColumns = criteria.getSortedStaticAndDynamicColumns(true);
-
-        // we'll initalize the table view with one 1 row .. this will resize dynamically as we append tables
-        TableView masterTable = new TableView(0, sortedStaticAndDynamicColumns.size());
-
-        final ResultTransformer<TableView> resultTransformer = new ResultTransformerFactory().createResultTransformer(criteria);
-
-        int pageNumber = 0;
-        do {
-            masterTable.append(performSearch(criteria, resultTransformer, pageNumber, pageSize, useSelection).getPageResults());
-            pageNumber++;
-
-        } while(pageNumber < totalPages);
-
-        // we now need to run all the cell handlers on the table so the values are properly converted
-
-        TableViewExcelHandler tableHandler = new TableViewExcelHandler(createCellHandlers(criteria, exportContextProvider));
-        tableHandler.handle(masterTable);
-
-        // create an excel builder and add our data
-        ExcelBuilder excelBuilder = new ExcelBuilder(dateTimeDefiner);
-        excelBuilder.createSheet("Report", getColumnTitles(criteria), masterTable);
-
-        //write the file
         try {
             excelBuilder.writeToFile(file);
         } catch (IOException e) {
@@ -90,7 +68,23 @@ public abstract class ExcelExportService<T extends SearchCriteria> extends Downl
         }
     }
 
-    private int countTotalResults(T criteria, int resultLimit) {
+	private int calcTotalResults(boolean useSelection, T criteria, int resultLimit) {
+		int totalResults;
+		if (useSelection) {
+			totalResults = criteria.getSelection().getNumSelectedIds();
+		} else {
+			totalResults = countTotalResults(criteria, resultLimit);
+		}
+		return totalResults;
+	}
+
+	private TableView getSearchPage(T criteria, ResultTransformer<TableView> resultTransformer, int pageNumber, int pageSize, boolean useSelection, TableViewExcelHandler tableHandler) {
+		TableView page = performSearch(criteria, resultTransformer, pageNumber, pageSize, useSelection).getPageResults();
+		tableHandler.handle(page);
+		return page;
+	}
+
+	private int countTotalResults(T criteria, int resultLimit) {
         int totalResults = countTotalResults(criteria);
         if (resultLimit == 0) {
             return totalResults;
