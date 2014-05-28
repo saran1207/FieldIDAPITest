@@ -1036,8 +1036,9 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     public boolean hasMainProcedureType(Asset asset){
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
 
-        query.addSimpleWhere("procedureType", ProcedureType.MAIN);
         query.addSimpleWhere("asset", asset);
+        query.addSimpleWhere("procedureType", ProcedureType.MAIN);
+        query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
 
         Long count = persistenceService.count(query);
 
