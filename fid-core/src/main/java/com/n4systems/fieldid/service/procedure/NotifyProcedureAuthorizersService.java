@@ -107,7 +107,7 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
     }
 
     private TemplateMailMessage createMailMessage(ProcedureDefinition procedureDefinition, UserGroup approvalGroup) {
-        String subject = "Approval Requested: Lockout/Tagout Procedure";
+        String subject = "Certification Requested: Lockout/Tagout Procedure";
         TemplateMailMessage msg = new TemplateMailMessage(subject, NOTIFY_PROCEDURE_AUTH_TEMPLATE);
         msg.setSubject(subject);
 
