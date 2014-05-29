@@ -4,18 +4,18 @@
 <wicket:panel>
     <h3><wicket:message key="label.result"/></h3>
 
-    <div class="control-group score">
+    <div class="control-group" name="score">
         <label class="label"><wicket:message key="label.score"/></label>
         <span class="value">
             <span wicket:id="score"/>&nbsp;
             <span wicket:enclosure="percentage">(<span wicket:id="percentage"/>)</span>
         </span>
     </div>
-    <div class="control-group result">
+    <div class="control-group" name="result">
         <label class="label"><wicket:message key="label.result"/></label>
         <span class="value result"><span wicket:id="result"/></span>
     </div>
-    <div class="control-group eventStatus">
+    <div class="control-group" name="eventStatus">
         <label class="label"><wicket:message key="label.event_status"/></label>
         <span class="value" wicket:id="eventStatus"/>
     </div>
