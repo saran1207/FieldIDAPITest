@@ -105,7 +105,10 @@
 }
 div.wicket-modal div.w_caption,
 div.dialog-modal div.w_caption {
- 	padding: 0;
+ 	padding: 0 0 10px 0;
+}
+div.wicket-modal div .w_top_1 {
+	height: 7px;
 }
 .step1 {
 	text-align: center;

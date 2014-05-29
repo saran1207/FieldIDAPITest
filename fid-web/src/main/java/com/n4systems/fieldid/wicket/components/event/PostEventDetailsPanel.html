@@ -3,23 +3,23 @@
 
 <wicket:panel>
     <h3><wicket:message key="label.posteventinformation"/></h3>
-    <div class="control-group">
+    <div class="control-group" name="comments">
         <label class="label"><wicket:message key="label.comments"/></label>
         <span class="value" wicket:id="comments"/>
     </div>
-    <div class="control-group">
+    <div class="control-group" name="createdBy">
         <label class="label"><wicket:message key="label.createdby"/></label>
         <span class="value">
             <span wicket:id="createdBy"/>&nbsp;<span wicket:id="created"/>&nbsp;<img wicket:id="createdIcon"/>
         </span>
     </div>
-    <div class="control-group">
+    <div class="control-group" name="modifiedBy">
         <label class="label"><wicket:message key="label.modifiedby"/></label>
         <span class="value">
             <span wicket:id="modifiedBy"/>&nbsp;<span wicket:id="modified"/>&nbsp;<img wicket:id="modifiedIcon"/>
         </span>
     </div>
-    <div class="control-group" wicket:enclosure="assetStatus">
+    <div class="control-group" name="assetStatus" wicket:enclosure="assetStatus">
         <label class="label"><wicket:message key="label.assetstatus"/></label>
         <span class="value" wicket:id="assetStatus"/>
     </div>
