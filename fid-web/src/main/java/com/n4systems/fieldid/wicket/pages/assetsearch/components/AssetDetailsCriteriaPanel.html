@@ -1,22 +1,22 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 	   
-     <div class="control-group">
+     <div class="control-group" name="assetStatus">
      	 <label wicket:for="assetStatus"><wicket:message key="label.assetstatus"/></label>
          <select wicket:id="assetStatus"></select>
      </div>
 
-    <div class="control-group">
+    <div class="control-group" name="assetTypeGroup">
 	    <label wicket:for="assetTypeGroup"><wicket:message key="label.asset_type_group"/></label>
         <select wicket:id="assetTypeGroup"></select>
     </div>
 
-    <div class="control-group">
+    <div class="control-group" name="assetType">
 		<label wicket:for="assetType"><wicket:message key="label.assettype"/></label>
         <select wicket:id="assetType"></select>
     </div>
 
-    <div wicket:enclosure="hasGps" class="control-group">
+    <div wicket:enclosure="hasGps" class="control-group" name="hasGps">
         <label wicket:for="hasGps"><wicket:message key="label.gps"/></label>
         <select wicket:id="hasGps"></select>
     </div>

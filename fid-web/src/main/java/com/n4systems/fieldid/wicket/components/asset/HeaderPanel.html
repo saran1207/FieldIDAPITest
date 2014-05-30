@@ -6,37 +6,37 @@
 
 <wicket:panel>
     <h1>
-        <span class="greyText"><span wicket:id="assetType"/> / </span><span wicket:id="assetIdentifier"/><span class="greyText" wicket:enclosure="assetStatus"> / <span id="assetStatus" wicket:id="assetStatus"/></span>
+        <span class="greyText" name="assetType"><span wicket:id="assetType"/> / </span><span name="assetId" wicket:id="assetIdentifier"/><span class="greyText" name="assetStatus" wicket:enclosure="assetStatus"> / <span id="assetStatus" wicket:id="assetStatus"/></span>
     </h1>
-    <div class="ownerInfo">
+    <div class="ownerInfo" name="ownerInfo">
         <img src="/fieldid/images/location-icon.png"/> <span wicket:id="ownerInfo"/>
     </div>
 
-    <div class="viewButtons">
-        <a wicket:id="summaryLink" class="mattButtonLeft"><wicket:message key="label.summary"/></a>
-        <a wicket:id="traceabilityLink"><wicket:message key="nav.traceability"/></a>
-        <a wicket:id="eventHistoryLink"> <wicket:message key="label.events"/></a>
-        <a wicket:id="lotoProceduresLink" class="mattButtonRight"><wicket:message key="label.procedures"/></a>
+    <div class="viewButtons" name="viewButtons">
+        <a wicket:id="summaryLink" name="summaryLink" class="mattButtonLeft"><wicket:message key="label.summary"/></a>
+        <a wicket:id="traceabilityLink" name="traceabilityLink"><wicket:message key="nav.traceability"/></a>
+        <a wicket:id="eventHistoryLink" name="eventHistoryLink"> <wicket:message key="label.events"/></a>
+        <a wicket:id="lotoProceduresLink" name="lotoProceduresLink" class="mattButtonRight"><wicket:message key="label.procedures"/></a>
     </div>
 
     <div class="actionButtons">
-        <a wicket:id="startEventLink" class="mattButton blueButton"> <wicket:message key="label.start_event"/></a>
-        <a wicket:id="scheduleEventLink" class="mattButton"><wicket:message key="label.uc_schedule"/></a>
-        <a wicket:id="scheduleProcedureLink" class="mattButton"><wicket:message key="label.uc_schedule"/></a>
+        <a wicket:id="startEventLink" class="mattButton blueButton" name="startEventLink"> <wicket:message key="label.start_event"/></a>
+        <a wicket:id="scheduleEventLink" class="mattButton" name="scheduleEventLink"><wicket:message key="label.uc_schedule"/></a>
+        <a wicket:id="scheduleProcedureLink" class="mattButton" name="scheduleProcedureLink"><wicket:message key="label.uc_schedule"/></a>
         <span wicket:id="scheduleMenu" class="actions">
             <ul>
-                <li class="menu">
+                <li class="menu" name="menu">
                     <a class="mattButton" href="javascript:void(0);">
                         <wicket:message key="label.uc_schedule"/><img src="/fieldid/images/menu-down.png"/>
                     </a>
-                    <ul class="menu-items">
-                        <li><a wicket:id="menuScheduleEventLink"> <wicket:message key="label.title.event"/></a></li>
-                        <li><a wicket:id="menuScheduleProcedureLink"> <wicket:message key="label.lockout_tagout"/></a></li>
+                    <ul class="menu-items" name="menu-items">
+                        <li><a wicket:id="menuScheduleEventLink" name="menuScheduleEventLink"> <wicket:message key="label.title.event"/></a></li>
+                        <li><a wicket:id="menuScheduleProcedureLink" name="menuScheduleProcedureLink"> <wicket:message key="label.lockout_tagout"/></a></li>
                     </ul>
                 </li>
             </ul>
         </span>
-        <a wicket:id="editAssetLink" class="mattButton"><wicket:message key="label.edit"/></a>
+        <a wicket:id="editAssetLink" class="mattButton" name="editAssetLink"><wicket:message key="label.edit"/></a>
     </div>
 
     <div wicket:id="schedulePicker"></div>
