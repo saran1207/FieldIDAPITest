@@ -48,12 +48,9 @@ ${action.setPageType('event_type_group', 'show')!}
 		</#if>	
 		<div class="infoSet">
             <div class="dropdown-btn">
-                <a class="btn btn-secondary btn-sml" href="#">Add Event Type<img src="/fieldid/images/menu-down.png"></a>
-                <ul class="pull-right">
-                    <li><a href="/fieldid/eventTypeAdd.action?newEventType=Asset&group=${group.id}">Asset Event</a></li>
-                    <li><a href="/fieldid/eventTypeAdd.action?newEventType=Place&group=${group.id}">Place Event</a></li>
-                    <li><a href="/fieldid/eventTypeAdd.action?newEventType=Action&group=${group.id}">Action</a></li>
-                </ul>
+                <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=Asset&group=${group.id}">Add Asset Event</a>
+                <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=Place&group=${group.id}">Add Place Event</a>
+                <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=Action&group=${group.id}">Add Action</a>
             </div>
 		</div>
 		 
