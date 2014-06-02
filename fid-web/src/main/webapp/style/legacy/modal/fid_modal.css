@@ -23,7 +23,7 @@ div.wicket-modal h3.w_captionText {
 }
 
 div.wicket-modal div.w_caption {
-    height:15px;
+    height:30px;
     background-color:#f2f2f2;
     color:#000;
     padding:0 0 12px 8px;
@@ -69,4 +69,8 @@ div.wicket-modal div.w_content_1 {
 
 div.wicket-modal div.w_right_1 {
     margin-left:0;
+}
+
+div.wicket-modal div.w_content_container {
+        min-height: 294px !important;
 }
