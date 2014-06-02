@@ -79,6 +79,17 @@ public class ProcedureService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
+    public Procedure getLockedProcedure(Asset asset) {
+        QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
+        query.addSimpleWhere("asset", asset);
+        query.addSimpleWhere("workflowState", ProcedureWorkflowState.LOCKED);
+        query.setOrder("modified", false);
+        query.setLimit(1);
+        Procedure procedure = persistenceService.find(query);
+
+        return procedure;
+    }
+
     public Long getAllProceduresForAssetTypeCount(AssetType assetType) {
         QueryBuilder<Long> query = new QueryBuilder<Long>(Procedure.class, securityContext.getTenantSecurityFilter());
         WhereParameterGroup wpg = new WhereParameterGroup();
