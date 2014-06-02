@@ -34,19 +34,13 @@ module.exports = function(grunt) {
         sass: {
             dev: {
                 options: {
-                    style: 'expanded',
-                    sourcemap: true,
-                    // lineNumbers: true
+                    style: 'expanded'
                 },
                 files: scssFileMap
             },
             prod: {
                 options: {
-                    style: 'compressed' 
-                    // compress: true,
-                    // yuicompress: true,
-                    // cleancss: true,
-                    // optimization: 2
+                    style: 'compressed'
                 },
                 files: scssFileMap
             }
