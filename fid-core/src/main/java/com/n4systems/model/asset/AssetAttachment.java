@@ -53,12 +53,20 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 		super.onUpdate();
 		ensureMobileIdIsSet();
 	}
-	
-	private void ensureMobileIdIsSet() {
-		if (mobileId == null) {
-			mobileId = UUID.randomUUID().toString();
-		}
-	}
+
+    public void ensureMobileIdIsSet() {
+        if (this.getMobileId() == null) {
+            this.setMobileId(UUID.randomUUID().toString());
+        }
+    }
+
+    public String getMobileId() {
+        return mobileId;
+    }
+
+    public void setMobileId(String mobileId) {
+        this.mobileId = mobileId;
+    }
 
 	public Asset getAsset() {
 		return asset;
@@ -106,14 +114,6 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 	@Override
 	public boolean hasAttachedFile() {
 		return note.hasAttachedFile();
-	}
-
-	public String getMobileId() {
-		return mobileId;
-	}
-
-	public void setMobileId(String mobileId) {
-		this.mobileId = mobileId;
 	}
 
 	public byte[] getData() {

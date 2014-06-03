@@ -43,12 +43,18 @@ public class DownloadAssetTypeAttachedFile extends AbstractDownloadAction {
 	
 	@Override
 	public File getFile() {
-		return PathHandler.getAssetTypeAttachmentFile(attachment, assetTypeId);
+        if(attachment.isRemote()){
+            File assetAttachmentFile = s3Service.downloadFileAttachment(attachment);
+            return assetAttachmentFile;
+        }
+        else {
+            return PathHandler.getAssetTypeAttachmentFile(attachment, assetTypeId);
+        }
 	}
 	
 	@Override
 	public String getFileName() {
-		return attachment.getFileName();
+		return attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
 	}
 	
 	public void setAttachmentID(Long attachmentID) {

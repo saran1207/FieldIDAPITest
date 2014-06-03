@@ -2,11 +2,14 @@ package com.n4systems.model.asset;
 
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.InvalidArgumentException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Asset;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.savers.ModifiedBySaver;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.FileUtils;
+import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
 import java.io.File;
@@ -14,17 +17,26 @@ import java.io.IOException;
 
 public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	private final Asset asset;
+    private S3Service s3Service;
 	
 	public AssetAttachmentSaver(Asset asset) {
-		super();
-		this.asset = asset;
+        this((User)null, asset, ServiceLocator.getS3Service());
 	}
 
+    public AssetAttachmentSaver(Asset asset, S3Service s3Service) {
+        this((User)null, asset, s3Service);
+    }
+
 	public AssetAttachmentSaver(User modifiedBy, Asset asset) {
-		super(modifiedBy);
-		this.asset = asset;
+        this(modifiedBy, asset, ServiceLocator.getS3Service());
 	}
-	
+
+    public AssetAttachmentSaver(User modifiedBy, Asset asset, S3Service s3Service) {
+        super(modifiedBy);
+        this.asset = asset;
+        this.s3Service = s3Service;
+    }
+
 	public void saveOrUpdate(EntityManager em, AssetAttachment entity) {
 		if (entity.isNew()) {
 			save(em, entity);
@@ -83,23 +95,31 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 		}
 	}
 
-	private void moveAttachmentFromTempDir(AssetAttachment entity) {
+	private void moveAttachmentFromTempDir(AssetAttachment attachment) {
 		try {
-			File attachmentDir = PathHandler.getAssetAttachmentDir(entity);
 			File tmpDirectory = PathHandler.getTempRoot();
 
-			File tmpAttachment = new File(tmpDirectory, entity.getFileName());
-			FileUtils.copyFileToDirectory(tmpAttachment, attachmentDir);
-			entity.setFileName(tmpAttachment.getName());
-		} catch (IOException e) {
-			throw new FileAttachmentException(e);
+			File tmpAttachment = new File(tmpDirectory, attachment.getFileName());
+            Assert.hasLength(attachment.getMobileId());
+            s3Service.uploadAssetAttachment(tmpAttachment, attachment);
+            attachment.setFileName(s3Service.getAssetAttachmentPath(attachment));
+		} catch (Exception e) {
+            throw new FileAttachmentException("Failed to upload attachment data [" + attachment.getFileName() + "]",e);
 		}
 	}
 
-	private void writeAttachmentDataToFileSystem(AssetAttachment entity, byte[] attachmentData) {
+	private void writeAttachmentDataToFileSystem(AssetAttachment attachment, byte[] attachmentData) {
 		try {
-			File attachmentFile = PathHandler.getAssetAttachmentFile(entity);
-			FileUtils.writeByteArrayToFile(attachmentFile, attachmentData);
+            //determine whether its local file or remote (if file does not exist, then it should be on s3)
+			File attachmentFile = PathHandler.getAssetAttachmentFile(attachment);
+            if(attachmentFile.exists()){
+			    FileUtils.writeByteArrayToFile(attachmentFile, attachmentData);
+            }
+            else {
+                Assert.hasLength(attachment.getMobileId());
+                s3Service.uploadAssetAttachmentData(attachmentData, attachment);
+                attachment.setFileName(s3Service.getAssetAttachmentPath(attachment));
+            }
 		} catch (IOException e) {
 			throw new FileAttachmentException(e);
 		}

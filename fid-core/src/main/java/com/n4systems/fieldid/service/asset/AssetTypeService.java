@@ -1,10 +1,12 @@
 package com.n4systems.fieldid.service.asset;
 
+import com.amazonaws.AmazonClientException;
 import com.google.common.collect.Lists;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
@@ -50,6 +52,8 @@ public class AssetTypeService extends FieldIdPersistenceService {
     private ProcedureService procedureService;
     @Autowired
     private ProcedureDefinitionService procedureDefinitionService;
+    @Autowired
+    private S3Service s3Service;
 
 
     public AssetType getAssetType(Long id) {
@@ -280,7 +284,6 @@ public class AssetTypeService extends FieldIdPersistenceService {
     }
 
     private void processUploadedFiles( AssetType assetType, List<FileAttachment> uploadedFiles ) throws FileAttachmentException {
-        File attachmentDirectory = PathHandler.getAssetTypeAttachmentFile(assetType);
         File tmpDirectory = PathHandler.getTempRoot();
 
         if( uploadedFiles != null ) {
@@ -292,19 +295,22 @@ public class AssetTypeService extends FieldIdPersistenceService {
                     try {
                         // move the file to it's new location, note that it's location is currently relative to the tmpDirectory
                         tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
-                        FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+
+                        s3Service.uploadFileAttachment(tmpFile, uploadedFile);
+                        //FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
 
                         // clean up the temp file
                         tmpFile.delete();
 
                         // now we need to set the correct file name for the attachment and set the modifiedBy
-                        uploadedFile.setFileName(tmpFile.getName());
                         uploadedFile.setTenant(assetType.getTenant());
                         uploadedFile.setModifiedBy(assetType.getModifiedBy());
+                        uploadedFile.ensureMobileIdIsSet();
+                        uploadedFile.setFileName(s3Service.getFileAttachmentPath(uploadedFile));
 
                         // attach the attachment
                         assetType.getAttachments().add(uploadedFile);
-                    } catch (IOException e) {
+                    } catch (AmazonClientException  e) {
                         logger.error("failed to copy uploaded file ", e);
                         throw new FileAttachmentException(e);
                     }
@@ -324,36 +330,6 @@ public class AssetTypeService extends FieldIdPersistenceService {
             persistenceService.update(assetType);
         }
 
-        // Now we need to cleanup any files that are no longer attached to the assettype
-        if(attachmentDirectory.exists()) {
-
-			/*
-			 * We'll start by constructing a list of attached file names which will be used in
-			 * a directory filter
-			 */
-            final List<String> attachedFiles = new ArrayList<String>();
-            for(FileAttachment file: assetType.getAttachments()) {
-                attachedFiles.add(file.getFileName());
-            }
-
-			/*
-			 * This lists all files in the attachment directory
-			 */
-            for(File detachedFile: attachmentDirectory.listFiles(
-                    new FilenameFilter() {
-                        public boolean accept(File dir, String name) {
-                            // accept only files that are not in our attachedFiles list
-                            return !attachedFiles.contains(name);
-                        }
-                    }
-            )) {
-				/*
-				 * any file returned from our fileNotAttachedFilter, is not in our attached file list
-				 * and should be removed
-				 */
-                detachedFile.delete();
-            }
-        }
     }
 
     private void cleanInfoFields( AssetType assetType, AssetType oldPI ) {

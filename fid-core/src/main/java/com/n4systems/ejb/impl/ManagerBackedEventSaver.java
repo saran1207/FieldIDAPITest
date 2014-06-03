@@ -328,9 +328,10 @@ public class ManagerBackedEventSaver implements EventSaver {
 	
 					// now we need to set the correct file name for the
 					// attachment and set the modifiedBy
-					uploadedFile.setFileName(tmpFile.getName());
 					uploadedFile.setTenant(targetEvent.getTenant());
 					uploadedFile.setModifiedBy(targetEvent.getModifiedBy());
+                    uploadedFile.ensureMobileIdIsSet();
+                    uploadedFile.setFileName(tmpFile.getName());
 	
 					// attach the attachment
 					targetEvent.getAttachments().add(uploadedFile);

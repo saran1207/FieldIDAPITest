@@ -10,6 +10,7 @@ import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.model.Attachment;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
@@ -20,6 +21,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigEntry;
+import com.n4systems.util.ContentTypeUtil;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -31,7 +33,9 @@ import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.net.URL;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.util.Assert;
 import sun.misc.BASE64Encoder;
@@ -67,6 +71,9 @@ public class S3Service extends FieldIdPersistenceService {
 
     public static final String ASSET_ATTACHMENT_FOLDER = "/assets/%s/attachments/%s/";
     public static final String ASSET_ATTACHMENT_PATH = ASSET_ATTACHMENT_FOLDER + "%s";
+
+    public static final String FILE_ATTACHMENT_FOLDER = "/file_attachments/%s/";
+    public static final String FILE_ATTACHMENT_PATH = FILE_ATTACHMENT_FOLDER + "%s";
 
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP = "/temp/procedure_definition_images/%s";
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM = "/temp/procedure_definition_images/%s.medium";
@@ -632,6 +639,15 @@ public class S3Service extends FieldIdPersistenceService {
         objectMeta.setContentLength(data.length);
         objectMeta.setContentType(contentType);
 
+        User user = getCurrentUser();
+        Map<String, String> userMetadata=new HashMap<String, String>();
+        userMetadata.put("fieldid-user-userid", user.getUserID());
+        userMetadata.put("fieldid-user-type", user.getUserType().getLabel());
+        userMetadata.put("fieldid-user-permissions", ""+user.getPermissions());
+        userMetadata.put("fieldid-user-guid", user.getGlobalId());
+        userMetadata.put("fieldid-user-owner-guid", user.getOwner().getGlobalId());
+        objectMeta.setUserMetadata(userMetadata);
+
         PutObjectResult result = getClient().putObject(new PutObjectRequest(getBucket(), path, new ByteArrayInputStream(data), objectMeta));
         return result;
     }
@@ -698,6 +714,11 @@ public class S3Service extends FieldIdPersistenceService {
         return bucketHostname;
     }
 
+    public String getAssetAttachmentPath(AssetAttachment assetAttachment){
+        String assetAttachmentPath = getAssetAttachmentPath(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName());
+        return assetAttachmentPath;
+    }
+
     public String getAssetAttachmentPath(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename){
         Assert.hasLength(assetUuid);
         Assert.hasLength(assetAttachmentUuid);
@@ -709,8 +730,8 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public URL getAssetAttachmentUrl(AssetAttachment assetAttachment){
-        URL getAssetAttachmentUrl = getAssetAttachmentUrl(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName());
-        return getAssetAttachmentUrl;
+        URL assetAttachmentUrl = getAssetAttachmentUrl(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName());
+        return assetAttachmentUrl;
     }
 
     public URL getAssetAttachmentUrl(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename) {
@@ -727,7 +748,7 @@ public class S3Service extends FieldIdPersistenceService {
         return url;
     }
 
-    public File downloadAssetAttachmentFile(AssetAttachment attachment){
+    public File downloadAssetAttachment(AssetAttachment attachment){
         File assetAttachmentFile = null;
         try {
             byte[] assetAttachmentBytes = downloadAssetAttachmentBytes(attachment);
@@ -745,6 +766,25 @@ public class S3Service extends FieldIdPersistenceService {
         return assetAttachmentFile;
     }
 
+    public void uploadAssetAttachment(File assetAttachmentFile, AssetAttachment attachment){
+        String assetAttachmentFileName = assetAttachmentFile.getName().substring(assetAttachmentFile.getName().lastIndexOf('/') + 1);
+        uploadAssetAttachment(assetAttachmentFile, attachment.getAsset().getMobileGUID(), attachment.getMobileId(), assetAttachmentFileName);
+    }
+
+    public void uploadAssetAttachment(File assetAttachmentFile, String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename){
+        uploadResource(assetAttachmentFile, null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+    }
+
+    public void uploadAssetAttachmentData(byte[] attachmentData, AssetAttachment attachment){
+        String assetAttachmentFileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
+        String contentType = ContentTypeUtil.getContentType(attachment.getFileName());
+        uploadAssetAttachmentData(attachmentData, contentType, attachment.getAsset().getMobileGUID(), attachment.getMobileId(), assetAttachmentFileName);
+    }
+
+    public void uploadAssetAttachmentData(byte[] attachmentData, String contentType, String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename){
+        uploadResource(attachmentData, contentType, null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+    }
+
     public byte[] downloadAssetAttachmentBytes(AssetAttachment attachment) throws IOException {
         //the attachment Filename field is overloaded to house full URL instead of just the filename
         String assetAttachmentFileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
@@ -757,6 +797,98 @@ public class S3Service extends FieldIdPersistenceService {
         Assert.hasLength(assetAttachmentUuid);
         Assert.hasLength(assetAttachmentFilename);
         return downloadResource(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+    }
+
+    public String getFileAttachmentPath(FileAttachment fileAttachment){
+        String fileName = fileAttachment.getFileName().substring(fileAttachment.getFileName().lastIndexOf('/') + 1);
+        String fileAttachmentPath = getFileAttachmentPath(fileAttachment.getMobileId(), fileName);
+        return fileAttachmentPath;
+    }
+
+    public String getFileAttachmentPath(String fileAttachmentUuid, String filename){
+        Assert.hasLength(fileAttachmentUuid);
+        Assert.hasLength(filename);
+        Assert.doesNotContain(filename, "/");
+        String fileAttachmentsUploadPath = createResourcePath(null, FILE_ATTACHMENT_PATH, fileAttachmentUuid, filename);
+        return fileAttachmentsUploadPath;
+    }
+
+    public URL getFileAttachmentUrl(FileAttachment fileAttachment){
+        String fileName = fileAttachment.getFileName().substring(fileAttachment.getFileName().lastIndexOf('/') + 1);
+        URL fileAttachmentUrl = getFileAttachmentUrl(fileAttachment.getMobileId(), fileName);
+        return fileAttachmentUrl;
+    }
+
+    public URL getFileAttachmentUrl(String fileAttachmentUuid, String filename) {
+        Assert.hasLength(fileAttachmentUuid);
+        Assert.hasLength(filename);
+        Assert.doesNotContain(filename, "/");
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+        String fullResourcePath = filename;
+        //if the path is not the full path (ie. its just the filename)
+        if(fullResourcePath.indexOf('/') == -1){
+            fullResourcePath = getFileAttachmentPath(fileAttachmentUuid, filename);
+        }
+        URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public File downloadFileAttachment(FileAttachment attachment){
+        File file = null;
+        try {
+            byte[] fileAttachmentBytes = downloadFileAttachmentBytes(attachment);
+            String fileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
+            file = PathHandler.getUserFile(getCurrentUser(), fileName);
+            FileOutputStream fileAttachmentFos = new FileOutputStream(file);
+            fileAttachmentFos.write(fileAttachmentBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp attachment file at: " + file, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download file attachment from S3: " + attachment, e);
+        }
+        return file;
+    }
+
+    public void uploadFileAttachment(File file, FileAttachment attachment){
+        String fileName = file.getName().substring(file.getName().lastIndexOf('/') + 1);
+        uploadFileAttachment(file, attachment.getMobileId(), fileName);
+    }
+
+    public void uploadFileAttachment(File file, String fileAttachmentUuid, String filename){
+        Assert.hasLength(fileAttachmentUuid);
+        Assert.hasLength(filename);
+        Assert.doesNotContain(filename, "/");
+        uploadResource(file, null, FILE_ATTACHMENT_PATH, fileAttachmentUuid, filename);
+    }
+
+    public void uploadFileAttachmentData(byte[] attachmentData, FileAttachment attachment){
+        String fileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
+        String contentType = ContentTypeUtil.getContentType(attachment.getFileName());
+        uploadFileAttachmentData(attachmentData, contentType, attachment.getMobileId(), fileName);
+    }
+
+    public void uploadFileAttachmentData(byte[] attachmentData, String contentType, String fileAttachmentUuid, String filename){
+        Assert.hasLength(fileAttachmentUuid);
+        Assert.hasLength(filename);
+        Assert.doesNotContain(filename, "/");
+        Assert.hasLength(contentType);
+        uploadResource(attachmentData, contentType, null, FILE_ATTACHMENT_PATH, fileAttachmentUuid, filename);
+    }
+
+    public byte[] downloadFileAttachmentBytes(FileAttachment attachment) throws IOException {
+        //the attachment Filename field is overloaded to house full URL instead of just the filename
+        String fileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
+        byte[] fileAttachmentData = downloadFileAttachmentBytes(attachment.getMobileId(), fileName);
+        return fileAttachmentData;
+    }
+
+    public byte[] downloadFileAttachmentBytes(String fileAttachmentUuid, String filename) throws IOException {
+        Assert.hasLength(fileAttachmentUuid);
+        Assert.hasLength(filename);
+        Assert.doesNotContain(filename, "/");
+        return downloadResource(null, FILE_ATTACHMENT_PATH, fileAttachmentUuid, filename);
     }
 
     public String getBucketPolicySigned(String bucketPolicyBase64){

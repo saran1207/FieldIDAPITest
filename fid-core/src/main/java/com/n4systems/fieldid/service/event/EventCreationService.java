@@ -230,9 +230,11 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
 
                     // now we need to set the correct file name for the
                     // attachment and set the modifiedBy
-                    uploadedFile.setFileName(tmpFile.getName());
                     uploadedFile.setTenant(targetEvent.getTenant());
                     uploadedFile.setModifiedBy(targetEvent.getModifiedBy());
+                    uploadedFile.ensureMobileIdIsSet();
+                    uploadedFile.setFileName(tmpFile.getName());
+
                 } catch (IOException e) {
                     logger.error("failed to copy uploaded file ", e);
                     throw new FileAttachmentException(e);

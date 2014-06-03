@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.actions.downloaders;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.wicket.util.ZipFileUtil;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.reporting.PathHandler;
 
@@ -43,7 +44,12 @@ public class DownloadSafetyNetworkAssetAttachmentFile extends AbstractDownloadAc
 
     @Override
     public File getFile() {
-        return PathHandler.getAssetAttachmentFile(attachment);
+        if(attachment.isRemote()){
+            return s3Service.downloadAssetAttachment(attachment);
+        }
+        else {
+            return PathHandler.getAssetAttachmentFile(attachment);
+        }
     }
 
     @Override

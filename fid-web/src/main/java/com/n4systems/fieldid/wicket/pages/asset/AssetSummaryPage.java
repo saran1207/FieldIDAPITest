@@ -228,14 +228,19 @@ public class AssetSummaryPage extends AssetPage {
                     ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(getFile(filename)));
                     for (AssetAttachment assetAttachment: assetAttachments) {
                         if(assetAttachment.isRemote()){
-                            ZipFileUtil.addToZipFile(s3Service.downloadAssetAttachmentFile(assetAttachment), zipOut);
+                            ZipFileUtil.addToZipFile(s3Service.downloadAssetAttachment(assetAttachment), zipOut);
                         }
                         else {
                             ZipFileUtil.addToZipFile(PathHandler.getAssetAttachmentFile(assetAttachment), zipOut);
                         }
                     }
                     for (FileAttachment fileAttachment: typeAttachments) {
-                        ZipFileUtil.addToZipFile(PathHandler.getAssetTypeAttachmentFile(fileAttachment, assetType.getId()), zipOut);
+                        if(fileAttachment.isRemote()){
+                            ZipFileUtil.addToZipFile(s3Service.downloadFileAttachment(fileAttachment), zipOut);
+                        }
+                        else {
+                            ZipFileUtil.addToZipFile(PathHandler.getAssetTypeAttachmentFile(fileAttachment, assetType.getId()), zipOut);
+                        }
                     }
 
                     IOUtils.closeQuietly(zipOut);
