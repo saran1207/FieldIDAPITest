@@ -96,6 +96,7 @@ public abstract class DownloadService<T extends SearchCriteria> extends FieldIdP
     @Transactional
     public abstract void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize) throws ReportException;
 
+	@Transactional
     private void updateDownloadLinkState(DownloadLink downloadLink, DownloadState state) {
 		downloadLink.setState(state);
 		persistenceService.update(downloadLink);

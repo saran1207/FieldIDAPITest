@@ -26,6 +26,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,12 @@ public class PersistenceService extends FieldIdService {
         QueryBuilder<T> queryBuilder = createUserSecurityBuilder(entityClass).addSimpleWhere("id", entityId);
         return find(queryBuilder);
     }
+
+	@Transactional(readOnly = true)
+	public <T extends AbstractEntity> List<T> findAllById(Class<T> entityClass, Collection<Long> entityIds) {
+		QueryBuilder<T> queryBuilder = createUserSecurityBuilder(entityClass).addWhere(WhereClauseFactory.create(Comparator.IN, "id", entityIds));
+		return findAll(queryBuilder);
+	}
 
     @Transactional
     public <T extends AbstractEntity> void delete(T entity) {
