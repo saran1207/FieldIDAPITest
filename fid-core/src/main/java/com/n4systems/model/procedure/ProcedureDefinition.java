@@ -381,4 +381,14 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     public ProcedureType getProcedureType() { return procedureType; }
 
     public void setProcedureType(ProcedureType procedureType) { this.procedureType = procedureType; }
+
+    public String getProcedureTypeLabel() { return procedureType.getLabel(); }
+
+    public void setProcedureTypeLabel(String label) {
+        if(label.equals(ProcedureType.SUB.getLabel())){
+            procedureType = ProcedureType.SUB;
+        } else if (label.equals(ProcedureType.MAIN.getLabel())){
+            procedureType = ProcedureType.MAIN;
+        }
+    }
 }

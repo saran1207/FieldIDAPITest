@@ -2,6 +2,7 @@ package com.n4systems.model.procedure;
 
 import com.n4systems.model.api.DisplayEnum;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,6 +28,15 @@ public enum ProcedureType implements DisplayEnum {
 
     public String getName() {
         return name();
+    }
+
+    public List<String> getAllLabels() {
+        List<String> labels = new ArrayList<String>();
+
+        labels.add(this.MAIN.getLabel());
+        labels.add(this.SUB.getLabel());
+
+        return labels;
     }
 
 }

@@ -506,3 +506,10 @@ h3 {
 .publish .rejection-message textarea {
     margin-top:4px;
 }
+
+.procedure-def-paddingCorrection {
+    margin-top: -5px;
+}
+.procedure-def-paddingCorrection > label > div {
+    margin-top: 5px;
+}

@@ -12,6 +12,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -63,48 +64,51 @@ public class DetailsPanel extends Panel {
 
             add(new LabelledRequiredTextField<String>("equipmentDescription", "label.equipment_description", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentDescription())));
 
-            //This is not the best way to do it, but it's the simplest way to understand the different edge cases for when and how the
-            //Procedure Type picker is displayed and with what values.
+            /*
+            * This is not the best way to do it, but it's the simplest way to understand the different edge cases for when and how the
+            * Procedure Type picker is displayed and with what values.
+            */
             boolean hasMainProcedureType = procedureDefinitionService.hasMainProcedureType(model.getObject().getAsset());
-            LabelledDropDown<ProcedureType> procedureTypeLabelledDropDown = null;
+            LabelledDropDown<String> procedureTypeLabelledDropDown = null;
             if(model.getObject().getProcedureType() == null && hasMainProcedureType) {
-                procedureTypeLabelledDropDown = new LabelledDropDown<ProcedureType>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureType())) {
+                procedureTypeLabelledDropDown = new LabelledDropDown<String>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureTypeLabel())) {
                     @Override
-                    protected List<ProcedureType> getChoices() {
-                        return Arrays.asList(ProcedureType.SUB);
+                    protected List<String> getChoices() {
+                        return Arrays.asList(ProcedureType.SUB.getLabel());
                     }
                 };
             } else if (model.getObject().getProcedureType() == null && !hasMainProcedureType) {
-                procedureTypeLabelledDropDown = new LabelledDropDown<ProcedureType>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureType())) {
+                procedureTypeLabelledDropDown = new LabelledDropDown<String>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureTypeLabel())) {
                     @Override
-                    protected List<ProcedureType> getChoices() {
-                        return ProcedureType.PROCEDURE_TYPE_LIST;
+                    protected List<String> getChoices() {
+                        return ProcedureType.MAIN.getAllLabels();
                     }
                 };
             } else if (hasMainProcedureType && model.getObject().getProcedureType().equals(ProcedureType.MAIN)) {
-                procedureTypeLabelledDropDown = new LabelledDropDown<ProcedureType>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureType())) {
+                procedureTypeLabelledDropDown = new LabelledDropDown<String>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureTypeLabel())) {
                     @Override
-                    protected List<ProcedureType> getChoices() {
-                        return ProcedureType.PROCEDURE_TYPE_LIST;
+                    protected List<String> getChoices() {
+                        return ProcedureType.MAIN.getAllLabels();
                     }
                 };
             } else if (hasMainProcedureType && model.getObject().getProcedureType().equals(ProcedureType.SUB)) {
-                procedureTypeLabelledDropDown = new LabelledDropDown<ProcedureType>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureType())) {
+                procedureTypeLabelledDropDown = new LabelledDropDown<String>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureTypeLabel())) {
                     @Override
-                    protected List<ProcedureType> getChoices() {
-                        return Arrays.asList(ProcedureType.SUB);
+                    protected List<String> getChoices() {
+                        return Arrays.asList(ProcedureType.SUB.getLabel());
                     }
                 };
             }
             else {
-                procedureTypeLabelledDropDown = new LabelledDropDown<ProcedureType>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureType())) {
+                procedureTypeLabelledDropDown = new LabelledDropDown<String>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureTypeLabel())) {
                     @Override
-                    protected List<ProcedureType> getChoices() {
-                        return ProcedureType.PROCEDURE_TYPE_LIST;
+                    protected List<String> getChoices() {
+                        return ProcedureType.MAIN.getAllLabels();
                     }
                 };
             }
             procedureTypeLabelledDropDown.required();
+            procedureTypeLabelledDropDown.add(new AttributeAppender("class", "procedure-def-paddingCorrection"));
             add(procedureTypeLabelledDropDown);
 
             add(new AjaxLink("cancel") {
@@ -126,6 +130,12 @@ public class DetailsPanel extends Panel {
             });
             submitLink.setMarkupId("detailsContinueLink");
         }
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
     }
 
     protected void doContinue(AjaxRequestTarget target) { }
