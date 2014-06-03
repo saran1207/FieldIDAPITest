@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.assettype;
 
 import com.google.common.io.Files;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.Watermark;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
@@ -34,6 +35,7 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.request.resource.IResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.springframework.util.FileCopyUtils;
 
 import java.io.File;
@@ -46,6 +48,9 @@ import java.util.List;
 import static ch.lambdaj.Lambda.on;
 
 public class AssetTypeAttachmentsPanel extends Panel {
+
+    @SpringBean
+    protected S3Service s3Service;
 
     List<FileAttachment> attachments = new ArrayList<FileAttachment>();
     private WebMarkupContainer existingAttachmentsContainer;
@@ -86,13 +91,20 @@ public class AssetTypeAttachmentsPanel extends Panel {
                             }
                         }));
                     }else {
-                        String imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetTypeAttachedFile.action?fileName=" + item.getModelObject().getFileName().replace(" ", "+") + "&uniqueID=" + assetTypeModel.getObject().getId() + "&attachmentID=" + item.getModelObject().getId());
+                        String imageUrl;
+                        if(item.getModelObject().isRemote()){
+                            imageUrl = s3Service.getFileAttachmentUrl(item.getModelObject()).toString();
+                        }
+                        else {
+                            imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetTypeAttachedFile.action?fileName=" + item.getModelObject().getFileName().replace(" ", "+") + "&uniqueID=" + assetTypeModel.getObject().getId() + "&attachmentID=" + item.getModelObject().getId());
+                        }
                         item.add(image = new ExternalImage("attachmentImage", imageUrl));
                     }
                     image.add(new AttributeModifier("class", "attachmentImage"));
                 } else {
                     item.add(image = new Image("attachmentImage", new ContextRelativeResource("images/file-icon.png")));
                     image.add(new AttributeModifier("class", "attachmentIcon"));
+                    //TODO arezafar why is there no link for non-image attachments?
                 }
 
                 item.add(new Label("fileName", new NameAfterLastFileSeparatorModel(ProxyModel.of(item.getModel(), on(AssetAttachment.class).getFileName()))));
@@ -133,6 +145,7 @@ public class AssetTypeAttachmentsPanel extends Panel {
                     }
 
                     FileAttachment attachment = new FileAttachment();
+                    attachment.ensureMobileIdIsSet();
                     attachment.setFileName(tempDir.getName() + File.separator + fileName);
 
                     attachments.add(attachment);

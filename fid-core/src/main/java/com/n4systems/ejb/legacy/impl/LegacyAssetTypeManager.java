@@ -14,8 +14,10 @@ import javax.persistence.NoResultException;
 
 import javax.persistence.Query;
 
+import com.amazonaws.AmazonClientException;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.impl.EventScheduleManagerImpl;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import org.apache.commons.io.FileUtils;
@@ -62,7 +64,7 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 	 protected AutoAttributeManager autoAttributeManager;	
 	 protected LegacyAsset assetManager;
 	 protected EventScheduleManager eventScheduleManager;
-	
+	 protected S3Service s3Service;
 	
 	
 	
@@ -75,6 +77,7 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 		this.autoAttributeManager = new AutoAttributeManagerImpl(em);	
 		this.assetManager = new LegacyAssetManager(em);
 		this.eventScheduleManager = new EventScheduleManagerImpl(em);
+        this.s3Service = new S3Service();
 	}
 
 	//TODO remove this only used by asset crud to determine if the asset type has changed.
@@ -320,19 +323,22 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 				try {	
 					// move the file to it's new location, note that it's location is currently relative to the tmpDirectory
 					tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
-					FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+
+                    s3Service.uploadFileAttachment(tmpFile, uploadedFile);
+					//FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
 					
 					// clean up the temp file
 					tmpFile.delete();
 					
 					// now we need to set the correct file name for the attachment and set the modifiedBy
-					uploadedFile.setFileName(tmpFile.getName());
 					uploadedFile.setTenant(assetType.getTenant());
 					uploadedFile.setModifiedBy(assetType.getModifiedBy());
-					
+                    uploadedFile.ensureMobileIdIsSet();
+                    uploadedFile.setFileName(s3Service.getFileAttachmentPath(uploadedFile));
+
 					// attach the attachment
 					assetType.getAttachments().add(uploadedFile);
-				} catch (IOException e) {
+				} catch (AmazonClientException e) {
 					logger.error("failed to copy uploaded file ", e);
 					throw new FileAttachmentException(e);
 				}

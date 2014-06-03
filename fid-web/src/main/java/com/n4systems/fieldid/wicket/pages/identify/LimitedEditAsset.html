@@ -1,17 +1,16 @@
 <html xmlns:wicket="http://wicket.apache.org">
 
 <wicket:extend>
-
     <form wicket:id="editCustomerInformationForm" class="form-horizontal">
 
         <fieldset>
-            <div class="control-group">
-                <label>* <wicket:message key="label.owner"/></label>
+            <div class="control-group limited-edit-asset-picker">
+                <label class="owner">* <wicket:message key="label.owner"/></label>
                 <div wicket:id="ownerPicker"/>
             </div>
 
-            <div class="control-group">
-                <label><wicket:message key="label.location"/></label>
+            <div class="control-group limited-edit-asset-picker">
+                <label class="location"><wicket:message key="label.location"/></label>
                 <div wicket:id="locationPicker"/>
             </div>
 
@@ -26,10 +25,13 @@
             </div>
         </fieldset>
 
-        <a wicket:id="saveLink" class="btn-primary"><wicket:message key="label.save"/></a> <wicket:message key="label.or"/> <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        <div id="limited-edit-asset-save-buttons">
+            <a wicket:id="saveLink" class="btn-primary"><wicket:message key="label.save"/></a> 
+            <wicket:message key="label.or"/> 
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
 
     </form>
-
 </wicket:extend>
 
 </html>

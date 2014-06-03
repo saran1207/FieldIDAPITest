@@ -45,7 +45,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 
 
         S3Service s3Service = ServiceLocator.getS3Service();
-        File assetAttachmentFile = s3Service.downloadAssetAttachmentFile(attachment);
+        File assetAttachmentFile = s3Service.downloadAssetAttachment(attachment);
         if (assetAttachmentFile == null || !assetAttachmentFile.exists()) {
             assetAttachmentFile = PathHandler.getAssetAttachmentFile(attachment);
             if (!assetAttachmentFile.exists()) {
@@ -200,7 +200,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
                 S3Service s3Service = ServiceLocator.getS3Service();
                 data = s3Service.downloadAssetAttachmentBytes(attachment);
 
-                File test = s3Service.downloadAssetAttachmentFile(attachment);
+                File test = s3Service.downloadAssetAttachment(attachment);
             } catch(Exception e) {
                 String assetAttachmentUrl = attachment.getFileName();
                 logger.warn("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);

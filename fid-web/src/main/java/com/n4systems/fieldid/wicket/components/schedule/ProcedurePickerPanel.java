@@ -43,7 +43,6 @@ public class ProcedurePickerPanel extends Panel {
     private IModel<Procedure> scheduleModel;
     private ProcedureForm procedureForm;
     private WebMarkupContainer noActiveProcedureDefinitionMessage;
-    private WebMarkupContainer scheduledProcedureExistsMessage;
     private Label saveScheduleLabel;
 
     @SpringBean private ProcedureDefinitionService procedureDefinitionService;
@@ -67,7 +66,6 @@ public class ProcedurePickerPanel extends Panel {
                 setResponsePage(new ProcedureDefinitionPage(scheduleModel.getObject().getAsset()));
             }
         });
-        add(scheduledProcedureExistsMessage = new WebMarkupContainer("scheduledProcedureExistsMessage"));
 
         updateVisibility();
     }
@@ -77,15 +75,10 @@ public class ProcedurePickerPanel extends Panel {
 
         Boolean isNew = scheduleModel.getObject().isNew();
         Boolean hasPublishedProcedureDef = procedureDefinitionService.hasPublishedProcedureDefinition(asset);
-        Boolean hasActiveProcedure = procedureService.hasActiveProcedure(asset);
 
         noActiveProcedureDefinitionMessage.setVisible(!hasPublishedProcedureDef);
         if(isNew) {
-            procedureForm.setVisible(hasPublishedProcedureDef && !hasActiveProcedure);
-            scheduledProcedureExistsMessage.setVisible(hasActiveProcedure);
-        } else {
             procedureForm.setVisible(hasPublishedProcedureDef);
-            scheduledProcedureExistsMessage.setVisible(false);
         }
 
     }
