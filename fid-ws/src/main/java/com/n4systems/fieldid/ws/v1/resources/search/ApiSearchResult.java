@@ -17,6 +17,7 @@ public class ApiSearchResult extends ApiReadWriteModel {
 	private Long predefinedLocationId;
 	private Date nextEventDate;
 	private byte[] image;
+	private Date identified;
 
 	public String getAssetTypeName() {
 		return assetTypeName;
@@ -112,5 +113,13 @@ public class ApiSearchResult extends ApiReadWriteModel {
 
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+
+	public Date getIdentified() {
+		return identified;
+	}
+
+	public void setIdentified(Date identified) {
+		this.identified = identified;
 	}
 }
