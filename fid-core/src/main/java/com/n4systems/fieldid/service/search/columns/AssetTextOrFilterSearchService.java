@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.service.search.columns;
 
-import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.fieldid.service.search.AssetSearchService;
 import com.n4systems.fieldid.service.search.SearchResult;
@@ -15,20 +14,17 @@ import com.n4systems.services.search.field.AssetIndexField;
 import org.apache.lucene.search.highlight.Formatter;
 import org.apache.lucene.search.highlight.TokenGroup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional(readOnly = true)
 public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<AssetSearchCriteria, Asset, AssetSearchRecord> {
 
     private @Autowired AssetFullTextSearchService fullTextSearchService;
     private @Autowired AssetSearchService searchService;
     private @Autowired LastEventDateService lastEventDateService;
-    private @Autowired AssetService assetService;
-
-    public AssetTextOrFilterSearchService() {
-        super(Asset.class);
-    }
 
     @Override
     protected List<Long> textIdSearch(AssetSearchCriteria criteria) {
@@ -90,12 +86,9 @@ public class AssetTextOrFilterSearchService extends TextOrFilterSearchService<As
         List<Long> selectedIdList = criteriaModel.getSelection().getSelectedIds();
         List<Long> currentPageOfSelectedIds = selectedIdList.subList(beginIndex, Math.min(selectedIdList.size(), beginIndex + pageSize));
 
-        List<Asset> entities = new ArrayList<Asset>(pageSize);
-        Asset asset = null;
-        for (Long id : currentPageOfSelectedIds) {
-            asset = assetService.findAssetWithInfoOptions(id);
+        List<Asset> entities = persistenceService.findAllById(Asset.class, currentPageOfSelectedIds);
+        for (Asset asset: entities) {
             fillInVirtualColumns(asset, criteriaModel);
-            entities.add(asset);
         }
 
         SearchResult<Asset> searchResult = new SearchResult<Asset>();

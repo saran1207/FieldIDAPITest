@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Transactional(readOnly = true)
 public abstract class ExcelExportService<T extends SearchCriteria> extends DownloadService<T> {
 	private static final String SHEET_NAME = "Report";
 
@@ -33,12 +34,10 @@ public abstract class ExcelExportService<T extends SearchCriteria> extends Downl
     }
 
     @Override
-    @Transactional
     public void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize) throws ReportException {
         generateFile(criteria, file, useSelection, resultLimit, pageSize, false);
     }
 
-    @Transactional
     public void generateFile(T criteria, File file, boolean useSelection, int resultLimit, int pageSize, boolean exceptionOnEmptyReport) throws ReportException {
 		int totalResults = calcTotalResults(useSelection, criteria, resultLimit);
 		if (exceptionOnEmptyReport && totalResults == 0) {
@@ -93,7 +92,6 @@ public abstract class ExcelExportService<T extends SearchCriteria> extends Downl
     }
 
     protected abstract int countTotalResults(T criteria);
-
     protected abstract PageHolder<TableView> performSearch(T criteria, ResultTransformer<TableView> resultTransformer, int pageNumber, int pageSize, boolean useSelection);
 
     private List<String> getColumnTitles(SearchCriteria criteria) {

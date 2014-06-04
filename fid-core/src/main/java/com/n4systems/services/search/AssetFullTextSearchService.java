@@ -10,7 +10,9 @@ import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.MatchAllDocsQuery;
 import org.apache.lucene.search.NumericRangeQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 public class AssetFullTextSearchService extends FullTextSearchService {
 
     @Autowired private AssetIndexWriter assetIndexWriter;

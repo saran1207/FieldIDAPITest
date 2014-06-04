@@ -21,6 +21,7 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Closeable;
 import java.io.File;
@@ -28,6 +29,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+@Transactional(readOnly = true)
 public abstract class FullTextSearchService extends FieldIdPersistenceService {
     private static Logger logger = Logger.getLogger(FullTextSearchService.class);
 

@@ -15,15 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional(readOnly = true)
 public abstract class TextOrFilterSearchService<T extends SearchCriteria, M extends EntityWithTenant & NetworkEntity, K extends HasGpsLocation> extends FieldIdPersistenceService {
 
-    private Class<M> entityClass;
-
-    public TextOrFilterSearchService(Class<M> clazz) {
-        this.entityClass = clazz;
-    }
-
-    @Transactional(readOnly = true)
     public List<Long> idSearch(T criteria) {
         if (criteria.getQuery() != null) {
             return textIdSearch(criteria);
@@ -32,7 +26,6 @@ public abstract class TextOrFilterSearchService<T extends SearchCriteria, M exte
         }
     }
 
-    @Transactional(readOnly = true)
     public Integer countPages(T criteriaModel, Long pageSize) {
         if (criteriaModel.getQuery() != null) {
             return textCountPages(criteriaModel, pageSize);
@@ -45,7 +38,6 @@ public abstract class TextOrFilterSearchService<T extends SearchCriteria, M exte
         Preconditions.checkArgument(criteriaModel.getQuery() == null, "map searching not supported for Advanced Search queries!");
         return filterMapSearch(criteriaModel);
     }
-
 
     public <K> PageHolder<K> performSearch(T criteriaModel, ResultTransformer<K> transformer, Integer pageNumber, Integer pageSize) {
         return performSearch(criteriaModel, transformer, pageNumber, pageSize, false);
@@ -71,18 +63,13 @@ public abstract class TextOrFilterSearchService<T extends SearchCriteria, M exte
         return new PageHolder<K>(pageResults, totalResultCount);
     }
 
-
-
-
-
     protected abstract SearchResult<M> findSelectedEntities(T criteriaModel, int pageNumber, int pageSize);
     protected abstract List<Long> textIdSearch(T criteria);
     protected abstract List<Long> filterIdSearch(T criteria);
-
     protected abstract Integer textCountPages(T criteria, Long pageSize);
     protected abstract Integer filterCountPages(T criteria, Long pageSize);
-
     protected abstract SearchResult<M> textSearch(T criteriaModel, Integer pageNumber, Integer pageSize);
     protected abstract SearchResult<M> filterSearch(T criteriaModel, Integer pageNumber, Integer pageSize);
     protected abstract MappedResults<K> filterMapSearch(T criteriaModel);
+
 }
