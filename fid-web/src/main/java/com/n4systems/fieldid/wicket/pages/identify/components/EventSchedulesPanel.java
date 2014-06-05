@@ -43,6 +43,7 @@ public class EventSchedulesPanel extends Panel {
             protected void populateItem(final ListItem<Event> item) {
                 item.add(new DateLabel("dueDate", ProxyModel.of(item.getModel(), on(Event.class).getDueDate())));
                 item.add(new Label("eventTypeName", ProxyModel.of(item.getModel(), on(Event.class).getType().getName())));
+                item.add(new Label("assignee", ProxyModel.of(item.getModel(), on(Event.class).getAssigneeName())));
                 item.add(new AjaxLink("removeLink") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {

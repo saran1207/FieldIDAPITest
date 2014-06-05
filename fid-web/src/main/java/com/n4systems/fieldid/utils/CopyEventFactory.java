@@ -13,7 +13,8 @@ public class CopyEventFactory {
 		
 		copyAbstractEvent(newEvent, event);
         copyAssetEvent(newEvent, event);
-		
+
+        newEvent.setAssignee(event.getAssignee());
 		newEvent.setAssignedTo(event.getAssignedTo());
 		newEvent.setOwner( event.getOwner() );
 		newEvent.setBook( event.getBook() );
