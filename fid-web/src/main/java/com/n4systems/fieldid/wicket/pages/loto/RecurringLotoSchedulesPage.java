@@ -68,7 +68,7 @@ public class RecurringLotoSchedulesPage extends FieldIDTemplatePage {
         });
 
         add(listContainer = new WebMarkupContainer("listContainer"));
-        listContainer.setOutputMarkupId(true);
+        listContainer.setOutputMarkupPlaceholderTag(true);
         listContainer.add(listView = new ListView<RecurringLotoEvent>("list", getRecurringEvents()) {
             @Override
             protected void populateItem(final ListItem<RecurringLotoEvent> item) {
@@ -91,8 +91,8 @@ public class RecurringLotoSchedulesPage extends FieldIDTemplatePage {
 
         add(noProcedureBlankSlate = new WebMarkupContainer("noProceduresBlankSlate"));
         add(blankSlate = new WebMarkupContainer("blankSlate"));
-        noProcedureBlankSlate.setOutputMarkupId(true);
-        blankSlate.setOutputMarkupId(true);
+        noProcedureBlankSlate.setOutputMarkupPlaceholderTag(true);
+        blankSlate.setOutputMarkupPlaceholderTag(true);
         setVisibility();
     }
 
