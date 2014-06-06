@@ -639,15 +639,6 @@ public class S3Service extends FieldIdPersistenceService {
         objectMeta.setContentLength(data.length);
         objectMeta.setContentType(contentType);
 
-        User user = getCurrentUser();
-        Map<String, String> userMetadata=new HashMap<String, String>();
-        userMetadata.put("fieldid-user-userid", user.getUserID());
-        userMetadata.put("fieldid-user-type", user.getUserType().getLabel());
-        userMetadata.put("fieldid-user-permissions", ""+user.getPermissions());
-        userMetadata.put("fieldid-user-guid", user.getGlobalId());
-        userMetadata.put("fieldid-user-owner-guid", user.getOwner().getGlobalId());
-        objectMeta.setUserMetadata(userMetadata);
-
         PutObjectResult result = getClient().putObject(new PutObjectRequest(getBucket(), path, new ByteArrayInputStream(data), objectMeta));
         return result;
     }
