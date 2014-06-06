@@ -6,11 +6,10 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.asset.AssetTypeService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
-import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.MultiSelectDropDownChoice;
+import com.n4systems.fieldid.wicket.components.TimeContainer;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.AutoCompleteOrgPicker;
@@ -276,7 +275,7 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
         }
 
         private TimeContainer createTimePicker() {
-            return new TimeContainer("timeContainer");
+            return new TimeContainer("timeContainer", new PropertyModel<RecurrenceTimeOfDay>(RecurringEventsForm.this, "time"), new PropertyModel<List<RecurrenceTimeOfDay>>(RecurringEventsForm.this, "times"));
         }
 
         private void updateTimeComponents(RecurrenceType recurrenceType) {
@@ -336,44 +335,6 @@ public class RecurringAssetTypeEventsPage extends FieldIDFrontEndPage {
                         form.error(getString("label.date.required"));
                     };
                     break;
-            }
-        }
-
-
-        class TimeContainer extends WebMarkupContainer {
-
-            private FidDropDownChoice singleTime;
-            private MultiSelectDropDownChoice<RecurrenceTimeOfDay> multipleTime;
-
-            public TimeContainer(String id) {
-                super(id);
-                setOutputMarkupId(true);
-                setOutputMarkupPlaceholderTag(true);
-
-                singleTime = new FidDropDownChoice<RecurrenceTimeOfDay>("time", new PropertyModel<RecurrenceTimeOfDay>(RecurringEventsForm.this, "time"), Arrays.asList(RecurrenceTimeOfDay.values()), new EnumPropertyChoiceRenderer<RecurrenceTimeOfDay>());
-                add(singleTime.setNullValid(true).setOutputMarkupId(true));
-                multipleTime = new MultiSelectDropDownChoice<RecurrenceTimeOfDay>("multipleTimes", new PropertyModel<List<RecurrenceTimeOfDay>>(RecurringEventsForm.this, "times"), Arrays.asList(RecurrenceTimeOfDay.values()), new EnumPropertyChoiceRenderer<RecurrenceTimeOfDay>());
-                add(multipleTime.setOutputMarkupId(true));
-
-                singleTime.add(new UpdateComponentOnChange());
-                multipleTime.add(new UpdateComponentOnChange());
-            }
-
-            public void updateComponents(RecurrenceType recurrenceType) {
-                toggle(recurrenceType.canHaveMultipleTimes());
-            }
-
-            private void toggle(boolean b) {
-                multipleTime.setVisible(b);
-                singleTime.setVisible(!b);
-            }
-
-            public MultiSelectDropDownChoice<RecurrenceTimeOfDay> getMultipleTime() {
-                return multipleTime;
-            }
-
-            public FidDropDownChoice getSingleTime() {
-                return singleTime;
             }
         }
 

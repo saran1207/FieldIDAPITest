@@ -1,29 +1,37 @@
-package com.n4systems.fieldid.wicket.components.assettype;
+package com.n4systems.fieldid.wicket.components.loto;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.TimeContainer;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
+import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
+import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
+import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
 import com.n4systems.fieldid.wicket.util.EnumPropertyChoiceRenderer;
-import com.n4systems.model.EventType;
+import com.n4systems.model.Asset;
 import com.n4systems.model.Recurrence;
 import com.n4systems.model.RecurrenceTimeOfDay;
 import com.n4systems.model.RecurrenceType;
-import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.RecurringLotoEvent;
+import com.n4systems.model.user.Assignable;
 import com.n4systems.services.date.DateService;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
 import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IChoiceRenderer;
 import org.apache.wicket.markup.html.form.validation.FormValidatorAdapter;
 import org.apache.wicket.markup.html.form.validation.IFormValidator;
-import org.apache.wicket.markup.html.image.ContextImage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -34,15 +42,22 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public abstract class RecurrenceFormPanel<T> extends Panel {
+public class RecurrenceFormPanel extends Panel {
 
     @SpringBean
     private DateService dateService;
 
-    private IModel<T> model;
+    @SpringBean
+    private ProcedureDefinitionService procedureDefinitionService;
 
-    public RecurrenceFormPanel(String id, IModel<T> model) {
-        super(id, model);
+    @SpringBean
+    private RecurringScheduleService recurringScheduleService;
+
+    private IModel<Asset> assetModel;
+
+    public RecurrenceFormPanel(String id, IModel<Asset> assetModel) {
+        super(id, assetModel);
+        this.assetModel = assetModel;
         add(new RecurringEventsForm("form"));
     }
 
@@ -51,17 +66,17 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
         // private fields used to back form components.
         private RecurrenceTimeOfDay time = RecurrenceTimeOfDay.NINE_AM;
         private List<RecurrenceTimeOfDay> times = Lists.newArrayList(RecurrenceTimeOfDay.NINE_AM);
-        private EventType eventType = null;
+
         private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
-        private BaseOrg owner;
         private Date dateTime = dateService.nowInUsersTimeZone().toDate();
         private TimeContainer timePicker;
         private DateTimePicker dateTimepicker;
         private DropDownChoice<RecurrenceType> recurrenceTypeDropDown;
         private final FIDFeedbackPanel feedback;
-        private Boolean ownerAndDown;
-        private Boolean autoassign;
-        List<EventType> eventTypes;
+
+        private ProcedureDefinition procedureDefinition;
+        private List<ProcedureDefinition> procedureDefinitionsList;
+        private Assignable assignee;
 
         public RecurringEventsForm(String id) {
             super(id);
@@ -70,15 +85,13 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
 
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
 
-            eventTypes = Lists.newArrayList(getEventTypes());
-            // set default value if one available.
-            eventType = (eventTypes.size()>0) ? eventTypes.get(0) : null;
+            procedureDefinitionsList = procedureDefinitionService.getActiveProcedureDefinitionsForAsset(assetModel.getObject());
 
-            final IChoiceRenderer<EventType> eventTypeRenderer = new IChoiceRenderer<EventType>() {
-                @Override public Object getDisplayValue(EventType object) {
-                    return new FIDLabelModel(object.getName()).getObject();
+            final IChoiceRenderer<ProcedureDefinition> procedureDefRenderer = new IChoiceRenderer<ProcedureDefinition>() {
+                @Override public Object getDisplayValue(ProcedureDefinition object) {
+                    return new FIDLabelModel(object.getProcedureCode()).getObject();
                 }
-                @Override public String getIdValue(EventType object, int index) {
+                @Override public String getIdValue(ProcedureDefinition object, int index) {
                     return object.getId().toString();
                 }
             };
@@ -89,38 +102,15 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
             dateTimepicker = new DateTimePicker("dateTime", new PropertyModel<Date>(this, "dateTime"),true).withMonthsDisplayed(1).withNoAllDayCheckbox();
             timePicker = createTimePicker();
 
-            inputContainer.add(new FidDropDownChoice<EventType>("eventType", new PropertyModel<EventType>(this, "eventType"), eventTypes, eventTypeRenderer).setNullValid(false));
+            FidDropDownChoice procedureDefSelect;
+            inputContainer.add(procedureDefSelect = new FidDropDownChoice<ProcedureDefinition>("procedureDef", new PropertyModel<ProcedureDefinition>(this, "procedureDefinition"), procedureDefinitionsList, procedureDefRenderer));
+            procedureDefSelect.setRequired(true);
+            procedureDefSelect.setNullValid(true);
+
             recurrenceTypeDropDown = new FidDropDownChoice<RecurrenceType>("recurrence", new PropertyModel<RecurrenceType>(this, "type"), recurrences, new EnumPropertyChoiceRenderer<RecurrenceType>());
             inputContainer.add(recurrenceTypeDropDown);
             inputContainer.add(dateTimepicker.setOutputMarkupPlaceholderTag(true));
             inputContainer.add(timePicker);
-
-            inputContainer.add(new OrgLocationPicker("organization", new PropertyModel<BaseOrg>(this, "owner")) {
-                @Override public boolean isVisible() {
-                    return isOrgPickerVisible();
-                }
-            });
-
-            inputContainer.add(new CheckBox("ownerAndDown", new PropertyModel<Boolean>(this, "ownerAndDown")) {
-                @Override public boolean isVisible() {
-                    return isOwnerDownOptionVisible();
-                }
-            });
-
-            inputContainer.add(new CheckBox("autoassign", new PropertyModel<Boolean>(this, "autoassign")) {
-                @Override public boolean isVisible() {
-                    return isAutoAssignVisible();
-                }
-            });
-
-            ContextImage tooltip;
-            inputContainer.add(tooltip = new ContextImage("tooltip", "images/tooltip-icon.png"));
-            tooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_owner_and_down"), TipsyBehavior.Gravity.N));
-
-
-            ContextImage autotooltip;
-            inputContainer.add(autotooltip = new ContextImage("autotooltip", "images/tooltip-icon.png"));
-            autotooltip.add(new TipsyBehavior(new FIDLabelModel("message.recurring_events_auto_assign"), TipsyBehavior.Gravity.N));
 
             recurrenceTypeDropDown.setNullValid(false).setOutputMarkupId(true).add(new AjaxFormComponentUpdatingBehavior("onchange") {
                 @Override protected void onUpdate(AjaxRequestTarget target) {
@@ -129,9 +119,22 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
                 }
             });
 
+            ExaminersModel usersModel = new ExaminersModel();
+            VisibleUserGroupsModel userGroupsModel = new VisibleUserGroupsModel();
+            AssignedUserOrGroupSelect assignedUserOrGroupSelect = new AssignedUserOrGroupSelect("assignee",
+                    new PropertyModel<Assignable>(this, "assignee"),
+                    usersModel, userGroupsModel,
+                    new AssigneesModel(userGroupsModel, usersModel));
+            assignedUserOrGroupSelect.setRequired(true);
+            inputContainer.add(assignedUserOrGroupSelect);
+
             inputContainer.add(new AjaxSubmitLink("create") {
                 @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                    onCreate(target, RecurringEventsForm.this);
+                    RecurringLotoEvent newEvent = new RecurringLotoEvent(procedureDefinition, assignee, createRecurrence());
+                    newEvent.setTenant(procedureDefinition.getTenant());
+                    recurringScheduleService.addRecurringEvent(newEvent);
+                    resetForm();
+                    onCreateRecurrence(target);
                 }
 
                 @Override
@@ -146,11 +149,6 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
             updateTimeComponents(type);
         }
 
-        protected void onCreate(AjaxRequestTarget target, RecurringEventsForm form) {
-            RecurrenceFormPanel.this.onCreateRecurrence(target, form);
-            resetForm();
-        }
-
         public Recurrence createRecurrence() {
             if ( type.requiresDate() ) {
                 return new Recurrence(type).withDayAndTime(dateTime);
@@ -163,7 +161,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
 
         private void resetForm() {
             time = RecurrenceTimeOfDay.NINE_AM;
-            eventType = (eventTypes.size()>0) ? eventTypes.get(0) : null;
+            procedureDefinition = (procedureDefinitionsList.size()>0) ? procedureDefinitionsList.get(0) : null;
             type = RecurrenceType.MONTHLY_1ST;
         }
 
@@ -194,7 +192,7 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
         }
 
         @Override
-        public void validate(Form<?> form) {
+        public void validate(Form form) {
             switch (recurrenceTypeDropDown.getModel().getObject()) {
                 case DAILY:
                     if (timePicker.getMultipleTime().getConvertedInput().size()==0) {
@@ -231,22 +229,6 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
             }
         }
 
-        public Boolean getAutoassign() {
-            return autoassign;
-        }
-
-        public EventType getEventType() {
-            return eventType;
-        }
-
-        public BaseOrg getOwner() {
-            return owner;
-        }
-
-        public Boolean getOwnerAndDown() {
-            return ownerAndDown;
-        }
-
         public RecurrenceTimeOfDay getTime() {
             return time;
         }
@@ -260,21 +242,6 @@ public abstract class RecurrenceFormPanel<T> extends Panel {
         }
     }
 
-    protected boolean isAutoAssignVisible() {
-        return true;
-    }
-
-    protected boolean isOwnerDownOptionVisible() {
-        return true;
-    }
-
-    protected boolean isOrgPickerVisible() {
-        return true;
-    }
-
-    protected abstract List<? extends EventType> getEventTypes();
-
-    protected abstract void onCreateRecurrence(AjaxRequestTarget target, RecurringEventsForm form);
-
+    protected void onCreateRecurrence(AjaxRequestTarget target) {}
 
 }

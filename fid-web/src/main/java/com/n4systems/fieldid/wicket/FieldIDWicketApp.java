@@ -208,6 +208,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("completedProcedures", ProceduresListPage.class);
         mountPage("procedureResults", ProcedureResultsPage.class);
         mountPage("copyProceduresList", CopyProceduresList.class);
+        mountPage("recurringLotoPage", RecurringLotoSchedulesPage.class);
 
         mountPage("identify", IdentifyOrEditAssetPage.class);
 
