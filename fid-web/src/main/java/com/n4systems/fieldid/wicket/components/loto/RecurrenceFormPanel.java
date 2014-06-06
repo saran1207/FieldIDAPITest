@@ -85,7 +85,7 @@ public class RecurrenceFormPanel extends Panel {
 
             final List<RecurrenceType> recurrences= Arrays.asList(RecurrenceType.values());
 
-            procedureDefinitionsList = procedureDefinitionService.getActiveProcedureDefinitionsForAsset(assetModel.getObject());
+            procedureDefinitionsList = procedureDefinitionService.getAllPublishedProcedures(assetModel.getObject());
 
             final IChoiceRenderer<ProcedureDefinition> procedureDefRenderer = new IChoiceRenderer<ProcedureDefinition>() {
                 @Override public Object getDisplayValue(ProcedureDefinition object) {
