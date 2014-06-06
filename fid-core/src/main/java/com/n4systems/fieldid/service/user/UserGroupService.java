@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.service.user;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
-import com.n4systems.model.Event;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
@@ -100,6 +99,12 @@ public class UserGroupService extends FieldIdPersistenceService {
     public List<User> getUsersInGroup(Long userGroupId) {
         UserGroup userGroup = persistenceService.findUsingTenantOnlySecurityWithArchived(UserGroup.class, userGroupId);
         return getUsersInGroup(userGroup);
+    }
+
+    public UserGroup getUserGroup(Long id) {
+        QueryBuilder<UserGroup> query = createUserSecurityBuilder(UserGroup.class);
+        query.addSimpleWhere("id", id);
+        return persistenceService.find(query);
     }
 
     public List<UserGroup> getUserGroups(List<Long> ids) {
