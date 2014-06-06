@@ -150,10 +150,10 @@ public class ProcedurePickerPanel extends Panel {
 
         }
 
-        private void setDefaultEventType(IModel<Procedure> eventScheduleModel, List<ProcedureDefinition> eventTypeOptions) {
-            Procedure eventSchedule = eventScheduleModel.getObject();
-            if (eventSchedule.getType() == null && eventTypeOptions.size() > 0) {
-                eventSchedule.setType(eventTypeOptions.get(0));
+        private void setDefaultEventType(IModel<Procedure> scheduleModel, List<ProcedureDefinition> procedureOptions) {
+            Procedure schedule = scheduleModel.getObject();
+            if (schedule.getType() == null && procedureOptions.size() > 0) {
+                schedule.setType(procedureOptions.get(0));
             }
         }
 
