@@ -196,15 +196,34 @@ div.wicket-modal div .w_top_1 {
 		padding: 0 10px;
 	}
 	.form-horizontal .event-schedules .due-date {
-		background-color: #ccc;
-		padding: 6px 10px;
-		display: inline-block;
-        width:56px;
+        background-color: #ccc;
+        padding: 12px 10px;
+        height: 16px;
+        line-height: 16px;
+        display: block;
+        width: 56px;
         text-align: center;
+        float: left;
+        margin-right: 5px;
+        margin-top: 1px;
 	}
+    .form-horizontal .event-schedules .event-name {
+        font-weight: bold;
+        display: block;
+        padding-right: 16px;
+    }
+    .form-horizontal .event-schedules .event-assignee {
+        display: block;
+    }
+    .form-horizontal .event-schedules .current-schedule > div{
+        position: relative;
+        margin-bottom: 18px;
+    }
 		.form-horizontal .event-schedules .remove-link {
-			float: right;
-			line-height: 28px;
+            line-height: 28px;
+            position: absolute;
+            top: 6px;
+            right: 0;
 		}
 		.form-horizontal .add-schedule-form {
 			border-bottom: 1px solid #E2E2E2;

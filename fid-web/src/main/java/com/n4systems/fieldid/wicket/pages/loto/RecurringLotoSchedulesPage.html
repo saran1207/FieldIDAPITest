@@ -1,0 +1,44 @@
+<html xmlns:wicket="http://wicket.apache.org">
+
+<wicket:extend>
+
+    <div wicket:id="addRecurrence"/>
+
+    <div wicket:id="listContainer" class="content">
+        <table class="list">
+            <tbody>
+            <tr>
+                <th><wicket:message key="label.schedule_type"/></th>
+                <th><wicket:message key="label.procedure_code"/></th>
+                <th><wicket:message key="label.frequency"/></th>
+                <th><wicket:message key="label.assigned_to"/></th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr wicket:id="list">
+                <td class="schedule"><wicket:message key="label.recurring"/></td>
+                <td wicket:id="procedureCode"/>
+                <td><span wicket:id="recurrence"/> @ <span wicket:id="time"/> </td>
+                <td wicket:id="assignedTo"/>
+                <td class="action-buttons">
+                    <a wicket:id="removeLink" class="btn-secondary right"><wicket:message key="label.remove"/></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div wicket:id="noProceduresBlankSlate" class="info">
+        <p><wicket:message key="message.recurring_events_no_procedures"/></p>
+    </div>
+
+    <div wicket:id="blankSlate" class="info">
+        <p ><wicket:message key="message.recurring_events_no_events"/></p>
+    </div>
+
+
+    <wicket:fragment wicket:id="addRecurrenceActionGroup">
+        <a wicket:id="addRecurrenceLink" class="btn-primary"><wicket:message key="label.create_new_rule"/></a>
+    </wicket:fragment>
+
+</wicket:extend>
+</html>

@@ -80,6 +80,10 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
     @Column(name="mobileguid")
     private String mobileGUID;
 
+    @ManyToOne(optional = true, fetch = FetchType.LAZY)
+    @JoinColumn(name="recurring_event_id")
+    private RecurringLotoEvent recurringEvent;
+
     public List<IsolationPointResult> getLockResults() {
         return lockResults;
     }
@@ -258,6 +262,14 @@ public class Procedure extends ArchivableEntityWithTenant implements NetworkEnti
             return assignee.getFullName();
         }
         return null;
+    }
+
+    public RecurringLotoEvent getRecurringEvent() {
+        return recurringEvent;
+    }
+
+    public void setRecurringEvent(RecurringLotoEvent recurringEvent) {
+        this.recurringEvent = recurringEvent;
     }
 
 }

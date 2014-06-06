@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.loto;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.loto.copy.CopyProceduresList;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.model.Asset;
@@ -31,6 +32,13 @@ public class LotoActionGroup extends Panel {
             @Override
             public void onClick() {
                 setResponsePage(new ProcedureDefinitionPage(assetModel.getObject()));
+            }
+        });
+
+        optionsContainer.add(new Link("recurringSchedulesLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(RecurringLotoSchedulesPage.class, PageParametersBuilder.uniqueId(assetModel.getObject().getId()));
             }
         });
 

@@ -1,0 +1,43 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <form wicket:id="form" class="new-rules">
+        <div wicket:id="feedbackPanel"></div>
+
+        <h3><wicket:message key="label.recurring"/></h3>
+        <p><wicket:message key="message.recurring_loto"/></p>
+
+        <div wicket:id="createContainer" class="new-event">
+            <div class="clearfix">
+                <label class="left"><wicket:message key="label.capital_schedule_a"/></label>
+                <div class="right"><select wicket:id="procedureDef"></select></div>
+            </div>
+            <div class="clearfix">
+                <label class="left"><wicket:message key="label.every"/></label>
+                <div class="right">
+                    <select wicket:id="recurrence" class="recurrence"></select>
+                </div>
+            </div>
+            <div class="clearfix">
+                <label class="left"><wicket:message key="label.at"/></label>
+                <div class="right">
+                    <span wicket:id="timeContainer" class="time-container">
+                        <select class="time" wicket:id="time"/>
+                        <select class="time" wicket:id="multipleTimes"/>
+                    </span>
+                    <span wicket:id="dateTime" class="date-time"/>
+                </div>
+            </div>
+            <div class="clearfix">
+                <label class="left"><wicket:message key="label.assign_to"/></label>
+                <div class="right">
+                    <div wicket:id="assignee" class="clearfix"></div>
+                </div>
+            </div>
+
+            <a class="btn btn-blue btn-sml btn-primary" wicket:id="create"><wicket:message key="label.create_recurring_event"/></a>
+        </div>
+    </form>
+
+</wicket:panel>
+</html>

@@ -22,7 +22,7 @@ public class PlaceEvent extends Event<PlaceEventType, PlaceEvent, BaseOrg> imple
     @JoinColumn(name="place_id")
     private BaseOrg place;
 
-    @ManyToOne()
+    @ManyToOne
     @JoinColumn(name="recurring_event_id")
     private RecurringPlaceEvent recurringEvent;
 

@@ -55,6 +55,8 @@ public class ProceduresListPage extends LotoPage {
                 item.add(new Label("procedureType", new PropertyModel<String>(procedure, "type.procedureType.label")));
                 item.add(new Label("revision", new PropertyModel<Long>(procedure, "type.revisionNumber")));
                 item.add(new Label("state", new PropertyModel<Long>(procedure, "workflowState.label")));
+                item.add(new Label("dateDue", new DayDisplayModel(new PropertyModel<Date>(procedure, "dueDate"), true, getCurrentUser().getTimeZone())));
+
                 item.add(new BookmarkablePageLink<ProcedureResultsPage>("viewLink", ProcedureResultsPage.class, PageParametersBuilder.id(procedure.getObject().getId())).
                         setVisible(!procedure.getObject().getWorkflowState().equals(ProcedureWorkflowState.OPEN)));
 
