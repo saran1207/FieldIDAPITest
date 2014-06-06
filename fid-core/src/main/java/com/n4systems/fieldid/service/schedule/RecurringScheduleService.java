@@ -226,6 +226,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
             procedure.setWorkflowState(ProcedureWorkflowState.OPEN);
             procedure.setRecurringEvent(recurringEvent);
             procedure.setDueDate(futureDate.toDate());
+            procedure.setAssignedUserOrGroup(recurringEvent.getAssignedUserOrGroup());
             procedureService.createSchedule(procedure);
         }
     }
