@@ -48,7 +48,7 @@ public class ProcedureService extends FieldIdPersistenceService {
 
     public void deleteSchedule(Procedure procedure) {
         Preconditions.checkArgument(procedure.getWorkflowState().equals(ProcedureWorkflowState.OPEN));
-        persistenceService.delete(procedure);
+        persistenceService.archive(procedure);
     }
 
     public Procedure findByMobileId(String mobileId, boolean withArchived) {
