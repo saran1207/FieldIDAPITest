@@ -44,20 +44,30 @@ public class DownloadProjectNoteFile extends DownloadAction {
 			addActionError(getText("error.noprojectnoteattachedfile", fileName));
 			return MISSING;
 		}
-		
-		// construct a file path to our attachment
-		File projectNoteDirectory = PathHandler.getAttachmentFile(project, attachment);
-		File attachedFile = new File(projectNoteDirectory.getAbsolutePath(), attachment.getFileName());
-		
-		// make sure the file actually exists
-		if( !attachedFile.exists() ) {
-			addActionError( getText( "error.noprojectnoteattachedfile", fileName ) );
-			return MISSING;
-		}
+
+        File attachedFile;
+        if(attachment.isRemote()){
+            attachedFile = s3Service.downloadFileAttachment(attachment);
+            if(attachedFile == null) {
+                addActionError( getText( "error.noprojectnoteattachedfile", fileName ) );
+                return MISSING;
+            }
+        }
+        else {
+            // construct a file path to our attachment
+            File projectNoteDirectory = PathHandler.getAttachmentFile(project, attachment);
+            attachedFile = new File(projectNoteDirectory.getAbsolutePath(), attachment.getFileName());
+
+            // make sure the file actually exists
+            if( !attachedFile.exists() ) {
+                addActionError( getText( "error.noprojectnoteattachedfile", fileName ) );
+                return MISSING;
+            }
+        }
 		
 		fileName = attachment.getFileName();
 		// stream the file back to the browser
-		fileSize = new Long( attachedFile.length() ).intValue();
+		//fileSize = new Long( attachedFile.length() ).intValue();
 		InputStream input = null;
 		boolean failure = false;
 		try {

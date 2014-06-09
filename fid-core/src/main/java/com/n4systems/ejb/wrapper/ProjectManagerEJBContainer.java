@@ -22,7 +22,7 @@ public class ProjectManagerEJBContainer extends EJBTransactionEmulator<ProjectMa
 
 	public int attachAsset(Asset asset, Project project, Long modifiedBy) throws AssetAlreadyAttachedException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).attachAsset(asset, project, modifiedBy);
 
@@ -38,7 +38,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public FileAttachment attachNote(FileAttachment note, Project project, Long modifiedBy) throws FileAttachmentException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).attachNote(note, project, modifiedBy);
 
@@ -54,7 +54,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public int detachAsset(Asset asset, Project project, Long modifiedBy) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).detachAsset(asset, project, modifiedBy);
 
@@ -70,7 +70,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public int detachNote(FileAttachment note, Project project, Long modifiedBy) throws FileAttachmentException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).detachNote(note, project, modifiedBy);
 
@@ -86,7 +86,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Pager<Asset> getAssetsPaged(Project project, SecurityFilter filter, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getAssetsPaged(project, filter, page, pageSize);
 
@@ -102,7 +102,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Long getCompleteSchedules(Project project, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getCompleteSchedules(project, filter);
 
@@ -118,7 +118,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Long getIncompleteSchedules(Project project, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getIncompleteSchedules(project, filter);
 
@@ -134,7 +134,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Pager<FileAttachment> getNotesPaged(Project project, int page, int pageSize) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getNotesPaged(project, page, pageSize);
 
@@ -150,7 +150,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public List<Project> getProjectsForAsset(Asset asset, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getProjectsForAsset(asset, filter);
 
@@ -168,7 +168,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Pager<Event> getSchedulesPaged(Project project, SecurityFilter filter, int page, int pageSize, List<WorkflowState> statuses) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).getSchedulesPaged(project, filter, page, pageSize, statuses);
 
