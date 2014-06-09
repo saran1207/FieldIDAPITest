@@ -33,9 +33,8 @@ import java.util.Set;
 @Transactional
 public class PlaceService extends FieldIdPersistenceService {
 
-    private @Autowired OrgService orgService;
-    private @Autowired
-    S3Service s3Service;
+    @Autowired private OrgService orgService;
+    @Autowired private S3Service s3Service;
 
     /**
      * NOTE THAT ALL METHODS IN THIS SERVICE ARE JUST PLACEHOLDERS FOR 2013.8!!!!

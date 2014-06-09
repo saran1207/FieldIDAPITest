@@ -148,8 +148,8 @@ public class Asset extends ArchivableEntityWithOwner implements Listable<Long>, 
 	}
 	
 	public void ensureMobileGuidIsSet() {
-		if (this.getMobileGUID() == null) {
-            this.setMobileGUID(UUID.randomUUID().toString());
+		if (getMobileGUID() == null || getMobileGUID().length() == 0) {
+            setMobileGUID(UUID.randomUUID().toString());
 		}
 	}
 	

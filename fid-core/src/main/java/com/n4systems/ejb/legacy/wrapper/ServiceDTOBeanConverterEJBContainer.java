@@ -24,7 +24,7 @@ public class ServiceDTOBeanConverterEJBContainer extends EJBTransactionEmulator<
 
 	public ProductTypeServiceDTO convert_new(AssetType assetType) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert_new(assetType);
 
@@ -39,7 +39,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public FileAttachment convert(AbstractEvent event, InspectionImageServiceDTO inspectionImageServiceDTO, User performedBy) throws IOException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(event, inspectionImageServiceDTO, performedBy);
 
@@ -54,7 +54,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public CustomerOrgServiceDTO convert(CustomerOrg customerOrg) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(customerOrg);
 
@@ -69,7 +69,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public DivisionOrgServiceDTO convert(DivisionOrg divisionOrg) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(divisionOrg);
 
@@ -84,7 +84,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public InspectionServiceDTO convert(ThingEvent event) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(event);
 
@@ -99,7 +99,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public InspectionBookServiceDTO convert(EventBook eventBook) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(eventBook);
 
@@ -114,7 +114,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public ThingEvent convert(InspectionScheduleServiceDTO inspectionScheduleServiceDTO, long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(inspectionScheduleServiceDTO, tenantId);
 
@@ -129,7 +129,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public ThingEvent convert(InspectionServiceDTO inspectionServiceDTO, ThingEvent schedule, Long tenantId) throws IOException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(inspectionServiceDTO, schedule, tenantId);
 
@@ -144,7 +144,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public InternalOrgServiceDTO convert(InternalOrg internalOrg) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(internalOrg);
 
@@ -159,7 +159,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public BaseOrg convert(long ownerId, long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(ownerId, tenantId);
 
@@ -174,7 +174,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public VendorServiceDTO convert(OrgConnection orgConnections) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(orgConnections);
 
@@ -189,7 +189,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public TenantServiceDTO convert(PrimaryOrg tenant) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(tenant);
 
@@ -204,7 +204,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public ProductServiceDTO convert(Asset asset) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(asset);
 
@@ -219,7 +219,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public Asset convert(ProductServiceDTO productServiceDTO, Asset targetProduct, long tenantId) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(productServiceDTO, targetProduct, tenantId);
 
@@ -234,7 +234,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public ProductTypeGroupServiceDTO convert(AssetTypeGroup assetTypeGroup) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(assetTypeGroup);
 
@@ -249,7 +249,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public JobServiceDTO convert(Project job) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(job);
 
@@ -264,7 +264,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public SetupDataLastModDatesServiceDTO convert(SetupDataLastModDates setupModDates) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(setupModDates);
 
@@ -279,7 +279,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public UserServiceDTO convert(User user) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(user);
 
@@ -294,7 +294,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public User convert(UserServiceDTO user) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).convert(user);
 

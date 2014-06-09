@@ -55,8 +55,8 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 	}
 
     public void ensureMobileIdIsSet() {
-        if (this.getMobileId() == null) {
-            this.setMobileId(UUID.randomUUID().toString());
+        if (getMobileId() == null || getMobileId().length() == 0) {
+            setMobileId(UUID.randomUUID().toString());
         }
     }
 

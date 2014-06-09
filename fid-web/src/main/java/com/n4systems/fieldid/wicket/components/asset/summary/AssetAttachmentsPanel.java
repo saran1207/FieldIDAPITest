@@ -33,7 +33,7 @@ public class AssetAttachmentsPanel extends Panel {
     protected AssetService assetService;
 
     @SpringBean
-    private S3Service s3Service;
+    protected S3Service s3Service;
 
     @SpringBean
     private UserService userService;

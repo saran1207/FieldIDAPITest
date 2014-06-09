@@ -2,6 +2,7 @@ package com.n4systems.fieldid.actions.downloaders;
 
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.api.AbstractAction;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.util.ContentTypeUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -19,6 +20,7 @@ public abstract class DownloadAction extends AbstractAction {
 	protected String fileName;
 	protected Integer fileSize;
 	protected Long attachmentID;
+    protected S3Service s3service;
 
 	public DownloadAction(PersistenceManager persistenceManager) {
 		super(persistenceManager);

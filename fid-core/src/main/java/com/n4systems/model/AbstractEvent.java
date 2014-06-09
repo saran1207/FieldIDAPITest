@@ -81,8 +81,8 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 	}
 
 	private void ensureMobileGuidIsSet() {
-		if (mobileGUID == null) {
-			mobileGUID = UUID.randomUUID().toString();
+		if(getMobileGUID() == null || getMobileGUID().length() == 0){
+			setMobileGUID(UUID.randomUUID().toString());
 		}
 	}
 	

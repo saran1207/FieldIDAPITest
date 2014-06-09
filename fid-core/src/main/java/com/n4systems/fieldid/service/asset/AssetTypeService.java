@@ -44,17 +44,13 @@ public class AssetTypeService extends FieldIdPersistenceService {
 
     private static final Logger logger= Logger.getLogger(AssetTypeService.class);
 
-    private @Autowired AsyncService asyncService;
-    private @Autowired RecurringScheduleService recurringScheduleService;
-    private @Autowired AssetCodeMappingService assetCodeMappingService;
-    private @Autowired AutoAttributeService autoAttributeService;
-    @Autowired
-    private ProcedureService procedureService;
-    @Autowired
-    private ProcedureDefinitionService procedureDefinitionService;
-    @Autowired
-    private S3Service s3Service;
-
+    @Autowired private AsyncService asyncService;
+    @Autowired private RecurringScheduleService recurringScheduleService;
+    @Autowired private AssetCodeMappingService assetCodeMappingService;
+    @Autowired private AutoAttributeService autoAttributeService;
+    @Autowired private ProcedureService procedureService;
+    @Autowired private ProcedureDefinitionService procedureDefinitionService;
+    @Autowired private S3Service s3Service;
 
     public AssetType getAssetType(Long id) {
         return persistenceService.find(AssetType.class, id);
@@ -295,18 +291,15 @@ public class AssetTypeService extends FieldIdPersistenceService {
                     try {
                         // move the file to it's new location, note that it's location is currently relative to the tmpDirectory
                         tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
-
-                        s3Service.uploadFileAttachment(tmpFile, uploadedFile);
                         //FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
-
-                        // clean up the temp file
-                        tmpFile.delete();
-
-                        // now we need to set the correct file name for the attachment and set the modifiedBy
                         uploadedFile.setTenant(assetType.getTenant());
                         uploadedFile.setModifiedBy(assetType.getModifiedBy());
                         uploadedFile.ensureMobileIdIsSet();
                         uploadedFile.setFileName(s3Service.getFileAttachmentPath(uploadedFile));
+                        s3Service.uploadFileAttachment(tmpFile, uploadedFile);
+
+                        // clean up the temp file
+                        tmpFile.delete();
 
                         // attach the attachment
                         assetType.getAttachments().add(uploadedFile);

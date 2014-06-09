@@ -19,7 +19,7 @@ public class NoteManagerEJBContainer extends EJBTransactionEmulator<NoteManager>
 
 	public FileAttachment attachNote(FileAttachment note, Project project, Long modifiedBy) throws FileAttachmentException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).attachNote(note, project, modifiedBy);
 
@@ -34,7 +34,7 @@ Transaction transaction = transactionManager.startTransaction();
 
 	public int detachNote(FileAttachment note, Project project, Long modifiedBy) throws FileAttachmentException {
 		TransactionManager transactionManager = new FieldIdTransactionManager();
-Transaction transaction = transactionManager.startTransaction();
+        Transaction transaction = transactionManager.startTransaction();
 		try {
 			return createManager(transaction.getEntityManager()).detachNote(note, project, modifiedBy);
 

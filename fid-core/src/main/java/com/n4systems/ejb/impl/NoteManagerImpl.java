@@ -7,7 +7,8 @@ import java.io.IOException;
 
 import javax.persistence.EntityManager;
 
-import org.apache.commons.io.FileUtils;
+import com.amazonaws.AmazonClientException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.NoteManager;
@@ -21,12 +22,13 @@ import com.n4systems.reporting.PathHandler;
 public class NoteManagerImpl implements NoteManager {
 
 	private static final Logger logger = Logger.getLogger(NoteManagerImpl.class);
-
 	
 	private PersistenceManager persistenceManager;
+    protected S3Service s3Service;
 
 	public NoteManagerImpl(EntityManager em) {
 		this.persistenceManager = new PersistenceManagerImpl(em);
+        this.s3Service = new S3Service();
 	}
 
 	public FileAttachment attachNote(FileAttachment note, Project project, Long modifiedBy) throws FileAttachmentException {
@@ -35,7 +37,7 @@ public class NoteManagerImpl implements NoteManager {
 			note.setTenant(project.getTenant());
 			persistenceManager.save(note, modifiedBy);
 
-			File attachmentDirectory = PathHandler.getAttachmentFile(project, note);
+			//File attachmentDirectory = PathHandler.getAttachmentFile(project, note);
 			File tmpDirectory = PathHandler.getTempRoot();
 			File tmpFile = null;
 
@@ -43,7 +45,10 @@ public class NoteManagerImpl implements NoteManager {
 				// move the file to it's new location, note that it's
 				// location is currently relative to the tmpDirectory
 				tmpFile = new File(tmpDirectory, note.getFileName());
-				FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+				//FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+                note.ensureMobileIdIsSet();
+                note.setFileName(s3Service.getFileAttachmentPath(note));
+                s3Service.uploadFileAttachment(tmpFile, note);
 
 				// clean up the temp file
 				tmpFile.delete();
@@ -55,7 +60,7 @@ public class NoteManagerImpl implements NoteManager {
 			project.getNotes().add(0, note);
 			persistenceManager.update(project, modifiedBy);
 
-		} catch (IOException e) {
+		} catch (AmazonClientException e) {
 			logger.error("failed to copy uploaded file ", e);
 			throw new FileAttachmentException(e);
 		}

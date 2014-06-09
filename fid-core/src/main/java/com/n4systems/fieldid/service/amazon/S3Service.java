@@ -608,7 +608,8 @@ public class S3Service extends FieldIdPersistenceService {
 
     private String createResourcePath(Long tenantId, String resourcePath, Object...pathArgs) {
         if (tenantId == null) {
-            tenantId = securityContext.getTenantSecurityFilter().getTenantId();
+            //tenantId = securityContext.getTenantSecurityFilter().getTenantId();
+            tenantId = getCurrentTenant().getId();
         }
         String path = TENANTS_PREFIX + tenantId + String.format(resourcePath, pathArgs);
 

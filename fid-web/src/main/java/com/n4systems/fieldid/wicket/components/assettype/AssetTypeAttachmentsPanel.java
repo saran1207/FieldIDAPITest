@@ -77,7 +77,7 @@ public class AssetTypeAttachmentsPanel extends Panel {
                     protected void onUpdate(AjaxRequestTarget target) { } });
                 comments.add(new Watermark(new FIDLabelModel("label.asset_type.form.files").getObject()));
 
-                WebComponent image;
+                WebComponent image, imageFilename;
                 if (item.getModelObject().isImage()) {
                     if(item.getModelObject().isNew()) {
                         item.add(image = new Image("attachmentImage",new DynamicImageResource() {

@@ -1,11 +1,13 @@
 package com.n4systems.ejb.impl;
 
+import com.amazonaws.AmazonClientException;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAsset;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UnknownSubAsset;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.*;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
@@ -33,12 +35,15 @@ public class ManagerBackedEventSaver implements EventSaver {
 	public final EntityManager em;
 	public final LastEventDateFinder lastEventDateFinder;
 
+    protected S3Service s3Service;
+
 	public ManagerBackedEventSaver(LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
 			EntityManager em, LastEventDateFinder lastEventDateFinder) {
 		this.legacyAssetManager = legacyAssetManager;
 		this.persistenceManager = persistenceManager;
 		this.em = em;
 		this.lastEventDateFinder = lastEventDateFinder;
+        this.s3Service = new S3Service();
 	}
 
 	public ThingEvent createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
@@ -300,13 +305,10 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 
     ThingEvent attachUploadedFiles(ThingEvent event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
-		File attachmentDirectory;
 		AbstractEvent<ThingEventType,Asset> targetEvent;
 		if (subEvent == null) {
-			attachmentDirectory = PathHandler.getAttachmentFile(event);
 			targetEvent = event;
 		} else {
-			attachmentDirectory = PathHandler.getAttachmentFile(event, subEvent);
 			targetEvent = subEvent;
 		}
 		File tmpDirectory = PathHandler.getTempRoot();
@@ -321,58 +323,26 @@ public class ManagerBackedEventSaver implements EventSaver {
 					// move the file to it's new location, note that it's
 					// location is currently relative to the tmpDirectory
 					tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
-					FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+					//FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+                    uploadedFile.setTenant(targetEvent.getTenant());
+                    uploadedFile.setModifiedBy(targetEvent.getModifiedBy());
+                    uploadedFile.ensureMobileIdIsSet();
+                    uploadedFile.setFileName(s3Service.getFileAttachmentPath(uploadedFile));
+                    s3Service.uploadFileAttachment(tmpFile, uploadedFile);
 	
 					// clean up the temp file
 					tmpFile.delete();
-	
-					// now we need to set the correct file name for the
-					// attachment and set the modifiedBy
-					uploadedFile.setTenant(targetEvent.getTenant());
-					uploadedFile.setModifiedBy(targetEvent.getModifiedBy());
-                    uploadedFile.ensureMobileIdIsSet();
-                    uploadedFile.setFileName(tmpFile.getName());
-	
+
 					// attach the attachment
 					targetEvent.getAttachments().add(uploadedFile);
-				} catch (IOException e) {
+				} catch (AmazonClientException e) {
 					EventManagerImpl.logger.error("failed to copy uploaded file ", e);
 					throw new FileAttachmentException(e);
 				}
 	
 			}
 		}
-	
-		// Now we need to cleanup any files that are no longer attached to the
-		// event
-		if (attachmentDirectory.exists()) {
-	
-			/*
-			 * We'll start by constructing a list of attached file names which
-			 * will be used in a directory filter
-			 */
-			final List<String> attachedFiles = new ArrayList<String>();
-			for (FileAttachment file : targetEvent.getAttachments()) {
-				attachedFiles.add(file.getFileName());
-			}
-	
-			/*
-			 * This lists all files in the attachment directory
-			 */
-			for (File detachedFile : attachmentDirectory.listFiles(new FilenameFilter() {
-				public boolean accept(File dir, String name) {
-					// accept only files that are not in our attachedFiles list
-					return !attachedFiles.contains(name);
-				}
-			})) {
-				/*
-				 * any file returned from our fileNotAttachedFilter, is not in
-				 * our attached file list and should be removed
-				 */
-				detachedFile.delete();
-	
-			}
-		}
+
 		return event;
 	}
 

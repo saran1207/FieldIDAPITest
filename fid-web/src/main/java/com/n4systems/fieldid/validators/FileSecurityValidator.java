@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 
 import com.opensymphony.xwork2.validator.ValidationException;
 import com.opensymphony.xwork2.validator.validators.FieldValidatorSupport;
+import org.springframework.util.StringUtils;
 
 public class FileSecurityValidator extends FieldValidatorSupport {
 
@@ -21,7 +22,7 @@ public class FileSecurityValidator extends FieldValidatorSupport {
 	protected boolean fileNamePasses( String fileName, Object action ) {
 		File targetFile = new File( fileName );
 		try {
-			if(!targetFile.getCanonicalFile().equals(targetFile.getAbsoluteFile())) {
+			if(!isRemote(fileName) && !targetFile.getCanonicalFile().equals(targetFile.getAbsoluteFile())) {
 				logger.warn( "Attached file tried to target non uploaded file " + fileName );
 				addFieldError(getFieldName(), action);
 				return false;
@@ -33,5 +34,11 @@ public class FileSecurityValidator extends FieldValidatorSupport {
 		}
 		return true;
 	}
+
+    protected boolean isRemote(String fileName) {
+        //the local files only contain the filename, whereas the files on s3 have a full path
+        //files in temp folder will have one /, so we are counting if there is more than 1
+        return StringUtils.countOccurrencesOf(fileName, "/") > 1;
+    }
 
 }

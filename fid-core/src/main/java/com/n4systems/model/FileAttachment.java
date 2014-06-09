@@ -52,8 +52,8 @@ public class
     }
 
     public void ensureMobileIdIsSet() {
-        if (mobileId == null) {
-            mobileId = UUID.randomUUID().toString();
+        if (getMobileId() == null || getMobileId().length() < 1) {
+            setMobileId(UUID.randomUUID().toString());
         }
     }
 

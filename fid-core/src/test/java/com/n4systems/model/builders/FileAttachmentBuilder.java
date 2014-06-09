@@ -45,7 +45,8 @@ public class FileAttachmentBuilder extends BaseBuilder<FileAttachment> {
 	@Override
 	public FileAttachment createObject() {
 		FileAttachment attachment = new FileAttachment();
-		
+
+        attachment.ensureMobileIdIsSet();
 		attachment.setId(getId());
 		attachment.setTenant(tenant);
 		attachment.setFileName(fileName);
