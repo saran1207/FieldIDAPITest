@@ -1,6 +1,7 @@
 package com.n4systems.model.procedure;
 
 import com.n4systems.model.Recurrence;
+import com.n4systems.model.api.DisplayEnum;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.api.SecurityEnhanced;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
@@ -15,6 +16,25 @@ import javax.persistence.*;
 @Table(name = "recurring_loto_events")
 @PrimaryKeyJoinColumn(name="id")
 public class RecurringLotoEvent  extends ArchivableEntityWithTenant implements Saveable, SecurityEnhanced<RecurringLotoEvent>, Cloneable{
+
+    public enum RecurringLotoEventType implements DisplayEnum{
+        LOTO("LOTO"), AUDIT("Procedure Audit");
+
+        private String label;
+
+        RecurringLotoEventType(String label) {
+            this.label = label;
+        }
+
+        @Override
+        public String getLabel() {
+            return label;
+        }
+
+        public String getName() {
+            return name();
+        }
+    }
 
     @ManyToOne(fetch = FetchType.EAGER, optional = true)
     @JoinColumn(name = "procedure_definition_id", nullable = true)
@@ -31,6 +51,9 @@ public class RecurringLotoEvent  extends ArchivableEntityWithTenant implements S
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="assigned_group_id")
     private UserGroup assignedGroup;
+
+    @Enumerated(EnumType.STRING)
+    private RecurringLotoEventType type;
 
 
     public RecurringLotoEvent(ProcedureDefinition procedureDefinition, Assignable assignee, Recurrence recurrence) {

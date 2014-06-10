@@ -53,6 +53,9 @@ ${action.setPageType('event_type', 'list')!}
                     <#if eventType.actionEventType >
                         <@s.text name="label.action"/>
                     </#if>
+                    <#if eventType.procedureAuditEventType >
+                    <@s.text name="label.procedure_audit"/>
+                </#if>
 				</td>
 				<td><#if eventType.group?exists><a href="<@s.url action="eventTypeGroup" uniqueID="${eventType.group.id}" />">${eventType.group.name!}</a></#if></td>
 				<td><#if eventType.createdBy?exists>${eventType.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(eventType.created)}</td>
