@@ -88,41 +88,47 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	}
 
 	private void saveAttachmentData(AssetAttachment attachment, byte[] attachmentData) {
-		if (attachmentData != null) {
-			writeAttachmentDataToFileSystem(attachment, attachmentData);
-		} else if(!attachment.isRemote()) {
-			moveAttachmentFromTempDir(attachment);
-		}
+        if (attachmentData != null) {
+            writeAttachmentDataToFileSystem(attachment, attachmentData);
+        } else {
+            moveAttachmentFromTempDir(attachment);
+        }
 	}
 
 	private void moveAttachmentFromTempDir(AssetAttachment attachment) {
-		try {
-			File tmpDirectory = PathHandler.getTempRoot();
+        //if attachment is already on S3, then we don't need to copy it there
+        if(!s3Service.assetAttachmentExists(attachment)){
+            try {
+                File tmpDirectory = PathHandler.getTempRoot();
 
-			File tmpAttachment = new File(tmpDirectory, attachment.getFileName());
-            Assert.hasLength(attachment.getMobileId());
-            s3Service.uploadAssetAttachment(tmpAttachment, attachment);
-            attachment.setFileName(s3Service.getAssetAttachmentPath(attachment));
-		} catch (Exception e) {
-            throw new FileAttachmentException("Failed to upload attachment data [" + attachment.getFileName() + "]",e);
-		}
+                File tmpAttachment = new File(tmpDirectory, attachment.getFileName());
+                Assert.hasLength(attachment.getMobileId());
+                s3Service.uploadAssetAttachment(tmpAttachment, attachment);
+                attachment.setFileName(s3Service.getAssetAttachmentPath(attachment));
+            } catch (Exception e) {
+                throw new FileAttachmentException("Failed to upload attachment data [" + attachment.getFileName() + "]",e);
+            }
+        }
 	}
 
 	private void writeAttachmentDataToFileSystem(AssetAttachment attachment, byte[] attachmentData) {
-		try {
-            //determine whether its local file or remote (if file does not exist, then it should be on s3)
-			File attachmentFile = PathHandler.getAssetAttachmentFile(attachment);
-            if(attachmentFile.exists()){
-			    FileUtils.writeByteArrayToFile(attachmentFile, attachmentData);
+        //if attachment is already on S3, then we don't need to copy it there
+        if(!s3Service.assetAttachmentExists(attachment)){
+            try {
+                //determine whether its local file or remote (if file does not exist, then it should be on s3)
+                File attachmentFile = PathHandler.getAssetAttachmentFile(attachment);
+                if(attachmentFile.exists()){
+                    FileUtils.writeByteArrayToFile(attachmentFile, attachmentData);
+                }
+                else {
+                    Assert.hasLength(attachment.getMobileId());
+                    s3Service.uploadAssetAttachmentData(attachmentData, attachment);
+                    attachment.setFileName(s3Service.getAssetAttachmentPath(attachment));
+                }
+            } catch (IOException e) {
+                throw new FileAttachmentException(e);
             }
-            else {
-                Assert.hasLength(attachment.getMobileId());
-                s3Service.uploadAssetAttachmentData(attachmentData, attachment);
-                attachment.setFileName(s3Service.getAssetAttachmentPath(attachment));
-            }
-		} catch (IOException e) {
-			throw new FileAttachmentException(e);
-		}
+        }
 	}
 
 	private void fillInConnectionFields(AssetAttachment entity) {

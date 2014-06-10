@@ -240,10 +240,15 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
+    public boolean assetAttachmentExists(AssetAttachment assetAttachment){
+        String fileName = assetAttachment.getFileName().substring(assetAttachment.getFileName().lastIndexOf('/') + 1);
+        return assetAttachmentExists(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), fileName);
+    }
+
     public boolean assetAttachmentExists(String assetUuid, String assetAttachmentUuid, String assetAttachmentFilename){
         Assert.hasLength(assetUuid);
         Assert.hasLength(assetAttachmentUuid);
-        //Assert.hasLength(assetAttachmentFilename);
+        Assert.hasLength(assetAttachmentFilename);
         boolean exists = resourceExists(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
         return exists;
     }
@@ -657,7 +662,13 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     private URL generatePresignedUrl(String path, Date expires, HttpMethod method) {
-        return getClient().generatePresignedUrl(getBucket(), path, expires, method);
+        URL url = null;
+        try {
+            url = getClient().generatePresignedUrl(getBucket(), path, expires, method);
+        } catch(AmazonServiceException ase){
+            //just ignore the exception, its probably caused by resource not existing
+        }
+        return url;
     }
 
     private AmazonS3Client getClient() {
@@ -707,7 +718,8 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public String getAssetAttachmentPath(AssetAttachment assetAttachment){
-        String assetAttachmentPath = getAssetAttachmentPath(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), assetAttachment.getFileName());
+        String fileName = assetAttachment.getFileName().substring(assetAttachment.getFileName().lastIndexOf('/') + 1);
+        String assetAttachmentPath = getAssetAttachmentPath(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), fileName);
         return assetAttachmentPath;
     }
 
@@ -715,8 +727,15 @@ public class S3Service extends FieldIdPersistenceService {
         Assert.hasLength(assetUuid);
         Assert.hasLength(assetAttachmentUuid);
         Assert.hasLength(assetAttachmentFilename);
-        String assetAttachmentsUploadPath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
-        return assetAttachmentsUploadPath;
+        Assert.doesNotContain(assetAttachmentFilename, "/");
+        String fullResourcePath = assetAttachmentFilename;
+        //if the path is not the full path (ie. its just the filename)
+        if(fullResourcePath.indexOf('/') == -1){
+            fullResourcePath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+        }
+        return fullResourcePath;
+        //arezafar drio this before commit String assetAttachmentsUploadPath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+        //arezafar drop this before commit return assetAttachmentsUploadPath;
         //String assetAttachmentsFolderUrl = "/" + this.getBucketHostname() + "/" + assetAttachmentsUploadPath;
         //return assetAttachmentsFolderUrl;
     }
@@ -821,8 +840,7 @@ public class S3Service extends FieldIdPersistenceService {
         if(fullResourcePath.indexOf('/') == -1){
             fullResourcePath = getFileAttachmentPath(fileAttachmentUuid, filename);
         }
-        URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
-        return url;
+        return generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
     }
 
     public File downloadFileAttachment(FileAttachment attachment){

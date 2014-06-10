@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 
 import com.amazonaws.AmazonClientException;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.util.ServiceLocator;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.NoteManager;
@@ -24,11 +25,9 @@ public class NoteManagerImpl implements NoteManager {
 	private static final Logger logger = Logger.getLogger(NoteManagerImpl.class);
 	
 	private PersistenceManager persistenceManager;
-    protected S3Service s3Service;
 
 	public NoteManagerImpl(EntityManager em) {
 		this.persistenceManager = new PersistenceManagerImpl(em);
-        this.s3Service = new S3Service();
 	}
 
 	public FileAttachment attachNote(FileAttachment note, Project project, Long modifiedBy) throws FileAttachmentException {
@@ -47,6 +46,7 @@ public class NoteManagerImpl implements NoteManager {
 				tmpFile = new File(tmpDirectory, note.getFileName());
 				//FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
                 note.ensureMobileIdIsSet();
+                S3Service s3Service = ServiceLocator.getS3Service();
                 note.setFileName(s3Service.getFileAttachmentPath(note));
                 s3Service.uploadFileAttachment(tmpFile, note);
 
@@ -54,7 +54,6 @@ public class NoteManagerImpl implements NoteManager {
 				tmpFile.delete();
 			}
 
-			note.setFileName((tmpFile != null) ? tmpFile.getName() : null);
 			persistenceManager.update(note, modifiedBy);
 
 			project.getNotes().add(0, note);
