@@ -235,6 +235,11 @@ public abstract class EventType<T extends EventType> extends ArchivableEntityWit
         return false;
     }
 
+    public boolean isProcedureAuditEventType() {
+        return false;
+    }
+
+
     @Deprecated // remove when TYPE() works. See field comment.
     public boolean isActionType() {
         return actionType;
