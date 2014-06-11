@@ -37,7 +37,7 @@ public class EventTypeCrud extends AbstractCrud {
     private static final String ACTION_TYPE="Action";
     private static final String ASSET_TYPE="Asset";
     private static final String PLACE_TYPE="Place";
-    private static final String PROCEDURE_AUDIT="Procedure Audit";
+    private static final String PROCEDURE_AUDIT="ProcedureAudit";
 
 	private List<ListingPair> eventTypeGroups;
     private List<EventTypeGroup> eventGroups;
@@ -411,7 +411,7 @@ public class EventTypeCrud extends AbstractCrud {
     }
 
     public List<String> getTypes() {
-        return Arrays.asList(ASSET_TYPE,PLACE_TYPE,ACTION_TYPE, PROCEDURE_AUDIT);
+        return Arrays.asList(ASSET_TYPE, PLACE_TYPE, ACTION_TYPE, PROCEDURE_AUDIT);
     }
 
     public String getTypeFilter() {
