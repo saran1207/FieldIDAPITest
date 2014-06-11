@@ -1,29 +1,29 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
-    <form wicket:id="criteriaEditForm">
+    <form wicket:id="criteriaEditForm" name="criteriaEditForm">
 
-        <div class="infoSet" wicket:id="criteria">
+        <div class="infoSet" name="criteria" wicket:id="criteria">
             <div class="tooltip"><img wicket:id="tooltip"/></div>
-            <label class="label eventFormLabel" wicket:id="criteriaName"></label>
+            <label class="label eventFormLabel" name="criteriaName" wicket:id="criteriaName"></label>
 
-            <div wicket:id="criteriaEditor" class="criteriaEditContainer">
+            <div wicket:id="criteriaEditor" class="criteriaEditContainer" name="criteriaContainer">
 
             </div>
 
             <div class="recDefButtons event-actions">
 
-                <a wicket:id="deficienciesButton"/>
+                <a wicket:id="deficienciesButton" name="deficienciesButton"/>
 
-                <a wicket:id="recommendationsButton"/>
+                <a wicket:id="recommendationsButton" name="recommendationsButton"/>
 
-                <a wicket:id="criteriaImageButton"/>
+                <a wicket:id="criteriaImageButton" name="criteriaImageButton"/>
 
-                <a wicket:id="actionsLink"/>
+                <a wicket:id="actionsLink" name="actionsLink"/>
 
             </div>
-            <div class="expand-button">
-                <div wicket:id="showActionsButton"/>
+            <div class="expand-button" name="expand-button">
+                <div wicket:id="showActionsButton" name="showActionsButton"/>
             </div>
 
         </div>
