@@ -42,7 +42,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class RecurrenceFormPanel extends Panel {
+public class RecurringLotoFormPanel extends Panel {
 
     @SpringBean
     private DateService dateService;
@@ -55,7 +55,7 @@ public class RecurrenceFormPanel extends Panel {
 
     private IModel<Asset> assetModel;
 
-    public RecurrenceFormPanel(String id, IModel<Asset> assetModel) {
+    public RecurringLotoFormPanel(String id, IModel<Asset> assetModel) {
         super(id, assetModel);
         this.assetModel = assetModel;
         add(new RecurringEventsForm("form"));

@@ -24,6 +24,7 @@ public class PlaceEventScheduleService extends FieldIdPersistenceService {
         return id;
     }
 
+    @Transactional
     public PlaceEvent retireSchedule(PlaceEvent schedule) {
         schedule.retireEntity();
         schedule = persistenceService.update(schedule);

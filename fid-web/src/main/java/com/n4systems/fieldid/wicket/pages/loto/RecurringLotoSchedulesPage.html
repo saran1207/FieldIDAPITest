@@ -2,7 +2,8 @@
 
 <wicket:extend>
 
-    <div wicket:id="addRecurrence"/>
+    <div wicket:id="addLotoRecurrence"/>
+    <div wicket:id="addAuditRecurrence"/>
 
     <div wicket:id="listContainer" class="content">
         <table class="list">
@@ -15,7 +16,7 @@
                 <th>&nbsp;</th>
             </tr>
             <tr wicket:id="list">
-                <td class="schedule"><wicket:message key="label.recurring"/></td>
+                <td class="schedule" wicket:id="type"/>
                 <td wicket:id="procedureCode"/>
                 <td><span wicket:id="recurrence"/> @ <span wicket:id="time"/> </td>
                 <td wicket:id="assignedTo"/>
@@ -37,7 +38,13 @@
 
 
     <wicket:fragment wicket:id="addRecurrenceActionGroup">
-        <a wicket:id="addRecurrenceLink" class="btn-primary"><wicket:message key="label.create_new_rule"/></a>
+        <div class="dropdown">
+            <button class="btn-primary"><wicket:message key="label.create_new_rule"/></button>
+            <ul>
+                <li><a wicket:id="addRecurringLotoLink"><wicket:message key="label.lockout"/></a></li>
+                <li><a wicket:id="addRecurringAuditLink"><wicket:message key="label.procedure_audit"/></a></li>
+            </ul>
+        </div>
     </wicket:fragment>
 
 </wicket:extend>

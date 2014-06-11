@@ -1,5 +1,6 @@
 package com.n4systems.model.procedure;
 
+import com.n4systems.model.ProcedureAuditEventType;
 import com.n4systems.model.Recurrence;
 import com.n4systems.model.api.DisplayEnum;
 import com.n4systems.model.api.Saveable;
@@ -18,7 +19,7 @@ import javax.persistence.*;
 public class RecurringLotoEvent  extends ArchivableEntityWithTenant implements Saveable, SecurityEnhanced<RecurringLotoEvent>, Cloneable{
 
     public enum RecurringLotoEventType implements DisplayEnum{
-        LOTO("LOTO"), AUDIT("Procedure Audit");
+        LOTO("Lockout"), AUDIT("Procedure Audit");
 
         private String label;
 
@@ -36,7 +37,7 @@ public class RecurringLotoEvent  extends ArchivableEntityWithTenant implements S
         }
     }
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "procedure_definition_id", nullable = true)
     private ProcedureDefinition procedureDefinition;
 
@@ -55,15 +56,28 @@ public class RecurringLotoEvent  extends ArchivableEntityWithTenant implements S
     @Enumerated(EnumType.STRING)
     private RecurringLotoEventType type;
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = true)
+    @JoinColumn(name="audit_event_id")
+    private ProcedureAuditEventType auditEventType;
+
+
+    public RecurringLotoEvent(ProcedureAuditEventType auditEventType, ProcedureDefinition procedureDefinition, Assignable assignee, Recurrence recurrence) {
+        this.auditEventType = auditEventType;
+        this.procedureDefinition = procedureDefinition;
+        setAssignedUserOrGroup(assignee);
+        this.recurrence = recurrence;
+        setType(RecurringLotoEventType.AUDIT);
+    }
 
     public RecurringLotoEvent(ProcedureDefinition procedureDefinition, Assignable assignee, Recurrence recurrence) {
         this.procedureDefinition = procedureDefinition;
         setAssignedUserOrGroup(assignee);
         this.recurrence = recurrence;
+        setType(RecurringLotoEventType.LOTO);
     }
 
     public RecurringLotoEvent() {
-        this(null, null, new Recurrence());
+        this(null, null, null, new Recurrence());
     }
 
     public ProcedureDefinition getProcedureDefinition() {
@@ -113,8 +127,33 @@ public class RecurringLotoEvent  extends ArchivableEntityWithTenant implements S
         this.recurrence = recurrence;
     }
 
+    public RecurringLotoEventType getType() {
+        return type;
+    }
+
+    public void setType(RecurringLotoEventType type) {
+        this.type = type;
+    }
+
+    public ProcedureAuditEventType getAuditEventType() {
+        return auditEventType;
+    }
+
+    public void setAuditEventType(ProcedureAuditEventType auditEventType) {
+        this.auditEventType = auditEventType;
+    }
+
     @Override
     public RecurringLotoEvent enhance(SecurityLevel level) {
         return this;
     }
+
+    public boolean isRecurringLockout() {
+        return type.equals(RecurringLotoEventType.LOTO);
+    }
+
+    public boolean isRecurringAudit() {
+        return type.equals(RecurringLotoEventType.AUDIT);
+    }
+
 }
