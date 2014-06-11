@@ -1,19 +1,20 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.NetworkEntity;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.RecurringLotoEvent;
-import org.hibernate.annotations.Entity;
+import com.n4systems.model.security.AllowSafetyNetworkAccess;
+import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.SecurityLevel;
 
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 
 @Entity
 @Table(name="procedure_audit_events")
 @PrimaryKeyJoinColumn(name="id")
-public class ProcedureAuditEvent extends Event<ProcedureAuditEventType, ProcedureAuditEvent, ProcedureDefinition> {
+public class ProcedureAuditEvent extends Event<ProcedureAuditEventType, ProcedureAuditEvent, ProcedureDefinition> implements NetworkEntity<ProcedureAuditEvent>{
 
     @ManyToOne
     @JoinColumn(name="procedure_definition_id")
@@ -63,5 +64,16 @@ public class ProcedureAuditEvent extends Event<ProcedureAuditEventType, Procedur
 
     public void setRecurringEvent(RecurringLotoEvent recurringEvent) {
         this.recurringEvent = recurringEvent;
+    }
+
+    @Override
+    @AllowSafetyNetworkAccess
+    public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
+        return SecurityLevel.calculateSecurityLevel(fromOrg, getProcedureDefinition().getAsset().getOwner());
+    }
+
+    @Override
+    public ProcedureAuditEvent enhance(SecurityLevel level) {
+        return EntitySecurityEnhancer.enhance(this, level);
     }
 }

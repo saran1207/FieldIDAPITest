@@ -4,7 +4,8 @@ import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.wicket.components.DisplayRecurrenceTimeModel;
-import com.n4systems.fieldid.wicket.components.loto.RecurrenceFormPanel;
+import com.n4systems.fieldid.wicket.components.loto.RecurringAuditFormPanel;
+import com.n4systems.fieldid.wicket.components.loto.RecurringLotoFormPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.EnumLabelModel;
@@ -53,16 +54,26 @@ public class RecurringLotoSchedulesPage extends FieldIDTemplatePage {
     private WebMarkupContainer noProcedureBlankSlate;
     private WebMarkupContainer blankSlate;
     private ListView listView;
-    private ModalWindow recurrenceModalWindow;
+    private ModalWindow lotoRecurrenceModalWindow;
+    private ModalWindow auditRecurrenceModalWindow;
 
     public RecurringLotoSchedulesPage(PageParameters params) {
         super(params);
 
-        add(recurrenceModalWindow = new DialogModalWindow("addRecurrence").setInitialWidth(480));
-        recurrenceModalWindow.setContent(new RecurrenceFormPanel(recurrenceModalWindow.getContentId(), assetModel) {
+        add(lotoRecurrenceModalWindow = new DialogModalWindow("addLotoRecurrence").setInitialWidth(480));
+        lotoRecurrenceModalWindow.setContent(new RecurringLotoFormPanel(lotoRecurrenceModalWindow.getContentId(), assetModel) {
             @Override
             protected void onCreateRecurrence(AjaxRequestTarget target) {
-                recurrenceModalWindow.close(target);
+                lotoRecurrenceModalWindow.close(target);
+                refreshContent(target);
+            }
+        });
+
+        add(auditRecurrenceModalWindow = new DialogModalWindow("addAuditRecurrence").setInitialWidth(480));
+        auditRecurrenceModalWindow.setContent(new RecurringAuditFormPanel(auditRecurrenceModalWindow.getContentId(), assetModel) {
+            @Override
+            protected void onCreateRecurrence(AjaxRequestTarget target) {
+                auditRecurrenceModalWindow.close(target);
                 refreshContent(target);
             }
         });
@@ -74,6 +85,7 @@ public class RecurringLotoSchedulesPage extends FieldIDTemplatePage {
             protected void populateItem(final ListItem<RecurringLotoEvent> item) {
                 final RecurringLotoEvent event = item.getModelObject();
 
+                item.add(new Label("type", new PropertyModel<String>(item.getModel(), "type.label")));
                 item.add(new Label("procedureCode", new PropertyModel<String>(item.getModel(), "procedureDefinition.procedureCode")));
                 item.add(new Label("recurrence", new EnumLabelModel(event.getRecurrence().getType())));
                 item.add(new Label("time", new DisplayRecurrenceTimeModel(new PropertyModel<Set<RecurrenceTime>>(item.getDefaultModelObject(), "recurrence.times"))));
@@ -153,10 +165,28 @@ public class RecurringLotoSchedulesPage extends FieldIDTemplatePage {
     private class ActionGroup extends Fragment {
         public ActionGroup(String id) {
             super(id, "addRecurrenceActionGroup", RecurringLotoSchedulesPage.this);
-            add(new AjaxLink("addRecurrenceLink") {
+            add(new AjaxLink("addRecurringLotoLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    recurrenceModalWindow.show(target);
+                    lotoRecurrenceModalWindow.show(target);
+                }
+
+                @Override
+                protected boolean isLinkEnabled() {
+                    return procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject());
+                }
+
+                @Override
+                protected void disableLink(ComponentTag tag) {
+                    super.disableLink(tag);
+                    tag.put("class", tag.getAttribute("class") + " disabled");
+                }
+            }.setBeforeDisabledLink("").setAfterDisabledLink(""));
+
+            add(new AjaxLink("addRecurringAuditLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    auditRecurrenceModalWindow.show(target);
                 }
 
                 @Override

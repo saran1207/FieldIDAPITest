@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.eventattachment;
 
 public class ApiEventAttachment {
 	private String fileName;
+    private String filePath;
 	private String comments;
 	private byte[] image;
 	private String eventSid;
@@ -13,6 +14,14 @@ public class ApiEventAttachment {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
 	
 	public String getComments() {
 		return comments;

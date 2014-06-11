@@ -16,6 +16,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import rfid.ejb.entity.InfoOptionBean;
@@ -35,15 +36,12 @@ public class ManagerBackedEventSaver implements EventSaver {
 	public final EntityManager em;
 	public final LastEventDateFinder lastEventDateFinder;
 
-    protected S3Service s3Service;
-
 	public ManagerBackedEventSaver(LegacyAsset legacyAssetManager, PersistenceManager persistenceManager,
 			EntityManager em, LastEventDateFinder lastEventDateFinder) {
 		this.legacyAssetManager = legacyAssetManager;
 		this.persistenceManager = persistenceManager;
 		this.em = em;
 		this.lastEventDateFinder = lastEventDateFinder;
-        this.s3Service = new S3Service();
 	}
 
 	public ThingEvent createEvent(CreateEventParameter parameterObject) throws ProcessingProofTestException, FileAttachmentException, UnknownSubAsset {
@@ -320,6 +318,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 			for (FileAttachment uploadedFile : uploadedFiles) {
 	
 				try {
+                    S3Service s3Service = ServiceLocator.getS3Service();
 					// move the file to it's new location, note that it's
 					// location is currently relative to the tmpDirectory
 					tmpFile = new File(tmpDirectory, uploadedFile.getFileName());

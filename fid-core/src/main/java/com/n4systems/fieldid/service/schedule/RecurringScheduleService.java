@@ -4,12 +4,12 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.PlaceEventScheduleService;
+import com.n4systems.fieldid.service.event.ProcedureAuditScheduleService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.Procedure;
-import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.RecurringLotoEvent;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.OwnerAndDownFilter;
@@ -39,6 +39,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
     @Autowired private EventScheduleService eventScheduleService;
     @Autowired private PlaceEventScheduleService placeEventScheduleService;
+    @Autowired private ProcedureAuditScheduleService procedureAuditScheduleService;
     @Autowired private ProcedureService procedureService;
     @Autowired private AsyncService asyncService;
 
@@ -216,13 +217,12 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
     }
 
     public void scheduleALotoEventFor(RecurringLotoEvent recurringEvent, LocalDateTime futureDate) {
-        ProcedureDefinition procedureDefinition =  recurringEvent.getProcedureDefinition();
 
-        if(!checkIfScheduleExists(procedureDefinition, recurringEvent, futureDate)) {
+        if(!checkIfScheduleExists(recurringEvent, futureDate)) {
             Procedure procedure = new Procedure();
-            procedure.setType(procedureDefinition);
-            procedure.setAsset(procedureDefinition.getAsset());
-            procedure.setTenant(procedureDefinition.getTenant());
+            procedure.setType(recurringEvent.getProcedureDefinition());
+            procedure.setAsset(recurringEvent.getProcedureDefinition().getAsset());
+            procedure.setTenant(recurringEvent.getProcedureDefinition().getTenant());
             procedure.setWorkflowState(ProcedureWorkflowState.OPEN);
             procedure.setRecurringEvent(recurringEvent);
             procedure.setDueDate(futureDate.toDate());
@@ -231,9 +231,25 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         }
     }
 
-    private boolean checkIfScheduleExists(ProcedureDefinition procedureDefinition, RecurringLotoEvent recurringEvent, LocalDateTime futureDate) {
+    public void scheduleAnAuditEventFor(RecurringLotoEvent recurringEvent, LocalDateTime futureDate) {
+
+        if(!checkIfAuditScheduleExists(recurringEvent, futureDate)) {
+            ProcedureAuditEvent auditEvent = new ProcedureAuditEvent();
+            auditEvent.setTarget(recurringEvent.getProcedureDefinition());
+            auditEvent.setType(recurringEvent.getAuditEventType());
+            auditEvent.setRecurringEvent(recurringEvent);
+            auditEvent.setTenant(recurringEvent.getProcedureDefinition().getTenant());
+            auditEvent.setWorkflowState(WorkflowState.OPEN);
+            auditEvent.setDueDate(futureDate.toDate());
+            auditEvent.setAssignedUserOrGroup(recurringEvent.getAssignedUserOrGroup());
+            auditEvent.setEventResult(EventResult.VOID);
+            procedureAuditScheduleService.createSchedule(auditEvent);
+        }
+    }
+
+    private boolean checkIfScheduleExists(RecurringLotoEvent recurringEvent, LocalDateTime futureDate) {
         QueryBuilder<Procedure> query = new QueryBuilder<Procedure>(Procedure.class, new OpenSecurityFilter());
-        query.addSimpleWhere("type", procedureDefinition);
+        query.addSimpleWhere("type", recurringEvent.getProcedureDefinition());
         query.addSimpleWhere("recurringEvent", recurringEvent);
 
         //A simple equals does not work due to comparison problems comparing Timestamps and Date see java.sql.Timestamp
@@ -242,6 +258,20 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LE, "to", "dueDate", futureDate.toDate()));
 
         return persistenceService.count(query) > 0;
+    }
+
+    private boolean checkIfAuditScheduleExists(RecurringLotoEvent recurringEvent, LocalDateTime futureDate) {
+        QueryBuilder<ProcedureAuditEvent> query = new QueryBuilder<ProcedureAuditEvent>(ProcedureAuditEvent.class, new OpenSecurityFilter());
+        query.addSimpleWhere("recurringEvent.auditEventType", recurringEvent.getAuditEventType());
+        query.addSimpleWhere("procedureDefinition", recurringEvent.getProcedureDefinition());
+        query.addSimpleWhere("recurringEvent", recurringEvent);
+
+        //A simple equals does not work due to comparison problems comparing Timestamps and Date see java.sql.Timestamp
+        // .: we use a range.
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "dueDate", futureDate.minusMillis(1).toDate()));
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LE, "to", "dueDate", futureDate.toDate()));
+
+        return persistenceService.findAll(query).size() > 0;
     }
 
     public List<RecurringLotoEvent> getAllRecurringLotoEvents() {
@@ -264,11 +294,15 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
     }
 
     public void purgeRecurringEvent(RecurringLotoEvent recurringEvent) {
-        removeScheduledEvents(recurringEvent);
+        if(recurringEvent.isRecurringLockout()) {
+            removeScheduledLotos(recurringEvent);
+        } else {
+            removeScheduledAudits(recurringEvent);
+        }
         removeRecurringEvent(recurringEvent);
     }
 
-    private void removeScheduledEvents(RecurringLotoEvent recurringEvent){
+    private void removeScheduledLotos(RecurringLotoEvent recurringEvent){
         QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
 
         query.addSimpleWhere("workflowState", ProcedureWorkflowState.OPEN);
@@ -277,6 +311,18 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         List<Procedure> events = persistenceService.findAll(query);
         for (Procedure event:events) {
             logger.debug("removing scheduled LOTO for asset: " + event.getAsset().getIdentifier() + " on " + event.getDueDate());
+            persistenceService.delete(event);
+        }
+    }
+
+    private void removeScheduledAudits(RecurringLotoEvent recurringEvent){
+        QueryBuilder<ProcedureAuditEvent> query = createTenantSecurityBuilder(ProcedureAuditEvent.class);
+        query.addSimpleWhere("workflowState", WorkflowState.OPEN);
+        query.addSimpleWhere("recurringEvent", recurringEvent);
+
+        List<ProcedureAuditEvent> events = persistenceService.findAll(query);
+        for (ProcedureAuditEvent event:events) {
+            logger.debug("removing scheduled Procedure Audits for Procedure Definition: " + event.getProcedureDefinition().getProcedureCode() + " on " + event.getDueDate());
             persistenceService.delete(event);
         }
     }
@@ -302,7 +348,11 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
     private void scheduleInitialEvents(RecurringLotoEvent recurringEvent) {
         for (LocalDateTime dateTime: getBoundedScheduledTimesIterator(recurringEvent.getRecurrence())) {
-            scheduleALotoEventFor(recurringEvent, dateTime);
+            if(recurringEvent.isRecurringLockout()) {
+                scheduleALotoEventFor(recurringEvent, dateTime);
+            } else {
+                scheduleAnAuditEventFor(recurringEvent, dateTime);
+            }
         }
     }
 
