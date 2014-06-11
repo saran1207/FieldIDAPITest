@@ -108,6 +108,7 @@ public class  EventScheduleService extends FieldIdPersistenceService {
     }
 
     @Transactional
+    @Deprecated //duplicate see PlaceEventScheduleService
     public Event updateSchedule(PlaceEvent schedule) {
         PlaceEvent updatedSchedule = persistenceService.update(schedule);
         return updatedSchedule;

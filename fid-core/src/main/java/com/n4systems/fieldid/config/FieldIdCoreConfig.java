@@ -803,4 +803,9 @@ public class FieldIdCoreConfig {
     public ProjectService projectService(){
         return new ProjectService();
     }
+
+    @Bean
+    public ProcedureAuditScheduleService procedureAuditScheduleService() {
+        return new ProcedureAuditScheduleService();
+    }
 }

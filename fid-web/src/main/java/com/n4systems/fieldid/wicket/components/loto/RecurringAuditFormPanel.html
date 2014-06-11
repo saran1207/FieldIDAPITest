@@ -4,13 +4,17 @@
     <form wicket:id="form" class="new-rules">
         <div wicket:id="feedbackPanel"></div>
 
-        <h3><wicket:message key="label.recurring"/></h3>
-        <p><wicket:message key="message.recurring_loto"/></p>
+        <h3><wicket:message key="label.recurring"/>&nbsp;<wicket:message key="label.procedure_audits"/></h3>
+        <p><wicket:message key="message.recurring_audit"/></p>
 
         <div wicket:id="createContainer" class="new-event">
             <div class="clearfix">
                 <label class="left"><wicket:message key="label.capital_schedule_a"/></label>
-                <div class="right"><select wicket:id="procedureDef"></select></div>
+                <div class="right"><select wicket:id="procedureAudits"></select></div>
+            </div>
+            <div class="clearfix">
+                <label class="left"><wicket:message key="label.for"/></label>
+                <div class="right"><select wicket:id="procedureDefs"></select></div>
             </div>
             <div class="clearfix">
                 <label class="left"><wicket:message key="label.every"/></label>
