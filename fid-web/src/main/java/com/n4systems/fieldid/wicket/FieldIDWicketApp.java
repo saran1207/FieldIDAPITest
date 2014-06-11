@@ -143,6 +143,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("draftListAllPage", DraftListAllPage.class);
         mountPage("previouslyPublishedListAllPage", PreviouslyPublishedListAllPage.class);
 
+        mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
+
         mountPage("quickEvent", QuickEventPage.class);
         mountPage("startEvent", StartRegularOrMasterEventPage.class);
         mountPage("performEvent", PerformEventPage.class);

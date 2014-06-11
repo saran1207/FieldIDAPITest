@@ -8,10 +8,13 @@ import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.RecurringLotoEvent;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.UpcomingScheduledLotoRecord;
 import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.SortTerm;
 import org.apache.commons.lang.time.DateUtils;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -177,4 +180,119 @@ public class ProcedureService extends FieldIdPersistenceService {
 
         return filteredList;
     }
+
+    public Long getSelectedAuditCount(String procedureCode, Asset asset, boolean isAsset){
+
+        QueryBuilder<Procedure> procedureCountQuery = createUserSecurityBuilder(Procedure.class);
+
+        procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
+
+        procedureCountQuery.addSimpleWhere("asset", asset);
+
+        if(!isAsset) {
+            procedureCountQuery.addSimpleWhere("type.procedureCode", procedureCode.trim());
+        }
+
+        return persistenceService.count(procedureCountQuery);
+    }
+
+    public Long getAllAuditCount(String searchTerm){
+
+        QueryBuilder<Procedure> procedureCountQuery = createUserSecurityBuilder(Procedure.class);
+
+        procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
+
+        if(!searchTerm.trim().equals("")) {
+            WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "type.procedureCode", "type.procedureCode", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "type.equipmentNumber", "type.equipmentNumber", searchTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            procedureCountQuery.addWhere(group);
+        }
+
+        return persistenceService.count(procedureCountQuery);
+    }
+
+    public List<Procedure> getSelectedAuditProcedures(String procedureCode, Asset asset, boolean isAsset, String order, boolean ascending, int first, int count) {
+
+        QueryBuilder<Procedure> procedureCountQuery = createUserSecurityBuilder(Procedure.class);
+
+        procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
+
+        procedureCountQuery.addSimpleWhere("asset", asset);
+
+        if(!isAsset) {
+            procedureCountQuery.addSimpleWhere("type.procedureCode", procedureCode.trim());
+        }
+
+        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
+        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
+        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
+        // will not be returned in the result list.
+        // this should be handled more elegantly in the future but i'm fixing at the last second.
+        boolean needsSortJoin = false;
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("developedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    procedureCountQuery.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+                } else {
+                    procedureCountQuery.addOrder(subOrder, ascending);
+                }
+            }
+        }
+
+        if (needsSortJoin) {
+            procedureCountQuery.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
+        }
+
+        return persistenceService.findAll(procedureCountQuery);
+    }
+
+    public List<Procedure> getAllAuditProcedures(String sTerm, String order, boolean ascending, int first, int count) {
+
+        QueryBuilder<Procedure> procedureCountQuery = createUserSecurityBuilder(Procedure.class);
+
+        procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
+
+        if(!sTerm.trim().equals("")) {
+            WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "type.procedureCode", "type.procedureCode", sTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "type.equipmentNumber", "type.equipmentNumber", sTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
+            procedureCountQuery.addWhere(group);
+        }
+
+        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
+        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
+        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
+        // will not be returned in the result list.
+        // this should be handled more elegantly in the future but i'm fixing at the last second.
+        boolean needsSortJoin = false;
+        if (order != null) {
+            String[] orders = order.split(",");
+            for (String subOrder : orders) {
+                if (subOrder.startsWith("developedBy")) {
+                    subOrder = subOrder.replaceAll("developedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    procedureCountQuery.getOrderArguments().add(sortTerm.toSortField());
+                    needsSortJoin = true;
+                } else {
+                    procedureCountQuery.addOrder(subOrder, ascending);
+                }
+            }
+        }
+
+        if (needsSortJoin) {
+            procedureCountQuery.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "developedBy", "sortJoin", true));
+        }
+
+        return persistenceService.findAll(procedureCountQuery);
+    }
+
 }

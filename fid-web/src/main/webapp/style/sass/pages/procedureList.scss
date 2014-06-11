@@ -6,6 +6,9 @@
 .page-procedureListPage td.developed-by { min-width: 137px; }
 .page-procedureListPage td.created {      min-width: 76px; }
 
+.page-procedureListPage td.overdue {  background-color: #FFFF99;}
+.page-procedureListPage td.sevenDays {  background-color: #E68269;}
+
 .procedure-text-search {
   margin-bottom: 14px;
   width: 308px;
