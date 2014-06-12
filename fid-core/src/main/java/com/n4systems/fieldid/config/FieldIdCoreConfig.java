@@ -34,6 +34,7 @@ import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.event.*;
 import com.n4systems.fieldid.service.event.perform.PerformPlaceEventHelperService;
+import com.n4systems.fieldid.service.event.perform.PerformProcedureAuditEventHelperService;
 import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
 import com.n4systems.fieldid.service.export.EventTypeExportService;
 import com.n4systems.fieldid.service.images.ImageService;
@@ -784,6 +785,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public PerformProcedureAuditEventHelperService performProcedureAuditEventHelperService() {
+        return new PerformProcedureAuditEventHelperService();
+    }
+
+    @Bean
     @Scope("prototype")
     public ImageFlavour imageFlavour() {
         return new ImageFlavour();
@@ -811,4 +817,8 @@ public class FieldIdCoreConfig {
 
     @Bean
     public ProcedureAuditEventService procedureAuditEventService() { return new ProcedureAuditEventService(); }
+
+    @Bean
+    public ProcedureAuditEventCreationService procedureAuditEventCreationService() { return new ProcedureAuditEventCreationService(); }
+
 }
