@@ -33,13 +33,13 @@ public class ProcedureAuditEventSummaryPage extends EventSummaryPage {
     @SpringBean
     private EventService eventService;
     private IModel<ProcedureAuditEvent> eventModel;
-    private IModel<ProcedureDefinition> placeModel;
+    private IModel<ProcedureDefinition> procedureDefinitionModel;
 
     public ProcedureAuditEventSummaryPage(PageParameters parameters) {
         super(parameters);
 
         eventModel = new LocalizeModel<ProcedureAuditEvent>(Model.of(loadExistingEvent()));
-        placeModel = new LocalizeModel<ProcedureDefinition>(new PropertyModel<ProcedureDefinition>(eventModel, "procedureDefinition"));
+        procedureDefinitionModel = new LocalizeModel<ProcedureDefinition>(new PropertyModel<ProcedureDefinition>(eventModel, "procedureDefinition"));
         eventSummaryType = EventSummaryType.PROCEDURE_AUDIT_EVENT;
     }
 
@@ -102,13 +102,13 @@ public class ProcedureAuditEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new PropertyModel<String>(placeModel, "procedureCode"));
+        return new Label(labelId, new PropertyModel<String>(procedureDefinitionModel, "procedureCode"));
     }
 
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label(new FIDLabelModel("label.summary")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(placeModel.getObject().getId())).build(),
+                aNavItem().label(new FIDLabelModel("label.summary")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(procedureDefinitionModel.getObject().getId())).build(),
                 aNavItem().label(new FIDLabelModel("label.event_summary")).page(ProcedureAuditEventSummaryPage.class).params(PageParametersBuilder.id(uniqueId)).build()
         ));
     }
