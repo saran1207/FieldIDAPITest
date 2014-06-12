@@ -40,14 +40,15 @@ public class ProcedureAuditEvent extends Event<ProcedureAuditEventType, Procedur
         setProcedureDefinition(target);
     }
 
+    //We are forced to implement this due to the HasOwner interface on the event creation service and related classes
     @Override
     public BaseOrg getOwner() {
-        return null;
+        return procedureDefinition.getOwner();
     }
 
     @Override
     public void setOwner(BaseOrg owner) {
-
+        //should not have an owner
     }
 
     public ProcedureDefinition getProcedureDefinition() {
