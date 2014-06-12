@@ -45,6 +45,9 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
     private static final Logger logger= Logger.getLogger(RecurringScheduleService.class);
 
+
+    /******* ThingEvents ********/
+
     public List<RecurringAssetTypeEvent> getRecurringAssetTypeEvents() {
         QueryBuilder<RecurringAssetTypeEvent> query = new QueryBuilder<RecurringAssetTypeEvent>(RecurringAssetTypeEvent.class, new OpenSecurityFilter());
         return persistenceService.findAll(query);
@@ -119,13 +122,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public Iterable<LocalDateTime> getScheduledTimesIterator(Recurrence recurrence) {
-        return new ScheduleTimeIterator(recurrence);
-    }
-
-    public Iterable<LocalDateTime> getBoundedScheduledTimesIterator(Recurrence recurrence) {
-        return new BoundedScheduleTimeIterator(recurrence);
-    }
+    /******* PlaceEvents ********/
 
     /*package protected for test reasons*/
     boolean checkIfScheduleExists(BaseOrg place, RecurringPlaceEvent event, LocalDateTime futureDate) {
@@ -216,9 +213,12 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         }
     }
 
+
+    /******* Lockouts / Procedure Audits ********/
+
     public void scheduleALotoEventFor(RecurringLotoEvent recurringEvent, LocalDateTime futureDate) {
 
-        if(!checkIfScheduleExists(recurringEvent, futureDate)) {
+        if(!checkIfLotoScheduleExists(recurringEvent, futureDate)) {
             Procedure procedure = new Procedure();
             procedure.setType(recurringEvent.getProcedureDefinition());
             procedure.setAsset(recurringEvent.getProcedureDefinition().getAsset());
@@ -229,6 +229,19 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
             procedure.setAssignedUserOrGroup(recurringEvent.getAssignedUserOrGroup());
             procedureService.createSchedule(procedure);
         }
+    }
+
+    private boolean checkIfLotoScheduleExists(RecurringLotoEvent recurringEvent, LocalDateTime futureDate) {
+        QueryBuilder<Procedure> query = new QueryBuilder<Procedure>(Procedure.class, new OpenSecurityFilter());
+        query.addSimpleWhere("type", recurringEvent.getProcedureDefinition());
+        query.addSimpleWhere("recurringEvent", recurringEvent);
+
+        //A simple equals does not work due to comparison problems comparing Timestamps and Date see java.sql.Timestamp
+        // .: we use a range.
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "dueDate", futureDate.minusMillis(1).toDate()));
+        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LE, "to", "dueDate", futureDate.toDate()));
+
+        return persistenceService.count(query) > 0;
     }
 
     public void scheduleAnAuditEventFor(RecurringLotoEvent recurringEvent, LocalDateTime futureDate) {
@@ -247,18 +260,6 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
         }
     }
 
-    private boolean checkIfScheduleExists(RecurringLotoEvent recurringEvent, LocalDateTime futureDate) {
-        QueryBuilder<Procedure> query = new QueryBuilder<Procedure>(Procedure.class, new OpenSecurityFilter());
-        query.addSimpleWhere("type", recurringEvent.getProcedureDefinition());
-        query.addSimpleWhere("recurringEvent", recurringEvent);
-
-        //A simple equals does not work due to comparison problems comparing Timestamps and Date see java.sql.Timestamp
-        // .: we use a range.
-        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.GE, "from", "dueDate", futureDate.minusMillis(1).toDate()));
-        query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.LE, "to", "dueDate", futureDate.toDate()));
-
-        return persistenceService.count(query) > 0;
-    }
 
     private boolean checkIfAuditScheduleExists(RecurringLotoEvent recurringEvent, LocalDateTime futureDate) {
         QueryBuilder<ProcedureAuditEvent> query = new QueryBuilder<ProcedureAuditEvent>(ProcedureAuditEvent.class, new OpenSecurityFilter());
@@ -425,6 +426,14 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
             }
         }
 
+    }
+
+    public Iterable<LocalDateTime> getScheduledTimesIterator(Recurrence recurrence) {
+        return new ScheduleTimeIterator(recurrence);
+    }
+
+    public Iterable<LocalDateTime> getBoundedScheduledTimesIterator(Recurrence recurrence) {
+        return new BoundedScheduleTimeIterator(recurrence);
     }
 
     class ScheduleTimeIterator implements Iterable<LocalDateTime>, Iterator<LocalDateTime> {
