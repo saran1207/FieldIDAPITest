@@ -5,7 +5,7 @@ import com.n4systems.fieldid.wicket.components.loto.ProcedureAuditActionsColumn;
 import com.n4systems.fieldid.wicket.components.loto.ProcedureAuditListPanel;
 import com.n4systems.fieldid.wicket.data.ProcedureAuditDataProvider;
 import com.n4systems.model.Asset;
-import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.ProcedureAuditEvent;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxIndicatorAware;
@@ -85,7 +85,7 @@ public class ProcedureAuditListPage extends ProcedureAuditPage implements IAjaxI
         onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));
         field.add(onChangeAjaxBehavior);
 
-        dataProvider = new ProcedureAuditDataProvider("created", SortOrder.DESCENDING, PublishedState.PUBLISHED, procedureCodeString, asset, isProcedureCode, isAsset){
+        dataProvider = new ProcedureAuditDataProvider("dueDate", SortOrder.ASCENDING, PublishedState.PUBLISHED, procedureCodeString, asset, isProcedureCode, isAsset){
             @Override protected String getTextFilter() {
                 return textFilter;
             }
@@ -95,11 +95,11 @@ public class ProcedureAuditListPage extends ProcedureAuditPage implements IAjaxI
 
         add(procedureDefinitionListPanel = new ProcedureAuditListPanel("procedureDefinitionListPanel", dataProvider) {
             @Override
-            protected void addCustomColumns(List<IColumn<? extends Procedure>> columns) {
+            protected void addCustomColumns(List<IColumn<? extends ProcedureAuditEvent>> columns) {
             }
 
             @Override
-            protected void addActionColumn(List<IColumn<? extends Procedure>> columns) {
+            protected void addActionColumn(List<IColumn<? extends ProcedureAuditEvent>> columns) {
                 columns.add(getActionsColumn(this));
             }
 

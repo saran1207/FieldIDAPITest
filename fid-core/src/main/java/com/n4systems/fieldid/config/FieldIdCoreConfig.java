@@ -808,4 +808,7 @@ public class FieldIdCoreConfig {
     public ProcedureAuditScheduleService procedureAuditScheduleService() {
         return new ProcedureAuditScheduleService();
     }
+
+    @Bean
+    public ProcedureAuditEventService procedureAuditEventService() { return new ProcedureAuditEventService(); }
 }

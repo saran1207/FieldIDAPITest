@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.components.loto;
 
-import com.n4systems.model.procedure.Procedure;
+import com.n4systems.model.ProcedureAuditEvent;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
@@ -14,7 +14,7 @@ import java.util.Date;
 /**
  * Created by rrana on 2014-06-11.
  */
-public class ProcedureAuditDateColumn extends PropertyColumn<Procedure> {
+public class ProcedureAuditDateColumn extends PropertyColumn<ProcedureAuditEvent> {
 
 
     public ProcedureAuditDateColumn(IModel<String> displayModel, String sortProperty, String propertyExpression) {
@@ -22,7 +22,7 @@ public class ProcedureAuditDateColumn extends PropertyColumn<Procedure> {
     }
 
     @Override
-    public void populateItem(Item<ICellPopulator<Procedure>> item, String id, IModel<Procedure> procedureModel) {
+    public void populateItem(Item<ICellPopulator<ProcedureAuditEvent>> item, String id, IModel<ProcedureAuditEvent> procedureModel) {
 
         Calendar cal = Calendar.getInstance();
         cal.add(Calendar.DATE, 7);

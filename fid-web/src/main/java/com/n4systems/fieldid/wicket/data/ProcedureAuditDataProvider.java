@@ -1,7 +1,8 @@
 package com.n4systems.fieldid.wicket.data;
 
-import com.n4systems.fieldid.service.procedure.ProcedureService;
+import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
 import com.n4systems.model.Asset;
+import com.n4systems.model.ProcedureAuditEvent;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.PublishedState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -15,10 +16,10 @@ import java.util.List;
 /**
  * Created by rrana on 2014-06-10.
  */
-public class ProcedureAuditDataProvider extends FieldIDDataProvider<Procedure>{
+public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAuditEvent>{
 
     @SpringBean
-    private ProcedureService procedureService;
+    private ProcedureAuditEventService procedureService;
 
     private PublishedState state;
 
@@ -40,13 +41,12 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<Procedure>{
         this.asset = asset;
         this.isProcedureCode = isProcedureCode;
         this.isAsset = isAsset;
-
     }
 
 
     @Override
-    public Iterator<? extends Procedure> iterator(int first, int count) {
-        List<? extends Procedure> procedureDefinitionList = null;
+    public Iterator<? extends ProcedureAuditEvent> iterator(int first, int count) {
+        List<? extends ProcedureAuditEvent> procedureDefinitionList = null;
 
         if(isProcedureCode || isAsset) {
             procedureDefinitionList = procedureService.getSelectedAuditProcedures(procedureCode, asset, isAsset, getSort().getProperty(), getSort().isAscending(), first, count);
@@ -74,15 +74,15 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<Procedure>{
         return null;
     }
 
-    protected Class<? extends Procedure> getTypeFilter() {
+    protected Class<? extends ProcedureAuditEvent> getTypeFilter() {
         return null;
     }
 
     @Override
-    public IModel<Procedure> model(final Procedure object) {
-        return new AbstractReadOnlyModel<Procedure>() {
+    public IModel<ProcedureAuditEvent> model(final ProcedureAuditEvent object) {
+        return new AbstractReadOnlyModel<ProcedureAuditEvent>() {
             @Override
-            public Procedure getObject() {
+            public ProcedureAuditEvent getObject() {
                 return object;
             }
         };
