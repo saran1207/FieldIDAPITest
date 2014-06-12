@@ -4,14 +4,17 @@ import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.fieldid.service.event.ProcedureAuditEventCreationService;
 import com.n4systems.fieldid.wicket.components.event.prooftest.ProofTestEditPanel;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
+import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForProcedureAuditModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.loto.LotoPage;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.model.ProcedureAuditEvent;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.ArrayList;
@@ -27,16 +30,13 @@ public abstract class ProcedureAuditEventPage extends EventPage<ProcedureAuditEv
 
     @Override
     protected SchedulePicker<ProcedureAuditEvent> createSchedulePicker() {
-        return null;
 
-        /*
-        return new SchedulePicker<ProcedureAuditEvent>("schedulePicker", new PropertyModel<ProcedureAuditEvent>(ProcedureAuditEventPage.this, "scheduleToAdd"), new EventTypesForPlaceModel(new PropertyModel<BaseOrg>(event, "place"))){
-            @Override
-            protected void onPickComplete(AjaxRequestTarget target) {
-                onSchedulePickComplete(target);
-            }
-        };
-        */
+        SchedulePicker<ProcedureAuditEvent> picker = new SchedulePicker<ProcedureAuditEvent>("schedulePicker", new PropertyModel<ProcedureAuditEvent>(ProcedureAuditEventPage.this, "scheduleToAdd"), new EventTypesForProcedureAuditModel(new PropertyModel<ProcedureDefinition>(event, "procedureDefinition")));
+
+        picker.setVisible(false);
+
+        return picker;
+
     }
 
     @Override
@@ -69,7 +69,7 @@ public abstract class ProcedureAuditEventPage extends EventPage<ProcedureAuditEv
 
     @Override
     protected Component createCancelLink(String cancelLink) {
-        return new BookmarkablePageLink<Void>(cancelLink, LotoPage.class, PageParametersBuilder.id(event.getObject().getProcedureDefinition().getAsset().getId()));
+        return new BookmarkablePageLink<ProceduresListPage>(cancelLink, ProceduresListPage.class, PageParametersBuilder.uniqueId(event.getObject().getProcedureDefinition().getAsset().getId()));
     }
 
     @Override

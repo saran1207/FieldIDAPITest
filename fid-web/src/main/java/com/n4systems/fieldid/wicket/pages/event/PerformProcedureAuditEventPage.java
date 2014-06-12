@@ -3,12 +3,14 @@ package com.n4systems.fieldid.wicket.pages.event;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
-import com.n4systems.fieldid.service.event.perform.PerformPlaceEventHelperService;
+import com.n4systems.fieldid.service.event.perform.PerformProcedureAuditEventHelperService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.loto.LotoPage;
-import com.n4systems.fieldid.wicket.pages.org.PlaceSummaryPage;
-import com.n4systems.model.*;
+import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
+import com.n4systems.model.AbstractEvent;
+import com.n4systems.model.Event;
+import com.n4systems.model.FileAttachment;
+import com.n4systems.model.ProcedureAuditEvent;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
@@ -29,11 +31,11 @@ public class PerformProcedureAuditEventPage extends ProcedureAuditEventPage {
     @SpringBean private PersistenceService persistenceService;
     @SpringBean private EventScheduleService eventScheduleService;
 
-    @SpringBean private PerformPlaceEventHelperService placeEventHelperService;
+    @SpringBean private PerformProcedureAuditEventHelperService procedureAuditEventHelperService;
 
     public PerformProcedureAuditEventPage(Long scheduleId, Long procedureDefinitionId, Long typeId) {
         try {
-            ProcedureAuditEvent procedureAuditEvent = placeEventHelperService.createEvent(scheduleId, procedureDefinitionId, typeId);
+            ProcedureAuditEvent procedureAuditEvent = procedureAuditEventHelperService.createEvent(scheduleId, procedureDefinitionId, typeId);
             event = Model.of(procedureAuditEvent);
 
             setEventResult(event.getObject().getEventResult());
@@ -54,7 +56,7 @@ public class PerformProcedureAuditEventPage extends ProcedureAuditEventPage {
 
     @Override
     protected Component createCancelLink(String id) {
-        return new BookmarkablePageLink<Void>(id, LotoPage.class, PageParametersBuilder.id(event.getObject().getProcedureDefinition().getAsset().getId()));
+        return new BookmarkablePageLink<ProceduresListPage>(id, ProceduresListPage.class, PageParametersBuilder.uniqueId(event.getObject().getProcedureDefinition().getAsset().getId()));
     }
 
     @Override

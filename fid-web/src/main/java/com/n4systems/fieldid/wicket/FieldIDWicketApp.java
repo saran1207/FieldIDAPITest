@@ -155,6 +155,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("performPlaceEvent", PerformPlaceEventPage.class);
         mountPage("editPlaceEvent", EditPlaceEventPage.class);
 
+        mountPage("performProcedureAuditEvent", PerformProcedureAuditEventPage.class);
+        mountPage("editProcedureAuditEvent", EditProcedureAuditEventPage.class);
+
         mountPage("closeEvent", CloseEventPage.class);
 
         mountPage("sendSavedItem", SendSavedItemPage.class);
