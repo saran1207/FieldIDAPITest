@@ -40,7 +40,7 @@ public class ProcedureAuditEventSummaryPage extends EventSummaryPage {
 
         eventModel = new LocalizeModel<ProcedureAuditEvent>(Model.of(loadExistingEvent()));
         placeModel = new LocalizeModel<ProcedureDefinition>(new PropertyModel<ProcedureDefinition>(eventModel, "procedureDefinition"));
-        eventSummaryType = EventSummaryType.PLACE_EVENT;
+        eventSummaryType = EventSummaryType.PROCEDURE_AUDIT_EVENT;
     }
 
     @Override
@@ -102,7 +102,7 @@ public class ProcedureAuditEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new PropertyModel<String>(placeModel, "name"));
+        return new Label(labelId, new PropertyModel<String>(placeModel, "procedureCode"));
     }
 
     @Override

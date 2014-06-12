@@ -44,7 +44,7 @@ public class EditProcedureAuditEventPage extends ProcedureAuditEventPage {
 
     protected ProcedureAuditEvent loadExistingEvent() {
         ProcedureAuditEvent existingEvent = eventService.lookupExistingEvent(ProcedureAuditEvent.class, uniqueId);
-        PostFetcher.postFetchFields(existingEvent, Event.PLACE_FIELD_PATHS);
+        PostFetcher.postFetchFields(existingEvent, Event.PROCEDURE_AUDIT_FIELD_PATHS);
         return existingEvent;
     }
 
