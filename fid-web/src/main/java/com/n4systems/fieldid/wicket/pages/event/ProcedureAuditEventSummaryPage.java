@@ -7,7 +7,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.LocalizeAround;
 import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.org.PlaceSummaryPage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Event;
 import com.n4systems.model.ProcedureAuditEvent;
@@ -102,13 +102,14 @@ public class ProcedureAuditEventSummaryPage extends EventSummaryPage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new PropertyModel<String>(procedureDefinitionModel, "procedureCode"));
+        String title = eventModel.getObject().getRecurringEvent().getAuditEventType().getDisplayName() + " for " + procedureDefinitionModel.getObject().getDisplayName();
+        return new Label(labelId, Model.of(title));
     }
 
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label(new FIDLabelModel("label.summary")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(procedureDefinitionModel.getObject().getId())).build(),
+                aNavItem().label(new FIDLabelModel("label.summary")).page(AssetSummaryPage.class).params(PageParametersBuilder.uniqueId(procedureDefinitionModel.getObject().getAsset().getId())).build(),
                 aNavItem().label(new FIDLabelModel("label.event_summary")).page(ProcedureAuditEventSummaryPage.class).params(PageParametersBuilder.id(uniqueId)).build()
         ));
     }

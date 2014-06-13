@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
-import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
@@ -17,7 +17,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 public class ProcedureAuditPage extends FieldIDTemplatePage {
 
     @SpringBean
-    private ProcedureDefinitionService procedureDefinitionService;
+    private ProcedureAuditEventService procedureAuditEventService;
 
     @Override
     protected Component createTitleLabel(String labelId) {
@@ -27,11 +27,7 @@ public class ProcedureAuditPage extends FieldIDTemplatePage {
     @Override
     protected void addNavBar(String navBarId) {
 
-        // get count
-        //Long auditCount = procedureDefinitionService.getAuditCount("");
-        Long auditCount = new Long(4);
-
-
+        Long auditCount = procedureAuditEventService.getAllAuditCount("");
         add(new NavigationBar(navBarId,
                 aNavItem().label(new FIDLabelModel("label.upcoming_audits", auditCount)).page(ProcedureAuditListPage.class).build()
         ));

@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.event.EventCriteriaEditService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.FileAttachment;
@@ -12,7 +11,7 @@ import com.n4systems.model.ProcedureAuditEvent;
 import com.n4systems.persistence.utils.PostFetcher;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -50,7 +49,13 @@ public class EditProcedureAuditEventPage extends ProcedureAuditEventPage {
 
     @Override
     protected Component createCancelLink(String id) {
-        return new BookmarkablePageLink<ProceduresListPage>(id, ProceduresListPage.class, PageParametersBuilder.uniqueId(event.getObject().getProcedureDefinition().getAsset().getId()));
+
+        return new Link("cancelLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(ProcedureAuditEventSummaryPage.class, PageParametersBuilder.id(event.getObject().getId()));
+            }
+        };
     }
 
     @Override
