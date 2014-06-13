@@ -72,6 +72,7 @@ public class SimpleDataTable<T> extends Panel {
             protected Item<IColumn<T>> newCellItem(String id, int index, IModel<IColumn<T>> tiModel) {
                 Item<IColumn<T>> cellItem = super.newCellItem(id, index, tiModel);
                 cellItem.setOutputMarkupId(true);
+                cellItem.add(new AttributeModifier("name", new Model<String>("dataTableColumn")));
                 return cellItem;
             }
 

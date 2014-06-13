@@ -2,28 +2,28 @@
 <wicket:panel>
 
     <div class="control-group" name="criteria" wicket:id="criteria">
-        <label class="label" wicket:id="criteriaName"/>
-        <div class="value" wicket:id="criteriaResult"/>
-        <div class="actions">
-            <a wicket:id="deficiencies"><img src="/fieldid/images/def-icon.png"/> </a>
-            <a wicket:id="recommendations"><img src="/fieldid/images/rec-icon.png"/> </a>
-            <a wicket:id="criteriaImages"><img src="/fieldid/images/camera-icon.png"/> </a>
-            <a wicket:id="actions"><img src="/fieldid/images/action-icon.png"/> </a>
+        <label class="label" name="criteriaName" wicket:id="criteriaName"/>
+        <div class="value" name="criteriaResult" wicket:id="criteriaResult"/>
+        <div class="actions" name="actions">
+            <a wicket:id="deficiencies" name="deficiencies"><img src="/fieldid/images/def-icon.png"/> </a>
+            <a wicket:id="recommendations" name="recommendations"><img src="/fieldid/images/rec-icon.png"/> </a>
+            <a wicket:id="criteriaImages" name="criteriaImages"><img src="/fieldid/images/camera-icon.png"/> </a>
+            <a wicket:id="actions" name="actions"><img src="/fieldid/images/action-icon.png"/> </a>
         </div>
-        <div wicket:id="deficienciesDialog" class="observation-dialog">
-            <p wicket:id="deficiency">
-                <span wicket:id="text"/>
+        <div wicket:id="deficienciesDialog" class="observation-dialog" name="deficienciesDialog">
+            <p wicket:id="deficiency" name="deficiency">
+                <span wicket:id="text" name="text"/>
             </p>
         </div>
-        <div wicket:id="recommendationsDialog" class="observation-dialog">
-            <p wicket:id="recommendation">
-                <span wicket:id="text"/>
+        <div wicket:id="recommendationsDialog" class="observation-dialog" name="recommendationsDialog">
+            <p wicket:id="recommendation" name="recommendation">
+                <span wicket:id="text" name="text"/>
             </p>
         </div>
     </div>
 
-    <div wicket:id="actionsModal" class="actions-modal"/>
-    <div wicket:id="imagesModal" class="observation-modal"/>
+    <div wicket:id="actionsModal" class="actions-modal" name="actionsModal"/>
+    <div wicket:id="imagesModal" class="observation-modal" name="imagesModal"/>
 
 </wicket:panel>
 </html>
