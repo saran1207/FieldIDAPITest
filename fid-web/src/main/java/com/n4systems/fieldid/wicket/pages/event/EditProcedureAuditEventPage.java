@@ -2,8 +2,12 @@ package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.event.EventCriteriaEditService;
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.loto.ProcedureAuditCompletedListPage;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventResult;
 import com.n4systems.model.FileAttachment;
@@ -25,7 +29,10 @@ public class EditProcedureAuditEventPage extends ProcedureAuditEventPage {
 
     @SpringBean
     private EventService eventService;
-    @SpringBean private EventCriteriaEditService criteriaEditService;
+    @SpringBean
+    private EventCriteriaEditService criteriaEditService;
+    @SpringBean
+    private ProcedureAuditEventService procedureAuditEventService;
 
     private long uniqueId;
 
@@ -56,6 +63,27 @@ public class EditProcedureAuditEventPage extends ProcedureAuditEventPage {
                 setResponsePage(ProcedureAuditEventSummaryPage.class, PageParametersBuilder.id(event.getObject().getId()));
             }
         };
+    }
+
+    @Override
+    protected Link createDeleteLink(String linkId) {
+        return new Link(linkId) {
+            {
+                add(new JavaScriptAlertConfirmBehavior(new FIDLabelModel("label.confirm_audit_delete")));
+                setVisible(!event.getObject().isNew());
+            }
+            @Override
+            public void onClick() {
+                retireEvent(event.getObject());
+                FieldIDSession.get().info(getString("message.audit_deleted"));
+                setResponsePage(new ProcedureAuditCompletedListPage(PageParametersBuilder.uniqueId(event.getObject().getProcedureDefinition().getAsset().getId())));
+            }
+        };
+    }
+
+    @Override
+    protected void retireEvent(ProcedureAuditEvent event) {
+        procedureAuditEventService.retireEvent(event);
     }
 
     @Override

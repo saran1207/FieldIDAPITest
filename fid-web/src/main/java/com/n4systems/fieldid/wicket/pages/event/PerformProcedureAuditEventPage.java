@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.perform.PerformProcedureAuditEventHelperService;
+import com.n4systems.fieldid.wicket.behavior.JavaScriptAlertConfirmBehavior;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.loto.ProcedureAuditListPage;
 import com.n4systems.model.AbstractEvent;
@@ -56,7 +57,21 @@ public class PerformProcedureAuditEventPage extends ProcedureAuditEventPage {
     @Override
     protected Component createCancelLink(String id) {
 
-        return new Link("cancelLink") {
+        return new Link(id) {
+            @Override
+            public void onClick() {
+                setResponsePage(new ProcedureAuditListPage());
+            }
+        };
+    }
+
+    @Override
+    protected Link createDeleteLink(String linkId) {
+        return new Link(linkId) {
+            {
+                add(new JavaScriptAlertConfirmBehavior(new FIDLabelModel("label.confirm_audit_delete")));
+                setVisible(!event.getObject().isNew());
+            }
             @Override
             public void onClick() {
                 setResponsePage(new ProcedureAuditListPage());

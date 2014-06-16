@@ -402,7 +402,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     protected abstract Component createCancelLink(String id);
     protected abstract boolean targetAlreadyArchived(T event);
 
-    private Link createDeleteLink(String linkId) {
+    protected Link createDeleteLink(String linkId) {
         return new Link(linkId) {
             {
                 add(new JavaScriptAlertConfirmBehavior(new FIDLabelModel("label.confirm_event_delete")));

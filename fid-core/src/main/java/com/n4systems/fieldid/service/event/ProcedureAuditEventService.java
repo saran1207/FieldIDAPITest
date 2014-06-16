@@ -2,8 +2,10 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
+import com.n4systems.model.Event;
 import com.n4systems.model.ProcedureAuditEvent;
 import com.n4systems.model.WorkflowState;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.RecurringLotoEvent;
 import com.n4systems.util.persistence.*;
@@ -141,10 +143,17 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
 
         procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
         procedureCountQuery.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
+        procedureCountQuery.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
         procedureCountQuery.addSimpleWhere("procedureDefinition.asset", asset);
         procedureCountQuery.addOrder("completedDate", false);
 
         return persistenceService.findAll(procedureCountQuery);
+    }
+
+    public Event retireEvent(ProcedureAuditEvent event) {
+        event.retireEntity();
+        event = persistenceService.update(event);
+        return event;
     }
 
 }
