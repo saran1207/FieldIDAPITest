@@ -45,12 +45,13 @@ public class RecurringSchedulesTask extends ScheduledTask {
 
         List<RecurringLotoEvent> recurringLotoEventList = getRecurringScheduleService().getAllRecurringLotoEvents();
         for(RecurringLotoEvent event: recurringLotoEventList) {
-            for (LocalDateTime dateTime : getRecurringScheduleService().getBoundedScheduledTimesIterator(event.getRecurrence())) {
-                if(event.isRecurringLockout()) {
+            if(event.isRecurringLockout()) {
+                for (LocalDateTime dateTime : getRecurringScheduleService().getBoundedScheduledTimesIterator(event.getRecurrence())) {
                     getRecurringScheduleService().scheduleALotoEventFor(event, dateTime);
-                } else {
-                    getRecurringScheduleService().scheduleAnAuditEventFor(event, dateTime);
                 }
+            } else {
+                    LocalDateTime dateTime = getRecurringScheduleService().getNextProcedureAuditDate(event);
+                    getRecurringScheduleService().scheduleAnAuditEventFor(event, dateTime);
             }
         }
 

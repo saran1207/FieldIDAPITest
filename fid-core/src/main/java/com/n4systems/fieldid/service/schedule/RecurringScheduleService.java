@@ -348,13 +348,18 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
     }
 
     private void scheduleInitialEvents(RecurringLotoEvent recurringEvent) {
-        for (LocalDateTime dateTime: getBoundedScheduledTimesIterator(recurringEvent.getRecurrence())) {
-            if(recurringEvent.isRecurringLockout()) {
+        if(recurringEvent.isRecurringLockout()) {
+            for (LocalDateTime dateTime: getBoundedScheduledTimesIterator(recurringEvent.getRecurrence())) {
                 scheduleALotoEventFor(recurringEvent, dateTime);
-            } else {
-                scheduleAnAuditEventFor(recurringEvent, dateTime);
             }
+        } else {
+            LocalDateTime dateTime = getNextProcedureAuditDate(recurringEvent);
+            scheduleAnAuditEventFor(recurringEvent, dateTime);
         }
+    }
+
+    public LocalDateTime getNextProcedureAuditDate(RecurringLotoEvent recurringEvent) {
+        return new ScheduleTimeIterator(recurringEvent.getRecurrence()).next();
     }
 
     class BoundedScheduleTimeIterator implements Iterable<LocalDateTime>, Iterator<LocalDateTime> {
