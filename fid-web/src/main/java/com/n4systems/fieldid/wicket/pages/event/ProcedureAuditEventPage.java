@@ -32,11 +32,14 @@ public abstract class ProcedureAuditEventPage extends EventPage<ProcedureAuditEv
     protected SchedulePicker<ProcedureAuditEvent> createSchedulePicker() {
 
         SchedulePicker<ProcedureAuditEvent> picker = new SchedulePicker<ProcedureAuditEvent>("schedulePicker", new PropertyModel<ProcedureAuditEvent>(ProcedureAuditEventPage.this, "scheduleToAdd"), new EventTypesForProcedureAuditModel(new PropertyModel<ProcedureDefinition>(event, "procedureDefinition")));
-
         picker.setVisible(false);
-
         return picker;
 
+    }
+
+    @Override
+    protected boolean isScheduleVisable() {
+        return false;
     }
 
     @Override

@@ -142,6 +142,7 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
         procedureCountQuery.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
         procedureCountQuery.addSimpleWhere("procedureDefinition.asset", asset);
+        procedureCountQuery.addOrder("completedDate", false);
 
         return persistenceService.findAll(procedureCountQuery);
     }

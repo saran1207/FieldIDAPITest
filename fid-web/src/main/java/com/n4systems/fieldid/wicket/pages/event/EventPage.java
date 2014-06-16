@@ -84,7 +84,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     protected WebMarkupContainer jobsContainer;
     protected WebMarkupContainer eventBookContainer;
 
-    private WebMarkupContainer schedulesContainer;
+    protected WebMarkupContainer schedulesContainer;
 
     private Boolean assetOwnerUpdate;
 
@@ -220,10 +220,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             // checkbox
             ownerSection.add(new CheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(EventPage.this, "assetOwnerUpdate")).add(new UpdateComponentOnChange()));
 
-
             schedulesContainer = new WebMarkupContainer("schedulesContainer");
             schedulesContainer.setOutputMarkupPlaceholderTag(true);
-            schedulesContainer.setVisible(event.getObject().isNew() || !event.getObject().isCompleted());
+            schedulesContainer.setVisible(isScheduleVisable());
             schedulesContainer.add(new ListView<Event>("schedules", new PropertyModel<List<Event>>(EventPage.this, "schedules")) {
                 @Override
                 protected void populateItem(final ListItem<Event> item) {
@@ -251,7 +250,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             });
 
             add(new Label("eventTypeName", new PropertyModel<String>(event, "type.name")));
-            
+
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
 
             if (event.getObject().getType().isThingEventType()) {
@@ -484,4 +483,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     public void setEventResult(EventResult eventResult) {
         this.eventResult = eventResult;
     }
+
+    protected boolean isScheduleVisable() {
+        return (event.getObject().isNew() || !event.getObject().isCompleted());
+    }
+
 }
