@@ -41,7 +41,8 @@ public class ProceduresListPage extends LotoPage {
             protected void populateItem(ListItem<Procedure> item) {
                 final IModel<Procedure> procedure = item.getModel();
 
-                item.add(new Label("dateDue", new DayDisplayModel(new PropertyModel<Date>(procedure, "dueDate"), true, getCurrentUser().getTimeZone())));
+                //TODO due date seems to be stored in local time, we should probably be storing it in UTC and converting the time to the user's locale?
+                item.add(new Label("dateDue", new DayDisplayModel(new PropertyModel<Date>(procedure, "dueDate"), true/*, getCurrentUser().getTimeZone()*/)));
                 if(procedure.getObject().getWorkflowState().equals(ProcedureWorkflowState.OPEN)) {
                     item.add(new Label("dateLocked"));
                     item.add(new Label("dateUnlocked"));
