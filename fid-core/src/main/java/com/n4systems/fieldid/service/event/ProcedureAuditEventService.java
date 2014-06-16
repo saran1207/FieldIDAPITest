@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.event;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ProcedureAuditEvent;
+import com.n4systems.model.WorkflowState;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.RecurringLotoEvent;
 import com.n4systems.util.persistence.*;
@@ -24,8 +25,8 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         QueryBuilder<Procedure> procedureCountQuery = createUserSecurityBuilder(Procedure.class);
 
         procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
-
         procedureCountQuery.addSimpleWhere("procedureDefinition.asset", asset);
+        procedureCountQuery.addSimpleWhere("workflowState", WorkflowState.OPEN);
 
         if(!isAsset) {
             procedureCountQuery.addSimpleWhere("procedureDefinition.procedureCode", procedureCode.trim());
@@ -39,6 +40,7 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         QueryBuilder<ProcedureAuditEvent> procedureCountQuery = createUserSecurityBuilder(ProcedureAuditEvent.class);
 
         procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
+        procedureCountQuery.addSimpleWhere("workflowState", WorkflowState.OPEN);
 
         if(!searchTerm.trim().equals("")) {
             WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
@@ -55,8 +57,8 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         QueryBuilder<ProcedureAuditEvent> procedureCountQuery = createUserSecurityBuilder(ProcedureAuditEvent.class);
 
         procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
-
         procedureCountQuery.addSimpleWhere("procedureDefinition.asset", asset);
+        procedureCountQuery.addSimpleWhere("workflowState", WorkflowState.OPEN);
 
         if(!isAsset) {
             procedureCountQuery.addSimpleWhere("procedureDefinition.procedureCode", procedureCode.trim());
@@ -96,6 +98,7 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         QueryBuilder<ProcedureAuditEvent> procedureCountQuery = createUserSecurityBuilder(ProcedureAuditEvent.class);
 
         procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
+        procedureCountQuery.addSimpleWhere("workflowState", WorkflowState.OPEN);
 
         if(!sTerm.trim().equals("")) {
             WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
@@ -132,4 +135,15 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
 
         return persistenceService.findAll(procedureCountQuery);
     }
+
+    public List<ProcedureAuditEvent> getAllCompletedAuditsForAsset(Asset asset) {
+        QueryBuilder<ProcedureAuditEvent> procedureCountQuery = createUserSecurityBuilder(ProcedureAuditEvent.class);
+
+        procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
+        procedureCountQuery.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
+        procedureCountQuery.addSimpleWhere("procedureDefinition.asset", asset);
+
+        return persistenceService.findAll(procedureCountQuery);
+    }
+
 }
