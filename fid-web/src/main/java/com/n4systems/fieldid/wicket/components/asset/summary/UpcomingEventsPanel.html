@@ -5,7 +5,7 @@
       lang="en">
 
 <wicket:panel>
-    <div class="upcomingEvent" wicket:id="upcomingLoto">
+    <div class="upcomingEvent" name="upcomingLoto" wicket:id="upcomingLoto">
         <div wicket:id="scheduleIcon"></div>
         <div class="scheduleInfo">
             <div class="eventType" wicket:id="upcomingEventType"/>
@@ -16,16 +16,16 @@
         </div>
         <div wicket:id="editLoto"/>
     </div>
-    <div class="upcomingEvent" wicket:id="upcomingEventsList">
+    <div class="upcomingEvent" name="upcomingEventsList" wicket:id="upcomingEventsList">
         <div wicket:id="scheduleIcon"></div>
         <div class="scheduleInfo">
-            <div class="eventType" wicket:id="upcomingEventType"/>
-            <div class="eventDate">
-                <abbr wicket:id="upcomingEventDate"></abbr>
-                <span wicket:id="onDate"></span>
+            <div class="eventType" name="upcomingEventType" wicket:id="upcomingEventType"/>
+            <div class="eventDate" name="eventDate">
+                <abbr wicket:id="upcomingEventDate" name="upcomingEventDate"></abbr>
+                <span wicket:id="onDate" name="onDate"></span>
             </div>
          </div>
-        <div wicket:id="openActions"/>
+        <div wicket:id="openActions" name="openActions"/>
     </div>
 </wicket:panel>
 
