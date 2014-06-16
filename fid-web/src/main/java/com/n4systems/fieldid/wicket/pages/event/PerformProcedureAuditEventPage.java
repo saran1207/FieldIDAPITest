@@ -76,6 +76,10 @@ public class PerformProcedureAuditEventPage extends ProcedureAuditEventPage {
             public void onClick() {
                 setResponsePage(new ProcedureAuditListPage());
             }
+            @Override
+            public boolean isVisible() {
+                return false;
+            }
         };
     }
 
