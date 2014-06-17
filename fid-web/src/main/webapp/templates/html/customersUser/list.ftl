@@ -25,8 +25,12 @@ ${action.setPageType('customer', 'users')!}
 		</tr>
 		<#assign count=0 >
 		<#list userList as user >
-			<tr id="user_${user.id!}" >
-				<td><a href="<@s.url action="viewUser" uniqueID="${user.id!}" includeParams="get"/>" >${user.userID?html!}</a> </td>
+            <tr id="user_${user.id!}" >
+                <#if user.userType = 'PERSON'>
+                    <td>&nbsp;</td>
+                <#else>
+                    <td><a href="<@s.url action="viewUser" uniqueID="${user.id!}" includeParams="get"/>" >${user.userID?html!}</a> </td>
+                </#if>
 				<td>${user.userLabel?html! }</td>
 				<td>${(user.owner.divisionOrg.name)!?html}</td>
 				<td>${user.emailAddress?html! } </td>

@@ -7,7 +7,9 @@ import java.io.IOException;
 
 import javax.persistence.EntityManager;
 
-import org.apache.commons.io.FileUtils;
+import com.amazonaws.AmazonClientException;
+import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.util.ServiceLocator;
 import org.apache.log4j.Logger;
 
 import com.n4systems.ejb.NoteManager;
@@ -21,7 +23,6 @@ import com.n4systems.reporting.PathHandler;
 public class NoteManagerImpl implements NoteManager {
 
 	private static final Logger logger = Logger.getLogger(NoteManagerImpl.class);
-
 	
 	private PersistenceManager persistenceManager;
 
@@ -35,7 +36,7 @@ public class NoteManagerImpl implements NoteManager {
 			note.setTenant(project.getTenant());
 			persistenceManager.save(note, modifiedBy);
 
-			File attachmentDirectory = PathHandler.getAttachmentFile(project, note);
+			//File attachmentDirectory = PathHandler.getAttachmentFile(project, note);
 			File tmpDirectory = PathHandler.getTempRoot();
 			File tmpFile = null;
 
@@ -43,19 +44,22 @@ public class NoteManagerImpl implements NoteManager {
 				// move the file to it's new location, note that it's
 				// location is currently relative to the tmpDirectory
 				tmpFile = new File(tmpDirectory, note.getFileName());
-				FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+				//FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+                note.ensureMobileIdIsSet();
+                S3Service s3Service = ServiceLocator.getS3Service();
+                note.setFileName(s3Service.getFileAttachmentPath(note));
+                s3Service.uploadFileAttachment(tmpFile, note);
 
 				// clean up the temp file
 				tmpFile.delete();
 			}
 
-			note.setFileName((tmpFile != null) ? tmpFile.getName() : null);
 			persistenceManager.update(note, modifiedBy);
 
 			project.getNotes().add(0, note);
 			persistenceManager.update(project, modifiedBy);
 
-		} catch (IOException e) {
+		} catch (AmazonClientException e) {
 			logger.error("failed to copy uploaded file ", e);
 			throw new FileAttachmentException(e);
 		}

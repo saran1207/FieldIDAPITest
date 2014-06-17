@@ -1,6 +1,7 @@
 package com.n4systems.model;
 
 import javax.activation.FileTypeMap;
+import java.util.UUID;
 
 public interface Attachment {
 

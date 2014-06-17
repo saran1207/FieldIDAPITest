@@ -31,9 +31,10 @@ import java.util.List;
 public class EventDetailsCriteriaPanel extends Panel {
 
     private FidDropDownChoice<EventType> eventTypeSelect;
+    private FidDropDownChoice<PriorityCode> prioritySelect;
     private IModel<List<? extends EventType>> availableEventTypesModel;
 
-    public EventDetailsCriteriaPanel(String id, IModel<?> model) {
+    public EventDetailsCriteriaPanel(String id, IModel<EventReportCriteria> model) {
         super(id, model);
 
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
@@ -58,7 +59,10 @@ public class EventDetailsCriteriaPanel extends Panel {
         // Initially, update the dynamic columns causing an empty list to be put into our model
         eventTypeSelect.setOutputMarkupId(true);
 
-        add(new FidDropDownChoice<PriorityCode>("priority", new PropertyModel<PriorityCode>(getDefaultModel(), "priority"), new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>()).setNullValid(true));
+        add(prioritySelect = new FidDropDownChoice<PriorityCode>("priority", new PropertyModel<PriorityCode>(getDefaultModel(), "priority"), new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>()));
+        prioritySelect.setNullValid(true);
+        prioritySelect.setOutputMarkupId(true);
+        setPrioritySelectVisibility();
 
         add(createEventTypeGroupChoice(eventTypeGroupModel, eventTypeModel, availableEventTypesModel));
 
@@ -111,5 +115,15 @@ public class EventDetailsCriteriaPanel extends Panel {
     }
 
     protected void onEventTypeOrGroupUpdated(AjaxRequestTarget target, EventType selectedEventType, List<? extends EventType> availableEventTypes) {}
+
+    protected void repaintPrioritySelect(AjaxRequestTarget target) {
+        setPrioritySelectVisibility();
+        target.add(prioritySelect);
+    }
+
+    private void setPrioritySelectVisibility() {
+        IModel<EventSearchType> eventSearchTypeModel = new PropertyModel<EventSearchType>(getDefaultModel(), "eventSearchType");
+        prioritySelect.setVisible(eventSearchTypeModel.getObject().equals(EventSearchType.ACTIONS));
+    }
 
 }

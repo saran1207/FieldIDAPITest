@@ -15,7 +15,8 @@
 </head>
 <body>
 	<div id="header">
-        <a class="floatRight" href="<@s.url namespace="/admin" action="signOut"/>"><@s.text name="label.logout" /></a>
+        <a class="floatRight" href="<@s.url namespace="/admin" action="signOut"/>"><@s.text name="label.logout"/>&nbsp;</a>
+        <a class="floatRight" style="margin-right: 10px" href="/fieldid/w/admin/changeAdminPassword"><@s.text name="label.change_password"/></a>
 		 <a href="/fieldid/admin/organizations.action" style="border:0;">
              <img src="../images/admin/admin-logo.png"/>
          </a>

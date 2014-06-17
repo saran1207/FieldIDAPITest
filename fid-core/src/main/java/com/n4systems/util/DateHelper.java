@@ -95,7 +95,7 @@ public class DateHelper {
 	}
 
     public static Date string2Date(String format, String dateStr) {
-        return string2Date(format, dateStr, null);
+        return string2Date(format, dateStr, TimeZone.getDefault());
     }
 
     public static Date string2Date(String format, String dateStr, TimeZone timeZone) {
@@ -112,10 +112,12 @@ public class DateHelper {
             sdf.setTimeZone(timeZone);
         }
 
-		Date date = null;
-		try {
-			date = sdf.parse(dateStr);
-		} catch (ParseException parseEx) {
+        String strDateString = dateStr;
+
+        try {
+			return sdf.parse(strDateString);
+		} catch (ParseException e) {
+            return null;
 		}
 
 		/**
@@ -127,8 +129,7 @@ public class DateHelper {
 		 * string then the results would be very hard to debug. 
 		 *  
 		*/
-		
-		return date;
+
 	}
 
 	public static boolean isDateValid(String format, String dateStr) {

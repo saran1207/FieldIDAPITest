@@ -34,8 +34,8 @@ ${action.setPageType('customer', 'divisions')!}
 				</td>
 				<td>${(division.code?html)!}</td>
 				<td>
-					<a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>"><@s.text name="label.edit"/></a> | 
-					<a href="<@s.url action="divisionArchive" uniqueID="${division.id}" includeParams="get"/>"><@s.text name="label.archive"/></a>
+					<a href="<@s.url action="divisionEdit" uniqueID="${division.id}" includeParams="get"/>"><@s.text name="label.edit"/></a> |
+                    <a href="<@s.url action="divisionArchive" uniqueID="${division.id}" includeParams="get"/>" onclick="return confirm('<@s.text name="label.areyousurearchivecustomer" />');" ><@s.text name="label.archive" /></a>
 				</td>
 			</tr>	
 		</#list>

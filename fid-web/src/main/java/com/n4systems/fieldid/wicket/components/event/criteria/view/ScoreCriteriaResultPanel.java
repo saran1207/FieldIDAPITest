@@ -10,7 +10,7 @@ public class ScoreCriteriaResultPanel extends Panel{
     public ScoreCriteriaResultPanel(String id, IModel<ScoreCriteriaResult> resultModel) {
         super(id);
 
-        add(new Label("scoreResult", new PropertyModel<String>(resultModel, "resultString")));
+        add(new Label("scoreResult", new PropertyModel<String>(resultModel, "score")));
 
     }
 

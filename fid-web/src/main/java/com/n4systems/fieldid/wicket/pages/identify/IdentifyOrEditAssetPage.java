@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.asset.AssetIdentifierService;
 import com.n4systems.fieldid.service.asset.AssetService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.validation.ValidationBehavior;
@@ -42,13 +43,10 @@ import com.n4systems.services.date.DateService;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxCallDecorator;
-import org.apache.wicket.ajax.calldecorator.AjaxCallDecorator;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.AjaxIndicatorAppender;
-import org.apache.wicket.extensions.ajax.markup.html.IndicatingAjaxButton;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -68,8 +66,6 @@ import org.apache.wicket.util.visit.IVisitor;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.*;
 
 import static ch.lambdaj.Lambda.on;
@@ -84,6 +80,7 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     @SpringBean private AssetSaveServiceSpring assetSaveService;
     @SpringBean private PersistenceService persistenceService;
     @SpringBean private OrgService orgService;
+    @SpringBean private UserGroupService userGroupService;
 
     EventSchedulesPanel eventSchedulesPanel;
     AttributesEditPanel attributesEditPanel;
@@ -505,9 +502,15 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     private void saveSchedulesForAsset(Asset asset) {
         for (ThingEvent eventToSchedule : schedulesToAdd) {
             ThingEvent copiedEvent = CopyEventFactory.copyEvent(eventToSchedule);
+
+            if(eventToSchedule.getAssignedGroup() != null) {
+                copiedEvent.setAssignedGroup(userGroupService.getUserGroup(eventToSchedule.getAssignedGroup().getId()));
+            }
+
             copiedEvent.setAsset(asset);
             copiedEvent.setTenant(getTenant());
             copiedEvent.setOwner(asset.getOwner());
+
             persistenceService.save(copiedEvent);
         }
     }

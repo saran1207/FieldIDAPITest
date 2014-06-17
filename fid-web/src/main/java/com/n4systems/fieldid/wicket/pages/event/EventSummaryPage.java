@@ -22,7 +22,7 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
     protected Boolean useContext;
     protected EventSummaryType eventSummaryType;
 
-    protected enum EventSummaryType {THING_EVENT, PLACE_EVENT};
+    protected enum EventSummaryType {THING_EVENT, PLACE_EVENT, PROCEDURE_AUDIT_EVENT};
 
     public EventSummaryPage(PageParameters parameters) {
         uniqueId = parameters.get("id").toLong();
@@ -97,6 +97,8 @@ public abstract class EventSummaryPage extends FieldIDTemplatePage {
 
             if(eventSummaryType.equals(EventSummaryType.THING_EVENT)) {
                 add(new NonWicketLink("editLink", "selectEventEdit.action?uniqueID=" + uniqueId, new AttributeModifier("class", "btn-secondary")));
+            } else if (eventSummaryType.equals(EventSummaryType.PROCEDURE_AUDIT_EVENT)) {
+                add(new BookmarkablePageLink<EditProcedureAuditEventPage>("editLink", EditProcedureAuditEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
             } else {
                 add(new BookmarkablePageLink<EditEventPage>("editLink", EditPlaceEventPage.class, PageParametersBuilder.uniqueId(uniqueId)));
             }

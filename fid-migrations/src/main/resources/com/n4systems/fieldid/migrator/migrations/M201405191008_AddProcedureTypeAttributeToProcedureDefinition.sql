@@ -1,0 +1,1 @@
+ALTER TABLE procedure_definitions ADD procedure_type VARCHAR(255);

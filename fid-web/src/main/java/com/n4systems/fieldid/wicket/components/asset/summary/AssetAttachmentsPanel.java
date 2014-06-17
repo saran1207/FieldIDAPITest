@@ -33,7 +33,7 @@ public class AssetAttachmentsPanel extends Panel {
     protected AssetService assetService;
 
     @SpringBean
-    private S3Service s3Service;
+    protected S3Service s3Service;
 
     @SpringBean
     private UserService userService;
@@ -49,19 +49,18 @@ public class AssetAttachmentsPanel extends Panel {
             protected void populateItem(ListItem<AssetAttachment> item) {
                 AssetAttachment attachment = item.getModelObject();
 
-                String fileName;
-                try {
-                    fileName = URLEncoder.encode(attachment.getFileName(), "UTF-8");
-                } catch (Exception e) {
-                    logger.warn("Could not convert to UTF-8", e);
-                    fileName = attachment.getFileName().replace(" ", "+");
-                }
-
                 String downloadUrl;
                 if(attachment.isRemote()){
                     downloadUrl = s3Service.getAssetAttachmentUrl(attachment).toString();
                 }
                 else {
+                    String fileName;
+                    try {
+                        fileName = URLEncoder.encode(attachment.getFileName(), "UTF-8");
+                    } catch (Exception e) {
+                        logger.warn("Could not convert to UTF-8", e);
+                        fileName = attachment.getFileName().replace(" ", "+");
+                    }
                     downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetAttachedFile.action?fileName="+ fileName + "&uniqueID="+ asset.getId() + "&attachmentID=" + attachment.getId());
                 }
 
@@ -91,7 +90,20 @@ public class AssetAttachmentsPanel extends Panel {
             protected void populateItem(ListItem<FileAttachment> item) {
                 FileAttachment attachment = item.getModelObject();
 
-                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetTypeAttachedFile.action?fileName=" + attachment.getFileName().replace(" ", "+") + "&uniqueID=" + asset.getType().getId() + "&attachmentID=" + attachment.getId());
+                String downloadUrl;
+                if(attachment.isRemote()){
+                    downloadUrl = s3Service.getFileAttachmentUrl(attachment).toString();
+                }
+                else {
+                    String fileName;
+                    try {
+                        fileName = URLEncoder.encode(attachment.getFileName(), "UTF-8");
+                    } catch (Exception e) {
+                        logger.warn("Could not convert to UTF-8", e);
+                        fileName = attachment.getFileName().replace(" ", "+");
+                    }
+                    downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAssetTypeAttachedFile.action?fileName=" + fileName + "&uniqueID=" + asset.getType().getId() + "&attachmentID=" + attachment.getId());
+                }
 
                 WebComponent image;
                 if (attachment.isImage()) {
@@ -101,9 +113,13 @@ public class AssetAttachmentsPanel extends Panel {
                     item.add(image = new Image("attachmentImage", new ContextRelativeResource("images/file-icon.png")));
                     image.add(new AttributeModifier("class", "attachmentIcon"));
                 }
+
+                String fileAttachmentFilePath = attachment.getFileName();
+                String fileAttachmentFileName = fileAttachmentFilePath.substring(fileAttachmentFilePath.lastIndexOf('/') + 1);
+
                 ExternalLink attachmentLink;
                 item.add(attachmentLink = new ExternalLink("attachmentLink", downloadUrl));
-                attachmentLink.add(new Label("attachmentName", attachment.getFileName()));
+                attachmentLink.add(new Label("attachmentName", fileAttachmentFileName));
                 item.add(new Label("attachmentNote", attachment.getComments()));
             }
         });

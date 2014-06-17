@@ -46,10 +46,17 @@ var orgTreeFactory = (function() {
 		}
 
 		var updateBranch = function(parentNodeId,nodeId) {
-			jQuery.jstree._reference(getTree()).open_node(parentNodeId,null,true);
+            jQuery.jstree._reference(getTree()).open_node(parentNodeId,null,true);
+
+            jQuery.jstree._reference(getTree())._get_children(parentNodeId).each(function() {
+                jQuery.jstree._reference(getTree()).delete_node($(this));
+            });
+
 			jQuery.jstree._reference(getTree()).load_node_json(parentNodeId,null,null);
+
 			setTimeout(function() {
-					$(nodeId).addClass('added');
+                    jQuery.jstree._reference(getTree()).open_node(parentNodeId,null,true);
+                    $(nodeId).addClass('added');
 				}
 				,500);
 			setTimeout(function() {

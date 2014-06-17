@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.event;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.model.AbstractEvent;
@@ -16,6 +17,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.resource.ContextRelativeResource;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.net.URLEncoder;
 import java.util.List;
@@ -24,6 +26,8 @@ public class EventAttachmentsPanel extends Panel {
 
     private static final Logger logger = Logger.getLogger(EventAttachmentsPanel.class);
 
+    @SpringBean
+    private S3Service s3Service;
     private String downloadAction;
 
     public EventAttachmentsPanel(String id, IModel<? extends AbstractEvent> eventModel) {
@@ -51,15 +55,20 @@ public class EventAttachmentsPanel extends Panel {
             protected void populateItem(ListItem<FileAttachment> item) {
                 FileAttachment fileAttachment = item.getModelObject();
 
-                String fileName;
-                try {
-                    fileName = URLEncoder.encode(fileAttachment.getFileName(), "UTF-8");
-                } catch (Exception e) {
-                    logger.warn("Could not convert to UTF-8", e);
-                    fileName = fileAttachment.getFileName().replace(" ", "+");
+                String downloadUrl;
+                if(fileAttachment.isRemote()){
+                    downloadUrl = s3Service.getFileAttachmentUrl(fileAttachment).toString();
                 }
-
-                String downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/" + downloadAction + ".action?fileName=" + fileName + "&uniqueID=" + event.getId() + "&attachmentID=" + fileAttachment.getId());
+                else {
+                    String fileName;
+                    try {
+                        fileName = URLEncoder.encode(fileAttachment.getFileName(), "UTF-8");
+                    } catch (Exception e) {
+                        logger.warn("Could not convert to UTF-8", e);
+                        fileName = fileAttachment.getFileName().replace(" ", "+");
+                    }
+                    downloadUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/" + downloadAction + ".action?fileName=" + fileName + "&uniqueID=" + event.getId() + "&attachmentID=" + fileAttachment.getId());
+                }
 
                 WebComponent image;
                 if(fileAttachment.isImage()) {
@@ -72,7 +81,8 @@ public class EventAttachmentsPanel extends Panel {
 
                 ExternalLink attachmentLink;
                 item.add(attachmentLink = new ExternalLink("attachmentLink", downloadUrl));
-                attachmentLink.add(new Label("attachmentName", fileAttachment.getFileName()));
+                String attachmentFilename = fileAttachment.getFileName().substring(fileAttachment.getFileName().lastIndexOf('/') + 1);
+                attachmentLink.add(new Label("attachmentName", attachmentFilename));
                 item.add(new Label("attachmentNote", fileAttachment.getComments()));
 
             }

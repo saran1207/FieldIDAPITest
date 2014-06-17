@@ -1,29 +1,35 @@
 package com.n4systems.fieldid.wicket.pages.loto.definition;
 
+import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.fieldid.wicket.components.text.LabelledAutoCompleteUser;
-import com.n4systems.fieldid.wicket.components.text.LabelledRequiredTextField;
-import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
-import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
+import com.n4systems.fieldid.wicket.components.text.*;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.ProcedureType;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static ch.lambdaj.Lambda.on;
 
 public class DetailsPanel extends Panel {
 
     private FIDFeedbackPanel feedbackPanel;
+
+    private @SpringBean ProcedureDefinitionService procedureDefinitionService;
 
     public DetailsPanel(String id, IModel<ProcedureDefinition> model) {
         super(id, model);
@@ -58,6 +64,53 @@ public class DetailsPanel extends Panel {
 
             add(new LabelledRequiredTextField<String>("equipmentDescription", "label.equipment_description", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentDescription())));
 
+            /*
+            * This is not the best way to do it, but it's the simplest way to understand the different edge cases for when and how the
+            * Procedure Type picker is displayed and with what values.
+            */
+            boolean hasMainProcedureType = procedureDefinitionService.hasMainProcedureType(model.getObject().getAsset());
+            LabelledDropDown<String> procedureTypeLabelledDropDown = null;
+            if(model.getObject().getProcedureType() == null && hasMainProcedureType) {
+                procedureTypeLabelledDropDown = new LabelledDropDown<String>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureTypeLabel())) {
+                    @Override
+                    protected List<String> getChoices() {
+                        return Arrays.asList(ProcedureType.SUB.getLabel());
+                    }
+                };
+            } else if (model.getObject().getProcedureType() == null && !hasMainProcedureType) {
+                procedureTypeLabelledDropDown = new LabelledDropDown<String>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureTypeLabel())) {
+                    @Override
+                    protected List<String> getChoices() {
+                        return ProcedureType.MAIN.getAllLabels();
+                    }
+                };
+            } else if (hasMainProcedureType && model.getObject().getProcedureType().equals(ProcedureType.MAIN)) {
+                procedureTypeLabelledDropDown = new LabelledDropDown<String>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureTypeLabel())) {
+                    @Override
+                    protected List<String> getChoices() {
+                        return ProcedureType.MAIN.getAllLabels();
+                    }
+                };
+            } else if (hasMainProcedureType && model.getObject().getProcedureType().equals(ProcedureType.SUB)) {
+                procedureTypeLabelledDropDown = new LabelledDropDown<String>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureTypeLabel())) {
+                    @Override
+                    protected List<String> getChoices() {
+                        return Arrays.asList(ProcedureType.SUB.getLabel());
+                    }
+                };
+            }
+            else {
+                procedureTypeLabelledDropDown = new LabelledDropDown<String>("procedureType", "label.procedure_type", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureTypeLabel())) {
+                    @Override
+                    protected List<String> getChoices() {
+                        return ProcedureType.MAIN.getAllLabels();
+                    }
+                };
+            }
+            procedureTypeLabelledDropDown.required();
+            procedureTypeLabelledDropDown.add(new AttributeAppender("class", "procedure-def-paddingCorrection"));
+            add(procedureTypeLabelledDropDown);
+
             add(new AjaxLink("cancel") {
                 @Override public void onClick(AjaxRequestTarget target) {
                     doCancel(target);
@@ -77,6 +130,12 @@ public class DetailsPanel extends Panel {
             });
             submitLink.setMarkupId("detailsContinueLink");
         }
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
     }
 
     protected void doContinue(AjaxRequestTarget target) { }

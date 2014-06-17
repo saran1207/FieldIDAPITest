@@ -143,6 +143,9 @@
                                     <a href="/fieldid/w/procedureWaitingApprovals"><@s.text name="speed.loto_procedure_approvals" /></a>
                                 </li>
                                 <li>
+                                    <a href="/fieldid/w/procedureAuditListPage"><@s.text name="speed.procedure_audits" /></a>
+                                </li>
+                                <li>
                                     <a href="/fieldid/w/procedure"><@s.text name="speed.loto_log" /></a>
                                 </li>
                             </ul>

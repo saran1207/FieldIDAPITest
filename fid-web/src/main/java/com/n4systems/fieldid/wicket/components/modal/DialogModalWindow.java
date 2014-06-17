@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.modal;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
@@ -12,6 +13,12 @@ public class DialogModalWindow extends ModalWindow {
 
     public DialogModalWindow(String id, IModel<?> model) {
         super(id, model);
+    }
+
+    @Override
+    public void show(AjaxRequestTarget target) {
+        super.show(target);
+        target.appendJavaScript("$('.w_content_container').removeAttr('style')");
     }
 
     @Override

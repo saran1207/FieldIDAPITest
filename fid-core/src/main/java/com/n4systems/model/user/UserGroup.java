@@ -3,7 +3,10 @@ package com.n4systems.model.user;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -47,6 +50,10 @@ public class UserGroup extends ArchivableEntityWithTenant implements Listable<Lo
     @Override
     public String getDisplayName() {
         return name;
+    }
+
+    public String getAssignToDisplayName() {
+        return getDisplayName();
     }
 
     public String getKeyForStruts() {

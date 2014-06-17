@@ -3,8 +3,10 @@ package com.n4systems.model.procedure;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.n4systems.model.Asset;
+import com.n4systems.model.api.HasOwner;
 import com.n4systems.model.api.Listable;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.User;
@@ -17,7 +19,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "procedure_definitions")
-public class ProcedureDefinition extends ArchivableEntityWithTenant implements Listable<Long> {
+public class ProcedureDefinition extends ArchivableEntityWithTenant implements Listable<Long>, HasOwner {
 
     public static final SecurityDefiner createSecurityDefiner() {
         return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
@@ -99,6 +101,10 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     @ManyToOne
     @JoinColumn(name = "unpublished_by_id")
     private User unpublishedBy;
+
+    @Column(name="procedure_type")
+    @Enumerated(EnumType.STRING)
+    private ProcedureType procedureType;
 
     public String getProcedureCode() {
         return procedureCode;
@@ -372,5 +378,36 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
     public void setUnpublishedBy(User unpublishedBy) {
         this.unpublishedBy = unpublishedBy;
+    }
+
+    public ProcedureType getProcedureType() { return procedureType; }
+
+    public void setProcedureType(ProcedureType procedureType) { this.procedureType = procedureType; }
+
+    public String getProcedureTypeLabel() {
+        if(procedureType == null) {
+            return null;
+        } else {
+            return procedureType.getLabel();
+        }
+    }
+
+    public void setProcedureTypeLabel(String label) {
+        if(label.equals(ProcedureType.SUB.getLabel())){
+            procedureType = ProcedureType.SUB;
+        } else if (label.equals(ProcedureType.MAIN.getLabel())){
+            procedureType = ProcedureType.MAIN;
+        }
+    }
+
+    //We are forced to implement this due to the HasOwner interface on the event creation service and related classes
+    @Override
+    public BaseOrg getOwner() {
+        return asset.getOwner();
+    }
+
+    @Override
+    public void setOwner(BaseOrg owner) {
+        //Nothing to set
     }
 }

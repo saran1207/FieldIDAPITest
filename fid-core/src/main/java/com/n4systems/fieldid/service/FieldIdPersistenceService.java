@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.parents.AbstractEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,7 +14,7 @@ public class FieldIdPersistenceService extends FieldIdService {
 
 	@Autowired
     protected PersistenceService persistenceService;
-    
+
     @PersistenceContext EntityManager _entityManager;
 
 	public void setPersistenceService(PersistenceService persistenceService) {

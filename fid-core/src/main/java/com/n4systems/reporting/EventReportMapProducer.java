@@ -85,7 +85,10 @@ public class EventReportMapProducer extends AbsractEventReportMapProducer {
 
 	@Override
 	protected File imagePath(FileAttachment imageAttachment) {
-		return PathHandler.getEventAttachmentFile((Event) getEvent(), imageAttachment);
+        if(imageAttachment.isRemote())
+            return s3Service.downloadFileAttachment(imageAttachment);
+        else
+            return PathHandler.getEventAttachmentFile((Event) getEvent(), imageAttachment);
 	}
 
 	@Override

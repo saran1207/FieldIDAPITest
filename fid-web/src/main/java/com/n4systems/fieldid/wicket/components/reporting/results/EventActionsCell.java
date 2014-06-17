@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
+import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.event.CloseEventPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
@@ -163,7 +164,7 @@ public class EventActionsCell extends Panel {
 
         Asset networkAsset = event.getAsset();
 
-        NonWicketLink viewLink = new NonWicketLink("viewLink", "event.action?uniqueID=" + event.getId());
+        BookmarkablePageLink viewLink = new BookmarkablePageLink<ThingEventSummaryPage>("viewLink", ThingEventSummaryPage.class, PageParametersBuilder.id(event.getID()));
         viewLink.setVisible(event.getWorkflowState() == WorkflowState.COMPLETED);
         safetyNetworkActionsList.add(viewLink);
 

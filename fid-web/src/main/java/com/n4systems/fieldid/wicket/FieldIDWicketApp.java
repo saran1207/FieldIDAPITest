@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.pages.SelectLanguagePage;
 import com.n4systems.fieldid.wicket.pages.admin.adminusers.AdminUserPage;
 import com.n4systems.fieldid.wicket.pages.admin.connections.ConnectionViewPage;
 import com.n4systems.fieldid.wicket.pages.admin.languages.ConfigureLanguagesPage;
+import com.n4systems.fieldid.wicket.pages.admin.security.ChangeAdminPasswordPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.AddTenantPage;
 import com.n4systems.fieldid.wicket.pages.admin.tenants.TenantUserListPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
@@ -142,15 +143,21 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("draftListAllPage", DraftListAllPage.class);
         mountPage("previouslyPublishedListAllPage", PreviouslyPublishedListAllPage.class);
 
+        mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
+
         mountPage("quickEvent", QuickEventPage.class);
         mountPage("startEvent", StartRegularOrMasterEventPage.class);
         mountPage("performEvent", PerformEventPage.class);
         mountPage("editEvent", EditEventPage.class);
         mountPage("thingEventSummary", ThingEventSummaryPage.class);
         mountPage("placeEventSummary", PlaceEventSummaryPage.class);
+        mountPage("procedureAuditEventSummary", ProcedureAuditEventSummaryPage.class);
 
         mountPage("performPlaceEvent", PerformPlaceEventPage.class);
         mountPage("editPlaceEvent", EditPlaceEventPage.class);
+
+        mountPage("performProcedureAuditEvent", PerformProcedureAuditEventPage.class);
+        mountPage("editProcedureAuditEvent", EditProcedureAuditEventPage.class);
 
         mountPage("closeEvent", CloseEventPage.class);
 
@@ -180,6 +187,7 @@ public class FieldIDWicketApp extends WebApplication {
 		mountPage("admin/connections", ConnectionViewPage.class);
         mountPage("admin/configureLanguages", ConfigureLanguagesPage.class);
 		mountPage("admin/tenantUsers", TenantUserListPage.class);
+        mountPage("admin/changeAdminPassword", ChangeAdminPasswordPage.class);
 
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);
@@ -206,6 +214,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("completedProcedures", ProceduresListPage.class);
         mountPage("procedureResults", ProcedureResultsPage.class);
         mountPage("copyProceduresList", CopyProceduresList.class);
+        mountPage("recurringLotoPage", RecurringLotoSchedulesPage.class);
 
         mountPage("identify", IdentifyOrEditAssetPage.class);
 

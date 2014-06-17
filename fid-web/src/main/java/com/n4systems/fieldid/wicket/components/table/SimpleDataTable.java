@@ -8,6 +8,7 @@ import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.selection.MultiIdSelection;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortState;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.ISortStateLocator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.OrderByBorder;
@@ -62,6 +63,7 @@ public class SimpleDataTable<T> extends Panel {
                 int resultSetIndex = getCurrentPage()*getItemsPerPage()+index;
                 rowItem.add(new HighlightIfSelectedBehavior(multiIdSelection, resultSetIndex));
                 rowItem.add(new EvenOddStylingBehavior(index));
+                rowItem.add(new AttributeModifier("name", new Model<String>("dataTableRow")));
                 onRowItemCreated(rowItem, rowModel);
                 return rowItem;
             }
@@ -70,6 +72,7 @@ public class SimpleDataTable<T> extends Panel {
             protected Item<IColumn<T>> newCellItem(String id, int index, IModel<IColumn<T>> tiModel) {
                 Item<IColumn<T>> cellItem = super.newCellItem(id, index, tiModel);
                 cellItem.setOutputMarkupId(true);
+                cellItem.add(new AttributeModifier("name", new Model<String>("dataTableColumn")));
                 return cellItem;
             }
 
@@ -87,6 +90,7 @@ public class SimpleDataTable<T> extends Panel {
         };
         table.setOutputMarkupPlaceholderTag(true);
         table.add(new AttributeAppender("class", new PropertyModel<String>(this, "cssClass"), " "));
+        table.add(new AttributeModifier("name", new Model<String>("dataTable")));
 
 		table.addTopToolbar(new HeadersToolbar(table, dataProvider) {
             @Override

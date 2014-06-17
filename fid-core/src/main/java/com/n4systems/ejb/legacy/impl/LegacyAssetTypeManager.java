@@ -14,10 +14,13 @@ import javax.persistence.NoResultException;
 
 import javax.persistence.Query;
 
+import com.amazonaws.AmazonClientException;
 import com.n4systems.ejb.EventScheduleManager;
 import com.n4systems.ejb.impl.EventScheduleManagerImpl;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -62,7 +65,7 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 	 protected AutoAttributeManager autoAttributeManager;	
 	 protected LegacyAsset assetManager;
 	 protected EventScheduleManager eventScheduleManager;
-	
+	 protected S3Service s3Service;
 	
 	
 	
@@ -75,6 +78,7 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 		this.autoAttributeManager = new AutoAttributeManagerImpl(em);	
 		this.assetManager = new LegacyAssetManager(em);
 		this.eventScheduleManager = new EventScheduleManagerImpl(em);
+        this.s3Service = ServiceLocator.getS3Service();
 	}
 
 	//TODO remove this only used by asset crud to determine if the asset type has changed.
@@ -309,7 +313,6 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 	}
 
 	private void processUploadedFiles( AssetType assetType, List<FileAttachment> uploadedFiles ) throws FileAttachmentException {
-		File attachmentDirectory = PathHandler.getAssetTypeAttachmentFile(assetType);
 		File tmpDirectory = PathHandler.getTempRoot();
 		
 		if( uploadedFiles != null ) {
@@ -320,19 +323,19 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 				try {	
 					// move the file to it's new location, note that it's location is currently relative to the tmpDirectory
 					tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
-					FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
-					
+                    //FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+                    uploadedFile.setTenant(assetType.getTenant());
+                    uploadedFile.setModifiedBy(assetType.getModifiedBy());
+                    uploadedFile.ensureMobileIdIsSet();
+                    uploadedFile.setFileName(s3Service.getFileAttachmentPath(uploadedFile));
+                    s3Service.uploadFileAttachment(tmpFile, uploadedFile);
+
 					// clean up the temp file
 					tmpFile.delete();
-					
-					// now we need to set the correct file name for the attachment and set the modifiedBy
-					uploadedFile.setFileName(tmpFile.getName());
-					uploadedFile.setTenant(assetType.getTenant());
-					uploadedFile.setModifiedBy(assetType.getModifiedBy());
-					
+
 					// attach the attachment
 					assetType.getAttachments().add(uploadedFile);
-				} catch (IOException e) {
+				} catch (AmazonClientException e) {
 					logger.error("failed to copy uploaded file ", e);
 					throw new FileAttachmentException(e);
 				}
@@ -341,39 +344,7 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 			
 			persistenceManager.update(assetType);
 		}
-		
-		// Now we need to cleanup any files that are no longer attached to the assettype
-		if(attachmentDirectory.exists()) {
-			
-			/*
-			 * We'll start by constructing a list of attached file names which will be used in 
-			 * a directory filter
-			 */
-			final List<String> attachedFiles = new ArrayList<String>();
-			for(FileAttachment file: assetType.getAttachments()) {
-				attachedFiles.add(file.getFileName());
-			}
-		
-			/*
-			 * This lists all files in the attachment directory 
-			 */
-			for(File detachedFile: attachmentDirectory.listFiles(
-					new FilenameFilter() {
-						public boolean accept(File dir, String name) {
-							// accept only files that are not in our attachedFiles list
-							return !attachedFiles.contains(name);
-						}
-					}
-			)) {
-				/* 
-				 * any file returned from our fileNotAttachedFilter, is not in our attached file list
-				 * and should be removed
-				 */
-				detachedFile.delete();
-				
-			}
-		}
-		
+
 	}
 	
 	public AssetType updateAssetType(AssetType assetType) throws FileAttachmentException, ImageAttachmentException {

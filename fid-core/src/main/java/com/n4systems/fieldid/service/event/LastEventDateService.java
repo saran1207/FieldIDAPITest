@@ -10,9 +10,12 @@ import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
+@Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
 public class LastEventDateService extends FieldIdPersistenceService {
     
     private static final Logger logger = Logger.getLogger(LastEventDateService.class);

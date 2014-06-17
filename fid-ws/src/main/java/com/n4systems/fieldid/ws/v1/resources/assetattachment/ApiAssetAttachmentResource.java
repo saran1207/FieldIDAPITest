@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.assetattachment;
 
 import java.io.File;
+import java.net.URL;
 import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -45,7 +46,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 
 
         S3Service s3Service = ServiceLocator.getS3Service();
-        File assetAttachmentFile = s3Service.downloadAssetAttachmentFile(attachment);
+        File assetAttachmentFile = s3Service.downloadAssetAttachment(attachment);
         if (assetAttachmentFile == null || !assetAttachmentFile.exists()) {
             assetAttachmentFile = PathHandler.getAssetAttachmentFile(attachment);
             if (!assetAttachmentFile.exists()) {
@@ -148,17 +149,15 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		apiAttachment.setModified(attachment.getModified());
 		apiAttachment.setAssetId(attachment.getAsset().getMobileGUID());
 		apiAttachment.setComments(attachment.getComments());
-		//arezafar apiAttachment.setFileName(attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1));
-        apiAttachment.setFileName(attachment.getFileName());
+		apiAttachment.setFileName(attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1));
+        apiAttachment.setFilePath(attachment.getFileName());
 		apiAttachment.setImage(attachment.isImage());
-		if (attachment.isImage()) {
-			apiAttachment.setData(loadAttachmentData(attachment));
-		}
+        apiAttachment.setUrl(getAttachmentUrl(attachment));
 		return apiAttachment;
 	}
 
 	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment apiAttachment, Asset asset) {
-		AssetAttachment attachment = findExistingAttachment(apiAttachment.getSid());
+        AssetAttachment attachment = findExistingAttachment(apiAttachment.getSid());
 
 		if(attachment == null) {
 			attachment = new AssetAttachment();
@@ -167,8 +166,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 			attachment.setTenant(asset.getTenant());
 		}
 		attachment.setComments(apiAttachment.getComments());
-		//arezafar attachment.setFileName(apiAttachment.getFileName().substring(apiAttachment.getFileName().lastIndexOf('/') + 1));
-        attachment.setFileName(apiAttachment.getFileName());
+		attachment.setFileName(apiAttachment.getFilePath() != null ? apiAttachment.getFilePath() : apiAttachment.getFileName());
 		attachment.setData(apiAttachment.getData());
 		return attachment;
 	}
@@ -192,15 +190,18 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 			? attachments.get(0)
 			: null;
 	}
+
+    public void loadAttachmentData(ApiAssetAttachment apiAssetAttachment, Asset asset){
+        AssetAttachment attachment = convertApiModelToEntity(apiAssetAttachment, asset);
+        apiAssetAttachment.setData(loadAttachmentData(attachment));
+    }
 	
 	private byte[] loadAttachmentData(AssetAttachment attachment) {
+        S3Service s3Service = ServiceLocator.getS3Service();
 		byte[] data = null;
-        if (attachment.isRemote()){
+        if(s3Service.assetAttachmentExists(attachment)){
             try {
-                S3Service s3Service = ServiceLocator.getS3Service();
                 data = s3Service.downloadAssetAttachmentBytes(attachment);
-
-                File test = s3Service.downloadAssetAttachmentFile(attachment);
             } catch(Exception e) {
                 String assetAttachmentUrl = attachment.getFileName();
                 logger.warn("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);
@@ -217,4 +218,14 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		}
 		return data;
 	}
+
+    private URL getAttachmentUrl(AssetAttachment attachment){
+        S3Service s3Service = ServiceLocator.getS3Service();
+        URL url = null;
+        if(s3Service.assetAttachmentExists(attachment)){
+            url = s3Service.getAssetAttachmentUrl(attachment);
+        }
+        return url;
+
+    }
 }

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.event;
 
+import com.amazonaws.AmazonClientException;
 import com.n4systems.ejb.impl.EventResultCalculator;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.exceptions.FileAttachmentException;
@@ -15,13 +16,11 @@ import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.*;
 
@@ -189,13 +188,10 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     }
 
     private Event attachUploadedFiles(Event event, SubEvent subEvent, List<FileAttachment> uploadedFiles) throws FileAttachmentException {
-        File attachmentDirectory;
         AbstractEvent<ThingEventType,Asset> targetEvent;
         if (subEvent == null) {
-            attachmentDirectory = PathHandler.getAttachmentFile(event);
             targetEvent = event;
         } else {
-            attachmentDirectory = PathHandler.getAttachmentFile(event, subEvent);
             targetEvent = subEvent;
         }
         File tmpDirectory = PathHandler.getTempRoot();
@@ -223,17 +219,16 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
                     // move the file to it's new location, note that it's
                     // location is currently relative to the tmpDirectory
                     tmpFile = new File(tmpDirectory, uploadedFile.getFileName());
-                    FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+                    //FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+                    uploadedFile.setTenant(targetEvent.getTenant());
+                    uploadedFile.setModifiedBy(targetEvent.getModifiedBy());
+                    uploadedFile.ensureMobileIdIsSet();
+                    uploadedFile.setFileName(s3Service.getFileAttachmentPath(uploadedFile));
+                    s3Service.uploadFileAttachment(tmpFile, uploadedFile);
 
                     // clean up the temp file
                     tmpFile.delete();
-
-                    // now we need to set the correct file name for the
-                    // attachment and set the modifiedBy
-                    uploadedFile.setFileName(tmpFile.getName());
-                    uploadedFile.setTenant(targetEvent.getTenant());
-                    uploadedFile.setModifiedBy(targetEvent.getModifiedBy());
-                } catch (IOException e) {
+                } catch (AmazonClientException e) {
                     logger.error("failed to copy uploaded file ", e);
                     throw new FileAttachmentException(e);
                 }
@@ -241,37 +236,6 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
             }
         }
 
-        // Now we need to cleanup any files that are no longer attached to the
-        // event
-        if (attachmentDirectory.exists()) {
-
-            /*
-                * We'll start by constructing a list of attached file names which
-                * will be used in a directory filter
-                */
-            final List<String> attachedFiles = new ArrayList<String>();
-            for (FileAttachment file : targetEvent.getAttachments()) {
-                attachedFiles.add(file.getFileName());
-            }
-
-            /*
-                * This lists all files in the attachment directory
-                */
-            File[] filesInDirectoryThatAreNoLongerAttached = attachmentDirectory.listFiles(new FilenameFilter() {
-                public boolean accept(File dir, String name) {
-                    // accept only files that are not in our attachedFiles list
-                    return !attachedFiles.contains(name);
-                }
-            });
-            for (File detachedFile : filesInDirectoryThatAreNoLongerAttached) {
-                /*
-                     * any file returned from our fileNotAttachedFilter, is not in
-                     * our attached file list and should be removed
-                     */
-                detachedFile.delete();
-
-            }
-        }
         return event;
     }
 

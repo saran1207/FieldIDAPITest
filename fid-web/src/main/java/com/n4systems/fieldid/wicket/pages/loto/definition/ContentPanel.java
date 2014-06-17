@@ -61,10 +61,16 @@ public class ContentPanel extends Panel {
             protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint isolationPoint, int index) {
                 List<IsolationPoint> isolationPointList = getProcedureDefinition().getLockIsolationPoints();
 
-                isolationPointList.remove(isolationPoint);
-                isolationPointList.add(index - 1, isolationPoint);
+                if(isolationPointList.size() > 1) {
+                    if(index == 0) {
+                        index = 1;
+                    }
 
-                getProcedureDefinition().reindexLockIsolationPoints(isolationPointList);
+                    isolationPointList.remove(isolationPoint);
+                    isolationPointList.add(index - 1, isolationPoint);
+
+                    getProcedureDefinition().reindexLockIsolationPoints(isolationPointList);
+                }
             }
 
             @Override
@@ -93,10 +99,16 @@ public class ContentPanel extends Panel {
             protected void reorderIsolationPoint(AjaxRequestTarget target, IsolationPoint isolationPoint, int index) {
                 List<IsolationPoint> isolationPointList = getProcedureDefinition().getUnlockIsolationPoints();
 
-                isolationPointList.remove(isolationPoint);
-                isolationPointList.add(index - 1, isolationPoint);
+                if(isolationPointList.size() > 1) {
+                    if(index == 0) {
+                        index = 1;
+                    }
 
-                getProcedureDefinition().reindexUnlockIsolationPoints(isolationPointList);
+                    isolationPointList.remove(isolationPoint);
+                    isolationPointList.add(index - 1, isolationPoint);
+
+                    getProcedureDefinition().reindexUnlockIsolationPoints(isolationPointList);
+                }
             }
 
             @Override

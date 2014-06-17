@@ -10,25 +10,30 @@
         <table class="list">
             <tbody>
             <tr>
+                <th><wicket:message key="label.scheduleddate"/></th>
                 <th><wicket:message key="label.lock_date"/></th>
                 <th><wicket:message key="label.locked_by"/></th>
                 <th><wicket:message key="label.unlock_date"/></th>
                 <th><wicket:message key="label.unlocked_by"/></th>
                 <th><wicket:message key="label.procedure_code"/></th>
+                <th><wicket:message key="label.procedure_type"/></th>
                 <th><wicket:message key="label.revision_number"/></th>
                 <th><wicket:message key="label.published_state"/></th>
                 <th>&nbsp;</th>
             </tr>
             <tr wicket:id="list">
+                <td wicket:id="dateDue"/>
                 <td wicket:id="dateLocked"/>
                 <td wicket:id="lockedBy"/>
                 <td wicket:id="dateUnlocked"/>
                 <td wicket:id="unlockedBy"/>
                 <td wicket:id="procedureCode"/>
+                <td wicket:id="procedureType"/>
                 <td wicket:id="revision"/>
                 <td wicket:id="state"/>
                 <td class="action-buttons">
-                    <a wicket:id="viewLink" class="btn-secondary right"><wicket:message key="label.view"/></a>
+                    <a wicket:id="viewLink" class="btn-secondary pull-right"><wicket:message key="label.view"/></a>
+                    <a wicket:id="deleteLink" class="btn-secondary pull-right"><wicket:message key="label.delete"/></a>
                 </td>
             </tr>
             </tbody>

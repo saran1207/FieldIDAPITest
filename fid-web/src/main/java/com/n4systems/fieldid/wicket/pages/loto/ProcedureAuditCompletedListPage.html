@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+
+    <div wicket:id="listContainer" class="content">
+        <table class="list">
+            <tbody>
+            <tr>
+                <th><wicket:message key="label.completed"/></th>
+                <th><wicket:message key="label.due"/></th>
+                <th><wicket:message key="label.procedure_code"/></th>
+                <th><wicket:message key="label.procedure_type"/></th>
+                <th><wicket:message key="label.performed_by"/></th>
+                <th><wicket:message key="label.result"/></th>
+                <th><wicket:message key="label.event_status"/></th>
+                <th>&nbsp;</th>
+            </tr>
+            <tr wicket:id="list">
+                <td wicket:id="completedDate"/>
+                <td wicket:id="dateDue"/>
+                <td wicket:id="procedureDefinition"/>
+                <td wicket:id="procedureType"/>
+                <td wicket:id="performedBy"/>
+                <td wicket:id="eventResult"/>
+                <td wicket:id="eventStatus"/>
+                <td class="action-buttons">
+                    <a wicket:id="viewLink" class="btn-secondary pull-right"><wicket:message key="label.view"/></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div wicket:id="blankSlate" class="blankSlate">
+        <img src="/fieldid/images/procedures-completed-blank-slate-icon.png"/>
+        <p><label><wicket:message key="message.completed_procedure_audit_blank_slate"/></label></p>
+    </div>
+
+</wicket:extend>
+</html>

@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+@Transactional(readOnly = true)
 public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset, AssetSearchRecord> {
 
     public AssetSearchService() {
@@ -143,7 +144,6 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
         return super.convertResults(criteriaModel, results);
     }
 
-    @Transactional(readOnly = true)
     public MappedResults<AssetSearchRecord> performMapSearch(AssetSearchCriteria criteria) {
         QueryBuilder<Asset> query = createBaseMappedSearchQueryBuilder(criteria);
 

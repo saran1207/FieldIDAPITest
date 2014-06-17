@@ -1,4 +1,14 @@
 ${action.setPageType('event_type_group', 'show')!}
+
+<head>
+    <@n4.includeStyle href="/style/legacy/newCss/component/buttons.css" type="page"/>
+    <style type="text/css">
+        .sectionContent, .crudForm .infoSet {
+            overflow: visible;
+        }
+    </style>
+</head>
+
 <div class="crudForm bigForm pageSection">
 	<h2><@s.text name="label.groupdetails"/> <a href="<@s.url action="eventTypeGroupEdit" uniqueID="${group.id}"/>"><@s.text name="label.littleedit"/></a></h2>
 	<div class="sectionContent">
@@ -37,7 +47,12 @@ ${action.setPageType('event_type_group', 'show')!}
 			</div>
 		</#if>	
 		<div class="infoSet">
-			<label class="line"><a href="<@s.url action="eventTypeAdd" group="${group.id}"/>"><@s.text name="label.addneweventtype"/></a></label>
+            <div class="dropdown-btn">
+                <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=Asset&group=${group.id}">Add Asset Event</a>
+                <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=Place&group=${group.id}">Add Place Event</a>
+                <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=Action&group=${group.id}">Add Action</a>
+                <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=ProcedureAudit&group=${group.id}">Add Procedure Audit</a>
+            </div>
 		</div>
 		 
 	</div>

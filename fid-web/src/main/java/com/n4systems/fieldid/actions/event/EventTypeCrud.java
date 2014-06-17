@@ -37,6 +37,7 @@ public class EventTypeCrud extends AbstractCrud {
     private static final String ACTION_TYPE="Action";
     private static final String ASSET_TYPE="Asset";
     private static final String PLACE_TYPE="Place";
+    private static final String PROCEDURE_AUDIT="ProcedureAudit";
 
 	private List<ListingPair> eventTypeGroups;
     private List<EventTypeGroup> eventGroups;
@@ -72,6 +73,8 @@ public class EventTypeCrud extends AbstractCrud {
             eventType = new ActionEventType();
         } else if (PLACE_TYPE.equals(newEventType)) {
             eventType = new PlaceEventType();
+        } else if (PROCEDURE_AUDIT.equals(newEventType)) {
+            eventType = new ProcedureAuditEventType();
         } else {
             eventType = new ThingEventType();
         }
@@ -244,11 +247,12 @@ public class EventTypeCrud extends AbstractCrud {
                 eventTypes = eventTypeService.getThingEventTypes(groupFilter, nameFilter);
             } else if (PLACE_TYPE.equals(typeFilter)) {
                 eventTypes = eventTypeService.getPlaceEventTypes(groupFilter, nameFilter);
+            } else if (PROCEDURE_AUDIT.equals(typeFilter)) {
+                eventTypes = eventTypeService.getProcedureAuditEventTypes(groupFilter, nameFilter);
             } else {
                 eventTypes = eventTypeService.getAllEventTypes(groupFilter, nameFilter);
             }
 		}
-
 		return eventTypes;
 	}
 
@@ -407,7 +411,7 @@ public class EventTypeCrud extends AbstractCrud {
     }
 
     public List<String> getTypes() {
-        return Arrays.asList(ASSET_TYPE,PLACE_TYPE,ACTION_TYPE);
+        return Arrays.asList(ASSET_TYPE, PLACE_TYPE, ACTION_TYPE, PROCEDURE_AUDIT);
     }
 
     public String getTypeFilter() {
@@ -436,6 +440,10 @@ public class EventTypeCrud extends AbstractCrud {
 
     public String getActionTypeString() {
         return ACTION_TYPE;
+    }
+
+    public String getProcedureAuditTypeString() {
+        return PROCEDURE_AUDIT;
     }
 
 }

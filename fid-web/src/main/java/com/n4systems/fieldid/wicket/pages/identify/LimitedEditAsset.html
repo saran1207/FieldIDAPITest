@@ -1,17 +1,37 @@
+<html xmlns:wicket="http://wicket.apache.org">
+
 <wicket:extend>
+    <form wicket:id="editCustomerInformationForm" class="form-horizontal">
 
-    <form wicket:id="editCustomerInformationForm">
+        <fieldset>
+            <div class="control-group limited-edit-asset-picker">
+                <label class="owner">* <wicket:message key="label.owner"/></label>
+                <div wicket:id="ownerPicker"/>
+            </div>
 
-        <div wicket:id="ownerPicker"/>
+            <div class="control-group limited-edit-asset-picker">
+                <label class="location"><wicket:message key="label.location"/></label>
+                <div wicket:id="locationPicker"/>
+            </div>
 
-        <div wicket:id="locationPicker"/>
+            <div class="control-group">
+                <label><wicket:message key="label.reference_number"/></label>
+                <input wicket:id="referenceNumber" type="text"/>
+            </div>
 
-        <input type="text" wicket:id=""/>
+            <div class="control-group">
+                <label><wicket:message key="label.purchaseorder"/></label>
+                <input wicket:id="purchaseOrder" type="text"/>
+            </div>
+        </fieldset>
 
-        <input type="text" wicket:id=""/>
-
-        <input type="submit" wicket:message="value:label.save"/> <wicket:message key="label.or"/> <a wicket:id="cancelLink"></a>
+        <div id="limited-edit-asset-save-buttons">
+            <a wicket:id="saveLink" class="btn-primary"><wicket:message key="label.save"/></a> 
+            <wicket:message key="label.or"/> 
+            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+        </div>
 
     </form>
-
 </wicket:extend>
+
+</html>

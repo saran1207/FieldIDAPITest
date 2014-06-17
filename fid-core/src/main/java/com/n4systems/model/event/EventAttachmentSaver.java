@@ -8,7 +8,10 @@ import java.io.OutputStream;
 
 import javax.persistence.EntityManager;
 
+import com.amazonaws.AmazonServiceException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.SubEvent;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.IOUtils;
 
 import com.n4systems.exceptions.FileAttachmentException;
@@ -24,12 +27,23 @@ public class EventAttachmentSaver extends Saver<FileAttachment> {
 	private Event event;
 	private SubEvent subEvent;
 	private byte[] data;
-	
-	public EventAttachmentSaver() {}
+    protected S3Service s3Service;
+
+    //added get/set for S3Service so that it can be mocked by EasyMock
+    public void setS3Service(S3Service _s3Service){
+        s3Service = _s3Service;
+    }
+
+    private S3Service getS3Service(){
+        if(s3Service == null){
+            s3Service = ServiceLocator.getS3Service();
+        }
+        return s3Service;
+    }
 	
 	@Override
 	public void save(EntityManager em, FileAttachment attachment) {
-		writeFileToDisk(attachment);
+        saveFileAttachment(attachment);
 		
 		super.save(em, attachment);
 	
@@ -39,33 +53,14 @@ public class EventAttachmentSaver extends Saver<FileAttachment> {
 		em.merge(targetEvent);
 	}
 	
-	private void writeFileToDisk(FileAttachment attachment) {
-		File path = resolveAttachmentPath(attachment);
-		
-		// need to ensure the parent directory exists
-		if (!path.getParentFile().exists()) {
-			path.getParentFile().mkdirs();
-		}
-		
-		OutputStream out = null;
+	private void saveFileAttachment(FileAttachment attachment) {
 		try {
-			out = new BufferedOutputStream(new FileOutputStream(path));
-			out.write(data);
-		} catch(IOException e) {
-			throw new FileAttachmentException("Failed to write attachment data [" + path + "]", e);
-		} finally {
-			IOUtils.closeQuietly(out);
+            attachment.ensureMobileIdIsSet();
+            attachment.setFileName(getS3Service().getFileAttachmentPath(attachment));
+            getS3Service().uploadFileAttachmentData(data, attachment);
+		} catch(AmazonServiceException e) {
+			throw new FileAttachmentException("Failed to write attachment data to S3", e);
 		}
-	}
-	
-	private File resolveAttachmentPath(FileAttachment attachment) {
-		File attachmentFile;
-		if (subEvent == null) {
-			attachmentFile = PathHandler.getEventAttachmentFile(event, attachment);
-		} else {
-			attachmentFile = PathHandler.getEventAttachmentFile(event, subEvent, attachment);
-		}
-		return attachmentFile;
 	}
 
 	@Override

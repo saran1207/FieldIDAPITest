@@ -32,16 +32,18 @@ public class ApiSmartSearchResource extends FieldIdPersistenceService {
 		 */
 		List<ApiSmartSearchSuggestion> identifierSuggestions = loadSuggestions("identifier", searchText);
 		List<ApiSmartSearchSuggestion> refNumberSuggestions = loadSuggestions("customerRefNumber", searchText);
+        List<ApiSmartSearchSuggestion> rfidNumberSuggestions = loadSuggestions("rfidNumber", searchText);
 
 		List<ApiSmartSearchSuggestion> suggestions = mergeSuggestions(identifierSuggestions, refNumberSuggestions);
-		
-		ListResponse<ApiSmartSearchSuggestion> response = new ListResponse<ApiSmartSearchSuggestion>(suggestions, 0, MaxResults, suggestions.size());
+        List<ApiSmartSearchSuggestion> fullSuggestions = mergeSuggestions(suggestions, rfidNumberSuggestions);
+
+		ListResponse<ApiSmartSearchSuggestion> response = new ListResponse<ApiSmartSearchSuggestion>(fullSuggestions, 0, MaxResults, fullSuggestions.size());
 		return response;
 	}
 	
 	private List<ApiSmartSearchSuggestion> loadSuggestions(String field, String searchText) {
 		QueryBuilder<ApiSmartSearchSuggestion> builder = new QueryBuilder<ApiSmartSearchSuggestion>(Asset.class, securityContext.getUserSecurityFilter());
-		builder.setSelectArgument(new NewObjectSelect(ApiSmartSearchSuggestion.class, "mobileGUID", "type.name", "identifier", "customerRefNumber", "length(" + field + ")"));
+		builder.setSelectArgument(new NewObjectSelect(ApiSmartSearchSuggestion.class, "mobileGUID", "type.name", "identifier", "rfidNumber" ,"customerRefNumber", "length(" + field + ")"));
 		
 		builder.addWhere(WhereClauseFactory.create(Comparator.LIKE, field, searchText, SearchOptions, ChainOp.AND));
 		
@@ -80,3 +82,4 @@ public class ApiSmartSearchResource extends FieldIdPersistenceService {
 	}
 
 }
+

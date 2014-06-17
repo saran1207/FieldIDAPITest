@@ -405,8 +405,12 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
         for (String userGroupIdString : userGroupIdStrings) {
             userGroupIds.add(Long.valueOf(userGroupIdString));
         }
-        HashSet<UserGroup> newGroups = new HashSet<UserGroup>(userGroupService.getUserGroups(userGroupIds));
-        user.setGroups(newGroups);
+        if(userGroupIds.isEmpty()) {
+            user.setGroups(null);
+        } else {
+            HashSet<UserGroup> newGroups = new HashSet<UserGroup>(userGroupService.getUserGroups(userGroupIds));
+            user.setGroups(newGroups);
+        }
     }
 
 	public String getTimeZoneID() {
@@ -472,7 +476,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 							               .withUserGroup(userGroupFilter)
 							               .withNameFilter(listFilter)
 										   .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : true);
-			setOrgFilter(loader);
+            applyOrgFilter(loader);
 			page = loader.setPage(getCurrentPage().intValue())
             			 .setPageSize(Constants.PAGE_SIZE)
                          .load();
@@ -489,7 +493,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 							               .withUserGroup(userGroupFilter)
 							               .withNameFilter(listFilter)
 							               .withOrder(sortColumn, sortDirection != null ? sortDirection.equals("asc") : true);
-			setOrgFilter(loader);
+            applyOrgFilter(loader);
 			archivedPage = loader.setPage(getCurrentPage().intValue())
             			 .setPageSize(Constants.PAGE_SIZE)
                          .load();
@@ -497,7 +501,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		return archivedPage;
 	}
 
-	private void setOrgFilter(UserPaginatedLoader loader) {
+	private void applyOrgFilter(UserPaginatedLoader loader) {
 		if(orgFilter != null) {
 			if(getPrimaryOrg().getId().equals(orgFilter)) {
 				loader.filterOnPrimaryOrg();

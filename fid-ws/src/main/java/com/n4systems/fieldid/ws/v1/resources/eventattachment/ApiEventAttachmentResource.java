@@ -11,8 +11,11 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 
+import com.amazonaws.AmazonClientException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +33,11 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 @Path("eventAttachment")
 public class ApiEventAttachmentResource extends FieldIdPersistenceService {
 	private static Logger logger = Logger.getLogger(ApiEventAttachmentResource.class);
-	
-	@PUT
+
+    @Autowired
+    protected S3Service s3Service;
+
+    @PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Transactional
 	public void saveEventAttachment(ApiEventAttachment apiAttachment) throws IOException {
@@ -44,26 +50,27 @@ public class ApiEventAttachmentResource extends FieldIdPersistenceService {
         	// TODO we should refactor ManagerBackedEventSaver.attachUploadedFiles to expose that logic.
         	FileAttachment attachment = convert(apiAttachment, event.getTenant(), event.getCreatedBy());        	
         	File tmpDirectory = PathHandler.getTempRoot();        	
-        	File attachmentDirectory = PathHandler.getAttachmentFile(event);
         	File tmpFile = new File(tmpDirectory, attachment.getFileName());
+
 			try {
-				FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
-			} catch (IOException e) {
+				//FileUtils.copyFileToDirectory(tmpFile, attachmentDirectory);
+                attachment.setTenant(event.getTenant());
+                attachment.setModifiedBy(event.getModifiedBy());
+                attachment.ensureMobileIdIsSet();
+                attachment.setFileName(s3Service.getFileAttachmentPath(attachment));
+                s3Service.uploadFileAttachment(tmpFile, attachment);
+
+                // clean up the temp file
+                tmpFile.delete();
+
+                event.getAttachments().add(attachment);
+                persistenceService.save(event);
+
+			} catch (AmazonClientException e) {
 				logger.error("Failed Saving Event Attachment for Event: " + apiAttachment.getEventSid());
 				e.printStackTrace();
 				throw e;
 			}
-
-			// clean up the temp file
-			tmpFile.delete();
-
-			// now we need to set the correct file name for the
-			// attachment and set the modifiedBy
-			attachment.setFileName(tmpFile.getName());
-			attachment.setTenant(event.getTenant());
-			attachment.setModifiedBy(event.getModifiedBy());        	
-        	event.getAttachments().add(attachment);
-        	persistenceService.save(event);
         	logger.info("Saved Event Attachment for Event: " + apiAttachment.getEventSid());
         } else {
         	logger.error("Failed Saving Event Attachment. Unable to find Event: " + apiAttachment.getEventSid());

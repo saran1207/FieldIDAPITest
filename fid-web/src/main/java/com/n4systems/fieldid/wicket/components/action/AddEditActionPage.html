@@ -1,46 +1,46 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-    <form wicket:id="addActionForm" class="addActionForm actionPage">
+    <form wicket:id="addActionForm" class="addActionForm actionPage" name="addActionForm">
 
-        <div wicket:id="feedbackPanel"></div>
+        <div wicket:id="feedbackPanel" name="feedbackPanel"></div>
 
-        <select wicket:id="type"></select>
+        <select wicket:id="type" name="actionType"></select>
 
-        <select wicket:id="priority"></select>
+        <select wicket:id="priority" name="actionPriority"></select>
 
-        <textarea wicket:id="notes"/>
+        <textarea wicket:id="notes" name="notes"/>
 
-        <div class="dueDescription">
+        <div class="dueDescription" name="dueDescription">
             <wicket:message key="label.set_the_due_date"/>
         </div>
 
-        <div wicket:id="dueDate"></div>
+        <div wicket:id="dueDate" name="dueDate"></div>
 
         <div class="quickLinks">
-            <a wicket:id="todayLink"><wicket:message key="label.today"/></a> |
-            <a wicket:id="tomorrowLink"><wicket:message key="label.tomorrow"/></a> |
-            <a wicket:id="endOfWeekLink"><wicket:message key="label.end_of_the_week"/></a> |
-            <a wicket:id="in30DaysLink"><wicket:message key="label.in_30_days"/></a>
+            <a wicket:id="todayLink" name="todayLink"><wicket:message key="label.today"/></a> |
+            <a wicket:id="tomorrowLink" name="tomorrowLink"><wicket:message key="label.tomorrow"/></a> |
+            <a wicket:id="endOfWeekLink" name="endOfWeekLink"><wicket:message key="label.end_of_the_week"/></a> |
+            <a wicket:id="in30DaysLink" name="in30DaysLink"><wicket:message key="label.in_30_days"/></a>
         </div>
 
-        <div class="assigneeSection">
+        <div class="assigneeSection" name="assigneeSection">
 
-            <div class="assigneeTitle">
+            <div class="assigneeTitle" name="assigneeTitle">
                 <wicket:message key="label.assignee"/>
             </div>
 
             <wicket:message key="message.person_assigned_will_be_notified_by_email"/>
 
-            <div wicket:id="assignee"></div>
+            <div wicket:id="assignee" name="assignee"></div>
 
         </div>
         <div class="actions">
-            <a wicket:id="submitLink" class="mattButton blueButton save"><span wicket:id="saveLabel"></span></a>
+            <a wicket:id="submitLink" class="mattButton blueButton save" name="createButton"><span wicket:id="saveLabel"></span></a>
             <wicket:message key="label.or"/>
-            <a wicket:id="cancelLink" class="cancel"><wicket:message key="label.cancel"/></a>
+            <a wicket:id="cancelLink" class="cancel" name="cancelLink"><wicket:message key="label.cancel"/></a>
             <span wicket:enclosure="deleteLink"><wicket:message key="label.or"/></span>
-            <a wicket:id="deleteLink" class="delete"><wicket:message key="label.delete"/></a>
+            <a wicket:id="deleteLink" class="delete" name="deleteLink"><wicket:message key="label.delete"/></a>
         </div>
     </form>
 

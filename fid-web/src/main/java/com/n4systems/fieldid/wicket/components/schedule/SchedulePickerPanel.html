@@ -25,11 +25,11 @@
                 <div wicket:id="datePicker"></div>
 
                 <span class="dateQuickLinks">
-                    <a wicket:id="quickLinkToday"><wicket:message key="label.today"/></a> |
-                    <a wicket:id="quickLinkTomorrow"><wicket:message key="label.tomorrow"/></a> |
-                    <a wicket:id="quickLinkNextMonth"><wicket:message key="label.next_month"/></a> |
-                    <a wicket:id="quickLinkSixMonths"><wicket:message key="label.in_6_months"/></a> |
-                    <a wicket:id="quickLinkNextYear"><wicket:message key="label.next_year"/></a>
+                    <a wicket:id="quickLinkToday" name="quickLinkToday"><wicket:message key="label.today"/></a> |
+                    <a wicket:id="quickLinkTomorrow" name="quickLinkTomorrow"><wicket:message key="label.tomorrow"/></a> |
+                    <a wicket:id="quickLinkNextMonth" name="quickLinkNextMonth"><wicket:message key="label.next_month"/></a> |
+                    <a wicket:id="quickLinkSixMonths" name="quickLinkSixMonths"><wicket:message key="label.in_6_months"/></a> |
+                    <a wicket:id="quickLinkNextYear" name="quickLinkNextYear"><wicket:message key="label.next_year"/></a>
                 </span>
 
             </div>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="formActions blockSeparated">
-                <a wicket:id="addScheduleButton" class="mattButton blueButton"><span wicket:id="saveScheduleLabel"/></a>
+                <a wicket:id="addScheduleButton" class="mattButton blueButton" name="addScheduleButton"><span wicket:id="saveScheduleLabel"/></a>
                 <div style="display:block;float:left;padding-top:5px;">
                     <wicket:message key="label.or"/>
                     <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>

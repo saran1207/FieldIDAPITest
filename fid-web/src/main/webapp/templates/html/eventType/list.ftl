@@ -23,7 +23,7 @@ ${action.setPageType('event_type', 'list')!}
 		<div class="formAction filterAction">
 			<@s.submit key="hbutton.filter" />
 			<span><@s.text name="label.or" /></span>
-			<a href="javascript:void(0);" onClick="$('nameFilter').value = '';$('groupFilter').selectedIndex = 0;$('listFilterForm').submit();"> <@s.text name="hbutton.clear"/></a>
+			<a href="javascript:void(0);" onClick="$('nameFilter').value = '';$('typeFilter').selectedIndex = 0;$('groupFilter').selectedIndex = 0;$('listFilterForm').submit();"> <@s.text name="hbutton.clear"/></a>
 		</div>
 	</@s.form>
 </div>
@@ -53,6 +53,9 @@ ${action.setPageType('event_type', 'list')!}
                     <#if eventType.actionEventType >
                         <@s.text name="label.action"/>
                     </#if>
+                    <#if eventType.procedureAuditEventType >
+                    <@s.text name="label.procedure_audit"/>
+                </#if>
 				</td>
 				<td><#if eventType.group?exists><a href="<@s.url action="eventTypeGroup" uniqueID="${eventType.group.id}" />">${eventType.group.name!}</a></#if></td>
 				<td><#if eventType.createdBy?exists>${eventType.createdBy.fullName!},&nbsp;</#if>${action.formatDateTime(eventType.created)}</td>

@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Transactional(readOnly = true)
 public abstract class SearchService<T extends SearchCriteria, M extends EntityWithTenant & NetworkEntity, S extends HasGpsLocation> extends FieldIdPersistenceService {
 
 	public @Autowired OrgService orgService;
@@ -41,7 +42,6 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         this.searchClass = searchClass;
     }
 
-    @Transactional(readOnly = true)
 	public List<Long> idSearch(T criteria) {
 		// construct a search QueryBuilder with Long as the select class since we will force simple select to be "id" later
 		QueryBuilder<?> idBuilder = createBaseSearchQueryBuilder(criteria);
@@ -52,7 +52,6 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 		return (List<Long>) persistenceService.findAll(idBuilder.setSimpleSelect("id"));
 	}
 
-    @Transactional(readOnly = true)
 	public Integer countPages(T criteriaModel, Long pageSize) {
 		QueryBuilder<?> countBuilder = createBaseSearchQueryBuilder(criteriaModel);
 
@@ -64,8 +63,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
     public <K> PageHolder<K> performSearch(T criteriaModel, ResultTransformer<K> transformer, Integer pageNumber, Integer pageSize) {
         return performSearch(criteriaModel, transformer, pageNumber, pageSize, false);
     }
-	
-    @Transactional(readOnly = true)
+
     public <K> PageHolder<K> performSearch(T criteriaModel, ResultTransformer<K> transformer, Integer pageNumber, Integer pageSize, boolean selectedOnly) {
         List<M> entities;
         Integer totalResultCount;
@@ -87,31 +85,22 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
     // TODO: This is redundant and needs to be refactored back to the TextOrFilterSearchService only.
     private List<M> findItemsInSelection(T criteriaModel, int pageNumber, int pageSize) {
-
         int beginIndex = pageNumber * pageSize;
         List<Long> selectedIdList = criteriaModel.getSelection().getSelectedIds();
         List<Long> currentPageOfSelectedIds = selectedIdList.subList(beginIndex, Math.min(selectedIdList.size(), beginIndex + pageSize));
 
-
-        List<M> items = new ArrayList<M>(pageSize);
-        for (Long id : currentPageOfSelectedIds) {
-            items.add(persistenceService.find(searchClass, id));
-        }
-
+        List<M> items = persistenceService.findAllById(searchClass, currentPageOfSelectedIds);
         return items;
     }
 
-    @Transactional(readOnly = true)
     public SearchResult<M> performRegularSearch(T criteriaModel) {
         return performFilterSearch(criteriaModel, null, null);
     }
 
-    @Transactional(readOnly = true)
     public SearchResult<M> performRegularSearch(T criteriaModel, Integer pageNumber, Integer pageSize) {
         return performFilterSearch(criteriaModel, pageNumber, pageSize);
     }
 
-    @Transactional(readOnly = true)
     private SearchResult<M> performFilterSearch(T criteriaModel, Integer pageNumber, Integer pageSize) {
 		// create our base query builder (no sort terms yet)
 		QueryBuilder<M> searchBuilder = createBaseSearchQueryBuilder(criteriaModel);
@@ -141,7 +130,6 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         return searchResult;
     }
 
-    @Transactional(readOnly = true)
     public MappedResults<S> performMapSearch(T criteriaModel) {
         throw new UnsupportedOperationException("map searching not supported for this service " + getClass().getSimpleName());
     }

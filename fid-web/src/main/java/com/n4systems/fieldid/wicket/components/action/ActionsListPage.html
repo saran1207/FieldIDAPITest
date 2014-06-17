@@ -1,31 +1,31 @@
 <wicket:extend>
 
-    <div class="actionPage">
+    <div class="actionPage" name="actionPage">
 
         <img wicket:id="blankSlate" class="blank-slate"/>
-        <div wicket:id="actionsList" class="actionItem">
+        <div wicket:id="actionsList" class="actionItem" name="actionList">
 
-            <div class="eventIcon" wicket:id="eventStateIcon">
+            <div class="eventIcon" name="eventIcon" wicket:id="eventStateIcon">
             </div>
 
-            <div class="actionDescription">
+            <div class="actionDescription" name="actionDescription">
 
-                <span wicket:id="actionType"></span>
-                due <span wicket:id="dueDate"></span>
-                assigned to <span wicket:id="assignee"></span>
+                <span wicket:id="actionType" name="actionType"></span>
+                due <span wicket:id="dueDate" name="dueDate"></span>
+                assigned to <span wicket:id="assignee" name="assignee"></span>
 
             </div>
 
-            <div class="expandIcon">
+            <div class="expandIcon" name="expandArrow">
                 <img src="/fieldid/images/action/expand-arrow.png">
             </div>
 
         </div>
 
-        <div class="linkSection issueActionSection" wicket:id="issueActionSection">
+        <div class="linkSection issueActionSection" name="issueActionSection" wicket:id="issueActionSection">
 
-            <a wicket:id="addActionLink" class="mattButton blueButton"><wicket:message key="label.add_an_action"/></a>
-            <a wicket:id="finishedLink" class="mattButton "><wicket:message key="label.finished"/></a>
+            <a wicket:id="addActionLink" class="mattButton blueButton" name="addActionButton"><wicket:message key="label.add_an_action"/></a>
+            <a wicket:id="finishedLink" class="mattButton " name="finishedButton"><wicket:message key="label.finished"/></a>
 
         </div>
 

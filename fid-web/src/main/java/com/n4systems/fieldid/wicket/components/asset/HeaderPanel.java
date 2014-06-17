@@ -10,16 +10,19 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketIframeLink;
 import com.n4systems.fieldid.wicket.components.schedule.ProcedurePicker;
 import com.n4systems.fieldid.wicket.components.schedule.SchedulePicker;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.LocalizeAround;
 import com.n4systems.fieldid.wicket.model.LocalizeModel;
 import com.n4systems.fieldid.wicket.model.eventtype.EventTypesForAssetTypeModel;
 import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.OopsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetEventsPage;
 import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.event.QuickEventPage;
 import com.n4systems.fieldid.wicket.pages.identify.IdentifyOrEditAssetPage;
 import com.n4systems.fieldid.wicket.pages.identify.LimitedEditAsset;
+import com.n4systems.fieldid.wicket.pages.loto.ProcedureResultsPage;
 import com.n4systems.fieldid.wicket.pages.loto.ProceduresListPage;
 import com.n4systems.model.*;
 import com.n4systems.model.location.Location;
@@ -36,6 +39,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -191,6 +195,46 @@ public class HeaderPanel extends Panel {
 
         add(schedulePicker);
         add(procedurePicker);
+
+        add(createWorkflowStateLabel("workflowState", asset));
+    }
+
+
+    private WebMarkupContainer createWorkflowStateLabel(String id, Asset asset) {
+
+        Procedure procedureModel = procedureService.getLockedProcedure(asset);
+
+        WebMarkupContainer labelAndLinkContainer = new WebMarkupContainer("labelAndLinkContainer");
+        Label workflowStateLabel;
+        BookmarkablePageLink resultsPageBookmarkablePageLink;
+
+        //If the asset is not locked out
+        if(procedureModel == null) {
+            workflowStateLabel = new Label(id, new FIDLabelModel(""));
+            resultsPageBookmarkablePageLink = new BookmarkablePageLink("viewLink", OopsPage.class);
+
+            workflowStateLabel.setVisible(false);
+            resultsPageBookmarkablePageLink.setVisible(false);
+        } else {
+            workflowStateLabel = new Label(id, new FIDLabelModel(asset.getDisplayName() + " IS CURRENTLY LOCKED OUT"));
+            resultsPageBookmarkablePageLink = new BookmarkablePageLink<ProcedureResultsPage>("viewLink", ProcedureResultsPage.class, PageParametersBuilder.id(procedureModel.getId()));
+
+            workflowStateLabel.setVisible(procedureModel.getWorkflowState().equals(ProcedureWorkflowState.LOCKED));
+            resultsPageBookmarkablePageLink.setVisible(procedureModel.getWorkflowState().equals(ProcedureWorkflowState.LOCKED));
+
+            labelAndLinkContainer.add(new AttributeAppender("class", "actionButtons "));
+            labelAndLinkContainer.add(new AttributeAppender("class", "workflowState "));
+            labelAndLinkContainer.add(new AttributeAppender("class", Model.of(procedureModel.getWorkflowState().name()), " "));
+
+            resultsPageBookmarkablePageLink.add(new AttributeAppender("class", "mattButton "));
+            resultsPageBookmarkablePageLink.add(new AttributeAppender("class", "blueButton "));
+            resultsPageBookmarkablePageLink.add(new AttributeAppender("class", "workflowButton "));
+        }
+
+        labelAndLinkContainer.add(workflowStateLabel);
+        labelAndLinkContainer.add(resultsPageBookmarkablePageLink);
+
+        return labelAndLinkContainer;
     }
 
     private Procedure createNewProcedure(Asset asset) {
@@ -228,6 +272,7 @@ public class HeaderPanel extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.renderCSSReference("style/legacy/newCss/asset/header.css");
+        response.renderCSSReference("style/legacy/pageStyles/procedureResults.css");
     }
 
     public boolean isInVendorContext() {

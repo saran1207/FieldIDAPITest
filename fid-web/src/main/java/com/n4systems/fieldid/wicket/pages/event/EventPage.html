@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
     <div wicket:id="feedbackPanel"></div>
@@ -6,30 +7,6 @@
 
         <div wicket:id="targetDetailsPanel">
         </div>
-
-        <wicket:enclosure child="gpsContainer">
-          <div>
-                <h2>GPS</h2>
-                <div wicket:id="gpsContainer" class="uploads attributes">
-                    <div class="infoSet">
-                        <label class="label"><wicket:message key="label.latitude"/></label>
-                         <span class="fieldHolder">
-                            <input type="text" wicket:id="latitude"/>
-                        </span>
-                    </div>
-
-                    <div class="infoSet">
-                        <label class="label"><wicket:message key="label.longitude"/></label>
-                       <span class="fieldHolder">
-                            <input type="text" wicket:id="longitude"/>
-                        </span>
-                    </div>
-                </div>
-          </div>
-        </wicket:enclosure>
-
-
-
 
         <div>
 
@@ -111,6 +88,27 @@
             </div>
 
         </div>
+
+        <wicket:enclosure child="gpsContainer">
+            <div>
+                <h2><wicket:message key="label.gps"/></h2>
+                <div wicket:id="gpsContainer" class="uploads attributes">
+                    <div class="infoSet">
+                        <label class="label"><wicket:message key="label.latitude"/></label>
+                         <span class="fieldHolder">
+                            <input type="text" wicket:id="latitude"/>
+                        </span>
+                    </div>
+
+                    <div class="infoSet">
+                        <label class="label"><wicket:message key="label.longitude"/></label>
+                       <span class="fieldHolder">
+                            <input type="text" wicket:id="longitude"/>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </wicket:enclosure>
 
         <div wicket:id="eventFormPanel" class="eventForm">
         </div>
@@ -212,14 +210,9 @@
             </wicket:enclosure>
         </div>
 
-
-
-
     </form>
 
     <div wicket:id="schedulePicker"></div>
 
-
-
-
 </wicket:extend>
+</html>

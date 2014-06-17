@@ -99,8 +99,8 @@ public class EditableImage extends EntityWithTenant implements S3Image {
     }
 
     private void ensureMobileGuidIsSet() {
-        if (mobileGUID == null) {
-            mobileGUID = UUID.randomUUID().toString();
+        if (getMobileGUID() == null || getMobileGUID().length() == 0) {
+            setMobileGUID(UUID.randomUUID().toString());
         }
     }
 

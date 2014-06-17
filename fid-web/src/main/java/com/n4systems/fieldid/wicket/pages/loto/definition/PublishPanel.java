@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.ProcedureType;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -80,6 +81,8 @@ public class PublishPanel extends Panel {
                         error(getString("message.cant_publish_with_active_procedure"));
                     } else if (procedureDefinitionService.hasPublishedProcedureCode(model.getObject())) {
                         error(new FIDLabelModel("message.procedure_code_exists", model.getObject().getProcedureCode()).getObject());
+                    } else if(model.getObject().getProcedureType().equals(ProcedureType.MAIN) && procedureDefinitionService.hasMainProcedureType(model.getObject().getAsset())){
+                        error(getString("message.main_procedure_exists"));
                     } else {
                         if (isWaitingForApproval || procedureDefinitionService.canCurrentUserApprove()) {
                             model.getObject().setApprovedBy(getCurrentUser());

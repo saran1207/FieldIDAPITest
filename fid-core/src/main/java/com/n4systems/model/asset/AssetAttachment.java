@@ -6,6 +6,7 @@ import com.n4systems.model.api.Note;
 import com.n4systems.model.api.Saveable;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.SecurityDefiner;
+import org.eclipse.jdt.internal.core.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -53,12 +54,20 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 		super.onUpdate();
 		ensureMobileIdIsSet();
 	}
-	
-	private void ensureMobileIdIsSet() {
-		if (mobileId == null) {
-			mobileId = UUID.randomUUID().toString();
-		}
-	}
+
+    public void ensureMobileIdIsSet() {
+        if (getMobileId() == null || getMobileId().length() == 0) {
+            setMobileId(UUID.randomUUID().toString());
+        }
+    }
+
+    public String getMobileId() {
+        return mobileId;
+    }
+
+    public void setMobileId(String mobileId) {
+        this.mobileId = mobileId;
+    }
 
 	public Asset getAsset() {
 		return asset;
@@ -90,7 +99,8 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 	}
 
 	public void setFileName(String fileName) {
-		note.setFileName(fileName);
+        Assert.isNotNull(fileName);
+        note.setFileName(fileName);
 	}
 
 	public boolean isImage() {
@@ -106,14 +116,6 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
 	@Override
 	public boolean hasAttachedFile() {
 		return note.hasAttachedFile();
-	}
-
-	public String getMobileId() {
-		return mobileId;
-	}
-
-	public void setMobileId(String mobileId) {
-		this.mobileId = mobileId;
 	}
 
 	public byte[] getData() {

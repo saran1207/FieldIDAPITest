@@ -27,7 +27,7 @@ import java.util.List;
 
 public class CriteriaImageUploadPage extends FieldIDAuthenticatedPage {
 
-    private @SpringBean S3Service s3Service;
+    @SpringBean private S3Service s3Service;
 
     private FIDFeedbackPanel feedbackPanel;
     

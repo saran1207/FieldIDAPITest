@@ -63,6 +63,9 @@ public class ProcedureListPanel extends Panel {
                 item.add(new Label(componentId, createLabelModel(rowModel))).add(new AttributeAppender("class", new Model<String>("procedure-code"), ""));
             }
         });
+
+        columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.procedure_type"),"procedureType", "procedureType.label"));
+
         columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.revision_#"),"revisionNumber", "revisionNumber")
         {
             @Override

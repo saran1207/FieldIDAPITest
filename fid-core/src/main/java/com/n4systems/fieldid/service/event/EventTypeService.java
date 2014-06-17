@@ -40,6 +40,16 @@ public class EventTypeService extends FieldIdPersistenceService {
         return postFetchForStruts(persistenceService.findAll(builder));
     }
 
+    public List<ProcedureAuditEventType> getProcedureAuditEventTypes() {
+        return getProcedureAuditEventTypes(null, null);
+    }
+
+    public List<ProcedureAuditEventType> getProcedureAuditEventTypes(Long eventTypeGroupId, String nameFilter) {
+        QueryBuilder<ProcedureAuditEventType> builder = createEventTypeQuery(ProcedureAuditEventType.class, eventTypeGroupId, nameFilter);
+        return postFetchForStruts(persistenceService.findAll(builder));
+    }
+
+
     public List<EventType> getAllEventTypes(Long eventTypeGroupId) {
         return getAllEventTypes(eventTypeGroupId, null);
     }

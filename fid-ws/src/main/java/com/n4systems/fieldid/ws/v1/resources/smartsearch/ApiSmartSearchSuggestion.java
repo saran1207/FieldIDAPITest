@@ -6,11 +6,13 @@ public class ApiSmartSearchSuggestion {
 	private String identifier;
 	private String customerRefNumber;
 	private Integer fieldLength;
+    private String rfidNumber;
 
-	public ApiSmartSearchSuggestion(String sid, String type, String identifier, String customerRefNumber, Integer fieldLength) {
+    public ApiSmartSearchSuggestion(String sid, String type, String identifier, String rfidNumber,String customerRefNumber, Integer fieldLength) {
 		this.sid = sid;
 		this.type = type;
 		this.identifier = identifier;
+        this.rfidNumber = rfidNumber;
 		this.customerRefNumber = customerRefNumber;
 		this.fieldLength = fieldLength;
 	}
@@ -38,6 +40,10 @@ public class ApiSmartSearchSuggestion {
 	public void setIdentifier(String identifier) {
 		this.identifier = identifier;
 	}
+
+    public String getRfidNumber() { return rfidNumber; }
+
+    public void setRfidNumber(String rfidNumber) { this.rfidNumber = rfidNumber; }
 
 	public String getCustomerRefNumber() {
 		return customerRefNumber;

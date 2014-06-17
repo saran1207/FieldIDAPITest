@@ -77,7 +77,7 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
         } else {
             // There is no approval user or group (but was one earlier since this was marked waiting for approval)
             // This means we can simply publish the procedure def automatically.
-            log.warn("Procedure def waiting for approval but no approval user or group set: " + procedureDefinition.getId() +". Publishing automatically.");
+            log.warn("Procedure def waiting for certification but no certifier user or group set: " + procedureDefinition.getId() +". Publishing automatically.");
             procedureDefinitionService.publishProcedureDefinition(procedureDefinition);
         }
     }
@@ -96,7 +96,7 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
         try {
             mailService.sendMessage(message);
         } catch (Exception e) {
-            log.error("Could not notify procedure approver", e);
+            log.error("Could not notify procedure certifier", e);
         }
     }
 
@@ -107,7 +107,7 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
     }
 
     private TemplateMailMessage createMailMessage(ProcedureDefinition procedureDefinition, UserGroup approvalGroup) {
-        String subject = "Approval Requested: Lockout/Tagout Procedure";
+        String subject = "Certification Requested: Lockout/Tagout Procedure";
         TemplateMailMessage msg = new TemplateMailMessage(subject, NOTIFY_PROCEDURE_AUTH_TEMPLATE);
         msg.setSubject(subject);
 

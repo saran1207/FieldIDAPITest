@@ -2,9 +2,12 @@ package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.ProcedureWorkflowState;
 import com.n4systems.model.procedure.Procedure;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -38,6 +41,8 @@ public class ProceduresListPage extends LotoPage {
             protected void populateItem(ListItem<Procedure> item) {
                 final IModel<Procedure> procedure = item.getModel();
 
+                //TODO due date seems to be stored in local time, we should probably be storing it in UTC and converting the time to the user's locale?
+                item.add(new Label("dateDue", new DayDisplayModel(new PropertyModel<Date>(procedure, "dueDate"), true/*, getCurrentUser().getTimeZone()*/)));
                 if(procedure.getObject().getWorkflowState().equals(ProcedureWorkflowState.OPEN)) {
                     item.add(new Label("dateLocked"));
                     item.add(new Label("dateUnlocked"));
@@ -52,13 +57,28 @@ public class ProceduresListPage extends LotoPage {
                 item.add(new Label("lockedBy", new PropertyModel<String>(procedure, "lockedBy.displayName")));
                 item.add(new Label("unlockedBy", new PropertyModel<String>(procedure, "unlockedBy.displayName")));
                 item.add(new Label("procedureCode", new PropertyModel<String>(procedure, "type.procedureCode")));
+                item.add(new Label("procedureType", new PropertyModel<String>(procedure, "type.procedureType.label")));
                 item.add(new Label("revision", new PropertyModel<Long>(procedure, "type.revisionNumber")));
                 item.add(new Label("state", new PropertyModel<Long>(procedure, "workflowState.label")));
+
                 item.add(new BookmarkablePageLink<ProcedureResultsPage>("viewLink", ProcedureResultsPage.class, PageParametersBuilder.id(procedure.getObject().getId())).
                         setVisible(!procedure.getObject().getWorkflowState().equals(ProcedureWorkflowState.OPEN)));
 
+
+                item.add(new AjaxLink<Void>("deleteLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        procedureService.deleteSchedule(procedure.getObject());
+                        info(new FIDLabelModel("message.loto_deleted").getObject());
+
+                        ProceduresListPage.this.detach();
+                        target.add(ProceduresListPage.this);
+                        target.add(((ProceduresListPage) getPage()).getTopFeedbackPanel());
+                    }
+                }.setVisible(procedure.getObject().getWorkflowState().equals(ProcedureWorkflowState.OPEN)));
             }
         });
+
         listContainer.setVisible(!listView.getList().isEmpty());
         add(listContainer);
 

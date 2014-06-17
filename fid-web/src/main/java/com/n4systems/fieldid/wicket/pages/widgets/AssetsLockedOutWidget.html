@@ -1,0 +1,22 @@
+<wicket:extend>
+
+    <div class="dashboardSection jobsSection">
+
+        <div wicket:id="jobsAssignedEnclosure">
+
+            <div wicket:id="jobsTable" class="simpleTable decorated"></div>
+
+            <div class="jobsAssignedDescription">
+                <wicket:message key="label.you_currently_have"/> <span wicket:id="totalJobs"></span> <wicket:message key="label.assets_locked_out"/>
+            </div>
+
+        </div>
+
+        <div wicket:id="noJobsAssignedMessage">
+            <div class="noJobsAssigned">
+                <wicket:message key="label.you_currently_have_no_assets_locked_out"/>
+            </div>
+        </div>
+    </div>
+
+</wicket:extend>

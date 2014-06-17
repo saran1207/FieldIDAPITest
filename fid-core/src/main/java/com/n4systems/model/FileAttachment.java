@@ -10,20 +10,26 @@ import javax.persistence.Transient;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.user.User;
 import com.n4systems.util.ContentTypeUtil;
+import org.springframework.util.StringUtils;
+
+import java.util.UUID;
 
 @Entity
 @Table(name = "fileattachments")
-public class FileAttachment extends EntityWithTenant implements Attachment {
+public class
+        FileAttachment extends EntityWithTenant implements Attachment {
 	private static final long serialVersionUID = 1L;
 
+    /* arezafar
     @Transient
     private String tempFileName;
+    */
 
 	@Column(length=255)
 	private String fileName;
 	
-	
 	private String comments;
+    private String mobileId;
 	
 	public FileAttachment() {}
 
@@ -32,6 +38,24 @@ public class FileAttachment extends EntityWithTenant implements Attachment {
 		setModifiedBy(modifiedBy);
 		setFileName(fileName);
 	}
+
+    @Override
+    protected void onCreate() {
+        super.onCreate();
+        ensureMobileIdIsSet();
+    }
+
+    @Override
+    protected void onUpdate() {
+        super.onUpdate();
+        ensureMobileIdIsSet();
+    }
+
+    public void ensureMobileIdIsSet() {
+        if (getMobileId() == null || getMobileId().length() < 1) {
+            setMobileId(UUID.randomUUID().toString());
+        }
+    }
 
 	public String getFileName() {
 		return fileName;
@@ -48,7 +72,14 @@ public class FileAttachment extends EntityWithTenant implements Attachment {
 	public void setComments(String comments) {
 		this.comments = comments;
 	}
-	
+
+    public String getMobileId() {
+        return mobileId;
+    }
+
+    public void setMobileId(String mobileId) {
+        this.mobileId = mobileId;
+    }
 	
 	/**
 	 * Tests if the filename has a content type starting with <code>'image/'</code>. The
@@ -65,6 +96,12 @@ public class FileAttachment extends EntityWithTenant implements Attachment {
 		return false;
 	}
 
+    public boolean isRemote() {
+        //the local files only contain the filename, whereas the files on s3 have a full path
+        //files in temp folder will have one /, so we are counting if there is more than 1
+        return StringUtils.countOccurrencesOf(getFileName(), "/") > 1;
+    }
+
 	protected String getContentType(String fileName) {
 		return ContentTypeUtil.getContentType(fileName);
 	}
@@ -73,11 +110,12 @@ public class FileAttachment extends EntityWithTenant implements Attachment {
 		return fileName != null && !fileName.isEmpty();
 	}
 
+    /* arezafar
     public String getTempFileName() {
         return tempFileName;
     }
 
     public void setTempFileName(String tempFileName) {
         this.tempFileName = tempFileName;
-    }
+    }*/
 }
