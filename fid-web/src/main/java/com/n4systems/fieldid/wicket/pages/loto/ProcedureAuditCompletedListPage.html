@@ -12,21 +12,21 @@
             <tr>
                 <th><wicket:message key="label.completed"/></th>
                 <th><wicket:message key="label.due"/></th>
+                <th><wicket:message key="label.audit_performed"/></th>
                 <th><wicket:message key="label.procedure_code"/></th>
                 <th><wicket:message key="label.procedure_type"/></th>
                 <th><wicket:message key="label.performed_by"/></th>
                 <th><wicket:message key="label.result"/></th>
-                <th><wicket:message key="label.event_status"/></th>
                 <th>&nbsp;</th>
             </tr>
             <tr wicket:id="list">
                 <td wicket:id="completedDate"/>
                 <td wicket:id="dateDue"/>
+                <td wicket:id="auditType"/>
                 <td wicket:id="procedureDefinition"/>
                 <td wicket:id="procedureType"/>
                 <td wicket:id="performedBy"/>
                 <td wicket:id="eventResult"/>
-                <td wicket:id="eventStatus"/>
                 <td class="action-buttons">
                     <a wicket:id="viewLink" class="btn-secondary pull-right"><wicket:message key="label.view"/></a>
                 </td>

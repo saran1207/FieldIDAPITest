@@ -240,6 +240,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("template/noColumnsTab", SecondTab.class);
         mountPage("template/allTemplates", AllTemplates.class);
 
+        mountPage("completedProcedureAudits", ProcedureAuditCompletedListPage.class);
 
         mountPage("oops", OopsPage.class);
 
