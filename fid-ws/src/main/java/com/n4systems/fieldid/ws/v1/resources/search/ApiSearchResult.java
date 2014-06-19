@@ -1,12 +1,13 @@
 package com.n4systems.fieldid.ws.v1.resources.search;
 
-import java.util.Date;
-
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModel;
+
+import java.util.Date;
 
 public class ApiSearchResult extends ApiReadWriteModel {
 	private String assetTypeName;
-	private String identifier;
+    private Long assetTypeId;
+    private String identifier;
 	private String referenceNumber;
 	private String assetStatus;
 	private String description;
@@ -26,6 +27,14 @@ public class ApiSearchResult extends ApiReadWriteModel {
 	public void setAssetTypeName(String assetTypeName) {
 		this.assetTypeName = assetTypeName;
 	}
+
+    public Long getAssetTypeId() {
+        return assetTypeId;
+    }
+
+    public void setAssetTypeId(Long assetTypeId) {
+        this.assetTypeId = assetTypeId;
+    }
 
 	public String getIdentifier() {
 		return identifier;
