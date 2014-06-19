@@ -62,7 +62,7 @@
 	<#list eventType.infoFieldNames as infoField >
 		<div class="infoSet">
 			<label class="label">${infoField?html}:</label>
-			<@s.textfield name="encodedInfoOptionMap['${infoField?url}']"/>
+			<@s.textfield name="encodedInfoOptionMap['${action.getBase64EncodedString(infoField)}']"/>
 		</div>
 	</#list>
 		
