@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.assetattachment;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.model.FileAttachment;
 import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -29,6 +31,7 @@ import com.n4systems.model.asset.AssetAttachmentSaver;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import org.springframework.util.Assert;
 
 @Path("assetAttachment")
 public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, AssetAttachment> {
@@ -120,7 +123,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		logger.info("Saved " + multiAssetAttachment.getAttachments().size() + " Asset Attachments");
 	}
 	
-	public List<ApiAssetAttachment> findAllAttachments(String assetId) {
+	/*public List<ApiAssetAttachment> findAllAttachments(String assetId) {
 		List<AssetAttachment> attachments = findAllAssetAttachments(assetId);
 		List<ApiAssetAttachment> apiAttachments = convertAllEntitiesToApiModels(attachments);
 		
@@ -132,14 +135,46 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 		}
 		
 		return apiAttachments;
-	}
+	}*/
+
+    public List<ApiAssetAttachment> convertAllAssetAttachments(List<AssetAttachment> assetAttachments) {
+        List<ApiAssetAttachment> apiAttachments = convertAllEntitiesToApiModels(assetAttachments);
+
+        for (ApiAssetAttachment apiAttachment : apiAttachments) {
+            // If attachment is not an image, remove the data. User has to get that data on fly.
+            /*if(!apiAttachment.isImage()) {
+                apiAttachment.setData(null);
+            }*/
+            Assert.isNull(apiAttachment.getData());
+        }
+
+        return apiAttachments;
+    }
+
+
+    public List<ApiAssetAttachment> convertAllFileAttachments(List<FileAttachment> fileAttachments) {
+        List<ApiAssetAttachment> apiAttachments = new ArrayList<ApiAssetAttachment>();
+        for (FileAttachment fileAttachment: fileAttachments) {
+            apiAttachments.add(convertEntityToApiModel(fileAttachment));
+        }
+
+        for (ApiAssetAttachment apiAttachment : apiAttachments) {
+            // If attachment is not an image, remove the data. User has to get that data on fly.
+            /*if(!apiAttachment.isImage()) {
+                apiAttachment.setData(null);
+            }*/
+            Assert.isNull(apiAttachment.getData());
+        }
+
+        return apiAttachments;
+    }
 	
-	public List<AssetAttachment> findAllAssetAttachments(String assetId) {
+	/*public List<AssetAttachment> findAllAssetAttachments(String assetId) {
 		QueryBuilder<AssetAttachment> builder = createUserSecurityBuilder(AssetAttachment.class);
 		builder.addWhere(WhereClauseFactory.create("asset.mobileGUID", assetId));
 		//return builder.getResultList(getEntityManager());
 		return persistenceService.findAll(builder);
-	}
+	}*/
 	
 	@Override
 	protected ApiAssetAttachment convertEntityToApiModel(AssetAttachment attachment) {
@@ -155,6 +190,20 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
         apiAttachment.setUrl(getAttachmentUrl(attachment));
 		return apiAttachment;
 	}
+
+    protected ApiAssetAttachment convertEntityToApiModel(FileAttachment attachment) {
+        ApiAssetAttachment apiAttachment = new ApiAssetAttachment();
+        apiAttachment.setSid(attachment.getMobileId());
+        apiAttachment.setActive(true);
+        apiAttachment.setModified(attachment.getModified());
+        //apiAttachment.setAssetId(attachment.getAsset().getMobileGUID());
+        apiAttachment.setComments(attachment.getComments());
+        apiAttachment.setFileName(attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1));
+        apiAttachment.setFilePath(attachment.getFileName());
+        apiAttachment.setImage(attachment.isImage());
+        apiAttachment.setUrl(getAttachmentUrl(attachment));
+        return apiAttachment;
+    }
 
 	public AssetAttachment convertApiModelToEntity(ApiAssetAttachment apiAttachment, Asset asset) {
         AssetAttachment attachment = findExistingAttachment(apiAttachment.getSid());
@@ -199,6 +248,7 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
 	private byte[] loadAttachmentData(AssetAttachment attachment) {
         S3Service s3Service = ServiceLocator.getS3Service();
 		byte[] data = null;
+        String fileName = attachment.getFileName().substring(attachment.getFileName().lastIndexOf('/') + 1);
         if(s3Service.assetAttachmentExists(attachment)){
             try {
                 data = s3Service.downloadAssetAttachmentBytes(attachment);
@@ -207,15 +257,26 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
                 logger.warn("Unable to load remote asset attachment at: " + assetAttachmentUrl, e);
             }
         }
+        //check to see if a file attachment exists
+        else if(s3Service.fileAttachmentExists(attachment.getMobileId(), fileName)){
+            try {
+                data = s3Service.downloadFileAttachmentBytes(attachment.getMobileId(), fileName);
+            } catch(Exception e) {
+                String assetAttachmentUrl = attachment.getFileName();
+                logger.warn("Unable to load remote file attachment at: " + assetAttachmentUrl, e);
+            }
+        }
 
-		File attachmentFile = PathHandler.getAssetAttachmentFile(attachment);
-		if (data == null && attachmentFile.exists()) {
-			try {
-				data = FileUtils.readFileToByteArray(attachmentFile);
-			} catch(Exception e) {
-				logger.warn("Unable to load local asset attachment at: " + attachmentFile, e);
-			}
-		}
+        if(data == null && attachment.getId() != null){
+            File attachmentFile = PathHandler.getAssetAttachmentFile(attachment);
+            if (attachmentFile.exists()) {
+                try {
+                    data = FileUtils.readFileToByteArray(attachmentFile);
+                } catch(Exception e) {
+                    logger.warn("Unable to load local asset attachment at: " + attachmentFile, e);
+                }
+            }
+        }
 		return data;
 	}
 
@@ -226,6 +287,14 @@ public class ApiAssetAttachmentResource extends ApiResource<ApiAssetAttachment, 
             url = s3Service.getAssetAttachmentUrl(attachment);
         }
         return url;
+    }
 
+    private URL getAttachmentUrl(FileAttachment attachment){
+        S3Service s3Service = ServiceLocator.getS3Service();
+        URL url = null;
+        if(s3Service.fileAttachmentExists(attachment)){
+            url = s3Service.getFileAttachmentUrl(attachment);
+        }
+        return url;
     }
 }
