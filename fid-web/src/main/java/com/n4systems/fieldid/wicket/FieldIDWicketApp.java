@@ -143,15 +143,21 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("draftListAllPage", DraftListAllPage.class);
         mountPage("previouslyPublishedListAllPage", PreviouslyPublishedListAllPage.class);
 
+        mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
+
         mountPage("quickEvent", QuickEventPage.class);
         mountPage("startEvent", StartRegularOrMasterEventPage.class);
         mountPage("performEvent", PerformEventPage.class);
         mountPage("editEvent", EditEventPage.class);
         mountPage("thingEventSummary", ThingEventSummaryPage.class);
         mountPage("placeEventSummary", PlaceEventSummaryPage.class);
+        mountPage("procedureAuditEventSummary", ProcedureAuditEventSummaryPage.class);
 
         mountPage("performPlaceEvent", PerformPlaceEventPage.class);
         mountPage("editPlaceEvent", EditPlaceEventPage.class);
+
+        mountPage("performProcedureAuditEvent", PerformProcedureAuditEventPage.class);
+        mountPage("editProcedureAuditEvent", EditProcedureAuditEventPage.class);
 
         mountPage("closeEvent", CloseEventPage.class);
 
@@ -234,6 +240,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("template/noColumnsTab", SecondTab.class);
         mountPage("template/allTemplates", AllTemplates.class);
 
+        mountPage("completedProcedureAudits", ProcedureAuditCompletedListPage.class);
 
         mountPage("oops", OopsPage.class);
 

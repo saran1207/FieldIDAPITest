@@ -35,7 +35,6 @@ import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.user.User;
 import org.apache.commons.lang.StringUtils;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -45,7 +44,9 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -83,7 +84,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     protected WebMarkupContainer jobsContainer;
     protected WebMarkupContainer eventBookContainer;
 
-    private WebMarkupContainer schedulesContainer;
+    protected WebMarkupContainer schedulesContainer;
 
     private Boolean assetOwnerUpdate;
 
@@ -219,10 +220,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             // checkbox
             ownerSection.add(new CheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(EventPage.this, "assetOwnerUpdate")).add(new UpdateComponentOnChange()));
 
-
             schedulesContainer = new WebMarkupContainer("schedulesContainer");
             schedulesContainer.setOutputMarkupPlaceholderTag(true);
-            schedulesContainer.setVisible(event.getObject().isNew() || !event.getObject().isCompleted());
+            schedulesContainer.setVisible(isScheduleVisable());
             schedulesContainer.add(new ListView<Event>("schedules", new PropertyModel<List<Event>>(EventPage.this, "schedules")) {
                 @Override
                 protected void populateItem(final ListItem<Event> item) {
@@ -250,7 +250,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             });
 
             add(new Label("eventTypeName", new PropertyModel<String>(event, "type.name")));
-            
+
             WebMarkupContainer proofTestContainer = new WebMarkupContainer("proofTestContainer");
 
             if (event.getObject().getType().isThingEventType()) {
@@ -375,8 +375,11 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                 FieldIDSession.get().storeInfoMessageForStruts(getString("message.eventsaved"));
                 if(savedEvent.getType().isPlaceEventType())
                     setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                else
+                else if (savedEvent.getType().isProcedureAuditEventType()) {
+                    setResponsePage(ProcedureAuditEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+                } else {
                     setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+                }
             }
         }
     }
@@ -399,7 +402,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     protected abstract Component createCancelLink(String id);
     protected abstract boolean targetAlreadyArchived(T event);
 
-    private Link createDeleteLink(String linkId) {
+    protected Link createDeleteLink(String linkId) {
         return new Link(linkId) {
             {
                 add(new JavaScriptAlertConfirmBehavior(new FIDLabelModel("label.confirm_event_delete")));
@@ -480,4 +483,9 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     public void setEventResult(EventResult eventResult) {
         this.eventResult = eventResult;
     }
+
+    protected boolean isScheduleVisable() {
+        return (event.getObject().isNew() || !event.getObject().isCompleted());
+    }
+
 }

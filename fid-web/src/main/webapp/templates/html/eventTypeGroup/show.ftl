@@ -51,6 +51,7 @@ ${action.setPageType('event_type_group', 'show')!}
                 <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=Asset&group=${group.id}">Add Asset Event</a>
                 <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=Place&group=${group.id}">Add Place Event</a>
                 <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=Action&group=${group.id}">Add Action</a>
+                <a class="btn btn-secondary btn-sml" href="/fieldid/eventTypeAdd.action?newEventType=ProcedureAudit&group=${group.id}">Add Procedure Audit</a>
             </div>
 		</div>
 		 

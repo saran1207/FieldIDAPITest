@@ -136,6 +136,7 @@ public class ApiSearchResource extends ApiResource<ApiSearchResult, Asset> {
 		ApiSearchResult apiResult = new ApiSearchResult();
 		apiResult.setSid(asset.getMobileGUID());
 		apiResult.setAssetTypeName(asset.getType().getName());
+        apiResult.setAssetTypeId(asset.getType().getId());
 		apiResult.setIdentifier(asset.getIdentifier());
 		apiResult.setReferenceNumber(asset.getCustomerRefNumber());
 		apiResult.setAssetStatus(asset.getAssetStatus() != null ? asset.getAssetStatus().getName() : null);

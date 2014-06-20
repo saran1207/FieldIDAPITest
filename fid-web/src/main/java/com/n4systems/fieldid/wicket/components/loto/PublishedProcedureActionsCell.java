@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.loto.DraftListAllPage;
 import com.n4systems.fieldid.wicket.pages.loto.PreviouslyPublishedListAllPage;
+import com.n4systems.fieldid.wicket.pages.loto.RecurringLotoSchedulesPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
@@ -173,6 +174,18 @@ public class PublishedProcedureActionsCell extends Panel {
         deleteLink.setVisible(isAuthor(procedureDefinition) && procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));
 
         optionsContainer.add(deleteLink);
+
+        Link recurringSchedulesLink = new Link("recurringSchedulesLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(RecurringLotoSchedulesPage.class, PageParametersBuilder.uniqueId(procedureDefinition.getAsset().getId()));
+            }
+        };
+        recurringSchedulesLink.setVisible(procedureDefinitionService.hasPublishedProcedureDefinition(procedureDefinition.getAsset())
+                && procedureDefinition.getPublishedState().equals(PublishedState.PUBLISHED));
+
+        optionsContainer.add(recurringSchedulesLink);
+
 
         add(optionsContainer);
 

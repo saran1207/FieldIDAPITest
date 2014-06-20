@@ -69,7 +69,7 @@ public class RecurringAuditFormPanel extends Panel {
         private RecurrenceTimeOfDay time = RecurrenceTimeOfDay.NINE_AM;
         private List<RecurrenceTimeOfDay> times = Lists.newArrayList(RecurrenceTimeOfDay.NINE_AM);
 
-        private RecurrenceType type = RecurrenceType.MONTHLY_1ST;
+        private RecurrenceType type = RecurrenceType.ANNUALLY;
         private Date dateTime = dateService.nowInUsersTimeZone().toDate();
         private TimeContainer timePicker;
         private DateTimePicker dateTimepicker;
