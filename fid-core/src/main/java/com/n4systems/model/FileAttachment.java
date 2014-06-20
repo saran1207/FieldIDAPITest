@@ -27,7 +27,7 @@ public class
 
 	@Column(length=255)
 	private String fileName;
-	
+
 	private String comments;
     private String mobileId;
 	
@@ -64,6 +64,10 @@ public class
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
+
+    public String getDisplayFileName() {
+        return getFileName().substring(getFileName().lastIndexOf('/') + 1);
+    }
 
 	public String getComments() {
 		return comments;
