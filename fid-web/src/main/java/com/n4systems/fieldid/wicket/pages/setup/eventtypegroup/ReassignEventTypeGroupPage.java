@@ -57,8 +57,7 @@ public class ReassignEventTypeGroupPage extends FieldIDFrontEndPage{
             }
         };
 
-        List<EventTypeGroup> groups = eventTypeGroupService.getEventTypeGroupsExcludingActions();
-        groups.addAll(eventTypeGroupService.getEventTypeGroupsActionsOnly());
+        List<EventTypeGroup> groups = eventTypeGroupService.getAllEventTypeGroups();
         groups.remove(group);
         EventTypeGroupDropDownChoice groupsDropDownChoice;
         form.add(groupsDropDownChoice = new EventTypeGroupDropDownChoice("groups", newEventTypeGroupModel, groups));

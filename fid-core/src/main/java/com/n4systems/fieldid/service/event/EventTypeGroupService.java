@@ -15,20 +15,6 @@ public class EventTypeGroupService extends FieldIdPersistenceService {
 
 	@Autowired private EventTypeService eventTypeService;
 
-    public List<EventTypeGroup> getEventTypeGroupsExcludingActions() {
-        QueryBuilder<EventTypeGroup> query = createUserSecurityBuilder(EventTypeGroup.class);
-        query.addSimpleWhere("action", false);
-        query.addOrder("name");
-        return persistenceService.findAll(query);
-    }
-
-    public List<EventTypeGroup> getEventTypeGroupsActionsOnly() {
-        QueryBuilder<EventTypeGroup> query = createUserSecurityBuilder(EventTypeGroup.class);
-        query.addSimpleWhere("action", true);
-        query.addOrder("name");
-        return persistenceService.findAll(query);
-    }
-
     public List<EventTypeGroup> getAllEventTypeGroups() {
         QueryBuilder<EventTypeGroup> query = createUserSecurityBuilder(EventTypeGroup.class);
         query.addOrder("name");
