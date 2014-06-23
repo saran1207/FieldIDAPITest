@@ -15,10 +15,7 @@ import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventResource;
-import com.n4systems.model.Asset;
-import com.n4systems.model.AssetStatus;
-import com.n4systems.model.AssetType;
-import com.n4systems.model.GpsLocation;
+import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.asset.SmartSearchWhereClause;
 import com.n4systems.model.location.Location;
@@ -32,6 +29,7 @@ import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.internal.core.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -216,7 +214,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
             for (ApiAssetAttachment apiAttachment: apiAsset.getAttachments()) {
                 if (apiAttachment.isImage()) {
                     apiAttachmentResource.loadAttachmentData(apiAttachment, asset);
-                    Assert.isNotNull(apiAttachment.getData());
+                    //Assert.isNotNull(apiAttachment.getData());
                 }
             }
         }
@@ -275,7 +273,12 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		
 		apiAsset.setAttributeValues(findAllAttributeValues(asset));		
 		apiAsset.setEventHistory(apiEventHistoryResource.findAllEventHistory(asset.getMobileGUID()));
-		apiAsset.setAttachments(apiAttachmentResource.findAllAttachments(asset.getMobileGUID()));
+
+        List<AssetAttachment> assetAttachments = assetService.findAssetAttachments(asset);
+        List<FileAttachment> typeAttachments = asset.getType().getAttachments();
+        List<ApiAssetAttachment> apiAssetAttachments = apiAttachmentResource.convertAllAssetAttachments(assetAttachments);
+        List<ApiAssetAttachment> apiFileAttachments = apiAttachmentResource.convertAllFileAttachments(typeAttachments);
+        apiAsset.setAttachments(ListUtils.union(apiAssetAttachments, apiFileAttachments));
 		
 		return apiAsset;
 	}

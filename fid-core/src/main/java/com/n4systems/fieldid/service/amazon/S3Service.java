@@ -253,6 +253,18 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
+    public boolean fileAttachmentExists(FileAttachment fileAttachment){
+        String fileName = fileAttachment.getFileName().substring(fileAttachment.getFileName().lastIndexOf('/') + 1);
+        return fileAttachmentExists(fileAttachment.getMobileId(), fileName);
+    }
+
+    public boolean fileAttachmentExists(String fileAttachmentUuid, String filename){
+        Assert.hasLength(fileAttachmentUuid);
+        Assert.hasLength(filename);
+        boolean exists = resourceExists(null, FILE_ATTACHMENT_PATH, fileAttachmentUuid, filename);
+        return exists;
+    }
+
     public byte[] downloadProcedureDefinitionMediumImage(ProcedureDefinitionImage image) throws IOException {
         byte[] imageData = downloadResource(null, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
                 image.getProcedureDefinition().getAsset().getId(),

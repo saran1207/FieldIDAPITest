@@ -41,11 +41,11 @@ public class ProcedureAuditCompletedListPage extends LotoPage {
                 final IModel<ProcedureAuditEvent> procedureAuditEvent = item.getModel();
                 item.add(new Label("completedDate", new DayDisplayModel(new PropertyModel<Date>(procedureAuditEvent, "completedDate"), true, getCurrentUser().getTimeZone())));
                 item.add(new Label("dateDue", new DayDisplayModel(new PropertyModel<Date>(procedureAuditEvent, "dueDate"), true, getCurrentUser().getTimeZone())));
+                item.add(new Label("auditType", new PropertyModel<String>(procedureAuditEvent, "recurringEvent.auditEventType.displayName")));
                 item.add(new Label("procedureDefinition", new PropertyModel<String>(procedureAuditEvent, "procedureDefinition.procedureCode")));
                 item.add(new Label("procedureType", new PropertyModel<String>(procedureAuditEvent, "procedureDefinition.procedureType.label")));
                 item.add(new Label("performedBy", new PropertyModel<String>(procedureAuditEvent, "performedBy.displayName")));
                 item.add(new Label("eventResult", new PropertyModel<String>(procedureAuditEvent, "eventResult")));
-                item.add(new Label("eventStatus", new PropertyModel<Long>(procedureAuditEvent, "eventStatus.displayName")));
                 item.add(new BookmarkablePageLink<ProcedureAuditEventSummaryPage>("viewLink", ProcedureAuditEventSummaryPage.class, PageParametersBuilder.id(procedureAuditEvent.getObject().getId())));
 
             }

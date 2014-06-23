@@ -2,7 +2,7 @@
 	<div class="noteInformation">
 		<p class="noteText">${ action.replaceCR( ( note.comments?html) ! "" )}</p>
 		<#if note.fileName?exists > 
-			<p class="noteText"><a href="<@s.url action="downloadJobNoteFile" namespace="/file" projectId="${project.id}" attachmentID="${note.id}"/>">${ action.replaceCR( note.fileName?html) }</a></p>
+			<p class="noteText"><a href="<@s.url action="downloadJobNoteFile" namespace="/file" projectId="${project.id}" attachmentID="${note.id}"/>">${ action.replaceCR( note.displayFileName?html) }</a></p>
 		</#if>
 		<p class="noteCreation"><@s.text name="label.created"/> ${action.formatDateTime(note.created)} <@s.text name="label.by"/> ${ note.modifiedBy.userLabel?html }</p>
 	</div>
