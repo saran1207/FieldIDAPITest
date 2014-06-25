@@ -62,6 +62,7 @@ public class DateRangePicker extends Panel {
 		dropDownChoice.setNullValid(false);
 		dropDownChoice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
 			@Override protected void onUpdate(AjaxRequestTarget target) {
+                onRangeTypeChanged(target);
 				target.add(fromDatePicker, toDatePicker);
 			}
 		});
@@ -69,13 +70,45 @@ public class DateRangePicker extends Panel {
 		add(dropDownChoice, fromDatePicker, toDatePicker);
 	}
 
+    protected void onRangeTypeChanged(AjaxRequestTarget target) {}
+
+    protected RangeType getSelectedRangeType() {
+        return ((DateRange)getDefaultModelObject()).getRangeType();
+    }
+
+    protected void clearInput() {
+        fromDatePicker.reset();
+        toDatePicker.reset();
+    }
+
+    public DateRangePicker withFormUpdatingBehavior() {
+        fromDatePicker.getDateTextField().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                onFromDateChanged(target);
+            }
+        });
+
+        toDatePicker.getDateTextField().add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                onToDateChanged(target);
+            }
+        });
+        return this;
+    }
+
+    protected void onFromDateChanged(AjaxRequestTarget target) {}
+
+    protected void onToDateChanged(AjaxRequestTarget target) {}
+
+
 	protected List<RangeType> getDateRanges() {
 		return Arrays.asList(rangeTypes.toArray(new RangeType[]{}));
 	}
 
 	@Override
 	public void renderHead(IHeaderResponse response) {
-        //response.renderCSSReference("style/legacy/newCss/component/dateRange.css");
         super.renderHead(response);
 	}
 

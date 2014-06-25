@@ -5,11 +5,15 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.ProcedureAuditEvent;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.PublishedState;
+import com.n4systems.model.utils.DateRange;
+import com.n4systems.services.date.DateService;
+import com.n4systems.util.chart.RangeType;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -20,6 +24,9 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
 
     @SpringBean
     private ProcedureAuditEventService procedureService;
+
+    @SpringBean
+    private DateService dateService;
 
     private PublishedState state;
 
@@ -33,6 +40,9 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
     private boolean isProcedureCode;
     private boolean isAsset;
 
+    private DateRange dateRange;
+
+
     public ProcedureAuditDataProvider(String order, SortOrder sortOrder, PublishedState state, String procedureCode, Asset asset, boolean isProcedureCode, boolean isAsset) {
         setSort(order, sortOrder);
         this.state = state;
@@ -41,6 +51,7 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
         this.asset = asset;
         this.isProcedureCode = isProcedureCode;
         this.isAsset = isAsset;
+        this.dateRange = new DateRange(RangeType.CUSTOM);
     }
 
 
@@ -49,12 +60,20 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
         List<? extends ProcedureAuditEvent> procedureDefinitionList = null;
 
         if(isProcedureCode || isAsset) {
-            procedureDefinitionList = procedureService.getSelectedAuditProcedures(procedureCode, asset, isAsset, getSort().getProperty(), getSort().isAscending(), first, count);
+            procedureDefinitionList = procedureService.getSelectedAuditProcedures(procedureCode, asset, isAsset, getFromDate(), getToDate(), getSort().getProperty(), getSort().isAscending(), first, count);
         } else {
-           procedureDefinitionList = procedureService.getAllAuditProcedures(searchTerm, getSort().getProperty(), getSort().isAscending(), first, count);
+           procedureDefinitionList = procedureService.getAllAuditProcedures(searchTerm, getFromDate(), getToDate(), getSort().getProperty(), getSort().isAscending(), first, count);
         }
 
         return procedureDefinitionList.iterator();
+    }
+
+    private Date getFromDate() {
+        return dateRange.getFrom() != null ? dateService.calculateFromDate(dateRange): null;
+    }
+
+    private Date getToDate() {
+        return dateRange.getTo() != null ? dateService.calculateInclusiveToDate(dateRange) : null;
     }
 
     @Override
@@ -106,4 +125,7 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
         isAsset = false;
     }
 
+    public void setDueDateRange(DateRange dateRange) {
+        this.dateRange = dateRange;
+    }
 }
