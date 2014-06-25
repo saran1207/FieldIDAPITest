@@ -34,7 +34,8 @@ public class DayDisplayModel extends LoadableDetachableModel<String> {
     protected String load() {
         if (dayModel.getObject() != null) {
             Date date = new Date(dayModel.getObject().getTime());
-            boolean convertTimeZone = timeZone != null;
+            //If the timezone isn't null AND the date doesn't contain a time of midnight...
+            boolean convertTimeZone = timeZone != null && !DateUtil.isMidnight(date);
             boolean showTime = !DateUtil.isMidnight(date) && includeTime;
             return new FieldIdDateFormatter(date, FieldIDSession.get().getSessionUser(), convertTimeZone, showTime).format();
         } else
