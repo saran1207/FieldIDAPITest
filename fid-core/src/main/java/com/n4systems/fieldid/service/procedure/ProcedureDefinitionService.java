@@ -691,6 +691,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setPublishedState(PublishedState.DRAFT);
         to.setFamilyId(source.getFamilyId());
         to.setProcedureType(source.getProcedureType());
+        to.setApplicationProcess(source.getApplicationProcess());
+        to.setRemovalProcess(source.getRemovalProcess());
 
         Map<String, ProcedureDefinitionImage> clonedImages = cloneImages(source,to);
         to.setImages(Lists.newArrayList(clonedImages.values()));
@@ -715,6 +717,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setProcedureCode(source.getProcedureCode()+" Copy");
         to.setElectronicIdentifier(source.getElectronicIdentifier());
         to.setWarnings(source.getWarnings());
+        to.setApplicationProcess(source.getApplicationProcess());
+        to.setRemovalProcess(source.getRemovalProcess());
         to.setDevelopedBy(getCurrentUser());
         if(source.getAsset().getId() == asset.getId()) {
             to.setEquipmentNumber(source.getEquipmentNumber());

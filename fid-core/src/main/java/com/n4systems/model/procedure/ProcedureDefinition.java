@@ -106,6 +106,13 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     @Enumerated(EnumType.STRING)
     private ProcedureType procedureType;
 
+    //These will soon be additional fields:
+    @Column(name="application_process")
+    private String applicationProcess;
+
+    @Column(name="removal_process")
+    private String removalProcess;
+
     public String getProcedureCode() {
         return procedureCode;
     }
@@ -398,6 +405,22 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
         } else if (label.equals(ProcedureType.MAIN.getLabel())){
             procedureType = ProcedureType.MAIN;
         }
+    }
+
+    public String getApplicationProcess() {
+        return applicationProcess;
+    }
+
+    public void setApplicationProcess(String applicationProcess) {
+        this.applicationProcess = applicationProcess;
+    }
+
+    public String getRemovalProcess() {
+        return removalProcess;
+    }
+
+    public void setRemovalProcess(String removalProcess) {
+        this.removalProcess = removalProcess;
     }
 
     //We are forced to implement this due to the HasOwner interface on the event creation service and related classes
