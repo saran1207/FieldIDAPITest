@@ -13,6 +13,7 @@ import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import org.apache.log4j.Logger;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,16 +55,17 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         return persistenceService.count(procedureCountQuery);
     }
 
-    public List<ProcedureAuditEvent> getSelectedAuditProcedures(String procedureCode, Asset asset, boolean isAsset, String order, boolean ascending, int first, int count) {
+    public List<ProcedureAuditEvent> getSelectedAuditProcedures(String procedureCode, Asset asset, boolean isAsset, Date fromDate, Date toDate, String order, boolean ascending, int first, int count) {
 
-        QueryBuilder<ProcedureAuditEvent> procedureCountQuery = createUserSecurityBuilder(ProcedureAuditEvent.class);
+        QueryBuilder<ProcedureAuditEvent> query = createUserSecurityBuilder(ProcedureAuditEvent.class);
 
-        procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
-        procedureCountQuery.addSimpleWhere("procedureDefinition.asset", asset);
-        procedureCountQuery.addSimpleWhere("workflowState", WorkflowState.OPEN);
+        query.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
+        query.addSimpleWhere("procedureDefinition.asset", asset);
+        query.addSimpleWhere("workflowState", WorkflowState.OPEN);
+        query.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
 
         if(!isAsset) {
-            procedureCountQuery.addSimpleWhere("procedureDefinition.procedureCode", procedureCode.trim());
+            query.addSimpleWhere("procedureDefinition.procedureCode", procedureCode.trim());
         }
 
         // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
@@ -80,33 +82,34 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
                     SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
                     sortTerm.setAlwaysDropAlias(true);
                     sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
-                    procedureCountQuery.getOrderArguments().add(sortTerm.toSortField());
+                    query.getOrderArguments().add(sortTerm.toSortField());
                     needsSortJoin = true;
                 } else {
-                    procedureCountQuery.addOrder(subOrder, ascending);
+                    query.addOrder(subOrder, ascending);
                 }
             }
         }
 
         if (needsSortJoin) {
-            procedureCountQuery.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "procedureDefinition.developedBy", "sortJoin", true));
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "procedureDefinition.developedBy", "sortJoin", true));
         }
 
-        return persistenceService.findAll(procedureCountQuery);
+        return persistenceService.findAll(query);
     }
 
-    public List<ProcedureAuditEvent> getAllAuditProcedures(String sTerm, String order, boolean ascending, int first, int count) {
+    public List<ProcedureAuditEvent> getAllAuditProcedures(String sTerm, Date fromDate, Date toDate, String order, boolean ascending, int first, int count) {
 
-        QueryBuilder<ProcedureAuditEvent> procedureCountQuery = createUserSecurityBuilder(ProcedureAuditEvent.class);
+        QueryBuilder<ProcedureAuditEvent> query = createUserSecurityBuilder(ProcedureAuditEvent.class);
 
-        procedureCountQuery.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
-        procedureCountQuery.addSimpleWhere("workflowState", WorkflowState.OPEN);
+        query.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
+        query.addSimpleWhere("workflowState", WorkflowState.OPEN);
+        query.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
 
         if(!sTerm.trim().equals("")) {
             WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "procedureCode", "procedureDefinition.procedureCode", sTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
             group.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "equipmentNumber", "procedureDefinition.equipmentNumber", sTerm.trim(), WhereParameter.WILDCARD_BOTH, WhereClause.ChainOp.OR));
-            procedureCountQuery.addWhere(group);
+            query.addWhere(group);
         }
 
         // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
@@ -123,19 +126,19 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
                     SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
                     sortTerm.setAlwaysDropAlias(true);
                     sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
-                    procedureCountQuery.getOrderArguments().add(sortTerm.toSortField());
+                    query.getOrderArguments().add(sortTerm.toSortField());
                     needsSortJoin = true;
                 } else {
-                    procedureCountQuery.addOrder(subOrder, ascending);
+                    query.addOrder(subOrder, ascending);
                 }
             }
         }
 
         if (needsSortJoin) {
-            procedureCountQuery.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "procedureDefinition.developedBy", "sortJoin", true));
+            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "procedureDefinition.developedBy", "sortJoin", true));
         }
 
-        return persistenceService.findAll(procedureCountQuery);
+        return persistenceService.findAll(query);
     }
 
     public List<ProcedureAuditEvent> getAllCompletedAuditsForAsset(Asset asset) {
@@ -154,6 +157,23 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         event.retireEntity();
         event = persistenceService.update(event);
         return event;
+    }
+
+    private WhereClause<?> whereFromTo(Date fromDate, Date toDate, String property) {
+
+        if (fromDate!=null && toDate!=null) {
+            WhereParameterGroup filterGroup = new WhereParameterGroup("filtergroup");
+            filterGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.GE, "fromDate", property, fromDate, null, WhereClause.ChainOp.AND));
+            filterGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LT, "toDate", property, toDate, null, WhereClause.ChainOp.AND));
+            return filterGroup;
+        } else if (fromDate!=null) {
+            return new WhereParameter<Date>(WhereParameter.Comparator.GE, property, fromDate);
+        } else if (toDate!=null) {
+            return new WhereParameter<Date>(WhereParameter.Comparator.LT, property, toDate);
+        }
+        // CAVEAT : we don't want results to include values with null dates. they are ignored.  (this makes sense for EventSchedules
+        //   because null dates are used when representing AdHoc events).
+        return new WhereParameter<Date>(WhereParameter.Comparator.NOTNULL, property);
     }
 
 }

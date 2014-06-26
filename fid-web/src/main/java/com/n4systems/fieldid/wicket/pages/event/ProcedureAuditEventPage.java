@@ -38,7 +38,7 @@ public abstract class ProcedureAuditEventPage extends EventPage<ProcedureAuditEv
     }
 
     @Override
-    protected boolean isScheduleVisable() {
+    protected boolean isScheduleVisible() {
         return false;
     }
 

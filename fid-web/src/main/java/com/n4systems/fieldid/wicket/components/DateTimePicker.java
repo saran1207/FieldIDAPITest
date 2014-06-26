@@ -216,6 +216,12 @@ public class DateTimePicker extends Panel {
         dateTextField.clearInput();
     }
 
+    public void reset() {
+        dateTextField.clearInput();
+        dateTextField.setModelValue(null);
+    }
+
+
     public Component addToDateField(Behavior... behaviors) {
         return dateTextField.add(behaviors);
     }
