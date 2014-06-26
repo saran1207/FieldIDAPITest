@@ -54,6 +54,7 @@ public class DetailsPanel extends Panel {
 
             add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())));
 
+
             //Fields for Application Process and Removal Process of lockouts.
             add(new LabelledTextArea<String>("applicationProcess", "label.lockout_application_process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())));
 

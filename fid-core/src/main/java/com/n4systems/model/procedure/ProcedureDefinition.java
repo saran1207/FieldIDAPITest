@@ -44,6 +44,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     @Column(name="complete_points_in_order")
     private boolean completeIsolationPointInOrder;
 
+
     @ManyToOne
     @JoinColumn(name = "developed_by_id")
     private User developedBy;
