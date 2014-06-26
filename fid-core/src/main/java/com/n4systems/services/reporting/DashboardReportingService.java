@@ -8,6 +8,7 @@ import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventTypeGroupService;
 import com.n4systems.fieldid.service.event.PriorityCodeService;
+import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.fieldid.service.search.columns.AssetColumnsService;
@@ -44,6 +45,7 @@ public class DashboardReportingService extends FieldIdPersistenceService {
     private @Autowired PriorityCodeService priorityCodeService;
     private @Autowired EventTypeGroupService eventTypeGroupService;
     private @Autowired ProcedureDefinitionService procedureDefinitionService;
+    private @Autowired ProcedureAuditEventService procedureAuditEventService;
 
     @Transactional(readOnly = true)
     public ChartSeries<LocalDate> getAssetsIdentified(DateRange dateRange, ChartGranularity granularity, BaseOrg owner) {
@@ -63,6 +65,13 @@ public class DashboardReportingService extends FieldIdPersistenceService {
     public ChartSeries<LocalDate> getUpcomingScheduledLoto(Integer period) {
         Preconditions.checkArgument(period!=null);
         List<UpcomingScheduledLotoRecord> results = procedureService.getUpcomingScheduledLotos(period);
+        return new ChartSeries<LocalDate>(results);
+    }
+
+    @Transactional(readOnly = true)
+    public ChartSeries<LocalDate> getUpcomingScheduledProcedureAudits(Integer period, BaseOrg owner) {
+        Preconditions.checkArgument(period!=null);
+        List<UpcomingScheduledProcedureAuditsRecord> results = procedureAuditEventService.getUpcomingScheduledProcedureAudits(period, owner);
         return new ChartSeries<LocalDate>(results);
     }
 
@@ -157,6 +166,8 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 			case UPCOMING_SCHEDULED_EVENTS: 
 				return getCriteriaDefaults(((UpcomingEventsWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
             case UPCOMING_SCHEDULED_LOTO:
+                return getCriteriaDefaults(new LocalDate(x));
+            case UPCOMING_PROCEDURE_AUDITS:
                 return getCriteriaDefaults(new LocalDate(x));
             case EVENT_KPI:
                 return getCriteriaDefaults((EventKPIWidgetConfiguration) widgetDefinition.getConfig(), series, x.intValue()/*assumed to be org index*/);
