@@ -365,4 +365,10 @@ public class DashboardReportingService extends FieldIdPersistenceService {
         criteria.setReportAlreadyRun(true);
         return criteria;
     }
+
+    public BaseOrg getProcedureAuditsOwner(Long widgetDefinitionId) {
+        WidgetDefinition widgetDefinition = getWidgetDefinition(widgetDefinitionId);
+        UpcomingProcedureAuditsWidgetConfiguration widgetConfig = (UpcomingProcedureAuditsWidgetConfiguration) widgetDefinition.getConfig() ;
+        return widgetConfig.getOrg();
+    }
 }
