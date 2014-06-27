@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.data.ProcedureAuditDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ProcedureAuditEvent;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.util.chart.RangeType;
@@ -43,6 +44,7 @@ public class ProcedureAuditListPage extends ProcedureAuditPage implements IAjaxI
     private String textFilter = null;
 
     private DateRange dateRange = new DateRange(RangeType.CUSTOM);
+    private BaseOrg owner = null;
 
     public ProcedureAuditListPage() {
         super();
@@ -57,8 +59,9 @@ public class ProcedureAuditListPage extends ProcedureAuditPage implements IAjaxI
         this.searchTerm = asset.getDisplayName();
     }
 
-    public ProcedureAuditListPage(DateRange dateRange) {
+    public ProcedureAuditListPage(DateRange dateRange, BaseOrg owner) {
         this.dateRange = dateRange;
+        this.owner = owner;
     }
 
     @Override
@@ -112,7 +115,7 @@ public class ProcedureAuditListPage extends ProcedureAuditPage implements IAjaxI
         onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));
         field.add(onChangeAjaxBehavior);
 
-        dataProvider = new ProcedureAuditDataProvider("dueDate", SortOrder.ASCENDING, PublishedState.PUBLISHED, procedureCodeString, asset, isProcedureCode, isAsset, dateRange){
+        dataProvider = new ProcedureAuditDataProvider("dueDate", SortOrder.ASCENDING, PublishedState.PUBLISHED, procedureCodeString, asset, isProcedureCode, isAsset, dateRange, owner){
             @Override protected String getTextFilter() {
                 return textFilter;
             }

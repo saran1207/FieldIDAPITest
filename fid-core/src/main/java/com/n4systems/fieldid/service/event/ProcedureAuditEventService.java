@@ -63,7 +63,7 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         return persistenceService.count(procedureCountQuery);
     }
 
-    public List<ProcedureAuditEvent> getSelectedAuditProcedures(String procedureCode, Asset asset, boolean isAsset, Date fromDate, Date toDate, String order, boolean ascending, int first, int count) {
+    public List<ProcedureAuditEvent> getSelectedAuditProcedures(String procedureCode, Asset asset, boolean isAsset, Date fromDate, Date toDate, String order, boolean ascending, int first, int count, BaseOrg owner) {
 
         QueryBuilder<ProcedureAuditEvent> query = createUserSecurityBuilder(ProcedureAuditEvent.class);
 
@@ -71,6 +71,8 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         query.addSimpleWhere("procedureDefinition.asset", asset);
         query.addSimpleWhere("workflowState", WorkflowState.OPEN);
         query.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
+
+        query.applyFilter(new OwnerAndDownFilter(owner));
 
         if(!isAsset) {
             query.addSimpleWhere("procedureDefinition.procedureCode", procedureCode.trim());
@@ -105,13 +107,15 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public List<ProcedureAuditEvent> getAllAuditProcedures(String sTerm, Date fromDate, Date toDate, String order, boolean ascending, int first, int count) {
+    public List<ProcedureAuditEvent> getAllAuditProcedures(String sTerm, Date fromDate, Date toDate, String order, boolean ascending, int first, int count, BaseOrg owner) {
 
         QueryBuilder<ProcedureAuditEvent> query = createUserSecurityBuilder(ProcedureAuditEvent.class);
 
         query.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
         query.addSimpleWhere("workflowState", WorkflowState.OPEN);
         query.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
+
+        query.applyFilter(new OwnerAndDownFilter(owner));
 
         if(!sTerm.trim().equals("")) {
             WhereParameterGroup group = new WhereParameterGroup("procedureSearch");

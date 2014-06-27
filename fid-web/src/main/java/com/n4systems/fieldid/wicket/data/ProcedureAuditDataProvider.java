@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.data;
 import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.ProcedureAuditEvent;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.model.utils.DateRange;
@@ -40,9 +41,9 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
     private boolean isAsset;
 
     private DateRange dateRange;
+    private BaseOrg owner;
 
-
-    public ProcedureAuditDataProvider(String order, SortOrder sortOrder, PublishedState state, String procedureCode, Asset asset, boolean isProcedureCode, boolean isAsset, DateRange dateRange) {
+    public ProcedureAuditDataProvider(String order, SortOrder sortOrder, PublishedState state, String procedureCode, Asset asset, boolean isProcedureCode, boolean isAsset, DateRange dateRange, BaseOrg owner) {
         setSort(order, sortOrder);
         this.state = state;
         searchTerm = "";
@@ -51,6 +52,7 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
         this.isProcedureCode = isProcedureCode;
         this.isAsset = isAsset;
         this.dateRange = dateRange;
+        this.owner = owner;
     }
 
 
@@ -59,9 +61,9 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
         List<? extends ProcedureAuditEvent> procedureDefinitionList = null;
 
         if(isProcedureCode || isAsset) {
-            procedureDefinitionList = procedureService.getSelectedAuditProcedures(procedureCode, asset, isAsset, getFromDate(), getToDate(), getSort().getProperty(), getSort().isAscending(), first, count);
+            procedureDefinitionList = procedureService.getSelectedAuditProcedures(procedureCode, asset, isAsset, getFromDate(), getToDate(), getSort().getProperty(), getSort().isAscending(), first, count, owner);
         } else {
-           procedureDefinitionList = procedureService.getAllAuditProcedures(searchTerm, getFromDate(), getToDate(), getSort().getProperty(), getSort().isAscending(), first, count);
+           procedureDefinitionList = procedureService.getAllAuditProcedures(searchTerm, getFromDate(), getToDate(), getSort().getProperty(), getSort().isAscending(), first, count, owner);
         }
 
         return procedureDefinitionList.iterator();
