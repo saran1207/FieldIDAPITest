@@ -167,8 +167,6 @@ public class DashboardReportingService extends FieldIdPersistenceService {
 				return getCriteriaDefaults(((UpcomingEventsWidgetConfiguration) widgetDefinition.getConfig()), series, new LocalDate(x));
             case UPCOMING_SCHEDULED_LOTO:
                 return getCriteriaDefaults(new LocalDate(x));
-            case UPCOMING_PROCEDURE_AUDITS:
-                return getCriteriaDefaults(new LocalDate(x));
             case EVENT_KPI:
                 return getCriteriaDefaults((EventKPIWidgetConfiguration) widgetDefinition.getConfig(), series, x.intValue()/*assumed to be org index*/);
             case WORK:
