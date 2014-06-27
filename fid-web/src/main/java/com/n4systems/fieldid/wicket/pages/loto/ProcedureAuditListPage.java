@@ -57,8 +57,7 @@ public class ProcedureAuditListPage extends ProcedureAuditPage implements IAjaxI
         this.searchTerm = asset.getDisplayName();
     }
 
-    public ProcedureAuditListPage(String procedureCodeString, Asset asset, boolean isProcedureCode, boolean isAsset, DateRange dateRange) {
-        this(procedureCodeString, asset, isProcedureCode, isAsset);
+    public ProcedureAuditListPage(DateRange dateRange) {
         this.dateRange = dateRange;
     }
 
