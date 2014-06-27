@@ -112,7 +112,7 @@ public class ProcedureAuditListPage extends ProcedureAuditPage implements IAjaxI
         onChangeAjaxBehavior.setThrottleDelay(Duration.milliseconds(new Long(500)));
         field.add(onChangeAjaxBehavior);
 
-        dataProvider = new ProcedureAuditDataProvider("dueDate", SortOrder.ASCENDING, PublishedState.PUBLISHED, procedureCodeString, asset, isProcedureCode, isAsset){
+        dataProvider = new ProcedureAuditDataProvider("dueDate", SortOrder.ASCENDING, PublishedState.PUBLISHED, procedureCodeString, asset, isProcedureCode, isAsset, dateRange){
             @Override protected String getTextFilter() {
                 return textFilter;
             }

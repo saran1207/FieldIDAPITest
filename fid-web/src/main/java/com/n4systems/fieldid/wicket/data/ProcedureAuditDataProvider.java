@@ -7,7 +7,6 @@ import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.model.utils.DateRange;
 import com.n4systems.services.date.DateService;
-import com.n4systems.util.chart.RangeType;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
@@ -43,7 +42,7 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
     private DateRange dateRange;
 
 
-    public ProcedureAuditDataProvider(String order, SortOrder sortOrder, PublishedState state, String procedureCode, Asset asset, boolean isProcedureCode, boolean isAsset) {
+    public ProcedureAuditDataProvider(String order, SortOrder sortOrder, PublishedState state, String procedureCode, Asset asset, boolean isProcedureCode, boolean isAsset, DateRange dateRange) {
         setSort(order, sortOrder);
         this.state = state;
         searchTerm = "";
@@ -51,7 +50,7 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
         this.asset = asset;
         this.isProcedureCode = isProcedureCode;
         this.isAsset = isAsset;
-        this.dateRange = new DateRange(RangeType.CUSTOM);
+        this.dateRange = dateRange;
     }
 
 
