@@ -54,6 +54,12 @@ public class DetailsPanel extends Panel {
 
             add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())));
 
+
+            //Fields for Application Process and Removal Process of lockouts.
+            add(new LabelledTextArea<String>("applicationProcess", "label.lockout_application_process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())));
+
+            add(new LabelledTextArea<String>("removalProcess", "label.lockout_removal_process", ProxyModel.of(model, on(ProcedureDefinition.class).getRemovalProcess())));
+
             add(new LabelledAutoCompleteUser("user", "label.developed_by", ProxyModel.of(model, on(ProcedureDefinition.class).getDevelopedBy()), true));
 
             add(new LabelledRequiredTextField<String>("equipmentNumber", "label.equipment_number", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentNumber())));
