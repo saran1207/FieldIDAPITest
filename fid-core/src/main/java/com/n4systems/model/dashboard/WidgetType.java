@@ -21,7 +21,8 @@ public enum WidgetType implements Listable<String> {
     EVENT_KPI("Event KPIs", "Compare completed events across multiple locations", EventKPIWidgetConfiguration.class),
     PROCEDURES_PUBLISHED("Procedures Published", "A graph of all procedures published", ProceduresPublishedWidgetConfiguration.class),
     UPCOMING_SCHEDULED_LOTO("Upcoming Lockouts", "Scheduled lockouts for the next 30,60 or 90 days", UpcomingLotoWidgetConfiguration.class),
-    ASSETS_LOCKED_OUT("Currently Locked Out", "List of all assets that are currently locked out", LockedoutProceduresWidgetConfiguration.class);
+    ASSETS_LOCKED_OUT("Currently Locked Out", "List of all assets that are currently locked out", LockedoutProceduresWidgetConfiguration.class),
+    UPCOMING_PROCEDURE_AUDITS("Upcoming Procedure Audits", "Scheduled Procedure Audits for the next 30,60 or 90 days", UpcomingProcedureAuditsWidgetConfiguration.class);
 
     private static EnumSet<WidgetType> eventRelatedWidgets = EnumSet.of(EVENT_KPI,COMPLETED_EVENTS,EVENT_COMPLETENESS,UPCOMING_SCHEDULED_EVENTS, ACTIONS);
 
