@@ -6,6 +6,7 @@ import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.RecurringLotoEvent;
 import com.n4systems.model.security.AllowSafetyNetworkAccess;
 import com.n4systems.model.security.EntitySecurityEnhancer;
+import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 
 import javax.persistence.*;
@@ -15,6 +16,10 @@ import javax.persistence.*;
 @Table(name="procedure_audit_events")
 @PrimaryKeyJoinColumn(name="id")
 public class ProcedureAuditEvent extends Event<ProcedureAuditEventType, ProcedureAuditEvent, ProcedureDefinition> implements NetworkEntity<ProcedureAuditEvent>{
+
+    public static final SecurityDefiner createSecurityDefiner() {
+        return new SecurityDefiner("tenant.id", "procedureDefinition.asset.owner", null, "state", true);
+    }
 
     @ManyToOne
     @JoinColumn(name="procedure_definition_id")

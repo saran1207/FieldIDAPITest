@@ -6,15 +6,23 @@ import com.n4systems.model.Event;
 import com.n4systems.model.ProcedureAuditEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.Procedure;
 import com.n4systems.model.procedure.RecurringLotoEvent;
+import com.n4systems.model.security.OwnerAndDownFilter;
+import com.n4systems.model.utils.PlainDate;
+import com.n4systems.services.reporting.UpcomingScheduledProcedureAuditsRecord;
+import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Created by rrana on 2014-06-12.
@@ -55,7 +63,7 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         return persistenceService.count(procedureCountQuery);
     }
 
-    public List<ProcedureAuditEvent> getSelectedAuditProcedures(String procedureCode, Asset asset, boolean isAsset, Date fromDate, Date toDate, String order, boolean ascending, int first, int count) {
+    public List<ProcedureAuditEvent> getSelectedAuditProcedures(String procedureCode, Asset asset, boolean isAsset, Date fromDate, Date toDate, String order, boolean ascending, int first, int count, BaseOrg owner) {
 
         QueryBuilder<ProcedureAuditEvent> query = createUserSecurityBuilder(ProcedureAuditEvent.class);
 
@@ -63,6 +71,8 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         query.addSimpleWhere("procedureDefinition.asset", asset);
         query.addSimpleWhere("workflowState", WorkflowState.OPEN);
         query.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
+
+        query.applyFilter(new OwnerAndDownFilter(owner));
 
         if(!isAsset) {
             query.addSimpleWhere("procedureDefinition.procedureCode", procedureCode.trim());
@@ -97,13 +107,15 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public List<ProcedureAuditEvent> getAllAuditProcedures(String sTerm, Date fromDate, Date toDate, String order, boolean ascending, int first, int count) {
+    public List<ProcedureAuditEvent> getAllAuditProcedures(String sTerm, Date fromDate, Date toDate, String order, boolean ascending, int first, int count, BaseOrg owner) {
 
         QueryBuilder<ProcedureAuditEvent> query = createUserSecurityBuilder(ProcedureAuditEvent.class);
 
         query.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
         query.addSimpleWhere("workflowState", WorkflowState.OPEN);
         query.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
+
+        query.applyFilter(new OwnerAndDownFilter(owner));
 
         if(!sTerm.trim().equals("")) {
             WhereParameterGroup group = new WhereParameterGroup("procedureSearch");
@@ -152,6 +164,23 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
 
         return persistenceService.findAll(procedureCountQuery);
     }
+
+    public List<UpcomingScheduledProcedureAuditsRecord> getUpcomingScheduledProcedureAudits(Integer period, BaseOrg owner) {
+
+        QueryBuilder<UpcomingScheduledProcedureAuditsRecord> builder = new QueryBuilder<UpcomingScheduledProcedureAuditsRecord>(ProcedureAuditEvent.class, securityContext.getUserSecurityFilter());
+
+        builder.setSelectArgument(new NewObjectSelect(UpcomingScheduledProcedureAuditsRecord.class, "date(dueDate)", "COUNT(*)"));
+
+        Date today = new PlainDate();
+        Date endDate = DateUtils.addDays(today, period);
+
+        builder.addWhere(whereFromTo(today, endDate, "dueDate"));
+        builder.addSimpleWhere("workflowState", WorkflowState.OPEN);
+
+        builder.applyFilter(new OwnerAndDownFilter(owner));
+        builder.addGroupByClauses(Arrays.asList(new GroupByClause("date(dueDate)", true)));
+        return persistenceService.findAll(builder);
+    };
 
     public Event retireEvent(ProcedureAuditEvent event) {
         event.retireEntity();
