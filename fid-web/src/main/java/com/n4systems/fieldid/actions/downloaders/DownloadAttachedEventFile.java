@@ -2,15 +2,18 @@ package com.n4systems.fieldid.actions.downloaders;
 
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.util.ZipFileUtil;
 import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.zip.ZipOutputStream;
 
 public class DownloadAttachedEventFile extends DownloadAction {
@@ -154,20 +157,33 @@ public class DownloadAttachedEventFile extends DownloadAction {
 		if( event == null ) {
 			addActionError( getText( "error.noevent" ) );
 			return MISSING;
-		} 
-		
-		if( event.getProofTestInfo() == null ) {
+		}
+
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        if (itr.hasNext()) {
 			addActionError( getText( "error.nochart", fileName ) );
 			return MISSING;
 		}
-		
-		File chartFile = PathHandler.getChartImageFile(event);
-		fileName = chartFile.getName();
-		if( !chartFile.exists() ) {
-			addActionError( getText( "error.nochart", chartFile.getName() ) );
+
+        S3Service s3Service = ServiceLocator.getS3Service();
+        ThingEventProofTest proofTest = itr.next();
+
+        File chartFile = null;
+
+        if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID(), proofTest.getProofTestInfo().getProofTestFileName())){
+            chartFile = s3service.downloadAssetProofTest(proofTest);
+        }
+        else {
+            chartFile = PathHandler.getChartImageFile(event);
+        }
+
+		if( chartFile == null || !chartFile.exists() ) {
+			addActionError( getText( "error.nochart", fileName ) );
 			return MISSING;
 		}
-		
+
+        fileName = chartFile.getName();
+
 		fileSize = new Long( chartFile.length() ).intValue();
 		InputStream input = null;
 		boolean failure = false;

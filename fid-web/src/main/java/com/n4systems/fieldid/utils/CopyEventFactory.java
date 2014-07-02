@@ -29,7 +29,14 @@ public class CopyEventFactory {
 		newEvent.setEventResult(event.getEventResult());
 		
 		newEvent.setDate( ( event.getDate() != null ) ? new Date( event.getDate().getTime() ) : null );
-		newEvent.setProofTestInfo( copyProofTestInfo( event.getProofTestInfo() ) );
+        newEvent.setThingEventProofTests(new HashSet<ThingEventProofTest>());
+        for(ThingEventProofTest oldProofTest : event.getThingEventProofTests()){
+            //copy the prooftest info
+            ThingEventProofTest newProofTest = copyProofTestInfo(oldProofTest);
+            //set the parent event
+            newProofTest.setThingEvent(newEvent);
+            newEvent.getThingEventProofTests().add(newProofTest);
+        }
 		newEvent.setSubEvents( copySubEvents( event.getSubEvents() ) );
         newEvent.setEventForm(event.getEventForm());
         newEvent.setEventStatus(event.getEventStatus());
@@ -50,14 +57,11 @@ public class CopyEventFactory {
 		return newSubEvents;
 	}
 	
-	protected static ProofTestInfo copyProofTestInfo( ProofTestInfo oldProofTestInfo ) {
+	protected static ThingEventProofTest copyProofTestInfo( ThingEventProofTest oldProofTestInfo ) {
 		if( oldProofTestInfo == null ) { return null; }
-		
-		ProofTestInfo newProofTestInfo = new ProofTestInfo();
-		newProofTestInfo.setDuration( oldProofTestInfo.getDuration() );
-		newProofTestInfo.setPeakLoad( oldProofTestInfo.getPeakLoad() );
-		newProofTestInfo.setProofTestType( oldProofTestInfo.getProofTestType() );
-		
+
+        ThingEventProofTest newProofTestInfo = new ThingEventProofTest();
+        newProofTestInfo.copyDataFrom(oldProofTestInfo);
 		return newProofTestInfo;
 	}
 	

@@ -115,6 +115,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 		 * We need to move the file before the end of this request otherwise struts will clear it out
 		 * we'll use the PathHandler to find a new temp spot.  Notice we also preserve the original file name.
 		 */
+        //TODO arezafar I still need to make sure that content of this file is saved to DB (before removing it) who calls setFiledataFileName ?
 		File newPath = PathHandler.getTempFile(filedataFileName);
 		
 		try {

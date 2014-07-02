@@ -193,7 +193,7 @@ public class MasterEventCrud extends AbstractCrud {
 				
 				CreateEventParameterBuilder createEventBuilder = new CreateEventParameterBuilder(master, getSessionUserId())
 						.withProofTestFile(masterEvent.getProofTestFile())
-						.withUploadedImages(masterEvent.getUploadedFiles());
+						.withUploadedFiles(masterEvent.getUploadedFiles());
 
 				createEventBuilder.addSchedules(createEventScheduleBundles(masterEvent.getNextSchedules()));
 				

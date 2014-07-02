@@ -14,7 +14,6 @@ public class TenantPathUpdater {
 			
 	public void renameTenantPaths(Tenant tenant, String newName) throws IOException {
 		File [] files = {PathHandler.getEventAttachmentBaseFile(tenant),
-		                 PathHandler.getEventProoftestBaseFile(tenant),
 		                 PathHandler.getEventChartImageBaseFile(tenant),
 		                 PathHandler.getEventSignatureBaseFile(tenant),
 		                 PathHandler.getAssetAttachmentBaseFile(tenant),
