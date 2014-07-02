@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.location.PredefinedLocation;
 import com.n4systems.model.orgs.*;
+import com.n4systems.model.security.OwnerAndDownWithPrimaryFilter;
 import com.n4systems.util.collections.OrgList;
 import com.n4systems.util.persistence.*;
 import org.apache.commons.lang.StringUtils;
@@ -163,6 +164,16 @@ public class OrgService extends FieldIdPersistenceService {
             default:
                 throw new IllegalStateException("parser can only supports having 1 or 2 parents specified.");
         }
+    }
+
+    public OrgLocationTree getLocationTree(BaseOrg locationOwner, String search) {
+        OrgLocationTree result = new OrgLocationTree().withFilter(search);
+        QueryBuilder locQuery = createUserSecurityBuilder(PredefinedLocation.class);
+        if(locationOwner != null) {
+            locQuery.applyFilter(new OwnerAndDownWithPrimaryFilter(locationOwner));
+        }
+        result.addPredefinedLocations(persistenceService.findAll(locQuery));
+        return result;
     }
 
     public OrgLocationTree getOrgLocationTree(String search) {

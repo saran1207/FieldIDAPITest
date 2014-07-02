@@ -22,6 +22,16 @@ import java.util.List;
 public class GoogleMap<T extends HasGpsLocation> extends Panel {
     public static final String GOOGLE_MAPS_JS_ID = "googleMaps";
     public static final String GOOGLE_MAP_API_ID = "google-map-api";
+
+    public enum MapMarkerColour {
+        GREEN,
+        YELLOW,
+        YELLOW_A,
+        RED,
+        RED_A,
+        GRAY
+    }
+
     private static final String CREATE_AND_SHOW_JS = "%s = googleMapFactory.createAndShow(%s);";
     private static final GpsLocation defaultCentre = new GpsLocation(43.548548, -96.987305);
     private Gson gson;
@@ -182,7 +192,6 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         return "";
     }
 
-
     class GoogleMapOptions implements Serializable {
         private Integer zoom = defaultZoom;
         private String id = GoogleMap.this.getMarkupId();
@@ -208,20 +217,24 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
         @Override
         public JsonElement serialize(MappedResults<T> results, Type typeOfSrc, JsonSerializationContext context) {
             JsonObject object = new JsonObject();
-            object.addProperty("count",results.getCount());
-            object.addProperty("grouped",results.isGrouped());
+            object.addProperty("count", results.getCount());
+            object.addProperty("grouped", results.isGrouped());
             JsonArray data = new JsonArray();
             for (GpsLocation location:results.getLocations()) {
                 JsonObject o = new JsonObject();
-                o.addProperty("latitude",location.getLatitude());
-                o.addProperty("longitude",location.getLongitude());
+                o.addProperty("latitude", location.getLatitude());
+                o.addProperty("longitude", location.getLongitude());
                 o.addProperty("id", getClickId(results.getEntitiesAtLocation(location)));
-                o.addProperty("desc", getDescription(results,location));
+                o.addProperty("desc", getDescription(results, location));
+                addCustomProperties(o, results, location);
                 data.add(o);
             }
             object.add("results",data);
             return object;
         }
+    }
+
+    protected void addCustomProperties(JsonObject o, MappedResults<T> results, GpsLocation location) {
     }
 
 }
