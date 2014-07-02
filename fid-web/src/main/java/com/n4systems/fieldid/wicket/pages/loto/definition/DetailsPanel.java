@@ -52,13 +52,27 @@ public class DetailsPanel extends Panel {
             add(new LabelledTextField<String>("identifier", "label.electronic_id", ProxyModel.of(model, on(ProcedureDefinition.class).getElectronicIdentifier()))
                     .add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.electronic_id"), TipsyBehavior.Gravity.N)));
 
-            add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())));
-
+            add(new LabelledTextArea<String>("warnings", "label.warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())){
+                @Override
+                public int getMaxLength() {
+                    return 1024;
+                }
+            });
 
             //Fields for Application Process and Removal Process of lockouts.
-            add(new LabelledTextArea<String>("applicationProcess", "label.lockout_application_process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())));
+            add(new LabelledTextArea<String>("applicationProcess", "label.lockout_application_process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())){
+                @Override
+                public int getMaxLength() {
+                    return 512;
+                }
+            });
 
-            add(new LabelledTextArea<String>("removalProcess", "label.lockout_removal_process", ProxyModel.of(model, on(ProcedureDefinition.class).getRemovalProcess())));
+            add(new LabelledTextArea<String>("removalProcess", "label.lockout_removal_process", ProxyModel.of(model, on(ProcedureDefinition.class).getRemovalProcess())){
+                @Override
+                public int getMaxLength() {
+                    return 512;
+                }
+            });
 
             add(new LabelledAutoCompleteUser("user", "label.developed_by", ProxyModel.of(model, on(ProcedureDefinition.class).getDevelopedBy()), true));
 
