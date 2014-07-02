@@ -44,8 +44,24 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
     private String entityType;
     private final OrgLocationModel model;
 
+    private BaseOrg locationOwner;
+    private Boolean locationPicker = false;
+
     public OrgLocationPicker(String id, IModel<BaseOrg> orgModel) {
         this(id,new OrgLocationModel(orgModel,null));
+    }
+
+    public OrgLocationPicker(String id, IModel<BaseOrg> orgModel, IModel<PredefinedLocation> locationModel) {
+        this(id,new OrgLocationModel(orgModel, locationModel));
+        locationPicker = true;
+    }
+
+    public void setLocationOwner(BaseOrg owner) {
+        locationOwner = owner;
+    }
+
+    public String getTextString(){
+        return ((TextField) text).getRawInput();
     }
 
     public OrgLocationPicker(String id, OrgLocationModel model) {
@@ -114,7 +130,11 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
     }
 
     protected OrgLocationTree getOrgLocationTree(String search) {
-        return includeLocations ? orgService.getOrgLocationTree(search) : orgService.getOrgTree(search);
+        if(locationPicker) {
+            return orgService.getLocationTree(locationOwner, search);
+        } else {
+            return includeLocations ? orgService.getOrgLocationTree(search) : orgService.getOrgTree(search);
+        }
     }
 
     protected OrgLocationTree getOrgLocationTree(Long parentNodeId, OrgLocationTree.NodeType type) {
