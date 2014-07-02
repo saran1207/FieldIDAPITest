@@ -1,10 +1,13 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.*;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
+import com.n4systems.fieldid.wicket.components.TimeAgoLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
@@ -12,15 +15,19 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunLastReportPage;
 import com.n4systems.model.*;
+import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.IHeaderResponse;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -37,6 +44,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
     private @SpringBean EventScheduleService eventScheduleService;
     private @SpringBean ThingEventCreationService eventCreationService;
     private @SpringBean PlaceEventCreationService placeEventCreationService;
+    @SpringBean protected S3Service s3Service;
 
     protected IModel<Event> openEventModel;
     private FieldIDAuthenticatedPage returnPage;
@@ -48,6 +56,27 @@ public class CloseEventPage extends FieldIDFrontEndPage {
         add(new FIDFeedbackPanel("feedbackPanel"));
         add(new Label("event", PropertyModel.of(openEventModel, "type.name")));
         add(new ResolveForm("form"));
+
+        WebMarkupContainer actionsColumn;
+        add(actionsColumn = new WebMarkupContainer("actionsColumn"));
+        actionsColumn.setVisible(openEventModel.getObject().isAction());
+        actionsColumn.add(new Label("priority", new PropertyModel<String>(openEventModel, "priority.name")));
+        actionsColumn.add(new Label("notes", new PropertyModel<String>(openEventModel, "notes")));
+
+        if (openEventModel.getObject().getDueDate() != null) {
+            actionsColumn.add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(openEventModel, "dueDate"),getCurrentUser().getTimeZone()));
+        } else {
+            actionsColumn.add(new Label("dueDate"));
+        }
+        actionsColumn.add(new Label("assignee", new PropertyModel<String>(openEventModel, "assignedUserOrGroup.assignToDisplayName")));
+        actionsColumn.add(new ListView<CriteriaResultImage>("criteriaResultImage", new PropertyModel<List<? extends CriteriaResultImage>>(openEventModel, "sourceCriteriaResult.criteriaImages")) {
+            @Override
+            protected void populateItem(ListItem<CriteriaResultImage> item) {
+                CriteriaResultImage image = item.getModelObject();
+                item.add(new ExternalImage("image", s3Service.getCriteriaResultImageThumbnailURL(image).toString()));
+            }
+        });
+
     }
 
     public CloseEventPage(PageParameters params, FieldIDAuthenticatedPage returnPage) {
@@ -107,6 +136,7 @@ public class CloseEventPage extends FieldIDFrontEndPage {
             if (activeStatuses.size() > 0) {
                 eventStatus = activeStatuses.get(0);
             }
+
         }
 
         @Override
