@@ -42,6 +42,6 @@
         </#if>
     </p>
 
-    You can certify or reject the new procedure here: <a href="${systemUrl}/fieldid/w/procedureDefinitions?uniqueID=${procedureDefinition.asset.id?c}">Procedures</a>
+    You can certify or reject the new procedure here: <a href="${systemUrl}/fieldid/w/procedureWaitingApprovals">Procedures</a>
 
 </div>
