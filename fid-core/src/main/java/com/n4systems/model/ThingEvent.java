@@ -10,8 +10,7 @@ import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.AssetEvent;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name="thing_events")
@@ -22,7 +21,11 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
     }
 
-    private ProofTestInfo proofTestInfo;
+    /* does this cause "failed to lazily initialize a collection of role"? YES!
+    TODO figure out WHY above happens*/
+    @OneToMany(fetch=FetchType.EAGER, mappedBy="thingEvent")
+    //@JoinColumn(name="event_id")  Associations marked as mappedBy must not define database mappings like @JoinTable or @JoinColumn
+    private Set<ThingEventProofTest> thingEventProofTests = new HashSet<ThingEventProofTest>();
 
     @ManyToOne(fetch=FetchType.LAZY, optional = false)
     @JoinColumn(name="asset_id")
@@ -64,12 +67,22 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
     }
 
     @AllowSafetyNetworkAccess
-    public ProofTestInfo getProofTestInfo() {
-        return proofTestInfo;
+    public Set<ThingEventProofTest> getThingEventProofTests() {
+        return thingEventProofTests;
     }
 
-    public void setProofTestInfo(ProofTestInfo proofTestInfo) {
-        this.proofTestInfo = proofTestInfo;
+    public ThingEventProofTest getProofTestInfo() {
+        Iterator<ThingEventProofTest> itr = thingEventProofTests.iterator();
+        if(itr.hasNext()){
+            return itr.next();
+        }
+        else {
+            return null;
+        }
+    }
+
+    public void setThingEventProofTests(Set<ThingEventProofTest> thingEventProofTests) {
+        this.thingEventProofTests = thingEventProofTests;
     }
 
     @Override

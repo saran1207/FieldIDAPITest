@@ -18,8 +18,9 @@ public class ProofTestInfoConverter extends ExportConverter {
 		ProofTestInfo info = (ProofTestInfo) source;
 		writeNode(writer, context, "Type", toFriendlyName(info.getProofTestType()));
 		writeNode(writer, context, "PeakLoad", info.getPeakLoad());
-		writeNode(writer, context, "Duration", info.getPeakLoad());
-		writeNode(writer, context, "PeakLoadDuration", info.getPeakLoad());
+		writeNode(writer, context, "Duration", info.getDuration());
+		writeNode(writer, context, "PeakLoadDuration", info.getPeakLoadDuration());
+        writeNode(writer, context, "FileName", info.getProofTestFileName());
 	}
 
 	private String toFriendlyName(ProofTestType type) {

@@ -14,6 +14,7 @@ import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueAssetException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TooManyIdentifiersException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
@@ -394,8 +395,17 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		event.setType(inspType);
 		event.setPrintable(inspType.isPrintable());
-		
-		
+
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        if(itr.hasNext()){
+            ThingEventProofTest thingEventProofTest = itr.next();
+            thingEventProofTest.getProofTestInfo().setProofTestType(fileData.getFileType());
+            thingEventProofTest.getProofTestInfo().setProofTestFileName(fileData.getFileName());
+            thingEventProofTest.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
+            thingEventProofTest.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
+            thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
+            event.getThingEventProofTests().add(thingEventProofTest);
+        }
 		
 		// let's see if there are any event info fields that need to be set
 		String infoFieldName, infoOptionName, resolvedInfoField;
@@ -442,9 +452,18 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 
 		return type;
 	}
-	
-	private boolean chartImageExists(Event event) {
-		return PathHandler.getChartImageFile(event).exists();
+
+	private boolean chartImageExists(ThingEvent event) {
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        if (!itr.hasNext()) {
+            return false;
+        }
+        S3Service s3Service = ServiceLocator.getS3Service();
+        ThingEventProofTest proofTest = itr.next();
+        if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID(), proofTest.getProofTestInfo().getProofTestFileName())){
+            return true;
+        }
+        return PathHandler.getChartImageFile(event).exists();
 	}
 	
 	private void writeLogMessage(Tenant tenant, String message) {

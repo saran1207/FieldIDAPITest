@@ -3,6 +3,8 @@ package com.n4systems.fieldid.service.event.perform;
 import com.n4systems.model.*;
 import com.n4systems.persistence.utils.PostFetcher;
 
+import java.util.HashSet;
+
 public class PerformThingEventHelperService extends PerformEventHelperService<ThingEvent, ThingEventType> {
 
     public PerformThingEventHelperService() {
@@ -19,7 +21,7 @@ public class PerformThingEventHelperService extends PerformEventHelperService<Th
         super.populateNewEvent(masterEvent);
         masterEvent.setAdvancedLocation(masterEvent.getAsset().getAdvancedLocation());
         masterEvent.setOwner(masterEvent.getAsset().getOwner());
-        masterEvent.setProofTestInfo(new ProofTestInfo());
+        masterEvent.setThingEventProofTests(new HashSet());
         masterEvent.setAssetStatus(masterEvent.getAsset().getAssetStatus());
     }
 

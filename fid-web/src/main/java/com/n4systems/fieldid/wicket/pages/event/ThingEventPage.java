@@ -104,7 +104,11 @@ public abstract class ThingEventPage extends EventPage<ThingEvent> {
 
     @Override
     protected void onPreSave(ThingEvent event) {
-        event.setProofTestInfo(proofTestInfo.getObject());
+        if(event.getThingEventProofTests().size() == 0){
+            event.getThingEventProofTests().add(new ThingEventProofTest());
+            event.getThingEventProofTests().iterator().next().setProofTestInfo(new ProofTestInfo());
+        }
+        event.getThingEventProofTests().iterator().next().setProofTestInfo(proofTestInfo.getObject());
     }
 
     @Override

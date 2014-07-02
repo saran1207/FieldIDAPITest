@@ -129,10 +129,11 @@ public class EventSummaryGenerator {
 				}
 
 				eventMap.put("allInspections", inspectionResultMaps);
-				
-				if (event.getProofTestInfo() != null) {
-					eventMap.put("peakLoad", event.getProofTestInfo().getPeakLoad());
-				}
+
+                Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+                if (itr.hasNext()) {
+                    eventMap.put("peakLoad", itr.next().getProofTestInfo().getPeakLoad());
+                }
 
 				collection.add(eventMap);
 				
