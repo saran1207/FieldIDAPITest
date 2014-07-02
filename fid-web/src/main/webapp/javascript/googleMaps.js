@@ -62,7 +62,7 @@ var googleMapFactory = (function() {
 		if (opts.data) {
 			var results = opts.data.results;
         	for (var i=0;i<results.length;i++) {
-			    map.addLocation(results[i].latitude, results[i].longitude, results[i].desc);
+			    map.addLocation(results[i].latitude, results[i].longitude, results[i].desc, results[i].colour);
 	        }
 		}
 		map.show();
@@ -312,7 +312,7 @@ var googleMapFactory = (function() {
 				return marker;
 			},
 
-			addLocation : function(latitude,longitude,desc) {
+			addLocation : function(latitude, longitude, desc, colour) {
 				var loc = new google.maps.LatLng(latitude,longitude);
 				if (desc) { loc.desc = desc; }
 				locations.push(loc);  				
@@ -360,7 +360,7 @@ var googleMapFactory = (function() {
 
 				for (var i=0; i<count; i++) {
 					var loc = locations[i];
-					var marker = this.makeMarker(loc);
+					var marker = makeColouredMarker(loc);
 					markers.push(marker);
 					marker.setMap(map);
 					if (marker.content || this.updateContentWithAddress) {
@@ -398,13 +398,7 @@ var googleMapFactory = (function() {
 		return prefix ? prefix+url : url;
 	}
 
-	 // TODO
-	var makeAssetMarker = function(loc) {
-	}
-
-	function makeColoredMarker(loc, color) {
-	}
-
+     //Not being used
 	 var makeMarkerForStatus = function(loc) {
 		var content = loc.args[0];   // assumes that these *might* be passed to addLocation in this order.  [content,status,prefix]
 		var status = loc.args[1];
@@ -453,37 +447,31 @@ var googleMapFactory = (function() {
 		return marker;		
 	};
 
+	 var makeColouredMarker = function(loc) {
+         var colour = loc.args[1];
+         var desc = loc.desc;
+         var prefix= window.location.protocol+ "//" + window.location.hostname + "/fieldid/";
 
-//	 var makeMarkerForStatus = function(loc) {
-//		 var content = loc.args[0];   // assumes that these *might* be passed to addLocation in this order.  [content,status,prefix]
-//		 var status = loc.args[1];
-//		 var prefix = loc.args[2];
-//		 if (status.toLowerCase()=='fail') {
-//			 return makeColoredMarker('red');
-//		 } else if (status.toLowerCase()=='pass') {
-//			 return makeColoredMarker('green');
-//		 } else if (status.toLowerCase()=='na') {
-//			 return makeColoredMarker('gray');
-//		 }
-//	 };
-
-
-	 var makeColouredMarker = function(loc,colour) {
-		 if (colour.toLowerCase()=='red') {
-			 return new google.maps.Marker({     /* note that red is default icon which is what we currently use for fail */
-				 draggable : false,
-				 position: loc
-			 });
+         //Use default marker if no colour is provided
+		 if (colour == null) {
+             var marker = new google.maps.Marker({
+                 draggable : false,
+                 position: loc
+             });
+             marker.content = desc;
+             return marker;
 		 }
 
 		 var icon = '';
-		 if (status.toLowerCase()=='green') {
+		 if (colour.toUpperCase()=='GREEN') {
 			 icon = prefixed(prefix,'images/marker-images/greenMapIcon.png');
-		 } else if (status.toLowerCase()=='gray') {
+		 } else if (colour.toUpperCase()=='GRAY') {
 			 icon =  prefixed(prefix,'images/marker-images/grayMapIcon.png');
-		 } else if (status.toLowerCase()=='yellow') {
+		 } else if (colour.toUpperCase()=='YELLOW') {
 			 icon =  prefixed(prefix,'images/marker-images/yellowMapIcon.png');
-		 } else if (status.toLowerCase()=='gray') {
+		 } else if (colour.toUpperCase()=='RED') {
+             icon =  prefixed(prefix,'images/marker-images/redMapIcon.png');
+         } else if (colour.toUpperCase()=='GRAY') {
 			 icon =  prefixed(prefix,'images/marker-images/blueMapIcon.png');
 		 }
 		 var image = new google.maps.MarkerImage(
@@ -513,13 +501,10 @@ var googleMapFactory = (function() {
 			 position: loc
 		 });
 
-		 marker.content = content;
+		 marker.content = desc;
 		 return marker;
 	 };
 
-
-
-		
 	return { 
 		create : create,
 		createAndShow : createAndShow,
