@@ -26,7 +26,9 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     public enum MapMarkerColour {
         GREEN,
         YELLOW,
+        YELLOW_A,
         RED,
+        RED_A,
         GRAY
     }
 

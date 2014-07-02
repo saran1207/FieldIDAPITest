@@ -112,19 +112,22 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
         if (nextOpenEvent == null) {
             return GoogleMap.MapMarkerColour.GREEN.toString();
         } else {
+            GoogleMap.MapMarkerColour markerColour;
+            Boolean isAction =  nextOpenEvent.isAction();
             DateTime dueDate = new DateTime(nextOpenEvent.getDueDate());
             if (dueDate.isBeforeNow()) {
-                return GoogleMap.MapMarkerColour.RED.toString();
+                    markerColour = isAction ? GoogleMap.MapMarkerColour.RED_A : GoogleMap.MapMarkerColour.RED;
             } else if (true ) {
                 Interval interval30Days = new Interval(DateTime.now(), DateTime.now().plusDays(30));
                 if (interval30Days.contains(dueDate)) {
-                    return GoogleMap.MapMarkerColour.YELLOW.toString();
+                    markerColour = isAction ? GoogleMap.MapMarkerColour.YELLOW_A : GoogleMap.MapMarkerColour.YELLOW;
                 } else {
-                    return GoogleMap.MapMarkerColour.GREEN.toString();
+                    markerColour = GoogleMap.MapMarkerColour.GREEN;
                 }
             } else {
-                return GoogleMap.MapMarkerColour.GREEN.toString();
+                markerColour = GoogleMap.MapMarkerColour.GREEN;
             }
+            return markerColour.toString();
         }
     }
 

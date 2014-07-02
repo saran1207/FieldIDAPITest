@@ -469,8 +469,12 @@ var googleMapFactory = (function() {
 			 icon =  prefixed(prefix,'images/marker-images/grayMapIcon.png');
 		 } else if (colour.toUpperCase()=='YELLOW') {
 			 icon =  prefixed(prefix,'images/marker-images/yellowMapIcon.png');
+         } else if (colour.toUpperCase()=='YELLOW_A') {
+             icon =  prefixed(prefix,'images/marker-images/yellowMapIconA.png');
 		 } else if (colour.toUpperCase()=='RED') {
              icon =  prefixed(prefix,'images/marker-images/redMapIcon.png');
+         } else if (colour.toUpperCase()=='RED_A') {
+             icon =  prefixed(prefix,'images/marker-images/redMapIconA.png');
          } else if (colour.toUpperCase()=='GRAY') {
 			 icon =  prefixed(prefix,'images/marker-images/blueMapIcon.png');
 		 }
