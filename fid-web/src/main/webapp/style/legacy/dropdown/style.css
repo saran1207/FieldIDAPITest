@@ -118,7 +118,7 @@ ul.floatingDropdown li:hover > ul 			{ visibility: visible; }
 /*--------------------------------------- 
   MEDIA QUERIES for the global header
 -----------------------------------------*/
-@media (max-width: 1150px) {
+@media (max-width: 1162px) {
   #pageHeader #navigationLinks .dropdown > li > a {
     padding-left: 10px;
     padding-right: 10px;
