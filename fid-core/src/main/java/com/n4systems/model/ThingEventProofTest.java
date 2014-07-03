@@ -30,7 +30,7 @@ public class ThingEventProofTest /*nope, it shouldn't "extends Event<ThingEventT
     @Column(name="id", nullable=false)
     private Long thingEventProofTestId;
 
-    private ProofTestInfo proofTestInfo;
+    private ProofTestInfo proofTestInfo = new ProofTestInfo();
 
     @ManyToOne(optional=false)
     @JoinColumn(name="event_id", insertable=false, updatable=false)

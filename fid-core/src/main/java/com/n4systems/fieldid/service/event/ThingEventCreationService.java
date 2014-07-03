@@ -63,7 +63,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     }
 
     private void setProofTestData(ThingEvent event, FileDataContainer fileData) {
-        if (fileData == null) {
+        if (fileData == null || fileData.getFileData() == null) {
             return;
         }
 
@@ -76,7 +76,9 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         thingEventProofTest.getProofTestInfo().setDuration(fileData.getTestDuration());
         thingEventProofTest.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
         thingEventProofTest.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
-        thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
+        if(fileData.getFileData() != null){
+            thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
+        }
         thingEventProofTest.getProofTestInfo().setProofTestFileName(fileData.getFileName());
 
         event.getThingEventProofTests().add(thingEventProofTest);
@@ -179,7 +181,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     }
 
     private void uploadProofTestFile(ThingEvent event, FileDataContainer fileData) throws ProcessingProofTestException {
-        if (fileData == null) {
+        if (fileData == null || fileData.getFileData() == null) {
             return;
         }
 

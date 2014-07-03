@@ -403,7 +403,9 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
             thingEventProofTest.getProofTestInfo().setProofTestFileName(fileData.getFileName());
             thingEventProofTest.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
             thingEventProofTest.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
-            thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
+            if(fileData.getFileData() != null){
+                thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
+            }
             event.getThingEventProofTests().add(thingEventProofTest);
         }
 		
