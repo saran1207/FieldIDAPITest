@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.image.IsolationPointImageGallery;
 import com.n4systems.fieldid.wicket.components.modal.FIDModalWindow;
 import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
+import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetType;
@@ -15,6 +16,7 @@ import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -26,8 +28,6 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.*;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -40,12 +40,23 @@ public class IsolationPointEditor extends Panel {
 
     private Form form;
     private IsolationPoint editedIsolationPoint;
-    private LabelledComboBox<String> deviceComboBox;
     private FIDModalWindow modal;
     private final ProcedureDefinition procedureDefinition;
     private FIDFeedbackPanel feedbackPanel;
-    private Component imagePanel;
     private RequiredTextField sourceID;
+
+    //These components will have their visibility altered by the type of "Isolation Point" being edited...
+    //If it's a "Note," then most of these fields will be rendered invisible.
+    private Component imagePanel;
+    private Component electronicIdentifier;
+    private Component sourceText;
+    private Component lockField;
+    private Component checkField;
+    private Component locationField;
+    private Component methodField;  //This may actually be the "notes" field, depending on context...
+    private Component notesField;
+    private LabelledComboBox<String> deviceComboBox;
+
 
     public IsolationPointEditor(String id, ProcedureDefinition procedureDefinition) {
         super(id, new CompoundPropertyModel(new IsolationPoint()));
@@ -68,9 +79,9 @@ public class IsolationPointEditor extends Panel {
 
         form.add(sourceID = new RequiredTextField("identifier"));
         sourceID.setOutputMarkupId(true);
-        form.add(new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<String>(getDefaultModel(), "electronicIdentifier"))
+        form.add(electronicIdentifier = new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<String>(getDefaultModel(), "electronicIdentifier"))
                 .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id"), TipsyBehavior.Gravity.N)));
-        form.add(new TextField("sourceText"));
+        form.add(sourceText = new LabelledTextField<String>("sourceText", "label.source", new PropertyModel(getDefaultModel(), "sourceText")));
 
         form.add(deviceComboBox = new LabelledComboBox<String>("device", "label.device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription")){
             @Override
@@ -81,13 +92,19 @@ public class IsolationPointEditor extends Panel {
         deviceComboBox.addBehavior(new UpdateComponentOnChange());
         deviceComboBox.add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.device"), TipsyBehavior.Gravity.N));
 
-        form.add(new TextField("lock", new PropertyModel(getDefaultModel(),"lockDefinition.freeformDescription")));
 
-        form.add(new TextField("location").setLabel(new FIDLabelModel("label.location")).setRequired(true));
-        form.add(new TextArea("check").setLabel(new FIDLabelModel("label.check")).setRequired(true));
-        form.add(new TextArea("method").setLabel(new FIDLabelModel("label.method")).setRequired(true));
+
+        form.add(lockField = new LabelledTextField<String>("lock", "label.lock", new PropertyModel(getDefaultModel(),"lockDefinition.freeformDescription")));
+
+        //These all needed to change, because they're not proper components.  We need our internally made components so
+        //we get more control over what's rendered...
+        form.add(locationField = new LabelledTextField<String>("location", "label.location", new PropertyModel(getDefaultModel(), "location")).required());
+        form.add(checkField = new LabelledTextArea<String>("check", "label.check", new PropertyModel(getDefaultModel(), "check")).setMaxLength(255).required());
+        form.add(methodField = new LabelledTextArea<String>("method", "label.method", new PropertyModel(getDefaultModel(), "method")).setMaxLength(255).required());
+        form.add(notesField = new LabelledTextArea<String>("notes", "label.notes", new PropertyModel(getDefaultModel(), "method")).setMaxLength(255).required());
 
         form.add(imagePanel = new IsolationPointImagePanel("annotation", (IsolationPoint) getDefaultModelObject()).add(createEditClickBehavior()));
+
 
         form.add(new AjaxSubmitLink("done") {
             @Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
@@ -132,46 +149,6 @@ public class IsolationPointEditor extends Panel {
         };
     }
 
-    private IModel<String> getDeviceDescriptionModel() {
-        return new Model<String>() {
-            @Override public String getObject() {
-                IsolationPoint isolationPoint = getIsolationPointModel().getObject();
-                if (isolationPoint!=null) {
-                    IsolationDeviceDescription deviceDefinition = isolationPoint.getDeviceDefinition();
-                    if (deviceDefinition!=null) {
-                        AssetType assetType = deviceDefinition.getAssetType();
-                        if (assetType!=null) {
-                            return assetType.getDisplayName();
-                        }
-                    }
-                }
-                return "no device";  // TODO : put this in properties file.
-            }
-        };
-    }
-
-    private IModel<String> getLockDescriptionModel() {
-        return new Model<String>() {
-            @Override public String getObject() {
-                IsolationPoint isolationPoint = getIsolationPointModel().getObject();
-                if (isolationPoint!=null) {
-                    IsolationDeviceDescription lockDefinition = isolationPoint.getLockDefinition();
-                    if (lockDefinition!=null) {
-                        AssetType assetType = lockDefinition.getAssetType();
-                        if (assetType!=null) {
-                            return assetType.getDisplayName();
-                        }
-                    }
-                }
-                return "no lock";  // TODO : put this in properties file.
-            }
-        };
-    }
-
-    private IModel<IsolationPoint> getIsolationPointModel() {
-        return (IModel<IsolationPoint>) getDefaultModel();
-    }
-
     private IModel<String> getTitleModel() {
         return new Model<String>() {
             @Override public String getObject() {
@@ -205,10 +182,6 @@ public class IsolationPointEditor extends Panel {
         target.appendJavaScript("procedureDefinitionPage.openIsolationPointEditor();");
     }
 
-    private String getDeviceDescription(IsolationDeviceDescription deviceDefinition) {
-        return deviceDefinition==null ? "no device" : deviceDefinition.getAssetType().getDisplayName();
-    }
-
     protected void doDone(AjaxRequestTarget target, Form<?> form) { }
 
     protected void doCancel(AjaxRequestTarget target) { }
@@ -216,12 +189,52 @@ public class IsolationPointEditor extends Panel {
     public void edit(IsolationPoint isoPoint) {
         editedIsolationPoint = isoPoint;
         copyIntoModel(isoPoint);
+        manageVisibilityBasedOnSourceType(isoPoint.getSourceType());
     }
 
     public void editNew(IsolationPoint isoPoint) {
         editedIsolationPoint = null;
         copyIntoModel(isoPoint);
-    };
+        manageVisibilityBasedOnSourceType(isoPoint.getSourceType());
+    }
+
+    /**
+     * This method determines which forms should be visible on the Isolation Point Editor based on the SourceType of the
+     * Isolation Point.  If the IsolationPointSourceType is equal to NOTE, then we want to hide all input fields that are
+     * used for Isolation Points and reveal any fields relevant to Notes.  Vice Versa if it is a non-NOTE Isolation Point.
+     *
+     * @param sourceType - An IsolationPointSourceType instance representing the SourceType of the Isolation Point being edited.
+     */
+    private void manageVisibilityBasedOnSourceType(IsolationPointSourceType sourceType) {
+        if(IsolationPointSourceType.N.equals(sourceType)) {
+            //Render these invisible...
+            deviceComboBox.setVisible(false);
+            imagePanel.setVisible(false);
+            electronicIdentifier.setVisible(false);
+            sourceText.setVisible(false);
+            lockField.setVisible(false);
+            checkField.setVisible(false);
+            locationField.setVisible(false);
+            methodField.setVisible(false);
+
+            //And this visible... kind of an ugly hack, but I couldn't seem to dynamically set the
+            //label content.
+            notesField.setVisible(true);
+        } else {
+            //Exact opposite as above... make all these visible...
+            deviceComboBox.setVisible(true);
+            imagePanel.setVisible(true);
+            electronicIdentifier.setVisible(true);
+            sourceText.setVisible(true);
+            lockField.setVisible(true);
+            checkField.setVisible(true);
+            locationField.setVisible(true);
+            methodField.setVisible(true);
+
+            //...and make this invisible.
+            notesField.setVisible(false);
+        }
+    }
 
     private IsolationPoint copyIntoModel(IsolationPoint isolationPoint) {
         IsolationPoint ip = getIsolationPoint();

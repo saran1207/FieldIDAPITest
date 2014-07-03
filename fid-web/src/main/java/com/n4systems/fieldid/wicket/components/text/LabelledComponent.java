@@ -44,4 +44,17 @@ public abstract class LabelledComponent<T extends FormComponent, M > extends Pan
         return (T) this;
     }
 
+    /**
+     * Some components support the "maxlength" attribute.  This simply uses an AttributeModifier to
+     * tack this value onto the Text Input component wrapped inside the LabelledComponent.
+     *
+     * @param maxLength - An integer value representing the maximum amount of characters the component should hold.
+     * @param <T> - The type of component (LabelledTextArea, etc.) that is being modified.
+     * @return A reference to the LabelledComponent being modified.
+     */
+    public <T extends LabelledComponent> T setMaxLength(int maxLength) {
+        component.add(new AttributeModifier("maxlength", Integer.toString(maxLength)));
+        return (T) this;
+    }
+
 }
