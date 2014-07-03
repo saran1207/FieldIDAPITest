@@ -34,9 +34,12 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
 
     private static final String MARKER_FORMAT =
             "<div class='marker'>" +
+                    "%s" +
                     "<a class='link' href='%s'>%s / %s / %s</a>" +
                     "<p class='owner'>%s</p>" +
             "</div>";
+
+    private static final String ICON_MARKER_FORMAT = "<img class='icon' src='%s'/>";
 
     private final String linkLabel = new FIDLabelModel("label.view_asset").getObject();
 
@@ -77,7 +80,7 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
             }
 
             @Override protected String getMultipleDescription(AssetSearchRecord entity) {
-                return getMapMarkerText(entity);
+                return getMapMarkerText(entity, getIconMarkerFormat(entity));
             }
 
             @Override protected String getCssForEmptyMap() {
@@ -99,16 +102,16 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
         if (entitiesAtLocation.isEmpty()) {
             return "";
         } else {
-            return getMarkerColour(entitiesAtLocation.get(0));
+            return getMarkerColour(entitiesAtLocation.get(0)).name();
         }
     }
 
-    private String getMarkerColour(AssetSearchRecord assetSearchRecord) {
+    private GoogleMap.MapMarkerColour getMarkerColour(AssetSearchRecord assetSearchRecord) {
 
         ThingEvent nextOpenEvent = new NextEventScheduleLoader().setAssetId(assetSearchRecord.getId()).load();
 
         if (nextOpenEvent == null) {
-            return GoogleMap.MapMarkerColour.GREEN.toString();
+            return GoogleMap.MapMarkerColour.GREEN;
         } else {
             GoogleMap.MapMarkerColour markerColour;
             Boolean isAction =  nextOpenEvent.isAction();
@@ -125,13 +128,23 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
             } else {
                 markerColour = GoogleMap.MapMarkerColour.GREEN;
             }
-            return markerColour.toString();
+            return markerColour;
         }
     }
 
     protected String getMapMarkerText(AssetSearchRecord entity) {
         String url = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(urlFor(AssetSummaryPage.class, new PageParameters().add("uniqueID", entity.getId()).add("useContext", "false")).toString()));
-        return String.format(MARKER_FORMAT, url, entity.getType(), entity.getSerialNumber(), entity.getStatus(), entity.getOwner());
+        return String.format(MARKER_FORMAT, "", url, entity.getType(), entity.getSerialNumber(), entity.getStatus(), entity.getOwner());
+    }
+
+    protected String getMapMarkerText(AssetSearchRecord entity, String imageMarkup) {
+        String url = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(urlFor(AssetSummaryPage.class, new PageParameters().add("uniqueID", entity.getId()).add("useContext", "false")).toString()));
+        return String.format(MARKER_FORMAT, imageMarkup, url, entity.getType(), entity.getSerialNumber(), entity.getStatus(), entity.getOwner());
+    }
+
+    private String getIconMarkerFormat(AssetSearchRecord entity) {
+        String imageUrl = RequestCycle.get().getUrlRenderer().renderContextRelativeUrl(getMarkerColour(entity).getImageUrl());
+        return String.format(ICON_MARKER_FORMAT, imageUrl);
     }
 
     @Override

@@ -647,3 +647,46 @@ span.fieldHolder img {
 .criteriaEditForm .infoSet {
     overflow-y:visible;
 }
+
+
+.event-form-column-left {
+    float: left;
+    width: 676px;
+}
+.event-form-column-left .title,
+    .event-form-column-right .title {
+    margin-top: 15px;
+}
+.event-form-column-left .grey-message {
+    margin-bottom: 28px;
+}
+.event-form-column-left .field {
+    clear: both;
+    margin-bottom: 16px;
+    min-height: 26px;
+}
+.event-form-column-left .field.last {
+    margin-bottom: 36px;
+}
+.event-form-column-left .field span {
+    line-height: 26px;
+}
+.event-form-column-left .field textarea {
+    height: 150px;
+    width: 250px;
+}
+.event-form-column-right {
+    float: right;
+    width: 310px;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+}
+.event-form-column-right .actionDetail {
+    clear: both;
+    margin-top: 12px;
+    margin-left: 16px;
+}
+.event-form-column-right .detailSectionIcon {
+    float: left;
+    margin-right: 5px;
+}

@@ -4,9 +4,8 @@ import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
 import com.n4systems.fieldid.wicket.components.image.EditableImageList;
-import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
-import com.n4systems.model.common.ImageAnnotationType;
+import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
@@ -22,7 +21,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 
@@ -33,6 +31,7 @@ import static ch.lambdaj.Lambda.on;
 
 public class IsolationPointListPanel extends Panel {
 
+    //May no longer be needed here...
     private @SpringBean PersistenceService persistenceService;
     private @SpringBean S3Service s3Service;
 
@@ -106,72 +105,36 @@ public class IsolationPointListPanel extends Panel {
         add(blankSlate = new WebMarkupContainer("blankSlate").setVisible(false));
     }
 
+    /**
+     * This method populates rows in the Isolation Point List on the LOTO Procedure Editor.
+     *
+     * @param item - A ListItem object containing an IsolationPoint model.
+     */
     protected void populateIsolationPoint(ListItem<IsolationPoint> item) {
         final IsolationPoint isolationPoint = item.getModelObject();
 
         item.add(new AjaxLink("delete") {
-            @Override public void onClick(AjaxRequestTarget target) {
-                doDelete(target,isolationPoint);
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                doDelete(target, isolationPoint);
             }
         });
+
         item.add(new Label("id", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getIdentifier())));
-        Label source;
-        item.add(source = new Label("source", getSourceTypeDescription(isolationPoint)));
-        source.add(new AttributeAppender("class", getSourceCssClass(isolationPoint), " "));
-        if (isolationPoint.getDeviceDefinition() == null) {
-            item.add(new Label("device"));
-        } else if(isolationPoint.getDeviceDefinition().isFreeform()) {
-            item.add(new Label("device", getDeviceFreeFormDescription(isolationPoint)));
+
+        //Depending on the "Source" for the Isolation Point, we're either going to display a NoteListItem
+        //or an IsolationPointListItem so that the proper values are displayed.
+        if(IsolationPointSourceType.N.equals(isolationPoint.getSourceType())) {
+            item.add(new NoteListItem("listItem", item.getModel()));
         } else {
-            item.add(new Label("device", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getDeviceDefinition().getAssetType().getName())));
+            item.add(new IsolationPointListItem("listItem", item.getModel()));
         }
-        item.add(new Label("location", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getLocation())));
-        item.add(new Label("method", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getMethod())));
-        item.add(new Label("check", ProxyModel.of(isolationPoint, on(IsolationPoint.class).getCheck())));
-        item.add(new WebMarkupContainer("label").add(new AttributeAppender("class", getLabelCss(item.getModel())," ")));
 
         item.add(new AjaxLink("edit") {
             @Override public void onClick(AjaxRequestTarget target) {
                 doEdit(target, isolationPoint);
             }
         });
-    }
-
-    private IModel<String> getLabelCss(final IModel<IsolationPoint> model) {
-        return new Model<String>() {
-            @Override public String getObject() {
-                return model.getObject().getAnnotation()!=null ? "labelled" : "unlabelled";
-            }
-        };
-    }
-
-    private IModel<String> getSourceCssClass(IsolationPoint isolationPoint) {
-        ImageAnnotationType annotationType = ImageAnnotationType.valueOf(isolationPoint.getSourceType().name());
-        return Model.of(annotationType.getCssClass());
-    }
-
-    private String getSourceTypeDescription(IsolationPoint isolationPoint) {
-        StringBuilder description = new StringBuilder();
-
-        if(isolationPoint.getSourceText() != null){
-            description.append(isolationPoint.getSourceText());
-        } else {
-            description.append(isolationPoint.getSourceType().getIdentifier());
-        }
-
-        return description.toString();
-    }
-
-    private String getDeviceFreeFormDescription(IsolationPoint isolationPoint) {
-        StringBuilder description = new StringBuilder();
-        description.append(isolationPoint.getDeviceDefinition().getFreeformDescription());
-        if(isolationPoint.getLockDefinition().getFreeformDescription() != null) {
-            description.append(" ");
-            description.append(new FIDLabelModel("label.and").getObject());
-            description.append(" ");
-            description.append(isolationPoint.getLockDefinition().getFreeformDescription());
-        }
-        return description.toString();
     }
 
     @Override

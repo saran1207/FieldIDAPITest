@@ -24,12 +24,23 @@ public class GoogleMap<T extends HasGpsLocation> extends Panel {
     public static final String GOOGLE_MAP_API_ID = "google-map-api";
 
     public enum MapMarkerColour {
-        GREEN,
-        YELLOW,
-        YELLOW_A,
-        RED,
-        RED_A,
-        GRAY
+        GREEN("images/marker-images/greenMapIcon.png"),
+        YELLOW("images/marker-images/yellowMapIcon.png"),
+        YELLOW_A("images/marker-images/yellowMapIconA.png"),
+        RED("images/marker-images/redMapIcon.png"),
+        RED_A("images/marker-images/redMapIconA.png"),
+        GRAY("images/marker-images/grayMapIcon.png");
+
+        private String imageUrl;
+
+        private MapMarkerColour(String imageUrl) {
+            this.imageUrl = imageUrl;
+        }
+
+        public String getImageUrl() {
+            return imageUrl;
+        }
+
     }
 
     private static final String CREATE_AND_SHOW_JS = "%s = googleMapFactory.createAndShow(%s);";
