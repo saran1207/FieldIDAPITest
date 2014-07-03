@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.text;
 
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.IModel;
 
@@ -11,7 +12,15 @@ public class LabelledTextField<M> extends LabelledComponent<TextField,M> {
 
     @Override
     protected TextField<M> createLabelledComponent(String id, IModel<M> model) {
-        return new TextField(id, model);
+
+        TextField textField = new TextField(id, model);
+        textField.add(new AttributeAppender("maxlength", Integer.toString(getMaxLength())));
+        return textField;
+    }
+
+    //If you want to change the maxlength size, override this method when creating this object.
+    public int getMaxLength() {
+        return 255;
     }
 
 }
