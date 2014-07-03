@@ -1,7 +1,8 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-    <div class="column-wide">
+    <!-- target for class="event-form-column-left" or "column-wide" -->
+    <div>
 
         <div wicket:id="feedbackPanel"></div>
 
@@ -217,7 +218,7 @@
         <div wicket:id="schedulePicker"></div>
     </div>
 
-    <div wicket:id="actionsColumn" class="column-right">
+    <div wicket:id="actionsColumn" class="event-form-column-right">
         <h2><wicket:message key="label.corrective_action"/></h2>
 
         <div class="actionDetail">
