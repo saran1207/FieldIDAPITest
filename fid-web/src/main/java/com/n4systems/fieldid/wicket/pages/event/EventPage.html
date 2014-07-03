@@ -1,222 +1,217 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 
-    <!-- target for class="event-form-column-left" or "column-wide" -->
-    <div>
+    <div wicket:id="feedbackPanel"></div>
 
-        <div wicket:id="feedbackPanel"></div>
+    <form wicket:id="outerEventForm">
 
-        <form wicket:id="outerEventForm">
+        <div wicket:id="targetDetailsPanel"/>
 
-            <div wicket:id="targetDetailsPanel">
+        <div>
+
+            <h2><span wicket:id="eventTypeName"/> <wicket:message key="label.details"/></h2>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.performed_by"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="performedBy"/>
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.date_performed"/></label>
+                <span class="fieldHolder">
+                    <div wicket:id="datePerformed"/>
+                </span>
+            </div>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.scheduledon"/></label>
+                <span class="fieldHolder">
+                    <div wicket:id="dateScheduled"/>
+                </span>
+            </div>
+
+            <div class="infoSet" wicket:id="jobsContainer">
+                <label class="label"><wicket:message key="label.job"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="job"/>
+                </span>
+            </div>
+
+            <div class="infoSet" wicket:id="eventBookContainer">
+                <label class="label"><wicket:message key="label.eventbook"/></label>
+                <span class="fieldHolder">
+                    <div wicket:id="newOrExistingEventBook"/>
+                </span>
+            </div>
+
+            <div wicket:id="eventAttributes"></div>
+
+        </div>
+
+        <div wicket:id="ownerSection">
+
+            <h2><wicket:message key="label.owner"/></h2>
+
+            <div class="infoSet assignedTo" wicket:enclosure="assignedTo">
+                <label class="label"><wicket:message key="label.assignedto"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="assignedTo" class="popup"></select>
+                </span>
             </div>
 
             <div>
 
-                <h2><span wicket:id="eventTypeName"/> <wicket:message key="label.details"/></h2>
+                <div class="infoSet" style="overflow:visible">
+                    <!-- blargh : why is overflow hidden for infoSet? hack so i can see popups in this div.-->
+                    <label class="label">* <wicket:message key="label.owner"/></label>
 
-                <div class="infoSet">
-                    <label class="label"><wicket:message key="label.performed_by"/></label>
-                    <span class="fieldHolder">
-                        <select wicket:id="performedBy"/>
-                    </span>
+                    <span wicket:id="orgPicker"></span>
+
                 </div>
 
                 <div class="infoSet">
-                    <label class="label"><wicket:message key="label.date_performed"/></label>
-                    <span class="fieldHolder">
-                        <div wicket:id="datePerformed"/>
+                    <label class="label"><wicket:message key="label.assetownerupdate"/></label>
+                     <span class="fieldHolder">
+                        <input type="checkbox" wicket:id="assetOwnerUpdate">
                     </span>
                 </div>
 
                 <div class="infoSet">
-                    <label class="label"><wicket:message key="label.scheduledon"/></label>
-                    <span class="fieldHolder">
-                        <div wicket:id="dateScheduled"/>
-                    </span>
-                </div>
+                    <label class="label"><wicket:message key="label.location"/></label>
 
-                <div class="infoSet" wicket:id="jobsContainer">
-                    <label class="label"><wicket:message key="label.job"/></label>
-                    <span class="fieldHolder">
-                        <select wicket:id="job"/>
-                    </span>
+                    <span wicket:id="locationPicker"></span>
                 </div>
-
-                <div class="infoSet" wicket:id="eventBookContainer">
-                    <label class="label"><wicket:message key="label.eventbook"/></label>
-                    <span class="fieldHolder">
-                        <div wicket:id="newOrExistingEventBook"/>
-                    </span>
-                </div>
-
-                <div wicket:id="eventAttributes"></div>
 
             </div>
 
-            <div wicket:id="ownerSection">
+        </div>
 
-                <h2><wicket:message key="label.owner"/></h2>
-
-                <div class="infoSet assignedTo" wicket:enclosure="assignedTo">
-                    <label class="label"><wicket:message key="label.assignedto"/></label>
-                    <span class="fieldHolder">
-                        <select wicket:id="assignedTo" class="popup"></select>
-                    </span>
-                </div>
-
-                <div>
-
-                    <div class="infoSet" style="overflow:visible">
-                        <!-- blargh : why is overflow hidden for infoSet? hack so i can see popups in this div.-->
-                        <label class="label">* <wicket:message key="label.owner"/></label>
-
-                        <span wicket:id="orgPicker"></span>
-
-                    </div>
-
+        <wicket:enclosure child="gpsContainer">
+            <div>
+                <h2><wicket:message key="label.gps"/></h2>
+                <div wicket:id="gpsContainer" class="uploads attributes">
                     <div class="infoSet">
-                        <label class="label"><wicket:message key="label.assetownerupdate"/></label>
+                        <label class="label"><wicket:message key="label.latitude"/></label>
                          <span class="fieldHolder">
-                            <input type="checkbox" wicket:id="assetOwnerUpdate">
+                            <input type="text" wicket:id="latitude"/>
                         </span>
                     </div>
 
                     <div class="infoSet">
-                        <label class="label"><wicket:message key="label.location"/></label>
-
-                        <span wicket:id="locationPicker"></span>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <wicket:enclosure child="gpsContainer">
-                <div>
-                    <h2><wicket:message key="label.gps"/></h2>
-                    <div wicket:id="gpsContainer" class="uploads attributes">
-                        <div class="infoSet">
-                            <label class="label"><wicket:message key="label.latitude"/></label>
-                             <span class="fieldHolder">
-                                <input type="text" wicket:id="latitude"/>
-                            </span>
-                        </div>
-
-                        <div class="infoSet">
-                            <label class="label"><wicket:message key="label.longitude"/></label>
-                           <span class="fieldHolder">
-                                <input type="text" wicket:id="longitude"/>
-                            </span>
-                        </div>
+                        <label class="label"><wicket:message key="label.longitude"/></label>
+                       <span class="fieldHolder">
+                            <input type="text" wicket:id="longitude"/>
+                        </span>
                     </div>
                 </div>
-            </wicket:enclosure>
-
-            <div wicket:id="eventFormPanel" class="eventForm">
             </div>
+        </wicket:enclosure>
 
-            <div style="clear:both; overflow:hidden">
-                <h2><wicket:message key="label.result"/></h2>
+        <div wicket:id="eventFormPanel" class="eventForm">
+        </div>
 
-                <div class="infoSet">
-                    <label class="label"><wicket:message key="label.result"/></label>
-                    <span class="fieldHolder">
-                        <select wicket:id="eventResult"/>
-                    </span>
-                </div>
-                <div class="infoSet">
-                    <label class="label"><wicket:message key="label.event_status"/></label>
-                    <span class="fieldHolder">
-                        <select wicket:id="eventStatus"/>
-                    </span>
-                </div>
+        <div style="clear:both; overflow:hidden">
+            <h2><wicket:message key="label.result"/></h2>
+
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.result"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="eventResult"/>
+                </span>
             </div>
-
-            <div style="clear:both;overflow:hidden" wicket:id="proofTestContainer">
-                <h2><wicket:message key="label.prooftest"/></h2>
-
-                <div wicket:id="proofTest"></div>
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.event_status"/></label>
+                <span class="fieldHolder">
+                    <select wicket:id="eventStatus"/>
+                </span>
             </div>
+        </div>
 
-            <div style="clear:both;">
-                <h2><wicket:message key="label.posteventinformation"/></h2>
+        <div style="clear:both;overflow:hidden" wicket:id="proofTestContainer">
+            <h2><wicket:message key="label.prooftest"/></h2>
 
-                <div wicket:id="comments"></div>
+            <div wicket:id="proofTest"></div>
+        </div>
 
-                <div class="infoSet">
-                    <label class="label"><wicket:message key="label.printable"/></label>
+        <div style="clear:both;">
+            <h2><wicket:message key="label.posteventinformation"/></h2>
 
-                    <span class="fieldHolder">
-                        <input type="checkbox" wicket:id="printable">
-                        <wicket:message key="label.printableexplination"/>
-                    </span>
-                </div>
+            <div wicket:id="comments"></div>
 
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.printable"/></label>
 
-                <div wicket:id="postEventPanel"></div>
-
+                <span class="fieldHolder">
+                    <input type="checkbox" wicket:id="printable">
+                    <wicket:message key="label.printableexplination"/>
+                </span>
             </div>
 
 
-            <wicket:enclosure child="schedulesContainer">
-            <div style="clear:both;">
-                <h2><wicket:message key="label.schedules"/></h2>
+            <div wicket:id="postEventPanel"></div>
 
-                <div wicket:id="schedulesContainer">
-                    <div class="blockSeparated eventSchedule" wicket:id="schedules">
-                        <div wicket:id="addScheduleDate" class="addScheduleDate"></div>
-                        <div class="addScheduleLabel">
-                            <label wicket:id="addScheduleLabel">[sched label]</label>
-                            <wicket:enclosure>
-                                <div class="inline addScheduleJob">
-                                    <wicket:message key="label.on"/>
-                                    <span wicket:id="addScheduleJob"/>
-                                </div>
-                            </wicket:enclosure>
-                        </div>
-                        <a wicket:id="removeLink">
-                            <img src="/fieldid/images/small-x.png"/>
-                        </a>
+        </div>
+
+
+        <wicket:enclosure child="schedulesContainer">
+        <div style="clear:both;">
+            <h2><wicket:message key="label.schedules"/></h2>
+
+            <div wicket:id="schedulesContainer">
+                <div class="blockSeparated eventSchedule" wicket:id="schedules">
+                    <div wicket:id="addScheduleDate" class="addScheduleDate"></div>
+                    <div class="addScheduleLabel">
+                        <label wicket:id="addScheduleLabel">[sched label]</label>
+                        <wicket:enclosure>
+                            <div class="inline addScheduleJob">
+                                <wicket:message key="label.on"/>
+                                <span wicket:id="addScheduleJob"/>
+                            </div>
+                        </wicket:enclosure>
                     </div>
-                </div>
-
-                <div wicket:id="openSchedulePickerButton"></div>
-
-            </div>
-            </wicket:enclosure>
-
-            <div class="attachments">
-
-                <div id="attachments" class="assetFormGroup">
-                    <h2><wicket:message key="label.attachments"/></h2>
-                </div>
-
-                <p>
-                    <wicket:message key="message.attachment"/>
-                </p>
-
-                <div wicket:id="attachmentsPanel" class="attachmentsForm"></div>
-            </div>
-
-            <div class="formAction">
-                <input type="submit" wicket:id="saveButton" wicket:message="value:hbutton.save">
-                <wicket:message key="label.or"/>
-                <a wicket:id="cancelLink">
-                    <wicket:message key="label.cancel"/>
-                </a>
-                <wicket:enclosure>
-                    <wicket:message key="label.or"/>
-                    <a wicket:id="deleteLink">
-                        <wicket:message key="label.delete"/>
+                    <a wicket:id="removeLink">
+                        <img src="/fieldid/images/small-x.png"/>
                     </a>
-                </wicket:enclosure>
+                </div>
             </div>
 
-        </form>
+            <div wicket:id="openSchedulePickerButton"></div>
 
-        <div wicket:id="schedulePicker"></div>
-    </div>
+        </div>
+        </wicket:enclosure>
+
+        <div class="attachments">
+
+            <div id="attachments" class="assetFormGroup">
+                <h2><wicket:message key="label.attachments"/></h2>
+            </div>
+
+            <p>
+                <wicket:message key="message.attachment"/>
+            </p>
+
+            <div wicket:id="attachmentsPanel" class="attachmentsForm"></div>
+        </div>
+
+        <div class="formAction">
+            <input type="submit" wicket:id="saveButton" wicket:message="value:hbutton.save">
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink">
+                <wicket:message key="label.cancel"/>
+            </a>
+            <wicket:enclosure>
+                <wicket:message key="label.or"/>
+                <a wicket:id="deleteLink">
+                    <wicket:message key="label.delete"/>
+                </a>
+            </wicket:enclosure>
+        </div>
+
+    </form>
+
+    <div wicket:id="schedulePicker"></div>
 
     <div wicket:id="actionsColumn" class="event-form-column-right">
         <h2><wicket:message key="label.corrective_action"/></h2>

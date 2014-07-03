@@ -40,6 +40,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -134,8 +135,8 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
             }
         }
-
-        add(new OuterEventForm("outerEventForm"){
+        OuterEventForm form;
+        add(form = new OuterEventForm("outerEventForm"){
 
             private static final long serialVersionUID = 1L;
 
@@ -159,8 +160,11 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                     }
                 }
             }
-
         });
+
+        if (event.getObject().isAction()) {
+            form.add(new AttributeAppender("class", "event-form-column-left"));
+        }
 
         WebMarkupContainer actionsColumn;
         add(actionsColumn = new WebMarkupContainer("actionsColumn"));
