@@ -8,6 +8,8 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.AssetEvent;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.util.*;
@@ -21,10 +23,8 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
     }
 
-    /* does this cause "failed to lazily initialize a collection of role"? YES!
-    TODO figure out WHY above happens*/
     @OneToMany(fetch=FetchType.EAGER, mappedBy="thingEvent")
-    //@JoinColumn(name="event_id")  Associations marked as mappedBy must not define database mappings like @JoinTable or @JoinColumn
+    @NotFound(action= NotFoundAction.IGNORE)
     private Set<ThingEventProofTest> thingEventProofTests = new HashSet<ThingEventProofTest>();
 
     @ManyToOne(fetch=FetchType.LAZY, optional = false)
@@ -62,7 +62,7 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         setCreatedBy(event.getCreatedBy());
         setModifiedBy(event.getModifiedBy());
         setModified(event.getModified());
-
+        //TODO arezafar: do I need to copy ThingEventProofTests?
         return this;
     }
 

@@ -17,7 +17,7 @@ import java.util.List;
 
 @Entity
 @Table(name="thing_event_prooftests")
-public class ThingEventProofTest /*nope, it shouldn't "extends Event<ThingEventType,ThingEvent,Asset>"*/ implements AssetEvent, NetworkEntity<ThingEvent>, Serializable {
+public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent>, Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final SecurityDefiner createSecurityDefiner() {
@@ -134,24 +134,48 @@ public class ThingEventProofTest /*nope, it shouldn't "extends Event<ThingEventT
         return getProofTestInfo().getPeakLoad();
     }
 
+    public void setPeakLoad(String peakLoad) {
+        getProofTestInfo().setPeakLoad(peakLoad);
+    }
+
     public String getDuration() {
         return getProofTestInfo().getDuration();
+    }
+
+    public void setDuration(String duration) {
+        getProofTestInfo().setDuration(duration);
     }
 
     public ProofTestType getProofTestType() {
         return getProofTestInfo().getProofTestType();
     }
 
+    public void setProofTestType(ProofTestType proofTestType) {
+        getProofTestInfo().setProofTestType(proofTestType);
+    }
+
     public String getPeakLoadDuration() {
         return getProofTestInfo().getPeakLoadDuration();
+    }
+
+    public void setPeakLoadDuration(String peakLoadDuration) {
+        getProofTestInfo().setPeakLoadDuration(peakLoadDuration);
     }
 
     public String getProofTestData() {
         return getProofTestInfo().getProofTestData();
     }
 
+    public void setProofTestData(String fileData) {
+        getProofTestInfo().setProofTestData(fileData);
+    }
+
     public String getProofTestFileName() {
         return getProofTestInfo().getProofTestFileName();
+    }
+
+    public void setProofTestFileName(String fileName) {
+        getProofTestInfo().setProofTestFileName(fileName);
     }
 
     @Override
