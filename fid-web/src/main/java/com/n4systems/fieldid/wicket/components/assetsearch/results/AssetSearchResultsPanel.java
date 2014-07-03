@@ -34,11 +34,9 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
 
     private static final String MARKER_FORMAT =
             "<div class='marker'>" +
-                    "<p class='title'>%s / %s / %s</p>" +
+                    "<a class='link' href='%s'>%s / %s / %s</a>" +
                     "<p class='owner'>%s</p>" +
-                    "%s" +
             "</div>";
-    private static final String MARKER_LINK_FORMAT = "<a class='link' href='%s' class='marker'>%s</a><br>";
 
     private final String linkLabel = new FIDLabelModel("label.view_asset").getObject();
 
@@ -75,7 +73,7 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
             }
 
             @Override protected String getDescription(AssetSearchRecord entity) {
-                return getMapMarkerTextWithUrl(entity);
+                return getMapMarkerText(entity);
             }
 
             @Override protected String getMultipleDescription(AssetSearchRecord entity) {
@@ -131,18 +129,9 @@ public class AssetSearchResultsPanel extends SRSResultsPanel<AssetSearchCriteria
         }
     }
 
-
     protected String getMapMarkerText(AssetSearchRecord entity) {
-        return getMapMarkerTextWithUrl(entity,"");
-    }
-
-    protected String getMapMarkerTextWithUrl(AssetSearchRecord entity) {
         String url = RequestCycle.get().getUrlRenderer().renderFullUrl(Url.parse(urlFor(AssetSummaryPage.class, new PageParameters().add("uniqueID", entity.getId()).add("useContext", "false")).toString()));
-        return getMapMarkerTextWithUrl(entity,String.format(MARKER_LINK_FORMAT,url,linkLabel));
-    }
-
-    protected String getMapMarkerTextWithUrl(AssetSearchRecord entity, String url) {
-        return String.format(MARKER_FORMAT, entity.getType(), entity.getSerialNumber(), entity.getStatus(), entity.getOwner(), url );
+        return String.format(MARKER_FORMAT, url, entity.getType(), entity.getSerialNumber(), entity.getStatus(), entity.getOwner());
     }
 
     @Override
