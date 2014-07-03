@@ -216,7 +216,7 @@ public class HeaderPanel extends Panel {
             workflowStateLabel.setVisible(false);
             resultsPageBookmarkablePageLink.setVisible(false);
         } else {
-            workflowStateLabel = new Label(id, new FIDLabelModel(asset.getDisplayName() + " IS CURRENTLY LOCKED OUT"));
+            workflowStateLabel = new Label(id, new FIDLabelModel("CURRENTLY LOCKED OUT BY " + procedureModel.getLockedBy().getDisplayName().toUpperCase()));
             resultsPageBookmarkablePageLink = new BookmarkablePageLink<ProcedureResultsPage>("viewLink", ProcedureResultsPage.class, PageParametersBuilder.id(procedureModel.getId()));
 
             workflowStateLabel.setVisible(procedureModel.getWorkflowState().equals(ProcedureWorkflowState.LOCKED));
