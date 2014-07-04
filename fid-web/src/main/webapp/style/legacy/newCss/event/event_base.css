@@ -677,9 +677,14 @@ span.fieldHolder img {
 }
 .event-form-column-right {
     float: right;
-    width: 310px;
-    border-bottom: 1px solid #ccc;
+    width: 308px;
     padding-bottom: 10px;
+    margin-top: 20px;
+    border: 1px solid #D1D1D1;
+    border-top: none;
+}
+.event-form-column-right h2 {
+    margin-top: 0px;
 }
 .event-form-column-right .actionDetail {
     clear: both;
@@ -689,4 +694,18 @@ span.fieldHolder img {
 .event-form-column-right .detailSectionIcon {
     float: left;
     margin-right: 5px;
+}
+.event-form-column-right .actionMessage span {
+    min-height: 13px;
+    display: block;
+}
+.event-form-column-right .actionImage img {
+    display: block;
+    width: 280px;
+    margin: 5px 16px;
+}
+.event-form-column-right .actionImage {
+    margin-top: 16px;
+    border-top: 1px solid #ccc;
+    padding-top: 11px;
 }
