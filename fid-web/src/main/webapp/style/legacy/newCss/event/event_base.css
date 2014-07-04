@@ -653,10 +653,6 @@ span.fieldHolder img {
     float: left;
     width: 676px;
 }
-.event-form-column-left .title,
-    .event-form-column-right .title {
-    margin-top: 15px;
-}
 .event-form-column-left .grey-message {
     margin-bottom: 28px;
 }

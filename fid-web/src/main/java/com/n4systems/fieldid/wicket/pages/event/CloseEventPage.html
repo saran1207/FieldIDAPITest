@@ -3,7 +3,7 @@
     <div class="event-form-column-left">
         <div wicket:id="feedbackPanel"></div>
 
-        <h2 class="title">
+        <h2>
             <wicket:message key="label.close_event_header">
                 <label wicket:id="event"/>
             </wicket:message>
@@ -46,9 +46,7 @@
     </div>
 
     <div wicket:id="actionsColumn" class="event-form-column-right">
-        <h2 class="title">
-            <wicket:message key="label.corrective_action"/>
-        </h2>
+        <h2><wicket:message key="label.corrective_action"/></h2>
         <div class="actionDetail">
             <div class="detailSectionIcon">
                 <img src="/fieldid/images/action/icon-priority.png">
@@ -81,7 +79,7 @@
                 <span wicket:id="assignee"></span>
             </div>
         </div>
-        <div wicket:id="criteriaResultImage">
+        <div wicket:id="criteriaResultImage" class="actionImage">
             <img wicket:id="image"/>
         </div>
 
