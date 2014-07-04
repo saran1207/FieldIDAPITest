@@ -74,7 +74,7 @@ public class RecurringAuditFormPanel extends Panel {
         private List<RecurrenceTimeOfDay> times = Lists.newArrayList(RecurrenceTimeOfDay.NINE_AM);
 
         private RecurrenceType type = RecurrenceType.ANNUALLY;
-        private Date dateTime = dateService.nowInUsersTimeZone().toDate();
+        private Date dateTime = null;
         private TimeContainer timePicker;
         private DateTimePicker dateTimepicker;
         private DropDownChoice<RecurrenceType> recurrenceTypeDropDown;
@@ -179,7 +179,7 @@ public class RecurringAuditFormPanel extends Panel {
 
         private void resetForm() {
             time = RecurrenceTimeOfDay.NINE_AM;
-            dateTime = dateService.nowInUsersTimeZone().toDate();
+            dateTime = null;
             type = RecurrenceType.ANNUALLY;
             updateTimeComponents(type);
             procedureDefinition = null;
