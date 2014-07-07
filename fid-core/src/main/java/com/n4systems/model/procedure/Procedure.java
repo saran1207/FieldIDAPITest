@@ -24,7 +24,7 @@ import java.util.UUID;
 public class Procedure extends ArchivableEntityWithTenant implements NetworkEntity<Procedure>, HasGpsLocation {
 
     public static final SecurityDefiner createSecurityDefiner() {
-        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
+        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", false);
     }
 
     @ManyToOne

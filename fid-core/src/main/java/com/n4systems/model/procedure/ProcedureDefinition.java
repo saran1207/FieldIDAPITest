@@ -22,7 +22,7 @@ import java.util.Set;
 public class ProcedureDefinition extends ArchivableEntityWithTenant implements Listable<Long>, HasOwner {
 
     public static final SecurityDefiner createSecurityDefiner() {
-        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
+        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", false);
     }
 
     @ManyToOne
