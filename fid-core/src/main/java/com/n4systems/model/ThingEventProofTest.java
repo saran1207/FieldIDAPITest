@@ -20,9 +20,9 @@ import java.util.List;
 public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent>, Serializable {
     private static final long serialVersionUID = 1L;
 
-    public static final SecurityDefiner createSecurityDefiner() {
-        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
-    }
+    /*public static final SecurityDefiner createSecurityDefiner() {
+        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", false);
+    } */
 
     @SuppressWarnings("unused")
     @Id
