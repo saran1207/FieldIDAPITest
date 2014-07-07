@@ -283,7 +283,7 @@ public class PlaceSummaryPage extends PlacePage {
 
         generalForm
                 .add(new TextField<String>("name", ProxyModel.of(orgModel, on(BaseOrg.class).getName())).add(new LinkFieldsBehavior(".js-title-label").forTextField()))
-                .add(new TextField<String>("id", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
+                .add(new TextField<String>("code", ProxyModel.of(orgModel, on(BaseOrg.class).getCode())))
                 .add(new TextArea<String>("notes", ProxyModel.of(orgModel, on(BaseOrg.class).getNotes())));
 
 

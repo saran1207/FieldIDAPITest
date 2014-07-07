@@ -35,7 +35,11 @@ import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -70,7 +74,7 @@ public class RecurringAuditFormPanel extends Panel {
         private List<RecurrenceTimeOfDay> times = Lists.newArrayList(RecurrenceTimeOfDay.NINE_AM);
 
         private RecurrenceType type = RecurrenceType.ANNUALLY;
-        private Date dateTime = dateService.nowInUsersTimeZone().toDate();
+        private Date dateTime = null;
         private TimeContainer timePicker;
         private DateTimePicker dateTimepicker;
         private DropDownChoice<RecurrenceType> recurrenceTypeDropDown;
@@ -175,8 +179,12 @@ public class RecurringAuditFormPanel extends Panel {
 
         private void resetForm() {
             time = RecurrenceTimeOfDay.NINE_AM;
-            procedureDefinition = (procedureDefinitionsList.size()>0) ? procedureDefinitionsList.get(0) : null;
-            type = RecurrenceType.MONTHLY_1ST;
+            dateTime = null;
+            type = RecurrenceType.ANNUALLY;
+            updateTimeComponents(type);
+            procedureDefinition = null;
+            auditEventType = null;
+            assignee = null;
         }
 
         private TimeContainer createTimePicker() {
