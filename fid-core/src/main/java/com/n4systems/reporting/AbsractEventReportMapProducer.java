@@ -262,6 +262,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                 CriteriaResultImageView criteriaResultImageView = new CriteriaResultImageView();
                 criteriaResultImageView.setComments(resultImage.getComments());
                 criteriaResultImageView.setImage(s3Service.openCriteriaResultImageMedium(resultImage));
+                criteriaResultImageView.setImageUrl(s3Service.getCriteriaResultImageMediumURL(resultImage));
                 stateView.getCriteriaImages().add(criteriaResultImageView);
             } catch (IOException e) {
                 throw new RuntimeException(e);
