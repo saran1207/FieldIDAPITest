@@ -47,9 +47,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
             setOutputMarkupId(true);
 
             ThingEventProofTest info = proofTestInfo.getObject();
-            setVisible(proofTestInfo.getObject() != null
-                    && proofTestInfo.getObject().getProofTestType() != null
-                    && proofTestInfo.getObject().getProofTestType() != ProofTestType.OTHER);
+            setVisible(proofTestInfo.getObject() != null && proofTestInfo.getObject().getProofTestType() != null && proofTestInfo.getObject().getProofTestType() != ProofTestType.OTHER);
 
             add(new AjaxLink("removeExistingProofTestLink") {
                 @Override
