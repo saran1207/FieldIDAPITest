@@ -160,7 +160,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
 		}
 
         Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
-        if (itr.hasNext()) {
+        if (!itr.hasNext()) {
 			addActionError( getText( "error.nochart", fileName ) );
 			return MISSING;
 		}
@@ -170,7 +170,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
 
         File chartFile = null;
 
-        if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID(), proofTest.getProofTestInfo().getProofTestFileName())){
+        if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID())){
             chartFile = s3service.downloadAssetProofTest(proofTest);
         }
         else {

@@ -33,7 +33,7 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
     private ProofTestInfo proofTestInfo = new ProofTestInfo();
 
     @ManyToOne(optional=false)
-    @JoinColumn(name="event_id", insertable=false, updatable=false)
+    @JoinColumn(name="event_id")
     private ThingEvent thingEvent;
 
     /*@Override

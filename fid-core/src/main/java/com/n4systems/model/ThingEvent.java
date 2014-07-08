@@ -8,6 +8,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.AssetEvent;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -23,8 +24,9 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
     }
 
-    @OneToMany(fetch=FetchType.EAGER, mappedBy="thingEvent")
-    @NotFound(action= NotFoundAction.IGNORE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "thingEvent", cascade = CascadeType.ALL)
+    @OrderColumn
+    @NotFound(action = NotFoundAction.IGNORE)
     private Set<ThingEventProofTest> thingEventProofTests = new HashSet<ThingEventProofTest>();
 
     @ManyToOne(fetch=FetchType.LAZY, optional = false)
@@ -78,6 +80,16 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         }
         else {
             return null;
+        }
+    }
+
+    public void setProofTestInfo(ThingEventProofTest thingEventProofTest) {
+        Iterator<ThingEventProofTest> itr = thingEventProofTests.iterator();
+        if(itr.hasNext()){
+            itr.next().copyDataFrom(thingEventProofTest);
+        }
+        else {
+            thingEventProofTests.add(thingEventProofTest);
         }
     }
 

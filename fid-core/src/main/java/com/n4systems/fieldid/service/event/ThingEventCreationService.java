@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class ThingEventCreationService extends EventCreationService<ThingEvent, Asset> {
@@ -80,8 +81,15 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
             thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
         }
         thingEventProofTest.getProofTestInfo().setProofTestFileName(fileData.getFileName());
+        thingEventProofTest.setThingEvent(event);
 
-        event.getThingEventProofTests().add(thingEventProofTest);
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        if(itr.hasNext()){
+            itr.next().copyDataFrom(thingEventProofTest);
+        }
+        else {
+            event.getThingEventProofTests().add(thingEventProofTest);
+        }
     }
 
 
@@ -192,7 +200,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
             fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
             String contentType = ContentTypeUtil.getContentType(fileName);
             if (fileData.getChart() != null) {
-                s3Service.uploadAssetProofTestChart(fileData.getChart(), contentType, event.getAsset().getMobileGUID(), event.getMobileGUID(), fileName);
+                s3Service.uploadAssetProofTestChart(fileData.getChart(), contentType, event.getAsset().getMobileGUID(), event.getMobileGUID());
             }
 
         } catch (AmazonClientException e) {

@@ -13,7 +13,7 @@ CREATE TABLE `thing_event_prooftests` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 INSERT INTO `thing_event_prooftests`
-(`event_id`,`prooftesttype`,`peakload`,`duration`,`peakloadduration`,`prooftestfilename`)
-SELECT `id`,`prooftesttype`, `peakload`, `duration`, `peakloadduration`, "proof_test_chart.png"
+(`event_id`,`prooftesttype`,`peakload`,`duration`,`peakloadduration`)
+SELECT `id`,`prooftesttype`, `peakload`, `duration`, `peakloadduration`
 FROM thing_events
 WHERE prooftesttype IS NOT NULL;

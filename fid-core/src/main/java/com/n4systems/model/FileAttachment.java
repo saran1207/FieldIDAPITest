@@ -20,11 +20,6 @@ public class
         FileAttachment extends EntityWithTenant implements Attachment {
 	private static final long serialVersionUID = 1L;
 
-    /* arezafar
-    @Transient
-    private String tempFileName;
-    */
-
 	@Column(length=255)
 	private String fileName;
 
@@ -114,12 +109,4 @@ public class
 		return fileName != null && !fileName.isEmpty();
 	}
 
-    /* arezafar
-    public String getTempFileName() {
-        return tempFileName;
-    }
-
-    public void setTempFileName(String tempFileName) {
-        this.tempFileName = tempFileName;
-    }*/
 }

@@ -77,7 +77,7 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String FILE_ATTACHMENT_PATH = FILE_ATTACHMENT_FOLDER + "%s";
 
     public static final String ASSET_PROOFTESTS_FOLDER = "/assets/%s/prooftests/%s/";
-    public static final String ASSET_PROOFTESTS_PATH = ASSET_PROOFTESTS_FOLDER + "%s";
+    public static final String ASSET_PROOFTESTS_PATH = ASSET_PROOFTESTS_FOLDER + PathHandler.CHART_FILE_NAME;
 
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP = "/temp/procedure_definition_images/%s";
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM = "/temp/procedure_definition_images/%s.medium";
@@ -258,16 +258,13 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public boolean assetProofTestExists(ThingEventProofTest proofTest){
-        String fileName = proofTest.getProofTestInfo().getProofTestFileName();
-        fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
-        return assetProofTestExists(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID(), fileName);
+        return assetProofTestExists(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
     }
 
-    public boolean assetProofTestExists(String assetUuid, String eventUuid, String proofTestFilename){
+    public boolean assetProofTestExists(String assetUuid, String eventUuid){
         Assert.hasLength(assetUuid);
         Assert.hasLength(eventUuid);
-        Assert.hasLength(proofTestFilename);
-        boolean exists = resourceExists(null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid, proofTestFilename);
+        boolean exists = resourceExists(null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid);
         return exists;
     }
 
@@ -837,23 +834,14 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public String getAssetProofTestPath(ThingEventProofTest proofTest){
-        String fileName = proofTest.getProofTestInfo().getProofTestFileName();
-        fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
-        String assetProofTestPath = getAssetProofTestPath(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID(), fileName);
+        String assetProofTestPath = getAssetProofTestPath(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
         return assetProofTestPath;
     }
 
-    public String getAssetProofTestPath(String assetUuid, String eventUuid, String proofTestFilename){
+    public String getAssetProofTestPath(String assetUuid, String eventUuid){
         Assert.hasLength(assetUuid);
         Assert.hasLength(eventUuid);
-        Assert.hasLength(proofTestFilename);
-        Assert.doesNotContain(proofTestFilename, "/");
-        String fullResourcePath = proofTestFilename;
-        //if the path is not the full path (ie. its just the filename)
-        if(fullResourcePath.indexOf('/') == -1){
-            fullResourcePath = createResourcePath(null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid, proofTestFilename);
-        }
-        return fullResourcePath;
+        return createResourcePath(null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid);
     }
 
     public URL getAssetProofTestUrl(ThingEventProofTest proofTest){
@@ -869,7 +857,7 @@ public class S3Service extends FieldIdPersistenceService {
         String fullResourcePath = proofTestFilename;
         //if the path is not the full path (ie. its just the filename)
         if(fullResourcePath.indexOf('/') == -1){
-            fullResourcePath = getAssetProofTestPath(assetUuid, eventUuid, proofTestFilename);
+            fullResourcePath = getAssetProofTestPath(assetUuid, eventUuid);
         }
         URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
         return url;
@@ -898,39 +886,31 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public void uploadAssetProofTest(File assetProofTestFile, ThingEventProofTest proofTest){
-        String fileName = proofTest.getProofTestInfo().getProofTestFileName();
-        fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
-        uploadAssetProofTest(assetProofTestFile, proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID(), fileName);
+        uploadAssetProofTest(assetProofTestFile, proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
     }
 
-    public void uploadAssetProofTest(File assetProofTestFile, String assetUuid, String eventUuid, String proofTestFilename){
-        uploadResource(assetProofTestFile, null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid, proofTestFilename);
+    public void uploadAssetProofTest(File assetProofTestFile, String assetUuid, String eventUuid){
+        uploadResource(assetProofTestFile, null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid);
     }
 
     public void uploadAssetProofTestChart(byte[] proofTestChart, ThingEventProofTest proofTest){
-        String fileName = proofTest.getProofTestInfo().getProofTestFileName();
-        fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
-        String contentType = ContentTypeUtil.getContentType(fileName);
-        uploadAssetProofTestChart(proofTestChart, contentType, proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID(), fileName);
+        String contentType = "image/png";
+        uploadAssetProofTestChart(proofTestChart, contentType, proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
     }
 
-    public void uploadAssetProofTestChart(byte[] proofTestChart, String contentType, String assetUuid, String eventUuid, String proofTestFilename){
-        uploadResource(proofTestChart, contentType, null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid, proofTestFilename);
+    public void uploadAssetProofTestChart(byte[] proofTestChart, String contentType, String assetUuid, String eventUuid){
+        uploadResource(proofTestChart, contentType, null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid);
     }
 
     public byte[] downloadAssetProofTestBytes(ThingEventProofTest proofTest) throws IOException {
-        //the Filename field is overloaded to house full URL instead of just the filename
-        String fileName = proofTest.getProofTestInfo().getProofTestFileName();
-        fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
-        byte[] assetProofTestChart = downloadAssetProofTestBytes(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID(), fileName);
+        byte[] assetProofTestChart = downloadAssetProofTestBytes(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
         return assetProofTestChart;
     }
 
-    public byte[] downloadAssetProofTestBytes(String assetUuid, String eventUuid, String proofTestFilename) throws IOException {
+    public byte[] downloadAssetProofTestBytes(String assetUuid, String eventUuid) throws IOException {
         Assert.hasLength(assetUuid);
         Assert.hasLength(eventUuid);
-        Assert.hasLength(proofTestFilename);
-        return downloadResource(null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid, proofTestFilename);
+        return downloadResource(null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid);
     }
 
     public String getFileAttachmentPath(FileAttachment fileAttachment){

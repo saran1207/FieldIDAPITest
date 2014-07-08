@@ -396,19 +396,24 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		event.setType(inspType);
 		event.setPrintable(inspType.isPrintable());
 
+
+        ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
+        thingEventProofTest.getProofTestInfo().setProofTestType(fileData.getFileType());
+        thingEventProofTest.getProofTestInfo().setProofTestFileName(fileData.getFileName());
+        thingEventProofTest.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
+        thingEventProofTest.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
+        if(fileData.getFileData() != null){
+            thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
+        }
+
         Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
         if(itr.hasNext()){
-            ThingEventProofTest thingEventProofTest = itr.next();
-            thingEventProofTest.getProofTestInfo().setProofTestType(fileData.getFileType());
-            thingEventProofTest.getProofTestInfo().setProofTestFileName(fileData.getFileName());
-            thingEventProofTest.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
-            thingEventProofTest.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
-            if(fileData.getFileData() != null){
-                thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
-            }
+            itr.next().copyDataFrom(thingEventProofTest);
+        }
+        else {
             event.getThingEventProofTests().add(thingEventProofTest);
         }
-		
+
 		// let's see if there are any event info fields that need to be set
 		String infoFieldName, infoOptionName, resolvedInfoField;
 		for(Map.Entry<String, String> optEntry: fileData.getExtraInfo().entrySet()) {
@@ -462,7 +467,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
         }
         S3Service s3Service = ServiceLocator.getS3Service();
         ThingEventProofTest proofTest = itr.next();
-        if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID(), proofTest.getProofTestInfo().getProofTestFileName())){
+        if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID())){
             return true;
         }
         return PathHandler.getChartImageFile(event).exists();
