@@ -64,7 +64,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     }
 
     private void setProofTestData(ThingEvent event, FileDataContainer fileData) {
-        if (fileData == null || fileData.getFileData() == null) {
+        if (fileData == null) {
             return;
         }
 
@@ -73,7 +73,10 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         }
 
         ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
-        thingEventProofTest.getProofTestInfo().setProofTestType(fileData.getFileType());
+        //thingEventProofTest.copyDataFrom(event.getProofTestInfo());
+        //if(fileData.getFileType() != null){
+            thingEventProofTest.getProofTestInfo().setProofTestType(fileData.getFileType());
+        //}
         thingEventProofTest.getProofTestInfo().setDuration(fileData.getTestDuration());
         thingEventProofTest.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
         thingEventProofTest.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());

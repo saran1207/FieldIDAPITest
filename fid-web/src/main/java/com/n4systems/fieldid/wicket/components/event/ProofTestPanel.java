@@ -25,7 +25,12 @@ public class ProofTestPanel extends Panel {
     public ProofTestPanel(String id, IModel<ThingEvent> eventModel) {
         super(id);
 
-        setVisible(eventModel.getObject().getThingEventProofTests().size() > 0);
+        //setVisible(eventModel.getObject().getThingEventProofTests().size() > 0);
+        setVisible(eventModel.getObject().getProofTestInfo().getProofTestType() != null);
+
+        if(eventModel.getObject().getProofTestInfo().getProofTestType() == null){
+            return;
+        }
 
         add(new Label("proofTestType", new FIDLabelModel(new PropertyModel<String>(eventModel, "proofTestInfo.proofTestType.label"))));
         add(new Label("peakLoad", new PropertyModel<String>(eventModel, "proofTestInfo.peakLoad")));
@@ -39,7 +44,7 @@ public class ProofTestPanel extends Panel {
         Iterator<ThingEventProofTest> itr = thingEventProofTests.iterator();
         if(itr.hasNext()){
             ThingEventProofTest proofTest = itr.next();
-            if(s3Service.assetProofTestExists(proofTest)){
+            if(proofTest.getProofTestInfo() != null && s3Service.assetProofTestExists(proofTest)){
                 Assert.isTrue(proofTest != null && proofTest.getAsset().getMobileGUID() == eventModel.getObject().getAsset().getMobileGUID());
                 Assert.isTrue(proofTest != null && proofTest.getThingEvent().getMobileGUID() == eventModel.getObject().getMobileGUID());
                 chartUrl = s3Service.getAssetProofTestUrl(proofTest).toString();

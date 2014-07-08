@@ -36,16 +36,6 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
     @JoinColumn(name="event_id")
     private ThingEvent thingEvent;
 
-    /*@Override
-    public Asset getTarget(){
-        return thingEvent.getAsset();
-    }
-
-    @Override
-    public void setTarget(Asset target){
-        thingEvent.setAsset(target);
-    } */
-
     @AllowSafetyNetworkAccess
     public ThingEvent getThingEvent(){
         return thingEvent;
@@ -70,6 +60,9 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
 
     @AllowSafetyNetworkAccess
     public ProofTestInfo getProofTestInfo() {
+        if(proofTestInfo == null){
+            proofTestInfo = new ProofTestInfo();
+        }
         return proofTestInfo;
     }
 
@@ -131,7 +124,7 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
     }
 
     public String getPeakLoad() {
-        return getProofTestInfo().getPeakLoad();
+        return proofTestInfo == null ? null : proofTestInfo.getPeakLoad();
     }
 
     public void setPeakLoad(String peakLoad) {
@@ -139,7 +132,7 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
     }
 
     public String getDuration() {
-        return getProofTestInfo().getDuration();
+        return proofTestInfo == null ? null : proofTestInfo.getDuration();
     }
 
     public void setDuration(String duration) {
@@ -147,7 +140,7 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
     }
 
     public ProofTestType getProofTestType() {
-        return getProofTestInfo().getProofTestType();
+        return proofTestInfo == null ? null : proofTestInfo.getProofTestType();
     }
 
     public void setProofTestType(ProofTestType proofTestType) {
@@ -155,7 +148,7 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
     }
 
     public String getPeakLoadDuration() {
-        return getProofTestInfo().getPeakLoadDuration();
+        return proofTestInfo == null ? null : proofTestInfo.getPeakLoadDuration();
     }
 
     public void setPeakLoadDuration(String peakLoadDuration) {
@@ -163,7 +156,7 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
     }
 
     public String getProofTestData() {
-        return getProofTestInfo().getProofTestData();
+        return proofTestInfo == null ? null : proofTestInfo.getProofTestData();
     }
 
     public void setProofTestData(String fileData) {
@@ -171,7 +164,7 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
     }
 
     public String getProofTestFileName() {
-        return getProofTestInfo().getProofTestFileName();
+        return proofTestInfo == null ? null : proofTestInfo.getProofTestFileName();
     }
 
     public void setProofTestFileName(String fileName) {
