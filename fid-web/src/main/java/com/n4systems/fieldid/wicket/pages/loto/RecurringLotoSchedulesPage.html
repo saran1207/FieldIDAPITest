@@ -33,12 +33,12 @@
     </div>
 
     <div wicket:id="blankSlate" class="info">
-        <p ><wicket:message key="message.recurring_events_no_events"/></p>
+        <p><wicket:message key="message.recurring_events_no_events"/></p>
     </div>
 
 
     <wicket:fragment wicket:id="addRecurrenceActionGroup">
-        <div class="dropdown">
+        <div wicket:id="dropDownContainer" class="dropdown">
             <button class="btn-primary"><wicket:message key="label.create_new_rule"/></button>
             <ul>
                 <li><a wicket:id="addRecurringLotoLink"><wicket:message key="label.lockout"/></a></li>
