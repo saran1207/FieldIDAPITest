@@ -10,23 +10,34 @@
 		<p onclick="window.print();">Print page  <img class="printIcon" wicket:id="printIcon"/></p>
     </div>
 
-	<div class="procedure-print-container">
-		<div class="header">
-			<div wicket:id="meta" class="metadata"/>
-			<div wicket:id="assetpage" class="assets"/>
-			<div wicket:id="productsummary" class="procedure-summary" />
-			<div class="watermark">
-				<img src="/fieldid/images/loto/procedure-watermark.png"/>
-			</div>
-		</div>
-				
-		<div class="content">
-			<div wicket:id="images" class="image-list" />
-			<div wicket:id="list"/>
-			<div wicket:id="footer" class="footer" />
-		</div>
-	</div>
+
+    <body class="print-form">
+        <div class="print-form-page" id="source">
+            <div class="header">
+                <div class="data-container-header">
+                    <div wicket:id="meta" class="metadata"/>
+                    <div wicket:id="assetpage" class="assets"/>
+                    <div wicket:id="productsummary" class="procedure-summary" />
+                    <div class="watermark">
+                        <img src="/fieldid/images/loto/procedure-watermark.png"/>
+                    </div>
+                </div>
+            </div>
+
+            <div class="data-container">
+                <div wicket:id="images" class="image-list" />
+
+                <div wicket:id="applicationProcess"/>
+
+                <div wicket:id="list"/>
+
+                <div wicket:id="removalProcess"/>
+
+                <div wicket:id="footer" class="footer" />
+            </div>
+        </div>
+    </body>
+
 
 </wicket:extend>
 </html>
-

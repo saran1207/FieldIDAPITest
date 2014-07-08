@@ -54,6 +54,7 @@ public class PrintImages extends Panel {
             protected void populateItem(ListItem<ProcedureDefinitionImage> item) {
                 item.getDefaultModelObject();
                 ExternalImage image = new ExternalImage("image", getImageUrl(item));
+
                 image.setOutputMarkupId(true);
                 imageMarkupIds.add(image.getMarkupId());
                 item.add(image);
