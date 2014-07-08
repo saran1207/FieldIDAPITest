@@ -92,7 +92,7 @@ public abstract class PlaceEventPage extends EventPage<PlaceEvent> {
         List<EventScheduleBundle<BaseOrg>> scheduleBundles = new ArrayList<EventScheduleBundle<BaseOrg>>();
 
         for (PlaceEvent sched : schedules) {
-            EventScheduleBundle<BaseOrg> bundle = new EventScheduleBundle<BaseOrg>(sched.getPlace(), sched.getType(), sched.getProject(), sched.getDueDate());
+            EventScheduleBundle<BaseOrg> bundle = new EventScheduleBundle<BaseOrg>(sched.getPlace(), sched.getType(), sched.getProject(), sched.getDueDate(), sched.getAssignedUserOrGroup());
             scheduleBundles.add(bundle);
         }
 

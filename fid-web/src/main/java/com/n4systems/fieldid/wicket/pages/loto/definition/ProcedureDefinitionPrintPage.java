@@ -52,11 +52,21 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         add(new AttributeAppender("class", Model.of("print-procedure-definition")));
         add(new PrintMetaData("meta",model));
         add(new PrintAsset("assetpage",model));
-        add(new PrintProductSummary("productsummary",model));
-        add(new PrintImages("images",model));
-        add(new PrintList("list",model));
-        add(new PrintFooter("footer",model));
 
+
+        add(new PrintProductSummary("productsummary",model));
+
+        //----------------------------------------------------
+
+        add(new PrintImages("images",model));
+
+        add(new ProcessPanel("applicationProcess", model));
+
+        add(new PrintList("list",model));
+
+        add(new RemovalProcessPanel("removalProcess", model));
+
+        add(new PrintFooter("footer",model));
 
     }
 
@@ -71,13 +81,14 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/legacy/component/imageList.css");
-        response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
-        response.renderCSSReference("style/legacy/component/annotated-image.css");
-        response.renderCSSReference("style/legacy/pageStyles/procedureDefinitionPrint.css");
+        //response.renderCSSReference("style/legacy/component/imageList.css");
+        //response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
+        //response.renderCSSReference("style/legacy/component/annotated-image.css");
+        //response.renderCSSReference("style/legacy/pageStyles/procedureDefinitionPrint.css");
+        response.renderCSSReference("style/print/print-style.css");
 
-        response.renderJavaScriptReference("javascript/component/printimages.js");
-        response.renderOnDomReadyJavaScript("setupPrintPage("+ getJsonPrintOptions() +")");
+        //response.renderJavaScriptReference("javascript/component/printimages.js");
+        //response.renderOnDomReadyJavaScript("setupPrintPage("+ getJsonPrintOptions() +")");
     }
 
 

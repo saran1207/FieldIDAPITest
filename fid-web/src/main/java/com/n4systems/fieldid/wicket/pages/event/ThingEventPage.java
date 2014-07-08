@@ -75,7 +75,7 @@ public abstract class ThingEventPage extends EventPage<ThingEvent> {
         List<EventScheduleBundle<Asset>> scheduleBundles = new ArrayList<EventScheduleBundle<Asset>>();
 
         for (ThingEvent sched : schedules) {
-            EventScheduleBundle bundle = new EventScheduleBundle<Asset>(sched.getAsset(), sched.getType(), sched.getProject(), sched.getDueDate());
+            EventScheduleBundle bundle = new EventScheduleBundle<Asset>(sched.getAsset(), sched.getType(), sched.getProject(), sched.getDueDate(), sched.getAssignedUserOrGroup());
             scheduleBundles.add(bundle);
         }
 
