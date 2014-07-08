@@ -25,8 +25,8 @@
 var googleMapFactory = (function() {
 
 	 var defaultOptions = {
-		 zoom: 10,
-		 mapTypeId:google.maps.MapTypeId.ROADMAP
+		 zoom: 8,
+		 mapTypeId:google.maps.MapTypeId.ROADMAP,
 	 };
 
 	 var create = function(options, lat, lng) {
@@ -44,7 +44,7 @@ var googleMapFactory = (function() {
 		 }
 		 if (options.latitude && options.longitude) {
 			 options.center = new google.maps.LatLng(options.latitude,options.longitude);
-		 }
+         }
 		
 		 if (typeof options.zoom === "undefined") {
 			options.zoom = defaultOptions.zoom;
@@ -453,7 +453,7 @@ var googleMapFactory = (function() {
          var prefix= window.location.protocol+ "//" + window.location.hostname + "/fieldid/";
 
          //Use default marker if no colour is provided
-		 if (colour == null) {
+		 if (!colour) {
              var marker = new google.maps.Marker({
                  draggable : false,
                  position: loc
