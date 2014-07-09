@@ -3,41 +3,28 @@
 			xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
 			xml:lang="en"
 			lang="en">
-
 <wicket:extend>
-
-	<div class="printbar">
-		<p onclick="window.print();">Print page  <img class="printIcon" wicket:id="printIcon"/></p>
-    </div>
-
-
     <body class="print-form">
+        <div class="printbar">
+            <p onclick="window.print();">Print page  <img class="printIcon" wicket:id="printIcon"/></p>
+        </div>
+        <img class="watermark" wicket:id=watermarkImage/>
         <div class="print-form-page" id="source">
             <div class="header">
                 <div class="data-container-header">
                     <div wicket:id="meta" class="metadata"/>
                     <div wicket:id="assetpage" class="assets"/>
                     <div wicket:id="productsummary" class="procedure-summary" />
-                    <div class="watermark">
-                        <img src="/fieldid/images/loto/procedure-watermark.png"/>
-                    </div>
                 </div>
             </div>
-
             <div class="data-container">
                 <div wicket:id="images" class="image-list" />
-
                 <div wicket:id="applicationProcess"/>
-
                 <div wicket:id="list"/>
-
                 <div wicket:id="removalProcess"/>
-
-                <div wicket:id="footer" class="footer" />
             </div>
+            <div wicket:id="footer" class="footer" />
         </div>
     </body>
-
-
 </wicket:extend>
 </html>
