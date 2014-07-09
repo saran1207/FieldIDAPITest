@@ -19,10 +19,17 @@ public class ProcessPanel extends Panel {
     public ProcessPanel(String id, IModel<ProcedureDefinition> model) {
         super(id, model);
 
-        //assetDescription
-        //add(new Label("assetDescription", ProxyModel.of(model, on(ProcedureDefinition.class).getAsset().getDescription())));
+        boolean showPanel = true;
+        if(model.getObject().getApplicationProcess() == null) {
+            showPanel = false;
+        } else if (model.getObject().getApplicationProcess().isEmpty()) {
+            showPanel = false;
+        } else {
+            showPanel = true;
+        }
+        Label process = new Label("process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess()));
+        process.setVisible(showPanel);
 
-        add(new Label("process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())));
-
+        add(process);
     }
 }
