@@ -19,9 +19,9 @@ public class RemovalProcessPanel extends Panel {
         super(id, model);
 
         boolean showPanel = true;
-        if(model.getObject().getApplicationProcess() == null) {
+        if(model.getObject().getRemovalProcess() == null) {
             showPanel = false;
-        } else if (model.getObject().getApplicationProcess().isEmpty()) {
+        } else if (model.getObject().getRemovalProcess().isEmpty()) {
             showPanel = false;
         } else {
             showPanel = true;
