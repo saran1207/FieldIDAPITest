@@ -25,8 +25,13 @@ public class ProofTestPanel extends Panel {
     public ProofTestPanel(String id, IModel<ThingEvent> eventModel) {
         super(id);
 
-        //setVisible(eventModel.getObject().getThingEventProofTests().size() > 0);
-        setVisible(eventModel.getObject().getProofTestInfo().getProofTestType() != null);
+        if(eventModel.getObject().getThingEventProofTests().size() == 0 || eventModel.getObject().getProofTestInfo().getProofTestType() == null){
+            setVisible(false);
+            return;
+        }
+        else {
+            setVisible(true);
+        }
 
         if(eventModel.getObject().getProofTestInfo().getProofTestType() == null){
             return;
