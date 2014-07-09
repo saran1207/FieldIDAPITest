@@ -845,20 +845,15 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public URL getAssetProofTestUrl(ThingEventProofTest proofTest){
-        URL assetProofTestUrl = getAssetProofTestUrl(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID(), proofTest.getProofTestInfo().getProofTestFileName());
+        URL assetProofTestUrl = getAssetProofTestUrl(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
         return assetProofTestUrl;
     }
 
-    public URL getAssetProofTestUrl(String assetUuid, String eventUuid, String proofTestFilename){
+    public URL getAssetProofTestUrl(String assetUuid, String eventUuid){
         Assert.hasLength(assetUuid);
         Assert.hasLength(eventUuid);
-        Assert.hasLength(proofTestFilename);
         Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
-        String fullResourcePath = proofTestFilename;
-        //if the path is not the full path (ie. its just the filename)
-        if(fullResourcePath.indexOf('/') == -1){
-            fullResourcePath = getAssetProofTestPath(assetUuid, eventUuid);
-        }
+        String fullResourcePath = getAssetProofTestPath(assetUuid, eventUuid);
         URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
         return url;
     }

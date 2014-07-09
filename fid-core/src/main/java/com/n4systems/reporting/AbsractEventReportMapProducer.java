@@ -330,14 +330,16 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 		if (itr.hasNext()) {
             //TODO handling of cases when there are multiple ProofTests per event
             ThingEventProofTest proofTest = itr.next();
-			proofTestInfo.put("peakLoad", proofTest.getProofTestInfo().getPeakLoad());
-			proofTestInfo.put("testDuration", proofTest.getProofTestInfo().getDuration());
-			proofTestInfo.put("peakLoadDuration", proofTest.getProofTestInfo().getPeakLoadDuration());
-            if(s3Service.assetProofTestExists(proofTest)){
-                proofTestInfo.put("chartPath", s3Service.getAssetProofTestUrl(proofTest));
-            }
-            else {
-                proofTestInfo.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
+            if(proofTest.getProofTestInfo() != null){
+    			proofTestInfo.put("peakLoad", proofTest.getProofTestInfo().getPeakLoad());
+	    		proofTestInfo.put("testDuration", proofTest.getProofTestInfo().getDuration());
+		    	proofTestInfo.put("peakLoadDuration", proofTest.getProofTestInfo().getPeakLoadDuration());
+                if(s3Service.assetProofTestExists(proofTest)){
+                    proofTestInfo.put("chartPath", s3Service.getAssetProofTestUrl(proofTest));
+                }
+                else {
+                    proofTestInfo.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
+                }
             }
 		}
 		return proofTestInfo;

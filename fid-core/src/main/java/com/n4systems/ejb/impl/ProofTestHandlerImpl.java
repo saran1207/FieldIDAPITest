@@ -398,13 +398,17 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 
 
         ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
-        thingEventProofTest.getProofTestInfo().setProofTestType(fileData.getFileType());
-        thingEventProofTest.getProofTestInfo().setProofTestFileName(fileData.getFileName());
+        //thingEventProofTest.copyDataFrom(event.getProofTestInfo());
+        //if(fileData.getFileType() != null){
+            thingEventProofTest.getProofTestInfo().setProofTestType(fileData.getFileType());
+        //}
+        thingEventProofTest.getProofTestInfo().setDuration(fileData.getTestDuration());
         thingEventProofTest.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
         thingEventProofTest.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
         if(fileData.getFileData() != null){
             thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
         }
+        thingEventProofTest.getProofTestInfo().setProofTestFileName(fileData.getFileName());
 
         Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
         if(itr.hasNext()){
@@ -465,8 +469,11 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
         if (!itr.hasNext()) {
             return false;
         }
-        S3Service s3Service = ServiceLocator.getS3Service();
         ThingEventProofTest proofTest = itr.next();
+        if(proofTest.getProofTestInfo() == null){
+            return false;
+        }
+        S3Service s3Service = ServiceLocator.getS3Service();
         if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID())){
             return true;
         }

@@ -61,7 +61,7 @@ public class ProcedureAuditListPanel extends Panel {
 
         columns.add(new ProcedureAuditDueDateColumn(new FIDLabelModel("label.due"),"dueDate", "dueDate"));
 
-        columns.add(new PropertyColumn<ProcedureAuditEvent>(new FIDLabelModel("label.assigned_to"),"assignee.firstName", "assignee.fullName")
+        columns.add(new PropertyColumn<ProcedureAuditEvent>(new FIDLabelModel("label.assigned_to"),"assignedUserOrGroup.displayName", "assignedUserOrGroup.displayName")
         {
             @Override
             public void populateItem(final Item<ICellPopulator<ProcedureAuditEvent>> item, final String componentId, final IModel<ProcedureAuditEvent> rowModel)

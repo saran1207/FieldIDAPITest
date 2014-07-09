@@ -4,10 +4,7 @@ import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.fieldid.wicket.components.renderer.ListableLabelChoiceRenderer;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fileprocessing.ProofTestType;
-import com.n4systems.model.EventType;
-import com.n4systems.model.ProofTestInfo;
-import com.n4systems.model.ThingEventProofTest;
-import com.n4systems.model.ThingEventType;
+import com.n4systems.model.*;
 import com.n4systems.tools.FileDataContainer;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
@@ -42,17 +39,17 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
 
     class RemoveExistingProofTestPanel extends WebMarkupContainer {
 
-        public RemoveExistingProofTestPanel(String id, final ThingEventType eventType, final IModel<ThingEventProofTest> proofTestInfo) {
+        public RemoveExistingProofTestPanel(String id, final ThingEventType eventType, final IModel<ThingEventProofTest> proofTestModel) {
             super(id);
             setOutputMarkupId(true);
 
-            ThingEventProofTest info = proofTestInfo.getObject();
-            setVisible(proofTestInfo.getObject() != null && proofTestInfo.getObject().getProofTestType() != null && proofTestInfo.getObject().getProofTestType() != ProofTestType.OTHER);
+            ThingEventProofTest info = proofTestModel.getObject();
+            setVisible(proofTestModel.getObject() != null && proofTestModel.getObject().getProofTestType() != null && proofTestModel.getObject().getProofTestType() != ProofTestType.OTHER);
 
             add(new AjaxLink("removeExistingProofTestLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    proofTestInfo.setObject(createInitialProofTestObject(eventType));
+                    proofTestModel.setObject(createInitialProofTestObject(eventType, proofTestModel.getObject().getThingEvent()));
                     removeExistingPanel.setVisible(false);
                     proofTestDetailsPanel.setVisible(true);
                     target.add(ProofTestEditPanel.this);
@@ -68,19 +65,19 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
         FileUploadField fileUploadField;
 
 
-        public ProofTestDetailsPanel(String id, ThingEventType eventType, IModel<ThingEventProofTest> proofTest) {
-            super(id, proofTest);
+        public ProofTestDetailsPanel(String id, ThingEventType eventType, IModel<ThingEventProofTest> proofTestModel) {
+            super(id, proofTestModel);
 
             setOutputMarkupId(true);
 
-            setVisible(proofTest.getObject() == null || proofTest.getObject().getProofTestType() == null || proofTest.getObject().getProofTestType() == ProofTestType.OTHER);
+            setVisible(proofTestModel.getObject() == null || proofTestModel.getObject().getProofTestType() == null || proofTestModel.getObject().getProofTestType() == ProofTestType.OTHER);
 
             otherTypeContainer = new WebMarkupContainer("otherProofTestContainer");
             otherTypeContainer.setOutputMarkupPlaceholderTag(true);
 
-            otherTypeContainer.add(new TextField<String>("peakLoad", new PropertyModel<String>(proofTest, "peakLoad")));
-            otherTypeContainer.add(new TextField<String>("duration", new PropertyModel<String>(proofTest, "duration")));
-            otherTypeContainer.add(new TextField<String>("peakLoadDuration", new PropertyModel<String>(proofTest, "peakLoadDuration")));
+            otherTypeContainer.add(new TextField<String>("peakLoad", new PropertyModel<String>(proofTestModel, "peakLoad")));
+            otherTypeContainer.add(new TextField<String>("duration", new PropertyModel<String>(proofTestModel, "duration")));
+            otherTypeContainer.add(new TextField<String>("peakLoadDuration", new PropertyModel<String>(proofTestModel, "peakLoadDuration")));
 
             uploadedProofTestContainer = new WebMarkupContainer("uploadedProofTestContainer");
             uploadedProofTestContainer.setOutputMarkupPlaceholderTag(true);
@@ -90,7 +87,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
             final List<ProofTestType> proofTestTypes = new ArrayList<ProofTestType>(eventType.getSupportedProofTests());
 
             final boolean multipleProofTypes = proofTestTypes.size() > 1;
-            DropDownChoice<ProofTestType> typeSelect = new DropDownChoice<ProofTestType>("proofTestType", new PropertyModel<ProofTestType>(proofTest, "proofTestType"), proofTestTypes, new ListableLabelChoiceRenderer<ProofTestType>()) {
+            DropDownChoice<ProofTestType> typeSelect = new DropDownChoice<ProofTestType>("proofTestType", new PropertyModel<ProofTestType>(proofTestModel, "proofTestType"), proofTestTypes, new ListableLabelChoiceRenderer<ProofTestType>()) {
                 @Override public boolean isVisible() {
                     return multipleProofTypes;
                 }
@@ -103,11 +100,11 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
                 }
             });
 
-            add(new Label("proofTestTypeLabel", new FIDLabelModel(new PropertyModel<String>(proofTest, "proofTestType.displayName"))).setVisible(!multipleProofTypes));
-            if (proofTest.getObject() == null || proofTest.getObject().getProofTestType() == null) {
-                ThingEventProofTest proofTestInit = createInitialProofTestObject(eventType);
-                proofTest.setObject(proofTestInit);
+            if (proofTestModel.getObject() == null || proofTestModel.getObject().getProofTestType() == null) {
+                ThingEventProofTest proofTestInit = createInitialProofTestObject(eventType, proofTestModel.getObject().getThingEvent());
+                proofTestModel.getObject().copyDataFrom(proofTestInit);
             }
+            add(new Label("proofTestTypeLabel", new FIDLabelModel(new PropertyModel<String>(proofTestModel, "proofTestType.displayName"))).setVisible(!multipleProofTypes));
 
             add(otherTypeContainer, uploadedProofTestContainer, typeSelect);
 
@@ -176,11 +173,12 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
         return proofTestDetailsPanel.getFileDataContainer();
     }
 
-    private ThingEventProofTest createInitialProofTestObject(ThingEventType eventType) {
+    private ThingEventProofTest createInitialProofTestObject(ThingEventType eventType, ThingEvent thingEvent) {
         ThingEventProofTest info = new ThingEventProofTest();
         Iterator<ProofTestType> itr = eventType.getSupportedProofTests().iterator();
         if (itr.hasNext()) {
             info.setProofTestType(itr.next());
+            info.setThingEvent(thingEvent);
         }
         return info;
     }
