@@ -328,7 +328,6 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
         Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
 		Map<String, Object> proofTestInfo = new HashMap<String, Object>();
 		if (itr.hasNext()) {
-            //TODO handling of cases when there are multiple ProofTests per event
             ThingEventProofTest proofTest = itr.next();
             if(proofTest.getProofTestInfo() != null){
     			proofTestInfo.put("peakLoad", proofTest.getProofTestInfo().getPeakLoad());

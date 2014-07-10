@@ -10,6 +10,7 @@ import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.AssetEvent;
 import com.n4systems.tools.FileDataContainer;
+import org.apache.commons.lang.ArrayUtils;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -48,10 +49,10 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
 
     public ThingEventProofTest copyDataFrom(FileDataContainer fileData) {
 
-        getProofTestInfo().setDuration( fileData.getTestDuration() );
+        getProofTestInfo().setDuration(fileData.getTestDuration());
         getProofTestInfo().setPeakLoad( fileData.getPeakLoad() );
         getProofTestInfo().setPeakLoadDuration( fileData.getPeakLoadDuration() );
-        getProofTestInfo().setProofTestType( fileData.getFileType() );
+        getProofTestInfo().setProofTestType(fileData.getFileType());
         getProofTestInfo().setProofTestFileName( fileData.getFileName() );
         getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
 
@@ -169,7 +170,7 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
     }
 
     public String getProofTestData() {
-        return proofTestInfo == null ? null : proofTestInfo.getProofTestData();
+        return proofTestInfo == null ? null : String.copyValueOf(ArrayUtils.toPrimitive(proofTestInfo.getProofTestData()));
     }
 
     public void setProofTestData(String fileData) {

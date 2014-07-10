@@ -5,7 +5,6 @@ import com.n4systems.model.api.Listable;
 public enum ProofTestType implements Listable<String> {
 
 	ROBERTS(RobertsFileProcessor.class, "label.robertlog", true),
-    NATIONALAUTOMATION(NationalAutomationFileProcessor.class, "label.naexcel", true),
     CHANT(ChantFileProcessor.class, "label.chantlog", true),
     WIROP(WiropFileProcessor.class, "label.wiroplog", true),
 	OTHER( ManualFileProcessor.class, "label.other", false );

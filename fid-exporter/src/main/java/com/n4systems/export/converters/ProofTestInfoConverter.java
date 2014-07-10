@@ -31,8 +31,6 @@ public class ProofTestInfoConverter extends ExportConverter {
 		switch (type) {
 			case ROBERTS:
 				return "Roberts";
-			case NATIONALAUTOMATION:
-				return "National Automation";
 			case CHANT:
 				return "Chant";
 			case WIROP:
