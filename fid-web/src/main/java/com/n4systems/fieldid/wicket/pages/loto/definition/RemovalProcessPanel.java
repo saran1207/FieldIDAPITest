@@ -18,11 +18,17 @@ public class RemovalProcessPanel extends Panel {
     public RemovalProcessPanel(String id, IModel<ProcedureDefinition> model) {
         super(id, model);
 
-        //assetDescription
-        //add(new Label("assetDescription", ProxyModel.of(model, on(ProcedureDefinition.class).getAsset().getDescription())));
+        boolean showPanel = true;
+        if(model.getObject().getRemovalProcess() == null) {
+            showPanel = false;
+        } else if (model.getObject().getRemovalProcess().isEmpty()) {
+            showPanel = false;
+        } else {
+            showPanel = true;
+        }
+        Label process = new Label("process", ProxyModel.of(model, on(ProcedureDefinition.class).getRemovalProcess()));
+        process.setVisible(showPanel);
 
-        add(new Label("process", ProxyModel.of(model, on(ProcedureDefinition.class).getRemovalProcess())));
-
-
+        add(process);
     }
 }
