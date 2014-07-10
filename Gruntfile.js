@@ -25,7 +25,7 @@ module.exports = function(grunt) {
     var scssBase = styleBase + 'sass/';
     var cssBase = styleBase;
 
-    var scssFileMap = buildScssFileMap(scssBase, cssBase, 'global', 'ie-all', 'ie-lte8', 'pages/', 'plugins/');
+    var scssFileMap = buildScssFileMap(scssBase, cssBase, 'global', 'ie-all', 'ie-lte8', 'pages/', 'plugins/', 'print/');
 
     util.print('Found scss root files: \n' + util.inspect(scssFileMap) + '\n\n');
 
