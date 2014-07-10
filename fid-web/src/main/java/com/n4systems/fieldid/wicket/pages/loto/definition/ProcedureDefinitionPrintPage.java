@@ -58,19 +58,14 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         add(new AttributeAppender("class", Model.of("print-procedure-definition")));
         add(new PrintMetaData("meta",model));
         add(new PrintAsset("assetpage",model));
-
-
         add(new PrintProductSummary("productsummary",model));
 
         //----------------------------------------------------
 
-        add(new PrintImages("images",model));
-
-        add(new ProcessPanel("applicationProcess", model));
-
-        add(new PrintList("list",model));
-
-        add(new RemovalProcessPanel("removalProcess", model));
+        add(new PrintImages("images",model).setRenderBodyOnly(true));
+        add(new ProcessPanel("applicationProcess", model).setRenderBodyOnly(true));
+        add(new PrintList("list",model).setRenderBodyOnly(true));
+        add(new RemovalProcessPanel("removalProcess", model).setRenderBodyOnly(true));
 
         add(new PrintFooter("footer",model));
 
