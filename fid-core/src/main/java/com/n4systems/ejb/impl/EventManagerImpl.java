@@ -19,6 +19,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import com.n4systems.webservice.dto.WSSearchCritiera;
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -50,13 +51,14 @@ public class EventManagerImpl implements EventManager {
 
 	
 	public ThingEvent findEventThroughSubEvent(Long subEventId, SecurityFilter filter) {
-		String str = "select e FROM "+ThingEvent.class.getName()+" e, IN( e.subEvents ) s WHERE s.id = :subEventId AND ";
+		String str = "SELECT e FROM "+ThingEvent.class.getName()+" e JOIN FETCH e.asset, IN( e.subEvents ) s WHERE s.id = :subEventId AND ";
 		str += filter.produceWhereClause(ThingEvent.class, "e");
 		Query query = em.createQuery(str);
 		query.setParameter("subEventId", subEventId);
 		filter.applyParameters(query, ThingEvent.class);
 		try {
-			return (ThingEvent) query.getSingleResult();
+            ThingEvent event = (ThingEvent) query.getSingleResult();
+			return event;
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
@@ -66,14 +68,16 @@ public class EventManagerImpl implements EventManager {
 	}
 
 	public SubEvent findSubEvent(Long subEventId, SecurityFilter filter) {
-		Event event = findEventThroughSubEvent(subEventId, filter);
+        ThingEvent event = findEventThroughSubEvent(subEventId, filter);
 
 		if (event == null) {
 			return null;
 		}
 
 		try {
-			return persistenceManager.find(SubEvent.class, subEventId, "attachments");
+            SubEvent subEvent = persistenceManager.find(SubEvent.class, subEventId, "attachments");
+            subEvent.setAsset(event.getAsset());
+            return subEvent;
 		} catch (NoResultException e) {
 			return null;
 		} catch (Exception e) {
@@ -81,6 +85,23 @@ public class EventManagerImpl implements EventManager {
 			return null;
 		}
 	}
+
+    public PlaceEvent findPlaceEvent(Long id, SecurityFilter filter) {
+        PlaceEvent event = null;
+
+        QueryBuilder<PlaceEvent> queryBuilder = new QueryBuilder<PlaceEvent>(PlaceEvent.class, filter);
+        queryBuilder.setSimpleSelect().addSimpleWhere("id", id).addSimpleWhere("state", EntityState.ACTIVE);
+        queryBuilder.addOrder("created");
+        queryBuilder.addPostFetchPaths(Event.PLACE_FIELD_PATHS);
+
+        try {
+            event = persistenceManager.find(queryBuilder);
+        } catch (InvalidQueryException iqe) {
+            logger.error("bad query while loading place event", iqe);
+        }
+
+        return event;
+    }
 
 	public ThingEvent findAllFields(Long id, SecurityFilter filter) {
         ThingEvent event = null;
@@ -92,7 +113,8 @@ public class EventManagerImpl implements EventManager {
 
 		try {
 			event = persistenceManager.find(queryBuilder);
-			if (event != null) {
+            event.getAsset();
+            if (event != null) {
 				// now we need to postfetch the rec/def lists on the results. We
 				// can't do this above since the results themselvs are a list.
 				persistenceManager.postFetchFields(event.getResults(), "recommendations", "deficiencies");

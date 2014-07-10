@@ -54,6 +54,20 @@ public class EventManagerEJBContainer extends EJBTransactionEmulator<EventManage
             transactionManager.finishTransaction(transaction);
         }
     }
+    public PlaceEvent findPlaceEvent(Long id, SecurityFilter filter) {
+        TransactionManager transactionManager = new FieldIdTransactionManager();
+        Transaction transaction = transactionManager.startTransaction();
+        try {
+            return createManager(transaction.getEntityManager()).findPlaceEvent(id, filter);
+
+        } catch (RuntimeException e) {
+            transactionManager.rollbackTransaction(transaction);
+
+            throw e;
+        } finally {
+            transactionManager.finishTransaction(transaction);
+        }
+    }
 
     public ThingEvent findAllFields(Long id, SecurityFilter filter) {
 		TransactionManager transactionManager = new FieldIdTransactionManager();

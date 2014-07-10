@@ -2,24 +2,24 @@ package com.n4systems.fieldid.actions.downloaders;
 
 import com.n4systems.ejb.EventManager;
 import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.util.ZipFileUtil;
 import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipOutputStream;
 
 public class DownloadAttachedEventFile extends DownloadAction {
 	private static final long serialVersionUID = 1L;
 
-	private ThingEvent event;
+	//private ThingEvent event;
 	private EventManager eventManager;
 	
 	public DownloadAttachedEventFile(EventManager eventManager, PersistenceManager persistenceManager) {
@@ -30,7 +30,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
 	public String doDownload() {
 		
 		// load the event
-		event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
+        ThingEvent event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
 		
 		if( event == null ) {
 			addActionError( getText( "error.noevent" ) );
@@ -40,7 +40,8 @@ public class DownloadAttachedEventFile extends DownloadAction {
 		FileAttachment attachment = null;
 		
 		// make sure our attachment is actually attached to this event
-		for(FileAttachment attach: event.getAttachments()) {
+        List<FileAttachment> fileAttachments = event.getAttachments();
+		for(FileAttachment attach: fileAttachments) {
 			if(attach.getId().equals(attachmentID)) {
 				attachment = attach;
 				break;
@@ -91,7 +92,7 @@ public class DownloadAttachedEventFile extends DownloadAction {
 	public String doDownloadSubEvent()  {
 		
 		// load the event
-		event = eventManager.findEventThroughSubEvent( uniqueID, getSecurityFilter() );
+        ThingEvent event = eventManager.findEventThroughSubEvent( uniqueID, getSecurityFilter() );
 		
 		SubEvent subEvent = eventManager.findSubEvent( uniqueID, getSecurityFilter() );
 		
@@ -153,28 +154,27 @@ public class DownloadAttachedEventFile extends DownloadAction {
 	
 	
 	public String doDownloadChart() {
-		event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
-		if( event == null ) {
+		ThingEvent thingEvent =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
+		if( thingEvent == null ) {
 			addActionError( getText( "error.noevent" ) );
 			return MISSING;
 		}
 
-        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        Iterator<ThingEventProofTest> itr = thingEvent.getThingEventProofTests().iterator();
         if (!itr.hasNext()) {
 			addActionError( getText( "error.nochart", fileName ) );
 			return MISSING;
 		}
 
-        S3Service s3Service = ServiceLocator.getS3Service();
         ThingEventProofTest proofTest = itr.next();
 
         File chartFile = null;
 
-        if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID())){
+        if(s3Service.assetProofTestExists(thingEvent.getAsset().getMobileGUID(), thingEvent.getMobileGUID())){
             chartFile = s3service.downloadAssetProofTest(proofTest);
         }
         else {
-            chartFile = PathHandler.getChartImageFile(event);
+            chartFile = PathHandler.getChartImageFile(thingEvent);
         }
 
 		if( chartFile == null || !chartFile.exists() ) {
@@ -201,20 +201,46 @@ public class DownloadAttachedEventFile extends DownloadAction {
 
     public String doDownloadAll() {
         // load the event
-        event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
+        ThingEvent event =  eventManager.findAllFields( uniqueID, getSecurityFilter() );
+        String name = event.getAsset().getIdentifier();
+
+        return doDownloadAll(event, name);
+    }
+
+    public String doDownloadAllSub() {
+
+        // load the event
+        SubEvent event =  eventManager.findSubEvent( uniqueID, getSecurityFilter() );
+        String name = event.getAsset().getIdentifier();
+
+        return doDownloadAll(event, name);
+    }
+
+    public String doDownloadAllPlace() {
+
+        // load the event
+        PlaceEvent event =  eventManager.findPlaceEvent(uniqueID, getSecurityFilter());
+        String name = event.getPlace().getDisplayName();
+
+        return doDownloadAll(event, name);
+    }
+
+    private String doDownloadAll(AbstractEvent event, String name) {
 
         if( event == null ) {
             addActionError( getText( "error.noevent" ) );
             return MISSING;
         }
 
-        String filename = event.getAsset().getIdentifier() + "-" + new SimpleDateFormat("MM-dd-yy").format(event.getCompletedDate()) + "-Attachments.zip";
+        name = name.replaceAll("[^a-zA-Z0-9.-]", "_");
+        String filename = name + "-" + new SimpleDateFormat("MM-dd-yy").format(event.getCreated()) + "-Attachments.zip";
         boolean failure = false;
 
         try {
             setFileName(URLEncoder.encode(filename, "UTF-8"));
             ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(getFile(fileName)));
-            for(FileAttachment attachment: event.getAttachments()) {
+            List<FileAttachment> fileAttachments = event.getAttachments();
+            for(FileAttachment attachment: fileAttachments) {
 
                 if(attachment.isRemote()){
                     ZipFileUtil.addToZipFile(s3Service.downloadFileAttachment(attachment), zipOut);
