@@ -15,6 +15,8 @@ public interface EventManager {
 
 	public SubEvent findSubEvent(Long subEventId, SecurityFilter filter);
 
+    public PlaceEvent findPlaceEvent(Long placeEventId, SecurityFilter filter);
+
 	public ThingEvent findEventThroughSubEvent(Long subEventId, SecurityFilter filter);
 
 	public ThingEvent findAllFields(Long id, SecurityFilter filter);

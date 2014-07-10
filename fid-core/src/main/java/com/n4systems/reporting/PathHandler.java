@@ -318,11 +318,11 @@ public class PathHandler {
 	public static File getCompiledSummaryReportFile(Tenant tenant, Locale locale) {
         return getPossiblyLocalizedReport(tenant, locale, COMPILED_SUMMARY_REPORT_FILE_NAME_LOCALIZED, COMPILED_SUMMARY_REPORT_FILE_NAME);
 	}
-	
-	private static String getEventPath(Event event) {
-		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(event.getCreated());
-		return mergePaths(dateCreatedPath, event.getId().toString());
-	}
+
+    private static String getEventPath(AbstractEvent event) {
+        String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(event.getCreated());
+        return mergePaths(dateCreatedPath, event.getId().toString());
+    }
 	
 	private static String getProjectPath(Project project) {
 		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(project.getCreated());
@@ -350,7 +350,7 @@ public class PathHandler {
 		return getAssetTypePath(assetType.getId());
 	}
 	
-	private static String getAttachmentPath(Event event) {
+	private static String getAttachmentPath(AbstractEvent event) {
 		return mergePaths(getEventPath(event));
 	}
 	
@@ -370,11 +370,11 @@ public class PathHandler {
 		return new File(getAttachmentFile(event), attachment.getFileName());
 	}
 	
-	public static File getAttachmentFile(Event event, SubEvent subEvent) {
+	public static File getAttachmentFile(AbstractEvent event, SubEvent subEvent) {
 		return absolutize(mergePaths(getEventAttachmentBasePath(event.getTenant()), getAttachmentPath(event), getSubEventPath(subEvent)));
 	}
 	
-	public static File getAttachmentFile(Event event) {
+	public static File getAttachmentFile(AbstractEvent event) {
 		return absolutize(mergePaths(getEventAttachmentBasePath(event.getTenant()), getAttachmentPath(event)));
 	}
 	
