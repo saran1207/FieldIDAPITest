@@ -398,17 +398,8 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 
 
         ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
-        //thingEventProofTest.copyDataFrom(event.getProofTestInfo());
-        //if(fileData.getFileType() != null){
-            thingEventProofTest.getProofTestInfo().setProofTestType(fileData.getFileType());
-        //}
-        thingEventProofTest.getProofTestInfo().setDuration(fileData.getTestDuration());
-        thingEventProofTest.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
-        thingEventProofTest.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
-        if(fileData.getFileData() != null){
-            thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
-        }
-        thingEventProofTest.getProofTestInfo().setProofTestFileName(fileData.getFileName());
+        thingEventProofTest.copyDataFrom(fileData);
+        thingEventProofTest.setThingEvent(event);
 
         Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
         if(itr.hasNext()){

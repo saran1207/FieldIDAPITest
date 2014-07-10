@@ -258,6 +258,9 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     public boolean assetProofTestExists(ThingEventProofTest proofTest){
+        if(proofTest == null){
+            return false;
+        }
         return assetProofTestExists(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
     }
 

@@ -9,6 +9,7 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.AssetEvent;
+import com.n4systems.tools.FileDataContainer;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -43,6 +44,18 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
 
     public void setThingEvent(ThingEvent thingEvent){
         this.thingEvent = thingEvent;
+    }
+
+    public ThingEventProofTest copyDataFrom(FileDataContainer fileData) {
+
+        getProofTestInfo().setDuration( fileData.getTestDuration() );
+        getProofTestInfo().setPeakLoad( fileData.getPeakLoad() );
+        getProofTestInfo().setPeakLoadDuration( fileData.getPeakLoadDuration() );
+        getProofTestInfo().setProofTestType( fileData.getFileType() );
+        getProofTestInfo().setProofTestFileName( fileData.getFileName() );
+        getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
+
+        return this;
     }
 
     public ThingEventProofTest copyDataFrom(ThingEventProofTest oldProofTestInfo) {

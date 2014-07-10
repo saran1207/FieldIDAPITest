@@ -173,7 +173,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 
 	private void setProofTestData(ThingEvent event, FileDataContainer fileData) {
-		if (fileData == null) {
+		if (fileData == null || fileData.getFileData() == null) {
 			return;
 		}
 	
@@ -182,17 +182,7 @@ public class ManagerBackedEventSaver implements EventSaver {
 		}
 
         ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
-        //thingEventProofTest.copyDataFrom(event.getProofTestInfo());
-        //if(fileData.getFileType() != null){
-            thingEventProofTest.getProofTestInfo().setProofTestType(fileData.getFileType());
-        //}
-        thingEventProofTest.getProofTestInfo().setDuration(fileData.getTestDuration());
-        thingEventProofTest.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
-        thingEventProofTest.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
-        if(fileData.getFileData() != null){
-            thingEventProofTest.getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
-        }
-        thingEventProofTest.getProofTestInfo().setProofTestFileName(fileData.getFileName());
+        thingEventProofTest.copyDataFrom(fileData);
         thingEventProofTest.setThingEvent(event);
 
         Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
