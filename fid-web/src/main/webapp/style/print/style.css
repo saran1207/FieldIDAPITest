@@ -19,6 +19,34 @@ ul, li {
   margin: 0;
 }
 
+.watermark {
+  position: absolute;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  margin-left: -306px;
+  margin-top: -392px;
+}
+
+.printbar {
+  height: 38px;
+  background: black;
+  padding-top: 10px;
+  padding-right: 13px;
+}
+.printbar p {
+  margin: 0;
+  color: white;
+  float: right;
+  padding-top: 1px;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.printbar img {
+  float: right;
+  margin-left: 7px;
+}
+
 .print-form {
   height: 11in;
   width: 100%;
@@ -59,6 +87,16 @@ ul, li {
 .data-container-asset-info {
   width: 55%;
   min-height: 1.0695in;
+  margin-bottom: 6pt;
+}
+.data-container-asset-info .form-type {
+  margin-top: -7pt;
+}
+.data-container-asset-info .asset-procedure-code {
+  margin-top: -8pt;
+}
+.data-container-asset-info .asset-type {
+  margin-top: 3px;
 }
 
 .data-container-caution {
@@ -68,11 +106,14 @@ ul, li {
   padding: 0.10695in;
   padding-right: 36%;
 }
+.data-container-caution table {
+  width: 100%;
+}
 .data-container-caution th {
   height: 0.2139in;
 }
 .data-container-caution td {
-  height: 0.74865in;
+  height: 0.7in;
   padding: 0 0.2139in 0 0.2139in;
 }
 
@@ -80,28 +121,23 @@ ul, li {
   height: 595px;
 }
 
-.data-item.images table {
-  margin-top: -1px;
-}
-.data-item.images td {
+.data-item.images {
+  display: inline-block;
   width: 20%;
-  height: 1.69732in;
-  padding: 0;
 }
-.data-item.images td img {
+.data-item.images img {
   display: block;
   margin: 0;
+  margin-bottom: -1px;
   width: 100%;
-  height: 100%;
-}
-.data-item.images td.landscape {
-  width: 40%;
+  height: auto;
 }
 
 .data-item.application-process table,
 .data-item.short-form-steps table,
 .data-item.removal-process table {
   width: 100%;
+  margin-top: -1px;
 }
 .data-item.application-process th,
 .data-item.short-form-steps th,
@@ -143,12 +179,13 @@ ul, li {
 }
 
 .removal-process {
+  margin-top: 1px;
   margin-bottom: 0.05348in;
 }
 
 .data-container-next-audit {
   float: right;
-  margin-top: 68px;
+  margin-top: 36px;
 }
 .data-container-next-audit p, .data-container-next-audit ul, .data-container-next-audit li {
   display: inline-block;
@@ -165,6 +202,10 @@ ul, li {
 }
 
 @media print {
+  .printbar {
+    display: none;
+  }
+
   .print-form-page {
     padding: 0;
   }
@@ -185,8 +226,9 @@ ul, li {
 @page :first {
   margin: 0.51in 0.51in 0.3in 0.51in;
 }
+
 .print-form {
-  font-family: 'Open Sans', sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-weight: 400;
   font-size: 7pt;
 }
@@ -195,9 +237,6 @@ ul, li {
 .data-container-caution table,
 .data-container-caution th,
 .data-container-caution td,
-.images table,
-.images th,
-.images td,
 .application-process table,
 .application-process th,
 .application-process td,
@@ -211,6 +250,15 @@ ul, li {
   border: 0.01388in solid black;
 }
 
+.images img {
+  border: 0.01388in solid black;
+  border-right: none;
+}
+
+.images img:first-child {
+  border-left: 0.01388in solid black;
+}
+
 .data-container-revision-and-points th, .data-container-revision-and-points td {
   text-align: center;
   background: white;
@@ -219,7 +267,7 @@ ul, li {
   background: #eeeff0;
 }
 .data-container-revision-and-points td.revision {
-  font-family: 'Anton', sans-serif;
+  font-family: "Anton", sans-serif;
   font-size: 14pt;
   font-weight: 700;
 }
@@ -232,30 +280,26 @@ ul, li {
 .data-container-revision-and-points td.lockout-number {
   background: #eeeff0;
   text-transform: uppercase;
-  font-family: 'Anton', sans-serif;
+  font-family: "Anton", sans-serif;
   font-size: 55pt;
   font-weight: 500;
   letter-spacing: 2pt;
 }
 
-.data-container-asset-info {
-  margin-bottom: 7pt;
-}
 .data-container-asset-info .form-type {
-  font-family: 'Open Sans Condensed', sans-serif;
+  font-family: "Open Sans Condensed", sans-serif;
   font-weight: 800;
   text-transform: uppercase;
   font-size: 24pt;
-  margin-top: -7pt;
   letter-spacing: -0.6pt;
 }
-.data-container-asset-info .asset-type {
-  font-family: 'Open Sans Condensed', sans-serif;
+.data-container-asset-info .asset-procedure-code {
+  font-family: "Open Sans Condensed", sans-serif;
   font-weight: 300;
   text-transform: uppercase;
   font-size: 14pt;
-  margin-top: -8pt;
 }
+.data-container-asset-info .asset-type,
 .data-container-asset-info .asset-number,
 .data-container-asset-info .asset-location,
 .data-container-asset-info .asset-building {
@@ -263,14 +307,12 @@ ul, li {
   font-size: 8pt;
   line-height: 9pt;
 }
+.data-container-asset-info .asset-type .asset-info-heading,
 .data-container-asset-info .asset-number .asset-info-heading,
 .data-container-asset-info .asset-location .asset-info-heading,
 .data-container-asset-info .asset-building .asset-info-heading {
   font-weight: 700;
   text-transform: uppercase;
-}
-.data-container-asset-info .asset-number {
-  margin-top: 6px;
 }
 
 .data-container-caution {
@@ -285,13 +327,9 @@ ul, li {
 }
 .data-container-caution td {
   font-size: 9pt;
+  text-align: center;
 }
 
-.application-process table,
-.short-form-steps table,
-.removal-process table {
-  margin-top: -1px;
-}
 .application-process th, .application-process td,
 .short-form-steps th,
 .short-form-steps td,

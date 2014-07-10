@@ -1,40 +1,36 @@
 <wicket:panel>
 
-    <ul id="iso-table">
-        <li class="data-item short-form-steps">
-            <table>
-                <thead>
-                <tr>
-                    <th class="heading" colspan="6">Lockout Steps</th>
-                </tr>
-                <tr>
-                    <th class="steps-identifier"><wicket:message key="label.identifier"/></th>
-                    <th class="steps-source"><wicket:message key="label.isolation_source"/></th>
-                    <th class="steps-device"><wicket:message key="label.device"/></th>
-                    <th class="steps-location"><wicket:message key="label.location"/></th>
-                    <th class="steps-method"><wicket:message key="label.isolation_method"/></th>
-                    <th class="steps-check"><wicket:message key="label.check"/></th>
-                </tr>
-                </thead>
-            </table>
-        </li>
+    <li class="data-item short-form-steps">
+        <table>
+            <thead>
+            <tr>
+                <th class="heading" colspan="6">Lockout Steps</th>
+            </tr>
+            <tr>
+                <th class="steps-identifier"><wicket:message key="label.identifier"/></th>
+                <th class="steps-source"><wicket:message key="label.isolation_source"/></th>
+                <th class="steps-device"><wicket:message key="label.device"/></th>
+                <th class="steps-location"><wicket:message key="label.location"/></th>
+                <th class="steps-method"><wicket:message key="label.isolation_method"/></th>
+                <th class="steps-check"><wicket:message key="label.check"/></th>
+            </tr>
+            </thead>
+        </table>
+    </li>
 
-        <li wicket:id="list" class="data-item short-form-steps seperator">
-            <table>
-                <tbody>
-                <tr class="even">
-                    <td wicket:id="id" class="steps-identifier"></td>
-                    <td wicket:id="source" class="steps-source"></td>
-                    <td wicket:id="device" class="steps-device"></td>
-                    <td wicket:id="location" class="steps-location"></td>
-                    <td wicket:id="method" class="steps-method"></td>
-                    <td wicket:id="check" class="steps-check"></td>
-                </tr>
-                </tbody>
-            </table>
-        </li>
-    </ul>
-
-    <div id="print-isolation-points-list"></div>
+    <li wicket:id="list" class="data-item short-form-steps">
+        <table>
+            <tbody>
+            <tr class="even">
+                <td wicket:id="id" class="steps-identifier"></td>
+                <td wicket:id="source" class="steps-source"></td>
+                <td wicket:id="device" class="steps-device"></td>
+                <td wicket:id="location" class="steps-location"></td>
+                <td wicket:id="method" class="steps-method"></td>
+                <td wicket:id="check" class="steps-check"></td>
+            </tr>
+            </tbody>
+        </table>
+    </li>
 
 </wicket:panel>

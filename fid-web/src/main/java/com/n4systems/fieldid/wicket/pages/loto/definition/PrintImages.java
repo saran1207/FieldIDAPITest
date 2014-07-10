@@ -70,11 +70,11 @@ public class PrintImages extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
-        response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
-        response.renderJavaScriptReference("javascript/jquery.annotate.js");
+        //response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
+        //response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
+        //response.renderJavaScriptReference("javascript/jquery.annotate.js");
 
-        response.renderCSSReference("style/legacy/component/annotated-image.css");
+        //response.renderCSSReference("style/legacy/component/annotated-image.css");
 
 
 
@@ -91,7 +91,7 @@ public class PrintImages extends Panel {
         if (null != annotatedImages && annotatedImages.size() > 0) {
             jsonStr = renderer.render(new ImageList(annotatedImages));
 
-            response.renderOnLoadJavaScript("fieldIdWidgets.annotate(" + jsonStr + ");");
+            //response.renderOnLoadJavaScript("fieldIdWidgets.annotate(" + jsonStr + ");");
 
            // response.renderOnDomReadyJavaScript("fieldIdWidgets.annotate('" + jsonStr + "');");
            // response.renderOnDomReadyJavaScript("fieldIdWidgets.createMenuButton('"+getMarkupId()+"',"+jsonRenderer.render(new MenuButtonOptions())+");");
