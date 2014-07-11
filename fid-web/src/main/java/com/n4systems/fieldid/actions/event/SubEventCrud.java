@@ -339,7 +339,9 @@ public class SubEventCrud extends EventCrud {
             proofTestInfo.setPeakLoad(fileDataContainer.getPeakLoad());
             proofTestInfo.setDuration(fileDataContainer.getTestDuration());
             proofTestInfo.setProofTestFileName(fileDataContainer.getFileName());
-            proofTestInfo.setProofTestData(new String(fileDataContainer.getFileData()));
+            if(fileDataContainer.getFileData() != null){
+                proofTestInfo.setProofTestData(new String(fileDataContainer.getFileData()));
+            }
             proofTestInfo.setProofTestType(fileDataContainer.getFileType());
             proofTestInfo.setPeakLoadDuration(fileDataContainer.getPeakLoadDuration());
 		}
