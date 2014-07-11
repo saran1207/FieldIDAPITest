@@ -54,7 +54,9 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
         getProofTestInfo().setPeakLoadDuration( fileData.getPeakLoadDuration() );
         getProofTestInfo().setProofTestType(fileData.getFileType());
         getProofTestInfo().setProofTestFileName( fileData.getFileName() );
-        getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
+        if(fileData.getFileData() != null){
+            getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
+        }
 
         return this;
     }
