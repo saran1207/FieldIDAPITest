@@ -36,6 +36,33 @@ ul, li {
 //-----------------------------------------------------------------
 //  Layout
 //-----------------------------------------------------------------
+.watermark {
+    position: absolute;
+    z-index: 1000;
+    top: 50%;
+    left: 50%;
+    margin-left: -306px;
+    margin-top: -392px;
+}
+.printbar {
+    height: 38px;
+    background: black;
+    padding-top: 10px;
+    padding-right: 13px;
+
+    p {
+        margin: 0;
+        color: white;
+        float: right;
+        padding-top: 1px;
+        text-transform: uppercase;
+        font-size: 11px;
+    }
+    img {
+        float: right;
+        margin-left: 7px;
+    }
+}
 .print-form {
 	height: 11in;
 	width: 100%;
@@ -74,19 +101,33 @@ ul, li {
 .data-container-asset-info {
 	width: 55%;
 	min-height: $grid-height * 5;
+	margin-bottom: 6pt;
+
+	.form-type {
+		margin-top: -7pt;
+	}
+	.asset-procedure-code {
+		margin-top: -8pt;
+	}
+	.asset-type {
+		margin-top: 3px;
+	}
 }
 .data-container-caution {
-	width:  95%;
+	width: 95%;
 	min-height: ($grid-height * 5) + ($grid-height / 2);
 	margin-bottom: ($grid-height / 2);
 	padding: $grid-height / 2;
 	padding-right: 36%;
 
+    table {
+        width: 100%;
+    }
 	th {
 		height: $grid-height;
 	}
 	td {
-		height: ($grid-height*3) + ($grid-height / 2);
+		height: (($grid-height*3) + ($grid-height / 2)) - 0.04865in; // subtract 0.04865in to fix layout issue
 		padding: 0 $grid-height 0 $grid-height;
 	}
 }
@@ -95,22 +136,15 @@ ul, li {
 	//outline: 1px solid black;
 }
 .data-item.images {
-	table {
-		margin-top: -1px;
-	}
-	td {
-		width: $grid-width * 2;
-		height: ($grid-height * 8) - $border-thickness;
-		padding: 0;
-		img {
-			display: block;
-			margin: 0;
-			width: 100%;
-			height: 100%;
-		}
-	}
-	td.landscape {
-		width: $grid-width * 4;
+    display: inline-block;
+    width: 20%;
+
+	img {
+         display: block;
+         margin: 0;
+         margin-bottom: -1px;
+         width: 100%;
+         height: auto;
 	}
 }
 .data-item.application-process,
@@ -119,6 +153,7 @@ ul, li {
 
 	table {
 		width: 100%;
+		margin-top: -1px; // Collapse borders while keeping the border for page break
 	}
 	th {
 		height: $grid-height;
@@ -142,11 +177,12 @@ ul, li {
 	}
 }
 .removal-process {
+    margin-top: 1px;
 	margin-bottom: ($grid-height / 4);
 }
 .data-container-next-audit {
 	float: right;
-	margin-top: 68px;
+	margin-top: 36px;
 
 	p, ul, li {
 		display: inline-block;
@@ -166,6 +202,9 @@ ul, li {
 //  Print Layout
 //-----------------------------------------------------------------
 @media print {
+	.printbar {
+		display: none;
+	}
 	.print-form-page {
 		padding: 0;
 	}
@@ -197,7 +236,6 @@ ul, li {
 }
 .data-container-revision-and-points,
 	.data-container-caution,
-	.images,
 	.application-process,
 	.short-form-steps,
 	.removal-process {
@@ -206,6 +244,13 @@ ul, li {
 		border-collapse: collapse;
 		border: $border-thickness solid $color-border;
 	}
+}
+.images img {
+    border: $border-thickness solid $color-border;
+    border-right: none;
+}
+.images img:first-child {
+    border-left: $border-thickness solid $color-border;
 }
 .data-container-revision-and-points {
 	th, td {
@@ -236,24 +281,22 @@ ul, li {
 	}
 }
 .data-container-asset-info {
-	margin-bottom: 7pt;
 
 	.form-type {
 		font-family: 'Open Sans Condensed', sans-serif;
 		font-weight: 800;
 		text-transform: uppercase;
 		font-size: 24pt;
-		margin-top: -7pt;
 		letter-spacing: -0.6pt;
 	}
-	.asset-type {
+	.asset-procedure-code {
 		font-family: 'Open Sans Condensed', sans-serif;
 		font-weight: 300;
 		text-transform: uppercase;
 		font-size: 14pt;
-		margin-top: -8pt;
 	}
-	.asset-number,
+	.asset-type,
+		.asset-number,
 		.asset-location,
 		.asset-building {
 		font-weight: 400;
@@ -264,9 +307,6 @@ ul, li {
 			font-weight: 700;
 			text-transform: uppercase;
 		}
-	}
-	.asset-number {
-		margin-top: 6px;
 	}
 }
 .data-container-caution {
@@ -281,15 +321,13 @@ ul, li {
 	}
 	td {
 		font-size: 9pt;
+		text-align: center;
 	}
 }
 .application-process,
 	.short-form-steps,
 	.removal-process {
-	table {
-		// Collapse borders while keeping the border for page break
-		margin-top: -1px;
-	}
+
 	th, td {
 		border-left: none;
 		text-align: center;

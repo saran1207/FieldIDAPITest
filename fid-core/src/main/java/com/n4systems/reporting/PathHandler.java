@@ -429,19 +429,21 @@ public class PathHandler {
 	private static String getEventChartImageBasePath(Tenant tenant) {
 		return mergePaths(CHART_IMAGE_PATH_BASE, getTenantPathPart(tenant));
 	}
-	
-	/* these methods are depricated, since the prooftest data is going to be saved to database
-	public static File getProofTestFile(Event event) {
+
+    @Deprecated
+    public static File getProofTestFile(Event event) {
 		return absolutize(mergePaths(getEventProoftestBasePath(event.getTenant()), getEventPath(event), PROOF_TEST_FILE_NAME));
 	}
-	
-	public static File getEventProoftestBaseFile(Tenant tenant) {
+
+    @Deprecated
+    public static File getEventProoftestBaseFile(Tenant tenant) {
 		return absolutize(getEventProoftestBasePath(tenant));
 	}
-	
-	private static String getEventProoftestBasePath(Tenant tenant) {
+
+    @Deprecated
+    private static String getEventProoftestBasePath(Tenant tenant) {
 		return mergePaths(PROOF_TEST_PATH_BASE, getTenantPathPart(tenant));
-	} */
+	}
 	
 	public static File getButtonImageFile(Button button) {
 		return absolutize(mergePaths(BUTTON_IMAGE_PATH_BASE, button.getButtonName()+ BUTTON_IMAGE_EXT));

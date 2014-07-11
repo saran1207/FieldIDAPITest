@@ -24,6 +24,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
+import rfid.web.helper.SessionUser;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
 public class MultiProofTestUpload extends AbstractAction implements Preparable {
@@ -84,6 +85,7 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 			
 			try {
 				// processes this prooftest file
+                SessionUser temp = getSessionUser();
 				eventMap = proofTestHandler.multiProofTestUpload(
 											proofTest, 
 											proofTestType, 

@@ -1,0 +1,353 @@
+*, *:before, *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+html {
+  background: white;
+  width: 100%;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+ul, li {
+  display: block;
+  padding: 0;
+  margin: 0;
+}
+
+.watermark {
+  position: absolute;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  margin-left: -306px;
+  margin-top: -392px;
+}
+
+.printbar {
+  height: 38px;
+  background: black;
+  padding-top: 10px;
+  padding-right: 13px;
+}
+.printbar p {
+  margin: 0;
+  color: white;
+  float: right;
+  padding-top: 1px;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+.printbar img {
+  float: right;
+  margin-left: 7px;
+}
+
+.print-form {
+  height: 11in;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.print-form-page {
+  width: 100%;
+  padding: 0.51in 0.51in 0.9in 0.51in;
+  position: relative;
+  margin: 0;
+}
+
+.data-container-revision-and-points {
+  position: absolute;
+  width: 100%;
+  height: 2.139in;
+  padding: 0 0.51in;
+  top: 0.51in;
+  right: 0;
+  z-index: 20;
+}
+.data-container-revision-and-points table {
+  position: absolute;
+  width: 40%;
+  height: 100%;
+  right: 10px;
+}
+.data-container-revision-and-points th, .data-container-revision-and-points td {
+  height: 0.2139in;
+  width: 25%;
+}
+.data-container-revision-and-points td.lockout-number {
+  height: 1.2834in;
+}
+
+.data-container-asset-info {
+  width: 55%;
+  min-height: 1.0695in;
+  margin-bottom: 6pt;
+}
+.data-container-asset-info .form-type {
+  margin-top: -7pt;
+}
+.data-container-asset-info .asset-procedure-code {
+  margin-top: -8pt;
+}
+.data-container-asset-info .asset-type {
+  margin-top: 3px;
+}
+
+.data-container-caution {
+  width: 95%;
+  min-height: 1.17645in;
+  margin-bottom: 0.10695in;
+  padding: 0.10695in;
+  padding-right: 36%;
+}
+.data-container-caution table {
+  width: 100%;
+}
+.data-container-caution th {
+  height: 0.2139in;
+}
+.data-container-caution td {
+  height: 0.7in;
+  padding: 0 0.2139in 0 0.2139in;
+}
+
+.data-container {
+  height: 595px;
+}
+
+.data-item.images {
+  display: inline-block;
+  width: 20%;
+}
+.data-item.images img {
+  display: block;
+  margin: 0;
+  margin-bottom: -1px;
+  width: 100%;
+  height: auto;
+}
+
+.data-item.application-process table,
+.data-item.short-form-steps table,
+.data-item.removal-process table {
+  width: 100%;
+  margin-top: -1px;
+}
+.data-item.application-process th,
+.data-item.short-form-steps th,
+.data-item.removal-process th {
+  height: 0.2139in;
+}
+.data-item.application-process td,
+.data-item.short-form-steps td,
+.data-item.removal-process td {
+  min-height: 0.4278in;
+  padding: 0.095in 0.04in 0.095in 0.04in;
+}
+.data-item.application-process .steps-identifier,
+.data-item.application-process .steps-source,
+.data-item.short-form-steps .steps-identifier,
+.data-item.short-form-steps .steps-source,
+.data-item.removal-process .steps-identifier,
+.data-item.removal-process .steps-source {
+  width: 10%;
+}
+.data-item.application-process .steps-device,
+.data-item.application-process .steps-location,
+.data-item.application-process .steps-method,
+.data-item.application-process .steps-check,
+.data-item.short-form-steps .steps-device,
+.data-item.short-form-steps .steps-location,
+.data-item.short-form-steps .steps-method,
+.data-item.short-form-steps .steps-check,
+.data-item.removal-process .steps-device,
+.data-item.removal-process .steps-location,
+.data-item.removal-process .steps-method,
+.data-item.removal-process .steps-check {
+  width: 20%;
+}
+.data-item.application-process .steps-heading,
+.data-item.short-form-steps .steps-heading,
+.data-item.removal-process .steps-heading {
+  width: 100%;
+}
+
+.removal-process {
+  margin-top: 1px;
+  margin-bottom: 0.05348in;
+}
+
+.data-container-next-audit {
+  float: right;
+  margin-top: 36px;
+}
+.data-container-next-audit p, .data-container-next-audit ul, .data-container-next-audit li {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+.seperator {
+  margin-bottom: 0.10695in;
+}
+
+.logo {
+  display: inline-block;
+}
+
+@media print {
+  .printbar {
+    display: none;
+  }
+
+  .print-form-page {
+    padding: 0;
+  }
+
+  .data-item {
+    page-break-inside: avoid;
+  }
+
+  .data-container-revision-and-points {
+    top: 0.11in;
+    right: 0;
+    padding: 0;
+  }
+  .data-container-revision-and-points table {
+    right: 0;
+  }
+}
+@page :first {
+  margin: 0.51in 0.51in 0.3in 0.51in;
+}
+
+.print-form {
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
+  font-size: 7pt;
+}
+
+.data-container-revision-and-points table, .data-container-revision-and-points th, .data-container-revision-and-points td,
+.data-container-caution table,
+.data-container-caution th,
+.data-container-caution td,
+.application-process table,
+.application-process th,
+.application-process td,
+.short-form-steps table,
+.short-form-steps th,
+.short-form-steps td,
+.removal-process table,
+.removal-process th,
+.removal-process td {
+  border-collapse: collapse;
+  border: 0.01388in solid black;
+}
+
+.images img {
+  border: 0.01388in solid black;
+  border-right: none;
+}
+
+.images img:first-child {
+  border-left: 0.01388in solid black;
+}
+
+.data-container-revision-and-points th, .data-container-revision-and-points td {
+  text-align: center;
+  background: white;
+}
+.data-container-revision-and-points .revision {
+  background: #eeeff0;
+}
+.data-container-revision-and-points td.revision {
+  font-family: "Anton", sans-serif;
+  font-size: 14pt;
+  font-weight: 700;
+}
+.data-container-revision-and-points th.lockout-number {
+  background: #ff0047;
+  color: white;
+  text-transform: uppercase;
+  font-size: 8pt;
+}
+.data-container-revision-and-points td.lockout-number {
+  background: #eeeff0;
+  text-transform: uppercase;
+  font-family: "Anton", sans-serif;
+  font-size: 55pt;
+  font-weight: 500;
+  letter-spacing: 2pt;
+}
+
+.data-container-asset-info .form-type {
+  font-family: "Open Sans Condensed", sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: 24pt;
+  letter-spacing: -0.6pt;
+}
+.data-container-asset-info .asset-procedure-code {
+  font-family: "Open Sans Condensed", sans-serif;
+  font-weight: 300;
+  text-transform: uppercase;
+  font-size: 14pt;
+}
+.data-container-asset-info .asset-type,
+.data-container-asset-info .asset-number,
+.data-container-asset-info .asset-location,
+.data-container-asset-info .asset-building {
+  font-weight: 400;
+  font-size: 8pt;
+  line-height: 9pt;
+}
+.data-container-asset-info .asset-type .asset-info-heading,
+.data-container-asset-info .asset-number .asset-info-heading,
+.data-container-asset-info .asset-location .asset-info-heading,
+.data-container-asset-info .asset-building .asset-info-heading {
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.data-container-caution {
+  border: 0.01388in solid black;
+}
+.data-container-caution th, .data-container-caution td {
+  background: #fff8ad;
+}
+.data-container-caution th {
+  text-transform: uppercase;
+  font-size: 8pt;
+}
+.data-container-caution td {
+  font-size: 9pt;
+  text-align: center;
+}
+
+.application-process th, .application-process td,
+.short-form-steps th,
+.short-form-steps td,
+.removal-process th,
+.removal-process td {
+  border-left: none;
+  text-align: center;
+  font-size: 8pt;
+}
+.application-process .heading,
+.short-form-steps .heading,
+.removal-process .heading {
+  text-transform: uppercase;
+  background: #ff0047;
+  color: white;
+}
+
+.data-container-next-audit p, .data-container-next-audit ul, .data-container-next-audit li {
+  color: #8f8f8f;
+  text-transform: uppercase;
+}

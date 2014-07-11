@@ -1,13 +1,15 @@
 package com.n4systems.model;
 
 import com.n4systems.fileprocessing.ProofTestType;
+import org.apache.commons.lang.ArrayUtils;
+import org.hibernate.FetchMode;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.Type;
 
 import java.io.Serializable;
 import java.util.UUID;
 
-import javax.persistence.Embeddable;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.*;
 
 @Embeddable
 public class ProofTestInfo implements Serializable {
@@ -23,8 +25,11 @@ public class ProofTestInfo implements Serializable {
 	private String peakLoad;
 	private String duration;
 	private String peakLoadDuration;
-    private String proofTestData;
     private String proofTestFileName;
+
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private Character[] proofTestData;
 
 	public String getPeakLoad() {
 		return peakLoad;
@@ -62,12 +67,27 @@ public class ProofTestInfo implements Serializable {
 		this.peakLoadDuration = peakLoadDuration;
 	}
 
-    public String getProofTestData() {
+    public Character[] getProofTestData() {
         return proofTestData;
     }
 
     public void setProofTestData(String fileData) {
-        this.proofTestData = fileData;
+        if(fileData != null){
+            this.proofTestData = ArrayUtils.toObject(fileData.toCharArray());
+        }
+        else {
+            this.proofTestData = null;
+        }
+
+    }
+
+    public void setProofTestData(Character[] fileData) {
+        if(fileData != null){
+            this.proofTestData = fileData.clone();
+        }
+        else {
+            this.proofTestData = null;
+        }
     }
 
     public String getProofTestFileName() {

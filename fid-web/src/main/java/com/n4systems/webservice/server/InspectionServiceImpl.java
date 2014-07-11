@@ -20,27 +20,7 @@ import com.n4systems.webservice.server.bundles.WebServiceStatus;
 
 public class InspectionServiceImpl extends AbstractWebServiceImpl implements InspectionService {
 	private Logger logger = Logger.getLogger(InspectionServiceImpl.class);
-	
-	/* arezafar: super method is deprecated, so I commented it out to see if its being used anywhere
-	public boolean processInspectionFile(String tenantName, String userName, String userPassword, byte[] fileData, String fileName, String fileType) throws WebserviceAuthenticationException, WebserviceException {
-		
-		ProofTestBundle bundle = new ProofTestBundle();
-		bundle.setCreateProduct(false);
-		bundle.setFileData(fileData);
-		bundle.setFileName(fileName);
-		
-		if(fileType != null && fileType.length() > 0) {
-			bundle.setFileType(fileType);
-		} else {
-			bundle.setFileType("roberts");
-		}
-		
-		List<ProofTestStatusBundle> statuses = uploadProofTest(new AuthBundle(tenantName, userName, userPassword), Arrays.asList(bundle));
-		
-		// we only sent one bundle in so we'll only get one status out
-		return (statuses.get(0).getStatus() == WebServiceStatus.SUCCESSFUL) ? true : false;
-	}*/
-	
+
 	public List<ProofTestStatusBundle> uploadProofTest(AuthBundle authUser, List<ProofTestBundle> bundles) throws WebserviceAuthenticationException, WebserviceException {
 		//authenticate the user
 		User user = authenticateUser(authUser);
