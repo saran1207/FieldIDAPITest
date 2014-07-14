@@ -145,6 +145,7 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
 		this.comments = comments;
 	}
 
+    @AllowSafetyNetworkAccess
     public EventForm getEventForm() {
         return eventForm;
     }
@@ -247,6 +248,7 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
     public abstract R getTarget();
     public abstract void setTarget(R target);
 
+    @AllowSafetyNetworkAccess
     public EventType<T> getType() {
         return type;
     }

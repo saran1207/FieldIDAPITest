@@ -41,6 +41,7 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
     private RecurringAssetTypeEvent recurringEvent;
 
     @Override
+    @AllowSafetyNetworkAccess
     public Asset getTarget() {
         return getAsset();
     }
@@ -90,6 +91,7 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         return enhanced;
     }
 
+    @AllowSafetyNetworkAccess
     public Asset getAsset() {
         return asset;
     }
@@ -98,6 +100,7 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         this.asset = asset;
     }
 
+    @AllowSafetyNetworkAccess
     public AssetStatus getAssetStatus() {
         return assetStatus;
     }
@@ -106,6 +109,7 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         this.assetStatus = assetStatus;
     }
 
+    @AllowSafetyNetworkAccess
     public BaseOrg getOwner() {
         return owner;
     }
@@ -121,6 +125,7 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         action.setOwner(getOwner());
     }
 
+    @AllowSafetyNetworkAccess
     public ThingEventType getThingType() {
         return (ThingEventType) getType();
     }
@@ -131,6 +136,7 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
     }
 
+    @AllowSafetyNetworkAccess
     public RecurringAssetTypeEvent getRecurringEvent() {
         return recurringEvent;
     }
