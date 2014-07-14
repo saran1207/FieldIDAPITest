@@ -20,7 +20,7 @@ import java.util.List;
 @Entity
 @Table(name="thing_event_prooftests")
 public class ThingEventProofTest extends BaseEntity implements AssetEvent, Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     /*
      *   XXX - Peak Load and Test Duration were strings on the old InspectionDoc.

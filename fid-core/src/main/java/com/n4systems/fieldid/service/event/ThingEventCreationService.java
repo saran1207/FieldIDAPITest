@@ -64,7 +64,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     }
 
     private void setProofTestData(ThingEvent event, FileDataContainer fileData) {
-        if (fileData == null) {
+        if (fileData == null || fileData.getFileType() == null) {
             return;
         }
 
