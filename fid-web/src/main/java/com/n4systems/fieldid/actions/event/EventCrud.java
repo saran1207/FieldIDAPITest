@@ -339,10 +339,10 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
             Iterator<ThingEventProofTest> itr = ((ThingEvent)event).getThingEventProofTests().iterator();
             if (itr.hasNext()) {
                 ThingEventProofTest eventProofTest = itr.next();
-                peakLoad = eventProofTest.getProofTestInfo().getPeakLoad();
-                testDuration = eventProofTest.getProofTestInfo().getDuration();
-                peakLoadDuration = eventProofTest.getProofTestInfo().getPeakLoadDuration();
-                prootTestFileName = eventProofTest.getProofTestInfo().getProofTestFileName();
+                peakLoad = eventProofTest.getPeakLoad();
+                testDuration = eventProofTest.getDuration();
+                peakLoadDuration = eventProofTest.getPeakLoadDuration();
+                prootTestFileName = eventProofTest.getProofTestFileName();
                 //is it necessary to load this? they can be up to couple of MBs each! prootTestFileData = eventProofTest.getProofTestInfo().getProofTestData();
             }
 
@@ -371,10 +371,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
         }
         Iterator<ThingEventProofTest> itr = ((ThingEvent)event).getThingEventProofTests().iterator();
         if (itr.hasNext()){
-            ProofTestInfo proofTestInfo = itr.next().getProofTestInfo();
-            if(proofTestInfo.getProofTestType() != null) {
-			    proofTestType = proofTestInfo.getProofTestType();
-            }
+            proofTestType = itr.next().getProofTestType();
 		} else if (!((ThingEventType)getEventType()).getSupportedProofTests().isEmpty()) {
 			proofTestType = ((ThingEventType)getEventType()).getSupportedProofTests().iterator().next();
 		}
@@ -537,16 +534,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
             if(thingEvent.getThingEventProofTests().size() == 0){
                 thingEvent.getThingEventProofTests().add(new ThingEventProofTest());
-                thingEvent.getThingEventProofTests().iterator().next().setProofTestInfo(new ProofTestInfo());
             }
-            thingEvent.getThingEventProofTests().iterator().next().getProofTestInfo().setProofTestType(proofTestType);
+            thingEvent.getThingEventProofTests().iterator().next().setProofTestType(proofTestType);
             fileDataContainer = createFileDataContainer();
 		} else if (proofTestType == ProofTestType.OTHER) {
             if(thingEvent.getThingEventProofTests().size() == 0){
                 thingEvent.getThingEventProofTests().add(new ThingEventProofTest());
-                thingEvent.getThingEventProofTests().iterator().next().setProofTestInfo(new ProofTestInfo());
             }
-            thingEvent.getThingEventProofTests().iterator().next().getProofTestInfo().setProofTestType(proofTestType);
+            thingEvent.getThingEventProofTests().iterator().next().setProofTestType(proofTestType);
             fileDataContainer = new FileDataContainer();
             fileDataContainer.setFileType(proofTestType);
             fileDataContainer.setPeakLoad(peakLoad);
@@ -562,7 +557,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
             try {
                 Iterator<ThingEventProofTest> itr = ((ThingEvent)event).getThingEventProofTests().iterator();
                 if(itr.hasNext()){
-                    fileDataContainer = itr.next().getProofTestInfo().getProofTestType().getFileProcessorInstance().processFile(proofTest);
+                    fileDataContainer = itr.next().getProofTestType().getFileProcessorInstance().processFile(proofTest);
                 }
             } catch (Exception e) {
                 throw new ProcessingProofTestException(e);
@@ -765,8 +760,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
 	public ProofTestType getProofTestTypeEnum() {
 		if (getEventType().isThingEventType() && proofTestType == null && ((ThingEvent) event).getThingEventProofTests().size() > 0) {
-            ProofTestInfo proofTestInfo = ((ThingEvent) event).getThingEventProofTests().iterator().next().getProofTestInfo();
-            proofTestType = (proofTestInfo != null) ? proofTestInfo.getProofTestType() : null;
+            proofTestType = ((ThingEvent) event).getThingEventProofTests().iterator().next().getProofTestType();
 		}
 		return proofTestType;
 	}

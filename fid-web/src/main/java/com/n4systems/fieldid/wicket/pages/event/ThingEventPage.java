@@ -111,9 +111,8 @@ public abstract class ThingEventPage extends EventPage<ThingEvent> {
 
         if(event.getThingEventProofTests().size() == 0){
             event.getThingEventProofTests().add(new ThingEventProofTest());
-            event.getThingEventProofTests().iterator().next().setProofTestInfo(new ProofTestInfo());
         }
-        event.getThingEventProofTests().iterator().next().setProofTestInfo(proofTestInfo.getObject().getProofTestInfo());
+        event.getThingEventProofTests().iterator().next().copyDataFrom(proofTestInfo.getObject());
     }
 
     @Override

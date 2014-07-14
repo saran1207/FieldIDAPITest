@@ -333,9 +333,8 @@ public class SubEventCrud extends EventCrud {
 		if (fileDataContainer != null) {
             if(((ThingEvent)event).getThingEventProofTests().size() == 0){
                 ((ThingEvent)event).getThingEventProofTests().add(new ThingEventProofTest());
-                ((ThingEvent)event).getThingEventProofTests().iterator().next().setProofTestInfo(new ProofTestInfo());
             }
-            ProofTestInfo proofTestInfo = ((ThingEvent)event).getThingEventProofTests().iterator().next().getProofTestInfo();
+            ThingEventProofTest proofTestInfo = ((ThingEvent)event).getThingEventProofTests().iterator().next();
             proofTestInfo.setPeakLoad(fileDataContainer.getPeakLoad());
             proofTestInfo.setDuration(fileDataContainer.getTestDuration());
             proofTestInfo.setProofTestFileName(fileDataContainer.getFileName());

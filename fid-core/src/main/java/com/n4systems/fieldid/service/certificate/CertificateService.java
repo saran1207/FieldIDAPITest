@@ -189,7 +189,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
             else {
                 reportMap.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
             }
-            addProofTestInfoParams(reportMap, proofTest.getProofTestInfo());
+            addProofTestInfoParams(reportMap, proofTest);
         }
 	}
 
@@ -345,7 +345,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		}
 	}
 
-    private void addProofTestInfoParams(Map<String, Object> reportMap, ProofTestInfo proofTestInfo) {
+    private void addProofTestInfoParams(Map<String, Object> reportMap, ThingEventProofTest proofTestInfo) {
 		if (proofTestInfo != null) {
 			reportMap.put("peakLoad", proofTestInfo.getPeakLoad());
 			reportMap.put("testDuration", proofTestInfo.getDuration());

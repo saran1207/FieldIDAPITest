@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.n4systems.model.Event;
+import com.n4systems.model.EventBook;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.eventbook.EventBookListLoader;
 import org.apache.commons.io.FileUtils;
@@ -24,6 +25,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.ListingPair;
 import com.opensymphony.xwork2.Preparable;
+import org.eclipse.jdt.internal.core.Assert;
 import rfid.web.helper.SessionUser;
 
 @UserPermissionFilter(userRequiresOneOf={Permissions.CreateEvent})
@@ -86,6 +88,18 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 			try {
 				// processes this prooftest file
                 SessionUser temp = getSessionUser();
+                Assert.isNotNull(proofTest);
+                Assert.isNotNull(event);
+                Assert.isNotNull(getSessionUser());
+                Assert.isNotNull(getSessionUser().getTenant().getId());
+                Assert.isNotNull(getSessionUser().getTenant());
+                Assert.isNotNull(getSessionUser().getUniqueID());
+                BaseOrg owner = event.getOwner();
+                Assert.isNotNull(event.getOwner());
+                Assert.isNotNull(event.getOwner().getId());
+                Assert.isNotNull(event.getBook());
+                EventBook booklet = event.getBook();
+                Assert.isNotNull(event.getBook().getId());
 				eventMap = proofTestHandler.multiProofTestUpload(
 											proofTest, 
 											proofTestType, 
