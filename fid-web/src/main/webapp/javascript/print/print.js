@@ -18,7 +18,7 @@ $( document ).ready(function() {
         }
     });
     $('#source .data-container-footer').clone().appendTo(page);
-   // $('#source').hide();
+    $('#source').hide();
 
     $('.data-container').height(595);
 });
