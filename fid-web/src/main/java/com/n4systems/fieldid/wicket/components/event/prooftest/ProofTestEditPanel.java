@@ -43,8 +43,8 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
             super(id);
             setOutputMarkupId(true);
 
-            ThingEventProofTest info = proofTestModel.getObject();
-            setVisible(proofTestModel.getObject() != null && proofTestModel.getObject().getProofTestType() != null && proofTestModel.getObject().getProofTestType() != ProofTestType.OTHER);
+            ThingEventProofTest proofTest = proofTestModel.getObject();
+            setVisible(proofTestModel.getObject() != null && proofTest.getProofTestType() != null && proofTest.getProofTestType() != ProofTestType.OTHER);
 
             add(new AjaxLink("removeExistingProofTestLink") {
                 @Override
@@ -70,6 +70,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
 
             setOutputMarkupId(true);
 
+            Boolean setVisible = (proofTestModel.getObject() == null || proofTestModel.getObject().getProofTestType() == null || proofTestModel.getObject().getProofTestType() == ProofTestType.OTHER);
             setVisible(proofTestModel.getObject() == null || proofTestModel.getObject().getProofTestType() == null || proofTestModel.getObject().getProofTestType() == ProofTestType.OTHER);
 
             otherTypeContainer = new WebMarkupContainer("otherProofTestContainer");
@@ -100,7 +101,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
                 }
             });
 
-            if (proofTestModel.getObject() == null || proofTestModel.getObject().getProofTestType() == null) {
+            if (proofTestModel.getObject() == null) {
                 ThingEventProofTest proofTestInit = createInitialProofTestObject(eventType, proofTestModel.getObject().getThingEvent());
                 proofTestModel.getObject().copyDataFrom(proofTestInit);
             }
@@ -174,13 +175,13 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
     }
 
     private ThingEventProofTest createInitialProofTestObject(ThingEventType eventType, ThingEvent thingEvent) {
-        ThingEventProofTest info = new ThingEventProofTest();
+        ThingEventProofTest proofTest = new ThingEventProofTest();
         Iterator<ProofTestType> itr = eventType.getSupportedProofTests().iterator();
         if (itr.hasNext()) {
-            info.setProofTestType(itr.next());
-            info.setThingEvent(thingEvent);
+            proofTest.setProofTestType(itr.next());
+            proofTest.setThingEvent(thingEvent);
         }
-        return info;
+        return proofTest;
     }
 
 }

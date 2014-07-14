@@ -866,7 +866,7 @@ public class S3Service extends FieldIdPersistenceService {
         try {
             byte[] assetProofTestBytes = downloadAssetProofTestBytes(event);
 
-            String fileName = event.getProofTestInfo().getProofTestFileName();
+            String fileName = event.getProofTestFileName();
             fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
             fileName = event.getAsset().getMobileGUID() + "-" + fileName;
 

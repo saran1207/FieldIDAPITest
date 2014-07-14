@@ -461,9 +461,6 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
             return false;
         }
         ThingEventProofTest proofTest = itr.next();
-        if(proofTest.getProofTestInfo() == null){
-            return false;
-        }
         S3Service s3Service = ServiceLocator.getS3Service();
         if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID())){
             return true;

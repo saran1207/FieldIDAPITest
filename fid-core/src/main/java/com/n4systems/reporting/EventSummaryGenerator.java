@@ -132,7 +132,7 @@ public class EventSummaryGenerator {
 
                 Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
                 if (itr.hasNext()) {
-                    eventMap.put("peakLoad", itr.next().getProofTestInfo().getPeakLoad());
+                    eventMap.put("peakLoad", itr.next().getPeakLoad());
                 }
 
 				collection.add(eventMap);

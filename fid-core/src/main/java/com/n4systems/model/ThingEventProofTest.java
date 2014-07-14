@@ -19,20 +19,24 @@ import java.util.List;
 
 @Entity
 @Table(name="thing_event_prooftests")
-public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent>, Serializable {
+public class ThingEventProofTest extends BaseEntity implements AssetEvent, Serializable {
     private static final long serialVersionUID = 1L;
 
-    /*public static final SecurityDefiner createSecurityDefiner() {
-        return new SecurityDefiner("tenant.id", "asset.owner", null, "state", false);
-    } */
+    /*
+     *   XXX - Peak Load and Test Duration were strings on the old InspectionDoc.
+     *   My feeling is they should be moved to a Number (float or double) and the unit stored separately
+     *   - mf
+     */
+    @Enumerated(EnumType.STRING)
+    private ProofTestType proofTestType;
+    private String peakLoad;
+    private String duration;
+    private String peakLoadDuration;
+    private String proofTestFileName;
 
-    @SuppressWarnings("unused")
-    @Id
-    @GeneratedValue
-    @Column(name="id", nullable=false)
-    private Long thingEventProofTestId;
-
-    private ProofTestInfo proofTestInfo = new ProofTestInfo();
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
+    private Character[] proofTestData;
 
     @ManyToOne(optional=false)
     @JoinColumn(name="event_id")
@@ -49,13 +53,13 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
 
     public ThingEventProofTest copyDataFrom(FileDataContainer fileData) {
 
-        getProofTestInfo().setDuration(fileData.getTestDuration());
-        getProofTestInfo().setPeakLoad( fileData.getPeakLoad() );
-        getProofTestInfo().setPeakLoadDuration( fileData.getPeakLoadDuration() );
-        getProofTestInfo().setProofTestType(fileData.getFileType());
-        getProofTestInfo().setProofTestFileName( fileData.getFileName() );
+        setDuration(fileData.getTestDuration());
+        setPeakLoad( fileData.getPeakLoad() );
+        setPeakLoadDuration( fileData.getPeakLoadDuration() );
+        setProofTestType(fileData.getFileType());
+        setProofTestFileName( fileData.getFileName() );
         if(fileData.getFileData() != null){
-            getProofTestInfo().setProofTestData(new String(fileData.getFileData()));
+            setProofTestData(new String(fileData.getFileData()));
         }
 
         return this;
@@ -64,44 +68,14 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
     public ThingEventProofTest copyDataFrom(ThingEventProofTest oldProofTestInfo) {
 
         setThingEvent(oldProofTestInfo.getThingEvent());
-        getProofTestInfo().setDuration( oldProofTestInfo.getProofTestInfo().getDuration() );
-        getProofTestInfo().setPeakLoad( oldProofTestInfo.getProofTestInfo().getPeakLoad() );
-        getProofTestInfo().setPeakLoadDuration( oldProofTestInfo.getProofTestInfo().getPeakLoadDuration() );
-        getProofTestInfo().setProofTestType( oldProofTestInfo.getProofTestInfo().getProofTestType() );
-        getProofTestInfo().setProofTestFileName( oldProofTestInfo.getProofTestInfo().getProofTestFileName() );
-        getProofTestInfo().setProofTestData(oldProofTestInfo.getProofTestInfo().getProofTestData() );
+        setDuration( oldProofTestInfo.getDuration() );
+        setPeakLoad( oldProofTestInfo.getPeakLoad() );
+        setPeakLoadDuration( oldProofTestInfo.getPeakLoadDuration() );
+        setProofTestType( oldProofTestInfo.getProofTestType() );
+        setProofTestFileName( oldProofTestInfo.getProofTestFileName() );
+        setProofTestData(oldProofTestInfo.getProofTestData() );
 
         return this;
-    }
-
-    @AllowSafetyNetworkAccess
-    public ProofTestInfo getProofTestInfo() {
-        if(proofTestInfo == null){
-            proofTestInfo = new ProofTestInfo();
-        }
-        return proofTestInfo;
-    }
-
-    public void setProofTestInfo(ProofTestInfo proofTestInfo) {
-        this.proofTestInfo = proofTestInfo;
-    }
-
-    @Override
-    public ThingEvent enhance(SecurityLevel level) {
-        ThingEvent enhanced = EntitySecurityEnhancer.enhanceEntity(thingEvent, level);
-        enhanced.setBook(enhanced.enhance(thingEvent.getBook(), level));
-        enhanced.setPerformedBy(enhanced.enhance(thingEvent.getPerformedBy(), level));
-        enhanced.setType(enhanced.enhance(thingEvent.getType(), level));
-        enhanced.setAsset(enhanced.enhance(getAsset(), level));
-        enhanced.setOwner(enhanced.enhance(getOwner(), level));
-
-        List<SubEvent> enhancedSubEvents = new ArrayList<SubEvent>();
-        for (SubEvent subEvent : thingEvent.getSubEvents()) {
-            enhancedSubEvents.add(subEvent.enhance(level));
-        }
-        enhanced.setSubEvents(enhancedSubEvents);
-
-        return enhanced;
     }
 
     public Asset getAsset() {
@@ -128,68 +102,75 @@ public class ThingEventProofTest implements AssetEvent, NetworkEntity<ThingEvent
         thingEvent.setOwner(owner);
     }
 
-    /*@Override
-    protected void copyDataIntoResultingAction(AbstractEvent<?,?> event) {
-        ThingEventProofTest action = (ThingEventProofTest) event;
-        action.setProofTestInfo(getProofTestInfo());
-        action.setThingEvent(getThingEvent());
-    } */
+    public String getPeakLoad() {
+        return peakLoad;
+    }
+
+    public void setPeakLoad(String peakLoad) {
+        this.peakLoad = peakLoad;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
+    }
+
+    public ProofTestType getProofTestType() {
+        return proofTestType;
+    }
+
+    public void setProofTestType(ProofTestType proofTestType) {
+        this.proofTestType = proofTestType;
+    }
+
+    public boolean hasProofTestFile() {
+        return (proofTestType != null);
+    }
+
+    public String getPeakLoadDuration() {
+        return peakLoadDuration;
+    }
+
+    public void setPeakLoadDuration(String peakLoadDuration) {
+        this.peakLoadDuration = peakLoadDuration;
+    }
+
+    public Character[] getProofTestData() {
+        return proofTestData;
+    }
+
+    public void setProofTestData(String fileData) {
+        if(fileData != null){
+            this.proofTestData = ArrayUtils.toObject(fileData.toCharArray());
+        }
+        else {
+            this.proofTestData = null;
+        }
+
+    }
+
+    public void setProofTestData(Character[] fileData) {
+        if(fileData != null){
+            this.proofTestData = fileData.clone();
+        }
+        else {
+            this.proofTestData = null;
+        }
+    }
+
+    public String getProofTestFileName() {
+        return proofTestFileName;
+    }
+
+    public void setProofTestFileName(String fileName) {
+        this.proofTestFileName = fileName;
+    }
 
     public ThingEventType getThingType() {
         return (ThingEventType) thingEvent.getType();
     }
 
-    public String getPeakLoad() {
-        return proofTestInfo == null ? null : proofTestInfo.getPeakLoad();
-    }
-
-    public void setPeakLoad(String peakLoad) {
-        getProofTestInfo().setPeakLoad(peakLoad);
-    }
-
-    public String getDuration() {
-        return proofTestInfo == null ? null : proofTestInfo.getDuration();
-    }
-
-    public void setDuration(String duration) {
-        getProofTestInfo().setDuration(duration);
-    }
-
-    public ProofTestType getProofTestType() {
-        return proofTestInfo == null ? null : proofTestInfo.getProofTestType();
-    }
-
-    public void setProofTestType(ProofTestType proofTestType) {
-        getProofTestInfo().setProofTestType(proofTestType);
-    }
-
-    public String getPeakLoadDuration() {
-        return proofTestInfo == null ? null : proofTestInfo.getPeakLoadDuration();
-    }
-
-    public void setPeakLoadDuration(String peakLoadDuration) {
-        getProofTestInfo().setPeakLoadDuration(peakLoadDuration);
-    }
-
-    public String getProofTestData() {
-        return proofTestInfo == null ? null : String.copyValueOf(ArrayUtils.toPrimitive(proofTestInfo.getProofTestData()));
-    }
-
-    public void setProofTestData(String fileData) {
-        getProofTestInfo().setProofTestData(fileData);
-    }
-
-    public String getProofTestFileName() {
-        return proofTestInfo == null ? null : proofTestInfo.getProofTestFileName();
-    }
-
-    public void setProofTestFileName(String fileName) {
-        getProofTestInfo().setProofTestFileName(fileName);
-    }
-
-    @Override
-    @AllowSafetyNetworkAccess
-    public SecurityLevel getSecurityLevel(BaseOrg fromOrg) {
-        return SecurityLevel.calculateSecurityLevel(fromOrg, getOwner());
-    }
 }
