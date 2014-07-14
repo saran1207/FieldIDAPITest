@@ -28,13 +28,13 @@ public abstract class ThingEventPage extends EventPage<ThingEvent> {
 
     @SpringBean protected ThingEventCreationService eventCreationService;
 
-    protected IModel<ProofTestInfo> proofTestInfo;
+    protected IModel<ThingEventProofTest> proofTestInfo;
 
     @Override
     protected void onInitialize() {
-        proofTestInfo = new PropertyModel<ProofTestInfo>(event, "proofTestInfo");
+        proofTestInfo = new PropertyModel<ThingEventProofTest>(event, "proofTestInfo");
         if (proofTestInfo.getObject() == null) {
-            proofTestInfo = new Model<ProofTestInfo>(new ProofTestInfo());
+            proofTestInfo = new Model<ThingEventProofTest>(new ThingEventProofTest());
         }
 
         super.onInitialize();
@@ -75,7 +75,7 @@ public abstract class ThingEventPage extends EventPage<ThingEvent> {
         List<EventScheduleBundle<Asset>> scheduleBundles = new ArrayList<EventScheduleBundle<Asset>>();
 
         for (ThingEvent sched : schedules) {
-            EventScheduleBundle bundle = new EventScheduleBundle<Asset>(sched.getAsset(), sched.getType(), sched.getProject(), sched.getDueDate());
+            EventScheduleBundle bundle = new EventScheduleBundle<Asset>(sched.getAsset(), sched.getType(), sched.getProject(), sched.getDueDate(), sched.getAssignedUserOrGroup());
             scheduleBundles.add(bundle);
         }
 
@@ -104,7 +104,15 @@ public abstract class ThingEventPage extends EventPage<ThingEvent> {
 
     @Override
     protected void onPreSave(ThingEvent event) {
-        event.setProofTestInfo(proofTestInfo.getObject());
+        //if prooftest is null, then no need to "save" it
+        if(proofTestInfo.getObject().getProofTestType() == null){
+            return;
+        }
+
+        if(event.getThingEventProofTests().size() == 0){
+            event.getThingEventProofTests().add(new ThingEventProofTest());
+        }
+        event.getThingEventProofTests().iterator().next().copyDataFrom(proofTestInfo.getObject());
     }
 
     @Override

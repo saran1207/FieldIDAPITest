@@ -17,7 +17,17 @@ public class PrintAsset extends Panel {
         super(id, model);
 
         //assetDescription
-        add(new Label("assetDescription", ProxyModel.of(model, on(ProcedureDefinition.class).getAsset().getDescription())));
+        //add(new Label("assetDescription", ProxyModel.of(model, on(ProcedureDefinition.class).getAsset().getDescription())));
+
+        add(new Label("procedureCode", ProxyModel.of(model, on(ProcedureDefinition.class).getProcedureCode())));
+
+        add(new Label("equipmentType", ProxyModel.of(model, on(ProcedureDefinition.class).getAsset().getType().getDisplayName())));
+
+        add(new Label("equipmentNumber", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentNumber())));
+
+        add(new Label("location", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentLocation())));
+
+        add(new Label("building", ProxyModel.of(model, on(ProcedureDefinition.class).getBuilding())));
 
     }
 }

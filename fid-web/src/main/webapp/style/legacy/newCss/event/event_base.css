@@ -647,3 +647,61 @@ span.fieldHolder img {
 .criteriaEditForm .infoSet {
     overflow-y:visible;
 }
+
+
+.event-form-column-left {
+    float: left;
+    width: 676px;
+}
+.event-form-column-left .grey-message {
+    margin-bottom: 28px;
+}
+.event-form-column-left .field {
+    clear: both;
+    margin-bottom: 16px;
+    min-height: 26px;
+}
+.event-form-column-left .field.last {
+    margin-bottom: 36px;
+}
+.event-form-column-left .field span {
+    line-height: 26px;
+}
+.event-form-column-left .field textarea {
+    height: 150px;
+    width: 250px;
+}
+.event-form-column-right {
+    float: right;
+    width: 308px;
+    padding-bottom: 10px;
+    margin-top: 20px;
+    border: 1px solid #D1D1D1;
+    border-top: none;
+}
+.event-form-column-right h2 {
+    margin-top: 0px;
+}
+.event-form-column-right .actionDetail {
+    clear: both;
+    margin-top: 12px;
+    margin-left: 16px;
+}
+.event-form-column-right .detailSectionIcon {
+    float: left;
+    margin-right: 5px;
+}
+.event-form-column-right .actionMessage span {
+    min-height: 13px;
+    display: block;
+}
+.event-form-column-right .actionImage img {
+    display: block;
+    width: 280px;
+    margin: 5px 16px;
+}
+.event-form-column-right .actionImage {
+    margin-top: 16px;
+    border-top: 1px solid #ccc;
+    padding-top: 11px;
+}

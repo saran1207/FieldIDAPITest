@@ -9,21 +9,25 @@
     <div wicket:id="feedbackPanel"/>
 
     <form wicket:id="form">
+        <!-- Replace this stuff with a larger div which will be divided into two smaller divs... allowing a custom
+             form to appear based on whether or not we're editing a note or an Isolation Point... -->
         <div class="column left">
             <label class="source-id"><wicket:message key="label.source_id"/><input type="text" wicket:id="identifier"/></label>
-            <label><wicket:message key="label.source"/><input type="text" wicket:id="sourceText"/></label>
+            <div wicket:id="sourceText" />
             <div wicket:id="electronicIdentifier" class="tooltip-label"/>
-            <label><wicket:message key="label.location"/><input type="text" wicket:id="location"/></label>
+            <div wicket:id="location"/>
             <div wicket:id="device" class="tooltip-label"/>
-            <label><wicket:message key="label.lock"/><input type="text" wicket:id="lock"/></label>
-            <label><wicket:message key="label.method"/><textarea wicket:id="method" maxlength="255"/></label>
-            <label><wicket:message key="label.check"/><textarea wicket:id="check" maxlength="255"/></label>
+            <div wicket:id="lock"/>
+            <div wicket:id="method"/>
+            <div wicket:id="check"/>
+
+            <div wicket:id="notes"/>
         </div>
 
         <div class="column right">
             <div wicket:id="annotation" class="isolation-point-image"/>
         </div>
-        
+
         <div class="buttons">
             <a wicket:id="back" class="mattButton"><wicket:message key="label.back"/></a>
             <a wicket:id="done" class="mattButton mattButtonBlue"><wicket:message key="label.done"/></a>

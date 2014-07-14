@@ -38,7 +38,7 @@ public abstract class ProcedureAuditEventPage extends EventPage<ProcedureAuditEv
     }
 
     @Override
-    protected boolean isScheduleVisable() {
+    protected boolean isScheduleVisible() {
         return false;
     }
 
@@ -94,7 +94,7 @@ public abstract class ProcedureAuditEventPage extends EventPage<ProcedureAuditEv
         List<EventScheduleBundle<ProcedureDefinition>> scheduleBundles = new ArrayList<EventScheduleBundle<ProcedureDefinition>>();
 
         for (ProcedureAuditEvent sched : schedules) {
-            EventScheduleBundle<ProcedureDefinition> bundle = new EventScheduleBundle<ProcedureDefinition>(sched.getProcedureDefinition(), sched.getType(), sched.getProject(), sched.getDueDate());
+            EventScheduleBundle<ProcedureDefinition> bundle = new EventScheduleBundle<ProcedureDefinition>(sched.getProcedureDefinition(), sched.getType(), sched.getProject(), sched.getDueDate(), sched.getAssignedUserOrGroup());
             scheduleBundles.add(bundle);
         }
 

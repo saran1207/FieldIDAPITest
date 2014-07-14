@@ -135,7 +135,8 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
                 @Override
                 protected void onUpdate(AjaxRequestTarget target) {
                     if (getModelObject().isNew()) {
-                        autoScheduleBasedOnPriority(getModel());
+//                        autoScheduleBasedOnPriority(getModel());
+                        autoScheduleBasedOnPriority(priorityCodeModel, scheduledDateModel);
                         target.add(scheduledDatePicker);
                     }
                 }
@@ -269,20 +270,20 @@ public class AddEditActionPage extends FieldIDAuthenticatedPage {
         return date;
     }
 
-    private void autoScheduleBasedOnPriority(IModel<Event> model) {
-        PriorityCode priority = model.getObject().getPriority();
+    private void autoScheduleBasedOnPriority(IModel<PriorityCode> model, IModel<Date> dateModel) {
+        PriorityCode priority = model.getObject();
         if (priority != null && priority.getAutoSchedule() != null) {
             PriorityCodeAutoScheduleType autoSchedule = priority.getAutoSchedule();
             if (autoSchedule == PriorityCodeAutoScheduleType.END_OF_WEEK) {
-                model.getObject().setDueDate(getEndOfWeek());
+                dateModel.setObject(getEndOfWeek());
             } else if (autoSchedule == PriorityCodeAutoScheduleType.IN_30_DAYS) {
-                model.getObject().setDueDate(getDaysFromNow(30));
+                dateModel.setObject(getDaysFromNow(30));
             } else if (autoSchedule == PriorityCodeAutoScheduleType.TODAY) {
-                model.getObject().setDueDate(getDaysFromNow(0));
+                dateModel.setObject(getDaysFromNow(0));
             } else if (autoSchedule == PriorityCodeAutoScheduleType.TOMORROW) {
-                model.getObject().setDueDate(getDaysFromNow(1));
+                dateModel.setObject(getDaysFromNow(1));
             } else if (autoSchedule == PriorityCodeAutoScheduleType.CUSTOM && priority.getAutoScheduleCustomDays() != null) {
-                model.getObject().setDueDate(getDaysFromNow(priority.getAutoScheduleCustomDays()));
+                dateModel.setObject(getDaysFromNow(priority.getAutoScheduleCustomDays()));
             }
         }
     }

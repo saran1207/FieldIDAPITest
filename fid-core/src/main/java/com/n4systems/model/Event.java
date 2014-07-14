@@ -28,7 +28,7 @@ import java.util.TimeZone;
 public abstract class Event<T extends EventType, V extends Event, R extends EntityWithTenant> extends AbstractEvent<T,R> implements Comparable<Event>, Archivable, Exportable, LocationContainer, HasCreatedModifiedPlatform, HasOwner, HasGpsLocation {
 	private static final long serialVersionUID = 1L;
     public static final String[] PROCEDURE_AUDIT_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "infoOptionMap", "subEvents", "procedureDefinition" };
-    	public static final String[] PLACE_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "infoOptionMap", "subEvents", "place" };
+    public static final String[] PLACE_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "infoOptionMap", "subEvents", "place" };
     public static final String[] ALL_FIELD_PATHS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents" };
 	public static final String[] ALL_FIELD_PATHS_WITH_SUB_EVENTS = { "modifiedBy", "createdBy", "eventForm.sections", "type.infoFieldNames", "attachments", "results", "results.criteriaImages", "asset", "asset.infoOptions", "infoOptionMap", "subEvents.eventForm.sections"};
     public static final String[] THING_TYPE_PATHS = { "type.supportedProofTests" };

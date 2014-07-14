@@ -1,19 +1,25 @@
 package com.n4systems.fieldid.service.event;
 
+import com.amazonaws.AmazonClientException;
 import com.n4systems.ejb.impl.EventResultCalculator;
 import com.n4systems.ejb.impl.EventScheduleBundle;
 import com.n4systems.exceptions.ProcessingProofTestException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.UnknownSubAsset;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.ContentTypeUtil;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 public class ThingEventCreationService extends EventCreationService<ThingEvent, Asset> {
@@ -53,7 +59,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     @Override
     protected void postSaveEvent(ThingEvent event, FileDataContainer fileData) {
         updateAsset(event);
-        saveProofTestFiles(event, fileData);
+        uploadProofTestFile(event, fileData);
         assignNextEventInSeries(event, EventEnum.PERFORM);
     }
 
@@ -62,14 +68,21 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
             return;
         }
 
-        if (event.getProofTestInfo() == null) {
-            event.setProofTestInfo(new ProofTestInfo());
+        if (event.getThingEventProofTests() == null) {
+            event.setThingEventProofTests(new HashSet());
         }
 
-        event.getProofTestInfo().setProofTestType(fileData.getFileType());
-        event.getProofTestInfo().setDuration(fileData.getTestDuration());
-        event.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
-        event.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
+        ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
+        thingEventProofTest.copyDataFrom(fileData);
+        thingEventProofTest.setThingEvent(event);
+
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        if(itr.hasNext()){
+            itr.next().copyDataFrom(thingEventProofTest);
+        }
+        else {
+            event.getThingEventProofTests().add(thingEventProofTest);
+        }
     }
 
 
@@ -160,7 +173,7 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
     @Override
     protected void preUpdateEvent(ThingEvent event, FileDataContainer fileData) {
         setProofTestData(event, fileData);
-        saveProofTestFiles(event, fileData);
+        uploadProofTestFile(event, fileData);
     }
 
     @Override
@@ -168,31 +181,22 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         assignNextEventInSeries(event, EventEnum.PERFORM);
     }
 
-    private void saveProofTestFiles(Event event, FileDataContainer fileData) throws ProcessingProofTestException {
-        if (fileData == null) {
+    private void uploadProofTestFile(ThingEvent event, FileDataContainer fileData) throws ProcessingProofTestException {
+        if (fileData == null || fileData.getFileData() == null) {
             return;
         }
-        File proofTestFile = PathHandler.getProofTestFile(event);
-        File chartImageFile = PathHandler.getChartImageFile(event);
-
-        // we should make sure our parent directories exist first
-        proofTestFile.getParentFile().mkdirs();
-        chartImageFile.getParentFile().mkdirs();
 
         try {
-            if (fileData.getFileData() != null) {
-                FileUtils.writeByteArrayToFile(proofTestFile, fileData.getFileData());
-            } else if (proofTestFile.exists()) {
-                proofTestFile.delete();
-            }
+            S3Service s3Service = ServiceLocator.getS3Service();
 
+            String fileName = fileData.getFileName();
+            fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
+            String contentType = ContentTypeUtil.getContentType(fileName);
             if (fileData.getChart() != null) {
-                FileUtils.writeByteArrayToFile(chartImageFile, fileData.getChart());
-            } else if (chartImageFile.exists()) {
-                chartImageFile.delete();
+                s3Service.uploadAssetProofTestChart(fileData.getChart(), contentType, event.getAsset().getMobileGUID(), event.getMobileGUID());
             }
 
-        } catch (IOException e) {
+        } catch (AmazonClientException e) {
             logger.error("Failed while writing Proof Test files", e);
             throw new ProcessingProofTestException(e);
         }

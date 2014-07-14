@@ -348,7 +348,7 @@ public class EventService extends FieldIdPersistenceService {
             builder.addWhere(wpg);
         } else {
             // Users in groups can pull in only local events of their group. Group filtering is done in the user security filter.
-            builder = createUserSecurityBuilder(Event.class);
+            builder = new QueryBuilder<Event>(ThingEvent.class, securityContext.getUserSecurityFilter());
         }
 
         builder.addWhere(WhereClauseFactory.create("asset.networkId", networkId));

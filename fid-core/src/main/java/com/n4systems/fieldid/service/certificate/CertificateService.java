@@ -16,6 +16,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.model.utils.DateTimeDefiner;
 import com.n4systems.reporting.*;
 import com.n4systems.util.FieldIdDateFormatter;
+import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.StreamHelper;
 import com.n4systems.util.time.DateUtil;
 import net.sf.jasperreports.engine.*;
@@ -30,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.*;
 
 @Transactional(readOnly = true)
@@ -175,8 +177,20 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 	}
 
 	private void addProofTestParams(Map<String, Object> reportMap, ThingEvent event) {
-		reportMap.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
-		addProofTestInfoParams(reportMap, event.getProofTestInfo());
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        if (itr.hasNext()) {
+            S3Service s3Service = ServiceLocator.getS3Service();
+            ThingEventProofTest proofTest = itr.next();
+
+            if(s3Service.assetProofTestExists(proofTest)){
+                URL chartUrl = s3Service.getAssetProofTestUrl(event.getAsset().getMobileGUID(), event.getMobileGUID());
+                reportMap.put("chartPath", chartUrl);
+            }
+            else {
+                reportMap.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
+            }
+            addProofTestInfoParams(reportMap, proofTest);
+        }
 	}
 
 	private void addEventScheduleParams(Map<String, Object> reportMap, Event event) {
@@ -331,11 +345,14 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		}
 	}
 
-	private void addProofTestInfoParams(Map<String, Object> reportMap, ProofTestInfo proofTestInfo) {
+    private void addProofTestInfoParams(Map<String, Object> reportMap, ThingEventProofTest proofTestInfo) {
 		if (proofTestInfo != null) {
 			reportMap.put("peakLoad", proofTestInfo.getPeakLoad());
 			reportMap.put("testDuration", proofTestInfo.getDuration());
 			reportMap.put("peakLoadDuration", proofTestInfo.getPeakLoadDuration());
+            reportMap.put("proofTestType", proofTestInfo.getProofTestType());
+            reportMap.put("fileName", proofTestInfo.getProofTestFileName());
+            reportMap.put("fileData", proofTestInfo.getProofTestData());
 		}
 	}
 

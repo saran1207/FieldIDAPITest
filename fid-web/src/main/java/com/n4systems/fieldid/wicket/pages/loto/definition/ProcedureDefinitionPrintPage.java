@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.ComponentWithExternalHtml;
 import com.n4systems.fieldid.wicket.pages.FieldIDAuthenticatedPage;
 import com.n4systems.fieldid.wicket.pages.loto.PrintOptions;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.util.json.JsonRenderer;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.IMarkupFragment;
@@ -48,15 +49,25 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         //add print button icon
         add(new ContextImage("printIcon", "/fieldid/images/print-icon-transparent.png"));
 
+        //add watermark
+        ContextImage icon = new ContextImage("watermarkImage", "/fieldid/images/loto/procedure-watermark.png");
+        icon.setVisible(!model.getObject().getPublishedState().equals(PublishedState.PUBLISHED));
+        add(icon);
+
         mode = initMode();
         add(new AttributeAppender("class", Model.of("print-procedure-definition")));
         add(new PrintMetaData("meta",model));
         add(new PrintAsset("assetpage",model));
         add(new PrintProductSummary("productsummary",model));
-        add(new PrintImages("images",model));
-        add(new PrintList("list",model));
-        add(new PrintFooter("footer",model));
 
+        //----------------------------------------------------
+
+        add(new PrintImages("images",model).setRenderBodyOnly(true));
+        add(new ProcessPanel("applicationProcess", model).setRenderBodyOnly(true));
+        add(new PrintList("list",model).setRenderBodyOnly(true));
+        add(new RemovalProcessPanel("removalProcess", model).setRenderBodyOnly(true));
+
+        add(new PrintFooter("footer",model));
 
     }
 
@@ -71,13 +82,11 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("style/legacy/component/imageList.css");
-        response.renderCSSReference("style/legacy/pageStyles/procedureDefinition.css");
-        response.renderCSSReference("style/legacy/component/annotated-image.css");
-        response.renderCSSReference("style/legacy/pageStyles/procedureDefinitionPrint.css");
 
-        response.renderJavaScriptReference("javascript/component/printimages.js");
-        response.renderOnDomReadyJavaScript("setupPrintPage("+ getJsonPrintOptions() +")");
+        response.renderCSSReference("//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,400,600,700,800");
+        response.renderCSSReference("style/print/style.css");
+        response.renderJavaScriptReference("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js");
+        response.renderJavaScriptReference("javascript/print/print.js");
     }
 
 

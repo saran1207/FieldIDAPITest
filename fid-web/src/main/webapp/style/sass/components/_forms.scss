@@ -213,7 +213,37 @@ legend + label,
 legend + p {
 	margin-top: 20px;
 }
+.horizontal-group-procedure-audit {
+	height: 71px;
+	margin-bottom: 15px;
 
+    .dateRange,
+        .dateFrom,
+        .dateTo {
+	    float: left;
+	    margin-right: 16px;
+
+        input {
+            border: 1px solid #c7c7c9;
+        }
+    }
+
+    .ui-datepicker-trigger {
+        margin-left: -20px;
+        padding-left: 0;
+        vertical-align: top;
+        padding-top: 5px;
+        cursor: pointer;
+    }
+
+    .text-search {
+        margin-top: 21px;
+    }
+}
+.procedure-audit-list {
+    margin-top: -63px;
+    margin-left: -21px;
+}
 // Search box - TODO
 // -----------
 .search-box {

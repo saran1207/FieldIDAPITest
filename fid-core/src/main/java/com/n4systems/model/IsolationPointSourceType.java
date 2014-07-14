@@ -1,7 +1,7 @@
 package com.n4systems.model;
 
 public enum IsolationPointSourceType {
-    W("Water"), V("Valve"), S("Steam"), P("Pneumatic"), G("Gas"), E("Electrical"), CP("Control Panel");
+    W("Water"), V("Valve"), S("Steam"), P("Pneumatic"), G("Gas"), E("Electrical"), CP("Control Panel"), N("Notes");
 
     private final String identifier;
 

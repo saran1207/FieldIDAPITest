@@ -6,10 +6,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.certificate.ReportCompiler;
 import com.n4systems.fieldid.service.org.OrgService;
-import com.n4systems.model.EventResult;
-import com.n4systems.model.ExtendedFeature;
-import com.n4systems.model.SubEvent;
-import com.n4systems.model.ThingEvent;
+import com.n4systems.model.*;
 import com.n4systems.model.orgs.InternalOrg;
 import com.n4systems.model.orgs.PrimaryOrg;
 import com.n4systems.model.search.EventReportCriteria;
@@ -126,8 +123,9 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
 
                 eventMap.put("allInspections", inspectionResultMaps);
 
-                if (event.getProofTestInfo() != null) {
-                    eventMap.put("peakLoad", event.getProofTestInfo().getPeakLoad());
+                Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+                if (itr.hasNext()) {
+                    eventMap.put("peakLoad", itr.next().getPeakLoad());
                 }
 
                 collection.add(eventMap);

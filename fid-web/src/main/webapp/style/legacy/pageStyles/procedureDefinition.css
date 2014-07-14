@@ -121,8 +121,9 @@ h3 {
 ---------------*/
 .sections .left {
 	float: left;
-	width: 430px;
+	width: 450px;
 }
+
 .sections .right {
 	float: left;
 	width: 490px;
@@ -322,7 +323,7 @@ h3 {
         padding-right: 25px;
 	}
 	.isolation-point-table .method {
-		width: 182px;
+		width: 160px;
 	}
 	.isolation-point-table .check {
 		width: 135px;
@@ -335,6 +336,14 @@ h3 {
 		width: 30px;
         padding-right: 5px;
 	}
+    /*
+         This CSS class is for the notes field, which replaces several other fields/columns in this table.
+         It is used when we're displaying notes instead of isolation points in the list.
+    */
+    .isolation-point-table .notes {
+        width: 690px;
+        padding-left: 22px;
+    }
 	
 
 
@@ -380,6 +389,14 @@ h3 {
 }
 .isolation-point-editor .title.water {
 	background-image: url(/fieldid/images/loto/water-full.png);
+}
+
+/*
+    We need a proper entry for notes here as well... which means we need an image for this
+    as well...
+*/
+.isolation-point-editor .title.notes {
+    background-image: url(/fieldid/images/loto/note-full.png);
 }
 
 .isolation-point-editor .column.left {

@@ -61,7 +61,7 @@ public class ManagerBackedCreateEventsMethodObject implements CreateEventsMethod
 			}
 
             final CreateEventParameter createEventParameter = new CreateEventParameterBuilder(event, event.getModifiedBy().getId())
-                    .withUploadedImages(fileAttachments).build();
+                    .withUploadedFiles(fileAttachments).build();
 
             try {
                 eventSaver.createEvent(createEventParameter);

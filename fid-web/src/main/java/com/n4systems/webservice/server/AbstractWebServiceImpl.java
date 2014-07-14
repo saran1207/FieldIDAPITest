@@ -1,6 +1,8 @@
 package com.n4systems.webservice.server;
 
 import com.n4systems.exceptions.LoginException;
+import com.n4systems.fieldid.service.SecurityContextInitializer;
+import com.n4systems.fieldid.ws.v1.exceptions.ForbiddenException;
 import com.n4systems.model.user.User;
 import com.n4systems.util.WsServiceLocator;
 import com.n4systems.webservice.server.bundles.AuthBundle;
@@ -23,7 +25,13 @@ public abstract class AbstractWebServiceImpl implements AbstractWebService {
 			logger.warn("User failed authentication to the webservice: tenant [" + authUser.getTenantName() + "] username [" + authUser.getUserName() + "]");
 			throw new WebserviceAuthenticationException("Bad Organization name, Username or Password");
 		}
-		
+        String authKey = user.getAuthKey();
+        try {
+            SecurityContextInitializer.initSecurityContext(authKey);
+        } catch (SecurityException e) {
+            throw new ForbiddenException("Invalid auth key '" + authKey + "'");
+        }
+
 		logger.warn("User authenticated sucessfully to the webservice: tenant [" + authUser.getTenantName() + "] username [" + authUser.getUserName() + "]");
 		
 		return user;

@@ -1,46 +1,88 @@
 <wicket:extend>
 
-    <div wicket:id="feedbackPanel"></div>
+    <div class="event-form-column-left">
+        <div wicket:id="feedbackPanel"></div>
 
-    <div class="title">
-        <wicket:message key="label.close_event_header">
-            <label wicket:id="event"/>
-        </wicket:message>
+        <h2>
+            <wicket:message key="label.close_event_header">
+                <label wicket:id="event"/>
+            </wicket:message>
+        </h2>
+
+        <form wicket:id="form" class="form ">
+            <div class="grey-message">
+                <wicket:message key="message.close_event"/>
+            </div>
+
+            <div class="field">
+                <label class="label"><wicket:message key="label.due"/></label>
+                <span wicket:id="due"/>
+            </div>
+
+            <div class="field">
+                <label class="label"><wicket:message key="label.event_state"/></label>
+                <span wicket:id="state"/>
+            </div>
+
+            <div class="field">
+                <label class="label"><wicket:message key="label.status"/></label>
+                <select wicket:id="status" style="width:250px;"/>
+            </div>
+
+            <div class="field">
+                <label class="label"><wicket:message key="label.closed_by"/></label>
+                <select wicket:id="resolver" style="width:250px;"/>
+            </div>
+
+            <div class="field last">
+                <label class="label"><wicket:message key="label.comment"/></label>
+                <textarea wicket:id="comment"/>
+            </div>
+
+            <div class="formAction">
+                <input type="submit" wicket:id="closeButton" wicket:message="value:label.close_event"/> or <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            </div>
+        </form>
     </div>
 
-    <form wicket:id="form" class="form">
-        <div class="grey-message">
-            <wicket:message key="message.close_event"/>
+    <div wicket:id="actionsColumn" class="event-form-column-right">
+        <h2><wicket:message key="label.corrective_action"/></h2>
+        <div class="actionDetail">
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-priority.png">
+            </div>
+            <div class="actionMessage">
+                <span wicket:id="priority"></span>
+            </div>
+        </div>
+        <div class="actionDetail">
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-notes.png">
+            </div>
+            <div class="actionMessage">
+                <span wicket:id="notes"></span>
+            </div>
+        </div>
+        <div class="actionDetail">
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-due.png">
+            </div>
+            <div class="actionMessage">
+                <span wicket:id="dueDate"></span>
+            </div>
+        </div>
+        <div class="actionDetail">
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-assignee.png">
+            </div>
+            <div class="actionMessage">
+                <span wicket:id="assignee"></span>
+            </div>
+        </div>
+        <div wicket:id="criteriaResultImage" class="actionImage">
+            <img wicket:id="image"/>
         </div>
 
-        <div class="field">
-            <label class="label"><wicket:message key="label.due"/></label>
-            <span wicket:id="due"/>
-        </div>
-
-        <div class="field">
-            <label class="label"><wicket:message key="label.event_state"/></label>
-            <span wicket:id="state"/>
-        </div>
-
-        <div class="field">
-            <label class="label"><wicket:message key="label.status"/></label>
-            <select wicket:id="status" style="width:200px;"/>
-        </div>
-
-        <div class="field">
-            <label class="label"><wicket:message key="label.closed_by"/></label>
-            <select wicket:id="resolver" style="width:200px;"/>
-        </div>
-
-        <div class="field">
-            <label class="label"><wicket:message key="label.comment"/></label>
-            <textarea wicket:id="comment"/>
-        </div>
-
-        <div class="formAction">
-            <input type="submit" wicket:id="closeButton" wicket:message="value:label.close_event"/> or <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
-        </div>
-    </form>
+    </div>
 
 </wicket:extend>

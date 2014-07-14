@@ -24,7 +24,7 @@ public class PathHandler {
     private static final String ASSET_REPORT_FILE_NAME_LOCALIZED = "product_%s" + REPORT_FILE_EXT;
     private static final String COMPILED_ASSET_REPORT_FILE_NAME = "product" + COMPILED_REPORT_FILE_EXT;
     private static final String COMPILED_ASSET_REPORT_FILE_NAME_LOCALIZED = "product_%s" + COMPILED_REPORT_FILE_EXT;
-	private static final String CHART_FILE_NAME = "proof_test_chart.png";
+	public static final String CHART_FILE_NAME = "proof_test_chart.png";
 	private static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
 	private static final String SIGNATURE_IMAGE_FILE_NAME = "signature.gif";
 	private static final String EVENT_PATH_BASE = PRIVATE_PATH_BASE + "/inspections";
@@ -318,11 +318,11 @@ public class PathHandler {
 	public static File getCompiledSummaryReportFile(Tenant tenant, Locale locale) {
         return getPossiblyLocalizedReport(tenant, locale, COMPILED_SUMMARY_REPORT_FILE_NAME_LOCALIZED, COMPILED_SUMMARY_REPORT_FILE_NAME);
 	}
-	
-	private static String getEventPath(Event event) {
-		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(event.getCreated());
-		return mergePaths(dateCreatedPath, event.getId().toString());
-	}
+
+    private static String getEventPath(AbstractEvent event) {
+        String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(event.getCreated());
+        return mergePaths(dateCreatedPath, event.getId().toString());
+    }
 	
 	private static String getProjectPath(Project project) {
 		String dateCreatedPath = (new SimpleDateFormat(CREATED_DATE_PATH_FORMAT)).format(project.getCreated());
@@ -350,7 +350,7 @@ public class PathHandler {
 		return getAssetTypePath(assetType.getId());
 	}
 	
-	private static String getAttachmentPath(Event event) {
+	private static String getAttachmentPath(AbstractEvent event) {
 		return mergePaths(getEventPath(event));
 	}
 	
@@ -370,11 +370,11 @@ public class PathHandler {
 		return new File(getAttachmentFile(event), attachment.getFileName());
 	}
 	
-	public static File getAttachmentFile(Event event, SubEvent subEvent) {
+	public static File getAttachmentFile(AbstractEvent event, SubEvent subEvent) {
 		return absolutize(mergePaths(getEventAttachmentBasePath(event.getTenant()), getAttachmentPath(event), getSubEventPath(subEvent)));
 	}
 	
-	public static File getAttachmentFile(Event event) {
+	public static File getAttachmentFile(AbstractEvent event) {
 		return absolutize(mergePaths(getEventAttachmentBasePath(event.getTenant()), getAttachmentPath(event)));
 	}
 	
@@ -418,7 +418,7 @@ public class PathHandler {
 		return absolutize(mergePaths(getAssetImageBasePath(asset.getTenant()), getAssetPath(asset)));
 	}
 
-	public static File getChartImageFile(Event event) {
+	public static File getChartImageFile(ThingEvent event) {
 		return absolutize(mergePaths(getEventChartImageBasePath(event.getTenant()), getEventPath(event), CHART_FILE_NAME));
 	}
 	
@@ -429,16 +429,19 @@ public class PathHandler {
 	private static String getEventChartImageBasePath(Tenant tenant) {
 		return mergePaths(CHART_IMAGE_PATH_BASE, getTenantPathPart(tenant));
 	}
-	
-	public static File getProofTestFile(Event event) {
+
+    @Deprecated
+    public static File getProofTestFile(Event event) {
 		return absolutize(mergePaths(getEventProoftestBasePath(event.getTenant()), getEventPath(event), PROOF_TEST_FILE_NAME));
 	}
-	
-	public static File getEventProoftestBaseFile(Tenant tenant) {
+
+    @Deprecated
+    public static File getEventProoftestBaseFile(Tenant tenant) {
 		return absolutize(getEventProoftestBasePath(tenant));
 	}
-	
-	private static String getEventProoftestBasePath(Tenant tenant) {
+
+    @Deprecated
+    private static String getEventProoftestBasePath(Tenant tenant) {
 		return mergePaths(PROOF_TEST_PATH_BASE, getTenantPathPart(tenant));
 	}
 	

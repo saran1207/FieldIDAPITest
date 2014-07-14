@@ -277,7 +277,7 @@ public class SubEventCrud extends EventCrud {
 			processProofTestFile();
 			getModifiableEvent().pushValuesTo(((ThingEvent)event));
             setOverrideResult(getModifiableEvent().getOverrideResult());
-			masterEventHelper.setProofTestFile(fileData);
+			masterEventHelper.setProofTestFile(fileDataContainer);
 			masterEventHelper.setAssignToUpdate(getAssignedTo(), isAssignToSomeone());
             masterEventHelper.setOverrideResult(getOverrideResult());
 
@@ -330,12 +330,19 @@ public class SubEventCrud extends EventCrud {
 	protected void processProofTestFile() throws ProcessingProofTestException {
 		super.processProofTestFile();
 
-		if (fileData != null) {
-			if (((ThingEvent)event).getProofTestInfo() == null) {
-                ((ThingEvent)event).setProofTestInfo(new ProofTestInfo());
-			}
-            ((ThingEvent)event).getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
-            ((ThingEvent)event).getProofTestInfo().setDuration(fileData.getTestDuration());
+		if (fileDataContainer != null) {
+            if(((ThingEvent)event).getThingEventProofTests().size() == 0){
+                ((ThingEvent)event).getThingEventProofTests().add(new ThingEventProofTest());
+            }
+            ThingEventProofTest proofTestInfo = ((ThingEvent)event).getThingEventProofTests().iterator().next();
+            proofTestInfo.setPeakLoad(fileDataContainer.getPeakLoad());
+            proofTestInfo.setDuration(fileDataContainer.getTestDuration());
+            proofTestInfo.setProofTestFileName(fileDataContainer.getFileName());
+            if(fileDataContainer.getFileData() != null){
+                proofTestInfo.setProofTestData(new String(fileDataContainer.getFileData()));
+            }
+            proofTestInfo.setProofTestType(fileDataContainer.getFileType());
+            proofTestInfo.setPeakLoadDuration(fileDataContainer.getPeakLoadDuration());
 		}
 
 	}

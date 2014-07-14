@@ -19,8 +19,8 @@ import com.n4systems.model.procedure.RecurringLotoEvent;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
-import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
@@ -29,6 +29,7 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -165,41 +166,26 @@ public class RecurringLotoSchedulesPage extends FieldIDTemplatePage {
     private class ActionGroup extends Fragment {
         public ActionGroup(String id) {
             super(id, "addRecurrenceActionGroup", RecurringLotoSchedulesPage.this);
-            add(new AjaxLink("addRecurringLotoLink") {
+            WebMarkupContainer dropDownContainer;
+            add(dropDownContainer = new WebMarkupContainer("dropDownContainer"));
+            dropDownContainer.add(new AjaxLink("addRecurringLotoLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     lotoRecurrenceModalWindow.show(target);
                 }
+            });
 
-                @Override
-                protected boolean isLinkEnabled() {
-                    return procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject());
-                }
-
-                @Override
-                protected void disableLink(ComponentTag tag) {
-                    super.disableLink(tag);
-                    tag.put("class", tag.getAttribute("class") + " disabled");
-                }
-            }.setBeforeDisabledLink("").setAfterDisabledLink(""));
-
-            add(new AjaxLink("addRecurringAuditLink") {
+            dropDownContainer.add(new AjaxLink("addRecurringAuditLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
                     auditRecurrenceModalWindow.show(target);
                 }
+            });
 
-                @Override
-                protected boolean isLinkEnabled() {
-                    return procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject());
-                }
+            if (!procedureDefinitionService.hasPublishedProcedureDefinition(assetModel.getObject())) {
+                 dropDownContainer.add(new AttributeAppender("class", Model.of("disabled"), " "));
+            }
 
-                @Override
-                protected void disableLink(ComponentTag tag) {
-                    super.disableLink(tag);
-                    tag.put("class", tag.getAttribute("class") + " disabled");
-                }
-            }.setBeforeDisabledLink("").setAfterDisabledLink(""));
         }
     }
 }

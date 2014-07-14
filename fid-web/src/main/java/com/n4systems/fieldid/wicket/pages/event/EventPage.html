@@ -5,8 +5,7 @@
 
     <form wicket:id="outerEventForm">
 
-        <div wicket:id="targetDetailsPanel">
-        </div>
+        <div wicket:id="targetDetailsPanel"/>
 
         <div>
 
@@ -213,6 +212,63 @@
     </form>
 
     <div wicket:id="schedulePicker"></div>
+
+    <div wicket:id="actionsColumn" class="event-form-column-right">
+        <h2><wicket:message key="label.corrective_action"/></h2>
+
+        <div class="actionDetail">
+
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-priority.png">
+            </div>
+
+            <div class="actionMessage">
+                <span wicket:id="priority"></span>
+            </div>
+
+        </div>
+
+        <div class="actionDetail">
+
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-notes.png">
+            </div>
+
+            <div class="actionMessage">
+                <span wicket:id="notes"></span>
+            </div>
+
+        </div>
+
+        <div class="actionDetail">
+
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-due.png">
+            </div>
+
+            <div class="actionMessage">
+                <span wicket:id="dueDate"></span>
+            </div>
+
+        </div>
+
+        <div class="actionDetail">
+
+            <div class="detailSectionIcon">
+                <img src="/fieldid/images/action/icon-assignee.png">
+            </div>
+
+            <div class="actionMessage">
+                <span wicket:id="assignee"></span>
+            </div>
+
+        </div>
+
+        <div wicket:id="criteriaResultImage" class="actionImage">
+            <img wicket:id="image"/>
+        </div>
+
+    </div>
 
 </wicket:extend>
 </html>

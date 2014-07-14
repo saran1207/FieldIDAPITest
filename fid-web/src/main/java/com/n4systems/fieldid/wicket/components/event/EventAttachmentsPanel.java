@@ -3,9 +3,7 @@ package com.n4systems.fieldid.wicket.components.event;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Event;
-import com.n4systems.model.FileAttachment;
+import com.n4systems.model.*;
 import org.apache.log4j.Logger;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebComponent;
@@ -29,6 +27,7 @@ public class EventAttachmentsPanel extends Panel {
     @SpringBean
     private S3Service s3Service;
     private String downloadAction;
+    private String downloadAllAction;
 
     public EventAttachmentsPanel(String id, IModel<? extends AbstractEvent> eventModel) {
         super(id);
@@ -45,7 +44,15 @@ public class EventAttachmentsPanel extends Panel {
 
         setVisible(!attachments.isEmpty());
 
-        String downloadAllUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/downloadAllAttachedFiles.action?uniqueID=" + event.getId());
+        if (event instanceof PlaceEvent) {
+            downloadAllAction = "downloadAllPlaceAttachedFiles";
+        } else if (event instanceof SubEvent){
+            downloadAllAction = "downloadAllSubAttachedFiles";
+        } else {
+            downloadAllAction = "downloadAllAttachedFiles";
+        }
+
+        String downloadAllUrl = ContextAbsolutizer.toContextAbsoluteUrl("file/" + downloadAllAction + ".action?uniqueID=" + event.getId());
 
         add(new ExternalLink("downloadAllLink", downloadAllUrl));
 

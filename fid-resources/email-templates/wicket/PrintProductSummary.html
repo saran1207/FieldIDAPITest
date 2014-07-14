@@ -1,63 +1,8 @@
 <wicket:panel xmlns:wicket="http://www.apache.org/internal/xmlbeans/wsdlsubst">
 
-    <table class="equipment-details">
-        <tr>
-            <td><wicket:message key="label.equipment_number" />: <span wicket:id="equipmentNumber"/></td>
-            <td><wicket:message key="label.location" />: <span wicket:id="equipmentLocation"/></td>
-            <td class="building"><wicket:message key="label.building" />: <span wicket:id="building"/></td>
-        </tr>
+    <table>
+        <tr><th><wicket:message key="label.caution" /></th></tr>
+        <tr><td><span wicket:id="warnings"/></td></tr>
     </table>
-
-    <table class="procedure-details">
-        <tr>
-            <th class="print-image">
-            	<div><span><img src="/fieldid/images/loto/bg-gray.gif"></span></div>
-            	<span><wicket:message key="label.lockout_points" /></span>
-            </th>
-            <th class="devices print-image">
-            	<div><span><img src="/fieldid/images/loto/bg-gray.gif"></span></div>
-            	<span><wicket:message key="label.devices" /></span>
-            </th>
-            <th class="warning print-image">
-            	<div><span><img src="/fieldid/images/loto/bg-yellow.gif"></span></div>
-            	<span><wicket:message key="label.caution" /></span>
-            </th>
-        </tr>
-        <tr>
-            <td class="print-image">
-            	<div><span><img src="/fieldid/images/loto/bg-gray-light.gif"></span></div>
-            	<span wicket:id="lockoutPoints"/>
-            </td>
-            <td class="devices print-image">
-                <div><span><img src="/fieldid/images/loto/bg-gray-light.gif"></span></div>
-            	<span wicket:id="deviceCount"/>
-            </td>
-            <td class="warning print-image">
-                <div><span><img src="/fieldid/images/loto/bg-gray-light.gif"></span></div>
-            	<span wicket:id="warnings"/>
-            </td>
-        </tr>
-    </table>
-
-    <div class="audit-dates">
-        <ul>
-            <li>
-                <h3>Next audit due</h3>
-                <span class="date" wicket:id="auditDateOne"></span><!-- these dates should be related to the origin date, temp hard-coded for styling -->
-            </li>
-            <li>
-                <h3>Next audit due</h3>
-                <span class="date"  wicket:id="auditDateTwo"></span>
-            </li>
-            <li>
-                <h3>Next audit due</h3>
-                <span class="date" wicket:id="auditDateThree"></span>
-            </li>
-            <li>
-                <h3>Next audit due</h3>
-                <span class="date" wicket:id="auditDateFour"></span>
-            </li>
-        </ul>
-    </div>
 
 </wicket:panel>

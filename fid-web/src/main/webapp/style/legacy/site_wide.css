@@ -490,6 +490,7 @@ input.wavy-underline {
     font-weight: bold;
 }
 .googleMap .marker .link {
+    font-weight: bold;
     padding-top:5px;
 }
 .googleMap .marker .owner {

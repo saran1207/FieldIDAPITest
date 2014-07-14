@@ -17,10 +17,7 @@ import org.jsoup.nodes.Document;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 
@@ -328,12 +325,19 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	}
 
 	protected Map<String, Object> addProofTestInfoParams(ThingEvent event) {
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
 		Map<String, Object> proofTestInfo = new HashMap<String, Object>();
-		if (event.getProofTestInfo() != null) {
-			proofTestInfo.put("peakLoad", event.getProofTestInfo().getPeakLoad());
-			proofTestInfo.put("testDuration", event.getProofTestInfo().getDuration());
-			proofTestInfo.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
-			proofTestInfo.put("peakLoadDuration", event.getProofTestInfo().getPeakLoadDuration());
+		if (itr.hasNext()) {
+            ThingEventProofTest proofTest = itr.next();
+            proofTestInfo.put("peakLoad", proofTest.getPeakLoad());
+            proofTestInfo.put("testDuration", proofTest.getDuration());
+            proofTestInfo.put("peakLoadDuration", proofTest.getPeakLoadDuration());
+            if(s3Service.assetProofTestExists(proofTest)){
+                proofTestInfo.put("chartPath", s3Service.getAssetProofTestUrl(proofTest));
+            }
+            else {
+                proofTestInfo.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
+            }
 		}
 		return proofTestInfo;
 	}

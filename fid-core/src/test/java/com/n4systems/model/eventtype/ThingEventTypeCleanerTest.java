@@ -25,7 +25,7 @@ public class ThingEventTypeCleanerTest {
 	private static final boolean master = false;
 	private static final long formVersion = EventType.DEFAULT_FORM_VERSION;
 	private static final EventTypeGroup GROUP = new EventTypeGroup();
-	private static final Set<ProofTestType> supportedProofTests = new HashSet<ProofTestType>(Arrays.asList(ProofTestType.CHANT, ProofTestType.NATIONALAUTOMATION));;
+	private static final Set<ProofTestType> supportedProofTests = new HashSet<ProofTestType>(Arrays.asList(ProofTestType.CHANT));
 	private static final List<String> infoFieldNames = Arrays.asList("field 1", "field 2", "field 3");	
 
 	@SuppressWarnings("unchecked")

@@ -14,7 +14,9 @@ public enum ImageAnnotationType {
     P("pneumatic","#FFFFFF","#144B8F","#FFFFFF","images/single-event.png","images/loto/pneumatic-full.png"),
     S("steam","#FFFFFF","#D83E37","#FFFFFF","images/loto/steam.jpg","images/loto/steam-full.png"),
     V("valve","#000000","#FFFFFF","#000000","images/loto/valve.jpg","images/loto/valve-full.png"),
-    W("water", "#FFFFFF","#099C4F","#FFFFFF","images/loto/water.jpg","images/loto/water-full.png");
+    W("water", "#FFFFFF","#099C4F","#FFFFFF","images/loto/water.jpg","images/loto/water-full.png"),
+    //TODO This has to be unique for this "Isolation Point" type...
+    N("notes", "#FFFFFF","#099C4F","#FFFFFF","images/loto/note.jpg","images/loto/note-full.png");
 
     // in the world of the browser, this is how the annotations are differentiated.
     // i.e. a P type will be rendered as <span class="pneumatic ..."/>

@@ -11,6 +11,7 @@ import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.model.Attachment;
 import com.n4systems.model.FileAttachment;
+import com.n4systems.model.ThingEventProofTest;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
@@ -74,6 +75,9 @@ public class S3Service extends FieldIdPersistenceService {
 
     public static final String FILE_ATTACHMENT_FOLDER = "/file_attachments/%s/";
     public static final String FILE_ATTACHMENT_PATH = FILE_ATTACHMENT_FOLDER + "%s";
+
+    public static final String ASSET_PROOFTESTS_FOLDER = "/assets/%s/prooftests/%s/";
+    public static final String ASSET_PROOFTESTS_PATH = ASSET_PROOFTESTS_FOLDER + PathHandler.CHART_FILE_NAME;
 
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP = "/temp/procedure_definition_images/%s";
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM = "/temp/procedure_definition_images/%s.medium";
@@ -250,6 +254,20 @@ public class S3Service extends FieldIdPersistenceService {
         Assert.hasLength(assetAttachmentUuid);
         Assert.hasLength(assetAttachmentFilename);
         boolean exists = resourceExists(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+        return exists;
+    }
+
+    public boolean assetProofTestExists(ThingEventProofTest proofTest){
+        if(proofTest == null){
+            return false;
+        }
+        return assetProofTestExists(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
+    }
+
+    public boolean assetProofTestExists(String assetUuid, String eventUuid){
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(eventUuid);
+        boolean exists = resourceExists(null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid);
         return exists;
     }
 
@@ -746,10 +764,6 @@ public class S3Service extends FieldIdPersistenceService {
             fullResourcePath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
         }
         return fullResourcePath;
-        //arezafar drio this before commit String assetAttachmentsUploadPath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
-        //arezafar drop this before commit return assetAttachmentsUploadPath;
-        //String assetAttachmentsFolderUrl = "/" + this.getBucketHostname() + "/" + assetAttachmentsUploadPath;
-        //return assetAttachmentsFolderUrl;
     }
 
     public URL getAssetAttachmentUrl(AssetAttachment assetAttachment){
@@ -820,6 +834,81 @@ public class S3Service extends FieldIdPersistenceService {
         Assert.hasLength(assetAttachmentUuid);
         Assert.hasLength(assetAttachmentFilename);
         return downloadResource(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
+    }
+
+    public String getAssetProofTestPath(ThingEventProofTest proofTest){
+        String assetProofTestPath = getAssetProofTestPath(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
+        return assetProofTestPath;
+    }
+
+    public String getAssetProofTestPath(String assetUuid, String eventUuid){
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(eventUuid);
+        return createResourcePath(null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid);
+    }
+
+    public URL getAssetProofTestUrl(ThingEventProofTest proofTest){
+        URL assetProofTestUrl = getAssetProofTestUrl(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
+        return assetProofTestUrl;
+    }
+
+    public URL getAssetProofTestUrl(String assetUuid, String eventUuid){
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(eventUuid);
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+        String fullResourcePath = getAssetProofTestPath(assetUuid, eventUuid);
+        URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public File downloadAssetProofTest(ThingEventProofTest event){
+        File assetProofTestFile = null;
+        try {
+            byte[] assetProofTestBytes = downloadAssetProofTestBytes(event);
+
+            String fileName = event.getProofTestFileName();
+            fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
+            fileName = event.getAsset().getMobileGUID() + "-" + fileName;
+
+            assetProofTestFile = PathHandler.getUserFile(getCurrentUser(), fileName);
+            FileOutputStream assetProofTestFos = new FileOutputStream(assetProofTestFile);
+            assetProofTestFos.write(assetProofTestBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp prooftest file at: " + assetProofTestFile, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download asset prooftest from S3: " + event, e);
+        }
+        return assetProofTestFile;
+    }
+
+    public void uploadAssetProofTest(File assetProofTestFile, ThingEventProofTest proofTest){
+        uploadAssetProofTest(assetProofTestFile, proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
+    }
+
+    public void uploadAssetProofTest(File assetProofTestFile, String assetUuid, String eventUuid){
+        uploadResource(assetProofTestFile, null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid);
+    }
+
+    public void uploadAssetProofTestChart(byte[] proofTestChart, ThingEventProofTest proofTest){
+        String contentType = "image/png";
+        uploadAssetProofTestChart(proofTestChart, contentType, proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
+    }
+
+    public void uploadAssetProofTestChart(byte[] proofTestChart, String contentType, String assetUuid, String eventUuid){
+        uploadResource(proofTestChart, contentType, null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid);
+    }
+
+    public byte[] downloadAssetProofTestBytes(ThingEventProofTest proofTest) throws IOException {
+        byte[] assetProofTestChart = downloadAssetProofTestBytes(proofTest.getAsset().getMobileGUID(), proofTest.getThingEvent().getMobileGUID());
+        return assetProofTestChart;
+    }
+
+    public byte[] downloadAssetProofTestBytes(String assetUuid, String eventUuid) throws IOException {
+        Assert.hasLength(assetUuid);
+        Assert.hasLength(eventUuid);
+        return downloadResource(null, ASSET_PROOFTESTS_PATH, assetUuid, eventUuid);
     }
 
     public String getFileAttachmentPath(FileAttachment fileAttachment){

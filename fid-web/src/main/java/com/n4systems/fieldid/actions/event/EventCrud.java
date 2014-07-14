@@ -62,6 +62,7 @@ import com.opensymphony.xwork2.validator.annotations.VisitorFieldValidator;
 import org.apache.log4j.Logger;
 import org.apache.struts2.interceptor.validation.SkipValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
 
 import java.io.File;
 import java.util.*;
@@ -92,6 +93,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	protected String peakLoad;
 	protected String testDuration;
 	protected String peakLoadDuration;
+    protected String prootTestFileName;
+    protected String prootTestFileData;
 	protected Event openEvent;
     protected Long openEventId;
 	private boolean scheduleSuggested = false;
@@ -113,7 +116,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
 	private Map<String, String> encodedInfoOptionMap = new HashMap<String, String>(); 
 
-	protected FileDataContainer fileData = null;
+	protected FileDataContainer fileDataContainer = null;
 
 	private String proofTestDirectory;
 	private boolean newFile = false;
@@ -333,10 +336,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		
 
         if (event instanceof ThingEvent) {
-            if (((ThingEvent)event).getProofTestInfo() != null) {
-                peakLoad = ((ThingEvent)event).getProofTestInfo().getPeakLoad();
-                testDuration = ((ThingEvent)event).getProofTestInfo().getDuration();
-                peakLoadDuration = ((ThingEvent)event).getProofTestInfo().getPeakLoadDuration();
+            Iterator<ThingEventProofTest> itr = ((ThingEvent)event).getThingEventProofTests().iterator();
+            if (itr.hasNext()) {
+                ThingEventProofTest eventProofTest = itr.next();
+                peakLoad = eventProofTest.getPeakLoad();
+                testDuration = eventProofTest.getDuration();
+                peakLoadDuration = eventProofTest.getPeakLoadDuration();
+                prootTestFileName = eventProofTest.getProofTestFileName();
+                //is it necessary to load this? they can be up to couple of MBs each! prootTestFileData = eventProofTest.getProofTestInfo().getProofTestData();
             }
 
         }
@@ -362,8 +369,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
         if (!(event instanceof ThingEvent)) {
             return;
         }
-		if (((ThingEvent)event).getProofTestInfo() != null && ((ThingEvent)event).getProofTestInfo().getProofTestType() != null) {
-			proofTestType = ((ThingEvent)event).getProofTestInfo().getProofTestType();
+        Iterator<ThingEventProofTest> itr = ((ThingEvent)event).getThingEventProofTests().iterator();
+        if (itr.hasNext()){
+            proofTestType = itr.next().getProofTestType();
 		} else if (!((ThingEventType)getEventType()).getSupportedProofTests().isEmpty()) {
 			proofTestType = ((ThingEventType)getEventType()).getSupportedProofTests().iterator().next();
 		}
@@ -430,7 +438,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 				EventResult eventEventResult = (modifiableEvent.getOverrideResult() != null && !"auto".equals(modifiableEvent.getOverrideResult())) ? EventResult.valueOf(modifiableEvent.getOverrideResult()) : null;
                 event.setEventResult(eventEventResult);
 
-                event = eventCreationService.createEventWithSchedules((ThingEvent)event, 0L, fileData, getUploadedFiles(), createEventScheduleBundles());
+                event = eventCreationService.createEventWithSchedules((ThingEvent)event, 0L, fileDataContainer, getUploadedFiles(), createEventScheduleBundles());
 				uniqueID = event.getId();
 				
 			} else {
@@ -440,7 +448,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 				}
 				// when updating, we need to remove any files that should no longer be attached
 				updateAttachmentList(event, modifiedBy);
-				event = eventManager.updateEvent((ThingEvent)event, null, getSessionUser().getUniqueID(), fileData, getUploadedFiles());
+				event = eventManager.updateEvent((ThingEvent)event, null, getSessionUser().getUniqueID(), fileDataContainer, getUploadedFiles());
 			}
 
 			
@@ -523,26 +531,34 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
         }
 
         if (proofTest != null && proofTestType != ProofTestType.OTHER) {
-            thingEvent.setProofTestInfo(new ProofTestInfo());
-            thingEvent.getProofTestInfo().setProofTestType(proofTestType);
-			fileData = createFileDataContainer();
+
+            if(thingEvent.getThingEventProofTests().size() == 0){
+                thingEvent.getThingEventProofTests().add(new ThingEventProofTest());
+            }
+            thingEvent.getThingEventProofTests().iterator().next().setProofTestType(proofTestType);
+            fileDataContainer = createFileDataContainer();
 		} else if (proofTestType == ProofTestType.OTHER) {
-            thingEvent.setProofTestInfo(new ProofTestInfo());
-            thingEvent.getProofTestInfo().setProofTestType(proofTestType);
-			fileData = new FileDataContainer();
-			fileData.setFileType(proofTestType);
-			fileData.setPeakLoad(peakLoad);
-			fileData.setTestDuration(testDuration);
-			fileData.setPeakLoadDuration(peakLoadDuration);
+            if(thingEvent.getThingEventProofTests().size() == 0){
+                thingEvent.getThingEventProofTests().add(new ThingEventProofTest());
+            }
+            thingEvent.getThingEventProofTests().iterator().next().setProofTestType(proofTestType);
+            fileDataContainer = new FileDataContainer();
+            fileDataContainer.setFileType(proofTestType);
+            fileDataContainer.setPeakLoad(peakLoad);
+            fileDataContainer.setTestDuration(testDuration);
+            fileDataContainer.setPeakLoadDuration(peakLoadDuration);
 		}
 	}
 
 	private FileDataContainer createFileDataContainer() throws ProcessingProofTestException {
 
-		FileDataContainer fileData = null;
+		FileDataContainer fileDataContainer = null;
         if (getEventType().isThingEventType()) {
             try {
-                fileData = ((ThingEvent)event).getProofTestInfo().getProofTestType().getFileProcessorInstance().processFile(proofTest);
+                Iterator<ThingEventProofTest> itr = ((ThingEvent)event).getThingEventProofTests().iterator();
+                if(itr.hasNext()){
+                    fileDataContainer = itr.next().getProofTestType().getFileProcessorInstance().processFile(proofTest);
+                }
             } catch (Exception e) {
                 throw new ProcessingProofTestException(e);
             } finally {
@@ -552,7 +568,7 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
         }
 
-		return fileData;
+		return fileDataContainer;
 	}
 
 	@SkipValidation
@@ -743,9 +759,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	public ProofTestType getProofTestTypeEnum() {
-		if (getEventType().isThingEventType() && proofTestType == null) {
-            ProofTestInfo proofTestInfo = ((ThingEvent) event).getProofTestInfo();
-            proofTestType = (proofTestInfo != null) ? proofTestInfo.getProofTestType() : null;
+		if (getEventType().isThingEventType() && proofTestType == null && ((ThingEvent) event).getThingEventProofTests().size() > 0) {
+            proofTestType = ((ThingEvent) event).getThingEventProofTests().iterator().next().getProofTestType();
 		}
 		return proofTestType;
 	}

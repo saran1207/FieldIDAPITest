@@ -8,10 +8,12 @@ import com.n4systems.model.security.EntitySecurityEnhancer;
 import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.security.SecurityLevel;
 import com.n4systems.model.utils.AssetEvent;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name="thing_events")
@@ -22,7 +24,10 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
     }
 
-    private ProofTestInfo proofTestInfo;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "thingEvent", cascade = CascadeType.ALL)
+    @OrderColumn
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Set<ThingEventProofTest> thingEventProofTests = new HashSet<ThingEventProofTest>();
 
     @ManyToOne(fetch=FetchType.LAZY, optional = false)
     @JoinColumn(name="asset_id")
@@ -60,17 +65,37 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         setCreatedBy(event.getCreatedBy());
         setModifiedBy(event.getModifiedBy());
         setModified(event.getModified());
-
+        //TODO arezafar: do I need to copy ThingEventProofTests?
         return this;
     }
 
     @AllowSafetyNetworkAccess
-    public ProofTestInfo getProofTestInfo() {
-        return proofTestInfo;
+    public Set<ThingEventProofTest> getThingEventProofTests() {
+        return thingEventProofTests;
     }
 
-    public void setProofTestInfo(ProofTestInfo proofTestInfo) {
-        this.proofTestInfo = proofTestInfo;
+    public ThingEventProofTest getProofTestInfo() {
+        Iterator<ThingEventProofTest> itr = thingEventProofTests.iterator();
+        if(itr.hasNext()){
+            return itr.next();
+        }
+        else {
+            return null;
+        }
+    }
+
+    public void setProofTestInfo(ThingEventProofTest thingEventProofTest) {
+        Iterator<ThingEventProofTest> itr = thingEventProofTests.iterator();
+        if(itr.hasNext()){
+            itr.next().copyDataFrom(thingEventProofTest);
+        }
+        else {
+            thingEventProofTests.add(thingEventProofTest);
+        }
+    }
+
+    public void setThingEventProofTests(Set<ThingEventProofTest> thingEventProofTests) {
+        this.thingEventProofTests = thingEventProofTests;
     }
 
     @Override

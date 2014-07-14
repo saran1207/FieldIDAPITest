@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.event;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
@@ -30,6 +31,7 @@ import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.*;
+import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.event.AssignedToUpdate;
 import com.n4systems.model.location.Location;
 import com.n4systems.model.orgs.BaseOrg;
@@ -38,6 +40,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.behavior.SimpleAttributeModifier;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -65,9 +68,14 @@ import static ch.lambdaj.Lambda.on;
 
 public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
-    @SpringBean protected EventService eventService;
-    @SpringBean protected PersistenceService persistenceService;
-    @SpringBean protected EventStatusService eventStatusService;
+    @SpringBean
+    protected EventService eventService;
+    @SpringBean
+    protected PersistenceService persistenceService;
+    @SpringBean
+    protected EventStatusService eventStatusService;
+    @SpringBean
+    protected S3Service s3Service;
 
     protected IModel<T> event;
 
@@ -127,9 +135,8 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
             }
         }
-
-
-        add(new OuterEventForm("outerEventForm"){
+        OuterEventForm form;
+        add(form = new OuterEventForm("outerEventForm"){
 
             private static final long serialVersionUID = 1L;
 
@@ -153,8 +160,36 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
                     }
                 }
             }
-
         });
+
+        if (event.getObject().isAction()) {
+            form.add(new AttributeAppender("class", "event-form-column-left"));
+        }
+
+        WebMarkupContainer actionsColumn;
+        add(actionsColumn = new WebMarkupContainer("actionsColumn"));
+        actionsColumn.setVisible(event.getObject().isAction());
+
+        actionsColumn.add(new Label("priority", new PropertyModel<String>(event, "priority.name")));
+        actionsColumn.add(new Label("notes", new PropertyModel<String>(event, "notes")));
+
+        if (event.getObject().getDueDate() != null) {
+            actionsColumn.add(new TimeAgoLabel("dueDate", new PropertyModel<Date>(event, "dueDate"),getCurrentUser().getTimeZone()));
+        } else {
+            actionsColumn.add(new Label("dueDate"));
+        }
+        actionsColumn.add(new Label("assignee", new PropertyModel<String>(event, "assignedUserOrGroup.assignToDisplayName")));
+
+        actionsColumn.add(new ListView<CriteriaResultImage>("criteriaResultImage", new PropertyModel<List<? extends CriteriaResultImage>>(event, "sourceCriteriaResult.criteriaImages")) {
+
+            @Override
+            protected void populateItem(ListItem<CriteriaResultImage> item) {
+                CriteriaResultImage image = item.getModelObject();
+                item.add(new ExternalImage("image", s3Service.getCriteriaResultImageThumbnailURL(image).toString()));
+            }
+        });
+
+
     }
 
     protected abstract SchedulePicker<T> createSchedulePicker();
@@ -222,7 +257,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
 
             schedulesContainer = new WebMarkupContainer("schedulesContainer");
             schedulesContainer.setOutputMarkupPlaceholderTag(true);
-            schedulesContainer.setVisible(isScheduleVisable());
+            schedulesContainer.setVisible(isScheduleVisible());
             schedulesContainer.add(new ListView<Event>("schedules", new PropertyModel<List<Event>>(EventPage.this, "schedules")) {
                 @Override
                 protected void populateItem(final ListItem<Event> item) {
@@ -484,7 +519,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
         this.eventResult = eventResult;
     }
 
-    protected boolean isScheduleVisable() {
+    protected boolean isScheduleVisible() {
         return (event.getObject().isNew() || !event.getObject().isCompleted());
     }
 

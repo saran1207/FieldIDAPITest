@@ -16,6 +16,7 @@ import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.tools.FileDataContainer;
+import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
@@ -172,18 +173,25 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 
 	private void setProofTestData(ThingEvent event, FileDataContainer fileData) {
-		if (fileData == null) {
+		if (fileData == null || fileData.getFileData() == null) {
 			return;
 		}
 	
-		if (event.getProofTestInfo() == null) {
-			event.setProofTestInfo(new ProofTestInfo());
+		if (event.getThingEventProofTests() == null) {
+			event.setThingEventProofTests(new HashSet());
 		}
-	
-		event.getProofTestInfo().setProofTestType(fileData.getFileType());
-		event.getProofTestInfo().setDuration(fileData.getTestDuration());
-		event.getProofTestInfo().setPeakLoad(fileData.getPeakLoad());
-		event.getProofTestInfo().setPeakLoadDuration(fileData.getPeakLoadDuration());
+
+        ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
+        thingEventProofTest.copyDataFrom(fileData);
+        thingEventProofTest.setThingEvent(event);
+
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        if(itr.hasNext()){
+            itr.next().copyDataFrom(thingEventProofTest);
+        }
+        else {
+            event.getThingEventProofTests().add(thingEventProofTest);
+        }
 	}
 	
 	private void confirmSubEventsAreAgainstAttachedSubAssets(ThingEvent event) throws UnknownSubAsset {
@@ -349,31 +357,22 @@ public class ManagerBackedEventSaver implements EventSaver {
 	 * Writes the file data and chart image back onto the file system from a
 	 * fully constructed FileDataContainer
 	 */
-	private void saveProofTestFiles(Event event, FileDataContainer fileData) throws ProcessingProofTestException {
-		if (fileData == null) {
+	private void saveProofTestFiles(ThingEvent event, FileDataContainer fileData) throws ProcessingProofTestException {
+		if (fileData == null || fileData.getFileData() == null) {
 			return;
 		}
-		File proofTestFile = PathHandler.getProofTestFile(event);
-		File chartImageFile = PathHandler.getChartImageFile(event);
-
-		// we should make sure our parent directories exist first
-		proofTestFile.getParentFile().mkdirs();
-		chartImageFile.getParentFile().mkdirs();
 
 		try {
-			if (fileData.getFileData() != null) {
-				FileUtils.writeByteArrayToFile(proofTestFile, fileData.getFileData());
-			} else if (proofTestFile.exists()) {
-				proofTestFile.delete();
-			}
+            S3Service s3Service = ServiceLocator.getS3Service();
 
+            String fileName = fileData.getFileName();
+            fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
+            String contentType = ContentTypeUtil.getContentType(fileName);
 			if (fileData.getChart() != null) {
-				FileUtils.writeByteArrayToFile(chartImageFile, fileData.getChart());
-			} else if (chartImageFile.exists()) {
-				chartImageFile.delete();
+                s3Service.uploadAssetProofTestChart(fileData.getChart(), contentType, event.getAsset().getMobileGUID(), event.getMobileGUID());
 			}
 
-		} catch (IOException e) {
+		} catch (AmazonClientException e) {
 			logger.error("Failed while writing Proof Test files", e);
 			throw new ProcessingProofTestException(e);
 		}

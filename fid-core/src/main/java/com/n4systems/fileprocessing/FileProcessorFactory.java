@@ -19,10 +19,6 @@ public class FileProcessorFactory {
 			return new RobertsFileProcessor();
 		}
 		
-		if (fileType.equals("nationalautomation")) {
-			return new NationalAutomationFileProcessor();
-		}
-		
 		if (fileType.equals("chant")) {
 			return new ChantFileProcessor();
 		}

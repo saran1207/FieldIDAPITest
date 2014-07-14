@@ -14,6 +14,7 @@ import com.n4systems.exceptions.FileProcessingException;
 import com.n4systems.exceptions.NonUniqueAssetException;
 import com.n4systems.exceptions.SubAssetUniquenessException;
 import com.n4systems.exceptions.TooManyIdentifiersException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fileprocessing.ProofTestType;
 import com.n4systems.model.*;
 import com.n4systems.model.orgs.BaseOrg;
@@ -394,9 +395,20 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		
 		event.setType(inspType);
 		event.setPrintable(inspType.isPrintable());
-		
-		
-		
+
+
+        ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
+        thingEventProofTest.copyDataFrom(fileData);
+        thingEventProofTest.setThingEvent(event);
+
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        if(itr.hasNext()){
+            itr.next().copyDataFrom(thingEventProofTest);
+        }
+        else {
+            event.getThingEventProofTests().add(thingEventProofTest);
+        }
+
 		// let's see if there are any event info fields that need to be set
 		String infoFieldName, infoOptionName, resolvedInfoField;
 		for(Map.Entry<String, String> optEntry: fileData.getExtraInfo().entrySet()) {
@@ -442,9 +454,18 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 
 		return type;
 	}
-	
-	private boolean chartImageExists(Event event) {
-		return PathHandler.getChartImageFile(event).exists();
+
+	private boolean chartImageExists(ThingEvent event) {
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        if (!itr.hasNext()) {
+            return false;
+        }
+        ThingEventProofTest proofTest = itr.next();
+        S3Service s3Service = ServiceLocator.getS3Service();
+        if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID())){
+            return true;
+        }
+        return PathHandler.getChartImageFile(event).exists();
 	}
 	
 	private void writeLogMessage(Tenant tenant, String message) {

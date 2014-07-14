@@ -5,7 +5,7 @@ import java.net.URL;
 
 public class CriteriaResultImageView {
 	private String comments;
-	private InputStream image;
+    private InputStream image;
     private URL imageUrl;
 
 	public String getComments() {

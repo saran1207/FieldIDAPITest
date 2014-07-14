@@ -2,8 +2,11 @@ package com.n4systems.export.converters;
 
 import com.n4systems.model.Event;
 import com.n4systems.model.ThingEvent;
+import com.n4systems.model.ThingEventProofTest;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+
+import java.util.Iterator;
 
 public class EventConverter extends AbstractEventConverter<ThingEvent> {
 
@@ -27,7 +30,13 @@ public class EventConverter extends AbstractEventConverter<ThingEvent> {
 		writeNode(writer, context, "AssignedTo", event.getAssignedTo());
 		writeNode(writer, context, "Location", event.getAdvancedLocation());
 		writeNode(writer, context, "EventBook", event.getBook());
-		writeNode(writer, context, "ProofTestInfo", event.getProofTestInfo());
+        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        if (itr.hasNext()) {
+            writeNode(writer, context, "ProofTestInfo", itr.next());
+        }
+        else {
+            writeNode(writer, context, "ProofTestInfo", null);
+        }
 		writeIterable(writer, context, "SubEvents", event.getSubEvents(), new SubEventConverter());
 		writer.endNode();
 	}
