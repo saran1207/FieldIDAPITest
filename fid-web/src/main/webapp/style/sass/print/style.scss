@@ -14,22 +14,22 @@ $grid-width:       10%;
 $border-thickness: 0.01388in;
 
 *, *:before, *:after {
-  -moz-box-sizing: border-box; 
+  -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
 }
 
 html {
-	background: $color-page;
-	width:  100%;
+  background: $color-page;
+  width:  100%;
 }
 body {
-	font-family: sans-serif;
+  font-family: sans-serif;
 }
 ul, li {
-	display: block;
-	padding: 0;
-	margin: 0;
+  display: block;
+  padding: 0;
+  margin: 0;
 }
 
 
@@ -37,164 +37,166 @@ ul, li {
 //  Layout
 //-----------------------------------------------------------------
 .watermark {
-    position: absolute;
-    z-index: 1000;
-    top: 50%;
-    left: 50%;
-    margin-left: -306px;
-    margin-top: -392px;
+  position: absolute;
+  z-index: 1000;
+  top: 50%;
+  left: 50%;
+  margin-left: -306px;
+  margin-top: -392px;
 }
 .printbar {
-    height: 38px;
-    background: black;
-    padding-top: 10px;
-    padding-right: 13px;
+  height: 38px;
+  background: black;
+  padding-top: 10px;
+  padding-right: 13px;
 
-    p {
-        margin: 0;
-        color: white;
-        float: right;
-        padding-top: 1px;
-        text-transform: uppercase;
-        font-size: 11px;
-    }
-    img {
-        float: right;
-        margin-left: 7px;
-    }
+  p {
+    margin: 0;
+    color: white;
+    float: right;
+    padding-top: 1px;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+  img {
+    float: right;
+    margin-left: 7px;
+  }
 }
 body {
-	height: 11in;
-	width: 100%;
-	margin: 0;
-	padding: 0;
+  height: 11in;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 .print-form-page {
-	width: 100%;
-	padding: $page-margin $page-margin 0.9in $page-margin;
-	position: relative;
-	margin: 0;
+  width: 100%;
+  padding: $page-margin $page-margin 0.9in $page-margin;
+  position: relative;
+  margin: 0;
 }
 .data-container-revision-and-points {
-	position: absolute;
-	width:  100%;
-	height: $grid-height * 10;
-	padding: 0 $page-margin;
-	top: $page-margin;
-	right: 0;
-	z-index: 20;
+  position: absolute;
+  width:  100%;
+  height: $grid-height * 10;
+  padding: 0 $page-margin;
+  top: $page-margin;
+  right: 0;
+  z-index: 20;
 
-	table {
-		position: absolute;
-		width:  40%;
-		height: 100%;
-		right: 10px;
-	}
-	th, td {
-		height: $grid-height;
-		width:  25%;
-	}
-	td.lockout-number {
-		height: $grid-height * 6;
-	}
+  table {
+    position: absolute;
+    width:  40%;
+    height: 100%;
+    right: 10px;
+  }
+  th, td {
+    height: $grid-height;
+    width:  25%;
+  }
+  td.lockout-number {
+    height: $grid-height * 6;
+  }
 }
 .data-container-asset-info {
-	width: 55%;
-	min-height: $grid-height * 5;
-	margin-bottom: 6pt;
+  width: 55%;
+  min-height: $grid-height * 5;
+  margin-bottom: 6pt;
 
-	.form-type {
-		margin-top: -7pt;
-	}
-	.asset-procedure-code {
-		margin-top: -8pt;
-	}
-	.asset-type {
-		margin-top: 3px;
-	}
+  .form-type {
+    margin-top: -7pt;
+  }
+  .asset-procedure-code {
+    margin-top: -8pt;
+  }
+  .asset-type {
+    margin-top: 3px;
+  }
 }
 .data-container-caution {
-	width: 95%;
-	min-height: ($grid-height * 5) + ($grid-height / 2);
-	margin-bottom: ($grid-height / 2);
-	padding: $grid-height / 2;
-	padding-right: 36%;
+  width: 95%;
+  min-height: ($grid-height * 5) + ($grid-height / 2);
+  margin-bottom: ($grid-height / 2);
+  padding: $grid-height / 2;
+  padding-right: 36%;
 
-    table {
-        width: 100%;
-    }
-	th {
-		height: $grid-height;
-	}
-	td {
-		height: (($grid-height*3) + ($grid-height / 2)) - 0.04865in; // subtract 0.04865in to fix layout issue
-		padding: 0 $grid-height 0 $grid-height;
-	}
+  table {
+    width: 100%;
+  }
+  th {
+    height: $grid-height;
+  }
+  td {
+    height: (($grid-height*3) + ($grid-height / 2)) - 0.04865in; // subtract 0.04865in to fix layout issue
+    padding: 0 $grid-height 0 $grid-height;
+  }
 }
 .data-container {
-	height: 595px;
-	//outline: 1px solid black;
+  // height is set by javascript
+  // height: 595px;
+  // outline: 1px solid black;
 }
 .data-item.images {
-    display: inline-block;
-    width: 20%;
+  display: inline-block;
+  width: 20.12%;
+  margin-left: -1px;
 
-	img {
-         display: block;
-         margin: 0;
-         margin-bottom: -1px;
-         width: 100%;
-         height: auto;
-	}
+  img {
+    display: block;
+    margin: 0;
+    margin-bottom: -4px;
+    width: 100%;
+    height: auto;
+  }
 }
-.data-item.application-process,
-	.data-item.short-form-steps,
-	.data-item.removal-process {
 
-	table {
-		width: 100%;
-		margin-top: -1px; // Collapse borders while keeping the border for page break
-	}
-	th {
-		height: $grid-height;
-	}
-	td {
-		min-height: $grid-height * 2;
-		padding: 0.095in 0.04in 0.095in 0.04in;
-	}
-	.steps-identifier, 
-		.steps-source {
-		width: $grid-width;
-	}
-	.steps-device,
-		.steps-location,
-		.steps-method,
-		.steps-check {
-		width: $grid-width * 2;
-	}
-	.steps-heading {
-		width: 100%;
-	}
+.data-item.application-process,
+.data-item.short-form-steps,
+.data-item.removal-process {
+
+  table {
+    width: 100%;
+    margin-top: -1px; // Collapse borders while keeping the border for page break
+  }
+  th {
+    height: $grid-height;
+  }
+  td {
+    min-height: $grid-height * 2;
+    padding: 0.095in 0.04in 0.095in 0.04in;
+  }
+  .steps-identifier,
+  .steps-source {
+    width: $grid-width;
+  }
+  .steps-device,
+  .steps-location,
+  .steps-method,
+  .steps-check {
+    width: $grid-width * 2;
+  }
+  .steps-heading {
+    width: 100%;
+  }
 }
 .removal-process {
-    margin-top: 1px;
-	margin-bottom: ($grid-height / 4);
+  margin-top: 1px;
 }
 .data-container-next-audit {
-	float: right;
-	margin-top: 36px;
+  float: right;
+  margin-top: 70px;
 
-	p, ul, li {
-		display: inline-block;
-		margin: 0;
-		padding: 0;
-	}
+  p, ul, li {
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+  }
 }
 .seperator {
-	margin-bottom: ($grid-height / 2);
+  margin-bottom: ($grid-height / 2);
 }
 .logo {
-	display: inline-block;
+  display: inline-block;
 }
 
 
@@ -202,27 +204,27 @@ body {
 //  Print Layout
 //-----------------------------------------------------------------
 @media print {
-	.printbar {
-		display: none;
-	}
-	.print-form-page {
-		padding: 0;
-	}
-	.data-item {
-		page-break-inside: avoid;
-	}
-	.data-container-revision-and-points {
-		top:   0.11in;
-		right: 0;
-		padding: 0;
+  .printbar {
+    display: none;
+  }
+  .print-form-page {
+    padding: 0;
+  }
+  .data-item {
+    page-break-inside: avoid;
+  }
+  .data-container-revision-and-points {
+    top:   0.11in;
+    right: 0;
+    padding: 0;
 
-		table {
-			right: 0;
-		}
-	}
+    table {
+      right: 0;
+    }
+  }
 }
 @page :first {
-	margin: $page-margin $page-margin 0.3in $page-margin;
+  margin: $page-margin $page-margin 0.3in $page-margin;
 }
 
 
@@ -230,118 +232,114 @@ body {
 //  Typography & Color & Borders
 //-----------------------------------------------------------------
 body {
-	font-family: 'Open Sans', sans-serif;
-	font-weight: 400;
-	font-size: 7pt;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 7pt;
 }
 .data-container-revision-and-points,
-	.data-container-caution,
-	.application-process,
-	.short-form-steps,
-	.removal-process {
+.data-container-caution,
+.application-process,
+.short-form-steps,
+.removal-process {
 
-	table, th, td {
-		border-collapse: collapse;
-		border: $border-thickness solid $color-border;
-	}
+  table, th, td {
+    border-collapse: collapse;
+    border: $border-thickness solid $color-border;
+  }
 }
 .images img {
-    border: $border-thickness solid $color-border;
-    border-right: none;
-}
-.images img:first-child {
-    border-left: $border-thickness solid $color-border;
+  border: $border-thickness solid $color-border;
 }
 .data-container-revision-and-points {
-	th, td {
-		text-align: center;
-		background: $color-page;
-	}
-	.revision {
-		background: $color-light-background;
-	}
-	td.revision {
-		font-family: 'Anton', sans-serif;
-		font-size: 14pt;
-		font-weight: 700;
-	}
-	th.lockout-number {
-		background: $color-heading;
-		color: $color-heading-text;
-		text-transform: uppercase;
-		font-size: 8pt;
-	}
-	td.lockout-number {
-		background: $color-light-background;
-		text-transform: uppercase;
-		font-family: 'Anton', sans-serif;
-		font-size: 55pt;
-		font-weight: 500;
-		letter-spacing: 2pt;
-	}
+  th, td {
+    text-align: center;
+    background: $color-page;
+  }
+  .revision {
+    background: $color-light-background;
+  }
+  td.revision {
+    font-family: 'Anton', sans-serif;
+    font-size: 14pt;
+    font-weight: 700;
+  }
+  th.lockout-number {
+    background: $color-heading;
+    color: $color-heading-text;
+    text-transform: uppercase;
+    font-size: 8pt;
+  }
+  td.lockout-number {
+    background: $color-light-background;
+    text-transform: uppercase;
+    font-family: 'Anton', sans-serif;
+    font-size: 55pt;
+    font-weight: 500;
+    letter-spacing: 2pt;
+  }
 }
 .data-container-asset-info {
 
-	.form-type {
-		font-family: 'Open Sans Condensed', sans-serif;
-		font-weight: 800;
-		text-transform: uppercase;
-		font-size: 24pt;
-		letter-spacing: -0.6pt;
-	}
-	.asset-procedure-code {
-		font-family: 'Open Sans Condensed', sans-serif;
-		font-weight: 300;
-		text-transform: uppercase;
-		font-size: 14pt;
-	}
-	.asset-type,
-		.asset-number,
-		.asset-location,
-		.asset-building {
-		font-weight: 400;
-		font-size: 8pt;
-		line-height: 9pt;
+  .form-type {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 24pt;
+    letter-spacing: -0.6pt;
+  }
+  .asset-procedure-code {
+    font-family: 'Open Sans Condensed', sans-serif;
+    font-weight: 300;
+    text-transform: uppercase;
+    font-size: 14pt;
+  }
+  .asset-type,
+  .asset-number,
+  .asset-location,
+  .asset-building {
+    font-weight: 400;
+    font-size: 8pt;
+    line-height: 9pt;
 
-		.asset-info-heading {
-			font-weight: 700;
-			text-transform: uppercase;
-		}
-	}
+    .asset-info-heading {
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+  }
 }
 .data-container-caution {
-	border: $border-thickness solid $color-border;
+  border: $border-thickness solid $color-border;
 
-	th, td {
-		background: $color-caution;
-	}
-	th {
-		text-transform: uppercase;
-		font-size: 8pt;
-	}
-	td {
-		font-size: 9pt;
-		text-align: center;
-	}
+  th, td {
+    background: $color-caution;
+  }
+  th {
+    text-transform: uppercase;
+    font-size: 8pt;
+  }
+  td {
+    font-size: 9pt;
+    text-align: center;
+  }
 }
 .application-process,
-	.short-form-steps,
-	.removal-process {
+.short-form-steps,
+.removal-process {
 
-	th, td {
-		border-left: none;
-		text-align: center;
-		font-size: 8pt;
-	}
-	.heading {
-		text-transform: uppercase;
-		background: $color-heading;
-		color: $color-heading-text;
-	}
+  th, td {
+    border-left: none;
+    text-align: center;
+    font-size: 8pt;
+  }
+  .heading {
+    text-transform: uppercase;
+    background: $color-heading;
+    color: $color-heading-text;
+  }
 }
 .data-container-next-audit {
-	p, ul, li {
-		color: $color-next-audio-text;
-		text-transform: uppercase;
-	}
+  p, ul, li {
+    color: $color-next-audio-text;
+    text-transform: uppercase;
+  }
 }
