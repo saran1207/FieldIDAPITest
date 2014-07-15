@@ -87,19 +87,6 @@ public class MultiProofTestUpload extends AbstractAction implements Preparable {
 			
 			try {
 				// processes this prooftest file
-                SessionUser temp = getSessionUser();
-                Assert.isNotNull(proofTest);
-                Assert.isNotNull(event);
-                Assert.isNotNull(getSessionUser());
-                Assert.isNotNull(getSessionUser().getTenant().getId());
-                Assert.isNotNull(getSessionUser().getTenant());
-                Assert.isNotNull(getSessionUser().getUniqueID());
-                BaseOrg owner = event.getOwner();
-                Assert.isNotNull(event.getOwner());
-                Assert.isNotNull(event.getOwner().getId());
-                Assert.isNotNull(event.getBook());
-                EventBook booklet = event.getBook();
-                Assert.isNotNull(event.getBook().getId());
 				eventMap = proofTestHandler.multiProofTestUpload(
 											proofTest, 
 											proofTestType, 
