@@ -25,8 +25,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
@@ -138,7 +137,11 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
     }
 
     protected OrgLocationTree getOrgLocationTree(Long parentNodeId, OrgLocationTree.NodeType type) {
-        return includeLocations ? orgService.getOrgLocationTree(parentNodeId,type) : orgService.getOrgTree(parentNodeId,type);
+        if(locationPicker) {
+            return orgService.getLocationTree(parentNodeId, type);
+        } else {
+            return includeLocations ? orgService.getOrgLocationTree(parentNodeId, type) : orgService.getOrgTree(parentNodeId, type);
+        }
     }
 
     private OrgLocationTree getInitialOrgTree() {

@@ -168,11 +168,20 @@ public class OrgService extends FieldIdPersistenceService {
 
     public OrgLocationTree getLocationTree(BaseOrg locationOwner, String search) {
         OrgLocationTree result = new OrgLocationTree().withFilter(search);
+
         QueryBuilder locQuery = createUserSecurityBuilder(PredefinedLocation.class);
+
+        if (StringUtils.isBlank(search)) {
+            locQuery.addWhere(new WhereParameter<PredefinedLocation>(WhereParameter.Comparator.NULL, "parent"));
+            List<PredefinedLocation> locations = persistenceService.findAll(locQuery);
+            return new OrgLocationTree(locations, true);
+        }
+
         if(locationOwner != null) {
             locQuery.applyFilter(new OwnerAndDownWithPrimaryFilter(locationOwner));
         }
         result.addPredefinedLocations(persistenceService.findAll(locQuery));
+
         return result;
     }
 
@@ -202,6 +211,14 @@ public class OrgService extends FieldIdPersistenceService {
         return result;
     }
 
+    public OrgLocationTree getLocationTree(Long parentNodeId, OrgLocationTree.NodeType type) {
+        OrgLocationTree result = getOrgTree(parentNodeId, type);
+        QueryBuilder locQuery = createUserSecurityBuilder(PredefinedLocation.class);
+        locQuery.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "owner_id", "owner.id", parentNodeId, 0, WhereClause.ChainOp.AND));
+        result.addPredefinedLocations(persistenceService.findAll(locQuery));
+        return result;
+    }
+
     public OrgLocationTree getOrgTree(Long parentNodeId, OrgLocationTree.NodeType type) {
         switch (type) {
             case INTERNAL_ORG:
@@ -214,7 +231,10 @@ public class OrgService extends FieldIdPersistenceService {
                 return new OrgLocationTree(persistenceService.findAll(divisionQuery));
             case DIVISION_ORG:
             case LOCATION:
-                return new OrgLocationTree(); /*no results ever for this case...locations optionally filled in by caller. */
+                QueryBuilder<PredefinedLocation> locationQuery = createUserSecurityBuilder(PredefinedLocation.class);
+                locationQuery.addSimpleWhere("parent.id", parentNodeId);
+                return new OrgLocationTree(persistenceService.findAll(locationQuery), true);
+                //return new OrgLocationTree(); /*no results ever for this case...locations optionally filled in by caller. */
             default:
                 throw new IllegalStateException("illegal type " + type);
         }
