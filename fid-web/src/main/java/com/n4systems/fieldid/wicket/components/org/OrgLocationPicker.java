@@ -138,7 +138,7 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
 
     protected OrgLocationTree getOrgLocationTree(Long parentNodeId, OrgLocationTree.NodeType type) {
         if(locationPicker) {
-            return orgService.getLocationTree(parentNodeId, type);
+            return orgService.getLocationTree(locationOwner, parentNodeId, type);
         } else {
             return includeLocations ? orgService.getOrgLocationTree(parentNodeId, type) : orgService.getOrgTree(parentNodeId, type);
         }
