@@ -5,7 +5,6 @@ CREATE TABLE `thing_event_prooftests` (
   `peakload` varchar(255) DEFAULT NULL,
   `duration` varchar(255) DEFAULT NULL,
   `peakloadduration` varchar(255) DEFAULT NULL,
-  `prooftestdata` mediumtext DEFAULT NULL,
   `prooftestfilename` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_prooftests_on_thing_event` (`event_id`),

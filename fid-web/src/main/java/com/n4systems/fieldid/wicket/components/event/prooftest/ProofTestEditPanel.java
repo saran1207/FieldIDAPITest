@@ -70,7 +70,6 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
 
             setOutputMarkupId(true);
 
-            Boolean setVisible = (proofTestModel.getObject() == null || proofTestModel.getObject().getProofTestType() == null || proofTestModel.getObject().getProofTestType() == ProofTestType.OTHER);
             setVisible(proofTestModel.getObject() == null || proofTestModel.getObject().getProofTestType() == null || proofTestModel.getObject().getProofTestType() == ProofTestType.OTHER);
 
             otherTypeContainer = new WebMarkupContainer("otherProofTestContainer");
@@ -101,7 +100,7 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
                 }
             });
 
-            if (proofTestModel.getObject() == null) {
+            if (proofTestModel.getObject() == null || proofTestModel.getObject().getProofTestType() == null || proofTestModel.getObject().getProofTestType() == ProofTestType.OTHER) {
                 ThingEventProofTest proofTestInit = createInitialProofTestObject(eventType, proofTestModel.getObject().getThingEvent());
                 proofTestModel.getObject().copyDataFrom(proofTestInit);
             }
