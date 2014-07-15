@@ -182,8 +182,8 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
             S3Service s3Service = ServiceLocator.getS3Service();
             ThingEventProofTest proofTest = itr.next();
 
-            if(s3Service.assetProofTestExists(proofTest)){
-                URL chartUrl = s3Service.getAssetProofTestUrl(event.getAsset().getMobileGUID(), event.getMobileGUID());
+            if(s3Service.assetProofTestChartExists(proofTest)){
+                URL chartUrl = s3Service.getAssetProofTestChartUrl(event.getAsset().getMobileGUID(), event.getMobileGUID());
                 reportMap.put("chartPath", chartUrl);
             }
             else {
@@ -352,7 +352,6 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 			reportMap.put("peakLoadDuration", proofTestInfo.getPeakLoadDuration());
             reportMap.put("proofTestType", proofTestInfo.getProofTestType());
             reportMap.put("fileName", proofTestInfo.getProofTestFileName());
-            reportMap.put("fileData", proofTestInfo.getProofTestData());
 		}
 	}
 
