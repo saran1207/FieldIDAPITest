@@ -189,11 +189,11 @@ public class ThingEventCreationService extends EventCreationService<ThingEvent, 
         try {
             S3Service s3Service = ServiceLocator.getS3Service();
 
-            String fileName = fileData.getFileName();
-            fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
-            String contentType = ContentTypeUtil.getContentType(fileName);
+            if (fileData.getFileData() != null) {
+                s3Service.uploadAssetProofTestFile(fileData.getFileData(), "text/plain", event.getAsset().getMobileGUID(), event.getMobileGUID());
+            }
             if (fileData.getChart() != null) {
-                s3Service.uploadAssetProofTestChart(fileData.getChart(), contentType, event.getAsset().getMobileGUID(), event.getMobileGUID());
+                s3Service.uploadAssetProofTestChart(fileData.getChart(), "image/png", event.getAsset().getMobileGUID(), event.getMobileGUID());
             }
 
         } catch (AmazonClientException e) {
