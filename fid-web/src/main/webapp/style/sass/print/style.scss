@@ -184,7 +184,6 @@ body {
 }
 .data-container-next-audit {
   float: right;
-  margin-top: 70px;
 
   p, ul, li {
     display: inline-block;
@@ -276,6 +275,9 @@ body {
     font-size: 55pt;
     font-weight: 500;
     letter-spacing: 2pt;
+  }
+  .date-time {
+    letter-spacing: -0.7px;
   }
 }
 .data-container-asset-info {
