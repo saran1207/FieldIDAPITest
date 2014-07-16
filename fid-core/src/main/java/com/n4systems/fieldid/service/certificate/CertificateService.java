@@ -183,8 +183,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
             ThingEventProofTest proofTest = itr.next();
 
             if(s3Service.assetProofTestChartExists(proofTest)){
-                URL chartUrl = s3Service.getAssetProofTestChartUrl(event.getAsset().getMobileGUID(), event.getMobileGUID());
-                reportMap.put("chartPath", chartUrl);
+                reportMap.put("chartPath", s3Service.downloadAssetProofTestChart(proofTest).getAbsolutePath());
             }
             else {
                 reportMap.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());
