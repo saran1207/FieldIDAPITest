@@ -462,7 +462,7 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
         }
         ThingEventProofTest proofTest = itr.next();
         S3Service s3Service = ServiceLocator.getS3Service();
-        if(s3Service.assetProofTestExists(event.getAsset().getMobileGUID(), event.getMobileGUID())){
+        if(s3Service.assetProofTestChartExists(event.getAsset().getMobileGUID(), event.getMobileGUID())){
             return true;
         }
         return PathHandler.getChartImageFile(event).exists();

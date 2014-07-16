@@ -170,8 +170,8 @@ public class DownloadAttachedEventFile extends DownloadAction {
 
         File chartFile = null;
 
-        if(s3Service.assetProofTestExists(thingEvent.getAsset().getMobileGUID(), thingEvent.getMobileGUID())){
-            chartFile = s3service.downloadAssetProofTest(proofTest);
+        if(s3Service.assetProofTestChartExists(thingEvent.getAsset().getMobileGUID(), thingEvent.getMobileGUID())){
+            chartFile = s3service.downloadAssetProofTestChart(proofTest);
         }
         else {
             chartFile = PathHandler.getChartImageFile(thingEvent);

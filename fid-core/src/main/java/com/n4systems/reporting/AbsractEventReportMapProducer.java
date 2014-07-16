@@ -332,8 +332,8 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
             proofTestInfo.put("peakLoad", proofTest.getPeakLoad());
             proofTestInfo.put("testDuration", proofTest.getDuration());
             proofTestInfo.put("peakLoadDuration", proofTest.getPeakLoadDuration());
-            if(s3Service.assetProofTestExists(proofTest)){
-                proofTestInfo.put("chartPath", s3Service.getAssetProofTestUrl(proofTest));
+            if(s3Service.assetProofTestChartExists(proofTest)){
+                proofTestInfo.put("chartPath", s3Service.downloadAssetProofTestChart(proofTest));
             }
             else {
                 proofTestInfo.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());

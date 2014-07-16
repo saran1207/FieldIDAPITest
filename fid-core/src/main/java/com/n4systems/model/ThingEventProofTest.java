@@ -20,7 +20,7 @@ import java.util.List;
 @Entity
 @Table(name="thing_event_prooftests")
 public class ThingEventProofTest extends BaseEntity implements AssetEvent, Serializable {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     /*
      *   XXX - Peak Load and Test Duration were strings on the old InspectionDoc.
@@ -33,10 +33,6 @@ public class ThingEventProofTest extends BaseEntity implements AssetEvent, Seria
     private String duration;
     private String peakLoadDuration;
     private String proofTestFileName;
-
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    private Character[] proofTestData;
 
     @ManyToOne(optional=false)
     @JoinColumn(name="event_id")
@@ -58,9 +54,6 @@ public class ThingEventProofTest extends BaseEntity implements AssetEvent, Seria
         setPeakLoadDuration( fileData.getPeakLoadDuration() );
         setProofTestType(fileData.getFileType());
         setProofTestFileName( fileData.getFileName() );
-        if(fileData.getFileData() != null){
-            setProofTestData(new String(fileData.getFileData()));
-        }
 
         return this;
     }
@@ -73,7 +66,6 @@ public class ThingEventProofTest extends BaseEntity implements AssetEvent, Seria
         setPeakLoadDuration( oldProofTestInfo.getPeakLoadDuration() );
         setProofTestType( oldProofTestInfo.getProofTestType() );
         setProofTestFileName( oldProofTestInfo.getProofTestFileName() );
-        setProofTestData(oldProofTestInfo.getProofTestData() );
 
         return this;
     }
@@ -136,29 +128,6 @@ public class ThingEventProofTest extends BaseEntity implements AssetEvent, Seria
 
     public void setPeakLoadDuration(String peakLoadDuration) {
         this.peakLoadDuration = peakLoadDuration;
-    }
-
-    public Character[] getProofTestData() {
-        return proofTestData;
-    }
-
-    public void setProofTestData(String fileData) {
-        if(fileData != null){
-            this.proofTestData = ArrayUtils.toObject(fileData.toCharArray());
-        }
-        else {
-            this.proofTestData = null;
-        }
-
-    }
-
-    public void setProofTestData(Character[] fileData) {
-        if(fileData != null){
-            this.proofTestData = fileData.clone();
-        }
-        else {
-            this.proofTestData = null;
-        }
     }
 
     public String getProofTestFileName() {

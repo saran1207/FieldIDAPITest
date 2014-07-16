@@ -49,10 +49,10 @@ public class ProofTestPanel extends Panel {
         Iterator<ThingEventProofTest> itr = thingEventProofTests.iterator();
         if(itr.hasNext()){
             ThingEventProofTest proofTest = itr.next();
-            if(s3Service.assetProofTestExists(proofTest)){
+            if(s3Service.assetProofTestChartExists(proofTest)){
                 Assert.isTrue(proofTest != null && proofTest.getAsset().getMobileGUID() == eventModel.getObject().getAsset().getMobileGUID());
                 Assert.isTrue(proofTest != null && proofTest.getThingEvent().getMobileGUID() == eventModel.getObject().getMobileGUID());
-                chartUrl = s3Service.getAssetProofTestUrl(proofTest).toString();
+                chartUrl = s3Service.getAssetProofTestChartUrl(proofTest).toString();
                 chartExists = true;
             }
         }
