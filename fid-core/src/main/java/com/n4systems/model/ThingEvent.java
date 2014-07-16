@@ -72,10 +72,6 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
     }
 
     public void setProofTestInfo(ThingEventProofTest thingEventProofTest) {
-        /*if(proofTestInfo == null){
-            proofTestInfo = new ThingEventProofTest();
-        }
-        proofTestInfo.copyDataFrom(thingEventProofTest);*/
         proofTestInfo = thingEventProofTest;
     }
 

@@ -396,6 +396,9 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		event.setType(inspType);
 		event.setPrintable(inspType.isPrintable());
 
+        if (event.getProofTestInfo() == null) {
+            event.setProofTestInfo(new ThingEventProofTest());
+        }
 
         ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
         thingEventProofTest.copyDataFrom(fileData);

@@ -335,6 +335,7 @@ public class SubEventCrud extends EventCrud {
                 ((ThingEvent)event).setProofTestInfo(new ThingEventProofTest());
             }
             ThingEventProofTest proofTestInfo = ((ThingEvent)event).getProofTestInfo();
+            proofTestInfo.setThingEvent((ThingEvent)event);
             proofTestInfo.setPeakLoad(fileDataContainer.getPeakLoad());
             proofTestInfo.setDuration(fileDataContainer.getTestDuration());
             proofTestInfo.setProofTestFileName(fileDataContainer.getFileName());

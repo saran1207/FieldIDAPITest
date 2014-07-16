@@ -22,6 +22,7 @@ public class PerformThingEventHelperService extends PerformEventHelperService<Th
         masterEvent.setAdvancedLocation(masterEvent.getAsset().getAdvancedLocation());
         masterEvent.setOwner(masterEvent.getAsset().getOwner());
         masterEvent.setProofTestInfo(new ThingEventProofTest());
+        masterEvent.getProofTestInfo().setThingEvent(masterEvent);
         masterEvent.setAssetStatus(masterEvent.getAsset().getAssetStatus());
     }
 

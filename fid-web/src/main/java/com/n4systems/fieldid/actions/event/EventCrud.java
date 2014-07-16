@@ -342,7 +342,6 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
                 testDuration = eventProofTest.getDuration();
                 peakLoadDuration = eventProofTest.getPeakLoadDuration();
                 prootTestFileName = eventProofTest.getProofTestFileName();
-                //is it necessary to load this? they can be up to couple of MBs each! prootTestFileData = eventProofTest.getProofTestInfo().getProofTestData();
             }
 
         }
@@ -535,12 +534,14 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
                 thingEvent.setProofTestInfo(new ThingEventProofTest());
             }
             thingEvent.getProofTestInfo().setProofTestType(proofTestType);
+            thingEvent.getProofTestInfo().setThingEvent(thingEvent);
             fileDataContainer = createFileDataContainer();
 		} else if (proofTestType == ProofTestType.OTHER) {
             if(thingEvent.getProofTestInfo() == null){
                 thingEvent.setProofTestInfo(new ThingEventProofTest());
             }
             thingEvent.getProofTestInfo().setProofTestType(proofTestType);
+            thingEvent.getProofTestInfo().setThingEvent(thingEvent);
             fileDataContainer = new FileDataContainer();
             fileDataContainer.setFileType(proofTestType);
             fileDataContainer.setPeakLoad(peakLoad);
