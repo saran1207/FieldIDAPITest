@@ -325,15 +325,14 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
 	}
 
 	protected Map<String, Object> addProofTestInfoParams(ThingEvent event) {
-        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
+        ThingEventProofTest proofTest = event.getProofTestInfo();
 		Map<String, Object> proofTestInfo = new HashMap<String, Object>();
-		if (itr.hasNext()) {
-            ThingEventProofTest proofTest = itr.next();
+		if (proofTest != null) {
             proofTestInfo.put("peakLoad", proofTest.getPeakLoad());
             proofTestInfo.put("testDuration", proofTest.getDuration());
             proofTestInfo.put("peakLoadDuration", proofTest.getPeakLoadDuration());
             if(s3Service.assetProofTestChartExists(proofTest)){
-                proofTestInfo.put("chartPath", s3Service.downloadAssetProofTestChart(proofTest));
+                proofTestInfo.put("chartPath", s3Service.downloadAssetProofTestChart(proofTest).getAbsolutePath());
             }
             else {
                 proofTestInfo.put("chartPath", PathHandler.getChartImageFile(event).getAbsolutePath());

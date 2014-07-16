@@ -29,14 +29,13 @@ public class CopyEventFactory {
 		newEvent.setEventResult(event.getEventResult());
 		
 		newEvent.setDate( ( event.getDate() != null ) ? new Date( event.getDate().getTime() ) : null );
-        newEvent.setThingEventProofTests(new HashSet<ThingEventProofTest>());
-        for(ThingEventProofTest oldProofTest : event.getThingEventProofTests()){
-            //copy the prooftest info
-            ThingEventProofTest newProofTest = copyProofTestInfo(oldProofTest);
-            //set the parent event
-            newProofTest.setThingEvent(newEvent);
-            newEvent.getThingEventProofTests().add(newProofTest);
-        }
+        newEvent.setProofTestInfo(new ThingEventProofTest());
+        //copy the prooftest info
+        ThingEventProofTest newProofTest = copyProofTestInfo(event.getProofTestInfo());
+        //set the parent event
+        newProofTest.setThingEvent(newEvent);
+        newEvent.setProofTestInfo(newProofTest);
+
 		newEvent.setSubEvents( copySubEvents( event.getSubEvents() ) );
         newEvent.setEventForm(event.getEventForm());
         newEvent.setEventStatus(event.getEventStatus());

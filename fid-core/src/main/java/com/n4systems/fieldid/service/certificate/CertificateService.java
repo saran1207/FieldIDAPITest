@@ -177,10 +177,10 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 	}
 
 	private void addProofTestParams(Map<String, Object> reportMap, ThingEvent event) {
-        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
-        if (itr.hasNext()) {
+        ThingEventProofTest proofTest = event.getProofTestInfo();
+
+        if (proofTest != null) {
             S3Service s3Service = ServiceLocator.getS3Service();
-            ThingEventProofTest proofTest = itr.next();
 
             if(s3Service.assetProofTestChartExists(proofTest)){
                 reportMap.put("chartPath", s3Service.downloadAssetProofTestChart(proofTest).getAbsolutePath());

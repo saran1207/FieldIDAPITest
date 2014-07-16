@@ -34,7 +34,7 @@ public class ThingEventProofTest extends BaseEntity implements AssetEvent, Seria
     private String peakLoadDuration;
     private String proofTestFileName;
 
-    @ManyToOne(optional=false)
+    @OneToOne(optional=false)
     @JoinColumn(name="event_id")
     private ThingEvent thingEvent;
 
