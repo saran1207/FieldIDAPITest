@@ -33,8 +33,10 @@ public class CopyEventFactory {
         //copy the prooftest info
         ThingEventProofTest newProofTest = copyProofTestInfo(event.getProofTestInfo());
         //set the parent event
-        newProofTest.setThingEvent(newEvent);
         newEvent.setProofTestInfo(newProofTest);
+        if(newProofTest != null){
+            newProofTest.setThingEvent(newEvent);
+        }
 
 		newEvent.setSubEvents( copySubEvents( event.getSubEvents() ) );
         newEvent.setEventForm(event.getEventForm());
