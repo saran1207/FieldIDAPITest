@@ -63,6 +63,15 @@ public class OrgLocationTree {
         }
     }
 
+    public OrgLocationTree(List<? extends PredefinedLocation> orgs, boolean location) {
+        this();
+        for (PredefinedLocation org:orgs) {
+            OrgLocationTreeNode node=new LocationTreeNode(org);
+            rootNode.addChild(node);
+            nodes.put(org,node);
+        }
+    }
+
     public OrgLocationTree addOrgs(Iterable<? extends BaseOrg> orgs) {
         for (BaseOrg org:orgs) {
             addOrg(org);
@@ -90,7 +99,6 @@ public class OrgLocationTree {
         return node;
     }
 
-    @Deprecated // locations not tested yet.  not required for functionality. consider implementation incomplete.
     public OrgLocationTree addPredefinedLocations(Iterable<PredefinedLocation> locations) {
         for (PredefinedLocation location:locations) {
             addPredefinedLocation(location);
@@ -98,13 +106,11 @@ public class OrgLocationTree {
         return this;
     }
 
-    @Deprecated // locations not tested yet.  not required for functionality. consider implementation incomplete.
     public OrgLocationTree addPredefinedLocation(PredefinedLocation location) {
         getPredefinedLocationNode(location);
         return this;
     }
 
-    @Deprecated // locations not tested yet.  not required for functionality. consider implementation incomplete.
     private OrgLocationTreeNode getPredefinedLocationNode(PredefinedLocation location) {
         OrgLocationTreeNode node = nodes.get(location);
         if (node==null) {
@@ -116,7 +122,6 @@ public class OrgLocationTree {
         return node;
     }
 
-    @Deprecated // locations not tested yet.  not required for functionality. consider implementation incomplete.
     private OrgLocationTreeNode getPredefinedLocationParentNode(PredefinedLocation location) {
         EntityWithTenant parent = location.getParent() == null ? location.getOwner() : location.getParent();
         if (parent instanceof BaseOrg) {
