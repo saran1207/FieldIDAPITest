@@ -30,13 +30,7 @@ public class EventConverter extends AbstractEventConverter<ThingEvent> {
 		writeNode(writer, context, "AssignedTo", event.getAssignedTo());
 		writeNode(writer, context, "Location", event.getAdvancedLocation());
 		writeNode(writer, context, "EventBook", event.getBook());
-        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
-        if (itr.hasNext()) {
-            writeNode(writer, context, "ProofTestInfo", itr.next());
-        }
-        else {
-            writeNode(writer, context, "ProofTestInfo", null);
-        }
+        writeNode(writer, context, "ProofTestInfo", event.getProofTestInfo());
 		writeIterable(writer, context, "SubEvents", event.getSubEvents(), new SubEventConverter());
 		writer.endNode();
 	}

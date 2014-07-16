@@ -331,10 +331,10 @@ public class SubEventCrud extends EventCrud {
 		super.processProofTestFile();
 
 		if (fileDataContainer != null) {
-            if(((ThingEvent)event).getThingEventProofTests().size() == 0){
-                ((ThingEvent)event).getThingEventProofTests().add(new ThingEventProofTest());
+            if(((ThingEvent)event).getProofTestInfo() == null){
+                ((ThingEvent)event).setProofTestInfo(new ThingEventProofTest());
             }
-            ThingEventProofTest proofTestInfo = ((ThingEvent)event).getThingEventProofTests().iterator().next();
+            ThingEventProofTest proofTestInfo = ((ThingEvent)event).getProofTestInfo();
             proofTestInfo.setPeakLoad(fileDataContainer.getPeakLoad());
             proofTestInfo.setDuration(fileDataContainer.getTestDuration());
             proofTestInfo.setProofTestFileName(fileDataContainer.getFileName());

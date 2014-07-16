@@ -160,13 +160,11 @@ public class DownloadAttachedEventFile extends DownloadAction {
 			return MISSING;
 		}
 
-        Iterator<ThingEventProofTest> itr = thingEvent.getThingEventProofTests().iterator();
-        if (!itr.hasNext()) {
+        ThingEventProofTest proofTest = thingEvent.getProofTestInfo();
+        if (proofTest == null) {
 			addActionError( getText( "error.nochart", fileName ) );
 			return MISSING;
 		}
-
-        ThingEventProofTest proofTest = itr.next();
 
         File chartFile = null;
 
