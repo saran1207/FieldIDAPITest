@@ -34,21 +34,6 @@ public class PrintImages extends Panel {
     public PrintImages(String id, final IModel<ProcedureDefinition> model) {
         super(id,new PropertyModel(model,"images"));
 
-// add images for testing
-//        PropertyModel<List<ProcedureDefinitionImage>> pmod = ProxyModel.of(model, on(ProcedureDefinition.class).getImages());
-//
-//        List<ProcedureDefinitionImage> pimgs = ( List<ProcedureDefinitionImage>)pmod.getObject();
-//        addTestImages(pimgs);
-//
-//        add(new ListView<ProcedureDefinitionImage>("images", pimgs) {
-//            @Override
-//            protected void populateItem(ListItem<ProcedureDefinitionImage> item) {
-//                item.getDefaultModelObject();
-//                item.add(new ExternalImage("image", getImageUrl(item)));
-//            }
-//        });
-
-
         add(new ListView<ProcedureDefinitionImage>("imagesu", ProxyModel.of(model, on(ProcedureDefinition.class).getImages())) {
             @Override
             protected void populateItem(ListItem<ProcedureDefinitionImage> item) {
@@ -60,7 +45,6 @@ public class PrintImages extends Panel {
                 item.add(image);
             }
         });
-
     }
 
     protected String getImageUrl(ListItem<ProcedureDefinitionImage> item) {
@@ -70,15 +54,14 @@ public class PrintImages extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        //response.renderJavaScriptReference("javascript/procedureDefinitionPage.js");
         //response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
-        //response.renderJavaScriptReference("javascript/jquery.annotate.js");
+        response.renderJavaScriptReference("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js");
+        response.renderJavaScriptReference("javascript/jquery.annotate.js");
+        response.renderJavaScriptReference("javascript/print/annotate-images.js");
 
-        //response.renderCSSReference("style/legacy/component/annotated-image.css");
+        response.renderCSSReference("style/legacy/component/annotated-image.css");
 
-
-
-       List<ProcedureDefinitionImage> images = (List<ProcedureDefinitionImage>) getDefaultModel().getObject();
+        List<ProcedureDefinitionImage> images = (List<ProcedureDefinitionImage>) getDefaultModel().getObject();
 
         String jsonStr = "";
         List<AnnotatedImage> annotatedImages = new ArrayList<AnnotatedImage>();
@@ -90,12 +73,7 @@ public class PrintImages extends Panel {
 
         if (null != annotatedImages && annotatedImages.size() > 0) {
             jsonStr = renderer.render(new ImageList(annotatedImages));
-
-            //response.renderOnLoadJavaScript("fieldIdWidgets.annotate(" + jsonStr + ");");
-
-           // response.renderOnDomReadyJavaScript("fieldIdWidgets.annotate('" + jsonStr + "');");
-           // response.renderOnDomReadyJavaScript("fieldIdWidgets.createMenuButton('"+getMarkupId()+"',"+jsonRenderer.render(new MenuButtonOptions())+");");
-
+            response.renderOnLoadJavaScript("annotateImages(" + jsonStr + ");");
         }
     }
 
