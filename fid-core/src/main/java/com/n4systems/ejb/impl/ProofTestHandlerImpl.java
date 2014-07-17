@@ -396,18 +396,15 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 		event.setType(inspType);
 		event.setPrintable(inspType.isPrintable());
 
+        if (event.getProofTestInfo() == null) {
+            event.setProofTestInfo(new ThingEventProofTest());
+        }
 
         ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
         thingEventProofTest.copyDataFrom(fileData);
         thingEventProofTest.setThingEvent(event);
 
-        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
-        if(itr.hasNext()){
-            itr.next().copyDataFrom(thingEventProofTest);
-        }
-        else {
-            event.getThingEventProofTests().add(thingEventProofTest);
-        }
+        event.getProofTestInfo().copyDataFrom(thingEventProofTest);
 
 		// let's see if there are any event info fields that need to be set
 		String infoFieldName, infoOptionName, resolvedInfoField;
@@ -456,11 +453,10 @@ public class ProofTestHandlerImpl implements ProofTestHandler {
 	}
 
 	private boolean chartImageExists(ThingEvent event) {
-        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
-        if (!itr.hasNext()) {
+        ThingEventProofTest thingEventProofTest = event.getProofTestInfo();
+        if (thingEventProofTest == null) {
             return false;
         }
-        ThingEventProofTest proofTest = itr.next();
         S3Service s3Service = ServiceLocator.getS3Service();
         if(s3Service.assetProofTestChartExists(event.getAsset().getMobileGUID(), event.getMobileGUID())){
             return true;

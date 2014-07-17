@@ -173,25 +173,20 @@ public class ManagerBackedEventSaver implements EventSaver {
 	}
 
 	private void setProofTestData(ThingEvent event, FileDataContainer fileData) {
-		if (fileData == null || fileData.getFileData() == null) {
-			return;
+		if (fileData == null || fileData.getFileType() == null) {
+            event.setProofTestInfo(null); //this is needed for events that do not have prooftests
+            return;
 		}
 	
-		if (event.getThingEventProofTests() == null) {
-			event.setThingEventProofTests(new HashSet());
+		if (event.getProofTestInfo() == null) {
+			event.setProofTestInfo(new ThingEventProofTest());
 		}
 
         ThingEventProofTest thingEventProofTest = new ThingEventProofTest();
         thingEventProofTest.copyDataFrom(fileData);
         thingEventProofTest.setThingEvent(event);
 
-        Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
-        if(itr.hasNext()){
-            itr.next().copyDataFrom(thingEventProofTest);
-        }
-        else {
-            event.getThingEventProofTests().add(thingEventProofTest);
-        }
+        event.getProofTestInfo().copyDataFrom(thingEventProofTest);
 	}
 	
 	private void confirmSubEventsAreAgainstAttachedSubAssets(ThingEvent event) throws UnknownSubAsset {

@@ -123,9 +123,9 @@ public class EventSummaryJasperGenerator extends FieldIdPersistenceService {
 
                 eventMap.put("allInspections", inspectionResultMaps);
 
-                Iterator<ThingEventProofTest> itr = event.getThingEventProofTests().iterator();
-                if (itr.hasNext()) {
-                    eventMap.put("peakLoad", itr.next().getPeakLoad());
+                ThingEventProofTest thingEventProofTest = event.getProofTestInfo();
+                if (thingEventProofTest != null) {
+                    eventMap.put("peakLoad", thingEventProofTest.getPeakLoad());
                 }
 
                 collection.add(eventMap);

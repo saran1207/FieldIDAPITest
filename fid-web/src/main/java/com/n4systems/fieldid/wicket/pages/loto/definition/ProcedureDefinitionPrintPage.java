@@ -85,7 +85,7 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
         response.renderCSSReference("//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,400,600,700,800");
         response.renderCSSReference("style/print/style.css");
-        response.renderJavaScriptReference("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js");
+        response.renderJavaScriptReference("javascript/jquery.imagesloaded.js");
         response.renderJavaScriptReference("javascript/print/print.js");
     }
 

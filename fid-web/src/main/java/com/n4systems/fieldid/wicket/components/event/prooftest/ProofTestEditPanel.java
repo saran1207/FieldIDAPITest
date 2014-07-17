@@ -49,7 +49,10 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
             add(new AjaxLink("removeExistingProofTestLink") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {
-                    proofTestModel.setObject(createInitialProofTestObject(eventType, proofTestModel.getObject().getThingEvent()));
+                    ThingEventProofTest proofTestInit = createInitialProofTestObject(eventType, proofTestModel.getObject().getThingEvent());
+                    proofTestModel.setObject(proofTestInit);
+                    proofTestModel.getObject().getThingEvent().setProofTestInfo(proofTestInit);
+
                     removeExistingPanel.setVisible(false);
                     proofTestDetailsPanel.setVisible(true);
                     target.add(ProofTestEditPanel.this);
@@ -100,9 +103,12 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
                 }
             });
 
-            if (proofTestModel.getObject() == null || proofTestModel.getObject().getProofTestType() == null || proofTestModel.getObject().getProofTestType() == ProofTestType.OTHER) {
+            if(proofTestModel.getObject() == null || proofTestModel.getObject().getProofTestType() == null || proofTestModel.getObject().getProofTestType() == ProofTestType.OTHER){
                 ThingEventProofTest proofTestInit = createInitialProofTestObject(eventType, proofTestModel.getObject().getThingEvent());
-                proofTestModel.getObject().copyDataFrom(proofTestInit);
+                proofTestModel.setObject(proofTestInit);
+                if(proofTestModel.getObject().getThingEvent() != null){ //if we are editing an existing event
+                    proofTestModel.getObject().getThingEvent().setProofTestInfo(proofTestInit);
+                }
             }
             add(new Label("proofTestTypeLabel", new FIDLabelModel(new PropertyModel<String>(proofTestModel, "proofTestType.displayName"))).setVisible(!multipleProofTypes));
 
@@ -180,7 +186,14 @@ public class ProofTestEditPanel extends FormComponentPanel<ThingEventProofTest> 
             proofTest.setProofTestType(itr.next());
             proofTest.setThingEvent(thingEvent);
         }
-        return proofTest;
+
+        if(thingEvent != null && thingEvent.getProofTestInfo() != null){
+            thingEvent.getProofTestInfo().copyDataFrom(proofTest);
+            return thingEvent.getProofTestInfo();
+        }
+        else {
+            return proofTest;
+        }
     }
 
 }

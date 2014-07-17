@@ -24,10 +24,8 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
         return new SecurityDefiner("tenant.id", "asset.owner", null, "state", true);
     }
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "thingEvent", cascade = CascadeType.ALL)
-    @OrderColumn
-    @NotFound(action = NotFoundAction.IGNORE)
-    private Set<ThingEventProofTest> thingEventProofTests = new HashSet<ThingEventProofTest>();
+    @OneToOne( mappedBy="thingEvent", targetEntity = ThingEventProofTest.class, cascade = CascadeType.ALL)
+    private ThingEventProofTest proofTestInfo;
 
     @ManyToOne(fetch=FetchType.LAZY, optional = false)
     @JoinColumn(name="asset_id")
@@ -70,32 +68,12 @@ public class ThingEvent extends Event<ThingEventType,ThingEvent,Asset> implement
     }
 
     @AllowSafetyNetworkAccess
-    public Set<ThingEventProofTest> getThingEventProofTests() {
-        return thingEventProofTests;
-    }
-
     public ThingEventProofTest getProofTestInfo() {
-        Iterator<ThingEventProofTest> itr = thingEventProofTests.iterator();
-        if(itr.hasNext()){
-            return itr.next();
-        }
-        else {
-            return null;
-        }
+        return proofTestInfo;
     }
 
     public void setProofTestInfo(ThingEventProofTest thingEventProofTest) {
-        Iterator<ThingEventProofTest> itr = thingEventProofTests.iterator();
-        if(itr.hasNext()){
-            itr.next().copyDataFrom(thingEventProofTest);
-        }
-        else {
-            thingEventProofTests.add(thingEventProofTest);
-        }
-    }
-
-    public void setThingEventProofTests(Set<ThingEventProofTest> thingEventProofTests) {
-        this.thingEventProofTests = thingEventProofTests;
+        proofTestInfo = thingEventProofTest;
     }
 
     @Override

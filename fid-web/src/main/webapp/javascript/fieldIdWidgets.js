@@ -197,7 +197,7 @@ var fieldIdWidgets = (function() {
                 $img.css('width',imageContainerWidth);
             }
 
-
+            console.log($('#' + value.id));
 
             $('#'+value.id).parent().addAnnotations(
 				function(annotation) {return createNote(annotation);},

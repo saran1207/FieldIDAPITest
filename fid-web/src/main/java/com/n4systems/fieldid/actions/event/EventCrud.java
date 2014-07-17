@@ -336,14 +336,12 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		
 
         if (event instanceof ThingEvent) {
-            Iterator<ThingEventProofTest> itr = ((ThingEvent)event).getThingEventProofTests().iterator();
-            if (itr.hasNext()) {
-                ThingEventProofTest eventProofTest = itr.next();
+            ThingEventProofTest eventProofTest = ((ThingEvent)event).getProofTestInfo();
+            if (eventProofTest != null) {
                 peakLoad = eventProofTest.getPeakLoad();
                 testDuration = eventProofTest.getDuration();
                 peakLoadDuration = eventProofTest.getPeakLoadDuration();
                 prootTestFileName = eventProofTest.getProofTestFileName();
-                //is it necessary to load this? they can be up to couple of MBs each! prootTestFileData = eventProofTest.getProofTestInfo().getProofTestData();
             }
 
         }
@@ -369,9 +367,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
         if (!(event instanceof ThingEvent)) {
             return;
         }
-        Iterator<ThingEventProofTest> itr = ((ThingEvent)event).getThingEventProofTests().iterator();
-        if (itr.hasNext()){
-            proofTestType = itr.next().getProofTestType();
+        ThingEventProofTest proofTest = ((ThingEvent)event).getProofTestInfo();
+        if (proofTest != null){
+            proofTestType = proofTest.getProofTestType();
 		} else if (!((ThingEventType)getEventType()).getSupportedProofTests().isEmpty()) {
 			proofTestType = ((ThingEventType)getEventType()).getSupportedProofTests().iterator().next();
 		}
@@ -532,16 +530,18 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 
         if (proofTest != null && proofTestType != ProofTestType.OTHER) {
 
-            if(thingEvent.getThingEventProofTests().size() == 0){
-                thingEvent.getThingEventProofTests().add(new ThingEventProofTest());
+            if(thingEvent.getProofTestInfo() == null){
+                thingEvent.setProofTestInfo(new ThingEventProofTest());
             }
-            thingEvent.getThingEventProofTests().iterator().next().setProofTestType(proofTestType);
+            thingEvent.getProofTestInfo().setProofTestType(proofTestType);
+            thingEvent.getProofTestInfo().setThingEvent(thingEvent);
             fileDataContainer = createFileDataContainer();
 		} else if (proofTestType == ProofTestType.OTHER) {
-            if(thingEvent.getThingEventProofTests().size() == 0){
-                thingEvent.getThingEventProofTests().add(new ThingEventProofTest());
+            if(thingEvent.getProofTestInfo() == null){
+                thingEvent.setProofTestInfo(new ThingEventProofTest());
             }
-            thingEvent.getThingEventProofTests().iterator().next().setProofTestType(proofTestType);
+            thingEvent.getProofTestInfo().setProofTestType(proofTestType);
+            thingEvent.getProofTestInfo().setThingEvent(thingEvent);
             fileDataContainer = new FileDataContainer();
             fileDataContainer.setFileType(proofTestType);
             fileDataContainer.setPeakLoad(peakLoad);
@@ -555,9 +555,9 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 		FileDataContainer fileDataContainer = null;
         if (getEventType().isThingEventType()) {
             try {
-                Iterator<ThingEventProofTest> itr = ((ThingEvent)event).getThingEventProofTests().iterator();
-                if(itr.hasNext()){
-                    fileDataContainer = itr.next().getProofTestType().getFileProcessorInstance().processFile(proofTest);
+                ThingEventProofTest thingEventProofTest = ((ThingEvent)event).getProofTestInfo();
+                if(thingEventProofTest != null){
+                    fileDataContainer = thingEventProofTest.getProofTestType().getFileProcessorInstance().processFile(proofTest);
                 }
             } catch (Exception e) {
                 throw new ProcessingProofTestException(e);
@@ -759,8 +759,8 @@ public class EventCrud extends UploadFileSupport implements SafetyNetworkAware, 
 	}
 
 	public ProofTestType getProofTestTypeEnum() {
-		if (getEventType().isThingEventType() && proofTestType == null && ((ThingEvent) event).getThingEventProofTests().size() > 0) {
-            proofTestType = ((ThingEvent) event).getThingEventProofTests().iterator().next().getProofTestType();
+		if (getEventType().isThingEventType() && proofTestType == null && ((ThingEvent) event).getProofTestInfo() != null) {
+            proofTestType = ((ThingEvent) event).getProofTestInfo().getProofTestType();
 		}
 		return proofTestType;
 	}

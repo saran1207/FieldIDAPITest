@@ -1,0 +1,1 @@
+UPDATE thing_event_prooftests SET prooftesttype='OTHER' WHERE prooftesttype = 'NATIONALAUTOMATION';
