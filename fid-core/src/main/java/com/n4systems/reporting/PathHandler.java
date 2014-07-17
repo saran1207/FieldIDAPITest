@@ -391,7 +391,9 @@ public class PathHandler {
 	}
 	
 	public static File getAssetAttachmentDir(AssetAttachment attachment) {
-		return absolutize(mergePaths(getAssetAttachmentBasePath(attachment.getTenant()), getAssetPath(attachment.getAsset()), getAssetAttachmentPath(attachment)));
+		File assetAttachmentDir = absolutize(mergePaths(getAssetAttachmentBasePath(attachment.getTenant()), getAssetPath(attachment.getAsset()), getAssetAttachmentPath(attachment)));
+        assetAttachmentDir.mkdirs();
+        return assetAttachmentDir;
 	}
 	
 	public static File getAssetAttachmentFile(AssetAttachment attachment) {
@@ -415,7 +417,9 @@ public class PathHandler {
 	}
 	
 	public static File getAssetImageDir(Asset asset) {
-		return absolutize(mergePaths(getAssetImageBasePath(asset.getTenant()), getAssetPath(asset)));
+		File assetImageDir = absolutize(mergePaths(getAssetImageBasePath(asset.getTenant()), getAssetPath(asset)));
+        assetImageDir.mkdirs();
+        return assetImageDir;
 	}
 
 	public static File getChartImageFile(ThingEvent event) {
@@ -495,7 +499,9 @@ public class PathHandler {
 
 	/** @return The Tenant specific configuration directory for a tenant */
 	public static File getConfDir(Tenant tenant) {
-		return absolutize(mergePaths(CONF_PATH_BASE, getTenantPathPart(tenant)));
+		File confDir = absolutize(mergePaths(CONF_PATH_BASE, getTenantPathPart(tenant)));
+        confDir.mkdirs();
+        return confDir;
 	}
 	
 	/** @return The Tenant specific configuration properties file for a Tenant and Class */
@@ -514,7 +520,9 @@ public class PathHandler {
 
 	/** @return The absolute private directory for a user  */
 	public static File getUserPrivateDir(User user) {
-		return absolutize(getUserPrivatePath(user));
+        File userPrivateDir = absolutize(getUserPrivatePath(user));
+        userPrivateDir.mkdirs();
+        return userPrivateDir;
 	}
 	
 	/** @return The path to a file under a users private directory */
