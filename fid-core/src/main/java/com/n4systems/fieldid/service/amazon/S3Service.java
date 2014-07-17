@@ -893,6 +893,9 @@ public class S3Service extends FieldIdPersistenceService {
             byte[] assetProofTestBytes = downloadAssetProofTestFileBytes(event);
 
             String fileName = event.getProofTestFileName();
+            if(fileName == null){
+                fileName = PathHandler.CHART_FILE_NAME;
+            }
             fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
             fileName = event.getAsset().getMobileGUID() + "-" + fileName;
 
@@ -915,6 +918,9 @@ public class S3Service extends FieldIdPersistenceService {
             byte[] assetProofTestBytes = downloadAssetProofTestChartBytes(event);
 
             String fileName = event.getProofTestFileName();
+            if(fileName == null){
+                fileName = PathHandler.CHART_FILE_NAME;
+            }
             fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
             fileName = event.getAsset().getMobileGUID() + "-" + fileName;
 
