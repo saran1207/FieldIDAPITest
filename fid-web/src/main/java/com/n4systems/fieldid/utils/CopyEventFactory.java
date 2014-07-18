@@ -102,7 +102,7 @@ public class CopyEventFactory {
 			FileAttachment newFileAttachment = new FileAttachment();
 			copyEntity( newFileAttachment, oldFileAttachment );
 			newFileAttachment.setComments( oldFileAttachment.getComments() );
-            newFileAttachment.ensureMobileIdIsSet();
+            newFileAttachment.setMobileId(oldFileAttachment.getMobileId());
 			newFileAttachment.setFileName( oldFileAttachment.getFileName() );
 			newFileAttachments.add( newFileAttachment );
 		}

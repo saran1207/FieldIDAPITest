@@ -34,7 +34,13 @@ public class AvailableFileNameValidator {
 	}
 	
 	private String justFileName(FileAttachment fileAttachment) {
-		return new File(fileAttachment.getFileName()).getName();
+        if(fileAttachment.getFileName() == null){
+            return null;
+        }
+        else {
+            return fileAttachment.getFileName().substring(fileAttachment.getFileName().lastIndexOf('/') + 1);
+        }
+		//return new File(fileAttachment.getFileName()).getName();
 	}
 
 	
