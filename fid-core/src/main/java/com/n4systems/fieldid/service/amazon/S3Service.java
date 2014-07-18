@@ -917,11 +917,7 @@ public class S3Service extends FieldIdPersistenceService {
         try {
             byte[] assetProofTestBytes = downloadAssetProofTestChartBytes(event);
 
-            String fileName = event.getProofTestFileName();
-            if(fileName == null){
-                fileName = PathHandler.CHART_FILE_NAME;
-            }
-            fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
+            String fileName = PathHandler.CHART_FILE_NAME;
             fileName = event.getAsset().getMobileGUID() + "-" + fileName;
 
             assetProofTestFile = PathHandler.getUserFile(getCurrentUser(), fileName);
