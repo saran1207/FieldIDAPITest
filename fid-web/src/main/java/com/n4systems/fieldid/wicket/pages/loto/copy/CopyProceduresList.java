@@ -23,11 +23,15 @@ public class CopyProceduresList extends PublishedListAllPage {
 
     public CopyProceduresList(PageParameters params) {
         Long assetId = params.get("uniqueID").toLong();
-        assetModel = new EntityModel<Asset>(Asset.class, assetId).withLocalization(true);
+        this.assetModel = new EntityModel<Asset>(Asset.class, assetId).withLocalization(true);
     }
 
     public CopyProceduresList( IModel<Asset> assetModel) {
         this.assetModel = assetModel;
+    }
+
+    public CopyProceduresList(Asset asset) {
+        this.assetModel = new EntityModel<Asset>(Asset.class, asset.getId()).withLocalization(true);
     }
 
     @Override
