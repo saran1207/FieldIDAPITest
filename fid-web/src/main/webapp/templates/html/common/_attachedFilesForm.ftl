@@ -22,17 +22,17 @@
 				
 				<div id="attached_${attachedFile_index}" class="fileUpload assetUploadPreview attachementsPreview">
 					<@s.hidden id="attachedFile_${attachedFile_index}" name="attachments[${attachedFile_index}].id" />
-					<@s.hidden id="attachedFile_${attachedFile_index}" name="attachments[${attachedFile_index}].fileName" />
+					<@s.hidden id="attachedFile_${attachedFile_index}" name="attachments[${attachedFile_index}].displayFileName" />
 					
 				<div class="previewImageDisplay">
 					<img src="images/attachment-icon.png" class="previewImage" alt="uploadedFile"/>
 				</div>
 					<div class="previewImageLabel" >
 						<div id="imageLabel" class="attachmentLabel"> 
-							<span id="attached_${attachedFile_index}_label" class='ellipsis_text'>${attachments[attachedFile_index].fileName}</span>
+							<span id="attached_${attachedFile_index}_label" class='ellipsis_text'>${attachments[attachedFile_index].displayFileName}</span>
 						</div>
 						<script type="text/javascript">						
-							var filename =  "${attachments[attachedFile_index].fileName}";
+							var filename =  "${attachments[attachedFile_index].displayFileName}";
 							var ext =  filename.slice(filename.lastIndexOf('.'));
 							/*jQuery(".attachmentLabel").ThreeDots({ max_rows:1, whole_word:false, allow_dangle: true, ellipsis_string:'... '+ ext });*/
 						</script>
@@ -58,8 +58,8 @@
 		<#list uploadedFiles as uploadedFile >
 			<#if uploadedFile?exists>
 				<div id="frame_${uploadedFile_index}" class="fileUpload infoSet">
-					<@s.hidden name="uploadedFiles[${uploadedFile_index}].fileName" />
-					<label>${action.getFileName(uploadedFile.fileName)}</label>
+					<@s.hidden name="uploadedFiles[${uploadedFile_index}].displayFileName" />
+					<label>${action.getFileName(uploadedFile.displayFileName)}</label>
 					<a href="javascript:void(0)" onclick="$('frame_${uploadedFile_index}').remove();addUploadFile('${uploadFileType!}', true);return false;"><@s.text name="label.remove"/></a>
 					<div>
 						<@s.textarea name="uploadedFiles[${uploadedFile_index}].comments" id="uploadedFiles[${uploadedFile_index}].comments"  cols="50" rows="3" theme="fieldidSimple"/>
