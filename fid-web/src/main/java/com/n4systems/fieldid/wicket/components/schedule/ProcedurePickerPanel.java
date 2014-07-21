@@ -2,15 +2,18 @@ package com.n4systems.fieldid.wicket.components.schedule;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
+import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.behavior.JChosenBehavior;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.user.AssignedUserOrGroupSelect;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.AssigneesModel;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.VisibleUserGroupsModel;
+import com.n4systems.fieldid.wicket.pages.loto.copy.CopyProceduresList;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.Asset;
@@ -28,6 +31,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
@@ -64,6 +68,13 @@ public class ProcedurePickerPanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 setResponsePage(new ProcedureDefinitionPage(scheduleModel.getObject().getAsset()));
+            }
+        });
+
+        noActiveProcedureDefinitionMessage.add(new AjaxLink("copyExistingProcedureLink") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                setResponsePage(new CopyProceduresList(scheduleModel.getObject().getAsset()));
             }
         });
 

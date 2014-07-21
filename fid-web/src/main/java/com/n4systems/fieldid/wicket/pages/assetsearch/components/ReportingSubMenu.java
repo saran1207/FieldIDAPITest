@@ -10,7 +10,7 @@ import com.n4systems.fieldid.wicket.pages.print.PrintInspectionCertPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintObservationCertReportPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintThisReportPage;
 import com.n4systems.fieldid.wicket.pages.reporting.summary.EventResolutionPage;
-import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.AddSendSavedItemPage;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventSearchType;
 import com.n4systems.model.search.WorkflowStateCriteria;
@@ -70,7 +70,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         add(print);
         add(new Link("emailLink") {
             @Override public void onClick() {
-                setResponsePage(new SendSavedItemPage(model, getPage()));
+                setResponsePage(new AddSendSavedItemPage(model, getPage()));
             }
         });
         add(new SaveMenu("saveMenu") {

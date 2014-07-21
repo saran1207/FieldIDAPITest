@@ -35,8 +35,9 @@ import com.n4systems.fieldid.wicket.pages.saveditems.EditSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.AddSendSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.EditSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
-import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
@@ -161,7 +162,8 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("closeEvent", CloseEventPage.class);
 
-        mountPage("sendSavedItem", SendSavedItemPage.class);
+        mountPage("addSendSavedItem", AddSendSavedItemPage.class);
+        mountPage("editSendSavedItem", EditSendSavedItemPage.class);
         mountPage("manageSendItemSchedules", ManageSendItemSchedulesPage.class);
 
         mountPage("recurringEvents", RecurringAssetTypeEventsPage.class);
