@@ -67,8 +67,15 @@ public class PrintImages extends Panel {
         List<AnnotatedImage> annotatedImages = new ArrayList<AnnotatedImage>();
 
         Iterator<String> imageIdIterator = imageMarkupIds.iterator();
-        for(ProcedureDefinitionImage image: images) {
-            annotatedImages.add(new AnnotatedImage(imageIdIterator.next(), convertAnnotations(image.getAnnotations())));
+        //This manipulation is necessary for the edge case of refreshing the generated print page.
+        //The PrintImages panel is reused, and as such the imageMarkupIds list keeps growing and does not
+        //match the json id's genereated to display the annotations.
+        int listSize = images.size();
+        int markupSize = imageMarkupIds.size();
+        int start = markupSize-listSize;
+
+        for(int i = start, x=0; i < markupSize; i++, x++){
+            annotatedImages.add(new AnnotatedImage(imageMarkupIds.get(i), convertAnnotations(images.get(x).getAnnotations())));
         }
 
         if (null != annotatedImages && annotatedImages.size() > 0) {
