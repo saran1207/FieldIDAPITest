@@ -9,6 +9,7 @@ $color-heading-light:    #FFE0E0;
 $color-caution:          #fff8ad;
 
 $page-margin:      0.5100in; // top bottom
+$page-margin-set:  0.51in 0.51in 0.2in 0.51in;
 $grid-height:      0.21390in;
 $grid-width:       10%;
 $border-thickness: 0.01388in;
@@ -31,7 +32,6 @@ ul, li {
   padding: 0;
   margin: 0;
 }
-
 
 //-----------------------------------------------------------------
 //  Layout
@@ -64,16 +64,18 @@ ul, li {
   }
 }
 body {
-  height: 11in;
+  height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
 }
 .print-form-page {
-  width: 100%;
-  padding: $page-margin $page-margin 0.9in $page-margin;
+  width: 8.5in;
+  height: 11in;
+  padding: $page-margin-set;
   position: relative;
-  margin: 0;
+  margin: 0.25in auto;
+  outline: 1px dotted #A8A8A8;
 }
 .data-container-revision-and-points {
   position: absolute;
@@ -133,8 +135,8 @@ body {
 }
 .data-container {
   // height is set by javascript
-  // height: 595px;
-  // outline: 1px solid black;
+  // height: 595px; 
+  width: 7.48in;
 }
 .data-item.images {
   display: inline-block;
@@ -183,7 +185,9 @@ body {
   margin-top: 1px;
 }
 .data-container-next-audit {
-  float: right;
+  position: absolute;
+  bottom: 40px;
+  right: $page-margin;
 
   p, ul, li {
     display: inline-block;
@@ -194,8 +198,14 @@ body {
 .seperator {
   margin-bottom: ($grid-height / 2);
 }
+.large-seperator {
+  margin-bottom: 0.144in;
+}
 .logo {
-  display: inline-block;
+  display: block;
+  position: absolute;
+  bottom: 40px;
+  left: $page-margin;
 }
 
 
@@ -207,7 +217,11 @@ body {
     display: none;
   }
   .print-form-page {
+    width: 7.48in;
+    height: 10.19in;
     padding: 0;
+    margin: 0 auto;
+    outline: none;
   }
   .data-item {
     page-break-inside: avoid;
@@ -221,9 +235,17 @@ body {
       right: 0;
     }
   }
+  .data-container-next-audit {
+    bottom: 20px;
+    right: 0;
+  }
+  .logo {
+    bottom: 20px;
+    left: 0;
+  }
 }
-@page :first {
-  margin: $page-margin $page-margin 0.3in $page-margin;
+@page {
+  margin: $page-margin-set;
 }
 
 

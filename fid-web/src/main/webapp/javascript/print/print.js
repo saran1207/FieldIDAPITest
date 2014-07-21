@@ -23,7 +23,7 @@ $(document).ready(function() {
             $(elem).appendTo(currentDataContainer);
 
             //---------------------[ if the element overflows the page ]---------------
-            if( $(currentDataContainer).outerHeight(true) > (550 - offset)){
+            if( $(currentDataContainer).outerHeight(true) > (630 - offset)){
                 //-----------------[ end current page - add footer to page ]-----------
                 $('#source .data-container-footer').clone().appendTo(page);
 
@@ -41,6 +41,6 @@ $(document).ready(function() {
         $('#source').hide();
 
         //-------------------------[ resize the container to fit the page ]------------
-        $('.data-container').height(595 - offset);
+        $('.data-container').height(645 - offset);
     });
 });
