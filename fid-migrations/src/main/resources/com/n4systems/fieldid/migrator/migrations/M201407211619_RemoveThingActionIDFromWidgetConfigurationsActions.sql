@@ -1,0 +1,2 @@
+ALTER TABLE widget_configurations_actions DROP FOREIGN KEY fk_widget_configurations_actions_on_thing_action_type_id;
+ALTER TABLE widget_configurations_actions DROP COLUMN thing_action_id;
