@@ -36,7 +36,7 @@ public class ManageSendItemSchedulesPage extends FieldIDFrontEndPage {
 
         final IModel<SavedItem> savedItemModel = new EntityModel<SavedItem>(SavedItem.class, params.get("id").toLong());
         
-        add(new BookmarkablePageLink<Void>("addLink", SendSavedItemPage.class, PageParametersBuilder.id(savedItemModel.getObject().getId())));
+        add(new BookmarkablePageLink<Void>("addLink", AddSendSavedItemPage.class, PageParametersBuilder.id(savedItemModel.getObject().getId())));
         add(new BookmarkablePageLink<Void>("backLink", ManageSavedItemsPage.class));
 
         schedulesTable.add(new ListView<SendSavedItemSchedule>("schedules", new PropertyModel<List<SendSavedItemSchedule>>(savedItemModel, "sendSchedules")) {
@@ -49,6 +49,7 @@ public class ManageSendItemSchedulesPage extends FieldIDFrontEndPage {
                 item.add(new Label("sendToMe", new BooleanModel(new PropertyModel<Boolean>(item.getModel(), "sendToOwner"))));
                 item.add(new Label("sendBlankReport", new BooleanModel(new PropertyModel<Boolean>(item.getModel(), "sendBlankReport"))));
                 item.add(new Label("subject", new PropertyModel<String>(item.getModel(), "subject")));
+                item.add(new BookmarkablePageLink<Void>("editLink", EditSendSavedItemPage.class, PageParametersBuilder.id(savedItemModel.getObject().getId()).add("scheduleId", item.getModelObject().getId())));
                 item.add(new Link("deleteLink") {
                     @Override
                     public void onClick() {

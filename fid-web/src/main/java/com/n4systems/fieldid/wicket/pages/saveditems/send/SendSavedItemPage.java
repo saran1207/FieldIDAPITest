@@ -36,7 +36,6 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -47,29 +46,31 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class SendSavedItemPage extends FieldIDFrontEndPage {
+public abstract class SendSavedItemPage extends FieldIDFrontEndPage {
 
     @SpringBean
-    private PersistenceService persistenceService;
+    protected PersistenceService persistenceService;
 
     @SpringBean
-    private AsyncService asyncService;
+    protected AsyncService asyncService;
 
     @SpringBean
-    private SendSearchService sendSearchService;
+    protected SendSearchService sendSearchService;
 
-    private SavedItem savedItem;
-    private IModel<? extends SearchCriteria> criteria;
+    protected SavedItem savedItem;
+    protected IModel<? extends SearchCriteria> criteria;
     private Page returnToPage;
 
-    private static final int SEND_NOW_STATE = 1;
-    private static final int SCHEDULE_STATE = 2;
-    
-    private int currentState;
-    private boolean scheduleStateAvailable = false;
+    protected static final int SEND_NOW_STATE = 1;
+    protected static final int SCHEDULE_STATE = 2;
+
+    protected int currentState;
+    protected boolean scheduleStateAvailable = false;
 
     private AjaxSubmitLink submitLink;
-    private Long savedReportId;
+    protected Long savedReportId;
+
+    protected FIDFeedbackPanel feedbackPanel;
 
     public SendSavedItemPage(IModel<? extends SearchCriteria> criteria, Page returnToPage) {
         this.criteria = criteria;
@@ -83,29 +84,13 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
         }
     }
 
-    public SendSavedItemPage(PageParameters params) {
+    public SendSavedItemPage (PageParameters params) {
         super(params);
-
-        savedReportId = params.get("id").toLong();
-        initializeSavedItem(savedReportId);
     }
 
-    private void initializeSavedItem(long savedItemId) {
-        savedItem = persistenceService.find(SavedItem.class, savedItemId);
-        criteria = new Model<SearchCriteria>(savedItem.getSearchCriteria());
-        currentState = SCHEDULE_STATE;
-        scheduleStateAvailable = true;
-    }
+    protected abstract void initializeSavedItem(long savedItemId);
 
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-        SendSavedItemSchedule sendSavedItemSchedule = new SendSavedItemSchedule();
-        prepopulateSubject(sendSavedItemSchedule);
-        add(new SendSavedItemForm("form", new Model<SendSavedItemSchedule>(sendSavedItemSchedule)));
-    }
-
-    private void prepopulateSubject(SendSavedItemSchedule sendSavedItemSchedule) {
+    protected void prepopulateSubject(SendSavedItemSchedule sendSavedItemSchedule) {
         if (criteria.getObject() instanceof AssetSearchCriteria) {
             sendSavedItemSchedule.setSubject("FieldID: Search");
         } else if (criteria.getObject() instanceof EventReportCriteria) {
@@ -118,9 +103,9 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
         public SendSavedItemForm(String id, final IModel<SendSavedItemSchedule> model) {
             super(id, model);
 
-            addBlankEmailIfEmptyAddressList();
+            addBlankEmailIfEmptyAddressList(model.getObject());
 
-            final FIDFeedbackPanel feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
+            feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
             add(feedbackPanel);
             
             final WebMarkupContainer scheduleFieldsContainer = new WebMarkupContainer("scheduleFieldsContainer");
@@ -212,8 +197,14 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                         sendItemSchedule.setSavedItem(savedItem);
 
                         if (currentState == SCHEDULE_STATE) {
-                            persistenceService.save(sendItemSchedule);
-                            FieldIDSession.get().info("Successfully saved schedule");
+                            if (sendItemSchedule.isNew()) {
+                                persistenceService.save(sendItemSchedule);
+                                FieldIDSession.get().info("Successfully saved schedule");
+                            } else {
+                                persistenceService.update(sendItemSchedule);
+                                FieldIDSession.get().info("Successfully updated schedule");
+                            }
+
                             getRequestCycle().setResponsePage(ManageSavedItemsPage.class);
                         } else {
                             AsyncService.AsyncTask<Object> task = asyncService.createTask(new Callable<Object>() {
@@ -224,7 +215,7 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                                     } else {
                                         sendSearchService.sendSearch(criteria.getObject(), sendItemSchedule);
                                     }
-                                    
+
                                     return null;
                                 }
                             });
@@ -239,6 +230,7 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
                     } else {
                         target.add(feedbackPanel);
                     }
+
                 }
 
                 @Override
@@ -261,37 +253,37 @@ public class SendSavedItemPage extends FieldIDFrontEndPage {
             submitLink.add(new FlatLabel("submitLabel", createCurrentSubmitLabelModel()));
         }
 
-        // Would like to validate email addresses in a standard way -- but this has an issue
-        // If the user enters an invalid email address, then clicks the add button,
-        // the input with the bad email address will clear (actually they will all clear unless they're updated on change)
-        // This solves the issue.
-        private boolean validateEmailAddresses(SendSavedItemSchedule sendItemSchedule) {
-            EmailAddressValidator emailAddressValidator = EmailAddressValidator.getInstance();
-            boolean goodAddresses = true;
-            
-            if (sendItemSchedule.getEmailAddresses().size() == 0 && !sendItemSchedule.isSendToOwner()) {
-                getDefaultModel();
-                addBlankEmailIfEmptyAddressList();
-                error(new FIDLabelModel("message.at_least_one_email_address_required").getObject());
-                return false;
-            }
-            
-            for (String address : sendItemSchedule.getEmailAddresses()) {
-                if (!emailAddressValidator.getPattern().matcher(address).matches()) {
-                    goodAddresses = false;
-                    error("Invalid email address: " + address);
-                }
-            }
-            return goodAddresses;
+    }
+
+    // Would like to validate email addresses in a standard way -- but this has an issue
+    // If the user enters an invalid email address, then clicks the add button,
+    // the input with the bad email address will clear (actually they will all clear unless they're updated on change)
+    // This solves the issue.
+    protected boolean validateEmailAddresses(SendSavedItemSchedule sendItemSchedule) {
+        EmailAddressValidator emailAddressValidator = EmailAddressValidator.getInstance();
+        boolean goodAddresses = true;
+
+        if (sendItemSchedule.getEmailAddresses().size() == 0 && !sendItemSchedule.isSendToOwner()) {
+            getDefaultModel();
+            addBlankEmailIfEmptyAddressList(sendItemSchedule);
+            error(new FIDLabelModel("message.at_least_one_email_address_required").getObject());
+            return false;
         }
 
-        private void addBlankEmailIfEmptyAddressList() {
-            // We want to see a blank field for an extra email address to send to if there aren't any yet
-            if (getModelObject().getEmailAddresses().isEmpty()) {
-                getModelObject().getEmailAddresses().add("");
+        for (String address : sendItemSchedule.getEmailAddresses()) {
+            if (!emailAddressValidator.getPattern().matcher(address).matches()) {
+                goodAddresses = false;
+                error("Invalid email address: " + address);
             }
         }
+        return goodAddresses;
+    }
 
+    private void addBlankEmailIfEmptyAddressList(SendSavedItemSchedule sendItemSchedule) {
+        // We want to see a blank field for an extra email address to send to if there aren't any yet
+        if (sendItemSchedule.getEmailAddresses().isEmpty()) {
+            sendItemSchedule.getEmailAddresses().add("");
+        }
     }
 
     @Override
