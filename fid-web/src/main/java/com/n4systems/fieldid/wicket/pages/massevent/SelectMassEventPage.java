@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.search.EventReportCriteria;
 import org.apache.wicket.Component;
 import org.apache.wicket.RestartResponseException;
@@ -28,24 +29,26 @@ public class SelectMassEventPage extends FieldIDTemplatePage {
 
     public SelectMassEventPage(IModel<EventReportCriteria> criteriaModel) {
         this.criteriaModel = criteriaModel;
-        List<Long> eventIds = criteriaModel.getObject().getSelection().getSelectedIds();
+        final List<Long> eventIds = criteriaModel.getObject().getSelection().getSelectedIds();
 
         List<SelectedEventTypeCount> eventTypeCounts = massEventService.countSelectedEventTypes(eventIds);
 
         if(eventTypeCounts.size() == 1) {
             //TODO redirect to perform mass events page
+            List<ThingEvent> openEvents = massEventService.getSelectedEventsByEventType(eventIds);
             throw new RestartResponseException(new DashboardPage());
         } else {
             add(new ListView<SelectedEventTypeCount>("eventType", eventTypeCounts) {
 
                 @Override
-                protected void populateItem(ListItem<SelectedEventTypeCount> item) {
+                protected void populateItem(final ListItem<SelectedEventTypeCount> item) {
                     item.add(new Label("name", new PropertyModel<String>(item.getModel(), "type.displayName")));
                     item.add(new Label("count", new PropertyModel<Long>(item.getModel(), "count")));
                     item.add(new Link("performEvents") {
                         @Override
                         public void onClick() {
                             //TODO setresponse page to perform mass events page
+                            List<ThingEvent> openEvents = massEventService.getSelectedEventsByEventType(eventIds, item.getModelObject().type);
                         }
                     });
                 }
@@ -55,7 +58,7 @@ public class SelectMassEventPage extends FieldIDTemplatePage {
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.select_event_type_to_perform"));    //To change body of overridden methods use File | Settings | File Templates.
+        return new Label(labelId, new FIDLabelModel("title.select_event_type_to_perform"));
     }
 
     @Override
