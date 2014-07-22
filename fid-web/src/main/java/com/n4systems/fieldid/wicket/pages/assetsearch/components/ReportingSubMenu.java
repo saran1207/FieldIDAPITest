@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.assetsearch.components;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.search.results.MassActionLink;
+import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.AssignEventsToJobPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
@@ -25,6 +26,7 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
     private Link printLink;
     private Link exportLink;
     private Link updateLink;
+    private Link massEventLink;
     private Link assignJobLink;
     private Link updateSchedulesLink;
     private WebMarkupContainer actions;
@@ -40,6 +42,13 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
 
         // note that only one of these mass update links will be shown at a time - depends on the context.
         actions.add(assignJobLink = new MassActionLink<AssignEventsToJobPage>("assignJobLink", AssignEventsToJobPage.class, model));
+
+        actions.add(massEventLink = new Link("massEventLink") {
+            @Override
+            public void onClick() {
+                setResponsePage(new SelectMassEventPage(model));
+            }
+        });
 
         actions.add(updateLink = new Link("massUpdateLink") {
             @Override
@@ -96,7 +105,8 @@ public abstract class ReportingSubMenu extends SubMenu<EventReportCriteria> {
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
         boolean searchIncludesSafetyNetwork = model.getObject().isIncludeSafetyNetwork();
         WorkflowStateCriteria state = model.getObject().getWorkflowState();
-        
+
+        massEventLink.setVisible(state == WorkflowStateCriteria.OPEN && sessionUser.hasAccess("editevent"));
         updateLink.setVisible(state == WorkflowStateCriteria.COMPLETE && sessionUser.hasAccess("editevent"));
         updateSchedulesLink.setVisible(state == WorkflowStateCriteria.OPEN && sessionUser.hasAccess("editevent"));
 
