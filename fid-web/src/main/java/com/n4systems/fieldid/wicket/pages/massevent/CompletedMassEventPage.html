@@ -1,0 +1,28 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <table class="comfortable">
+        <tr>
+            <th><wicket:message key="label.identifier"/></th>
+            <th><wicket:message key="label.eventtype"/></th>
+            <th><wicket:message key="label.assettype"/></th>
+            <th><wicket:message key="label.due_date"/></th>
+            <th><wicket:message key="label.owner"/></th>
+            <th><wicket:message key="label.event_status"/></th>
+        </tr>
+        <tr wicket:id="events">
+            <td><label wicket:id="serialNumber"/></td>
+            <td><label wicket:id="eventType"/></td>
+            <td><label wicket:id="assetType"/></td>
+            <td><label wicket:id="dueDate"/></td>
+            <td><label wicket:id="owner"/></td>
+            <td><label wicket:id="eventStatus"/></td>
+        </tr>
+    </table>
+
+    <div>
+        <a wicket:id="backToReport" class="btn-primary"><wicket:message key="label.back_to"/> <wicket:message key="label.reporting_results"/></a>
+    </div>
+
+</wicket:extend>
+</html>
