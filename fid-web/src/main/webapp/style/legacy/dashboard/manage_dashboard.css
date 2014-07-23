@@ -89,3 +89,8 @@
 .closeLink .blue-submit {
     color: #FFFFFF;
 }
+
+.closeLink.manage {
+    bottom: inherit;
+    top: 56px;
+}
