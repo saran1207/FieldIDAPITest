@@ -1,0 +1,19 @@
+.proceduresWithoutAuditsDescription {
+    padding:2px 0 12px;
+    display:block;
+    float:right;
+    font-size:11px;
+}
+
+.proceduresWithoutAuditsSection .simpleTable th {
+    background:#666;
+    color:#f7f7f7;
+}
+
+.allProceduresHaveAudits {
+    font-size:13px;
+    font-weight:bold;
+    color:#999999;
+    text-align:center;
+    width:100%;
+}
