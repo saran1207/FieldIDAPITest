@@ -334,6 +334,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
         query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", getProcedureDefinitionIdFromProcedureAuditEvents());
+        query.setOrder("equipmentLocation", true);
+        query.addOrder("procedureCode", true);
 
         query.applyFilter(new OwnerAndDownFilter(owner));
 
