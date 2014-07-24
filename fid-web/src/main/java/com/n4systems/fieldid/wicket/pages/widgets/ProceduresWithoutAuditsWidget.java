@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.n4systems.fieldid.wicket.components.loto.ProcedureWithoutAuditsAssetColumn;
-import com.n4systems.fieldid.wicket.components.loto.ProcedureWithoutAuditsTypeColumn;
+import com.n4systems.fieldid.wicket.components.loto.ProcedureWithoutAuditsActionColumn;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.ProceduresWithoutAuditsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -35,6 +35,7 @@ public class ProceduresWithoutAuditsWidget extends Widget<ProceduresWithoutAudit
        columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.procedure_code"), "procedureCode"));
        columns.add(new PropertyColumn(new FIDLabelModel("label.location"), "equipmentLocation"));
        columns.add(new PropertyColumn(new FIDLabelModel("label.type"),"procedureType"));
+       columns.add(new ProcedureWithoutAuditsActionColumn(new FIDLabelModel("label.create_audit"), "asset"));
 
        final ProceduresWithoutAuditsDataProvider dataProvider = new ProceduresWithoutAuditsDataProvider(getOrg());
 
