@@ -24,6 +24,8 @@ import com.n4systems.fieldid.wicket.pages.loto.*;
 import com.n4systems.fieldid.wicket.pages.loto.copy.CopyProceduresList;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
+import com.n4systems.fieldid.wicket.pages.massevent.CompletedMassEventPage;
+import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
@@ -35,8 +37,9 @@ import com.n4systems.fieldid.wicket.pages.saveditems.EditSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.AddSendSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.EditSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
-import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
@@ -161,7 +164,8 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("closeEvent", CloseEventPage.class);
 
-        mountPage("sendSavedItem", SendSavedItemPage.class);
+        mountPage("addSendSavedItem", AddSendSavedItemPage.class);
+        mountPage("editSendSavedItem", EditSendSavedItemPage.class);
         mountPage("manageSendItemSchedules", ManageSendItemSchedulesPage.class);
 
         mountPage("recurringEvents", RecurringAssetTypeEventsPage.class);
@@ -169,6 +173,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("assetMassUpdate", MassUpdateAssetsPage.class);
         mountPage("eventMassUpdate", MassUpdateEventsPage.class);
         mountPage("openEventMassUpdate", MassUpdateOpenEventsPage.class);
+
+        mountPage("selectMassEventType", SelectMassEventPage.class);
+        mountPage("completedMassEvent", CompletedMassEventPage.class);
 
         mountPage("savedReport", RunReportPage.class);
         mountPage("savedSearch", RunSearchPage.class);

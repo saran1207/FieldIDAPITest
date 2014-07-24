@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 	<div class="action-group">
 
@@ -17,7 +18,10 @@
 			<wicket:enclosure> 
 				<li><a wicket:id="assignJobLink"><wicket:message key="label.assign_to_a_job" /></a></li>
 			</wicket:enclosure>
-			<wicket:enclosure> 
+            <wicket:enclosure>
+                <li><a wicket:id="massEventLink"><wicket:message key="label.perform_event"/></a></li>
+            </wicket:enclosure>
+			<wicket:enclosure>
 				<li><a wicket:id="massUpdateLink"><wicket:message key="label.massupdate"/></a></li>
 			</wicket:enclosure>
 			<wicket:enclosure>
@@ -34,4 +38,5 @@
 	<!-- TO BE REMOVED -->
 	<span wicket:id="msg" class="msg" style="display:none;"/>
 </wicket:extend>
+</html>
 		

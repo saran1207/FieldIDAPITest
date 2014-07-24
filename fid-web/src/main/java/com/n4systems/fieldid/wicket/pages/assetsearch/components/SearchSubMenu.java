@@ -12,7 +12,7 @@ import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.print.ExportSearchToExcelPage;
 import com.n4systems.fieldid.wicket.pages.print.PrintAllCertificatesPage;
 import com.n4systems.fieldid.wicket.pages.reporting.MassSchedulePage;
-import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.AddSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.search.help.AssetSearchHelpPanel;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.ExtendedFeature;
@@ -108,7 +108,7 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         add(new Link("emailLink") {
             @Override
             public void onClick() {
-                setResponsePage(new SendSavedItemPage(searchCriteria, getPage()));
+                setResponsePage(new AddSendSavedItemPage(searchCriteria, getPage()));
             }
         });
         add(new SaveMenu("saveMenu") {
