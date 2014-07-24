@@ -30,6 +30,11 @@
     display: block;
 }
 
+#authorLink {
+    display: inline-block;
+    margin-left: 13px;
+}
 #copyExistingProcedureLink {
-    margin-top: 5px;
+    display: inline-block;
+    margin-left: 3px;
 }
