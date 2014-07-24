@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.widgets;
 
 import com.n4systems.fieldid.wicket.components.loto.ProcedureWithoutAuditsAssetColumn;
+import com.n4systems.fieldid.wicket.components.loto.ProcedureWithoutAuditsTypeColumn;
 import com.n4systems.fieldid.wicket.components.table.SimpleDataTable;
 import com.n4systems.fieldid.wicket.data.ProceduresWithoutAuditsDataProvider;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -32,10 +33,12 @@ public class ProceduresWithoutAuditsWidget extends Widget<ProceduresWithoutAudit
        List<IColumn<ProcedureDefinition>> columns = new ArrayList<IColumn<ProcedureDefinition>>();
        columns.add(new ProcedureWithoutAuditsAssetColumn(new FIDLabelModel("label.equipment_#"),"equipmentNumber"));
        columns.add(new PropertyColumn<ProcedureDefinition>(new FIDLabelModel("label.procedure_code"), "procedureCode"));
+       columns.add(new PropertyColumn(new FIDLabelModel("label.location"), "equipmentLocation"));
+       columns.add(new PropertyColumn(new FIDLabelModel("label.type"),"procedureType"));
 
        final ProceduresWithoutAuditsDataProvider dataProvider = new ProceduresWithoutAuditsDataProvider(getOrg());
 
-       SimpleDataTable<ProcedureDefinition> dataTable = new SimpleDataTable<ProcedureDefinition>("proceduresWithoutAuditsTable", columns, dataProvider, 10) {
+       SimpleDataTable<ProcedureDefinition> dataTable = new SimpleDataTable<ProcedureDefinition>("proceduresWithoutAuditsTable", columns, dataProvider, 25) {
            @Override
            public boolean isVisible() {
                return dataProvider.size() > 0;
@@ -56,7 +59,6 @@ public class ProceduresWithoutAuditsWidget extends Widget<ProceduresWithoutAudit
                return dataProvider.size() == 0;
            }
        });
-
    }
 
     private BaseOrg getOrg() {
