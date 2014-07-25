@@ -24,13 +24,13 @@ public class ProceduresWithoutAuditsDataProvider extends FieldIDDataProvider<Pro
 
     @Override
     public Iterator<? extends ProcedureDefinition> iterator(int pageNumber, int pageSize) {
-        List<ProcedureDefinition> proceduresWithoutAudits = procedureDefinitionService.getPublishedProceduresWithoutAudits(org);
+        List<ProcedureDefinition> proceduresWithoutAudits = procedureDefinitionService.getPublishedProceduresWithoutAudits(pageNumber, pageSize, org);
         return proceduresWithoutAudits.iterator();
     }
 
     @Override
     public int size() {
-        return procedureDefinitionService.getPublishedProceduresWithoutAudits(org).size();
+        return procedureDefinitionService.countPublishedProceduresWithoutAudits(org).intValue();
     }
 
     @Override

@@ -328,19 +328,31 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAllPaginated(query,first,count);
     }
 
-    public List<ProcedureDefinition> getPublishedProceduresWithoutAudits(BaseOrg owner) {
+    public List<ProcedureDefinition> getPublishedProceduresWithoutAudits(int pageNumber, int pageSize, BaseOrg owner) {
 
         QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
+        query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
+        query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", getProcedureDefinitionIdFromProcedureAuditEvents());
+        query.setOrder("equipmentLocation", true);
+        query.addOrder("procedureCode", true);
+        query.applyFilter(new OwnerAndDownFilter(owner));
+        query.setLimit(25);
+        return persistenceService.findAll(query, pageNumber, pageSize);
+    }
+
+    public Long countPublishedProceduresWithoutAudits(BaseOrg owner) {
+
+        QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
 
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
         query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", getProcedureDefinitionIdFromProcedureAuditEvents());
         query.setOrder("equipmentLocation", true);
         query.addOrder("procedureCode", true);
-
         query.applyFilter(new OwnerAndDownFilter(owner));
+        query.setCountSelect();
+        return persistenceService.find(query);
+    };
 
-        return persistenceService.findAll(query);
-    }
 
     public List<Long> getProcedureDefinitionIdFromProcedureAuditEvents() {
 
