@@ -94,3 +94,10 @@
     bottom: inherit;
     top: 56px;
 }
+
+#manage-dashboard-feedback-panel {
+    float: none;
+}
+#manage-dashboard-feedback-panel .formErrors {
+    width: 674px;
+}
