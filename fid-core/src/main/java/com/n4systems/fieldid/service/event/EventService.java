@@ -390,6 +390,12 @@ public class EventService extends FieldIdPersistenceService {
 	}
 
     public Event retireEvent(ThingEvent event) {
+        if(event.isAction()) {
+            CriteriaResult sourceCriteriaResult = event.getSourceCriteriaResult();
+            sourceCriteriaResult.getActions().remove(event);
+            persistenceService.update(sourceCriteriaResult);
+        }
+
         event.retireEntity();
         event = persistenceService.update(event);
         event.getAsset().touch();
