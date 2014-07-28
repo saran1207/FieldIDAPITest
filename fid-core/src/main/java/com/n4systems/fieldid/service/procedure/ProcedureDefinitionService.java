@@ -331,6 +331,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     public List<ProcedureDefinition> getPublishedProceduresWithoutAudits(int pageNumber, int pageSize, BaseOrg owner) {
 
         QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
+
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
         query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", getProcedureDefinitionIdFromProcedureAuditEvents());
         query.setOrder("equipmentLocation", true);
@@ -352,7 +353,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         query.setCountSelect();
         return persistenceService.find(query);
     };
-
 
     public List<Long> getProcedureDefinitionIdFromProcedureAuditEvents() {
 

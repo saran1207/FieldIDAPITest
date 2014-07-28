@@ -16,10 +16,12 @@ public class ProceduresWithoutAuditsDataProvider extends FieldIDDataProvider<Pro
     private ProcedureDefinitionService procedureDefinitionService;
 
     private BaseOrg org;
+    private int dataSize;
 
     public ProceduresWithoutAuditsDataProvider(BaseOrg org){
         super();
         this.org = org;
+        this.dataSize = procedureDefinitionService.countPublishedProceduresWithoutAudits(org).intValue();
     }
 
     @Override
@@ -30,7 +32,7 @@ public class ProceduresWithoutAuditsDataProvider extends FieldIDDataProvider<Pro
 
     @Override
     public int size() {
-        return procedureDefinitionService.countPublishedProceduresWithoutAudits(org).intValue();
+        return dataSize;
     }
 
     @Override
