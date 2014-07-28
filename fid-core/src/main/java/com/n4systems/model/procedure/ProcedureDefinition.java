@@ -457,4 +457,12 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     public void setOwner(BaseOrg owner) {
         //Nothing to set
     }
+
+	public String getMobileId() {
+		return mobileId;
+	}
+
+	public void setMobileId(String mobileId) {
+		this.mobileId = mobileId;
+	}
 }
