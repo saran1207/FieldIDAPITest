@@ -6,6 +6,9 @@ import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
+import com.n4systems.fieldid.service.event.ProcedureAuditScheduleService;
+import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.model.Asset;
@@ -44,6 +47,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     @Autowired private S3Service s3Service;
     @Autowired private DateService dateService;
     @Autowired private AtomicLongService atomicLongService;
+    @Autowired private RecurringScheduleService recurringScheduleService;
 
 
     public Boolean hasPublishedProcedureDefinition(Asset asset) {
@@ -56,6 +60,16 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
 
     public List<ProcedureDefinition> getAllPublishedProcedures(Asset asset) {
           return persistenceService.findAll(getPublishedProcedureDefinitionQuery(asset));
+    }
+
+    /**
+     * A convenience method to retrieve a ProcedureDefinition by its ID.
+     *
+     * @param id - A <b>Long</b> value representing the ID of the ProcedureDefinition you wish to retrieve.
+     * @return A <b>ProcedureDefinition</b> object representing the desired definition.
+     */
+    public ProcedureDefinition getProcedureDefinitionById(Long id) {
+        return persistenceService.find(ProcedureDefinition.class, id);
     }
 
     public Boolean hasPublishedProcedureCode(ProcedureDefinition procedureDefinition) {
@@ -650,7 +664,49 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         persistenceService.update(definition);
     }
 
+    /**
+     * This method unpublishes a <b>ProcedureDefinition</b> and also removes any scheduled Procedures of this type and
+     * any Audits of this <b>ProcedureDefinition</b>.
+     *
+     * @param definition - An initialized <b>ProcedureDefinition</b> object representing the definition you wish to unpublish.
+     */
     public void unpublishProcedureDefinition(ProcedureDefinition definition) {
+        //First, we need to make sure that we clear up all Procedure Audits...
+        QueryBuilder<ProcedureAuditEvent> auditEventQuery = createTenantSecurityBuilder(ProcedureAuditEvent.class);
+        auditEventQuery.addSimpleWhere("procedureDefinition", definition);
+
+        List<ProcedureAuditEvent> auditResults = persistenceService.findAll(auditEventQuery);
+
+        for(ProcedureAuditEvent auditEvent : auditResults) {
+            logger.debug("Retiring Procedure Audit Event " + auditEvent.getId());
+
+            //Not sure if this ends up doubling up some of our work
+            if(auditEvent.getRecurringEvent() != null) {
+                logger.debug("Purging Recurring Schedule for Procedure Audit Event " + auditEvent.getId());
+                recurringScheduleService.purgeRecurringEvent(auditEvent.getRecurringEvent());
+            }
+            auditEvent.retireEntity();
+            persistenceService.update(auditEvent);
+        }
+
+
+        //Next, we need to do the same with any Procedures.
+        QueryBuilder<Procedure> procedureEventQuery = createTenantSecurityBuilder(Procedure.class);
+
+        procedureEventQuery.addSimpleWhere("type", definition);
+
+        List<Procedure> procedureResults = persistenceService.findAll(procedureEventQuery);
+
+        for(Procedure procedureEvent : procedureResults) {
+            logger.debug("Archiving Procedure Event " + procedureEvent.getId());
+            if(procedureEvent.getRecurringEvent() != null) {
+                logger.debug("Purging Recurring Schedule for Procedure " + procedureEvent.getId());
+                recurringScheduleService.purgeRecurringEvent(procedureEvent.getRecurringEvent());
+            }
+            persistenceService.archive(procedureEvent);
+        }
+
+        //Now that we're all cleaned up, we can proceed with unpublishing the definition.
         definition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
         definition.setRetireDate(dateService.nowUTC().toDate());
         definition.setUnpublishedDate(dateService.nowUTC().toDate());

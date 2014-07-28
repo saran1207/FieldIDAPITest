@@ -1,0 +1,16 @@
+<html xmlns:wicket="http://wicket.apache.org">
+    <wicket:extend>
+        <div>
+            <p>
+                <wicket:message key="message.unpublish_procedure_definition_warning"/>
+            </p>
+        </div>
+        <form wicket:id="confirmForm">
+            <input type="submit" wicket:message="value:label.ok" />
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink">
+                <wicket:message key="label.cancel"/>
+            </a>
+        </form>
+    </wicket:extend>
+</html>

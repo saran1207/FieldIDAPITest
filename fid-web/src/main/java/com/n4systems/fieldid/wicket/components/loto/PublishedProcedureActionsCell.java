@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.loto.DraftListAllPage;
 import com.n4systems.fieldid.wicket.pages.loto.PreviouslyPublishedListAllPage;
 import com.n4systems.fieldid.wicket.pages.loto.RecurringLotoSchedulesPage;
+import com.n4systems.fieldid.wicket.pages.loto.UnpublishProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
@@ -107,8 +108,13 @@ public class PublishedProcedureActionsCell extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 if(procedureService.hasOpenProcedure(procedureDefinition)) {
-                    error(new FIDLabelModel("error.unpublish").getObject());
-                    target.add(procedureListPanel.getErrorFeedbackPanel());
+                    //Instead of causing an error, we want to forward the user to a new page where they can see the
+                    //open procedures for that definition.  We also want to ensure all recurring schedules are removed,
+                    //which will only be done after the user confirms this is what they want to do.
+//                    error(new FIDLabelModel("error.unpublish").getObject());
+//                    target.add(procedureListPanel.getErrorFeedbackPanel());
+                    //The below line will replace the above two.  We're not staying on that page if there's work to do.
+                    setResponsePage(new UnpublishProcedureDefinitionPage(PageParametersBuilder.param("procedureDefinitionId", procedureDefinition.getId())));
                 } else {
                     procedureDefinitionService.unpublishProcedureDefinition(procedureDefinition);
                     info(new FIDLabelModel("message.unpublish", procedureDefinition.getProcedureCode()).getObject());
