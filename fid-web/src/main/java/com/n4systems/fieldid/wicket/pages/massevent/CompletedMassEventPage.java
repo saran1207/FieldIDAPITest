@@ -5,12 +5,16 @@ import com.n4systems.fieldid.service.event.massevent.MassEventService;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
+import com.n4systems.fieldid.wicket.pages.asset.AssetSummaryPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
+import com.n4systems.fieldid.wicket.pages.event.ThingEventSummaryPage;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.search.EventReportCriteria;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -53,12 +57,14 @@ public class CompletedMassEventPage extends FieldIDTemplatePage {
 
             @Override
             protected void populateItem(ListItem<ThingEvent> item) {
-                item.add(new Label("serialNumber", new PropertyModel<String>(item.getModel(), "asset.identifier" )));
+                item.add(new BookmarkablePageLink<AssetSummaryPage>("assetSummaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(item.getModelObject().getAsset().getId()))
+                        .add(new Label("serialNumber", new PropertyModel<String>(item.getModel(), "asset.identifier"))));
                 item.add(new Label("eventType", new PropertyModel<String>(item.getModel(), "type.displayName" )));
                 item.add(new Label("assetType", new PropertyModel<String>(item.getModel(), "asset.type.displayName" )));
                 item.add(new Label("dueDate", new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "dueDate"), true)));
                 item.add(new Label("owner", new PropertyModel<String>(item.getModel(), "owner.displayName" )));
                 item.add(new Label("eventStatus", new PropertyModel<String>(item.getModel(), "eventStatus.displayName" )));
+                item.add(new BookmarkablePageLink<ThingEventSummaryPage>("eventSummaryLink", ThingEventSummaryPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
             }
         });
 

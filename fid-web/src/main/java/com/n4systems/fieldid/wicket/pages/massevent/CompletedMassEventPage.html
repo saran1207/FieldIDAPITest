@@ -9,14 +9,16 @@
             <th><wicket:message key="label.due_date"/></th>
             <th><wicket:message key="label.owner"/></th>
             <th><wicket:message key="label.event_status"/></th>
+            <th>&nbsp;</th>
         </tr>
         <tr wicket:id="events">
-            <td><label wicket:id="serialNumber"/></td>
+            <td><a wicket:id="assetSummaryLink"><label wicket:id="serialNumber"/></a></td>
             <td><label wicket:id="eventType"/></td>
             <td><label wicket:id="assetType"/></td>
             <td><label wicket:id="dueDate"/></td>
             <td><label wicket:id="owner"/></td>
             <td><label wicket:id="eventStatus"/></td>
+            <td><a class="btn-secondary" wicket:id="eventSummaryLink"><wicket:message key="label.view"/></a></td>
         </tr>
     </table>
 
