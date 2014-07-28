@@ -12,10 +12,12 @@ import com.n4systems.model.security.SecurityDefiner;
 import com.n4systems.model.user.User;
 
 import javax.persistence.*;
+
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "procedure_definitions")
@@ -113,6 +115,27 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
     @Column(name="removal_process")
     private String removalProcess;
+
+	@Column(nullable=false)
+	private String mobileId;
+
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		ensureMobileId();
+	}
+
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		ensureMobileId();
+	}
+
+	private void ensureMobileId() {
+		if (mobileId == null) {
+			mobileId = UUID.randomUUID().toString();
+		}
+	}
 
     public String getProcedureCode() {
         return procedureCode;
