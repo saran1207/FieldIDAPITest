@@ -60,7 +60,7 @@ public class ProcedureAuditEvent extends Event<ProcedureAuditEventType, Procedur
         return procedureDefinition;
     }
 
-    public void setProcedureDefinition(ProcedureDefinition procedureDefinition) {
+    public void  setProcedureDefinition(ProcedureDefinition procedureDefinition) {
         this.procedureDefinition = procedureDefinition;
     }
 

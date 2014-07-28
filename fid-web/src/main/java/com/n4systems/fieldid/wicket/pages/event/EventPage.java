@@ -233,6 +233,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(createTargetDetailsPanel(event));
 
             ownerSection = new WebMarkupContainer("ownerSection");
+            ownerSection.setVisible(isJobsContainerVisible());
             add(ownerSection);
 
             GroupedUserPicker groupedUserPicker;
@@ -306,6 +307,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             DateTimePicker dateScheduledPicker = new DateTimePicker("dateScheduled", new PropertyModel<Date>(event, "dueDate"), true).withNoAllDayCheckbox();
 
             eventBookContainer = new WebMarkupContainer("eventBookContainer");
+            eventBookContainer.setVisible(isEventBookVisible());
 			newOrExistingEventBook = new NewOrExistingEventBook("newOrExistingEventBook", new PropertyModel<EventBook>(event, "book"));
             newOrExistingEventBook.setOwner(event.getObject().getOwner());
 
@@ -321,6 +323,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             jobsContainer = new WebMarkupContainer("jobsContainer");
             add(jobsContainer);
             jobsContainer.setVisible(getSessionUser().getOrganization().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.Projects));
+            jobsContainer.setVisible(isJobsContainerVisible());
             DropDownChoice<Project> jobSelect = new DropDownChoice<Project>("job", new PropertyModel<Project>(event, "project"), new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>());
             jobSelect.setNullValid(true);
             jobsContainer.add(jobSelect);
@@ -347,7 +350,7 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             add(new CheckBox("printable", new PropertyModel<Boolean>(event, "printable")).add(new UpdateComponentOnChange()));
 
             EventForm form = event.getObject().getEventForm();
-            add(new EventFormEditPanel("eventFormPanel", event, new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults")).setVisible(form!=null && form.getAvailableSections().size()>0));
+            add(new EventFormEditPanel("eventFormPanel", event, new PropertyModel<List<AbstractEvent.SectionResults>>(EventPage.this, "sectionResults"), isActionButtonsVisible()).setVisible(form!=null && form.getAvailableSections().size()>0));
             add(new AttachmentsPanel("attachmentsPanel", new PropertyModel<List<FileAttachment>>(EventPage.this, "fileAttachments")));
 
             WebMarkupContainer gpsContainer = new WebMarkupContainer("gpsContainer");
@@ -522,5 +525,20 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     protected boolean isScheduleVisible() {
         return (event.getObject().isNew() || !event.getObject().isCompleted());
     }
+
+
+    public boolean isEventBookVisible() {
+        return true;
+    }
+
+    public boolean isJobsContainerVisible() {
+        return true;
+    }
+
+    public boolean isOwnerSectionVisible() {
+        return true;
+    }
+
+    public boolean isActionButtonsVisible() { return true; }
 
 }
