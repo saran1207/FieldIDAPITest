@@ -1,51 +1,39 @@
 package com.n4systems.fieldid.service.remover;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.handlers.remover.summary.EventArchiveSummary;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
+import com.n4systems.model.ThingEvent;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
-import com.n4systems.persistence.archivers.EventListArchiver;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.SimpleSelect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import java.util.TreeSet;
 
 public class AllEventsOfTypeRemovalService extends FieldIdPersistenceService {
 
     @Autowired
     private ScheduleListRemovalService scheduleListRemovalService;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private EventService eventService;
 
     @Transactional
 	public void remove(EventType eventType) {
-		archiveEvents(eventType);
+        List<Event> events = getEvents(eventType);
+        for(Event event: events) {
+            eventService.retireEvent((ThingEvent) event);
+        }
 	}
 
-	private void archiveEvents(EventType eventType) {
-		List<Long> ids = getEventIds(eventType);
-
-		archiveEvents(ids);
-	}
-
-	private void archiveEvents(List<Long> ids) {
-		EventListArchiver archiver = new EventListArchiver(new TreeSet<Long>(ids));
-		archiver.archive(entityManager);
-	}
-
-	private List<Long> getEventIds(EventType eventType) {
-		QueryBuilder<Long> queryBuilder = new QueryBuilder<Long>(Event.class, new TenantOnlySecurityFilter(getCurrentTenant()))
-				.setSelectArgument(new SimpleSelect("id"))
+	private List<Event> getEvents(EventType eventType) {
+		QueryBuilder<Event> queryBuilder = new QueryBuilder<Event>(Event.class, new TenantOnlySecurityFilter(getCurrentTenant()))
 				.addSimpleWhere("type", eventType);
         return persistenceService.findAll(queryBuilder);
 	}

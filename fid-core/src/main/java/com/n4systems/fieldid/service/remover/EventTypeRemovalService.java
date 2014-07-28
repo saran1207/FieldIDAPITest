@@ -6,7 +6,7 @@ import com.n4systems.fieldid.service.search.SavedSearchRemoveFilter;
 import com.n4systems.fieldid.service.task.AsyncService;
 import com.n4systems.handlers.remover.summary.EventTypeArchiveSummary;
 import com.n4systems.handlers.remover.summary.SavedReportDeleteSummary;
-import com.n4systems.model.EventType;
+import com.n4systems.model.*;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.util.ServiceLocator;
@@ -28,18 +28,54 @@ private static final Logger logger = Logger.getLogger(EventTypeRemovalService.cl
     @Autowired private AllEventsOfTypeRemovalService allEventsOfTypeRemovalService;
     @Autowired private CatalogItemRemovalService catalogItemRemovalService;
     @Autowired private NotificationSettingRemovalService notificationSettingRemovalService;
+    @Autowired private PlaceEventsOfTypeRemovalService placeEventsOfTypeRemovalService;
+    @Autowired private AssociatedPlaceEventTypeRemovalService associatedPlaceEventTypeRemovalService;
+    @Autowired private ProcedureAuditEventTypeRemovalService procedureAuditEventTypeRemovalService;
 
     @Transactional
 	public void remove(EventType eventType) {
-		breakConnectionsToAssetType(eventType);
-		archiveEventsOfType(eventType);
-		removeEventTypeFromCatalog(eventType);
-		deleteNotificationSettingsUsing(eventType);
-		deleteSavedReportsWithEventTypeCriteria(eventType);
-		archiveEventType(eventType);
+        if(eventType.isThingEventType()) {
+            breakConnectionsToAssetType(eventType);
+            archiveEventsOfType(eventType);
+            removeEventTypeFromCatalog(eventType);
+            deleteNotificationSettingsUsing(eventType);
+            deleteSavedReportsWithEventTypeCriteria(eventType);
+        } else if (eventType.isActionEventType()) {
+            archiveEventsOfType(eventType);
+            deleteSavedReportsWithEventTypeCriteria(eventType);
+            removeEventTypeFromCatalog(eventType);
+        } else if (eventType.isPlaceEventType()) {
+            breakConnectionsToPlace(eventType);
+            archivePlaceEventsOfType(eventType);
+            removeRecurringPlaceEvents(eventType);
+        } else if (eventType.isProcedureAuditEventType()) {
+            removeProcedureAuditEvents(eventType);
+            removeRecurringProcedureAudits(eventType);
+        }
+        archiveEventType(eventType);
 	}
 
-	private void deleteSavedReportsWithEventTypeCriteria(final EventType eventType) {
+    private void removeProcedureAuditEvents(EventType eventType) {
+        procedureAuditEventTypeRemovalService.remove((ProcedureAuditEventType) eventType);
+    }
+
+    private void removeRecurringProcedureAudits(EventType eventType) {
+        procedureAuditEventTypeRemovalService.removeRecurrence((ProcedureAuditEventType) eventType);
+    }
+
+    private void removeRecurringPlaceEvents(EventType eventType) {
+        associatedPlaceEventTypeRemovalService.removeRecurringEvents(eventType);
+    }
+
+    private void breakConnectionsToPlace(EventType eventType) {
+        associatedPlaceEventTypeRemovalService.removeOrgConnections(eventType);
+    }
+
+    private void archivePlaceEventsOfType(EventType eventType) {
+         placeEventsOfTypeRemovalService.remove((PlaceEventType) eventType);
+    }
+
+    private void deleteSavedReportsWithEventTypeCriteria(final EventType eventType) {
         savedReportService.deleteAllSavedSearchesMatching(new SavedSearchRemoveFilter() {
             @Override
             public boolean removeThisSearch(SearchCriteria searchCriteria) {
@@ -74,8 +110,8 @@ private static final Logger logger = Logger.getLogger(EventTypeRemovalService.cl
 	}
 
     @Transactional
-	public EventTypeArchiveSummary summary(EventType eventType) {
-		EventTypeArchiveSummary summary = new EventTypeArchiveSummary();
+	public EventTypeArchiveSummary summary(ThingEventType eventType) {
+		EventTypeArchiveSummary summary = new EventTypeArchiveSummary(eventType);
 
 		summary.setAssociatedEventTypeDeleteSummary(associatedEventTypeRemovalService.summary(eventType));
 		summary.setEventArchiveSummary(allEventsOfTypeRemovalService.summary(eventType));
@@ -84,6 +120,35 @@ private static final Logger logger = Logger.getLogger(EventTypeRemovalService.cl
 
 		return summary;
 	}
+
+    @Transactional
+    public EventTypeArchiveSummary summary(ActionEventType eventType) {
+        EventTypeArchiveSummary summary = new EventTypeArchiveSummary(eventType);
+
+        summary.setEventArchiveSummary(allEventsOfTypeRemovalService.summary(eventType));
+        summary.setSavedReportDeleteSummary(countSavedReportsToBeDeleted(eventType));
+
+        return summary;
+    }
+
+    @Transactional
+    public EventTypeArchiveSummary summary(PlaceEventType eventType) {
+        EventTypeArchiveSummary summary = new EventTypeArchiveSummary(eventType);
+
+        summary.setEventArchiveSummary(placeEventsOfTypeRemovalService.summary(eventType));
+        summary.setAssociatedPlaceEventTypeSummary(associatedPlaceEventTypeRemovalService.summary(eventType));
+
+        return summary;
+    }
+
+    public EventTypeArchiveSummary summary(ProcedureAuditEventType eventType) {
+        EventTypeArchiveSummary summary = new EventTypeArchiveSummary(eventType);
+
+        summary.setEventArchiveSummary(procedureAuditEventTypeRemovalService.summary(eventType));
+        summary.setRecurringProcedureAuditEvents(procedureAuditEventTypeRemovalService.countRecurringEvents(eventType));
+
+        return summary;
+    }
 
     private SavedReportDeleteSummary countSavedReportsToBeDeleted(EventType eventType) {
         QueryBuilder<EventReportCriteria> query = createTenantSecurityBuilder(EventReportCriteria.class);
@@ -154,5 +219,4 @@ private static final Logger logger = Logger.getLogger(EventTypeRemovalService.cl
 	        logger.error("Unable to send Event Type removal email", e);
         }
 	}
-
 }
