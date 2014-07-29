@@ -3,9 +3,9 @@ package com.n4systems.fieldid.wicket.pages.massevent;
 import com.n4systems.fieldid.service.event.massevent.MassEventService;
 import com.n4systems.fieldid.service.event.massevent.SelectedEventTypeCount;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.DashboardPage;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
+import com.n4systems.fieldid.wicket.pages.event.PerformMultiEventPage;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.search.EventReportCriteria;
 import org.apache.wicket.Component;
@@ -25,18 +25,19 @@ public class SelectMassEventPage extends FieldIDTemplatePage {
     @SpringBean
     private MassEventService massEventService;
 
-    private IModel<EventReportCriteria> criteriaModel;
+    private final IModel<EventReportCriteria> criteriaModel;
 
     public SelectMassEventPage(IModel<EventReportCriteria> criteriaModel) {
         this.criteriaModel = criteriaModel;
         final List<Long> eventIds = criteriaModel.getObject().getSelection().getSelectedIds();
 
         List<SelectedEventTypeCount> eventTypeCounts = massEventService.countSelectedEventTypes(eventIds);
+        final IModel<EventReportCriteria> criteriaModelToSend = criteriaModel;
 
         if(eventTypeCounts.size() == 1) {
             //TODO redirect to perform mass events page
             List<ThingEvent> openEvents = massEventService.getSelectedEventsByEventType(eventIds);
-            throw new RestartResponseException(new DashboardPage());
+            throw new RestartResponseException(new PerformMultiEventPage(openEvents, criteriaModelToSend, false));
         } else {
             add(new ListView<SelectedEventTypeCount>("eventType", eventTypeCounts) {
 
@@ -49,6 +50,7 @@ public class SelectMassEventPage extends FieldIDTemplatePage {
                         public void onClick() {
                             //TODO setresponse page to perform mass events page
                             List<ThingEvent> openEvents = massEventService.getSelectedEventsByEventType(eventIds, item.getModelObject().type);
+                            throw new RestartResponseException(new PerformMultiEventPage(openEvents, criteriaModelToSend, true));
                         }
                     });
                 }
