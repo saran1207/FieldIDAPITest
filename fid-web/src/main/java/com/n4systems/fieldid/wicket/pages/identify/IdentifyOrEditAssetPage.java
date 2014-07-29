@@ -318,7 +318,10 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
 
             eventSchedulesPanel = new EventSchedulesPanel("eventSchedulesPanel", schedulePicker, new PropertyModel<List<Event>>(IdentifyOrEditAssetPage.this, "schedulesToAdd"));
-            eventSchedulesPanel.setVisible(assetModel.getObject().isNew());
+            eventSchedulesPanel.setVisible(assetModel.getObject().isNew() &&
+                                           //Again, the important part here is whether or not Inspections is enabled,
+                                           //since this control is specific to the Inspection mechanic.
+                                           getTenant().getSettings().isInspectionsEnabled());
             add(eventSchedulesPanel);
 
             add(attributesEditPanel = new AttributesEditPanel("attributesPanel", assetTypeModel, assetModel));
@@ -347,7 +350,13 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             }.add(new AjaxIndicatorAppender()));
 
             actionsContainer.add(new Button("saveAndStartEventButton") {
-                { setVisible(getSessionUser().hasAccess("createevent")); }
+                {
+                    //This needs to be modified to set visibility based on access to create event AND the Tenant having
+                    //Inspections enabled.  Whether or not LOTO is enabled is irrelevant here, since the control is
+                    //really specific to Inspections.
+                    setVisible(getSessionUser().hasAccess("createevent") &&
+                               getTenant().getSettings().isInspectionsEnabled());
+                }
                 @Override
                 public void onSubmit() {
                     performSingleOrMultiSave(assetModel);
