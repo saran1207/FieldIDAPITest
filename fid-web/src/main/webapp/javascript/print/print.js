@@ -14,6 +14,7 @@ $(document).ready(function() {
 
         //-----------------[ Create Page ]---------------------------------------------
         var page = $('<div class="print-form-page"></div>').appendTo('body');
+        $('#source .watermark').clone().appendTo(page);
         $('#source .data-container-header').clone().appendTo(page);
         var currentDataContainer = $('<ul class="data-container"></ul>').appendTo(page);
 

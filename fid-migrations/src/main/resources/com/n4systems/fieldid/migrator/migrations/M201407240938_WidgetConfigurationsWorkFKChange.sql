@@ -1,0 +1,6 @@
+ALTER TABLE widget_configurations_work
+DROP FOREIGN KEY fk_widget_configurations_work_on_thing_event_type_id;
+ALTER TABLE widget_configurations_work
+ADD CONSTRAINT fk_widget_configurations_work_on_thing_event_type_id
+FOREIGN KEY (thing_event_type_id)
+REFERENCES thing_event_types(id);

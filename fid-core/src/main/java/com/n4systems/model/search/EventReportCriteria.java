@@ -51,7 +51,7 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
     private boolean unassignedOnly;
 
     @ManyToOne
-    @JoinColumn(name="thingEventTypeId")
+    @JoinColumn(name="eventTypeId")
     private EventType eventType;
 
     @Embedded

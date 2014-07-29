@@ -25,7 +25,7 @@ public class SelectMassEventPage extends FieldIDTemplatePage {
     @SpringBean
     private MassEventService massEventService;
 
-    private final IModel<EventReportCriteria> criteriaModel;
+    private IModel<EventReportCriteria> criteriaModel;
 
     public SelectMassEventPage(IModel<EventReportCriteria> criteriaModel) {
         this.criteriaModel = criteriaModel;
@@ -36,7 +36,7 @@ public class SelectMassEventPage extends FieldIDTemplatePage {
 
         if(eventTypeCounts.size() == 1) {
             //TODO redirect to perform mass events page
-            List<ThingEvent> openEvents = massEventService.getSelectedEventsByEventType(eventIds);
+            List<ThingEvent> openEvents = massEventService.getSelectedEventsById(eventIds);
             throw new RestartResponseException(new PerformMultiEventPage(openEvents, criteriaModelToSend, false));
         } else {
             add(new ListView<SelectedEventTypeCount>("eventType", eventTypeCounts) {
@@ -49,7 +49,7 @@ public class SelectMassEventPage extends FieldIDTemplatePage {
                         @Override
                         public void onClick() {
                             //TODO setresponse page to perform mass events page
-                            List<ThingEvent> openEvents = massEventService.getSelectedEventsByEventType(eventIds, item.getModelObject().type);
+                            List<ThingEvent> openEvents = massEventService.getSelectedEventsById(eventIds, item.getModelObject().type);
                             throw new RestartResponseException(new PerformMultiEventPage(openEvents, criteriaModelToSend, true));
                         }
                     });

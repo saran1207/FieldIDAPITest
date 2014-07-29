@@ -20,12 +20,12 @@ public class MassEventService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public List<ThingEvent> getSelectedEventsByEventType(List<Long> selectedEvents) {
-        return getSelectedEventsByEventType(selectedEvents, null);
+    public List<ThingEvent> getSelectedEventsById(List<Long> selectedEvents) {
+        return getSelectedEventsById(selectedEvents, null);
     }
 
 
-    public List<ThingEvent> getSelectedEventsByEventType(List<Long> selectedEvents, EventType type) {
+    public List<ThingEvent> getSelectedEventsById(List<Long> selectedEvents, EventType type) {
         QueryBuilder<ThingEvent> query = createUserSecurityBuilder(ThingEvent.class);
         query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.IN, "id", selectedEvents));
         if (type != null)

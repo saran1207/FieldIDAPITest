@@ -1,0 +1,22 @@
+<wicket:extend>
+
+    <div class="dashboardSection proceduresWithoutAuditsSection">
+
+        <div wicket:id="proceduresWithoutAuditsEnclosure">
+
+            <div wicket:id="proceduresWithoutAuditsTable" class="simpleTable decorated"></div>
+
+            <div class="proceduresWithoutAuditsDescription">
+                <wicket:message key="label.you_currently_have"/> <span wicket:id="totalProceduresWithoutAudits"></span> <wicket:message key="label.procedures_without_audits_scheduled"/>
+            </div>
+
+        </div>
+
+        <div wicket:id="allProceduresHaveAuditsMessage">
+            <div class="allProceduresHaveAudits">
+                <wicket:message key="label.all_procedures_have_audits_scheduled"/>
+            </div>
+        </div>
+    </div>
+
+</wicket:extend>

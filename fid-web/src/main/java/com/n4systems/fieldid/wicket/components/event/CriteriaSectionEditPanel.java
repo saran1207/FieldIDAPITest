@@ -45,9 +45,11 @@ public class CriteriaSectionEditPanel extends Panel {
     private WebMarkupContainer instructionsViewer;
     private Popup popup;
     private RichTextDisplay richTextDisplay;
+    private boolean showActionButtons;
 
-    public CriteriaSectionEditPanel(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results) {
+    public CriteriaSectionEditPanel(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results, boolean showActionButtons) {
         super(id);
+        this.showActionButtons = showActionButtons;
         setOutputMarkupPlaceholderTag(true);
         add(new CriteriaEditForm("criteriaEditForm", eventClass, results));
 
@@ -193,7 +195,7 @@ public class CriteriaSectionEditPanel extends Panel {
                             target.add(item);
                             target.appendJavaScript("$('.tipsy').remove();");  // tipsy tooltips hang around after ajax. must manually clean them up.
                         }
-                    });
+                    }.setVisible(showActionButtons));
 
                     showActionsIfAvailable(item);
                 }
