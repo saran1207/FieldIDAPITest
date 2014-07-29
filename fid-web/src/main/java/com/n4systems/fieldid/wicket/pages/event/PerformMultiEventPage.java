@@ -9,8 +9,6 @@ import com.n4systems.fieldid.utils.CopyEventFactory;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.assetsearch.ReportPage;
 import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
-import com.n4systems.model.AbstractEvent;
-import com.n4systems.model.Event;
 import com.n4systems.model.FileAttachment;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.search.EventReportCriteria;
@@ -86,12 +84,12 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
     }
 
     @Override
-    protected List<AbstractEvent> doSave() {
+    protected List<ThingEvent> doSave() {
         event.getObject().storeTransientCriteriaResults();
         event.getObject().setEventResult(getEventResult());
 
         FileDataContainer fileDataContainer = null;
-        List<AbstractEvent> finalList = new ArrayList<AbstractEvent>();
+        List<ThingEvent> finalList = new ArrayList<ThingEvent>();
 
         for(ThingEvent originalEventFromList:selectedEventList){
 
@@ -99,7 +97,7 @@ public class PerformMultiEventPage extends ThingMultiEventPage {
 
             copyMassEventInfo(originalEvent);
 
-            Event savedEvent = eventCreationService.createEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()));
+            ThingEvent savedEvent = eventCreationService.createEventWithSchedules(originalEvent, 0L, fileDataContainer, fileAttachments, createEventScheduleBundles(originalEvent.getAsset()));
             finalList.add(savedEvent);
         }
         return finalList;

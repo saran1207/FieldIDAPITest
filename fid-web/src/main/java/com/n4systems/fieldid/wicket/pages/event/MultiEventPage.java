@@ -20,10 +20,10 @@ import com.n4systems.fieldid.wicket.components.user.GroupedUserPicker;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.UserToUTCDateModel;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.model.user.ExaminersModel;
 import com.n4systems.fieldid.wicket.model.user.GroupedVisibleUsersModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.massevent.CompletedMassEventPage;
 import com.n4systems.model.*;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.event.AssignedToUpdate;
@@ -256,10 +256,10 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
             saveAssignedToIfNecessary();
             saveEventBookIfNecessary();
             if (doPostSubmitValidation()) {
-                List<AbstractEvent> savedEvent = doSave();
+                List<ThingEvent> savedEvent = doSave();
 
                 //TODO: Add the right page to send the saved events to
-                setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.get(0).getId()));
+                setResponsePage(new CompletedMassEventPage(savedEvent));
             }
         }
     }
@@ -358,7 +358,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
 
     protected void createEventFormSection(IModel<T> event, OuterEventForm form2) {
         EventForm form = event.getObject().getEventForm();
-        form2.add(new EventFormEditPanel("eventFormPanel", event, new PropertyModel<List<AbstractEvent.SectionResults>>(MultiEventPage.this, "sectionResults")).setVisible(form != null && form.getAvailableSections().size() > 0));
+        form2.add(new EventFormEditPanel("eventFormPanel", event, new PropertyModel<List<AbstractEvent.SectionResults>>(MultiEventPage.this, "sectionResults"), isActionButtonsVisible()).setVisible(form!=null && form.getAvailableSections().size()>0));
     }
 
     protected void createResultSection(IModel<T> event, OuterEventForm form) {
@@ -402,7 +402,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         }
     }
 
-    protected abstract List<AbstractEvent> doSave();
+    protected abstract List<ThingEvent> doSave();
     protected void onPreSave(T event) { }
 
     private boolean doPostSubmitValidation() {
@@ -455,5 +455,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
     protected boolean isScheduleVisible() {
         return (event.getObject().isNew() || !event.getObject().isCompleted());
     }
+
+    public boolean isActionButtonsVisible() { return true; }
 
 }
