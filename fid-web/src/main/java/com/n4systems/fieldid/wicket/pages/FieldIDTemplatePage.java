@@ -273,7 +273,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         container.add(assetCodeMappingcontainer);
         
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("assetLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.ASSET)));
-        container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)));
+        container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)).setVisible(getTenant().getSettings().isInspectionsEnabled()));
 
         return container;
 	}
@@ -282,7 +282,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
         container.add(new BookmarkablePageLink("eventStatusListLink", EventStatusListPage.class));
         container.add(new BookmarkablePageLink("assetTypesList", AssetTypeListPage.class));
-        container.add(new BookmarkablePageLink("priorityCodeListLink", PriorityCodePage.class));
+        container.add(new BookmarkablePageLink("priorityCodeListLink", PriorityCodePage.class).setVisible(getTenant().getSettings().isInspectionsEnabled()));
         container.setVisible(getSessionUser().hasAccess("managesystemconfig"));
         
         return container;
@@ -338,7 +338,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         Integer timeoutTime = getConfigurationProvider().getInteger(ConfigEntry.ACTIVE_SESSION_TIME_OUT);
         String loginLightboxTitle = getApplication().getResourceSettings().getLocalizer().getString("title.sessionexpired", null);
         javascriptBuffer.append("loggedInUserName = '").append(getSessionUser().getUserName()).append("';\n");
-        javascriptBuffer.append("tenantName = '").append(getSessionUser().getTenant().getName()).append("';\n");
+        javascriptBuffer.append("tenantName = '").append(getTenant().getName()).append("';\n");
         javascriptBuffer.append("sessionTimeOut = ").append(timeoutTime).append(";\n");
         javascriptBuffer.append("sessionTestUrl = '/fieldid/ajax/testSession.action';").append(";\n");
         javascriptBuffer.append("loginWindowTitle = '").append(loginLightboxTitle).append("';\n");
@@ -423,13 +423,17 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
             SessionUser sessionUser = getSessionUser();
 
+            boolean inspectionEnabled = sessionUser.getTenant().getSettings().isInspectionsEnabled();
+            boolean lotoEnabled = sessionUser.getTenant().getSettings().isLotoEnabled();
             boolean trendingEnabled = getSecurityGuard().isCriteriaTrendsEnabled();
             boolean advancedEventSearchEnabled = getSecurityGuard().isAdvancedEventSearchEnabled();
             boolean extraEventLinksAvailable = trendingEnabled || advancedEventSearchEnabled;
 
+            // header logo and links
             add(new StaticImage("tenantLogo", new Model<String>(s3Service.getBrandingLogoURL().toString())).setEscapeModelStrings(false));
 
             add(new Label("loggedInUsernameLabel", sessionUser.getName()));
+            addSpeedIdentifyLinks(sessionUser);
 
             add(new AjaxLink<Void>("languageSelection") {
                 @Override
@@ -442,28 +446,27 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
             add(new SavedItemsDropdown("savedItemsDropdown"));
 
-            addSpeedIdentifyLinks(sessionUser);
-
-            add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent")));
-
-            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class));
+            // menu bar links: Start Event, Search, Reporting, Places, LOTO, Safety Network, Jobs, Setup
+            add(new WebMarkupContainer("startEventLinkContainer").setVisible(sessionUser.hasAccess("createevent") && inspectionEnabled));
 
             add(new BookmarkablePageLink<Void>("assetSearchLink", SearchPage.class));
 
-            add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class));
-
+            add(new BookmarkablePageLink<Void>("reportingLink", ReportPage.class).setVisible(inspectionEnabled));
             WebMarkupContainer extraEventLinksContainer = new WebMarkupContainer("extraReportingLinksContainer");
-            extraEventLinksContainer.setVisible(extraEventLinksAvailable);
-            add(extraEventLinksContainer);
-
+            extraEventLinksContainer.setVisible(extraEventLinksAvailable && inspectionEnabled);
             extraEventLinksContainer.add(new BookmarkablePageLink<Void>("advancedEventSearchLink", AdvancedEventSearchPage.class).setVisible(advancedEventSearchEnabled));
             extraEventLinksContainer.add(new BookmarkablePageLink<Void>("criteriaTrendsLink", CriteriaTrendsPage.class).setVisible(trendingEnabled));
+            add(extraEventLinksContainer);
+
+            add(new BookmarkablePageLink<Void>("placesLink", OrgViewPage.class));
 
             add(createLotoLinkContainer());
-            add(createSetupLinkContainer(sessionUser));
-            add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled()));
-            add(new WebMarkupContainer("safetyNetworkLinkContainer").setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork()));
 
+            add(new WebMarkupContainer("safetyNetworkLinkContainer").setVisible(getUserSecurityGuard().isAllowedManageSafetyNetwork() && inspectionEnabled));
+
+            add(new WebMarkupContainer("jobsLinkContainer").setVisible(getSecurityGuard().isProjectsEnabled() && inspectionEnabled));
+
+            add(createSetupLinkContainer(sessionUser));
         }
 
         private void addSpeedIdentifyLinks(SessionUser sessionUser) {
@@ -498,8 +501,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureList", PublishedListAllPage.class));
         lotoLinkContainer.add(new BookmarkablePageLink<Void>("upcomingAuditsLink", ProcedureAuditListPage.class));
         lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureAwaitingApprovalLink", ProcedureWaitingApprovalsPage.class));
-
-        lotoLinkContainer.setVisible(FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures));
+        lotoLinkContainer.setVisible(getTenant().getSettings().isLotoEnabled());
 
         return lotoLinkContainer;
     }
