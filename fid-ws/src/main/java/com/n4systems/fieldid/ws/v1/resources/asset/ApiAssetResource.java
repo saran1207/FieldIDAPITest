@@ -13,6 +13,7 @@ import com.n4systems.fieldid.ws.v1.resources.eventhistory.ApiEventHistoryResourc
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
 import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
+import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureDefinitionResourceV2;
 import com.n4systems.fieldid.ws.v1.resources.procedure.ApiProcedureResource;
 import com.n4systems.fieldid.ws.v1.resources.savedEvent.ApiSavedEventResource;
 import com.n4systems.model.*;
@@ -29,17 +30,20 @@ import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+
 import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
 import org.eclipse.jdt.internal.core.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+
 import java.io.IOException;
 import java.util.*;
 
@@ -58,6 +62,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 	@Autowired private ApiAttributeValueResource apiAttributeValueResource;
     @Autowired private LastEventDateService lastEventDateService;
     @Autowired private ApiProcedureResource procedureResource;
+    @Autowired private ApiProcedureDefinitionResourceV2 procedureDefinitionResource;
 
 
 	@GET
@@ -171,6 +176,11 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 
 		logger.info("Saved " + multiAddAsset.getIdentifiers().size() + " Assets ");
 	}
+
+    @Path("{assetId}/procedures")
+    public ApiProcedureDefinitionResourceV2 assetProcedureDefinitions() {
+        return procedureDefinitionResource;
+    }
 
 	private Asset createAsset(ApiAsset apiAsset) {
 		Asset asset = new Asset();

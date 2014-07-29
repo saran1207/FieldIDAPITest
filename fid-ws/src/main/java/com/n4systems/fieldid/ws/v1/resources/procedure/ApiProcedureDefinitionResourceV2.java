@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 //import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValueResource;
+import com.n4systems.fieldid.ws.v1.resources.model.DateParam;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.procedure.*;
@@ -22,6 +23,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import java.io.IOException;
@@ -29,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-@Path("procedureDefinitionV2")
+//@Path("procedureDefinitionV2")
 public class ApiProcedureDefinitionResourceV2 extends SetupDataResource<ApiProcedureDefinitionV2, ProcedureDefinition> {
 
     private static final Logger log = Logger.getLogger(ApiProcedureDefinitionResource.class);
@@ -143,33 +145,42 @@ public class ApiProcedureDefinitionResourceV2 extends SetupDataResource<ApiProce
         return apiDescription;
     }
 
+    @Override
+	public ListResponse<ApiProcedureDefinitionV2> findAll(
+			@QueryParam("after") DateParam after,
+			@DefaultValue("0") @QueryParam("page") int page,
+			@DefaultValue("500") @QueryParam("pageSize") int pageSize) {
+
+        return null;
+	}
+
     @GET
-    @Path("asset/{assetId}/procedures")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
+    @Path("/")
 	@Transactional(readOnly = true)
 	public ListResponse<ApiProcedureDefinitionV2> FindForAsset(
-            @QueryParam("assetId") String assetId,
+            @PathParam("assetId") String assetId,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("100") @QueryParam("pageSize") int pageSize) {
         QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
-        builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.id", assetId));
+        builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.mobileGUID", assetId));
         List<ApiProcedureDefinitionV2> procs = convertAllProcedureDefinitionsToApiModels(persistenceService.findAll(builder, page, pageSize));
 
         return new ListResponse<ApiProcedureDefinitionV2>(procs, page, pageSize, persistenceService.count(builder));
 	}
 
     @GET
-    @Path("asset/{assetId}/procedures/test")
+    @Path("/asset/{assetId}/procedures/test")
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
 	public String FindForAssetTest(
-            @QueryParam("assetId") String assetId,
+            //@PathParam("assetId") String assetId,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("100") @QueryParam("pageSize") int pageSize) {
         QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
-        builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.id", assetId));
+        builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.mobileGUID", "0"));
 
         return builder.getQueryString();
 	}
