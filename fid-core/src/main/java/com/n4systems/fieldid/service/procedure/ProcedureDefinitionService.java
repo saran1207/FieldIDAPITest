@@ -78,6 +78,43 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.exists(query);
     }
 
+    public Boolean hasRecurringSchedule(ProcedureDefinition procedureDefinition) {
+        Boolean returnMe = false;
+
+        QueryBuilder<Procedure> procedureQuery = createTenantSecurityBuilder(Procedure.class);
+        procedureQuery.addSimpleWhere("type",
+                                      procedureDefinition);
+        //This should result in the query only looking for Procedures where recurringEvent is NOT null (ie. scheduled)
+        procedureQuery.addWhere(WhereParameter.Comparator.NOTNULL,
+                                "recurringEvent",
+                                "recurringEvent",
+                                null);
+
+        //Doesn't matter if there's 1 or 1 million... anything scheduled is what we're looking for.
+        procedureQuery.setLimit(1);
+
+        returnMe = persistenceService.exists(procedureQuery);
+
+        if(!returnMe) {
+            QueryBuilder<ProcedureAuditEvent> procedureAuditEventQuery =
+                    createTenantSecurityBuilder(ProcedureAuditEvent.class);
+
+            procedureAuditEventQuery.addSimpleWhere("procedureDefinition",
+                                                    procedureDefinition);
+
+            procedureAuditEventQuery.addWhere(WhereParameter.Comparator.NOTNULL,
+                                              "recurringEvent",
+                                              "recurringEvent",
+                                              null);
+
+            procedureQuery.setLimit(1);
+
+            returnMe = persistenceService.exists(procedureAuditEventQuery);
+        }
+
+        return returnMe;
+    }
+
     private QueryBuilder<ProcedureDefinition> getPublishedProcedureDefinitionQuery(Asset asset) {
         return getPublishedProcedureDefinitionQuery(asset, null);
     }

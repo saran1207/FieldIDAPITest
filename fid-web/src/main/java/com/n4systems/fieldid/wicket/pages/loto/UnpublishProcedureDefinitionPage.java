@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.wicket.pages.loto;
 
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.model.procedure.ProcedureDefinition;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.basic.Label;
@@ -23,6 +25,11 @@ public class UnpublishProcedureDefinitionPage extends FieldIDTemplatePage {
 
     private ProcedureDefinition procedureDefinition;
 
+    @Override
+    protected Component createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.unpublish_loto_procedure_warning"));
+    }
+
     public UnpublishProcedureDefinitionPage(PageParameters pageParameters) {
         super(pageParameters);
 
@@ -34,7 +41,11 @@ public class UnpublishProcedureDefinitionPage extends FieldIDTemplatePage {
             @Override
             protected void onSubmit() {
                 procedureDefinitionService.unpublishProcedureDefinition(procedureDefinition);
-                setResponsePage(new PreviouslyPublishedListAllPage());
+                //Before navigating back to this page, we need to display an appropriate message, indicating that
+                //the Procedure Definition was unpublished.
+                PreviouslyPublishedListAllPage nextPage = new PreviouslyPublishedListAllPage();
+                nextPage.info(new FIDLabelModel("message.unpublish", procedureDefinition.getProcedureCode()).getObject());
+                setResponsePage(nextPage);
             }
         };
 
