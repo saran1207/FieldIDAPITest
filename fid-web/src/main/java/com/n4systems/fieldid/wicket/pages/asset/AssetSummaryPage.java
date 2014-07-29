@@ -153,10 +153,16 @@ public class AssetSummaryPage extends AssetPage {
             upcomingEventsPanel.setVisible(false);
         }
 
-        if (hasLastEvent(asset)) {
-            add(new LastEventPanel("lastEventsPanel", assetModel));
+        if(getTenant().getSettings().isInspectionsEnabled()) {
+            if (hasLastEvent(asset)) {
+                add(new LastEventPanel("lastEventsPanel", assetModel));
+            } else {
+                add(new Label("lastEventsPanel", new FIDLabelModel("label.emptyeventlist").getObject()));
+            }
         } else {
-            add(new Label("lastEventsPanel", new FIDLabelModel("label.emptyeventlist").getObject()));
+            Label spaceHolder = new Label("lastEventsPanel");
+            spaceHolder.setVisible(false);
+            add(spaceHolder);
         }
 
         DownloadLink downloadAllLink;
