@@ -13,7 +13,11 @@ public class TemplatesPage extends SetupPage {
         add(new WebMarkupContainer("assetCodeMappingContainer").setVisible(getSecurityGuard().isIntegrationEnabled()));
 
         add(new BookmarkablePageLink<ColumnsLayoutPage>("assetLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.ASSET)));
-        add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)));
+
+        WebMarkupContainer eventColumnsLayoutContainer = new WebMarkupContainer("eventColumnsLayoutContainer");
+        eventColumnsLayoutContainer.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)));
+        eventColumnsLayoutContainer.setVisible(getTenant().getSettings().isInspectionsEnabled());
+        add(eventColumnsLayoutContainer);
     }
 
 }

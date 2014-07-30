@@ -13,8 +13,13 @@ public class AssetsAndEventsPage extends SetupPage {
         allOptionsContainer.setVisible(getSessionUser().hasAccess("managesystemconfig"));
         allOptionsContainer.setRenderBodyOnly(true);
         allOptionsContainer.add(new BookmarkablePageLink("eventStatusList", EventStatusListPage.class));
-        allOptionsContainer.add(new BookmarkablePageLink("priorityCodeList", PriorityCodePage.class));
         allOptionsContainer.add(new BookmarkablePageLink("assetTypesList", AssetTypeListPage.class));
+
+        WebMarkupContainer priorityCodeListContainer = new WebMarkupContainer("priorityCodeListContainer");
+        priorityCodeListContainer.add(new BookmarkablePageLink("priorityCodeList", PriorityCodePage.class));
+        priorityCodeListContainer.setVisible(getTenant().getSettings().isInspectionsEnabled());
+        allOptionsContainer.add(priorityCodeListContainer);
+
         add(allOptionsContainer);
     }
 }
