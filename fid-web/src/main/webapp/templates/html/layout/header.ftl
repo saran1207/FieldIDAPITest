@@ -93,7 +93,7 @@
 						</li>
 					</#if>
 					
-					<#if sessionUser.hasAccess("createevent") >
+					<#if sessionUser.hasAccess("createevent") && sessionUser.tenant.settings.isInspectionsEnabled()>
 						<li>
 							<a href="<@s.url action="startEvent" namespace="/"/>" class="speedLink textLink" id="menuEvent"><@s.text name="speed.event"/></a>
 						</li>
@@ -103,36 +103,36 @@
 						<a href="/fieldid/w/search" class="speedLink textLink" id="menuAssets"><@s.text name="speed.search" /></a>
                      </li>
 
+                    <#if sessionUser.tenant.settings.isInspectionsEnabled()>
+                        <li>
+                            <a href="/fieldid/w/reporting" class="speedLink textLink struts" id="menuReport"><@s.text name="speed.reporting" />
+                                <#if securityGuard.isCriteriaTrendsEnabled() || securityGuard.isAdvancedEventSearchEnabled()>
+                                    <!-- <img src="/fieldid/images/down-arrow.png" /> -->
+                                </#if>
+                            </a>
 
-                    <li>
-                        <a href="/fieldid/w/reporting" class="speedLink textLink struts" id="menuReport"><@s.text name="speed.reporting" />
-                            <#if securityGuard.isCriteriaTrendsEnabled() || securityGuard.isAdvancedEventSearchEnabled()>
-                                <!-- <img src="/fieldid/images/down-arrow.png" /> -->
+                            <#if securityGuard.isCriteriaTrendsEnabled()>
+                                <ul class="sub_menu">
+                                    <li>
+                                        <a href="<@s.url value='/w/criteriaTrends'/>" ><@s.text name="nav.trending" /></a>
+                                    </li>
+                                </ul>
                             </#if>
-                        </a>
-
-                        <#if securityGuard.isCriteriaTrendsEnabled()>
-                            <ul class="sub_menu">
-                                <li>
-                                    <a href="<@s.url value='/w/criteriaTrends'/>" ><@s.text name="nav.trending" /></a>
-                                </li>
-                            </ul>
-                        </#if>
-                    <#if securityGuard.isAdvancedEventSearchEnabled()>
-                        <ul class="sub_menu">
-                            <li>
-                                <a href="<@s.url value='/w/advancedEventSearch'/>" ><@s.text name="nav.advanced_event_search" /></a>
-                            </li>
-                        </ul>
+                            <#if securityGuard.isAdvancedEventSearchEnabled()>
+                                <ul class="sub_menu">
+                                    <li>
+                                        <a href="<@s.url value='/w/advancedEventSearch'/>" ><@s.text name="nav.advanced_event_search" /></a>
+                                    </li>
+                                </ul>
+                            </#if>
+                        </li>
                     </#if>
-
-                    </li>
 
                     <li>
                         <a href="/fieldid/w/places" class="speedLink textLink" id="menuPlaces"><@s.text name="speed.places" /></a>
                     </li>
 
-                    <#if securityGuard.lotoProceduresEnabled>
+                    <#if securityGuard.lotoProceduresEnabled && sessionUser.tenant.settings.isLotoEnabled()>
                         <li>
                             <a href="javascript:void(0)" class="speedLink textLink" id="menuLoto"><@s.text name="speed.lockout_tagout"/>&nbsp;</a>
                             <ul class="sub_menu">
@@ -152,12 +152,12 @@
                         </li>
                     </#if>
 
-					<#if userSecurityGuard.allowedManageSafetyNetwork>
+					<#if userSecurityGuard.allowedManageSafetyNetwork && sessionUser.tenant.settings.isInspectionsEnabled()>
 						<li>
 							<a href="<@s.url action="safetyNetwork" namespace="/"/>" class="speedLink textLink" id="menuSafetyNetwork"><@s.text name="speed.safety_network" /></a>
 						</li>
 					</#if>
-					<#if securityGuard.projectsEnabled>
+					<#if securityGuard.projectsEnabled && sessionUser.tenant.settings.isInspectionsEnabled()>
 						<li>
 							<a href="<@s.url action="jobs" namespace="/"/>" class="speedLink textLink" id="menuProject"><@s.text name="speed.projects"/></a>
 						</li>
@@ -206,7 +206,9 @@
 												<li><a href="<@s.url action='assetTypeGroups' namespace='/'/>" ><@s.text name="title.manage_asset_type_groups.plural"/></a></li>
 												<li><a href="<@s.url value='/w/setup/assetTypes' namespace='/'/>" ><@s.text name="title.manage_asset_types.plural"/></a></li>
 												<li><a href="<@s.url action='assetStatusList' namespace='/'/>" ><@s.text name="title.manage_asset_statuses.plural"/></a></li>
-                                                <li><a href="<@s.url value='/w/setup/priorityCodes' namespace='/'/>" ><@s.text name="title.manage_priority_code.plural"/></a></li>
+                                                <#if sessionUser.tenant.settings.isInspectionsEnabled()>
+                                                    <li><a href="<@s.url value='/w/setup/priorityCodes' namespace='/'/>" ><@s.text name="title.manage_priority_code.plural"/></a></li>
+                                                </#if>
 											</ul>
 										</#if>
 									</li>
@@ -227,7 +229,9 @@
 												<li><a href="<@s.url action='autoAttributeCriteriaList' namespace='/'/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
 												<li><a href="<@s.url action='commentTemplateList' namespace='/'/>" ><@s.text name="title.manage_comment_templates.plural" /></a></li>
 												<li><a href="<@s.url value='/w/setup/columnsLayout' type='ASSET'/>" ><@s.text name="title.column_layout_asset" /></a></li>
-												<li><a href="<@s.url value='/w/setup/columnsLayout' type='EVENT'/>" ><@s.text name="title.column_layout_event" /></a></li>
+                                                <#if sessionUser.tenant.settings.isInspectionsEnabled()>
+												    <li><a href="<@s.url value='/w/setup/columnsLayout' type='EVENT'/>" ><@s.text name="title.column_layout_event" /></a></li>
+                                                </#if>
 												<#if securityGuard.integrationEnabled>
 													<li><a href="<@s.url action="assetCodeMappingList"/>" ><@s.text name="title.manage_asset_code_mappings" /></a></li>
 												</#if>
