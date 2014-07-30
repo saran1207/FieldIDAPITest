@@ -17,7 +17,7 @@ public class AssetsAndEventsPage extends SetupPage {
 
         WebMarkupContainer priorityCodeListContainer = new WebMarkupContainer("priorityCodeListContainer");
         priorityCodeListContainer.add(new BookmarkablePageLink("priorityCodeList", PriorityCodePage.class));
-        priorityCodeListContainer.setVisible(getTenant().getSettings().isInspectionsEnabled());
+        priorityCodeListContainer.setVisible(getSecurityGuard().isInspectionsEnabled());
         allOptionsContainer.add(priorityCodeListContainer);
 
         add(allOptionsContainer);

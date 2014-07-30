@@ -16,7 +16,7 @@ public class TemplatesPage extends SetupPage {
 
         WebMarkupContainer eventColumnsLayoutContainer = new WebMarkupContainer("eventColumnsLayoutContainer");
         eventColumnsLayoutContainer.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)));
-        eventColumnsLayoutContainer.setVisible(getTenant().getSettings().isInspectionsEnabled());
+        eventColumnsLayoutContainer.setVisible(getSecurityGuard().isInspectionsEnabled());
         add(eventColumnsLayoutContainer);
     }
 

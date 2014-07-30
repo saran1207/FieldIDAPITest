@@ -283,7 +283,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         container.add(new BookmarkablePageLink<ProcedureApproverPage>("procedureApproverLink", ProcedureApproverPage.class));
         container.add(new BookmarkablePageLink<EnableByAssetTypePage>("enableByAssetTypeLink", EnableByAssetTypePage.class));
 
-        container.setVisible(getTenant().getSettings().isLotoEnabled());
+        container.setVisible(getSecurityGuard().isLotoEnabled());
         return container;
     }
 
@@ -304,7 +304,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         container.add(assetCodeMappingcontainer);
         
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("assetLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.ASSET)));
-        container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)).setVisible(getTenant().getSettings().isInspectionsEnabled()));
+        container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)).setVisible(getSecurityGuard().isInspectionsEnabled()));
 
         return container;
 	}
@@ -313,7 +313,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
         container.add(new BookmarkablePageLink("eventStatusListLink", EventStatusListPage.class));
         container.add(new BookmarkablePageLink("assetTypesList", AssetTypeListPage.class));
-        container.add(new BookmarkablePageLink("priorityCodeListLink", PriorityCodePage.class).setVisible(getTenant().getSettings().isInspectionsEnabled()));
+        container.add(new BookmarkablePageLink("priorityCodeListLink", PriorityCodePage.class).setVisible(getSecurityGuard().isInspectionsEnabled()));
         container.setVisible(getSessionUser().hasAccess("managesystemconfig"));
         
         return container;
@@ -477,8 +477,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
             SessionUser sessionUser = getSessionUser();
 
-            boolean inspectionEnabled = sessionUser.getTenant().getSettings().isInspectionsEnabled();
-            boolean lotoEnabled = sessionUser.getTenant().getSettings().isLotoEnabled();
+            boolean inspectionEnabled = getSecurityGuard().isInspectionsEnabled();
             boolean trendingEnabled = getSecurityGuard().isCriteriaTrendsEnabled();
             boolean advancedEventSearchEnabled = getSecurityGuard().isAdvancedEventSearchEnabled();
             boolean extraEventLinksAvailable = trendingEnabled || advancedEventSearchEnabled;
@@ -548,7 +547,7 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
             lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureList", PublishedListAllPage.class));
             lotoLinkContainer.add(new BookmarkablePageLink<Void>("upcomingAuditsLink", ProcedureAuditListPage.class));
             lotoLinkContainer.add(new BookmarkablePageLink<Void>("procedureAwaitingApprovalLink", ProcedureWaitingApprovalsPage.class));
-            lotoLinkContainer.setVisible(getTenant().getSettings().isLotoEnabled());
+            lotoLinkContainer.setVisible(getSecurityGuard().isLotoEnabled());
 
             return lotoLinkContainer;
         }
