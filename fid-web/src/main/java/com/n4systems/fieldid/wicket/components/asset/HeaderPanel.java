@@ -82,7 +82,7 @@ public class HeaderPanel extends Panel {
         BookmarkablePageLink summaryLink;
         BookmarkablePageLink eventHistoryLink;
         NonWicketIframeLink traceabilityLink;
-        boolean hasProcedures = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures) &&
+        boolean hasProcedures = FieldIDSession.get().getTenant().getSettings().isLotoEnabled() &&
                 asset.getType().hasProcedures();
 
         add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
@@ -124,7 +124,7 @@ public class HeaderPanel extends Panel {
                 return !assocEventTypesModel.getObject().isEmpty();
             }
         }).call();
-        boolean isLotoEnabled = FieldIDSession.get().getPrimaryOrg().hasExtendedFeature(ExtendedFeature.LotoProcedures);
+        boolean isLotoEnabled = FieldIDSession.get().getTenant().getSettings().isLotoEnabled();
         boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
 
         BookmarkablePageLink startEventLink;
