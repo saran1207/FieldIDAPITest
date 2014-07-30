@@ -42,6 +42,7 @@ private static final Logger logger = Logger.getLogger(EventTypeRemovalService.cl
             deleteSavedReportsWithEventTypeCriteria(eventType);
         } else if (eventType.isActionEventType()) {
             archiveEventsOfType(eventType);
+            archivePlaceEventsOfType(eventType);
             deleteSavedReportsWithEventTypeCriteria(eventType);
             removeEventTypeFromCatalog(eventType);
         } else if (eventType.isPlaceEventType()) {

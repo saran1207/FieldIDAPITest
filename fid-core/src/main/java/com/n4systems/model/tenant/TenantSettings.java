@@ -28,17 +28,17 @@ public class TenantSettings extends EntityWithTenant {
 	@Embedded
 	private PasswordPolicy passwordPolicy = new PasswordPolicy();
 	
-	private Boolean gpsCapture;
+	private Boolean gpsCapture = false;
 
 	private String supportUrl;
     
     private String logoutUrl;
 
-    @Column(name="inspections_enabled")
-    private Boolean inspectionsEnabled;
+    @Column(name="inspections_enabled", nullable = false)
+    private Boolean inspectionsEnabled = false;
 
-    @Column(name="loto_enabled")
-    private Boolean lotoEnabled;
+    @Column(name="loto_enabled", nullable = false)
+    private Boolean lotoEnabled = false;
 
     @ManyToOne
     @JoinColumn(name = "approval_user_id")

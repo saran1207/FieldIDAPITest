@@ -1,13 +1,9 @@
-#orgInfo, #orgPlan, #extendedFeatures {
+#orgInfo, #orgPlan, #extendedFeatures, #modules {
 	float: left;
 }
 
 #orgInfo {
 	width: 20%;
-}
-
-#extendedFeatures {
-	width: 21%;
 }
 
 #orgPlan {
@@ -17,8 +13,9 @@
 	padding: 0 30px;
 }
 
-#extendedFeatures {
+#extendedFeatures, #modules {
 	padding-left: 30px;
+    width: 21%;
 }
 .limit {
 	height : 30px;
@@ -67,7 +64,7 @@
 
 #addFullUsers {
 	width: 100%;
-	padding: 5px 20px 5px; 0;
+	padding: 5px 20px 5px 0px;
 }
 
 .editHeader{
@@ -83,7 +80,7 @@
 	padding-bottom: 30px;
 }
 
-.infoSet {
+.infoSet, .modules {
 	overflow: hidden;
 	padding: 5px 0px;
 }
@@ -104,6 +101,25 @@
 	padding : 5px 0px;
 	width : 305px;
 	line-height : 18px;
+}
+
+.modules span {
+    float : left;
+    padding-left : 30px;
+    line-height : 18px;
+}
+
+.modules label {
+    float : left;
+    display : block;
+    text-align : left;
+    width : 150px;
+    padding-left : 10px;
+    color : #333;
+}
+
+.modules .fieldHolder input[type="checkbox"] {
+    margin-top: 2px;
 }
 
 .planFormActions {
@@ -132,7 +148,7 @@
    padding-left : 30px;
 }
 
-#extendedFeatures h3 {
+#extendedFeatures h3, #modules h3 {
 	padding: 5px 0;
 }
 
