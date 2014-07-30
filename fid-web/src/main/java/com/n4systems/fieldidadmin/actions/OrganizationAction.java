@@ -160,11 +160,11 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
 
 	@SkipValidation
 	public String doUpdateSecondaryOrgs() {
-		tenantSettingsService.update(tenant.getSettings());
-		return SUCCESS;
+        updateTenantSettings();
+        return SUCCESS;
 	}
 
-	@SkipValidation
+    @SkipValidation
 	public String doUpdateTenantStatus() {
 		updateTenant();
 		return SUCCESS;
@@ -258,7 +258,24 @@ public class OrganizationAction extends AbstractCrud implements Preparable, HasD
         return SUCCESS;
     }
 
-	private void updatePrimaryOrg() {
+    @SkipValidation
+    public String doToggleInspectionsEnabled() {
+        updateTenantSettings();
+        return SUCCESS;
+    }
+
+    @SkipValidation
+    public String doToggleLotoEnabled() {
+        updateTenantSettings();
+        return SUCCESS;
+    }
+
+    private void updateTenantSettings() {
+        tenantSettingsService.update(tenant.getSettings());
+    }
+
+
+    private void updatePrimaryOrg() {
 		new OrgSaver().update(primaryOrg);
 	}
 

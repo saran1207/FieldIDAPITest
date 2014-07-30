@@ -89,23 +89,28 @@
 	</div>
 </div>
 
+<div id="modules">
+    <#include "_modules.ftl"/>
+</div>
+
 <div id="extendedFeatures">
-<h3>Extended Features</h3>
-<table id="extendedFeaturesList">
-	<#list availableExtendedFeatures as feature>
-		<#if feature == "JobSites">
-			<tr><td colspan = "4">&nbsp;</td></tr>
-		</#if> 		
-		<tr id="extendedFeatureRow_${feature}">
-			<#assign featureLabel="${feature.label}">
-			<#include "_extendedFeatures.ftl"/>
-		</tr>
-	</#list>
-	<tr><td colspan = "4">&nbsp;</td></tr>
-	<tr id="plansAndPricingRow">
-		<#include "_plansAndPricing.ftl"/>		
-	</tr>
-	<tr id="secondaryOrgsRow">
-		<#include "_secondaryOrgsButton.ftl"/>		
-	</tr>
-<table>	</div>
+    <h3>Extended Features</h3>
+    <table id="extendedFeaturesList">
+        <#list availableExtendedFeatures as feature>
+            <#if feature == "JobSites">
+                <tr><td colspan = "4">&nbsp;</td></tr>
+            </#if>
+            <tr id="extendedFeatureRow_${feature}">
+                <#assign featureLabel="${feature.label}">
+                <#include "_extendedFeatures.ftl"/>
+            </tr>
+        </#list>
+        <tr><td colspan = "4">&nbsp;</td></tr>
+        <tr id="plansAndPricingRow">
+            <#include "_plansAndPricing.ftl"/>
+        </tr>
+        <tr id="secondaryOrgsRow">
+            <#include "_secondaryOrgsButton.ftl"/>
+        </tr>
+    <table>
+</div>
