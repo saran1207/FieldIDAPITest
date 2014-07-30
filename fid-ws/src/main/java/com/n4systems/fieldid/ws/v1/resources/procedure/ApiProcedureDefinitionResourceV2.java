@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.ws.v1.resources.procedure;
 
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 //import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValueResource;
@@ -31,17 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-//@Path("procedureDefinitionV2")
-public class ApiProcedureDefinitionResourceV2 extends SetupDataResource<ApiProcedureDefinitionV2, ProcedureDefinition> {
+@Path("procedureDefinitionV2")
+public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDefinitionV2, ProcedureDefinition> {
 
     private static final Logger log = Logger.getLogger(ApiProcedureDefinitionResource.class);
 
     @Autowired private ApiAttributeValueResource attrResource;
     @Autowired private S3Service s3Service;
-
-    public ApiProcedureDefinitionResourceV2() {
-        super(ProcedureDefinition.class, false);
-    }
 
     @Override
     protected ApiProcedureDefinitionV2 convertEntityToApiModel(ProcedureDefinition procedureDef) {
@@ -145,21 +142,12 @@ public class ApiProcedureDefinitionResourceV2 extends SetupDataResource<ApiProce
         return apiDescription;
     }
 
-    @Override
-	public ListResponse<ApiProcedureDefinitionV2> findAll(
-			@QueryParam("after") DateParam after,
-			@DefaultValue("0") @QueryParam("page") int page,
-			@DefaultValue("500") @QueryParam("pageSize") int pageSize) {
-
-        return null;
-	}
-
     @GET
 	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
     @Path("/")
 	@Transactional(readOnly = true)
-	public ListResponse<ApiProcedureDefinitionV2> FindForAsset(
+	public ListResponse<ApiProcedureDefinitionV2> findForAsset(
             @PathParam("assetId") String assetId,
 			@DefaultValue("0") @QueryParam("page") int page,
 			@DefaultValue("100") @QueryParam("pageSize") int pageSize) {
@@ -169,6 +157,22 @@ public class ApiProcedureDefinitionResourceV2 extends SetupDataResource<ApiProce
 
         return new ListResponse<ApiProcedureDefinitionV2>(procs, page, pageSize, persistenceService.count(builder));
 	}
+
+    @GET
+    @Path("list")
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional(readOnly = true)
+    public ListResponse<ApiProcedureDefinitionV2> findAll(
+            @QueryParam("id") List<String> assetIds) {
+        QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
+        builder.addWhere(WhereClauseFactory.create(Comparator.IN, "asset.mobileGUID", assetIds));
+
+        List<ProcedureDefinition> procs = persistenceService.findAll(builder);
+        List<ApiProcedureDefinitionV2> apiProcs = convertAllProcedureDefinitionsToApiModels(procs);
+
+        return new ListResponse<ApiProcedureDefinitionV2>(apiProcs, 0, apiProcs.size(), apiProcs.size());
+    }
 
     @GET
     @Path("/asset/{assetId}/procedures/test")
