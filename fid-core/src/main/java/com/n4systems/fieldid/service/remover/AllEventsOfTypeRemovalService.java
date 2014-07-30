@@ -26,14 +26,14 @@ public class AllEventsOfTypeRemovalService extends FieldIdPersistenceService {
 
     @Transactional
 	public void remove(EventType eventType) {
-        List<Event> events = getEvents(eventType);
+        List<ThingEvent> events = getEvents(eventType);
         for(Event event: events) {
             eventService.retireEvent((ThingEvent) event);
         }
 	}
 
-	private List<Event> getEvents(EventType eventType) {
-		QueryBuilder<Event> queryBuilder = new QueryBuilder<Event>(Event.class, new TenantOnlySecurityFilter(getCurrentTenant()))
+	private List<ThingEvent> getEvents(EventType eventType) {
+		QueryBuilder<ThingEvent> queryBuilder = new QueryBuilder<ThingEvent>(ThingEvent.class, new TenantOnlySecurityFilter(getCurrentTenant()))
 				.addSimpleWhere("type", eventType);
         return persistenceService.findAll(queryBuilder);
 	}
