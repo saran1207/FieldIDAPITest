@@ -132,7 +132,7 @@
                         <a href="/fieldid/w/places" class="speedLink textLink" id="menuPlaces"><@s.text name="speed.places" /></a>
                     </li>
 
-                    <#if securityGuard.lotoProceduresEnabled && sessionUser.tenant.settings.isLotoEnabled()>
+                    <#if securityGuard.isLotoEnabled()>
                         <li>
                             <a href="javascript:void(0)" class="speedLink textLink" id="menuLoto"><@s.text name="speed.lockout_tagout"/>&nbsp;</a>
                             <ul class="sub_menu">
@@ -152,12 +152,12 @@
                         </li>
                     </#if>
 
-					<#if userSecurityGuard.allowedManageSafetyNetwork && sessionUser.tenant.settings.isInspectionsEnabled()>
+					<#if userSecurityGuard.allowedManageSafetyNetwork && securityGuard.isInspectionsEnabled()>
 						<li>
 							<a href="<@s.url action="safetyNetwork" namespace="/"/>" class="speedLink textLink" id="menuSafetyNetwork"><@s.text name="speed.safety_network" /></a>
 						</li>
 					</#if>
-					<#if securityGuard.projectsEnabled && sessionUser.tenant.settings.isInspectionsEnabled()>
+					<#if securityGuard.projectsEnabled && securityGuard.isInspectionsEnabled()>
 						<li>
 							<a href="<@s.url action="jobs" namespace="/"/>" class="speedLink textLink" id="menuProject"><@s.text name="speed.projects"/></a>
 						</li>
@@ -206,7 +206,7 @@
 												<li><a href="<@s.url action='assetTypeGroups' namespace='/'/>" ><@s.text name="title.manage_asset_type_groups.plural"/></a></li>
 												<li><a href="<@s.url value='/w/setup/assetTypes' namespace='/'/>" ><@s.text name="title.manage_asset_types.plural"/></a></li>
 												<li><a href="<@s.url action='assetStatusList' namespace='/'/>" ><@s.text name="title.manage_asset_statuses.plural"/></a></li>
-                                                <#if sessionUser.tenant.settings.isInspectionsEnabled()>
+                                                <#if securityGuard.isInspectionsEnabled()>
                                                     <li><a href="<@s.url value='/w/setup/priorityCodes' namespace='/'/>" ><@s.text name="title.manage_priority_code.plural"/></a></li>
                                                 </#if>
 											</ul>
@@ -229,7 +229,7 @@
 												<li><a href="<@s.url action='autoAttributeCriteriaList' namespace='/'/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
 												<li><a href="<@s.url action='commentTemplateList' namespace='/'/>" ><@s.text name="title.manage_comment_templates.plural" /></a></li>
 												<li><a href="<@s.url value='/w/setup/columnsLayout' type='ASSET'/>" ><@s.text name="title.column_layout_asset" /></a></li>
-                                                <#if sessionUser.tenant.settings.isInspectionsEnabled()>
+                                                <#if securityGuard.isInspectionsEnabled()>
 												    <li><a href="<@s.url value='/w/setup/columnsLayout' type='EVENT'/>" ><@s.text name="title.column_layout_event" /></a></li>
                                                 </#if>
 												<#if securityGuard.integrationEnabled>
@@ -248,7 +248,7 @@
 											<li><a href="<@s.url value='/w/setup/accountPolicy'/>"><@s.text name="title.account_lockout_policy"/></a></li>
 										</ul>
 									</li>
-                                    <#if sessionUser.tenant.settings.isLotoEnabled()>
+                                    <#if securityGuard.isLotoEnabled()>
                                         <li>
                                             <a href="javascript:void(0)" ><@s.text name="speed.lockout_tagout"/> » </a>
                                             <ul class="sub_menu">
