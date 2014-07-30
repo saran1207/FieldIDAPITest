@@ -69,11 +69,17 @@ public abstract class PlacePage extends FieldIDTemplatePage {
     @Override
     protected void addNavBar(String navBarId) {
         Long orgId = orgModel.getObject().getId();
-        add(new NavigationBar(navBarId,
-                aNavItem().label(new FIDLabelModel("label.summary")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(orgId)).build(),
-                aNavItem().label(new FIDLabelModel("label.events")).page(PlaceEventsPage.class).params(PageParametersBuilder.id(orgId)).ignoreParams("open").build()
-        //        aNavItem().label(new FIDLabelModel("label.people")).page(PlacePeoplePage.class).params(PageParametersBuilder.id(orgId)).build()
-        ));
+        if(getTenant().getSettings().isInspectionsEnabled()) {
+            add(new NavigationBar(navBarId,
+                    aNavItem().label(new FIDLabelModel("label.summary")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(orgId)).build(),
+                    aNavItem().label(new FIDLabelModel("label.events")).page(PlaceEventsPage.class).params(PageParametersBuilder.id(orgId)).ignoreParams("open").build()
+            ));
+        } else {
+            //If inspections ISN'T enabled, we want to hide anything to do with Events... those are for Inspections only.
+            add(new NavigationBar(navBarId,
+                    aNavItem().label(new FIDLabelModel("label.summary")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(orgId)).build()
+            ));
+        }
     }
 
     @Override

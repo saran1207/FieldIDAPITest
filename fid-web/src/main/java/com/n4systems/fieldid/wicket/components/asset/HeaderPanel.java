@@ -90,7 +90,10 @@ public class HeaderPanel extends Panel {
         add(traceabilityLink = new NonWicketIframeLink("traceabilityLink", "aHtml/iframe/assetTraceability.action?uniqueID=" + asset.getId() + "&useContext=false", false, 1000, 600, new AttributeModifier("class", "mattButtonMiddle")));
         traceabilityLink.setVisible(assetService.hasLinkedAssets(asset) || isInVendorContext());
 
-        add(eventHistoryLink = new BookmarkablePageLink<Void>("eventHistoryLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId())));
+        eventHistoryLink = new BookmarkablePageLink<Void>("eventHistoryLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId()));
+        eventHistoryLink.setVisible(FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
+
+        add(eventHistoryLink);
 
         add(new BookmarkablePageLink<ProceduresListPage>("lotoProceduresLink", ProceduresListPage.class, PageParametersBuilder.uniqueId(asset.getId()))
                 .setVisible(hasProcedures));
@@ -100,6 +103,8 @@ public class HeaderPanel extends Panel {
         } else {
            eventHistoryLink.add(new AttributeAppender("class", "mattButtonPressed").setSeparator(" "));
         }
+
+
 
         if (hasProcedures) {
             eventHistoryLink.add(new AttributeAppender("class", "mattButtonMiddle").setSeparator(" "));
@@ -124,7 +129,9 @@ public class HeaderPanel extends Panel {
 
         BookmarkablePageLink startEventLink;
         add(startEventLink = new BookmarkablePageLink<Void>("startEventLink", QuickEventPage.class, PageParametersBuilder.id(asset.getId())));
-        startEventLink.setVisible(hasCreateEvent && hasAssociatedEventTypes);
+        startEventLink.setVisible(hasCreateEvent &&
+                                  hasAssociatedEventTypes &&
+                                  FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
 
         scheduleToAdd = createNewSchedule(asset);
 
@@ -189,7 +196,11 @@ public class HeaderPanel extends Panel {
             }
         });
 
-        scheduleMenu.setVisible(hasCreateEvent && isLotoEnabled && hasAssociatedEventTypes && asset.getType().hasProcedures());
+        scheduleMenu.setVisible(hasCreateEvent &&
+                                isLotoEnabled && //We may no longer need this, since we're determining if LOTO is enabled differently.
+                                hasAssociatedEventTypes &&
+                                asset.getType().hasProcedures() &&
+                                FieldIDSession.get().getTenant().getSettings().isLotoEnabled());
 
         add(scheduleMenu);
 

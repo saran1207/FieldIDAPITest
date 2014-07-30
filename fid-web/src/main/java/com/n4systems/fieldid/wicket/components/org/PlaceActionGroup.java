@@ -90,7 +90,8 @@ public class PlaceActionGroup extends Panel {
                 schedulePicker.show(target);
             }
         });
-        scheduleLink.setVisible(canCreateEvents);
+        scheduleLink.setVisible(canCreateEvents &&
+                                FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
 
         if (!hasAssociatedEvents()) {
             scheduleLink.add(new AttributeAppender("class", "disabled").setSeparator(" "));
@@ -98,7 +99,8 @@ public class PlaceActionGroup extends Panel {
 
         add(eventsContainer = new WebMarkupContainer("eventsContainer"));
         eventsContainer.setOutputMarkupPlaceholderTag(true);
-        eventsContainer.setVisible(canCreateEvents);
+        eventsContainer.setVisible(canCreateEvents &&
+                                   FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
 
         eventsContainer.add(new ListView<PlaceEvent>("scheduled", new ScheduledEventsMenuModel()) {
             @Override
@@ -150,10 +152,12 @@ public class PlaceActionGroup extends Panel {
         archiveLink.setVisible((getOrg().isCustomer() || getOrg().isDivision()) && canManageCustomers);
 
         optionsContainer.add(recurringSchedulesLink = new BookmarkablePageLink<PlaceRecurringSchedulesPage>("recurringSchedulesLink", PlaceRecurringSchedulesPage.class, PageParametersBuilder.id(getOrg().getId())));
-        recurringSchedulesLink.setVisible(canManageSystemConfig);
+        recurringSchedulesLink.setVisible(canManageSystemConfig &&
+                                          FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
 
         optionsContainer.add(eventTypesLink = new BookmarkablePageLink<PlaceEventTypesPage>("eventTypesLink", PlaceEventTypesPage.class, PageParametersBuilder.id(getOrg().getId())));
-        eventTypesLink.setVisible(canManageSystemConfig);
+        eventTypesLink.setVisible(canManageSystemConfig &&
+                                  FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
 
         optionsContainer.add(descendantsLink = new BookmarkablePageLink<PlaceDescendantsPage>("descendants", PlaceDescendantsPage.class, PageParametersBuilder.id(getOrg().getId())));
         descendantsLink.setVisible((!getOrg().isDivision()) && canManageCustomers);

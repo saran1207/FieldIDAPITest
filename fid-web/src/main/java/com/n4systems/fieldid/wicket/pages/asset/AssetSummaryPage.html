@@ -12,10 +12,12 @@
                     </h1>
                     <div class="rightPanel" wicket:id="upcomingEventsPanel" />
                     <div class="rightPanel" wicket:id="upcomingEventsMessage" />
-                    <h1>
-                        <label> <wicket:message key="label.lasteventperformed"/></label>
-                    </h1>
-                    <div class="rightPanel" wicket:id="lastEventsPanel" />
+                    <wicket:enclosure child="lastEventsPanel">
+                        <h1>
+                            <label> <wicket:message key="label.lasteventperformed"/></label>
+                        </h1>
+                        <div class="rightPanel" wicket:id="lastEventsPanel" />
+                    </wicket:enclosure>
                     <h1>
                         <label> <wicket:message key="label.attachments"/></label> <span wicket:enclosure="downloadAllLink" style="font-weight: normal;"> | <a wicket:id="downloadAllLink"><wicket:message key="label.download_all"/></a></span>
                     </h1>
