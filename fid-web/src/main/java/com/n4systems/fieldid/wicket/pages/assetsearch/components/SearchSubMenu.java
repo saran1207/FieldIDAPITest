@@ -186,9 +186,11 @@ public abstract class SearchSubMenu extends SubMenu<AssetSearchCriteria> {
         
         SessionUser sessionUser = FieldIDSession.get().getSessionUser();
 
-        massEventLink.setVisible(sessionUser.hasAccess("createevent"));
+        boolean isInspectionsEnabled = FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled();
+
+        massEventLink.setVisible(sessionUser.hasAccess("createevent") && isInspectionsEnabled);
         massUpdateLink.setVisible(sessionUser.hasAccess("tag"));
-        massScheduleLink.setVisible(sessionUser.hasAccess("createevent"));
+        massScheduleLink.setVisible(sessionUser.hasAccess("createevent") && isInspectionsEnabled);
         
         actions.setVisible(rowsSelected && (selected < maxUpdate) && (massEventLink.isVisible() || massUpdateLink.isVisible() || massScheduleLink.isVisible() || exportLink.isVisible()));
     }

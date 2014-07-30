@@ -14,8 +14,7 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 		return primaryOrg;
 	}
 
-
-	public Tenant getTenant() {
+    public Tenant getTenant() {
 		return primaryOrg.getTenant();
 	}
 
@@ -29,76 +28,55 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 		return primaryOrg.getTenant().getName();
 	}
 
+    @Override
+    public boolean isInspectionsEnabled() {
+        return false;
+    }
 
-	public boolean isAllowIntegrationEnabled() {
-		return false;
-	}
+    @Override
+    public boolean isLotoEnabled() {
+        return false;
+    }
 
-
+    @Override
 	public boolean isAssignedToEnabled() {
 		return false;
 	}
 
-
+    @Override
 	public boolean isBrandingEnabled() {
 		return false;
 	}
 
-
-	public boolean isCustomCertEnabled() {
-		return false;
-	}
-
-
-	public boolean isDedicatedProgramManagerEnabled() {
-		return false;
-	}
-
-
+    @Override
 	public boolean isEmailAlertsEnabled() {
 		return false;
 	}
 
-
+    @Override
 	public boolean isExtendedFeatureEnabled(ExtendedFeature feature) {
 		return false;
 	}
 
-
+    @Override
 	public boolean isIntegrationEnabled() {
 		return false;
 	}
 
-
+    @Override
 	public boolean isJobSitesEnabled() {
 		return false;
 	}
 
-
-	public boolean isMultiLocationEnabled() {
-		return false;
-	}
-
-
-	public boolean isReadOnlyUsersEnabled() {
-		return false;
-	}
-
-
+    @Override
 	public boolean isPlansAndPricingAvailable() {
 		return false;
 	}
 
-
+    @Override
 	public boolean isProjectsEnabled() {
 		return false;
 	}
-
-
-	public boolean isUnlimitedLinkedAssetsEnabled() {
-		return false;
-	}
-
 
 	@Override
 	public boolean isAdvancedLocationEnabled() {
@@ -106,12 +84,10 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 		return false;
 	}
 
-
 	@Override
 	public boolean isProofTestIntegrationEnabled() {
 		return false;
 	}
-
 
 	@Override
 	public boolean isManufacturerCertificateEnabled() {
@@ -122,11 +98,6 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 	public boolean isOrderDetailsEnabled() {
 		return false;
 	}
-
-    @Override
-    public boolean isLotoProceduresEnabled() {
-        return false;
-    }
 
     @Override
     public boolean isGlobalSearchEnabled() {

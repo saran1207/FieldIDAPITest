@@ -72,7 +72,17 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 		return primaryOrg;
 	}
 
-	@Override
+    @Override
+    public boolean isInspectionsEnabled() {
+        return tenant.getSettings().isInspectionsEnabled();
+    }
+
+    @Override
+    public boolean isLotoEnabled() {
+        return tenant.getSettings().isLotoEnabled();
+    }
+
+    @Override
 	public boolean isJobSitesEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.JobSites);
 	}
@@ -106,11 +116,6 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 	public boolean isOrderDetailsEnabled() {
 		return primaryOrg.hasExtendedFeature(ExtendedFeature.OrderDetails);
 	}
-
-    @Override
-    public boolean isLotoProceduresEnabled() {
-        return primaryOrg.hasExtendedFeature(ExtendedFeature.LotoProcedures);
-    }
 
     @Override
     public boolean isGlobalSearchEnabled() {

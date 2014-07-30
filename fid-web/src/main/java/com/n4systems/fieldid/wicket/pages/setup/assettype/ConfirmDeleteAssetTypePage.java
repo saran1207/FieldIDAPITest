@@ -16,10 +16,12 @@ import com.n4systems.util.AssetTypeRemovalSummary;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
@@ -66,8 +68,8 @@ public class ConfirmDeleteAssetTypePage extends FieldIDFrontEndPage {
         add(new Label("subAssetsToDetach", new PropertyModel<Long>(summary, "subAssetsToDetach")));
         add(new Label("assetsToDetachFromProjects", new PropertyModel<Long>(summary, "assetsToDetachFromProjects")).setVisible(getSecurityGuard().isProjectsEnabled()));
 
-        add(new Label("proceduresToDelete", new PropertyModel<Long>(summary, "proceduresToDelete")).setVisible(getSecurityGuard().isLotoProceduresEnabled()));
-        add(new Label("procedureDefinitionsToDelete", new PropertyModel<Long>(summary, "procedureDefinitionsToDelete")).setVisible(getSecurityGuard().isLotoProceduresEnabled()));
+        add(new Label("proceduresToDelete", new PropertyModel<Long>(summary, "proceduresToDelete")).setVisible(getSecurityGuard().isLotoEnabled()));
+        add(new Label("procedureDefinitionsToDelete", new PropertyModel<Long>(summary, "procedureDefinitionsToDelete")).setVisible(getSecurityGuard().isLotoEnabled()));
 
 
         Form form;
