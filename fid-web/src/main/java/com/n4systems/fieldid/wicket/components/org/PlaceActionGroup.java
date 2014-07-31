@@ -91,7 +91,7 @@ public class PlaceActionGroup extends Panel {
             }
         });
         scheduleLink.setVisible(canCreateEvents &&
-                                FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
+                                FieldIDSession.get().getSecurityGuard().isInspectionsEnabled());
 
         if (!hasAssociatedEvents()) {
             scheduleLink.add(new AttributeAppender("class", "disabled").setSeparator(" "));
@@ -100,7 +100,7 @@ public class PlaceActionGroup extends Panel {
         add(eventsContainer = new WebMarkupContainer("eventsContainer"));
         eventsContainer.setOutputMarkupPlaceholderTag(true);
         eventsContainer.setVisible(canCreateEvents &&
-                                   FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
+                                   FieldIDSession.get().getSecurityGuard().isInspectionsEnabled());
 
         eventsContainer.add(new ListView<PlaceEvent>("scheduled", new ScheduledEventsMenuModel()) {
             @Override
@@ -153,11 +153,11 @@ public class PlaceActionGroup extends Panel {
 
         optionsContainer.add(recurringSchedulesLink = new BookmarkablePageLink<PlaceRecurringSchedulesPage>("recurringSchedulesLink", PlaceRecurringSchedulesPage.class, PageParametersBuilder.id(getOrg().getId())));
         recurringSchedulesLink.setVisible(canManageSystemConfig &&
-                                          FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
+                                          FieldIDSession.get().getSecurityGuard().isInspectionsEnabled());
 
         optionsContainer.add(eventTypesLink = new BookmarkablePageLink<PlaceEventTypesPage>("eventTypesLink", PlaceEventTypesPage.class, PageParametersBuilder.id(getOrg().getId())));
         eventTypesLink.setVisible(canManageSystemConfig &&
-                                  FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
+                                  FieldIDSession.get().getSecurityGuard().isInspectionsEnabled());
 
         optionsContainer.add(descendantsLink = new BookmarkablePageLink<PlaceDescendantsPage>("descendants", PlaceDescendantsPage.class, PageParametersBuilder.id(getOrg().getId())));
         descendantsLink.setVisible((!getOrg().isDivision()) && canManageCustomers);

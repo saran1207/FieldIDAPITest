@@ -69,7 +69,7 @@ public abstract class PlacePage extends FieldIDTemplatePage {
     @Override
     protected void addNavBar(String navBarId) {
         Long orgId = orgModel.getObject().getId();
-        if(getTenant().getSettings().isInspectionsEnabled()) {
+        if(getSecurityGuard().isInspectionsEnabled()) {
             add(new NavigationBar(navBarId,
                     aNavItem().label(new FIDLabelModel("label.summary")).page(PlaceSummaryPage.class).params(PageParametersBuilder.id(orgId)).build(),
                     aNavItem().label(new FIDLabelModel("label.events")).page(PlaceEventsPage.class).params(PageParametersBuilder.id(orgId)).ignoreParams("open").build()
