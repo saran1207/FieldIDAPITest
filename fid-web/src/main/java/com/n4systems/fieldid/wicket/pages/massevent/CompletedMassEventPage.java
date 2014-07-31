@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.massevent;
 
-import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.massevent.MassEventService;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
@@ -37,21 +36,9 @@ public class CompletedMassEventPage extends FieldIDTemplatePage {
     @SpringBean
     private SavedReportService savedReportService;
 
-
-    //Test Constructor
-    @Deprecated
-    public CompletedMassEventPage() {
-        events = massEventService.getSelectedEventsById(Lists.newArrayList(4101826L, 4100604L, 4101516L));
-    }
-
     public CompletedMassEventPage(List<ThingEvent> events) {
         this.criteriaModel = criteriaModel;
         this.events = events;
-    }
-
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
 
         add(new ListView<ThingEvent>("events", events) {
 
@@ -59,11 +46,11 @@ public class CompletedMassEventPage extends FieldIDTemplatePage {
             protected void populateItem(ListItem<ThingEvent> item) {
                 item.add(new BookmarkablePageLink<AssetSummaryPage>("assetSummaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(item.getModelObject().getAsset().getId()))
                         .add(new Label("serialNumber", new PropertyModel<String>(item.getModel(), "asset.identifier"))));
-                item.add(new Label("eventType", new PropertyModel<String>(item.getModel(), "type.displayName" )));
-                item.add(new Label("assetType", new PropertyModel<String>(item.getModel(), "asset.type.displayName" )));
+                item.add(new Label("eventType", new PropertyModel<String>(item.getModel(), "type.displayName")));
+                item.add(new Label("assetType", new PropertyModel<String>(item.getModel(), "asset.type.displayName")));
                 item.add(new Label("dueDate", new DayDisplayModel(new PropertyModel<Date>(item.getModel(), "dueDate"), true)));
-                item.add(new Label("owner", new PropertyModel<String>(item.getModel(), "owner.displayName" )));
-                item.add(new Label("eventStatus", new PropertyModel<String>(item.getModel(), "eventStatus.displayName" )));
+                item.add(new Label("owner", new PropertyModel<String>(item.getModel(), "owner.displayName")));
+                item.add(new Label("eventStatus", new PropertyModel<String>(item.getModel(), "eventStatus.displayName")));
                 item.add(new BookmarkablePageLink<ThingEventSummaryPage>("eventSummaryLink", ThingEventSummaryPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
             }
         });
@@ -74,12 +61,11 @@ public class CompletedMassEventPage extends FieldIDTemplatePage {
                 setResponsePage(new ReportPage(savedReportService.retrieveLastSearch()));
             }
         });
-
     }
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.completed_events"));
+        return new Label(labelId, new FIDLabelModel("title.completed_x_events", events.size()));
     }
 
 }
