@@ -5,17 +5,14 @@
       lang="en">
 
 <wicket:panel>
-    <div class="add_widget_title">
-        <img src="/fieldid/images/widget-large.png"/>
-        <h2><wicket:message key="label.select_your_widgets"/></h2>
-    </div>
 
     <div wicket:id="widgets">
-        <div wicket:id="tabs"></div>
+        <div class="widget_details" wicket:id="widgetList">
+            <a class="mattButton" wicket:id="add"><em wicket:id="addLabel"/></a>
+            <label wicket:id="name"/>
+            <span wicket:id="description"/>
+        </div>
     </div>
 
-    <div class="closeLink">
-        <a wicket:id="closeLink" class="blue-submit"><wicket:message key="label.finished"/></a>
-    </div>
 </wicket:panel>
 </html>
