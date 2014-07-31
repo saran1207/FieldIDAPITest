@@ -30,10 +30,10 @@ public abstract class AssetStatusListPage extends FieldIDTemplatePage {
 
     @Override
     protected void addNavBar(String navBarId) {
-        add(new NavigationBar(navBarId,
-                aNavItem().label(new FIDLabelModel("nav.view_all.count", assetStatusService.getActiveStatusCount())),
-                aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", assetStatusService.getActiveStatusCount()))
-            )
-        );
+//        add(new NavigationBar(navBarId,
+//                aNavItem().label(new FIDLabelModel("nav.view_all.count", assetStatusService.getActiveStatusCount())),
+//                aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", assetStatusService.getActiveStatusCount()))
+//            )
+//        );
     }
 }
