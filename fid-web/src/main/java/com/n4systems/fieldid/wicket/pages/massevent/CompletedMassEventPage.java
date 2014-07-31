@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.massevent;
 
-import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.massevent.MassEventService;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
@@ -37,21 +36,9 @@ public class CompletedMassEventPage extends FieldIDTemplatePage {
     @SpringBean
     private SavedReportService savedReportService;
 
-
-    //Test Constructor
-    @Deprecated
-    public CompletedMassEventPage() {
-        events = massEventService.getSelectedEventsById(Lists.newArrayList(4101826L, 4100604L, 4101516L));
-    }
-
     public CompletedMassEventPage(List<ThingEvent> events) {
         this.criteriaModel = criteriaModel;
         this.events = events;
-    }
-
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
 
         add(new ListView<ThingEvent>("events", events) {
 
@@ -74,12 +61,11 @@ public class CompletedMassEventPage extends FieldIDTemplatePage {
                 setResponsePage(new ReportPage(savedReportService.retrieveLastSearch()));
             }
         });
-
     }
 
     @Override
     protected Component createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("title.completed_events"));
+        return new Label(labelId, new FIDLabelModel("title.completed_x_events", events.size()));
     }
 
 }
