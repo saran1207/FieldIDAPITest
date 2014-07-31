@@ -153,7 +153,7 @@ public class AssetSummaryPage extends AssetPage {
             upcomingEventsPanel.setVisible(false);
         }
 
-        if(getTenant().getSettings().isInspectionsEnabled()) {
+        if(getSecurityGuard().isInspectionsEnabled()) {
             if (hasLastEvent(asset)) {
                 add(new LastEventPanel("lastEventsPanel", assetModel));
             } else {

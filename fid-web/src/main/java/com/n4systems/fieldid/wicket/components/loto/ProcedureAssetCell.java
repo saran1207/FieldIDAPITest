@@ -19,7 +19,6 @@ public class ProcedureAssetCell extends Panel {
         super(id);
 
         add(new BookmarkablePageLink<Void>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(procedureModel.getObject().getAsset().getId()))
-                        .setParameter("name", procedureModel.getObject().getEquipmentNumber())
                         .add(new Label("name", procedureModel.getObject().getEquipmentNumber()))
                         .add(new AttributeAppender("class", new Model<String>("equipment-number"), ""))
         );
