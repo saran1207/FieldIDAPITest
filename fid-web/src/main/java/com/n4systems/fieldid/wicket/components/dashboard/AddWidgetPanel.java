@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.dashboard;
 
 import com.n4systems.fieldid.service.event.EventService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.dashboard.DashboardColumn;
 import com.n4systems.model.dashboard.DashboardLayout;
@@ -55,7 +56,6 @@ public class AddWidgetPanel extends Panel {
             }
         });
 
-
         tabs.add(new AbstractTab(new FIDLabelModel("label.inspection_and_audits")) {
             @Override
             public WebMarkupContainer getPanel(String panelId) {
@@ -73,7 +73,7 @@ public class AddWidgetPanel extends Panel {
             }
             @Override
             public boolean isVisible(){
-                return true;
+                return FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled();
             }
         });
 
@@ -94,7 +94,7 @@ public class AddWidgetPanel extends Panel {
             }
             @Override
             public boolean isVisible(){
-                return true;
+                return FieldIDSession.get().getTenant().getSettings().isLotoEnabled();
             }
         });
         widgetsContainer.add(new AjaxTabbedPanel("tabs", tabs));
