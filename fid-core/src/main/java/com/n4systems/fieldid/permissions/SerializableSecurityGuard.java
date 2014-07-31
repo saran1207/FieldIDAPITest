@@ -139,7 +139,7 @@ public class SerializableSecurityGuard implements SystemSecurityGuard, Serializa
 
     @Override
     public boolean isLotoProceduresEnabled() {
-        return false;
+        return primaryOrg.hasExtendedFeature(ExtendedFeature.LotoProcedures);
     }
 
 
