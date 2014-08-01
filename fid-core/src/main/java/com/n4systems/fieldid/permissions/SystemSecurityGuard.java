@@ -32,7 +32,4 @@ public interface SystemSecurityGuard {
     public boolean isAdvancedEventSearchEnabled();
     public boolean isCriteriaTrendsEnabled();
     public boolean isUserGroupFilteringEnabled();
-
-    @Deprecated
-    public boolean isLotoProceduresEnabled();
 }
