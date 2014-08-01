@@ -82,7 +82,7 @@ public class HeaderPanel extends Panel {
         BookmarkablePageLink summaryLink;
         BookmarkablePageLink eventHistoryLink;
         NonWicketIframeLink traceabilityLink;
-        boolean hasProcedures = FieldIDSession.get().getTenant().getSettings().isLotoEnabled() &&
+        boolean hasProcedures = FieldIDSession.get().getSecurityGuard().isLotoEnabled() &&
                 asset.getType().hasProcedures();
 
         add(summaryLink = new BookmarkablePageLink<Void>("summaryLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(asset.getId())));
@@ -91,7 +91,7 @@ public class HeaderPanel extends Panel {
         traceabilityLink.setVisible(assetService.hasLinkedAssets(asset) || isInVendorContext());
 
         eventHistoryLink = new BookmarkablePageLink<Void>("eventHistoryLink", AssetEventsPage.class, PageParametersBuilder.uniqueId(asset.getId()));
-        eventHistoryLink.setVisible(FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
+        eventHistoryLink.setVisible(FieldIDSession.get().getSecurityGuard().isInspectionsEnabled());
 
         add(eventHistoryLink);
 
@@ -124,14 +124,14 @@ public class HeaderPanel extends Panel {
                 return !assocEventTypesModel.getObject().isEmpty();
             }
         }).call();
-        boolean isLotoEnabled = FieldIDSession.get().getTenant().getSettings().isLotoEnabled();
+        boolean isLotoEnabled = FieldIDSession.get().getSecurityGuard().isLotoEnabled();
         boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
 
         BookmarkablePageLink startEventLink;
         add(startEventLink = new BookmarkablePageLink<Void>("startEventLink", QuickEventPage.class, PageParametersBuilder.id(asset.getId())));
         startEventLink.setVisible(hasCreateEvent &&
                                   hasAssociatedEventTypes &&
-                                  FieldIDSession.get().getTenant().getSettings().isInspectionsEnabled());
+                                  FieldIDSession.get().getSecurityGuard().isInspectionsEnabled());
 
         scheduleToAdd = createNewSchedule(asset);
 
@@ -200,7 +200,7 @@ public class HeaderPanel extends Panel {
                                 isLotoEnabled && //We may no longer need this, since we're determining if LOTO is enabled differently.
                                 hasAssociatedEventTypes &&
                                 asset.getType().hasProcedures() &&
-                                FieldIDSession.get().getTenant().getSettings().isLotoEnabled());
+                                FieldIDSession.get().getSecurityGuard().isLotoEnabled());
 
         add(scheduleMenu);
 

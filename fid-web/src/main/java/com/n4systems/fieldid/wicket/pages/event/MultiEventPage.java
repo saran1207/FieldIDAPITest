@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.*;
+import com.n4systems.fieldid.wicket.components.event.CriteriaSectionEditPanel;
 import com.n4systems.fieldid.wicket.components.event.EventFormEditPanel;
 import com.n4systems.fieldid.wicket.components.event.book.NewOrExistingEventBook;
 import com.n4systems.fieldid.wicket.components.event.prooftest.ProofTestEditPanel;
@@ -45,6 +46,7 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -139,7 +141,6 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
                 item.add(new ExternalImage("image", s3Service.getCriteriaResultImageThumbnailURL(image).toString()));
             }
         });
-
 
     }
 
@@ -358,7 +359,12 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
 
     protected void createEventFormSection(IModel<T> event, OuterEventForm form2) {
         EventForm form = event.getObject().getEventForm();
-        form2.add(new EventFormEditPanel("eventFormPanel", event, new PropertyModel<List<AbstractEvent.SectionResults>>(MultiEventPage.this, "sectionResults"), isActionButtonsVisible()).setVisible(form!=null && form.getAvailableSections().size()>0));
+        form2.add(new EventFormEditPanel("eventFormPanel", event, new PropertyModel<List<AbstractEvent.SectionResults>>(MultiEventPage.this, "sectionResults"), isActionButtonsVisible()){
+            @Override
+            protected Panel getCriteriaSectionPanel(Class<? extends AbstractEvent> eventClass, PropertyModel<List<CriteriaResult>> results) {
+                return new CriteriaSectionEditPanel("criteriaPanel", eventClass, results, isActionButtonsVisible(), isAttachmentAndActionVisible());
+            }
+        }.setVisible(form != null && form.getAvailableSections().size() > 0));
     }
 
     protected void createResultSection(IModel<T> event, OuterEventForm form) {
@@ -457,5 +463,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
     }
 
     public boolean isActionButtonsVisible() { return true; }
+
+    public boolean isAttachmentAndActionVisible() { return false; }
 
 }

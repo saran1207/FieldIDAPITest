@@ -19,7 +19,6 @@ import com.n4systems.model.dashboard.WidgetDefinition;
 import com.n4systems.model.dashboard.WidgetType;
 import com.n4systems.model.dashboard.widget.WidgetConfiguration;
 import com.n4systems.model.user.User;
-import com.n4systems.persistence.PersistenceManager;
 import com.n4systems.services.dashboard.DashboardService;
 import org.apache.wicket.Component;
 import org.apache.wicket.MarkupContainer;
@@ -358,7 +357,7 @@ public class DashboardPageTest extends FieldIdPageTest<DashboardHarness, Dashboa
 		}
 
         private AjaxLink getAddWidgetLink(WidgetType widgetType) {
-            ListView<WidgetType> widgets = (ListView<WidgetType>) get("configWindow", "content", "widgets", "widgetList");
+            ListView<WidgetType> widgets = (ListView<WidgetType>) get("configWindow", "content", "widgets", "tabs", "panel", "widgets", "widgetList");
             return (AjaxLink) widgets.get(widgetType.ordinal()).get("add");
         }
 

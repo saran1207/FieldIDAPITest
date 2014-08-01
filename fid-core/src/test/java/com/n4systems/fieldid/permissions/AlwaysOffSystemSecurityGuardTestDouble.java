@@ -80,7 +80,6 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 
 	@Override
 	public boolean isAdvancedLocationEnabled() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -116,6 +115,11 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
 
     @Override
     public boolean isAdvancedEventSearchEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isLotoProceduresEnabled() {
         return false;
     }
 }
