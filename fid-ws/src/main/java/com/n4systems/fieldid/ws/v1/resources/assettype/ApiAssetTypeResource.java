@@ -32,6 +32,8 @@ public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetT
 		apiType.setSid(type.getId());
 		apiType.setActive(type.isActive());
 		apiType.setModified(type.getModified());
+
+
 		
 		// We only set the rest of the fields if the entity is active.
 		if(type.isActive()) {
@@ -40,6 +42,7 @@ public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetT
 			apiType.setInstructions(type.getInstructions());
 			apiType.setCautionUrl(type.getCautionUrl());
 			apiType.setDescriptionTemplate(type.getDescriptionTemplate());
+            apiType.setHasProcedures(type.hasProcedures());
 			apiType.setIdentifierFormat(type.getIdentifierFormat());
 			apiType.setIdentifierLabel(type.getIdentifierLabel());
 			apiType.setIdentifierOverridden(type.isIdentifierOverridden());

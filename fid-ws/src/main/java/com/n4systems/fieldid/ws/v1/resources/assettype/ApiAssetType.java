@@ -12,6 +12,7 @@ public class ApiAssetType extends ApiReadonlyModel {
 	private String instructions;
 	private String cautionUrl;
 	private String descriptionTemplate;
+    private boolean hasProcedures;
 	private String identifierFormat;
 	private String identifierLabel;
 	private boolean identifierOverridden;
@@ -69,6 +70,14 @@ public class ApiAssetType extends ApiReadonlyModel {
 	public void setDescriptionTemplate(String descriptionTemplate) {
 		this.descriptionTemplate = descriptionTemplate;
 	}
+
+    public boolean getHasProcedures() {
+        return hasProcedures;
+    }
+
+    public void setHasProcedures(boolean hasProcedures) {
+        this.hasProcedures = hasProcedures;
+    }
 
 	public String getIdentifierFormat() {
 		return identifierFormat;
