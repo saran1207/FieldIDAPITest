@@ -23,10 +23,17 @@
 			<p><wicket:message key="label.manage_event_books_msg"/></p>
 		</div>
 
-		<div class="setupOption assetTypeGroups">
-			<h1><a href="/fieldid/assetTypeGroups.action" ><wicket:message key="title.manage_asset_type_groups.plural"/></a></h1>
-			<p><wicket:message key="label.manage_asset_type_groups_msg"/></p>
-		</div>
+		<!--<div class="setupOption assetTypeGroups">-->
+			<!--<h1><a href="/fieldid/assetTypeGroups.action" ><wicket:message key="title.asset_type_groups.plural"/></a></h1>-->
+			<!--<p><wicket:message key="label.manage_asset_type_groups_msg"/></p>-->
+		<!--</div>-->
+
+        <div class="setupOption assetTypeGroups">
+            <h1>
+                <a wicket:id="assetTypeGroupsList"><wicket:message key="title.asset_type_groups.plural"/></a>
+            </h1>
+            <p><wicket:message key="label.manage_asset_type_groups_msg"/></p>
+        </div>
 
 		<div class="setupOption assetTypes">
 			<h1>

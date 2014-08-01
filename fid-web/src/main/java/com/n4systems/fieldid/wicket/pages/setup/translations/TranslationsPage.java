@@ -90,7 +90,7 @@ abstract public class TranslationsPage<T extends EntityWithTenant> extends Field
     protected void addNavBar(String navBarId) {
         boolean hasTranslatedLanguages = !getTenant().getSettings().getTranslatedLanguages().isEmpty();
         add(new NavigationBar(navBarId,
-                aNavItem().label("title.manage_asset_type_groups.singular").cond(hasTranslatedLanguages).page(AssetTypeGroupTranslationsPage.class).build(),
+                aNavItem().label("title.asset_type_groups.singular").cond(hasTranslatedLanguages).page(AssetTypeGroupTranslationsPage.class).build(),
                 aNavItem().label("title.asset_type").cond(hasTranslatedLanguages).page(AssetTypeTranslationsPage.class).build(),
                 aNavItem().label("label.eventtypegroup").cond(hasTranslatedLanguages).page(EventTypeGroupTranslationsPage.class).build(),
                 aNavItem().label("label.event_type").cond(hasTranslatedLanguages).page(EventTypeTranslationsPage.class).build(),

@@ -57,7 +57,7 @@ ${action.setPageType('setup','setup')!}
 			</p>
 		
 			<p>
-				<label><a href="<@s.url action="assetTypeGroups"/>" ><@s.text name="title.manage_asset_type_groups.plural" /></a></label>
+				<label><a href="<@s.url action="assetTypeGroups"/>" ><@s.text name="title.asset_type_groups.plural" /></a></label>
 				<span>Manage all of your asset type groups.</span>
 			</p>
 			<p>
