@@ -91,12 +91,15 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
             }
 
         });
-        add(new WebMarkupContainer("icon") {
+
+        icon = new WebMarkupContainer("icon") {
             @Override protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
                 tag.put("onClick",String.format("%s.toggleTree()",tree.getJsVariableName()));
             }
-        });
+        };
+
+        add(icon);
         setOutputMarkupPlaceholderTag(true);
     }
 
@@ -182,6 +185,14 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
             parent.setState("open");
             parent = parent.getParent();
         }
+    }
+
+    public void setIconVisible(boolean visible) {
+        icon.setVisible(visible);
+    }
+
+    public void setTextEnabled(boolean enabled) {
+        text.setEnabled(enabled);
     }
 
     @Override
