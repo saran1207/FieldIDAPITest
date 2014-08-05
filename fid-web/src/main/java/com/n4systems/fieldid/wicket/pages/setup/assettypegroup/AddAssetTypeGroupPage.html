@@ -1,0 +1,29 @@
+<html xmlns:wicket="http://wicket.apache.org">
+
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"></div>
+
+    <form wicket:id="addAssetTypeGroupForm" class="crudForm bigForm pageSection layout">
+        <h2><wicket:message key="label.groupdetails"/></h2>
+        <div wicket:id="groupDetailsContainer">
+            <div class="infoSet">
+                <label class="label"><wicket:message key="label.name"/></label>
+                     <span class="fieldHolder">
+                        <input type="text" wicket:id="name"/>
+                    </span>
+            </div>
+        </div>
+
+        <div class="formAction">
+            <input type="submit" wicket:id="saveButton" wicket:message="value:hbutton.save">
+            <wicket:message key="label.or"/>
+            <a wicket:id="cancelLink">
+                <wicket:message key="label.cancel"/>
+            </a>
+        </div>
+
+    </form>
+
+</wicket:extend>
+</html>

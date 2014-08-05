@@ -9,6 +9,7 @@ import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.AssetTypeGroupRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.WhereClauseFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,7 +59,7 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         persistenceService.delete(groupToDelete);
 	}
 
-    public AssetTypeGroup getGroupById(Long id) {
+    public AssetTypeGroup getAssetTypeGroupById(Long id) {
         return persistenceService.find(AssetTypeGroup.class, id);
     }
 
@@ -66,6 +67,12 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         QueryBuilder<AssetTypeGroup> query = createTenantSecurityBuilder(AssetTypeGroup.class);
         query.addOrder("orderIdx");
         return persistenceService.findAll(query);
+    }
+
+    public boolean isNameExists(String name) {
+        QueryBuilder<AssetTypeGroup> query = createTenantSecurityBuilder(AssetTypeGroup.class);
+        query.addWhere(WhereClauseFactory.create("name", name));
+        return persistenceService.exists(query);
     }
 
 }
