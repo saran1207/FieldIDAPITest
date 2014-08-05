@@ -49,6 +49,8 @@ import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListArchivePage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.ReassignEventTypeGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
@@ -145,6 +147,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("publishedListAllPage", PublishedListAllPage.class);
         mountPage("draftListAllPage", DraftListAllPage.class);
         mountPage("previouslyPublishedListAllPage", PreviouslyPublishedListAllPage.class);
+
+        mountPage("eventTypeGroup", EventTypeGroupListPage.class);
+        mountPage("eventTypeGroupArchive", EventTypeGroupListArchivePage.class);
 
         mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
 
