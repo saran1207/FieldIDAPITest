@@ -12,6 +12,8 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import rfid.ejb.entity.InfoFieldBean;
+import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -73,6 +75,23 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         QueryBuilder<AssetTypeGroup> query = createTenantSecurityBuilder(AssetTypeGroup.class);
         query.addWhere(WhereClauseFactory.create("name", name));
         return persistenceService.exists(query);
+    }
+
+    public AssetTypeGroup saveAssetTypeGroup(AssetTypeGroup assetTypeGroup) {
+        AssetTypeGroup oldPI = null;
+        if( assetTypeGroup.getId() != null ) {
+            oldPI = persistenceService.find( AssetTypeGroup.class, assetTypeGroup.getId());
+        }
+
+///        assetTypeGroup.touch();
+        assetTypeGroup = (AssetTypeGroup) persistenceService.saveOrUpdate(assetTypeGroup);
+
+        return assetTypeGroup;
+    }
+
+    public Long getNextAvailableIndex() {
+        QueryBuilder<AssetTypeGroup> query = createTenantSecurityBuilder(AssetTypeGroup.class);
+        return persistenceService.count(query);
     }
 
 }

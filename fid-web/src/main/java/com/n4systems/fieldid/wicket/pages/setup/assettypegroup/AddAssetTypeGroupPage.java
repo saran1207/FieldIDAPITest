@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.wicket.pages.setup.assettypegroup;
 
+import com.n4systems.exceptions.ImageAttachmentException;
 import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -8,10 +10,13 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
+import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.model.AssetTypeGroup;
+import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
@@ -80,7 +85,22 @@ public class AddAssetTypeGroupPage extends FieldIDTemplatePage{
 
         @Override
         protected void onSubmit() {
+            AssetTypeGroup assetTypeGroup = getModelObject();
 
+            if (!isEdit()) {
+                assetTypeGroup.setTenant(getTenant());
+                assetTypeGroup.setOrderIdx(assetTypeGroupService.getNextAvailableIndex());
+            }
+
+            assetTypeGroupService.saveAssetTypeGroup(assetTypeGroup);
+
+            if (isEdit()) {
+                FieldIDSession.get().info(new FIDLabelModel("message.asset_type.edit").getObject());
+            } else {
+                FieldIDSession.get().info(new FIDLabelModel("message.asset_type.add").getObject());
+            }
+
+            setResponsePage(AssetTypeGroupListPage.class);
         }
 
     }
@@ -89,6 +109,11 @@ public class AddAssetTypeGroupPage extends FieldIDTemplatePage{
         AssetTypeGroup assetTypeGroup = new AssetTypeGroup();
         assetTypeGroup.setTenant(getTenant());
         return assetTypeGroup;
+    }
+
+    @Override
+    protected Component createTitleLabel(String labelId) {
+        return new Label(labelId, new FIDLabelModel("title.add_asset_type_group"));
     }
 
     @Override

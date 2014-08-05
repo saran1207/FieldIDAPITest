@@ -70,9 +70,4 @@ public class ViewAssetTypeGroupPage extends FieldIDTemplatePage {
         return pageLink;
     }
 
-
-
-
-
-
 }
