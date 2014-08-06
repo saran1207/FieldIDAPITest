@@ -1,0 +1,24 @@
+<html xmlns:wicket="http://wicket.apache.org">
+
+<wicket:panel>
+    <table class="list">
+        <tbody>
+        <tr>
+            <th><wicket:message key="label.assetstatus" /></th>
+            <th><wicket:message key="label.created" /></th>
+            <th><wicket:message key="label.last_modified" /></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr wicket:id="list">
+            <td><span wicket:id="name" /></td>
+            <td><span wicket:enclosure="createdBy"><label wicket:id="createdBy"/>, </span><label wicket:id="createdDate"/></td>
+            <td><span wicket:enclosure="modifiedBy"><label wicket:id="modifiedBy"/>, </span><label wicket:id="modifiedDate"/></td>
+            <td><span wicket:id="actionCell" /></td>
+        </tr>
+        </tbody>
+    </table>
+    <div wicket:id="noResults">
+        <wicket:message key="label.emptylistassetstatuses"/>
+    </div>
+</wicket:panel>
+</html>

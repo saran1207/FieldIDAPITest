@@ -290,7 +290,7 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         //groupedUserPicker.setNullValid(true);
         groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
-        ownerSection.add(new OrgLocationPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
+        final OrgLocationPicker picker = new OrgLocationPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
             @Override
             protected void onChanged(AjaxRequestTarget target) {
                 target.add(schedulesContainer);
@@ -298,16 +298,58 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
                 locationPicker.setOwner(selectedOrg);
                 target.add(locationPicker);
             }
-        }.withAutoUpdate());
+        }.withAutoUpdate();
+
+        ownerSection.add(picker);
 
         // checkbox
-        CheckBox ownerCheckBox = new CheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "assetOwnerUpdate"));
+        CheckBox ownerCheckBox = new CheckBox("assetOwnerUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "assetOwnerUpdate")){
+            @Override
+            protected void onSelectionChanged(Boolean newSelection)
+            {
+                if(assetOwnerUpdate) {
+                    picker.setEnabled(!assetOwnerUpdate);
+                    picker.setIconVisible(!assetOwnerUpdate);
+                    picker.setTextEnabled(!assetOwnerUpdate);
+                } else {
+                    picker.setEnabled(!assetOwnerUpdate);
+                    picker.setIconVisible(!assetOwnerUpdate);
+                    picker.setTextEnabled(!assetOwnerUpdate);
+                }
+            }
+            @Override
+            protected boolean wantOnSelectionChangedNotifications()
+            {
+                return true;
+            }
+        };
+        picker.setEnabled(false);
+        picker.setIconVisible(false);
+        picker.setTextEnabled(false);
+
         ownerSection.add(ownerCheckBox);
 
         ownerSection.add(locationPicker = new LocationPicker("locationPicker", new PropertyModel<Location>(event, "advancedLocation")).withRelativePosition());
         locationPicker.setOwner(new PropertyModel<BaseOrg>(event, "owner").getObject());
 
-        CheckBox locationCheckBox = new CheckBox("locationUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "locationUpdate"));
+        CheckBox locationCheckBox = new CheckBox("locationUpdate", new PropertyModel<Boolean>(MultiEventPage.this, "locationUpdate")){
+            @Override
+            protected void onSelectionChanged(Boolean newSelection)
+            {
+                if(locationUpdate) {
+                    locationPicker.setEnabled(!locationUpdate);
+                } else {
+                    locationPicker.setEnabled(!locationUpdate);
+                }
+            }
+            @Override
+            protected boolean wantOnSelectionChangedNotifications()
+            {
+                return true;
+            }
+        };
+        locationPicker.setEnabled(false);
+
         ownerSection.add(locationCheckBox);
 
         return ownerSection;

@@ -25,9 +25,11 @@ import com.n4systems.fieldid.wicket.pages.loto.PublishedListAllPage;
 import com.n4systems.fieldid.wicket.pages.org.OrgViewPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
+import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListPage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
@@ -311,8 +313,10 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
 
 	private Component createAssetEventsSubMenu() {
         WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
+        container.add(new BookmarkablePageLink("eventTypeGroups", EventTypeGroupListPage.class));
         container.add(new BookmarkablePageLink("eventStatusListLink", EventStatusListPage.class));
         container.add(new BookmarkablePageLink("assetTypesList", AssetTypeListPage.class));
+        container.add(new BookmarkablePageLink("assetStatusList", AssetStatusListAllPage.class));
         container.add(new BookmarkablePageLink("priorityCodeListLink", PriorityCodePage.class).setVisible(getSecurityGuard().isInspectionsEnabled()));
         container.setVisible(getSessionUser().hasAccess("managesystemconfig"));
         

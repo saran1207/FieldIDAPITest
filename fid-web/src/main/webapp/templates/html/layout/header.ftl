@@ -199,7 +199,7 @@
 										<a href="<@s.url value="/w/setup/assetsEvents" />" ><@s.text name="nav.assets_and_events"/> » </a>
 										<#if sessionUser.hasAccess("managesystemconfig") >
 											<ul class="sub_menu">
-												<li><a href="<@s.url action='eventTypeGroups' namespace='/'/>" ><@s.text name="title.manage_event_type_groups.plural"/></a></li>
+												<li><a href="<@s.url value='/w/eventTypeGroup' namespace='/'/>" ><@s.text name="title.manage_event_type_groups.plural"/></a></li>
 												<li><a href="<@s.url action='eventTypes' namespace='/'/>" ><@s.text name="title.manage_event_types.plural"/></a></li>
                                                 <li><a href="<@s.url value='/w/eventStatusList' namespace='/'/>" ><@s.text name="title.manage_event_status.plural"/></a></li>
 												<li><a href="<@s.url action='eventBooks' namespace='/'/>" ><@s.text name="title.manage_event_books.plural"/></a></li>

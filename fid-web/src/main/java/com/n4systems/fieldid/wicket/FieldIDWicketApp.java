@@ -43,12 +43,16 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedule
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
+import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
+import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListArchivePage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.ReassignEventTypeGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
@@ -121,6 +125,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
         mountPage("setup/procedureApprover", ProcedureApproverPage.class);
         mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
+        mountPage("setup/assetStatusList", AssetStatusListAllPage.class);
+        mountPage("setup/assetStatusArchivedList", AssetStatusListArchivedPage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
@@ -145,6 +151,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("publishedListAllPage", PublishedListAllPage.class);
         mountPage("draftListAllPage", DraftListAllPage.class);
         mountPage("previouslyPublishedListAllPage", PreviouslyPublishedListAllPage.class);
+
+        mountPage("eventTypeGroup", EventTypeGroupListPage.class);
+        mountPage("eventTypeGroupArchive", EventTypeGroupListArchivePage.class);
 
         mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
 
