@@ -43,6 +43,8 @@ import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedule
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
+import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
+import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
@@ -123,6 +125,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
         mountPage("setup/procedureApprover", ProcedureApproverPage.class);
         mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
+        mountPage("setup/assetStatusList", AssetStatusListAllPage.class);
+        mountPage("setup/assetStatusArchivedList", AssetStatusListArchivedPage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListPage;
@@ -17,6 +18,7 @@ public class AssetsAndEventsPage extends SetupPage {
         allOptionsContainer.add(new BookmarkablePageLink("eventTypeGroup", EventTypeGroupListPage.class));
         allOptionsContainer.add(new BookmarkablePageLink("eventStatusList", EventStatusListPage.class));
         allOptionsContainer.add(new BookmarkablePageLink("assetTypesList", AssetTypeListPage.class));
+        allOptionsContainer.add(new BookmarkablePageLink("assetStatusList", AssetStatusListAllPage.class));
 
         WebMarkupContainer priorityCodeListContainer = new WebMarkupContainer("priorityCodeListContainer");
         priorityCodeListContainer.add(new BookmarkablePageLink("priorityCodeList", PriorityCodePage.class));
