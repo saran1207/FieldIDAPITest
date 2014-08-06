@@ -1,11 +1,12 @@
 package com.n4systems.security;
 
+import com.n4systems.model.api.DisplayEnum;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
 
 
-public enum UserType {
+public enum UserType implements DisplayEnum{
 	ALL( "All", PermissionType.allPermissions() ),
 	ADMIN( "Admin", PermissionType.allPermissions() ),
 	SYSTEM( "System", PermissionType.allPermissions() ),
@@ -14,6 +15,8 @@ public enum UserType {
     READONLY( "Reporting" /*no permissions*/ ),
     PERSON("Person" /*no permissions*/),
     USAGE_BASED("Usage Based", PermissionType.CreateEvent, PermissionType.EditEvent);
+
+    public static UserType [] VISIBLE_USER_TYPES= {FULL, LITE, READONLY, PERSON, USAGE_BASED};
 
 	private String label;
 	private final Set<PermissionType> permissionSet = new HashSet<PermissionType>();

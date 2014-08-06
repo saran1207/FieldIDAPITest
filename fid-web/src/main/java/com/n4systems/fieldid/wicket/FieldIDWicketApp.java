@@ -219,6 +219,7 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("searchOpenEventsForJob", SearchOpenEventsForJobPage.class);
 
+        mountPage("usersList", UsersListPage.class);
         mountPage("addPerson", AddPersonPage.class);
         mountPage("editPerson", EditPersonPage.class);
         mountPage("addUsageBasedUser", AddUsageBasedUserPage.class);

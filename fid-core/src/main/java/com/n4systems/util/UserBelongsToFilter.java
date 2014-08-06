@@ -1,6 +1,8 @@
 package com.n4systems.util;
 
-public enum UserBelongsToFilter {
+import com.n4systems.model.api.DisplayEnum;
+
+public enum UserBelongsToFilter implements DisplayEnum{
 	ALL( "All" ),
 	EMPLOYEE( "Employee" ),
 	CUSTOMER( "Customer" );

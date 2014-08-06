@@ -122,7 +122,6 @@ public abstract class UserPage extends FieldIDFrontEndPage {
                 aNavItem().label("nav.view_all_archived").page("archivedUserList.action").params(param("currentPage", 1)).build(),
                 aNavItem().label("nav.add").page("addUser.action").onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
-
         ));
     }
 
