@@ -34,6 +34,7 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
     @Transactional
 	public AssetTypeGroupRemovalSummary testDelete(AssetTypeGroup group) {
 		AssetTypeGroupRemovalSummary summary = new AssetTypeGroupRemovalSummary(group);
+
 		QueryBuilder<AssetType> countQuery = new QueryBuilder<AssetType>(AssetType.class, new OpenSecurityFilter());
 		countQuery.addSimpleWhere("group", group);
         summary.setAssetTypesConnected(persistenceService.count(countQuery));
@@ -65,6 +66,10 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
 
         persistenceService.delete(groupToDelete);
 	}
+
+    public AssetTypeGroupRemovalSummary getRemovalSummary(AssetTypeGroup group) {
+        return testDelete(group);
+    }
 
     public AssetTypeGroup getAssetTypeGroupById(Long id) {
         return persistenceService.find(AssetTypeGroup.class, id);
