@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.service.asset;
 
+import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.search.SavedSearchRemoveFilter;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +27,9 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
 
     @Autowired
     private SavedReportService savedReportService;
+
+    private List<Long> reorderedIdList = new ArrayList<Long>();
+    private List<AssetTypeGroup> groups;
 
     @Transactional
 	public AssetTypeGroupRemovalSummary testDelete(AssetTypeGroup group) {
@@ -82,8 +87,7 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         if( assetTypeGroup.getId() != null ) {
             oldPI = persistenceService.find( AssetTypeGroup.class, assetTypeGroup.getId());
         }
-
-///        assetTypeGroup.touch();
+//        assetTypeGroup.touch();
         assetTypeGroup = (AssetTypeGroup) persistenceService.saveOrUpdate(assetTypeGroup);
 
         return assetTypeGroup;
@@ -93,5 +97,34 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         QueryBuilder<AssetTypeGroup> query = createTenantSecurityBuilder(AssetTypeGroup.class);
         return persistenceService.count(query);
     }
+
+    public String reorderAssetTypeGroup() {
+        List<AssetTypeGroup> reorderedGroupList = new ArrayList<AssetTypeGroup>();
+        for (int i = 0; i < reorderedIdList.size(); i++) {
+            Long id = reorderedIdList.get(i);
+            for (AssetTypeGroup group : getGroups()) {
+                if (group.getId().equals(id)) {
+                    reorderedGroupList.add(group);
+                    getGroups().remove(group);
+                    break;
+                }
+            }
+        }
+        reorderedGroupList.addAll(getGroups());
+        for (int i = 0; i < reorderedGroupList.size(); i++) {
+            AssetTypeGroup group = reorderedGroupList.get(i);
+            group.setOrderIdx(new Long(i));
+        }
+        persistenceService.updateAll(reorderedGroupList, getCurrentUser().getId());
+        return null;
+    }
+
+    public List<AssetTypeGroup> getGroups() {
+        if (groups == null) {
+            groups = getAllAssetTypeGroups();
+        }
+        return groups;
+    }
+
 
 }

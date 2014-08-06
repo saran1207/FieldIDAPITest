@@ -11,6 +11,7 @@ import com.n4systems.model.parents.AbstractEntity;
 import com.n4systems.model.parents.ArchivableEntityWithTenant;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.parents.legacy.LegacyBaseEntity;
+import com.n4systems.model.user.User;
 import com.n4systems.persistence.loaders.Loader;
 import com.n4systems.persistence.savers.Saver;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -26,10 +27,7 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 public class PersistenceService extends FieldIdService {
 
@@ -186,7 +184,17 @@ public class PersistenceService extends FieldIdService {
             return update(entity);
         }
     }
-    
+
+    @Transactional
+    public <T extends AbstractEntity> List<T> updateAll(List<T> entities, Long userId) {
+        List<T> updatedEntities = new ArrayList<T>();
+
+        for (T entity : entities) {
+            updatedEntities.add(update(entity, userId));
+        }
+        return updatedEntities;
+    }
+
     @Transactional
     public <T extends BaseEntity> Long save(T entity) {
         em.persist(entity);
@@ -201,6 +209,20 @@ public class PersistenceService extends FieldIdService {
     @Transactional
     public  Saveable update(Saveable entity) {
         return em.merge(entity);
+    }
+
+    @Transactional
+    public <T extends AbstractEntity> T update(T entity, Long userId) {
+        return update(updateModifiedBy(entity, userId));
+    }
+
+    private <T extends AbstractEntity> T updateModifiedBy(T entity, Long userId) {
+        return updateModifiedBy(entity, find(User.class, userId));
+    }
+
+    private <T extends AbstractEntity> T updateModifiedBy(T entity, User user) {
+        entity.setModifiedBy(user);
+        return entity;
     }
 
     @Transactional
