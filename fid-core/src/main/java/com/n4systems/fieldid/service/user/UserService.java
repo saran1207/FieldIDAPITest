@@ -146,7 +146,7 @@ public class UserService extends FieldIdPersistenceService {
         }
 
         if(criteria.isFilterOnSecondaryOrg()) {
-            builder.addSimpleWhere("owner.secondaryOrg.id", criteria.getOrgFilter());
+            builder.addSimpleWhere("owner.secondaryOrg", criteria.getOrgFilter());
         }
 
         if (criteria.getUserType() != null && criteria.getUserType() != UserType.ALL) {
