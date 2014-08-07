@@ -195,8 +195,8 @@ public class UserService extends FieldIdPersistenceService {
             for (String order : DEFAULT_ORDER) {
                 builder.setOrder(order, criteria.isAscending());
             }
-        }                                                               return builder;
-
+        }
+        return builder;
     }
 
     public User getUser(Long userId) {
