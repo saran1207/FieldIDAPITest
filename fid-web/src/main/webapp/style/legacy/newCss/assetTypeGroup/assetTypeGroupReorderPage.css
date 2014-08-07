@@ -1,0 +1,28 @@
+
+/* Reorder page */
+.drag {
+    cursor: move;
+}
+#reorderGroupList tr {
+    padding: 10px 10px;
+    overflow:hidden;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+#reorderGroupList tr td {
+    float:left;
+    padding: 0px 5px;
+    margin-top: 10px;
+}
+
+#reorderGroupList tr td.drag {
+    margin: 0px;
+}
+
+.imageWidth {
+    width: 15px;
+}
+
+div.formAction {
+    text-align:left;
+}

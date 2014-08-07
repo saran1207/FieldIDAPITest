@@ -4,7 +4,7 @@ import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.DeleteAssetTypeGroupPage;
+import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.ConfirmDeleteAssetTypeGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.EditAssetTypeGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.ViewAssetTypeGroupPage;
 import com.n4systems.model.AssetTypeGroup;
@@ -35,7 +35,7 @@ public class AssetTypeGroupListPanel extends Panel {
     public AssetTypeGroupListPanel(String id) {
         super(id);
 
-        listView = new ListView<AssetTypeGroup>("list", getAssetTypeGroups()) {
+        listView = new ListView<AssetTypeGroup>("assetTypeGroupList", getAssetTypeGroups()) {
             @Override
             protected void populateItem(ListItem<AssetTypeGroup> item) {
 
@@ -52,7 +52,7 @@ public class AssetTypeGroupListPanel extends Panel {
                 item.add(new Label("modifiedBy", new PropertyModel<String>(assetTypeGroup, "modifiedBy.displayName")).setVisible(assetTypeGroup.getModifiedBy() != null));
                 item.add(new Label("modifiedDate", new DayDisplayModel(new PropertyModel<Date>(assetTypeGroup, "modified"), true, timeZone)));
                 item.add(new BookmarkablePageLink<Void>("edit", EditAssetTypeGroupPage.class, PageParametersBuilder.uniqueId(assetTypeGroupId)));
-                item.add(new BookmarkablePageLink<Void>("delete", DeleteAssetTypeGroupPage.class, PageParametersBuilder.uniqueId(assetTypeGroupId)));
+                item.add(new BookmarkablePageLink<Void>("delete", ConfirmDeleteAssetTypeGroupPage.class, PageParametersBuilder.uniqueId(assetTypeGroupId)));
 
             }
         };

@@ -1,0 +1,24 @@
+
+/* Asest Type Groups List Page */
+
+#assetTypeGroupList tr {
+    padding: 10px 10px;
+    overflow:hidden;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+#assetTypeGroupList tr td #nameLink {
+    width: 100px;
+}
+
+#assetTypeGroupList tr td #createdBy {
+    width: 100px;
+}
+
+#assetTypeGroupList tr td #modifiedBy {
+    width: 300px;
+}
+
+#assetTypeGroupList tr td #actionButtons {
+    width: 100px;
+}

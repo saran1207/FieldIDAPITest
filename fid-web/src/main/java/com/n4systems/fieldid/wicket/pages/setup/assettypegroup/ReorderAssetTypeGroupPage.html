@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+
+<wicket:extend>
+
+    <div class="formAction">
+        <form wicket:id="doneReorderForm">
+            <button class="btn-secondary" type="submit" wicket:id="doneReorderButton"><wicket:message key="label.donereordering"/></button>
+        </form>
+    </div>
+
+    <table class="list borders clear">
+        <h2><wicket:message key="label.assettypegroups"/></h2>
+        <tbody>
+        <tr wicket:id="reorderGroupList">
+            <td class="drag imageWidth"><img wicket:id="reorderImage"/></td>
+            <td><label wicket:id="assetTypeGroupName"/></td>
+        </tr>
+        </tbody>
+    </table>
+
+</wicket:extend>
+</html>

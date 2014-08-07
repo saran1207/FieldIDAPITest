@@ -5,7 +5,7 @@
       lang="en">
 <wicket:panel>
 
-    <table class="list">
+    <table class="list borders clear">
         <tbody>
         <tr>
             <th><wicket:message key="label.name"/></th>
@@ -13,7 +13,7 @@
             <th><wicket:message key="label.last_modified"/></th>
             <th>&nbsp;</th>
         </tr>
-        <tr wicket:id="list">
+        <tr wicket:id="assetTypeGroupList">
             <td><a wicket:id="nameLink"><span wicket:id="name"/></a></td>
             <td><span wicket:enclosure="createdBy"><label wicket:id="createdBy"/>, </span><label wicket:id="createdDate"/></td>
             <td><span wicket:enclosure="modifiedBy"><label wicket:id="modifiedBy"/>, </span><label wicket:id="modifiedDate"/></td>
