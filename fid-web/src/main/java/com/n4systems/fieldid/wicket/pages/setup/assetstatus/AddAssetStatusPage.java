@@ -5,18 +5,15 @@ import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.setup.assetstatus.AssetStatusUniqueNameValidator;
-import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
-import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AssetStatus;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
@@ -25,7 +22,6 @@ import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import static ch.lambdaj.Lambda.on;
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
 /**
@@ -49,8 +45,6 @@ public class AddAssetStatusPage extends FieldIDTemplatePage {
      */
     public AddAssetStatusPage(PageParameters params) {
         thisStatus = Model.of(getAssetStatus(params));
-
-        add(new AssetStatusEditForm("editOrAddAssetForm", thisStatus));
 
         Form<Void> form = new Form<Void>("form") {
             /**
@@ -153,48 +147,6 @@ public class AddAssetStatusPage extends FieldIDTemplatePage {
                                   .build()
                 )
         );
-    }
-
-    /**
-     * This is the Form used for editing the Asset Status.
-     */
-    private class AssetStatusEditForm extends Form<AssetStatus> {
-        /**
-         * Initialize the AssetStatus form and build all of the components.
-         *
-         * @param id - The Wicket ID of the AssetStatus form.
-         * @param assetStatus - An AssetStatus IModel to be edited or created.
-         */
-        public AssetStatusEditForm(String id, IModel<AssetStatus> assetStatus) {
-            super(id, assetStatus);
-
-            add(new LabelledTextField<String>("displayNameField",
-                                              "label.name",
-                                              ProxyModel.of(thisStatus,
-                                                            on(AssetStatus.class).getName())).required());
-
-
-            add(new SubmitLink("save"));
-            add(new BookmarkablePageLink("cancel", AssetStatusListAllPage.class));
-        }
-
-        /**
-         * Create custom onSubmit behaviour to save or update the AssetStatus then provide a confirmation message
-         * to the user.
-         */
-        @Override
-        public void onSubmit() {
-            if(isEdit()) {
-                assetStatusService.update(thisStatus.getObject(), getCurrentUser());
-            } else {
-                assetStatusService.saveAssetStatus(thisStatus.getObject(), getCurrentUser());
-            }
-
-            AssetStatusListAllPage nextPage = new AssetStatusListAllPage();
-            nextPage.info(new FIDLabelModel("message.saved_asset_status",
-                                            thisStatus.getObject().getDisplayName()).getObject());
-            setResponsePage(nextPage);
-        }
     }
 
     /**
