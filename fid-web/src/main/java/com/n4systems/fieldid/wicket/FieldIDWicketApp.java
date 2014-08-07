@@ -128,6 +128,13 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/assetStatusList", AssetStatusListAllPage.class);
         mountPage("setup/assetStatusArchivedList", AssetStatusListArchivedPage.class);
 
+        mountPage("setup/usersList", UsersListPage.class);
+        mountPage("setup/archivedUsersList", ArchivedUsersListPage.class);
+        mountPage("setup/addPerson", AddPersonPage.class);
+        mountPage("setup/editPerson", EditPersonPage.class);
+        mountPage("setup/addUsageBasedUser", AddUsageBasedUserPage.class);
+        mountPage("setup/editUsageBasedUser", EditUsageBasedUserPage.class);
+
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
         mountPage("placeEvents", PlaceEventsPage.class);
@@ -218,13 +225,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("viewActionsList", ViewActionsListPage.class);
 
         mountPage("searchOpenEventsForJob", SearchOpenEventsForJobPage.class);
-
-        mountPage("usersList", UsersListPage.class);
-        mountPage("archivedUsersList", ArchivedUsersListPage.class);
-        mountPage("addPerson", AddPersonPage.class);
-        mountPage("editPerson", EditPersonPage.class);
-        mountPage("addUsageBasedUser", AddUsageBasedUserPage.class);
-        mountPage("editUsageBasedUser", EditUsageBasedUserPage.class);
 
         mountPage("procedureWaitingApprovals", ProcedureWaitingApprovalsPage.class);
         mountPage("procedureRejected", ProcedureRejectedPage.class);

@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
-import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
 public class EditPersonPage extends UserPage{
@@ -34,8 +33,8 @@ public class EditPersonPage extends UserPage{
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page("userList.action").build(),
-                aNavItem().label("nav.view_all_archived").page("archivedUserList.action").params(param("currentPage", 1)).build(),
+                aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
+                aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.view").page("viewUser.action").params(uniqueId(user.getObject().getId())).build(),
                 aNavItem().label("nav.edit").page(EditPersonPage.class).params(uniqueId(user.getObject().getId())).build(),
                 aNavItem().label("nav.add").page("addUser.action").onRight().build(),

@@ -23,7 +23,7 @@ ${action.setPageType('setup','setup')!}
 			
 		<#if sessionUser.hasAccess("managesystemusers") == true >
 			<p>
-				<label><a href="<@s.url action="userList"/>" ><@s.text name="title.manage_users.plural" /></a></label>
+				<label><a href="/fieldid/w/setup/usersList" ><@s.text name="title.manage_users.plural" /></a></label>
 				<span >View and setup all of your users in Field ID.</span>
 			</p>
 			<#if userLimitService.readOnlyUsersEnabled>

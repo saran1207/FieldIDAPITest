@@ -36,6 +36,7 @@ import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
@@ -63,30 +64,43 @@ public class UsersListPage extends FieldIDTemplatePage {
     public UsersListPage() {
        filterCriteriaModel = getUserListFilterCriteria();
        dataProvider = new UsersDataProvider(filterCriteriaModel.getObject());
+    }
 
-       add(filterForm = new Form<UserListFilterCriteria>("filterForm", filterCriteriaModel));
-       filterForm.add(new TextField<String>("nameFilter", new PropertyModel<String>(filterCriteriaModel, "nameFilter")));
-       filterForm.add(new FidDropDownChoice<UserBelongsToFilter>("userBelongsToFilter",
-               new PropertyModel<UserBelongsToFilter>(filterCriteriaModel, "userBelongsToFilter"),
-               Lists.newArrayList(UserBelongsToFilter.values()),
-               new DisplayEnumChoiceRenderer()));
-       filterForm.add(new FidDropDownChoice<UserType>("userTypeFilter",
-               new PropertyModel<UserType>(filterCriteriaModel, "userType"),
-               Lists.newArrayList(UserType.VISIBLE_USER_TYPES),
-               new DisplayEnumChoiceRenderer())
-               .setNullValid(true));
-       filterForm.add(new FidDropDownChoice<UserGroup>("userGroupFilter",
-               new PropertyModel<UserGroup>(filterCriteriaModel, "groupFilter"),
-               userGroupService.getActiveUserGroups(),
-               new ListableChoiceRenderer<UserGroup>())
-               .setNullValid(true));
-       filterForm.add(new FidDropDownChoice<InternalOrg>("orgFilter",
-               new PropertyModel<InternalOrg>(filterCriteriaModel, "orgFilter"),
-               orgService.getInternalOrgs(),
-               new ListableChoiceRenderer<InternalOrg>())
-               .setNullValid(true));
+    public UsersListPage(PageParameters params) {
+        filterCriteriaModel = getUserListFilterCriteria();
 
-       filterForm.add(new AjaxSubmitLink("filter") {
+        Long userGroupId = params.get("userGroupFilter").toLong();
+        UserGroup userGroupFilter = userGroupService.getUserGroup(userGroupId);
+        dataProvider = new UsersDataProvider(filterCriteriaModel.getObject().withUserGroup(userGroupFilter));
+    }
+
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+
+        add(filterForm = new Form<UserListFilterCriteria>("filterForm", filterCriteriaModel));
+        filterForm.add(new TextField<String>("nameFilter", new PropertyModel<String>(filterCriteriaModel, "nameFilter")));
+        filterForm.add(new FidDropDownChoice<UserBelongsToFilter>("userBelongsToFilter",
+                new PropertyModel<UserBelongsToFilter>(filterCriteriaModel, "userBelongsToFilter"),
+                Lists.newArrayList(UserBelongsToFilter.values()),
+                new DisplayEnumChoiceRenderer()));
+        filterForm.add(new FidDropDownChoice<UserType>("userTypeFilter",
+                new PropertyModel<UserType>(filterCriteriaModel, "userType"),
+                Lists.newArrayList(UserType.VISIBLE_USER_TYPES),
+                new DisplayEnumChoiceRenderer())
+                .setNullValid(true));
+        filterForm.add(new FidDropDownChoice<UserGroup>("userGroupFilter",
+                new PropertyModel<UserGroup>(filterCriteriaModel, "groupFilter"),
+                userGroupService.getActiveUserGroups(),
+                new ListableChoiceRenderer<UserGroup>())
+                .setNullValid(true));
+        filterForm.add(new FidDropDownChoice<InternalOrg>("orgFilter",
+                new PropertyModel<InternalOrg>(filterCriteriaModel, "orgFilter"),
+                orgService.getInternalOrgs(),
+                new ListableChoiceRenderer<InternalOrg>())
+                .setNullValid(true));
+
+        filterForm.add(new AjaxSubmitLink("filter") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 target.add(usersListContainer);
@@ -94,9 +108,9 @@ public class UsersListPage extends FieldIDTemplatePage {
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {}
-       });
+        });
 
-       filterForm.add(new AjaxSubmitLink("clear") {
+        filterForm.add(new AjaxSubmitLink("clear") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 filterCriteriaModel.getObject().reset();
@@ -105,11 +119,11 @@ public class UsersListPage extends FieldIDTemplatePage {
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {}
-       });
+        });
 
-       add(usersListContainer = new WebMarkupContainer("usersListContainer"));
-       usersListContainer.setOutputMarkupId(true);
-       usersListContainer.add(new SimpleDefaultDataTable<User>("users", getUserTableColumns(), dataProvider, PAGE_SIZE));
+        add(usersListContainer = new WebMarkupContainer("usersListContainer"));
+        usersListContainer.setOutputMarkupId(true);
+        usersListContainer.add(new SimpleDefaultDataTable<User>("users", getUserTableColumns(), dataProvider, PAGE_SIZE));
     }
 
     protected Model<UserListFilterCriteria> getUserListFilterCriteria() {

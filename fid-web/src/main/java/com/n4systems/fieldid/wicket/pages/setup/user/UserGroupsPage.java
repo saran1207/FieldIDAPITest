@@ -6,13 +6,13 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.TextFieldHintBehavior;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.MattBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
+import com.n4systems.fieldid.wicket.pages.user.UsersListPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.user.UserGroup;
@@ -85,7 +85,7 @@ public class UserGroupsPage extends FieldIDFrontEndPage {
                 item.add(nameLabel.setOutputMarkupPlaceholderTag(true));
                 item.add(new Label("groupId", ProxyModel.of(item.getModel(), on(UserGroup.class).getGroupId())));
 
-                NonWicketLink linkToUsersList = new NonWicketLink("linkToUsersListPage", "userList.action?userGroupFilter="+item.getModelObject().getId());
+                BookmarkablePageLink<UsersListPage> linkToUsersList = new BookmarkablePageLink<UsersListPage>("linkToUsersListPage", UsersListPage.class, PageParametersBuilder.param("userGroupFilter", item.getModelObject().getId()));
                 linkToUsersList.add(new Label("members", String.valueOf(userGroupService.getUsersInGroup(item.getModelObject().getId()).size())));
                 item.add(linkToUsersList);
 

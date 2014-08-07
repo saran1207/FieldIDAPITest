@@ -5,8 +5,8 @@
 </head>
 
 <div class="viewLinks">
-    <a class="mattButtonLeft" href="<@s.url action='userList'/>"><@s.text name="nav.view_all"/></a>
-    <a class="mattButtonRight" href="<@s.url action='archivedUserList'/>"><@s.text name="nav.archived"/></a>
+    <a class="mattButtonLeft" href="/fieldid/w/setup/usersList"><@s.text name="nav.view_all"/></a>
+    <a class="mattButtonRight" href="/fieldid/w/setup/archivedUsersList"><@s.text name="nav.archived"/></a>
     <a class="mattButton padLeft" href="<@s.url action='userImportExport'/>"><@s.text name="nav.import"/></a>
 </div>
 
