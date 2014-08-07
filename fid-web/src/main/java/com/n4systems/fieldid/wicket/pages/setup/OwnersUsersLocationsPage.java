@@ -3,7 +3,7 @@ package com.n4systems.fieldid.wicket.pages.setup;
 import com.n4systems.fieldid.service.user.UserLimitService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
-import com.n4systems.fieldid.wicket.pages.user.UsersListPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
 import com.n4systems.model.ExtendedFeature;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;

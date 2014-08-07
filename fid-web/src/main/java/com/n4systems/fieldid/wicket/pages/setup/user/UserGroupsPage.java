@@ -12,7 +12,6 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
-import com.n4systems.fieldid.wicket.pages.user.UsersListPage;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.user.UserGroup;

@@ -2,8 +2,8 @@ package com.n4systems.fieldid.wicket.components.user.columns;
 
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.user.EditPersonPage;
-import com.n4systems.fieldid.wicket.pages.user.EditUsageBasedUserPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.EditPersonPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.EditUsageBasedUserPage;
 import com.n4systems.model.user.User;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;

@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.user;
+package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;

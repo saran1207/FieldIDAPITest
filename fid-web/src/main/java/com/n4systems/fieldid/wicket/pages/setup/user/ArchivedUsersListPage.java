@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.user;
+package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.user.UserListFilterCriteria;
