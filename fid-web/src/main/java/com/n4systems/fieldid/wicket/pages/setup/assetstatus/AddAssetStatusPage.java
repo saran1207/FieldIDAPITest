@@ -7,14 +7,11 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.setup.assetstatus.AssetStatusUniqueNameValidator;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusUniqueNameValidator;
 import com.n4systems.fieldid.wicket.util.ProxyModel;
 import com.n4systems.model.AssetStatus;
 import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -38,7 +35,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
  *
  * Created by Jordan Heath on 05/08/14.
  */
-public class AddAssetStatusPage extends FieldIDFrontEndPage {
+public class AddAssetStatusPage extends FieldIDTemplatePage {
 
     @SpringBean
     protected AssetStatusService assetStatusService;
