@@ -23,6 +23,9 @@ public class UsersListActionCell extends Panel {
             add(new NonWicketLink("edit", "liteUserEdit.action?uniqueID=" + user.getId(), new AttributeModifier("class", "btn-secondary")));
             add(new NonWicketLink("archive", "liteUserArchive.action?uniqueID=" + user.getId()));
         } else if(user.isReadOnly()) {
+            add(new NonWicketLink("edit", "readOnlyUserEdit.action?uniqueID=" + user.getId(), new AttributeModifier("class", "btn-secondary")));
+            add(new NonWicketLink("archive", "readOnlyUserArchive.action?uniqueID=" + user.getId()));
+        } else if(user.isPerson()) {
             add(new BookmarkablePageLink<EditPersonPage>("edit", EditPersonPage.class, PageParametersBuilder.uniqueId(user.getId())));
             add(new NonWicketLink("archive", "personArchive.action?uniqueID=" + user.getId()));
         } else if(user.isUsageBasedUser()) {

@@ -112,7 +112,7 @@ public class UserService extends FieldIdPersistenceService {
     }
 
     private QueryBuilder<User> createUserQueryBuilder(boolean registered, boolean includeSystem) {
-        UserListFilterCriteria criteria = new UserListFilterCriteria();
+        UserListFilterCriteria criteria = new UserListFilterCriteria(false);
         if(registered)
             criteria.withRegistered();
         if(includeSystem)
@@ -121,7 +121,7 @@ public class UserService extends FieldIdPersistenceService {
     }
 
     private QueryBuilder<User> createUserQueryBuilder(UserListFilterCriteria criteria) {
-        QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
+        QueryBuilder<User> builder = createUserSecurityBuilder(User.class, criteria.isArchivedOnly());
 
         if (criteria.isRegistered()) {
             UserQueryHelper.applyRegisteredFilter(builder);

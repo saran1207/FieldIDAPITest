@@ -18,11 +18,15 @@ public class UserListFilterCriteria implements Serializable {
     private UserType userType = UserType.ALL;
     private UserBelongsToFilter userBelongsToFilter = UserBelongsToFilter.ALL;
     private String nameFilter;
-    private boolean archivedOnly = false;
+    private boolean archivedOnly;
     private String order = "";
     private boolean ascending = true;
     private boolean registered = false;
     private boolean includeSystem = false;
+
+    public UserListFilterCriteria(boolean archivedOnly) {
+        this.archivedOnly = archivedOnly;
+    }
 
     public UserListFilterCriteria withOwner(BaseOrg owner) {
         this.owner = owner;
@@ -137,17 +141,16 @@ public class UserListFilterCriteria implements Serializable {
     }
 
     public void reset() {
-        owner = null;
-        customer = null;
-        orgFilter = null;
-        groupFilter = null;
-        userType = UserType.ALL;
-        userBelongsToFilter = UserBelongsToFilter.ALL;
-        nameFilter = null;
-        archivedOnly = false;
-        order = "";
-        ascending = true;
-        registered = false;
-        includeSystem = false;
+        this.owner = null;
+        this.customer = null;
+        this.orgFilter = null;
+        this.groupFilter = null;
+        this.userType = UserType.ALL;
+        this.userBelongsToFilter = UserBelongsToFilter.ALL;
+        this.nameFilter = null;
+        this.order = "";
+        this.ascending = true;
+        this.registered = false;
+        this.includeSystem = false;
     }
 }

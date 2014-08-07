@@ -41,7 +41,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.List;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
-import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 
 public class UsersListPage extends FieldIDTemplatePage {
 
@@ -62,7 +61,7 @@ public class UsersListPage extends FieldIDTemplatePage {
     private Form filterForm;
 
     public UsersListPage() {
-       filterCriteriaModel = Model.of(new UserListFilterCriteria());
+       filterCriteriaModel = getUserListFilterCriteria();
        dataProvider = new UsersDataProvider(filterCriteriaModel.getObject());
 
        add(filterForm = new Form<UserListFilterCriteria>("filterForm", filterCriteriaModel));
@@ -113,8 +112,11 @@ public class UsersListPage extends FieldIDTemplatePage {
        usersListContainer.add(new SimpleDefaultDataTable<User>("users", getUserTableColumns(), dataProvider, PAGE_SIZE));
     }
 
+    protected Model<UserListFilterCriteria> getUserListFilterCriteria() {
+        return Model.of(new UserListFilterCriteria(false));
+    }
 
-    public List<IColumn<User>> getUserTableColumns() {
+    protected List<IColumn<User>> getUserTableColumns() {
         List<IColumn<User>> columns = Lists.newArrayList();
 
         columns.add(new UserNameLinkColumn(new FIDLabelModel("label.name_first_last"), "firstName, lastName"));
@@ -145,7 +147,7 @@ public class UsersListPage extends FieldIDTemplatePage {
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
-                aNavItem().label("nav.view_all_archived").page("archivedUserList.action").params(param("currentPage", 1)).build(),
+                aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.add").page("addUser.action").onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));
