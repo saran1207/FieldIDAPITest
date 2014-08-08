@@ -19,7 +19,7 @@ ${action.setPageType('setup','ownersUsersLocations')!}
 	
 	<#if sessionUser.hasAccess("managesystemusers") >
 		<div class="setupOption users">
-			<h1><a href="<@s.url action="userList"/>" ><@s.text name="title.manage_users.plural" /></a></h1>
+			<h1><<a href="/fieldid/w/setup/usersList" ><@s.text name="title.manage_users.plural" /></a></h1>
 			<p><@s.text name='label.manage_users_msg' /></p>
 		</div>
 		

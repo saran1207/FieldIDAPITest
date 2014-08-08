@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
 import com.n4systems.services.signature.SignatureService;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class EventCriteriaEditService extends FieldIdPersistenceService {
             ((SignatureCriteriaResult)realResult).setTemporaryFileId(((SignatureCriteriaResult)result).getTemporaryFileId());
             if (((SignatureCriteriaResult) realResult).isSigned() && (((SignatureCriteriaResult) realResult).getImage() != null || ((SignatureCriteriaResult) realResult).getTemporaryFileId() != null)) {
                 try {
-                    new SignatureService().storeSignatureFileFor((SignatureCriteriaResult) realResult);
+                    SignatureService.getSignatureService().storeSignatureFileFor((SignatureCriteriaResult) realResult);
                 } catch (Exception e) {
                     logger.error("Error saving signature", e);
                 }

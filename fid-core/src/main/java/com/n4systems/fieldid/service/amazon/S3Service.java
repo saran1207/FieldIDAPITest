@@ -1,7 +1,11 @@
 package com.n4systems.fieldid.service.amazon;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.HttpMethod;
+import com.amazonaws.Protocol;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
@@ -11,6 +15,7 @@ import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.fieldid.version.FieldIdVersion;
 import com.n4systems.model.Attachment;
 import com.n4systems.model.FileAttachment;
+import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.ThingEventProofTest;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
@@ -21,6 +26,7 @@ import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.ConfigService;
+import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ContentTypeUtil;
 import org.apache.commons.io.FileUtils;
@@ -33,10 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.net.URL;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.util.Assert;
 import sun.misc.BASE64Encoder;
@@ -60,6 +63,8 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String CRITERIA_RESULT_IMAGE_PATH_ORIG = "/events/%d/criteria_results/%d/criteria_images/%s";
     public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
+
+    public static final String EVENT_SIGNATURE_PATH = "/events/%d/criteria_results/%d/signature.png";
 
     public static final String CRITERIA_RESULT_IMAGE_TEMP = "/temp_criteria_result_images/%s";
     public static final String CRITERIA_RESULT_THUMB_IMAGE_TEMP = "/temp_criteria_result_images/%s.thumbnail";
@@ -746,6 +751,86 @@ public class S3Service extends FieldIdPersistenceService {
     protected String getBucketHostname() {
         String bucketHostname = configService.getString(ConfigEntry.AMAZON_S3_BUCKET) + "." + configService.getString(ConfigEntry.AMAZON_S3_SERVER_HOSTNAME);
         return bucketHostname;
+    }
+
+    public String getEventSignaturePath(SignatureCriteriaResult signatureResult){
+        String eventSignaturePath = getEventSignaturePath(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+        return eventSignaturePath;
+    }
+
+    public String getEventSignaturePath(Long tenantId, Long eventId, Long criteriaId){
+        String resourcePath = createResourcePath(tenantId, EVENT_SIGNATURE_PATH, eventId, criteriaId);
+        return resourcePath;
+    }
+
+    public URL getEventSignatureUrl(SignatureCriteriaResult signatureResult){
+        URL eventSignatureUrl = getEventSignatureUrl(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+        return eventSignatureUrl;
+    }
+
+    public URL getEventSignatureUrl(Long tenantId, Long eventId, Long criteriaId){
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+        String resourcePath = getEventSignaturePath(tenantId, eventId, criteriaId);
+        URL url = generatePresignedUrl(resourcePath, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public File downloadEventSignature(SignatureCriteriaResult signatureResult){
+        return downloadEventSignature(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+    }
+
+    public File downloadEventSignature(Long tenantId, Long eventId, Long criteriaId){
+        File eventSignatureFile = null;
+        try {
+            byte[] eventSignatureBytes = downloadEventSignatureBytes(tenantId, eventId, criteriaId);
+            eventSignatureFile = SignatureService.getTemporarySignatureFile(tenantId, UUID.randomUUID().toString());
+            FileOutputStream eventSignatureFos = new FileOutputStream(eventSignatureFile);
+            eventSignatureFos.write(eventSignatureBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp signature file at: " + eventSignatureFile, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download event signature from S3", e);
+        }
+        return eventSignatureFile;
+    }
+
+    public void uploadEventSignature(File eventSignatureFile, SignatureCriteriaResult signatureResult){
+        uploadEventSignature(eventSignatureFile, signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+    }
+
+    public void uploadEventSignature(File eventSignatureFile, Long tenantId, Long eventId, Long criteriaId){
+        uploadResource(eventSignatureFile, tenantId, EVENT_SIGNATURE_PATH, eventId, criteriaId);
+    }
+
+    public void uploadEventSignatureData(byte[] eventSignatureData, SignatureCriteriaResult signatureResult){
+        String eventSignatureFileName = EVENT_SIGNATURE_PATH.substring(EVENT_SIGNATURE_PATH.lastIndexOf('/') + 1);
+        String contentType = ContentTypeUtil.getContentType(eventSignatureFileName);
+        uploadEventSignatureData(eventSignatureData, contentType, signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+    }
+
+    public void uploadEventSignatureData(byte[] eventSignatureData, String contentType, Long tenantId, Long eventId, Long criteriaId){
+        uploadResource(eventSignatureData, contentType, tenantId, EVENT_SIGNATURE_PATH, eventId, criteriaId);
+    }
+
+    public byte[] downloadEventSignatureBytes(SignatureCriteriaResult signatureResult) throws IOException {
+        //the attachment Filename field is overloaded to house full URL instead of just the filename
+        byte[] eventSignatureData = downloadEventSignatureBytes(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+        return eventSignatureData;
+    }
+
+    public byte[] downloadEventSignatureBytes(Long tenantId, Long eventId, Long criteriaId) throws IOException {
+        return downloadResource(tenantId, EVENT_SIGNATURE_PATH, eventId, criteriaId);
+    }
+
+    public boolean eventSignatureExists(SignatureCriteriaResult signatureResult){
+        return eventSignatureExists(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+    }
+
+    public boolean eventSignatureExists(Long tenantId, Long eventId, Long criteriaId){
+        boolean exists = resourceExists(tenantId, EVENT_SIGNATURE_PATH, eventId, criteriaId);
+        return exists;
     }
 
     public String getAssetAttachmentPath(AssetAttachment assetAttachment){

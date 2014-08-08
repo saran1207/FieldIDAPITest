@@ -61,11 +61,9 @@ import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.*;
-import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
-import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.*;
 import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
-import com.n4systems.fieldid.wicket.pages.user.*;
 import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
@@ -127,6 +125,13 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
         mountPage("setup/assetStatusList", AssetStatusListAllPage.class);
         mountPage("setup/assetStatusArchivedList", AssetStatusListArchivedPage.class);
+
+        mountPage("setup/usersList", UsersListPage.class);
+        mountPage("setup/archivedUsersList", ArchivedUsersListPage.class);
+        mountPage("setup/addPerson", AddPersonPage.class);
+        mountPage("setup/editPerson", EditPersonPage.class);
+        mountPage("setup/addUsageBasedUser", AddUsageBasedUserPage.class);
+        mountPage("setup/editUsageBasedUser", EditUsageBasedUserPage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
@@ -218,11 +223,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("viewActionsList", ViewActionsListPage.class);
 
         mountPage("searchOpenEventsForJob", SearchOpenEventsForJobPage.class);
-
-        mountPage("addPerson", AddPersonPage.class);
-        mountPage("editPerson", EditPersonPage.class);
-        mountPage("addUsageBasedUser", AddUsageBasedUserPage.class);
-        mountPage("editUsageBasedUser", EditUsageBasedUserPage.class);
 
         mountPage("procedureWaitingApprovals", ProcedureWaitingApprovalsPage.class);
         mountPage("procedureRejected", ProcedureRejectedPage.class);

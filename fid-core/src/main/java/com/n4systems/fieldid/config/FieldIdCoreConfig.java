@@ -81,6 +81,7 @@ import com.n4systems.services.search.parser.*;
 import com.n4systems.services.search.writer.AssetIndexWriter;
 import com.n4systems.services.search.writer.CriteriaTrendsIndexWriter;
 import com.n4systems.services.search.writer.EventIndexWriter;
+import com.n4systems.services.signature.SignatureService;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
@@ -524,6 +525,11 @@ public class FieldIdCoreConfig {
     @Bean
     public S3Service s3Service() {
         return new S3Service();
+    }
+
+    @Bean
+    public SignatureService signatureService() {
+        return new SignatureService();
     }
 
 	@Bean

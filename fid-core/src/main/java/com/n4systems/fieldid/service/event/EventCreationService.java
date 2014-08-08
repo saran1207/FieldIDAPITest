@@ -35,6 +35,7 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     @Autowired protected TenantSettingsService tenantSettingsService;
     @Autowired protected EventScheduleService eventScheduleService;
     @Autowired protected EventService eventService;
+    @Autowired protected SignatureService signatureService;
 
     @Transactional
     public T createEventWithSchedules(T event, Long scheduleId, FileDataContainer fileData, List<FileAttachment> uploadedFiles, List<EventScheduleBundle<V>> schedules) {
@@ -251,11 +252,10 @@ public abstract class EventCreationService<T extends Event<?,?,?>, V extends Ent
     }
 
     private void writeSignatureImagesToDisk(T event) {
-        SignatureService sigService = new SignatureService();
 
-        writeSignatureImagesFor(sigService, event.getResults());
+        writeSignatureImagesFor(signatureService, event.getResults());
         for (SubEvent subEvent : event.getSubEvents()) {
-            writeSignatureImagesFor(sigService, subEvent.getResults());
+            writeSignatureImagesFor(signatureService, subEvent.getResults());
         }
     }
 

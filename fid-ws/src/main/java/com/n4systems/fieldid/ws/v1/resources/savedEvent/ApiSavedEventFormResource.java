@@ -22,7 +22,7 @@ public class ApiSavedEventFormResource extends FieldIdPersistenceService{
 	private static Logger logger = Logger.getLogger(ApiSavedEventFormResource.class);
 	
 	@Autowired private ApiEventTypeResource eventTypeResource;
-	private SignatureService signatureService = new SignatureService();
+    @Autowired private SignatureService signatureService;
 
 	public ApiEventForm convertToApiEventForm(AbstractEvent event) {
 		if(event.getEventForm() != null) {

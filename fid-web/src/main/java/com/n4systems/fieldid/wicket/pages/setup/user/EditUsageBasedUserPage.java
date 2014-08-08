@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.user;
+package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.actions.users.UploadedImage;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -14,7 +14,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import java.io.File;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
-import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
 public class EditUsageBasedUserPage extends UserPage {
@@ -80,8 +79,8 @@ public class EditUsageBasedUserPage extends UserPage {
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page("userList.action").build(),
-                aNavItem().label("nav.view_all_archived").page("archivedUserList.action").params(param("currentPage", 1)).build(),
+                aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
+                aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.view").page("viewUser.action").params(uniqueId(user.getObject().getId())).build(),
                 aNavItem().label("nav.edit").page(EditUsageBasedUserPage.class).params(uniqueId(user.getObject().getId())).build(),
                 aNavItem().label("nav.add").page("addUser.action").onRight().build(),

@@ -174,7 +174,9 @@
                             <a wicket:id="ownersUsersLocLink"><wicket:message key="nav.owners_users_loc"/></a>
                             <ul wicket:id="ownersSubMenuContainer">
                                 <li wicket:id="manageCustomersContainer"><a href="/fieldid/customerList.action" ><wicket:message key="label.customers"/></a></li>
-                                <li wicket:id="manageUsersContainer"><a href="/fieldid/userList.action"><wicket:message key="label.users"/></a></li>
+                                <wicket:enclosure>
+                                    <li><a wicket:id="manageUsersLink"><wicket:message key="label.users"/></a></li>
+                                </wicket:enclosure>
                                 <wicket:enclosure>
                                     <li><a wicket:id="userGroupsLink"><wicket:message key="label.user_groups"/></a></li>
                                 </wicket:enclosure>

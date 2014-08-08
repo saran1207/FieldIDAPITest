@@ -23,7 +23,7 @@ public class TemporarySignatureResource extends DynamicImageResource {
         }
 
         try {
-            return new SignatureService().loadSignatureImage(tenant.getId(), fileId);
+            return SignatureService.getSignatureService().loadSignatureImage(tenant.getId(), fileId);
         } catch (IOException e) {
             logger.info("error loading signature for resource", e);
             return null;

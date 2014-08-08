@@ -4,9 +4,9 @@ import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.model.EventStatus;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -38,9 +38,7 @@ public class EventStatusFormPage extends EventStatusPage{
         form.add(name = new RequiredTextField<String>("name", new PropertyModel<String>(eventStatusModel.getObject(), "name")));
         name.add(new EventStatusUniqueNameValidator(eventStatus.getId()));
 
-        Button submitButton;
-        form.add(submitButton = new Button("saveButton"));
-        submitButton.setOutputMarkupId(true);
+        form.add(new SubmitLink("saveLink"));
         form.add(new Link("cancelLink") {
             @Override
             public void onClick() {
