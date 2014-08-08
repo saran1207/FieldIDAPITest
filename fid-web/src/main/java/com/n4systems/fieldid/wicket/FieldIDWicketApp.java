@@ -47,6 +47,10 @@ import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPa
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.AddEventBookPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EditEventBookPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
@@ -124,6 +128,11 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/procedureApprover", ProcedureApproverPage.class);
         mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
         mountPage("setup/assetStatusList", AssetStatusListAllPage.class);
+        mountPage("setup/eventBooksList", EventBooksListAllPage.class);
+        mountPage("setup/addEventBook", AddEventBookPage.class);
+        mountPage("setup/editEventBook", EditEventBookPage.class);
+        mountPage("setup/eventBooksArchivedList", EventBooksListArchivedPage.class);
+
         mountPage("setup/assetStatusArchivedList", AssetStatusListArchivedPage.class);
 
         mountPage("setup/usersList", UsersListPage.class);

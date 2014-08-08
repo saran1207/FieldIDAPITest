@@ -154,7 +154,7 @@ public class AddAssetStatusPage extends FieldIDTemplatePage {
      *
      * If you extend this page, you can override this method to return a new value.
      *
-     * @return
+     * @return A boolean value indicating whether or not the page is in "Edit" mode.
      */
     public boolean isEdit() {
         return false;
