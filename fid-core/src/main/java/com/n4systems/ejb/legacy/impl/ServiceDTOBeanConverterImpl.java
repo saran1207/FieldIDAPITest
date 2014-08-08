@@ -69,8 +69,8 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 //	private IdentifierCounter identifierCounter;
 
 	
-	
-	
+
+
 	public ServiceDTOBeanConverterImpl(){}
 	
 	public ServiceDTOBeanConverterImpl(EntityManager em) {
@@ -752,7 +752,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			if (sigCriteria.isSigned()) {
 				byte[] signatureImage;
 				try {
-					signatureImage = new SignatureService().loadSignatureImage(criteriaResult.getTenant(), criteriaResult.getEvent().getId(), criteriaResult.getCriteria().getId());
+					signatureImage = SignatureService.getSignatureService().loadSignatureImage(criteriaResult.getTenant(), criteriaResult.getEvent().getId(), criteriaResult.getCriteria().getId());
 					criteriaResultServiceDTO.setSignatureImage(signatureImage);
 				} catch (IOException e) {
 					throw new RuntimeException(e);

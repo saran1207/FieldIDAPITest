@@ -9,6 +9,7 @@ import com.n4systems.fieldid.utils.StrutsListHelper;
 import com.n4systems.model.*;
 import com.n4systems.model.user.User;
 import com.n4systems.services.signature.SignatureService;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 import rfid.web.helper.SessionUser;
 
 import java.io.IOException;
@@ -172,7 +173,7 @@ public class EventHelper {
                 ((SignatureCriteriaResult)realResult).setSigned(formResult.isSigned());
                 
                 if (formResult.getSignatureFileId() != null) {
-                	((SignatureCriteriaResult)realResult).setImage(new SignatureService().loadSignatureImage(event.getTenant().getId(), formResult.getSignatureFileId()));
+                	((SignatureCriteriaResult)realResult).setImage(SignatureService.getSignatureService().loadSignatureImage(event.getTenant().getId(), formResult.getSignatureFileId()));
                     ((SignatureCriteriaResult)realResult).setTemporaryFileId(formResult.getSignatureFileId());
                 }
             } else if (realResult instanceof DateFieldCriteriaResult) {

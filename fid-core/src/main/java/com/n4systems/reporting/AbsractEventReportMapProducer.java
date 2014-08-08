@@ -14,6 +14,7 @@ import com.n4systems.util.DoubleFormatter;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.IOException;
@@ -218,7 +219,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             stateView.setState(unitOfMeasureValueStr);
                         } else if (result instanceof SignatureCriteriaResult) {
                             if (((SignatureCriteriaResult) result).isSigned()) {
-                                stateView.setStateImage(new SignatureService().getSignatureFileFor(getEvent().getTenant(), getEvent().getId(), result.getCriteria().getId()));
+                                stateView.setStateImage(SignatureService.getSignatureService().getSignatureFileFor(getEvent().getTenant(), getEvent().getId(), result.getCriteria().getId()));
                             }
                         } else if (result instanceof NumberFieldCriteriaResult) {
                             stateView.setState(getNumberStringValue(result));

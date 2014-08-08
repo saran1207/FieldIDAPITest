@@ -20,6 +20,7 @@ import com.n4systems.util.ContentTypeUtil;
 import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.InfoOptionBean;
 
 import javax.persistence.EntityManager;
@@ -129,11 +130,10 @@ public class ManagerBackedEventSaver implements EventSaver {
     }
 
 	private void writeSignatureImagesToDisk(ThingEvent event, Map<Long, byte[]> rememberedSignatureImages) {
-		SignatureService sigService = new SignatureService();
 
-        writeSignatureImagesFor(sigService, event.getResults(), rememberedSignatureImages);
+        writeSignatureImagesFor(SignatureService.getSignatureService(), event.getResults(), rememberedSignatureImages);
         for (SubEvent subEvent : event.getSubEvents()) {
-            writeSignatureImagesFor(sigService, subEvent.getResults(), rememberedSignatureImages);
+            writeSignatureImagesFor(SignatureService.getSignatureService(), subEvent.getResults(), rememberedSignatureImages);
         }
 	}
 
