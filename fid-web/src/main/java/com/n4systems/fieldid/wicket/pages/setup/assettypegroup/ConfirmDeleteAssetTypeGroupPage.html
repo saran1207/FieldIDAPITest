@@ -5,31 +5,29 @@
       lang="en">
 
 <wicket:extend>
+    <div wicket:id="feedbackPanel"/>
 
     <div wicket:id="instructions" class="instructions"/>
 
-    <div class="crudForm largeForm bigForm pageSection">
-        <h2><wicket:message key="label.removaldetails"/></h2>
-        <div class="sectionContent">
+    <ul class="list-table">
+        <li class="header">
+            <div><wicket:message key="label.removaldetails"/></div>
+        </li>
 
-            <div class="infoSet">
-                <label wicket:id="assetTypesToDetach"/>
-                <span><wicket:message key="label.assettypesbeingdetached"/></span>
-            </div>
+        <li class="infoSet">
+            <label wicket:id="assetTypesToDetach"/>
+            <span><wicket:message key="label.assettypesbeingdetached"/></span>
+        </li>
 
-            <div class="infoSet">
-                <label wicket:id="reportsAndSearchesToDelete"/>
-                <span><wicket:message key="label.saved_reports_being_deleted"/></span>
-            </div>
-
-        </div>
-    </div>
-
-    <div wicket:id="feedbackPanel"/>
+        <li class="infoSet">
+            <label wicket:id="reportsAndSearchesToDelete"/>
+            <span><wicket:message key="label.saved_reports_being_deleted"/></span>
+        </li>
+    </ul>
 
     <form wicket:id="form">
-        <div class="formActions">
-            <input wicket:id="deleteButton" type="submit" wicket:message="value:label.delete" />
+        <div>
+            <button class="btn-primary"  type="submit" wicket:id="deleteButton"><wicket:message key="label.delete"/></button>
             <wicket:message key="label.or"/>
             <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
         </div>

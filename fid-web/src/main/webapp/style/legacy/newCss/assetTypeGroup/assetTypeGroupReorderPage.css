@@ -1,28 +1,32 @@
 
 /* Reorder page */
+
+.buttonForm {
+     height: 45px;
+ }
+
 .drag {
     cursor: move;
 }
-#reorderGroupList tr {
-    padding: 10px 10px;
-    overflow:hidden;
-    border-bottom: 1px solid #CCCCCC;
-}
 
-#reorderGroupList tr td {
-    float:left;
-    padding: 0px 5px;
-    margin-top: 10px;
-}
+/*.groupList tr {*/
+    /*padding: 10px 10px;*/
+    /*overflow:hidden;*/
+    /*border-bottom: 1px solid #CCCCCC;*/
+/*}*/
 
-#reorderGroupList tr td.drag {
-    margin: 0px;
-}
+/*.groupList tr td {*/
+    /*float:left;*/
+    /*margin-left: 25px;*/
+    /*margin-top: 10px;*/
+    /*margin-bottom: 10px;*/
+/*}*/
 
-.imageWidth {
-    width: 15px;
-}
+/*.groupList tr td.drag {*/
+    /*margin-top: 10px;*/
+    /*margin-left: 5px;*/
+/*}*/
 
-div.formAction {
-    text-align:left;
-}
+/*.imageWidth {*/
+    /*width: 15px;*/
+/*}*/

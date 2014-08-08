@@ -2,7 +2,6 @@ package com.n4systems.fieldid.wicket.pages.setup.assettypegroup;
 
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.assettypegroup.AssetTypeGroupListPanel;
-import com.n4systems.fieldid.wicket.components.assettypegroup.AssetTypeGroupReorderPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;

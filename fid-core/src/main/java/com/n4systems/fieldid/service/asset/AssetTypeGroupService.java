@@ -92,7 +92,7 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         if( assetTypeGroup.getId() != null ) {
             oldPI = persistenceService.find( AssetTypeGroup.class, assetTypeGroup.getId());
         }
-//        assetTypeGroup.touch();
+        assetTypeGroup.touch();
         assetTypeGroup = (AssetTypeGroup) persistenceService.saveOrUpdate(assetTypeGroup);
 
         return assetTypeGroup;

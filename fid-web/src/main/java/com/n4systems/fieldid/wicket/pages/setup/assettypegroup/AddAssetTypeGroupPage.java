@@ -58,8 +58,6 @@ public class AddAssetTypeGroupPage extends FieldIDTemplatePage{
 
             setMultiPart(true);
 
-            WebMarkupContainer groupDetailsContainer = new WebMarkupContainer("groupDetailsContainer");
-
             RequiredTextField nameField = new RequiredTextField<String>("name", new PropertyModel<String>(model, "name"));
             nameField.add(new AbstractValidator() {
                 @Override
@@ -72,10 +70,7 @@ public class AddAssetTypeGroupPage extends FieldIDTemplatePage{
                     }
                 }
             });
-
-            groupDetailsContainer.add(nameField);
-            add(groupDetailsContainer);
-            groupDetailsContainer.setOutputMarkupId(true);
+            add(nameField);
 
             Button saveButton = new Button("saveButton");
             add(saveButton);
@@ -127,7 +122,7 @@ public class AddAssetTypeGroupPage extends FieldIDTemplatePage{
     @Override
     public void renderHead(IHeaderResponse response) {
         response.renderCSSReference("style/legacy/newCss/component/buttons.css");
-//        response.renderCSSReference("style/legacy/newCss/assetType/assetType.css");
+        response.renderCSSReference("style/legacy/newCss/assetTypeGroup/addAssetTypeGroup.css");
     }
 
     @Override
