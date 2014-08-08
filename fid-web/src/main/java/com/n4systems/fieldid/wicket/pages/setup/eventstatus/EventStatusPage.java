@@ -4,7 +4,7 @@ import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.EntityModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.EventStatus;
 import org.apache.wicket.Component;
@@ -17,7 +17,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
-public class EventStatusPage extends FieldIDFrontEndPage {
+public class EventStatusPage extends FieldIDTemplatePage {
 
     protected Long eventStatusId;
     protected IModel<EventStatus> eventStatusModel;

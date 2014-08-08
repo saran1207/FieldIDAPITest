@@ -4,7 +4,7 @@ import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.api.Archivable;
 import org.apache.wicket.Component;
@@ -23,7 +23,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
  *
  * Created by Jordan Heath on 31/07/14.
  */
-public abstract class AssetStatusListPage extends FieldIDFrontEndPage {
+public abstract class AssetStatusListPage extends FieldIDTemplatePage {
 
     protected IModel<Archivable.EntityState> archivableState;
 

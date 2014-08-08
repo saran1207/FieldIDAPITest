@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
 	<div wicket:id="feedbackPanel"></div>
 
@@ -101,6 +102,22 @@
 					</span>
 				</div>
 			</div>
+
+            <div class="fieldGroup">
+                <h2>Enabled Modules</h2>
+                <div class="infoSet">
+                    <label class="label">Inspections</label>
+					<span class="fieldHolder">
+						<input wicket:id="tenant.settings.inspectionsEnabled" type="checkbox"/>
+					</span>
+                </div>
+                <div class="infoSet">
+                    <label class="label">LOTO</label>
+					<span class="fieldHolder">
+						<input wicket:id="tenant.settings.lotoEnabled" type="checkbox"/>
+					</span>
+                </div>
+            </div>
 		</div>
 		
 		<div class="actions">
@@ -109,3 +126,4 @@
 	</form>
 
 </wicket:extend>
+</html>

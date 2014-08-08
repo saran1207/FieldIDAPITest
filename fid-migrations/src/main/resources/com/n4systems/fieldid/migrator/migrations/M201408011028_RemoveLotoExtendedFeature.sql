@@ -1,0 +1,1 @@
+DELETE FROM org_extendedfeatures WHERE feature = 'LotoProcedures';

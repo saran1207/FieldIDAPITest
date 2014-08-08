@@ -4,16 +4,20 @@ import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.orgs.BaseOrg;
+import com.n4systems.model.orgs.ExternalOrgFilter;
+import com.n4systems.model.orgs.InternalOrgFilter;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.search.SearchCriteria;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.SecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.User;
+import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.user.UserQueryHelper;
 import com.n4systems.security.Permissions;
 import com.n4systems.security.UserType;
 import com.n4systems.util.StringUtils;
+import com.n4systems.util.UserBelongsToFilter;
 import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -25,14 +29,34 @@ import java.util.*;
 @Transactional
 public class UserService extends FieldIdPersistenceService {
 
+    private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
+
+
     public List<User> getUsers(boolean registered, boolean includeSystem) {
-        QueryBuilder<User> builder = createUserQueryBuilderWithOrder(registered, includeSystem);
+        QueryBuilder<User> builder = createUserQueryBuilder(registered, includeSystem);
 
         if (!getCurrentUser().getGroups().isEmpty()) {
             return new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
         }
 
         return persistenceService.findAll(builder);
+    }
+
+    public List<User> getUsers(UserListFilterCriteria criteria) {
+        QueryBuilder<User> builder = createUserQueryBuilder(criteria);
+
+        if (!getCurrentUser().getGroups().isEmpty()) {
+            return new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
+        }
+
+        return persistenceService.findAll(builder);
+    }
+
+
+
+    public Long countUsers(UserListFilterCriteria criteria) {
+        QueryBuilder<User> builder = createUserQueryBuilder(criteria);
+        return persistenceService.count(builder);
     }
 
     public Map<BaseOrg, List<User>> getUsersByOrg() {
@@ -88,23 +112,91 @@ public class UserService extends FieldIdPersistenceService {
     }
 
     private QueryBuilder<User> createUserQueryBuilder(boolean registered, boolean includeSystem) {
-        QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
+        UserListFilterCriteria criteria = new UserListFilterCriteria(false);
+        if(registered)
+            criteria.withRegistered();
+        if(includeSystem)
+            criteria.withSystemUsers();
+        return createUserQueryBuilder(criteria);
+    }
 
-        if (registered) {
+    private QueryBuilder<User> createUserQueryBuilder(UserListFilterCriteria criteria) {
+        QueryBuilder<User> builder = createUserSecurityBuilder(User.class, criteria.isArchivedOnly());
+
+        if (criteria.isRegistered()) {
             UserQueryHelper.applyRegisteredFilter(builder);
         } else {
             UserQueryHelper.applyFullyActiveFilter(builder);
         }
 
-        if (!includeSystem) {
+        if (!criteria.isIncludeSystem()) {
             builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE, "userType", UserType.SYSTEM));
         }
 
-        return builder;
-    }
+        if (criteria.getOwner() != null) {
+            builder.addSimpleWhere("owner", criteria.getOwner());
+        }
 
-    private QueryBuilder<User> createUserQueryBuilderWithOrder(boolean registered, boolean includeSystem) {
-        return createUserQueryBuilder(registered, includeSystem).addOrder("firstName").addOrder("lastName");
+        if (criteria.getCustomer() != null) {
+            builder.addSimpleWhere("owner.customerOrg", criteria.getCustomer());
+        }
+
+        if(criteria.isFilterOnPrimaryOrg()) {
+            builder.addWhere(WhereClauseFactory.createIsNull("owner.secondaryOrg"));
+        }
+
+        if(criteria.isFilterOnSecondaryOrg()) {
+            builder.addSimpleWhere("owner.secondaryOrg", criteria.getOrgFilter());
+        }
+
+        if (criteria.getUserType() != null && criteria.getUserType() != UserType.ALL) {
+            builder.addSimpleWhere("userType", criteria.getUserType());
+        }
+
+        if (criteria.getUserBelongsToFilter() == UserBelongsToFilter.CUSTOMER) {
+            builder.applyFilter(new ExternalOrgFilter("owner"));
+        } else if (criteria.getUserBelongsToFilter() == UserBelongsToFilter.EMPLOYEE) {
+            builder.applyFilter(new InternalOrgFilter("owner"));
+        }
+
+        if (criteria.getGroupFilter() != null) {
+            builder.addWhere(new InElementsParameter<UserGroup>("groups", criteria.getGroupFilter()));
+        }
+
+        if (criteria.getNameFilter() != null && !criteria.getNameFilter().isEmpty()) {
+            WhereParameterGroup whereGroup = new WhereParameterGroup();
+            whereGroup.addClause(WhereClauseFactory.create(Comparator.LIKE, "userID", criteria.getNameFilter(), WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH,
+                    WhereClause.ChainOp.OR));
+            whereGroup.addClause(WhereClauseFactory.create(Comparator.LIKE, "firstName", criteria.getNameFilter(), WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH,
+                    WhereClause.ChainOp.OR));
+            whereGroup.addClause(WhereClauseFactory.create(Comparator.LIKE, "lastName", criteria.getNameFilter(), WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH,
+                    WhereClause.ChainOp.OR));
+            builder.addWhere(whereGroup);
+        }
+
+        if (criteria.isArchivedOnly()) {
+            UserQueryHelper.applyArchivedFilter(builder);
+        }
+
+        if(criteria.getOrder() != null && !criteria.getOrder().isEmpty()) {
+            if(criteria.getOrder().startsWith("owner")) {
+                builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, criteria.getOrder(), "sort", true));
+
+                OrderClause orderClause1 = new OrderClause("sort", criteria.isAscending());
+                orderClause1.setAlwaysDropAlias(true);
+
+                builder.getOrderArguments().add(orderClause1);
+                builder.getOrderArguments().add(new OrderClause("id", criteria.isAscending()));
+            } else
+                for (String subOrder : criteria.getOrder().split(",")) {
+                    builder.addOrder(subOrder.trim(), criteria.isAscending());
+                }
+        } else {
+            for (String order : DEFAULT_ORDER) {
+                builder.setOrder(order, criteria.isAscending());
+            }
+        }
+        return builder;
     }
 
     public User getUser(Long userId) {

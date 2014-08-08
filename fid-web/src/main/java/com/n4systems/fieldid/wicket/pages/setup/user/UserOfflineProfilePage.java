@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.user;
+package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.user.UserService;
@@ -11,14 +11,12 @@ import com.n4systems.fieldid.wicket.pages.useraccount.OfflineProfilePanel;
 import com.n4systems.model.user.User;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
-import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
-import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
 public class UserOfflineProfilePage extends FieldIDFrontEndPage {
@@ -55,8 +53,8 @@ public class UserOfflineProfilePage extends FieldIDFrontEndPage {
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page("userList.action").build(),
-                aNavItem().label("nav.view_all_archived").page("archivedUserList.action").params(param("currentPage", 1)).build(),
+                aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
+                aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.view").page("viewUser.action").params(uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.edit").page("employeeUserEdit.action").params(uniqueId(uniqueId)).cond(user.isFullUser()).build(),
                 aNavItem().label("nav.edit").page("liteUserEdit.action").params(uniqueId(uniqueId)).cond(user.isLiteUser()).build(),

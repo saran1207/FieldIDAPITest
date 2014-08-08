@@ -17,12 +17,10 @@ public class EventByNetworkIdProvider extends FieldIDDataProvider<Event> {
     private EventService eventService;
 
     private Long networkId;
-    private String order;
     private List<WorkflowState> states;
 
     public EventByNetworkIdProvider(Long networkId, String order, SortOrder sortOrder, List<WorkflowState> states) {
         this.networkId = networkId;
-        this.order = order;
         this.states = states;
 
         setSort(order, sortOrder);

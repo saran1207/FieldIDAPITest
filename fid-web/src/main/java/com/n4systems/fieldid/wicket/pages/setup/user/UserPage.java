@@ -1,4 +1,4 @@
-package com.n4systems.fieldid.wicket.pages.user;
+package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.actions.users.FileSystemUserSignatureFileProcessor;
 import com.n4systems.fieldid.actions.users.UploadedImage;
@@ -24,7 +24,6 @@ import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -33,7 +32,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.net.URI;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
-import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.param;
 
 public abstract class UserPage extends FieldIDFrontEndPage {
 
@@ -118,11 +116,10 @@ public abstract class UserPage extends FieldIDFrontEndPage {
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page("userList.action").build(),
-                aNavItem().label("nav.view_all_archived").page("archivedUserList.action").params(param("currentPage", 1)).build(),
+                aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
+                aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.add").page("addUser.action").onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
-
         ));
     }
 
@@ -141,18 +138,13 @@ public abstract class UserPage extends FieldIDFrontEndPage {
 
             add(new Button("save"));
 
-            add(new Link<Void>("cancel") {
-                @Override
-                public void onClick() {
-                    redirect("/userList.action?currentPage=1&listFilter=&userType=ALL");
-                }
-            });
+            add(new BookmarkablePageLink<UsersListPage>("cancel", UsersListPage.class));
         }
 
         @Override
         protected void onSubmit() {
             doSave();
-            redirect("/userList.action?currentPage=1&listFilter=&userType=ALL");
+            setResponsePage(UsersListPage.class);
         }
     }
 }

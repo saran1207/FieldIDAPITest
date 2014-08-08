@@ -118,8 +118,4 @@ public class AlwaysOffSystemSecurityGuardTestDouble implements SystemSecurityGua
         return false;
     }
 
-    @Override
-    public boolean isLotoProceduresEnabled() {
-        return false;
-    }
 }
