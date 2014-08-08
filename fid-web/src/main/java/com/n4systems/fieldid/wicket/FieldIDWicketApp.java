@@ -137,10 +137,11 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("setup/usersList", UsersListPage.class);
         mountPage("setup/archivedUsersList", ArchivedUsersListPage.class);
+        mountPage("setup/selectUserType", SelectUserTypePage.class);
+        mountPage("setup/addUser", AddUserPage.class);
+        mountPage("setup/editUser", EditUserPage.class);
         mountPage("setup/addPerson", AddPersonPage.class);
         mountPage("setup/editPerson", EditPersonPage.class);
-        mountPage("setup/addUsageBasedUser", AddUsageBasedUserPage.class);
-        mountPage("setup/editUsageBasedUser", EditUsageBasedUserPage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);

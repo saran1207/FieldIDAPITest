@@ -6,34 +6,34 @@
 
 <wicket:panel>
     <h2><wicket:message key="label.permissions"/></h2>
-    <table class="permissions fieldHolder">
-        <tr class="titleRow">
-            <th class="permissionName">&nbsp;</th>
+    <table class="list comfortable">
+        <tr>
+            <th>&nbsp;</th>
             <th>
-                <span class="radio floatLeft"><wicket:message key="label.on"/></span>
-                <span class="radio floatLeft"><wicket:message key="label.off"/></span>
+                <span><wicket:message key="label.on"/></span>
+                <span><wicket:message key="label.off"/></span>
             </th>
         </tr>
         <tr wicket:id="permissions">
-            <td class="permissionName" wicket:id="name"/>
+            <td wicket:id="name"/>
             <td wicket:id="group">
-                <span class="radio floatLeft">
-                    <input class="permissionOn" wicket:id="on" type="radio"/>
+                <span>
+                    <input wicket:id="on" type="radio"/>
                 </span>
-                <span class="radio floatLeft">
-                    <input class="permissionOff" wicket:id="off" type="radio"/>
+                <span>
+                    <input wicket:id="off" type="radio"/>
                 </span>
 
             </td>
         </tr>
         <tr>
-            <td class="permissionName permissionAction">&nbsp;</td>
-            <td class="permissionAction">
-                <span class="radio floatLeft">
-                    <input type="reset" value="All On" class="allOn" onclick="$('.permissionOn').trigger('click');return false;">
+            <td>&nbsp;</td>
+            <td>
+                <span>
+                    <input type="reset" value="All On" onclick="$('.permissionOn').trigger('click');return false;">
                 </span>
-                <span class="radio floatLeft">
-                <input type="reset" value="All Off" class="allOff" onclick="$('.permissionOff').trigger('click');return false;">
+                <span>
+                <input type="reset" value="All Off"onclick="$('.permissionOff').trigger('click');return false;">
                 </span>
             </td>
         </tr>

@@ -19,7 +19,7 @@ public class EditPersonPage extends UserPage{
 
     @Override
     protected User doSave() {
-        User person = user.getObject();
+        User person = userModel.getObject();
         userService.update(person);
 
         return person;
@@ -35,9 +35,9 @@ public class EditPersonPage extends UserPage{
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
                 aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
-                aNavItem().label("nav.view").page("viewUser.action").params(uniqueId(user.getObject().getId())).build(),
-                aNavItem().label("nav.edit").page(EditPersonPage.class).params(uniqueId(user.getObject().getId())).build(),
-                aNavItem().label("nav.add").page("addUser.action").onRight().build(),
+                aNavItem().label("nav.view").page("viewUser.action").params(uniqueId(userModel.getObject().getId())).build(),
+                aNavItem().label("nav.edit").page(EditPersonPage.class).params(uniqueId(userModel.getObject().getId())).build(),
+                aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));
     }
