@@ -38,20 +38,20 @@ public class EventBooksListPanel extends Panel {
         super(id);
 
         this.dataProvider = dataProvider;
-        add(new SimpleDefaultDataTable<ProcedureDefinition>("eventBookTable", getEventBookTableColumns(), dataProvider, PROCEDURES_PER_PAGE));
+        add(new SimpleDefaultDataTable<ProcedureDefinition>("eventBookTable",
+                                                            getEventBookTableColumns(),
+                                                            dataProvider,
+                                                            PROCEDURES_PER_PAGE));
     }
 
     private List<IColumn<EventBook>> getEventBookTableColumns() {
         List<IColumn<EventBook>> columns = Lists.newArrayList();
-
-//        addEditColumn(columns);
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.title"), "name", "name")
         {
             @Override
             public void populateItem(final Item<ICellPopulator<EventBook>> item, final String componentId, final IModel<EventBook> rowModel)
             {
-//                item.add(new Label(componentId, createLabelModel(rowModel)));
                 item.add(new EventBooksEditCell(componentId, rowModel));
             }
         });
@@ -60,7 +60,6 @@ public class EventBooksListPanel extends Panel {
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.created"), "created", "created"));
 
-//        columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.status"), "open", "open"));
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.status"), "open", "open")
         {
             @Override
@@ -77,10 +76,6 @@ public class EventBooksListPanel extends Panel {
     protected void addActionColumn(List<IColumn<EventBook>> columns) {
         //This does nothing.  You need to override it where you use this panel.
     }
-
-//    private void addEditColumn(List<IColumn<EventBook>> columns) {
-//        columns.add(new EventBooksEditColumn());
-//    }
 
     /**
      * This method needs to be overridden by the class that implements this Panel.  This provides an easy way for the
