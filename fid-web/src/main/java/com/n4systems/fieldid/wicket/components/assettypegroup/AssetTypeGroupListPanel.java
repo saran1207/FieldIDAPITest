@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.ConfirmDeleteAsse
 import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.EditAssetTypeGroupPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.ViewAssetTypeGroupPage;
 import com.n4systems.model.AssetTypeGroup;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -72,6 +73,11 @@ public class AssetTypeGroupListPanel extends Panel {
 
     public boolean isEmpty() {
         return listView.getList().isEmpty();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/legacy/newCss/assetTypeGroup/assetTypeGroupListPage.css");
     }
 
 }

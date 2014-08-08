@@ -1,24 +1,30 @@
 
 /* Asest Type Groups List Page */
 
-#assetTypeGroupList tr {
+.buttonForm {
+    height: 45px;
+}
+
+.assetTypeGroupList tr {
+    padding-top: 20px;
     padding: 10px 10px;
     overflow:hidden;
     border-bottom: 1px solid #CCCCCC;
 }
 
-#assetTypeGroupList tr td #nameLink {
+.groupList tr td.nameColumn {
     width: 100px;
 }
 
-#assetTypeGroupList tr td #createdBy {
+.groupList tr td.createdByColumn {
     width: 100px;
 }
 
-#assetTypeGroupList tr td #modifiedBy {
-    width: 300px;
+.groupList tr td.modifiedByColumn {
+    width: 200px;
+    text-align: left;
 }
 
-#assetTypeGroupList tr td #actionButtons {
+.groupList tr td.buttons {
     width: 100px;
 }
