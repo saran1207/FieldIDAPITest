@@ -234,6 +234,23 @@ public class S3Service extends FieldIdPersistenceService {
         return imageData;
     }
 
+    public File downloadAssetProfileImageFile(Long assetId, String imageName){
+        File assetProfileImage = null;
+        try {
+            byte[] assetProfileImageBytes = downloadAssetProfileOriginalImage(assetId, imageName);
+            assetProfileImage = PathHandler.getUserFile(getCurrentUser(), imageName);
+            FileOutputStream assetProfileImageFos = new FileOutputStream(assetProfileImage);
+            assetProfileImageFos.write(assetProfileImageBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp image file at: " + assetProfileImage, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download asset profile image from S3: " + assetId, e);
+        }
+        return assetProfileImage;
+    }
+
     public byte[] downloadAssetProfileMediumImage(Long assetId, String imageName) throws IOException {
         byte[] imageData = downloadResource(null, ASSET_PROFILE_IMAGE_PATH_MEDIUM, assetId, imageName);
         return imageData;

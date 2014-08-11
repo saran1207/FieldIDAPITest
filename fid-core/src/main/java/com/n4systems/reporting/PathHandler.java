@@ -407,20 +407,6 @@ public class PathHandler {
 	private static String getAssetAttachmentBasePath(Tenant tenant) {
 		return mergePaths(ASSET_ATTACHMENT_PATH_BASE, getTenantPathPart(tenant));
 	}
-	
-	public static File getAssetImageFile(Asset asset) {
-		return absolutize(mergePaths(getAssetImageBasePath(asset.getTenant()), getAssetPath(asset), asset.getImageName()));
-	}
-
-	private static String getAssetImageBasePath(Tenant tenant) {
-		return mergePaths(ASSET_IMAGE_PATH_BASE, getTenantPathPart(tenant));
-	}
-	
-	public static File getAssetImageDir(Asset asset) {
-		File assetImageDir = absolutize(mergePaths(getAssetImageBasePath(asset.getTenant()), getAssetPath(asset)));
-        assetImageDir.mkdirs();
-        return assetImageDir;
-	}
 
 	public static File getChartImageFile(ThingEvent event) {
 		return absolutize(mergePaths(getEventChartImageBasePath(event.getTenant()), getEventPath(event), CHART_FILE_NAME));
