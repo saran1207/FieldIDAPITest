@@ -9,15 +9,13 @@ import com.n4systems.model.Tenant;
 public class SharedColumnFactory implements StaticColumnProvider {
 
 	private final Class<?> implementingClass;
-	private final Tenant tenant;
 
 	public SharedColumnFactory(Class<?> implementingClass, Tenant tenant) {
 		this.implementingClass = implementingClass;
-		this.tenant = tenant;
 	}
 
 	public SortedSet<ColumnMappingGroupView> getMappings() {
-		return ColumnMappingFactory.getMappings(implementingClass, tenant);
+		return ColumnMappingFactory.getMappings(implementingClass);
 	}
 
 }
