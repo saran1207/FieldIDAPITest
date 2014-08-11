@@ -4,6 +4,7 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.ejb.legacy.LegacyAssetType;
 import com.n4systems.exceptions.FileAttachmentException;
 import com.n4systems.exceptions.ImageAttachmentException;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.model.Tenant;
@@ -15,6 +16,7 @@ import com.n4systems.services.safetyNetwork.catalog.summary.AssetTypeImportSumma
 import com.n4systems.services.safetyNetwork.catalog.summary.BaseImportSummary.FailureType;
 import com.n4systems.services.safetyNetwork.exception.ImportFailureException;
 import com.n4systems.util.ListingPair;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 
@@ -35,6 +37,7 @@ public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 	private Map<Long, AssetTypeGroup> assetGroupMapping;
 	private Set<Long> importAssetTypeIds;
 	private User importUser;
+    private S3Service s3Service = ServiceLocator.getS3Service();
 
 	
 	public CatalogAssetTypeImportHandler(PersistenceManager persistenceManager, Tenant tenant, CatalogService importCatalog, LegacyAssetType assetTypeManager) {
@@ -142,9 +145,18 @@ public class CatalogAssetTypeImportHandler extends CatalogImportHandler {
 				File productTypeDirectory = PathHandler.getAssetTypeImageFile(importedAssetType);
 				File imageFile = new File(productTypeDirectory.getAbsolutePath() + '/' + importedAssetType.getImageName());
 
-				File tmpDirectory = PathHandler.getTempRoot();
-				copiedAssetImage = new File(tmpDirectory.getAbsolutePath() + '/' + UUID.randomUUID().toString() + "/" + importedAssetType.getImageName());
-				FileUtils.copyFile(imageFile, copiedAssetImage);
+                File tmpDirectory = PathHandler.getTempRoot();
+                copiedAssetImage = new File(tmpDirectory.getAbsolutePath() + '/' + UUID.randomUUID().toString() + "/" + importedAssetType.getImageName());
+
+                if(imageFile.exists()){
+                    FileUtils.copyFile(imageFile, copiedAssetImage);
+                }
+                else if(s3Service.assetTypeProfileImageExists(importedAssetType)){
+                    imageFile = s3Service.downloadAssetTypeProfileImage(importedAssetType);
+                    FileUtils.copyFile(imageFile, copiedAssetImage);
+                } else {
+                    copiedAssetImage = null;
+                }
 
 			} else {
 				copiedAssetImage = null;

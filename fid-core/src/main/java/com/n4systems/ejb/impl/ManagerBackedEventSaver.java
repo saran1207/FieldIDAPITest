@@ -131,9 +131,9 @@ public class ManagerBackedEventSaver implements EventSaver {
 
 	private void writeSignatureImagesToDisk(ThingEvent event, Map<Long, byte[]> rememberedSignatureImages) {
 
-        writeSignatureImagesFor(SignatureService.getSignatureService(), event.getResults(), rememberedSignatureImages);
+        writeSignatureImagesFor(ServiceLocator.getSignatureService(), event.getResults(), rememberedSignatureImages);
         for (SubEvent subEvent : event.getSubEvents()) {
-            writeSignatureImagesFor(SignatureService.getSignatureService(), subEvent.getResults(), rememberedSignatureImages);
+            writeSignatureImagesFor(ServiceLocator.getSignatureService(), subEvent.getResults(), rememberedSignatureImages);
         }
 	}
 

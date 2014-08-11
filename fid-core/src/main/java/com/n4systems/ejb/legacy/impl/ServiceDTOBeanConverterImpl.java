@@ -752,7 +752,7 @@ public class ServiceDTOBeanConverterImpl implements ServiceDTOBeanConverter {
 			if (sigCriteria.isSigned()) {
 				byte[] signatureImage;
 				try {
-					signatureImage = SignatureService.getSignatureService().loadSignatureImage(criteriaResult.getTenant(), criteriaResult.getEvent().getId(), criteriaResult.getCriteria().getId());
+					signatureImage = ServiceLocator.getSignatureService().loadSignatureImage(criteriaResult.getTenant(), criteriaResult.getEvent().getId(), criteriaResult.getCriteria().getId());
 					criteriaResultServiceDTO.setSignatureImage(signatureImage);
 				} catch (IOException e) {
 					throw new RuntimeException(e);
