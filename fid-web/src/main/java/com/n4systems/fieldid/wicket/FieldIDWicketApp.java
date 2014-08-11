@@ -47,6 +47,9 @@ import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPa
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.AddCommentTemplatePage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.EditCommentTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.eventbook.AddEventBookPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventbook.EditEventBookPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
@@ -132,6 +135,10 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/addEventBook", AddEventBookPage.class);
         mountPage("setup/editEventBook", EditEventBookPage.class);
         mountPage("setup/eventBooksArchivedList", EventBooksListArchivedPage.class);
+
+        mountPage("setup/addCommentTemplate", AddCommentTemplatePage.class);
+        mountPage("setup/commentTemplateList", CommentTemplateListPage.class);
+        mountPage("setup/editCommentTemplate", EditCommentTemplatePage.class);
 
         mountPage("setup/assetStatusArchivedList", AssetStatusListArchivedPage.class);
 
