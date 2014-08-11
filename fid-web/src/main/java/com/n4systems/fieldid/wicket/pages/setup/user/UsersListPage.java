@@ -162,7 +162,7 @@ public class UsersListPage extends FieldIDTemplatePage {
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
                 aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
-                aNavItem().label("nav.add").page("addUser.action").onRight().build(),
+                aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));
     }
