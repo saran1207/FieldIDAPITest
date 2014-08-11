@@ -13,18 +13,23 @@
 }
 
 .groupList tr td.nameColumn {
-    width: 100px;
+    width: 150px;
 }
 
-.groupList tr td.createdByColumn {
-    width: 100px;
+.createdBy {
+    width: 50px;
 }
 
-.groupList tr td.modifiedByColumn {
-    width: 200px;
-    text-align: left;
-    white-space: nowrap
-    display: inline-block;
+.createdDate {
+    width: 150px;
+}
+
+.modifiedBy {
+    width: 50px;
+}
+
+.modifiedDate {
+    width: 150px;
 }
 
 .actionColumn {

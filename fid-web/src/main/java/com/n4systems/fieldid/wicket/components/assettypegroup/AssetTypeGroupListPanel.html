@@ -9,14 +9,18 @@
         <tbody>
         <tr>
             <th><wicket:message key="label.name"/></th>
-            <th><wicket:message key="label.created"/></th>
+            <th><wicket:message key="label.createdby"/></th>
+            <th><wicket:message key="label.created_on"/></th>
+            <th><wicket:message key="label.modifiedby"/></th>
             <th><wicket:message key="label.last_modified"/></th>
             <th>&nbsp;</th>
         </tr>
         <tr wicket:id="assetTypeGroupList" class="groupList">
             <td class="nameColumn"><a wicket:id="nameLink"><span wicket:id="name"/></a></td>
-            <td class="createdByColumn"><span wicket:enclosure="createdBy"><label wicket:id="createdBy"/>, </span><label wicket:id="createdDate"/></td>
-            <td class="modifiedByColumn"><span wicket:enclosure="modifiedBy"><label wicket:id="modifiedBy"/>, </span><label wicket:id="modifiedDate"/></td>
+            <td class="createdBy"><label wicket:id="createdBy"/></td>
+            <td class="createdDate"><label wicket:id="createdDate"/></td>
+            <td class="modifiedBy"><label wicket:id="modifiedBy"/></td>
+            <td class="modifiedDate"><label wicket:id="modifiedDate"/></td>
             <td class="actionColumn">
                 <div class="split-btn">
                     <a class="btn-secondary" wicket:id="edit"><wicket:message key="label.edit"/></a>
