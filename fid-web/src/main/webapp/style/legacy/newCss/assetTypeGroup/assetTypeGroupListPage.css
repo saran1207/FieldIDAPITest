@@ -23,6 +23,8 @@
 .groupList tr td.modifiedByColumn {
     width: 200px;
     text-align: left;
+    white-space: nowrap
+    display: inline-block;
 }
 
 .groupList tr td.buttons {

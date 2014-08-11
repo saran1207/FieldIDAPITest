@@ -88,11 +88,7 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
     }
 
     public AssetTypeGroup saveAssetTypeGroup(AssetTypeGroup assetTypeGroup) {
-        AssetTypeGroup oldPI = null;
-        if( assetTypeGroup.getId() != null ) {
-            oldPI = persistenceService.find( AssetTypeGroup.class, assetTypeGroup.getId());
-        }
-        assetTypeGroup.touch();
+//        assetTypeGroup.touch();
         assetTypeGroup = (AssetTypeGroup) persistenceService.saveOrUpdate(assetTypeGroup);
 
         return assetTypeGroup;
@@ -103,25 +99,14 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         return persistenceService.count(query);
     }
 
-    public String reorderAssetTypeGroup() {
-        List<AssetTypeGroup> reorderedGroupList = new ArrayList<AssetTypeGroup>();
-        for (int i = 0; i < reorderedIdList.size(); i++) {
-            Long id = reorderedIdList.get(i);
-            for (AssetTypeGroup group : getGroups()) {
-                if (group.getId().equals(id)) {
-                    reorderedGroupList.add(group);
-                    getGroups().remove(group);
-                    break;
-                }
-            }
-        }
-        reorderedGroupList.addAll(getGroups());
-        for (int i = 0; i < reorderedGroupList.size(); i++) {
-            AssetTypeGroup group = reorderedGroupList.get(i);
+    public void updateAllAssetTypeGroups(List<AssetTypeGroup> groupList) {
+
+        for (int i = 0; i < groupList.size(); i++) {
+            AssetTypeGroup group = groupList.get(i);
             group.setOrderIdx(new Long(i));
         }
-        persistenceService.updateAll(reorderedGroupList, getCurrentUser().getId());
-        return null;
+
+        persistenceService.updateAll(groupList, getCurrentUser().getId());
     }
 
     public List<AssetTypeGroup> getGroups() {

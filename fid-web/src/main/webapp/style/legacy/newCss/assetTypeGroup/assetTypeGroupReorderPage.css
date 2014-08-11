@@ -9,24 +9,22 @@
     cursor: move;
 }
 
-/*.groupList tr {*/
-    /*padding: 10px 10px;*/
-    /*overflow:hidden;*/
-    /*border-bottom: 1px solid #CCCCCC;*/
-/*}*/
+.groupList {
+    padding: 10px 10px;
+    overflow:hidden;
+    border-bottom: 1px solid #CCCCCC;
+}
 
-/*.groupList tr td {*/
-    /*float:left;*/
-    /*margin-left: 25px;*/
-    /*margin-top: 10px;*/
-    /*margin-bottom: 10px;*/
-/*}*/
+.groupList li {
+    height: 30px;
+    list-style-type: none;
+}
 
-/*.groupList tr td.drag {*/
-    /*margin-top: 10px;*/
-    /*margin-left: 5px;*/
-/*}*/
+.imageWidth {
+    width: 15px;
+}
 
-/*.imageWidth {*/
-    /*width: 15px;*/
-/*}*/
+
+
+
+

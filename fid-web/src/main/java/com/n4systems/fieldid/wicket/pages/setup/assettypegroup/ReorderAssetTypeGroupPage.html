@@ -6,21 +6,17 @@
 
 <wicket:extend>
 
-    <div class="formAction">
-        <form wicket:id="doneReorderForm">
-            <button class="btn-secondary" type="submit" wicket:id="doneReorderButton"><wicket:message key="label.donereordering"/></button>
-        </form>
-    </div>
+    <form wicket:id="doneReorderForm" class="buttonForm">
+        <button class="btn-secondary" type="submit" wicket:id="doneReorderButton"><wicket:message key="label.donereordering"/></button>
+    </form>
 
-    <table class="list borders clear">
-        <h2><wicket:message key="label.assettypegroups"/></h2>
-        <tbody>
-        <tr wicket:id="reorderGroupList">
-            <td class="drag imageWidth"><img wicket:id="reorderImage"/></td>
-            <td><label wicket:id="assetTypeGroupName"/></td>
-        </tr>
-        </tbody>
-    </table>
+    <h2><wicket:message key="label.assettypegroups"/></h2>
+    <ul class="list borders clear groupList" wicket:id="groupListContainer">
+        <li wicket:id="groupListView">
+            <span class="drag imageWidth"><img wicket:id="reorderImage"/></span>
+            <span wicket:id="groupName"></span>
+        </li>
+    </ul>
 
 </wicket:extend>
 </html>

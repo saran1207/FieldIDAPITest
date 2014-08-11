@@ -207,13 +207,13 @@ public class PersistenceService extends FieldIdService {
     }
 
     @Transactional
-    public  Saveable update(Saveable entity) {
-        return em.merge(entity);
+    public <T extends AbstractEntity> T update(T entity, Long userId) {
+        return update(updateModifiedBy(entity, userId));
     }
 
     @Transactional
-    public <T extends AbstractEntity> T update(T entity, Long userId) {
-        return update(updateModifiedBy(entity, userId));
+    public  Saveable update(Saveable entity) {
+        return em.merge(entity);
     }
 
     private <T extends AbstractEntity> T updateModifiedBy(T entity, Long userId) {
