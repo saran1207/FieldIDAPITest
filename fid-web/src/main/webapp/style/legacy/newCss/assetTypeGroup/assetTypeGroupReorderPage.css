@@ -12,15 +12,25 @@
 .groupList {
     padding: 10px 10px;
     overflow:hidden;
-    border-bottom: 1px solid #CCCCCC;
 }
 
 .groupList li {
-    height: 30px;
+    height: 40px;
     list-style-type: none;
+    border-bottom: 1px solid #CCCCCC;
 }
 
-.imageWidth {
+.groupList li div {
+    padding-top: 9px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.nameLabel {
+    padding-left: 20px;
+}
+
+.image {
     width: 15px;
 }
 
