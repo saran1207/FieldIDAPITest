@@ -28,6 +28,7 @@ import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListPage;
@@ -306,6 +307,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         container.setVisible(getSessionUser().hasAccess("managesystemconfig"));
         assetCodeMappingcontainer.setVisible(intergrationEnabled);
         container.add(assetCodeMappingcontainer);
+
+        container.add(new BookmarkablePageLink("commentTemplateLink",
+                                               CommentTemplateListPage.class));
         
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("assetLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.ASSET)));
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)).setVisible(getSecurityGuard().isInspectionsEnabled()));
