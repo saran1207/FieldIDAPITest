@@ -496,23 +496,6 @@ public class PathHandler {
 	public static String getAssetTypeImageBasePath(Tenant tenant) {
 		return mergePaths(ASSET_TYPE_IMAGE_PATH_BASE, getTenantPathPart(tenant));
 	}
-
-	/** @return The Tenant specific configuration directory for a tenant */
-	public static File getConfDir(Tenant tenant) {
-		File confDir = absolutize(mergePaths(CONF_PATH_BASE, getTenantPathPart(tenant)));
-        confDir.mkdirs();
-        return confDir;
-	}
-	
-	/** @return The Tenant specific configuration properties file for a Tenant and Class */
-	public static File getPropertiesFile(Tenant tenant, Class<?> clazz) {
-		return parentize(getConfDir(tenant), mergePaths(clazz.getPackage().getName(), clazz.getSimpleName() + PROPERTIES_FILE_EXT));
-	}
-	
-	/** @return The Tenant specific configuration properties file for a Tenant and Package */
-	public static File getPropertiesFile(Tenant tenant, Package pack) {
-		return parentize(getConfDir(tenant), mergePaths(pack.getName(), PACKAGE_PROPERTIES_FILE));
-	}
 	
 	private static String getUserPrivatePath(User user) {
 		return mergePaths(getTenantUserBasePath(user.getTenant()), user.getId().toString());

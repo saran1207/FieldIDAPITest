@@ -26,19 +26,6 @@ public class SignatureService {
     @Autowired
     private DateService dateService;
 
-    //@SpringBean & @Autowired did not work for the SignatureService in SignatureResource & TemporarySignatureResource,
-    //so I used a singleton pattern here (the static singleton instnace is created by FieldIdCoreConfig
-    private static SignatureService signatureService = null;
-    public static SignatureService getSignatureService(){
-        return signatureService;
-    }
-
-    public SignatureService(){
-        if(signatureService == null){
-            signatureService = this;
-        }
-    }
-
     public String storeTempSignature(Long tenantId, byte[] pngData) throws Exception {
         String fileId = UUID.randomUUID().toString();
         String fileName = buildTempFileName(tenantId, fileId);

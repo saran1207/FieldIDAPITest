@@ -153,22 +153,9 @@ public class LegacyAssetTypeManager implements LegacyAssetType {
 	
 	
 	private void processAssetImage( AssetType assetType, File assetImage ) throws ImageAttachmentException{
-		File imageDirectory = PathHandler.getAssetTypeImageFile(assetType);
-		// clear the old file if we have a new one uploaded or the image has been removed.
-		if( assetType.getImageName() == null || assetImage != null ) {
-			if( imageDirectory.exists() && imageDirectory.isDirectory() ) {
-				try {
-					FileUtils.cleanDirectory( imageDirectory );
-				} catch (Exception e) {
-					throw new ImageAttachmentException( e );
-				}
-			}
-		}
-		
 		if( assetImage != null ) {
 			try {
-				File imageFile = new File( imageDirectory, assetType.getImageName() );
-				FileUtils.copyFile( assetImage, imageFile );
+                s3Service.uploadAssetTypeProfileImage(assetImage, assetType);
 				assetImage.delete();
 			} catch (Exception e) {
 				throw new ImageAttachmentException( e );

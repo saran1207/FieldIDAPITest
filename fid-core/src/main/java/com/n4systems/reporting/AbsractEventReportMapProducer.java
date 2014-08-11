@@ -11,6 +11,7 @@ import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.DateTimeDefinition;
 import com.n4systems.util.DoubleFormatter;
+import com.n4systems.util.ServiceLocator;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -219,7 +220,7 @@ public abstract class AbsractEventReportMapProducer extends ReportMapProducer {
                             stateView.setState(unitOfMeasureValueStr);
                         } else if (result instanceof SignatureCriteriaResult) {
                             if (((SignatureCriteriaResult) result).isSigned()) {
-                                stateView.setStateImage(SignatureService.getSignatureService().getSignatureFileFor(getEvent().getTenant(), getEvent().getId(), result.getCriteria().getId()));
+                                stateView.setStateImage(ServiceLocator.getSignatureService().getSignatureFileFor(getEvent().getTenant(), getEvent().getId(), result.getCriteria().getId()));
                             }
                         } else if (result instanceof NumberFieldCriteriaResult) {
                             stateView.setState(getNumberStringValue(result));

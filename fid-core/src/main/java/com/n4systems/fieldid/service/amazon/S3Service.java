@@ -13,10 +13,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.fieldid.version.FieldIdVersion;
-import com.n4systems.model.Attachment;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.SignatureCriteriaResult;
-import com.n4systems.model.ThingEventProofTest;
+import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
@@ -69,6 +66,8 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String CRITERIA_RESULT_IMAGE_TEMP = "/temp_criteria_result_images/%s";
     public static final String CRITERIA_RESULT_THUMB_IMAGE_TEMP = "/temp_criteria_result_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_MEDIUM_IMAGE_TEMP = "/temp_criteria_result_images/%s.medium";
+
+    public static final String ASSETTYPE_PROFILE_IMAGE_PATH = "/assettypes/%d/profile/%s";
 
     public static final String ASSET_PROFILE_IMAGE_PATH = "/assets/%d/profile/";
     public static final String ASSET_PROFILE_IMAGE_PATH_ORIG = "/assets/%d/profile/%s";
@@ -751,6 +750,85 @@ public class S3Service extends FieldIdPersistenceService {
     protected String getBucketHostname() {
         String bucketHostname = configService.getString(ConfigEntry.AMAZON_S3_BUCKET) + "." + configService.getString(ConfigEntry.AMAZON_S3_SERVER_HOSTNAME);
         return bucketHostname;
+    }
+
+    public String getAssetTypeProfileImagePath(AssetType assetType){
+        String assetTypePath = getAssetTypeProfileImagePath(assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+        return assetTypePath;
+    }
+
+    public String getAssetTypeProfileImagePath(Long tenantId, Long assetTypeId, String assetTypeImageName){
+        String resourcePath = createResourcePath(tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+        return resourcePath;
+    }
+
+    public URL getAssetTypeProfileImageUrl(AssetType assetType){
+        URL eventSignatureUrl = getAssetTypeProfileImageUrl(assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+        return eventSignatureUrl;
+    }
+
+    public URL getAssetTypeProfileImageUrl(Long tenantId, Long assetTypeId, String assetTypeImageName){
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+        String resourcePath = getAssetTypeProfileImagePath(tenantId, assetTypeId, assetTypeImageName);
+        URL url = generatePresignedUrl(resourcePath, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public File downloadAssetTypeProfileImage(AssetType assetType){
+        return downloadAssetTypeProfileImage(assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+    }
+
+    public File downloadAssetTypeProfileImage(Long tenantId, Long assetTypeId, String assetTypeImageName){
+        File assetTypeProfileImageFile = null;
+        try {
+            byte[] assetTypeProfileImageBytes = downloadAssetTypeProfileImageBytes(tenantId, assetTypeId, assetTypeImageName);
+            assetTypeProfileImageFile = PathHandler.getUserFile(getCurrentUser(), assetTypeImageName);
+            FileOutputStream assetTypeProfileImageFos = new FileOutputStream(assetTypeProfileImageFile);
+            assetTypeProfileImageFos.write(assetTypeProfileImageBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp assettype profile image at: " + assetTypeProfileImageFile, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download assettype profile from S3", e);
+        }
+        return assetTypeProfileImageFile;
+    }
+
+    public void uploadAssetTypeProfileImage(File assetTypeProfileImageFile, AssetType assetType){
+        uploadAssetTypeProfileImage(assetTypeProfileImageFile, assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+    }
+
+    public void uploadAssetTypeProfileImage(File assetTypeProfileImageFile, Long tenantId, Long assetTypeId, String assetTypeImageName){
+        uploadResource(assetTypeProfileImageFile, tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+    }
+
+    public void uploadAssetTypeProfileImageData(byte[] assetTypeProfileImageData, AssetType assetType){
+        String contentType = ContentTypeUtil.getContentType(assetType.getImageName());
+        uploadAssetTypeProfileImageData(assetTypeProfileImageData, contentType, assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+    }
+
+    public void uploadAssetTypeProfileImageData(byte[] assetTypeProfileImageData, String contentType, Long tenantId, Long assetTypeId, String assetTypeImageName){
+        uploadResource(assetTypeProfileImageData, contentType, tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+    }
+
+    public byte[] downloadAssetTypeProfileImageBytes(AssetType assetType) throws IOException {
+        //the attachment Filename field is overloaded to house full URL instead of just the filename
+        byte[] assetTypeProfileImage = downloadAssetTypeProfileImageBytes(assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+        return assetTypeProfileImage;
+    }
+
+    public byte[] downloadAssetTypeProfileImageBytes(Long tenantId, Long assetTypeId, String assetTypeImageName) throws IOException {
+        return downloadResource(tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+    }
+
+    public boolean assetTypeProfileImageExists(AssetType assetType){
+        return assetTypeProfileImageExists(assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+    }
+
+    public boolean assetTypeProfileImageExists(Long tenantId, Long assetTypeId, String assetTypeImageName){
+        boolean exists = resourceExists(tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+        return exists;
     }
 
     public String getEventSignaturePath(SignatureCriteriaResult signatureResult){

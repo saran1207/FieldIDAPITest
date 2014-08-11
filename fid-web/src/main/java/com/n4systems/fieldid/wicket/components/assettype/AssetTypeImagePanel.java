@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.components.assettype;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.model.ContextAbsolutizer;
 import com.n4systems.model.AssetType;
@@ -15,6 +16,7 @@ import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.File;
 
@@ -26,6 +28,8 @@ public class AssetTypeImagePanel extends Panel {
     private boolean imageUpdated = false;
     private ExternalImage assetImage;
 
+    @SpringBean
+    protected S3Service s3Service;
 
     public AssetTypeImagePanel(String id, IModel<AssetType> assetTypeModel) {
         super(id);
@@ -70,10 +74,19 @@ public class AssetTypeImagePanel extends Panel {
         boolean imageExists;
         String imageUrl = "";
         if(assetTypeModel.getObject().getImageName() != null) {
-            imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("/file/downloadAssetTypeImage.action?uniqueID=" + assetTypeModel.getObject().getId());
-            imageExists = new File(PathHandler.getAssetTypeImageFile(assetTypeModel.getObject()), assetTypeModel.getObject().getImageName()).exists();
-        } else
+
+            boolean imageExistsLocal = new File(PathHandler.getAssetTypeImageFile(assetTypeModel.getObject()), assetTypeModel.getObject().getImageName()).exists();
+            boolean imageExistsRemote = s3Service.assetTypeProfileImageExists(assetTypeModel.getObject());
+            if(imageExistsRemote){
+                imageUrl = s3Service.getAssetTypeProfileImageUrl(assetTypeModel.getObject()).toString();
+            } else if(imageExistsLocal){
+                imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("/file/downloadAssetTypeImage.action?uniqueID=" + assetTypeModel.getObject().getId());
+            }
+
+            imageExists = imageExistsLocal || imageExistsRemote;
+        } else {
             imageExists = false;
+        }
 
         uploadedFileDisplayPanel.add(assetImage = new ExternalImage("image", imageUrl));
         assetImage.setVisible(imageExists && !imageUpdated);

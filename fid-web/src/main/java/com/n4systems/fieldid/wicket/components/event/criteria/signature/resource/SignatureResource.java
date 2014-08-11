@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.Tenant;
 import com.n4systems.services.signature.SignatureService;
+import com.n4systems.util.ServiceLocator;
 import org.apache.log4j.Logger;
 import org.apache.wicket.request.resource.DynamicImageResource;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -28,7 +29,7 @@ public class SignatureResource extends DynamicImageResource {
         }
 
         try {
-            return SignatureService.getSignatureService().loadSignatureImage(tenant, eventId, criteriaId);
+            return ServiceLocator.getSignatureService().loadSignatureImage(tenant, eventId, criteriaId);
         } catch (IOException e) {
             logger.info("error loading signature for resource", e);
             return null;

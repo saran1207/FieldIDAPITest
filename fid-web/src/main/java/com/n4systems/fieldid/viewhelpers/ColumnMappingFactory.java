@@ -31,8 +31,8 @@ public class ColumnMappingFactory {
 	 * @param clazz			The class to load properties from
 	 * @return				A list of ColumnMappingGroups populated with ColumnMappings
 	 */
-	public static SortedSet<ColumnMappingGroupView> getMappings(Class<?> clazz, Tenant tenant) {
-		return getMappings(clazz, tenant, true);
+	public static SortedSet<ColumnMappingGroupView> getMappings(Class<?> clazz) {
+		return getMappings(clazz, true);
 	}
 	
 	/**
@@ -43,11 +43,11 @@ public class ColumnMappingFactory {
 	 * @param forceReload	Forces a reload from the properties file
 	 * @return				A list of ColumnMappingGroups populated with ColumnMappings
 	 */
-	public static SortedSet<ColumnMappingGroupView> getMappings(Class<?> clazz, Tenant tenant, boolean forceReload) {
+	public static SortedSet<ColumnMappingGroupView> getMappings(Class<?> clazz, boolean forceReload) {
 		
 		SortedSet<ColumnMappingGroupView> mappings = classDataMap.get(clazz);
 		if(mappings == null || forceReload) {
-			mappings = loadMappings(clazz, tenant);
+			mappings = loadMappings(clazz);
 			classDataMap.put(clazz, mappings);
 		}
 		
@@ -61,8 +61,8 @@ public class ColumnMappingFactory {
 	 * @param clazz		The class to load properties from
 	 * @return			A SortedSet of ColumnMappingGroups populated with ColumnMappings
 	 */
-	private static SortedSet<ColumnMappingGroupView> loadMappings(Class<?> clazz, Tenant tenant) {
-		HierarchicalProperties properties = HirarchicalPropertiesLoader.load(clazz, tenant);
+	private static SortedSet<ColumnMappingGroupView> loadMappings(Class<?> clazz) {
+		HierarchicalProperties properties = HirarchicalPropertiesLoader.load(clazz);
 		
 		// we'll start by populating a map as it'll make it easier to add the mappings later
 		Map<String, ColumnMappingGroupView> groups = new HashMap<String, ColumnMappingGroupView>();
