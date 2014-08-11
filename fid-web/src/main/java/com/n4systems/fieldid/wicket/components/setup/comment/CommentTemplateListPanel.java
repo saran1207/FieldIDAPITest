@@ -17,6 +17,8 @@ import java.util.List;
  * and an "action" column) and - since Comment Templates have no state like other entities - there is no "Archived"
  * list.
  *
+ *
+ *
  * Created by Jordan Heath on 08/08/14.
  */
 public class CommentTemplateListPanel extends Panel {

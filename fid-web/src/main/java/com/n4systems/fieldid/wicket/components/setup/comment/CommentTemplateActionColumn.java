@@ -10,6 +10,7 @@ import org.apache.wicket.model.IModel;
 /**
  * This is the comment column for the Comment Template List Page.
  *
+ *
  * Created by Jordan Heath on 11/08/14.
  */
 public class CommentTemplateActionColumn extends AbstractColumn<CommentTemplate> {

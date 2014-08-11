@@ -76,6 +76,12 @@ public class CommentService extends FieldIdPersistenceService {
         return persistenceService.count(query);
     }
 
+    /**
+     * This method checks if a Comment Template name exists.
+     * @param name - A String value representing the name of the Comment Template.
+     * @param id - A Long value representing the ID of the comment template if there is one.
+     * @return A boolean value indicating whether (true) or not (false) the name is used elsewhere.
+     */
     public boolean exists(String name, Long id) {
         QueryBuilder<CommentTemplate> query = createUserSecurityBuilder(CommentTemplate.class);
 
@@ -85,7 +91,6 @@ public class CommentService extends FieldIdPersistenceService {
                                                      "id",
                                                      id));
         }
-
         return persistenceService.exists(query);
     }
 }

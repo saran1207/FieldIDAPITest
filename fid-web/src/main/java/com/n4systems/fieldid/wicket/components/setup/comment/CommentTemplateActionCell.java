@@ -16,6 +16,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
  *
  * This allows users to either Edit or Remove a Comment Template.
  *
+ *
  * Created by Jordan Heath on 08/08/14.
  */
 public class CommentTemplateActionCell extends Panel {
