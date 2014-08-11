@@ -7,6 +7,7 @@ import com.n4systems.fieldid.service.user.UserListFilterCriteria;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.people.table.UserGroupColumn;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
@@ -61,6 +62,8 @@ public class UsersListPage extends FieldIDTemplatePage {
     private IModel<UserListFilterCriteria> filterCriteriaModel;
     private Form filterForm;
 
+    protected FIDFeedbackPanel feedbackPanel;
+
     public UsersListPage() {
        filterCriteriaModel = getUserListFilterCriteria();
        dataProvider = new UsersDataProvider(filterCriteriaModel.getObject());
@@ -77,6 +80,9 @@ public class UsersListPage extends FieldIDTemplatePage {
     @Override
     protected void onInitialize() {
         super.onInitialize();
+
+        add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
+        feedbackPanel.setOutputMarkupId(true);
 
         add(filterForm = new Form<UserListFilterCriteria>("filterForm", filterCriteriaModel));
         filterForm.add(new TextField<String>("nameFilter", new PropertyModel<String>(filterCriteriaModel, "nameFilter")));
@@ -141,7 +147,12 @@ public class UsersListPage extends FieldIDTemplatePage {
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.emailaddress"), "emailAddress", "emailAddress"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.lastlogin"), "created"));
-        columns.add(new UsersListActionColumn());
+        columns.add(new UsersListActionColumn() {
+            @Override
+            protected void onArchive(AjaxRequestTarget target) {
+                target.add(usersListContainer, getTopFeedbackPanel());
+            }
+        });
         return columns;
     }
 

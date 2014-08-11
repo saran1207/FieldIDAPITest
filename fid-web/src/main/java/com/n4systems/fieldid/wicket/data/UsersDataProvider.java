@@ -25,12 +25,9 @@ public class UsersDataProvider extends FieldIDDataProvider<User> {
 
     @Override
     public Iterator<User> iterator(int first, int count) {
+        criteria.withOrder(getSort().getProperty(), getSort().isAscending());
         List<User> usersList = userService.getUsers(criteria);
-        if( first + count < usersList.size())
-                usersList.subList(first, first + count);
-        else
-                usersList.subList(first, usersList.size());
-        return usersList.iterator();
+        return usersList.subList(first, first + count).iterator();
     }
 
     @Override
