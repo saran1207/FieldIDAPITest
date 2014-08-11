@@ -12,6 +12,7 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.org.people.table.UserGroupColumn;
 import com.n4systems.fieldid.wicket.components.renderer.ListableChoiceRenderer;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
+import com.n4systems.fieldid.wicket.components.user.columns.LastLoginColumn;
 import com.n4systems.fieldid.wicket.components.user.columns.UserNameLinkColumn;
 import com.n4systems.fieldid.wicket.components.user.columns.UsersListActionColumn;
 import com.n4systems.fieldid.wicket.data.UsersDataProvider;
@@ -146,7 +147,7 @@ public class UsersListPage extends FieldIDTemplatePage {
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.customer"), "owner.customerOrg", "owner.customerOrg.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.emailaddress"), "emailAddress", "emailAddress"));
-        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.lastlogin"), "created"));
+        columns.add(new LastLoginColumn(new FIDLabelModel("label.lastlogin")));
         columns.add(new UsersListActionColumn() {
             @Override
             protected void onArchive(AjaxRequestTarget target) {
