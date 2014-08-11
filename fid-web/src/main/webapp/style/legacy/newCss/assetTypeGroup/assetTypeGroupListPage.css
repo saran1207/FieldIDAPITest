@@ -27,6 +27,6 @@
     display: inline-block;
 }
 
-.groupList tr td.buttons {
-    width: 100px;
+.actionColumn {
+    width: 50px;
 }

@@ -17,9 +17,18 @@
             <td class="nameColumn"><a wicket:id="nameLink"><span wicket:id="name"/></a></td>
             <td class="createdByColumn"><span wicket:enclosure="createdBy"><label wicket:id="createdBy"/>, </span><label wicket:id="createdDate"/></td>
             <td class="modifiedByColumn"><span wicket:enclosure="modifiedBy"><label wicket:id="modifiedBy"/>, </span><label wicket:id="modifiedDate"/></td>
-            <td class="buttons">
-                <a wicket:id="edit"><wicket:message key="label.edit"/></a>
-                <a wicket:id="delete"><wicket:message key="label.delete"/></a>
+            <td class="actionColumn">
+                <div class="split-btn">
+                    <a class="btn-secondary" wicket:id="edit"><wicket:message key="label.edit"/></a>
+                    <div class="dropdown">
+                        <button class="btn-secondary">
+                            <span>Toggle Dropdown</span>
+                        </button>
+                        <ul>
+                            <li><a wicket:id="delete"><wicket:message key="label.delete"/></a></li>
+                        </ul>
+                    </div>
+                </div>
             </td>
         </tr>
         </tbody>

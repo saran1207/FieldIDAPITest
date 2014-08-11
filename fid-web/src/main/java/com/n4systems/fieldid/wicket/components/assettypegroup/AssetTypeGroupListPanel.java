@@ -10,6 +10,7 @@ import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.ViewAssetTypeGrou
 import com.n4systems.model.AssetTypeGroup;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -52,6 +53,7 @@ public class AssetTypeGroupListPanel extends Panel {
                 item.add(new Label("createdDate", new DayDisplayModel(new PropertyModel<Date>(assetTypeGroup, "created"), true, timeZone)));
                 item.add(new Label("modifiedBy", new PropertyModel<String>(assetTypeGroup, "modifiedBy.displayName")).setVisible(assetTypeGroup.getModifiedBy() != null));
                 item.add(new Label("modifiedDate", new DayDisplayModel(new PropertyModel<Date>(assetTypeGroup, "modified"), true, timeZone)));
+
                 item.add(new BookmarkablePageLink<Void>("edit", EditAssetTypeGroupPage.class, PageParametersBuilder.uniqueId(assetTypeGroupId)));
                 item.add(new BookmarkablePageLink<Void>("delete", ConfirmDeleteAssetTypeGroupPage.class, PageParametersBuilder.uniqueId(assetTypeGroupId)));
 
