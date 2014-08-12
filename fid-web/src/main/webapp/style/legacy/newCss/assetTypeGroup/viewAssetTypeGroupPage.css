@@ -1,4 +1,12 @@
 
+h2 {
+    display: inline;
+}
+
+.editLink {
+    padding-left: 10px;
+}
+
 .labelContainer {
     margin-top: 20px;
     margin-bottom: 20px;

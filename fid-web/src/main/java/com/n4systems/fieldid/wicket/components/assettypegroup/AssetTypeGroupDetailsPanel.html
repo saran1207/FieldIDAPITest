@@ -6,7 +6,11 @@
 <wicket:panel>
 
     <div>
-        <h2><wicket:message key="label.groupdetails"/></h2>
+        <div>
+            <h2><wicket:message key="label.groupdetails"/></h2>
+            <a wicket:id="editLink"><wicket:message key="label.edit" class="editLink"/></a>
+        </div>
+
         <div class="labelContainer">
             <wicket:message key="label.name"/>
             <label wicket:id="name"/>
