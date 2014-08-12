@@ -1,7 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.user.User;
 import com.n4systems.security.UserType;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -15,10 +14,9 @@ public class AddPersonPage extends UserPage {
     }
 
     @Override
-    protected User doSave() {
-        User person = userModel.getObject();
-        userService.create(person);
-        return person;
+    protected void doSave() {
+        userService.create(userModel.getObject());
+        setResponsePage(UsersListPage.class);
     }
 
     @Override

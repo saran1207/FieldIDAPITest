@@ -3,7 +3,6 @@ package com.n4systems.fieldid.wicket.pages.setup.user;
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.user.UserListFilterCriteria;
 import com.n4systems.fieldid.wicket.components.user.columns.ArchivedUsersListActionColumn;
-import com.n4systems.fieldid.wicket.components.user.columns.UserNameLinkColumn;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -24,7 +23,7 @@ public class ArchivedUsersListPage extends UsersListPage {
     protected List<IColumn<User>> getUserTableColumns() {
         List<IColumn<User>> columns = Lists.newArrayList();
 
-        columns.add(new UserNameLinkColumn(new FIDLabelModel("label.name_first_last"), "firstName, lastName"));
+        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.name_first_last"), "firstName, lastName", "fullName"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.organization"), "owner", "owner.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.customer"), "owner.customerOrg", "owner.customerOrg.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name"));
