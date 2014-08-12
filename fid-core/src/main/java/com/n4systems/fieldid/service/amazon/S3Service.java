@@ -883,7 +883,7 @@ public class S3Service extends FieldIdPersistenceService {
         File userSignatureFile = null;
         try {
             byte[] userSignatureBytes = downloadUserSignatureBytes(userId);
-            userSignatureFile = PathHandler.getUserFile(getCurrentUser(), userId + SIGNATURE_IMAGE_FILE_NAME);
+            userSignatureFile = PathHandler.getUserFile(getCurrentUser(), userId + USER_SIGNATURE_IMAGE_FILE_NAME);
             FileOutputStream userSignatureFos = new FileOutputStream(userSignatureFile);
             userSignatureFos.write(userSignatureBytes);
         }
