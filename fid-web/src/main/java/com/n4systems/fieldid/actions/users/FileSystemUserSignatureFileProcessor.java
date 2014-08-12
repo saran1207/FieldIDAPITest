@@ -22,6 +22,9 @@ public class FileSystemUserSignatureFileProcessor {
 
 
 	public void process(UploadedImage signature) throws FileProcessingException {
+        if (signature.isRemoveImage()) {
+            removeExistingSignature();
+        }
 		if (signature.isNewImage()) {
 			putNewImageInPlace(signature);
 		}
@@ -36,4 +39,9 @@ public class FileSystemUserSignatureFileProcessor {
 		return new File(PathHandler.getTempRoot().getAbsolutePath() + '/' + signature.getUploadDirectory());
 	}
 
+    private void removeExistingSignature() {
+        if (s3Service.userSignatureExists(user)) {
+            s3Service.removeUserSignature(user);
+        }
+    }
 }

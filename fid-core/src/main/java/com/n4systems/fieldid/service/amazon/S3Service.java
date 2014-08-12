@@ -933,6 +933,14 @@ public class S3Service extends FieldIdPersistenceService {
         return exists;
     }
 
+    public void removeUserSignature(User user){
+        removeUserSignature(user.getId());
+    }
+
+    public void removeUserSignature(Long userId) {
+        removeResource(null, USER_SIGNATURE_PATH, userId);
+    }
+
     public String getEventSignaturePath(SignatureCriteriaResult signatureResult){
         String eventSignaturePath = getEventSignaturePath(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
         return eventSignaturePath;
