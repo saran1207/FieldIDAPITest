@@ -7,7 +7,7 @@
 <wicket:extend>
     <div wicket:id="feedbackPanel"/>
 
-    <div wicket:id="instructions" class="instructions"/>
+    <h2><div wicket:id="instructions" class="instructions"/></h2>
 
     <ul class="list-table">
         <li class="header">
@@ -15,13 +15,17 @@
         </li>
 
         <li class="infoSet">
-            <label wicket:id="assetTypesToDetach"/>
-            <span><wicket:message key="label.assettypesbeingdetached"/></span>
+            <span>
+                <label wicket:id="assetTypesToDetach"/>
+                <wicket:message key="label.assettypesbeingdetached"/>
+            </span>
         </li>
 
         <li class="infoSet">
-            <label wicket:id="reportsAndSearchesToDelete"/>
-            <span><wicket:message key="label.saved_reports_being_deleted"/></span>
+            <span>
+                <label wicket:id="reportsAndSearchesToDelete"/>
+                <wicket:message key="label.saved_reports_being_deleted"/>
+            </span>
         </li>
     </ul>
 

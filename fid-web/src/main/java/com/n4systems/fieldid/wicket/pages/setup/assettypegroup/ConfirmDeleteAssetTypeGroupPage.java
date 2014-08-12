@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.util.AssetTypeGroupRemovalSummary;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -88,6 +89,11 @@ public class ConfirmDeleteAssetTypeGroupPage extends FieldIDTemplatePage {
                 aNavItem().label("nav.edit").page(EditAssetTypeGroupPage.class).params(PageParametersBuilder.uniqueId(assetTypeGroup.getId())).build(),
                 aNavItem().label("nav.add").page(AddAssetTypePage.class).onRight().build()
         ));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/legacy/newCss/assetTypeGroup/confirmDeleteAssetTypeGroup.css");
     }
 
 }
