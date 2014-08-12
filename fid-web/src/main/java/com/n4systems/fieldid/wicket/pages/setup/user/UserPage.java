@@ -173,6 +173,10 @@ public abstract class UserPage extends FieldIDTemplatePage {
             saveSignatureFile(signature);
         }
 
+        if(user.isArchived()) {
+            user.activateEntity();
+        }
+
         userService.update(user);
 
         return user;

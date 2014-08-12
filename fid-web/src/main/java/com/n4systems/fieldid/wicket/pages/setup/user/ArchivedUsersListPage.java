@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.components.user.columns.ArchivedUsersListAct
 import com.n4systems.fieldid.wicket.components.user.columns.UserNameLinkColumn;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.user.User;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.model.Model;
@@ -29,7 +30,13 @@ public class ArchivedUsersListPage extends UsersListPage {
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.emailaddress"), "emailAddress", "emailAddress"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.lastlogin"), "created"));
-        columns.add(new ArchivedUsersListActionColumn());
+        columns.add(new ArchivedUsersListActionColumn() {
+            @Override
+            protected void onError(AjaxRequestTarget target, String message) {
+                error(message);
+                target.add(feedbackPanel);
+            }
+        });
         return columns;
     }
 }
