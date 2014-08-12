@@ -24,8 +24,8 @@ public class PathHandler {
     private static final String ASSET_REPORT_FILE_NAME_LOCALIZED = "product_%s" + REPORT_FILE_EXT;
     private static final String COMPILED_ASSET_REPORT_FILE_NAME = "product" + COMPILED_REPORT_FILE_EXT;
     private static final String COMPILED_ASSET_REPORT_FILE_NAME_LOCALIZED = "product_%s" + COMPILED_REPORT_FILE_EXT;
-	public static final String CHART_FILE_NAME = "proof_test_chart.png";
-    public static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
+    private static final String CHART_FILE_NAME = "proof_test_chart.png";
+    private static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
 	private static final String SIGNATURE_IMAGE_FILE_NAME = "signature.gif";
 	private static final String EVENT_PATH_BASE = PRIVATE_PATH_BASE + "/inspections";
 	private static final String ASSET_PATH_BASE = PRIVATE_PATH_BASE + "/products";
@@ -498,7 +498,7 @@ public class PathHandler {
 	public static File getUserFile(User user, String fileName) {
 		return new File(getUserPrivateDir(user), fileName);
 	}
-	
+
 	/** @return The signature image for a user  */
 	public static File getSignatureImage(User user) {
 		return getUserFile(user, SIGNATURE_IMAGE_FILE_NAME);

@@ -318,7 +318,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 		reportMap.put("performByName", performedBy.getUserLabel());
 		reportMap.put("position", performedBy.getPosition());
 		reportMap.put("initials", performedBy.getInitials());
-		reportMap.put("signatureImage", StreamHelper.openQuietly(PathHandler.getSignatureImage(performedBy)));
+		reportMap.put("signatureImage", StreamHelper.openQuietly(s3service.userSignatureExists(performedBy) ? s3service.downloadUserSignature(performedBy) : PathHandler.getSignatureImage(performedBy)));
 		
 		addOrganizationParams(reportMap, performedBy.getOwner().getInternalOrg());
 	}
@@ -329,7 +329,7 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 			reportMap.put("identifiedBy", identifiedBy.getUserLabel());
 			reportMap.put("position", identifiedBy.getPosition());
 			reportMap.put("initials", identifiedBy.getInitials());
-			reportMap.put("signatureImage", StreamHelper.openQuietly(PathHandler.getSignatureImage(identifiedBy)));
+			reportMap.put("signatureImage", StreamHelper.openQuietly(s3service.userSignatureExists(identifiedBy) ? s3service.downloadUserSignature(identifiedBy) : PathHandler.getSignatureImage(identifiedBy)));
 		}
 	}
 	

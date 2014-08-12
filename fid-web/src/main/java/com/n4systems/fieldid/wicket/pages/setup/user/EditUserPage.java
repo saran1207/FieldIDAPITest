@@ -1,12 +1,14 @@
 package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.actions.users.UploadedImage;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.user.UserFormAccountPanel;
 import com.n4systems.fieldid.wicket.components.user.UserFormPermissionsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.ServiceLocator;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -17,6 +19,8 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
 public class EditUserPage extends UserPage {
+
+    private S3Service s3Service = ServiceLocator.getS3Service();
 
     public EditUserPage(PageParameters parameters) {
         super(parameters);
@@ -43,6 +47,10 @@ public class EditUserPage extends UserPage {
         UploadedImage uploadedImage = new UploadedImage();
 
         if (signatureImage.exists()) {
+            uploadedImage.setImage(signatureImage);
+            uploadedImage.setUploadDirectory(signatureImage.getPath());
+        } else if(s3Service.userSignatureExists(userModel.getObject())){
+            signatureImage = s3Service.downloadUserSignature(userModel.getObject());
             uploadedImage.setImage(signatureImage);
             uploadedImage.setUploadDirectory(signatureImage.getPath());
         }

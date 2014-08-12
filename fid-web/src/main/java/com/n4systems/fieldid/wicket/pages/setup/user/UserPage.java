@@ -16,7 +16,6 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.user.User;
-import com.n4systems.reporting.PathHandler;
 import com.n4systems.security.UserType;
 import com.n4systems.util.timezone.Country;
 import com.n4systems.util.timezone.CountryList;
@@ -77,7 +76,7 @@ public abstract class UserPage extends FieldIDTemplatePage {
     }
 
     protected void saveSignatureFile(UploadedImage signature) {
-        new FileSystemUserSignatureFileProcessor(PathHandler.getSignatureImage(userModel.getObject())).process(signature);
+        new FileSystemUserSignatureFileProcessor(userModel.getObject()).process(signature);
     }
 
     protected void sendWelcomeEmail(User user, WelcomeMessage welcomeMessage, boolean passwordAssigned) {
