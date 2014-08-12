@@ -84,10 +84,10 @@ public class ConfirmDeleteAssetTypeGroupPage extends FieldIDTemplatePage {
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page(AssetTypeListPage.class).build(),
-                aNavItem().label("nav.view").page(ViewAssetTypeGroupPage.class).params(PageParametersBuilder.uniqueId(assetTypeGroup.getId())).build(),
+                aNavItem().label("nav.view_all").page(AssetTypeGroupListPage.class).build(),
+                aNavItem().label("nav.view").page(ConfirmDeleteAssetTypeGroupPage.class).params(PageParametersBuilder.uniqueId(assetTypeGroup.getId())).build(),
                 aNavItem().label("nav.edit").page(EditAssetTypeGroupPage.class).params(PageParametersBuilder.uniqueId(assetTypeGroup.getId())).build(),
-                aNavItem().label("nav.add").page(AddAssetTypePage.class).onRight().build()
+                aNavItem().label("nav.add").page(AddAssetTypeGroupPage.class).onRight().build()
         ));
     }
 

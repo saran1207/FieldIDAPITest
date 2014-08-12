@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.service.asset;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.search.SavedReportService;
 import com.n4systems.fieldid.service.search.SavedSearchRemoveFilter;
@@ -11,6 +12,7 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.util.AssetTypeGroupRemovalSummary;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoFieldBean;
@@ -30,21 +32,27 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
 
     private List<Long> reorderedIdList = new ArrayList<Long>();
     private List<AssetTypeGroup> groups;
+    private static final Logger logger= Logger.getLogger(AssetTypeGroupService.class);
 
     @Transactional
 	public AssetTypeGroupRemovalSummary testDelete(AssetTypeGroup group) {
 		AssetTypeGroupRemovalSummary summary = new AssetTypeGroupRemovalSummary(group);
 
-		QueryBuilder<AssetType> countQuery = new QueryBuilder<AssetType>(AssetType.class, new OpenSecurityFilter());
-		countQuery.addSimpleWhere("group", group);
-        summary.setAssetTypesConnected(persistenceService.count(countQuery));
+        try {
+            QueryBuilder<AssetType> countQuery = new QueryBuilder<AssetType>(AssetType.class, new OpenSecurityFilter());
+            countQuery.addSimpleWhere("group", group);
+            summary.setAssetTypesConnected(persistenceService.count(countQuery));
 
-        final QueryBuilder<SearchCriteria> savedItemCountQuery = createTenantSecurityBuilder(SearchCriteria.class);
-        savedItemCountQuery.addSimpleWhere("assetTypeGroup", group);
-        final List<SearchCriteria> all = persistenceService.findAll(savedItemCountQuery);
+            final QueryBuilder<SearchCriteria> savedItemCountQuery = createTenantSecurityBuilder(SearchCriteria.class);
+            savedItemCountQuery.addSimpleWhere("assetTypeGroup", group);
+            final List<SearchCriteria> all = persistenceService.findAll(savedItemCountQuery);
 
-        summary.setSavedReportsConnected((long)all.size());
-
+            summary.setSavedReportsConnected((long)all.size());
+        }
+		catch ( InvalidQueryException e) {
+            logger.error("bad removal summary query", e);
+            summary = null;
+        }
 		return summary;
 	}
 
@@ -64,7 +72,12 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         Query clearAssetTypesQuery = persistenceService.createQuery("UPDATE " + AssetType.class.getName() + " assetType SET assetType.group = null WHERE assetType.group = :group", params);
         clearAssetTypesQuery.executeUpdate();
 
-        persistenceService.delete(groupToDelete);
+        try {
+            persistenceService.delete(groupToDelete);
+        }
+        catch (Exception e) {
+            logger.error("could not delete asset type group: " + group.getDisplayName(), e);
+        }
 	}
 
     public AssetTypeGroupRemovalSummary getRemovalSummary(AssetTypeGroup group) {
@@ -88,8 +101,12 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
     }
 
     public AssetTypeGroup saveAssetTypeGroup(AssetTypeGroup assetTypeGroup) {
-//        assetTypeGroup.touch();
-        assetTypeGroup = (AssetTypeGroup) persistenceService.saveOrUpdate(assetTypeGroup);
+        try {
+            assetTypeGroup = (AssetTypeGroup) persistenceService.saveOrUpdate(assetTypeGroup);
+        }
+        catch (Exception e) {
+            logger.error("could not save asset type group: " + assetTypeGroup.getDisplayName(), e);
+        }
 
         return assetTypeGroup;
     }
@@ -106,7 +123,12 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
             group.setOrderIdx(new Long(i));
         }
 
-        persistenceService.updateAll(groupList, getCurrentUser().getId());
+        try {
+            persistenceService.updateAll(groupList, getCurrentUser().getId());
+        }
+        catch (Exception e) {
+            logger.error("could not update asset type groups" + e);
+        }
     }
 
     public List<AssetTypeGroup> getGroups() {
@@ -115,6 +137,5 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         }
         return groups;
     }
-
 
 }

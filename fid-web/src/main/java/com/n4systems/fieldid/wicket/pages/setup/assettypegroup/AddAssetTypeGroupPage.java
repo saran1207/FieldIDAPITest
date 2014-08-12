@@ -13,6 +13,7 @@ import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
 import com.n4systems.model.AssetTypeGroup;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -68,6 +69,11 @@ public class AddAssetTypeGroupPage extends FieldIDTemplatePage{
                         error.addMessageKey("error.assettypegroupnameduplicate");
                         validatable.error(error);
                     }
+                    if (name.length() > 40) {
+                        ValidationError error = new ValidationError();
+                        error.addMessageKey("error.assettypegroupnametoolong");
+                        validatable.error(error);
+                    }
                 }
             });
             add(nameField);
@@ -88,16 +94,10 @@ public class AddAssetTypeGroupPage extends FieldIDTemplatePage{
             }
 
             assetTypeGroupService.saveAssetTypeGroup(assetTypeGroup);
-
-            if (isEdit()) {
-                FieldIDSession.get().info(new FIDLabelModel("message.asset_type.edit").getObject());
-            } else {
-                FieldIDSession.get().info(new FIDLabelModel("message.asset_type.add").getObject());
-            }
+            FieldIDSession.get().info(new FIDLabelModel("message.assettypegroupsaved").getObject());
 
             setResponsePage(AssetTypeGroupListPage.class);
         }
-
     }
 
     protected AssetTypeGroup getAssetTypeGroup(PageParameters params) {
