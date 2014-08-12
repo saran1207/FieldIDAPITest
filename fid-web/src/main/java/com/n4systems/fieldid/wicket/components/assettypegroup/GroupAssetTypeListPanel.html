@@ -5,16 +5,10 @@
       lang="en">
 <wicket:panel>
 
-    <table class="list">
-        <tbody>
-        <tr>
-            <th><wicket:message key="label.assettypes"/></th>
-        </tr>
-        <tr wicket:id="list">
-            <td><a wicket:id="nameLink"><span wicket:id="name"/></a></td>
-        </tr>
-        </tbody>
-    </table>
+    <h2><wicket:message key="label.assettypes"/></h2>
+    <ul wicket:id="list" class="list assetTypeList">
+        <li><a wicket:id="nameLink"><span wicket:id="name"/></a></li>
+    </ul>
 
 </wicket:panel>
 </html>
