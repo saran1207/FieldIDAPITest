@@ -3,8 +3,6 @@ package com.n4systems.fieldid.wicket.components.setup.assetstatus;
 import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
-import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AddAssetStatusPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.EditAssetStatusPage;
 import com.n4systems.model.AssetStatus;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -43,17 +41,16 @@ public class AssetStatusActionCell extends Panel {
     public AssetStatusActionCell(String id, final IModel<AssetStatus> model, final AssetStatusListPanel listPanel) {
         super(id);
 
-        final AssetStatus thisStatus = model.getObject();
-
-        AssetStatus assetStatus = model.getObject();
+        this.thisStatus = model.getObject();
 
         Link editLink;
 
         add(editLink = new BookmarkablePageLink("editLink",
                                                 EditAssetStatusPage.class,
-                                                PageParametersBuilder.param("assetStatusId", assetStatus.getId())));
+                                                PageParametersBuilder.param("assetStatusId",
+                                                                            thisStatus.getId())));
 
-        editLink.setVisible(assetStatus.isActive());
+        editLink.setVisible(thisStatus.isActive());
 
         //We don't need to worry about controlling the visibility of this link, because it lives inside of a
         //wicket:enclosure, with editLink set as its child.  This means that any time the visibility of editLink
@@ -65,12 +62,13 @@ public class AssetStatusActionCell extends Panel {
              */
             @Override
             public void onClick(AjaxRequestTarget target) {
-                assetStatusService.archiveStatus(thisStatus);
+                AssetStatus archiveMe = assetStatusService.getStatusById(thisStatus.getId());
+                assetStatusService.archiveStatus(archiveMe);
 
                 info(new FIDLabelModel("message.archive_asset_status",
-                                       thisStatus.getDisplayName()).getObject());
-                target.add(listPanel.getFeedbackPanel());
-                target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
+                        thisStatus.getDisplayName()).getObject());
+
+                target.add(listPanel);
             }
         });
 
@@ -83,15 +81,15 @@ public class AssetStatusActionCell extends Panel {
              */
             @Override
             public void onClick(AjaxRequestTarget target) {
-                assetStatusService.unarchiveStatus(thisStatus);
+                AssetStatus unarchiveMe = assetStatusService.getStatusById(thisStatus.getId());
+                assetStatusService.unarchiveStatus(unarchiveMe);
 
                 info(new FIDLabelModel("message.unarchive_asset_status",
-                                       thisStatus.getDisplayName()).getObject());
-                target.add(listPanel.getFeedbackPanel());
-                target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
+                        thisStatus.getDisplayName()).getObject());
+                target.add(listPanel);
             }
         });
 
-        unarchiveLink.setVisible(assetStatus.isArchived());
+        unarchiveLink.setVisible(thisStatus.isArchived());
     }
 }
