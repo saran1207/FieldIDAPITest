@@ -162,6 +162,7 @@ public class ViewUserPage extends FieldIDTemplatePage{
                 aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.view").page(this.getClass()).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.mobile_passcode").page(EditUserMobilePasscodePage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.add").page(this.getClass()).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));
