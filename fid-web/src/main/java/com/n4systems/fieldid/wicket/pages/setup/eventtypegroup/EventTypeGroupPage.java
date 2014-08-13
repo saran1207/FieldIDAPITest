@@ -23,7 +23,8 @@ public class EventTypeGroupPage extends FieldIDTemplatePage {
         add(new NavigationBar(navBarId,
                 aNavItem().label(new FIDLabelModel("nav.view_all")).page(EventTypeGroupListPage.class).build(),
                 aNavItem().label(new FIDLabelModel("nav.view_all_archived")).page(EventTypeGroupListArchivePage.class).build(),
-                aNavItem().label(new FIDLabelModel("nav.add")).page("eventTypeGroupAdd.action").build()
+                aNavItem().label(new FIDLabelModel("nav.add")).page(EventTypeGroupAddPage.class).onRight().build()
         ));
     }
+
 }

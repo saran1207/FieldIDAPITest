@@ -3,7 +3,10 @@ package com.n4systems.fieldid.service.event;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.EventType;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.PrintOut;
+import com.n4systems.model.Tenant;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.persistence.JoinClause;
@@ -24,6 +27,12 @@ public class EventTypeGroupService extends FieldIdPersistenceService {
         query.addOrder("name");
         return persistenceService.findAll(query);
     }
+
+    public EventTypeGroup getEventTypeGroupById(Long id) {
+        QueryBuilder<EventTypeGroup> query = createUserSecurityBuilder(EventTypeGroup.class);
+        query.addSimpleWhere("id", id);
+        return persistenceService.find(query);
+    }
     
     public Long getNumberOfAssociatedEventTypes(EventTypeGroup group) {
         QueryBuilder<EventType> eventTypeCountQuery = createUserSecurityBuilder(EventType.class);
@@ -36,6 +45,14 @@ public class EventTypeGroupService extends FieldIdPersistenceService {
         group.setModifiedBy(user);
 		eventTypeService.touchEventTypesForGroup(group.getId(), user);
         return persistenceService.update(group);
+    }
+
+    public void create(EventTypeGroup group, User user, Tenant tenant) {
+        group.setModified(new Date());
+        group.setModifiedBy(user);
+        group.setTenant(tenant);
+        eventTypeService.touchEventTypesForGroup(group.getId(), user);
+        persistenceService.update(group);
     }
 
     public void archive(EventTypeGroup group, User user) {
@@ -103,6 +120,48 @@ public class EventTypeGroupService extends FieldIdPersistenceService {
         QueryBuilder<EventTypeGroup> query = createUserSecurityBuilder(EventTypeGroup.class, true);
         query.addSimpleWhere("state", state);
         return persistenceService.count(query);
+    }
+
+    public List<PrintOut> findCertPrintOuts(){
+        return findPrintOutsOfType(PrintOut.PrintOutType.CERT);
+    }
+
+    public List<PrintOut> findObservationPrintOuts(){
+        return findPrintOutsOfType(PrintOut.PrintOutType.OBSERVATION);
+    }
+
+    private List<PrintOut> findPrintOutsOfType(PrintOut.PrintOutType type) {
+        List<PrintOut> printOuts = null;
+
+        QueryBuilder<PrintOut> queryBuilder = new QueryBuilder<PrintOut>(PrintOut.class, new OpenSecurityFilter());
+        queryBuilder.addSimpleWhere("type", type);
+        queryBuilder.addSimpleWhere("custom", false);
+        queryBuilder.addOrder("name");
+        printOuts = persistenceService.findAll(queryBuilder);
+
+        QueryBuilder<PrintOut>queryBuilderCustomPrintOuts = createUserSecurityBuilder(PrintOut.class);
+        queryBuilderCustomPrintOuts.addSimpleWhere("type", type);
+        queryBuilderCustomPrintOuts.addSimpleWhere("custom", true);
+        queryBuilder.addOrder("name");
+        printOuts.addAll(persistenceService.findAll(queryBuilderCustomPrintOuts));
+
+        return printOuts;
+    }
+
+    public EventTypeGroup getNewEventTypeGroup() {
+        EventTypeGroup eventTypeGroup = new EventTypeGroup();
+        eventTypeGroup.setPrintOut(getDefaultCertPrintOut());
+        eventTypeGroup.setObservationPrintOut(null);
+
+        return eventTypeGroup;
+    }
+
+
+    private PrintOut getDefaultCertPrintOut() {
+        QueryBuilder<PrintOut> queryBuilder = new QueryBuilder<PrintOut>(PrintOut.class, new OpenSecurityFilter());
+        queryBuilder.addSimpleWhere("name", "2 Column with Observations");
+        queryBuilder.addSimpleWhere("custom", false);
+        return persistenceService.find(queryBuilder);
     }
 
 }

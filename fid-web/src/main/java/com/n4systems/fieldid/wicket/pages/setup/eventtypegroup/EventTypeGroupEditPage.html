@@ -1,0 +1,52 @@
+<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/html">
+<wicket:extend>
+    <div wicket:id="feedbackPanel"></div>
+    <form wicket:id="outerEventForm">
+        <div>
+            <div class="certFormTitle">
+                <h2><wicket:message key="label.event_group_name"/></h2>
+                <span><wicket:message key="label.event_group_name_desc"/></span>
+            </div>
+            <div class="infoSet">
+                <div wicket:id="name"/>
+            </div>
+
+            <div class="certFormTitle">
+                <h2><wicket:message key="label.report_title"/></h2>
+                <span><wicket:message key="label.report_title_desc"/></span>
+            </div>
+            <div class="infoSet">
+                <div wicket:id="reportTitle"/>
+            </div>
+
+            <div class="certFormTitle">
+                <h2><wicket:message key="label.select_event_pdf_report_style"/></h2>
+                <span><wicket:message key="label.select_event_pdf_report_style_desc"/>&nbsp;<a href="mailto:support@fieldid.com"><wicket:message key="label.contactus"/>.</a></span>
+            </div>
+
+            <div class="printOutSelection">
+                <div wicket:id="printOutSection"/>
+            </div>
+
+            <div class="certFormTitle">
+                <h2><wicket:message key="label.select_pdf_observation_report_style"/></h2>
+                <span><wicket:message key="label.select_pdf_observation_report_style_desc"/></span>
+            </div>
+
+            <div class="printOutSelection">
+                <div wicket:id="printOutSection2"/>
+            </div>
+
+
+            <div class="formAction">
+                <input type="submit" wicket:id="saveButton" wicket:message="value:hbutton.save">
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink">
+                    <wicket:message key="label.cancel"/>
+                </a>
+            </div>
+
+        </div>
+    </form>
+</wicket:extend>
+</html>
