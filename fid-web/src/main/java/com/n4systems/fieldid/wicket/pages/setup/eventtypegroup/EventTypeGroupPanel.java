@@ -66,7 +66,7 @@ public class EventTypeGroupPanel extends Panel {
 
         columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.createdby"),"createdBy.firstName", "createdBy.firstName"));
 
-        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.created"), "created", "created") {
+        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.created_on"), "created", "created") {
             @Override
             public void populateItem(Item<ICellPopulator<EventTypeGroup>> item, String componentId, IModel<EventTypeGroup> rowModel) {
                 Date created = rowModel.getObject().getCreated();
@@ -76,7 +76,7 @@ public class EventTypeGroupPanel extends Panel {
 
         columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.modifiedby"),"modifiedBy.firstName", "modifiedBy.firstName"));
 
-        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.modified"), "modified", "modified") {
+        columns.add(new PropertyColumn<EventTypeGroup>(new FIDLabelModel("label.modified_on"), "modified", "modified") {
             @Override
             public void populateItem(Item<ICellPopulator<EventTypeGroup>> item, String componentId, IModel<EventTypeGroup> rowModel) {
                 Date modified = rowModel.getObject().getModified();

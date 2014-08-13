@@ -3,6 +3,7 @@ package com.n4systems.fieldid.actions.signature;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.downloaders.DownloadAction;
 import com.n4systems.services.signature.SignatureService;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
@@ -16,8 +17,7 @@ public class SignatureAction extends DownloadAction {
 
     private static Logger logger = Logger.getLogger(SignatureAction.class);
 
-    @SpringBean
-    SignatureService signatureService;
+    SignatureService signatureService = ServiceLocator.getSignatureService();
 
     private String pngData;
     private String signatureFileId;

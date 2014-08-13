@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:panel>
+
+    <table class="list borders clear groupList">
+        <tbody>
+        <tr>
+            <th><wicket:message key="label.name"/></th>
+            <th><wicket:message key="label.createdby"/></th>
+            <th><wicket:message key="label.created_on"/></th>
+            <th><wicket:message key="label.modifiedby"/></th>
+            <th><wicket:message key="label.last_modified"/></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr wicket:id="assetTypeGroupList" class="groupList">
+            <td class="nameColumn"><a wicket:id="nameLink"><span wicket:id="name"/></a></td>
+            <td class="createdBy"><label wicket:id="createdBy"/></td>
+            <td class="createdDate"><label wicket:id="createdDate"/></td>
+            <td class="modifiedBy"><label wicket:id="modifiedBy"/></td>
+            <td class="modifiedDate"><label wicket:id="modifiedDate"/></td>
+            <td class="actionColumn">
+                <div class="split-btn">
+                    <a class="btn-secondary" wicket:id="edit"><wicket:message key="label.edit"/></a>
+                    <div class="dropdown">
+                        <button class="btn-secondary">
+                            <span>Toggle Dropdown</span>
+                        </button>
+                        <ul>
+                            <li><a wicket:id="delete"><wicket:message key="label.delete"/></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</wicket:panel>
+</html>

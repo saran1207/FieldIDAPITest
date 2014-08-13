@@ -81,7 +81,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
         AssetType assetType = new AssetType();
         assetType.setTenant(getTenant());
         if(!params.get("group").isNull()) {
-            AssetTypeGroup group = assetTypeGroupService.getGroupById(params.get("group").toLong());
+            AssetTypeGroup group = assetTypeGroupService.getAssetTypeGroupById(params.get("group").toLong());
             assetType.setGroup(group);
         }
         return assetType;

@@ -46,6 +46,7 @@ import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
+import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.comment.AddCommentTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
@@ -58,9 +59,7 @@ import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListArchivePage;
-import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.ReassignEventTypeGroupPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.*;
 import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.ConfirmArchivePage;
@@ -135,7 +134,12 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/addEventBook", AddEventBookPage.class);
         mountPage("setup/editEventBook", EditEventBookPage.class);
         mountPage("setup/eventBooksArchivedList", EventBooksListArchivedPage.class);
-
+        mountPage("setup/assetTypeGroupsList", AssetTypeGroupListPage.class);
+        mountPage("setup/reorderAssetTypeGroups", ReorderAssetTypeGroupPage.class);
+        mountPage("setup/viewAssetTypeGroup", ViewAssetTypeGroupPage.class);
+        mountPage("setup/addAssetTypeGroup", AddAssetTypeGroupPage.class);
+        mountPage("setup/editAssetTypeGroup", EditAssetTypeGroupPage.class);
+        mountPage("setup/confirmDeleteAssetTypeGroup", ConfirmDeleteAssetTypeGroupPage.class);
         mountPage("setup/addCommentTemplate", AddCommentTemplatePage.class);
         mountPage("setup/commentTemplateList", CommentTemplateListPage.class);
         mountPage("setup/editCommentTemplate", EditCommentTemplatePage.class);
@@ -178,6 +182,9 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("eventTypeGroup", EventTypeGroupListPage.class);
         mountPage("eventTypeGroupArchive", EventTypeGroupListArchivePage.class);
+        mountPage("eventTypeGroupAdd", EventTypeGroupAddPage.class);
+        mountPage("eventTypeGroupEdit", EventTypeGroupEditPage.class);
+        mountPage("eventTYpeGroupView", EventTypeGroupViewPage.class);
 
         mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
 

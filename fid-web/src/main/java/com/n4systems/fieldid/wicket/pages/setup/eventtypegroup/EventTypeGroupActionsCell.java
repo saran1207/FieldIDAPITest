@@ -8,8 +8,8 @@ import com.n4systems.model.api.Archivable;
 import com.n4systems.model.user.User;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -28,14 +28,9 @@ public class EventTypeGroupActionsCell extends Panel {
         final EventTypeGroup eventTypeGroup = eventTypeGroupModel.getObject();
 
         Link editLink;
+
         if(eventTypeGroup.isActive()) {
-            editLink = new Link("editLink") {
-                @Override
-                public void onClick() {
-                    //setResponsePage(new ProcedureDefinitionPrintPage(PageParametersBuilder.id(eventTypeGroup.getId())));
-                    setResponsePage(new RedirectPage("/fieldid/eventTypeGroupEdit.action?uniqueID=" + eventTypeGroup.getId()));
-                }
-            };
+            editLink = new BookmarkablePageLink("editLink", EventTypeGroupEditPage.class, PageParametersBuilder.uniqueId(eventTypeGroup.getID()));
             editLink.add(new Label("name", "Edit"));
         } else {
             editLink = new Link("editLink") {
