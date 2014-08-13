@@ -41,16 +41,24 @@ public class EditUserMobilePasscodePage extends FieldIDTemplatePage {
     private Form passcodeInputForm;
     private IModel<User> userModel;
     private Long uniqueId;
+    private String mobilePasscode;
 
     public EditUserMobilePasscodePage(PageParameters params) {
         super(params);
         uniqueId = params.get("uniqueID").toLong();
         userModel = Model.of(userService.getUser(uniqueId));
-        passcodeInputForm = new Form("passcodeInputForm");
-        add(new FIDFeedbackPanel("feedbackPanel"));
+        passcodeInputForm = new Form("passcodeInputForm") {
+            @Override
+            public void onSubmit() {
+                User user = userModel.getObject();
+                user.assignSecruityCardNumber(mobilePasscode);
+                userService.update(user);
+                FieldIDSession.get().info(new FIDLabelModel("message.passcodeupdated").getObject());
+                setResponsePage(ViewUserPage.class, PageParametersBuilder.uniqueId(uniqueId));
+            }
+        };
 
-        final RequiredTextField passcodeTextField = new RequiredTextField<String>("passcodeInputField", new PropertyModel<String>(userModel, "hashSecurityCardNumber"));
-        passcodeTextField.clearInput();
+        final RequiredTextField passcodeTextField = new RequiredTextField<String>("passcodeInputField", new PropertyModel<String>(this, "mobilePasscode"));
         passcodeTextField.add(new AbstractValidator() {
             @Override
             protected void onValidate(IValidatable iValidatable) {
@@ -64,18 +72,11 @@ public class EditUserMobilePasscodePage extends FieldIDTemplatePage {
         });
 
         passcodeInputForm.add(passcodeTextField);
-        passcodeInputForm.add(new Button("saveButton") {
-            @Override
-            public void onSubmit() {
-                User user = userModel.getObject();
-                userService.update(user);
-                FieldIDSession.get().info(new FIDLabelModel("message.passcodeupdated").getObject());
-                setResponsePage(ViewUserPage.class, PageParametersBuilder.uniqueId(uniqueId));
-            }
-        });
+        passcodeInputForm.add(new Button("saveButton"));
         passcodeInputForm.add(new BookmarkablePageLink("cancelLink", EditUserPage.class, PageParametersBuilder.uniqueId(uniqueId)));
 
         add(passcodeInputForm);
+        add(new FIDFeedbackPanel("feedbackPanel"));
     }
 
     @Override
