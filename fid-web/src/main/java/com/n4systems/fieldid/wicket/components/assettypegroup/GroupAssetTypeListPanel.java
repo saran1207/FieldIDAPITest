@@ -49,13 +49,8 @@ public class GroupAssetTypeListPanel extends Panel {
         };
 
         add(listView);
-
-        BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>("addNewAssetTypeLink", AddAssetTypePage.class);
-        add(link);
-
-        Label noResults = new Label("noResultsLabel", new FIDLabelModel("label.noassettypesundergroup"));
-        noResults.setVisible(isEmpty());
-        add(noResults);
+        add(new Label("noResultsLabel", new FIDLabelModel("label.noassettypesundergroup")).setVisible(isEmpty()));
+        add(new BookmarkablePageLink<Void>("addNewAssetTypeLink", AddAssetTypePage.class, PageParametersBuilder.param("group", assetTypeGroupId)));
     }
 
     private LoadableDetachableModel<List<AssetType>> getAssetTypes() {
