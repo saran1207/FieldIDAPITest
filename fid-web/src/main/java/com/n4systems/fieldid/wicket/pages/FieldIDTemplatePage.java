@@ -27,6 +27,7 @@ import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
+import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.AssetTypeGroupListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
@@ -289,6 +290,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
         WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
         container.add(new BookmarkablePageLink("eventStatusListLink", EventStatusListPage.class));
         container.add(new BookmarkablePageLink("eventBooksListLink", EventBooksListAllPage.class));
+        container.add(new BookmarkablePageLink("assetTypeGroupsListLink", AssetTypeGroupListPage.class));
         container.add(new BookmarkablePageLink("assetTypesList", AssetTypeListPage.class));
         container.add(new BookmarkablePageLink("assetStatusList", AssetStatusListAllPage.class));
         container.add(new BookmarkablePageLink("priorityCodeListLink", PriorityCodePage.class).setVisible(getSecurityGuard().isInspectionsEnabled()));
