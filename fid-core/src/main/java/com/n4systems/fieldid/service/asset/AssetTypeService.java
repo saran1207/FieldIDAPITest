@@ -257,22 +257,9 @@ public class AssetTypeService extends FieldIdPersistenceService {
     }
 
     private void processAssetImage( AssetType assetType, byte[] imageData ) throws ImageAttachmentException{
-        File imageDirectory = PathHandler.getAssetTypeImageFile(assetType);
-        // clear the old file if we have a new one uploaded or the image has been removed.
-        if( assetType.getImageName() == null || imageData != null ) {
-            if( imageDirectory.exists() && imageDirectory.isDirectory() ) {
-                try {
-                    FileUtils.cleanDirectory(imageDirectory);
-                } catch (Exception e) {
-                    throw new ImageAttachmentException( e );
-                }
-            }
-        }
-
         if( imageData != null ) {
             try {
-                File imageFile = new File( imageDirectory, assetType.getImageName() );
-                FileUtils.writeByteArrayToFile( imageFile, imageData );
+                s3Service.uploadAssetTypeProfileImageData(imageData, assetType);
             } catch (Exception e) {
                 throw new ImageAttachmentException( e );
             }

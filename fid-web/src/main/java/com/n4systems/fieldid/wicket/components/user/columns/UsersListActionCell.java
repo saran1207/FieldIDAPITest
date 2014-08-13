@@ -1,40 +1,46 @@
 package com.n4systems.fieldid.wicket.components.user.columns;
 
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
+import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.setup.user.EditPersonPage;
-import com.n4systems.fieldid.wicket.pages.setup.user.EditUsageBasedUserPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.EditUserPage;
 import com.n4systems.model.user.User;
-import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class UsersListActionCell extends Panel {
+
+    @SpringBean
+    UserService userService;
+
     public UsersListActionCell(String componentId, IModel<User> rowModel) {
         super(componentId, rowModel);
 
-        User user = rowModel.getObject();
-        if (user.isEmployee()) {
-            add(new NonWicketLink("edit", "employeeUserEdit.action?uniqueID=" + user.getId(), new AttributeModifier("class", "btn-secondary")));
-            add(new NonWicketLink("archive", "employeeUserArchive.action?uniqueID=" + user.getId()));
-        } else if(user.isLiteUser()) {
-            add(new NonWicketLink("edit", "liteUserEdit.action?uniqueID=" + user.getId(), new AttributeModifier("class", "btn-secondary")));
-            add(new NonWicketLink("archive", "liteUserArchive.action?uniqueID=" + user.getId()));
-        } else if(user.isReadOnly()) {
-            add(new NonWicketLink("edit", "readOnlyUserEdit.action?uniqueID=" + user.getId(), new AttributeModifier("class", "btn-secondary")));
-            add(new NonWicketLink("archive", "readOnlyUserArchive.action?uniqueID=" + user.getId()));
-        } else if(user.isPerson()) {
+        final User user = rowModel.getObject();
+
+        if(user.isPerson()) {
             add(new BookmarkablePageLink<EditPersonPage>("edit", EditPersonPage.class, PageParametersBuilder.uniqueId(user.getId())));
-            add(new NonWicketLink("archive", "personArchive.action?uniqueID=" + user.getId()));
-        } else if(user.isUsageBasedUser()) {
-            add(new BookmarkablePageLink<EditUsageBasedUserPage>("edit", EditUsageBasedUserPage.class, PageParametersBuilder.uniqueId(user.getId())));
-            add(new NonWicketLink("archive", "usageBasedArchive.action?uniqueID=" + user.getId()));
-        } else {
-            add(new Link("edit") { @Override public void onClick() { } }.setVisible(false));
-            add(new Link("archive") { @Override public void onClick() { } }.setVisible(false));
+        }  else {
+            add(new BookmarkablePageLink<EditUserPage>("edit", EditUserPage.class, PageParametersBuilder.uniqueId(user.getId())));
         }
 
+        add(new AjaxLink<Void>("archive") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                userService.archive(user);
+                FieldIDSession.get().info(new FIDLabelModel("message.userarchived").getObject());
+                onArchive(target);
+            }
+        }.setVisible(!user.isAdmin()));
+
     }
+
+    protected void onArchive(AjaxRequestTarget target) {}
 }

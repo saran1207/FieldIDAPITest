@@ -4,14 +4,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.AssetType;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.ServiceLocator;
 
 public class DownloadAssetTypeImage extends AbstractDownloadAction {
 	private static final long serialVersionUID = 1L;
 	
 	protected Long uniqueID;
 	private AssetType assetType;
+    private S3Service s3Service = ServiceLocator.getS3Service();
 	
 	public DownloadAssetTypeImage(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -42,7 +45,16 @@ public class DownloadAssetTypeImage extends AbstractDownloadAction {
 
 	@Override
 	public File getFile() {
-		return new File(PathHandler.getAssetTypeImageFile(assetType), assetType.getImageName());
+        File assetTypeImageFile = new File(PathHandler.getAssetTypeImageFile(assetType), assetType.getImageName());
+        if(assetTypeImageFile.exists()){
+            return assetTypeImageFile;
+        }
+        else if(s3Service.assetTypeProfileImageExists(assetType)){
+            return s3Service.downloadAssetTypeProfileImage(assetType);
+        }
+        else {
+            return null;
+        }
 	}
 
 	@Override

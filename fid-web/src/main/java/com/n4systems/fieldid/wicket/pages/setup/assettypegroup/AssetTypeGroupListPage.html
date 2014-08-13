@@ -5,6 +5,14 @@
       lang="en">
 
 <wicket:extend>
-    <table wicket:id="assetStatusList" class="list borders clear" />
+
+    <form wicket:id="reorderButtonForm" class="buttonForm">
+        <input class="btn-secondary" type="submit" id="reorderButton" wicket:id="reorderButton" wicket:message="value:hbutton.reorder"/>
+    </form>
+    <div wicket:id="assetTypeGroupListPanel"/>
+    <div wicket:id="noResults">
+        <wicket:message key="label.noresults"/>
+    </div>
+
 </wicket:extend>
 </html>

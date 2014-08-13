@@ -1,26 +1,27 @@
 package com.n4systems.fieldid.wicket.components.setup.assetstatus;
 
+import com.google.common.collect.Lists;
+import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
+import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
+import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
-import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetStatus;
-import org.apache.wicket.Component;
+import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
+import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * This is the Asset List Panel used by both <b>AssetStatusListAllPage</b> and <b>AssetStatusListArchivedPage</b>.
@@ -35,71 +36,70 @@ import java.util.TimeZone;
  */
 public class AssetStatusListPanel extends Panel {
 
+    public static final int ASSETS_PER_PAGE = 200;
+
+    @SpringBean
+    protected AssetStatusService assetStatusService;
+
+    private FieldIDDataProvider<AssetStatus> dataProvider;
+
     /**
      * This is the main constructor for the <b>AssetStatusListPanel</b>.  It simply needs a <b>String</b> parameter
      * representing the wicket:id of the component.
      *
      * @param id - A <b>String</b> value representing the wicket:id of the component.
      */
-    public AssetStatusListPanel(String id) {
+    public AssetStatusListPanel(String id,
+                                FieldIDDataProvider<AssetStatus> dataProvider) {
         super(id);
 
-        final AssetStatusListPanel myself = this;
+        this.dataProvider = dataProvider;
 
-        add(new ListView<AssetStatus>("list", getAssetStatuses()) {
-            @Override
-            protected void populateItem(ListItem<AssetStatus> item) {
-                AssetStatus assetStatus = item.getModelObject();
-                TimeZone timeZone = FieldIDSession.get()
-                                                  .getSessionUser()
-                                                  .getTimeZone();
+        add(new SimpleDefaultDataTable<AssetStatus>("assetStatusTable",
+                                                    getAssetStatusColumns(),
+                                                    dataProvider,
+                                                    ASSETS_PER_PAGE));
 
-                //Asset Status column
-                item.add(new Label("name",
-                                   new PropertyModel<String>(assetStatus,
-                                                             "displayName")));
 
-                //Created column
-                item.add(new Label("createdBy",
-                         new PropertyModel<String>(assetStatus,
-                                                   "createdBy.displayName")).setVisible(assetStatus.getCreatedBy() != null));
-                item.add(new Label("createdDate",
-                         new DayDisplayModel(new PropertyModel<Date>(assetStatus,
-                                                                     "created"),
-                                             true,
-                                             timeZone)));
-
-                //Modified column
-                item.add(new Label("modifiedBy",
-                        new PropertyModel<String>(assetStatus,
-                                                  "modifiedBy.displayName")).setVisible(assetStatus.getModifiedBy() != null));
-                item.add(new Label("modifiedDate",
-                         new DayDisplayModel(new PropertyModel<Date>(assetStatus,
-                                                                     "modified"),
-                                             true,
-                                             timeZone)));
-
-                //Action column
-                item.add(new AssetStatusActionCell("actionCell",
-                                                   item.getModel(),
-                                                   myself));
-            }
-        });
 
         WebMarkupContainer noResults;
         add(noResults = new WebMarkupContainer("noResults"));
 
-        noResults.setVisible(getAssetStatuses().getObject().size() < 1);
+        noResults.setVisible(dataProvider.size() < 1);
     }
 
-    /**
-     * This method needs to be overridden by the class that implements this Panel.  This provides an easy way for the
-     * List to be loaded with appropriate data.
-     *
-     * @return A null value, because you need to Override this method, not just use the default.
-     */
-    protected LoadableDetachableModel<List<AssetStatus>> getAssetStatuses() {
-        return null;
+    private List<IColumn<AssetStatus>> getAssetStatusColumns() {
+        List<IColumn<AssetStatus>> columns = Lists.newArrayList();
+
+        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.name"), "name", "name"));
+
+        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.createdby"), "createdBy.lastName", "createdBy.displayName"));
+
+        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.created"), "created", "created") {
+            @Override
+            public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
+                Date created = rowModel.getObject().getCreated();
+                item.add(new Label(componentId, new DayDisplayModel(Model.of(created)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+            }
+        });
+
+        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.modifiedby"), "modifiedBy.lastName", "modifiedBy.displayName"));
+
+        columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.modified"), "modified", "modified") {
+            @Override
+            public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
+                Date created = rowModel.getObject().getCreated();
+                item.add(new Label(componentId, new DayDisplayModel(Model.of(created)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+            }
+        });
+
+        addActionColumn(columns);
+
+        return columns;
+    }
+
+    protected void addActionColumn(List<IColumn<AssetStatus>> columns) {
+        //This does nothing... you need to override it on the implementing page.
     }
 
     /**

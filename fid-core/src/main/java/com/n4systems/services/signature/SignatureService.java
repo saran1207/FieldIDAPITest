@@ -1,20 +1,32 @@
 package com.n4systems.services.signature;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.services.date.DateService;
 import org.apache.commons.io.IOUtils;
 
 import com.n4systems.model.SignatureCriteriaResult;
 import com.n4systems.model.Tenant;
 import com.n4systems.reporting.PathHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.Assert;
+
 
 public class SignatureService {
 
-    public String storeSignature(Long tenantId, byte[] pngData) throws Exception {
+    @Autowired
+    private S3Service s3Service;
+    @Autowired
+    private DateService dateService;
+
+    public String storeTempSignature(Long tenantId, byte[] pngData) throws Exception {
         String fileId = UUID.randomUUID().toString();
         String fileName = buildTempFileName(tenantId, fileId);
         File file = PathHandler.getTempFileInRoot(fileName);
@@ -29,46 +41,46 @@ public class SignatureService {
         return fileId;
     }
 
-	private String buildTempFileName(Long tenantId, String fileId) {
+    static private String buildTempFileName(Long tenantId, String fileId) {
 		String fileName = tenantId + "-" + fileId + ".png";
 		return fileName;
 	}
 
-    public File getTemporarySignatureFile(Long tenantId, String fileId) {
+    static public File getTemporarySignatureFile(Long tenantId, String fileId) {
         String fileName = buildTempFileName(tenantId, fileId);
         return PathHandler.getTempFileInRoot(fileName);
     }
 
-    public File storeSignatureFileFor(SignatureCriteriaResult signatureResult) throws IOException {
-    	File sigFile = getSignatureFileFor(signatureResult.getTenant(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
-    	FileOutputStream out = null;
-    	try {
-    		if (!sigFile.getParentFile().exists()) {
-    			sigFile.getParentFile().mkdirs();
-    		}
-    		
-    		out = new FileOutputStream(sigFile);
+    public void storeSignatureFileFor(SignatureCriteriaResult signatureResult) throws IOException {
+            Assert.isTrue(signatureResult.getImage() != null || signatureResult.getTemporaryFileId() != null);
             if (signatureResult.getImage() != null) {
-                IOUtils.write(signatureResult.getImage(), out);
+                s3Service.uploadEventSignatureData(signatureResult.getImage(), signatureResult);
             } else if (signatureResult.getTemporaryFileId() != null) {
-                IOUtils.copy(new FileInputStream(getTemporarySignatureFile(signatureResult.getTenant().getId(), signatureResult.getTemporaryFileId())), out);
+                File temporarySignatureFile = getTemporarySignatureFile(signatureResult.getTenant().getId(), signatureResult.getTemporaryFileId());
+                s3Service.uploadEventSignature(temporarySignatureFile, signatureResult);
             }
-
-        } finally {
-            IOUtils.closeQuietly(out);
-        }
-        return sigFile;
     }
     
     public File getSignatureFileFor(Tenant tenant, Long eventId, Long criteriaId) {
         File signatureDirectory = PathHandler.getEventSignatureDirectory(tenant, eventId);
-        return new File(signatureDirectory, criteriaId + ".png");
+        File sigFile = new File(signatureDirectory, criteriaId + ".png");
+        if(sigFile.exists()){
+            return sigFile;
+        }
+        else {
+            return s3Service.downloadEventSignature(tenant.getId(), eventId, criteriaId);
+        }
     }
     
     public byte[] loadSignatureImage(Tenant tenant, Long eventId, Long criteriaId) throws IOException {
     	File sigFile = getSignatureFileFor(tenant, eventId, criteriaId);
-    	byte[] imageBytes = loadSignatureImage(sigFile);
-        return imageBytes;
+        if(sigFile.exists()){
+    	    byte[] imageBytes = loadSignatureImage(sigFile);
+            return imageBytes;
+        }
+        else {
+            return s3Service.downloadEventSignatureBytes(tenant.getId(), eventId, criteriaId);
+        }
     }
     
     public byte[] loadSignatureImage(Long tenantId, String fileId) throws IOException { 

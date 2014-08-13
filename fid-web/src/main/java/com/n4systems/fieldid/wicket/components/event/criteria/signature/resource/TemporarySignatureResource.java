@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.components.event.criteria.signature.resourc
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.model.Tenant;
 import com.n4systems.services.signature.SignatureService;
+import com.n4systems.util.ServiceLocator;
 import org.apache.log4j.Logger;
 import org.apache.wicket.request.resource.DynamicImageResource;
 
@@ -23,7 +24,7 @@ public class TemporarySignatureResource extends DynamicImageResource {
         }
 
         try {
-            return new SignatureService().loadSignatureImage(tenant.getId(), fileId);
+            return ServiceLocator.getSignatureService().loadSignatureImage(tenant.getId(), fileId);
         } catch (IOException e) {
             logger.info("error loading signature for resource", e);
             return null;

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.ws.v1.resources.assettype;
 
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.ws.v1.resources.SetupDataResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributes.*;
 import com.n4systems.model.AssetType;
@@ -9,11 +10,13 @@ import com.n4systems.reporting.PathHandler;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import javax.ws.rs.Path;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +24,9 @@ import java.util.List;
 @Path("assetType")
 public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetType> {
 	private static Logger logger = Logger.getLogger(ApiAssetTypeResource.class);
-	
+
+    @Autowired private S3Service s3Service;
+
 	public ApiAssetTypeResource() {
 		super(AssetType.class, true);
 	}
@@ -136,12 +141,22 @@ public class ApiAssetTypeResource extends SetupDataResource<ApiAssetType, AssetT
 	private byte[] loadAssetTypeImage(AssetType type) {
 		byte[] image = null;
 		if (type.hasImage()) {
-			File assetTypeImage = new File(PathHandler.getAssetTypeImageFile(type), type.getImageName());
-			try {
-				image = FileUtils.readFileToByteArray(assetTypeImage);
-			} catch(Exception e) {
-				logger.warn("Unable to load asset type image at: " + assetTypeImage, e);
-			}
+            if(s3Service.assetTypeProfileImageExists(type)){
+                try {
+                    image = s3Service.downloadAssetTypeProfileImageBytes(type);
+                } catch (IOException ex) {
+                    logger.warn("Unable to download asset type from S3 image for asset: " + type.getId(), ex);
+                }
+            }
+
+            if(image == null){
+			    File assetTypeImage = new File(PathHandler.getAssetTypeImageFile(type), type.getImageName());
+			    try {
+				    image = FileUtils.readFileToByteArray(assetTypeImage);
+			    } catch(Exception e) {
+				    logger.warn("Unable to load asset type image at: " + assetTypeImage, e);
+			    }
+            }
 		}
 		return image;
 	}

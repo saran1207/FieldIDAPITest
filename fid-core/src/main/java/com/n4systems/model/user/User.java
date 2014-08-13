@@ -107,8 +107,6 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	// XXX : refactor this to use PermissionType.
 	@Column(name="permissions", nullable=false)
 	private int permissions = Permissions.NO_PERMISSIONS;
-	
-	private Long externalId;
 
     @Column(length=20)
     private String identifier;
@@ -407,15 +405,6 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	@Override
 	public boolean isNew() {
 		return (getId() == null);
-	}
-
-
-	public Long getExternalId() {
-		return externalId;
-	}
-
-	public void setExternalId(Long externalId) {
-		this.externalId = externalId;
 	}
 	
 	public File getPrivateDir() {

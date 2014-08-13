@@ -14,7 +14,6 @@ import com.n4systems.reporting.PathHandler;
 
 
 public class HirarchicalPropertiesLoader {
-	private static final String GLOBAL_TENANT_NAME = "_GLOBAL_";
 	private static final String KEY_VALUE_EXT = ".properties";
 	private static final String XML_EXT = ".xml";
 	
@@ -36,24 +35,12 @@ public class HirarchicalPropertiesLoader {
 	}
 	
 	/**
-	 * Loads an overriding properties file for a specific tenant using the resource base properties file for defaults
-	 * @see #load(Class, Properties)
-	 * @param clazz		Class of properties file to load
-	 * @param tenant	Tenant to find the override file for
-	 * @return			HirarchicalProperties
-	 */
-	public static HierarchicalProperties load(Class<?> clazz, Tenant tenant) {
-		return load(clazz, tenant, (Properties)null);
-	}
-	
-	/**
-	 * Loads an overriding properties file for a fake 'global' tenant using the resource base properties file for defaults.
-	 * The global tenant is constructed with the name {@link #GLOBAL_TENANT_NAME}.
+	 * Loads an overriding properties file using the resource base properties file for defaults.
 	 * @param clazz		Class of properties file to load
 	 * @return			HirarchicalProperties with global overrides
 	 */
     public static HierarchicalProperties loadGlobal(Class<?> clazz) {		
-		return load(clazz, new Tenant(Long.MIN_VALUE, GLOBAL_TENANT_NAME));
+		return load(clazz);
 	}
 	
 	/**
@@ -88,34 +75,6 @@ public class HirarchicalPropertiesLoader {
 			throw new UncheckedLoadingException(e);
 		} finally {
 			IOUtils.closeQuietly(in);
-		}
-		
-		return properties;
-	}
-	
-	/**
-	 * Loads an overriding properties file for a specific tenant using the resource base properties file for defaults
-	 * @see #load(Class, Properties)
-	 * @param clazz		Class of properties file to load
-	 * @param tenant	Tenant to find the override file for
-	 * @param defaults	Properties to use as defaults
-	 * @return			HirarchicalProperties
-	 */
-	public static HierarchicalProperties load(Class<?> clazz, Tenant tenant, Properties defaults) {
-		HierarchicalProperties properties = new HierarchicalProperties(load(clazz, defaults));
-		
-		File propertiesFile = PathHandler.getPropertiesFile(tenant, clazz);
-		if (propertiesFile.exists()) {
-			InputStream in = null;
-			try {
-					in = FileUtils.openInputStream(propertiesFile);
-					properties.load(in);
-
-			} catch(IOException e) {
-				throw new UncheckedLoadingException(e);
-			} finally {
-				IOUtils.closeQuietly(in);
-			}
 		}
 		
 		return properties;

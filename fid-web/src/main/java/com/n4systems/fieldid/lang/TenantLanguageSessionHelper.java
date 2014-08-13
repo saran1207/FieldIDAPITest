@@ -43,9 +43,6 @@ public class TenantLanguageSessionHelper {
 			language.putAll(loadCustomerLanguage());
 		}
 		
-		// then we apply customer overrides (in case they have overrides for customer/jobsite as well)
-		language.putAll(loadTenantLanguage(tenant));
-		
 		// populate the session
 		session.setTenantLanguageOverrides(language);
 	}
@@ -77,26 +74,6 @@ public class TenantLanguageSessionHelper {
 			language.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue()));
 		}
 
-		return language;
-	}
-	
-	private Map<String, String> loadTenantLanguage(Tenant tenant) {
-		File propertiesFile = PathHandler.getPropertiesFile(tenant, Package.getPackage(PACKAGE_PROPERTIES_PATH));
-		
-		Map<String, String> language;
-		if (propertiesFile.exists()) {
-			InputStream is = null;
-			
-			try {
-				is = new FileInputStream(propertiesFile);
-			} catch (FileNotFoundException e) {}
-			
-			language = loadLanguageFromStream(is);
-			
-			IOUtils.closeQuietly(is);
-		} else {
-			language = new HashMap<String, String>();
-		}
 		return language;
 	}
 }

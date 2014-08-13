@@ -3,9 +3,11 @@ package com.n4systems.fieldid.actions.signature;
 import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.fieldid.actions.downloaders.DownloadAction;
 import com.n4systems.services.signature.SignatureService;
+import com.n4systems.util.ServiceLocator;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +16,8 @@ import java.io.IOException;
 public class SignatureAction extends DownloadAction {
 
     private static Logger logger = Logger.getLogger(SignatureAction.class);
+
+    SignatureService signatureService = ServiceLocator.getSignatureService();
 
     private String pngData;
     private String signatureFileId;
@@ -26,12 +30,12 @@ public class SignatureAction extends DownloadAction {
     }
 
     public String doDownloadTemporary() throws Exception {
-        File tempSignatureFile = new SignatureService().getTemporarySignatureFile(getTenantId(), signatureFileId);
+        File tempSignatureFile = signatureService.getTemporarySignatureFile(getTenantId(), signatureFileId);
         return sendFile(tempSignatureFile);
     }
 
     public String doDownload() throws Exception {
-        File signatureFile = new SignatureService().getSignatureFileFor(getTenant(), eventId, criteriaId);
+        File signatureFile = signatureService.getSignatureFileFor(getTenant(), eventId, criteriaId);
         return sendFile(signatureFile);
     }
 
@@ -55,7 +59,7 @@ public class SignatureAction extends DownloadAction {
     public String doStoreSignature() throws Exception {
         String pngBase64Data = pngData.substring(pngData.lastIndexOf(",") + 1);
         byte[] decodedBytes = new Base64().decode(pngBase64Data.getBytes());
-        signatureFileId = new SignatureService().storeSignature(getTenantId(), decodedBytes);
+        signatureFileId = signatureService.storeTempSignature(getTenantId(), decodedBytes);
         return SUCCESS;
     }
 

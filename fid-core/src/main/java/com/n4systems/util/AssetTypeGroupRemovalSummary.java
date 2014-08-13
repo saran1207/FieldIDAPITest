@@ -2,7 +2,9 @@ package com.n4systems.util;
 
 import com.n4systems.model.AssetTypeGroup;
 
-public class AssetTypeGroupRemovalSummary {
+import java.io.Serializable;
+
+public class AssetTypeGroupRemovalSummary implements Serializable {
 	private AssetTypeGroup group;
 
 	private Long assetTypesConnected = 0L;

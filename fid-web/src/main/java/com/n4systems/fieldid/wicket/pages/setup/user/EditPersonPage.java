@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.user.User;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -18,11 +18,9 @@ public class EditPersonPage extends UserPage{
     }
 
     @Override
-    protected User doSave() {
-        User person = user.getObject();
-        userService.update(person);
-
-        return person;
+    protected void doSave() {
+        userService.update(userModel.getObject());
+        setResponsePage(ViewUserPage.class, PageParametersBuilder.uniqueId(userModel.getObject().getId()));
     }
 
     @Override
@@ -35,9 +33,9 @@ public class EditPersonPage extends UserPage{
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
                 aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
-                aNavItem().label("nav.view").page("viewUser.action").params(uniqueId(user.getObject().getId())).build(),
-                aNavItem().label("nav.edit").page(EditPersonPage.class).params(uniqueId(user.getObject().getId())).build(),
-                aNavItem().label("nav.add").page("addUser.action").onRight().build(),
+                aNavItem().label("nav.view").page("viewUser.action").params(uniqueId(userModel.getObject().getId())).build(),
+                aNavItem().label("nav.edit").page(EditPersonPage.class).params(uniqueId(userModel.getObject().getId())).build(),
+                aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));
     }

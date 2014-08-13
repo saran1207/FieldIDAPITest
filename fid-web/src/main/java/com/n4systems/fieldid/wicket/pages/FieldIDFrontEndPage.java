@@ -27,7 +27,10 @@ import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.AssetTypeListPage;
+import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.AssetTypeGroupListPage;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListPage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
@@ -305,6 +308,9 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         container.setVisible(getSessionUser().hasAccess("managesystemconfig"));
         assetCodeMappingcontainer.setVisible(intergrationEnabled);
         container.add(assetCodeMappingcontainer);
+
+        container.add(new BookmarkablePageLink("commentTemplateLink",
+                                               CommentTemplateListPage.class));
         
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("assetLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.ASSET)));
         container.add(new BookmarkablePageLink<ColumnsLayoutPage>("eventLayoutLink", ColumnsLayoutPage.class, param("type", ReportType.EVENT)).setVisible(getSecurityGuard().isInspectionsEnabled()));
@@ -316,6 +322,8 @@ public class FieldIDFrontEndPage extends FieldIDAuthenticatedPage implements UIC
         WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
         container.add(new BookmarkablePageLink("eventTypeGroups", EventTypeGroupListPage.class));
         container.add(new BookmarkablePageLink("eventStatusListLink", EventStatusListPage.class));
+        container.add(new BookmarkablePageLink("eventBooksListLink", EventBooksListAllPage.class));
+        container.add(new BookmarkablePageLink("assetTypeGroupsListLink", AssetTypeGroupListPage.class));
         container.add(new BookmarkablePageLink("assetTypesList", AssetTypeListPage.class));
         container.add(new BookmarkablePageLink("assetStatusList", AssetStatusListAllPage.class));
         container.add(new BookmarkablePageLink("priorityCodeListLink", PriorityCodePage.class).setVisible(getSecurityGuard().isInspectionsEnabled()));

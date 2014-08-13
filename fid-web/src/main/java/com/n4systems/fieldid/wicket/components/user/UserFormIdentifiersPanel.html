@@ -1,78 +1,57 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
-      xml:lang="en"
-      lang="en">
-
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
-    <h2><wicket:message key="label.identifiers"/></h2>
+    <h3><wicket:message key="label.identifiers"/></h3>
 
-    <div class="infoSet" style="overflow:visible;">
+    <div class="control-group" style="overflow:visible;">
         <label class="label">* <wicket:message key="label.owner"/></label>
-        <div wicket:id="ownerPicker" class="fieldHolder" style="width:290px;"/>
+        <div wicket:id="ownerPicker"/>
     </div>
 
-    <div class="infoSet userGroup" wicket:enclosure="group">
+    <div class="control-group" wicket:enclosure="group">
         <label class="label"><wicket:message key="label.user_group"/></label>
-        <span class="fieldHolder">
-            <select wicket:id="group"/>
-        </span>
+        <select wicket:id="group"/>
     </div>
 
-    <div class="infoSet">
+    <div class="control-group">
         <label class="label">* <wicket:message key="label.emailaddress"/></label>
-        <span class="fieldHolder">
-            <input type="text" wicket:id="email"/>
-        </span>
+        <input type="text" wicket:id="email"/>
     </div>
 
-    <div class="infoSet">
+    <div class="control-group">
         <label class="label">* <wicket:message key="label.firstname"/></label>
-        <span class="fieldHolder">
-            <input type="text" wicket:id="firstname">
-        </span>
+        <input type="text" wicket:id="firstname">
     </div>
 
-    <div class="infoSet">
+    <div class="control-group">
         <label class="label">* <wicket:message key="label.lastname"/></label>
-        <span class="fieldHolder">
-            <input type="text" wicket:id="lastname">
-        </span>
+        <input type="text" wicket:id="lastname">
     </div>
 
-    <div class="infoSet">
+    <div class="control-group">
         <label class="label"><wicket:message key="label.initials"/></label>
-        <span class="fieldHolder">
-            <input type="text" wicket:id="initials">
-        </span>
+        <input type="text" wicket:id="initials">
     </div>
 
-    <div class="infoSet">
+    <div class="control-group">
         <label class="label"><wicket:message key="label.id"/></label>
-        <span class="fieldHolder">
-            <input type="text" wicket:id="identifier">
-        </span>
+        <input type="text" wicket:id="identifier">
     </div>
 
-    <div class="infoSet">
+    <div class="control-group">
         <label class="label"><wicket:message key="label.position"/></label>
-        <span class="fieldHolder">
-            <input type="text" wicket:id="position">
-        </span>
+        <input type="text" wicket:id="position">
     </div>
 
-    <div class="infoSet" wicket:enclosure="uploadForm">
+    <div class="control-group" wicket:enclosure="uploadForm">
         <label class="label"><wicket:message key="label.digital_signature"/></label>
-        <span class="fieldHolder">
-            <form wicket:id="uploadForm">
-                <input type="file" wicket:id="digitalSignature">
-                <span wicket:enclosure="digitalSignature"><wicket:message key="label.signature_size"/></span>
-                <span class="displaySignature" wicket:id="fileDisplay">
-                    <img src="/fieldid/images/attachment-icon.png" class="attachmentImage"> <label wicket:id="fileName" class="fileName"/> <a wicket:id="removeLink" class="removeLink"><wicket:message key="label.remove"/></a>
-                </span>
-            </form>
-        </span>
+        <form wicket:id="uploadForm">
+            <input type="file" wicket:id="digitalSignature">
+            <span wicket:enclosure="digitalSignature"><wicket:message key="label.signature_size"/></span>
+            <span class="displaySignature" wicket:id="fileDisplay">
+                <img src="/fieldid/images/attachment-icon.png" class="attachmentImage"> <label wicket:id="fileName" class="fileName"/> <a wicket:id="removeLink" class="removeLink"><wicket:message key="label.remove"/></a>
+            </span>
+        </form>
     </div>
 
 </wicket:panel>

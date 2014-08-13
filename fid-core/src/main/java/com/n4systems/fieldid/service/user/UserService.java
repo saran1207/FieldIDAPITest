@@ -56,6 +56,11 @@ public class UserService extends FieldIdPersistenceService {
 
     public Long countUsers(UserListFilterCriteria criteria) {
         QueryBuilder<User> builder = createUserQueryBuilder(criteria);
+
+        if (!getCurrentUser().getGroups().isEmpty()) {
+            return Long.valueOf(new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers()).size());
+        }
+
         return persistenceService.count(builder);
     }
 
@@ -366,5 +371,14 @@ public class UserService extends FieldIdPersistenceService {
         return users;
     }
 
+    public void archive(User user) {
+        user.archiveUser();
+        persistenceService.update(user);
+    }
+
+    public void unarchive(User user) {
+        user.activateEntity();
+        persistenceService.update(user);
+    }
 
 }

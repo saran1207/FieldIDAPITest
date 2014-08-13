@@ -23,7 +23,7 @@ ${action.setPageType('setup','assetsAndEvents')!}
 		</div>
 
 		<div class="setupOption assetTypeGroups">
-			<h1><a href="<@s.url action="assetTypeGroups"/>" ><@s.text name="title.manage_asset_type_groups.plural"/></a></h1>
+			<h1><a href="<@s.url action="assetTypeGroups"/>" ><@s.text name="title.asset_type_groups.plural"/></a></h1>
 			<p><@s.text name="label.manage_asset_type_groups_msg" /></p>
 		</div>	
 		

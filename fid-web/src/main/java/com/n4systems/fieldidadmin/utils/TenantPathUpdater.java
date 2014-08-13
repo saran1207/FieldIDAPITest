@@ -17,7 +17,6 @@ public class TenantPathUpdater {
 		                 PathHandler.getEventChartImageBaseFile(tenant),
 		                 PathHandler.getEventSignatureBaseFile(tenant),
 		                 PathHandler.getAssetAttachmentBaseFile(tenant),
-		                 PathHandler.getConfDir(tenant),
 		                 PathHandler.getTenantUserBaseFile(tenant)};
 
 		for (File file: files) {

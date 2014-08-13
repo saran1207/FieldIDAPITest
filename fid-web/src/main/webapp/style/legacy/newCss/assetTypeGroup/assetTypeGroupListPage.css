@@ -1,0 +1,37 @@
+
+/* Asest Type Groups List Page */
+
+.buttonForm {
+    height: 45px;
+}
+
+.assetTypeGroupList tr {
+    padding-top: 20px;
+    padding: 10px 10px;
+    overflow:hidden;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.groupList tr td.nameColumn {
+    width: 150px;
+}
+
+.createdBy {
+    width: 50px;
+}
+
+.createdDate {
+    width: 150px;
+}
+
+.modifiedBy {
+    width: 50px;
+}
+
+.modifiedDate {
+    width: 150px;
+}
+
+.actionColumn {
+    width: 50px;
+}

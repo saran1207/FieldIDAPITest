@@ -213,7 +213,9 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 		File signatureImage = PathHandler.getSignatureImage(user);
 		if (signatureImage.exists()) {
 			signature.setImage(signatureImage);
-		}
+		} else if(s3Service.userSignatureExists(user)){
+            signature.setImage(s3Service.downloadUserSignature(user));
+        }
 	}
 
 	public String doUpdate() {
@@ -308,7 +310,7 @@ abstract public class UserCrud extends AbstractCrud implements HasDuplicateValue
 	}
 
 	private void signatureFileProcess() throws Exception {
-		new FileSystemUserSignatureFileProcessor(PathHandler.getSignatureImage(user)).process(signature);
+		new FileSystemUserSignatureFileProcessor(user).process(signature);
 	}
 
 	protected void sendWelcomeEmail(WelcomeNotifier notifier) {

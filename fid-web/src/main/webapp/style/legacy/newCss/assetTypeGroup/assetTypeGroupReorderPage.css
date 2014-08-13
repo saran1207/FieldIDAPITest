@@ -1,0 +1,40 @@
+
+/* Reorder page */
+
+.buttonForm {
+     height: 45px;
+ }
+
+.drag {
+    cursor: move;
+}
+
+.groupList {
+    padding: 10px 10px;
+    overflow:hidden;
+}
+
+.groupList li {
+    height: 40px;
+    list-style-type: none;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.groupList li div {
+    padding-top: 9px;
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.nameLabel {
+    padding-left: 20px;
+}
+
+.image {
+    width: 15px;
+}
+
+
+
+
+

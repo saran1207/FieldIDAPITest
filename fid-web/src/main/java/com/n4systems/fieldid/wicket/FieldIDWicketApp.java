@@ -46,7 +46,15 @@ import com.n4systems.fieldid.wicket.pages.setup.*;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
+import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.AddCommentTemplatePage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.EditCommentTemplatePage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.AddEventBookPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EditEventBookPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
@@ -122,14 +130,30 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/procedureApprover", ProcedureApproverPage.class);
         mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
         mountPage("setup/assetStatusList", AssetStatusListAllPage.class);
+        mountPage("setup/eventBooksList", EventBooksListAllPage.class);
+        mountPage("setup/addEventBook", AddEventBookPage.class);
+        mountPage("setup/editEventBook", EditEventBookPage.class);
+        mountPage("setup/eventBooksArchivedList", EventBooksListArchivedPage.class);
+        mountPage("setup/assetTypeGroupsList", AssetTypeGroupListPage.class);
+        mountPage("setup/reorderAssetTypeGroups", ReorderAssetTypeGroupPage.class);
+        mountPage("setup/viewAssetTypeGroup", ViewAssetTypeGroupPage.class);
+        mountPage("setup/addAssetTypeGroup", AddAssetTypeGroupPage.class);
+        mountPage("setup/editAssetTypeGroup", EditAssetTypeGroupPage.class);
+        mountPage("setup/confirmDeleteAssetTypeGroup", ConfirmDeleteAssetTypeGroupPage.class);
+        mountPage("setup/addCommentTemplate", AddCommentTemplatePage.class);
+        mountPage("setup/commentTemplateList", CommentTemplateListPage.class);
+        mountPage("setup/editCommentTemplate", EditCommentTemplatePage.class);
+
         mountPage("setup/assetStatusArchivedList", AssetStatusListArchivedPage.class);
 
         mountPage("setup/usersList", UsersListPage.class);
         mountPage("setup/archivedUsersList", ArchivedUsersListPage.class);
+        mountPage("setup/selectUserType", SelectUserTypePage.class);
+        mountPage("setup/addUser", AddUserPage.class);
+        mountPage("setup/editUser", EditUserPage.class);
         mountPage("setup/addPerson", AddPersonPage.class);
         mountPage("setup/editPerson", EditPersonPage.class);
-        mountPage("setup/addUsageBasedUser", AddUsageBasedUserPage.class);
-        mountPage("setup/editUsageBasedUser", EditUsageBasedUserPage.class);
+        mountPage("setup/viewUser", ViewUserPage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
