@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.google.common.collect.Lists;
+import com.n4systems.fieldid.actions.users.WelcomeMessage;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.user.SendWelcomeEmailService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
@@ -18,6 +20,7 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.timezone.CountryList;
+import com.n4systems.util.uri.ActionURLBuilder;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -33,14 +36,18 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.Serializable;
+import java.net.URI;
 import java.util.List;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
+import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
 public class ViewUserPage extends FieldIDTemplatePage{
 
     @SpringBean
     private UserService userService;
+    @SpringBean
+    private SendWelcomeEmailService sendWelcomeEmailService;
 
     @SpringBean
     private S3Service s3Service;
@@ -66,7 +73,12 @@ public class ViewUserPage extends FieldIDTemplatePage{
 
         add(new NonWicketLink("upgrade", "upgradeUser.action?uniqueID=" + userModel.getObject().getId()));
 
-        add(new NonWicketLink("welcomeEmail", "sendWelcomeEmail.action?uniqueID=" + userModel.getObject().getId()).setVisible(!isPerson));
+        add(new Link<Void>("welcomeEmail") {
+            @Override
+            public void onClick() {
+                sendWelcomeEmail(userModel.getObject(), new WelcomeMessage(), userModel.getObject().getHashPassword() != null);
+            }
+        });
 
         add(new Label("owner", new PropertyModel<String>(userModel, "owner.displayName")));
 
@@ -148,6 +160,18 @@ public class ViewUserPage extends FieldIDTemplatePage{
         return permissions;
     }
 
+    protected void sendWelcomeEmail(User user, WelcomeMessage welcomeMessage, boolean passwordAssigned) {
+        sendWelcomeEmailService.sendUserWelcomeEmail(!passwordAssigned, user, welcomeMessage.getPersonalMessage(), createActionUrlBuilder());
+    }
+
+    protected ActionURLBuilder createActionUrlBuilder() {
+        return new ActionURLBuilder(getBaseURI(), getConfigurationProvider());
+    }
+
+    public URI getBaseURI() {
+        return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
+    }
+
     @Override
     protected Component createBackToLink(String linkId, String linkLabelId) {
         BookmarkablePageLink<Void> pageLink = new BookmarkablePageLink<Void>(linkId, OwnersUsersLocationsPage.class);
@@ -160,8 +184,10 @@ public class ViewUserPage extends FieldIDTemplatePage{
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
                 aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
-                aNavItem().label("nav.view").page(this.getClass()).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.view").page(ViewUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(userModel.getObject().getId())).build(),
+                aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.mobile_passcode").page(EditUserMobilePasscodePage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.add").page(this.getClass()).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()

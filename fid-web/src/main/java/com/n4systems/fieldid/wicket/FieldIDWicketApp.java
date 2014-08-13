@@ -154,6 +154,8 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/addPerson", AddPersonPage.class);
         mountPage("setup/editPerson", EditPersonPage.class);
         mountPage("setup/viewUser", ViewUserPage.class);
+        mountPage("setup/changeUserPassword", ChangeUserPasswordPage.class);
+        mountPage("setup/userOfflineProfile", UserOfflineProfilePage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
@@ -266,7 +268,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("selectLanguage", SelectLanguagePage.class);
 
         mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
-        mountPage("userOfflineProfile", UserOfflineProfilePage.class);
 
         mountPage("userAccountSearch", UserAccountSearchPage.class);
 
