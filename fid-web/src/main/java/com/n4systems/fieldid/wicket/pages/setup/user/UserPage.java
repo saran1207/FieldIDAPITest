@@ -39,12 +39,11 @@ public abstract class UserPage extends FieldIDTemplatePage {
 
     @SpringBean
     protected UserService userService;
-    protected UserType userType;
-    private Long uniqueId;
-
     @SpringBean
     private SendWelcomeEmailService sendWelcomeEmailService;
 
+    protected UserType userType;
+    private Long uniqueId;
     protected IModel<User> userModel;
     protected Country country;
     protected Region region;
