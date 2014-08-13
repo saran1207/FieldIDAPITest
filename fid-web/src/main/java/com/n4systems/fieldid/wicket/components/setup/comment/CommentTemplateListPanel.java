@@ -43,7 +43,6 @@ public class CommentTemplateListPanel extends Panel {
         List<IColumn<CommentTemplate>> columnList = Lists.newArrayList();
 
         columnList.add(new PropertyColumn<CommentTemplate>(new FIDLabelModel("label.title"),
-                                                           "name",
                                                            "name"));
 
         addActionColumn(columnList);

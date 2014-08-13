@@ -5,6 +5,7 @@ import com.n4systems.fieldid.actions.users.UploadedImage;
 import com.n4systems.fieldid.actions.users.WelcomeMessage;
 import com.n4systems.fieldid.service.user.SendWelcomeEmailService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
@@ -57,7 +58,7 @@ public abstract class UserPage extends FieldIDTemplatePage {
         userModel = Model.of(loadExistingUser());
     }
 
-    protected abstract User doSave();
+    protected abstract void doSave();
 
     protected abstract Component createAccountPanel(String id);
 
@@ -203,7 +204,7 @@ public abstract class UserPage extends FieldIDTemplatePage {
         @Override
         protected void onSubmit() {
             doSave();
-            setResponsePage(UsersListPage.class);
+            FieldIDSession.get().info(new FIDLabelModel("message.user_saved").getObject());
         }
     }
 }

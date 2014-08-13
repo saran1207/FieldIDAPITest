@@ -6,12 +6,12 @@ import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.user.UserFormAccountPanel;
 import com.n4systems.fieldid.wicket.components.user.UserFormPermissionsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.user.User;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.reporting.PathHandler;
-import com.n4systems.util.ServiceLocator;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.File;
 
@@ -20,15 +20,17 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 
 public class EditUserPage extends UserPage {
 
-    private S3Service s3Service = ServiceLocator.getS3Service();
+    @SpringBean
+    private S3Service s3Service;
 
     public EditUserPage(PageParameters parameters) {
         super(parameters);
     }
 
     @Override
-    protected User doSave() {
-        return update();
+    protected void doSave() {
+        update();
+        setResponsePage(ViewUserPage.class, PageParametersBuilder.uniqueId(userModel.getObject().getId()));
     }
 
     @Override
@@ -68,7 +70,7 @@ public class EditUserPage extends UserPage {
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
                 aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
-                aNavItem().label("nav.view").page("viewUser.action").params(uniqueId(userModel.getObject().getId())).build(),
+                aNavItem().label("nav.view").page(ViewUserPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
