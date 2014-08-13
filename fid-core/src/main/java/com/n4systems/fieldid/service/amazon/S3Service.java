@@ -1031,12 +1031,8 @@ public class S3Service extends FieldIdPersistenceService {
         Assert.hasLength(assetUuid);
         Assert.hasLength(assetAttachmentUuid);
         Assert.hasLength(assetAttachmentFilename);
-        Assert.doesNotContain(assetAttachmentFilename, "/");
-        String fullResourcePath = assetAttachmentFilename;
-        //if the path is not the full path (ie. its just the filename)
-        if(fullResourcePath.indexOf('/') == -1){
-            fullResourcePath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
-        }
+        assetAttachmentFilename = assetAttachmentFilename.substring(assetAttachmentFilename.lastIndexOf('/') + 1);
+        String fullResourcePath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
         return fullResourcePath;
     }
 
@@ -1050,11 +1046,8 @@ public class S3Service extends FieldIdPersistenceService {
         Assert.hasLength(assetAttachmentUuid);
         Assert.hasLength(assetAttachmentFilename);
         Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
-        String fullResourcePath = assetAttachmentFilename;
-        //if the path is not the full path (ie. its just the filename)
-        if(fullResourcePath.indexOf('/') == -1){
-            fullResourcePath = getAssetAttachmentPath(assetUuid, assetAttachmentUuid, assetAttachmentFilename);
-        }
+        assetAttachmentFilename = assetAttachmentFilename.substring(assetAttachmentFilename.lastIndexOf('/') + 1);
+        String fullResourcePath = getAssetAttachmentPath(assetUuid, assetAttachmentUuid, assetAttachmentFilename);
         URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
         return url;
     }
@@ -1287,11 +1280,8 @@ public class S3Service extends FieldIdPersistenceService {
         Assert.hasLength(filename);
         Assert.doesNotContain(filename, "/");
         Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
-        String fullResourcePath = filename;
-        //if the path is not the full path (ie. its just the filename)
-        if(fullResourcePath.indexOf('/') == -1){
-            fullResourcePath = getFileAttachmentPath(fileAttachmentUuid, filename);
-        }
+        filename = filename.substring(filename.lastIndexOf('/') + 1);
+        String fullResourcePath = getFileAttachmentPath(fileAttachmentUuid, filename);
         return generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
     }
 
