@@ -2,7 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.user.User;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -18,11 +18,9 @@ public class EditPersonPage extends UserPage{
     }
 
     @Override
-    protected User doSave() {
-        User person = userModel.getObject();
-        userService.update(person);
-
-        return person;
+    protected void doSave() {
+        userService.update(userModel.getObject());
+        setResponsePage(ViewUserPage.class, PageParametersBuilder.uniqueId(userModel.getObject().getId()));
     }
 
     @Override

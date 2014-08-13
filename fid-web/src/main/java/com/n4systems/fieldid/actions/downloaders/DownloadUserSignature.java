@@ -4,14 +4,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 
 import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
+import com.n4systems.util.ServiceLocator;
 
 public class DownloadUserSignature extends AbstractDownloadAction {
 
 
 	private Long userId;
 	private User user;
+    private S3Service s3Service = ServiceLocator.getS3Service();
 	
 	public DownloadUserSignature(PersistenceManager persistenceManager) {
 		super(persistenceManager);
@@ -19,8 +22,13 @@ public class DownloadUserSignature extends AbstractDownloadAction {
 
 	@Override
 	public File getFile() {
-		return PathHandler.getSignatureImage(user);
-	}
+        File signature = PathHandler.getSignatureImage(user);
+        if(!signature.exists() && s3Service.userSignatureExists(user)){
+            signature = s3Service.downloadUserSignature(user);
+        }
+        return signature;
+
+    }
 
 	@Override
 	public String getFileName() {
