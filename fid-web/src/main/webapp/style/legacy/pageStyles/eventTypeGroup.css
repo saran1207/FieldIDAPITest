@@ -11,6 +11,11 @@
 	display: none;
 }
 
+.btn-secondary a {
+    text-decoration: inherit;
+    color: inherit;
+}
+
 h2 {
     background-color: #eee;
     border-bottom: 1px solid #ccc;

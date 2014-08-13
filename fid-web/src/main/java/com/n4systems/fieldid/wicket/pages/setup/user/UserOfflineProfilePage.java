@@ -5,7 +5,7 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
+import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.OfflineProfilePanel;
 import com.n4systems.model.user.User;
@@ -19,7 +19,7 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
 
-public class UserOfflineProfilePage extends FieldIDFrontEndPage {
+public class UserOfflineProfilePage extends FieldIDTemplatePage {
 
     @SpringBean
     protected UserService userService;
@@ -55,14 +55,12 @@ public class UserOfflineProfilePage extends FieldIDFrontEndPage {
         add(new NavigationBar(navBarId,
                 aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
                 aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
-                aNavItem().label("nav.view").page("viewUser.action").params(uniqueId(uniqueId)).build(),
-                aNavItem().label("nav.edit").page("employeeUserEdit.action").params(uniqueId(uniqueId)).cond(user.isFullUser()).build(),
-                aNavItem().label("nav.edit").page("liteUserEdit.action").params(uniqueId(uniqueId)).cond(user.isLiteUser()).build(),
-                aNavItem().label("nav.edit").page("readOnlyUserEdit.action").params(uniqueId(uniqueId)).cond(user.isReadOnly()).build(),
-                aNavItem().label("nav.change_password").page("adminEditPassword.action").params(uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.view").page(ViewUserPage.class).params(uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.edit").page(EditUserPage.class).params(uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.mobile_passcode").page("adminMobilePasscode.action").params(uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(uniqueId)).build(),
-                aNavItem().label("nav.add").page("addUser.action").onRight().build(),
+                aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
 
         ));
