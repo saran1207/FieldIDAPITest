@@ -176,8 +176,8 @@ public class AssetAttachmentsPanel extends Panel {
                             boolean FileUploadSupported = clientProp.isBrowserChrome() ||
                                 (clientProp.isBrowserSafari() && clientProp.getBrowserVersionMajor() >= 5) ||
                                 (clientProp.isBrowserMozillaFirefox() && clientProp.getBrowserVersionMajor() >= 4) ||
-                                (clientProp.isBrowserOpera() && clientProp.getBrowserVersionMajor() >= 12) /*||
-                                (clientProp.isBrowserInternetExplorer() && clientProp.getBrowserVersionMajor() >= 10)*/;
+                                (clientProp.isBrowserOpera() && clientProp.getBrowserVersionMajor() >= 12) ||
+                                (clientProp.isBrowserInternetExplorer() && clientProp.getBrowserVersionMajor() >= 10);
                             //if the browser does not support direct upload to S3
                             if(FileUploadSupported){
                                 String getAssetAttachmentPath = s3Service.getAssetAttachmentPath(assetUuid, assetAttachmentUuid, fileName);

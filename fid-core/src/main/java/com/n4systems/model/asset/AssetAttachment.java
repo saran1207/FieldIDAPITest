@@ -110,7 +110,8 @@ public class AssetAttachment extends EntityWithTenant implements Saveable,
     public boolean isRemote() {
         //the local files only contain the filename, whereas the files on s3 have a full path
         //files in temp folder will have one /, so we are counting if there is more than 1
-        return StringUtils.countOccurrencesOf(getFileName(), "/") > 1;
+        //return StringUtils.countOccurrencesOf(getFileName(), "/") > 1;
+        return true;
     }
 
 	@Override
