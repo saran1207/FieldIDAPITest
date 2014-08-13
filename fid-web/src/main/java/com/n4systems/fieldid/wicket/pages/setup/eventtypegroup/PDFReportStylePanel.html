@@ -1,0 +1,18 @@
+<wicket:panel xmlns="http://www.w3.org/1999/html">
+    <div wicket:id="pdfRadioGroup">
+        <span wicket:id="pdfs">
+            <div wicket:id="imageContainer">
+                <img wicket:id="image"/>
+            </div>
+            <div class="printOutDetails">
+                <input type="radio" wicket:id="score"><span wicket:id="scoreLabel"></span></input>
+                <div wicket:enclosure="downloadLink">
+                    <a wicket:id="downloadLink" href="#">
+                        <img src="/fieldid/images/pdf_small.gif">
+                        <wicket:message key="label.preview"/>
+                    </a>
+                </div>
+            </div>
+        </span>
+    </div>
+</wicket:panel>

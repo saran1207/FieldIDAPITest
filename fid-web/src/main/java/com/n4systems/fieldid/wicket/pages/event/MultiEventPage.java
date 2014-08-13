@@ -258,8 +258,6 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
             saveEventBookIfNecessary();
             if (doPostSubmitValidation()) {
                 List<ThingEvent> savedEvent = doSave();
-
-                //TODO: Add the right page to send the saved events to
                 setResponsePage(new CompletedMassEventPage(savedEvent));
             }
         }
@@ -270,7 +268,6 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
         return new UpdateComponentOnChange() {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                //doAutoSchedule();
                 target.add(schedulesContainer);
             }
         };
@@ -287,7 +284,6 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
 
         GroupedUserPicker groupedUserPicker;
         ownerSection.add(groupedUserPicker = new GroupedUserPicker("assignedTo", new PropertyModel<User>(MultiEventPage.this, "assignedTo"), new GroupedVisibleUsersModel()));
-        //groupedUserPicker.setNullValid(true);
         groupedUserPicker.setVisible(event.getObject().getType().isAssignedToAvailable());
 
         final OrgLocationPicker picker = new OrgLocationPicker("orgPicker", new PropertyModel<BaseOrg>(event, "owner")) {
@@ -466,14 +462,12 @@ public abstract class MultiEventPage<T extends Event> extends FieldIDFrontEndPag
                 return false;
             }
 
-
         }
 
         if (event.getObject().containsUnfilledScoreCriteria()) {
             error(new FIDLabelModel("error.scores.required").getObject());
             return false;
         }
-
 
         return true;
     }

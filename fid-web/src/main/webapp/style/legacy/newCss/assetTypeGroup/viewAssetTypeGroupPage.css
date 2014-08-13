@@ -1,0 +1,34 @@
+
+h2 {
+    display: inline;
+}
+
+.editLink {
+    padding-left: 20px;
+}
+
+.labelContainer {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.labelContainer label {
+    display:inline-block;
+    padding-left: 100px;
+}
+
+.assetTypeList {
+    padding-left: 0px;
+    vertical-align: middle;
+}
+
+.assetTypeList li {
+    height:35px;
+    margin-top: 10px;
+    list-style: none;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+.assetTypeList li a {
+    vertical-align: middle;
+}
