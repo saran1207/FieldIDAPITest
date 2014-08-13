@@ -6,8 +6,14 @@
 <wicket:panel>
 
     <h2><wicket:message key="label.assettypes"/></h2>
-    <ul wicket:id="list" class="list assetTypeList">
+    <ul wicket:id="assetTypeList" class="list assetTypeList">
         <li><a wicket:id="nameLink"><span wicket:id="name"/></a></li>
+    </ul>
+
+    <ul wicket:id="noResultsLabel" class="list assetTypeList"></ul>
+
+    <ul class="list assetTypeList">
+        <li><a wicket:id="addNewAssetTypeLink"><wicket:message key="label.addnewassettype"/></a></li>
     </ul>
 
 </wicket:panel>

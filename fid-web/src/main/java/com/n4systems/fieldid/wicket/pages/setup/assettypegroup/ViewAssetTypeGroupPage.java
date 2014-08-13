@@ -34,7 +34,6 @@ public class ViewAssetTypeGroupPage extends FieldIDTemplatePage {
     private AssetTypeGroup assetTypeGroup;
     private AssetTypeGroupDetailsPanel detailsPanel;
     private GroupAssetTypeListPanel assetTypeListPanel;
-    private WebMarkupContainer noAssetTypesUnderGroup;
 
     public ViewAssetTypeGroupPage(PageParameters params) {
         assetTypeGroupId = params.get("uniqueID").toLong();
@@ -45,9 +44,6 @@ public class ViewAssetTypeGroupPage extends FieldIDTemplatePage {
 
         assetTypeListPanel = new GroupAssetTypeListPanel("groupAssetTypeListPanel", assetTypeGroupId);
         add(assetTypeListPanel);
-        add(noAssetTypesUnderGroup = new WebMarkupContainer("noAssetTypesUnderGroup"));
-        noAssetTypesUnderGroup.setOutputMarkupPlaceholderTag(true);
-        noAssetTypesUnderGroup.setVisible(assetTypeListPanel.isEmpty());
 
     }
 

@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.components.assettypegroup;
 
 import com.n4systems.fieldid.service.asset.AssetTypeService;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.setup.assettype.AddAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.EditAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.ViewAssetTypeGroupPage;
 import com.n4systems.model.AssetType;
@@ -34,7 +36,7 @@ public class GroupAssetTypeListPanel extends Panel {
         super(id);
         assetTypeGroupId = groupId;
 
-        listView = new ListView<AssetType>("list", getAssetTypes()) {
+        listView = new ListView<AssetType>("assetTypeList", getAssetTypes()) {
             @Override
             protected void populateItem(ListItem<AssetType> item) {
 
@@ -48,6 +50,12 @@ public class GroupAssetTypeListPanel extends Panel {
 
         add(listView);
 
+        BookmarkablePageLink<Void> link = new BookmarkablePageLink<Void>("addNewAssetTypeLink", AddAssetTypePage.class);
+        add(link);
+
+        Label noResults = new Label("noResultsLabel", new FIDLabelModel("label.noassettypesundergroup"));
+        noResults.setVisible(isEmpty());
+        add(noResults);
     }
 
     private LoadableDetachableModel<List<AssetType>> getAssetTypes() {
