@@ -9,7 +9,6 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
-import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
@@ -76,8 +75,8 @@ public class ViewUserPage extends FieldIDTemplatePage{
         archiveLink.setVisible(!userModel.getObject().isAdmin());
         archiveLink.add(new ConfirmBehavior(new FIDLabelModel("warning.archiveuser", userModel.getObject().getFullName())));
 
-
-        add(new NonWicketLink("upgrade", "upgradeUser.action?uniqueID=" + userModel.getObject().getId()));
+        add(new BookmarkablePageLink<UpgradeUserPage>("upgrade", UpgradeUserPage.class, PageParametersBuilder.uniqueId(userModel.getObject().getId()))
+                .setVisible(!userModel.getObject().isAdmin()));
 
         add(new Link<Void>("welcomeEmail") {
             @Override

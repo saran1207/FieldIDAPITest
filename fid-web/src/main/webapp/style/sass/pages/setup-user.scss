@@ -1,0 +1,27 @@
+.setup-user.user-list {
+  .form-horizontal {
+    margin: -14px 0 0 0;
+    padding: 15px 0 15px;
+    border-bottom: 1px solid #c7c7c9;
+  }
+  .control-group {
+    width: 390px;
+    display: inline-block;
+
+    label {
+      width: 130px;
+    }
+    input[type="text"],
+      select,
+      textarea {
+      width: 255px;
+    }
+    > div {
+      width: 255px;
+    }
+  }
+  .form-horizontal > span {
+    display: inline-block;
+    margin-left: 134px;
+  }
+}
