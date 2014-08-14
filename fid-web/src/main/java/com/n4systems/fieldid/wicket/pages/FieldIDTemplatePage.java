@@ -32,6 +32,7 @@ import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
 import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.EventTypeGroupListPage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
@@ -288,6 +289,7 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
 	private Component createAssetEventsSubMenu() {
         WebMarkupContainer container = new WebMarkupContainer("assetsEventsSubMenuContainer");
+        container.add(new BookmarkablePageLink("eventTypeGroupLink", EventTypeGroupListPage.class));
         container.add(new BookmarkablePageLink("eventStatusListLink", EventStatusListPage.class));
         container.add(new BookmarkablePageLink("eventBooksListLink", EventBooksListAllPage.class));
         container.add(new BookmarkablePageLink("assetTypeGroupsListLink", AssetTypeGroupListPage.class));
