@@ -52,8 +52,6 @@ public class UserService extends FieldIdPersistenceService {
         return persistenceService.findAll(builder);
     }
 
-
-
     public Long countUsers(UserListFilterCriteria criteria) {
         QueryBuilder<User> builder = createUserQueryBuilder(criteria);
 

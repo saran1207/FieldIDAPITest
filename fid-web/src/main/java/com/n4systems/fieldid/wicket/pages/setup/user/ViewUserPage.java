@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.SendWelcomeEmailService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -62,7 +63,8 @@ public class ViewUserPage extends FieldIDTemplatePage{
 
         boolean isPerson = userModel.getObject().isPerson();
 
-        add(new Link<Void>("archive") {
+        Link archiveLink;
+        add(archiveLink = new Link<Void>("archive") {
             @Override
             public void onClick() {
                 userService.archive(userModel.getObject());
@@ -70,6 +72,10 @@ public class ViewUserPage extends FieldIDTemplatePage{
                 setResponsePage(UsersListPage.class);
             }
         });
+
+        archiveLink.setVisible(!userModel.getObject().isAdmin());
+        archiveLink.add(new ConfirmBehavior(new FIDLabelModel("warning.archiveuser", userModel.getObject().getFullName())));
+
 
         add(new NonWicketLink("upgrade", "upgradeUser.action?uniqueID=" + userModel.getObject().getId()));
 
