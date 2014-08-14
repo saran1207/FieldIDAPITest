@@ -117,7 +117,7 @@ public class ChangeUserPasswordPage extends FieldIDTemplatePage {
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.mobile_passcode")
-                        .page((userModel.getObject().getHashSecurityCardNumber()==null) ? EditUserMobilePasscodePage.class : ManageUserMobilePasscode.class)
+                        .page((userModel.getObject().getHashSecurityCardNumber()==null) ? EditUserMobilePasscodePage.class : ManageUserMobilePasscodePage.class)
                         .params(PageParametersBuilder.uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),

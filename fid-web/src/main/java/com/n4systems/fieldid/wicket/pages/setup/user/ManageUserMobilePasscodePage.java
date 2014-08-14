@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.user.User;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -26,7 +27,7 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 /**
  * Created by tracyshi on 2014-08-13.
  */
-public class ManageUserMobilePasscode extends FieldIDTemplatePage {
+public class ManageUserMobilePasscodePage extends FieldIDTemplatePage {
 
     @SpringBean
     private UserService userService;
@@ -37,7 +38,7 @@ public class ManageUserMobilePasscode extends FieldIDTemplatePage {
     private Button turnOffPasscodeButton;
     private Button changePasscodeButton;
 
-    public ManageUserMobilePasscode(PageParameters params) {
+    public ManageUserMobilePasscodePage(PageParameters params) {
         super(params);
         uniqueId = params.get("uniqueID").toLong();
         userModel = Model.of(userService.getUser(uniqueId));
@@ -83,7 +84,7 @@ public class ManageUserMobilePasscode extends FieldIDTemplatePage {
                 aNavItem().label("nav.view").page(ViewUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(uniqueId)).build(),
-                aNavItem().label("nav.mobile_passcode").page(ManageUserMobilePasscode.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.mobile_passcode").page(ManageUserMobilePasscodePage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.add").page(AddUserPage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
@@ -93,6 +94,11 @@ public class ManageUserMobilePasscode extends FieldIDTemplatePage {
     @Override
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("title.user_change_rfid_number"));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/legacy/newCss/user/user_mobile_passcode.css");
     }
 
 }

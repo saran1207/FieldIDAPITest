@@ -4,11 +4,11 @@
 
     <div wicket:id="feedbackPanel"></div>
 
-    <form wicket:id="passcodeInputForm">
-        <fieldset>
+    <form class="edit-mobile-passcode-form" wicket:id="passcodeInputForm">
+
             <div class="control-group">
-                <label class="label"><wicket:message key="message.mobile_passcode_instructions"/></label>
-                <span class="fieldHolder"><input type="text" wicket:id="passcodeInputField"/></span>
+                <label><wicket:message key="message.mobile_passcode_instructions"/></label>
+                <input type="text" wicket:id="passcodeInputField">
             </div>
 
             <div class="control-group">
@@ -19,7 +19,6 @@
                 </a>
             </div>
 
-        </fieldset>
     </form>
 
 </wicket:extend>

@@ -11,6 +11,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.user.User;
 import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
@@ -43,6 +44,7 @@ public class EditUserMobilePasscodePage extends FieldIDTemplatePage {
 
     public EditUserMobilePasscodePage(PageParameters params) {
         super(params);
+        mobilePasscode = null;
         uniqueId = params.get("uniqueID").toLong();
         userModel = Model.of(userService.getUser(uniqueId));
         passcodeInputForm = new Form("passcodeInputForm") {
@@ -102,6 +104,11 @@ public class EditUserMobilePasscodePage extends FieldIDTemplatePage {
     @Override
     protected Label createTitleLabel(String labelId) {
         return new Label(labelId, new FIDLabelModel("title.user_change_rfid_number"));
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.renderCSSReference("style/legacy/newCss/user/user_mobile_passcode.css");
     }
 
 }
