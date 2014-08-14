@@ -15,7 +15,7 @@ public class UserListFilterCriteria implements Serializable {
     private CustomerOrg customer;
     private InternalOrg orgFilter;
     private UserGroup groupFilter;
-    private UserType userType = UserType.ALL;
+    private UserType userType;
     private UserBelongsToFilter userBelongsToFilter = UserBelongsToFilter.ALL;
     private String nameFilter;
     private boolean archivedOnly;

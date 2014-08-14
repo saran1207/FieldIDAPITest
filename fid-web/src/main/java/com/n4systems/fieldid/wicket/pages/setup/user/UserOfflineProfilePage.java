@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.OfflineProfilePanel;
@@ -58,7 +59,9 @@ public class UserOfflineProfilePage extends FieldIDTemplatePage {
                 aNavItem().label("nav.view").page(ViewUserPage.class).params(uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(uniqueId)).build(),
-                aNavItem().label("nav.mobile_passcode").page("adminMobilePasscode.action").params(uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.mobile_passcode")
+                        .page((user.getHashSecurityCardNumber() == null) ? EditUserMobilePasscodePage.class : ManageUserMobilePasscodePage.class)
+                        .params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
