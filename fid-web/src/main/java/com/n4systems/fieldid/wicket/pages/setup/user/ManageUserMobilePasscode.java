@@ -14,16 +14,11 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.ValidationError;
-import org.apache.wicket.validation.validator.AbstractValidator;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder.uniqueId;
@@ -31,49 +26,45 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 /**
  * Created by tracyshi on 2014-08-13.
  */
-public class EditUserMobilePasscodePage extends FieldIDTemplatePage {
+public class ManageUserMobilePasscode extends FieldIDTemplatePage {
 
     @SpringBean
     private UserService userService;
 
-    private Form passcodeInputForm;
-    private IModel<User> userModel;
     private Long uniqueId;
-    private String mobilePasscode;
+    private IModel<User> userModel;
+    private Form buttonForm;
+    private Button turnOffPasscodeButton;
+    private Button changePasscodeButton;
 
-    public EditUserMobilePasscodePage(PageParameters params) {
+    public ManageUserMobilePasscode(PageParameters params) {
         super(params);
         uniqueId = params.get("uniqueID").toLong();
         userModel = Model.of(userService.getUser(uniqueId));
-        passcodeInputForm = new Form("passcodeInputForm") {
-            @Override
-            public void onSubmit() {
-                User user = userModel.getObject();
-                user.assignSecruityCardNumber(mobilePasscode);
-                userService.update(user);
-                FieldIDSession.get().info(new FIDLabelModel("message.passcodeupdated").getObject());
-                setResponsePage(ViewUserPage.class, PageParametersBuilder.uniqueId(uniqueId));
-            }
+
+        buttonForm = new Form("buttonForm");
+
+        turnOffPasscodeButton = new Button("turnOffPasscodeButton") {
+          @Override
+          public void onSubmit() {
+              User user = userModel.getObject();
+              user.assignSecruityCardNumber(null);
+              userService.update(user);
+              FieldIDSession.get().info(new FIDLabelModel("message.passcoderemoved").getObject());
+              setResponsePage(EditUserMobilePasscodePage.class, PageParametersBuilder.uniqueId(uniqueId));
+          }
         };
 
-        final RequiredTextField passcodeTextField = new RequiredTextField<String>("passcodeInputField", new PropertyModel<String>(this, "mobilePasscode"));
-        passcodeTextField.add(new AbstractValidator() {
-            @Override
-            protected void onValidate(IValidatable iValidatable) {
-                String passcode = (String) iValidatable.getValue();
-                if (passcode.length() < 4) {
-                    ValidationError error = new ValidationError();
-                    error.addMessageKey("errors.passcodelength");
-                    iValidatable.error(error);
-                }
-            }
-        });
+        changePasscodeButton = new Button("changePasscodeButton") {
+          @Override
+        public void onSubmit() {
+              setResponsePage(EditUserMobilePasscodePage.class, PageParametersBuilder.uniqueId(uniqueId));
+          }
+        };
 
-        passcodeInputForm.add(passcodeTextField);
-        passcodeInputForm.add(new Button("saveButton"));
-        passcodeInputForm.add(new BookmarkablePageLink("cancelLink", EditUserPage.class, PageParametersBuilder.uniqueId(uniqueId)));
-
-        add(passcodeInputForm);
+        buttonForm.add(turnOffPasscodeButton);
+        buttonForm.add(changePasscodeButton);
+        add(buttonForm);
         add(new FIDFeedbackPanel("feedbackPanel"));
     }
 
@@ -92,8 +83,8 @@ public class EditUserMobilePasscodePage extends FieldIDTemplatePage {
                 aNavItem().label("nav.view").page(ViewUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(uniqueId)).build(),
-                aNavItem().label("nav.mobile_passcode").page(EditUserMobilePasscodePage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
-                aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.mobile_passcode").page(ManageUserMobilePasscode.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.add").page(AddUserPage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));
