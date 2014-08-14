@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.setup.assetstatus;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.AssetStatus;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.markup.repeater.Item;
@@ -14,11 +15,8 @@ import org.apache.wicket.model.IModel;
  */
 public class AssetStatusActionColumn extends AbstractColumn<AssetStatus> {
 
-    private AssetStatusListPanel listPanel;
-
-    public AssetStatusActionColumn(AssetStatusListPanel listPanel) {
+    public AssetStatusActionColumn() {
         super(new FIDLabelModel(""));
-        this.listPanel = listPanel;
     }
 
     @Override
@@ -26,6 +24,13 @@ public class AssetStatusActionColumn extends AbstractColumn<AssetStatus> {
                              String id,
                              IModel<AssetStatus> model) {
 
-        item.add(new AssetStatusActionCell(id, model, listPanel));
+        item.add(new AssetStatusActionCell(id, model) {
+            @Override
+            protected void onAction(AjaxRequestTarget target) {
+                AssetStatusActionColumn.this.onAction(target);
+            }
+        });
     }
+
+    protected void onAction(AjaxRequestTarget target) {}
 }

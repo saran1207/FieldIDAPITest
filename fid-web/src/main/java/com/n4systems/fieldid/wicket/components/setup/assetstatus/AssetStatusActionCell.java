@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.setup.assetstatus;
 
 import com.n4systems.fieldid.service.asset.AssetStatusService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.EditAssetStatusPage;
@@ -38,7 +39,7 @@ public class AssetStatusActionCell extends Panel {
      * @param id - A <b>String</b> value representing the wicket:id of the component.
      * @param model - An <b>IModel</b> object typed to <b>AssetStatus</b>, representing the AssetStatus that needs a cell.
      */
-    public AssetStatusActionCell(String id, final IModel<AssetStatus> model, final AssetStatusListPanel listPanel) {
+    public AssetStatusActionCell(String id, final IModel<AssetStatus> model) {
         super(id);
 
         this.thisStatus = model.getObject();
@@ -65,10 +66,11 @@ public class AssetStatusActionCell extends Panel {
                 AssetStatus archiveMe = assetStatusService.getStatusById(thisStatus.getId());
                 assetStatusService.archiveStatus(archiveMe);
 
-                info(new FIDLabelModel("message.archive_asset_status",
-                        thisStatus.getDisplayName()).getObject());
+                FieldIDSession.get()
+                              .info(new FIDLabelModel("message.archive_asset_status",
+                                    thisStatus.getDisplayName()).getObject());
 
-                target.add(listPanel);
+                onAction(target);
             }
         });
 
@@ -84,12 +86,18 @@ public class AssetStatusActionCell extends Panel {
                 AssetStatus unarchiveMe = assetStatusService.getStatusById(thisStatus.getId());
                 assetStatusService.unarchiveStatus(unarchiveMe);
 
-                info(new FIDLabelModel("message.unarchive_asset_status",
-                        thisStatus.getDisplayName()).getObject());
-                target.add(listPanel);
+                FieldIDSession.get()
+                              .info(new FIDLabelModel("message.unarchive_asset_status",
+                                    thisStatus.getDisplayName()).getObject());
+
+                onAction(target);
             }
         });
 
         unarchiveLink.setVisible(thisStatus.isArchived());
+    }
+
+    protected void onAction(AjaxRequestTarget target) {
+        //This sucker needs to be overridden.
     }
 }
