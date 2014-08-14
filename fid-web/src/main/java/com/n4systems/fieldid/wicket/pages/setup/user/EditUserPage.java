@@ -7,9 +7,11 @@ import com.n4systems.fieldid.wicket.components.user.UserFormAccountPanel;
 import com.n4systems.fieldid.wicket.components.user.UserFormPermissionsPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
@@ -22,6 +24,10 @@ public class EditUserPage extends UserPage {
 
     @SpringBean
     private S3Service s3Service;
+
+    public EditUserPage(IModel<User> userModel) {
+        super(userModel);
+    }
 
     public EditUserPage(PageParameters parameters) {
         super(parameters);
@@ -40,7 +46,12 @@ public class EditUserPage extends UserPage {
 
     @Override
     protected Component createPermissionsPanel(String id) {
-        return new UserFormPermissionsPanel(id, userModel);
+        return new UserFormPermissionsPanel(id, userModel) {
+            @Override
+            public boolean isVisible() {
+                return !userModel.getObject().isReadOnly();
+            }
+        };
     }
 
     @Override
