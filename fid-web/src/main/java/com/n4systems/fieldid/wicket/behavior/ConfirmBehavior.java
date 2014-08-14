@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.behavior;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.model.IModel;
 
+//Note: For AjaxLink use ConfirmAjaxCallDecorator
 public class ConfirmBehavior extends AttributeModifier {
 
     public ConfirmBehavior(IModel<String> msg) {
