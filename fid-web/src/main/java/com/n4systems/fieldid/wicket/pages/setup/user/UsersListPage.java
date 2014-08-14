@@ -27,6 +27,7 @@ import com.n4systems.security.UserType;
 import com.n4systems.util.UserBelongsToFilter;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
@@ -107,7 +108,7 @@ public class UsersListPage extends FieldIDTemplatePage {
                 new ListableChoiceRenderer<InternalOrg>())
                 .setNullValid(true));
 
-        filterForm.add(new AjaxSubmitLink("filter") {
+        filterForm.add(new AjaxButton("filter") {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 target.add(usersListContainer);
@@ -131,6 +132,8 @@ public class UsersListPage extends FieldIDTemplatePage {
         add(usersListContainer = new WebMarkupContainer("usersListContainer"));
         usersListContainer.setOutputMarkupId(true);
         usersListContainer.add(new SimpleDefaultDataTable<User>("users", getUserTableColumns(), dataProvider, PAGE_SIZE));
+
+        usersListContainer.add(new Label("total", new FIDLabelModel("label.total_x", userService.countUsers(new UserListFilterCriteria(false)))));
     }
 
     protected Model<UserListFilterCriteria> getUserListFilterCriteria() {

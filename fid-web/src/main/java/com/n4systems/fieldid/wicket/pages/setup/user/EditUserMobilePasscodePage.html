@@ -1,0 +1,25 @@
+<html xmlns:wicket="http://wicket.apache.org">
+
+<wicket:extend>
+
+    <div wicket:id="feedbackPanel"></div>
+
+    <form class="edit-mobile-passcode-form" wicket:id="passcodeInputForm">
+
+            <div class="control-group">
+                <label><wicket:message key="message.mobile_passcode_instructions"/></label>
+                <input type="text" wicket:id="passcodeInputField">
+            </div>
+
+            <div class="control-group">
+                <button class="btn-primary" type="submit" wicket:id="saveButton"><wicket:message key="label.save"/></button>
+                <wicket:message key="label.or"/>
+                <a wicket:id="cancelLink">
+                    <wicket:message key="label.cancel"/>
+                </a>
+            </div>
+
+    </form>
+
+</wicket:extend>
+</html>

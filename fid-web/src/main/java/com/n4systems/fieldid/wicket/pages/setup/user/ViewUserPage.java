@@ -6,6 +6,7 @@ import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.SendWelcomeEmailService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -62,7 +63,8 @@ public class ViewUserPage extends FieldIDTemplatePage{
 
         boolean isPerson = userModel.getObject().isPerson();
 
-        add(new Link<Void>("archive") {
+        Link archiveLink;
+        add(archiveLink = new Link<Void>("archive") {
             @Override
             public void onClick() {
                 userService.archive(userModel.getObject());
@@ -70,6 +72,10 @@ public class ViewUserPage extends FieldIDTemplatePage{
                 setResponsePage(UsersListPage.class);
             }
         });
+
+        archiveLink.setVisible(!userModel.getObject().isAdmin());
+        archiveLink.add(new ConfirmBehavior(new FIDLabelModel("warning.archiveuser", userModel.getObject().getFullName())));
+
 
         add(new NonWicketLink("upgrade", "upgradeUser.action?uniqueID=" + userModel.getObject().getId()));
 
@@ -187,6 +193,9 @@ public class ViewUserPage extends FieldIDTemplatePage{
                 aNavItem().label("nav.view").page(ViewUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(userModel.getObject().getId())).build(),
+                aNavItem().label("nav.mobile_passcode")
+                        .page((userModel.getObject().getHashSecurityCardNumber() == null) ? EditUserMobilePasscodePage.class : ManageUserMobilePasscodePage.class)
+                        .params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.add").page(this.getClass()).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()

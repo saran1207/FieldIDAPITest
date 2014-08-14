@@ -6,6 +6,7 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.model.IModel;
 
+//Note: For AjaxLink use ConfirmAjaxCallDecorator
 public class JavaScriptAlertConfirmBehavior extends Behavior {
 
     private IModel<String> confirmationMessage;
