@@ -215,7 +215,7 @@
 
     <root>
 		<priority value="info" />
-		<!-- appender-ref ref="CONSOLE" / -->
+		<appender-ref ref="CONSOLE" />
 		<appender-ref ref="FIELDID_LOG" />
 	</root>
 </log4j:configuration>
