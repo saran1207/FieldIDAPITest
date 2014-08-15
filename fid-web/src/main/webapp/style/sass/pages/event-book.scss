@@ -1,0 +1,25 @@
+.setup.event-book {
+  .infoSet {
+    label {
+      display: inline-block;
+      width: 100px;
+      text-align: right;
+      margin-right: 6px;
+    }
+    .orgPicker a.searchOwner {
+      margin-left: 3px;
+    }
+    input[type="radio"],
+      input[type="checkbox"] {
+      float: none;
+    }
+  }
+  .formAction {
+    padding-left: 348px;
+    margin-top: 10px;
+    margin-left: 0px;
+    border-top: 1px solid #E2E2E2;
+    padding-top: 10px;
+    width: 570px
+  }
+}
