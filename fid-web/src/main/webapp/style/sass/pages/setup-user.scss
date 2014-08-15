@@ -1,0 +1,50 @@
+.setup-user.user-list {
+  .form-horizontal {
+    margin: -14px 0 0 0;
+    padding: 15px 0 15px;
+    border-bottom: 1px solid #c7c7c9;
+  }
+  .control-group {
+    width: 390px;
+    display: inline-block;
+
+    label {
+      width: 130px;
+    }
+    input[type="text"],
+      select,
+      textarea {
+      width: 255px;
+    }
+    > div {
+      width: 255px;
+    }
+  }
+  .form-horizontal > span {
+    display: inline-block;
+    margin-left: 134px;
+  }
+}
+.setup-user.mobile-passcode {
+  .buttonForm {
+    padding-top: 20px;
+  }
+
+  .form button {
+    display: inline;
+  }
+
+  .edit-mobile-passcode-form {
+    padding-top: 20px;
+  }
+
+  .control-group label {
+    padding-bottom: 5px;
+  }
+
+  .control-group input {
+    width: 650px;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+}

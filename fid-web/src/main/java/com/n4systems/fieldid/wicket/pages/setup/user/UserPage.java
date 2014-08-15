@@ -52,6 +52,11 @@ public abstract class UserPage extends FieldIDTemplatePage {
         this.userType = userType;
     }
 
+    public UserPage(IModel<User> userModel) {
+        this.uniqueId = userModel.getObject().getId();
+        this.userModel = userModel;
+    }
+
     public UserPage(PageParameters parameters) {
         uniqueId = parameters.get("uniqueID").toLong();
         userModel = Model.of(loadExistingUser());

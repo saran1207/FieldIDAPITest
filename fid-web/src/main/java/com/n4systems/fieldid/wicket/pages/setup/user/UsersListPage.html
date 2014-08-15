@@ -1,38 +1,41 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-    <div wicket:id="feedbackPanel"/>
+    <div class="setup-user user-list">
+        <div wicket:id="feedbackPanel"/>
 
-    <form wicket:id="filterForm">
-        <fieldset class="form-horizontal">
-            <div class="control-group">
-                <label><wicket:message key="label.name"/>:</label>
-                <input wicket:id="nameFilter" type="text">
-            </div>
-            <div class="control-group">
-                <label><wicket:message key="label.belongs_to"/>:</label>
-                <select wicket:id="userBelongsToFilter"/>
-            </div>
-            <div class="control-group">
-                <label><wicket:message key="label.usertype"/>:</label>
-                <select wicket:id="userTypeFilter"/>
-            </div>
-            <div class="control-group">
-                <label><wicket:message key="label.usergroup"/>:</label>
-                <select wicket:id="userGroupFilter"/>
-            </div>
-            <div class="control-group">
-                <label><wicket:message key="label.organization"/>:</label>
-                <select wicket:id="orgFilter"/>
-            </div>
-        </fieldset>
-        <span>
-            <a class="btn-primary" wicket:id="filter"><wicket:message key="label.filter"/></a>
-            <wicket:message key="label.or"/>
-            <a class="btn-link" wicket:id="clear"><wicket:message key="label.clear"/></a>
-        </span>
-    </form>
-    <div wicket:id="usersListContainer">
-        <table wicket:id="users" class="list borders clear comfortable"/>
+        <form wicket:id="filterForm">
+            <fieldset class="form-horizontal">
+                <div class="control-group">
+                    <label><wicket:message key="label.name"/>:</label>
+                    <input wicket:id="nameFilter" type="text">
+                </div>
+                <div class="control-group">
+                    <label><wicket:message key="label.belongs_to"/>:</label>
+                    <select wicket:id="userBelongsToFilter"/>
+                </div>
+                <div class="control-group">
+                    <label><wicket:message key="label.usertype"/>:</label>
+                    <select wicket:id="userTypeFilter"/>
+                </div>
+                <div class="control-group">
+                    <label><wicket:message key="label.usergroup"/>:</label>
+                    <select wicket:id="userGroupFilter"/>
+                </div>
+                <div class="control-group">
+                    <label><wicket:message key="label.organization"/>:</label>
+                    <select wicket:id="orgFilter"/>
+                </div>
+                <span>
+                    <button class="btn-primary" wicket:id="filter"><wicket:message key="label.filter"/></button>
+                    <wicket:message key="label.or"/>
+                    <a class="btn-link" wicket:id="clear"><wicket:message key="label.clear"/></a>
+                </span>
+            </fieldset>
+        </form>
+        <div wicket:id="usersListContainer">
+            <table wicket:id="users" class="list borders clear comfortable"/>
+            <label class="label" wicket:id="total"/>
+        </div>
     </div>
 </wicket:extend>
 </html>

@@ -6,8 +6,6 @@ import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
-import com.n4systems.fieldid.service.event.ProcedureAuditScheduleService;
 import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
@@ -671,9 +669,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.count(procedureDefinitionCountQuery);
     }
 
-
-
-
     public List<String> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
         QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredDevice.class);
         query.setSimpleSelect("device");
@@ -686,6 +681,15 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         } else {
             query.addWhere(WhereClauseFactory.createIsNull("isolationPointSourceType"));
         }
+        query.addOrder("device");
+        return persistenceService.findAll(query);
+    }
+
+    public List<String> getPreConfiguredEnergySource(IsolationPointSourceType sourceType) {
+        QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredEnergySource.class);
+        query.setSimpleSelect("source");
+        query.addSimpleWhere("isolationPointSourceType", sourceType);
+        query.addOrder("source");
         return persistenceService.findAll(query);
     }
 
