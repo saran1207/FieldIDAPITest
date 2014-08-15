@@ -11,7 +11,7 @@ public enum IsolationPointSourceType {
     CP("Control Panel"),
     M("Mechanical"),
     H("Hydraulic"),
-    C("CP"),
+    C("Chemical"),
     N("Notes");
 
     private final String identifier;
