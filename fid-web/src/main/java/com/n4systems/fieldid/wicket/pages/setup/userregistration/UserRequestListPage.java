@@ -4,11 +4,12 @@ import com.n4systems.fieldid.service.user.UserRequestService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.OwnersUsersLocationsPage;
 import com.n4systems.model.UserRequest;
-import com.n4systems.model.user.User;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,7 +18,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.PropertyModel;
-import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
@@ -51,7 +51,7 @@ public class UserRequestListPage extends FieldIDTemplatePage {
                 item.add(new Label("lastName", new PropertyModel<String>(userRequest, "userAccount.lastName")));
                 item.add(new Label("comment", new PropertyModel<String>(userRequest, "comment")));
                 item.add(new Label("created", new DayDisplayModel(new PropertyModel<Date>(userRequest, "created"), true, timeZone)));
-                item.add(new BookmarkablePageLink<Void>("viewButton", ViewUserRequestPage.class));
+                item.add(new BookmarkablePageLink<Void>("viewButton", ViewUserRequestPage.class, PageParametersBuilder.uniqueId(userRequest.getId())));
             }
         };
 

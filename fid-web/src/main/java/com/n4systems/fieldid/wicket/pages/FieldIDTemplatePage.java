@@ -49,6 +49,7 @@ import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
+import com.n4systems.util.uri.ActionURLBuilder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -73,6 +74,7 @@ import org.apache.wicket.util.template.TextTemplate;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 import rfid.web.helper.SessionUser;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -340,6 +342,14 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 		}		
 		return configurationProvider; 
 	}
+
+    protected ActionURLBuilder createActionUrlBuilder() {
+        return new ActionURLBuilder(getBaseURI(), getConfigurationProvider());
+    }
+
+    private URI getBaseURI() {
+        return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
+    }
 	
 	@Deprecated // for testing only to get around static implementation of configContext.
     public void setConfigurationProvider(ConfigurationProvider configurationProvider) {
