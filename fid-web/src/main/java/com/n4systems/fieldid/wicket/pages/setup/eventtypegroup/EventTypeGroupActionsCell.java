@@ -22,15 +22,18 @@ public class EventTypeGroupActionsCell extends Panel {
     @SpringBean
     private EventTypeGroupService eventTypeGroupService;
 
+    private Long eventTypeGroupId;
+
     public EventTypeGroupActionsCell(String id, final IModel<EventTypeGroup> eventTypeGroupModel, final EventTypeGroupPanel procedureListPanel) {
         super(id);
 
         final EventTypeGroup eventTypeGroup = eventTypeGroupModel.getObject();
+        eventTypeGroupId = eventTypeGroupModel.getObject().getID();
 
         Link editLink;
 
         if(eventTypeGroup.isActive()) {
-            editLink = new BookmarkablePageLink("editLink", EventTypeGroupEditPage.class, PageParametersBuilder.uniqueId(eventTypeGroup.getID()));
+            editLink = new BookmarkablePageLink("editLink", EventTypeGroupEditPage.class, PageParametersBuilder.uniqueId(eventTypeGroupId));
             editLink.add(new Label("name", "Edit"));
         } else {
             editLink = new Link("editLink") {

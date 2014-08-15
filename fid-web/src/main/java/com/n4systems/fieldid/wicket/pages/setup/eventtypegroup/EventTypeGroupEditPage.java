@@ -9,7 +9,6 @@ import com.n4systems.fieldid.wicket.components.text.LabelledRequiredTextField;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.EventTypeGroup;
-import com.n4systems.model.PrintOut;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Button;
@@ -35,6 +34,9 @@ public class EventTypeGroupEditPage extends EventTypeGroupPage{
     private FIDFeedbackPanel feedbackPanel;
     protected IModel<EventTypeGroup> eventTypeGroupModel;
     private Long eventTypeGroupId;
+
+    private PDFReportStylePanel printOutPanel;
+    private ObservationReportStylePanel observationPrintOutPanel;
 
     public EventTypeGroupEditPage(){
         super();
@@ -91,9 +93,11 @@ public class EventTypeGroupEditPage extends EventTypeGroupPage{
 
             add(new LabelledRequiredTextField<String>("reportTitle", "label.report_title", new PropertyModel<String>(eventTypeGroupModel, "reportTitle")));
 
-            add(new PDFReportStylePanel("printOutSection", eventTypeGroupModel, PrintOut.PrintOutType.CERT));
+            printOutPanel = new PDFReportStylePanel("printOutSection", eventTypeGroupModel.getObject().getPrintOut());
+            add(printOutPanel);
 
-            add(new PDFReportStylePanel("printOutSection2", eventTypeGroupModel, PrintOut.PrintOutType.OBSERVATION));
+            observationPrintOutPanel = new ObservationReportStylePanel("printOutSection2", eventTypeGroupModel.getObject().getObservationPrintOut());
+            add(observationPrintOutPanel);
 
             Button saveButton = new Button("saveButton");
             saveButton.add(new DisableButtonBeforeSubmit());
@@ -103,12 +107,9 @@ public class EventTypeGroupEditPage extends EventTypeGroupPage{
 
         @Override
         protected void onSubmit() {
-            if(eventTypeGroupModel.getObject().getPrintOut().getName().equals("No Thanks, I do not need a PDF Report for this Event Type Group.")) {
-                eventTypeGroupModel.getObject().setPrintOut(null);
-            }
-            if(eventTypeGroupModel.getObject().getObservationPrintOut().getName().equals("No Thanks, I do not need a PDF Observation Report for this Event Type Group.")) {
-                eventTypeGroupModel.getObject().setObservationPrintOut(null);
-            }
+            eventTypeGroupModel.getObject().setPrintOut(printOutPanel.getPrintOut());
+            eventTypeGroupModel.getObject().setObservationPrintOut(observationPrintOutPanel.getPrintOut());
+
             eventTypeGroupService.update(eventTypeGroupModel.getObject(), eventTypeGroupService.getUser(FieldIDSession.get().getSessionUser().getId()));
             setResponsePage(new EventTypeGroupListPage());
         }

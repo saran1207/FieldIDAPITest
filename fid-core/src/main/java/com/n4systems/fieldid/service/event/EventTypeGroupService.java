@@ -14,6 +14,7 @@ import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -122,14 +123,17 @@ public class EventTypeGroupService extends FieldIdPersistenceService {
         return persistenceService.count(query);
     }
 
+    @Transactional
     public List<PrintOut> findCertPrintOuts(){
         return findPrintOutsOfType(PrintOut.PrintOutType.CERT);
     }
 
+    @Transactional
     public List<PrintOut> findObservationPrintOuts(){
         return findPrintOutsOfType(PrintOut.PrintOutType.OBSERVATION);
     }
 
+    @Transactional
     private List<PrintOut> findPrintOutsOfType(PrintOut.PrintOutType type) {
         List<PrintOut> printOuts = null;
 

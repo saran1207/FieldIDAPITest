@@ -21,28 +21,29 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import java.util.List;
 
 /**
- * Created by rrana on 2014-08-08.
+ * Created by rrana on 2014-08-15.
  */
-public class PDFReportStylePanel extends Panel {
+public class ObservationReportStylePanel extends Panel {
 
     @SpringBean
     private EventTypeGroupService eventTypeGroupService;
 
-    private PrintOut selection;
+    private List<PrintOut> observationPrintOutList;
 
-    private List<PrintOut> printOutList;
+    private PrintOut selection;
     private RadioGroup<PrintOut> scoreRadioGroup;
 
-    public PDFReportStylePanel(String id, PrintOut printOut) {
+    public ObservationReportStylePanel(String id, PrintOut printOut) {
         super(id);
 
-        printOutList = eventTypeGroupService.findCertPrintOuts();
+        observationPrintOutList = eventTypeGroupService.findObservationPrintOuts();
+        //final List<PrintOut> certs = eventTypeGroupService.findObservationPrintOuts();
 
         //Create the Empty PrintOut option
         PrintOut emptyOption = new PrintOut();
         emptyOption.setId(null);
-        emptyOption.setName("No Thanks, I do not need a PDF Report for this Event Type Group.");
-        printOutList.add(emptyOption);
+        emptyOption.setName("No Thanks, I do not need a PDF Observation Report for this Event Type Group.");
+        observationPrintOutList.add(emptyOption);
 
         if(printOut == null) {
             selection = emptyOption;
@@ -58,7 +59,7 @@ public class PDFReportStylePanel extends Panel {
         });
         add(scoreRadioGroup);
 
-        scoreRadioGroup.add(new ListView<PrintOut>("pdfs", printOutList) {
+        scoreRadioGroup.add(new ListView<PrintOut>("pdfs", observationPrintOutList) {
             @Override
             protected void populateItem(ListItem<PrintOut> item) {
 
