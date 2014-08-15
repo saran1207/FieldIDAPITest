@@ -4,104 +4,124 @@
 	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<param name="Threshold" value="DEBUG" />
-		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<!-- The default pattern: Date Priority [Category] Message\n -->
 			<param name="ConversionPattern" value="%D: %-5p [%c{1}] %m%n" />
 		</layout>
 	</appender>
-    <appender name="AUDIT_LOG" class="org.apache.log4j.FileAppender">
+    <appender name="AUDIT_LOG" class="org.apache.log4j.RollingFileAppender">
         <param name="File" value="/var/fieldid/logs/fieldid-audit.log" />
         <param name="Append" value="true" />
-        <layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+        <param name="MaxFileSize" value="500MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
             <param name="ConversionPattern" value="%D: %c: %m%n" />
         </layout>
     </appender>
-    <appender name="SEARCH_LOG" class="org.apache.log4j.FileAppender">
+    <appender name="SEARCH_LOG" class="org.apache.log4j.RollingFileAppender">
         <param name="File" value="/var/fieldid/logs/fieldid-search.log" />
         <param name="Append" value="true" />
-        <layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+        <param name="MaxFileSize" value="500MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
             <param name="ConversionPattern" value="%D: %c: %m%n" />
         </layout>
     </appender>
-    <appender name="CACHE_LOG" class="org.apache.log4j.FileAppender">
+    <appender name="CACHE_LOG" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/fieldid-cache.log" />
 		<param name="Append" value="true" />
-		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<param name="ConversionPattern" value="%D: %c: %m%n" />
 		</layout>
 	</appender>
-	<appender name="FIELDID_LOG" class="org.apache.log4j.FileAppender">
+	<appender name="FIELDID_LOG" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/fieldid.log" />
 		<param name="Append" value="true" />
-		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
-	<appender name="FIELDID_TASK" class="org.apache.log4j.FileAppender">
+	<appender name="FIELDID_TASK" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/fieldid-task.log" />
         <param name="Append" value="true" />
-		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
-	<appender name="FIELDID_ORDER" class="org.apache.log4j.FileAppender">
+	<appender name="FIELDID_ORDER" class="org.apache.log4j.DailyRollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/order.log" />
 		<param name="Append" value="true" />
-		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
-	<appender name="LIMIT_SERVICE" class="org.apache.log4j.FileAppender">
+	<appender name="LIMIT_SERVICE" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/limit-service.log" />
 		<param name="Append" value="true" />
-		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+		<param name="MaxFileSize" value="200MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
-	<appender name="INSPECTION_SERVICE" class="org.apache.log4j.FileAppender">
+	<appender name="INSPECTION_SERVICE" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/inspect-service.log" />
 		<param name="Append" value="true" />
-		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+		<param name="MaxFileSize" value="200MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
-	<appender name="MOBILE_ERROR" class="org.apache.log4j.FileAppender">
+	<appender name="MOBILE_ERROR" class="org.apache.log4j.RollingFileAppender">
 		<param name="File" value="/var/fieldid/logs/mobile_errors.log" />
 		<param name="Append" value="true" />
-		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+		<param name="MaxBackupIndex" value="30" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
 			<param name="ConversionPattern" value="%D: %m%n" />
 		</layout>
 	</appender>
-    <appender name="API_LOG" class="org.apache.log4j.FileAppender">
+    <appender name="API_LOG" class="org.apache.log4j.RollingFileAppender">
         <param name="File" value="/var/fieldid/logs/api.log" />
         <param name="Append" value="true" />
-        <layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+        <param name="MaxBackupIndex" value="30" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
             <param name="ConversionPattern" value="%D %-5p - %-26.26c{1} - %m\n" />
         </layout>
     </appender>
 
-    <appender name="REQUESTS" class="org.apache.log4j.FileAppender">
+    <appender name="REQUESTS" class="org.apache.log4j.RollingFileAppender">
         <param name="File" value="/var/fieldid/logs/wicket-requests.log" />
         <param name="Append" value="true" />
-        <layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+        <param name="MaxBackupIndex" value="30" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
             <param name="ConversionPattern" value="%D: %m%n" />
         </layout>
     </appender>
 
-    <appender name="FIELDID_MIGRATIONS" class="org.apache.log4j.FileAppender">
+    <appender name="FIELDID_MIGRATIONS" class="org.apache.log4j.RollingFileAppender">
         <param name="Threshold" value="DEBUG" />
         <param name="File" value="/var/fieldid/logs/migration.log" />
         <param name="Append" value="true" />
-        <layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+        <param name="MaxFileSize" value="500MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
             <param name="ConversionPattern" value="%D: %m%n" />
         </layout>
     </appender>
 
-    <appender name="Indexer" class="org.apache.log4j.FileAppender">
+    <appender name="Indexer" class="org.apache.log4j.DailyRollingFileAppender">
         <param name="File" value="/var/fieldid/logs/indexer.log" />
         <param name="Append" value="true" />
         <param name="DatePattern" value="'.'yyyy-MM-dd" />
-        <layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
             <param name="ConversionPattern" value="%D [%t] %-5p: %m%n" />
         </layout>
     </appender>
