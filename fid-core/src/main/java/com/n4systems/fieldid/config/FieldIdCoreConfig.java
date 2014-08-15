@@ -360,6 +360,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public UserRequestService userRequestService() {
+        return new UserRequestService();
+    }
+
+    @Bean
     public EventTypeService eventTypeService() {
         return new EventTypeService();
     }
