@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
-	<!-- appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<param name="Threshold" value="DEBUG" />
-		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<!-- The default pattern: Date Priority [Category] Message\n -->
 			<param name="ConversionPattern" value="%D: %-5p [%c{1}] %m%n" />
 		</layout>
-	</appender -->
+	</appender>
     <appender name="AUDIT_LOG" class="org.apache.log4j.FileAppender">
         <param name="File" value="/var/fieldid/logs/fieldid-audit.log" />
         <param name="Append" value="true" />
