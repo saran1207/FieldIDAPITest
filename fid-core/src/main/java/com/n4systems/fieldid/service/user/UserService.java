@@ -381,11 +381,4 @@ public class UserService extends FieldIdPersistenceService {
         persistenceService.update(user);
     }
 
-    public List<UserRequest> getUserRequests(Tenant tenant) {
-        QueryBuilder<UserRequest> builder = new QueryBuilder<UserRequest>(UserRequest.class, new OpenSecurityFilter());
-        builder.addSimpleWhere("tenant", tenant);
-        builder.addOrder("created", true);
-        return persistenceService.findAll(builder);
-    }
-
 }

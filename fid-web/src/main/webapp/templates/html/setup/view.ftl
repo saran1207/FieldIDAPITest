@@ -28,7 +28,7 @@ ${action.setPageType('setup','setup')!}
 			</p>
 			<#if userLimitService.readOnlyUsersEnabled>
 				<p>
-					<label><a href="<@s.url action="userRequestList"/>" ><@s.text name="title.manage_user_registrations.plural" /></a></label>
+					<label><a href="<@s.url action="userRequestList"/>" ><@s.text name="title.user_registrations.plural" /></a></label>
 					<span >Accept or deny requests for <@s.text name='label.customer'/> user accounts.</span>
 				</p>
 			</#if>

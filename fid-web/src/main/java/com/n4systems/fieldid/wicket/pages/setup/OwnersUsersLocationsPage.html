@@ -20,10 +20,12 @@
             </div>
         </wicket:enclosure>
 
-        <div wicket:id="manageUserRegistrationsContainer" class="setupOption userRegistrations">
-            <h1><a href="/fieldid/userRequestList.action" ><wicket:message key="title.manage_user_registrations.plural"/></a></h1>
-            <p><wicket:message key="label.manage_user_registrations_msg"/></p>
-        </div>
+        <wicket:enclosure>
+            <div class="setupOption userRegistrations">
+                <h1><a wicket:id="userRegistrationsLink" ><wicket:message key="label.user_registrations"/></a></h1>
+                <p><wicket:message key="label.manage_user_registrations_msg"/></p>
+            </div>
+        </wicket:enclosure>
 
         <div wicket:id="managePredefinedLocationsContainer" class="setupOption locations">
             <h1><a href="/fieldid/predefinedLocations.action" ><wicket:message key="title.manage_predefined_locations.plural"/></a></h1>

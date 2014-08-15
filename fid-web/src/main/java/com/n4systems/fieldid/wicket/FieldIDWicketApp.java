@@ -68,6 +68,7 @@ import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.*;
 import com.n4systems.fieldid.wicket.pages.setup.user.*;
+import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
 import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
@@ -159,6 +160,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/manageUserMobilePasscode", ManageUserMobilePasscodePage.class);
         mountPage("setup/userOfflineProfile", UserOfflineProfilePage.class);
         mountPage("setup/upgradeUserPage", UpgradeUserPage.class);
+        mountPage("setup/userRequestsList", UserRequestListPage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);

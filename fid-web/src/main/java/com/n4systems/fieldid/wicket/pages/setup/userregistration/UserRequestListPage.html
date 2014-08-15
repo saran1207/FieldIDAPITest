@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:wicket="http://git-wip-us.apache.org/repos/asf/wicket/repo?p=wicket.git;a=blob_plain;f=wicket-core/src/main/resources/META-INF/wicket-1.5.xsd;hb=master"
+      xml:lang="en"
+      lang="en">
+<wicket:extend>
+
+    <div wicket:id="noResults">
+        <wicket:message key="label.noresults"/>
+    </div>
+
+    <table class="list borders clear">
+        <tbody>
+        <tr>
+            <th><wicket:message key="label.company_name"/></th>
+            <th><wicket:message key="label.userid"/></th>
+            <th><wicket:message key="label.first_name"/></th>
+            <th><wicket:message key="label.last_name"/></th>
+            <th><wicket:message key="label.comment"/></th>
+            <th><wicket:message key="label.created"/></th>
+            <th>&nbsp;</th>
+        </tr>
+        <tr wicket:id="userRequestListView">
+            <td><label wicket:id="companyName"/></td>
+            <td><label wicket:id="userId"/></td>
+            <td><label wicket:id="firstName"/></td>
+            <td><label wicket:id="lastName"/></td>
+            <td><label wicket:id="comment"/></td>
+            <td><label wicket:id="created"/></td>
+            <td><a class="btn-secondary" wicket:id="viewButton"><wicket:message key="label.view"/></a></td>
+        </tr>
+        </tbody>
+    </table>
+
+</wicket:extend>
+</html>
