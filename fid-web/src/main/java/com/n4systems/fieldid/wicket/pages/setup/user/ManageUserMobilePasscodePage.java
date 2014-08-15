@@ -96,9 +96,4 @@ public class ManageUserMobilePasscodePage extends FieldIDTemplatePage {
         return new Label(labelId, new FIDLabelModel("title.user_change_rfid_number"));
     }
 
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/legacy/newCss/user/user_mobile_passcode.css");
-    }
-
 }

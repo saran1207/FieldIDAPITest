@@ -25,3 +25,26 @@
     margin-left: 134px;
   }
 }
+.setup-user.mobile-passcode {
+  .buttonForm {
+    padding-top: 20px;
+  }
+
+  .form button {
+    display: inline;
+  }
+
+  .edit-mobile-passcode-form {
+    padding-top: 20px;
+  }
+
+  .control-group label {
+    padding-bottom: 5px;
+  }
+
+  .control-group input {
+    width: 650px;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+  }
+}
