@@ -44,10 +44,9 @@
 			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
 	</appender>
-	<appender name="FIELDID_ORDER" class="org.apache.log4j.DailyRollingFileAppender">
+	<appender name="FIELDID_ORDER" class="org.apache.log4j.FileAppender">
 		<param name="File" value="/var/fieldid/logs/order.log" />
 		<param name="Append" value="true" />
-		<param name="DatePattern" value="'.'yyyy-MM-dd" />
 		<layout class="com.n4systems.fieldid.log.JSONEventLayoutV1">
 			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
 		</layout>
