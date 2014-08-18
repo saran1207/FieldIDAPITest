@@ -99,3 +99,87 @@
     }
   }
 }
+.setup-user.change-password {
+  fieldset {
+    margin-top: 0px;
+    .btn-link {
+      padding-left: 1px;
+    }
+  }
+  .confirm-password {
+    border-bottom: 1px solid #ececec;
+    padding-bottom: 23px;
+    margin-bottom: 11px;
+  }
+  div.info {
+    position: relative;
+    margin-top: 29px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+
+    .label-or {
+      position: absolute;
+      left: -50px;
+      top: 22px;
+    }
+    .btn-secondary {
+      margin-left: 236px;
+    }
+  }
+}
+.setup-user.user-page {
+  fieldset {
+    margin-right: 90px;
+    h3 {
+      border-bottom: 1px solid #B6B6B6;
+    }
+  }
+}
+.setup-user.identifiers-panel {
+  .owner {
+    label {
+      margin-top: -20px;
+    }
+    > div {
+      display: inline-block;
+    }
+  }
+  .user-group {
+    margin-top: -4px;
+  }
+  .digital-signature {
+    > label {
+      margin-top: -44px;
+    }
+    > div {
+      display: inline-block;
+      input {
+        display: block;
+      }
+      > span {
+        display: block;
+        margin-top: 4px;
+      }
+    }
+  }
+}
+.setup-user.permissions-panel {
+  border-bottom: 1px solid #B6B6B6;
+
+  td {
+    position: relative;
+  }
+  td > div,
+    th > div {
+    display: inline-block;
+    width: 30px;
+  }
+  .all-on {
+    position: absolute;
+    left: -27px;
+  }
+  .all-off {
+    position: absolute;
+    left: 39px;
+  }
+}

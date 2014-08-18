@@ -1,37 +1,30 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-    <h3><wicket:message key="label.permissions"/></h3>
-    <table class="list comfortable">
-        <tr>
-            <th>&nbsp;</th>
-            <th>
-                <span><wicket:message key="label.on"/></span>
-                <span><wicket:message key="label.off"/></span>
-            </th>
-        </tr>
-        <tr wicket:id="permissions">
-            <td wicket:id="name"/>
-            <td wicket:id="group">
-                <span>
-                    <input class="permissionOn" wicket:id="on" type="radio"/>
-                </span>
-                <span>
-                    <input class="permissionOff"  wicket:id="off" type="radio"/>
-                </span>
-
-            </td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>
-                <span>
-                    <input type="reset" value="All On" onclick="$('.permissionOn').trigger('click');return false;">
-                </span>
-                <span>
-                <input type="reset" value="All Off"onclick="$('.permissionOff').trigger('click');return false;">
-                </span>
-            </td>
-        </tr>
-    </table>
+    <div class="setup-user permissions-panel">
+        <h3><wicket:message key="label.permissions"/></h3>
+        <table class="list comfortable">
+            <tr>
+                <th>&nbsp;</th>
+                <th>
+                    <div><wicket:message key="label.on"/></div>
+                    <div><wicket:message key="label.off"/></div>
+                </th>
+            </tr>
+            <tr wicket:id="permissions">
+                <td wicket:id="name"/>
+                <td wicket:id="group">
+                    <div><input class="permissionOn" wicket:id="on" type="radio"/></div>
+                    <div><input class="permissionOff"  wicket:id="off" type="radio"/></div>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>
+                    <div class="all-on"><input type="reset" value="All On" onclick="$('.permissionOn').trigger('click');return false;"></div>
+                    <div class="all-off"><input type="reset" value="All Off"onclick="$('.permissionOff').trigger('click');return false;"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
 </wicket:panel>
 </html>
