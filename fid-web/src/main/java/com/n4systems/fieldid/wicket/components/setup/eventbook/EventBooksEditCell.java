@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.wicket.components.setup.eventbook;
 
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.setup.eventbook.EditEventBookPage;
 import com.n4systems.model.EventBook;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -28,7 +28,7 @@ public class EventBooksEditCell extends Panel {
                                                 PageParametersBuilder.param("eventBookId",
                                                                             model.getObject().getId())));
 
-        editLink.add(new Label("nameField",
+        editLink.add(new FlatLabel("nameField",
                                new PropertyModel<String>(model.getObject(),
                                                          "displayName")));
     }
