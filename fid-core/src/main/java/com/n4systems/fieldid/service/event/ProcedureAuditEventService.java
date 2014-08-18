@@ -12,7 +12,6 @@ import com.n4systems.model.procedure.RecurringLotoEvent;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.services.reporting.UpcomingScheduledProcedureAuditsRecord;
-import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
@@ -22,7 +21,6 @@ import org.apache.log4j.Logger;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 /**
  * Created by rrana on 2014-06-12.
@@ -44,6 +42,17 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
         }
 
         return persistenceService.count(procedureCountQuery);
+    }
+
+    public List<ProcedureAuditEvent> getAuditProceduresByAsset(Asset asset) {
+
+        QueryBuilder<ProcedureAuditEvent> query = createUserSecurityBuilder(ProcedureAuditEvent.class);
+
+        query.addSimpleWhere("recurringEvent.type", RecurringLotoEvent.RecurringLotoEventType.AUDIT);
+        query.addSimpleWhere("procedureDefinition.asset", asset);
+        query.addSimpleWhere("workflowState", WorkflowState.OPEN);
+
+        return persistenceService.findAll(query);
     }
 
     public Long getAllAuditCount(String searchTerm){
