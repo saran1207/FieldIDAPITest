@@ -192,7 +192,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("eventTypeGroupArchive", EventTypeGroupListArchivePage.class);
         mountPage("eventTypeGroupAdd", EventTypeGroupAddPage.class);
         mountPage("eventTypeGroupEdit", EventTypeGroupEditPage.class);
-        mountPage("eventTYpeGroupView", EventTypeGroupViewPage.class);
+        mountPage("eventTypeGroupView", EventTypeGroupViewPage.class);
 
         mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
 

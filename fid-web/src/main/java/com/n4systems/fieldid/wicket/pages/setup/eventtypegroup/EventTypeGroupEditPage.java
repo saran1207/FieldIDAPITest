@@ -37,6 +37,7 @@ public class EventTypeGroupEditPage extends EventTypeGroupPage{
 
     private PDFReportStylePanel printOutPanel;
     private ObservationReportStylePanel observationPrintOutPanel;
+    private String originalName;
 
     public EventTypeGroupEditPage(){
         super();
@@ -46,12 +47,14 @@ public class EventTypeGroupEditPage extends EventTypeGroupPage{
         super();
         eventTypeGroupModel = Model.of(eventTypeGroupService.getEventTypeGroupById(params.get("uniqueID").toLong()));
         eventTypeGroupId = eventTypeGroupModel.getObject().getId();
+        originalName = eventTypeGroupModel.getObject().getName();
     }
 
     public EventTypeGroupEditPage(EventTypeGroup eventTypeGroup){
         super();
         eventTypeGroupModel = Model.of(eventTypeGroup);
         eventTypeGroupId = eventTypeGroup.getId();
+        originalName = eventTypeGroupModel.getObject().getName();
     }
 
     @Override
@@ -110,8 +113,12 @@ public class EventTypeGroupEditPage extends EventTypeGroupPage{
             eventTypeGroupModel.getObject().setPrintOut(printOutPanel.getPrintOut());
             eventTypeGroupModel.getObject().setObservationPrintOut(observationPrintOutPanel.getPrintOut());
 
-            eventTypeGroupService.update(eventTypeGroupModel.getObject(), eventTypeGroupService.getUser(FieldIDSession.get().getSessionUser().getId()));
-            setResponsePage(new EventTypeGroupListPage());
+            if(eventTypeGroupService.exists(eventTypeGroupModel.getObject().getName()) && !originalName.equals(eventTypeGroupModel.getObject().getName())) {
+                FieldIDSession.get().error(new FIDLabelModel("error.eventtypegroupnameduplicated").getObject());
+            } else {
+                eventTypeGroupService.update(eventTypeGroupModel.getObject(), eventTypeGroupService.getUser(FieldIDSession.get().getSessionUser().getId()));
+                setResponsePage(new EventTypeGroupListPage());
+            }
         }
     }
 

@@ -5,6 +5,8 @@ import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.DisableButtonBeforeSubmit;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.text.LabelledRequiredTextField;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.EventTypeGroup;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
@@ -80,12 +82,16 @@ public class EventTypeGroupAddPage extends EventTypeGroupPage {
 
         @Override
         protected void onSubmit() {
-
             eventTypeGroupModel.getObject().setPrintOut(printOutPanel.getPrintOut());
             eventTypeGroupModel.getObject().setObservationPrintOut(observationPrintOutPanel.getPrintOut());
 
-            eventTypeGroupService.create(eventTypeGroupModel.getObject(), eventTypeGroupService.getUser(FieldIDSession.get().getSessionUser().getId()), FieldIDSession.get().getTenant());
-            setResponsePage(new EventTypeGroupListPage());
+            if(eventTypeGroupService.exists(eventTypeGroupModel.getObject().getName())) {
+                FieldIDSession.get().error(new FIDLabelModel("error.eventtypegroupnameduplicated").getObject());
+            } else {
+                EventTypeGroup createdEvent = eventTypeGroupService.create(eventTypeGroupModel.getObject(), eventTypeGroupService.getUser(FieldIDSession.get().getSessionUser().getId()), FieldIDSession.get().getTenant());
+                FieldIDSession.get().info(new FIDLabelModel("message.eventtypegroupsaved").getObject());
+                setResponsePage(EventTypeGroupViewPage.class, PageParametersBuilder.uniqueId(createdEvent.getID()));
+            }
         }
     }
 
