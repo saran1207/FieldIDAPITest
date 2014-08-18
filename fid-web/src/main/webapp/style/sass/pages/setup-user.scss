@@ -183,3 +183,41 @@
     left: 39px;
   }
 }
+.select-user-container {
+  float: left;
+  border: 1px solid #ececec;
+  margin: 4px;
+  min-height: 289px;
+  width: 271px;
+  padding-top: 27px;
+  padding-bottom: 50px;
+  position: relative;
+
+  h2 {
+    text-align: center;
+  }
+  img {
+    display: block;
+    margin: 10px auto 10px auto;
+    width: 74px;
+  }
+  ul {
+    list-style: none;
+    text-align: center;
+    padding: 0;
+  }
+  a {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 249px;
+  }
+}
+.setup-user.user-account-panel {
+  input[type="checkbox"] {
+    float: none;
+  }
+  .confirm-password {
+    margin-top: 7px;
+  }
+}
