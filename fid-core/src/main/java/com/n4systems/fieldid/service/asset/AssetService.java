@@ -8,6 +8,7 @@ import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.event.LastEventDateService;
+import com.n4systems.fieldid.service.event.ProcedureAuditEventService;
 import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
@@ -67,6 +68,7 @@ public class AssetService extends FieldIdPersistenceService {
     @Autowired private ProjectService projectService;
     @Autowired private ProcedureDefinitionService procedureDefinitionService;
     @Autowired private ProcedureService procedureService;
+    @Autowired private ProcedureAuditEventService procedureAuditEventService;
 
 	private Logger logger = Logger.getLogger(AssetService.class);
 
@@ -767,8 +769,19 @@ public class AssetService extends FieldIdPersistenceService {
         detachFromProjects(asset);
 
         archiveProcedures(asset);
+        archiveProcedureAudits(asset);
 
         return save(asset, archivedBy);
+    }
+
+    private void archiveProcedureAudits(Asset asset) {
+        if(asset.getType().hasProcedures()) {
+
+            for (ProcedureAuditEvent procedureAuditEvent: procedureAuditEventService.getAuditProceduresByAsset(asset)) {
+                procedureAuditEventService.retireEvent(procedureAuditEvent);
+            }
+
+        }
     }
 
     private void archiveProcedures(Asset asset) {
