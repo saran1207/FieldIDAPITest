@@ -1,6 +1,6 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-    <div class="pull-left">
+    <div class="select-user-container pull-left">
         <img src="/fieldid/images/icon-full.png"/>
         <h2><wicket:message key="label.full_user"/></h2>
         <ul class="permissionListing">
@@ -12,7 +12,7 @@
         <img wicket:id="adminUserWarning"/>
         <a wicket:id="changeToAdminUser" class="btn-secondary"><label wicket:id="label"/></a>
     </div>
-    <div class="pull-left">
+    <div class="select-user-container pull-left">
         <img src="/fieldid/images/icon-lite.png"/>
         <h2><wicket:message key="label.lite_user"/></h2>
         <ul class="permissionListing">
@@ -22,7 +22,7 @@
         <img wicket:id="inspectionUserWarning"/>
         <a wicket:id="changeToInspectionUser" class="btn-secondary"><label wicket:id="label"/></a>
     </div>
-    <div class="pull-left">
+    <div class="select-user-container pull-left">
         <img src="/fieldid/images/icon-readonly.png"/>
         <h2><wicket:message key="label.ready_only_user"/></h2>
         <ul class="permissionListing">
@@ -32,7 +32,7 @@
         <img wicket:id="reportingUserWarning"/>
         <a wicket:id="changeToReportingUser" class="btn-secondary"><label wicket:id="label"/></a>
     </div>
-    <div class="pull-left">
+    <div class="select-user-container pull-left">
         <img src="/fieldid/images/icon-person.png"/>
         <h2><wicket:message key="label.person"/></h2>
         <ul class="permissionListing">
@@ -42,7 +42,7 @@
         <a wicket:id="changeToPersonUser" class="btn-secondary"><label wicket:id="label"/></a>
 
     </div>
-    <div wicket:enclosure="changeToUsageBasedUser" class="pull-left">
+    <div wicket:enclosure="changeToUsageBasedUser" class="select-user-container pull-left">
         <img src="/fieldid/images/usage-based-user.png"/>
         <h2><wicket:message key="label.usage_based_user"/></h2>
         <ul class="permissionListing">

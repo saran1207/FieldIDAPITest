@@ -17,7 +17,8 @@ body, input[type="text"], textarea {
 	font-family: $helvetica-neue;
 }
 
-.input-combo input[type="text"]{
+.input-combo input[type="text"],
+.input-combo input[type="password"]{
 	height: 20px;
 }
 

@@ -14,10 +14,10 @@ public enum ImageAnnotationType {
     P("pneumatic","#FFFFFF","#144B8F","#FFFFFF","images/single-event.png","images/loto/pneumatic-full.png"),
     G("gas", "#7C4075","#FFFFFF","#7C4075","images/loto/gas.jpg","images/loto/gas-full.png"),
     E("electrical", "#D52029","#FFFFFF","#D52029","images/setup-wizard-gear.png","images/loto/electrical-full.png"),
-    CP("control-panel","#D68741","#FFFFFF",	"#D68741","images/loto/proof_test.jpg","images/loto/control-panel-full.png"),
-    M("mechanical", "#D52029","#FFFFFF","#D52029","images/setup-wizard-gear.png","images/loto/mechanical-full.png"),
-    H("hydraulic", "#D52029","#FFFFFF","#D52029","images/setup-wizard-gear.png","images/loto/hydraulic-full.png"),
-    C("chemical", "#D52029","#FFFFFF","#D52029","images/setup-wizard-gear.png","images/loto/chemical-full.png"),
+    CP("control-panel","#D68741","#FFFFFF",	"#D68741","none","images/loto/control-panel-full.png"),
+    M("mechanical", "#808080","#FFFFFF","#808080","none","images/loto/mechanical-full.png"),
+    H("hydraulic", "#000000","#FFFFFF","#000000","none","images/loto/hydraulic-full.png"),
+    C("chemical", "#FFFFFF","#808080","#FCF903","none","images/loto/chemical-full.png"),
 
     //TODO This has to be unique for this "Isolation Point" type...
     N("notes", "#FFFFFF","#099C4F","#FFFFFF","images/loto/note.jpg","images/loto/note-full.png");

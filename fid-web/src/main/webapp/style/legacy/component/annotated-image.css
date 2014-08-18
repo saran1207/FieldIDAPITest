@@ -101,6 +101,30 @@
 
 /* energy sources colors 
 -----------------------------------------------*/
+.chemical {
+    color: #808080;
+    background: #808080;
+}
+    .chemical input {
+        color: #fcf903;
+    }
+
+.hydraulic {
+    color: #000000;
+    background: #ffffff;
+}
+    .hydraulic input{
+        color: #000000;
+    }
+
+.mechanical {
+    color: #808080;
+    background: #ffffff;
+}
+    .mechanical input {
+        color: #808080;
+    }
+
 .control-panel { /*orange w/white bg*/
 	color: #f78f1e;
 	background: #fff;

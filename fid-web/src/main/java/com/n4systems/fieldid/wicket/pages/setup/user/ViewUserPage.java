@@ -181,7 +181,8 @@ public class ViewUserPage extends FieldIDTemplatePage{
                 aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
                 aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.view").page(ViewUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
-                aNavItem().label("nav.edit").page(EditUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
+                aNavItem().label("nav.edit").page(EditUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).cond(!userModel.getObject().isPerson()).build(),
+                aNavItem().label("nav.edit").page(EditPersonPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).cond(userModel.getObject().isPerson()).build(),
                 aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.mobile_passcode")
                         .page((userModel.getObject().getHashSecurityCardNumber() == null) ? EditUserMobilePasscodePage.class : ManageUserMobilePasscodePage.class)
