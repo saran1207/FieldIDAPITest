@@ -1,82 +1,84 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:extend>
-
-    <div wicket:id="feedbackPanel"/>
-
-    <div wicket:id="infoPanel" class="display-horizontal">
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.created"/></label>
-            <span class="value" wicket:id="created"/>
-        </div>
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.userid"/></label>
-            <span class="value" wicket:id="userid"/>
-        </div>
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.email_address"/></label>
-            <span class="value" wicket:id="email"/>
-        </div>
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.firstname"/></label>
-            <span class="value" wicket:id="firstName"/>
-        </div>
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.lastname"/></label>
-            <span class="value" wicket:id="lastName"/>
-        </div>
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.position"/></label>
-            <span class="value" wicket:id="position"/>
-        </div>
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.city"/></label>
-            <span class="value" wicket:id="city"/>
-        </div>
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.timezone"/></label>
-            <span class="value" wicket:id="timezone"/>
-        </div>
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.companyname"/></label>
-            <span class="value" wicket:id="companyName"/>
-        </div>
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.phonenumber"/></label>
-            <span class="value" wicket:id="phoneNumber"/>
-        </div>
-        <div class="control-group">
-            <label class="label"><wicket:message key="label.comments"/></label>
-            <span class="value" wicket:id="comments"/>
-        </div>
-
-        <div>
-            <a class="btn-primary" wicket:id="acceptLink"><wicket:message key="label.accept"/></a>
-             <wicket:message key="label.or"/>
-            <a class="btn-link" wicket:id="rejectLink"><wicket:message key="label.reject"/></a>
-        </div>
-    </div>
-
-    <div wicket:id="setOwnerPanel" class="setup-user registration-request">
-        <form wicket:id="form">
-            <fieldset class="form-horizontal">
-                <div class=info><wicket:message key="label.choose_the_users_company"/></div>
+    <div class="setup-user view-registration-request">
+        <div wicket:id="feedbackPanel"/>
+        <div class="columns-two">
+            <div wicket:id="infoPanel" class="display-horizontal">
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.created"/></label>
+                    <span class="value" wicket:id="created"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.userid"/></label>
+                    <span class="value" wicket:id="userid"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.email_address"/></label>
+                    <span class="value" wicket:id="email"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.firstname"/></label>
+                    <span class="value" wicket:id="firstName"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.lastname"/></label>
+                    <span class="value" wicket:id="lastName"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.position"/></label>
+                    <span class="value" wicket:id="position"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.city"/></label>
+                    <span class="value" wicket:id="city"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.timezone"/></label>
+                    <span class="value" wicket:id="timezone"/>
+                </div>
                 <div class="control-group">
                     <label class="label"><wicket:message key="label.companyname"/></label>
-                    <span wicket:id="companyName"/>
+                    <span class="value" wicket:id="companyName"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.phonenumber"/></label>
+                    <span class="value" wicket:id="phoneNumber"/>
+                </div>
+                <div class="control-group">
+                    <label class="label"><wicket:message key="label.comments"/></label>
+                    <span class="value" wicket:id="comments"/>
                 </div>
 
-                <div class="control-group owner">
-                    <label class="label">* <wicket:message key="label.owner"/></label>
-                    <div wicket:id="ownerPicker"/>
+                <div class="button-group">
+                    <a class="btn-primary" wicket:id="acceptLink"><wicket:message key="label.accept"/></a>
+                     <wicket:message key="label.or"/>
+                    <a class="btn-link" wicket:id="rejectLink"><wicket:message key="label.reject"/></a>
                 </div>
-            </fieldset>
-            <div>
-                <a class="btn-primary" wicket:id="submitLink"><wicket:message key="label.submit"/></a>
-                <wicket:message key="label.or"/>
-                <a class="btn-link" wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
             </div>
 
-        </form>
+            <div wicket:id="setOwnerPanel" class="setup-user registration-request">
+                <form wicket:id="form">
+                    <fieldset class="form-horizontal">
+                        <div class=info><wicket:message key="label.choose_the_users_company"/></div>
+                        <div class="control-group">
+                            <label class="label"><wicket:message key="label.companyname"/></label>
+                            <span wicket:id="companyName"/>
+                        </div>
+
+                        <div class="control-group owner">
+                            <label class="label">* <wicket:message key="label.owner"/></label>
+                            <div wicket:id="ownerPicker"/>
+                        </div>
+                    </fieldset>
+                    <div>
+                        <a class="btn-primary" wicket:id="submitLink"><wicket:message key="label.submit"/></a>
+                        <wicket:message key="label.or"/>
+                        <a class="btn-link" wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
     </div>
 </wicket:extend>
 </html>
