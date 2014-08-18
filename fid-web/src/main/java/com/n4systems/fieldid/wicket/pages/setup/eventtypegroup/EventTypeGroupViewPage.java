@@ -43,7 +43,7 @@ public class EventTypeGroupViewPage extends EventTypeGroupPage{
         super();
     }
 
-    public EventTypeGroupViewPage(PageParameters params) {
+    public EventTypeGroupViewPage(PageParameters params){
         super();
         eventTypeGroupModel = Model.of(eventTypeGroupService.getEventTypeGroupById(params.get("uniqueID").toLong()));
         eventTypeGroupId = eventTypeGroupModel.getObject().getId();
@@ -100,6 +100,8 @@ public class EventTypeGroupViewPage extends EventTypeGroupPage{
                 item.add(link);
             }
         });
+
+        add(new Label("noEventTypes", new FIDLabelModel("label.noeventtypesundergroup")).setVisible(eventTypeList.isEmpty()));
 
         add(new NonWicketLink("addAssetEvent", "eventTypeAdd.action?newEventType=Asset&group=" + eventTypeGroupModel.getObject().getId()));
         add(new NonWicketLink("addPlaceEvent", "eventTypeAdd.action?newEventType=Place&group=" + eventTypeGroupModel.getObject().getId()));

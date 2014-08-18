@@ -48,12 +48,18 @@ public class EventTypeGroupService extends FieldIdPersistenceService {
         return persistenceService.update(group);
     }
 
-    public void create(EventTypeGroup group, User user, Tenant tenant) {
+    public EventTypeGroup create(EventTypeGroup group, User user, Tenant tenant) {
         group.setModified(new Date());
         group.setModifiedBy(user);
         group.setTenant(tenant);
         eventTypeService.touchEventTypesForGroup(group.getId(), user);
-        persistenceService.update(group);
+        return persistenceService.update(group);
+    }
+
+    public boolean exists(String name) {
+        QueryBuilder<EventTypeGroup> query = createUserSecurityBuilder(EventTypeGroup.class, true);
+        query.addSimpleWhere("name", name);
+        return (persistenceService.count(query) > 0);
     }
 
     public void archive(EventTypeGroup group, User user) {
