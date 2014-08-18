@@ -15,16 +15,18 @@ public class UserRequestService extends FieldIdPersistenceService {
     }
 
     public void acceptRequest(UserRequest userRequest) {
-        userRequest.getUserAccount().setRegistered(true);
-        userRequest.getUserAccount().setUserType(UserType.READONLY);
+        UserRequest request = getUserRequest(userRequest.getId());
+        request.getUserAccount().setRegistered(true);
+        request.getUserAccount().setUserType(UserType.READONLY);
 
-        persistenceService.merge(userRequest.getUserAccount());
-        persistenceService.remove(userRequest);
+        persistenceService.merge(request.getUserAccount());
+        persistenceService.remove(request);
     }
 
     public void denyRequest(UserRequest userRequest) {
+        UserRequest request = getUserRequest(userRequest.getId());
         User user = userRequest.getUserAccount();
-        persistenceService.remove(userRequest);
+        persistenceService.remove(request);
         persistenceService.remove(user);
     }
 
