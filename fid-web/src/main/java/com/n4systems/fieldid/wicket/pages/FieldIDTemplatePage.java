@@ -39,6 +39,7 @@ import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.AssetTypeGroupTranslationsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
+import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
 import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
@@ -48,6 +49,7 @@ import com.n4systems.services.ConfigService;
 import com.n4systems.util.ConfigContext;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ConfigurationProvider;
+import com.n4systems.util.uri.ActionURLBuilder;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -72,6 +74,7 @@ import org.apache.wicket.util.template.TextTemplate;
 import org.odlabs.wiquery.core.resources.CoreJavaScriptResourceReference;
 import rfid.web.helper.SessionUser;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -318,8 +321,8 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 
         container.add(new WebMarkupContainer("manageCustomersContainer").setVisible(getSessionUser().hasAccess("manageendusers")));
         container.add(new BookmarkablePageLink<UsersListPage>("manageUsersLink", UsersListPage.class).setVisible(canManageSystemUsers));
-        container.add(new BookmarkablePageLink<Void>("userGroupsLink", UserGroupsPage.class).setVisible(canManageSystemUsers));
-        container.add(new WebMarkupContainer("manageUserRegistrationsContainer").setVisible(canManageSystemUsers && userLimitService.isReadOnlyUsersEnabled()));
+        container.add(new BookmarkablePageLink<UserGroupsPage>("userGroupsLink", UserGroupsPage.class).setVisible(canManageSystemUsers));
+        container.add(new BookmarkablePageLink<UserRequestListPage>("userRegistrationsLink", UserRequestListPage.class).setVisible(canManageSystemUsers && userLimitService.isReadOnlyUsersEnabled()));
         container.add(new WebMarkupContainer("managePredefinedLocationsContainer").setVisible(getSessionUser().hasAccess("manageendusers") && advancedLocationEnabled));
 
     	return container;
@@ -339,6 +342,14 @@ public class FieldIDTemplatePage extends FieldIDAuthenticatedPage implements UIC
 		}		
 		return configurationProvider; 
 	}
+
+    protected ActionURLBuilder createActionUrlBuilder() {
+        return new ActionURLBuilder(getBaseURI(), getConfigurationProvider());
+    }
+
+    private URI getBaseURI() {
+        return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
+    }
 	
 	@Deprecated // for testing only to get around static implementation of configContext.
     public void setConfigurationProvider(ConfigurationProvider configurationProvider) {

@@ -20,7 +20,6 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.security.Permissions;
 import com.n4systems.util.BitField;
 import com.n4systems.util.timezone.CountryList;
-import com.n4systems.util.uri.ActionURLBuilder;
 import org.apache.wicket.Component;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -36,7 +35,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.io.Serializable;
-import java.net.URI;
+import java.util.Date;
 import java.util.List;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
@@ -105,7 +104,7 @@ public class ViewUserPage extends FieldIDTemplatePage{
         add(new Label("name", new PropertyModel<String>(userModel, "fullName")));
         add(new Label("initials", new PropertyModel<String>(userModel, "initials")));
         add(new Label("identifier", new PropertyModel<String>(userModel, "identifier")));
-        add(new Label("position", new PropertyModel<String>(userModel, "owner.displayName")));
+        add(new Label("position", new PropertyModel<String>(userModel, "position")));
 
         add(new ExternalImage("signature", s3Service.getUserSignatureUrl(userModel.getObject())));
 
@@ -120,7 +119,7 @@ public class ViewUserPage extends FieldIDTemplatePage{
 
         add(accountInfoContainer = new WebMarkupContainer("accountInfoContainer"));
 
-        accountInfoContainer.add(new Label("lastLogin", new DayDisplayModel(Model.of(userModel.getObject().getLastLogin())).includeTime().withTimeZone(getSessionUser().getTimeZone())));
+        accountInfoContainer.add(new Label("lastLogin", new DayDisplayModel(new PropertyModel<Date>(userModel, "lastLogin")).includeTime().withTimeZone(getSessionUser().getTimeZone())));
         accountInfoContainer.add(new Label("username", new PropertyModel<String>(userModel, "userID")));
         accountInfoContainer.add(new Label("failedLoginAttempts", new PropertyModel<String>(userModel, "failedLoginAttempts")));
         if(userModel.getObject().isLocked())
@@ -167,14 +166,6 @@ public class ViewUserPage extends FieldIDTemplatePage{
 
     protected void sendWelcomeEmail(User user, WelcomeMessage welcomeMessage, boolean passwordAssigned) {
         sendWelcomeEmailService.sendUserWelcomeEmail(!passwordAssigned, user, welcomeMessage.getPersonalMessage(), createActionUrlBuilder());
-    }
-
-    protected ActionURLBuilder createActionUrlBuilder() {
-        return new ActionURLBuilder(getBaseURI(), getConfigurationProvider());
-    }
-
-    public URI getBaseURI() {
-        return URI.create(getServletRequest().getRequestURL().toString()).resolve(getServletRequest().getContextPath() + "/");
     }
 
     @Override
