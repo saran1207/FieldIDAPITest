@@ -27,7 +27,7 @@ public class ProcedureLockoutAssetCell extends Panel {
                 public void onClick() {
 
                 }
-            }.add(new Label("name", procedureModel.getObject().getType().getEquipmentNumber())));
+            }.add(new Label("name")));
         }
     }
 }
