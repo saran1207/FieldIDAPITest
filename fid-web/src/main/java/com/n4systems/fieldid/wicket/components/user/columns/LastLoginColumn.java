@@ -9,7 +9,7 @@ import org.apache.wicket.model.IModel;
 public class LastLoginColumn extends AbstractColumn<User> {
 
     public LastLoginColumn(IModel<String> displayModel) {
-        super(displayModel);
+        super(displayModel, "lastLogin");
     }
 
     @Override

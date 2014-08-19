@@ -37,6 +37,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -133,7 +134,7 @@ public class UsersListPage extends FieldIDTemplatePage {
         usersListContainer.setOutputMarkupId(true);
         usersListContainer.add(new SimpleDefaultDataTable<User>("users", getUserTableColumns(), dataProvider, PAGE_SIZE));
 
-        usersListContainer.add(new Label("total", new FIDLabelModel("label.total_x", userService.countUsers(new UserListFilterCriteria(false)))));
+        usersListContainer.add(new Label("total", getTotalCountLabel()));
     }
 
     protected Model<UserListFilterCriteria> getUserListFilterCriteria() {
@@ -146,7 +147,7 @@ public class UsersListPage extends FieldIDTemplatePage {
         columns.add(new UserNameLinkColumn(new FIDLabelModel("label.name_first_last"), "firstName, lastName"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.username"), "userID", "userID"));
         columns.add(new UserGroupColumn(new FIDLabelModel("label.user_group")));
-        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.organization"), "owner", "owner.name"));
+        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.organization"), "owner", "owner.rootOrgName"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.customer"), "owner.customerOrg", "owner.customerOrg.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.emailaddress"), "emailAddress", "emailAddress"));
@@ -180,6 +181,15 @@ public class UsersListPage extends FieldIDTemplatePage {
                 aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));
+    }
+
+    private LoadableDetachableModel<String> getTotalCountLabel() {
+        return new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return new FIDLabelModel("label.total_x", userService.countUsers(filterCriteriaModel.getObject())).getObject();
+            }
+        };
     }
 
 }

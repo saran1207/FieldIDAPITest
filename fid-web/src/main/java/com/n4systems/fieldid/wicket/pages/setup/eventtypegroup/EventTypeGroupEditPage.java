@@ -117,6 +117,7 @@ public class EventTypeGroupEditPage extends EventTypeGroupPage{
                 FieldIDSession.get().error(new FIDLabelModel("error.eventtypegroupnameduplicated").getObject());
             } else {
                 eventTypeGroupService.update(eventTypeGroupModel.getObject(), eventTypeGroupService.getUser(FieldIDSession.get().getSessionUser().getId()));
+                FieldIDSession.get().info(new FIDLabelModel("message.eventtypegroupsaved").getObject());
                 setResponsePage(new EventTypeGroupListPage());
             }
         }
