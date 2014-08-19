@@ -81,6 +81,7 @@ public class ViewUserPage extends FieldIDTemplatePage{
             @Override
             public void onClick() {
                 sendWelcomeEmail(userModel.getObject(), new WelcomeMessage(), userModel.getObject().getHashPassword() != null);
+                FieldIDSession.get().info(new FIDLabelModel("message.welcomeemailsent").getObject());
             }
         });
 
