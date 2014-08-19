@@ -52,6 +52,15 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.exists(getPublishedProcedureDefinitionQuery(asset));
     }
 
+    public ProcedureDefinition findProcedureDefinitionByMobileId(String mobileId) {
+        QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
+        query.addSimpleWhere("mobileId", mobileId);
+
+        ProcedureDefinition returnMe = persistenceService.find(query);
+
+        return returnMe;
+    }
+
     public ProcedureDefinition getPublishedProcedureDefinition(Asset asset, Long familyId) {
         return persistenceService.find(getPublishedProcedureDefinitionQuery(asset, familyId));
     }
