@@ -106,7 +106,7 @@ public class ViewUserPage extends FieldIDTemplatePage{
         add(new Label("identifier", new PropertyModel<String>(userModel, "identifier")));
         add(new Label("position", new PropertyModel<String>(userModel, "position")));
 
-        add(new ExternalImage("signature", s3Service.getUserSignatureUrl(userModel.getObject())));
+        add(new ExternalImage("signature", s3Service.getUserSignatureUrl(userModel.getObject())).setVisible(s3Service.userSignatureExists(userModel.getObject())));
 
         String timeZoneId = userModel.getObject().getTimeZoneID();
 
