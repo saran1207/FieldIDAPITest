@@ -34,10 +34,12 @@ public class UserRequestListPage extends FieldIDTemplatePage {
     @SpringBean
     private UserRequestService userRequestService;
 
+    private WebMarkupContainer listViewContainer;
     private ListView listView;
     private WebMarkupContainer noResults;
 
     public UserRequestListPage() {
+        listViewContainer = new WebMarkupContainer("listViewContainer");
 
         listView = new ListView<UserRequest>("userRequestListView", getUserRequests()) {
             @Override
@@ -55,12 +57,15 @@ public class UserRequestListPage extends FieldIDTemplatePage {
             }
         };
 
-        add(listView);
         listView.setOutputMarkupId(true);
+        listViewContainer.add(listView);
+        listViewContainer.setVisible(!isEmpty());
+        add(listViewContainer);
 
-        add(noResults = new WebMarkupContainer("noResults"));
+        noResults = new WebMarkupContainer("noResults");
         noResults.setOutputMarkupPlaceholderTag(true);
         noResults.setVisible(isEmpty());
+        add(noResults);
     }
 
     private LoadableDetachableModel<List<UserRequest>> getUserRequests() {
