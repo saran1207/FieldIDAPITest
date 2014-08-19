@@ -1,0 +1,26 @@
+.setup-event.event-type-group-edit {
+  .certFormTitle {
+    h2 {
+      margin-bottom: 15px;
+    }
+    span {
+      padding-left: 48px;
+    }
+  }
+  .infoSet label {
+    margin-left: 48px;
+  }
+}
+.setup-event.event-type-group-view {
+  .infoSet {
+    label, span {
+      padding-left: 48px;
+    }
+  }
+  .infoSet.line a {
+    line-height: 30px;
+  }
+  .event-type-set {
+    margin-bottom: 8px;
+  }
+}
