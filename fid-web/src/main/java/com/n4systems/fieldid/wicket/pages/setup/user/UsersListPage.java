@@ -146,7 +146,7 @@ public class UsersListPage extends FieldIDTemplatePage {
         columns.add(new UserNameLinkColumn(new FIDLabelModel("label.name_first_last"), "firstName, lastName"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.username"), "userID", "userID"));
         columns.add(new UserGroupColumn(new FIDLabelModel("label.user_group")));
-        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.organization"), "owner", "owner.name"));
+        columns.add(new PropertyColumn<User>(new FIDLabelModel("label.organization"), "owner", "owner.rootOrgName"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.customer"), "owner.customerOrg", "owner.customerOrg.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.emailaddress"), "emailAddress", "emailAddress"));
