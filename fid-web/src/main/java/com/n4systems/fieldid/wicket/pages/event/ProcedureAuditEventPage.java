@@ -66,6 +66,22 @@ public abstract class ProcedureAuditEventPage extends EventPage<ProcedureAuditEv
     }
 
     @Override
+    public boolean isEventBookVisible() { return false; }
+
+    @Override
+    public boolean isJobsContainerVisible() {
+        return false;
+    }
+
+    @Override
+    public boolean isOwnerSectionVisible() {
+        return false;
+    }
+
+    @Override
+    public boolean isActionButtonsVisible() { return false; }
+
+    @Override
     protected ProofTestEditPanel createProofTestEditPanel(String id) {
         return null;
     }

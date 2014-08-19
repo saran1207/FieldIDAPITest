@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.identify;
 
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.asset.AssetIdentifierService;
@@ -98,6 +99,8 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
     MultipleAssetConfiguration multiAssetConfig = new MultipleAssetConfiguration();
     IModel<MultipleAssetConfiguration> multiAssetConfigModel = new PropertyModel<MultipleAssetConfiguration>(this, "multiAssetConfig");
     DialogModalWindow multipleWindow;
+
+
 
     private FIDFeedbackPanel feedbackPanel;
 
@@ -318,7 +321,12 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
 
 
             eventSchedulesPanel = new EventSchedulesPanel("eventSchedulesPanel", schedulePicker, new PropertyModel<List<Event>>(IdentifyOrEditAssetPage.this, "schedulesToAdd"));
-            eventSchedulesPanel.setVisible(assetModel.getObject().isNew());
+            eventSchedulesPanel.setVisible(assetModel.getObject().isNew() &&
+                                           //Again, the important part here is whether or not Inspections is enabled,
+                                           //since this control is specific to the Inspection mechanic.
+                                           getSecurityGuard().isInspectionsEnabled());
+
+
             add(eventSchedulesPanel);
 
             add(attributesEditPanel = new AttributesEditPanel("attributesPanel", assetTypeModel, assetModel));
@@ -347,7 +355,13 @@ public class IdentifyOrEditAssetPage extends FieldIDFrontEndPage {
             }.add(new AjaxIndicatorAppender()));
 
             actionsContainer.add(new Button("saveAndStartEventButton") {
-                { setVisible(getSessionUser().hasAccess("createevent")); }
+                {
+                    //This needs to be modified to set visibility based on access to create event AND the Tenant having
+                    //Inspections enabled.  Whether or not LOTO is enabled is irrelevant here, since the control is
+                    //really specific to Inspections.
+                    setVisible(getSessionUser().hasAccess("createevent") &&
+                               getSecurityGuard().isInspectionsEnabled());
+                }
                 @Override
                 public void onSubmit() {
                     performSingleOrMultiSave(assetModel);

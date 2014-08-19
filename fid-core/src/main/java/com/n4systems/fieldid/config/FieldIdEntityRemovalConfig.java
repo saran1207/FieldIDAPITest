@@ -1,12 +1,6 @@
 package com.n4systems.fieldid.config;
 
-import com.n4systems.fieldid.service.remover.AllEventsOfTypeRemovalService;
-import com.n4systems.fieldid.service.remover.AssociatedEventTypeRemovalService;
-import com.n4systems.fieldid.service.remover.CatalogItemRemovalService;
-import com.n4systems.fieldid.service.remover.EventFrequenciesRemovalService;
-import com.n4systems.fieldid.service.remover.EventTypeRemovalService;
-import com.n4systems.fieldid.service.remover.NotificationSettingRemovalService;
-import com.n4systems.fieldid.service.remover.ScheduleListRemovalService;
+import com.n4systems.fieldid.service.remover.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -48,4 +42,18 @@ public class FieldIdEntityRemovalConfig {
         return new ScheduleListRemovalService();
     }
 
+    @Bean
+    public PlaceEventsOfTypeRemovalService placeEventsOfTypeRemovalService() {
+        return new PlaceEventsOfTypeRemovalService();
+    }
+
+    @Bean
+    public AssociatedPlaceEventTypeRemovalService associatedPlaceEventTypeRemovalService() {
+        return new AssociatedPlaceEventTypeRemovalService();
+    }
+
+    @Bean
+    public ProcedureAuditEventTypeRemovalService procedureAuditEventTypeRemovalService() {
+        return new ProcedureAuditEventTypeRemovalService();
+    }
 }

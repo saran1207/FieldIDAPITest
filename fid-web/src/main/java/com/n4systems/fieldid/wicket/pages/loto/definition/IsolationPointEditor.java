@@ -10,13 +10,10 @@ import com.n4systems.fieldid.wicket.components.text.LabelledComboBox;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextArea;
 import com.n4systems.fieldid.wicket.components.text.LabelledTextField;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
-import com.n4systems.model.AssetType;
 import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.ImageAnnotationType;
-import com.n4systems.model.procedure.IsolationDeviceDescription;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -81,7 +78,12 @@ public class IsolationPointEditor extends Panel {
         sourceID.setOutputMarkupId(true);
         form.add(electronicIdentifier = new LabelledTextField<String>("electronicIdentifier", "label.electronic_id", new PropertyModel<String>(getDefaultModel(), "electronicIdentifier"))
                 .add(new TipsyBehavior(new FIDLabelModel("message.isolation_point.electronic_id"), TipsyBehavior.Gravity.N)));
-        form.add(sourceText = new LabelledTextField<String>("sourceText", "label.source", new PropertyModel(getDefaultModel(), "sourceText")));
+        form.add(sourceText = new LabelledComboBox<String>("sourceText", "label.source", new PropertyModel(getDefaultModel(), "sourceText")) {
+            @Override
+            protected IModel<List<String>> getChoices() {
+                return getPreConfiguredEnergySources(new PropertyModel(getIsolationPoint(),"sourceType"));
+            }
+        });
 
         form.add(deviceComboBox = new LabelledComboBox<String>("device", "label.device", new PropertyModel(getDefaultModel(),"deviceDefinition.freeformDescription")){
             @Override
@@ -258,6 +260,14 @@ public class IsolationPointEditor extends Panel {
         return new LoadableDetachableModel<List<String>>() {
             @Override protected List<String> load() {
                 return procedureDefinitionService.getPreConfiguredDevices(sourceType.getObject());
+            }
+        };
+    }
+
+    public LoadableDetachableModel<List<String>> getPreConfiguredEnergySources(final IModel<IsolationPointSourceType> sourceType) {
+        return new LoadableDetachableModel<List<String>>() {
+            @Override protected List<String> load() {
+                return procedureDefinitionService.getPreConfiguredEnergySource(sourceType.getObject());
             }
         };
     }

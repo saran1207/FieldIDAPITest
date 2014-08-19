@@ -87,6 +87,7 @@ nav {
 	> ul {
 		overflow: hidden;
 		margin-bottom: -2px;
+        position: relative;
 
 		> li {
 			float: left;
@@ -103,6 +104,9 @@ nav {
 					color: $gray-darkest;
 				}
 			}
+            &.add {
+              float: right;
+            }
 			span {
 				padding: 10px 20px;
 				display: inline-block;
@@ -111,6 +115,15 @@ nav {
 					color: $gray-dark;
 				}
 			}
+		}
+		> li.add {
+          float: right;
+          border: 1px solid #e4e4e4 !important;
+          border-bottom: none !important;
+          background: #FCFCFC;
+          height: 37px;
+          border-radius: 7px 7px 0 0;
+          margin-right: 8px;
 		}
 	}
 }

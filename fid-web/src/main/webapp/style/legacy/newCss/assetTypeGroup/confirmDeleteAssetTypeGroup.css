@@ -1,0 +1,21 @@
+
+.list-table {
+    padding-top: 20px;
+}
+
+.infoSet {
+    height:50px;
+}
+
+.infoSet span {
+    padding-top: 15px;
+    padding-left: 30px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+.infoSet span label {
+    padding-right: 30px;
+    vertical-align: middle;
+    display: inline-block;
+}

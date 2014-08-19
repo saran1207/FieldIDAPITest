@@ -1,7 +1,11 @@
 package com.n4systems.fieldid.service.amazon;
 
 import com.amazonaws.AmazonServiceException;
+import com.amazonaws.ClientConfiguration;
 import com.amazonaws.HttpMethod;
+import com.amazonaws.Protocol;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
@@ -9,9 +13,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.images.ImageService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.fieldid.version.FieldIdVersion;
-import com.n4systems.model.Attachment;
-import com.n4systems.model.FileAttachment;
-import com.n4systems.model.ThingEventProofTest;
+import com.n4systems.model.*;
 import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
@@ -21,6 +23,7 @@ import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.user.User;
 import com.n4systems.reporting.PathHandler;
 import com.n4systems.services.ConfigService;
+import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ContentTypeUtil;
 import org.apache.commons.io.FileUtils;
@@ -33,10 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.net.URL;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.util.Assert;
 import sun.misc.BASE64Encoder;
@@ -61,9 +61,16 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String CRITERIA_RESULT_IMAGE_PATH_THUMB = "/events/%d/criteria_results/%d/criteria_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_IMAGE_PATH_MEDIUM = "/events/%d/criteria_results/%d/criteria_images/%s.medium";
 
+    public static final String USER_SIGNATURE_IMAGE_FILE_NAME = "signature.gif";
+    public static final String USER_SIGNATURE_PATH = "/users/%d/" + USER_SIGNATURE_IMAGE_FILE_NAME;
+    public static final String EVENT_SIGNATURE_IMAGE_FILE_NAME = "signature.png";
+    public static final String EVENT_SIGNATURE_PATH = "/events/%d/criteria_results/%d/" + EVENT_SIGNATURE_IMAGE_FILE_NAME;
+
     public static final String CRITERIA_RESULT_IMAGE_TEMP = "/temp_criteria_result_images/%s";
     public static final String CRITERIA_RESULT_THUMB_IMAGE_TEMP = "/temp_criteria_result_images/%s.thumbnail";
     public static final String CRITERIA_RESULT_MEDIUM_IMAGE_TEMP = "/temp_criteria_result_images/%s.medium";
+
+    public static final String ASSETTYPE_PROFILE_IMAGE_PATH = "/assettypes/%d/profile/%s";
 
     public static final String ASSET_PROFILE_IMAGE_PATH = "/assets/%d/profile/";
     public static final String ASSET_PROFILE_IMAGE_PATH_ORIG = "/assets/%d/profile/%s";
@@ -76,9 +83,11 @@ public class S3Service extends FieldIdPersistenceService {
     public static final String FILE_ATTACHMENT_FOLDER = "/file_attachments/%s/";
     public static final String FILE_ATTACHMENT_PATH = FILE_ATTACHMENT_FOLDER + "%s";
 
+    public static final String CHART_FILE_NAME = "proof_test_chart.png";
+    public static final String PROOF_TEST_FILE_NAME = "proof_test.pt";
     public static final String ASSET_PROOFTESTS_FOLDER = "/assets/%s/prooftests/%s/";
-    public static final String ASSET_PROOFTESTS_FILE_PATH = ASSET_PROOFTESTS_FOLDER + PathHandler.PROOF_TEST_FILE_NAME;
-    public static final String ASSET_PROOFTESTS_CHART_PATH = ASSET_PROOFTESTS_FOLDER + PathHandler.CHART_FILE_NAME;
+    public static final String ASSET_PROOFTESTS_FILE_PATH = ASSET_PROOFTESTS_FOLDER + PROOF_TEST_FILE_NAME;
+    public static final String ASSET_PROOFTESTS_CHART_PATH = ASSET_PROOFTESTS_FOLDER + CHART_FILE_NAME;
 
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP = "/temp/procedure_definition_images/%s";
     public static final String PROCEDURE_DEFINITION_IMAGE_TEMP_MEDIUM = "/temp/procedure_definition_images/%s.medium";
@@ -228,6 +237,23 @@ public class S3Service extends FieldIdPersistenceService {
     public byte[] downloadAssetProfileOriginalImage(Long assetId, String imageName) throws IOException {
         byte[] imageData = downloadResource(null, ASSET_PROFILE_IMAGE_PATH_ORIG, assetId, imageName);
         return imageData;
+    }
+
+    public File downloadAssetProfileImageFile(Long assetId, String imageName){
+        File assetProfileImage = null;
+        try {
+            byte[] assetProfileImageBytes = downloadAssetProfileOriginalImage(assetId, imageName);
+            assetProfileImage = PathHandler.getUserFile(getCurrentUser(), imageName);
+            FileOutputStream assetProfileImageFos = new FileOutputStream(assetProfileImage);
+            assetProfileImageFos.write(assetProfileImageBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp image file at: " + assetProfileImage, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download asset profile image from S3: " + assetId, e);
+        }
+        return assetProfileImage;
     }
 
     public byte[] downloadAssetProfileMediumImage(Long assetId, String imageName) throws IOException {
@@ -748,6 +774,253 @@ public class S3Service extends FieldIdPersistenceService {
         return bucketHostname;
     }
 
+    public String getAssetTypeProfileImagePath(AssetType assetType){
+        String assetTypePath = getAssetTypeProfileImagePath(assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+        return assetTypePath;
+    }
+
+    public String getAssetTypeProfileImagePath(Long tenantId, Long assetTypeId, String assetTypeImageName){
+        String resourcePath = createResourcePath(tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+        return resourcePath;
+    }
+
+    public URL getAssetTypeProfileImageUrl(AssetType assetType){
+        URL eventSignatureUrl = getAssetTypeProfileImageUrl(assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+        return eventSignatureUrl;
+    }
+
+    public URL getAssetTypeProfileImageUrl(Long tenantId, Long assetTypeId, String assetTypeImageName){
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+        String resourcePath = getAssetTypeProfileImagePath(tenantId, assetTypeId, assetTypeImageName);
+        URL url = generatePresignedUrl(resourcePath, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public File downloadAssetTypeProfileImage(AssetType assetType){
+        return downloadAssetTypeProfileImage(assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+    }
+
+    public File downloadAssetTypeProfileImage(Long tenantId, Long assetTypeId, String assetTypeImageName){
+        File assetTypeProfileImageFile = null;
+        try {
+            byte[] assetTypeProfileImageBytes = downloadAssetTypeProfileImageBytes(tenantId, assetTypeId, assetTypeImageName);
+            assetTypeProfileImageFile = PathHandler.getUserFile(getCurrentUser(), assetTypeImageName);
+            FileOutputStream assetTypeProfileImageFos = new FileOutputStream(assetTypeProfileImageFile);
+            assetTypeProfileImageFos.write(assetTypeProfileImageBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp assettype profile image at: " + assetTypeProfileImageFile, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download assettype profile from S3", e);
+        }
+        return assetTypeProfileImageFile;
+    }
+
+    public void uploadAssetTypeProfileImage(File assetTypeProfileImageFile, AssetType assetType){
+        uploadAssetTypeProfileImage(assetTypeProfileImageFile, assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+    }
+
+    public void uploadAssetTypeProfileImage(File assetTypeProfileImageFile, Long tenantId, Long assetTypeId, String assetTypeImageName){
+        uploadResource(assetTypeProfileImageFile, tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+    }
+
+    public void uploadAssetTypeProfileImageData(byte[] assetTypeProfileImageData, AssetType assetType){
+        String contentType = ContentTypeUtil.getContentType(assetType.getImageName());
+        uploadAssetTypeProfileImageData(assetTypeProfileImageData, contentType, assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+    }
+
+    public void uploadAssetTypeProfileImageData(byte[] assetTypeProfileImageData, String contentType, Long tenantId, Long assetTypeId, String assetTypeImageName){
+        uploadResource(assetTypeProfileImageData, contentType, tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+    }
+
+    public byte[] downloadAssetTypeProfileImageBytes(AssetType assetType) throws IOException {
+        //the attachment Filename field is overloaded to house full URL instead of just the filename
+        byte[] assetTypeProfileImage = downloadAssetTypeProfileImageBytes(assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+        return assetTypeProfileImage;
+    }
+
+    public byte[] downloadAssetTypeProfileImageBytes(Long tenantId, Long assetTypeId, String assetTypeImageName) throws IOException {
+        return downloadResource(tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+    }
+
+    public boolean assetTypeProfileImageExists(AssetType assetType){
+        return assetTypeProfileImageExists(assetType.getTenant().getId(), assetType.getId(), assetType.getImageName());
+    }
+
+    public boolean assetTypeProfileImageExists(Long tenantId, Long assetTypeId, String assetTypeImageName){
+        boolean exists = resourceExists(tenantId, ASSETTYPE_PROFILE_IMAGE_PATH, assetTypeId, assetTypeImageName);
+        return exists;
+    }
+
+    public String getUserSignaturePath(User user){
+        String userSignaturePath = getUserSignaturePath(user.getId());
+        return userSignaturePath;
+    }
+
+    public String getUserSignaturePath(Long userId){
+        String resourcePath = createResourcePath(null, USER_SIGNATURE_PATH, userId);
+        return resourcePath;
+    }
+
+    public URL getUserSignatureUrl(User user){
+        URL userSignatureUrl = getUserSignatureUrl(user.getId());
+        return userSignatureUrl;
+    }
+
+    public URL getUserSignatureUrl(Long userId){
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+        String resourcePath = getUserSignaturePath(userId);
+        URL url = generatePresignedUrl(resourcePath, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public File downloadUserSignature(User user){
+        return downloadUserSignature(user.getId());
+    }
+
+    public File downloadUserSignature(Long userId){
+        File userSignatureFile = null;
+        try {
+            byte[] userSignatureBytes = downloadUserSignatureBytes(userId);
+            userSignatureFile = PathHandler.getUserFile(getCurrentUser(), userId + USER_SIGNATURE_IMAGE_FILE_NAME);
+            FileOutputStream userSignatureFos = new FileOutputStream(userSignatureFile);
+            userSignatureFos.write(userSignatureBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp signature file at: " + userSignatureFile, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download user signature from S3", e);
+        }
+        return userSignatureFile;
+    }
+
+    public void uploadUserSignature(File userSignatureFile, User user){
+        uploadUserSignature(userSignatureFile, user.getId());
+    }
+
+    public void uploadUserSignature(File userSignatureFile, Long userId){
+        uploadResource(userSignatureFile, null, USER_SIGNATURE_PATH, userId);
+    }
+
+    public void uploadUserSignatureData(byte[] userSignatureData, User user){
+        String userSignatureFileName = USER_SIGNATURE_PATH.substring(USER_SIGNATURE_PATH.lastIndexOf('/') + 1);
+        String contentType = ContentTypeUtil.getContentType(userSignatureFileName);
+        uploadUserSignatureData(userSignatureData, contentType, user.getId());
+    }
+
+    public void uploadUserSignatureData(byte[] userSignatureData, String contentType, Long userId){
+        uploadResource(userSignatureData, contentType, null, USER_SIGNATURE_PATH, userId);
+    }
+
+    public byte[] downloadUserSignatureBytes(User user) throws IOException {
+        //the attachment Filename field is overloaded to house full URL instead of just the filename
+        byte[] userSignatureData = downloadUserSignatureBytes(user.getId());
+        return userSignatureData;
+    }
+
+    public byte[] downloadUserSignatureBytes(Long userId) throws IOException {
+        return downloadResource(null, USER_SIGNATURE_PATH, userId);
+    }
+
+    public boolean userSignatureExists(User user){
+        return userSignatureExists(user.getId());
+    }
+
+    public boolean userSignatureExists(Long userId){
+        boolean exists = resourceExists(null, USER_SIGNATURE_PATH, userId);
+        return exists;
+    }
+
+    public void removeUserSignature(User user){
+        removeUserSignature(user.getId());
+    }
+
+    public void removeUserSignature(Long userId) {
+        removeResource(null, USER_SIGNATURE_PATH, userId);
+    }
+
+    public String getEventSignaturePath(SignatureCriteriaResult signatureResult){
+        String eventSignaturePath = getEventSignaturePath(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+        return eventSignaturePath;
+    }
+
+    public String getEventSignaturePath(Long tenantId, Long eventId, Long criteriaId){
+        String resourcePath = createResourcePath(tenantId, EVENT_SIGNATURE_PATH, eventId, criteriaId);
+        return resourcePath;
+    }
+
+    public URL getEventSignatureUrl(SignatureCriteriaResult signatureResult){
+        URL eventSignatureUrl = getEventSignatureUrl(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+        return eventSignatureUrl;
+    }
+
+    public URL getEventSignatureUrl(Long tenantId, Long eventId, Long criteriaId){
+        Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
+        String resourcePath = getEventSignaturePath(tenantId, eventId, criteriaId);
+        URL url = generatePresignedUrl(resourcePath, expires, HttpMethod.GET);
+        return url;
+    }
+
+    public File downloadEventSignature(SignatureCriteriaResult signatureResult){
+        return downloadEventSignature(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+    }
+
+    public File downloadEventSignature(Long tenantId, Long eventId, Long criteriaId){
+        File eventSignatureFile = null;
+        try {
+            byte[] eventSignatureBytes = downloadEventSignatureBytes(tenantId, eventId, criteriaId);
+            eventSignatureFile = SignatureService.getTemporarySignatureFile(tenantId, UUID.randomUUID().toString());
+            FileOutputStream eventSignatureFos = new FileOutputStream(eventSignatureFile);
+            eventSignatureFos.write(eventSignatureBytes);
+        }
+        catch(FileNotFoundException e) {
+            logger.warn("Unable to write to temp signature file at: " + eventSignatureFile, e);
+        }
+        catch(IOException e) {
+            logger.warn("Unable to download event signature from S3", e);
+        }
+        return eventSignatureFile;
+    }
+
+    public void uploadEventSignature(File eventSignatureFile, SignatureCriteriaResult signatureResult){
+        uploadEventSignature(eventSignatureFile, signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+    }
+
+    public void uploadEventSignature(File eventSignatureFile, Long tenantId, Long eventId, Long criteriaId){
+        uploadResource(eventSignatureFile, tenantId, EVENT_SIGNATURE_PATH, eventId, criteriaId);
+    }
+
+    public void uploadEventSignatureData(byte[] eventSignatureData, SignatureCriteriaResult signatureResult){
+        String eventSignatureFileName = EVENT_SIGNATURE_PATH.substring(EVENT_SIGNATURE_PATH.lastIndexOf('/') + 1);
+        String contentType = ContentTypeUtil.getContentType(eventSignatureFileName);
+        uploadEventSignatureData(eventSignatureData, contentType, signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+    }
+
+    public void uploadEventSignatureData(byte[] eventSignatureData, String contentType, Long tenantId, Long eventId, Long criteriaId){
+        uploadResource(eventSignatureData, contentType, tenantId, EVENT_SIGNATURE_PATH, eventId, criteriaId);
+    }
+
+    public byte[] downloadEventSignatureBytes(SignatureCriteriaResult signatureResult) throws IOException {
+        //the attachment Filename field is overloaded to house full URL instead of just the filename
+        byte[] eventSignatureData = downloadEventSignatureBytes(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+        return eventSignatureData;
+    }
+
+    public byte[] downloadEventSignatureBytes(Long tenantId, Long eventId, Long criteriaId) throws IOException {
+        return downloadResource(tenantId, EVENT_SIGNATURE_PATH, eventId, criteriaId);
+    }
+
+    public boolean eventSignatureExists(SignatureCriteriaResult signatureResult){
+        return eventSignatureExists(signatureResult.getTenant().getId(), signatureResult.getEvent().getId(), signatureResult.getCriteria().getId());
+    }
+
+    public boolean eventSignatureExists(Long tenantId, Long eventId, Long criteriaId){
+        boolean exists = resourceExists(tenantId, EVENT_SIGNATURE_PATH, eventId, criteriaId);
+        return exists;
+    }
+
     public String getAssetAttachmentPath(AssetAttachment assetAttachment){
         String fileName = assetAttachment.getFileName().substring(assetAttachment.getFileName().lastIndexOf('/') + 1);
         String assetAttachmentPath = getAssetAttachmentPath(assetAttachment.getAsset().getMobileGUID(), assetAttachment.getMobileId(), fileName);
@@ -758,12 +1031,8 @@ public class S3Service extends FieldIdPersistenceService {
         Assert.hasLength(assetUuid);
         Assert.hasLength(assetAttachmentUuid);
         Assert.hasLength(assetAttachmentFilename);
-        Assert.doesNotContain(assetAttachmentFilename, "/");
-        String fullResourcePath = assetAttachmentFilename;
-        //if the path is not the full path (ie. its just the filename)
-        if(fullResourcePath.indexOf('/') == -1){
-            fullResourcePath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
-        }
+        assetAttachmentFilename = assetAttachmentFilename.substring(assetAttachmentFilename.lastIndexOf('/') + 1);
+        String fullResourcePath = createResourcePath(null, ASSET_ATTACHMENT_PATH, assetUuid, assetAttachmentUuid, assetAttachmentFilename);
         return fullResourcePath;
     }
 
@@ -777,11 +1046,8 @@ public class S3Service extends FieldIdPersistenceService {
         Assert.hasLength(assetAttachmentUuid);
         Assert.hasLength(assetAttachmentFilename);
         Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
-        String fullResourcePath = assetAttachmentFilename;
-        //if the path is not the full path (ie. its just the filename)
-        if(fullResourcePath.indexOf('/') == -1){
-            fullResourcePath = getAssetAttachmentPath(assetUuid, assetAttachmentUuid, assetAttachmentFilename);
-        }
+        assetAttachmentFilename = assetAttachmentFilename.substring(assetAttachmentFilename.lastIndexOf('/') + 1);
+        String fullResourcePath = getAssetAttachmentPath(assetUuid, assetAttachmentUuid, assetAttachmentFilename);
         URL url = generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
         return url;
     }
@@ -894,7 +1160,7 @@ public class S3Service extends FieldIdPersistenceService {
 
             String fileName = event.getProofTestFileName();
             if(fileName == null){
-                fileName = PathHandler.CHART_FILE_NAME;
+                fileName = CHART_FILE_NAME;
             }
             fileName = fileName.substring(fileName.lastIndexOf('/') + 1);
             fileName = event.getAsset().getMobileGUID() + "-" + fileName;
@@ -917,7 +1183,7 @@ public class S3Service extends FieldIdPersistenceService {
         try {
             byte[] assetProofTestBytes = downloadAssetProofTestChartBytes(event);
 
-            String fileName = PathHandler.CHART_FILE_NAME;
+            String fileName = CHART_FILE_NAME;
             fileName = event.getAsset().getMobileGUID() + "-" + fileName;
 
             assetProofTestFile = PathHandler.getUserFile(getCurrentUser(), fileName);
@@ -1014,11 +1280,8 @@ public class S3Service extends FieldIdPersistenceService {
         Assert.hasLength(filename);
         Assert.doesNotContain(filename, "/");
         Date expires = new DateTime().plusDays(getExpiryInDays()).toDate();
-        String fullResourcePath = filename;
-        //if the path is not the full path (ie. its just the filename)
-        if(fullResourcePath.indexOf('/') == -1){
-            fullResourcePath = getFileAttachmentPath(fileAttachmentUuid, filename);
-        }
+        filename = filename.substring(filename.lastIndexOf('/') + 1);
+        String fullResourcePath = getFileAttachmentPath(fileAttachmentUuid, filename);
         return generatePresignedUrl(fullResourcePath, expires, HttpMethod.GET);
     }
 

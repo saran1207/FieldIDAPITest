@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -53,7 +52,7 @@ public class ReassignEventTypeGroupPage extends FieldIDFrontEndPage{
                     eventTypeService.update(type, getCurrentUser());
                 }
                 eventTypeGroupService.archive(group, getCurrentUser());
-                setResponsePage(new RedirectPage("/fieldid/eventTypeGroups.action"));
+                setResponsePage(new EventTypeGroupListPage());
             }
         };
 
@@ -66,7 +65,7 @@ public class ReassignEventTypeGroupPage extends FieldIDFrontEndPage{
         form.add(new Link("cancelLink") {
             @Override
             public void onClick() {
-                setResponsePage(new RedirectPage("/fieldid/eventTypeGroups.action"));
+                setResponsePage(new EventTypeGroupListPage());
             }
         });
 

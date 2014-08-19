@@ -6,14 +6,18 @@ import com.google.common.collect.Maps;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.schedule.RecurringScheduleService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.model.Asset;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.IsolationPointSourceType;
+import com.n4systems.model.ProcedureAuditEvent;
 import com.n4systems.model.common.EditableImage;
 import com.n4systems.model.common.ImageAnnotation;
+import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.*;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -41,6 +45,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     @Autowired private S3Service s3Service;
     @Autowired private DateService dateService;
     @Autowired private AtomicLongService atomicLongService;
+    @Autowired private RecurringScheduleService recurringScheduleService;
 
 
     public Boolean hasPublishedProcedureDefinition(Asset asset) {
@@ -55,10 +60,57 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
           return persistenceService.findAll(getPublishedProcedureDefinitionQuery(asset));
     }
 
+    /**
+     * A convenience method to retrieve a ProcedureDefinition by its ID.
+     *
+     * @param id - A <b>Long</b> value representing the ID of the ProcedureDefinition you wish to retrieve.
+     * @return A <b>ProcedureDefinition</b> object representing the desired definition.
+     */
+    public ProcedureDefinition getProcedureDefinitionById(Long id) {
+        return persistenceService.find(ProcedureDefinition.class, id);
+    }
+
     public Boolean hasPublishedProcedureCode(ProcedureDefinition procedureDefinition) {
         QueryBuilder<ProcedureDefinition> query = getPublishedProcedureDefinitionQuery(procedureDefinition.getAsset());
         query.addSimpleWhere("procedureCode", procedureDefinition.getProcedureCode());
         return persistenceService.exists(query);
+    }
+
+    public Boolean hasRecurringSchedule(ProcedureDefinition procedureDefinition) {
+        Boolean returnMe = false;
+
+        QueryBuilder<Procedure> procedureQuery = createTenantSecurityBuilder(Procedure.class);
+        procedureQuery.addSimpleWhere("type",
+                                      procedureDefinition);
+        //This should result in the query only looking for Procedures where recurringEvent is NOT null (ie. scheduled)
+        procedureQuery.addWhere(WhereParameter.Comparator.NOTNULL,
+                                "recurringEvent",
+                                "recurringEvent",
+                                null);
+
+        //Doesn't matter if there's 1 or 1 million... anything scheduled is what we're looking for.
+        procedureQuery.setLimit(1);
+
+        returnMe = persistenceService.exists(procedureQuery);
+
+        if(!returnMe) {
+            QueryBuilder<ProcedureAuditEvent> procedureAuditEventQuery =
+                    createTenantSecurityBuilder(ProcedureAuditEvent.class);
+
+            procedureAuditEventQuery.addSimpleWhere("procedureDefinition",
+                                                    procedureDefinition);
+
+            procedureAuditEventQuery.addWhere(WhereParameter.Comparator.NOTNULL,
+                                              "recurringEvent",
+                                              "recurringEvent",
+                                              null);
+
+            procedureQuery.setLimit(1);
+
+            returnMe = persistenceService.exists(procedureAuditEventQuery);
+        }
+
+        return returnMe;
     }
 
     private QueryBuilder<ProcedureDefinition> getPublishedProcedureDefinitionQuery(Asset asset) {
@@ -325,6 +377,40 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAllPaginated(query,first,count);
     }
 
+    public List<ProcedureDefinition> getPublishedProceduresWithoutAudits(int pageNumber, int pageSize, BaseOrg owner) {
+
+        QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
+
+        query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
+        query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", getProcedureDefinitionIdFromProcedureAuditEvents());
+        query.setOrder("equipmentLocation", true);
+        query.addOrder("procedureCode", true);
+        query.applyFilter(new OwnerAndDownFilter(owner));
+        query.setLimit(25);
+        return persistenceService.findAll(query, pageNumber, pageSize);
+    }
+
+    public Long countPublishedProceduresWithoutAudits(BaseOrg owner) {
+
+        QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
+
+        query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
+        query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", getProcedureDefinitionIdFromProcedureAuditEvents());
+        query.setOrder("equipmentLocation", true);
+        query.addOrder("procedureCode", true);
+        query.applyFilter(new OwnerAndDownFilter(owner));
+        query.setCountSelect();
+        return persistenceService.find(query);
+    };
+
+    public List<Long> getProcedureDefinitionIdFromProcedureAuditEvents() {
+
+        QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureAuditEvent.class, securityContext.getUserSecurityFilter());
+        query.setSimpleSelect("procedureDefinition.id");
+        List<Long> list = persistenceService.findAll(query);
+
+        return list;
+    };
 
 
     public List<ProcedureDefinition> getAllPreviouslyPublishedProcedures(String sTerm, String order, boolean ascending, int first, int count) {
@@ -583,9 +669,6 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.count(procedureDefinitionCountQuery);
     }
 
-
-
-
     public List<String> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
         QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredDevice.class);
         query.setSimpleSelect("device");
@@ -598,6 +681,15 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         } else {
             query.addWhere(WhereClauseFactory.createIsNull("isolationPointSourceType"));
         }
+        query.addOrder("device");
+        return persistenceService.findAll(query);
+    }
+
+    public List<String> getPreConfiguredEnergySource(IsolationPointSourceType sourceType) {
+        QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredEnergySource.class);
+        query.setSimpleSelect("source");
+        query.addSimpleWhere("isolationPointSourceType", sourceType);
+        query.addOrder("source");
         return persistenceService.findAll(query);
     }
 
@@ -613,7 +705,49 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         persistenceService.update(definition);
     }
 
+    /**
+     * This method unpublishes a <b>ProcedureDefinition</b> and also removes any scheduled Procedures of this type and
+     * any Audits of this <b>ProcedureDefinition</b>.
+     *
+     * @param definition - An initialized <b>ProcedureDefinition</b> object representing the definition you wish to unpublish.
+     */
     public void unpublishProcedureDefinition(ProcedureDefinition definition) {
+        //First, we need to make sure that we clear up all Procedure Audits...
+        QueryBuilder<ProcedureAuditEvent> auditEventQuery = createTenantSecurityBuilder(ProcedureAuditEvent.class);
+        auditEventQuery.addSimpleWhere("procedureDefinition", definition);
+
+        List<ProcedureAuditEvent> auditResults = persistenceService.findAll(auditEventQuery);
+
+        for(ProcedureAuditEvent auditEvent : auditResults) {
+            logger.debug("Retiring Procedure Audit Event " + auditEvent.getId());
+
+            //Not sure if this ends up doubling up some of our work
+            if(auditEvent.getRecurringEvent() != null) {
+                logger.debug("Purging Recurring Schedule for Procedure Audit Event " + auditEvent.getId());
+                recurringScheduleService.purgeRecurringEvent(auditEvent.getRecurringEvent());
+            }
+            auditEvent.retireEntity();
+            persistenceService.update(auditEvent);
+        }
+
+
+        //Next, we need to do the same with any Procedures.
+        QueryBuilder<Procedure> procedureEventQuery = createTenantSecurityBuilder(Procedure.class);
+
+        procedureEventQuery.addSimpleWhere("type", definition);
+
+        List<Procedure> procedureResults = persistenceService.findAll(procedureEventQuery);
+
+        for(Procedure procedureEvent : procedureResults) {
+            logger.debug("Archiving Procedure Event " + procedureEvent.getId());
+            if(procedureEvent.getRecurringEvent() != null) {
+                logger.debug("Purging Recurring Schedule for Procedure " + procedureEvent.getId());
+                recurringScheduleService.purgeRecurringEvent(procedureEvent.getRecurringEvent());
+            }
+            persistenceService.archive(procedureEvent);
+        }
+
+        //Now that we're all cleaned up, we can proceed with unpublishing the definition.
         definition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
         definition.setRetireDate(dateService.nowUTC().toDate());
         definition.setUnpublishedDate(dateService.nowUTC().toDate());

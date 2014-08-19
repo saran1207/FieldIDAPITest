@@ -10,7 +10,13 @@ public interface SystemSecurityGuard {
 	public Long getTenantId();
 	public Tenant getTenant();
 	public PrimaryOrg getPrimaryOrg();
-	public boolean isExtendedFeatureEnabled(ExtendedFeature feature);
+
+    /* Modules */
+    public boolean isInspectionsEnabled();
+    public boolean isLotoEnabled();
+
+    /* Extended Features */
+    public boolean isExtendedFeatureEnabled(ExtendedFeature feature);
 	public boolean isIntegrationEnabled();
 	public boolean isProjectsEnabled();
 	public boolean isBrandingEnabled();
@@ -22,10 +28,8 @@ public interface SystemSecurityGuard {
 	public boolean isPlansAndPricingAvailable();
 	public boolean isManufacturerCertificateEnabled();
 	public boolean isOrderDetailsEnabled();
-    public boolean isLotoProceduresEnabled();
     public boolean isGlobalSearchEnabled();
     public boolean isAdvancedEventSearchEnabled();
     public boolean isCriteriaTrendsEnabled();
     public boolean isUserGroupFilteringEnabled();
-
 }

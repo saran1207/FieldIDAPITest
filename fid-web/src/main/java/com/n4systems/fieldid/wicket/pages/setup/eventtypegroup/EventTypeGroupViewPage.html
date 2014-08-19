@@ -1,0 +1,72 @@
+<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/html">
+<wicket:extend>
+    <div class="setup-event event-type-group-view">
+        <div wicket:id="feedbackPanel"></div>
+
+        <div class="certFormTitle">
+            <h2><wicket:message key="label.groupdetails"/>
+                <a wicket:id="edit">
+                    <wicket:message key="label.edit"/>
+                </a>
+            </h2>
+        </div>
+
+        <div class="infoSet">
+            <label><wicket:message key="label.name"/></label>
+            <span wicket:id="name"/>
+        </div>
+
+        <div class="infoSet">
+            <label><wicket:message key="label.report_title"/></label>
+            <span wicket:id="title"/>
+        </div>
+
+        <div class="infoSet">
+            <label><wicket:message key="label.select_event_pdf_report_style"/></label>
+            <span wicket:id="pdf"/>
+        </div>
+
+        <div class="infoSet">
+            <label><wicket:message key="label.observationreportstyle"/></label>
+            <span wicket:id="observation"/>
+        </div>
+
+        <div class="certFormTitle">
+            <h2><wicket:message key="label.eventtypes"/></h2>
+        </div>
+
+        <div class="event-type-set">
+           <div wicket:id="eventTypes">
+               <div class="infoSet line">
+                   <a wicket:id="eventTypeLink" href="#">
+                       <span wicket:id="eventTypeName"/>
+                   </a>
+               </div>
+           </div>
+           <div wicket:id="noEventTypes"/>
+        </div>
+
+        <div class="btn-secondary">
+            <a wicket:id="addAssetEvent">
+                <wicket:message key="label.add_asset_event"/>
+            </a>
+        </div>
+        <div class="btn-secondary">
+            <a wicket:id="addPlaceEvent">
+            <wicket:message key="label.add_place_event"/>
+            </a>
+        </div>
+        <div class="btn-secondary">
+            <a wicket:id="addAction">
+                <wicket:message key="label.add_action_event"/>
+            </a>
+        </div>
+        <div class="btn-secondary">
+            <a wicket:id="addProcedureAudit">
+                <wicket:message key="label.add_procedure_audit"/>
+            </a>
+        </div>
+    </div>
+
+</wicket:extend>
+</html>

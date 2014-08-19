@@ -18,7 +18,7 @@ import javax.persistence.*;
 public class ProcedureAuditEvent extends Event<ProcedureAuditEventType, ProcedureAuditEvent, ProcedureDefinition> implements NetworkEntity<ProcedureAuditEvent>{
 
     public static final SecurityDefiner createSecurityDefiner() {
-        return new SecurityDefiner("tenant.id", "procedureDefinition.asset.owner", null, "state", true);
+        return new SecurityDefiner("tenant.id", "procedureDefinition.asset.owner", null, "state", false);
     }
 
     @ManyToOne
@@ -60,7 +60,7 @@ public class ProcedureAuditEvent extends Event<ProcedureAuditEventType, Procedur
         return procedureDefinition;
     }
 
-    public void setProcedureDefinition(ProcedureDefinition procedureDefinition) {
+    public void  setProcedureDefinition(ProcedureDefinition procedureDefinition) {
         this.procedureDefinition = procedureDefinition;
     }
 

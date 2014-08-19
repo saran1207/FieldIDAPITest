@@ -4,8 +4,8 @@ import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.org.people.PeopleListPanel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
-import com.n4systems.fieldid.wicket.pages.user.EditPersonPage;
-import com.n4systems.fieldid.wicket.pages.user.EditUsageBasedUserPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.EditPersonPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.EditUserPage;
 import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -34,7 +34,7 @@ public class UserActionsCell extends Panel {
         } else if(user.isPerson()) {
             add(new BookmarkablePageLink<EditPersonPage>("editLink", EditPersonPage.class, PageParametersBuilder.id(user.getId())));
         } else if(user.isUsageBasedUser()) {
-            add(new BookmarkablePageLink<EditUsageBasedUserPage>("editLink", EditUsageBasedUserPage.class, PageParametersBuilder.id(user.getId())));
+            add(new BookmarkablePageLink<EditUserPage>("editLink", EditUserPage.class, PageParametersBuilder.id(user.getId())));
         } else {
             add(new WebMarkupContainer("editLink")).setVisible(false);
         }

@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.actions.users;
 
+import com.n4systems.model.user.User;
 import com.n4systems.util.StringUtils;
 
 import java.io.File;
@@ -10,8 +11,8 @@ public class UploadedImage implements Serializable {
 	private String uploadDirectory;
 	private boolean removeImage = false;
 	private boolean newImage = false;
-	
-	
+
+
 	public boolean isRemoveImage() {
 		return removeImage;
 	}

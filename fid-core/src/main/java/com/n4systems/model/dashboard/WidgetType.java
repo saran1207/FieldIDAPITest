@@ -22,9 +22,15 @@ public enum WidgetType implements Listable<String> {
     PROCEDURES_PUBLISHED("Procedures Published", "A graph of all procedures published", ProceduresPublishedWidgetConfiguration.class),
     UPCOMING_SCHEDULED_LOTO("Upcoming Lockouts", "Scheduled lockouts for the next 30,60 or 90 days", UpcomingLotoWidgetConfiguration.class),
     ASSETS_LOCKED_OUT("Currently Locked Out", "List of all assets that are currently locked out", LockedoutProceduresWidgetConfiguration.class),
-    UPCOMING_PROCEDURE_AUDITS("Upcoming Procedure Audits", "Scheduled Procedure Audits for the next 30,60 or 90 days", UpcomingProcedureAuditsWidgetConfiguration.class);
+    UPCOMING_PROCEDURE_AUDITS("Upcoming Procedure Audits", "Scheduled Procedure Audits for the next 30,60 or 90 days", UpcomingProcedureAuditsWidgetConfiguration.class),
+    PROCEDURES_WITHOUT_AUDITS("Procedures without Audits", "List of procedures that do not have recurring audits scheduled", ProceduresWithoutAuditsWidgetConfiguration.class);
 
     private static EnumSet<WidgetType> eventRelatedWidgets = EnumSet.of(EVENT_KPI,COMPLETED_EVENTS,EVENT_COMPLETENESS,UPCOMING_SCHEDULED_EVENTS, ACTIONS);
+
+    //MAKE SURE YOU ADD THE NEWLY CREATED WIDGETS INTO ONE OF THE FOLLOWING LISTS:
+    private static EnumSet<WidgetType> generalList = EnumSet.of(NEWS, WORK, ASSETS_IDENTIFIED, ASSETS_STATUS);
+    private static EnumSet<WidgetType> inspectionList = EnumSet.of(COMPLETED_EVENTS, UPCOMING_SCHEDULED_EVENTS, EVENT_COMPLETENESS, ACTIONS, JOBS_ASSIGNED, EVENT_KPI);
+    private static EnumSet<WidgetType> lotoList =  EnumSet.of(PROCEDURES_PUBLISHED, UPCOMING_SCHEDULED_LOTO, ASSETS_LOCKED_OUT, UPCOMING_PROCEDURE_AUDITS, PROCEDURES_WITHOUT_AUDITS);
 
     private String name;
     private String description;
@@ -64,6 +70,18 @@ public enum WidgetType implements Listable<String> {
     	return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, toString());
     }
 
+
+    public boolean isGeneral() {
+        return generalList.contains(this);
+    }
+
+    public boolean isInspection() {
+        return inspectionList.contains(this);
+    }
+
+    public boolean isLoto() {
+        return lotoList.contains(this);
+    }
 
     public boolean isEventRelated() {
         return eventRelatedWidgets.contains(this);

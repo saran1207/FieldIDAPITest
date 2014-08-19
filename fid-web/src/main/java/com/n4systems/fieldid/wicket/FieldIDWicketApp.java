@@ -24,6 +24,8 @@ import com.n4systems.fieldid.wicket.pages.loto.*;
 import com.n4systems.fieldid.wicket.pages.loto.copy.CopyProceduresList;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
+import com.n4systems.fieldid.wicket.pages.massevent.CompletedMassEventPage;
+import com.n4systems.fieldid.wicket.pages.massevent.SelectMassEventPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateAssetsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateEventsPage;
 import com.n4systems.fieldid.wicket.pages.massupdate.MassUpdateOpenEventsPage;
@@ -35,18 +37,29 @@ import com.n4systems.fieldid.wicket.pages.saveditems.EditSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ManageSavedItemsPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.SavedItemsDropdownPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.ShareSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.AddSendSavedItemPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.EditSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
-import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedAssetSearchPage;
 import com.n4systems.fieldid.wicket.pages.search.AdvancedEventSearchPage;
 import com.n4systems.fieldid.wicket.pages.setup.*;
+import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
+import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.assettype.*;
+import com.n4systems.fieldid.wicket.pages.setup.assettypegroup.*;
 import com.n4systems.fieldid.wicket.pages.setup.columnlayout.ColumnsLayoutPage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.AddCommentTemplatePage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.CommentTemplateListPage;
+import com.n4systems.fieldid.wicket.pages.setup.comment.EditCommentTemplatePage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.AddEventBookPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EditEventBookPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventform.EventFormEditPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusArchivedListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
-import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.ReassignEventTypeGroupPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.*;
 import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.ConfirmArchivePage;
@@ -54,11 +67,11 @@ import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
 import com.n4systems.fieldid.wicket.pages.setup.score.ScoreGroupsPage;
 import com.n4systems.fieldid.wicket.pages.setup.score.result.ScoreResultConfigurationPage;
 import com.n4systems.fieldid.wicket.pages.setup.translations.*;
-import com.n4systems.fieldid.wicket.pages.setup.user.ArchiveUserGroupPage;
-import com.n4systems.fieldid.wicket.pages.setup.user.UserGroupsPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.*;
+import com.n4systems.fieldid.wicket.pages.setup.userregistration.UserRequestListPage;
+import com.n4systems.fieldid.wicket.pages.setup.userregistration.ViewUserRequestPage;
 import com.n4systems.fieldid.wicket.pages.template.*;
 import com.n4systems.fieldid.wicket.pages.trends.CriteriaTrendsPage;
-import com.n4systems.fieldid.wicket.pages.user.*;
 import com.n4systems.fieldid.wicket.pages.useraccount.MobileOfflineProfilePage;
 import com.n4systems.fieldid.wicket.pages.useraccount.UserAccountSearchPage;
 import com.n4systems.fieldid.wicket.resources.CacheInSessionLocalizer;
@@ -118,6 +131,38 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
         mountPage("setup/procedureApprover", ProcedureApproverPage.class);
         mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
+        mountPage("setup/assetStatusList", AssetStatusListAllPage.class);
+        mountPage("setup/eventBooksList", EventBooksListAllPage.class);
+        mountPage("setup/addEventBook", AddEventBookPage.class);
+        mountPage("setup/editEventBook", EditEventBookPage.class);
+        mountPage("setup/eventBooksArchivedList", EventBooksListArchivedPage.class);
+        mountPage("setup/assetTypeGroupsList", AssetTypeGroupListPage.class);
+        mountPage("setup/reorderAssetTypeGroups", ReorderAssetTypeGroupPage.class);
+        mountPage("setup/viewAssetTypeGroup", ViewAssetTypeGroupPage.class);
+        mountPage("setup/addAssetTypeGroup", AddAssetTypeGroupPage.class);
+        mountPage("setup/editAssetTypeGroup", EditAssetTypeGroupPage.class);
+        mountPage("setup/confirmDeleteAssetTypeGroup", ConfirmDeleteAssetTypeGroupPage.class);
+        mountPage("setup/addCommentTemplate", AddCommentTemplatePage.class);
+        mountPage("setup/commentTemplateList", CommentTemplateListPage.class);
+        mountPage("setup/editCommentTemplate", EditCommentTemplatePage.class);
+
+        mountPage("setup/assetStatusArchivedList", AssetStatusListArchivedPage.class);
+
+        mountPage("setup/usersList", UsersListPage.class);
+        mountPage("setup/archivedUsersList", ArchivedUsersListPage.class);
+        mountPage("setup/selectUserType", SelectUserTypePage.class);
+        mountPage("setup/addUser", AddUserPage.class);
+        mountPage("setup/editUser", EditUserPage.class);
+        mountPage("setup/addPerson", AddPersonPage.class);
+        mountPage("setup/editPerson", EditPersonPage.class);
+        mountPage("setup/viewUser", ViewUserPage.class);
+        mountPage("setup/changeUserPassword", ChangeUserPasswordPage.class);
+        mountPage("setup/editUserMobilePasscode", EditUserMobilePasscodePage.class);
+        mountPage("setup/manageUserMobilePasscode", ManageUserMobilePasscodePage.class);
+        mountPage("setup/userOfflineProfile", UserOfflineProfilePage.class);
+        mountPage("setup/upgradeUser", UpgradeUserPage.class);
+        mountPage("setup/userRequestsList", UserRequestListPage.class);
+        mountPage("setup/viewUserRequest", ViewUserRequestPage.class);
 
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
@@ -143,6 +188,12 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("draftListAllPage", DraftListAllPage.class);
         mountPage("previouslyPublishedListAllPage", PreviouslyPublishedListAllPage.class);
 
+        mountPage("eventTypeGroup", EventTypeGroupListPage.class);
+        mountPage("eventTypeGroupArchive", EventTypeGroupListArchivePage.class);
+        mountPage("eventTypeGroupAdd", EventTypeGroupAddPage.class);
+        mountPage("eventTypeGroupEdit", EventTypeGroupEditPage.class);
+        mountPage("eventTypeGroupView", EventTypeGroupViewPage.class);
+
         mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
 
         mountPage("quickEvent", QuickEventPage.class);
@@ -161,7 +212,8 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("closeEvent", CloseEventPage.class);
 
-        mountPage("sendSavedItem", SendSavedItemPage.class);
+        mountPage("addSendSavedItem", AddSendSavedItemPage.class);
+        mountPage("editSendSavedItem", EditSendSavedItemPage.class);
         mountPage("manageSendItemSchedules", ManageSendItemSchedulesPage.class);
 
         mountPage("recurringEvents", RecurringAssetTypeEventsPage.class);
@@ -169,6 +221,9 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("assetMassUpdate", MassUpdateAssetsPage.class);
         mountPage("eventMassUpdate", MassUpdateEventsPage.class);
         mountPage("openEventMassUpdate", MassUpdateOpenEventsPage.class);
+
+        mountPage("selectMassEventType", SelectMassEventPage.class);
+        mountPage("completedMassEvent", CompletedMassEventPage.class);
 
         mountPage("savedReport", RunReportPage.class);
         mountPage("savedSearch", RunSearchPage.class);
@@ -203,11 +258,6 @@ public class FieldIDWicketApp extends WebApplication {
 
         mountPage("searchOpenEventsForJob", SearchOpenEventsForJobPage.class);
 
-        mountPage("addPerson", AddPersonPage.class);
-        mountPage("editPerson", EditPersonPage.class);
-        mountPage("addUsageBasedUser", AddUsageBasedUserPage.class);
-        mountPage("editUsageBasedUser", EditUsageBasedUserPage.class);
-
         mountPage("procedureWaitingApprovals", ProcedureWaitingApprovalsPage.class);
         mountPage("procedureRejected", ProcedureRejectedPage.class);
         mountPage("procedureDefinitionPrint", ProcedureDefinitionPrintPage.class);
@@ -225,7 +275,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("selectLanguage", SelectLanguagePage.class);
 
         mountPage("mobileOfflineProfile", MobileOfflineProfilePage.class);
-        mountPage("userOfflineProfile", UserOfflineProfilePage.class);
 
         mountPage("userAccountSearch", UserAccountSearchPage.class);
 

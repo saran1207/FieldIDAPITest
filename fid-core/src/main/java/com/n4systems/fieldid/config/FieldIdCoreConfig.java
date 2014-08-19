@@ -33,6 +33,7 @@ import com.n4systems.fieldid.service.attachment.ImageFlavour;
 import com.n4systems.fieldid.service.certificate.CertificateService;
 import com.n4systems.fieldid.service.certificate.PrintAllCertificateService;
 import com.n4systems.fieldid.service.event.*;
+import com.n4systems.fieldid.service.event.massevent.MassEventService;
 import com.n4systems.fieldid.service.event.perform.PerformPlaceEventHelperService;
 import com.n4systems.fieldid.service.event.perform.PerformProcedureAuditEventHelperService;
 import com.n4systems.fieldid.service.event.perform.PerformThingEventHelperService;
@@ -80,6 +81,7 @@ import com.n4systems.services.search.parser.*;
 import com.n4systems.services.search.writer.AssetIndexWriter;
 import com.n4systems.services.search.writer.CriteriaTrendsIndexWriter;
 import com.n4systems.services.search.writer.EventIndexWriter;
+import com.n4systems.services.signature.SignatureService;
 import com.n4systems.services.tenant.TenantCreationService;
 import com.n4systems.util.ConfigEntry;
 import com.n4systems.util.ServiceLocator;
@@ -358,6 +360,11 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
+    public UserRequestService userRequestService() {
+        return new UserRequestService();
+    }
+
+    @Bean
     public EventTypeService eventTypeService() {
         return new EventTypeService();
     }
@@ -523,6 +530,11 @@ public class FieldIdCoreConfig {
     @Bean
     public S3Service s3Service() {
         return new S3Service();
+    }
+
+    @Bean
+    public SignatureService signatureService() {
+        return new SignatureService();
     }
 
 	@Bean
@@ -816,9 +828,17 @@ public class FieldIdCoreConfig {
     }
 
     @Bean
-    public ProcedureAuditEventService procedureAuditEventService() { return new ProcedureAuditEventService(); }
+    public ProcedureAuditEventService procedureAuditEventService() {
+        return new ProcedureAuditEventService();
+    }
 
     @Bean
-    public ProcedureAuditEventCreationService procedureAuditEventCreationService() { return new ProcedureAuditEventCreationService(); }
+    public ProcedureAuditEventCreationService procedureAuditEventCreationService() {
+        return new ProcedureAuditEventCreationService();
+    }
 
+    @Bean
+    public MassEventService massEventService() {
+        return new MassEventService();
+    }
 }

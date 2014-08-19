@@ -187,7 +187,16 @@ public class EventTypeCrud extends AbstractCrud {
 		testRequiredEntities(true);
 		
 		try {
-            fillArchiveSummary(eventType);
+            if(eventType instanceof ThingEventType) {
+                fillArchiveSummary((ThingEventType) eventType);
+            } else if(eventType instanceof ActionEventType) {
+                fillArchiveSummary((ActionEventType) eventType);
+            } else if(eventType instanceof PlaceEventType) {
+                fillArchiveSummary((PlaceEventType) eventType);
+            } else if(eventType instanceof ProcedureAuditEventType) {
+                fillArchiveSummary((ProcedureAuditEventType) eventType);
+
+            }
 		} catch (Exception e) {
             e.printStackTrace();
 			addActionErrorText("error.confirming_event_type_delete");
@@ -197,10 +206,25 @@ public class EventTypeCrud extends AbstractCrud {
 		return SUCCESS;
 	}
 
-	private EventTypeArchiveSummary fillArchiveSummary(EventType eventType) {
+    private EventTypeArchiveSummary fillArchiveSummary(ThingEventType eventType) {
 		archiveSummary = eventTypeRemovalService.summary(eventType);
 		return archiveSummary;
 	}
+
+    private EventTypeArchiveSummary fillArchiveSummary(ActionEventType eventType) {
+        archiveSummary = eventTypeRemovalService.summary(eventType);
+       return archiveSummary;
+    }
+
+    private EventTypeArchiveSummary fillArchiveSummary(PlaceEventType eventType) {
+        archiveSummary = eventTypeRemovalService.summary(eventType);
+        return archiveSummary;
+    }
+
+    private EventTypeArchiveSummary fillArchiveSummary(ProcedureAuditEventType eventType) {
+        archiveSummary = eventTypeRemovalService.summary(eventType);
+        return archiveSummary;
+    }
 
 	public String doDelete() {
 		testRequiredEntities(true);

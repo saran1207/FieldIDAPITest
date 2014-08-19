@@ -82,6 +82,8 @@ public class AddTenantPage extends FieldIDAdminPage {
 			add(new RequiredTextField<String>("primaryOrg.name"));
 			add(new AddressInfoInputPanel("addressInfoContainer", new PropertyModel<AddressInfo>(getModel(), "primaryOrg.addressInfo")));
 			add(new TextArea<String>("primaryOrg.notes"));
+            add(new CheckBox("tenant.settings.inspectionsEnabled"));
+            add(new CheckBox("tenant.settings.lotoEnabled"));
 		}
 		
 		@Override

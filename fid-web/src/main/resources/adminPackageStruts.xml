@@ -550,6 +550,17 @@
         <action name="events30Day" method="doAjax" class="com.n4systems.fieldidadmin.actions.OrganizationAction">
             <result name="success" type="freemarker">/admin/templates/ajax/organization/events30Day.ftl</result>
         </action>
-		
-	</package>
+
+        <action name="toggleInspectionsEnabled" method="doToggleInspectionsEnabled"
+                class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+            <result name="success" type="freemarker">/admin/templates/ajax/organization/updateModules.ftl</result>
+        </action>
+
+        <action name="toggleLotoEnabled" method="doToggleLotoEnabled"
+                class="com.n4systems.fieldidadmin.actions.OrganizationAction">
+            <result name="success" type="freemarker">/admin/templates/ajax/organization/updateModules.ftl</result>
+        </action>
+
+
+    </package>
 </struts>

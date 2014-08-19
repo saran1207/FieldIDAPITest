@@ -258,9 +258,11 @@ public class EventService extends FieldIdPersistenceService {
         builder.addGroupBy("workflowState");
 		builder.applyFilter(new OwnerAndDownFilter(org));
 
+        //Adding this where clause to filter out actions for the Event Completeness widget
+        builder.addSimpleWhere("type.actionType", false);
 		builder.addOrder("dueDate");
 		
-		return persistenceService.findAll(builder);	
+		return persistenceService.findAll(builder);
 	}
 
     public <T extends AbstractEvent> T lookupExistingEvent(Class<T> clazz, Long eventId) {
@@ -388,6 +390,12 @@ public class EventService extends FieldIdPersistenceService {
 	}
 
     public Event retireEvent(ThingEvent event) {
+        if(event.isAction()) {
+            CriteriaResult sourceCriteriaResult = event.getSourceCriteriaResult();
+            sourceCriteriaResult.getActions().remove(event);
+            persistenceService.update(sourceCriteriaResult);
+        }
+
         event.retireEntity();
         event = persistenceService.update(event);
         event.getAsset().touch();

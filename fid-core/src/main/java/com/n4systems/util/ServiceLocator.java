@@ -28,6 +28,7 @@ import com.n4systems.services.EventScheduleService;
 import com.n4systems.services.EventScheduleServiceImpl;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.localization.LocalizationService;
+import com.n4systems.services.signature.SignatureService;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
@@ -138,6 +139,11 @@ public class ServiceLocator implements ApplicationContextAware {
     public static S3Service getS3Service() {
         S3Service s3Service = getBean(S3Service.class);
         return s3Service;
+    }
+
+    public static SignatureService getSignatureService() {
+        SignatureService signatureService = getBean(SignatureService.class);
+        return signatureService;
     }
 
     public static EventService getEventService() {

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Target" value="System.out" />
+		<param name="Threshold" value="DEBUG" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<!-- The default pattern: Date Priority [Category] Message\n -->
+			<param name="ConversionPattern" value="%D: %-5p [%c{1}] %m%n" />
+		</layout>
+	</appender>
+    <appender name="AUDIT_LOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/fieldid/logs/fieldid-audit.log" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="500MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+            <param name="ConversionPattern" value="%D: %c: %m%n" />
+        </layout>
+    </appender>
+    <appender name="SEARCH_LOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/fieldid/logs/fieldid-search.log" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="500MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+            <param name="ConversionPattern" value="%D: %c: %m%n" />
+        </layout>
+    </appender>
+    <appender name="CACHE_LOG" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/fieldid-cache.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%D: %c: %m%n" />
+		</layout>
+	</appender>
+	<appender name="FIELDID_LOG" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/fieldid.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
+		</layout>
+	</appender>
+	<appender name="FIELDID_TASK" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/fieldid-task.log" />
+        <param name="Append" value="true" />
+		<param name="MaxFileSize" value="500MB" />
+		<param name="MaxBackupIndex" value="10" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
+		</layout>
+	</appender>
+	<appender name="FIELDID_ORDER" class="org.apache.log4j.DailyRollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/order.log" />
+		<param name="Append" value="true" />
+		<param name="DatePattern" value="'.'yyyy-MM-dd" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
+		</layout>
+	</appender>
+	<appender name="LIMIT_SERVICE" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/limit-service.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="200MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
+		</layout>
+	</appender>
+	<appender name="INSPECTION_SERVICE" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/inspect-service.log" />
+		<param name="Append" value="true" />
+		<param name="MaxFileSize" value="200MB" />
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%D [%t] (%T:%U) %-5p %c - %m%n" />
+		</layout>
+	</appender>
+	<appender name="MOBILE_ERROR" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="/var/fieldid/logs/mobile_errors.log" />
+		<param name="Append" value="true" />
+		<param name="MaxBackupIndex" value="30" />
+		<layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+			<param name="ConversionPattern" value="%D: %m%n" />
+		</layout>
+	</appender>
+    <appender name="API_LOG" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/fieldid/logs/api.log" />
+        <param name="Append" value="true" />
+        <param name="MaxBackupIndex" value="30" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+            <param name="ConversionPattern" value="%D %-5p - %-26.26c{1} - %m\n" />
+        </layout>
+    </appender>
+
+    <appender name="REQUESTS" class="org.apache.log4j.RollingFileAppender">
+        <param name="File" value="/var/fieldid/logs/wicket-requests.log" />
+        <param name="Append" value="true" />
+        <param name="MaxBackupIndex" value="30" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+            <param name="ConversionPattern" value="%D: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="FIELDID_MIGRATIONS" class="org.apache.log4j.RollingFileAppender">
+        <param name="Threshold" value="DEBUG" />
+        <param name="File" value="/var/fieldid/logs/migration.log" />
+        <param name="Append" value="true" />
+        <param name="MaxFileSize" value="500MB" />
+        <param name="MaxBackupIndex" value="10" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+            <param name="ConversionPattern" value="%D: %m%n" />
+        </layout>
+    </appender>
+
+    <appender name="Indexer" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="/var/fieldid/logs/indexer.log" />
+        <param name="Append" value="true" />
+        <param name="DatePattern" value="'.'yyyy-MM-dd" />
+        <layout class="com.n4systems.fieldid.log.FieldIDPatternLayout">
+            <param name="ConversionPattern" value="%D [%t] %-5p: %m%n" />
+        </layout>
+    </appender>
+
+
+    <category name="org.springframework">
+        <priority value="INFO" />
+    </category>
+	<category name="org.apache">
+		<priority value="INFO" />
+	</category>
+	<category name="jacorb">
+		<priority value="WARN" />
+	</category>
+	<category name="org.jgroups">
+		<priority value="WARN" />
+	</category>
+	<category name="org.quartz">
+		<priority value="INFO" />
+	</category>
+	<category name="org.hibernate">
+		<priority value="WARN" />
+	</category>
+	<category name="org.hibernate.engine.loading.CollectionLoadContext">
+		<priority value="ERROR" />
+	</category>
+	<category name="org.hibernate.jdbc.AbstractBatcher">
+		<priority value="ERROR" />
+	</category>
+	<category name="net.sf.jasperreports">
+		<priority value="INFO" />
+	</category>
+	<category name="com.n4systems.ejb.OrderManagerImpl" additivity="false">
+		<priority value="TRACE" />
+		<appender-ref ref="FIELDID_ORDER" />
+	</category>
+	<category name="AuditLog" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="AUDIT_LOG" />
+	</category>
+    <category name="SearchLog" additivity="false">
+        <priority value="INFO" />
+        <appender-ref ref="SEARCH_LOG" />
+    </category>
+	<category name="MobileErrorLogger" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="MOBILE_ERROR" />
+	</category>
+	<category name="com.n4systems.ejb.interceptor.TimingInterceptor" additivity="false">
+		<priority value="DEBUG" />
+	</category>
+	<category name="com.n4systems.taskscheduling" additivity="false">
+		<priority value="DEBUG" />
+		<appender-ref ref="FIELDID_TASK" />
+	</category>
+	<category name="com.n4systems.services.limiters.TenantLimitService" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="LIMIT_SERVICE" />
+	</category>
+	<category name="com.n4systems.webservice.server.InspectionServiceImpl" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="INSPECTION_SERVICE" />
+	</category>
+	<category name="cache-info" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="CACHE_LOG" />
+	</category>
+	<category name="com.n4systems.fieldid.ws.v1.resources.logging.ApiLoggingResource" additivity="false">
+		<priority value="INFO" />
+		<appender-ref ref="API_LOG" />
+	</category>
+    <category name="com.n4systems.persistence.utils.DefaultEntityModifiedCreatedHandler" additivity="false">
+        <priority value="ERROR" />
+    </category>
+    <category name="org.apache.wicket.protocol.http.RequestLogger" additivity="false">
+        <priority value="INFO" />
+        <appender-ref ref="REQUESTS" />
+    </category>
+
+    <category name="org.apache.wicket.resource.PropertiesFactory" additivity="false">
+        <priority value="ERROR" />
+    </category>
+
+    <category name="com.n4systems.services.search" additivity="false">
+        <priority value="INFO" />
+        <appender-ref ref="Indexer" />
+    </category>
+
+    <category name="com.n4systems.fieldid.migrator">
+        <priority value="DEBUG" />
+        <appender-ref ref="FIELDID_MIGRATIONS" />
+    </category>
+
+    <category name="com.googlecode.ehcache">
+        <priority value="DEBUG" />
+        <appender-ref ref="CACHE_LOG" />
+    </category>
+
+    <category name="net.sf.ehcache">
+        <priority value="DEBUG" />
+        <appender-ref ref="CACHE_LOG" />
+    </category>
+
+    <category name="com.opensymphony.xwork2.ognl.OgnlValueStack">
+        <priority value="error"/>
+    </category>
+
+    <category name="org.apache.struts2.util.TextProviderHelper">
+        <priority value="error"/>
+    </category>
+
+    <root>
+		<priority value="info" />
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="FIELDID_LOG" />
+	</root>
+</log4j:configuration>

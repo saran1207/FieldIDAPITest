@@ -1,0 +1,15 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+    <div class="split-btn" wicket:enclosure="edit">
+        <a class="btn-secondary" wicket:id="edit"><wicket:message key="label.edit"/></a>
+        <div wicket:enclosure="archive" class="dropdown">
+            <button class="btn-secondary">
+                <span>Toggle Dropdown</span>
+            </button>
+            <ul>
+                <li><a wicket:id="archive"><wicket:message key="label.archive"/></a></li>
+            </ul>
+        </div>
+    </div>
+</wicket:panel>
+</html>

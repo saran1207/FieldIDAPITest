@@ -29,3 +29,12 @@
     width: 135px;
     display: block;
 }
+
+#authorLink {
+    display: inline-block;
+    margin-left: 13px;
+}
+#copyExistingProcedureLink {
+    display: inline-block;
+    margin-left: 3px;
+}

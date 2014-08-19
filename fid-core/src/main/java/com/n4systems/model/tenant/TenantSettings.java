@@ -28,11 +28,17 @@ public class TenantSettings extends EntityWithTenant {
 	@Embedded
 	private PasswordPolicy passwordPolicy = new PasswordPolicy();
 	
-	private boolean gpsCapture;
+	private Boolean gpsCapture = false;
 
 	private String supportUrl;
     
     private String logoutUrl;
+
+    @Column(name="inspections_enabled", nullable = false)
+    private Boolean inspectionsEnabled = false;
+
+    @Column(name="loto_enabled", nullable = false)
+    private Boolean lotoEnabled = false;
 
     @ManyToOne
     @JoinColumn(name = "approval_user_id")
@@ -84,11 +90,11 @@ public class TenantSettings extends EntityWithTenant {
 		return passwordPolicy;
 	}
 
-	public boolean isGpsCapture() {
+	public Boolean isGpsCapture() {
 		return gpsCapture;
 	}
 
-	public void setGpsCapture(boolean gpsCapture) {
+	public void setGpsCapture(Boolean gpsCapture) {
 		this.gpsCapture = gpsCapture;
 	}
 
@@ -156,5 +162,21 @@ public class TenantSettings extends EntityWithTenant {
 
     public void setDefaultLanguage(Locale defaultLanguage) {
         this.defaultLanguage = defaultLanguage;
+    }
+
+    public Boolean isInspectionsEnabled() {
+        return inspectionsEnabled;
+    }
+
+    public void setInspectionsEnabled(Boolean inspectionsEnabled) {
+        this.inspectionsEnabled = inspectionsEnabled;
+    }
+
+    public Boolean isLotoEnabled() {
+        return lotoEnabled;
+    }
+
+    public void setLotoEnabled(Boolean lotoEnabled) {
+        this.lotoEnabled = lotoEnabled;
     }
 }

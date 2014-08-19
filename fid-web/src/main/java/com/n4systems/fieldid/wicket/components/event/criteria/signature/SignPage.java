@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class SignPage extends FieldIDAuthenticatedPage {
     
@@ -21,6 +22,8 @@ public class SignPage extends FieldIDAuthenticatedPage {
     private AjaxButton storeButton;
     private HiddenField<String> pngDataField;
     private String pngData;
+    @SpringBean
+    SignatureService signatureService;
 
     public SignPage(final IModel<SignatureCriteriaResult> result) {
 
@@ -31,7 +34,7 @@ public class SignPage extends FieldIDAuthenticatedPage {
                 try {
                     String pngBase64Data = pngData.substring(pngData.lastIndexOf(",") + 1);
                     byte[] decodedBytes = new Base64().decode(pngBase64Data.getBytes());
-                    String tempId = new SignatureService().storeSignature(getCurrentUser().getTenant().getId(), decodedBytes);
+                    String tempId = signatureService.storeTempSignature(getCurrentUser().getTenant().getId(), decodedBytes);
                     FieldIDSession.get().setPreviouslyStoredTempFileId(tempId);
                 } catch (Exception e) {
                     logger.error("error storing signature", e);

@@ -14,6 +14,7 @@ public class CopyEventFactory {
 		copyAbstractEvent(newEvent, event);
         copyAssetEvent(newEvent, event);
 
+        newEvent.setSectionResults(event.getSectionResults());
         newEvent.setAssignee(event.getAssignee());
 		newEvent.setAssignedTo(event.getAssignedTo());
 		newEvent.setOwner( event.getOwner() );
@@ -47,7 +48,23 @@ public class CopyEventFactory {
 
 		return newEvent;
 	}
-	
+
+    public static void copyEventForMassEvents(ThingEvent copyTo, ThingEvent copyFrom) {
+        copyAbstractEventWithOutEntity(copyTo, copyFrom);
+
+        copyTo.setAssetStatus(copyFrom.getAssetStatus());
+        copyTo.setPerformedBy( copyFrom.getPerformedBy() );
+        copyTo.setDate( ( copyFrom.getDate() != null ) ? new Date( copyFrom.getDate().getTime() ) : null );
+        copyTo.setSectionResults(copyFrom.getSectionResults());
+        copyTo.setEventResult(copyFrom.getEventResult());
+        copyTo.setSubEvents( copySubEvents( copyFrom.getSubEvents() ) );
+        copyTo.setEventForm(copyFrom.getEventForm());
+        copyTo.setEventStatus(copyFrom.getEventStatus());
+        copyTo.setWorkflowState(copyFrom.getWorkflowState());
+        copyTo.setDueDate(copyFrom.getDueDate());
+        copyTo.setProject(copyFrom.getProject());
+    }
+
 	protected static List<SubEvent> copySubEvents( List<SubEvent> oldSubEvents) {
 		List<SubEvent> newSubEvents = new ArrayList<SubEvent>();
 		
@@ -78,6 +95,22 @@ public class CopyEventFactory {
     protected static void copyAssetEvent(AssetEvent newEvent, AssetEvent originalEvent) {
         newEvent.setAssetStatus(originalEvent.getAssetStatus());
         newEvent.setAsset( originalEvent.getAsset() );
+    }
+
+
+    protected static void copyAbstractEventWithOutEntity( AbstractEvent newEvent, AbstractEvent originalEvent) {
+        //copyEntity(newEvent, originalEvent);
+
+        newEvent.setType( originalEvent.getType() );
+        newEvent.setComments( originalEvent.getComments() );
+        newEvent.setEventForm( originalEvent.getEventForm() );
+
+        newEvent.setAttachments( copyFileAttachments( originalEvent.getAttachments() ) );
+        newEvent.setInfoOptionMap( new HashMap<String, String>( originalEvent.getInfoOptionMap() ) );
+
+        newEvent.setCriteriaResults( copyCriteriaResults( originalEvent.getResults(), newEvent) );
+        newEvent.setEditable(originalEvent.isEditable());
+        newEvent.setEventStatus(originalEvent.getEventStatus());
     }
 
 	protected static void copyAbstractEvent( AbstractEvent newEvent, AbstractEvent originalEvent) {

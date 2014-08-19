@@ -174,24 +174,28 @@
                             <a wicket:id="ownersUsersLocLink"><wicket:message key="nav.owners_users_loc"/></a>
                             <ul wicket:id="ownersSubMenuContainer">
                                 <li wicket:id="manageCustomersContainer"><a href="/fieldid/customerList.action" ><wicket:message key="label.customers"/></a></li>
-                                <li wicket:id="manageUsersContainer"><a href="/fieldid/userList.action"><wicket:message key="label.users"/></a></li>
+                                <wicket:enclosure>
+                                    <li><a wicket:id="manageUsersLink"><wicket:message key="label.users"/></a></li>
+                                </wicket:enclosure>
                                 <wicket:enclosure>
                                     <li><a wicket:id="userGroupsLink"><wicket:message key="label.user_groups"/></a></li>
                                 </wicket:enclosure>
-                                <li wicket:id="manageUserRegistrationsContainer"><a href="/fieldid/userRequestList.action"><wicket:message key="title.manage_user_registrations.plural"/></a></li>
+                                <wicket:enclosure>
+                                    <li><a wicket:id="userRegistrationsLink"><wicket:message key="label.user_registrations"/></a></li>
+                                </wicket:enclosure>
                                 <li wicket:id="managePredefinedLocationsContainer"><a href="/fieldid/predefinedLocations.action"><wicket:message key="title.manage_predefined_locations.plural"/></a></li>
                             </ul>
                         </li>
                         <li class="dropdown-secondary">
                             <a wicket:id="assetsEventsLink"><wicket:message key="nav.assets_and_events"/></a>
                             <ul wicket:id="assetsEventsSubMenuContainer">
-                                <li><a href="/fieldid/eventTypeGroups.action"><wicket:message key="title.manage_event_type_groups.plural"/></a></li>
+                                <li><a wicket:id="eventTypeGroupLink"><wicket:message key="title.manage_event_type_groups.plural"/></a></li>
                                 <li><a href="/fieldid/eventTypes.action"><wicket:message key="title.manage_event_types.plural"/></a></li>
                                 <li><a wicket:id="eventStatusListLink"><wicket:message key="title.manage_event_status.plural"/></a></li>
-                                <li><a href="/fieldid/eventBooks.action"><wicket:message key="title.manage_event_books.plural"/></a></li>
-                                <li><a href="/fieldid/assetTypeGroups.action"><wicket:message key="title.manage_asset_type_groups.plural"/></a></li>
+                                <li><a wicket:id="eventBooksListLink"><wicket:message key="title.manage_event_books.plural"/></a></li>
+                                <li><a wicket:id="assetTypeGroupsListLink"><wicket:message key="title.asset_type_groups.plural"/></a></li>
                                 <li><a wicket:id="assetTypesList" ><wicket:message key="title.asset_types.plural"/></a></li>
-                                <li><a href="/fieldid/assetStatusList.action"><wicket:message key="title.manage_asset_statuses.plural"/></a></li>
+                                <li><a wicket:id="assetStatusList" ><wicket:message key="title.manage_asset_statuses.plural"/></a></li>
                                 <li><a wicket:id="priorityCodeListLink" ><wicket:message key="title.manage_priority_code.plural"/></a></li>
                             </ul>
                         </li>
@@ -209,7 +213,7 @@
                             <a wicket:id="templatesLink"><wicket:message key="nav.templates"/></a>
                             <ul wicket:id="templatesSubMenuContainer">
                                 <li><a href="/fieldid/autoAttributeCriteriaList.action"><wicket:message key="title.auto_attribute_wizard.plural" /></a></li>
-                                <li><a href="/fieldid/commentTemplateList.action"><wicket:message key="title.manage_comment_templates.plural" /></a></li>
+                                <li><a wicket:id="commentTemplateLink"><wicket:message key="title.manage_comment_templates.plural" /></a></li>
                                 <li><a wicket:id="assetLayoutLink"><wicket:message key="title.column_layout_asset" /></a></li>
                                 <li><a wicket:id="eventLayoutLink"><wicket:message key="title.column_layout_event" /></a></li>
                                 <li wicket:id="assetCodeMappingContainer"><a href="/fieldid/assetCodeMappingList.action"><wicket:message key="title.manage_asset_code_mappings.plural" /></a></li>

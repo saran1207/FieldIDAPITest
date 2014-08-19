@@ -15,10 +15,9 @@ public class ProcedureLockoutAssetCell extends Panel {
 
     public ProcedureLockoutAssetCell(String id, IModel<? extends Procedure> procedureModel) {
         super(id);
-
         add(new BookmarkablePageLink<Void>("assetLink", AssetSummaryPage.class, PageParametersBuilder.uniqueId(procedureModel.getObject().getAsset().getId()))
-                        .setParameter("name", procedureModel.getObject().getType().getEquipmentNumber())
-                        .add(new Label("name", procedureModel.getObject().getType().getEquipmentNumber()))
+                .setParameter("name", procedureModel.getObject().getType().getEquipmentNumber())
+                .add(new Label("name", procedureModel.getObject().getType().getEquipmentNumber()))
         );
     }
 }

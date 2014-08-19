@@ -112,3 +112,11 @@ function toggleUsageBasedUserEvents(enabled) {
     else
         $('usageBasedUserEvents').disable();
 }
+
+function toggleInspectionsEnabled() {
+    $('toggleInspectionsForm').request(getStandardCallbacks());
+}
+
+function toggleLotoEnabled() {
+    $('toggleLotoForm').request(getStandardCallbacks());
+}

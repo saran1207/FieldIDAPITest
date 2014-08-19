@@ -76,13 +76,23 @@ public class AssetSummaryPage extends AssetPage {
         });
         
         boolean imageExists;
-        final String imageUrl;
+        String imageUrl = "";
         if(asset.getImageName() == null) {
-            imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("/file/downloadAssetTypeImage.action?uniqueID=" + asset.getType().getId());
-            if(asset.getType().getImageName() != null)
-                imageExists = new File(PathHandler.getAssetTypeImageFile(asset.getType()), asset.getType().getImageName()).exists();
-            else
+            if(asset.getType().getImageName() != null){
+                boolean imageExistsLocal = new File(PathHandler.getAssetTypeImageFile(asset.getType()), asset.getType().getImageName()).exists();
+                boolean imageExistsRemote = s3Service.assetTypeProfileImageExists(asset.getType());
+
+                if(imageExistsRemote){
+                    imageUrl = s3Service.getAssetTypeProfileImageUrl(asset.getType()).toString();
+                } else if(imageExistsLocal){
+                    imageUrl = ContextAbsolutizer.toContextAbsoluteUrl("/file/downloadAssetTypeImage.action?uniqueID=" + asset.getType().getId());
+                }
+
+                imageExists = imageExistsLocal || imageExistsRemote;
+            }
+            else {
                 imageExists = false;
+            }
         } else {
             imageExists = s3Service.assetProfileImageExists(asset.getId(), asset.getImageName());
             imageUrl = s3Service.getAssetProfileImageMediumURL(asset.getId(), asset.getImageName()).toString();
@@ -94,12 +104,13 @@ public class AssetSummaryPage extends AssetPage {
         add(modalWindow);
 
         ExternalImage assetImage;
+        final String imageUrlModel = imageUrl;
         add(assetImage = new ExternalImage("assetImage", imageUrl));
         assetImage.setVisible(imageExists);
         assetImage.add(new AjaxEventBehavior("onclick") {
             @Override
             protected void onEvent(AjaxRequestTarget target) {
-                modalWindow.setContent(new AssetImagePanel(modalWindow.getContentId(), Model.of(imageUrl)));
+                modalWindow.setContent(new AssetImagePanel(modalWindow.getContentId(), Model.of(imageUrlModel)));
                 modalWindow.show(target);
             }
         });
@@ -153,10 +164,16 @@ public class AssetSummaryPage extends AssetPage {
             upcomingEventsPanel.setVisible(false);
         }
 
-        if (hasLastEvent(asset)) {
-            add(new LastEventPanel("lastEventsPanel", assetModel));
+        if(getSecurityGuard().isInspectionsEnabled()) {
+            if (hasLastEvent(asset)) {
+                add(new LastEventPanel("lastEventsPanel", assetModel));
+            } else {
+                add(new Label("lastEventsPanel", new FIDLabelModel("label.emptyeventlist").getObject()));
+            }
         } else {
-            add(new Label("lastEventsPanel", new FIDLabelModel("label.emptyeventlist").getObject()));
+            Label spaceHolder = new Label("lastEventsPanel");
+            spaceHolder.setVisible(false);
+            add(spaceHolder);
         }
 
         DownloadLink downloadAllLink;

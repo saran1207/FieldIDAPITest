@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.loto.DraftListAllPage;
 import com.n4systems.fieldid.wicket.pages.loto.PreviouslyPublishedListAllPage;
 import com.n4systems.fieldid.wicket.pages.loto.RecurringLotoSchedulesPage;
+import com.n4systems.fieldid.wicket.pages.loto.UnpublishProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPage;
 import com.n4systems.fieldid.wicket.pages.loto.definition.ProcedureDefinitionPrintPage;
 import com.n4systems.model.procedure.ProcedureDefinition;
@@ -107,13 +108,28 @@ public class PublishedProcedureActionsCell extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 if(procedureService.hasOpenProcedure(procedureDefinition)) {
+                    //Instead of causing an error, we want to forward the user to a new page where they can see the
+                    //open procedures for that definition.  We also want to ensure all recurring schedules are removed,
+                    //which will only be done after the user confirms this is what they want to do.
                     error(new FIDLabelModel("error.unpublish").getObject());
                     target.add(procedureListPanel.getErrorFeedbackPanel());
                 } else {
-                    procedureDefinitionService.unpublishProcedureDefinition(procedureDefinition);
-                    info(new FIDLabelModel("message.unpublish", procedureDefinition.getProcedureCode()).getObject());
-                    target.add(procedureListPanel);
-                    target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
+                    if(procedureDefinitionService.hasRecurringSchedule(procedureDefinition)) {
+                        //There's a recurring schedule... the user needs to be notified of this before we proceed.  It's
+                        //possible they made a mistake.
+                        setResponsePage(new UnpublishProcedureDefinitionPage(
+                                        PageParametersBuilder.param("procedureDefinitionId",
+                                                procedureDefinition.getId()))
+                        );
+
+                    } else {
+                        //Otherwise, there's no recurring schedule to warn the user about.  We can just clean it up
+                        //right here...
+                        procedureDefinitionService.unpublishProcedureDefinition(procedureDefinition);
+                        info(new FIDLabelModel("message.unpublish", procedureDefinition.getProcedureCode()).getObject());
+                        target.add(procedureListPanel);
+                        target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
+                    }
                 }
             }
         };

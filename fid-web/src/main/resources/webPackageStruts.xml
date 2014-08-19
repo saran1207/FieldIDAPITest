@@ -1308,12 +1308,9 @@
 		</action>
 
 		<action name="adminSendResetPassword" method="doCreate" class="com.n4systems.fieldid.actions.ForgotPasswordAction">
-			<result name="success" type="redirectAction">
-				<param name="actionName">adminEditPassword</param>
-				<param name="uniqueID">${uniqueID}</param>
-			</result>
-			<result name="input" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
-			<result name="error" type="freemarker">/templates/html/changePassword/adminForm.ftl</result>
+            <result name="success" type="redirect">/w/setup/changeUserPassword?uniqueID=${uniqueID}</result>
+			<result name="input" type="redirect">/w/setup/changeUserPassword?uniqueID=${uniqueID}</result>
+			<result name="error" type="redirect">/w/setup/changeUserPassword?uniqueID=${uniqueID}</result>
 		</action>
 
 		<action name="resetPassword" method="doPrepare" class="com.n4systems.fieldid.actions.ForgotPasswordAction">

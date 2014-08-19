@@ -40,7 +40,8 @@ public class AssetActionsCell extends Panel {
         boolean hasCreateEvent = FieldIDSession.get().getSessionUser().hasAccess("createevent");
         boolean hasTag = FieldIDSession.get().getSessionUser().hasAccess("tag");
 
-        startEventLink.setVisible(hasCreateEvent);
+        viewEventsLink.setVisible(FieldIDSession.get().getSecurityGuard().isInspectionsEnabled());
+        startEventLink.setVisible(hasCreateEvent && FieldIDSession.get().getSecurityGuard().isInspectionsEnabled());
         editAssetLink.setVisible(hasTag);
         mergeAssetLink.setVisible(hasTag);
 
