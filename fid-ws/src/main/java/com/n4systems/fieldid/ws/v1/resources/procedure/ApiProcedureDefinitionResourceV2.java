@@ -268,38 +268,14 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         isolationPoint.setModifiedBy(getCurrentUser());
         isolationPoint.setModified(new Date(System.currentTimeMillis()));
 
-        if(!apiIsolationPoint.getSource().equals(isolationPoint.getSourceType().name())) {
-            isolationPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsolationPoint.getSource()));
-        }
-
-        if(!apiIsolationPoint.getSourceText().equals(isolationPoint.getSourceText())) {
-            isolationPoint.setSourceText(apiIsolationPoint.getSourceText());
-        }
-
-        if(!apiIsolationPoint.getIdentifier().equals(isolationPoint.getIdentifier())) {
-            isolationPoint.setIdentifier(apiIsolationPoint.getIdentifier());
-        }
-
-        if(!apiIsolationPoint.getElectronicIdentifier().equals(isolationPoint.getElectronicIdentifier())) {
-            isolationPoint.setElectronicIdentifier(apiIsolationPoint.getElectronicIdentifier());
-        }
-
-        if(!apiIsolationPoint.getLocation().equals(isolationPoint.getLocation())) {
-            isolationPoint.setLocation(apiIsolationPoint.getLocation());
-        }
-
-        if(!apiIsolationPoint.getMethod().equals(isolationPoint.getMethod())) {
-            isolationPoint.setMethod(apiIsolationPoint.getMethod());
-        }
-
-        if(apiIsolationPoint.getFwdIdx() != isolationPoint.getFwdIdx()) {
-            isolationPoint.setFwdIdx(apiIsolationPoint.getFwdIdx());
-        }
-
-        if(apiIsolationPoint.getRevIdx() != isolationPoint.getRevIdx()) {
-            isolationPoint.setRevIdx(apiIsolationPoint.getRevIdx());
-        }
-
+        isolationPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsolationPoint.getSource()));
+        isolationPoint.setSourceText(apiIsolationPoint.getSourceText());
+        isolationPoint.setIdentifier(apiIsolationPoint.getIdentifier());
+        isolationPoint.setElectronicIdentifier(apiIsolationPoint.getElectronicIdentifier());
+        isolationPoint.setLocation(apiIsolationPoint.getLocation());
+        isolationPoint.setMethod(apiIsolationPoint.getMethod());
+        isolationPoint.setFwdIdx(apiIsolationPoint.getFwdIdx());
+        isolationPoint.setRevIdx(apiIsolationPoint.getRevIdx());
         isolationPoint.setCheck(apiIsolationPoint.getCheck());
 
         //We'll just blatantly update these, regardless of changes or not.  Otherwise there's way more checking than is
