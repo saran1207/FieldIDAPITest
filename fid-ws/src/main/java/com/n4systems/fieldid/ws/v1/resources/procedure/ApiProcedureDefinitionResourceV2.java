@@ -207,7 +207,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         procDef = convertToEntityIsolationPoints(procDef, apiProcDef.getIsolationPoints());
 
         //2) Set the images.
-        procDef.setImages(convertToEntityImages(apiProcDef.getImages()));
+        procDef.setImages(convertToEntityImages(apiProcDef.getImages(), procDef));
 
         return procDef;
     }
@@ -221,12 +221,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 IsolationPoint isoPoint = new IsolationPoint();
 
                 isoPoint.setTenant(getCurrentTenant());
-                isoPoint.setModified(apiIsoPoint.getModified());
-                isoPoint.setModifiedBy(getCurrentUser());
-                isoPoint.setCreatedBy(getCurrentUser());
-                isoPoint.setCreated(new Date(System.currentTimeMillis()));
 
-                isoPoint.setId(apiIsoPoint.getSid());
+                //isoPoint.setId(apiIsoPoint.getSid());
                 isoPoint.setCheck(apiIsoPoint.getCheck());
 
                 isoPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsoPoint.getSource()));
@@ -288,7 +284,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         return isolationPoint;
     }
 
-    private List<ProcedureDefinitionImage> convertToEntityImages(List<ApiProcedureDefinitionImage> images) throws ImageProcessingException {
+    private List<ProcedureDefinitionImage> convertToEntityImages(List<ApiProcedureDefinitionImage> images, ProcedureDefinition procDef) throws ImageProcessingException {
         List<ProcedureDefinitionImage> imageList = Lists.newArrayList();
 
         for(ApiProcedureDefinitionImage image : images) {
@@ -307,6 +303,9 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             convertedImage.setAnnotations(convertToEntityAnnotations(image.getAnnotations()));
 
             convertedImage.setTenant(getCurrentTenant());
+
+            convertedImage.setProcedureDefinition(procDef);
+
 
             //If the image is new, we want to upload it... if it isn't, then we shouldn't need to.
             //Caveat being that we're expecting the image not to have changed...
