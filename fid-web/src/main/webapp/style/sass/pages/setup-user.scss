@@ -1,7 +1,22 @@
 .setup-user.user-list {
+  .filter {
+    position: absolute;
+    top: 8px;
+    left: 18px;
+    font-weight: bold;
+    font-size: 17px;
+  }
+  .filter-text {
+    position: absolute;
+    top: 42px;
+    left: 18px;
+    width: 180px;
+    font-size: 13px;
+    color: #7E7E7E;
+  }
   .form-horizontal {
     margin: -14px 0 0 0;
-    padding: 15px 0 15px;
+    padding: 15px 0px 15px 215px;
     border-bottom: 1px solid #c7c7c9;
   }
   .control-group {
