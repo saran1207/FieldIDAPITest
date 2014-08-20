@@ -30,20 +30,15 @@ import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
-
 import org.apache.commons.collections.ListUtils;
 import org.apache.log4j.Logger;
-import org.eclipse.jdt.internal.core.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-
 import java.io.IOException;
 import java.util.*;
 
@@ -343,7 +338,7 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 			asset.setAdvancedLocation(location);
 		}
 		
-		asset.setInfoOptions(convertAttributeValues(apiAsset.getAttributeValues(), asset));
+		asset.setInfoOptions(apiAttributeValueResource.convertAttributeValues(apiAsset.getAttributeValues(), asset.getInfoOptions()));
 	}
 
     protected List<ApiAttributeValue>  findAllAttributeValues(Asset asset) {
@@ -354,77 +349,6 @@ public class ApiAssetResource extends ApiResource<ApiAsset, Asset> {
 		}
 		
 		return apiAttributeValues;
-	}
-	
-	private Set<InfoOptionBean> convertAttributeValues(List<ApiAttributeValue> apiAttributeValues, Asset asset) {
-		Set<InfoOptionBean> infoOptions = new TreeSet<InfoOptionBean>();
-		
-		for(ApiAttributeValue apiAttributeValue : apiAttributeValues) {
-			infoOptions.add(convertApiAttributeValue(apiAttributeValue, asset));
-		}
-		
-		return infoOptions;
-	}
-	
-	// Convert a given attributevalue into InfoOptionBean of date, static(select, combobox) or text type.
-	// During Edit, because we are not storing InfoOptionId in client side, we have to look up by infoFieldID for a given asset.
-	private InfoOptionBean convertApiAttributeValue(ApiAttributeValue apiAttributeValue, Asset asset) {
-		Long infoFieldID = apiAttributeValue.getAttributeId();
-		Object value = apiAttributeValue.getValue();
-		InfoFieldBean infoField;
-		
-		// Get the infoOption from the existing assetInfoOptions if we have a match.
-		InfoOptionBean infoOptionBean = findInfoOption(infoFieldID, asset);
-		
-		if(infoOptionBean != null) {
-			infoField = infoOptionBean.getInfoField();
-		} else {
-			infoField = persistenceService.findNonSecure(InfoFieldBean.class, infoFieldID);
-			infoOptionBean = new InfoOptionBean();
-			infoOptionBean.setInfoField(infoField);
-		}		
-		
-		if(value instanceof Date) {
-			infoOptionBean.setName(Long.toString(((Date) value).getTime()));
-		} else {
-			InfoOptionBean staticOption = findStaticInfoOption(infoField, value);
-			
-			if (staticOption != null) {
-				//TODO, We need to remove the existing infoOptionBean if there was one at this point! Ask Mark.
-				infoOptionBean = staticOption;
-			} else {
-                if (infoOptionBean.isStaticData()) {
-                    infoOptionBean = new InfoOptionBean();
-                    infoOptionBean.setInfoField(infoField);
-                }
-                infoOptionBean.setName(value.toString());
-			}
-		}
-		
-		return infoOptionBean;
-	}
-	
-	// For the given InfoFieldId, check if we have an InfoOption in the asset.infoOptions.
-	private InfoOptionBean findInfoOption(Long infoFieldId, Asset asset) {
-		for (InfoOptionBean infoOption : asset.getInfoOptions()) {
-			if(infoOption.getInfoField().getUniqueID().equals(infoFieldId)) {
-				return infoOption;
-			}
-		}
-		
-		return null;
-	}
-	
-	// For the given InfoField, check if we have a static InfoOption for the given value.
-	private InfoOptionBean findStaticInfoOption(InfoFieldBean infoField, Object value) {
-		Set<InfoOptionBean> staticOptions = infoField.getUnfilteredInfoOptions();
-		for (InfoOptionBean staticOption: staticOptions) {
-			if (staticOption.getName().equals(value)) {
-				return staticOption;
-			}
-		}
-		
-		return null;
 	}
 	
 	private byte[] loadAssetImage(Asset asset) {

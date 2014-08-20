@@ -394,7 +394,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         IsolationDeviceDescription description = new IsolationDeviceDescription();
         description.setAssetType(deviceDefinition.getAssetTypeSid() == null ? null : assetTypeService.getAssetType(deviceDefinition.getAssetTypeSid()));
 
-        description.setAttributeValues(attrResource.convertAttributes(deviceDefinition.getAttributes()));
+        description.setAttributeValues(new ArrayList(attrResource.convertAttributeValues(deviceDefinition.getAttributes(), null)));
 
         description.setFreeformDescription(deviceDefinition.getFreeformDescription());
 
