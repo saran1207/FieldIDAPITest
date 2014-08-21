@@ -23,8 +23,12 @@ public class UserFormPermissionsPanel extends Panel {
 
     private List<Permission> permissions;
 
+    private IModel<User> userModel;
+
     public UserFormPermissionsPanel(String id, IModel<User> userModel) {
         super(id, userModel);
+
+        this.userModel = userModel;
 
         add(new ListView<Permission>("permissions", getPermissionsList(userModel)) {
             @Override
@@ -51,6 +55,11 @@ public class UserFormPermissionsPanel extends Panel {
 
             }
         });
+    }
+
+    @Override
+    public boolean isVisible() {
+        return !userModel.getObject().isReadOnly();
     }
 
     private List<Permission> getPermissionsList(IModel<User> userModel) {
@@ -92,6 +101,4 @@ public class UserFormPermissionsPanel extends Panel {
         }
 
     }
-
-
 }
