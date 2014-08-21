@@ -27,7 +27,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -159,8 +158,6 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         //Don't forget, you're passing this object in, either full of information or null... point being, it's already
         //initialised.
         procDef.setMobileId(apiProcDef.getSid());
-        procDef.setModified(apiProcDef.getModified());
-        procDef.setModifiedBy(getCurrentUser());
 
         //Transfer the easy fields from the ApiProcedureDefinitionV2 object.
         procDef.setCompleteIsolationPointInOrder(apiProcDef.isCompleteIsolationPointInOrder());
@@ -203,11 +200,14 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         }
 
         //Now we do the hard stuff:
-        //1) Set the isolation points.
+
+
+        //1) Set the images.
+        procDef.setImages(convertToEntityImages(apiProcDef.getImages(), procDef));
+
+        //2) Set the isolation points.
         procDef = convertToEntityIsolationPoints(procDef, apiProcDef.getIsolationPoints());
 
-        //2) Set the images.
-        procDef.setImages(convertToEntityImages(apiProcDef.getImages(), procDef));
 
         return procDef;
     }
@@ -237,14 +237,19 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 isoPoint.setDeviceDefinition(convertDefinition(apiIsoPoint.getDeviceDefinition()));
                 isoPoint.setLockDefinition(convertDefinition(apiIsoPoint.getLockDefinition()));
 
-                isoPoint.setAnnotation(convertAnnotation(apiIsoPoint.getAnnotation()));
+                ProcedureDefinitionImage theImage = findMatchingImage(procDef.getImages(),
+                                                                      apiIsoPoint.getAnnotation().getImageId());
+
+                isoPoint.setAnnotation(createNewAnnotation(apiIsoPoint.getAnnotation(), theImage));
 
                 addUs.add(isoPoint);
             } else {
                 //Existing isoPoint, so we update only the fields that changed.
                 for(IsolationPoint isoPoint : procDef.getLockIsolationPoints()) {
                     if(isoPoint.getId().equals(apiIsoPoint.getSid())) {
-                        isoPoint = updateEntityIsolationPoint(apiIsoPoint, isoPoint);
+                        isoPoint = updateEntityIsolationPoint(apiIsoPoint,
+                                                              isoPoint,
+                                                              procDef.getImages());
 
                         addUs.add(isoPoint);
                     }
@@ -260,9 +265,24 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         return procDef;
     }
 
-    private IsolationPoint updateEntityIsolationPoint(ApiIsolationPoint apiIsolationPoint, IsolationPoint isolationPoint) {
-        isolationPoint.setModifiedBy(getCurrentUser());
-        isolationPoint.setModified(new Date(System.currentTimeMillis()));
+    private ProcedureDefinitionImage findMatchingImage(List<ProcedureDefinitionImage> images, String mobileGUID) {
+        ProcedureDefinitionImage theImage = null;
+
+        for(ProcedureDefinitionImage image : images) {
+            if(mobileGUID != null &&
+               mobileGUID.equals(image.getMobileGUID())) {
+
+                theImage = image;
+                break;
+            }
+        }
+
+        return theImage;
+    }
+
+    private IsolationPoint updateEntityIsolationPoint(ApiIsolationPoint apiIsolationPoint,
+                                                      IsolationPoint isolationPoint,
+                                                      List<ProcedureDefinitionImage> images) {
 
         isolationPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsolationPoint.getSource()));
         isolationPoint.setSourceText(apiIsolationPoint.getSourceText());
@@ -278,8 +298,13 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         //logical.
         isolationPoint.setDeviceDefinition(convertDefinition(apiIsolationPoint.getDeviceDefinition()));
         isolationPoint.setLockDefinition(convertDefinition(apiIsolationPoint.getLockDefinition()));
+        ProcedureDefinitionImage theImage = null;
+        if(images.size() > 0) {
+            theImage = findMatchingImage(images, apiIsolationPoint.getAnnotation().getImageId());
+        }
 
-        isolationPoint.setAnnotation(convertAnnotation(apiIsolationPoint.getAnnotation()));
+
+        isolationPoint.setAnnotation(convertApiAnnotation(apiIsolationPoint.getAnnotation(), isolationPoint.getAnnotation(), theImage));
 
         return isolationPoint;
     }
@@ -287,76 +312,154 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     private List<ProcedureDefinitionImage> convertToEntityImages(List<ApiProcedureDefinitionImage> images, ProcedureDefinition procDef) throws ImageProcessingException {
         List<ProcedureDefinitionImage> imageList = Lists.newArrayList();
 
-        for(ApiProcedureDefinitionImage image : images) {
-            ProcedureDefinitionImage convertedImage = new ProcedureDefinitionImage();
-            convertedImage.setMobileGUID(image.getSid());
-            convertedImage.setModified(image.getModified());
-            convertedImage.setModifiedBy(getCurrentUser());
 
-            if(convertedImage.isNew()) {
-                convertedImage.setCreatedBy(getCurrentUser());
+        if(procDef.isNew()) {
+            //1) If the ProcDef is NEW, we just convert the images from the API model to Entity.  They should only
+            //   exist here... this is super easy.
+            for(ApiProcedureDefinitionImage image : images) {
+                ProcedureDefinitionImage convertedImage = createNewImage(image, procDef);
+
+                imageList.add(convertedImage);
             }
+        } else {
+            //2) If the ProcDef is NOT NEW, we need to try and match the images from the old one to the new one.
+            //  a) We need to find all images that match between the two and transfer over any properties to the Entity
+            for(ApiProcedureDefinitionImage apiImage : images) {
+                for(ProcedureDefinitionImage procImage : procDef.getImages()) {
+                    if(apiImage.getSid().equals(procImage.getMobileGUID())) {
+                        procImage.setMobileGUID(apiImage.getSid());
 
-            //Currently we don't handle anything to do with whether an image is active or not... skip that field.
+                        procImage.setFileName(apiImage.getFileName());
 
-            convertedImage.setFileName(image.getFileName());
-            convertedImage.setAnnotations(convertToEntityAnnotations(image.getAnnotations()));
+                        procImage.setTenant(getCurrentTenant());
 
-            convertedImage.setTenant(getCurrentTenant());
+                        procImage.setProcedureDefinition(procDef); //May not be necessary to do this... we're just updating.
 
-            convertedImage.setProcedureDefinition(procDef);
+                        procImage.setAnnotations(convertToEntityAnnotations(apiImage.getAnnotations(), procImage));
 
-
-            //If the image is new, we want to upload it... if it isn't, then we shouldn't need to.
-            //Caveat being that we're expecting the image not to have changed...
-            if(convertedImage.isNew()) {
-                convertedImage = s3Service.uploadTempProcedureDefImage(convertedImage, "image/jpeg", image.getData());
-
-                if (convertedImage == null) {
-                    throw new ImageProcessingException("The image with SID '" + image.getSid() + "' failed to upload to S3!!!");
+                        imageList.add(procImage);
+                        break;
+                    }
                 }
             }
 
-            imageList.add(convertedImage);
+
+            //  b) We need to find all images that are in the Entity, but not the API model and delete them.
+            if(procDef.getImages().size() > 0) {
+                //... but we're only even going to bother if the ProcedureDefinition contains existing images.
+
+                for(ProcedureDefinitionImage procDefImage : procDef.getImages()) {
+                    boolean notFound = true;
+
+                    for(ApiProcedureDefinitionImage apiImage : images) {
+                        if(apiImage.getSid().equals(procDefImage.getMobileGUID())) {
+                            notFound = false;
+                            break;
+                        }
+                    }
+
+                    if(notFound) {
+                        log.debug("Found an image not in the API Model which I will delete... ID is: " + procDefImage.getId());
+                        persistenceService.delete(procDefImage);
+                    }
+                }
+            }
+
+            //  c) We need to find all images that are in the API model, but not the Entity and add them.
+            for(ApiProcedureDefinitionImage apiImage : images) {
+                boolean notFound = true;
+
+                for(ProcedureDefinitionImage procDefImage : procDef.getImages()) {
+                    if(procDefImage.getMobileGUID().equals(apiImage.getSid())) {
+                        notFound = false;
+                        break;
+                    }
+                }
+
+                if(notFound) {
+                    imageList.add(createNewImage(apiImage, procDef));
+                }
+            }
         }
 
         return imageList;
     }
 
-    private List<ImageAnnotation> convertToEntityAnnotations(List<ApiImageAnnotation> annotations) {
+    private ProcedureDefinitionImage createNewImage(ApiProcedureDefinitionImage image,
+                                                    ProcedureDefinition procDef) throws ImageProcessingException {
+        ProcedureDefinitionImage convertedImage = new ProcedureDefinitionImage();
+        convertedImage.setMobileGUID(image.getSid());
+
+        //Currently we don't handle anything to do with whether an image is active or not... skip that field.
+
+        convertedImage.setFileName(image.getFileName());
+
+        convertedImage.setTenant(getCurrentTenant());
+
+        convertedImage.setProcedureDefinition(procDef);
+
+
+        convertedImage = s3Service.uploadTempProcedureDefImage(convertedImage, "image/jpeg", image.getData());
+
+        if (convertedImage == null) {
+            throw new ImageProcessingException("The image with SID '" + image.getSid() + "' failed to upload to S3!!!");
+        }
+
+        convertedImage.setAnnotations(convertToEntityAnnotations(image.getAnnotations(), convertedImage));
+
+        return convertedImage;
+    }
+
+    private List<ImageAnnotation> convertToEntityAnnotations(List<ApiImageAnnotation> annotations, ProcedureDefinitionImage image) {
         List<ImageAnnotation> convertedAnnotations = Lists.newArrayList();
 
         for(ApiImageAnnotation imageAnnotation : annotations) {
-            convertedAnnotations.add(convertAnnotation(imageAnnotation));
+            for(ImageAnnotation originalAnnotation : image.getAnnotations()) {
+                if(imageAnnotation.getSid()==originalAnnotation.getId()) {
+                    convertedAnnotations.add(convertApiAnnotation(imageAnnotation, originalAnnotation, image));
+                }
+            }
+//            convertedAnnotations.add(convertAnnotation(imageAnnotation, image));
         }
 
         return convertedAnnotations;
     }
 
-    private ImageAnnotation convertAnnotation(ApiImageAnnotation annotation) {
+    private ImageAnnotation convertApiAnnotation(ApiImageAnnotation imageAnnotation,
+                                                 ImageAnnotation originalAnnotation,
+                                                 ProcedureDefinitionImage image) {
+        if(imageAnnotation == null) {
+            return originalAnnotation;
+        }
+
+        originalAnnotation.setType(ImageAnnotationType.valueOf(imageAnnotation.getAnnotationType()));
+        originalAnnotation.setX(imageAnnotation.getX());
+        originalAnnotation.setY(imageAnnotation.getY());
+
+        originalAnnotation.setTenant(getCurrentTenant());
+
+        originalAnnotation.setImage(image);
+
+        return originalAnnotation;
+    }
+
+    private ImageAnnotation createNewAnnotation(ApiImageAnnotation annotation, ProcedureDefinitionImage image) {
         if(annotation == null) {
             return null;
         }
 
         ImageAnnotation convertedAnnotation = new ImageAnnotation();
 
-        //This may not be a good idea, since new items should not have an ID set by the mobile
-        //side, unless it has already written the isolation points to the DB and retrieved an ID.
-        //These come from the database.  NOTE: Kirill says not to worry about this one.
-        convertedAnnotation.setId(annotation.getSid());
-        convertedAnnotation.setModified(annotation.getModified());
+        //NOTE: We no longer care about this, because this is CLEARLY new and thus doesn't get an ID.
+//        convertedAnnotation.setId(annotation.getSid());
 
-        //This could cause problems if the values on the Client side aren't the same as those on the Server side.
         convertedAnnotation.setType(ImageAnnotationType.valueOf(annotation.getAnnotationType()));
         convertedAnnotation.setX(annotation.getX());
         convertedAnnotation.setY(annotation.getY());
 
         convertedAnnotation.setTenant(getCurrentTenant());
-        convertedAnnotation.setModifiedBy(getCurrentUser());
 
-        if(convertedAnnotation.isNew()) {
-            convertedAnnotation.setCreatedBy(getCurrentUser());
-        }
+        convertedAnnotation.setImage(image);
 
         return convertedAnnotation;
     }
