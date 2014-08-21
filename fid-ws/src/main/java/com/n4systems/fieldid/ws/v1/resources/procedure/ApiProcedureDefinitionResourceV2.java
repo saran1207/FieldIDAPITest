@@ -61,8 +61,33 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
             procDef = convertApiModelToEntity(apiProcDef, procDef);
 
-            //If we've made it this far, we can now attempt to save the ProcedureDefinition.
+            //If we've made it this far, we can now attempt to save the ProcedureDefinition.  Due to how the
+            //relationships in the model work, we actually have to do this in a couple of pieces.  First, we pull all of
+            //the IsolationPoints off and drop them into a list.  We'll handle those shortly.
+            List<IsolationPoint> isolationPoints = procDef.getIsolationPoints(); //Yes, it's deprecated... no, I don't care.
+            List<IsolationPoint> replacement = Lists.newArrayList();
+            procDef.setIsolationPoints(replacement); //remove them from the model, using an empty list... don't use null, that makes kittens die.
+
+            //Save the model...
             procedureDefinitionService.saveProcedureDefinition(procDef);
+
+            //Update the IsolationPoints with the existing images.  These images have IDs!!  This is important.
+            for(IsolationPoint isoPoint : isolationPoints) {
+                for(ProcedureDefinitionImage image : procDef.getImages()) {
+                    if(isoPoint.getAnnotation() != null &&
+                       isoPoint.getAnnotation().getImage() != null &&
+                       isoPoint.getAnnotation().getImage().getMobileGUID().equals(image.getMobileGUID())) {
+
+                        isoPoint.getAnnotation().setImage(image);
+                        procDef.addIsolationPoint(isoPoint);
+                        break;
+                    }
+                }
+            }
+
+            //Now write them back to the DB!!  Presto!  No more isolation Point issue.
+            procedureDefinitionService.saveProcedureDefinition(procDef);
+
 
             apiProcDef = convertEntityToApiModel(procDef);
 
@@ -326,7 +351,9 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             //  a) We need to find all images that match between the two and transfer over any properties to the Entity
             for(ApiProcedureDefinitionImage apiImage : images) {
                 for(ProcedureDefinitionImage procImage : procDef.getImages()) {
-                    if(apiImage.getSid().equals(procImage.getMobileGUID())) {
+                    if(apiImage.getSid() != null &&
+                       apiImage.getSid().equals(procImage.getMobileGUID())) {
+
                         procImage.setMobileGUID(apiImage.getSid());
 
                         procImage.setFileName(apiImage.getFileName());
@@ -344,28 +371,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             }
 
 
-            //  b) We need to find all images that are in the Entity, but not the API model and delete them.
-            if(procDef.getImages().size() > 0) {
-                //... but we're only even going to bother if the ProcedureDefinition contains existing images.
-
-                for(ProcedureDefinitionImage procDefImage : procDef.getImages()) {
-                    boolean notFound = true;
-
-                    for(ApiProcedureDefinitionImage apiImage : images) {
-                        if(apiImage.getSid().equals(procDefImage.getMobileGUID())) {
-                            notFound = false;
-                            break;
-                        }
-                    }
-
-                    if(notFound) {
-                        log.debug("Found an image not in the API Model which I will delete... ID is: " + procDefImage.getId());
-                        persistenceService.delete(procDefImage);
-                    }
-                }
-            }
-
-            //  c) We need to find all images that are in the API model, but not the Entity and add them.
+            //  b) We need to find all images that are in the API model, but not the Entity and add them.
             for(ApiProcedureDefinitionImage apiImage : images) {
                 boolean notFound = true;
 
