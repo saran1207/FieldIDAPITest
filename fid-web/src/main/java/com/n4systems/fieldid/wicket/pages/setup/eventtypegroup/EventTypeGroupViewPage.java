@@ -90,7 +90,7 @@ public class EventTypeGroupViewPage extends EventTypeGroupPage{
             add(new Label("observation", Model.of("None")));
         }
 
-        final List<EventType> eventTypeList = eventTypeService.getAllEventTypes(eventTypeGroupModel.getObject().getId());
+        final List<EventType> eventTypeList = eventTypeService.getAllActiveEventTypesForGroup(eventTypeGroupModel.getObject().getId());
         add(new ListView<EventType>("eventTypes", eventTypeList) {
             @Override
             protected void populateItem(ListItem<EventType> item) {

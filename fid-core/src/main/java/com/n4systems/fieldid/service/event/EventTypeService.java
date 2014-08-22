@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.user.User;
 import com.n4systems.persistence.utils.PostFetcher;
 import com.n4systems.util.persistence.QueryBuilder;
@@ -49,6 +50,14 @@ public class EventTypeService extends FieldIdPersistenceService {
         return postFetchForStruts(persistenceService.findAll(builder));
     }
 
+    public List<EventType> getAllActiveEventTypesForGroup(Long eventTypeGroupId) {
+        QueryBuilder<EventType> builder = createUserSecurityBuilder(EventType.class);
+
+        builder.addSimpleWhere("group.id", eventTypeGroupId);
+        builder.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+
+        return persistenceService.findAll(builder);
+    }
 
     public List<EventType> getAllEventTypes(Long eventTypeGroupId) {
         return getAllEventTypes(eventTypeGroupId, null);
