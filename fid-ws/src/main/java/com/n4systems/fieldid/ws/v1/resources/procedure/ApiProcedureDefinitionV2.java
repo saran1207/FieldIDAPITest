@@ -16,6 +16,9 @@ public class ApiProcedureDefinitionV2 extends ApiReadWriteModelWithOwner {
     private boolean completeIsolationPointInOrder;
     private String equipmentNumber;
     private String equipmentDescription;
+    private String equipmentLocation;
+    private String procedureType;
+    private Long developedBy;
 
     public List<ApiIsolationPoint> getIsolationPoints() {
         return isolationPoints;
@@ -95,6 +98,30 @@ public class ApiProcedureDefinitionV2 extends ApiReadWriteModelWithOwner {
 
     public void setImages(List<ApiProcedureDefinitionImage> images) {
         this.images = images;
+    }
+
+    public String getEquipmentLocation() {
+        return equipmentLocation;
+    }
+
+    public void setEquipmentLocation(String equipmentLocation) {
+        this.equipmentLocation = equipmentLocation;
+    }
+
+    public String getProcedureType() {
+        return procedureType;
+    }
+
+    public void setProcedureType(String procedureType) {
+        this.procedureType = procedureType;
+    }
+
+    public Long getDevelopedBy() {
+        return developedBy;
+    }
+
+    public void setDevelopedBy(Long developedBy) {
+        this.developedBy = developedBy;
     }
 }
 

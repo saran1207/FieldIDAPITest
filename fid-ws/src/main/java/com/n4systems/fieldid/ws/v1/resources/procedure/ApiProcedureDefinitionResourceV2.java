@@ -14,6 +14,7 @@ import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.*;
+import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -79,10 +80,11 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                        isoPoint.getAnnotation().getImage().getMobileGUID().equals(image.getMobileGUID())) {
 
                         isoPoint.getAnnotation().setImage(image);
-                        procDef.addIsolationPoint(isoPoint);
                         break;
                     }
                 }
+
+                procDef.addIsolationPoint(isoPoint);
             }
 
             //Now write them back to the DB!!  Presto!  No more isolation Point issue.
@@ -192,6 +194,12 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         procDef.setRevisionNumber(apiProcDef.getRevisionNumber());
         procDef.setProcedureCode(apiProcDef.getProcedureCode());
         procDef.setWarnings(apiProcDef.getWarnings());
+        procDef.setProcedureType(apiProcDef.getProcedureType() == null ? null : ProcedureType.valueOf(apiProcDef.getProcedureType()));
+        procDef.setEquipmentLocation(apiProcDef.getEquipmentLocation());
+
+        //Keep in mind if the user can't be found, it's going to fail silently and try to set "developedBy" as null.
+        User developedBy = userService.getUser(apiProcDef.getDevelopedBy());
+        procDef.setDevelopedBy(developedBy == null ? getCurrentUser() : developedBy);
 
         //You can't directly set this one on our model... so we have to use it as a switch for the appropriate methods.
         if(apiProcDef.isActive()) {
@@ -272,7 +280,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 addUs.add(isoPoint);
             } else {
                 //Existing isoPoint, so we update only the fields that changed.
-                for(IsolationPoint isoPoint : procDef.getLockIsolationPoints()) {
+                for(IsolationPoint isoPoint : procDef.getIsolationPoints()) {
                     if(isoPoint.getId().equals(apiIsoPoint.getSid())) {
                         isoPoint = updateEntityIsolationPoint(apiIsoPoint,
                                                               isoPoint,
@@ -578,6 +586,9 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         ApiProcedureDefinitionV2 apiProcedureDef = new ApiProcedureDefinitionV2();
         apiProcedureDef.setSid(procedureDef.getMobileId());
         apiProcedureDef.setModified(procedureDef.getModified());
+        apiProcedureDef.setEquipmentLocation(procedureDef.getEquipmentLocation());
+        apiProcedureDef.setProcedureType(procedureDef.getProcedureType() == null ? null : procedureDef.getProcedureType().getName());
+        apiProcedureDef.setDevelopedBy(procedureDef.getDevelopedBy() == null ? null : procedureDef.getDevelopedBy().getId());
         apiProcedureDef.setAssetId(procedureDef.getAsset().getMobileGUID());
         apiProcedureDef.setCompleteIsolationPointInOrder(procedureDef.isCompleteIsolationPointInOrder());
         apiProcedureDef.setElectronicIdentifier(procedureDef.getElectronicIdentifier());
