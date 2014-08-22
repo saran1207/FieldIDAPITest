@@ -262,10 +262,12 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 isoPoint.setDeviceDefinition(convertDefinition(apiIsoPoint.getDeviceDefinition()));
                 isoPoint.setLockDefinition(convertDefinition(apiIsoPoint.getLockDefinition()));
 
-                ProcedureDefinitionImage theImage = findMatchingImage(procDef.getImages(),
-                                                                      apiIsoPoint.getAnnotation().getImageId());
+                if(apiIsoPoint.getAnnotation() != null) {
+                    ProcedureDefinitionImage theImage = findMatchingImage(procDef.getImages(),
+                            apiIsoPoint.getAnnotation().getImageId());
 
-                isoPoint.setAnnotation(createNewAnnotation(apiIsoPoint.getAnnotation(), theImage));
+                    isoPoint.setAnnotation(createNewAnnotation(apiIsoPoint.getAnnotation(), theImage));
+                }
 
                 addUs.add(isoPoint);
             } else {
