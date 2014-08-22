@@ -46,12 +46,7 @@ public class EditUserPage extends UserPage {
 
     @Override
     protected Component createPermissionsPanel(String id) {
-        return new UserFormPermissionsPanel(id, userModel) {
-            @Override
-            public boolean isVisible() {
-                return !userModel.getObject().isReadOnly();
-            }
-        };
+        return new UserFormPermissionsPanel(id, userModel);
     }
 
     @Override

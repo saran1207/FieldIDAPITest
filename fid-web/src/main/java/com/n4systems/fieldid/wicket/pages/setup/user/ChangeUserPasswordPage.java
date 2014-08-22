@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.setup.user;
 import com.n4systems.fieldid.handler.password.PasswordHelper;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
 import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -60,6 +61,7 @@ public class ChangeUserPasswordPage extends FieldIDTemplatePage {
                 User user = userModel.getObject();
                 user.updatePassword(newPassword);
                 userService.update(user);
+                FieldIDSession.get().info(new FIDLabelModel("message.users_password_updated").getObject());
             }
         });
 
@@ -117,7 +119,7 @@ public class ChangeUserPasswordPage extends FieldIDTemplatePage {
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.mobile_passcode")
-                        .page((userModel.getObject().getHashSecurityCardNumber()==null) ? EditUserMobilePasscodePage.class : ManageUserMobilePasscodePage.class)
+                        .page((userModel.getObject().getHashSecurityCardNumber() == null) ? EditUserMobilePasscodePage.class : ManageUserMobilePasscodePage.class)
                         .params(PageParametersBuilder.uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
