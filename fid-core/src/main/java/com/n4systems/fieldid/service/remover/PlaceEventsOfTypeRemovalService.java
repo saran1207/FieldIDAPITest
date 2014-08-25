@@ -25,7 +25,7 @@ public class PlaceEventsOfTypeRemovalService extends FieldIdPersistenceService {
     }
 
     @Transactional
-    public void remove(PlaceEventType eventType) {
+    public void remove(EventType eventType) {
         List<PlaceEvent> events = getEventsByEventType(eventType);
         for(PlaceEvent event: events) {
             event.retireEntity();
