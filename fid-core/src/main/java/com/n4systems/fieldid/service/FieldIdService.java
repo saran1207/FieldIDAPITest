@@ -1,9 +1,8 @@
 package com.n4systems.fieldid.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.services.SecurityContext;
 import com.n4systems.util.persistence.QueryBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.TimeZone;
 
@@ -17,11 +16,15 @@ public class FieldIdService {
 	}
 
 	protected <T> QueryBuilder<T> createUserSecurityBuilder(Class<T> clazz) {
-    	return new QueryBuilder<T>(clazz, securityContext.getUserSecurityFilter());
+    	return createUserSecurityBuilder(clazz, false);
     }
 	
 	protected <T> QueryBuilder<T> createUserSecurityBuilder(Class<T> clazz, boolean withArchived) {
-		return new QueryBuilder<T>(clazz, securityContext.getUserSecurityFilter().setShowArchived(withArchived));
+        if(withArchived) {
+            return new QueryBuilder<T>(clazz, securityContext.getUserSecurityFilterWithArchived());
+        } else {
+            return new QueryBuilder<T>(clazz, securityContext.getUserSecurityFilter());
+        }
     }
     
     protected <T> QueryBuilder<T> createTenantSecurityBuilder(Class<T> clazz) {

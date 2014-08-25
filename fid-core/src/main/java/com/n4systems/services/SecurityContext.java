@@ -18,6 +18,10 @@ public class SecurityContext {
 		return userSecurityFilter;
 	}
 
+    public UserSecurityFilter getUserSecurityFilterWithArchived() {
+        return new UserSecurityFilter(getUserSecurityFilter()).setShowArchived(true);
+    }
+
 	public void setUserSecurityFilter(UserSecurityFilter userSecurityFilter) {
 		this.userSecurityFilter = userSecurityFilter;
 	}
