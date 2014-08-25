@@ -33,6 +33,10 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 		this(user.getOwner(), user, user.getTimeZone());
 	}
 
+    public UserSecurityFilter(UserSecurityFilter filter) {
+        this(filter.getUser().getOwner(), filter.getUser(), filter.getUser().getTimeZone());
+    }
+
 	@Override
 	protected void applyFilter(QueryBuilder<?> builder, SecurityDefiner definer) throws SecurityException {
 		if (definer.isStateFiltered() && !showArchived) {

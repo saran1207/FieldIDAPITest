@@ -9,10 +9,7 @@ import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.services.tenant.TenantCreationService;
-import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.search.SortDirection;
-import com.n4systems.util.persistence.search.SortTerm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -83,40 +80,8 @@ public class EventTypeGroupService extends FieldIdPersistenceService {
         QueryBuilder<EventTypeGroup> query = createUserSecurityBuilder(EventTypeGroup.class, true);
         query.addSimpleWhere("state", state);
 
-        // "performedBy.fullName"...split('.')  a.b  pb.name....order by a, order by a.b
-        // HACK : we need to do a *special* order by when chaining attributes together when the parent might be null.
-        // so if we order by performedBy.firstName we need to add this NULLS LAST clause otherwise events with null performedBy values
-        // will not be returned in the result list.
-        // this should be handled more elegantly in the future but i'm fixing at the last second.
-        boolean needsSortJoinForCreated = false;
-        boolean needsSortJoinForModified = false;
-        if (order != null) {
-            String[] orders = order.split(",");
-            for (String subOrder : orders) {
-                if (subOrder.startsWith("createdBy")) {
-                    subOrder = subOrder.replaceAll("createdBy", "sortJoin");
-                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
-                    sortTerm.setAlwaysDropAlias(true);
-                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
-                    query.getOrderArguments().add(sortTerm.toSortField());
-                    needsSortJoinForCreated = true;
-                } else if (subOrder.startsWith("modifiedBy")) {
-                    subOrder = subOrder.replaceAll("modifiedBy", "sortJoin");
-                    SortTerm sortTerm = new SortTerm(subOrder, ascending ? SortDirection.ASC : SortDirection.DESC);
-                    sortTerm.setAlwaysDropAlias(true);
-                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
-                    query.getOrderArguments().add(sortTerm.toSortField());
-                    needsSortJoinForModified = true;
-                } else {
-                    query.addOrder(subOrder, ascending);
-                }
-            }
-        }
-
-        if (needsSortJoinForCreated) {
-            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "createdBy", "sortJoin", true));
-        } else if (needsSortJoinForModified) {
-            query.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "modifiedBy", "sortJoin", true));
+        for (String subOrder : order.split(",")) {
+            query.addOrder(subOrder.trim(), ascending);
         }
 
         return persistenceService.findAllPaginated(query, first, count);

@@ -144,9 +144,21 @@ public abstract class EventBooksListPage extends FieldIDTemplatePage {
                                                   "owner.name",
                                                   "owner.name"));
 
-        columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.created"),
+        columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.createdby"),
+                "createdBy.firstName, createdBy.lastName",
+                "createdBy.fullName"));
+
+        columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.created_on"),
                                                   "created",
                                                   "created"));
+
+        columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.modifiedby"),
+                "modifiedBy.firstName, modifiedBy.lastName",
+                "modifiedBy.fullName"));
+
+        columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.modified_on"),
+                "modified",
+                "modified"));
 
         columns.add(new PropertyColumn<EventBook>(new FIDLabelModel("label.status"),
                                                   "open",
