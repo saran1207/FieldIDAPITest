@@ -202,10 +202,10 @@
 												<li><a href="<@s.url value='/w/eventTypeGroup' namespace='/'/>" ><@s.text name="title.manage_event_type_groups.plural_long"/></a></li>
 												<li><a href="<@s.url action='eventTypes' namespace='/'/>" ><@s.text name="title.manage_event_types.plural"/></a></li>
                                                 <li><a href="<@s.url value='/w/eventStatusList' namespace='/'/>" ><@s.text name="title.manage_event_status.plural"/></a></li>
-												<li><a href="<@s.url action='/w/setup/eventBooksList' namespace='/'/>" ><@s.text name="title.manage_event_books.plural"/></a></li>
+												<li><a href="<@s.url value='/w/setup/eventBooksList' namespace='/'/>" ><@s.text name="title.manage_event_books.plural"/></a></li>
 												<li><a href="<@s.url value='/w/setup/assetTypeGroupsList' namespace='/'/>" ><@s.text name="title.asset_type_groups.plural"/></a></li>
 												<li><a href="<@s.url value='/w/setup/assetTypes' namespace='/'/>" ><@s.text name="title.manage_asset_types.plural"/></a></li>
-												<li><a href="<@s.url action='assetStatusList' namespace='/'/>" ><@s.text name="title.manage_asset_statuses.plural"/></a></li>
+												<li><a href="<@s.url value='/w/setup/assetStatusList' namespace='/'/>" ><@s.text name="title.manage_asset_statuses.plural"/></a></li>
                                                 <#if securityGuard.isInspectionsEnabled()>
                                                     <li><a href="<@s.url value='/w/setup/priorityCodes' namespace='/'/>" ><@s.text name="title.manage_priority_code.plural"/></a></li>
                                                 </#if>
