@@ -32,17 +32,19 @@ public class EventStatusListPage extends EventStatusPage {
             protected void populateItem(ListItem<EventStatus> item) {
                 final EventStatus status = item.getModelObject();
 
-                Label createdBy;
-                Label modifiedBy;
+                //Label createdBy;
+                //Label modifiedBy;
 
                 item.add(new Label("name", new PropertyModel<String>(status, "displayName")));
 
-                item.add(createdBy = new Label("createdBy", new PropertyModel<Object>(status, "createdBy.userID")));
-                createdBy.setVisible(status.getCreatedBy() != null);
+                item.add(new Label("createdBy", new PropertyModel<Object>(status, "createdBy.fullName")));
+                //item.add(createdBy = new Label("createdBy", new PropertyModel<Object>(status, "createdBy.userID")));
+                //createdBy.setVisible(status.getCreatedBy() != null);
                 item.add(new DateTimeLabel("created", new PropertyModel<Date>(status, "created")));
 
-                item.add(modifiedBy = new Label("modifiedBy", new PropertyModel<Object>(status, "modifiedBy.userID")));
-                modifiedBy.setVisible(status.getModifiedBy() != null);
+                item.add(new Label("modifiedBy", new PropertyModel<Object>(status, "modifiedBy.fullName")));
+                //item.add(modifiedBy = new Label("modifiedBy", new PropertyModel<Object>(status, "modifiedBy.userID")));
+                //modifiedBy.setVisible(status.getModifiedBy() != null);
                 item.add(new DateTimeLabel("lastModified", new PropertyModel<Date>(status, "modified")));
 
                 item.add(new BookmarkablePageLink("edit", EventStatusFormPage.class, uniqueId(status.getId())));

@@ -3,14 +3,22 @@
     <table class="list borders clear comfortable">
         <tr>
             <th><wicket:message key="label.event_status" /></th>
-            <th><wicket:message key="label.created" /></th>
-            <th><wicket:message key="label.last_modified" /></th>
+            <th><wicket:message key="label.createdby" /></th>
+            <th><wicket:message key="label.created_on" /></th>
+            <th><wicket:message key="label.modifiedby" /></th>
+            <th><wicket:message key="label.modified_on" /></th>
             <th>&nbsp;</th>
         </tr>
         <tr wicket:id="eventStatusList">
             <td><span wicket:id="name"/></td>
-            <td><span wicket:enclosure="createdBy"><span wicket:id="createdBy"/>, </span><span wicket:id="created"/></td>
-            <td><span wicket:enclosure="modifiedBy"><span wicket:id="modifiedBy"/>, </span><span wicket:id="lastModified"/></td>
+
+            <td><span wicket:id="createdBy"/></td>
+
+            <td><span wicket:id="created"/></td>
+
+            <td><span wicket:id="modifiedBy"/></td>
+
+            <td><span wicket:id="lastModified"/></td>
             <td>
                 <a wicket:id="edit"><wicket:message key="label.edit" /></a>
                 |

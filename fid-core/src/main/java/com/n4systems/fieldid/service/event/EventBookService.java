@@ -134,7 +134,9 @@ public class EventBookService extends FieldIdPersistenceService {
         query.addSimpleWhere("state", state);
 
         if(order != null) {
-            query.addOrder(order, ascending);
+            for (String subOrder : order.split(",")) {
+                query.addOrder(subOrder.trim(), ascending);
+            }
         }
 
         return persistenceService.findAllPaginated(query, first, count);
