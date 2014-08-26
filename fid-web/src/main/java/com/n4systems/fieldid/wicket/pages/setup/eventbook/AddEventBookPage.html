@@ -1,32 +1,30 @@
 <html xmlns:wicket="http://wicket.apache.org">
 
 <wicket:extend>
-    <div class="setup event-book">
+    <fieldset class="setup-event-book">
         <div class="feedback" wicket:id="feedbackPanel"></div>
         <form wicket:id="form">
-            <div class="infoSet">
+            <div class="control-group">
                 <label class="label"><wicket:message key="label.title"/>:</label>
                 <span class="fieldHolder">
                     <input wicket:id="name" type="text"/>
                 </span>
             </div>
-            <div class="infoSet">
+            <div class="control-group owner">
                 <label class="label"><wicket:message key="label.owner"/>:</label>
-                <span wicket:id="orgPickerField"/>
+                <div wicket:id="orgPickerField"/>
             </div>
-            <div class="infoSet">
+            <div class="control-group">
                 <label class="label"><wicket:message key="label.open"/>:</label>
-                <span class="fieldHolder">
-                    <input wicket:id="openCheckBox" type="checkbox"/>
-                </span>
+                <input wicket:id="openCheckBox" type="checkbox"/>
             </div>
-            <div class="formAction">
+            <div class="form-action">
                 <input wicket:id="saveButton" type="submit" wicket:message="value:label.save" class="btn-primary"/>
                 <wicket:message key="label.or"/>
                 <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
             </div>
         </form>
-    </div>
+    </fieldset>
 </wicket:extend>
 
 </html>
