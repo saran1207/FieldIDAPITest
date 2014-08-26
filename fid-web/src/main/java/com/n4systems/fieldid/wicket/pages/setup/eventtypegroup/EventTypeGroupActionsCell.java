@@ -1,7 +1,9 @@
 package com.n4systems.fieldid.wicket.pages.setup.eventtypegroup;
 
 import com.n4systems.fieldid.service.event.EventTypeGroupService;
+import com.n4systems.fieldid.service.event.EventTypeService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.EventTypeGroup;
 import com.n4systems.model.api.Archivable;
@@ -21,6 +23,10 @@ public class EventTypeGroupActionsCell extends Panel {
 
     @SpringBean
     private EventTypeGroupService eventTypeGroupService;
+
+    @SpringBean
+    private EventTypeService eventTypeService;
+
 
     private Long eventTypeGroupId;
 
@@ -55,7 +61,13 @@ public class EventTypeGroupActionsCell extends Panel {
         Link archiveLink = new Link("archiveLink") {
             @Override
             public void onClick() {
-                setResponsePage(ReassignEventTypeGroupPage.class, PageParametersBuilder.uniqueId(eventTypeGroup.getId()));
+                if(eventTypeService.getAllActiveEventTypesForGroup(eventTypeGroupModel.getObject().getId()).size() == 0) {
+                    eventTypeGroupService.archive(eventTypeGroup, eventTypeGroupService.getUser(FieldIDSession.get().getSessionUser().getId()));
+                    FieldIDSession.get().info(new FIDLabelModel("message.eventtypegrouparchived").getObject());
+                    setResponsePage(new EventTypeGroupListPage());
+                } else {
+                    setResponsePage(ReassignEventTypeGroupPage.class, PageParametersBuilder.uniqueId(eventTypeGroup.getId()));
+                }
             }
         };
 

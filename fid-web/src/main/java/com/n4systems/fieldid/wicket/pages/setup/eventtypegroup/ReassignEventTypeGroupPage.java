@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.eventtypegroup;
 
 import com.n4systems.fieldid.service.event.EventTypeGroupService;
 import com.n4systems.fieldid.service.event.EventTypeService;
+import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.eventtypegroup.EventTypeGroupDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.EntityModel;
@@ -52,6 +53,7 @@ public class ReassignEventTypeGroupPage extends FieldIDFrontEndPage{
                     eventTypeService.update(type, getCurrentUser());
                 }
                 eventTypeGroupService.archive(group, getCurrentUser());
+                FieldIDSession.get().info(new FIDLabelModel("message.eventtypegrouparchived").getObject());
                 setResponsePage(new EventTypeGroupListPage());
             }
         };
