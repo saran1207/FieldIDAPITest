@@ -4,7 +4,7 @@ import com.n4systems.fieldid.service.event.EventBookService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
@@ -83,8 +83,7 @@ public class AddEventBookPage extends FieldIDTemplatePage {
         //This also must have a unique name, so we need a unique name validator.
         name.add(new EventBookUniqueNameValidator(thisBook.getObject().getId()));
 
-        form.add(new OrgPicker("orgPickerField",
-                               new PropertyModel<BaseOrg>(this, "thisBaseOrg")));
+        form.add(new OrgLocationPicker("orgPickerField", new PropertyModel<BaseOrg>(this, "thisBaseOrg")).withAutoUpdate().setRequired(true));
 
         form.add(new CheckBox("openCheckBox",
                               new PropertyModel<Boolean>(thisBook, "open")));

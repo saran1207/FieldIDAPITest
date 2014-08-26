@@ -21,6 +21,8 @@ import org.apache.wicket.model.StringResourceModel;
 import java.util.ArrayList;
 import java.util.List;
 
+//Please use OrgLocation Picker
+@Deprecated
 public class OrgPicker extends Panel {
 
     private IModel<BaseOrg> orgModel;
