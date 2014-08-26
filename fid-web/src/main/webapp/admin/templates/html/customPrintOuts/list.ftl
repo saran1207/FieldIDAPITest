@@ -1,4 +1,3 @@
-<%@ taglib prefix="s" uri="/struts-tags" %>
 <h1>Custom Print Outs</h1>
 
 <a href='<@s.url namespace="/admin" action="customPrintOutAdd" />'>add new custom print out</a>

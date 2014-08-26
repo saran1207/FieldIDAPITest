@@ -125,6 +125,15 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 		this.pageNumber = pageNumber; 
 	}
 
+
+    public Integer getCurrentPage() {
+        return this.getPageNumber();
+    }
+
+    public void setCurrentPage(Integer pageNumber) {
+        this.setPageNumber(pageNumber);
+    }
+
 	public PrintOut getPrintOut() {
 		return printOut;
 	}
@@ -140,7 +149,9 @@ public class DefaultPrintOutCrud extends AbstractAdminAction implements Preparab
 	public String getPrintOutType() {
 		return printOut.getType().name();
 	}
-	
+
+
+
 	@RequiredStringValidator(message="you must choose a print out type.")
 	public void setPrintOutType(String printOutName) {
 		try {
