@@ -73,7 +73,7 @@ private static final Logger logger = Logger.getLogger(EventTypeRemovalService.cl
     }
 
     private void archivePlaceEventsOfType(EventType eventType) {
-         placeEventsOfTypeRemovalService.remove((PlaceEventType) eventType);
+         placeEventsOfTypeRemovalService.remove(eventType);
     }
 
     private void deleteSavedReportsWithEventTypeCriteria(final EventType eventType) {

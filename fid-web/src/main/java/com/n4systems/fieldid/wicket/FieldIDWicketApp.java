@@ -164,6 +164,17 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/userRequestsList", UserRequestListPage.class);
         mountPage("setup/viewUserRequest", ViewUserRequestPage.class);
 
+        mountPage("setup/eventTypeGroup", EventTypeGroupListPage.class);
+        mountPage("setup/eventTypeGroupArchive", EventTypeGroupListArchivePage.class);
+        mountPage("setup/eventTypeGroupAdd", EventTypeGroupAddPage.class);
+        mountPage("setup/eventTypeGroupEdit", EventTypeGroupEditPage.class);
+        mountPage("setup/eventTypeGroupView", EventTypeGroupViewPage.class);
+
+        mountPage("setup/eventStatusList", EventStatusListPage.class);
+        mountPage("setup/eventStatusArchivedList", EventStatusArchivedListPage.class);
+        mountPage("setup/eventStatusForm", EventStatusFormPage.class);
+
+
         mountPage("places", OrgViewPage.class);
         mountPage("placeSummary", PlaceSummaryPage.class);
         mountPage("placeEvents", PlaceEventsPage.class);
@@ -187,12 +198,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("publishedListAllPage", PublishedListAllPage.class);
         mountPage("draftListAllPage", DraftListAllPage.class);
         mountPage("previouslyPublishedListAllPage", PreviouslyPublishedListAllPage.class);
-
-        mountPage("eventTypeGroup", EventTypeGroupListPage.class);
-        mountPage("eventTypeGroupArchive", EventTypeGroupListArchivePage.class);
-        mountPage("eventTypeGroupAdd", EventTypeGroupAddPage.class);
-        mountPage("eventTypeGroupEdit", EventTypeGroupEditPage.class);
-        mountPage("eventTypeGroupView", EventTypeGroupViewPage.class);
 
         mountPage("procedureAuditListPage", ProcedureAuditListPage.class);
 
@@ -247,10 +252,6 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("secret/test", SecretTestPage.class);
         mountPage("assetSummary", AssetSummaryPage.class);
         mountPage("assetEvents", AssetEventsPage.class);
-
-        mountPage("eventStatusList", EventStatusListPage.class);
-        mountPage("eventStatusArchivedList", EventStatusArchivedListPage.class);
-        mountPage("eventStatusForm", EventStatusFormPage.class);
 
         mountPage("criteriaImageList", CriteriaImageViewListPage.class);
 
