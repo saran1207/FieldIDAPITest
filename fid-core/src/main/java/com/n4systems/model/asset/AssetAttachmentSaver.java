@@ -51,9 +51,7 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 
 		// this must be captured prior to merge as data is a transient field
 		byte[] attachmentData = new byte[0];
-        if(!entity.isRemote()){
-            attachmentData = entity.getData();
-        }
+        attachmentData = entity.getData();
 
         entity = em.merge(entity);
 
@@ -64,9 +62,7 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
 	public AssetAttachment update(EntityManager em, AssetAttachment entity) {
 		fillInConnectionFields(entity);
         byte[] attachmentData = new byte[0];
-        if(!entity.isRemote()){
-            attachmentData = entity.getData();
-        }
+        attachmentData = entity.getData();
 
 		AssetAttachment attachment =  em.merge(entity);
 

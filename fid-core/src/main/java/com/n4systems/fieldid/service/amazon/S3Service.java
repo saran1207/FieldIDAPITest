@@ -625,8 +625,8 @@ public class S3Service extends FieldIdPersistenceService {
 
     private boolean resourceExists(Long tenantId, String path, Object...pathArgs) {
         try {
-            getObjectMetadata(createResourcePath(tenantId, path, pathArgs));
-            return true;
+            ObjectMetadata metadata = getObjectMetadata(createResourcePath(tenantId, path, pathArgs));
+            return metadata.getContentLength() > 0;
         } catch (AmazonS3Exception e) {
             return handleAmazonS3Exception(e, false);
         }
