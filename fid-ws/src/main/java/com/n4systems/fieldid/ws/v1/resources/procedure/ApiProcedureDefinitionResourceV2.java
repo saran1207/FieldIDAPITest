@@ -14,7 +14,6 @@ import com.n4systems.model.IsolationPointSourceType;
 import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.common.ImageAnnotationType;
 import com.n4systems.model.procedure.*;
-import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
@@ -47,6 +46,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/save")
+    @Transactional
     public Response writeOrUpdateProcedureDefinition(ApiProcedureDefinitionV2 apiProcDef) {
         boolean isNew = false;
 
@@ -65,30 +65,32 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             //If we've made it this far, we can now attempt to save the ProcedureDefinition.  Due to how the
             //relationships in the model work, we actually have to do this in a couple of pieces.  First, we pull all of
             //the IsolationPoints off and drop them into a list.  We'll handle those shortly.
-            List<IsolationPoint> isolationPoints = procDef.getIsolationPoints(); //Yes, it's deprecated... no, I don't care.
-            List<IsolationPoint> replacement = Lists.newArrayList();
-            procDef.setIsolationPoints(replacement); //remove them from the model, using an empty list... don't use null, that makes kittens die.
-
-            //Save the model...
-            procedureDefinitionService.saveProcedureDefinition(procDef);
-
-            //Update the IsolationPoints with the existing images.  These images have IDs!!  This is important.
-            for(IsolationPoint isoPoint : isolationPoints) {
-                for(ProcedureDefinitionImage image : procDef.getImages()) {
-                    if(isoPoint.getAnnotation() != null &&
-                       isoPoint.getAnnotation().getImage() != null &&
-                       isoPoint.getAnnotation().getImage().getMobileGUID().equals(image.getMobileGUID())) {
-
-                        isoPoint.getAnnotation().setImage(image);
-                        break;
-                    }
-                }
-
-                procDef.addIsolationPoint(isoPoint);
-            }
+//            List<IsolationPoint> isolationPoints = procDef.getIsolationPoints(); //Yes, it's deprecated... no, I don't care.
+//            List<IsolationPoint> replacement = Lists.newArrayList();
+//            procDef.setIsolationPoints(replacement); //remove them from the model, using an empty list... don't use null, that makes kittens die.
+//
+//            //Save the model...
+//            procedureDefinitionService.saveProcedureDefinition(procDef);
+//
+//            //Update the IsolationPoints with the existing images.  These images have IDs!!  This is important.
+//            for(IsolationPoint isoPoint : isolationPoints) {
+//                for(ProcedureDefinitionImage image : procDef.getImages()) {
+//                    if(isoPoint.getAnnotation() != null &&
+//                       isoPoint.getAnnotation().getImage() != null &&
+//                       isoPoint.getAnnotation().getImage().getMobileGUID().equals(image.getMobileGUID())) {
+//
+//                        isoPoint.getAnnotation().setImage(image);
+//                        break;
+//                    }
+//                }
+//
+//                procDef.addIsolationPoint(isoPoint);
+//            }
 
             //Now write them back to the DB!!  Presto!  No more isolation Point issue.
             procedureDefinitionService.saveProcedureDefinition(procDef);
+
+            procDef = procedureDefinitionService.findProcedureDefinitionByMobileId(procDef.getMobileId());
 
 
             apiProcDef = convertEntityToApiModel(procDef);
@@ -196,10 +198,14 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         procDef.setWarnings(apiProcDef.getWarnings());
         procDef.setProcedureType(apiProcDef.getProcedureType() == null ? null : ProcedureType.valueOf(apiProcDef.getProcedureType()));
         procDef.setEquipmentLocation(apiProcDef.getEquipmentLocation());
+        procDef.setPublishedState(PublishedState.valueOf(apiProcDef.getStatus()));
 
         //Keep in mind if the user can't be found, it's going to fail silently and try to set "developedBy" as null.
-        User developedBy = userService.getUser(apiProcDef.getDevelopedBy());
-        procDef.setDevelopedBy(developedBy == null ? getCurrentUser() : developedBy);
+        procDef.setDevelopedBy(userService.getUser(apiProcDef.getDevelopedBy()));
+
+        procDef.setBuilding(apiProcDef.getEquipmentBuilding());
+        procDef.setApplicationProcess(apiProcDef.getApplicationProcess());
+        procDef.setRemovalProcess(apiProcDef.getRemovalProcess());
 
         //You can't directly set this one on our model... so we have to use it as a switch for the appropriate methods.
         if(apiProcDef.isActive()) {
@@ -210,11 +216,10 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         //If this is a new ProcedureDefinition, there are a few other things we need to set.
         if(procDef.isNew()) {
-            procDef.setCreatedBy(getCurrentUser());
             procDef.setTenant(getCurrentTenant());
 
             //Pretty straight forward... if you made it, you developed it.
-            procDef.setDevelopedBy(getCurrentUser());
+            procDef.setDevelopedBy(userService.getUser(apiProcDef.getDevelopedBy()));
 
             //We start off saving it in draft state.  From there, it automatically figures out how to do things
             //regarding whether or not the user can publish or an approver has to publish.
@@ -255,7 +260,6 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
                 isoPoint.setTenant(getCurrentTenant());
 
-                //isoPoint.setId(apiIsoPoint.getSid());
                 isoPoint.setCheck(apiIsoPoint.getCheck());
 
                 isoPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsoPoint.getSource()));
@@ -277,16 +281,18 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                     isoPoint.setAnnotation(createNewAnnotation(apiIsoPoint.getAnnotation(), theImage));
                 }
 
-                addUs.add(isoPoint);
+                procDef.addIsolationPoint(isoPoint);
             } else {
                 //Existing isoPoint, so we update only the fields that changed.
                 for(IsolationPoint isoPoint : procDef.getIsolationPoints()) {
                     if(isoPoint.getId().equals(apiIsoPoint.getSid())) {
+                        procDef.removeIsolationPoint(isoPoint);
+
                         isoPoint = updateEntityIsolationPoint(apiIsoPoint,
                                                               isoPoint,
                                                               procDef.getImages());
 
-                        addUs.add(isoPoint);
+                        procDef.addIsolationPoint(isoPoint);
                     }
                 }
             }
@@ -295,7 +301,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         //While this is deprecated, we pretty much need to do this.  The new entities contain some of the old ones,
         //but there's no straight forward way to update existing items in the list.  As such, we need to make a NEW
         //list and use it to overwrite the old.
-        procDef.setIsolationPoints(addUs);
+//        procDef.setIsolationPoints(addUs);
 
         return procDef;
     }
@@ -319,6 +325,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                                                       IsolationPoint isolationPoint,
                                                       List<ProcedureDefinitionImage> images) {
 
+        //Why are we setting the ID from the Client side when we already know it's right?!
+//        isolationPoint.setId(apiIsolationPoint.getSid());
         isolationPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsolationPoint.getSource()));
         isolationPoint.setSourceText(apiIsolationPoint.getSourceText());
         isolationPoint.setIdentifier(apiIsolationPoint.getIdentifier());
@@ -328,9 +336,6 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         isolationPoint.setFwdIdx(apiIsolationPoint.getFwdIdx());
         isolationPoint.setRevIdx(apiIsolationPoint.getRevIdx());
         isolationPoint.setCheck(apiIsolationPoint.getCheck());
-
-        //We'll just blatantly update these, regardless of changes or not.  Otherwise there's way more checking than is
-        //logical.
         isolationPoint.setDeviceDefinition(convertDefinition(apiIsolationPoint.getDeviceDefinition()));
         isolationPoint.setLockDefinition(convertDefinition(apiIsolationPoint.getLockDefinition()));
         ProcedureDefinitionImage theImage = null;
@@ -431,7 +436,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         for(ApiImageAnnotation imageAnnotation : annotations) {
             for(ImageAnnotation originalAnnotation : image.getAnnotations()) {
-                if(imageAnnotation.getSid()==originalAnnotation.getId()) {
+                if(imageAnnotation.getSid().equals(originalAnnotation.getId())) {
                     convertedAnnotations.add(convertApiAnnotation(imageAnnotation, originalAnnotation, image));
                 }
             }
@@ -451,6 +456,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         originalAnnotation.setType(ImageAnnotationType.valueOf(imageAnnotation.getAnnotationType()));
         originalAnnotation.setX(imageAnnotation.getX());
         originalAnnotation.setY(imageAnnotation.getY());
+        //I don't think we actually need to set this either.
+//        originalAnnotation.setId(imageAnnotation.getSid());
 
         originalAnnotation.setTenant(getCurrentTenant());
 
@@ -492,6 +499,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         description.setFreeformDescription(deviceDefinition.getFreeformDescription());
 
+        //This is irrelevant, since our saving process effectively invalidates these IDs.
         description.setId(deviceDefinition.getSid());
 
         return description;
@@ -599,7 +607,13 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         apiProcedureDef.setProcedureCode(procedureDef.getProcedureCode());
         apiProcedureDef.setWarnings(procedureDef.getWarnings());
         apiProcedureDef.setActive(procedureDef.isActive());
+        apiProcedureDef.setStatus(procedureDef.getPublishedState().getName());
         apiProcedureDef.setImages(convertImages(procedureDef, procedureDef.getImages()));
+
+        apiProcedureDef.setEquipmentBuilding(procedureDef.getBuilding());
+        apiProcedureDef.setApplicationProcess(procedureDef.getApplicationProcess());
+        apiProcedureDef.setRemovalProcess(procedureDef.getRemovalProcess());
+
         return apiProcedureDef;
     }
 
