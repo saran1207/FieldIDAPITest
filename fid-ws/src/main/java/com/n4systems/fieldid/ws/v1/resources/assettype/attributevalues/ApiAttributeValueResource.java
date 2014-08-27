@@ -1,11 +1,13 @@
 package com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
 import java.util.*;
 
+@Transactional
 public class ApiAttributeValueResource extends FieldIdPersistenceService {
 
     //Changed to support the new fields in ApiAttributeValue
