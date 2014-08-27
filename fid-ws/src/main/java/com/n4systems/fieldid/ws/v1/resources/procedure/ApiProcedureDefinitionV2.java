@@ -19,6 +19,10 @@ public class ApiProcedureDefinitionV2 extends ApiReadWriteModelWithOwner {
     private String equipmentLocation;
     private String procedureType;
     private Long developedBy;
+    private String equipmentBuilding;
+    private String applicationProcess;
+    private String removalProcess;
+    private String status;
 
     public List<ApiIsolationPoint> getIsolationPoints() {
         return isolationPoints;
@@ -122,6 +126,38 @@ public class ApiProcedureDefinitionV2 extends ApiReadWriteModelWithOwner {
 
     public void setDevelopedBy(Long developedBy) {
         this.developedBy = developedBy;
+    }
+
+    public String getEquipmentBuilding() {
+        return equipmentBuilding;
+    }
+
+    public void setEquipmentBuilding(String equipmentBuilding) {
+        this.equipmentBuilding = equipmentBuilding;
+    }
+
+    public String getApplicationProcess() {
+        return applicationProcess;
+    }
+
+    public void setApplicationProcess(String applicationProcess) {
+        this.applicationProcess = applicationProcess;
+    }
+
+    public String getRemovalProcess() {
+        return removalProcess;
+    }
+
+    public void setRemovalProcess(String removalProcess) {
+        this.removalProcess = removalProcess;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }
 
