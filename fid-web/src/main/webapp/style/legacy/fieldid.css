@@ -889,7 +889,7 @@ div.formAction {
 }
 
 .quickForm {
-	width: 100%;
+	/*width: 100%;*/
 	overflow: hidden;
 	padding: 2px 10px;
 }
