@@ -121,7 +121,6 @@ public class AddAssetTypeGroupPage extends FieldIDTemplatePage{
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        response.renderCSSReference("style/legacy/newCss/component/buttons.css");
         response.renderCSSReference("style/legacy/newCss/assetTypeGroup/addAssetTypeGroup.css");
     }
 
