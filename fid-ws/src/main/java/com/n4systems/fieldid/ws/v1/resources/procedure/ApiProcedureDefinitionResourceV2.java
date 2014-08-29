@@ -62,33 +62,9 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
             procDef = convertApiModelToEntity(apiProcDef, procDef);
 
-            //If we've made it this far, we can now attempt to save the ProcedureDefinition.  Due to how the
-            //relationships in the model work, we actually have to do this in a couple of pieces.  First, we pull all of
-            //the IsolationPoints off and drop them into a list.  We'll handle those shortly.
-//            List<IsolationPoint> isolationPoints = procDef.getIsolationPoints(); //Yes, it's deprecated... no, I don't care.
-//            List<IsolationPoint> replacement = Lists.newArrayList();
-//            procDef.setIsolationPoints(replacement); //remove them from the model, using an empty list... don't use null, that makes kittens die.
-//
-//            //Save the model...
-//            procedureDefinitionService.saveProcedureDefinition(procDef);
-//
-//            //Update the IsolationPoints with the existing images.  These images have IDs!!  This is important.
-//            for(IsolationPoint isoPoint : isolationPoints) {
-//                for(ProcedureDefinitionImage image : procDef.getImages()) {
-//                    if(isoPoint.getAnnotation() != null &&
-//                       isoPoint.getAnnotation().getImage() != null &&
-//                       isoPoint.getAnnotation().getImage().getMobileGUID().equals(image.getMobileGUID())) {
-//
-//                        isoPoint.getAnnotation().setImage(image);
-//                        break;
-//                    }
-//                }
-//
-//                procDef.addIsolationPoint(isoPoint);
-//            }
-
-            //Now write them back to the DB!!  Presto!  No more isolation Point issue.
-            procedureDefinitionService.saveProcedureDefinition(procDef);
+            //Make sure to write these as a DRAFT.  Mobile doesn't need/want the ability to actually publish.  These are
+            //just saved in the field and then modified by someone in an office later before being published.
+            procedureDefinitionService.saveProcedureDefinitionDraft(procDef);
 
             procDef = procedureDefinitionService.findProcedureDefinitionByMobileId(procDef.getMobileId());
 
@@ -196,7 +172,10 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         procDef.setRevisionNumber(apiProcDef.getRevisionNumber());
         procDef.setProcedureCode(apiProcDef.getProcedureCode());
         procDef.setWarnings(apiProcDef.getWarnings());
-        procDef.setProcedureType(apiProcDef.getProcedureType() == null ? null : ProcedureType.valueOf(apiProcDef.getProcedureType()));
+
+        //Ideally, the client should always be providing the ProcedureType, but this just prevents an error if they
+        //happened to forget.
+        procDef.setProcedureType(apiProcDef.getProcedureType() == null ? ProcedureType.SUB : ProcedureType.valueOf(apiProcDef.getProcedureType()));
         procDef.setEquipmentLocation(apiProcDef.getEquipmentLocation());
         procDef.setPublishedState(PublishedState.valueOf(apiProcDef.getStatus()));
 
@@ -218,12 +197,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         if(procDef.isNew()) {
             procDef.setTenant(getCurrentTenant());
 
-            //Pretty straight forward... if you made it, you developed it.
             procDef.setDevelopedBy(userService.getUser(apiProcDef.getDevelopedBy()));
-
-            //We start off saving it in draft state.  From there, it automatically figures out how to do things
-            //regarding whether or not the user can publish or an approver has to publish.
-            procDef.setPublishedState(PublishedState.DRAFT);
 
             //Read the associated Asset from the DB.
             Asset asset = assetService.findByMobileId(apiProcDef.getAssetId());
