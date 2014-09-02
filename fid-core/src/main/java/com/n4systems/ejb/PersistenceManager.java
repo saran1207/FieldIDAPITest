@@ -8,7 +8,7 @@ import java.util.Set;
 
 import javax.persistence.EntityManager;
 
-import org.hibernate.collection.AbstractPersistentCollection;
+import org.hibernate.collection.internal.AbstractPersistentCollection;
 import org.hibernate.stat.Statistics;
 import org.springframework.transaction.annotation.Transactional;
 

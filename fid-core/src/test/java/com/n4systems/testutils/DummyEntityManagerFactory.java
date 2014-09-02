@@ -2,10 +2,7 @@ package com.n4systems.testutils;
 
 import java.util.Map;
 
-import javax.persistence.Cache;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnitUtil;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.metamodel.Metamodel;
 
@@ -29,7 +26,17 @@ public class DummyEntityManagerFactory implements EntityManagerFactory {
 		return new DummyEntityManager();
 	}
 
-	@Override
+    @Override
+    public EntityManager createEntityManager(SynchronizationType synchronizationType) {
+        return null;
+    }
+
+    @Override
+    public EntityManager createEntityManager(SynchronizationType synchronizationType, Map map) {
+        return null;
+    }
+
+    @Override
 	public boolean isOpen() {
 		return open;
 	}
@@ -54,7 +61,22 @@ public class DummyEntityManagerFactory implements EntityManagerFactory {
 		return null;
 	}
 
-	@Override
+    @Override
+    public void addNamedQuery(String s, Query query) {
+
+    }
+
+    @Override
+    public <T> T unwrap(Class<T> tClass) {
+        return null;
+    }
+
+    @Override
+    public <T> void addNamedEntityGraph(String s, EntityGraph<T> tEntityGraph) {
+
+    }
+
+    @Override
 	public Map<String, Object> getProperties() {
 		return null;
 	}

@@ -18,9 +18,9 @@ import javax.persistence.Query;
 import org.apache.log4j.Logger;
 import org.hibernate.LockMode;
 import org.hibernate.Session;
-import org.hibernate.collection.AbstractPersistentCollection;
+import org.hibernate.collection.internal.AbstractPersistentCollection;
 import org.hibernate.exception.ConstraintViolationException;
-import org.hibernate.impl.SessionImpl;
+import org.hibernate.internal.SessionImpl;
 import org.hibernate.stat.Statistics;
 
 import com.n4systems.ejb.PerformSearchRequiringTransaction;

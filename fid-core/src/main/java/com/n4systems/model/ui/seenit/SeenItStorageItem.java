@@ -3,14 +3,7 @@ package com.n4systems.model.ui.seenit;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Table;
-
-import org.hibernate.annotations.CollectionOfElements;
+import javax.persistence.*;
 
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
@@ -22,8 +15,8 @@ public class SeenItStorageItem extends AbstractEntity implements UnsecuredEntity
 	@Column(nullable=false)
 	private Long userId;
 	
-	
-	@CollectionOfElements(fetch = FetchType.EAGER)
+	//TODO Make sure we don't need additional annotations here... I think we might.
+	@ElementCollection(fetch = FetchType.EAGER)
 	@Enumerated(EnumType.STRING)
 	private Set<SeenItItem> itemsSeen = new HashSet<SeenItItem>();
 	
