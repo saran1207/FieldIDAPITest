@@ -1,0 +1,49 @@
+<html xmlns:wicket="http://wicket.apache.org">
+    <wicket:extend>
+        <form>
+            <fieldset wicket:id="formContainer">
+                <legend>Form Components</legend>
+
+                <div class="control-group">
+                    <label class="label">Text</label>
+                    <input wicket:id="textField" type="text"/>
+                </div>
+                <div class="control-group">
+                    <label class="label">Text Area</label>
+                    <textarea wicket:id="textArea"/>
+                </div>
+                <div class="control-group">
+                    <label class="label">Dropdown</label>
+                    <select wicket:id="dropdownField"/>
+                </div>
+                <div class="control-group">
+                    <label class="label">Checkbox</label>
+                    <input type="checkbox"/>
+                </div>
+                <div class="control-group">
+                    <label class="label">Radio</label>
+                    <input type="radio"/>
+                </div>
+                <div class="control-group">
+                    <label class="label">Owner Location Picker</label>
+                    <div wicket:id="orgPicker"/>
+                </div>
+                <div class="control-group">
+                    <label class="label">Location Picker</label>
+                    <div wicket:id="locationPicker"/>
+                </div>
+                <div class="control-group">
+                    <label class="label">Date Picker</label>
+                    <div wicket:id="datePicker"/>
+                </div>
+                <div class="control-group">
+                    <label class="label">Date Range Picker</label>
+                    <div wicket:id="dateRangePicker"/>
+                </div>
+            </fieldset>
+            <div>
+                <a wicket:id="toggleLink" class="btn-primary">Toggle Layout</a>
+            </div>
+        </form>
+    </wicket:extend>
+</html>
