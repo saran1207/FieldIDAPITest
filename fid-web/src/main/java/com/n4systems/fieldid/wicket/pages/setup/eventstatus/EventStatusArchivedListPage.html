@@ -11,7 +11,9 @@
             <td><span wicket:enclosure="createdBy"><span wicket:id="createdBy"/>, </span><span wicket:id="created"/></td>
             <td><span wicket:enclosure="modifiedBy"><span wicket:id="modifiedBy"/>, </span><span wicket:id="lastModified"/></td>
             <td>
-                <a wicket:id="unarchive"><wicket:message key="label.unarchive" /></a>
+                <div class="split-btn">
+                    <a wicket:id="unarchive" class="btn-secondary" href="#"><wicket:message key="label.unarchive" /></a>
+                </div>
             </td>
         </tr>
     </table>

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.setup.eventstatus;
 import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.model.EventStatus;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
@@ -47,25 +48,30 @@ public class EventStatusListPage extends EventStatusPage {
                 //modifiedBy.setVisible(status.getModifiedBy() != null);
                 item.add(new DateTimeLabel("lastModified", new PropertyModel<Date>(status, "modified")));
 
-                item.add(new BookmarkablePageLink("edit", EventStatusFormPage.class, uniqueId(status.getId())));
+                Link editLink = new BookmarkablePageLink("edit", EventStatusFormPage.class, uniqueId(status.getId()));
+                item.add(editLink);
 
+                WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
 
-                item.add(new Link("archive") {
-                        @Override
-                        public void onClick() {
+                Link archiveLink =new Link("archive") {
+                    @Override
+                    public void onClick() {
 
-                            List<EventStatus> evntStatusList = eventStatusService.getActiveStatuses();
-                            if (evntStatusList.size() > 1) {
-                                eventStatusService.archive(status);
-                                setResponsePage(EventStatusListPage.class);
-                            }
+                        List<EventStatus> evntStatusList = eventStatusService.getActiveStatuses();
+                        if (evntStatusList.size() > 1) {
+                            eventStatusService.archive(status);
+                            setResponsePage(EventStatusListPage.class);
                         }
+                    }
 
-                        @Override public boolean isVisible() {
-                            return eventStatusList.size() > 1;
-                        }
-                    });
+                    @Override public boolean isVisible() {
+                        return eventStatusList.size() > 1;
+                    }
+                };
 
+                optionsContainer.add(archiveLink);
+
+                item.add(optionsContainer);
             }
         }); 
         

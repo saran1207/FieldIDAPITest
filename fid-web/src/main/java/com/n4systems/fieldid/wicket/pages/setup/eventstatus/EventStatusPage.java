@@ -48,7 +48,7 @@ public class EventStatusPage extends FieldIDTemplatePage {
 
     @Override
     protected Label createTitleLabel(String labelId) {
-        return new Label(labelId, new FIDLabelModel("label.event_statuses"));
+        return new Label(labelId, new FIDLabelModel("title.manage_event_status_long.plural"));
     }
 
     @Override
