@@ -38,40 +38,38 @@
         <sass.maven.plugin.version>1.1.0</sass.maven.plugin.version>
         <buildnumber.maven.plugin.version>1.0-beta-3</buildnumber.maven.plugin.version>
     </properties>
-    <!-- I'm pretty sure FieldID Central is NOT accessible from outside.  This will prevent being blocked from chewing
-         on my local repo... -->
-	<!--<repositories>-->
-		<!--<repository>-->
-			<!--<snapshots>-->
-				<!--<enabled>false</enabled>-->
-			<!--</snapshots>-->
-			<!--<id>central</id>-->
-			<!--<name>libs-release</name>-->
-			<!--<url>http://repo.n4systems.net/artifactory/libs-release</url>-->
-		<!--</repository>-->
-		<!--<repository>-->
-			<!--<snapshots />-->
-			<!--<id>snapshots</id>-->
-			<!--<name>libs-snapshot</name>-->
-			<!--<url>http://repo.n4systems.net/artifactory/libs-snapshot</url>-->
-		<!--</repository>-->
-	<!--</repositories>-->
-	<!--<pluginRepositories>-->
-		<!--<pluginRepository>-->
-			<!--<snapshots>-->
-				<!--<enabled>false</enabled>-->
-			<!--</snapshots>-->
-			<!--<id>central</id>-->
-			<!--<name>plugins-release</name>-->
-			<!--<url>http://repo.n4systems.net/artifactory/plugins-release</url>-->
-		<!--</pluginRepository>-->
-		<!--<pluginRepository>-->
-			<!--<snapshots />-->
-			<!--<id>snapshots</id>-->
-			<!--<name>plugins-snapshot</name>-->
-			<!--<url>http://repo.n4systems.net/artifactory/plugins-snapshot</url>-->
-		<!--</pluginRepository>-->
-	<!--</pluginRepositories>-->
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>libs-release</name>
+			<url>http://repo.n4systems.net/artifactory/libs-release</url>
+		</repository>
+		<repository>
+			<snapshots />
+			<id>snapshots</id>
+			<name>libs-snapshot</name>
+			<url>http://repo.n4systems.net/artifactory/libs-snapshot</url>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>plugins-release</name>
+			<url>http://repo.n4systems.net/artifactory/plugins-release</url>
+		</pluginRepository>
+		<pluginRepository>
+			<snapshots />
+			<id>snapshots</id>
+			<name>plugins-snapshot</name>
+			<url>http://repo.n4systems.net/artifactory/plugins-snapshot</url>
+		</pluginRepository>
+	</pluginRepositories>
 	<build>
 		<pluginManagement>
 			<plugins>
