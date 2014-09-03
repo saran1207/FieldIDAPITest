@@ -6,6 +6,7 @@ import com.n4systems.fieldid.wicket.pages.setup.comment.EditCommentTemplatePage;
 import com.n4systems.model.commenttemplate.CommentTemplate;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
@@ -39,13 +40,18 @@ public class CommentTemplateActionCell extends Panel {
                                      EditCommentTemplatePage.class,
                                      PageParametersBuilder.param("commentTemplateId", thisTemplate.getId())));
 
-        add(new AjaxLink("removeLink") {
+        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
+
+        optionsContainer.add(new AjaxLink("removeLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 removeCommentTemplate();
                 target.add(listPanel);
             }
         });
+
+        add(optionsContainer);
+
     }
 
     private void removeCommentTemplate() {

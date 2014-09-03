@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.log;
 
+import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
+import com.n4systems.model.user.User;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.helpers.PatternParser;
 import org.json.JSONObject;
@@ -139,6 +141,16 @@ public class JSONEventLayoutV1 extends PatternLayout {
         addEventData("ndc", ndc);
         addEventData("level", loggingEvent.getLevel().toString());
         addEventData("thread_name", threadName);
+
+        User currentUser = ThreadLocalInteractionContext.getInstance().getCurrentUser();
+        if(currentUser != null){
+            addEventData("user", currentUser.getUserID());
+            addEventData("tenant", currentUser.getOwner().getTenant().getName());
+        }
+        else {
+            addEventData("user", "unknown");
+            addEventData("tenant", "unknown");
+        }
 
         return logstashEvent.toString() + "\n";
     }

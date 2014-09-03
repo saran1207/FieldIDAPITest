@@ -116,7 +116,7 @@ public class AssetAttachmentSaver extends ModifiedBySaver<AssetAttachment> {
                 if(attachmentFile.exists()){
                     FileUtils.writeByteArrayToFile(attachmentFile, attachmentData);
                 }
-                else {
+                else if(attachmentData != null && attachmentData.length > 0) {
                     Assert.hasLength(attachment.getMobileId());
                     s3Service.uploadAssetAttachmentData(attachmentData, attachment);
                     attachment.setFileName(s3Service.getAssetAttachmentPath(attachment));

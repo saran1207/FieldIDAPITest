@@ -79,7 +79,8 @@ public class EventBookService extends FieldIdPersistenceService {
     }
 
     public EventBook getEventBookById(Long id) {
-        return persistenceService.find(EventBook.class, id);
+        QueryBuilder<EventBook> queryBuilder = createUserSecurityBuilder(EventBook.class, true).addSimpleWhere("id", id);
+        return persistenceService.find(queryBuilder);
     }
 
     public void archiveEventBook(EventBook eventBook) {
