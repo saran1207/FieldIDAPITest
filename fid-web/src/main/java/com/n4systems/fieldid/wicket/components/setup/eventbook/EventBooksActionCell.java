@@ -6,6 +6,8 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.EventBook;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
@@ -31,52 +33,66 @@ public class EventBooksActionCell extends Panel {
         final EventBook thisBook = model.getObject();
 
         //Create all of the links...
+
+        AjaxLink openOrCloseLink;
+
         AjaxLink openLink;
         AjaxLink closeLink;
         AjaxLink archiveLink;
         AjaxLink unarchiveLink;
 
-        add(openLink = new AjaxLink("openLink") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                EventBook bookToOpen = eventBookService.getEventBookById(thisBook.getId());
-                eventBookService.openEventBook(bookToOpen);
+        if(!thisBook.isOpen()) {
+            add(openOrCloseLink = new AjaxLink("openOrCloseLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    EventBook bookToOpen = eventBookService.getEventBookById(thisBook.getId());
+                    eventBookService.openEventBook(bookToOpen);
 
-                FieldIDSession.get()
-                              .info(new FIDLabelModel("message.open_event_book",
-                                      thisBook.getDisplayName()).getObject());
+                    FieldIDSession.get()
+                            .info(new FIDLabelModel("message.open_event_book",
+                                    thisBook.getDisplayName()).getObject());
 
-                onAction(target);
-            }
-        });
+                    onAction(target);
+                }
+            });
 
-        add(closeLink = new AjaxLink("closeLink") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                EventBook bookToClose = eventBookService.getEventBookById(thisBook.getId());
-                eventBookService.closeEventBook(bookToClose);
+            openOrCloseLink.add(new Label("openOrCloseLabel", new FIDLabelModel("label.open")));
+        } else {
+            add(openOrCloseLink = new AjaxLink("openOrCloseLink") {
+                @Override
+                public void onClick(AjaxRequestTarget target) {
+                    EventBook bookToClose = eventBookService.getEventBookById(thisBook.getId());
+                    eventBookService.closeEventBook(bookToClose);
 
-                FieldIDSession.get()
-                              .info(new FIDLabelModel("message.close_event_book",
-                                      thisBook.getDisplayName()).getObject());
+                    FieldIDSession.get()
+                            .info(new FIDLabelModel("message.close_event_book",
+                                    thisBook.getDisplayName()).getObject());
 
-                onAction(target);
-            }
-        });
+                    onAction(target);
+                }
+            });
 
-        add(archiveLink = new AjaxLink("archiveLink") {
+            openOrCloseLink.add(new Label("openOrCloseLabel", new FIDLabelModel("label.close")));
+        }
+
+        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
+
+        optionsContainer.add(archiveLink = new AjaxLink("archiveLink") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 EventBook bookToArchive = eventBookService.getEventBookById(thisBook.getId());
                 eventBookService.archiveEventBook(bookToArchive);
 
                 FieldIDSession.get()
-                              .info(new FIDLabelModel("message.archive_event_book",
-                                      thisBook.getDisplayName()).getObject());
+                        .info(new FIDLabelModel("message.archive_event_book",
+                                thisBook.getDisplayName()).getObject());
 
                 onAction(target);
             }
         });
+
+        add(optionsContainer);
+
 
         add(unarchiveLink = new AjaxLink("unarchiveLink") {
             @Override
@@ -93,10 +109,12 @@ public class EventBooksActionCell extends Panel {
         });
 
         //Manage Visibility...
-        archiveLink.setVisible(!thisBook.isArchived());
+        optionsContainer.setVisible(!thisBook.isArchived());
+        //archiveLink.setVisible(!thisBook.isArchived());
+        openOrCloseLink.setVisible(!thisBook.isArchived());
         unarchiveLink.setVisible(thisBook.isArchived());
-        openLink.setVisible(!thisBook.isOpen());
-        closeLink.setVisible(thisBook.isOpen());
+        //openLink.setVisible(!thisBook.isOpen());
+        //closeLink.setVisible(thisBook.isOpen());
     }
 
     protected void onAction(AjaxRequestTarget target) {}
