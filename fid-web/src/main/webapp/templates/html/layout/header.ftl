@@ -227,7 +227,7 @@
 										<#if sessionUser.hasAccess("managesystemconfig") >
 											<ul class="sub_menu">
 												<li><a href="<@s.url action='autoAttributeCriteriaList' namespace='/'/>" ><@s.text name="title.auto_attribute_wizard.plural" /></a></li>
-												<li><a href="<@s.url action='commentTemplateList' namespace='/'/>" ><@s.text name="title.manage_comment_templates.plural" /></a></li>
+												<li><a href="<@s.url value='w/setup/commentTemplateList' />" ><@s.text name="title.manage_comment_templates.plural" /></a></li>
 												<li><a href="<@s.url value='/w/setup/columnsLayout' type='ASSET'/>" ><@s.text name="title.column_layout_asset" /></a></li>
                                                 <#if securityGuard.isInspectionsEnabled()>
 												    <li><a href="<@s.url value='/w/setup/columnsLayout' type='EVENT'/>" ><@s.text name="title.column_layout_event" /></a></li>
