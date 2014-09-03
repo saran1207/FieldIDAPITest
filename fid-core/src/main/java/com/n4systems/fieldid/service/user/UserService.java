@@ -3,8 +3,6 @@ package com.n4systems.fieldid.service.user;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.SendSavedItemSchedule;
-import com.n4systems.model.Tenant;
-import com.n4systems.model.UserRequest;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.ExternalOrgFilter;
 import com.n4systems.model.orgs.InternalOrgFilter;
@@ -205,7 +203,7 @@ public class UserService extends FieldIdPersistenceService {
     }
 
     public User getUser(Long userId) {
-        QueryBuilder<User> builder = createUserSecurityBuilder(User.class);
+        QueryBuilder<User> builder = createUserSecurityBuilder(User.class, true);
         builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "id", userId));
         User user = persistenceService.find(builder);
         return user;
