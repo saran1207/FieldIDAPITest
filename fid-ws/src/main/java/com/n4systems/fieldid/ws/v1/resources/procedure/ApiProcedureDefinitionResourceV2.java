@@ -143,6 +143,41 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         return builder.getQueryString();
 	}
 
+    /**
+     * This method is called to delete ProcedureDefinitions from the database.  It should be noted that a user may only
+     * delete ProcedureDefinitions in DRAFT status that they authored themselves.
+     *
+     * This method doesn't really need to specify what it consumes or provides, as it technically neither consumes nor
+     * provides any actual data.  Responses from this method are simple HTTP Status codes (204, 400 or 409).
+     *
+     * @param procDefSid
+     * @return
+     */
+    @DELETE
+    @Path("/{procDefSid}")
+    @Transactional
+    public Response deleteDraftProcedureDefinition(@PathParam("procDefSid") String procDefSid) {
+
+        ProcedureDefinition deleteMe = procedureDefinitionService.findProcedureDefinitionByMobileId(procDefSid);
+
+        Response.Status responseStatus;
+        if(deleteMe != null) {
+            if (deleteMe.getDevelopedBy().equals(getCurrentUser())) {
+                procedureDefinitionService.deleteProcedureDefinition(deleteMe);
+                responseStatus = Response.Status.NO_CONTENT;
+            } else {
+                responseStatus = Response.Status.CONFLICT;
+            }
+        } else {
+            responseStatus = Response.Status.BAD_REQUEST;
+        }
+
+        //If there was no success, we return a 409, meaning that there was a conflict in the request.
+        //If there WAS success, we return a 204, meaning that everything is OK, but there is no content being returned.
+        return Response.status(responseStatus)
+                       .build();
+    }
+
     protected List<ApiProcedureDefinitionV2> convertAllProcedureDefinitionsToApiModels(List<ProcedureDefinition> procedureDefinitions) {
         List<ApiProcedureDefinitionV2> apiProcedureDefinitions = new ArrayList<ApiProcedureDefinitionV2>();
 
@@ -583,6 +618,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         apiProcedureDef.setActive(procedureDef.isActive());
         apiProcedureDef.setStatus(procedureDef.getPublishedState().getName());
         apiProcedureDef.setImages(convertImages(procedureDef, procedureDef.getImages()));
+        apiProcedureDef.setRejectedReason(procedureDef.getRejectedReason());
 
         apiProcedureDef.setEquipmentBuilding(procedureDef.getBuilding());
         apiProcedureDef.setApplicationProcess(procedureDef.getApplicationProcess());
