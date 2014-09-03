@@ -8,6 +8,7 @@ import com.n4systems.fieldid.wicket.pages.setup.assetstatus.EditAssetStatusPage;
 import com.n4systems.model.AssetStatus;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -53,10 +54,13 @@ public class AssetStatusActionCell extends Panel {
 
         editLink.setVisible(thisStatus.isActive());
 
+
+        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
+
         //We don't need to worry about controlling the visibility of this link, because it lives inside of a
         //wicket:enclosure, with editLink set as its child.  This means that any time the visibility of editLink
         //changes, the visibility of the whole enclosure changes.
-        add(new AjaxLink("archiveLink") {
+        optionsContainer.add(new AjaxLink("archiveLink") {
             /**
              * This method simply provides the click functionality for the Archive link, tying it to an internal method
              * in the class.
@@ -73,6 +77,8 @@ public class AssetStatusActionCell extends Panel {
                 onAction(target);
             }
         });
+
+        add(optionsContainer);
 
         AjaxLink unarchiveLink;
 

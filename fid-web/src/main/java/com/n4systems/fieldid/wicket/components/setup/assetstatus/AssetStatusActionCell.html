@@ -1,12 +1,25 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
     <div>
-        <wicket:enclosure child="editLink">
-            <a wicket:id="editLink"><wicket:message key="label.edit" /></a>
-            |
-            <a wicket:id="archiveLink"><wicket:message key="label.archive" /></a>
-        </wicket:enclosure>
-        <a wicket:id="unarchiveLink"><wicket:message key="label.unarchive" /></a>
+        <div class="split-btn">
+            <wicket:enclosure child="editLink">
+                <a wicket:id="editLink" class="btn-secondary" href="#"><wicket:message key="label.edit" /></a>
+                <div wicket:enclosure="optionsContainer" class="dropdown">
+                    <button class="btn-secondary">Toggle Dropdown</button>
+                    <ul wicket:id="optionsContainer" class="pull-right">
+                        <li>
+                            <a wicket:id="archiveLink">
+                                <wicket:message key="label.archive"/>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </wicket:enclosure>
+
+            <a wicket:id="unarchiveLink" class="btn-secondary" href="#"><wicket:message key="label.unarchive" /></a>
+
+        </div>
+
     </div>
 </wicket:panel>
 </html>
