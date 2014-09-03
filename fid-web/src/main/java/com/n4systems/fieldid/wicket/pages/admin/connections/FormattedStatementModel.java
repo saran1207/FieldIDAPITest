@@ -1,7 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.admin.connections;
 
 import org.apache.wicket.model.IModel;
-import org.hibernate.engine.jdbc.internal.BasicFormatterImpl;
+import org.hibernate.jdbc.util.BasicFormatterImpl;
 
 public class FormattedStatementModel implements IModel<String> {
 

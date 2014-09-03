@@ -4,12 +4,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.hibernate.event.spi.PostDeleteEvent;
-import org.hibernate.event.spi.PostDeleteEventListener;
-import org.hibernate.event.spi.PostInsertEvent;
-import org.hibernate.event.spi.PostInsertEventListener;
-import org.hibernate.event.spi.PostUpdateEvent;
-import org.hibernate.event.spi.PostUpdateEventListener;
+import org.hibernate.event.PostDeleteEvent;
+import org.hibernate.event.PostDeleteEventListener;
+import org.hibernate.event.PostInsertEvent;
+import org.hibernate.event.PostInsertEventListener;
+import org.hibernate.event.PostUpdateEvent;
+import org.hibernate.event.PostUpdateEventListener;
 
 import com.n4systems.model.api.CrossTenantEntity;
 import com.n4systems.model.api.HasTenant;
@@ -20,7 +20,7 @@ import com.n4systems.persistence.Transactor;
 import com.n4systems.services.InvalidSetupDataGroupClassException;
 import com.n4systems.services.SetupDataGroup;
 import com.n4systems.taskscheduling.TaskExecutor;
-import org.hibernate.persister.entity.EntityPersister;
+//import org.hibernate.persister.entity.EntityPersister;
 
 public class SetupDataUpdateEventListener implements PostUpdateEventListener, PostInsertEventListener, PostDeleteEventListener {
 	private static Logger logger = Logger.getLogger(SetupDataUpdateEventListener.class);
@@ -39,10 +39,10 @@ public class SetupDataUpdateEventListener implements PostUpdateEventListener, Po
 	}
 
     //TODO Figure out if we need to do anything special here... this is just an implementation to satisfy the compiler.
-    @Override
-    public boolean requiresPostCommitHanding(EntityPersister entityPersister) {
-        return false;
-    }
+//    @Override
+//    public boolean requiresPostCommitHanding(EntityPersister entityPersister) {
+//        return false;
+//    }
 
     public void onPostInsert(PostInsertEvent event) {
 		updateSetupDataModDates(event.getEntity());

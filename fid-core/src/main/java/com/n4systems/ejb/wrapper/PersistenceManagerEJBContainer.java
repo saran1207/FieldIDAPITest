@@ -9,7 +9,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 
 import com.n4systems.model.api.NetworkEntity;
-import org.hibernate.collection.internal.AbstractPersistentCollection;
+import org.hibernate.collection.AbstractPersistentCollection;
 import org.hibernate.stat.Statistics;
 
 

@@ -17,7 +17,7 @@
         <module>fid-index-validator</module>
     </modules>
     <properties>
-        <hibernate.version>4.3.6.Final</hibernate.version>
+        <hibernate.version>3.6.0.Final</hibernate.version>
         <spring.version>4.0.3.RELEASE</spring.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.lang.version>2.5</commons.lang.version>
