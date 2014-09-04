@@ -82,11 +82,12 @@ public class S3ServiceTest extends FieldIdServiceTest {
     public void test_getBrandingLogo() throws MalformedURLException {
         Long myTenantId = 123L;
 
-        URL expectedUrl = new URL("http://somebogusurl.com");
+        URL expectedUrl = new URL("http://" + bucket);
 
         Date expires =  new DateTime().plusDays(expiryDays).toDate();
 
         expect(configService.getString(ConfigEntry.AMAZON_S3_BUCKET)).andReturn(bucket);
+        expect(configService.getString(ConfigEntry.AMAZON_S3_ENDPOINT)).andReturn(bucket);
         replay(configService);
 
         expect(s3client.generatePresignedUrl(bucket, S3Service.TENANTS_PREFIX + myTenantId + S3Service.BRANDING_LOGO_PATH, expires, HttpMethod.GET)).andReturn(expectedUrl);
@@ -101,7 +102,7 @@ public class S3ServiceTest extends FieldIdServiceTest {
 
     @Test
     public void test_getBrandingLogo_no_tenant() throws MalformedURLException {
-        URL expectedUrl = new URL("http://expected.com");
+        URL expectedUrl = new URL("http://" + bucket);
 
         Date expires =  new DateTime().plusDays(expiryDays).toDate();
 
@@ -112,6 +113,7 @@ public class S3ServiceTest extends FieldIdServiceTest {
         replay(securityFilter);
 
         expect(configService.getString(ConfigEntry.AMAZON_S3_BUCKET)).andReturn(bucket);
+        expect(configService.getString(ConfigEntry.AMAZON_S3_ENDPOINT)).andReturn(bucket);
         replay(configService);
 
         expect(s3client.generatePresignedUrl(bucket, S3Service.TENANTS_PREFIX + tenantId + S3Service.BRANDING_LOGO_PATH, expires, HttpMethod.GET) ).andReturn(expectedUrl);
