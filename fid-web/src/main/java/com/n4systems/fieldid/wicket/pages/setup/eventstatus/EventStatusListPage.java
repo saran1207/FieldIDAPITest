@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.setup.eventstatus;
 
-import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.components.DateTimeLabel;
 import com.n4systems.model.EventStatus;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -11,7 +10,6 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.Date;
 import java.util.List;
@@ -20,9 +18,6 @@ import static com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilde
 
 public class EventStatusListPage extends EventStatusPage {
 
-    @SpringBean
-    protected EventStatusService eventStatusService;
-            
     public EventStatusListPage(PageParameters params) {
         super(params);
         

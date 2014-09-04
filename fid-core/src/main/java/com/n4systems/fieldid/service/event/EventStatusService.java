@@ -29,6 +29,13 @@ public class EventStatusService extends FieldIdPersistenceService {
         return persistenceService.findAll(builder);
     }
 
+    public Long countEventStatusByEntityState(Archivable.EntityState entityState) {
+        QueryBuilder<EventStatus> builder = createTenantSecurityBuilder(EventStatus.class, true);
+        builder.addSimpleWhere("state", entityState);
+
+        return persistenceService.count(builder);
+    }
+
     public void create(EventStatus eventStatus) {
         persistenceService.save(eventStatus);
     }

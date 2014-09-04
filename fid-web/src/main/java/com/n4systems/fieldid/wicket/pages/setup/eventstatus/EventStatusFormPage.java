@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.wicket.pages.setup.eventstatus;
 
-import com.n4systems.fieldid.service.event.EventStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.model.EventStatus;
@@ -10,12 +9,8 @@ import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class EventStatusFormPage extends EventStatusPage{
-
-    @SpringBean
-    private EventStatusService eventStatusService;
 
     public EventStatusFormPage(PageParameters params) {
         super(params);
