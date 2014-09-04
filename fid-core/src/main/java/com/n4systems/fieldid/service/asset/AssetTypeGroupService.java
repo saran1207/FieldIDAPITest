@@ -1,6 +1,5 @@
 package com.n4systems.fieldid.service.asset;
 
-import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.search.SavedReportService;
@@ -15,15 +14,12 @@ import com.n4systems.util.persistence.WhereClauseFactory;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import rfid.ejb.entity.InfoFieldBean;
-import rfid.ejb.entity.InfoOptionBean;
 
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.persistence.Query;
 
 public class AssetTypeGroupService extends FieldIdPersistenceService {
 
@@ -138,4 +134,10 @@ public class AssetTypeGroupService extends FieldIdPersistenceService {
         return groups;
     }
 
+
+    public Long countAssetTypeGroups() {
+        QueryBuilder<AssetTypeGroup> query = createTenantSecurityBuilder(AssetTypeGroup.class);
+
+        return persistenceService.count(query);
+    }
 }

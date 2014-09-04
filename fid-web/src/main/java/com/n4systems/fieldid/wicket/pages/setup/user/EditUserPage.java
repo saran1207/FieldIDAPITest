@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.actions.users.UploadedImage;
 import com.n4systems.fieldid.service.amazon.S3Service;
+import com.n4systems.fieldid.service.user.UserListFilterCriteria;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.components.user.UserFormAccountPanel;
 import com.n4systems.fieldid.wicket.components.user.UserFormPermissionsPanel;
@@ -73,9 +74,13 @@ public class EditUserPage extends UserPage {
 
     @Override
     protected void addNavBar(String navBarId) {
+        UserListFilterCriteria criteria = new UserListFilterCriteria(false);
+        Long activeUserCount = userService.countUsers(criteria.withArchivedOnly(false));
+        Long archivedUserCount = userService.countUsers(criteria.withArchivedOnly());
+
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
-                aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all.count", activeUserCount)).page(UsersListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", archivedUserCount)).page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.view").page(ViewUserPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(userModel.getObject().getId())).build(),

@@ -48,7 +48,7 @@ public class EventTypeGroupActionsCell extends Panel {
                     eventTypeGroup.setState(Archivable.EntityState.ACTIVE);
                     User user = eventTypeGroupService.getUser(FieldIDSession.get().getSessionUser().getId());
                     eventTypeGroupService.update(eventTypeGroup, user);
-                    setResponsePage(new EventTypeGroupListPage());
+                    setResponsePage(EventTypeGroupListPage.class);
                 }
             };
             editLink.add(new Label("name", "Unarchive"));
@@ -64,7 +64,7 @@ public class EventTypeGroupActionsCell extends Panel {
                 if(eventTypeService.getAllActiveEventTypesForGroup(eventTypeGroupModel.getObject().getId()).size() == 0) {
                     eventTypeGroupService.archive(eventTypeGroup, eventTypeGroupService.getUser(FieldIDSession.get().getSessionUser().getId()));
                     FieldIDSession.get().info(new FIDLabelModel("message.eventtypegrouparchived").getObject());
-                    setResponsePage(new EventTypeGroupListPage());
+                    setResponsePage(EventTypeGroupListPage.class);
                 } else {
                     setResponsePage(ReassignEventTypeGroupPage.class, PageParametersBuilder.uniqueId(eventTypeGroup.getId()));
                 }

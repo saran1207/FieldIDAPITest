@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.service.user.UserLimitService;
+import com.n4systems.fieldid.service.user.UserListFilterCriteria;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.behavior.TipsyBehavior;
 import com.n4systems.fieldid.wicket.components.ExternalImage;
@@ -139,9 +140,13 @@ public class UpgradeUserPage extends FieldIDTemplatePage {
 
     @Override
     protected void addNavBar(String navBarId) {
+        UserListFilterCriteria criteria = new UserListFilterCriteria(false);
+        Long activeUserCount = userService.countUsers(criteria.withArchivedOnly(false));
+        Long archivedUserCount = userService.countUsers(criteria.withArchivedOnly());
+
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
-                aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all.count", activeUserCount)).page(UsersListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", archivedUserCount)).page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.add").page(this.getClass()).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));

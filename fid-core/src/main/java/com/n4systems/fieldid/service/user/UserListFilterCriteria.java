@@ -28,6 +28,21 @@ public class UserListFilterCriteria implements Serializable {
         this.archivedOnly = archivedOnly;
     }
 
+    public UserListFilterCriteria(UserListFilterCriteria criteria) {
+        this.owner = criteria.getOwner();
+        this.customer = criteria.getCustomer();
+        this.orgFilter = criteria.getOrgFilter();
+        this.groupFilter = criteria.getGroupFilter();
+        this.userType = criteria.getUserType();
+        this.userBelongsToFilter = criteria.getUserBelongsToFilter();
+        this.nameFilter = criteria.getNameFilter();
+        this.archivedOnly = criteria.isArchivedOnly();
+        this.order = criteria.getOrder();
+        this.ascending = criteria.isAscending();
+        this.registered = criteria.isRegistered();
+        this.includeSystem = criteria.isIncludeSystem();
+    }
+
     public UserListFilterCriteria withOwner(BaseOrg owner) {
         this.owner = owner;
         return this;
@@ -60,6 +75,11 @@ public class UserListFilterCriteria implements Serializable {
 
     public UserListFilterCriteria withArchivedOnly() {
         this.archivedOnly = true;
+        return this;
+    }
+
+    public UserListFilterCriteria withArchivedOnly(boolean archiveOnly) {
+        this.archivedOnly = archiveOnly;
         return this;
     }
 
