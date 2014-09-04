@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.setup.user;
 
 import com.n4systems.fieldid.handler.password.PasswordHelper;
 import com.n4systems.fieldid.service.tenant.TenantSettingsService;
+import com.n4systems.fieldid.service.user.UserListFilterCriteria;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
@@ -112,9 +113,13 @@ public class ChangeUserPasswordPage extends FieldIDTemplatePage {
 
     @Override
     protected void addNavBar(String navBarId) {
+        UserListFilterCriteria criteria = new UserListFilterCriteria(false);
+        Long activeUserCount = userService.countUsers(criteria.withArchivedOnly(false));
+        Long archivedUserCount = userService.countUsers(criteria.withArchivedOnly());
+
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
-                aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all.count", activeUserCount)).page(UsersListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", archivedUserCount)).page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.view").page(ViewUserPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(uniqueId(userModel.getObject().getId())).build(),
                 aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(userModel.getObject().getId())).build(),

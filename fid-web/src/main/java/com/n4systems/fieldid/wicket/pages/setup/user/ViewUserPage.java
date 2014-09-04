@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.n4systems.fieldid.actions.users.WelcomeMessage;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.user.SendWelcomeEmailService;
+import com.n4systems.fieldid.service.user.UserListFilterCriteria;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.ConfirmBehavior;
@@ -178,17 +179,21 @@ public class ViewUserPage extends FieldIDTemplatePage{
 
     @Override
     protected void addNavBar(String navBarId) {
+        UserListFilterCriteria criteria = new UserListFilterCriteria(false);
+        Long activeUserCount = userService.countUsers(criteria.withArchivedOnly(false));
+        Long archivedUserCount = userService.countUsers(criteria.withArchivedOnly());
+
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
-                aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all.count", activeUserCount)).page(UsersListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", archivedUserCount)).page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.view").page(ViewUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.edit").page(EditUserPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).cond(!userModel.getObject().isPerson()).build(),
                 aNavItem().label("nav.edit").page(EditPersonPage.class).params(PageParametersBuilder.uniqueId(uniqueId)).cond(userModel.getObject().isPerson()).build(),
-                aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(userModel.getObject().getId())).build(),
+                aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(userModel.getObject().getId())).cond(!userModel.getObject().isPerson()).build(),
                 aNavItem().label("nav.mobile_passcode")
                         .page((userModel.getObject().getHashSecurityCardNumber() == null) ? EditUserMobilePasscodePage.class : ManageUserMobilePasscodePage.class)
-                        .params(PageParametersBuilder.uniqueId(uniqueId)).build(),
-                aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(userModel.getObject().getId())).build(),
+                        .params(PageParametersBuilder.uniqueId(uniqueId)).cond(!userModel.getObject().isPerson()).build(),
+                aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(userModel.getObject().getId())).cond(!userModel.getObject().isPerson()).build(),
                 aNavItem().label("nav.add").page(this.getClass()).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));
