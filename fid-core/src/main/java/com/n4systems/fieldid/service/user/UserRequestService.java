@@ -37,4 +37,9 @@ public class UserRequestService extends FieldIdPersistenceService {
         return persistenceService.findAll(builder);
     }
 
+    public Long countAllUserRequests() {
+        QueryBuilder<UserRequest> builder = createTenantSecurityBuilder(UserRequest.class);
+        return persistenceService.count(builder);
+    }
+
 }
