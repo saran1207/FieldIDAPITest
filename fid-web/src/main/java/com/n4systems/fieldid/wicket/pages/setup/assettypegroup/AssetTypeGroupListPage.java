@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.wicket.pages.setup.assettypegroup;
 
+import com.n4systems.fieldid.service.asset.AssetTypeGroupService;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.assettypegroup.AssetTypeGroupListPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.FieldIDTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
-import com.n4systems.util.AssetTypeGroupRemovalSummary;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -14,7 +14,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilder.aNavItem;
 
@@ -22,6 +22,9 @@ import static com.n4systems.fieldid.wicket.model.navigation.NavigationItemBuilde
  * Created by tracyshi on 2014-07-31.
  */
 public class AssetTypeGroupListPage extends FieldIDTemplatePage {
+
+    @SpringBean
+    private AssetTypeGroupService assetTypeGroupService;
 
     private AssetTypeGroupReorderForm reorderButtonForm;
     private AssetTypeGroupListPanel listPanel;
@@ -57,7 +60,7 @@ public class AssetTypeGroupListPage extends FieldIDTemplatePage {
     @Override
     protected void addNavBar(String navBarId) {
         NavigationBar navBar = new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page(AssetTypeGroupListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all.count", assetTypeGroupService.countAssetTypeGroups())).page(AssetTypeGroupListPage.class).build(),
                 aNavItem().label("nav.add").page(AddAssetTypeGroupPage.class).onRight().build());
         add(navBar);
     }
