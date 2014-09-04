@@ -3,6 +3,8 @@ package com.n4systems.fieldid.wicket.components.setup.eventbook;
 import com.n4systems.fieldid.service.event.EventBookService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListAllPage;
+import com.n4systems.fieldid.wicket.pages.setup.eventbook.EventBooksListArchivedPage;
 import com.n4systems.model.EventBook;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -87,7 +89,7 @@ public class EventBooksActionCell extends Panel {
                         .info(new FIDLabelModel("message.archive_event_book",
                                 thisBook.getDisplayName()).getObject());
 
-                onAction(target);
+                setResponsePage(EventBooksListAllPage.class);
             }
         });
 
@@ -104,17 +106,14 @@ public class EventBooksActionCell extends Panel {
                               .info(new FIDLabelModel("message.unarchive_event_book",
                                       thisBook.getDisplayName()).getObject());
 
-                onAction(target);
+                setResponsePage(EventBooksListArchivedPage.class);
             }
         });
 
         //Manage Visibility...
         optionsContainer.setVisible(!thisBook.isArchived());
-        //archiveLink.setVisible(!thisBook.isArchived());
         openOrCloseLink.setVisible(!thisBook.isArchived());
         unarchiveLink.setVisible(thisBook.isArchived());
-        //openLink.setVisible(!thisBook.isOpen());
-        //closeLink.setVisible(thisBook.isOpen());
     }
 
     protected void onAction(AjaxRequestTarget target) {}
