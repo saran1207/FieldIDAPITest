@@ -147,16 +147,14 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
      * This method is called to delete ProcedureDefinitions from the database.  It should be noted that a user may only
      * delete ProcedureDefinitions in DRAFT status that they authored themselves.
      *
-     * This method doesn't really need to specify what it consumes or provides, as it technically neither consumes nor
-     * provides any actual data.  Responses from this method are simple HTTP Status codes (204, 400 or 409).
-     *
-     * @param procDefSid
-     * @return
+     * @param procDefSid - The MobileID of the ProcedureDefinition as a String.
+     * @return A Response object containing only the Status of the request (204 for success, 400 or 409 for error).
      */
     @DELETE
-    @Path("/{procDefSid}")
+    @Path("/")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Transactional
-    public Response deleteDraftProcedureDefinition(@PathParam("procDefSid") String procDefSid) {
+    public Response deleteDraftProcedureDefinition(@QueryParam("procDefSid") String procDefSid) {
 
         ProcedureDefinition deleteMe = procedureDefinitionService.findProcedureDefinitionByMobileId(procDefSid);
 
