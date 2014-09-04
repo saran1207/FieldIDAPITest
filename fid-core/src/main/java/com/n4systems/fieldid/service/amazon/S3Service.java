@@ -35,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
@@ -720,12 +721,16 @@ public class S3Service extends FieldIdPersistenceService {
 
     private URL generatePresignedUrl(String path, Date expires, HttpMethod method) {
         URL url = null;
+        URL fieldidUrl = url;
         try {
             url = getClient().generatePresignedUrl(getBucket(), path, expires, method);
+            fieldidUrl = new URL(url.getProtocol(), getEndpoint(), url.getPort(), url.getFile());
         } catch(AmazonServiceException ase){
             //just ignore the exception, its probably caused by resource not existing
+        } catch(MalformedURLException e){
+            logger.warn("Issue with setting the S3 endpoint in URL: " + e);
         }
-        return url;
+        return fieldidUrl;
     }
 
     private AmazonS3Client getClient() {
@@ -735,6 +740,11 @@ public class S3Service extends FieldIdPersistenceService {
     private String getBucket() {
         String bucket = configService.getString(ConfigEntry.AMAZON_S3_BUCKET);
         return bucket;
+    }
+
+    private String getEndpoint() {
+        String endpoint = configService.getString(ConfigEntry.AMAZON_S3_ENDPOINT);
+        return endpoint;
     }
 
     private String getAccessKey() {
@@ -770,7 +780,7 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     protected String getBucketHostname() {
-        String bucketHostname = configService.getString(ConfigEntry.AMAZON_S3_BUCKET) + "." + configService.getString(ConfigEntry.AMAZON_S3_SERVER_HOSTNAME);
+        String bucketHostname = configService.getString(ConfigEntry.AMAZON_S3_ENDPOINT);
         return bucketHostname;
     }
 
