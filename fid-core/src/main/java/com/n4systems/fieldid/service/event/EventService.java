@@ -206,7 +206,7 @@ public class EventService extends FieldIdPersistenceService {
 		QueryBuilder<EventScheduleStatusCount> builder1 = new QueryBuilder<EventScheduleStatusCount>(ThingEvent.class, securityContext.getUserSecurityFilter());
 		builder1.setSelectArgument(new NewObjectSelect(EventScheduleStatusCount.class, "obj.workflowState", "COUNT(*)"));
         builder1.applyFilter(new OwnerAndDownFilter(owner));
-
+        builder1.addSimpleWhere("type.actionType", false);
 		builder1.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
 		builder1.addGroupBy("workflowState");
 
@@ -222,6 +222,7 @@ public class EventService extends FieldIdPersistenceService {
 		QueryBuilder<CompletedResultRecord> builder2 = new QueryBuilder<CompletedResultRecord>(ThingEvent.class, securityContext.getUserSecurityFilter());
 		builder2.applyFilter(new OwnerAndDownFilter(owner));
 		builder2.addSimpleWhere("workflowState", WorkflowState.COMPLETED);
+        builder2.addSimpleWhere("type.actionType", false);
 		builder2.addWhere(whereFromTo(fromDate, toDate, "dueDate"));
         builder2.addGroupBy("eventResult");
 
