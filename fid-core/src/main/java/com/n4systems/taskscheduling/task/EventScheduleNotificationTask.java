@@ -1,5 +1,6 @@
 package com.n4systems.taskscheduling.task;
 
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.event.FailedEventListLoader;
 import com.n4systems.model.event.SmartFailedEventListLoader;
 import com.n4systems.model.eventschedulecount.OverdueEventScheduleCountListLoader;
@@ -62,13 +63,15 @@ public class EventScheduleNotificationTask extends ScheduledTask {
 		for (NotificationSetting setting: loader.load()) {
 			try {
 				PrimaryOrg primaryOrg = TenantFinder.getInstance().findPrimaryOrg(setting.getTenant().getId());
-				SecurityFilter settingUserFilter = new UserSecurityFilter(setting.getUser());
+                if(primaryOrg.getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
+                    SecurityFilter settingUserFilter = new UserSecurityFilter(setting.getUser());
 
-				logger.info(LogUtils.prepare("Generating event schedule report for Tenant [$0], Name [$1], User [$2]",	setting.getTenant(), setting.getName(), setting.getUser().getUserID()));
+                    logger.info(LogUtils.prepare("Generating event schedule report for Tenant [$0], Name [$1], User [$2]", setting.getTenant(), setting.getName(), setting.getUser().getUserID()));
 
-				new EventScheduleCountGenerator(new SimpleDateFormat(primaryOrg.getDateFormat()), new UpcomingEventScheduleCountListLoader(settingUserFilter), 
-						new OverdueEventScheduleCountListLoader(settingUserFilter), createFailedEventListLoader(setting, settingUserFilter),
-						ServiceLocator.getMailManager()).sendReport(setting, clock);
+                    new EventScheduleCountGenerator(new SimpleDateFormat(primaryOrg.getDateFormat()), new UpcomingEventScheduleCountListLoader(settingUserFilter),
+                            new OverdueEventScheduleCountListLoader(settingUserFilter), createFailedEventListLoader(setting, settingUserFilter),
+                            ServiceLocator.getMailManager()).sendReport(setting, clock);
+                }
 
 			} catch(Exception e) {
 				logger.error("Failed sending notification: " + setting.getId(), e);

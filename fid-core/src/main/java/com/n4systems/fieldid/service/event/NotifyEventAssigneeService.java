@@ -1,12 +1,15 @@
 package com.n4systems.fieldid.service.event;
 
+import com.n4systems.fieldid.permissions.SystemSecurityGuard;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.fieldid.service.download.SystemUrlUtil;
 import com.n4systems.fieldid.service.mail.MailService;
+import com.n4systems.fieldid.service.tenant.ExtendedFeatureService;
 import com.n4systems.fieldid.service.user.UserGroupService;
 import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.Event;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.WorkflowState;
 import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -17,6 +20,7 @@ import com.n4systems.model.user.UserGroup;
 import com.n4systems.model.utils.PlainDate;
 import com.n4systems.util.FieldIdDateFormatter;
 import com.n4systems.util.mail.TemplateMailMessage;
+import com.n4systems.util.persistence.JoinClause;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter;
 import org.apache.log4j.Logger;
@@ -33,6 +37,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     @Autowired private MailService mailService;
     @Autowired private S3Service s3Service;
     @Autowired private UserGroupService userGroupService;
+    @Autowired private ExtendedFeatureService extendedFeatureService;
 
     @Transactional
     public void sendNotifications() {
@@ -45,6 +50,7 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private void notifyGroupAssignees() {
         QueryBuilder<AssigneeNotification> assigneeQuery = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.addWhere(WhereParameter.Comparator.NOTNULL, "event.assignedGroup", "event.assignedGroup", "");
+        assigneeQuery.addSimpleWhere("event.tenant.disabled", false);
 
         List<AssigneeNotification> assigneeRecords = persistenceService.findAll(assigneeQuery);
 
@@ -58,6 +64,14 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
     private void notifyUserAssignees() {
         QueryBuilder<AssigneeNotification> assigneeQuery = new QueryBuilder<AssigneeNotification>(AssigneeNotification.class, new OpenSecurityFilter());
         assigneeQuery.addWhere(WhereParameter.Comparator.NOTNULL, "event.assignee", "event.assignee", "");
+        assigneeQuery.addSimpleWhere("event.tenant.disabled", false);
+
+        //So we basically need to add inner joins to the following tables, to make sure that we can pull up
+        //tenant information (all may not be necessary... they were only necessary with raw SQL, not accounting
+        //for the relationships managed by Hibernate    ):
+        //  - org_base
+        //  - org_primary
+        //  - org_extendedfeatures
 
         List<AssigneeNotification> assigneeRecords = persistenceService.findAll(assigneeQuery);
 
@@ -111,15 +125,20 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
             securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(assignedGroup.getTenant()));
 
+
+
             for (User member : userGroupService.getUsersInGroup(assignedGroup.getId())) {
-                // Instead of sending a multi message, since users can define their own date
-                // formats and we want our notification to reflect this, we send an individual email to each member.
-                TemplateMailMessage message = createMultiNotifications(events, member);
 
-                message.getToAddresses().add(member.getEmailAddress());
+                if(member.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
+                    // Instead of sending a multi message, since users can define their own date
+                    // formats and we want our notification to reflect this, we send an individual email to each member.
+                    TemplateMailMessage message = createMultiNotifications(events, member);
 
-                message.getTemplateMap().put("assignedGroup", assignedGroup);
-                mailService.sendMessage(message);
+                    message.getToAddresses().add(member.getEmailAddress());
+
+                    message.getTemplateMap().put("assignedGroup", assignedGroup);
+                    mailService.sendMessage(message);
+                }
             }
 
 
@@ -132,14 +151,14 @@ public class NotifyEventAssigneeService extends FieldIdPersistenceService {
 
     private void notifyEventAssignee(List<Event> events, User assignee) {
         try {
+            if(assignee.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
+                TemplateMailMessage message = createMultiNotifications(events, assignee);
 
-            TemplateMailMessage message = createMultiNotifications(events, assignee);
+                message.getToAddresses().add(assignee.getEmailAddress());
+                message.getTemplateMap().put("assignee", assignee);
 
-            message.getToAddresses().add(assignee.getEmailAddress());
-            message.getTemplateMap().put("assignee", assignee);
-
-            mailService.sendMessage(message);
-
+                mailService.sendMessage(message);
+            }
         } catch (Exception e) {
             logger.error("Could not notify assignee", e);
         }
