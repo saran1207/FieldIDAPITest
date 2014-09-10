@@ -50,6 +50,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
     public List<RecurringAssetTypeEvent> getRecurringAssetTypeEvents() {
         QueryBuilder<RecurringAssetTypeEvent> query = new QueryBuilder<RecurringAssetTypeEvent>(RecurringAssetTypeEvent.class, new OpenSecurityFilter());
+        query.addSimpleWhere("tenant.disabled", false);
         return persistenceService.findAll(query);
     }
 
@@ -155,6 +156,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
     public List<RecurringPlaceEvent> getAllRecurringPlaceEvents() {
         QueryBuilder<RecurringPlaceEvent> query = new QueryBuilder<RecurringPlaceEvent>(RecurringPlaceEvent.class, new OpenSecurityFilter());
+        query.addSimpleWhere("tenant.disabled", false);
         return persistenceService.findAll(query);
     }
 
@@ -277,6 +279,7 @@ public class RecurringScheduleService extends FieldIdPersistenceService {
 
     public List<RecurringLotoEvent> getAllRecurringLotoEvents() {
         QueryBuilder<RecurringLotoEvent> query = new QueryBuilder<RecurringLotoEvent>(RecurringLotoEvent.class, new OpenSecurityFilter());
+        query.addSimpleWhere("tenant.disabled", false);
         return persistenceService.findAll(query);
     }
 

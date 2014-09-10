@@ -22,6 +22,7 @@ public class NotificationSettingsByTimezoneListLoader extends ListLoader<Notific
 
         query.addSimpleWhere("user.timeZoneID", timeZone);
         query.addSimpleWhere("user.state", Archivable.EntityState.ACTIVE);
+        query.addSimpleWhere("tenant.disabled", false);
 
         return query.getResultList(em);
     }

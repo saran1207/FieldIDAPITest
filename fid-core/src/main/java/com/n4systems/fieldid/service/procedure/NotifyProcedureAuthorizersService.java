@@ -4,6 +4,7 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.download.SystemUrlUtil;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.user.UserGroupService;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
@@ -33,16 +34,19 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
         QueryBuilder<ProcedureDefinition> assigneeQuery = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, new OpenSecurityFilter());
         assigneeQuery.addSimpleWhere("publishedState", PublishedState.WAITING_FOR_APPROVAL);
         assigneeQuery.addSimpleWhere("authorizationNotificationSent", false);
+        assigneeQuery.addSimpleWhere("tenant.disabled", false);
 
         List<ProcedureDefinition> publishedDefsAwaitingAuthorization = persistenceService.findAll(assigneeQuery);
 
         for (ProcedureDefinition procedureDefinition : publishedDefsAwaitingAuthorization) {
-            try {
-                sendAuthorizationNotification(procedureDefinition);
-            } catch(Exception e) {
-                log.error("Could not send auth notification for procedureDef: " + procedureDefinition.getId(), e);
-            } finally {
-                persistenceService.update(procedureDefinition);
+            if(procedureDefinition.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
+                try {
+                    sendAuthorizationNotification(procedureDefinition);
+                } catch (Exception e) {
+                    log.error("Could not send auth notification for procedureDef: " + procedureDefinition.getId(), e);
+                } finally {
+                    persistenceService.update(procedureDefinition);
+                }
             }
         }
     }
