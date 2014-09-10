@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.eventbook.EventBookListFilterCriteria;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
 
 import java.util.Date;
 import java.util.List;
@@ -114,12 +114,69 @@ public class EventBookService extends FieldIdPersistenceService {
         return persistenceService.exists(query);
     }
 
+    public Long getEventBooksCountByState(EventBookListFilterCriteria criteria, Archivable.EntityState state) {
+        if(Archivable.EntityState.ACTIVE.equals(state)) {
+            return getActiveEventBookCountByCriteria(criteria);
+        } else {
+            return getArchivedEventBookCountByCriteria(criteria);
+        }
+    }
+
+    public Long getActiveEventBookCountByCriteria(EventBookListFilterCriteria criteria) {
+        QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class);
+        applyFilter(query, criteria);
+        query.addSimpleWhere("state",
+                Archivable.EntityState.ACTIVE);
+
+        return persistenceService.count(query);
+    }
+
+    public Long getArchivedEventBookCountByCriteria(EventBookListFilterCriteria criteria) {
+        QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class, true);
+        applyFilter(query, criteria);
+        query.addSimpleWhere("state",
+                Archivable.EntityState.ARCHIVED);
+
+        return persistenceService.count(query);
+    }
+
+    private void applyFilter(QueryBuilder<EventBook> builder, EventBookListFilterCriteria criteria) {
+
+        if (criteria.getOwner() != null) {
+            builder.applyFilter(new OwnerAndDownFilter(criteria.getOwner()));
+        }
+
+        if (criteria.getTitleFilter() != null && !criteria.getTitleFilter().isEmpty()) {
+            WhereParameterGroup whereGroup = new WhereParameterGroup();
+            whereGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name", criteria.getTitleFilter(), WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH,
+                    WhereClause.ChainOp.OR));
+            builder.addWhere(whereGroup);
+        }
+
+        if(criteria.getOrder() != null && !criteria.getOrder().isEmpty()) {
+            for (String subOrder : criteria.getOrder().split(",")) {
+                builder.addOrder(subOrder.trim(), criteria.isAscending());
+            }
+        }
+    }
+
     public Long getEventBooksCountByState(Archivable.EntityState state) {
         if(Archivable.EntityState.ACTIVE.equals(state)) {
             return getActiveEventBookCount();
         } else {
             return getArchivedEventBookCount();
         }
+    }
+
+    public List<EventBook> getEventBooks(EventBookListFilterCriteria criteria, Archivable.EntityState state) {
+        QueryBuilder<EventBook> query = (Archivable.EntityState.ACTIVE.equals(state) ?
+                createUserSecurityBuilder(EventBook.class) :
+                createUserSecurityBuilder(EventBook.class, true));
+
+        applyFilter(query, criteria);
+        query.addSimpleWhere("state", state);
+
+        return persistenceService.findAll(query);
     }
 
     public List<EventBook> getPagedEventBooksListByState(Archivable.EntityState state,

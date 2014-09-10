@@ -2,9 +2,11 @@ package com.n4systems.fieldid.wicket.pages.setup.eventbook;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.event.EventBookService;
+import com.n4systems.fieldid.service.eventbook.EventBookListFilterCriteria;
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.navigation.NavigationBar;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.fieldid.wicket.components.setup.eventbook.EventBooksActionColumn;
 import com.n4systems.fieldid.wicket.components.setup.eventbook.EventBooksEditCell;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
@@ -15,17 +17,24 @@ import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.orgs.BaseOrg;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import java.util.List;
@@ -46,6 +55,10 @@ public abstract class EventBooksListPage extends FieldIDTemplatePage {
 
     protected FIDFeedbackPanel feedbackPanel;
     private WebMarkupContainer listContainer;
+    private OrgLocationPicker picker;
+
+    private IModel<EventBookListFilterCriteria> filterCriteriaModel;
+    private Form filterForm;
 
     protected IModel<Archivable.EntityState> archivableState;
 
@@ -54,6 +67,7 @@ public abstract class EventBooksListPage extends FieldIDTemplatePage {
 
     public EventBooksListPage(IModel<Archivable.EntityState> model) {
         archivableState = model;
+        filterCriteriaModel = Model.of(new EventBookListFilterCriteria());
     }
 
     @Override
@@ -63,6 +77,35 @@ public abstract class EventBooksListPage extends FieldIDTemplatePage {
         feedbackPanel = new FIDFeedbackPanel("feedbackPanel");
         feedbackPanel.setOutputMarkupId(true);
         add(feedbackPanel);
+
+        add(filterForm = new Form<EventBookListFilterCriteria>("filterForm", filterCriteriaModel));
+        filterForm.add(new TextField<String>("titleFilter", new PropertyModel<String>(filterCriteriaModel, "titleFilter")));
+
+        picker = new OrgLocationPicker("orgPickerField", new PropertyModel<BaseOrg>(filterCriteriaModel, "owner"));
+        filterForm.add(picker);
+
+        filterForm.add(new AjaxButton("filter") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                target.add(listContainer);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {}
+        });
+
+        filterForm.add(new AjaxSubmitLink("clear") {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                filterCriteriaModel.getObject().reset();
+                picker.resetInput();
+                target.add(filterForm, listContainer);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {}
+        });
+
 
         add(listContainer = new WebMarkupContainer("eventBooksListPanel"));
 
@@ -120,7 +163,7 @@ public abstract class EventBooksListPage extends FieldIDTemplatePage {
     protected EventBookDataProvider getDataProvider() {
         return new EventBookDataProvider("name",
                                          SortOrder.ASCENDING,
-                                         archivableState.getObject());
+                                         archivableState.getObject(), filterCriteriaModel.getObject());
     }
 
     private List<IColumn<EventBook>> getEventBookTableColumns() {
