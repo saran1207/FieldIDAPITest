@@ -7,11 +7,15 @@ import com.n4systems.model.api.Archivable;
 import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.SortTerm;
 
 import java.util.Date;
 import java.util.List;
 
 public class EventBookService extends FieldIdPersistenceService {
+
+    private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
 
     public List<EventBook> getAllEventBooks() {
         return persistenceService.findAll(EventBook.class);
@@ -46,7 +50,7 @@ public class EventBookService extends FieldIdPersistenceService {
         QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class, true);
 
         query.addSimpleWhere("state",
-                             Archivable.EntityState.ARCHIVED);
+                Archivable.EntityState.ARCHIVED);
 
         return persistenceService.count(query);
     }
@@ -153,11 +157,40 @@ public class EventBookService extends FieldIdPersistenceService {
             builder.addWhere(whereGroup);
         }
 
-        if(criteria.getOrder() != null && !criteria.getOrder().isEmpty()) {
-            for (String subOrder : criteria.getOrder().split(",")) {
-                builder.addOrder(subOrder.trim(), criteria.isAscending());
+        boolean needsCreatedBySortJoin = false;
+        boolean needsModifiedBySortJoin = false;
+        if (criteria.getOrder() != null) {
+            String[] orders = criteria.getOrder().split(",");
+            for (String subOrder : orders) {
+                subOrder=subOrder.trim();
+                if (subOrder.startsWith("createdBy")) {
+                    subOrder = subOrder.replaceAll("createdBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, criteria.isAscending() ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    builder.getOrderArguments().add(sortTerm.toSortField());
+                    needsCreatedBySortJoin = true;
+                } else if (subOrder.startsWith("modifiedBy")) {
+                    subOrder = subOrder.replaceAll("modifiedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, criteria.isAscending() ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    builder.getOrderArguments().add(sortTerm.toSortField());
+                    needsModifiedBySortJoin = true;
+                } else {
+                    builder.addOrder(subOrder, criteria.isAscending());
+                }
             }
         }
+
+        if (needsCreatedBySortJoin) {
+            builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "createdBy", "sortJoin", true));
+        }
+
+        if (needsModifiedBySortJoin) {
+            builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "modifiedBy", "sortJoin", true));
+        }
+
     }
 
     public Long getEventBooksCountByState(Archivable.EntityState state) {
@@ -169,14 +202,11 @@ public class EventBookService extends FieldIdPersistenceService {
     }
 
     public List<EventBook> getEventBooks(EventBookListFilterCriteria criteria, Archivable.EntityState state) {
-        QueryBuilder<EventBook> query = (Archivable.EntityState.ACTIVE.equals(state) ?
-                createUserSecurityBuilder(EventBook.class) :
-                createUserSecurityBuilder(EventBook.class, true));
-
+        QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class, true);
         applyFilter(query, criteria);
         query.addSimpleWhere("state", state);
-
         return persistenceService.findAll(query);
+
     }
 
     public List<EventBook> getPagedEventBooksListByState(Archivable.EntityState state,
