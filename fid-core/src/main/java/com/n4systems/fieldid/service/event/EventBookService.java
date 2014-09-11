@@ -159,6 +159,7 @@ public class EventBookService extends FieldIdPersistenceService {
 
         boolean needsCreatedBySortJoin = false;
         boolean needsModifiedBySortJoin = false;
+        boolean needsJobSiteSortJoin = false;
         if (criteria.getOrder() != null) {
             String[] orders = criteria.getOrder().split(",");
             for (String subOrder : orders) {
@@ -177,6 +178,13 @@ public class EventBookService extends FieldIdPersistenceService {
                     sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
                     builder.getOrderArguments().add(sortTerm.toSortField());
                     needsModifiedBySortJoin = true;
+                } else if (subOrder.startsWith("owner")) {
+                    subOrder = subOrder.replaceAll("owner", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, criteria.isAscending() ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    builder.getOrderArguments().add(sortTerm.toSortField());
+                    needsJobSiteSortJoin = true;
                 } else {
                     builder.addOrder(subOrder, criteria.isAscending());
                 }
@@ -186,9 +194,11 @@ public class EventBookService extends FieldIdPersistenceService {
         if (needsCreatedBySortJoin) {
             builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "createdBy", "sortJoin", true));
         }
-
         if (needsModifiedBySortJoin) {
             builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "modifiedBy", "sortJoin", true));
+        }
+        if (needsJobSiteSortJoin) {
+            builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "owner", "sortJoin", true));
         }
 
     }
