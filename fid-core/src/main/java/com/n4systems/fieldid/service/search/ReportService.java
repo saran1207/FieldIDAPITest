@@ -7,6 +7,7 @@ import com.n4systems.model.user.User;
 import com.n4systems.services.date.DateService;
 import com.n4systems.util.DateHelper;
 import com.n4systems.util.persistence.QueryBuilder;
+import com.n4systems.util.persistence.SubSelectInClause;
 import com.n4systems.util.persistence.search.JoinTerm;
 import com.n4systems.util.persistence.search.SortDirection;
 import com.n4systems.util.persistence.search.SortTerm;
@@ -121,7 +122,6 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
         if (!criteriaModel.getLocation().isBlank()) {
             searchTerms.add(new LocationTerm(criteriaModel.getWorkflowState(), getId(criteriaModel.getLocation().getPredefinedLocation()), criteriaModel.getLocation().getFreeformLocation()));
         }
-
     }
 
 
@@ -216,6 +216,17 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
             // This is a standard sort
             super.addSortTerms(criteriaModel, searchBuilder, sortColumn, sortDirection);
         }
+    }
+
+    @Override
+    protected <E> QueryBuilder<E> addMostRecentEventSearchTerm(EventReportCriteria criteriaModel, QueryBuilder<E> searchBuilder) {
+        if (criteriaModel.isShowMostRecentEventsOnly()) {
+            QueryBuilder<ThingEvent> subQuery = createBaseSearchQueryBuilder(criteriaModel);
+            subQuery.addGroupBy("asset.id");
+            subQuery.setMaxSelect("completedDate");
+            searchBuilder.addWhere(new SubSelectInClause("completedDate", subQuery));
+        }
+        return searchBuilder;
     }
 
     private void addOrgSort(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, SortDirection sortDirection, String assetOrgAlias, String eventOrgAlias) {

@@ -73,6 +73,7 @@ public class ReportingFilterPanel extends Panel {
             protected void onUpdate(AjaxRequestTarget target) {
                 eventStatusAndDateRangePanel.repaintComponents(target);
                 eventStatusAndDateRangePanel.onWorkflowStateChanged(target);
+                eventDetailsCriteriaPanel.repaintShowMostRecentEventsOnlyCheck(target);
             }
         });
 

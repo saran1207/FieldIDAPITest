@@ -46,6 +46,8 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 		// construct a search QueryBuilder with Long as the select class since we will force simple select to be "id" later
 		QueryBuilder<?> idBuilder = createBaseSearchQueryBuilder(criteria);
 
+        addMostRecentEventSearchTerm(criteria, idBuilder);
+
 		addSortTermsToBuilder(idBuilder, criteria);
 
 		// note that this will fail for entities not implementing BaseEntity (unless you get lucky)
@@ -54,6 +56,8 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
 	public Integer countPages(T criteriaModel, Long pageSize) {
 		QueryBuilder<?> countBuilder = createBaseSearchQueryBuilder(criteriaModel);
+
+        addMostRecentEventSearchTerm(criteriaModel, countBuilder);
 
 		Long count = (Long) persistenceService.find(countBuilder.setCountSelect());
 
@@ -105,6 +109,8 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 		// create our base query builder (no sort terms yet)
 		QueryBuilder<M> searchBuilder = createBaseSearchQueryBuilder(criteriaModel);
 
+        addMostRecentEventSearchTerm(criteriaModel, searchBuilder);
+
 		// get/set the total result count now before the sort terms get added
 		int totalResultCount = findCount(searchBuilder).intValue();
 
@@ -144,14 +150,15 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
     public QueryBuilder<M> createBaseMappedSearchQueryBuilder(T criteriaModel) {
         QueryBuilder<M> searchBuilder = createAppropriateMappedQueryBuilder(criteriaModel);
-        augmentSearchBuilder(criteriaModel, searchBuilder, true);
-        return searchBuilder;
+        return augmentSearchBuilder(criteriaModel, searchBuilder, true);
+
     }
 
     public QueryBuilder<M> createBaseSearchQueryBuilder(T criteriaModel) {
 		// create our QueryBuilder, note the type will be the same as our selectClass
 		QueryBuilder<M> searchBuilder = createAppropriateQueryBuilder(criteriaModel, searchClass);
         return augmentSearchBuilder(criteriaModel, searchBuilder, false);
+
     }
 
     private <E> QueryBuilder<E> augmentSearchBuilder(T criteriaModel, QueryBuilder<E> searchBuilder, boolean includeGps) {
@@ -210,6 +217,7 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
 
     protected void addJoinTerms(T criteriaModel, List<JoinTerm> joinTerms) { }
+    protected <E> QueryBuilder<E> addMostRecentEventSearchTerm(T criteriaModel, QueryBuilder<E> searchBuilder) { return searchBuilder; }
     protected abstract void addSearchTerms(T criteriaModel, List<SearchTermDefiner> search, boolean includeGps);
 
     protected boolean isIntegrationEnabled() {
