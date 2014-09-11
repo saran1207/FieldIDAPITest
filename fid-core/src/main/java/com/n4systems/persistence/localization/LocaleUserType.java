@@ -1,6 +1,7 @@
 package com.n4systems.persistence.localization;
 
 import org.hibernate.HibernateException;
+import org.hibernate.engine.SessionImplementor;
 import org.hibernate.type.StandardBasicTypes;
 import org.hibernate.usertype.UserType;
 import org.springframework.util.StringUtils;
@@ -62,6 +63,20 @@ public class LocaleUserType implements UserType {
         String localeString = locale!=null ? locale.toString() : null;
         StandardBasicTypes.STRING.nullSafeSet(st, localeString, index);
     }
+
+    //TODO Make sure this is the correct implementation of nullSafeGet and nullSafeSet
+//    @Override
+//    public Object nullSafeGet(ResultSet rs, String[] names, SessionImplementor sessionImplementor, Object owner) throws HibernateException, SQLException {
+//        String value = StandardBasicTypes.STRING.nullSafeGet(rs, names[0], sessionImplementor);
+//        return value== null ? null : StringUtils.parseLocaleString(value);
+//    }
+//
+//    @Override
+//    public void nullSafeSet(PreparedStatement st, Object value, int index, SessionImplementor sessionImplementor) throws HibernateException, SQLException {
+//        Locale locale = (Locale) value;
+//        String localeString = locale!=null ? locale.toString() : null;
+//        StandardBasicTypes.STRING.nullSafeSet(st, localeString, index, sessionImplementor);
+//    }
 
     public Object deepCopy(Object value) throws HibernateException {
         return value;
