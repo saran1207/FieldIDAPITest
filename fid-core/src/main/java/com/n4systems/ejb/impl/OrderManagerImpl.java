@@ -409,7 +409,6 @@ public class OrderManagerImpl implements OrderManager {
 	 * @param customerCode	short name of the customer
 	 * @param tenant		a Tenant
 	 * @return				A customer or null
-	 * @throws DuplicateExtenalOrgException 
 	 */
 	private CustomerOrg processCustomer(String customerName, String customerCode, Tenant tenant) {
 		// if neither are set, do nothing
@@ -437,7 +436,6 @@ public class OrderManagerImpl implements OrderManager {
 	 * @param divisionName	Name of a division
 	 * @param customer		An existing customer in the system
 	 * @return				A Division or null
-	 * @throws DuplicateExtenalOrgException 
 	 */
 	private DivisionOrg processDivision(String divisionName, CustomerOrg customer) {
 		// we'll need both of these to do anything
@@ -447,8 +445,9 @@ public class OrderManagerImpl implements OrderManager {
 		
 		LegacyFindOrCreateDivisionOrgHandler findOrCreateDiv = getFindOrCreateDivisionHandler();
 		
-		DivisionOrg division = findOrCreateDiv.findOrCreate(customer, divisionName);
-		return division;
+//		DivisionOrg division = findOrCreateDiv.findOrCreate(customer, divisionName);
+//		return division;
+		return null;
 	}
 	
 	/**
@@ -698,6 +697,7 @@ public class OrderManagerImpl implements OrderManager {
 	}
     
     protected LegacyFindOrCreateDivisionOrgHandler getFindOrCreateDivisionHandler() {
-		return new LegacyFindOrCreateDivisionOrgHandler(persistenceManager);
+//		return new LegacyFindOrCreateDivisionOrgHandler(persistenceManager);
+		return null;
 	}
 }

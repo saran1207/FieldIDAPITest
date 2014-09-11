@@ -40,7 +40,7 @@ import java.net.URL;
 import java.util.*;
 
 import org.springframework.util.Assert;
-import sun.misc.BASE64Encoder;
+//import sun.misc.BASE64Encoder;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -1358,7 +1358,7 @@ public class S3Service extends FieldIdPersistenceService {
             Mac hmac = Mac.getInstance("HmacSHA1");
             hmac.init(new SecretKeySpec(getSecretKey().getBytes("UTF-8"), "HmacSHA1"));
 
-            String bucketPolicySignature = (new BASE64Encoder()).encode(hmac.doFinal(bucketPolicyBase64.getBytes("UTF-8"))).replaceAll("\n", "");
+            String bucketPolicySignature = Base64.getEncoder().encodeToString(hmac.doFinal(bucketPolicyBase64.getBytes("UTF-8"))).replaceAll("\n", "");
             return bucketPolicySignature;
         }
         catch(Exception e){
@@ -1369,7 +1369,7 @@ public class S3Service extends FieldIdPersistenceService {
 
     public String getBucketPolicyBase64(){
         try {
-            return (new BASE64Encoder()).encode(
+            return Base64.getEncoder().encodeToString(
                     this.getBucketPolicy().getBytes("UTF-8")).replaceAll("\n","").replaceAll("\r","");
         }
         catch(Exception e){
