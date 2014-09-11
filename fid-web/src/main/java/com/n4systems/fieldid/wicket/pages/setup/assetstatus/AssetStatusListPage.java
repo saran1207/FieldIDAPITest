@@ -139,8 +139,8 @@ public abstract class AssetStatusListPage extends FieldIDTemplatePage {
         columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.modified"), "modified", "modified") {
             @Override
             public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
-                Date created = rowModel.getObject().getCreated();
-                item.add(new Label(componentId, new DayDisplayModel(Model.of(created)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+                Date modified = rowModel.getObject().getModified();
+                item.add(new Label(componentId, new DayDisplayModel(Model.of(modified)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
             }
         });
 
