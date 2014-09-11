@@ -1903,7 +1903,7 @@ input.description {
 	padding: 6px 0px 2px 0px; 
 }
 
-#reducedLineHeightLabel{
+.reducedLineHeightLabel{
 	line-height: normal;
 }
 
