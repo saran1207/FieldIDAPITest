@@ -4,6 +4,7 @@ import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressed
 import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.TrimmedStringModel;
+import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -114,6 +115,8 @@ public class EditCopyDeleteItemPanel extends Panel {
         editFormContainer = new WebMarkupContainer("editFormContainer");
         editFormContainer.add(new EditForm("editForm", titleModel));
         add(editFormContainer.setVisible(false));
+
+        add(createOptionalPanel("optionalPanel"));
     }
 
     protected String getTrimmedString(String str, int limit) {
@@ -169,6 +172,10 @@ public class EditCopyDeleteItemPanel extends Panel {
     protected void onFormValidationError(AjaxRequestTarget target) { }
 
     protected void onStoreLinkClicked(AjaxRequestTarget target) { }
+
+    protected Component createOptionalPanel(String id) {
+        return new WebMarkupContainer(id).setVisible(false);
+    }
 
     private void setViewState(AjaxRequestTarget target) {
         editFormContainer.setVisible(false);

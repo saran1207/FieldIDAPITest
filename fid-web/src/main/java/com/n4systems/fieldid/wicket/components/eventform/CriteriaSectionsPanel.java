@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.components.eventform;
 
 import com.n4systems.fieldid.utils.Predicate;
 import com.n4systems.fieldid.wicket.behavior.ClickOnComponentWhenEnterKeyPressedBehavior;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.AppendToClassIfCondition;
 import com.n4systems.fieldid.wicket.components.TwoStateAjaxLink;
 import com.n4systems.fieldid.wicket.components.feedback.ContainerFeedbackPanel;
@@ -13,12 +14,14 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.EnclosureContainer;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.RequiredTextField;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.html.panel.Fragment;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -94,6 +97,11 @@ public class CriteriaSectionsPanel extends SortableListPanel {
                     @Override
                     protected boolean isReorderState() {
                         return reorderState;
+                    }
+
+                    @Override
+                    protected Component createOptionalPanel(String id) {
+                       return new OptionalFlagPanel(id, new PropertyModel<Boolean>(item.getModel(), "optional"));
                     }
                 });
 
@@ -185,5 +193,12 @@ public class CriteriaSectionsPanel extends SortableListPanel {
     protected void onCriteriaSectionListUpdated(AjaxRequestTarget target) { }
 
     protected void onCurrentCriteriaSectionDeleted(AjaxRequestTarget target) { }
+
+    private class OptionalFlagPanel extends Fragment {
+        public OptionalFlagPanel(String id, IModel<Boolean> model) {
+            super(id, "optionalFlagPanel", CriteriaSectionsPanel.this, model);
+            add(new CheckBox("optionalCheck", model).add(new UpdateComponentOnChange()));
+        }
+    }
 
 }
