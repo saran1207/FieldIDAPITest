@@ -156,4 +156,8 @@ abstract public class BaseEntity implements Saveable, Serializable, Copyable {
         setUntranslatedValue("VOID","PLACEHOLDER-VALUE");
     }
 
+	public String getPublicId() {
+		return PublicIdEncoder.encode(id);
+	}
+
 }
