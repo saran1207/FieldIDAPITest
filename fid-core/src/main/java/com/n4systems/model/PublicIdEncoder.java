@@ -10,7 +10,7 @@ public class PublicIdEncoder {
 
 	private static final char[] ID_CHARSET = ("0123456789" + "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
 
-	protected static final MultiplicativeInverseEncoder longEncoder = new MultiplicativeInverseEncoder(11037271757L, 22801763489L);
+	protected static final MultiplicativeInverseEncoder longEncoder = new MultiplicativeInverseEncoder(COPRIMEA, COPRIMEB);
 	protected static final CustomBaseEncoder stringEncoder = new CustomBaseEncoder(ID_CHARSET);
 
 	public static String encode(long n) {
