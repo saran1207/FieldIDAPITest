@@ -27,6 +27,8 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
     @JoinTable(name="criteriasections_criteria", joinColumns = @JoinColumn(name="criteriasections_id"), inverseJoinColumns = @JoinColumn(name="criteria_id"))
 	private List<Criteria> criteria = new ArrayList<Criteria>();
 
+    private boolean optional = false;
+
     @Transient
     private Long oldId;
 	
@@ -91,6 +93,14 @@ public class CriteriaSection extends EntityWithTenant implements Listable<Long>,
 	public void setName( String name ) {
 		setTitle( name );
 	}
+
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public void setOptional(boolean optional) {
+        this.optional = optional;
+    }
 
     @Override
 	public String toString() {
