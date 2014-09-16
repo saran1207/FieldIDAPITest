@@ -59,11 +59,40 @@ public class EventScheduleCount implements Comparable<EventScheduleCount> {
 		if (comp == 0) {
 			comp = getDivisionName().compareTo(other.getDivisionName());
 		}
+
+        //Because of some weird quirk with how tests are being run against this class under Java 8, this
+        //ridiculous "if" structure needed to be added.  In any real world situation, this would never actually
+        //happen, because of the fact that these fields are not nullable on the JPA entity.  This is just due
+        //to a peculiarity with EasyMock that was NOT addressed by the shift to cglib:cglib-nodep:3.2
 		if (comp == 0) {
-			comp = getAssetTypeName().compareTo(other.getAssetTypeName());
+            if(getAssetTypeName() == null && other.getAssetTypeName() ==  null) {
+                comp = 0;
+            } else {
+                if(getAssetTypeName() == null && other.getAssetTypeName() != null) {
+                    comp = -1;
+                } else {
+                    if(getAssetTypeName() != null && other.getAssetTypeName() == null) {
+                        comp = 1;
+                    } else {
+                        comp = getAssetTypeName().compareTo(other.getAssetTypeName());
+                    }
+                }
+            }
 		}
 		if (comp == 0) {
-			comp = getEventTypeName().compareTo(other.getEventTypeName());
+            if(getEventTypeName() == null && other.getEventTypeName() == null) {
+                comp = 0;
+            } else {
+                if(getEventTypeName() == null && other.getEventTypeName() != null) {
+                    comp = -1;
+                } else {
+                    if(getEventTypeName() != null && other.getEventTypeName() == null) {
+                        comp = 1;
+                    } else {
+                        comp = getEventTypeName().compareTo(other.getEventTypeName());
+                    }
+                }
+            }
 		}
 		
 		return comp;

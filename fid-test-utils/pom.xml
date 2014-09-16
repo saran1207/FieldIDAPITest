@@ -17,7 +17,21 @@
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
 			<version>3.0</version>
+            <exclusions>
+                <!-- EasyMock includes a bad version of CGLib.  We're going to dump it and use a custom build
+                     of 3.2 while we wait for an official build to be cut... -->
+                <exclusion>
+                    <groupId>cglib</groupId>
+                    <artifactId>cglib-nodep</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
+        <!-- This is a custom build of CGLib.  It doesn't actually exist in the wild... YET -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>3.2-fid</version>
+        </dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
@@ -70,8 +84,17 @@
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-api</artifactId>
                 </exclusion>
+                <!--<exclusion>-->
+                    <!--<groupId>cglib</groupId>-->
+                    <!--<artifactId>cglib</artifactId>-->
+                <!--</exclusion>-->
             </exclusions>
         </dependency>
+        <!--<dependency>-->
+            <!--<groupId>cglib</groupId>-->
+            <!--<artifactId>cglib</artifactId>-->
+            <!--<version>3.2-fid</version>-->
+        <!--</dependency>-->
         <dependency>
 			<groupId>commons-io</groupId>
 			<artifactId>commons-io</artifactId>
