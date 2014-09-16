@@ -7,18 +7,23 @@ import javax.persistence.*;
 
 import com.n4systems.model.api.UnsecuredEntity;
 import com.n4systems.model.parents.AbstractEntity;
+import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.annotations.IndexColumn;
 
 @Entity
 @Table(name="seenitstorageitem")
+@PrimaryKeyJoinColumn(name="id")
 public class SeenItStorageItem extends AbstractEntity implements UnsecuredEntity {
 	
 	@Column(nullable=false)
 	private Long userId;
 	
-	//TODO Make sure we don't need additional annotations here... I think we might.
-	@ElementCollection(fetch = FetchType.EAGER)
+    @Column(name="element")
+    @ElementCollection(fetch=FetchType.EAGER)
+    @JoinTable(name="seenitstorageitem_itemsseen", joinColumns = @JoinColumn(name="seenitstorageitem_id"))
 	@Enumerated(EnumType.STRING)
-	private Set<SeenItItem> itemsSeen = new HashSet<SeenItItem>();
+    @IndexColumn(name="id")
+	private Set<SeenItItem> itemsSeen = new HashSet<>();
 	
 	public SeenItStorageItem() {
 		super();
