@@ -391,7 +391,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
 
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
-        query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", getProcedureDefinitionIdFromProcedureAuditEvents());
+        List<Long> idList = getProcedureDefinitionIdFromProcedureAuditEvents();
+        if(idList.size()>0) {
+            query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", idList);
+        }
         query.setOrder("equipmentLocation", true);
         query.addOrder("procedureCode", true);
         query.applyFilter(new OwnerAndDownFilter(owner));
@@ -404,13 +407,16 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
 
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
-        query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", getProcedureDefinitionIdFromProcedureAuditEvents());
+        List<Long> idList = getProcedureDefinitionIdFromProcedureAuditEvents();
+        if(idList.size()>0) {
+            query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", idList);
+        }
         query.setOrder("equipmentLocation", true);
         query.addOrder("procedureCode", true);
         query.applyFilter(new OwnerAndDownFilter(owner));
         query.setCountSelect();
         return persistenceService.find(query);
-    };
+    }
 
     public List<Long> getProcedureDefinitionIdFromProcedureAuditEvents() {
 
@@ -419,7 +425,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         List<Long> list = persistenceService.findAll(query);
 
         return list;
-    };
+    }
 
 
     public List<ProcedureDefinition> getAllPreviouslyPublishedProcedures(String sTerm, String order, boolean ascending, int first, int count) {
