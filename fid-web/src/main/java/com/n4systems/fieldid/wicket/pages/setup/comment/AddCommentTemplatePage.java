@@ -74,11 +74,18 @@ public class AddCommentTemplatePage extends FieldIDTemplatePage {
                             .required()
                             .add(new CommentTemplateUniqueNameValidator(template.getId())));
 
-        form.add(new LabelledTextArea<String>("commentField",
+        LabelledTextArea<String> textArea;
+
+        form.add(textArea = new LabelledTextArea<String>("commentField",
                                               "label.comment",
                                               new PropertyModel<String>(thisTemplate,
-                                                                        "comment"))
-                            .required());
+                                                                        "comment")));
+
+        //Something is strange in the kitchen.  For unclear reasons, Java 8 has caused us to have to
+        //declare a component as required like this if we're not also adding a behaviour to the component.
+        //This DOES work, though.  And as you can see above, if you add a behaviour, you don't need to split
+        //out the declaration like this.
+        textArea.required();
 
         Button submitButton;
         form.add(submitButton = new Button("saveButton"));
