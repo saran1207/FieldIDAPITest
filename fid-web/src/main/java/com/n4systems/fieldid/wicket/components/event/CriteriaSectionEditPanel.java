@@ -48,42 +48,6 @@ public class CriteriaSectionEditPanel extends Panel {
     private boolean showActionButtons;
     private boolean showAttachmentsAndActions = true;
 
-    public CriteriaSectionEditPanel(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results, boolean showActionButtons) {
-        super(id);
-        this.showActionButtons = showActionButtons;
-        setOutputMarkupPlaceholderTag(true);
-        add(new CriteriaEditForm("criteriaEditForm", eventClass, results));
-
-        add(criteriaImagesModalWindow = new DialogModalWindow("imagesWindow"));
-        criteriaImagesModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
-            @Override
-            public boolean onCloseButtonClicked(AjaxRequestTarget target) {
-                target.add(CriteriaSectionEditPanel.this);
-                return true;
-            }
-        });
-
-        add(criteriaModalWindow = new FIDModalWindow("observationWindow"));
-        criteriaModalWindow.setCloseButtonCallback(new ModalWindow.CloseButtonCallback() {
-			@Override
-			public boolean onCloseButtonClicked(AjaxRequestTarget target) {
-				target.add(CriteriaSectionEditPanel.this);
-				return true;
-			}
-		});
-
-        add(actionsWindow = new DialogModalWindow("actionsWindow"));
-        actionsWindow.setInitialWidth(350);
-        actionsWindow.setInitialHeight(600);
-
-        add(popup = new Popup("instructionsDialog") {
-            { setVisible(false); }
-            @Override protected WebMarkupContainer createContent(String id) {
-                return richTextDisplay =  new RichTextDisplay(id, Model.of(""));
-            }
-        });
-    }
-
     public CriteriaSectionEditPanel(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results, boolean showActionButtons, boolean showAttachmentsAndActions) {
         super(id);
         this.showActionButtons = showActionButtons;

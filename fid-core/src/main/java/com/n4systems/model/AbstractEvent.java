@@ -214,6 +214,7 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
     public static class SectionResults implements Serializable {
         public List<CriteriaResult> results;
         public CriteriaSection section;
+        public Boolean disabled = Boolean.FALSE;
     }
 
     public List<SectionResults> getSectionResults() {
@@ -226,9 +227,11 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
     
     public boolean containsUnfilledScoreCriteria() {
         for (SectionResults sectionResult : getSectionResults()) {
-            for (CriteriaResult result : sectionResult.results) {
-                if (result.getCriteria().getCriteriaType() == CriteriaType.SCORE && ((ScoreCriteriaResult)result).getScore() == null) {
-                    return true;
+            if(!sectionResult.disabled) {
+                for (CriteriaResult result : sectionResult.results) {
+                    if (result.getCriteria().getCriteriaType() == CriteriaType.SCORE && ((ScoreCriteriaResult)result).getScore() == null) {
+                        return true;
+                    }
                 }
             }
         }
@@ -239,8 +242,10 @@ public abstract class AbstractEvent<T extends EventType, R extends EntityWithTen
         results.clear();
         for (SectionResults sectionResult : getSectionResults()) {
             for (CriteriaResult result : sectionResult.results) {
-                result.setEvent(this);
-                results.add(result);
+                if(!sectionResult.disabled) {
+                    result.setEvent(this);
+                    results.add(result);
+                }
             }
         }
     }
