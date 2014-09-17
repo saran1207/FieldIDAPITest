@@ -59,16 +59,20 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
         add(new PrintMetaData("meta",model));
         add(new PrintAsset("assetpage",model));
         add(new PrintProductSummary("productsummary",model));
-
         //----------------------------------------------------
-
-        add(new PrintImages("images",model).setRenderBodyOnly(true));
         add(new ProcessPanel("applicationProcess", model).setRenderBodyOnly(true));
-        add(new PrintList("list",model).setRenderBodyOnly(true));
-        add(new RemovalProcessPanel("removalProcess", model).setRenderBodyOnly(true));
 
+        getPrintInformation(model);
+
+        add(new TestingAndVerificationPanel("testingAndVerification", model).setRenderBodyOnly(true));
+        add(new RemovalProcessPanel("removalProcess", model).setRenderBodyOnly(true));
         add(new PrintFooter("footer",model));
 
+    }
+
+    private void getPrintInformation(IModel<ProcedureDefinition> model) {
+        add(new PrintImages("images", model).setRenderBodyOnly(true));
+        add(new PrintList("list", model).setRenderBodyOnly(true));
     }
 
     private PrintOptions initMode() {
@@ -82,11 +86,11 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-
         response.renderCSSReference("//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,400,600,700,800");
+        response.renderCSSReference("//fonts.googleapis.com/css?family=Anton");
         response.renderCSSReference("style/print/style.css");
         response.renderJavaScriptReference("javascript/jquery.imagesloaded.js");
-        response.renderJavaScriptReference("javascript/print/print.js");
+        response.renderJavaScriptReference("javascript/print/jquery.print.js");
     }
 
 
@@ -102,17 +106,13 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
 
     class JsonPrintOption {
-
         String printOption;
         String state;
-
         JsonPrintOption () {}
-
         JsonPrintOption (String printOption, String state) {
             this.printOption = printOption;
             this.state = state;
         }
-
     }
 
 }
