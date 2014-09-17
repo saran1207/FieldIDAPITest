@@ -5,24 +5,29 @@
 			lang="en">
 <wicket:extend>
     <div class="print-container short-form">
+        
         <div class="printbar">
             <img onclick="window.print();" class="printIcon" wicket:id="printIcon"/>
             <p   onclick="window.print();">Print page</p>
         </div>
+
         <div class="print-page source">
             <img class="watermark" wicket:id=watermarkImage/>
+
             <header class="page-header">
-                <div wicket:id="meta" class="data-container-revision-and-points"/>
-                <div wicket:id="assetpage" class="data-container-asset-info"/>
+                <div wicket:id="meta"/>
+                <div wicket:id="assetpage"/>
             </header>
-            <ul class="page-content">
-                <div wicket:id="productsummary" class="data-container-caution"/>
+
+            <div class="page-content">
+                <div wicket:id="productsummary"/>
                 <div wicket:id="applicationProcess"/>
                 <div wicket:id="images"/>
                 <div wicket:id="list"/>
                 <div wicket:id="testingAndVerification"/>
                 <div wicket:id="removalProcess"/>
-            </ul>
+            </div>
+
             <footer class="page-footer">
                 <div wicket:id="footer"/>
             </footer>

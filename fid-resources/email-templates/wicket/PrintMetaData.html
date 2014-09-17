@@ -1,24 +1,20 @@
 <wicket:panel xmlns:wicket="http://www.apache.org/internal/xmlbeans/wsdlsubst">
-
-    <header class="page-header">
-        <div class="procedure-user-and-revision">
-            <table>
-                <tr>
-                    <th>Verified Effective by Testing</th>
-                    <th class="number-of-devices">Devices</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td wicket:id="deviceCount" rowspan="3" class="number-of-devices"></td>
-                </tr>
-                <tr>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="date-time"></td>
-                </tr>
-            </table>
-        </div>
-    </header>
-
+    <div class="procedure-user-and-device">
+        <table>
+            <tr>
+                <th><wicket:message key="label.verfied_effective_by_testing" /></th>
+                <th class="number-of-devices"><wicket:message key="label.label.devices" /></th>
+            </tr>
+            <tr>
+                <td></td>
+                <td wicket:id="deviceCount" rowspan="3" class="number-of-devices"></td>
+            </tr>
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="date-time"></td>
+            </tr>
+        </table>
+    </div>
 </wicket:panel>

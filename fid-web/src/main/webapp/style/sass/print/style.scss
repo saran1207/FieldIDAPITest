@@ -96,6 +96,10 @@ img {
 //-----------------------------------------------------------------
 // Layout
 //-----------------------------------------------------------------
+.print-container {
+  width:  100%;
+  height: 100%;
+}
 .print-page {
   padding: $page-margin-set;
   margin: ($page-margin/2) auto;
@@ -143,7 +147,7 @@ img {
     }
   }
 }
-.procedure-user-and-revision {
+.procedure-user-and-device {
   position: absolute;
   top: 0;
   right: 0;
