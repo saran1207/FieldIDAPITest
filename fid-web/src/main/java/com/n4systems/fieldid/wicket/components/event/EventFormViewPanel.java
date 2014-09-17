@@ -16,7 +16,7 @@ import java.util.List;
 public class EventFormViewPanel extends EventFormPanel {
 
     public EventFormViewPanel(String id, final IModel<? extends AbstractEvent> event, IModel<List<AbstractEvent.SectionResults>> results) {
-        super(id, event, results);
+        super(id, event, results, false);
         setVisible(!results.getObject().isEmpty());
     }
 

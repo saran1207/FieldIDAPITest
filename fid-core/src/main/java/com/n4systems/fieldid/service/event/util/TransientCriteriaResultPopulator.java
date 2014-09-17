@@ -29,9 +29,11 @@ public abstract class TransientCriteriaResultPopulator {
                     transientResult.setTenant(event.getTenant());
                     transientSectionResults.add(transientResult);
                 }
-                sectionResults.results = transientSectionResults;
-                sectionResults.section = section;
-                transientResults.add(sectionResults);
+                if(!transientSectionResults.isEmpty()) {
+                    sectionResults.results = transientSectionResults;
+                    sectionResults.section = section;
+                    transientResults.add(sectionResults);
+                }
             }
         }
 

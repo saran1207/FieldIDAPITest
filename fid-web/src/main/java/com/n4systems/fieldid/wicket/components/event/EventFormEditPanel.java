@@ -13,12 +13,12 @@ public class EventFormEditPanel extends EventFormPanel {
     private boolean showActionButtons;
 
     public EventFormEditPanel(String id, final IModel<? extends AbstractEvent> event, IModel<List<AbstractEvent.SectionResults>> results, boolean showActionButtons) {
-        super(id, event, results);
+        super(id, event, results, true);
         this.showActionButtons = showActionButtons;
     }
 
     @Override
     protected Panel getCriteriaSectionPanel(Class<? extends AbstractEvent> eventClass, PropertyModel<List<CriteriaResult>> results) {
-        return new CriteriaSectionEditPanel("criteriaPanel", eventClass, results, showActionButtons);
+        return new CriteriaSectionEditPanel("criteriaPanel", eventClass, results, showActionButtons, false);
     }
 }
