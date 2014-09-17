@@ -5,6 +5,8 @@ import com.n4systems.model.AbstractEvent;
 import com.n4systems.model.Criteria;
 import com.n4systems.model.CriteriaResult;
 
+import java.util.List;
+
 public class NewEventTransientCriteriaResultPopulator extends TransientCriteriaResultPopulator {
 
     private CriteriaResultFactory resultFactory;
@@ -18,4 +20,8 @@ public class NewEventTransientCriteriaResultPopulator extends TransientCriteriaR
         return resultFactory.createCriteriaResult(criteria.getCriteriaType());
     }
 
+    @Override
+    protected void addSectionToTransientResults(List<AbstractEvent.SectionResults> transientResults, AbstractEvent.SectionResults sectionResults, List<CriteriaResult> transientSectionResults) {
+        transientResults.add(sectionResults);
+    }
 }

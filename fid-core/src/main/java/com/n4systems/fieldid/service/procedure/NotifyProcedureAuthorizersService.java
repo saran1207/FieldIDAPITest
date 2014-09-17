@@ -12,6 +12,7 @@ import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import com.n4systems.services.SecurityContext;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
@@ -72,6 +73,7 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
     private void sendAuthorizationNotification(ProcedureDefinition procedureDefinition) {
         Tenant tenant = procedureDefinition.getTenant();
         TenantSettings settings = tenant.getSettings();
+
         if (settings.getApprovalUser() != null) {
             sendNotifications(procedureDefinition, settings.getApprovalUser(), null);
             procedureDefinition.setAuthorizationNotificationSent(true);

@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class TransientCriteriaResultPopulator {
 
-    public void populateTransientCriteriaResultsForNewEvent(AbstractEvent event) {
+    public void populateTransientCriteriaResultsForEvent(AbstractEvent event) {
         EventForm eventForm = event.getEventForm();
 
         List<AbstractEvent.SectionResults> transientResults = new ArrayList<AbstractEvent.SectionResults>();
@@ -22,16 +22,21 @@ public abstract class TransientCriteriaResultPopulator {
                     CriteriaResult transientResult = getCriteriaResultFor(event, criteria);
 
                     if (transientResult == null) {
-                        continue;
+                        sectionResults.disabled = true;
+                        if((transientResult = getEditableCriteriaResult(event, criteria)) == null) {
+                            continue;
+                        }
                     }
 
                     transientResult.setCriteria(criteria);
                     transientResult.setTenant(event.getTenant());
                     transientSectionResults.add(transientResult);
                 }
+
+                sectionResults.results = transientSectionResults;
+                sectionResults.section = section;
+
                 if(!transientSectionResults.isEmpty()) {
-                    sectionResults.results = transientSectionResults;
-                    sectionResults.section = section;
                     transientResults.add(sectionResults);
                 }
             }
@@ -40,6 +45,12 @@ public abstract class TransientCriteriaResultPopulator {
         event.setSectionResults(transientResults);
     }
 
+    protected abstract void addSectionToTransientResults(List<AbstractEvent.SectionResults> transientResults, AbstractEvent.SectionResults sectionResults, List<CriteriaResult> transientSectionResults);
+
     protected abstract CriteriaResult getCriteriaResultFor(AbstractEvent<ThingEventType,Asset> event, Criteria criteria);
+
+    protected CriteriaResult getEditableCriteriaResult(AbstractEvent<ThingEventType,Asset> event, Criteria criteria) {
+        return null;
+    }
 
 }

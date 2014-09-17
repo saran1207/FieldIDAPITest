@@ -88,7 +88,7 @@ public class ThingEventSummaryPage extends EventSummaryPage {
     }
 
     private ThingEvent loadExistingEvent() {
-        final ThingEvent event = eventService.lookupExistingEvent(ThingEvent.class, uniqueId, true);
+        final ThingEvent event = eventService.lookupExistingEvent(ThingEvent.class, uniqueId, true, false);
 
         ThingEvent existingEvent = new LocalizeAround<ThingEvent>(new Callable<ThingEvent>() {
             @Override

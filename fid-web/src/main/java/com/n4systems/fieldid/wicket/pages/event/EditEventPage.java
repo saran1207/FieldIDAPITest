@@ -39,7 +39,7 @@ public class EditEventPage extends ThingEventPage {
     }
 
     protected ThingEvent loadExistingEvent() {
-        ThingEvent existingEvent = eventService.lookupExistingEvent(ThingEvent.class, uniqueId);
+        ThingEvent existingEvent = eventService.lookupExistingEvent(ThingEvent.class, uniqueId, false, true);
         PostFetcher.postFetchFields(existingEvent, Event.ALL_FIELD_PATHS_WITH_SUB_EVENTS);
         if (existingEvent.getType().isThingEventType()) {
             PostFetcher.postFetchFields(existingEvent, Event.THING_TYPE_PATHS);

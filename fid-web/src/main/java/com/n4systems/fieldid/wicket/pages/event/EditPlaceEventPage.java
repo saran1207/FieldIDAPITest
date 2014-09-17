@@ -38,7 +38,7 @@ public class EditPlaceEventPage extends PlaceEventPage {
     }
 
     protected PlaceEvent loadExistingEvent() {
-        PlaceEvent existingEvent = eventService.lookupExistingEvent(PlaceEvent.class, uniqueId);
+        PlaceEvent existingEvent = eventService.lookupExistingEvent(PlaceEvent.class, uniqueId, false, true);
         PostFetcher.postFetchFields(existingEvent, Event.PLACE_FIELD_PATHS);
         return existingEvent;
     }

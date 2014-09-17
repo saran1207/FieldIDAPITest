@@ -6,6 +6,7 @@ import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.asset.AssetService;
+import com.n4systems.fieldid.service.event.util.EditExistingEventTransientResultPopulator;
 import com.n4systems.fieldid.service.event.util.ExistingEventTransientCriteriaResultPopulator;
 import com.n4systems.model.*;
 import com.n4systems.model.api.Archivable;
@@ -267,10 +268,10 @@ public class EventService extends FieldIdPersistenceService {
 	}
 
     public <T extends AbstractEvent> T lookupExistingEvent(Class<T> clazz, Long eventId) {
-        return lookupExistingEvent(clazz, eventId, false);
+        return lookupExistingEvent(clazz, eventId, false, false);
     }
 
-    public <T extends AbstractEvent> T lookupExistingEvent(Class<T> clazz, Long eventId, boolean withLocalization) {
+    public <T extends AbstractEvent> T lookupExistingEvent(Class<T> clazz, Long eventId, boolean withLocalization, boolean showHiddenSections) {
         T event;
 
         Locale previousLanguage = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
@@ -280,7 +281,11 @@ public class EventService extends FieldIdPersistenceService {
                 ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(language);
             }
             event = persistenceService.find(clazz, eventId);
-            new ExistingEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(event);
+            if(showHiddenSections) {
+                new EditExistingEventTransientResultPopulator().populateTransientCriteriaResultsForEvent(event);
+            } else {
+                new ExistingEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForEvent(event);
+            }
         } finally {
             if (withLocalization) {
                 ThreadLocalInteractionContext.getInstance().setUserThreadLanguage(previousLanguage);
