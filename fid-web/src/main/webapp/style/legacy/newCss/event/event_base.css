@@ -47,14 +47,6 @@ label.label {
     width: 260px;
     padding: 4px;
 }
-/*
-.pageContent .fieldHolder input {
-    border: 1px solid #9c9c9c;
-    color: #555;
-    width: 260px;
-    padding: 4px;
-}
-*/
 
 label.eventFormLabel {
     width: 50%;
@@ -725,4 +717,21 @@ span.fieldHolder img {
     z-index: 10;
     background-color: #FFFFFF;
     opacity: 0.65;
+}
+
+
+.disabled-overlay .message, .disabled-overlay .button {
+    width: 1000px;
+    margin: auto 0;
+    text-align: center;
+}
+
+.disabled-overlay .message {
+    font-size: 24px;
+    padding-bottom: 10px;
+}
+
+.disabled-overlay .button .mattButton {
+    font-size: 16px;
+    float: none;
 }

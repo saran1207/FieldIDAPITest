@@ -81,12 +81,23 @@ public abstract class EventFormPanel extends Panel {
                     }
                 });
                 item.add(sectionContainer);
-                sectionContainer.add(new WebMarkupContainer("disabledOverlay") {
+
+                WebMarkupContainer disabledOverlay;
+                sectionContainer.add(disabledOverlay = new WebMarkupContainer("disabledOverlay") {
                     @Override
                     public boolean isVisible() {
                         return item.getModelObject().disabled;
                     }
-                }.setOutputMarkupPlaceholderTag(true));
+                });
+                disabledOverlay.setOutputMarkupPlaceholderTag(true);
+                disabledOverlay.add(new Label("name", new PropertyModel<String>(item.getModel(), "section.title")));
+                disabledOverlay.add(new AjaxLink<Void>("restoreLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        item.getModelObject().disabled = false;
+                        target.add(criteriaSectionContainer);
+                    }
+                });
             }
         });
 

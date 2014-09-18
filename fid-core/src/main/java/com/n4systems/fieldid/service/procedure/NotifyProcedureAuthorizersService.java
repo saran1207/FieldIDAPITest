@@ -9,6 +9,7 @@ import com.n4systems.model.Tenant;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -84,6 +85,7 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
             // There is no approval user or group (but was one earlier since this was marked waiting for approval)
             // This means we can simply publish the procedure def automatically.
             log.warn("Procedure def waiting for certification but no certifier user or group set: " + procedureDefinition.getId() +". Publishing automatically.");
+            securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(tenant.getId()));
             procedureDefinitionService.publishProcedureDefinition(procedureDefinition);
         }
     }
