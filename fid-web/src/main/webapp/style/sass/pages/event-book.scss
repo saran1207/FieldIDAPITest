@@ -17,3 +17,58 @@
     width: 570px
   }
 }
+
+.event-books-list {
+  .filter {
+    position: absolute;
+    top: 4px;
+    left: 18px;
+    font-weight: bold;
+    font-size: 17px;
+  }
+  .filter-text {
+    position: absolute;
+    top: 38px;
+    left: 18px;
+    width: 180px;
+    font-size: 13px;
+    color: #7E7E7E;
+  }
+  .form-horizontal {
+    margin: -14px 0 0 0;
+    padding: 15px 0px 15px 215px;
+    border-bottom: 1px solid #c7c7c9;
+  }
+  .control-group {
+    width: 410px;
+    float: left;
+
+    label {
+      width: 130px;
+      float: left;
+      line-height: 28px;
+    }
+    input[type="text"],
+      select,
+      textarea {
+      width: 255px;
+    }
+    > div {
+      width: 285px;
+      display: inline;
+    }
+  }
+  .filter-buttons {
+    margin-top: 4px;
+  }
+  .btn-primary {
+    margin-left: 80px;
+  }
+  .btn-link {
+    padding-left: 0;
+  }
+  .form-horizontal > span {
+    display: inline-block;
+    margin-left: 134px;
+  }
+}
