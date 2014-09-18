@@ -54,6 +54,7 @@ public class EditUserMobilePasscodePage extends FieldIDTemplatePage {
                 user.assignSecruityCardNumber(mobilePasscode);
                 userService.update(user);
                 FieldIDSession.get().info(new FIDLabelModel("message.passcodeupdated").getObject());
+                //Don't trust the IDE Warnings... this is NOT an error.  Page works fine.
                 setResponsePage(ViewUserPage.class, PageParametersBuilder.uniqueId(uniqueId));
             }
         };
@@ -100,7 +101,7 @@ public class EditUserMobilePasscodePage extends FieldIDTemplatePage {
                 aNavItem().label("nav.change_password").page(ChangeUserPasswordPage.class).params(uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.mobile_passcode").page(EditUserMobilePasscodePage.class).params(PageParametersBuilder.uniqueId(uniqueId)).build(),
                 aNavItem().label("nav.mobile_profile").page(UserOfflineProfilePage.class).params(uniqueId(uniqueId)).build(),
-                aNavItem().label("nav.add").page(AddUserPage.class).onRight().build(),
+                aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));
     }
