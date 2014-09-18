@@ -58,17 +58,14 @@
       display: inline;
     }
   }
-  .filter-buttons {
-    margin-top: 4px;
-  }
-  .btn-primary {
-    margin-left: 80px;
-  }
   .btn-link {
     padding-left: 0;
   }
-  .form-horizontal > span {
+  .filter-buttons {
     display: inline-block;
-    margin-left: 134px;
+    margin-top: 4px;
+    margin-left: 130px;
+    width: 170px;
+    float: left;
   }
 }
