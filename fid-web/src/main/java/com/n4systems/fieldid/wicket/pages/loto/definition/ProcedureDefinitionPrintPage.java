@@ -56,9 +56,9 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
         mode = initMode();
         add(new AttributeAppender("class", Model.of("print-procedure-definition")));
-        add(new PrintMetaData("meta",model));
-        add(new PrintAsset("assetpage",model));
-        add(new PrintProductSummary("productsummary",model));
+        add(new PrintMetaData("meta",model).setRenderBodyOnly(true));
+        add(new PrintAsset("assetpage",model).setRenderBodyOnly(true));
+        add(new PrintProductSummary("productsummary",model).setRenderBodyOnly(true));
         //----------------------------------------------------
         add(new ProcessPanel("applicationProcess", model).setRenderBodyOnly(true));
 
@@ -66,11 +66,11 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
         add(new TestingAndVerificationPanel("testingAndVerification", model).setRenderBodyOnly(true));
         add(new RemovalProcessPanel("removalProcess", model).setRenderBodyOnly(true));
-        add(new PrintFooter("footer",model));
+        add(new PrintFooter("footer",model).setRenderBodyOnly(true));
 
     }
 
-    private void getPrintInformation(IModel<ProcedureDefinition> model) {
+    public void getPrintInformation(IModel<ProcedureDefinition> model) {
         add(new PrintImages("images", model).setRenderBodyOnly(true));
         add(new PrintList("list", model).setRenderBodyOnly(true));
     }

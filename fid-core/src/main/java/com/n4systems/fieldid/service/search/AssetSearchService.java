@@ -36,7 +36,8 @@ public class AssetSearchService extends SearchService<AssetSearchCriteria, Asset
         TimeZone timeZone = user.getTimeZone();
 
         addWildcardOrStringTerm(search, "rfidNumber", criteriaModel.getRfidNumber());
-		addWildcardOrStringTerm(search, "identifier", criteriaModel.getIdentifier());
+        addSimpleTerm(search, "identifier", criteriaModel.getIdentifier());
+		//addWildcardOrStringTerm(search, "identifier", criteriaModel.getIdentifier());
 		addWildcardOrStringTerm(search, "advancedLocation.freeformLocation", criteriaModel.getLocation().getFreeformLocation());
 		if (isIntegrationEnabled()) {
 			addWildcardOrStringTerm(search, "shopOrder.order.orderNumber", criteriaModel.getOrderNumber());
