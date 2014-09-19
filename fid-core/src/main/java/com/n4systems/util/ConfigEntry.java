@@ -55,8 +55,8 @@ public enum ConfigEntry {
 
     AMAZON_ACCESS_KEY_ID                        (   "AKIAJYAZBOFFRZAZSIGA"),
     AMAZON_SECRET_ACCESS_KEY                    (   "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"),
-    AMAZON_S3_ENDPOINT                          (   "cdn.dev.n4systems.net"),
-    AMAZON_S3_BUCKET                            (   "cdn.dev.n4systems.net"),
+    AMAZON_S3_ENDPOINT                          (   "s3.amazonaws.com"),
+    AMAZON_S3_BUCKET                            (   "fieldid_dev"),
     AMAZON_S3_UPLOAD_TIMEOUT_MILLISECONDS       (   "120000"),
     AMAZON_S3_UPLOAD_MAX_FILE_SIZE_BYTES        (   "10485760"),
 	
