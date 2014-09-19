@@ -3,7 +3,7 @@ $color-text:                    #000000;
 $color-border:                  #000000;
 $color-next-audio-text:         #8f8f8f;
 $color-light-background:        #eeeff0;
-$color-heading:                 #333;
+$color-heading:                 #FF0047;
 $color-heading-verification:    #FFE900;
 $color-heading-removal-process: #2CFF4D;
 $color-heading-text:            #ffffff;
@@ -197,7 +197,7 @@ img {
     border-bottom: $border-thickness solid $color-border;
   }
   p {
-    padding: 10px 20px 0 20px;
+    padding: 10px 20px 10px 20px;
     margin: 0;
     font-size: $fs-small;
   }
@@ -303,13 +303,12 @@ footer {
     margin-left: -1px;
     margin-bottom: -1px;
 
-    .buttons {
-      left: -($button-size/2);
-    }
-
     img {
       width: 100%;
       height: auto;
+    }
+    .buttons {
+      left: -($button-size/2);
     }
   }
   .application-steps {
