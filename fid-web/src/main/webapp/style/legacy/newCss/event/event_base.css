@@ -714,24 +714,44 @@ span.fieldHolder img {
     position: absolute;
     top: 0;
     left: 0;
+}
+.disabled-overlay .message, .disabled-overlay .button {
+    position: relative;
+    text-align: center;
+    width: 100%;
+    z-index: 20;
+}
+.disabled-overlay .background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
     z-index: 10;
     background-color: #FFFFFF;
     opacity: 0.65;
 }
-
-
-.disabled-overlay .message, .disabled-overlay .button {
-    width: 1000px;
-    margin: auto 0;
-    text-align: center;
-}
-
 .disabled-overlay .message {
     font-size: 24px;
-    padding-bottom: 10px;
+    padding-top: 10px;
 }
-
+.disabled-overlay .button {
+    margin-top: 10px;
+}
 .disabled-overlay .button .mattButton {
-    font-size: 16px;
     float: none;
+    line-height: 30px;
+    height: 30px;
+    display: block;
+    width: 140px;
+    margin: 0 auto;
+    padding: 0;
+    background: #008BD3;
+    border-color: #007ABA;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+}
+.disabled-overlay .button .mattButton:hover {
+    box-shadow: inset 0 0 18px #00486D;
 }
