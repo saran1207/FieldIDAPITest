@@ -51,7 +51,6 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     @Column(name="complete_points_in_order")
     private boolean completeIsolationPointInOrder;
 
-
     @ManyToOne
     @JoinColumn(name = "developed_by_id")
     private User developedBy;
@@ -122,7 +121,7 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     private String removalProcess;
 
     @Column(name="testing_and_verification")
-    private String testingAndVerification;
+    private String testingAndVerification = TESTING_AND_VERIFICATION_REQUIREMENTS;
 
 	@Column(nullable=false)
 	private String mobileId;
@@ -456,10 +455,6 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
     }
 
     public String getTestingAndVerification() {
-        if(testingAndVerification == null) {
-            testingAndVerification = TESTING_AND_VERIFICATION_REQUIREMENTS;
-        }
-
         return testingAndVerification;
     }
 
