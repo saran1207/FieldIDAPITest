@@ -478,3 +478,20 @@
     };
 
 })(jQuery, window, document);
+
+
+function annotateImages( data ){
+    var params = {
+        debug: false,
+        annotation: {
+            data: {}
+        }
+    }
+
+    params.annotation.data = data.images;
+    console.log(params);
+
+    $('img').imagesLoaded(function() {
+        $('body').pages(params);
+    });
+};

@@ -86,8 +86,7 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.renderCSSReference("//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,400,600,700,800");
-        response.renderCSSReference("//fonts.googleapis.com/css?family=Anton");
+        response.renderCSSReference("//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,400,600,700,800|Anton:400");
         response.renderCSSReference("style/print/style.css");
         response.renderJavaScriptReference("javascript/jquery.imagesloaded.js");
         response.renderJavaScriptReference("javascript/print/jquery.print.js");

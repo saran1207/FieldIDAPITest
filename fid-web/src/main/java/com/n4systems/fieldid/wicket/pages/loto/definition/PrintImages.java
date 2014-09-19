@@ -55,9 +55,9 @@ public class PrintImages extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         //response.renderJavaScriptReference("javascript/fieldIdWidgets.js");
-        response.renderJavaScriptReference("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js");
-        response.renderJavaScriptReference("javascript/jquery.annotate.js");
-        response.renderJavaScriptReference("javascript/print/annotate-images.js");
+        //response.renderJavaScriptReference("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js");
+        //response.renderJavaScriptReference("javascript/jquery.annotate.js");
+        //response.renderJavaScriptReference("javascript/print/annotate-images.js");
 
         response.renderCSSReference("style/legacy/component/annotated-image.css");
 
