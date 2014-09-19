@@ -19,8 +19,8 @@
         debug: false,
 
         // Content container
-        threshold: 0, // Subtract this many extra pixels from height check
-        offset:    0, // Make page content container smaller by this many pixels
+        threshold: 20, // Subtract this many extra pixels from height check
+        offset:    20, // Make page content container smaller by this many pixels
 
         // Page structure
         append:    'print-container',
@@ -52,11 +52,11 @@
                 { size: 'a3',     orientation: 'landscape', width: 1460, height: 990  }
             ]
         },
-        annotation: {
+        annotations: {
             _class: 'annotation',
             data: [
                 { 'id': 'id12a',
-                    'annotation': [
+                    'annotations': [
                         { 'x': 0.387097,
                             'y': 0.590909,
                             'text':'P-1',
@@ -86,7 +86,6 @@
         this.head();
         this.setDefaultPage();
         this.printbar();
-
         this.run();
     };
     Plugin.prototype.variables = function(params){
@@ -283,12 +282,10 @@
         });
     };
     Plugin.prototype.splitImageGroup = function(elem){
-        console.log('split image group');
         var tThis = this;
 
         //---- Get images
         var $items = $(elem).find('.images');
-        console.log($items);
 
         //---- Move images into a temp container
         var $temp = $('<div></div>');
@@ -318,8 +315,6 @@
                 // Create new image group
                 $currentGroup = $chunk.clone();
                 $currentGroup.appendTo(tThis.$newContainer);
-
-                console.log($currentGroup);
 
                 // Re-append element to new group
                 $(elem).appendTo($currentGroup);
@@ -394,7 +389,7 @@
 
 //---- Functions for image annotation
     Plugin.prototype.annotate = function(){
-        var notes = this.params.annotation;
+        var notes = this.params.annotations;
 
         // Remove all annotations if they exist
         $(_class(' ', notes._class)).remove();
@@ -409,8 +404,8 @@
         // For every element that matches the class
         // Render the set of annotations
         $('.'+set.id).each(function(index, elem){
-            for(var i = 0; i < set.annotation.length; i++){
-                tThis.renderAnnotation(elem, set.annotation[i]);
+            for(var i = 0; i < set.annotations.length; i++){
+                tThis.renderAnnotation(elem, set.annotations[i]);
             }
         });
     };
@@ -425,7 +420,7 @@
 
         // Add notes-container if it isn't present
         if( !container.parent().hasClass('notes-container') ){
-            container.wrap('<div class="notes-container"></div>')
+            container.wrap('<div class="panzoom-parent"><div class="notes-container panzoom"></div></div>')
         }
 
         // Generate HTML for the annotation
@@ -476,22 +471,24 @@
             }
         });
     };
-
 })(jQuery, window, document);
 
 
 function annotateImages( data ){
     var params = {
         debug: false,
-        annotation: {
+        annotations: {
             data: {}
         }
     }
-
-    params.annotation.data = data.images;
-    console.log(params);
+    params.annotations.data = data.images;
 
     $('img').imagesLoaded(function() {
         $('body').pages(params);
+        $('.panzoom').panzoom({
+            startTransform: 'scale(1.0)',
+            increment: 0.2,
+            minScale:  1.0
+        }).panzoom('zoom', true);
     });
 };
