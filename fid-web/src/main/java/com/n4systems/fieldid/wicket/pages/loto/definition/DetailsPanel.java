@@ -74,7 +74,7 @@ public class DetailsPanel extends Panel {
                 }
             });
 
-            add(new LabelledTextArea<String>("testingAndVerification", "label.testing_and_verification", ProxyModel.of(model, on(ProcedureDefinition.class).getTestingAndVerification())){
+            add(new LabelledTextArea<String>("testingAndVerification", "label.testing_and_verification_detail_panel", ProxyModel.of(model, on(ProcedureDefinition.class).getTestingAndVerification())){
                 @Override
                 public int getMaxLength() {
                     return 1024;
