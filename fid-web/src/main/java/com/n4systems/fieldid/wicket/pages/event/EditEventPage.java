@@ -35,7 +35,7 @@ public class EditEventPage extends ThingEventPage {
         } else {
             setEventResult(event.getObject().getEventResult());
         }
-        fileAttachments = new ArrayList<FileAttachment>(event.getObject().getAttachments());
+        fileAttachments = new ArrayList<>(event.getObject().getAttachments());
     }
 
     protected ThingEvent loadExistingEvent() {

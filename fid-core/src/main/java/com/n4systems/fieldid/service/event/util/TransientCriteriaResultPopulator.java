@@ -10,11 +10,11 @@ public abstract class TransientCriteriaResultPopulator {
     public void populateTransientCriteriaResultsForEvent(AbstractEvent event) {
         EventForm eventForm = event.getEventForm();
 
-        List<AbstractEvent.SectionResults> transientResults = new ArrayList<AbstractEvent.SectionResults>();
+        List<AbstractEvent.SectionResults> transientResults = new ArrayList<>();
 
         if (eventForm != null) {
             for (CriteriaSection section : eventForm.getAvailableSections()) {
-                List<CriteriaResult> transientSectionResults = new ArrayList<CriteriaResult>();
+                List<CriteriaResult> transientSectionResults = new ArrayList<>();
                 AbstractEvent.SectionResults sectionResults = new AbstractEvent.SectionResults();
 
                 for (Criteria criteria : section.getAvailableCriteria()) {
