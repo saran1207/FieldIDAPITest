@@ -41,7 +41,8 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
         List<ProcedureDefinition> publishedDefsAwaitingAuthorization = persistenceService.findAll(assigneeQuery);
 
         for (ProcedureDefinition procedureDefinition : publishedDefsAwaitingAuthorization) {
-            if(procedureDefinition.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
+            if(procedureDefinition.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts) ||
+                    procedureDefinition.getTenant().getSettings().getApprovalUserOrGroup() == null) {
                 try {
                     sendAuthorizationNotification(procedureDefinition);
                 } catch (Exception e) {
