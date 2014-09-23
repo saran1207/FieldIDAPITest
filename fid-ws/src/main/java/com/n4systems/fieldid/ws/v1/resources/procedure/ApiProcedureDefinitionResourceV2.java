@@ -85,7 +85,13 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             log.error("There was an error retrieving data related to the ProcedureDefinition.  Error: " + pe.getMessage(), pe);
 
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("There was an error retrieving data related to the ProcedureDefinition.  Error: " + pe.getMessage())
+                    .entity("There was an error retrieving data related to the ProcedureDefinition.  Error: " + pe.getMessage())
+                    .build();
+        } catch(IsolationPointProcessingException ippe) {
+            log.error("There was an error processing an Isolation Point in the provided JSON!  Error: " + ippe.getMessage(), ippe);
+
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                           .entity("There was an error processing an Isolation Point in the provided JSON!  Error: " + ippe.getMessage())
                            .build();
         } catch (Exception e) {
             log.error("Unexpected error!!!  Error: " + e.getMessage(), e);
@@ -192,7 +198,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     }*/
 
     //API Model to Entity Methods
-    private ProcedureDefinition convertApiModelToEntity(ApiProcedureDefinitionV2 apiProcDef, ProcedureDefinition procDef) throws ImageProcessingException, PersistenceException {
+    private ProcedureDefinition convertApiModelToEntity(ApiProcedureDefinitionV2 apiProcDef, ProcedureDefinition procDef) throws ImageProcessingException, PersistenceException, IsolationPointProcessingException {
         //Don't forget, you're passing this object in, either full of information or null... point being, it's already
         //initialised.
         procDef.setMobileId(apiProcDef.getSid());
@@ -257,11 +263,14 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         return procDef;
     }
 
-    private ProcedureDefinition convertToEntityIsolationPoints(ProcedureDefinition procDef, List<ApiIsolationPoint> isolationPoints) {
+    private ProcedureDefinition convertToEntityIsolationPoints(ProcedureDefinition procDef, List<ApiIsolationPoint> isolationPoints) throws IsolationPointProcessingException {
         List<IsolationPoint> addUs = Lists.newArrayList();
 
         for(ApiIsolationPoint apiIsoPoint : isolationPoints) {
             //New Isolation Point
+            if(apiIsoPoint.getSource() == null) {
+                throw new IsolationPointProcessingException("Could not process JSON, Isolation Point Source Type ('source') was null!");
+            }
             if(apiIsoPoint.getSid() == null) {
                 IsolationPoint isoPoint = new IsolationPoint();
 
@@ -636,6 +645,12 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
     private class PersistenceException extends Exception {
         public PersistenceException(String message) {
+            super(message);
+        }
+    }
+
+    private class IsolationPointProcessingException extends Exception {
+        public IsolationPointProcessingException(String message) {
             super(message);
         }
     }
