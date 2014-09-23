@@ -3,12 +3,9 @@ package com.n4systems.fieldid.service.event;
 import com.n4systems.api.conversion.event.CriteriaResultFactory;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
-import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.ServiceLocator;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
 import java.util.List;
 
 public class EventCriteriaEditService extends FieldIdPersistenceService {
