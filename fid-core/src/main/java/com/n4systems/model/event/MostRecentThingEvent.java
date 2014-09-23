@@ -4,6 +4,7 @@ import com.n4systems.model.Asset;
 import com.n4systems.model.BaseEntity;
 import com.n4systems.model.ThingEvent;
 import com.n4systems.model.ThingEventType;
+import com.n4systems.model.security.SecurityDefiner;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +12,10 @@ import java.util.Date;
 @Entity
 @Table(name="most_recent_completed_thing_events")
 public class MostRecentThingEvent extends BaseEntity {
+
+    public static final SecurityDefiner createSecurityDefiner() {
+        return new SecurityDefiner("event.tenant.id", "asset.owner", null, "event.state", true);
+    }
 
     @ManyToOne(optional = false)
     @JoinColumn(name="event_id")

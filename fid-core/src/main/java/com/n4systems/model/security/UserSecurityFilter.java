@@ -63,7 +63,7 @@ public class UserSecurityFilter extends AbstractSecurityFilter {
 
         if (filterOrg.getPrimaryOrg().hasExtendedFeature(ExtendedFeature.UserGroupFiltering)
                 && definer.isEventUserGroupFiltered() && user != null && user.getGroups().size() > 0) {
-            new WithinUserGroupTerm(null, user)
+            new WithinUserGroupTerm(user)
                     .applyToQuery(builder);
         }
 

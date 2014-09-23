@@ -46,8 +46,6 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 		// construct a search QueryBuilder with Long as the select class since we will force simple select to be "id" later
 		QueryBuilder<?> idBuilder = createBaseSearchQueryBuilder(criteria);
 
-        addMostRecentEventSearchTerm(criteria, idBuilder);
-
 		addSortTermsToBuilder(idBuilder, criteria);
 
 		// note that this will fail for entities not implementing BaseEntity (unless you get lucky)
@@ -56,8 +54,6 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
 	public Integer countPages(T criteriaModel, Long pageSize) {
 		QueryBuilder<?> countBuilder = createBaseSearchQueryBuilder(criteriaModel);
-
-        addMostRecentEventSearchTerm(criteriaModel, countBuilder);
 
 		Long count = (Long) persistenceService.find(countBuilder.setCountSelect());
 
@@ -108,8 +104,6 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
     private SearchResult<M> performFilterSearch(T criteriaModel, Integer pageNumber, Integer pageSize) {
 		// create our base query builder (no sort terms yet)
 		QueryBuilder<M> searchBuilder = createBaseSearchQueryBuilder(criteriaModel);
-
-        addMostRecentEventSearchTerm(criteriaModel, searchBuilder);
 
 		// get/set the total result count now before the sort terms get added
 		int totalResultCount = findCount(searchBuilder).intValue();
@@ -162,16 +156,8 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
     }
 
     private <E> QueryBuilder<E> augmentSearchBuilder(T criteriaModel, QueryBuilder<E> searchBuilder, boolean includeGps) {
-        ColumnMappingView sortColumn = criteriaModel.getSortColumn();
 
-        if (sortColumn != null && sortColumn.getJoinExpression() != null) {
-            String[] joinExpressions = sortColumn.getJoinExpression().split(",");
-            for (int i = 0; i < joinExpressions.length; i++) {
-                String sortAlias = JoinTerm.DEFAULT_SORT_JOIN_ALIAS + i;
-                JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT, joinExpressions[i], sortAlias, true);
-                searchBuilder.addJoin(joinTerm.toJoinClause());
-            }
-        }
+        addSortJoinTerms(searchBuilder, criteriaModel);
 
         List<SearchTermDefiner> searchTerms = new ArrayList<SearchTermDefiner>();
         List<JoinTerm> joinTerms = new ArrayList<JoinTerm>();
@@ -193,6 +179,18 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         applyOwnerFilter(criteriaModel, searchBuilder);
 
         return searchBuilder;
+    }
+
+    protected <E> void addSortJoinTerms(QueryBuilder<E> searchBuilder, T criteriaModel) {
+        ColumnMappingView sortColumn = criteriaModel.getSortColumn();
+        if (sortColumn != null && sortColumn.getJoinExpression() != null) {
+            String[] joinExpressions = sortColumn.getJoinExpression().split(",");
+            for (int i = 0; i < joinExpressions.length; i++) {
+                String sortAlias = JoinTerm.DEFAULT_SORT_JOIN_ALIAS + i;
+                JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT, joinExpressions[i], sortAlias, true);
+                searchBuilder.addJoin(joinTerm.toJoinClause());
+            }
+        }
     }
 
     protected void applyOwnerFilter(T criteriaModel, QueryBuilder<?> searchBuilder) {
@@ -217,7 +215,6 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
 
     protected void addJoinTerms(T criteriaModel, List<JoinTerm> joinTerms) { }
-    protected <E> QueryBuilder<E> addMostRecentEventSearchTerm(T criteriaModel, QueryBuilder<E> searchBuilder) { return searchBuilder; }
     protected abstract void addSearchTerms(T criteriaModel, List<SearchTermDefiner> search, boolean includeGps);
 
     protected boolean isIntegrationEnabled() {

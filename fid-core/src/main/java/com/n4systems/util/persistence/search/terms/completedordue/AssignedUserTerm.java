@@ -1,5 +1,6 @@
 package com.n4systems.util.persistence.search.terms.completedordue;
 
+import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.WorkflowStateCriteria;
 import com.n4systems.util.persistence.WhereClause;
 import com.n4systems.util.persistence.WhereParameter;
@@ -9,8 +10,14 @@ public class AssignedUserTerm extends CompleteOrIncompleteTerm {
 
     private Long assignedUserId;
 
+
     public AssignedUserTerm(WorkflowStateCriteria state, Long assignedUserId) {
-        super(state);
+        super(state, "");
+        this.assignedUserId = assignedUserId;
+    }
+
+    public AssignedUserTerm(EventReportCriteria criteriaModel, Long assignedUserId) {
+        super(criteriaModel.getWorkflowState(), criteriaModel.isShowMostRecentEventsOnly() ? "event.": "");
         this.assignedUserId = assignedUserId;
     }
 
@@ -25,12 +32,12 @@ public class AssignedUserTerm extends CompleteOrIncompleteTerm {
 
     @Override
     protected void populateCompletedTerm(WhereParameterGroup incompleteGroup) {
-        incompleteGroup.addClause(new WhereParameter<Boolean>(WhereParameter.Comparator.EQ, "assetAssignmentApplied", "assignedTo.assignmentApplyed", Boolean.TRUE, null, false, WhereClause.ChainOp.AND));
+        incompleteGroup.addClause(new WhereParameter<Boolean>(WhereParameter.Comparator.EQ, "assetAssignmentApplied", prefix + "assignedTo.assignmentApplyed", Boolean.TRUE, null, false, WhereClause.ChainOp.AND));
 
         if (assignedUserId == 0) {
-            incompleteGroup.addClause(new WhereParameter<Long>(WhereParameter.Comparator.NULL, "assetAssignedTo", "assignedTo.assignedUser.id", null, null, false, WhereClause.ChainOp.AND));
+            incompleteGroup.addClause(new WhereParameter<Long>(WhereParameter.Comparator.NULL, "assetAssignedTo", prefix + "assignedTo.assignedUser.id", null, null, false, WhereClause.ChainOp.AND));
         } else {
-            incompleteGroup.addClause(new WhereParameter<Long>(WhereParameter.Comparator.EQ, "assetAssignedTo", "assignedTo.assignedUser.id", assignedUserId, null, false, WhereClause.ChainOp.AND));
+            incompleteGroup.addClause(new WhereParameter<Long>(WhereParameter.Comparator.EQ, "assetAssignedTo", prefix + "assignedTo.assignedUser.id", assignedUserId, null, false, WhereClause.ChainOp.AND));
         }
     }
 

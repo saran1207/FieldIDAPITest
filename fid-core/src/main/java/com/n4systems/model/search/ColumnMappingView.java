@@ -1,8 +1,8 @@
 package com.n4systems.model.search;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.io.Serializable;
 
 public class ColumnMappingView implements Comparable<ColumnMappingView>, Serializable {
 	private static final long serialVersionUID = 1L;
@@ -46,9 +46,7 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
 	public String getId() {
 		return id;
 	}
-	
-	
-	
+
 	public String getLabel() {
 		return label;
 	}
@@ -57,17 +55,18 @@ public class ColumnMappingView implements Comparable<ColumnMappingView>, Seriali
 		return pathExpression;
 	}
 
-	
 	public String getSortExpression() {
 		// sort expression falls back on path expression
 		return (sortExpression != null) ? sortExpression : pathExpression;
 	}
 
+    public void setSortExpression(String sortExpression) {
+        this.sortExpression = sortExpression;
+    }
 
-	public String getOutputHandler() {
+    public String getOutputHandler() {
 		return outputHandler;
 	}
-
 
 	public boolean isSortable() {
 		return sortable;
