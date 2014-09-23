@@ -20,5 +20,6 @@ FROM (SELECT e.id, t.asset_id, e.type_id, m.completedDate
         AND m.workflow_state = 'COMPLETED'
         AND m.state = 'ACTIVE'
         AND et.action_type = FALSE
+        AND m.completedDate IS NOT NULL
       ORDER BY e.type_id, t.asset_id, m.completedDate DESC) AS s
 GROUP BY type_id, asset_id;
