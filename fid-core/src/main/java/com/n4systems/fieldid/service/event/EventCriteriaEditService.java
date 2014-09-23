@@ -21,26 +21,29 @@ public class EventCriteriaEditService extends FieldIdPersistenceService {
     }
 
     public void storeCriteriaChanges(AbstractEvent event) {
-        event.getResults();
+        event.getResults(); //Uh... what?
 
         List<AbstractEvent.SectionResults> sectionResults = event.getSectionResults();
         for (AbstractEvent.SectionResults sectionResult : sectionResults) {
-                for (CriteriaResult result : sectionResult.results) {
-                    CriteriaResult existingResult;
-                    if (result.getId() == null || sectionResult.disabled) {
-                        existingResult = criteriaResultFactory.createCriteriaResult(result.getCriteria().getCriteriaType());
-                        if(sectionResult.disabled) {
-                            //We need to delete this result from the DB... it's unnecessary now.
-                            CriteriaResult newResult = criteriaResultFactory.createCriteriaResult(result.getCriteria().getCriteriaType());
+            for (CriteriaResult result : sectionResult.results) {
+                CriteriaResult existingResult;
+                if (result.getId() == null || sectionResult.disabled) {
+                    if(sectionResult.disabled) {
+                        //If the CriteriaResult exists in the DB, we have to destroy it.
+                        if(result.getId() != null) {
                             result = persistenceService.find(CriteriaResult.class, result.getId());
                             persistenceService.remove(result);
-                            result = newResult;
                         }
-                    } else {
-                        existingResult = findExistingResultFor(result);
+                        Criteria criteria = result.getCriteria();
+                        result = criteriaResultFactory.createCriteriaResult(result.getCriteria().getCriteriaType());
+                        result.setCriteria(criteria);
                     }
-                    syncResultData(existingResult, result);
+                    existingResult = criteriaResultFactory.createCriteriaResult(result.getCriteria().getCriteriaType());
+                } else {
+                    existingResult = findExistingResultFor(result);
                 }
+                syncResultData(existingResult, result);
+            }
         }
     }
 
