@@ -4,7 +4,7 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.ws.rs.ApplicationPath;
 
-@ApplicationPath("api")
+@ApplicationPath("/")
 public class FieldIDApplication extends ResourceConfig {
 
 	public FieldIDApplication() {
