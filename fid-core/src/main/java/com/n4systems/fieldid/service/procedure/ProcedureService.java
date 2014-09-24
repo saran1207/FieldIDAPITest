@@ -158,7 +158,7 @@ public class ProcedureService extends FieldIdPersistenceService {
     }
 
     public List<Procedure> getLockedAssignedTo(BaseOrg org) {
-        QueryBuilder<Procedure> query = createTenantSecurityBuilder(Procedure.class);
+        QueryBuilder<Procedure> query = createUserSecurityBuilder(Procedure.class);
         query.addWhere(WhereParameter.Comparator.IN, "workflowState", "workflowState", Arrays.asList(ProcedureWorkflowState.LOCKED));
         if(org != null) {
             query.applyFilter(new OwnerAndDownFilter(org));
