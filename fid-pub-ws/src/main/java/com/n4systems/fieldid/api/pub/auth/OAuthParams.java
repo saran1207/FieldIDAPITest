@@ -1,45 +1,64 @@
 package com.n4systems.fieldid.api.pub.auth;
 
-/**
- * Created by kirillternovsky on 2014-09-23.
- */
 public class OAuthParams {
-    String consumerKey;
-    String tokenKey;
-    String signatureMethod;
-    String nonce;
-    String timestamp;
-    String signature;
+    private String consumerKey;
+	private String tokenKey;
+	private String signatureMethod;
+	private String nonce;
+	private String timestamp;
+	private String signature;
 
-    public OAuthParams(){}
+	public String getConsumerKey() {
+		return consumerKey;
+	}
 
-    public OAuthParams consumerKey(String key) {
-        consumerKey = key;
-        return this;
-    }
+	public OAuthParams setConsumerKey(String consumerKey) {
+		this.consumerKey = consumerKey;
+		return this;
+	}
 
-    public OAuthParams token(String key) {
-        tokenKey = key;
-        return this;
-    }
+	public String getTokenKey() {
+		return tokenKey;
+	}
 
-    public OAuthParams signatureMethod(String method) {
-        this.signatureMethod = method;
-        return this;
-    }
+	public OAuthParams setTokenKey(String tokenKey) {
+		this.tokenKey = tokenKey;
+		return this;
+	}
 
-    public OAuthParams nonce(String nonce) {
-        this.nonce = nonce;
-        return this;
-    }
+	public String getSignatureMethod() {
+		return signatureMethod;
+	}
 
-    public OAuthParams timestamp(String timestamp) {
-        this.timestamp = timestamp;
-        return this;
-    }
+	public OAuthParams setSignatureMethod(String signatureMethod) {
+		this.signatureMethod = signatureMethod;
+		return this;
+	}
 
-    public OAuthParams signature(String signature) {
-        this.signature = signature;
-        return this;
-    }
+	public String getNonce() {
+		return nonce;
+	}
+
+	public OAuthParams setNonce(String nonce) {
+		this.nonce = nonce;
+		return this;
+	}
+
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+	public OAuthParams setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+		return this;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public OAuthParams setSignature(String signature) {
+		this.signature = signature;
+		return this;
+	}
 }

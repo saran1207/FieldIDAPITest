@@ -160,4 +160,7 @@ abstract public class BaseEntity implements Saveable, Serializable, Copyable {
 		return PublicIdEncoder.encode(id);
 	}
 
+	public void setPublicId(String publicId) {
+		id = PublicIdEncoder.decode(publicId);
+	}
 }

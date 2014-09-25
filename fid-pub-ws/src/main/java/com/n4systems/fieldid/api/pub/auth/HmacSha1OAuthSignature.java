@@ -38,6 +38,6 @@ public class HmacSha1OAuthSignature implements OAuthSignature {
 
     @Override
     public boolean verify(OAuthRequestParams requestParams, OAuthSecrets secrets) {
-        return sign(requestParams, secrets).equals(OAuthEncoder.encode(requestParams.getOAuthParams().signature));
+        return sign(requestParams, secrets).equals(OAuthEncoder.encode(requestParams.getOAuthParams().getSignature()));
     }
 }

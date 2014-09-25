@@ -1,12 +1,12 @@
 package com.n4systems.fieldid.api.pub.auth;
 
+import com.google.common.base.Preconditions;
+
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-
-import com.google.common.base.Preconditions;
 
 /**
  * Created by kirillternovsky on 2014-09-23.
@@ -67,22 +67,22 @@ public class OAuthRequestParams {
         if(key.startsWith("oauth_")) {
             switch (key) {
                 case "oauth_consumer_key":
-                    oauthParams.consumerKey(value);
+                    oauthParams.setConsumerKey(value);
                     break;
                 case "oauth_token":
-                    oauthParams.token(value);
+                    oauthParams.setTokenKey(value);
                     break;
                 case "oauth_signature_method":
-                    oauthParams.signatureMethod(value);
+                    oauthParams.setSignatureMethod(value);
                     break;
                 case "oauth_nonce":
-                    oauthParams.nonce(value);
+                    oauthParams.setNonce(value);
                     break;
                 case "oauth_timestamp":
-                    oauthParams.timestamp(value);
+                    oauthParams.setTimestamp(value);
                     break;
                 case "oauth_signature":
-                    oauthParams.signature(value);
+                    oauthParams.setSignature(value);
                     break;
             }
         }
