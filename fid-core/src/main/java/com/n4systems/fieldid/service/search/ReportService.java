@@ -39,7 +39,7 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
         User user = getCurrentUser();
         TimeZone timeZone = user.getTimeZone();
 
-        String prefix = criteriaModel.isShowMostRecentEventsOnly() ? "event." : "";
+        String prefix = getPrefix(criteriaModel);
 
         addSimpleTerm(searchTerms, "type.actionType", criteriaModel.getEventSearchType().equals(EventSearchType.ACTIONS));
 
@@ -134,7 +134,7 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
     }
 
     private void addGpsLocationTerm(List<SearchTermDefiner> search, EventReportCriteria criteriaModel) {
-        String prefix = criteriaModel.isShowMostRecentEventsOnly() ? "event." : "";
+        String prefix = getPrefix(criteriaModel);
         search.add(new GpsBoundsTerm(prefix + "gpsLocation",criteriaModel.getBounds()));
     }
 
@@ -171,7 +171,7 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
     protected void addJoinTerms(EventReportCriteria criteriaModel, List<JoinTerm> joinTerms) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
 
-        String prefix = criteriaModel.isShowMostRecentEventsOnly() ? "event." : "";
+        String prefix = getPrefix(criteriaModel);
         WorkflowStateCriteria status = criteriaModel.getWorkflowState();
 
         if (predefLocationId != null && status.includesIncomplete()) {
@@ -199,7 +199,7 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
 
 
     private void addOrgJoinTerms(EventReportCriteria criteriaModel, String basePath, String assetJoinAlias, String eventJoinAlias, List<JoinTerm> joinTerms) {
-        String prefix = criteriaModel.isShowMostRecentEventsOnly() ? "event." : "";
+        String prefix = getPrefix(criteriaModel);
         WorkflowStateCriteria status = criteriaModel.getWorkflowState();
         if (status.includesIncomplete()) {
             JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "asset.owner." + basePath, assetJoinAlias, true);
@@ -214,7 +214,7 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
 
     @Override
     protected void addSortTerms(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
-        String prefix = criteriaModel.isShowMostRecentEventsOnly() ? "event." : "";
+        String prefix = getPrefix(criteriaModel);
 
         // Reporting has a few special case sorts that are more complicated due to displaying two types of data. ie sorting on two columns.
         // To prevent weird mixing, when one of these special cases occurs, we always sort by state first
@@ -260,6 +260,10 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
         }
     }
 
+    private String getPrefix(EventReportCriteria criteriaModel) {
+        return criteriaModel.isShowMostRecentEventsOnly() ? "event." : "";
+    }
+
     private void addOrgSort(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, SortDirection sortDirection, String assetOrgAlias, String eventOrgAlias) {
         addStatusSortIfNecessary(criteriaModel, searchBuilder, sortDirection);
 
@@ -281,7 +285,7 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
     // we decided to sort by workflowState first so there's less unexpected weirdness mixing complete/incomplete.
     private void addStatusSortIfNecessary(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, SortDirection sortDirection) {
         if (criteriaModel.getWorkflowState() == WorkflowStateCriteria.ALL) {
-            String prefix = criteriaModel.isShowMostRecentEventsOnly() ? "event." : "";
+            String prefix = getPrefix(criteriaModel);
             SortTerm sortTerm = new SortTerm(prefix + "workflowState", sortDirection);
             searchBuilder.getOrderArguments().add(sortTerm.toSortField());
         }
@@ -289,9 +293,11 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
 
     @Override
     protected <E> QueryBuilder<E> createAppropriateQueryBuilder(EventReportCriteria criteria, Class<E> searchClass) {
-        if (criteria.isIncludeSafetyNetwork()) {
+        if (criteria.isIncludeSafetyNetwork() && criteria.isShowMostRecentEventsOnly()) {
+            return new QueryBuilder<E>(MostRecentThingEvent.class, new NetworkIdSecurityFilter(securityContext.getUserSecurityFilter(), "asset.networkId"));
+        }else if (criteria.isIncludeSafetyNetwork()) {
             return new QueryBuilder<E>(searchClass, new NetworkIdSecurityFilter(securityContext.getUserSecurityFilter(), "asset.networkId"));
-        } if(criteria.isShowMostRecentEventsOnly()) {
+        } else if(criteria.isShowMostRecentEventsOnly()) {
             return new QueryBuilder<E>(MostRecentThingEvent.class, securityContext.getUserSecurityFilter());
         }
         return super.createAppropriateQueryBuilder(criteria, searchClass);
