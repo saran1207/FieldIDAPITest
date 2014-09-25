@@ -46,7 +46,11 @@ public class CriteriaSectionEditPanel extends Panel {
     private Popup popup;
     private RichTextDisplay richTextDisplay;
     private boolean showActionButtons;
-    private boolean showAttachmentsAndActions = true;
+    private boolean showAttachmentsAndActions;
+
+    public CriteriaSectionEditPanel(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results, boolean showActionButtons) {
+        this(id, eventClass, results, showActionButtons, true);
+    }
 
     public CriteriaSectionEditPanel(String id, final Class<? extends AbstractEvent> eventClass, IModel<List<CriteriaResult>> results, boolean showActionButtons, boolean showAttachmentsAndActions) {
         super(id);
