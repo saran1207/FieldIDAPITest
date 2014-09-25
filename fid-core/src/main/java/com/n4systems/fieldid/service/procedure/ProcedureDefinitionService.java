@@ -199,41 +199,30 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("asset", asset);
 
-
         return persistenceService.findAll(query);
     }
 
     public Long getAllProcedureDefinitionsForAssetTypeCount(AssetType assetType) {
-        QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
-        WhereParameterGroup wpg = new WhereParameterGroup();
-        wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()));
-        query.addWhere(wpg);
-
-        return persistenceService.count(query);
+        return persistenceService.count(getProcedureDefinitionForAssetTypeQueryBuilder(assetType));
     }
-
 
     public List<ProcedureDefinition> getAllProcedureDefinitionsForAssetType(AssetType assetType) {
-        QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
-        WhereParameterGroup wpg = new WhereParameterGroup();
-        wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()));
-        query.addWhere(wpg);
-
-        return persistenceService.findAll(query);
+        return persistenceService.findAll(getProcedureDefinitionForAssetTypeQueryBuilder(assetType));
     }
 
+    private QueryBuilder<ProcedureDefinition> getProcedureDefinitionForAssetTypeQueryBuilder(AssetType assetType) {
+        QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
+        query.addSimpleWhere("asset.type.id", assetType.getId());
+        return query;
+    }
 
     public void archiveProcedureDefinitionsForAssetType(AssetType assetType) {
-        List<ProcedureDefinition> procedureDefinitionList;
-        procedureDefinitionList = getAllProcedureDefinitionsForAssetType(assetType);
+        List<ProcedureDefinition> procedureDefinitionList = getAllProcedureDefinitionsForAssetType(assetType);
 
         for (ProcedureDefinition procedureDefinition : procedureDefinitionList) {
-            procedureDefinition.archiveEntity();
-            persistenceService.update(procedureDefinition);
+            archiveProcedureDefinition(procedureDefinition);
         }
-
     }
-
 
     public List<ProcedureDefinition> getActiveProcedureDefinitionsForAsset(Asset asset) {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
