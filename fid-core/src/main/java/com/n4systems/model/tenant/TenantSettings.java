@@ -59,6 +59,7 @@ public class TenantSettings extends EntityWithTenant {
     @Column(name="default_language")
     private Locale defaultLanguage;
 
+	@Column(name="public_api_enabled")
 	private boolean publicApiEnabled;
 
 	@Embedded

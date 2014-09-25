@@ -1,0 +1,1 @@
+ALTER TABLE `request_log` ADD INDEX (`consumer_key`, `token_key`);
