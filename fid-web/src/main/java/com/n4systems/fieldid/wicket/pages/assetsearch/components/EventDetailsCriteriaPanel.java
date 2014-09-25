@@ -137,7 +137,9 @@ public class EventDetailsCriteriaPanel extends Panel {
 
     private void setShowMostRecentEventsOnlyCheckVisibility() {
         IModel<WorkflowStateCriteria> workflowStateModel = new PropertyModel<WorkflowStateCriteria>(getDefaultModel(), "workflowState");
-        showMostRecentEventsOnlyCheck.setVisible(workflowStateModel.getObject().equals(WorkflowStateCriteria.COMPLETE));
+        IModel<EventSearchType> eventSearchTypeModel = new PropertyModel<EventSearchType>(getDefaultModel(), "eventSearchType");
+        showMostRecentEventsOnlyCheck.setVisible(workflowStateModel.getObject().equals(WorkflowStateCriteria.COMPLETE)
+                && !eventSearchTypeModel.getObject().equals(EventSearchType.ACTIONS));
     }
 
 }
