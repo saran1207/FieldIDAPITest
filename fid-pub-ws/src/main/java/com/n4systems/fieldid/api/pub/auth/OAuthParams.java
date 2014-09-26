@@ -8,6 +8,17 @@ public class OAuthParams {
 	private String timestamp;
 	private String signature;
 
+    public String getVersion() {
+        return version;
+    }
+
+    public OAuthParams setVersion(String version) {
+        this.version = version;
+        return this;
+    }
+
+    private String version;
+
 	public String getConsumerKey() {
 		return consumerKey;
 	}

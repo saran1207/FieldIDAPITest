@@ -7,7 +7,9 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLDecoder;
 import java.util.TreeSet;
 
 /**
@@ -41,6 +43,7 @@ public class OAuthRequestParamsFactory {
 
     private static void populateOAuthParamsFromHeader(OAuthRequestParams params, String authHeader) {
         if(authHeader != null && authHeader.length() > 0 && authHeader.startsWith("OAuth")) {
+            authHeader = authHeader.substring(authHeader.indexOf("oauth_"));
             String[] headerParams = authHeader.split(",");
 
             for(String headerParam : headerParams) {
@@ -54,7 +57,12 @@ public class OAuthRequestParamsFactory {
                     value = headerParam.substring(equalsIdx  + 1);
                 }
 
-                params.parameter(key, value);
+                try
+                {
+                    params.parameter(key.trim(), URLDecoder.decode(value.trim(), "UTF-8"));
+                }
+                catch(UnsupportedEncodingException ignored) {} // no way
+
             }
         }
     }

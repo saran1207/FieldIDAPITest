@@ -61,30 +61,43 @@ public class OAuthRequestParams {
 
     public OAuthRequestParams parameter(String key, String value) {
         isSorted = false;
-        parameters.add(new AbstractMap.SimpleEntry<>(key, value));
 
+        if("realm".equals(key)) {
+            return this;
+        }
 
         if(key.startsWith("oauth_")) {
             switch (key) {
                 case "oauth_consumer_key":
                     oauthParams.setConsumerKey(value);
+                    parameters.add(new AbstractMap.SimpleEntry<>(key, value));
                     break;
                 case "oauth_token":
                     oauthParams.setTokenKey(value);
+                    parameters.add(new AbstractMap.SimpleEntry<>(key, value));
                     break;
                 case "oauth_signature_method":
                     oauthParams.setSignatureMethod(value);
+                    parameters.add(new AbstractMap.SimpleEntry<>(key, value));
                     break;
                 case "oauth_nonce":
                     oauthParams.setNonce(value);
+                    parameters.add(new AbstractMap.SimpleEntry<>(key, value));
                     break;
                 case "oauth_timestamp":
                     oauthParams.setTimestamp(value);
+                    parameters.add(new AbstractMap.SimpleEntry<>(key, value));
                     break;
                 case "oauth_signature":
                     oauthParams.setSignature(value);
                     break;
+                case "oauth_version":
+                    oauthParams.setVersion(value);
+                    parameters.add(new AbstractMap.SimpleEntry<>(key, value));
+                    break;
             }
+        } else {
+            parameters.add(new AbstractMap.SimpleEntry<>(key, value));
         }
 
         return this;
@@ -103,10 +116,10 @@ public class OAuthRequestParams {
         sigBuilder.append(OAuthEncoder.encode(scheme + "://"));
         sigBuilder.append(OAuthEncoder.encode(host));
 
-        if(hasPort && (("http".equals(scheme) && port != 8080) ||
+        if(hasPort && (("http".equals(scheme) && port != 80) ||
                     ("https".equals(scheme) && port != 443))) {
 
-            sigBuilder.append(":");
+            sigBuilder.append("%3A");
             sigBuilder.append(port);
                     }
 
