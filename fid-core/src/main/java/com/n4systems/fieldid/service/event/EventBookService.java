@@ -1,17 +1,21 @@
 package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.eventbook.EventBookListFilterCriteria;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable;
+import com.n4systems.model.security.OwnerAndDownFilter;
 import com.n4systems.model.user.User;
-import com.n4systems.util.persistence.QueryBuilder;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
+import com.n4systems.util.persistence.*;
+import com.n4systems.util.persistence.search.SortDirection;
+import com.n4systems.util.persistence.search.SortTerm;
 
 import java.util.Date;
 import java.util.List;
 
 public class EventBookService extends FieldIdPersistenceService {
+
+    private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
 
     public List<EventBook> getAllEventBooks() {
         return persistenceService.findAll(EventBook.class);
@@ -46,7 +50,7 @@ public class EventBookService extends FieldIdPersistenceService {
         QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class, true);
 
         query.addSimpleWhere("state",
-                             Archivable.EntityState.ARCHIVED);
+                Archivable.EntityState.ARCHIVED);
 
         return persistenceService.count(query);
     }
@@ -79,7 +83,8 @@ public class EventBookService extends FieldIdPersistenceService {
     }
 
     public EventBook getEventBookById(Long id) {
-        return persistenceService.find(EventBook.class, id);
+        QueryBuilder<EventBook> queryBuilder = createUserSecurityBuilder(EventBook.class, true).addSimpleWhere("id", id);
+        return persistenceService.find(queryBuilder);
     }
 
     public void archiveEventBook(EventBook eventBook) {
@@ -113,12 +118,105 @@ public class EventBookService extends FieldIdPersistenceService {
         return persistenceService.exists(query);
     }
 
+    public Long getEventBooksCountByState(EventBookListFilterCriteria criteria, Archivable.EntityState state) {
+        if(Archivable.EntityState.ACTIVE.equals(state)) {
+            return getActiveEventBookCountByCriteria(criteria);
+        } else {
+            return getArchivedEventBookCountByCriteria(criteria);
+        }
+    }
+
+    public Long getActiveEventBookCountByCriteria(EventBookListFilterCriteria criteria) {
+        QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class);
+        applyFilter(query, criteria);
+        query.addSimpleWhere("state",
+                Archivable.EntityState.ACTIVE);
+
+        return persistenceService.count(query);
+    }
+
+    public Long getArchivedEventBookCountByCriteria(EventBookListFilterCriteria criteria) {
+        QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class, true);
+        applyFilter(query, criteria);
+        query.addSimpleWhere("state",
+                Archivable.EntityState.ARCHIVED);
+
+        return persistenceService.count(query);
+    }
+
+    private void applyFilter(QueryBuilder<EventBook> builder, EventBookListFilterCriteria criteria) {
+
+        if (criteria.getOwner() != null) {
+            builder.applyFilter(new OwnerAndDownFilter(criteria.getOwner()));
+        }
+
+        if (criteria.getTitleFilter() != null && !criteria.getTitleFilter().isEmpty()) {
+            WhereParameterGroup whereGroup = new WhereParameterGroup();
+            whereGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.LIKE, "name", criteria.getTitleFilter(), WhereParameter.IGNORE_CASE | WhereParameter.WILDCARD_BOTH,
+                    WhereClause.ChainOp.OR));
+            builder.addWhere(whereGroup);
+        }
+
+        boolean needsCreatedBySortJoin = false;
+        boolean needsModifiedBySortJoin = false;
+        boolean needsJobSiteSortJoin = false;
+        if (criteria.getOrder() != null) {
+            String[] orders = criteria.getOrder().split(",");
+            for (String subOrder : orders) {
+                subOrder=subOrder.trim();
+                if (subOrder.startsWith("createdBy")) {
+                    subOrder = subOrder.replaceAll("createdBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, criteria.isAscending() ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    builder.getOrderArguments().add(sortTerm.toSortField());
+                    needsCreatedBySortJoin = true;
+                } else if (subOrder.startsWith("modifiedBy")) {
+                    subOrder = subOrder.replaceAll("modifiedBy", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, criteria.isAscending() ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    builder.getOrderArguments().add(sortTerm.toSortField());
+                    needsModifiedBySortJoin = true;
+                } else if (subOrder.startsWith("owner")) {
+                    subOrder = subOrder.replaceAll("owner", "sortJoin");
+                    SortTerm sortTerm = new SortTerm(subOrder, criteria.isAscending() ? SortDirection.ASC : SortDirection.DESC);
+                    sortTerm.setAlwaysDropAlias(true);
+                    sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
+                    builder.getOrderArguments().add(sortTerm.toSortField());
+                    needsJobSiteSortJoin = true;
+                } else {
+                    builder.addOrder(subOrder, criteria.isAscending());
+                }
+            }
+        }
+
+        if (needsCreatedBySortJoin) {
+            builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "createdBy", "sortJoin", true));
+        }
+        if (needsModifiedBySortJoin) {
+            builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "modifiedBy", "sortJoin", true));
+        }
+        if (needsJobSiteSortJoin) {
+            builder.addJoin(new JoinClause(JoinClause.JoinType.LEFT, "owner", "sortJoin", true));
+        }
+
+    }
+
     public Long getEventBooksCountByState(Archivable.EntityState state) {
         if(Archivable.EntityState.ACTIVE.equals(state)) {
             return getActiveEventBookCount();
         } else {
             return getArchivedEventBookCount();
         }
+    }
+
+    public List<EventBook> getEventBooks(EventBookListFilterCriteria criteria, Archivable.EntityState state) {
+        QueryBuilder<EventBook> query = createUserSecurityBuilder(EventBook.class, true);
+        applyFilter(query, criteria);
+        query.addSimpleWhere("state", state);
+        return persistenceService.findAll(query);
+
     }
 
     public List<EventBook> getPagedEventBooksListByState(Archivable.EntityState state,

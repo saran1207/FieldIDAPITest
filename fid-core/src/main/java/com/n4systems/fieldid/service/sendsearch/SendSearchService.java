@@ -69,15 +69,19 @@ public class SendSearchService extends FieldIdPersistenceService {
     public void sendAllDueItems() {
         QueryBuilder<SendSavedItemSchedule> query = new QueryBuilder<SendSavedItemSchedule>(SendSavedItemSchedule.class, new OpenSecurityFilter());
         query.addSimpleWhere("user.state", Archivable.EntityState.ACTIVE);
+        query.addSimpleWhere("tenant.disabled", false);
+
         List<SendSavedItemSchedule> schedules = persistenceService.findAll(query);
         for (SendSavedItemSchedule schedule : schedules) {
-            try {
-                Date utcDateToTheHour = DateHelper.truncate(new Date(), DateHelper.HOUR);
-                if (schedule.shouldRunNow(utcDateToTheHour)  ) {
-                    sendSavedItemInsideUserContext(schedule.getSavedItem().getId(), schedule);
+            if(schedule.getUser().getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts)) {
+                try {
+                    Date utcDateToTheHour = DateHelper.truncate(new Date(), DateHelper.HOUR);
+                    if (schedule.shouldRunNow(utcDateToTheHour)) {
+                        sendSavedItemInsideUserContext(schedule.getSavedItem().getId(), schedule);
+                    }
+                } catch (Exception e) {
+                    logger.error("Error sending notification: " + ToStringBuilder.reflectionToString(schedule), e);
                 }
-            } catch (Exception e) {
-                logger.error("Error sending notification: " + ToStringBuilder.reflectionToString(schedule), e);
             }
         }
     }

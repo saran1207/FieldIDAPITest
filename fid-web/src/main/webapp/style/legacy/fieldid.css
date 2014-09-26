@@ -889,7 +889,7 @@ div.formAction {
 }
 
 .quickForm {
-	width: 100%;
+	/*width: 100%;*/
 	overflow: hidden;
 	padding: 2px 10px;
 }
@@ -1903,7 +1903,7 @@ input.description {
 	padding: 6px 0px 2px 0px; 
 }
 
-#reducedLineHeightLabel{
+.reducedLineHeightLabel{
 	line-height: normal;
 }
 

@@ -84,7 +84,7 @@ public class UserRequestListPage extends FieldIDTemplatePage {
     @Override
     protected void addNavBar(String navBarId) {
         NavigationBar navBar = new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page(UserRequestListPage.class).build());
+                aNavItem().label(new FIDLabelModel("nav.view_all.count", userRequestService.countAllUserRequests())).page(UserRequestListPage.class).build());
         add(navBar);
     }
 

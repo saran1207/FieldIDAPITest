@@ -7,6 +7,7 @@ import com.n4systems.model.CriteriaResult;
 import com.n4systems.model.CriteriaSection;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -32,10 +33,14 @@ public abstract class EventFormPanel extends Panel {
     private Map<CriteriaSection, Double> sectionScores;
     private Map<CriteriaSection, Double> sectionScorePercentages;
 
-    public EventFormPanel(String id, final IModel<? extends AbstractEvent> event, final IModel<List<AbstractEvent.SectionResults>> results) {
+    private WebMarkupContainer criteriaSectionContainer;
+    private boolean isEdit;
+
+    public EventFormPanel(String id, final IModel<? extends AbstractEvent> event, final IModel<List<AbstractEvent.SectionResults>> results, boolean isEdit) {
         super(id);
         this.results = results;
         this.event = event;
+        this.isEdit = isEdit;
         setOutputMarkupId(true);
 
         totalSections = results.getObject().size();
@@ -46,7 +51,10 @@ public abstract class EventFormPanel extends Panel {
         PropertyModel<Integer> currentSectionModel = new PropertyModel<Integer>(this, "currentSectionNumber");
         PropertyModel<Integer> totalSectionsModel = new PropertyModel<Integer>(this, "totalSections");
 
-        add(new ListView<AbstractEvent.SectionResults>("criteriaSections", results) {
+        add(criteriaSectionContainer = new WebMarkupContainer("criteriaSectionsContainer"));
+        criteriaSectionContainer.setOutputMarkupId(true);
+
+        criteriaSectionContainer.add(new ListView<AbstractEvent.SectionResults>("criteriaSectionsList", results) {
             @Override
             protected void populateItem(final ListItem<AbstractEvent.SectionResults> item) {
                 WebMarkupContainer sectionContainer = new WebMarkupContainer("sectionContainer") {
@@ -60,7 +68,36 @@ public abstract class EventFormPanel extends Panel {
                 sectionContainer.add(getCriteriaSectionPanel(event.getObject().getClass(), new PropertyModel<List<CriteriaResult>>(item.getModel(), "results")));
                 sectionContainer.add(getSectionScore("sectionScore", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
                 sectionContainer.add(getSectionScorePercentage("sectionScorePercentage", new PropertyModel<CriteriaSection>(item.getModel(), "section")));
+                sectionContainer.add(new AjaxLink<Void>("hideSectionLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        item.getModelObject().disabled = true;
+                        target.add(criteriaSectionContainer);
+                    }
+
+                    @Override
+                    public boolean isVisible() {
+                        return item.getModelObject().section.isOptional() && isEdit;
+                    }
+                });
                 item.add(sectionContainer);
+
+                WebMarkupContainer disabledOverlay;
+                sectionContainer.add(disabledOverlay = new WebMarkupContainer("disabledOverlay") {
+                    @Override
+                    public boolean isVisible() {
+                        return item.getModelObject().disabled;
+                    }
+                });
+                disabledOverlay.setOutputMarkupPlaceholderTag(true);
+                disabledOverlay.add(new Label("name", new PropertyModel<String>(item.getModel(), "section.title")));
+                disabledOverlay.add(new AjaxLink<Void>("restoreLink") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        item.getModelObject().disabled = false;
+                        target.add(criteriaSectionContainer);
+                    }
+                });
             }
         });
 

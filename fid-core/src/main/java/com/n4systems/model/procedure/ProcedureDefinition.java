@@ -27,6 +27,11 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
         return new SecurityDefiner("tenant.id", "asset.owner", null, "state", false);
     }
 
+    public static String TESTING_AND_VERIFICATION_REQUIREMENTS = "1. Test for zero energy by turning normal operational controls to the on position and verifying that no machine function or movement occurs.\n" +
+            "2. If possible contact with exposed electrical conductors could occur; qualified personnel must perform electrical voltage testing on all phases of the load side of the circuit to verify zero energy condition.\n" +
+            "3. Return all controls to the off position and complete all necessary adjustments or repair work.\n" +
+            "4. During testing and adjustment, Lockout must be re-applied when contact with hazardous area(s) is required.";
+
     @ManyToOne
     @JoinColumn(name = "asset_id")
     private Asset asset;
@@ -45,7 +50,6 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
     @Column(name="complete_points_in_order")
     private boolean completeIsolationPointInOrder;
-
 
     @ManyToOne
     @JoinColumn(name = "developed_by_id")
@@ -115,6 +119,9 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
     @Column(name="removal_process")
     private String removalProcess;
+
+    @Column(name="testing_and_verification")
+    private String testingAndVerification = TESTING_AND_VERIFICATION_REQUIREMENTS;
 
 	@Column(nullable=false)
 	private String mobileId;
@@ -445,6 +452,14 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
 
     public void setRemovalProcess(String removalProcess) {
         this.removalProcess = removalProcess;
+    }
+
+    public String getTestingAndVerification() {
+        return testingAndVerification;
+    }
+
+    public void setTestingAndVerification(String testingAndVerification) {
+        this.testingAndVerification = testingAndVerification;
     }
 
     //We are forced to implement this due to the HasOwner interface on the event creation service and related classes

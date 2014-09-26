@@ -144,27 +144,20 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
 
     public QueryBuilder<M> createBaseMappedSearchQueryBuilder(T criteriaModel) {
         QueryBuilder<M> searchBuilder = createAppropriateMappedQueryBuilder(criteriaModel);
-        augmentSearchBuilder(criteriaModel, searchBuilder, true);
-        return searchBuilder;
+        return augmentSearchBuilder(criteriaModel, searchBuilder, true);
+
     }
 
     public QueryBuilder<M> createBaseSearchQueryBuilder(T criteriaModel) {
 		// create our QueryBuilder, note the type will be the same as our selectClass
 		QueryBuilder<M> searchBuilder = createAppropriateQueryBuilder(criteriaModel, searchClass);
         return augmentSearchBuilder(criteriaModel, searchBuilder, false);
+
     }
 
     private <E> QueryBuilder<E> augmentSearchBuilder(T criteriaModel, QueryBuilder<E> searchBuilder, boolean includeGps) {
-        ColumnMappingView sortColumn = criteriaModel.getSortColumn();
 
-        if (sortColumn != null && sortColumn.getJoinExpression() != null) {
-            String[] joinExpressions = sortColumn.getJoinExpression().split(",");
-            for (int i = 0; i < joinExpressions.length; i++) {
-                String sortAlias = JoinTerm.DEFAULT_SORT_JOIN_ALIAS + i;
-                JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT, joinExpressions[i], sortAlias, true);
-                searchBuilder.addJoin(joinTerm.toJoinClause());
-            }
-        }
+        addSortJoinTerms(searchBuilder, criteriaModel);
 
         List<SearchTermDefiner> searchTerms = new ArrayList<SearchTermDefiner>();
         List<JoinTerm> joinTerms = new ArrayList<JoinTerm>();
@@ -186,6 +179,18 @@ public abstract class SearchService<T extends SearchCriteria, M extends EntityWi
         applyOwnerFilter(criteriaModel, searchBuilder);
 
         return searchBuilder;
+    }
+
+    protected <E> void addSortJoinTerms(QueryBuilder<E> searchBuilder, T criteriaModel) {
+        ColumnMappingView sortColumn = criteriaModel.getSortColumn();
+        if (sortColumn != null && sortColumn.getJoinExpression() != null) {
+            String[] joinExpressions = sortColumn.getJoinExpression().split(",");
+            for (int i = 0; i < joinExpressions.length; i++) {
+                String sortAlias = JoinTerm.DEFAULT_SORT_JOIN_ALIAS + i;
+                JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT, joinExpressions[i], sortAlias, true);
+                searchBuilder.addJoin(joinTerm.toJoinClause());
+            }
+        }
     }
 
     protected void applyOwnerFilter(T criteriaModel, QueryBuilder<?> searchBuilder) {

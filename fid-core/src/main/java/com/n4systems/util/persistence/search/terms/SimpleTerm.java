@@ -26,11 +26,12 @@ public class SimpleTerm<T> extends SingleTermDefiner {
 	protected WhereParameter<T> createWhere() {
 		WhereParameter<T> param = new WhereParameter<T>(comparator, field, value, dropAlias);
 		
-		// String fields are automatically ignore case & trim.
-		if (value instanceof String) {
+		//String fields are automatically ignore case & trim. This adds extra load on the query.
+		/*
+        if (value instanceof String) {
 			param.setOptions(WhereParameter.IGNORE_CASE | WhereParameter.TRIM);
-		}
-		
+		}*/
+
 		return param;
 	}
 	

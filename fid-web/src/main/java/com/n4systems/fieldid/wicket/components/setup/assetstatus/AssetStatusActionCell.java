@@ -4,10 +4,11 @@ import com.n4systems.fieldid.service.asset.AssetStatusService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
+import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListAllPage;
+import com.n4systems.fieldid.wicket.pages.setup.assetstatus.AssetStatusListArchivedPage;
 import com.n4systems.fieldid.wicket.pages.setup.assetstatus.EditAssetStatusPage;
 import com.n4systems.model.AssetStatus;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -53,16 +54,19 @@ public class AssetStatusActionCell extends Panel {
 
         editLink.setVisible(thisStatus.isActive());
 
+
+        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
+
         //We don't need to worry about controlling the visibility of this link, because it lives inside of a
         //wicket:enclosure, with editLink set as its child.  This means that any time the visibility of editLink
         //changes, the visibility of the whole enclosure changes.
-        add(new AjaxLink("archiveLink") {
+        optionsContainer.add(new Link("archiveLink") {
             /**
              * This method simply provides the click functionality for the Archive link, tying it to an internal method
              * in the class.
              */
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick() {
                 AssetStatus archiveMe = assetStatusService.getStatusById(thisStatus.getId());
                 assetStatusService.archiveStatus(archiveMe);
 
@@ -70,19 +74,21 @@ public class AssetStatusActionCell extends Panel {
                               .info(new FIDLabelModel("message.archive_asset_status",
                                     thisStatus.getDisplayName()).getObject());
 
-                onAction(target);
+                setResponsePage(AssetStatusListAllPage.class);
             }
         });
 
-        AjaxLink unarchiveLink;
+        add(optionsContainer);
 
-        add(unarchiveLink = new AjaxLink("unarchiveLink") {
+        Link unarchiveLink;
+
+        add(unarchiveLink = new Link("unarchiveLink") {
             /**
              * This method simply provides the click functionality for the Unarchive link, tying it to an internal
              * method in the class.
              */
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick() {
                 AssetStatus unarchiveMe = assetStatusService.getStatusById(thisStatus.getId());
                 assetStatusService.unarchiveStatus(unarchiveMe);
 
@@ -90,14 +96,10 @@ public class AssetStatusActionCell extends Panel {
                               .info(new FIDLabelModel("message.unarchive_asset_status",
                                     thisStatus.getDisplayName()).getObject());
 
-                onAction(target);
+                setResponsePage(AssetStatusListArchivedPage.class);
             }
         });
 
         unarchiveLink.setVisible(thisStatus.isArchived());
-    }
-
-    protected void onAction(AjaxRequestTarget target) {
-        //This sucker needs to be overridden.
     }
 }

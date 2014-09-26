@@ -4,13 +4,16 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.download.SystemUrlUtil;
 import com.n4systems.fieldid.service.mail.MailService;
 import com.n4systems.fieldid.service.user.UserGroupService;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
 import com.n4systems.model.security.OpenSecurityFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.tenant.TenantSettings;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
+import com.n4systems.services.SecurityContext;
 import com.n4systems.util.mail.TemplateMailMessage;
 import com.n4systems.util.persistence.QueryBuilder;
 import org.apache.log4j.Logger;
@@ -33,16 +36,20 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
         QueryBuilder<ProcedureDefinition> assigneeQuery = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, new OpenSecurityFilter());
         assigneeQuery.addSimpleWhere("publishedState", PublishedState.WAITING_FOR_APPROVAL);
         assigneeQuery.addSimpleWhere("authorizationNotificationSent", false);
+        assigneeQuery.addSimpleWhere("tenant.disabled", false);
 
         List<ProcedureDefinition> publishedDefsAwaitingAuthorization = persistenceService.findAll(assigneeQuery);
 
         for (ProcedureDefinition procedureDefinition : publishedDefsAwaitingAuthorization) {
-            try {
-                sendAuthorizationNotification(procedureDefinition);
-            } catch(Exception e) {
-                log.error("Could not send auth notification for procedureDef: " + procedureDefinition.getId(), e);
-            } finally {
-                persistenceService.update(procedureDefinition);
+            if(procedureDefinition.getOwner().getPrimaryOrg().getExtendedFeatures().contains(ExtendedFeature.EmailAlerts) ||
+                    procedureDefinition.getTenant().getSettings().getApprovalUserOrGroup() == null) {
+                try {
+                    sendAuthorizationNotification(procedureDefinition);
+                } catch (Exception e) {
+                    log.error("Could not send auth notification for procedureDef: " + procedureDefinition.getId(), e);
+                } finally {
+                    persistenceService.update(procedureDefinition);
+                }
             }
         }
     }
@@ -68,6 +75,7 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
     private void sendAuthorizationNotification(ProcedureDefinition procedureDefinition) {
         Tenant tenant = procedureDefinition.getTenant();
         TenantSettings settings = tenant.getSettings();
+
         if (settings.getApprovalUser() != null) {
             sendNotifications(procedureDefinition, settings.getApprovalUser(), null);
             procedureDefinition.setAuthorizationNotificationSent(true);
@@ -78,6 +86,7 @@ public class NotifyProcedureAuthorizersService extends FieldIdPersistenceService
             // There is no approval user or group (but was one earlier since this was marked waiting for approval)
             // This means we can simply publish the procedure def automatically.
             log.warn("Procedure def waiting for certification but no certifier user or group set: " + procedureDefinition.getId() +". Publishing automatically.");
+            securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(tenant.getId()));
             procedureDefinitionService.publishProcedureDefinition(procedureDefinition);
         }
     }

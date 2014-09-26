@@ -93,7 +93,7 @@ public class PlaceEventSummaryPage extends EventSummaryPage {
     }
 
     private PlaceEvent loadExistingEvent() {
-        final PlaceEvent event = eventService.lookupExistingEvent(PlaceEvent.class, uniqueId, true);
+        final PlaceEvent event = eventService.lookupExistingEvent(PlaceEvent.class, uniqueId, true, false);
         PlaceEvent existingEvent = new LocalizeAround<PlaceEvent>(new Callable<PlaceEvent>() {
             @Override
             public PlaceEvent call() throws Exception {

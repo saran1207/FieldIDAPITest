@@ -64,10 +64,16 @@ public class ActionDetailsPage extends FieldIDAuthenticatedPage {
                 // setting a response page just loads that page inside the window which is not the expected behavior
 
                 String url = null;
+
+                Event triggerEvent = actionModel.getObject().getTriggerEvent();
                 if (actionModel.getObject().getWorkflowState() == WorkflowState.OPEN) {
-                    url = String.format("/fieldid/w/performEvent?type=%d&assetId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getId(), actionModel.getObject().getId());
+                    if(triggerEvent.getType().isThingEventType()) {
+                        url = String.format("/fieldid/w/performEvent?type=%d&assetId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getTarget().getId(), actionModel.getObject().getId());
+                    } else {
+                        url = String.format("/fieldid/w/performPlaceEvent?type=%d&placeId=%d&scheduleId=%d", actionModel.getObject().getType().getId(), actionModel.getObject().getTarget().getId(), actionModel.getObject().getId());
+                    }
                 } else {
-                    if(actionModel.getObject().getType().isThingEventType() || actionModel.getObject().getType().isActionEventType())
+                    if(triggerEvent.getType().isThingEventType())
                         url = String.format("/fieldid/w/thingEventSummary?id=%d", actionModel.getObject().getId());
                     else
                         url = String.format("/fieldid/w/placeEventSummary?id=%d", actionModel.getObject().getId());

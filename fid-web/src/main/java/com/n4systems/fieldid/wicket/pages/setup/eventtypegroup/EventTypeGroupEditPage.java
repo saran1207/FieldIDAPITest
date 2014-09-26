@@ -9,6 +9,7 @@ import com.n4systems.fieldid.wicket.components.text.LabelledRequiredTextField;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.model.EventTypeGroup;
+import com.n4systems.model.api.Archivable;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Button;
@@ -60,8 +61,8 @@ public class EventTypeGroupEditPage extends EventTypeGroupPage{
     @Override
     protected void addNavBar(String navBarId) {
         add(new NavigationBar(navBarId,
-                aNavItem().label(new FIDLabelModel("nav.view_all")).page(EventTypeGroupListPage.class).build(),
-                aNavItem().label(new FIDLabelModel("nav.view_all_archived")).page(EventTypeGroupListArchivePage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all.count", eventTypeGroupService.getEventTypeGroupsByStateCount(Archivable.EntityState.ACTIVE))).page(EventTypeGroupListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", eventTypeGroupService.getEventTypeGroupsByStateCount(Archivable.EntityState.ARCHIVED))).page(EventTypeGroupListArchivePage.class).build(),
                 aNavItem().label(new FIDLabelModel("nav.view")).page(EventTypeGroupViewPage.class).params(PageParametersBuilder.uniqueId(eventTypeGroupId)).build(),
                 aNavItem().label(new FIDLabelModel("nav.edit")).page(EventTypeGroupEditPage.class).params(PageParametersBuilder.uniqueId(eventTypeGroupId)).build(),
                 aNavItem().label(new FIDLabelModel("nav.add")).page(EventTypeGroupAddPage.class).onRight().build()

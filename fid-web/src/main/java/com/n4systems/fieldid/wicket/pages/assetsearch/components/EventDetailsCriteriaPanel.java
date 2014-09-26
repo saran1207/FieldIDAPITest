@@ -16,6 +16,7 @@ import com.n4systems.fieldid.wicket.model.jobs.EventJobsForTenantModel;
 import com.n4systems.model.*;
 import com.n4systems.model.search.EventReportCriteria;
 import com.n4systems.model.search.EventSearchType;
+import com.n4systems.model.search.WorkflowStateCriteria;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -33,6 +34,7 @@ public class EventDetailsCriteriaPanel extends Panel {
     private FidDropDownChoice<EventType> eventTypeSelect;
     private FidDropDownChoice<PriorityCode> prioritySelect;
     private IModel<List<? extends EventType>> availableEventTypesModel;
+    private CheckBox showMostRecentEventsOnlyCheck;
 
     public EventDetailsCriteriaPanel(String id, IModel<EventReportCriteria> model) {
         super(id, model);
@@ -70,7 +72,7 @@ public class EventDetailsCriteriaPanel extends Panel {
 
         jobContainer.add(new FidDropDownChoice<Project>("job", new EventJobsForTenantModel(), new ListableChoiceRenderer<Project>()).setNullValid(true));
 
-        includeNetworkResultsContainer.add(new CheckBox("includeSafetyNetwork"));
+        includeNetworkResultsContainer.add(new CheckBox("includeSafetyNetwork").setOutputMarkupId(true));
 
         PropertyModel<Boolean> gpsStateCriteriaPropertyModel = new PropertyModel<Boolean>(model, "hasGps");
         FidDropDownChoice<Boolean> gpsStateCriteria = new FidDropDownChoice<Boolean>("hasGps",  new PropertyModel<Boolean>(model, "hasGps"),
@@ -94,6 +96,8 @@ public class EventDetailsCriteriaPanel extends Panel {
         gpsStateCriteria.setVisible( getDefaultModelObject().getClass().equals(EventReportCriteria.class) );
         add(gpsStateCriteria);
 
+        add(showMostRecentEventsOnlyCheck = new CheckBox("showMostRecentEventsOnly"));
+        showMostRecentEventsOnlyCheck.setOutputMarkupPlaceholderTag(true);
     }
 
     private FidDropDownChoice<EventTypeGroup> createEventTypeGroupChoice(IModel<EventTypeGroup> eventTypeGroupModel, final IModel<EventType> eventTypeModel, final IModel<List<? extends EventType>> availableEventTypesModel) {
@@ -121,9 +125,21 @@ public class EventDetailsCriteriaPanel extends Panel {
         target.add(prioritySelect);
     }
 
+    protected void repaintShowMostRecentEventsOnlyCheck(AjaxRequestTarget target) {
+        setShowMostRecentEventsOnlyCheckVisibility();
+        target.add(showMostRecentEventsOnlyCheck);
+    }
+
     private void setPrioritySelectVisibility() {
         IModel<EventSearchType> eventSearchTypeModel = new PropertyModel<EventSearchType>(getDefaultModel(), "eventSearchType");
         prioritySelect.setVisible(eventSearchTypeModel.getObject().equals(EventSearchType.ACTIONS));
+    }
+
+    private void setShowMostRecentEventsOnlyCheckVisibility() {
+        IModel<WorkflowStateCriteria> workflowStateModel = new PropertyModel<WorkflowStateCriteria>(getDefaultModel(), "workflowState");
+        IModel<EventSearchType> eventSearchTypeModel = new PropertyModel<EventSearchType>(getDefaultModel(), "eventSearchType");
+        showMostRecentEventsOnlyCheck.setVisible(workflowStateModel.getObject().equals(WorkflowStateCriteria.COMPLETE)
+                && !eventSearchTypeModel.getObject().equals(EventSearchType.ACTIONS));
     }
 
 }

@@ -1,17 +1,6 @@
 <wicket:panel xmlns:wicket="http://www.apache.org/internal/xmlbeans/wsdlsubst">
-
-    <wicket:enclosure>
-        <li class="data-item application-process">
-            <table>
-                <thead>
-                    <tr><th class="heading">Procedure Application Process</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td> <span wicket:id="process"/> </td></tr>
-                </tbody>
-            </table>
-        </li>
-        <li class="data-item seperator"></li>
-    </wicket:enclosure>
-
+    <section class="page-content-item application-process">
+        <header class="heading"><wicket:message key="label.lockout_application_process" /></header>
+        <p wicket:id="process"/>
+    </section>
 </wicket:panel>

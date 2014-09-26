@@ -2,10 +2,12 @@ package com.n4systems.fieldid.wicket.components.setup.comment;
 
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.model.commenttemplate.CommentTemplate;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 
 /**
  * This is the comment column for the Comment Template List Page.
@@ -27,6 +29,6 @@ public class CommentTemplateActionColumn extends AbstractColumn<CommentTemplate>
                              String id,
                              IModel<CommentTemplate> model) {
 
-        item.add(new CommentTemplateActionCell(id, model, listPanel));
+        item.add(new CommentTemplateActionCell(id, model, listPanel)).add(new AttributeAppender("class", new Model<String>("manage-comment-template-edit-remove"), " "));
     }
 }

@@ -1,36 +1,44 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
     <div class="control-group">
-        <label for="criteria.eventTypeGroup"><wicket:message key="label.eventtypegroup"/></label>
+        <label wicket:for="eventTypeGroup"><wicket:message key="label.eventtypegroup"/></label>
         <select wicket:id="eventTypeGroup"></select>
     </div>
     <div class="control-group">
-        <label for="criteria.eventType"><wicket:message key="label.eventtype"/></label>
+        <label wicket:for="eventType"><wicket:message key="label.eventtype"/></label>
         <select wicket:id="eventType"></select>
     </div>
 
     <div wicket:enclosure="priority" class="control-group">
-        <label for="criteria.priority"><wicket:message key="label.priority"/></label>
+        <label wicket:for="priority"><wicket:message key="label.priority"/></label>
         <select wicket:id="priority"></select>
     </div>
 
     <div class="control-group">
-        <label for="criteria.eventBook"><wicket:message key="label.eventbook"/></label>
+        <label wicket:for="eventBook"><wicket:message key="label.eventbook"/></label>
         <select wicket:id="eventBook"></select>
     </div>
 
     <div wicket:id="jobContainer" class="control-group">
-        <label for="criteria.job"><wicket:message key="label.job"/></label>
+        <label wicket:for="job"><wicket:message key="label.job"/></label>
         <select wicket:id="job"></select>
-    </div>
-    <div wicket:id="includeNetworkResultsContainer" class="control-group checkbox">
-        <input wicket:id="includeSafetyNetwork" type="checkbox"/>
-        <label id="reducedLineHeightLabel" for="criteria.includeNetworkResults"><wicket:message key="label.includesafetynetworkresults"/></label>
     </div>
 
     <div class="control-group">
-        <label for="criteria.hasGps"><wicket:message key="label.gps"/></label>
+        <label wicket:for="hasGps"><wicket:message key="label.gps"/></label>
         <select wicket:id="hasGps"></select>
     </div>
 
+    <div wicket:id="includeNetworkResultsContainer" class="control-group checkbox">
+        <input wicket:id="includeSafetyNetwork" type="checkbox"/>
+        <label class="reducedLineHeightLabel" wicket:for="includeSafetyNetwork"><wicket:message key="label.includesafetynetworkresults"/></label>
+    </div>
+
+    <div wicket:enclosure="showMostRecentEventsOnly" class="control-group checkbox">
+        <input wicket:id="showMostRecentEventsOnly" type="checkbox"/>
+        <label class="reducedLineHeightLabel" wicket:for="showMostRecentEventsOnly"><wicket:message key="label.showMostRecentEventsOnly"/></label>
+    </div>
+
 </wicket:panel>
+</html>

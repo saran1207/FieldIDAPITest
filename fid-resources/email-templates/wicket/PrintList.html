@@ -1,38 +1,27 @@
 <wicket:panel>
-
-    <li class="data-item short-form-steps">
+    <section class="page-content-item table application-steps">
         <table>
             <thead>
-            <tr>
-                <th class="heading" colspan="6">Lockout Steps</th>
-            </tr>
-            <tr>
-                <th class="steps-identifier"><wicket:message key="label.identifier"/></th>
-                <th class="steps-source"><wicket:message key="label.isolation_source"/></th>
-                <th class="steps-device"><wicket:message key="label.device"/></th>
-                <th class="steps-location"><wicket:message key="label.location"/></th>
-                <th class="steps-method"><wicket:message key="label.isolation_method"/></th>
-                <th class="steps-check"><wicket:message key="label.check"/></th>
-            </tr>
+                <tr class="mainheading">
+                    <th colspan="4">Application Steps</th>
+                </tr>
+                <tr class="subheading">
+                    <th class="identifier"><wicket:message key="label.identifier"/></th>
+                    <th class="source"><wicket:message key="label.isolation_source"/></th>
+                    <th class="device"><wicket:message key="label.device"/></th>
+                    <th class="method"><wicket:message key="label.isolation_method"/></th>
+                </tr>
             </thead>
-        </table>
-    </li>
 
-    <li wicket:id="list" class="data-item short-form-steps">
-        <table>
-            <tbody>
-            <tr class="even">
-                <td wicket:id="id" class="steps-identifier"></td>
-                <td wicket:id="source" class="steps-source"></td>
-                <td wicket:id="device" class="steps-device"></td>
-                <td wicket:id="location" class="steps-location"></td>
-                <td wicket:id="method" class="steps-method"></td>
-                <td wicket:id="check" class="steps-check"></td>
-            </tr>
+            <tbody wicket:id="list">
+                <tr>
+                    <td wicket:id="source" class="steps"></td>
+                    <td wicket:id="id"     class="identifier"></td>
+                    <td wicket:id="device" class="device"></td>
+                    <td wicket:id="method" class="method"></td>
+                </tr>
             </tbody>
         </table>
-    </li>
-
-    <li class="data-item seperator"></li>
+    </section>
 
 </wicket:panel>

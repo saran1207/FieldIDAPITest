@@ -10,13 +10,15 @@ import java.util.List;
 public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
 
     private WorkflowStateCriteria state;
+    protected String prefix;
 
     public CompleteOrIncompleteTerm() {
-        this(WorkflowStateCriteria.ALL);
+        this(WorkflowStateCriteria.ALL, "");
     }
 
-    public CompleteOrIncompleteTerm(WorkflowStateCriteria state) {
+    public CompleteOrIncompleteTerm(WorkflowStateCriteria state, String prefix) {
         this.state = state;
+        this.prefix = prefix;
     }
 
     @Override
@@ -43,13 +45,13 @@ public abstract class CompleteOrIncompleteTerm implements SearchTermDefiner {
     private void createAndPopulateCompleteAndIncompleteOuterGroup(WhereParameterGroup outerGroup) {
         WhereParameterGroup completedGroup = new WhereParameterGroup(getClass().getName()+".completed");
         completedGroup.setChainOperator(WhereClause.ChainOp.OR);
-        completedGroup.addClause(WhereClauseFactory.create("workflowState", com.n4systems.model.WorkflowState.COMPLETED, WhereClause.ChainOp.AND, "completedWorkflowState"));
+        completedGroup.addClause(WhereClauseFactory.create(prefix + "workflowState", com.n4systems.model.WorkflowState.COMPLETED, WhereClause.ChainOp.AND, "completedWorkflowState"));
 
         populateCompletedTerm(completedGroup);
 
         WhereParameterGroup incompleteGroup = new WhereParameterGroup(getClass().getName()+".incomplete");
         incompleteGroup.setChainOperator(WhereClause.ChainOp.OR);
-        incompleteGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE, "workflowState", com.n4systems.model.WorkflowState.COMPLETED, WhereClause.ChainOp.AND, "nonCompletedWorkflowState"));
+        incompleteGroup.addClause(WhereClauseFactory.create(WhereParameter.Comparator.NE, prefix + "workflowState", com.n4systems.model.WorkflowState.COMPLETED, WhereClause.ChainOp.AND, "nonCompletedWorkflowState"));
 
         populateIncompleteTerm(incompleteGroup);
 

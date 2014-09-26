@@ -13,7 +13,7 @@ public class EventFormEditPanel extends EventFormPanel {
     private boolean showActionButtons;
 
     public EventFormEditPanel(String id, final IModel<? extends AbstractEvent> event, IModel<List<AbstractEvent.SectionResults>> results, boolean showActionButtons) {
-        super(id, event, results);
+        super(id, event, results, true);
         this.showActionButtons = showActionButtons;
     }
 

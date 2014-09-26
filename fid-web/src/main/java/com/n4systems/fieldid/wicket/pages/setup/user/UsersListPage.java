@@ -152,12 +152,7 @@ public class UsersListPage extends FieldIDTemplatePage {
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.division"), "owner.divisionOrg", "owner.divisionOrg.name"));
         columns.add(new PropertyColumn<User>(new FIDLabelModel("label.emailaddress"), "emailAddress", "emailAddress"));
         columns.add(new LastLoginColumn(new FIDLabelModel("label.lastlogin")));
-        columns.add(new UsersListActionColumn() {
-            @Override
-            protected void onArchive(AjaxRequestTarget target) {
-                target.add(usersListContainer, getTopFeedbackPanel());
-            }
-        });
+        columns.add(new UsersListActionColumn());
         return columns;
     }
 
@@ -175,9 +170,12 @@ public class UsersListPage extends FieldIDTemplatePage {
 
     @Override
     protected void addNavBar(String navBarId) {
+        UserListFilterCriteria criteria = new UserListFilterCriteria(filterCriteriaModel.getObject());
+        Long activeUserCount = userService.countUsers(criteria.withArchivedOnly(false));
+        Long archivedUserCount = userService.countUsers(criteria.withArchivedOnly());
         add(new NavigationBar(navBarId,
-                aNavItem().label("nav.view_all").page(UsersListPage.class).build(),
-                aNavItem().label("nav.view_all_archived").page(ArchivedUsersListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all.count", activeUserCount)).page(UsersListPage.class).build(),
+                aNavItem().label(new FIDLabelModel("nav.view_all_archived.count", archivedUserCount)).page(ArchivedUsersListPage.class).build(),
                 aNavItem().label("nav.add").page(SelectUserTypePage.class).onRight().build(),
                 aNavItem().label("nav.import_export").page("userImportExport.action").onRight().build()
         ));

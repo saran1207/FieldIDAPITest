@@ -73,6 +73,7 @@ public class ReportingFilterPanel extends Panel {
             protected void onUpdate(AjaxRequestTarget target) {
                 eventStatusAndDateRangePanel.repaintComponents(target);
                 eventStatusAndDateRangePanel.onWorkflowStateChanged(target);
+                eventDetailsCriteriaPanel.repaintShowMostRecentEventsOnlyCheck(target);
             }
         });
 
@@ -83,6 +84,7 @@ public class ReportingFilterPanel extends Panel {
                 model.getObject().setEventType(null);
                 onEventTypeOrGroupUpdated(target, null, eventDetailsCriteriaPanel.getAvailableEventTypesModel().getObject());
                 eventDetailsCriteriaPanel.repaintPrioritySelect(target);
+                eventDetailsCriteriaPanel.repaintShowMostRecentEventsOnlyCheck(target);
                 target.add(eventDetailsCriteriaPanel);
             }
         });

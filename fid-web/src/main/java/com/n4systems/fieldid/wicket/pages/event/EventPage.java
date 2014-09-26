@@ -410,10 +410,15 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
             saveEventBookIfNecessary();
             if (doPostSubmitValidation()) {
                 AbstractEvent savedEvent = doSave();
-                FieldIDSession.get().storeInfoMessageForStruts(getString("message.eventsaved"));
-                if(savedEvent.getType().isPlaceEventType())
+                FieldIDSession.get().info(new FIDLabelModel("message.eventsaved").getObject());
+                if(savedEvent.getType().isActionEventType()) {
+                    if( ((Event)savedEvent).getTriggerEvent().getType().isThingEventType() )
+                        setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+                    else
+                        setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
+                } else if (savedEvent.getType().isPlaceEventType()) {
                     setResponsePage(PlaceEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
-                else if (savedEvent.getType().isProcedureAuditEventType()) {
+                } else if (savedEvent.getType().isProcedureAuditEventType()) {
                     setResponsePage(ProcedureAuditEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));
                 } else {
                     setResponsePage(ThingEventSummaryPage.class, PageParametersBuilder.id(savedEvent.getId()));

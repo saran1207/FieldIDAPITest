@@ -33,6 +33,19 @@ div.criteriaSections {
     font-size: 1.2em;
 }
 
+div.criteriaSections label.subTitle {
+    font-size: 11px;
+}
+
+div.criteriaSections input[type="checkbox"] {
+    vertical-align: text-bottom;
+}
+
+div.criteriaSections div.optionalContainer {
+    clear:both;
+    padding-bottom: 10px;
+}
+
 div.selectedSection {
     background: #C8E4FF;
 }

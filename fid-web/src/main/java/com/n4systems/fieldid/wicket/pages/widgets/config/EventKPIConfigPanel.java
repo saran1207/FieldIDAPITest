@@ -1,6 +1,6 @@
 package com.n4systems.fieldid.wicket.pages.widgets.config;
 
-import com.n4systems.fieldid.wicket.components.org.OrgPicker;
+import com.n4systems.fieldid.wicket.components.org.OrgLocationPicker;
 import com.n4systems.model.dashboard.widget.EventKPIWidgetConfiguration;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.chart.RangeType;
@@ -27,7 +27,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
     private WebMarkupContainer orgsListContainer;
     private BaseOrg orgToAdd;
 
-    private OrgPicker orgPicker;
+    private OrgLocationPicker orgPicker;
     private AjaxButton addOrgButton;
 	private DropDownChoice<RangeType> dateRange;
 
@@ -49,13 +49,14 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
             }
         });
 
-        addConfigElement(orgPicker = new OrgPicker("picker", new PropertyModel<BaseOrg>(this, "orgToAdd")) {
+        addConfigElement(orgPicker = new OrgLocationPicker("picker", new PropertyModel<BaseOrg>(this, "orgToAdd")) {
             @Override
-            protected void onPickerClosed(AjaxRequestTarget target) {
+            protected void onChanged(AjaxRequestTarget target) {
+                orgToAdd = getOwner();
                 target.add(addOrgButton);
             }
-        });
-        orgPicker.setTranslateContainerSelector(".w_content");
+        }.withAutoUpdate());
+        orgPicker.setOutputMarkupId(true);
 
         addConfigElement(orgsListContainer);
 
@@ -64,6 +65,7 @@ public class EventKPIConfigPanel extends WidgetConfigPanel<EventKPIWidgetConfigu
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 configModel.getObject().getOrgs().add(orgToAdd);
                 orgToAdd = null;
+                orgPicker.resetInput();
                 target.add(orgsListContainer);
                 target.add(orgPicker);
                 target.add(this);

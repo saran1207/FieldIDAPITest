@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.data;
 
 import com.n4systems.fieldid.service.event.EventBookService;
+import com.n4systems.fieldid.service.eventbook.EventBookListFilterCriteria;
 import com.n4systems.model.EventBook;
 import com.n4systems.model.api.Archivable;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
@@ -20,6 +21,7 @@ public class EventBookDataProvider extends FieldIDDataProvider<EventBook> {
     private EventBookService eventBookService;
 
     private Archivable.EntityState state;
+    private EventBookListFilterCriteria criteria;
 
     private List<EventBook> results;
 
@@ -27,8 +29,9 @@ public class EventBookDataProvider extends FieldIDDataProvider<EventBook> {
 
     public EventBookDataProvider(String order,
                                  SortOrder sortOrder,
-                                 Archivable.EntityState state) {
+                                 Archivable.EntityState state, EventBookListFilterCriteria criteria) {
 
+        this.criteria = criteria;
         setSort(order, sortOrder);
         this.state = state;
     }
@@ -38,18 +41,16 @@ public class EventBookDataProvider extends FieldIDDataProvider<EventBook> {
     public Iterator<? extends EventBook> iterator(int first,
                                                   int count) {
 
-        List<EventBook> eventBookList = eventBookService.getPagedEventBooksListByState(state,
-                                                                                       getSort().getProperty(),
-                                                                                       getSort().isAscending(),
-                                                                                       first,
-                                                                                       count);
+        criteria.withOrder(getSort().getProperty(), getSort().isAscending());
+        List<EventBook> eventBookList = eventBookService.getEventBooks(criteria, state);
 
-        return eventBookList.iterator();
+        return eventBookList.subList(first, first+count).iterator();
+
     }
 
     @Override
     public int size() {
-        return eventBookService.getEventBooksCountByState(state).intValue();
+        return eventBookService.getEventBooksCountByState(criteria, state).intValue();
     }
 
     @Override
@@ -67,4 +68,9 @@ public class EventBookDataProvider extends FieldIDDataProvider<EventBook> {
         results = null;
         size = null;
     }
+
+    public void setCriteria(EventBookListFilterCriteria criteria) {
+        this.criteria = criteria;
+    }
+
 }

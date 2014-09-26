@@ -199,41 +199,30 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
         query.addSimpleWhere("asset", asset);
 
-
         return persistenceService.findAll(query);
     }
 
     public Long getAllProcedureDefinitionsForAssetTypeCount(AssetType assetType) {
-        QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
-        WhereParameterGroup wpg = new WhereParameterGroup();
-        wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()));
-        query.addWhere(wpg);
-
-        return persistenceService.count(query);
+        return persistenceService.count(getProcedureDefinitionForAssetTypeQueryBuilder(assetType));
     }
-
 
     public List<ProcedureDefinition> getAllProcedureDefinitionsForAssetType(AssetType assetType) {
-        QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
-        WhereParameterGroup wpg = new WhereParameterGroup();
-        wpg.addClause(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()));
-        query.addWhere(wpg);
-
-        return persistenceService.findAll(query);
+        return persistenceService.findAll(getProcedureDefinitionForAssetTypeQueryBuilder(assetType));
     }
 
+    private QueryBuilder<ProcedureDefinition> getProcedureDefinitionForAssetTypeQueryBuilder(AssetType assetType) {
+        QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getTenantSecurityFilter());
+        query.addSimpleWhere("asset.type.id", assetType.getId());
+        return query;
+    }
 
     public void archiveProcedureDefinitionsForAssetType(AssetType assetType) {
-        List<ProcedureDefinition> procedureDefinitionList;
-        procedureDefinitionList = getAllProcedureDefinitionsForAssetType(assetType);
+        List<ProcedureDefinition> procedureDefinitionList = getAllProcedureDefinitionsForAssetType(assetType);
 
         for (ProcedureDefinition procedureDefinition : procedureDefinitionList) {
-            procedureDefinition.archiveEntity();
-            persistenceService.update(procedureDefinition);
+            archiveProcedureDefinition(procedureDefinition);
         }
-
     }
-
 
     public List<ProcedureDefinition> getActiveProcedureDefinitionsForAsset(Asset asset) {
         QueryBuilder<ProcedureDefinition> query = createUserSecurityBuilder(ProcedureDefinition.class);
@@ -391,7 +380,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
 
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
-        query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", getProcedureDefinitionIdFromProcedureAuditEvents());
+        List<Long> idList = getProcedureDefinitionIdFromProcedureAuditEvents();
+        if(idList.size()>0) {
+            query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", idList);
+        }
         query.setOrder("equipmentLocation", true);
         query.addOrder("procedureCode", true);
         query.applyFilter(new OwnerAndDownFilter(owner));
@@ -404,13 +396,16 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         QueryBuilder<Long> query = new QueryBuilder<Long>(ProcedureDefinition.class, securityContext.getUserSecurityFilter());
 
         query.addSimpleWhere("publishedState", PublishedState.PUBLISHED);
-        query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", getProcedureDefinitionIdFromProcedureAuditEvents());
+        List<Long> idList = getProcedureDefinitionIdFromProcedureAuditEvents();
+        if(idList.size()>0) {
+            query.addWhere(WhereParameter.Comparator.NOTIN, "id", "id", idList);
+        }
         query.setOrder("equipmentLocation", true);
         query.addOrder("procedureCode", true);
         query.applyFilter(new OwnerAndDownFilter(owner));
         query.setCountSelect();
         return persistenceService.find(query);
-    };
+    }
 
     public List<Long> getProcedureDefinitionIdFromProcedureAuditEvents() {
 
@@ -419,7 +414,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         List<Long> list = persistenceService.findAll(query);
 
         return list;
-    };
+    }
 
 
     public List<ProcedureDefinition> getAllPreviouslyPublishedProcedures(String sTerm, String order, boolean ascending, int first, int count) {
@@ -836,6 +831,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setProcedureType(source.getProcedureType());
         to.setApplicationProcess(source.getApplicationProcess());
         to.setRemovalProcess(source.getRemovalProcess());
+        to.setTestingAndVerification(source.getTestingAndVerification());
 
         Map<String, ProcedureDefinitionImage> clonedImages = cloneImages(source,to);
         to.setImages(Lists.newArrayList(clonedImages.values()));
@@ -862,6 +858,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         to.setWarnings(source.getWarnings());
         to.setApplicationProcess(source.getApplicationProcess());
         to.setRemovalProcess(source.getRemovalProcess());
+        to.setTestingAndVerification(source.getTestingAndVerification());
         to.setDevelopedBy(getCurrentUser());
         if(source.getAsset().getId() == asset.getId()) {
             to.setEquipmentNumber(source.getEquipmentNumber());

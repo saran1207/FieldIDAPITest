@@ -1,29 +1,47 @@
 package com.n4systems.fieldid.service.event;
 
+import com.n4systems.api.conversion.event.CriteriaResultFactory;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
-import com.n4systems.services.signature.SignatureService;
 import com.n4systems.util.ServiceLocator;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class EventCriteriaEditService extends FieldIdPersistenceService {
 
     private static final Logger logger = Logger.getLogger(EventCriteriaEditService.class);
+    private CriteriaResultFactory criteriaResultFactory;
+
+    public EventCriteriaEditService() {
+        criteriaResultFactory = new CriteriaResultFactory();
+    }
 
     public void storeCriteriaChanges(AbstractEvent event) {
-        event.getResults();
+        event.getResults(); //Uh... what?
 
         List<AbstractEvent.SectionResults> sectionResults = event.getSectionResults();
         for (AbstractEvent.SectionResults sectionResult : sectionResults) {
             for (CriteriaResult result : sectionResult.results) {
-                CriteriaResult existingResult = findExistingResultFor(result);
+                CriteriaResult existingResult;
+                if (result.getId() == null || sectionResult.disabled) {
+                    if(sectionResult.disabled) {
+                        //If the CriteriaResult exists in the DB, we have to destroy it.
+                        if(result.getId() != null) {
+                            result = persistenceService.find(CriteriaResult.class, result.getId());
+                            persistenceService.remove(result);
+                        }
+                        Criteria criteria = result.getCriteria();
+                        result = criteriaResultFactory.createCriteriaResult(result.getCriteria().getCriteriaType());
+                        result.setCriteria(criteria);
+                    }
+                    existingResult = criteriaResultFactory.createCriteriaResult(result.getCriteria().getCriteriaType());
+                } else {
+                    existingResult = findExistingResultFor(result);
+                }
                 syncResultData(existingResult, result);
             }
         }
-
     }
 
     private void syncResultData(CriteriaResult realResult, CriteriaResult result) {

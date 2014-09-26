@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.service.search;
 
+import com.google.common.collect.Lists;
 import com.n4systems.model.ThingEvent;
+import com.n4systems.model.event.MostRecentThingEvent;
 import com.n4systems.model.search.*;
 import com.n4systems.model.security.NetworkIdSecurityFilter;
 import com.n4systems.model.user.User;
@@ -37,6 +39,8 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
         User user = getCurrentUser();
         TimeZone timeZone = user.getTimeZone();
 
+        String prefix = getPrefix(criteriaModel);
+
         addSimpleTerm(searchTerms, "type.actionType", criteriaModel.getEventSearchType().equals(EventSearchType.ACTIONS));
 
         addWildcardOrStringTerm(searchTerms, "asset.rfidNumber", criteriaModel.getRfidNumber());
@@ -57,37 +61,37 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
 
         addSimpleTerm(searchTerms, "type.id", getId(criteriaModel.getEventType()));
         addSimpleTerm(searchTerms, "type.group.id", getId(criteriaModel.getEventTypeGroup()));
-        addSimpleTerm(searchTerms, "performedBy.id", getId(criteriaModel.getPerformedBy()));
-        addSimpleTerm(searchTerms, "project.id", getId(criteriaModel.getJob()));
-        addSimpleTerm(searchTerms, "priority.id", getId(criteriaModel.getPriority()));
-        addSimpleTerm(searchTerms, "eventResult", criteriaModel.getEventResult());
-        addSimpleTerm(searchTerms, "eventStatus", criteriaModel.getEventStatus());
+        addSimpleTerm(searchTerms, prefix + "performedBy.id", getId(criteriaModel.getPerformedBy()));
+        addSimpleTerm(searchTerms, prefix + "project.id", getId(criteriaModel.getJob()));
+        addSimpleTerm(searchTerms, prefix + "priority.id", getId(criteriaModel.getPriority()));
+        addSimpleTerm(searchTerms, prefix + "eventResult", criteriaModel.getEventResult());
+        addSimpleTerm(searchTerms, prefix + "eventStatus", criteriaModel.getEventStatus());
         if (criteriaModel.isUnassignedOnly()) {
-            addNullTerm(searchTerms, "assignee");
-            addNullTerm(searchTerms, "assignedGroup");
+            addNullTerm(searchTerms, prefix + "assignee");
+            addNullTerm(searchTerms, prefix + "assignedGroup");
         } else {
-            addSimpleTerm(searchTerms, "assignee", criteriaModel.getAssignee());
-            addSimpleTerm(searchTerms, "assignedGroup", criteriaModel.getAssignedUserGroup());
+            addSimpleTerm(searchTerms, prefix + "assignee", criteriaModel.getAssignee());
+            addSimpleTerm(searchTerms, prefix + "assignedGroup", criteriaModel.getAssignedUserGroup());
         }
 
         if (criteriaModel.getWorkflowState() == WorkflowStateCriteria.COMPLETE) {
-            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.COMPLETED);
+            addSimpleTerm(searchTerms, prefix + "workflowState", com.n4systems.model.WorkflowState.COMPLETED);
         } else if (criteriaModel.getWorkflowState() == WorkflowStateCriteria.OPEN) {
-            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.OPEN);
+            addSimpleTerm(searchTerms, prefix + "workflowState", com.n4systems.model.WorkflowState.OPEN);
         } else if (criteriaModel.getWorkflowState() == WorkflowStateCriteria.CLOSED) {
-            addSimpleTerm(searchTerms, "workflowState", com.n4systems.model.WorkflowState.CLOSED);
+            addSimpleTerm(searchTerms, prefix + "workflowState", com.n4systems.model.WorkflowState.CLOSED);
         }
 
         if (IncludeDueDateRange.HAS_NO_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
-            addNullTerm(searchTerms, "dueDate");
+            addNullTerm(searchTerms, prefix +  "dueDate");
         } else if (IncludeDueDateRange.HAS_A_DUE_DATE.equals(criteriaModel.getIncludeDueDateRange())) {
-            addNotNullTerm(searchTerms,  "dueDate");
+            addNotNullTerm(searchTerms, prefix +  "dueDate");
         } else if (criteriaModel.getWorkflowState() == WorkflowStateCriteria.OPEN || IncludeDueDateRange.SELECT_DUE_DATE_RANGE.equals(criteriaModel.getIncludeDueDateRange())) {
             if (criteriaModel.getDueDateRange() != null && !criteriaModel.getDueDateRange().isEmptyCustom()) {
                 // recall : due dates don't have timeZone.
                 Date from = dateService.calculateFromDate(criteriaModel.getDueDateRange());
                 Date to = dateService.calculateInclusiveToDate(criteriaModel.getDueDateRange());
-                addDateRangeTerm(searchTerms, "dueDate", from, to);
+                addDateRangeTerm(searchTerms, prefix + "dueDate", from, to);
             }
         }
 
@@ -96,21 +100,20 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
             addGpsLocationTerm(searchTerms, criteriaModel);
         }
 
-
         if (criteriaModel.getDateRange() != null && !criteriaModel.getDateRange().isEmptyCustom()) {
             if (criteriaModel.getWorkflowState() == WorkflowStateCriteria.COMPLETE || criteriaModel.getWorkflowState()== WorkflowStateCriteria.CLOSED) {
                 Date from = dateService.calculateFromDateWithTimeZone(criteriaModel.getDateRange(), timeZone);
                 Date to = dateService.calculateInclusiveToDateWithTimeZone(criteriaModel.getDateRange(), timeZone);
-                addDateRangeTerm(searchTerms, "completedDate", DateHelper.convertToUTC(from, timeZone), DateHelper.convertToUTC(to, timeZone));
+                addDateRangeTerm(searchTerms, prefix + "completedDate", DateHelper.convertToUTC(from, timeZone), DateHelper.convertToUTC(to, timeZone));
             } else if (criteriaModel.getWorkflowState() == WorkflowStateCriteria.ALL) {
                 searchTerms.add(new CompletedOrDueDateRange(timeZone, criteriaModel.getDateRange()));
             }
         }
 
         if(criteriaModel.getEventBook() != null && criteriaModel.getEventBook().getId() == 0) {
-            addNullTerm(searchTerms, "book.id");
+            addNullTerm(searchTerms, prefix + "book.id");
         } else {
-            addSimpleTerm(searchTerms, "book.id", getId(criteriaModel.getEventBook()));
+            addSimpleTerm(searchTerms, prefix + "book.id", getId(criteriaModel.getEventBook()));
         }
 
         Long assignedUserId = getId(criteriaModel.getAssignedTo());
@@ -119,35 +122,56 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
         }
 
         if (!criteriaModel.getLocation().isBlank()) {
-            searchTerms.add(new LocationTerm(criteriaModel.getWorkflowState(), getId(criteriaModel.getLocation().getPredefinedLocation()), criteriaModel.getLocation().getFreeformLocation()));
+            searchTerms.add(new LocationTerm(criteriaModel, getId(criteriaModel.getLocation().getPredefinedLocation())));
         }
-
     }
 
 
     private void addHasGpsTerm(List<SearchTermDefiner> search, EventReportCriteria criteriaModel) {
         if(criteriaModel.getHasGps() != null) {
-            search.add(new HasGpsTerm(criteriaModel.getHasGps()));
+            search.add(new HasGpsTerm(criteriaModel));
         }
     }
 
     private void addGpsLocationTerm(List<SearchTermDefiner> search, EventReportCriteria criteriaModel) {
-        search.add(new GpsBoundsTerm("gpsLocation",criteriaModel.getBounds()));
+        String prefix = getPrefix(criteriaModel);
+        search.add(new GpsBoundsTerm(prefix + "gpsLocation",criteriaModel.getBounds()));
     }
 
 
     private void addAssignedUserTerm(Long assignedUserId, EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
-        searchTerms.add(new AssignedUserTerm(criteriaModel.getWorkflowState(), assignedUserId));
+        searchTerms.add(new AssignedUserTerm(criteriaModel, assignedUserId));
     }
 
     private void addAssetStatusTerm(EventReportCriteria criteriaModel, List<SearchTermDefiner> searchTerms) {
-        searchTerms.add(new AssetStatusTerm(criteriaModel.getWorkflowState(), criteriaModel.getAssetStatus()));
+        searchTerms.add(new AssetStatusTerm(criteriaModel));
+    }
+
+    @Override
+    protected <E> void addSortJoinTerms(QueryBuilder<E> searchBuilder, EventReportCriteria criteriaModel) {
+        ColumnMappingView sortColumn = criteriaModel.getSortColumn();
+        if (criteriaModel.isShowMostRecentEventsOnly()) {
+            if(sortColumn.getJoinExpression() != null) {
+                String [] joinExpressions = sortColumn.getJoinExpression().split(",");
+                String newJoinExpression = "";
+                for(String joinExpression: joinExpressions) {
+                    if(!joinExpression.startsWith("asset.") && !joinExpression.startsWith("event.")) {
+                        newJoinExpression +="event." + joinExpression + ",";
+                    }
+                }
+                if(!newJoinExpression.isEmpty()) {
+                    sortColumn.setJoinExpression(newJoinExpression.substring(0, newJoinExpression.length()-1));
+                }
+            }
+        }
+        super.addSortJoinTerms(searchBuilder, criteriaModel);
     }
 
     @Override
     protected void addJoinTerms(EventReportCriteria criteriaModel, List<JoinTerm> joinTerms) {
         Long predefLocationId = getId(criteriaModel.getLocation().getPredefinedLocation());
 
+        String prefix = getPrefix(criteriaModel);
         WorkflowStateCriteria status = criteriaModel.getWorkflowState();
 
         if (predefLocationId != null && status.includesIncomplete()) {
@@ -156,46 +180,50 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
 		}
 
         if (predefLocationId != null && status.includesComplete()) {
-            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "advancedLocation.predefinedLocation.searchIds", "eventPreLocSearchId", true);
+            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, prefix + "advancedLocation.predefinedLocation.searchIds", "eventPreLocSearchId", true);
             joinTerms.add(joinTerm);
         }
 
         if (criteriaModel.sortingByDivision()) {
-            addOrgJoinTerms(status, "divisionOrg", "assetDivisionOrg", "eventDivisionOrg", joinTerms);
+            addOrgJoinTerms(criteriaModel, "divisionOrg", "assetDivisionOrg", "eventDivisionOrg", joinTerms);
         }
 
         if (criteriaModel.sortingByOrganization()) {
-            addOrgJoinTerms(status, "secondaryOrg", "assetSecondaryOrg", "eventSecondaryOrg", joinTerms);
+            addOrgJoinTerms(criteriaModel, "secondaryOrg", "assetSecondaryOrg", "eventSecondaryOrg", joinTerms);
         }
 
         if (criteriaModel.sortingByCustomer()) {
-            addOrgJoinTerms(status, "customerOrg", "assetCustomerOrg", "eventCustomerOrg", joinTerms);
+            addOrgJoinTerms(criteriaModel, "customerOrg", "assetCustomerOrg", "eventCustomerOrg", joinTerms);
         }
     }
 
 
-    private void addOrgJoinTerms(WorkflowStateCriteria status, String basePath, String assetJoinAlias, String eventJoinAlias, List<JoinTerm> joinTerms) {
+    private void addOrgJoinTerms(EventReportCriteria criteriaModel, String basePath, String assetJoinAlias, String eventJoinAlias, List<JoinTerm> joinTerms) {
+        String prefix = getPrefix(criteriaModel);
+        WorkflowStateCriteria status = criteriaModel.getWorkflowState();
         if (status.includesIncomplete()) {
             JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "asset.owner." + basePath, assetJoinAlias, true);
             joinTerms.add(joinTerm);
         }
 
         if (status.includesComplete()) {
-            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, "owner." + basePath, eventJoinAlias, true);
+            JoinTerm joinTerm = new JoinTerm(JoinTerm.JoinTermType.LEFT_OUTER, prefix + "owner." + basePath, eventJoinAlias, true);
             joinTerms.add(joinTerm);
         }
     }
 
     @Override
     protected void addSortTerms(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, ColumnMappingView sortColumn, SortDirection sortDirection) {
+        String prefix = getPrefix(criteriaModel);
+
         // Reporting has a few special case sorts that are more complicated due to displaying two types of data. ie sorting on two columns.
         // To prevent weird mixing, when one of these special cases occurs, we always sort by state first
         if (criteriaModel.sortingByLocation()) {
             addStatusSortIfNecessary(criteriaModel, searchBuilder, sortDirection);
 
             if (criteriaModel.getWorkflowState().includesComplete()) {
-                SortTerm sortTerm = new SortTerm("advancedLocation.predefinedLocation.id", sortDirection);
-                SortTerm sortTerm2 = new SortTerm("advancedLocation.freeformLocation", sortDirection);
+                SortTerm sortTerm = new SortTerm( prefix +"advancedLocation.predefinedLocation.id", sortDirection);
+                SortTerm sortTerm2 = new SortTerm( prefix +"advancedLocation.freeformLocation", sortDirection);
 
                 searchBuilder.getOrderArguments().add(sortTerm.toSortField());
                 searchBuilder.getOrderArguments().add(sortTerm2.toSortField());
@@ -214,8 +242,26 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
             addOrgSort(criteriaModel, searchBuilder, sortDirection, "assetCustomerOrg", "eventCustomerOrg");
         } else {
             // This is a standard sort
+            if(criteriaModel.isShowMostRecentEventsOnly()) {
+                String[] sortExpressions = sortColumn.getSortExpression().split(",");
+                String newSortExpressions = "";
+                for(String sortExpression : sortExpressions) {
+                    if(!sortExpression.startsWith("asset.")
+                            && !sortExpression.startsWith("type.")
+                            && !sortExpression.startsWith("event.")) {
+                        newSortExpressions +="event." + sortExpression + ",";
+                    }
+                }
+                if(!newSortExpressions.isEmpty()) {
+                    sortColumn.setSortExpression(newSortExpressions.substring(0, newSortExpressions.length()-1));
+                }
+            }
             super.addSortTerms(criteriaModel, searchBuilder, sortColumn, sortDirection);
         }
+    }
+
+    private String getPrefix(EventReportCriteria criteriaModel) {
+        return criteriaModel.isShowMostRecentEventsOnly() ? "event." : "";
     }
 
     private void addOrgSort(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, SortDirection sortDirection, String assetOrgAlias, String eventOrgAlias) {
@@ -239,16 +285,34 @@ public class ReportService extends SearchService<EventReportCriteria, ThingEvent
     // we decided to sort by workflowState first so there's less unexpected weirdness mixing complete/incomplete.
     private void addStatusSortIfNecessary(EventReportCriteria criteriaModel, QueryBuilder<?> searchBuilder, SortDirection sortDirection) {
         if (criteriaModel.getWorkflowState() == WorkflowStateCriteria.ALL) {
-            SortTerm sortTerm = new SortTerm("workflowState", sortDirection);
+            String prefix = getPrefix(criteriaModel);
+            SortTerm sortTerm = new SortTerm(prefix + "workflowState", sortDirection);
             searchBuilder.getOrderArguments().add(sortTerm.toSortField());
         }
     }
 
     @Override
     protected <E> QueryBuilder<E> createAppropriateQueryBuilder(EventReportCriteria criteria, Class<E> searchClass) {
-        if (criteria.isIncludeSafetyNetwork()) {
+        if (criteria.isIncludeSafetyNetwork() && criteria.isShowMostRecentEventsOnly()) {
+            return new QueryBuilder<E>(MostRecentThingEvent.class, new NetworkIdSecurityFilter(securityContext.getUserSecurityFilter(), "asset.networkId"));
+        }else if (criteria.isIncludeSafetyNetwork()) {
             return new QueryBuilder<E>(searchClass, new NetworkIdSecurityFilter(securityContext.getUserSecurityFilter(), "asset.networkId"));
+        } else if(criteria.isShowMostRecentEventsOnly()) {
+            return new QueryBuilder<E>(MostRecentThingEvent.class, securityContext.getUserSecurityFilter());
         }
         return super.createAppropriateQueryBuilder(criteria, searchClass);
+    }
+
+    @Override
+    protected List<ThingEvent> convertResults(EventReportCriteria criteriaModel, List results) {
+        if(criteriaModel.isShowMostRecentEventsOnly()) {
+            List<ThingEvent> convertedResults = Lists.newArrayList();
+            for (Object result : results) {
+                ThingEvent event = ((MostRecentThingEvent) result).getEvent();
+                convertedResults.add(event);
+            }
+            return convertedResults;
+        }
+        return super.convertResults(criteriaModel, results);
     }
 }

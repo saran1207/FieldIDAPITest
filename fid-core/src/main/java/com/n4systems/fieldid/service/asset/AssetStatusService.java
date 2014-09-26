@@ -94,7 +94,8 @@ public class AssetStatusService extends FieldIdPersistenceService {
     }
 
     public AssetStatus getStatusById(Long id) {
-        return persistenceService.find(AssetStatus.class, id);
+        QueryBuilder<AssetStatus> queryBuilder = createUserSecurityBuilder(AssetStatus.class, true).addSimpleWhere("id", id);
+        return persistenceService.find(queryBuilder);
     }
 
     public void archiveStatus(AssetStatus assetStatus) {

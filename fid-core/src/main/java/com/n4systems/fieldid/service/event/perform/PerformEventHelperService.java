@@ -4,7 +4,6 @@ import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.event.util.NewEventTransientCriteriaResultPopulator;
 import com.n4systems.model.Event;
 import com.n4systems.model.EventType;
-import com.n4systems.persistence.utils.PostFetcher;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -55,7 +54,7 @@ public abstract class PerformEventHelperService<T extends Event, V extends Event
         masterEvent.setPrintable(masterEvent.getEventType().isPrintable());
         masterEvent.setPerformedBy(getCurrentUser());
         masterEvent.setInitialResultBasedOnScoreOrOneClicksBeingAvailable();
-        new NewEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForNewEvent(masterEvent);
+        new NewEventTransientCriteriaResultPopulator().populateTransientCriteriaResultsForEvent(masterEvent);
     }
 
     @Transactional

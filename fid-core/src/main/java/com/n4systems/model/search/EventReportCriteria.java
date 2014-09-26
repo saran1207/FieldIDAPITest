@@ -120,7 +120,6 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
     @Embedded
     private GpsBounds bounds;
 
-
     @Embedded
 	@AttributeOverrides({
 		@AttributeOverride(name="rangeType", column = @Column(name="dueDateRange")),
@@ -136,6 +135,9 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
     @Enumerated(EnumType.STRING)
     @Column(name="search_type")
     private EventSearchType eventSearchType = EventSearchType.EVENTS;
+
+    @Column
+    private Boolean showMostRecentEventsOnly = Boolean.FALSE;
 
     public Location getLocation() {
         return location;
@@ -423,5 +425,13 @@ public class EventReportCriteria extends SearchCriteria implements PeopleCriteri
 
     public void setHasGps(Boolean hasGps) {
         this.hasGps = hasGps;
+    }
+
+    public Boolean isShowMostRecentEventsOnly() {
+        return showMostRecentEventsOnly;
+    }
+
+    public void setShowMostRecentEventsOnly(Boolean showMostRecentEventsOnly) {
+        this.showMostRecentEventsOnly = showMostRecentEventsOnly;
     }
 }

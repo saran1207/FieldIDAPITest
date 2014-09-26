@@ -129,7 +129,7 @@ public interface PersistenceManager {
 	 * Attempts to delete an Entity and watches for ConstraintViolationExceptions
 	 * 
 	 * @param entity The entity to remove
-	 * @throws If a ConstraintViolationException is thrown in the process of deleting.
+	 * @throws EntityStillReferencedException If a ConstraintViolationException is thrown in the process of deleting.
 	 */
 	public <T extends BaseEntity> void deleteSafe(T entity) throws EntityStillReferencedException;
 

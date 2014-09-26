@@ -2,6 +2,7 @@ package com.n4systems.fieldid.ws.v1.resources.procedure;
 
 import com.n4systems.fieldid.ws.v1.resources.model.ApiReadWriteModelWithOwner;
 
+import java.util.Date;
 import java.util.List;
 
 public class ApiProcedureDefinitionV2 extends ApiReadWriteModelWithOwner {
@@ -23,6 +24,7 @@ public class ApiProcedureDefinitionV2 extends ApiReadWriteModelWithOwner {
     private String applicationProcess;
     private String removalProcess;
     private String status;
+    private String rejectedReason;
 
     public List<ApiIsolationPoint> getIsolationPoints() {
         return isolationPoints;
@@ -158,6 +160,14 @@ public class ApiProcedureDefinitionV2 extends ApiReadWriteModelWithOwner {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getRejectedReason() {
+        return rejectedReason;
+    }
+
+    public void setRejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
     }
 }
 

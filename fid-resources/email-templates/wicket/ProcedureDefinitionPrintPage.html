@@ -4,24 +4,34 @@
 			xml:lang="en"
 			lang="en">
 <wicket:extend>
-    <div class="printbar">
-        <img onclick="window.print();" class="printIcon" wicket:id="printIcon"/>
-        <p   onclick="window.print();">Print page</p>
-    </div>
-    <div class="print-form-page" id="source">
-        <img class="watermark" wicket:id=watermarkImage/>
-        <div class="data-container-header">
-            <div wicket:id="meta" class="data-container-revision-and-points"/>
-            <div wicket:id="assetpage" class="data-container-asset-info"/>
-            <div wicket:id="productsummary" class="data-container-caution"/>
+    <div class="print-container short-form">
+        
+        <div class="print-bar">
+            <img onclick="window.print();" class="printIcon" wicket:id="printIcon"/>
+            <p   onclick="window.print();">Print page</p>
         </div>
-        <ul class="data-container">
-            <div wicket:id="images"/>
-            <div wicket:id="applicationProcess"/>
-            <div wicket:id="list"/>
-            <div wicket:id="removalProcess"/>
-        </ul>
-        <div wicket:id="footer" class="data-container-footer"/>
+
+        <div class="print-page source">
+            <img class="watermark" wicket:id=watermarkImage/>
+
+            <header class="page-header">
+                <div wicket:id="meta"/>
+                <div wicket:id="assetpage"/>
+            </header>
+
+            <div class="page-content">
+                <div wicket:id="productsummary"/>
+                <div wicket:id="applicationProcess"/>
+                <div wicket:id="images"/>
+                <div wicket:id="list"/>
+                <div wicket:id="testingAndVerification"/>
+                <div wicket:id="removalProcess"/>
+            </div>
+
+            <footer class="page-footer">
+                <div wicket:id="footer"/>
+            </footer>
+        </div>
     </div>
 </wicket:extend>
 </html>

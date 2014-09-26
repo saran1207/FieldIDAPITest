@@ -1,28 +1,11 @@
 package com.n4systems.taskscheduling.task;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.mail.MessagingException;
-import javax.mail.NoSuchProviderException;
-
+import com.n4systems.ejb.AssetManager;
+import com.n4systems.ejb.PersistenceManager;
+import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
 import com.n4systems.model.Asset;
-import com.n4systems.model.procedure.Procedure;
-import com.n4systems.model.procedure.ProcedureDefinition;
-import com.n4systems.util.persistence.WhereClauseFactory;
-import com.n4systems.util.persistence.WhereParameter;
-import com.n4systems.util.persistence.WhereParameterGroup;
-import org.apache.log4j.Logger;
-
-
-import com.n4systems.ejb.PersistenceManager;
-import com.n4systems.ejb.AssetManager;
-import com.n4systems.exceptions.InvalidQueryException;
 import com.n4systems.model.AssetType;
 import com.n4systems.model.api.Archivable.EntityState;
 import com.n4systems.model.security.OpenSecurityFilter;
@@ -34,6 +17,15 @@ import com.n4systems.util.ServiceLocator;
 import com.n4systems.util.mail.MailMessage;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.log4j.Logger;
+
+import javax.mail.MessagingException;
+import javax.mail.NoSuchProviderException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class ArchiveAssetTypeTask implements Runnable {
 	private static final Logger logger = Logger.getLogger(ArchiveAssetTypeTask.class);
@@ -96,41 +88,12 @@ public class ArchiveAssetTypeTask implements Runnable {
 
 
     private void deleteProcedures() throws InvalidQueryException {
-//        procedureService.archiveProceduresForAssetType(type);
-
-        List<Procedure> procedureList;
-
-        QueryBuilder<Procedure> query = new QueryBuilder<Procedure>(Procedure.class, new OpenSecurityFilter());
-        WhereParameterGroup wpg = new WhereParameterGroup();
-        wpg.addClause( WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", type.getId()) );
-        query.addWhere(wpg);
-        procedureList = persistenceManager.findAll(query);
-
-
-        for (Procedure procedure : procedureList) {
-            procedure.archiveEntity();
-            persistenceManager.update(procedure);
-        }
-
+        procedureService.archiveProceduresForAssetType(type);
     }
 
 
     private void deleteProcedureDefinitions() throws InvalidQueryException {
-//        procedureDefinitionService.archiveProcedureDefinitionsForAssetType(type);
-
-        QueryBuilder<ProcedureDefinition> query = new QueryBuilder<ProcedureDefinition>(ProcedureDefinition.class, new OpenSecurityFilter());
-        WhereParameterGroup wpg = new WhereParameterGroup();
-        wpg.addClause( WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", type.getId()) );
-        query.addWhere(wpg);
-
-        List<ProcedureDefinition> procedureDefinitionList;
-        procedureDefinitionList = persistenceManager.findAll(query);
-
-        for (ProcedureDefinition procedureDefinition : procedureDefinitionList) {
-            procedureDefinition.archiveEntity();
-            persistenceManager.update(procedureDefinition);
-        }
-
+        procedureDefinitionService.archiveProcedureDefinitionsForAssetType(type);
     }
 
 

@@ -19,6 +19,7 @@ public class CriteriaSectionCopyUtil {
         } else {
             copiedSection.setTitle(section.getName());
         }
+        copiedSection.setOptional(section.isOptional());
         copiedSection.setModifiedBy(section.getModifiedBy());
         copiedSection.setModified(section.getModified());
         copiedSection.setCreated(section.getCreated());

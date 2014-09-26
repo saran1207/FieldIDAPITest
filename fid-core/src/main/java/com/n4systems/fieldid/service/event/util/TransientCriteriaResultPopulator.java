@@ -7,14 +7,14 @@ import java.util.List;
 
 public abstract class TransientCriteriaResultPopulator {
 
-    public void populateTransientCriteriaResultsForNewEvent(AbstractEvent event) {
+    public void populateTransientCriteriaResultsForEvent(AbstractEvent event) {
         EventForm eventForm = event.getEventForm();
 
-        List<AbstractEvent.SectionResults> transientResults = new ArrayList<AbstractEvent.SectionResults>();
+        List<AbstractEvent.SectionResults> transientResults = new ArrayList<>();
 
         if (eventForm != null) {
             for (CriteriaSection section : eventForm.getAvailableSections()) {
-                List<CriteriaResult> transientSectionResults = new ArrayList<CriteriaResult>();
+                List<CriteriaResult> transientSectionResults = new ArrayList<>();
                 AbstractEvent.SectionResults sectionResults = new AbstractEvent.SectionResults();
 
                 for (Criteria criteria : section.getAvailableCriteria()) {
@@ -22,22 +22,35 @@ public abstract class TransientCriteriaResultPopulator {
                     CriteriaResult transientResult = getCriteriaResultFor(event, criteria);
 
                     if (transientResult == null) {
-                        continue;
+                        sectionResults.disabled = true;
+                        if((transientResult = getEditableCriteriaResult(event, criteria)) == null) {
+                            continue;
+                        }
                     }
 
                     transientResult.setCriteria(criteria);
                     transientResult.setTenant(event.getTenant());
                     transientSectionResults.add(transientResult);
                 }
+
                 sectionResults.results = transientSectionResults;
                 sectionResults.section = section;
-                transientResults.add(sectionResults);
+
+                if(!transientSectionResults.isEmpty()) {
+                    transientResults.add(sectionResults);
+                }
             }
         }
 
         event.setSectionResults(transientResults);
     }
 
+    protected abstract void addSectionToTransientResults(List<AbstractEvent.SectionResults> transientResults, AbstractEvent.SectionResults sectionResults, List<CriteriaResult> transientSectionResults);
+
     protected abstract CriteriaResult getCriteriaResultFor(AbstractEvent<ThingEventType,Asset> event, Criteria criteria);
+
+    protected CriteriaResult getEditableCriteriaResult(AbstractEvent<ThingEventType,Asset> event, Criteria criteria) {
+        return null;
+    }
 
 }

@@ -17,7 +17,6 @@ import com.n4systems.fieldid.wicket.pages.setup.AssetsAndEventsPage;
 import com.n4systems.model.AssetStatus;
 import com.n4systems.model.api.Archivable;
 import org.apache.wicket.Component;
-import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.sort.SortOrder;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
@@ -140,8 +139,8 @@ public abstract class AssetStatusListPage extends FieldIDTemplatePage {
         columns.add(new PropertyColumn<AssetStatus>(new FIDLabelModel("label.modified"), "modified", "modified") {
             @Override
             public void populateItem(Item<ICellPopulator<AssetStatus>> item, String componentId, IModel<AssetStatus> rowModel) {
-                Date created = rowModel.getObject().getCreated();
-                item.add(new Label(componentId, new DayDisplayModel(Model.of(created)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+                Date modified = rowModel.getObject().getModified();
+                item.add(new Label(componentId, new DayDisplayModel(Model.of(modified)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
             }
         });
 
@@ -151,12 +150,6 @@ public abstract class AssetStatusListPage extends FieldIDTemplatePage {
     }
 
     private void addActionColumn(List<IColumn<AssetStatus>> columns) {
-        columns.add(new AssetStatusActionColumn() {
-            @Override
-            protected void onAction(AjaxRequestTarget target) {
-                //Is this all we need?
-                target.add(listContainer, getTopFeedbackPanel());
-            }
-        });
+        columns.add(new AssetStatusActionColumn());
     }
 }

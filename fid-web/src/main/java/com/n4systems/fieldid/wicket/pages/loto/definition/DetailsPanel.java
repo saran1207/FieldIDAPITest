@@ -74,6 +74,13 @@ public class DetailsPanel extends Panel {
                 }
             });
 
+            add(new LabelledTextArea<String>("testingAndVerification", "label.testing_and_verification_detail_panel", ProxyModel.of(model, on(ProcedureDefinition.class).getTestingAndVerification())){
+                @Override
+                public int getMaxLength() {
+                    return 1024;
+                }
+            });
+
             add(new LabelledAutoCompleteUser("user", "label.developed_by", ProxyModel.of(model, on(ProcedureDefinition.class).getDevelopedBy()), true));
 
             add(new LabelledRequiredTextField<String>("equipmentNumber", "label.equipment_number", ProxyModel.of(model, on(ProcedureDefinition.class).getEquipmentNumber())));

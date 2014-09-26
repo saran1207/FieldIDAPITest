@@ -234,9 +234,10 @@ public class WhereParameter<T> implements WhereClause<T> {
 		BitField bits = new BitField(options);
 		String param = table.prepareField(this.param, dropAlias);
 
-		if (bits.isSet(IGNORE_CASE)) {
+        //This is already done by Hibernate.  Also, it was causing the query to not use the index.
+		/*if (bits.isSet(IGNORE_CASE)) {
 			param = applyFunction("lower", param);
-		}
+		}*/
 
 		return param;
 	}
@@ -253,13 +254,16 @@ public class WhereParameter<T> implements WhereClause<T> {
 		}
 
 		String prepValue = (String) value;
-		
-		if (bits.isSet(TRIM)) {
+
+        //This is already done by Hibernate.  Also, it was causing the query to not use the index.
+		/*
+        if (bits.isSet(TRIM)) {
 			prepValue = prepValue.trim();
 		}
-		if (bits.isSet(IGNORE_CASE)) {
+
+        if (bits.isSet(IGNORE_CASE)) {
 			prepValue = prepValue.toLowerCase();
-		}
+		}*/
 
 		if (bits.isSet(WILDCARD_LEFT)) {
 			prepValue = WILDCARD_CHAR + prepValue;

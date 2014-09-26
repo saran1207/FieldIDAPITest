@@ -11,52 +11,52 @@ import javax.persistence.metamodel.Metamodel;
 
 public class DummyEntityManagerFactory implements EntityManagerFactory {
 
-	private boolean open = true;
-	
-	@Override
-	public void close() {
-		open = false;
-	}
+    private boolean open = true;
 
-	@Override
-	public EntityManager createEntityManager() {
-		return new DummyEntityManager();
-	}
+    @Override
+    public void close() {
+        open = false;
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public EntityManager createEntityManager(Map arg0) {
-		return new DummyEntityManager();
-	}
+    @Override
+    public EntityManager createEntityManager() {
+        return new DummyEntityManager();
+    }
 
-	@Override
-	public boolean isOpen() {
-		return open;
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public EntityManager createEntityManager(Map arg0) {
+        return new DummyEntityManager();
+    }
 
-	@Override
-	public Cache getCache() {
-		return null;
-	}
+    @Override
+    public boolean isOpen() {
+        return open;
+    }
 
-	@Override
-	public CriteriaBuilder getCriteriaBuilder() {
-		return null;
-	}
+    @Override
+    public Cache getCache() {
+        return null;
+    }
 
-	@Override
-	public Metamodel getMetamodel() {
-		return null;
-	}
+    @Override
+    public CriteriaBuilder getCriteriaBuilder() {
+        return null;
+    }
 
-	@Override
-	public PersistenceUnitUtil getPersistenceUnitUtil() {
-		return null;
-	}
+    @Override
+    public Metamodel getMetamodel() {
+        return null;
+    }
 
-	@Override
-	public Map<String, Object> getProperties() {
-		return null;
-	}
+    @Override
+    public PersistenceUnitUtil getPersistenceUnitUtil() {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> getProperties() {
+        return null;
+    }
 
 }

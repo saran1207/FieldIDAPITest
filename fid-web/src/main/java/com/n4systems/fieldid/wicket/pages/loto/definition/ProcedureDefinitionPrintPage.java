@@ -56,19 +56,23 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
         mode = initMode();
         add(new AttributeAppender("class", Model.of("print-procedure-definition")));
-        add(new PrintMetaData("meta",model));
-        add(new PrintAsset("assetpage",model));
-        add(new PrintProductSummary("productsummary",model));
-
+        add(new PrintMetaData("meta",model).setRenderBodyOnly(true));
+        add(new PrintAsset("assetpage",model).setRenderBodyOnly(true));
+        add(new PrintProductSummary("productsummary",model).setRenderBodyOnly(true));
         //----------------------------------------------------
-
-        add(new PrintImages("images",model).setRenderBodyOnly(true));
         add(new ProcessPanel("applicationProcess", model).setRenderBodyOnly(true));
-        add(new PrintList("list",model).setRenderBodyOnly(true));
+
+        getPrintInformation(model);
+
+        add(new TestingAndVerificationPanel("testingAndVerification", model).setRenderBodyOnly(true));
         add(new RemovalProcessPanel("removalProcess", model).setRenderBodyOnly(true));
+        add(new PrintFooter("footer",model).setRenderBodyOnly(true));
 
-        add(new PrintFooter("footer",model));
+    }
 
+    public void getPrintInformation(IModel<ProcedureDefinition> model) {
+        add(new PrintImages("images", model).setRenderBodyOnly(true));
+        add(new PrintList("list", model).setRenderBodyOnly(true));
     }
 
     private PrintOptions initMode() {
@@ -82,11 +86,12 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-
-        response.renderCSSReference("//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,400,600,700,800");
+        response.renderCSSReference("//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700|Open+Sans:300,400,600,700,800|Anton:400");
         response.renderCSSReference("style/print/style.css");
-        response.renderJavaScriptReference("javascript/jquery.imagesloaded.js");
-        response.renderJavaScriptReference("javascript/print/print.js");
+        response.renderJavaScriptReference("//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js");
+        response.renderJavaScriptReference("javascript/print/jquery.imagesloaded.js");
+        response.renderJavaScriptReference("javascript/print/jquery.panzoom.js");
+        response.renderJavaScriptReference("javascript/print/jquery.print.js");
     }
 
 
@@ -102,17 +107,13 @@ public class ProcedureDefinitionPrintPage extends FieldIDAuthenticatedPage {
 
 
     class JsonPrintOption {
-
         String printOption;
         String state;
-
         JsonPrintOption () {}
-
         JsonPrintOption (String printOption, String state) {
             this.printOption = printOption;
             this.state = state;
         }
-
     }
 
 }

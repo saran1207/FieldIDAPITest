@@ -3,9 +3,8 @@
 	<parent>
 		<artifactId>fieldid-root</artifactId>
 		<groupId>com.fieldid</groupId>
-        <version>2014.6.1</version>
+        <version>2014.7.0-SNAPSHOT</version>
 	</parent>
-	<groupId>com.fieldid</groupId>
 	<artifactId>fid-web</artifactId>
 	<packaging>war</packaging>
 	<name>Web</name>
@@ -30,6 +29,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.plugin.version}</version>
 				<configuration>
 					<includes>
 						<include>**/*Test.java</include>
@@ -39,7 +39,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.0-beta-3</version>
+                <version>${buildnumber.maven.plugin.version}</version>
                 <configuration>
                     <format>{0,date,yyyy-MM-dd.HH:mm}</format>
                     <items>
@@ -58,7 +58,7 @@
             <plugin>
                 <groupId>org.jasig.maven</groupId>
                 <artifactId>sass-maven-plugin</artifactId>
-                <version>1.1.0</version>
+                <version>${sass.maven.plugin.version}</version>
                 <executions>
                     <execution>
                         <id>package</id>
@@ -104,65 +104,75 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-test</artifactId>
-			<version>4.0.2.RELEASE</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>com.fieldid</groupId>
 			<artifactId>fid-core</artifactId>
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-core</artifactId>
-			<version>2.3.16</version>
-<!--
-            &lt;!&ndash; The version of OGNL included by this version of struts has a serious scalability bug: OGNL-141 &ndash;&gt;
-            <exclusions>
-                <exclusion>
-                    <groupId>opensymphony</groupId>
-                    <artifactId>ognl</artifactId>
-                </exclusion>
-            </exclusions>
--->
-		</dependency>
-        <!-- Patched version of OGNL 2.6.11 to fix the OGNL-141 scalability bug. Unfortunately OGNL 2.7.2 introduced at least one issue (schedule search column selection broke)-->
-<!--
         <dependency>
-            <groupId>opensymphony</groupId>
-            <artifactId>ognl</artifactId>
-            <version>2.6.11-fieldid-1</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
         </dependency>
--->
-		<dependency>
-			<groupId>commons-fileupload</groupId>
-			<artifactId>commons-fileupload</artifactId>
-			<version>1.2</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-spring-plugin</artifactId>
-			<version>2.3.16</version>
-		</dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>4.0.2.RELEASE</version>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>${commons.fileupload.version}</version>
+		</dependency>
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>${commons.collections.version}</version>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.javassist</groupId>-->
+            <!--<artifactId>javassist</artifactId>-->
+            <!--<version>3.18.1-GA</version>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.apache.struts</groupId>
+            <artifactId>struts2-core</artifactId>
+            <version>${struts.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 		<dependency>
 			<groupId>org.apache.struts</groupId>
-			<artifactId>struts2-sitemesh-plugin</artifactId>
-			<version>2.3.16</version>
+			<artifactId>struts2-spring-plugin</artifactId>
+			<version>${struts.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javassist</groupId>
+                    <artifactId>javassist</artifactId>
+                </exclusion>
+            </exclusions>
 		</dependency>
-<!--		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>-->
+		<dependency>
+			<groupId>org.apache.struts</groupId>
+			<artifactId>struts2-sitemesh-plugin</artifactId>
+			<version>${struts.version}</version>
+            <!--<exclusions>-->
+                <!--<exclusion>-->
+                    <!--<groupId>javassist</groupId>-->
+                    <!--<artifactId>javassist</artifactId>-->
+                <!--</exclusion>-->
+            <!--</exclusions>-->
+		</dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -288,20 +298,10 @@
 			<artifactId>jersey-json</artifactId>
 			<version>1.4</version>
 		</dependency>
-		<dependency>
-      		<groupId>org.springframework</groupId>
-      		<artifactId>spring-context-support</artifactId>
-    		<version>4.0.2.RELEASE</version>
-    	</dependency>
     	<dependency>    	
             <groupId>opensymphony</groupId>
             <artifactId>quartz</artifactId>
             <version>1.6.0</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.2.1</version>
         </dependency>
 		<dependency>
       		<groupId>com.google.code.gson</groupId>

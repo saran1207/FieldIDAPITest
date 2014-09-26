@@ -5,7 +5,6 @@ import com.n4systems.ejb.PersistenceManager;
 import com.n4systems.exceptions.ReportException;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.service.certificate.ReportCompiler;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.service.event.LastEventDateService;
 import com.n4systems.model.*;
@@ -55,12 +54,16 @@ public class EventSummaryGenerator {
 	public JasperPrint generate(ReportDefiner reportDefiner, List<Long> eventIds, User user) throws ReportException {
         Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
 		File jasperFile = PathHandler.getCompiledSummaryReportFile(user.getTenant(), locale);
+
+        //We will no longer compile the jaspers through FieldiD.  The assumption is that the jasper file will exist on S3.
+        /*
 		try {
 			new ReportCompiler().compileReports(jasperFile.getParentFile());
 		} catch (JRException e) {
 			throw new ReportException(e);
 		}
-		
+		*/
+
 		// check to see if the report exists
 		if (!jasperFile.canRead()) {
 			throw new ReportException("Could not access Jasper File " + jasperFile);

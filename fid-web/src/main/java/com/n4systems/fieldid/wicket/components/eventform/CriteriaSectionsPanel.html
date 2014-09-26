@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
     <div class="columnHeader">
@@ -23,4 +24,11 @@
     <div class="feedback" wicket:id="feedbackPanel">
     </div>
 
+    <wicket:fragment wicket:id="optionalFlagPanel">
+        <input type="checkbox" wicket:id="optionalCheck">
+        <label class="subTitle"><wicket:message key="label.optional_section"/></label>
+    </wicket:fragment>
+
 </wicket:panel>
+
+</html>

@@ -24,11 +24,13 @@
         <span class="eventSectionIndex pagination" wicket:id="topSectionPager"></span>
     </h3>
 
-    <div wicket:id="criteriaSections">
+    <div wicket:id="criteriaSectionsContainer">
 
+        <div wicket:id="criteriaSectionsList">
 
-        <div wicket:id="sectionContainer">
+        <div wicket:id="sectionContainer" class="section-container">
 
+            <h3><a wicket:id="hideSectionLink" class="mattButton"><wicket:message key="label.hide_section"/></a></h3>
             <h3 class="event-section-title">
                 <span class="eventSectionTitle" wicket:id="sectionName"></span>
             </h3>
@@ -45,8 +47,19 @@
                 </div>
             </div>
 
+            <div wicket:id="disabledOverlay" class="disabled-overlay">
+                <div class="background"></div>
+                <div class="message">
+                    <wicket:message key="label.section"/>&nbsp;<span class="strong" wicket:id="name"/>&nbsp;<wicket:message key="label.is_hidden"/>
+                </div>
+                <div class="button">
+                    <a wicket:id="restoreLink" class="mattButton blueButton"><wicket:message key="label.restore_section"/></a>
+                </div>
+            </div>
         </div>
 
+
+    </div>
 
     </div>
 

@@ -1,9 +1,34 @@
 <html xmlns:wicket="http://wicket.apache.org">
 
 <wicket:extend>
-    <div wicket:id="feedbackPanel"/>
-    <div wicket:id="eventBooksListPanel">
-        <table wicket:id="eventBooksList" class="list borders clear comfortable"/>
+    <div class="event-books-list">
+        <div wicket:id="feedbackPanel"/>
+
+        <form wicket:id="filterForm">
+            <div class="filter"><wicket:message key="label.filter_header"/></div>
+            <div class="filter-text"><wicket:message key="label.event_book_filter_text"/></div>
+
+            <fieldset class="form-horizontal">
+                <div class="control-group">
+                    <label><wicket:message key="label.title"/>:</label>
+                    <input wicket:id="titleFilter" type="text">
+                </div>
+                <div class="control-group owner">
+                    <label><wicket:message key="label.owner"/>:</label>
+                    <div wicket:id="orgPickerField"/>
+                </div>
+                <div class="filter-buttons">
+                    <span>
+                        <button class="btn-primary" wicket:id="filter"><wicket:message key="label.filter"/></button>
+                        <wicket:message key="label.or"/>
+                        <a class="btn-link" wicket:id="clear"><wicket:message key="label.clear"/></a>
+                    </span>
+                </div>
+            </fieldset>
+        </form>
+        <div wicket:id="eventBooksListPanel">
+            <table wicket:id="eventBooksList" class="list borders clear comfortable"/>
+        </div>
     </div>
 </wicket:extend>
 

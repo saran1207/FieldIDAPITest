@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.util.CollectionUtils;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -45,7 +46,12 @@ public class ExcelSheetManager {
 		if (sheets.size()>1) { 		
 			logger.warn("since you have multiple sheets in your excel spreadsheet, you probably want to override getSheet() to control which cells go on which sheet otherwise everything will end up on the first sheet.");
 		}
-		return sheets.values().iterator().next();		// just return the first one by default.
+
+        //This method wasn't built to actually do what the name would suggest.  We're now returning the sheet that is
+        //named like the name that was passed in... Previously, we were returning the first sheet in the collection.
+        //Strangely... Java 8 doesn't behave like Java 7 or earlier.  Maps appear to load in a Last In First Out fashion
+        //instead of First In First Out as expected.
+        return sheets.get(columnTitle);
 	}
 		
 

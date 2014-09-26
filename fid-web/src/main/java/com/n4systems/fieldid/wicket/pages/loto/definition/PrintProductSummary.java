@@ -20,7 +20,7 @@ public class PrintProductSummary extends Panel {
         super(id, model);
 
         //warnings
-        add(new Label("warnings", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())));
+        add(new Label("precautions", ProxyModel.of(model, on(ProcedureDefinition.class).getWarnings())));
 
     }
 }

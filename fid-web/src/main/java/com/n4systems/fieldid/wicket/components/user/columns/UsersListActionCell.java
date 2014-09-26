@@ -7,6 +7,7 @@ import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.model.navigation.PageParametersBuilder;
 import com.n4systems.fieldid.wicket.pages.setup.user.EditPersonPage;
 import com.n4systems.fieldid.wicket.pages.setup.user.EditUserPage;
+import com.n4systems.fieldid.wicket.pages.setup.user.UsersListPage;
 import com.n4systems.model.user.User;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.IAjaxCallDecorator;
@@ -38,7 +39,7 @@ public class UsersListActionCell extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 userService.archive(user);
                 FieldIDSession.get().info(new FIDLabelModel("message.userarchived").getObject());
-                onArchive(target);
+                setResponsePage(UsersListPage.class);
             }
 
             @Override
@@ -49,6 +50,4 @@ public class UsersListActionCell extends Panel {
 
 
     }
-
-    protected void onArchive(AjaxRequestTarget target) {}
 }

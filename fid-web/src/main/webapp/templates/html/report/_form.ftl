@@ -66,7 +66,7 @@ ${action.setPageType('report', 'show')!}
 			</div>
 			<#if sessionUser.employeeUser || sessionUser.systemUser>
 				<div class="infoSet">
-					<label id="reducedLineHeightLabel" for="criteria.includeNetworkResults"><@s.text name="label.includesafetynetworkresults"/></label>
+					<label class="reducedLineHeightLabel" for="criteria.includeNetworkResults"><@s.text name="label.includesafetynetworkresults"/></label>
 					<@s.checkbox name="criteria.includeNetworkResults" fieldValue="true"/>
 				</div>
 			<#else>

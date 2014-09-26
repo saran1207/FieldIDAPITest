@@ -5,9 +5,7 @@ import com.n4systems.fieldid.wicket.components.ExternalImage;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
-import com.n4systems.util.DateHelper;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
@@ -74,17 +72,17 @@ public class PrintFooter extends Panel {
 
 
         // add(new Label("auditDateOne", Model.of( DateHelper.format(dte1, new DateTimeDefiner(user)) )));
-        add(new Label("auditDateOne", Model.of(DateHelper.date2String("MMM yyyy", dte1))));
+        //add(new Label("auditDateOne", Model.of(DateHelper.date2String("MMM yyyy", dte1))));
 
         //audit date two
 
-        add(new Label("auditDateTwo", Model.of( DateHelper.date2String("MMM yyyy", dte2) )));
+        //add(new Label("auditDateTwo", Model.of( DateHelper.date2String("MMM yyyy", dte2) )));
 
         //audit date three
-        add(new Label("auditDateThree", Model.of( DateHelper.date2String("MMM yyyy", dte3) )));
+        //add(new Label("auditDateThree", Model.of( DateHelper.date2String("MMM yyyy", dte3) )));
 
         //audit date four
-        add(new Label("auditDateFour", Model.of( DateHelper.date2String("MMM yyyy", dte4) )));
+        //add(new Label("auditDateFour", Model.of( DateHelper.date2String("MMM yyyy", dte4) )));
 
         //tennant logo
         add(new ExternalImage("tenantLogo", s3Service.getBrandingLogoURL(model.getObject().getTenant().getId()).toString()).setEscapeModelStrings(false));

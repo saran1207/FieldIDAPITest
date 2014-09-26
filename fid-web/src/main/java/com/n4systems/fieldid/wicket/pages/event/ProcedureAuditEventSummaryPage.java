@@ -89,7 +89,7 @@ public class ProcedureAuditEventSummaryPage extends EventSummaryPage {
     }
 
     private ProcedureAuditEvent loadExistingEvent() {
-        final ProcedureAuditEvent event = eventService.lookupExistingEvent(ProcedureAuditEvent.class, uniqueId, true);
+        final ProcedureAuditEvent event = eventService.lookupExistingEvent(ProcedureAuditEvent.class, uniqueId, true, false);
         ProcedureAuditEvent existingEvent = new LocalizeAround<ProcedureAuditEvent>(new Callable<ProcedureAuditEvent>() {
             @Override
             public ProcedureAuditEvent call() throws Exception {

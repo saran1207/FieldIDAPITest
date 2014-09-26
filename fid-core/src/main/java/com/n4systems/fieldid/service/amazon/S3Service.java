@@ -35,11 +35,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
 import org.springframework.util.Assert;
-import sun.misc.BASE64Encoder;
+//import sun.misc.BASE64Encoder;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -720,12 +721,16 @@ public class S3Service extends FieldIdPersistenceService {
 
     private URL generatePresignedUrl(String path, Date expires, HttpMethod method) {
         URL url = null;
+        URL fieldidUrl = url;
         try {
             url = getClient().generatePresignedUrl(getBucket(), path, expires, method);
+            fieldidUrl = new URL(url.getProtocol(), getEndpoint(), url.getPort(), url.getFile());
         } catch(AmazonServiceException ase){
             //just ignore the exception, its probably caused by resource not existing
+        } catch(MalformedURLException e){
+            logger.warn("Issue with setting the S3 endpoint in URL: " + e);
         }
-        return url;
+        return fieldidUrl;
     }
 
     private AmazonS3Client getClient() {
@@ -735,6 +740,11 @@ public class S3Service extends FieldIdPersistenceService {
     private String getBucket() {
         String bucket = configService.getString(ConfigEntry.AMAZON_S3_BUCKET);
         return bucket;
+    }
+
+    private String getEndpoint() {
+        String endpoint = configService.getString(ConfigEntry.AMAZON_S3_ENDPOINT);
+        return endpoint;
     }
 
     private String getAccessKey() {
@@ -770,7 +780,7 @@ public class S3Service extends FieldIdPersistenceService {
     }
 
     protected String getBucketHostname() {
-        String bucketHostname = configService.getString(ConfigEntry.AMAZON_S3_BUCKET) + "." + configService.getString(ConfigEntry.AMAZON_S3_SERVER_HOSTNAME);
+        String bucketHostname = configService.getString(ConfigEntry.AMAZON_S3_ENDPOINT);
         return bucketHostname;
     }
 
@@ -1348,7 +1358,7 @@ public class S3Service extends FieldIdPersistenceService {
             Mac hmac = Mac.getInstance("HmacSHA1");
             hmac.init(new SecretKeySpec(getSecretKey().getBytes("UTF-8"), "HmacSHA1"));
 
-            String bucketPolicySignature = (new BASE64Encoder()).encode(hmac.doFinal(bucketPolicyBase64.getBytes("UTF-8"))).replaceAll("\n", "");
+            String bucketPolicySignature = Base64.getEncoder().encodeToString(hmac.doFinal(bucketPolicyBase64.getBytes("UTF-8"))).replaceAll("\n", "");
             return bucketPolicySignature;
         }
         catch(Exception e){
@@ -1359,7 +1369,7 @@ public class S3Service extends FieldIdPersistenceService {
 
     public String getBucketPolicyBase64(){
         try {
-            return (new BASE64Encoder()).encode(
+            return Base64.getEncoder().encodeToString(
                     this.getBucketPolicy().getBytes("UTF-8")).replaceAll("\n","").replaceAll("\r","");
         }
         catch(Exception e){
