@@ -30,7 +30,7 @@ public class TestResource extends FieldIdPersistenceService {
 		if (!authService.validateRequest(consumerKey, tokenKey, nonce, timestamp)) {
 			throw new ForbiddenException();
 		}
-		return "" + authService.exceddedRequestLimit(consumerKey, tokenKey, 3);
+		return "" + authService.exceededRequestLimit(consumerKey, tokenKey, 3);
 	}
 
 	@GET

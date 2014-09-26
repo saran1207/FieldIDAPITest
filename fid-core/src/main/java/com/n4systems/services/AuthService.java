@@ -33,7 +33,7 @@ public class AuthService extends FieldIdPersistenceService {
 	}
 
 	@Transactional(readOnly = true)
-	public boolean exceddedRequestLimit(String consumerKey, String tokenKey, long limit) {
+	public boolean exceededRequestLimit(String consumerKey, String tokenKey, long limit) {
 		String stmt = "SELECT COUNT(*) FROM `request_log` WHERE `consumer_key` = ? AND `token_key` = ?";
 		Query query = getEntityManager().createNativeQuery(stmt);
 		query.setParameter(1, consumerKey);
