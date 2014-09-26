@@ -1,12 +1,9 @@
 package com.n4systems.fieldid.service.certificate;
 
+import net.sf.jasperreports.engine.JRException;
+
 import java.io.File;
 import java.io.FilenameFilter;
-
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-
-import org.apache.commons.io.FileUtils;
 
 public class ReportCompiler {
 	
@@ -18,15 +15,19 @@ public class ReportCompiler {
 	};
 	
 	public void compileReports(File directory) throws JRException {
-		for (File jrxmlFile: directory.listFiles(jrxmlFiler)) {
+
+        //We will no longer compile the jaspers through FieldiD.  The assumption is that the jasper file will exist on S3.
+
+        /*
+        for (File jrxmlFile: directory.listFiles(jrxmlFiler)) {
 			String reportName = jrxmlFile.getName().replace(".jrxml", "");
-			
+
 			File jasperFile = new File(directory, reportName + ".jasper");
-			
+
 			if (!jasperFile.exists() || FileUtils.isFileNewer(jrxmlFile, jasperFile)) {
 				JasperCompileManager.compileReportToFile(jrxmlFile.getAbsolutePath(), jasperFile.getAbsolutePath());
 			}
-		}
+		}*/
 	}
 	
 }
