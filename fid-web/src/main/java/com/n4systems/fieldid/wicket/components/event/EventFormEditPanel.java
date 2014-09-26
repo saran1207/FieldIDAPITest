@@ -19,6 +19,6 @@ public class EventFormEditPanel extends EventFormPanel {
 
     @Override
     protected Panel getCriteriaSectionPanel(Class<? extends AbstractEvent> eventClass, PropertyModel<List<CriteriaResult>> results) {
-        return new CriteriaSectionEditPanel("criteriaPanel", eventClass, results, showActionButtons, false);
+        return new CriteriaSectionEditPanel("criteriaPanel", eventClass, results, showActionButtons);
     }
 }

@@ -91,32 +91,27 @@ public class ProcedureService extends FieldIdPersistenceService {
     }
 
     public Long getAllProceduresForAssetTypeCount(AssetType assetType) {
-        QueryBuilder<Long> query = new QueryBuilder<Long>(Procedure.class, securityContext.getTenantSecurityFilter());
-        WhereParameterGroup wpg = new WhereParameterGroup();
-        wpg.addClause( WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()) );
-        query.addWhere(wpg);
-
-        return persistenceService.count(query);
+        return persistenceService.count(getProcedureForAssetTypeQueryBuilder(assetType));
     }
 
 
     public List<Procedure> getAllProceduresForAssetType(AssetType assetType) {
+        return persistenceService.findAll(getProcedureForAssetTypeQueryBuilder(assetType));
+    }
+
+    private QueryBuilder<Procedure> getProcedureForAssetTypeQueryBuilder(AssetType assetType) {
         QueryBuilder<Procedure> query = new QueryBuilder<Procedure>(Procedure.class, securityContext.getTenantSecurityFilter());
-        WhereParameterGroup wpg = new WhereParameterGroup();
-        wpg.addClause( WhereClauseFactory.create(WhereParameter.Comparator.EQ, "asset.type.id", assetType.getId()) );
-        query.addWhere(wpg);
-        return persistenceService.findAll(query);
+        query.addSimpleWhere("asset.type.id", assetType.getId());
+        return query;
     }
 
     public void archiveProceduresForAssetType(AssetType assetType) {
-        List<Procedure> procedureList;
-        procedureList = getAllProceduresForAssetType(assetType);
+        List<Procedure> procedureList = getAllProceduresForAssetType(assetType);
 
         for (Procedure procedure : procedureList) {
             archiveProcedure(procedure);
         }
     }
-
 
     public void archiveProcedure(Procedure procedure) {
         procedure.archiveEntity();
