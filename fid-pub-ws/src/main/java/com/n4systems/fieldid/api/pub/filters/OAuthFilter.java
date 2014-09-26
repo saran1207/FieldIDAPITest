@@ -30,6 +30,14 @@ public class OAuthFilter implements ContainerRequestFilter, ContainerResponseFil
         OAuthRequestParams requestParams = OAuthRequestParamsFactory.readParams(containerRequestContext);
         OAuthParams params = requestParams.getOAuthParams();
 
+        if(authService.exceededRequestLimit(params.getConsumerKey(), params.getTokenKey(), 3)) {
+            throw new ForbiddenException(); // flood
+        }
+
+        if(!authService.validateRequest(params.getConsumerKey(), params.getTokenKey(), params.getNonce(), Long.parseLong(params.getTimestamp()))) {
+            throw new ForbiddenException(); // replay
+        }
+
 		User user = authService.findUserByOAuthKey(params.getTokenKey(), params.getConsumerKey());
 		if (!user.getTenant().getSettings().isPublicApiEnabled()) {
 			throw new ForbiddenException();
