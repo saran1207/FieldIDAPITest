@@ -32,4 +32,10 @@ public class TestResource extends FieldIdPersistenceService {
 		}
 		return "" + authService.exceddedRequestLimit(consumerKey, tokenKey, 3);
 	}
+
+	@GET
+	@Path("clear")
+	public void truncate() {
+		authService.clearRequestLog();
+	}
 }

@@ -7,11 +7,22 @@ import com.n4systems.model.user.User;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionException;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import javax.annotation.Resource;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import java.math.BigInteger;
 
-public class AuthService extends FieldIdPersistenceService{
+public class AuthService extends FieldIdPersistenceService {
+
+	@Resource
+	private PlatformTransactionManager transactionManager;
 
 	@Transactional(readOnly = true)
 	public User findUserByOAuthKey(String tokenKey, String consumerKey) {
@@ -27,12 +38,13 @@ public class AuthService extends FieldIdPersistenceService{
 		Query query = getEntityManager().createNativeQuery(stmt);
 		query.setParameter(1, consumerKey);
 		query.setParameter(2, tokenKey);
-		Long requests = (Long) query.getSingleResult();
+		Long requests = ((BigInteger) query.getSingleResult()).longValue();
 		return requests > limit;
 	}
 
-	@Transactional
 	public boolean validateRequest(String consumerKey, String tokenKey, String nonce, Long timestamp) {
+		TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
+
 		try {
 			String stmt = "INSERT INTO `request_log` (`consumer_key`, `token_key`, `nonce`, `timestamp`) VALUES (?, ?, ?, ?)";
 			Query query = getEntityManager().createNativeQuery(stmt);
@@ -41,12 +53,23 @@ public class AuthService extends FieldIdPersistenceService{
 			query.setParameter(3, nonce);
 			query.setParameter(4, timestamp);
 			query.executeUpdate();
+			transactionManager.commit(status);
 			return true;
-		} catch (ConstraintViolationException cve) {
-			return false;
-		} catch (Exception e) {
-			throw e;
+		} catch (PersistenceException e) {
+			try { transactionManager.rollback(status); } catch (TransactionException te) { throw te; }
+			if (e.getCause() instanceof ConstraintViolationException) {
+				return false;
+			} else {
+				throw e;
+			}
 		}
+	}
+
+	@Transactional
+	public void clearRequestLog() {
+		String stmt = "TRUNCATE `request_log`";
+		Query query = getEntityManager().createNativeQuery(stmt);
+		query.executeUpdate();
 	}
 
 }
