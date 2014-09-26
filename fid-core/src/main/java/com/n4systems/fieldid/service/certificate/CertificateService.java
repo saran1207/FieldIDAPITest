@@ -31,7 +31,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.*;
 
 @Transactional(readOnly = true)
@@ -64,7 +63,9 @@ public class CertificateService extends FieldIdPersistenceService {
         try {
             Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
             File jrxmlFile = PathHandler.getReportFile(asset, locale);
-            reportCompiler.compileReports(jrxmlFile.getParentFile());
+
+            //We will no longer compile the jaspers through FieldiD.  The assumption is that the jasper file will exist on S3.
+            //reportCompiler.compileReports(jrxmlFile.getParentFile());
 
             Map<String, Object> reportMap = new HashMap<String, Object>();
             reportMap.put("SUBREPORT_DIR", jrxmlFile.getParent() + "/");
@@ -79,8 +80,8 @@ public class CertificateService extends FieldIdPersistenceService {
             List<Asset> reportCollection = new ArrayList<Asset>();
             reportCollection.add(asset);
 
-JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledReportFile(asset, locale));
-JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JRBeanCollectionDataSource(reportCollection));
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(PathHandler.getCompiledReportFile(asset, locale));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, new JRBeanCollectionDataSource(reportCollection));
             return jasperPrint;
         } catch (JRException e) {
             throw new ReportException("Failed to generate asset certificate", e);
@@ -118,7 +119,9 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 	private JasperPrint generateEventCertificateWithSubEvents(ThingEvent event, PrintOut printOut, DateTimeDefiner dateDefiner) throws JRException {
         Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
 		File jasperFile = PathHandler.getPrintOutFile(printOut, locale);
-		reportCompiler.compileReports(jasperFile.getParentFile());
+
+        //We will no longer compile the jaspers through FieldiD.  The assumption is that the jasper file will exist on S3.
+		//reportCompiler.compileReports(jasperFile.getParentFile());
 		
 		Map<String, Object> reportMap = new HashMap<String, Object>();
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
@@ -151,7 +154,9 @@ JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, reportMap, 
 	private JasperPrint generateEventCertificateWithoutSubEvents(ThingEvent event, PrintOut printOut, DateTimeDefiner dateDefiner) throws NonPrintableEventType, ReportException, JRException {
         Locale locale = ThreadLocalInteractionContext.getInstance().getUserThreadLanguage();
 		File jasperFile = PathHandler.getPrintOutFile(printOut, locale);
-		reportCompiler.compileReports(jasperFile.getParentFile());
+
+        //We will no longer compile the jaspers through FieldiD.  The assumption is that the jasper file will exist on S3.
+		//reportCompiler.compileReports(jasperFile.getParentFile());
 		
 		Map<String, Object> reportMap = new HashMap<String, Object>();
 		reportMap.put("SUBREPORT_DIR", jasperFile.getParent() + "/");
