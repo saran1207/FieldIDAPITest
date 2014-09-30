@@ -63,8 +63,8 @@ public class BaseUrlBuilderTest {
 	public void should_add_multiple_parameters_with_amps_between_them() throws Exception {
 		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder("https://somedomain.com/fieldid/");
 		sut.addParameter("param1", 4).addParameter("param2", "hello").addParameter("param3", 'c');
-		
-		assertThat(sut.build(), endsWith("?param3=c&param1=4&param2=hello"));
+
+        assertThat(sut.build(), endsWith("?param3=c&param1=4&param2=hello"));
 	}
 	
 	
