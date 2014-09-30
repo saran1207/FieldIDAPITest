@@ -64,7 +64,7 @@ public class BaseUrlBuilderTest {
 		BaseUrlBuilder sut = new BlankPathBaseUrlBuilder("https://somedomain.com/fieldid/");
 		sut.addParameter("param1", 4).addParameter("param2", "hello").addParameter("param3", 'c');
 
-        assertThat(sut.build(), endsWith("?param1=4&param2=hello&param3=c"));
+        assertThat(sut.build(), endsWith("?param3=c&param1=4&param2=hello"));
 	}
 	
 	
