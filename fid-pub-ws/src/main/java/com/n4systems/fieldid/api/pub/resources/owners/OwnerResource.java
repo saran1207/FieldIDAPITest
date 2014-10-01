@@ -26,7 +26,8 @@ public class OwnerResource extends CrudResource<BaseOrg, Owner> {
 	@Override
 	protected Owner marshal(BaseOrg org) {
 		Owner owner = new Owner();
-		owner.setParentId(org.getParent().getPublicId());
+        BaseOrg parent = org.getParent();
+		owner.setParentId(parent == null ? "" : parent.getPublicId());
 		owner.setName(org.getName());
 		owner.setCode(org.getCode());
 		owner.setNotes(org.getNotes());

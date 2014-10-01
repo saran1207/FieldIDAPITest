@@ -1,0 +1,10 @@
+package com.n4systems.fieldid.api.pub.serialization;
+
+option java_outer_classname = "Messages";
+
+message OrgMessage
+{
+    required string code = 1;
+    required string name = 2;
+
+}
