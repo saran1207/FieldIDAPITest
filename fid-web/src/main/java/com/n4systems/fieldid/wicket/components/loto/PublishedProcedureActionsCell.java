@@ -166,7 +166,7 @@ public class PublishedProcedureActionsCell extends Panel {
 
         BookmarkablePageLink<Void> editLink = new BookmarkablePageLink<Void>("editLink", ProcedureDefinitionPage.class, PageParametersBuilder.id(procedureDefinition.getId())) {
         };
-        editLink.setVisible(isAuthor(procedureDefinition) && procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));
+        editLink.setVisible(procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));
 
         optionsContainer.add(editLink);
 
