@@ -63,14 +63,14 @@ public class DetailsPanel extends Panel {
             add(new LabelledTextArea<String>("applicationProcess", "label.lockout_application_process", ProxyModel.of(model, on(ProcedureDefinition.class).getApplicationProcess())){
                 @Override
                 public int getMaxLength() {
-                    return 512;
+                    return 1024;
                 }
             });
 
             add(new LabelledTextArea<String>("removalProcess", "label.lockout_removal_process", ProxyModel.of(model, on(ProcedureDefinition.class).getRemovalProcess())){
                 @Override
                 public int getMaxLength() {
-                    return 512;
+                    return 1024;
                 }
             });
 
