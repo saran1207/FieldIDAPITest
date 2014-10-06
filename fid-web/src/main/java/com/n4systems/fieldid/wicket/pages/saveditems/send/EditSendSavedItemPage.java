@@ -11,7 +11,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 public class EditSendSavedItemPage extends SendSavedItemPage {
 
-    private long scheduleId;
     private SendSavedItemSchedule sendSavedItemSchedule;
 
     public EditSendSavedItemPage(IModel<? extends SearchCriteria> criteria, Page returnToPage) {
@@ -22,7 +21,6 @@ public class EditSendSavedItemPage extends SendSavedItemPage {
         super(params);
 
         savedReportId = params.get("id").toLong();
-        scheduleId = params.get("scheduleId").toLong();
         initializeSavedItem(savedReportId);
     }
 
@@ -35,7 +33,7 @@ public class EditSendSavedItemPage extends SendSavedItemPage {
     protected void initializeSavedItem(long savedItemId) {
         savedItem = persistenceService.find(SavedItem.class, savedItemId);
         criteria = new Model<SearchCriteria>(savedItem.getSearchCriteria());
-        sendSavedItemSchedule = persistenceService.find(SendSavedItemSchedule.class, scheduleId);
+        sendSavedItemSchedule = sendSearchService.findSavedItemSchedule(savedItem);
         currentState = SCHEDULE_STATE;
         scheduleStateAvailable = true;
     }

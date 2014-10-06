@@ -15,8 +15,8 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AbstractSearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.EditSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
-import com.n4systems.fieldid.wicket.pages.saveditems.send.SendSavedItemPage;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.saveditem.SavedSearchItem;
@@ -146,7 +146,7 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
                 item.add(new Label("description", item.getModel().getObject().getDescription()));
                 item.add(new BookmarkablePageLink<Void>("shareLink", ShareSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
                 item.add(new BookmarkablePageLink<Void>("editLink", EditSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
-                item.add(new BookmarkablePageLink<Void>("sendLink", SendSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
+                item.add(new BookmarkablePageLink<Void>("sendLink", EditSendSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
                 item.add(manageSchedulesLink = new BookmarkablePageLink<Void>("manageSchedulesLink", ManageSendItemSchedulesPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
                 manageSchedulesLink.add(new Label("manageSchedulesLabel", new FIDLabelModel("label.manage_send_schedules_with_count", item.getModelObject().getSendSchedules().size())));
 
