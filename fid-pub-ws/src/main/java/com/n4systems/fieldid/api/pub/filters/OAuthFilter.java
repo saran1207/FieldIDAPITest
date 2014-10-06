@@ -5,6 +5,7 @@ import com.n4systems.fieldid.service.SecurityContextInitializer;
 import com.n4systems.model.user.User;
 import com.n4systems.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 
 @Provider
+@Scope("request")
 public class OAuthFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
 	@Autowired
@@ -23,42 +25,43 @@ public class OAuthFilter implements ContainerRequestFilter, ContainerResponseFil
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-		if (containerRequestContext.getUriInfo().getQueryParameters().getFirst("bypass") != null) {
-			return;
-		}
+		boolean bypass = (containerRequestContext.getUriInfo().getQueryParameters().getFirst("bypass") != null);
 
         OAuthRequestParams requestParams = OAuthRequestParamsFactory.readParams(containerRequestContext);
         OAuthParams params = requestParams.getOAuthParams();
 
-        if(authService.exceededRequestLimit(params.getConsumerKey(), params.getTokenKey(), 3)) {
-            throw new ForbiddenException(); // flood
-        }
+		if (!bypass) {
+			if (authService.exceededRequestLimit(params.getConsumerKey(), params.getTokenKey(), 3)) {
+				throw new ForbiddenException(); // flood
+			}
 
-        if(!authService.validateRequest(params.getConsumerKey(), params.getTokenKey(), params.getNonce(), Long.parseLong(params.getTimestamp()))) {
-            throw new ForbiddenException(); // replay
-        }
+			if (!authService.validateRequest(params.getConsumerKey(), params.getTokenKey(), params.getNonce(), Long.parseLong(params.getTimestamp()))) {
+				throw new ForbiddenException(); // replay
+			}
+		}
 
 		User user = authService.findUserByOAuthKey(params.getTokenKey(), params.getConsumerKey());
 		if (!user.getTenant().getSettings().isPublicApiEnabled()) {
 			throw new ForbiddenException();
 		}
 
-		OAuthSecrets secrets = new OAuthSecrets()
-									.consumerSecret(user.getTenant().getSettings().getAuthConsumer().getSecret())
-									.tokenSecret(user.getAuthToken().getSecret());
+		if (!bypass) {
+			OAuthSecrets secrets = new OAuthSecrets()
+					.consumerSecret(user.getTenant().getSettings().getAuthConsumer().getSecret())
+					.tokenSecret(user.getAuthToken().getSecret());
 
-        OAuthSignature sig = null;
-        try {
-            sig = OAuthSignatureFactory.getSignature(params);
-        }
-        catch(NoSuchAlgorithmException ignored) {}
+			OAuthSignature sig = null;
+			try {
+				sig = OAuthSignatureFactory.getSignature(params);
+			} catch (NoSuchAlgorithmException ignored) {}
 
-        //noinspection ConstantConditions
-        boolean isValid = sig.verify(requestParams, secrets);
+			//noinspection ConstantConditions
+			boolean isValid = sig.verify(requestParams, secrets);
 
-        if(!isValid) {
-			throw new ForbiddenException();
-        }
+			if(!isValid) {
+				throw new ForbiddenException();
+			}
+		}
 
 		try {
 			SecurityContextInitializer.initSecurityContext(user);

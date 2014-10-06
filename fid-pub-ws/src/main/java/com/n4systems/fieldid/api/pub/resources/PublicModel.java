@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.api.pub.resources;
 
-import java.io.Serializable;
-
-public class PublicModel implements Serializable {
+public class PublicModel {
 	private String id;
 
 	public String getId() {

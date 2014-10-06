@@ -44,7 +44,11 @@ public abstract class CrudResource<M extends AbstractEntity, A> extends FieldIdP
 						.map(this::marshal)
 						.collect(Collectors.toList());
 
-		return new ListResponse<>(page, pageSize, crudService().count(), items);
+		return new ListResponse<A>()
+				.setPage(page)
+				.setPageSize(pageSize)
+				.setTotal(crudService().count());
+//				.setItems(items);
 	}
 
 	@GET
