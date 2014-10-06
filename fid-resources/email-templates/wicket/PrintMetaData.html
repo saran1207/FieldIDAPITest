@@ -1,19 +1,27 @@
 <wicket:panel xmlns:wicket="http://www.apache.org/internal/xmlbeans/wsdlsubst">
     <div class="procedure-user-and-device">
         <table>
+            <!-- headings -->
             <tr>
-                <th><wicket:message key="label.verfied_effective_by_testing" /></th>
+                <th><wicket:message key="label.developed_by" /></th>
+                <th><wicket:message key="label.reviewed_by" /></th>
+                <th><wicket:message key="label.revised_by" /></th>
                 <th class="number-of-devices"><wicket:message key="label.devices" /></th>
             </tr>
+
+            <!-- Names (by) -->
             <tr>
-                <td></td>
-                <td wicket:id="deviceCount" rowspan="3" class="number-of-devices"></td>
+                <td wicket:id="developedBy"></td>
+                <td wicket:id="reviewedBy"></td>
+                <td wicket:id="revisedBy"></td>
+                <td wicket:id="deviceCount" rowspan="2" class="number-of-devices"></td>
             </tr>
+
+            <!-- dates -->
             <tr>
-                <td></td>
-            </tr>
-            <tr>
-                <td class="date-time"></td>
+                <td class="date-time" wicket:id="developedDate"></td>
+                <td class="date-empty"></td>
+                <td class="date-time" wicket:id="modifiedDate"></td>
             </tr>
         </table>
     </div>
