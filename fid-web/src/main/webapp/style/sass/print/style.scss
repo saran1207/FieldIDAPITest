@@ -66,10 +66,10 @@ img {
 .watermark {
   position: absolute;
   z-index: 1000;
-  top:  50%;
+  top:  0;
   left: 50%;
+  margin-top: 0;
   margin-left: -306px;
-  margin-top:  -392px;
 }
 .print-bar {
   height: 38px;
