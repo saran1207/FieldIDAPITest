@@ -47,8 +47,8 @@ public abstract class CrudResource<M extends AbstractEntity, A> extends FieldIdP
 		return new ListResponse<A>()
 				.setPage(page)
 				.setPageSize(pageSize)
-				.setTotal(crudService().count());
-//				.setItems(items);
+				.setTotal(crudService().count())
+				.setItems(items);
 	}
 
 	@GET
