@@ -10,10 +10,11 @@ $color-heading-text:            #ffffff;
 $color-heading-light:           #FFE0E0;
 $color-caution:                 #fff8ad;
 
-$fs-base:      11px;
-$fs-small:     1.1em;
-$fs-heading:   1.16em;
-$fs-title:     3.1em;
+$fs-base:          11px;
+$fs-small:         1.1em;
+$fs-heading:       1.16em;
+$fs-heading-small: 1em;
+$fs-title:         3.1em;
 $fs-title-lineheight: 0.75em;
 
 $page-margin:      50px;
@@ -66,10 +67,10 @@ img {
 .watermark {
   position: absolute;
   z-index: 1000;
-  top:  50%;
+  top:  0;
   left: 50%;
+  margin-top: 0;
   margin-left: -306px;
-  margin-top:  -392px;
 }
 .print-bar {
   height: 38px;
@@ -153,12 +154,14 @@ img {
   right: 0;
 
   table {
-    width: 300px;
+    width: 384px;
   }
   th, td {
     height: $grid-height;
     text-align: center;
-    font-size: $fs-small;
+    font-size: $fs-heading-small;
+    padding: 0;
+    line-height: 27px;
   }
   th {
     background: $color-heading;

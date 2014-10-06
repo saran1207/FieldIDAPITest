@@ -481,14 +481,12 @@ function annotateImages( data ){
             data: {}
         }
     }
-    params.annotations.data = data.images;
+
+    if (typeof data != 'undefined') {
+        params.annotations.data = data.images;
+    }
 
     $('img').imagesLoaded(function() {
         $('body').pages(params);
-        $('.panzoom').panzoom({
-            startTransform: 'scale(1.0)',
-            increment: 0.2,
-            minScale:  1.0
-        }).panzoom('zoom', true);
     });
 };
