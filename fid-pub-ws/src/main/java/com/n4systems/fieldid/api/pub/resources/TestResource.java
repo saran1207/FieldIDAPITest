@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.api.pub.resources;
 
+import com.n4systems.fieldid.api.pub.serialization.Messages;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,4 +39,13 @@ public class TestResource extends FieldIdPersistenceService {
 	public void truncate() {
 		authService.clearRequestLog();
 	}
+
+    @POST
+    @Path("createEntity")
+    @Produces({"application/x-protobuf64", "application/x-protobuf64"})
+//    @Produces("application/x-protobuf64")
+    public Messages.TestEntityCreateResponse createEntity(Messages.TestEntityCreateMessage msg)
+    {
+        return Messages.TestEntityCreateResponse.newBuilder().setEntityCode(msg.getEntityCode()).setStatus(200).build();
+    }
 }

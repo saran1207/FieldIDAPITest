@@ -3,6 +3,7 @@ package com.n4systems.fieldid.api.pub.auth;
 import org.glassfish.jersey.uri.UriComponent;
 
 import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
 import java.io.IOException;
@@ -12,11 +13,8 @@ import java.net.URI;
 import java.net.URLDecoder;
 import java.util.TreeSet;
 
-/**
- * Created by kirillternovsky on 2014-09-24.
- */
 public class OAuthRequestParamsFactory {
-    public static OAuthRequestParams readParams(ContainerRequestContext containerRequestContext) {
+    public static OAuthRequestParams readParams(ContainerRequestContext containerRequestContext) throws IOException {
         UriInfo uriInfo = containerRequestContext.getUriInfo();
         URI uri = uriInfo.getRequestUri();
         OAuthRequestParams params = new OAuthRequestParams();
@@ -28,6 +26,8 @@ public class OAuthRequestParamsFactory {
                 .path(uri.getPath());
 
         populateOAuthParamsFromHeader(params, containerRequestContext.getHeaderString("Authorization"));
+
+        if(containerRequestContext.getMediaType().equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE))
         populateOAuthParamsFromContentBody(params, containerRequestContext.getEntityStream(), containerRequestContext.getLength());
 
         MultivaluedMap<String, String> getParams = UriComponent.decodeQuery(uri, true);

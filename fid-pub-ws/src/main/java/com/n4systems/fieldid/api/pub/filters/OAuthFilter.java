@@ -39,6 +39,11 @@ public class OAuthFilter implements ContainerRequestFilter, ContainerResponseFil
         }
 
 		User user = authService.findUserByOAuthKey(params.getTokenKey(), params.getConsumerKey());
+
+        if(user == null) {
+            throw new ForbiddenException();
+        }
+
 		if (!user.getTenant().getSettings().isPublicApiEnabled()) {
 			throw new ForbiddenException();
 		}

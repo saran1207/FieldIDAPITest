@@ -1,5 +1,7 @@
 package com.n4systems.fieldid.api.pub.config;
 
+import com.n4systems.fieldid.api.pub.ProtobufMessageBodyReader;
+import com.n4systems.fieldid.api.pub.ProtobufMessageBodyWriter;
 import com.n4systems.fieldid.api.pub.filters.OAuthFilter;
 import com.n4systems.fieldid.api.pub.resources.TestResource;
 import com.n4systems.fieldid.api.pub.resources.owners.OwnerResource;
@@ -28,4 +30,10 @@ public class PublicApiConfig {
 	public OAuthFilter oAuthFilter() {
 		return new OAuthFilter();
 	}
+
+    @Bean
+    public ProtobufMessageBodyReader protobufMessageBodyReader() { return new ProtobufMessageBodyReader(); }
+
+    @Bean
+    public ProtobufMessageBodyWriter protobufMessageBodyWriter() { return new ProtobufMessageBodyWriter(); }
 }
