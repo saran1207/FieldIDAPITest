@@ -37,10 +37,12 @@ public class OwnerResource extends CrudResource<BaseOrg, Messages.OrgMessage> {
 
 		builder
 			.setId(org.getPublicId())
-			.setParentId(org.getParent() == null ? null : org.getParent().getPublicId())
 			.setName(org.getName())
 			.setCode(org.getCode())
 			.setNotes(org.getNotes());
+
+        if(org.getParent() != null)
+            builder.setParentId(org.getParent().getPublicId());
 
 		ifNotNull(org.getAddressInfo(), addressInfo -> {
 			builder

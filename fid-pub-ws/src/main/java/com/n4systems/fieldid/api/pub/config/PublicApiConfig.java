@@ -2,6 +2,7 @@ package com.n4systems.fieldid.api.pub.config;
 
 import com.n4systems.fieldid.api.pub.ProtobufMessageBodyReader;
 import com.n4systems.fieldid.api.pub.ProtobufMessageBodyWriter;
+import com.n4systems.fieldid.api.pub.ProtobufParamConverterProvider;
 import com.n4systems.fieldid.api.pub.filters.OAuthFilter;
 import com.n4systems.fieldid.api.pub.resources.owners.OwnerResource;
 import com.n4systems.fieldid.api.pub.resources.test.TestResource;
@@ -36,6 +37,9 @@ public class PublicApiConfig {
 
     @Bean
     public ProtobufMessageBodyWriter protobufMessageBodyWriter() { return new ProtobufMessageBodyWriter(); }
+
+    @Bean
+    public ProtobufParamConverterProvider protobufParamConverterProvider() { return new ProtobufParamConverterProvider(); }
 
 	@Bean CatchAllExceptionMapper catchAllExceptionMapper() {
 		return new CatchAllExceptionMapper();

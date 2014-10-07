@@ -28,7 +28,9 @@ public class OAuthRequestParamsFactory {
                 .path(uri.getPath());
 
         populateOAuthParamsFromHeader(params, containerRequestContext.getHeaderString("Authorization"));
-        if(containerRequestContext.getMediaType().equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
+        String contentLengthHeader = containerRequestContext.getHeaderString("Content-Length");
+        if(contentLengthHeader != null &&
+                containerRequestContext.getMediaType().equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
             populateOAuthParamsFromContentBody(params, readBodyStream(containerRequestContext));
         }
 

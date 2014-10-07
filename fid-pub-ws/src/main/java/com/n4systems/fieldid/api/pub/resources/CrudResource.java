@@ -37,8 +37,7 @@ public abstract class CrudResource<M extends AbstractEntity, A> extends FieldIdP
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public Messages.ListResponse findAll(Messages.ListMessage msg) {
-
+	public Messages.ListResponse findAll(@QueryParam("listMessage") Messages.ListMessage msg) {
 		List<A> items = crudService()
 				.findAll(msg.getPage(), msg.getPageSize())
 				.stream()
