@@ -29,7 +29,7 @@ public class OAuthRequestParamsFactory {
 
         populateOAuthParamsFromHeader(params, containerRequestContext.getHeaderString("Authorization"));
         if(containerRequestContext.getMediaType().equals(MediaType.APPLICATION_FORM_URLENCODED_TYPE)) {
-            populateOAuthParamsFromContentBody(params, containerRequestContext.getEntityStream(), containerRequestContext.getLength());
+            populateOAuthParamsFromContentBody(params, readBodyStream(containerRequestContext));
         }
 
         MultivaluedMap<String, String> getParams = UriComponent.decodeQuery(uri, true);
@@ -84,8 +84,8 @@ public class OAuthRequestParamsFactory {
         }
     }
 
-    private static void populateOAuthParamsFromContentBody(OAuthRequestParams params, InputStream bodyStream, int contentLength) {
-        if(contentLength > 0) {
+    private static void populateOAuthParamsFromContentBody(OAuthRequestParams params, byte[] body) {
+        if(body.length > 0) {
 			//noinspection ResultOfMethodCallIgnored
 			String rawContent = new String(body);
 			String[] splitParams = rawContent.split("&");

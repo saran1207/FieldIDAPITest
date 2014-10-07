@@ -3,8 +3,8 @@ package com.n4systems.fieldid.api.pub.config;
 import com.n4systems.fieldid.api.pub.ProtobufMessageBodyReader;
 import com.n4systems.fieldid.api.pub.ProtobufMessageBodyWriter;
 import com.n4systems.fieldid.api.pub.filters.OAuthFilter;
-import com.n4systems.fieldid.api.pub.resources.test.TestResource;
 import com.n4systems.fieldid.api.pub.resources.owners.OwnerResource;
+import com.n4systems.fieldid.api.pub.resources.test.TestResource;
 import com.n4systems.fieldid.config.FieldIdCoreConfig;
 import com.n4systems.fieldid.config.FieldIdDownloadConfig;
 import com.n4systems.fieldid.config.FieldIdEntityRemovalConfig;
@@ -37,8 +37,6 @@ public class PublicApiConfig {
     @Bean
     public ProtobufMessageBodyWriter protobufMessageBodyWriter() { return new ProtobufMessageBodyWriter(); }
 
-    @Bean
-    public ProtobufMessageBodyWriter protobufMessageBodyWriter() { return new ProtobufMessageBodyWriter(); }
 	@Bean CatchAllExceptionMapper catchAllExceptionMapper() {
 		return new CatchAllExceptionMapper();
 	}

@@ -2,6 +2,38 @@ package com.n4systems.fieldid.api.pub.serialization;
 
 option java_outer_classname = "Messages";
 
+message ListResponse {
+	required int32 page = 1;
+	required int32 pageSize = 2;
+	required int64 total = 3;
+
+	extensions 10 to 1000;
+}
+
+message OrgMessage {
+	required string id 				= 1;
+	required string parentId		= 2;
+    required string code 			= 3;
+    required string name 			= 4;
+	optional string notes			= 5;
+	optional string streetAddress	= 6;
+	optional string city			= 7;
+	optional string state			= 8;
+	optional string country			= 9;
+	optional string zip				= 10;
+	optional string phone1			= 11;
+	optional string phone2			= 12;
+	optional string fax1			= 13;
+	optional string latitude		= 14;
+	optional string longitude		= 15;
+	optional string contactName		= 16;
+	optional string contactEmail	= 17;
+
+	extend ListResponse {
+		repeated OrgMessage list    = 10;
+	}
+}
+
 message TestEntityCreateMessage
 {
     required int32 entityCode = 1;
@@ -11,6 +43,16 @@ message TestEntityCreateResponse
 {
     required int32 status = 1;
     optional int32 entityCode = 2;
+}
+
+message ListMessage {
+	optional int32 page = 1 [default = 0];
+	optional int32 pageSize = 2 [default = 100];
+}
+
+service OrgService {
+	rpc createOrg (OrgMessage) returns (OrgMessage);
+	rpc listOrgs (ListMessage) returns (ListResponse);
 }
 
 service TestEntityService
