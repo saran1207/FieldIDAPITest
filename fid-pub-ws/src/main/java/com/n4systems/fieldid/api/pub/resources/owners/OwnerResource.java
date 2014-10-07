@@ -44,8 +44,8 @@ public class OwnerResource extends CrudResource<BaseOrg, Owner> {
 			owner.setFax1(addressInfo.getFax1());
 
 			ifNotNull(addressInfo.getGpsLocation(), gps -> {
-				owner.setLatitude(gps.getLatitude().toString());
-				owner.setLongitude(gps.getLongitude().toString());
+				ifNotNull(gps.getLatitude(), lat -> owner.setLatitude(lat.toString()));
+				ifNotNull(gps.getLongitude(), lon -> owner.setLongitude(lon.toString()));
 			});
 		});
 
@@ -71,6 +71,7 @@ public class OwnerResource extends CrudResource<BaseOrg, Owner> {
 		} else {
 			throw new BadRequestException("Owner parent cannot be a division");
 		}
+		org.setTenant(getCurrentTenant());
 		org.setName(apiModel.getName());
 		org.setCode(apiModel.getCode());
 		org.setNotes(apiModel.getNotes());

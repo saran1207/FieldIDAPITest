@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionException;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
@@ -42,6 +43,7 @@ public class AuthService extends FieldIdPersistenceService {
 		return requests > limit;
 	}
 
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public boolean validateRequest(String consumerKey, String tokenKey, String nonce, Long timestamp) {
 		TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
 

@@ -1,12 +1,14 @@
 package com.n4systems.fieldid.api.pub.auth;
 
+import org.apache.commons.io.IOUtils;
 import org.glassfish.jersey.uri.UriComponent;
 
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.UriInfo;
+import javax.xml.ws.WebServiceException;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLDecoder;
@@ -28,7 +30,7 @@ public class OAuthRequestParamsFactory {
                 .path(uri.getPath());
 
         populateOAuthParamsFromHeader(params, containerRequestContext.getHeaderString("Authorization"));
-        populateOAuthParamsFromContentBody(params, containerRequestContext.getEntityStream(), containerRequestContext.getLength());
+        populateOAuthParamsFromContentBody(params, readBodyStream(containerRequestContext));
 
         MultivaluedMap<String, String> getParams = UriComponent.decodeQuery(uri, true);
 
@@ -40,6 +42,21 @@ public class OAuthRequestParamsFactory {
 
         return params;
     }
+
+	private static byte[] readBodyStream(ContainerRequestContext containerRequestContext) {
+		byte[] bytes;
+		if (containerRequestContext.getLength() > 0) {
+			try {
+				bytes = IOUtils.toByteArray(containerRequestContext.getEntityStream());
+				containerRequestContext.setEntityStream(new ByteArrayInputStream(bytes));
+			} catch (IOException e) {
+				throw new WebServiceException(e);
+			}
+		} else {
+			bytes = new byte[0];
+		}
+		return bytes;
+	}
 
     private static void populateOAuthParamsFromHeader(OAuthRequestParams params, String authHeader) {
         if(authHeader != null && authHeader.length() > 0 && authHeader.startsWith("OAuth")) {
@@ -67,30 +84,24 @@ public class OAuthRequestParamsFactory {
         }
     }
 
-    private static void populateOAuthParamsFromContentBody(OAuthRequestParams params, InputStream bodyStream, int contentLength) {
-        if(contentLength > 0) {
-            byte[] rawData = new byte[contentLength];
-            try
-            {
-                //noinspection ResultOfMethodCallIgnored
-                bodyStream.read(rawData, 0, contentLength);
-                String rawContent = new String(rawData);
-                String[] splitParams = rawContent.split("&");
+    private static void populateOAuthParamsFromContentBody(OAuthRequestParams params, byte[] body) {
+        if(body.length > 0) {
+			//noinspection ResultOfMethodCallIgnored
+			String rawContent = new String(body);
+			String[] splitParams = rawContent.split("&");
 
-                for (String splitParam : splitParams) {
-                    int equalsIdx = splitParam.indexOf('=');
-                    String key, value;
-                    if (equalsIdx == -1) {
-                        key = splitParam;
-                        value = "";
-                    } else {
-                        key = splitParam.substring(0, equalsIdx);
-                        value = splitParam.substring(equalsIdx + 1);
-                    }
-                    params.parameter(key, value);
-                }
-            }
-            catch(IOException ignored) {}
+			for (String splitParam : splitParams) {
+				int equalsIdx = splitParam.indexOf('=');
+				String key, value;
+				if (equalsIdx == -1) {
+					key = splitParam;
+					value = "";
+				} else {
+					key = splitParam.substring(0, equalsIdx);
+					value = splitParam.substring(equalsIdx + 1);
+				}
+				params.parameter(key, value);
+			}
         }
     }
 }
