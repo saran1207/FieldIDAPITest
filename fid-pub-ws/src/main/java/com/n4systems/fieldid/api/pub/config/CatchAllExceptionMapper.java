@@ -11,7 +11,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 @Component
-@Scope("singleton")
+@Scope("request")
 @Provider
 public class CatchAllExceptionMapper implements ExceptionMapper<Throwable> {
 	private Logger logger = Logger.getLogger(CatchAllExceptionMapper.class);
