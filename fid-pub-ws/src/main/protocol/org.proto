@@ -2,9 +2,18 @@ package com.n4systems.fieldid.api.pub.serialization;
 
 option java_outer_classname = "Messages";
 
-message OrgMessage
+message TestEntityCreateMessage
 {
-    required string code = 1;
-    required string name = 2;
+    required int32 entityCode = 1;
+}
 
+message TestEntityCreateResponse
+{
+    required int32 status = 1;
+    optional int32 entityCode = 2;
+}
+
+service TestEntityService
+{
+    rpc CreateTestEntity (TestEntityCreateMessage) returns (TestEntityCreateResponse);
 }
