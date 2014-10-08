@@ -35,7 +35,7 @@ public abstract class CrudResource<M extends AbstractEntity, A> extends FieldIdP
 	}
 
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	@Produces({"application/x-protobuf64", MediaType.APPLICATION_JSON})
 	@Transactional(readOnly = true)
 	public ListResponse findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize) {
 		List<A> items = crudService()
