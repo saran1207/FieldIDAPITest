@@ -11,9 +11,9 @@ import static com.squareup.wire.Message.Label.REQUIRED;
 public final class OrgMessage extends Message {
 
   public static final String DEFAULT_ID = "";
+  public static final String DEFAULT_NAME = "";
   public static final String DEFAULT_PARENTID = "";
   public static final String DEFAULT_CODE = "";
-  public static final String DEFAULT_NAME = "";
   public static final String DEFAULT_NOTES = "";
   public static final String DEFAULT_STREETADDRESS = "";
   public static final String DEFAULT_CITY = "";
@@ -32,13 +32,13 @@ public final class OrgMessage extends Message {
   public final String id;
 
   @ProtoField(tag = 2, type = STRING, label = REQUIRED)
+  public final String name;
+
+  @ProtoField(tag = 3, type = STRING)
   public final String parentId;
 
-  @ProtoField(tag = 3, type = STRING, label = REQUIRED)
+  @ProtoField(tag = 4, type = STRING)
   public final String code;
-
-  @ProtoField(tag = 4, type = STRING, label = REQUIRED)
-  public final String name;
 
   @ProtoField(tag = 5, type = STRING)
   public final String notes;
@@ -79,11 +79,11 @@ public final class OrgMessage extends Message {
   @ProtoField(tag = 17, type = STRING)
   public final String contactEmail;
 
-  public OrgMessage(String id, String parentId, String code, String name, String notes, String streetAddress, String city, String state, String country, String zip, String phone1, String phone2, String fax1, String latitude, String longitude, String contactName, String contactEmail) {
+  public OrgMessage(String id, String name, String parentId, String code, String notes, String streetAddress, String city, String state, String country, String zip, String phone1, String phone2, String fax1, String latitude, String longitude, String contactName, String contactEmail) {
     this.id = id;
+    this.name = name;
     this.parentId = parentId;
     this.code = code;
-    this.name = name;
     this.notes = notes;
     this.streetAddress = streetAddress;
     this.city = city;
@@ -100,7 +100,7 @@ public final class OrgMessage extends Message {
   }
 
   private OrgMessage(Builder builder) {
-    this(builder.id, builder.parentId, builder.code, builder.name, builder.notes, builder.streetAddress, builder.city, builder.state, builder.country, builder.zip, builder.phone1, builder.phone2, builder.fax1, builder.latitude, builder.longitude, builder.contactName, builder.contactEmail);
+    this(builder.id, builder.name, builder.parentId, builder.code, builder.notes, builder.streetAddress, builder.city, builder.state, builder.country, builder.zip, builder.phone1, builder.phone2, builder.fax1, builder.latitude, builder.longitude, builder.contactName, builder.contactEmail);
     setBuilder(builder);
   }
 
@@ -110,9 +110,9 @@ public final class OrgMessage extends Message {
     if (!(other instanceof OrgMessage)) return false;
     OrgMessage o = (OrgMessage) other;
     return equals(id, o.id)
+        && equals(name, o.name)
         && equals(parentId, o.parentId)
         && equals(code, o.code)
-        && equals(name, o.name)
         && equals(notes, o.notes)
         && equals(streetAddress, o.streetAddress)
         && equals(city, o.city)
@@ -133,9 +133,9 @@ public final class OrgMessage extends Message {
     int result = hashCode;
     if (result == 0) {
       result = id != null ? id.hashCode() : 0;
+      result = result * 37 + (name != null ? name.hashCode() : 0);
       result = result * 37 + (parentId != null ? parentId.hashCode() : 0);
       result = result * 37 + (code != null ? code.hashCode() : 0);
-      result = result * 37 + (name != null ? name.hashCode() : 0);
       result = result * 37 + (notes != null ? notes.hashCode() : 0);
       result = result * 37 + (streetAddress != null ? streetAddress.hashCode() : 0);
       result = result * 37 + (city != null ? city.hashCode() : 0);
@@ -157,9 +157,9 @@ public final class OrgMessage extends Message {
   public static final class Builder extends Message.Builder<OrgMessage> {
 
     public String id;
+    public String name;
     public String parentId;
     public String code;
-    public String name;
     public String notes;
     public String streetAddress;
     public String city;
@@ -181,9 +181,9 @@ public final class OrgMessage extends Message {
       super(message);
       if (message == null) return;
       this.id = message.id;
+      this.name = message.name;
       this.parentId = message.parentId;
       this.code = message.code;
-      this.name = message.name;
       this.notes = message.notes;
       this.streetAddress = message.streetAddress;
       this.city = message.city;
@@ -204,6 +204,11 @@ public final class OrgMessage extends Message {
       return this;
     }
 
+    public Builder name(String name) {
+      this.name = name;
+      return this;
+    }
+
     public Builder parentId(String parentId) {
       this.parentId = parentId;
       return this;
@@ -211,11 +216,6 @@ public final class OrgMessage extends Message {
 
     public Builder code(String code) {
       this.code = code;
-      return this;
-    }
-
-    public Builder name(String name) {
-      this.name = name;
       return this;
     }
 

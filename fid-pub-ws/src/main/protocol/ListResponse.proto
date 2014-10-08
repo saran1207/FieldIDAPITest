@@ -1,0 +1,10 @@
+package com.n4systems.fieldid.api.pub.serialization;
+
+message ListResponse {
+    required int32 page = 1;
+    required int32 pageSize = 2;
+    required int64 total = 3;
+
+    extensions 10 to 1000;
+}
+

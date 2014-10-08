@@ -1,0 +1,8 @@
+package com.n4systems.fieldid.api.pub.serialization;
+
+import "ListResponse.proto";
+import "Org.proto";
+
+extend ListResponse {
+    repeated OrgMessage list    = 10;
+}
