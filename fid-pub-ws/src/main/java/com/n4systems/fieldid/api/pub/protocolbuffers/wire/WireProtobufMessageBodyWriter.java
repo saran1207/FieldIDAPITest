@@ -10,9 +10,11 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyWriter;
+import javax.ws.rs.ext.Provider;
 
 import com.squareup.wire.Message;
 
+@Provider
 public class WireProtobufMessageBodyWriter implements MessageBodyWriter<com.squareup.wire.Message> {
 
     @Override
