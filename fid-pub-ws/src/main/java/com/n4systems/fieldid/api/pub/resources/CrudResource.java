@@ -1,11 +1,11 @@
 package com.n4systems.fieldid.api.pub.resources;
 
-import com.google.protobuf.GeneratedMessage;
-import com.n4systems.fieldid.api.pub.serialization.Messages;
+import com.n4systems.fieldid.api.pub.serialization.ListResponse;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.PublicIdEncoder;
 import com.n4systems.model.parents.AbstractEntity;
+import com.squareup.wire.Extension;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
@@ -19,7 +19,7 @@ public abstract class CrudResource<M extends AbstractEntity, A> extends FieldIdP
 	protected abstract CrudService<M> crudService();
 	protected abstract A marshal(M model);
 	protected abstract M unmarshal(A apiModel);
-	protected abstract GeneratedMessage.GeneratedExtension<Messages.ListResponse, List<A>> listResponseType();
+	protected abstract Extension<ListResponse, List<A>> listResponseType();
 
 	protected <T> void ifNotNull(T t, Consumer<T> then) {
 		if (t != null) {
@@ -37,17 +37,17 @@ public abstract class CrudResource<M extends AbstractEntity, A> extends FieldIdP
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Transactional(readOnly = true)
-	public Messages.ListResponse findAll(@QueryParam("listMessage") Messages.ListMessage msg) {
+	public ListResponse findAll(@QueryParam("page") int page, @QueryParam("pageSize") int pageSize) {
 		List<A> items = crudService()
-				.findAll(msg.getPage(), msg.getPageSize())
+				.findAll(page, pageSize)
 				.stream()
 				.map(this::marshal)
 				.collect(Collectors.toList());
 
-		return Messages.ListResponse.newBuilder()
-				.setPage(msg.getPage())
-				.setPageSize(msg.getPageSize())
-				.setTotal(crudService().count())
+		return new ListResponse.Builder()
+				.page(page)
+				.pageSize(pageSize)
+				.total(crudService().count())
 				.setExtension(listResponseType(), items)
 				.build();
 	}

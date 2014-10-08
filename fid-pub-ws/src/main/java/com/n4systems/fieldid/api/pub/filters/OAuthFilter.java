@@ -46,7 +46,7 @@ public class OAuthFilter implements ContainerRequestFilter, ContainerResponseFil
             throw new ForbiddenException();
         }
 
-		if (!user.getTenant().getSettings().isPublicApiEnabled()) {
+		if (!bypass && !user.getTenant().getSettings().isPublicApiEnabled()) {
 			throw new ForbiddenException();
 		}
 

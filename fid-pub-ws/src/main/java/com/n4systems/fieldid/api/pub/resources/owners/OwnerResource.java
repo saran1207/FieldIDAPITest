@@ -1,13 +1,15 @@
 package com.n4systems.fieldid.api.pub.resources.owners;
 
-import com.google.protobuf.GeneratedMessage;
 import com.n4systems.fieldid.api.pub.resources.CrudResource;
-import com.n4systems.fieldid.api.pub.serialization.Messages;
+import com.n4systems.fieldid.api.pub.serialization.Ext_org;
+import com.n4systems.fieldid.api.pub.serialization.ListResponse;
+import com.n4systems.fieldid.api.pub.serialization.OrgMessage;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.orgs.*;
+import com.squareup.wire.Extension;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.BadRequestException;
@@ -16,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Path("owner")
-public class OwnerResource extends CrudResource<BaseOrg, Messages.OrgMessage> {
+public class OwnerResource extends CrudResource<BaseOrg, OrgMessage> {
 
 	@Autowired
 	private OrgService orgService;
@@ -27,54 +29,54 @@ public class OwnerResource extends CrudResource<BaseOrg, Messages.OrgMessage> {
 	}
 
 	@Override
-	protected GeneratedMessage.GeneratedExtension<Messages.ListResponse, List<Messages.OrgMessage>> listResponseType() {
-		return Messages.OrgMessage.list;
+	protected Extension<ListResponse, List<OrgMessage>> listResponseType() {
+        return Ext_org.list;
 	}
 
 	@Override
-	protected Messages.OrgMessage marshal(BaseOrg org) {
-		Messages.OrgMessage.Builder builder = Messages.OrgMessage.newBuilder();
+	protected OrgMessage marshal(BaseOrg org) {
+		OrgMessage.Builder builder = new OrgMessage.Builder();
 
 		builder
-			.setId(org.getPublicId())
-			.setName(org.getName())
-			.setCode(org.getCode())
-			.setNotes(org.getNotes());
+			.id(org.getPublicId())
+			.name(org.getName())
+			.code(org.getCode())
+			.notes(org.getNotes());
 
         if(org.getParent() != null)
-            builder.setParentId(org.getParent().getPublicId());
+            builder.parentId(org.getParent().getPublicId());
 
 		ifNotNull(org.getAddressInfo(), addressInfo -> {
 			builder
-				.setStreetAddress(addressInfo.getStreetAddress())
-				.setCity(addressInfo.getCity())
-				.setState(addressInfo.getState())
-				.setCountry(addressInfo.getCountry())
-				.setZip(addressInfo.getZip())
-				.setPhone1(addressInfo.getPhone1())
-				.setPhone2(addressInfo.getPhone2())
-				.setFax1(addressInfo.getFax1());
+				.streetAddress(addressInfo.getStreetAddress())
+				.city(addressInfo.getCity())
+				.state(addressInfo.getState())
+				.country(addressInfo.getCountry())
+				.zip(addressInfo.getZip())
+				.phone1(addressInfo.getPhone1())
+				.phone2(addressInfo.getPhone2())
+				.fax1(addressInfo.getFax1());
 
 			ifNotNull(addressInfo.getGpsLocation(), gps -> {
-				ifNotNull(gps.getLatitude(), lat -> builder.setLatitude(lat.toString()));
-				ifNotNull(gps.getLongitude(), lon -> builder.setLongitude(lon.toString()));
+				ifNotNull(gps.getLatitude(), lat -> builder.latitude(lat.toString()));
+				ifNotNull(gps.getLongitude(), lon -> builder.longitude(lon.toString()));
 			});
 		});
 
 		ifNotNull(org.getContact(), contact -> {
 			builder
-				.setContactName(contact.getName())
-				.setContactEmail(contact.getEmail());
+				.contactName(contact.getName())
+				.contactEmail(contact.getEmail());
 		});
 
 		return builder.build();
 	}
 
 	@Override
-	protected BaseOrg unmarshal(Messages.OrgMessage apiModel) {
+	protected BaseOrg unmarshal(OrgMessage apiModel) {
 		// only customers and divisions can be created through the webservice
 		ExternalOrg org = null;
-		BaseOrg parent = testNotFound(orgService.findByPublicId(apiModel.getParentId()));
+		BaseOrg parent = testNotFound(orgService.findByPublicId(apiModel.parentId));
 		if (parent.isInternal()) {
 			org = new CustomerOrg();
 			((CustomerOrg) org).setParent((InternalOrg) parent);
@@ -85,28 +87,28 @@ public class OwnerResource extends CrudResource<BaseOrg, Messages.OrgMessage> {
 			throw new BadRequestException("Owner parent cannot be a division");
 		}
 		org.setTenant(getCurrentTenant());
-		org.setName(apiModel.getName());
-		org.setCode(apiModel.getCode());
-		org.setNotes(apiModel.getNotes());
+		org.setName(apiModel.name);
+		org.setCode(apiModel.code);
+		org.setNotes(apiModel.notes);
 
 		AddressInfo address = new AddressInfo();
-		address.setStreetAddress(apiModel.getStreetAddress());
-		address.setCity(apiModel.getCity());
-		address.setState(apiModel.getState());
-		address.setCountry(apiModel.getCountry());
-		address.setZip(apiModel.getZip());
-		address.setPhone1(apiModel.getPhone1());
-		address.setPhone2(apiModel.getPhone2());
-		address.setFax1(apiModel.getFax1());
-		if (apiModel.getLatitude() != null && apiModel.getLongitude() != null) {
-			address.getGpsLocation().setLatitude(new BigDecimal(apiModel.getLatitude()));
-			address.getGpsLocation().setLongitude(new BigDecimal(apiModel.getLongitude()));
+		address.setStreetAddress(apiModel.streetAddress);
+		address.setCity(apiModel.city);
+		address.setState(apiModel.state);
+		address.setCountry(apiModel.country);
+		address.setZip(apiModel.zip);
+		address.setPhone1(apiModel.phone1);
+		address.setPhone2(apiModel.phone2);
+		address.setFax1(apiModel.fax1);
+		if (apiModel.latitude != null && apiModel.longitude != null) {
+			address.getGpsLocation().setLatitude(new BigDecimal(apiModel.latitude));
+			address.getGpsLocation().setLongitude(new BigDecimal(apiModel.longitude));
 		}
 		org.setAddressInfo(address);
 
 		Contact contact = new Contact();
-		contact.setEmail(apiModel.getContactEmail());
-		contact.setName(apiModel.getContactName());
+		contact.setEmail(apiModel.contactEmail);
+		contact.setName(apiModel.contactName);
 		org.setContact(contact);
 
 		return org;
