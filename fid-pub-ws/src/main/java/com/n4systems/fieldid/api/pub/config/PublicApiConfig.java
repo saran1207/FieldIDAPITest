@@ -33,10 +33,14 @@ public class PublicApiConfig {
 	}
 
     @Bean
-    public WireProtobufMessageBodyReader wireProtobufMessageBodyReader () { return new WireProtobufMessageBodyReader (); }
+    public WireProtobufMessageBodyReader wireProtobufMessageBodyReader () {
+		return new WireProtobufMessageBodyReader ();
+	}
 
     @Bean
-    public WireProtobufMessageBodyWriter wireProtobufMessageBodyWriter () { return new WireProtobufMessageBodyWriter (); }
+    public WireProtobufMessageBodyWriter wireProtobufMessageBodyWriter () {
+		return new WireProtobufMessageBodyWriter ();
+	}
 
 	@Bean CatchAllExceptionMapper catchAllExceptionMapper() {
 		return new CatchAllExceptionMapper();

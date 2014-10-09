@@ -1,8 +1,6 @@
 package com.n4systems.fieldid.api.pub.serialization;
 
-import "ListResponse.proto";
-
-message OrgMessage {
+message Owner {
 	required string id 				= 1;
     required string name 			= 2;
 	optional string parentId		= 3;
@@ -20,6 +18,4 @@ message OrgMessage {
 	optional string longitude		= 15;
 	optional string contactName		= 16;
 	optional string contactEmail	= 17;
-
-
 }
