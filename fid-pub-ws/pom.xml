@@ -124,7 +124,13 @@
             <groupId>com.squareup.wire</groupId>
             <artifactId>wire-runtime</artifactId>
             <version>1.5.2</version>
-        </dependency></dependencies>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
+        </dependency>
+    </dependencies>
     <properties>
         <jersey.version>2.13</jersey.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
