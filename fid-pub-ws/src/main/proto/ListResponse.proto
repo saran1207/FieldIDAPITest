@@ -1,10 +1,18 @@
 package com.n4systems.fieldid.api.pub.serialization;
 
+import "Asset.proto";
+import "Owner.proto";
+
 message ListResponse {
     required int32 page = 1;
     required int32 pageSize = 2;
     required int64 total = 3;
 
-    extensions 10 to 1000;
+	extensions 1000 to 2000;
+}
+
+extend ListResponse {
+	repeated Asset assets    = 1000;
+	repeated Owner owners    = 1001;
 }
 

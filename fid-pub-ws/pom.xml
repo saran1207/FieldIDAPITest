@@ -10,6 +10,30 @@
     <artifactId>fid-pub-ws</artifactId>
     <packaging>war</packaging>
     <name>Public Web Service</name>
+    <build>
+    <plugins>
+    <plugin>
+        <groupId>com.squareup.wire</groupId>
+        <artifactId>wire-maven-plugin</artifactId>
+        <executions>
+            <execution>
+                <phase>generate-sources</phase>
+                <goals>
+                    <goal>generate-sources</goal>
+                </goals>
+                <configuration>
+                    <protoFiles>
+                        <param>ListResponse.proto</param>
+                        <param>Asset.proto</param>
+                        <param>Owner.proto</param>
+                    </protoFiles>
+                    <generatedSourceDirectory>src/main/java</generatedSourceDirectory>
+                </configuration>
+            </execution>
+        </executions>
+    </plugin>
+    </plugins>
+    </build>
     <dependencyManagement>
         <dependencies>
             <dependency>

@@ -1,9 +1,9 @@
 package com.n4systems.fieldid.api.pub.resources.owners;
 
 import com.n4systems.fieldid.api.pub.resources.CrudResource;
-import com.n4systems.fieldid.api.pub.serialization.Ext_org;
+import com.n4systems.fieldid.api.pub.serialization.Ext_ListResponse;
 import com.n4systems.fieldid.api.pub.serialization.ListResponse;
-import com.n4systems.fieldid.api.pub.serialization.OrgMessage;
+import com.n4systems.fieldid.api.pub.serialization.Owner;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.AddressInfo;
@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Path("owner")
-public class OwnerResource extends CrudResource<BaseOrg, OrgMessage> {
+public class OwnerResource extends CrudResource<BaseOrg, Owner> {
 
 	@Autowired
 	private OrgService orgService;
@@ -29,13 +29,13 @@ public class OwnerResource extends CrudResource<BaseOrg, OrgMessage> {
 	}
 
 	@Override
-	protected Extension<ListResponse, List<OrgMessage>> listResponseType() {
-        return Ext_org.list;
+	protected Extension<ListResponse, List<Owner>> listResponseType() {
+        return Ext_ListResponse.owners;
 	}
 
 	@Override
-	protected OrgMessage marshal(BaseOrg org) {
-		OrgMessage.Builder builder = new OrgMessage.Builder();
+	protected Owner marshal(BaseOrg org) {
+		Owner.Builder builder = new Owner.Builder();
 
 		builder
 			.id(org.getPublicId())
@@ -73,7 +73,7 @@ public class OwnerResource extends CrudResource<BaseOrg, OrgMessage> {
 	}
 
 	@Override
-	protected BaseOrg unmarshal(OrgMessage apiModel) {
+	protected BaseOrg unmarshal(Owner apiModel) {
 		// only customers and divisions can be created through the webservice
 		ExternalOrg org = null;
 		BaseOrg parent = testNotFound(orgService.findByPublicId(apiModel.parentId));
