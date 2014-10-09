@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
     <form wicket:id="scheduleForm">
@@ -46,6 +47,11 @@
                     <select wicket:id="jobSelect"></select>
                 </div>
 
+                <div>
+                    <input wicket:id="sendEmailOnUpdate" type="checkbox"/>
+                    <label><wicket:message key="label.send_email_notification_on_update"/></label>
+                </div>
+
             </div>
 
             <div class="formActions blockSeparated">
@@ -61,3 +67,4 @@
     </form>
 
 </wicket:panel>
+</html>

@@ -190,6 +190,7 @@ public class PlaceActionGroup extends Panel {
         schedule.setEventResult(EventResult.VOID);
         schedule.setPlace(org);
         schedule.setTenant(FieldIDSession.get().getSessionUser().getTenant());
+        schedule.setSendEmailOnUpdate();
         Set<UserGroup> groups = userService.getUser(FieldIDSession.get().getSessionUser().getId()).getGroups();
         if (!groups.isEmpty()) {
             schedule.setAssignedUserOrGroup(groups.iterator().next());

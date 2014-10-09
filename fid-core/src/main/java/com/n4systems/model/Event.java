@@ -142,6 +142,9 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
     @Column(name="created_platform", length = 200)
     private String createdPlatform;
 
+    @Column(name="send_email_on_update")
+    private Boolean sendEmailOnUpdate;
+
 	public Event() {
 	}
 
@@ -629,6 +632,18 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
     public void setAssignedGroup(UserGroup assignedGroup) {
         this.assignee = null;
         this.assignedGroup = assignedGroup;
+    }
+
+    public Boolean isSendEmailOnUpdate() {
+        return sendEmailOnUpdate;
+    }
+
+    public void setSendEmailOnUpdate() {
+        setSendEmailOnUpdate(true);
+    }
+
+    public void setSendEmailOnUpdate(Boolean sendEmailOnUpdate) {
+        this.sendEmailOnUpdate = sendEmailOnUpdate;
     }
 
     @Transient

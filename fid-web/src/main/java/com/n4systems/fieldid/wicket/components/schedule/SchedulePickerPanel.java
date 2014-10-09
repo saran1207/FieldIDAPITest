@@ -25,6 +25,7 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -68,7 +69,12 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
 
             add(feedbackPanel = new FIDFeedbackPanel("feedbackPanel"));
 
-            add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "dueDate"), true));
+            add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "dueDate"), true) {
+                @Override
+                protected void onDatePicked(AjaxRequestTarget target) {
+                    SchedulePickerPanel.this.onDatePicked(target);
+                }
+            });
             dateTimePicker.getDateTextField().setRequired(true);
             dateTimePicker.setAllDay(dueDate == null || DateUtil.isMidnight(dueDate));
 
@@ -90,6 +96,8 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             }
 
             add(jobSelectContainer);
+
+            add(new CheckBox("sendEmailOnUpdate", new PropertyModel<>(eventScheduleModel, "sendEmailOnUpdate")));
 
             //priority
             DropDownChoice<PriorityCode> priorityChoice = new FidDropDownChoice<PriorityCode>("priority", ProxyModel.of(getModel(), on(Event.class).getPriority()), new PrioritiesForTenantModel(), new ListableChoiceRenderer<PriorityCode>());
@@ -172,6 +180,8 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
     }
 
     protected void onPickComplete(AjaxRequestTarget target) { }
+
+    protected void onDatePicked(AjaxRequestTarget target) { }
 
     @Override
     public void renderHead(IHeaderResponse response) {

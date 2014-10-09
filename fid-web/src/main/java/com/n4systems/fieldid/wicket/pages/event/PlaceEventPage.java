@@ -28,6 +28,7 @@ public abstract class PlaceEventPage extends EventPage<PlaceEvent> {
     protected PlaceEvent createNewOpenEvent() {
         PlaceEvent placeEvent = new PlaceEvent();
         placeEvent.setPlace(event.getObject().getPlace());
+        placeEvent.setSendEmailOnUpdate();
         return placeEvent;
     }
 
