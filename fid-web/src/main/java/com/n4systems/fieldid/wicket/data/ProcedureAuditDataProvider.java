@@ -84,6 +84,7 @@ public class ProcedureAuditDataProvider extends FieldIDDataProvider<ProcedureAud
         if(isProcedureCode || isAsset) {
             size = procedureService.getSelectedAuditCount(procedureCode, asset, isAsset).intValue();
         } else {
+            searchTerm = (searchTerm == null ? "" : searchTerm);
             size = procedureService.getAllAuditCount(searchTerm).intValue();
         }
 
