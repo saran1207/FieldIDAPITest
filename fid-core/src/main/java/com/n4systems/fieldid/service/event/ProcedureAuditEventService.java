@@ -149,6 +149,12 @@ public class ProcedureAuditEventService extends FieldIdPersistenceService {
                     sortTerm.setFieldAfterAlias(subOrder.substring("sortJoin".length() + 1));
                     query.getOrderArguments().add(sortTerm.toSortField());
                     needsSortJoin = true;
+                } else if(subOrder.startsWith("assignedUserOrGroup.displayName")) {
+                    //Since this column (assignedUserOrGroup) is Transient, it doesn't actually exist on the database,
+                    //meaning we can't sort by it.  So instead, we break it down into what this column actually
+                    //represents: the assignee OR the assigned group.
+                    query.addOrder("assignee", ascending);
+                    query.addOrder("assignedGroup", ascending);
                 } else {
                     query.addOrder(subOrder, ascending);
                 }
