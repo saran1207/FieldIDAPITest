@@ -3,6 +3,7 @@ package com.n4systems.fieldid.wicket.pages.saveditems;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.search.SavedAssetSearchService;
 import com.n4systems.fieldid.service.search.SavedReportService;
+import com.n4systems.fieldid.service.sendsearch.SendSearchService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.behavior.SimpleSortableAjaxBehavior;
@@ -15,8 +16,10 @@ import com.n4systems.fieldid.wicket.pages.FieldIDFrontEndPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.RunSearchPage;
 import com.n4systems.fieldid.wicket.pages.assetsearch.AbstractSearchPage;
 import com.n4systems.fieldid.wicket.pages.reporting.RunReportPage;
+import com.n4systems.fieldid.wicket.pages.saveditems.send.AddSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.EditSendSavedItemPage;
 import com.n4systems.fieldid.wicket.pages.saveditems.send.ManageSendItemSchedulesPage;
+import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.saveditem.SavedItem;
 import com.n4systems.model.saveditem.SavedReportItem;
 import com.n4systems.model.saveditem.SavedSearchItem;
@@ -62,6 +65,9 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
 
     @SpringBean
     private SavedReportService savedReportService;
+
+    @SpringBean
+    private SendSearchService sendSearchService;
 
     private WebMarkupContainer itemsListContainer;
     private SortableAjaxBehavior<WebMarkupContainer> sortableBehavior;
@@ -146,7 +152,17 @@ public class ManageSavedItemsPage extends FieldIDFrontEndPage {
                 item.add(new Label("description", item.getModel().getObject().getDescription()));
                 item.add(new BookmarkablePageLink<Void>("shareLink", ShareSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
                 item.add(new BookmarkablePageLink<Void>("editLink", EditSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
-                item.add(new BookmarkablePageLink<Void>("sendLink", EditSendSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
+
+                Long numberOfSchedules = sendSearchService.countSavedItemSchedules(item.getModelObject());
+                if(numberOfSchedules > 1) {
+                    item.add(new BookmarkablePageLink<Void>("sendLink", ManageSendItemSchedulesPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
+                } else if(numberOfSchedules == 1) {
+                    SendSavedItemSchedule schedule = (SendSavedItemSchedule) item.getModelObject().getSendSchedules().get(0);
+                    item.add(new BookmarkablePageLink<Void>("sendLink", EditSendSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())
+                            .add("scheduleId", schedule.getId())));
+                } else {
+                    item.add(new BookmarkablePageLink<Void>("sendLink", AddSendSavedItemPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
+                }
                 item.add(manageSchedulesLink = new BookmarkablePageLink<Void>("manageSchedulesLink", ManageSendItemSchedulesPage.class, PageParametersBuilder.id(item.getModelObject().getId())));
                 manageSchedulesLink.add(new Label("manageSchedulesLabel", new FIDLabelModel("label.manage_send_schedules_with_count", item.getModelObject().getSendSchedules().size())));
 
