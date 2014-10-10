@@ -52,6 +52,7 @@ public class CopyAssetTypePage extends AddAssetTypePage {
             copyField.setUnitOfMeasure(field.getUnitOfMeasure());
             copyField.setUnfilteredInfoOptions(copyInfoOptions(field, copyField));
             copyFields.add(copyField);
+            copyField.setWeight(field.getWeight());
         }
         return copyFields;
     }

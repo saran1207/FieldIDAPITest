@@ -2,6 +2,7 @@ package com.n4systems.fieldid.service.event;
 
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.*;
+import com.n4systems.model.notification.AssigneeNotification;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
@@ -16,7 +17,8 @@ public class  EventScheduleService extends FieldIdPersistenceService {
 
     private static Logger logger = Logger.getLogger( EventScheduleService.class );
 
-    @Autowired private NotifyEventAssigneeService notifyEventAssigneeService;
+    @Autowired
+    private NotifyEventAssigneeService notifyEventAssigneeService;
 
 	@Transactional(readOnly = true)
 	public ThingEvent getNextEventSchedule(Long assetId, Long eventTypeId) {
@@ -99,18 +101,24 @@ public class  EventScheduleService extends FieldIdPersistenceService {
         return persistenceService.find(builder);
     }
 
-    @Transactional
     public Event updateSchedule(ThingEvent schedule) {
-        ThingEvent updatedSchedule = persistenceService.update(schedule);
-        updatedSchedule.getAsset().touch();
-        persistenceService.update(updatedSchedule.getAsset());
-        return updatedSchedule;
+        return updateSchedule(schedule, false);
     }
 
     @Transactional
-    @Deprecated //duplicate see PlaceEventScheduleService
-    public Event updateSchedule(PlaceEvent schedule) {
-        PlaceEvent updatedSchedule = persistenceService.update(schedule);
+    public Event updateSchedule(ThingEvent schedule, boolean dateUpdated) {
+        if(schedule.isSendEmailOnUpdate() && dateUpdated) {
+           AssigneeNotification assigneeNotification = new AssigneeNotification();
+           assigneeNotification.setEvent(schedule);
+           persistenceService.save(assigneeNotification);
+           schedule.setAssigneeNotification(assigneeNotification);
+        }
+
+        ThingEvent updatedSchedule = persistenceService.update(schedule);
+        updatedSchedule.getAsset().touch();
+        persistenceService.update(updatedSchedule.getAsset());
+
+
         return updatedSchedule;
     }
 

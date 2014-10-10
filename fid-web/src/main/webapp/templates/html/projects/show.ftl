@@ -256,7 +256,9 @@ ${action.setPageType('job', 'show')!}
 		
 		<div id="jobResources" <#if jobResources.resources.isEmpty()> style="display:none" </#if>>	
 			<#list jobResources.resources as user >
-				<#include "_attachedUser.ftl"/>
+			    <#if !user.archived>
+				    <#include "_attachedUser.ftl"/>
+                </#if>
 			</#list>
 		</div>
 	</div>

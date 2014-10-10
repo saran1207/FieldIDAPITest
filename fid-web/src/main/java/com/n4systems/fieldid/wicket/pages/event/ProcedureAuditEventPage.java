@@ -47,6 +47,7 @@ public abstract class ProcedureAuditEventPage extends EventPage<ProcedureAuditEv
         ProcedureAuditEvent procedureAuditEvent = new ProcedureAuditEvent();
         procedureAuditEvent.setProcedureDefinition(event.getObject().getProcedureDefinition());
         procedureAuditEvent.setRecurringEvent(event.getObject().getRecurringEvent());
+        procedureAuditEvent.setSendEmailOnUpdate();
         return procedureAuditEvent;
     }
 

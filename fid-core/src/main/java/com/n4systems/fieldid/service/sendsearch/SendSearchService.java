@@ -127,6 +127,12 @@ public class SendSearchService extends FieldIdPersistenceService {
             }
     }
 
+    public SendSavedItemSchedule findSavedItemSchedule(SavedItem savedItem) {
+        QueryBuilder<SendSavedItemSchedule> query = createUserSecurityBuilder(SendSavedItemSchedule.class);
+        query.addSimpleWhere("savedItem", savedItem);
+        return persistenceService.find(query);
+    }
+
     private void sendSearchExcel(SearchCriteria criteria, SendSavedItemSchedule schedule) throws MessagingException {
         File temporaryAttachmentFile = null;
 
@@ -302,5 +308,5 @@ public class SendSearchService extends FieldIdPersistenceService {
         }
         return data;
     }
-    
+
 }

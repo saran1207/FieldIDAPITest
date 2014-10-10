@@ -31,10 +31,12 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 public class OpenActionsCell extends Panel {
 
-    @SpringBean private PlaceEventScheduleService placeEventScheduleService;
+    @SpringBean
+    private PlaceEventScheduleService placeEventScheduleService;
 
     private ModalWindow modalWindow;
     private SchedulePicker<PlaceEvent> schedulePicker;
+    private boolean isDateUpdated = false;
 
     public OpenActionsCell(String id, final IModel<PlaceEvent> eventModel, final Panel eventDisplayPanel) {
         super(id, eventModel);
@@ -49,8 +51,13 @@ public class OpenActionsCell extends Panel {
             { setSaveButtonLabel(new FIDLabelModel("label.save")); }
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
-                placeEventScheduleService.updateSchedule(eventModel.getObject());
+                placeEventScheduleService.updateSchedule(eventModel.getObject(), isDateUpdated);
                 target.add(eventDisplayPanel);
+            }
+
+            @Override
+            protected void onDatePicked(AjaxRequestTarget target) {
+                isDateUpdated = true;
             }
         });
 

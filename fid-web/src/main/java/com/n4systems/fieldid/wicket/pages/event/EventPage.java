@@ -100,9 +100,6 @@ public abstract class EventPage<T extends Event> extends FieldIDFrontEndPage {
     private String longVal = "";
     boolean hasDefaultVal = false;
 
-
-
-
     @Override
     protected void onInitialize() {
         super.onInitialize();

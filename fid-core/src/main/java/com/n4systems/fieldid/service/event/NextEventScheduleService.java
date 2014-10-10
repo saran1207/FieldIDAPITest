@@ -12,8 +12,11 @@ import java.util.List;
 
 public class NextEventScheduleService extends FieldIdPersistenceService {
 
-    private @Autowired EventScheduleService eventScheduleService;
+    @Autowired
+    private EventScheduleService eventScheduleService;
 
+    @Autowired
+    private PlaceEventScheduleService placeEventScheduleService;
     /**
      * Creates the next event schedule for the asset.  If there is already a schedule
      * for the contained asset and event type it will simply return that one.
@@ -48,7 +51,7 @@ public class NextEventScheduleService extends FieldIdPersistenceService {
         Event eventSchedule = findExistingSchedule(openEvent);
 
         if (eventSchedule == null) {
-            eventSchedule = eventScheduleService.updateSchedule(openEvent);
+            eventSchedule = placeEventScheduleService.updateSchedule(openEvent);
         }
 
         return eventSchedule;

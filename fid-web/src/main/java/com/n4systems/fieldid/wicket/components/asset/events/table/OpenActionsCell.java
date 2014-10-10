@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.asset.events.table;
 
 import com.n4systems.fieldid.service.PersistenceService;
+import com.n4systems.fieldid.service.event.EventScheduleService;
 import com.n4systems.fieldid.service.event.EventService;
 import com.n4systems.fieldid.wicket.FieldIDSession;
 import com.n4systems.fieldid.wicket.components.NonWicketLink;
@@ -32,11 +33,15 @@ import java.util.List;
 
 public class OpenActionsCell extends Panel {
 
-    @SpringBean private EventService eventService;
-    @SpringBean private PersistenceService persistenceService;
+    @SpringBean
+    private EventService eventService;
+
+    @SpringBean
+    private EventScheduleService eventScheduleService;
 
     private ModalWindow modalWindow;
     private SchedulePicker schedulePicker;
+    private boolean isDateUpdated = false;
 
     public OpenActionsCell(String id, final IModel<ThingEvent> eventModel, final Panel eventDisplayPanel) {
         super(id);
@@ -47,8 +52,13 @@ public class OpenActionsCell extends Panel {
             { setSaveButtonLabel(new FIDLabelModel("label.save")); }
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
-                persistenceService.update(eventModel.getObject());
+                eventScheduleService.updateSchedule(eventModel.getObject(), isDateUpdated);
                 target.add(eventDisplayPanel);
+            }
+
+            @Override
+            protected void onDatePicked(AjaxRequestTarget target) {
+                isDateUpdated = true;
             }
         });
 
