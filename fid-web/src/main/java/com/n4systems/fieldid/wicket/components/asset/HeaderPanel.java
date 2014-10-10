@@ -260,7 +260,6 @@ public class HeaderPanel extends Panel {
         ThingEvent schedule = new ThingEvent();
         schedule.setEventResult(EventResult.VOID);
         schedule.setAsset(asset);
-        schedule.setSendEmailOnUpdate();
         Set<UserGroup> groups = userService.getUser(FieldIDSession.get().getSessionUser().getId()).getGroups();
         if (!groups.isEmpty()) {
             schedule.setAssignedUserOrGroup(groups.iterator().next());

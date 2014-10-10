@@ -143,7 +143,7 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
     private String createdPlatform;
 
     @Column(name="send_email_on_update")
-    private Boolean sendEmailOnUpdate;
+    private Boolean sendEmailOnUpdate = Boolean.TRUE;
 
 	public Event() {
 	}
@@ -636,10 +636,6 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
 
     public Boolean isSendEmailOnUpdate() {
         return sendEmailOnUpdate;
-    }
-
-    public void setSendEmailOnUpdate() {
-        setSendEmailOnUpdate(true);
     }
 
     public void setSendEmailOnUpdate(Boolean sendEmailOnUpdate) {
