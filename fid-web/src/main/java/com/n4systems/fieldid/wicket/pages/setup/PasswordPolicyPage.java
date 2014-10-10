@@ -1,21 +1,22 @@
 package com.n4systems.fieldid.wicket.pages.setup;
 
+import com.n4systems.fieldid.service.tenant.TenantSettingsService;
+import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
+import com.n4systems.model.security.PasswordPolicy;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxButton;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.validation.validator.MinimumValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
-
-import com.n4systems.fieldid.service.tenant.TenantSettingsService;
-import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
-import com.n4systems.model.security.PasswordPolicy;
 
 public class PasswordPolicyPage extends SetupPage {
 
@@ -23,6 +24,7 @@ public class PasswordPolicyPage extends SetupPage {
 	private TenantSettingsService tenantSettingsService;
 	
     private FIDFeedbackPanel feedbackPanel;
+    public CheckBox checkName;
     
 	public PasswordPolicyPage(PageParameters params) {
         super(params);
@@ -46,11 +48,15 @@ public class PasswordPolicyPage extends SetupPage {
             add(addIntegerRangeTextField("minCapitals",0,100));
             add(addIntegerRangeTextField("expiryDays",0));
             add(addIntegerRangeTextField("uniqueness",0));
+
+            checkName = new CheckBox("checkName", Model.of(getModel().getObject().isCheckName()));
+            add(checkName);
             
             add(new AjaxButton("saveButton") {
 				private static final long serialVersionUID = 1L;
 				@Override protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                     target.add(feedbackPanel);
+                    ((PasswordPolicy) form.getModelObject()).setCheckName(Boolean.valueOf(checkName.getValue()));
                     tenantSettingsService.updateTenantPasswordPolicySettings((PasswordPolicy) form.getModelObject());
                 	setResponsePage(SecurityPage.class);                    
                 }

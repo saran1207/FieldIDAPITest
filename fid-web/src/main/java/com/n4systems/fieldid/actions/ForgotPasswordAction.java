@@ -79,6 +79,11 @@ public class ForgotPasswordAction extends LoginAction {
         	addFlashError(getText("error.password_unique", new String[] {getPasswordPolicy().getUniqueness()+""}) );
         	return INPUT; 
         }
+
+        if (passwordHelper.containsName(user, newPassword)) {
+            addFlashError(getText("error.password_contains_name"));
+            return INPUT;
+        }
         
 		if (!passwordHelper.isValidPassword(newPassword)) {
 			PasswordPolicy policy = passwordHelper.getPasswordPolicy();
