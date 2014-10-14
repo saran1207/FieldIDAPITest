@@ -26,6 +26,7 @@
                         <param>ListResponse.proto</param>
                         <param>Asset.proto</param>
                         <param>Owner.proto</param>
+                        <param>Extensions.proto</param>
                     </protoFiles>
                     <generatedSourceDirectory>src/main/java</generatedSourceDirectory>
                 </configuration>

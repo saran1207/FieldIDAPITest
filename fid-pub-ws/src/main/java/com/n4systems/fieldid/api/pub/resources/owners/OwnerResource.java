@@ -1,6 +1,8 @@
 package com.n4systems.fieldid.api.pub.resources.owners;
 
+import com.google.protobuf.FieldOptions;
 import com.n4systems.fieldid.api.pub.resources.CrudResource;
+import com.n4systems.fieldid.api.pub.serialization.Ext_Extensions;
 import com.n4systems.fieldid.api.pub.serialization.Ext_ListResponse;
 import com.n4systems.fieldid.api.pub.serialization.ListResponse;
 import com.n4systems.fieldid.api.pub.serialization.Owner;
@@ -47,27 +49,29 @@ public class OwnerResource extends CrudResource<BaseOrg, Owner> {
             builder.parentId(org.getParent().getPublicId());
 
 		ifNotNull(org.getAddressInfo(), addressInfo -> {
-			builder
-				.streetAddress(addressInfo.getStreetAddress())
-				.city(addressInfo.getCity())
-				.state(addressInfo.getState())
-				.country(addressInfo.getCountry())
-				.zip(addressInfo.getZip())
-				.phone1(addressInfo.getPhone1())
-				.phone2(addressInfo.getPhone2())
-				.fax1(addressInfo.getFax1());
+            builder
+                    .streetAddress(addressInfo.getStreetAddress())
+                    .city(addressInfo.getCity())
+                    .state(addressInfo.getState())
+                    .country(addressInfo.getCountry())
+                    .zip(addressInfo.getZip())
+                    .phone1(addressInfo.getPhone1())
+                    .phone2(addressInfo.getPhone2())
+                    .fax1(addressInfo.getFax1());
 
-			ifNotNull(addressInfo.getGpsLocation(), gps -> {
-				ifNotNull(gps.getLatitude(), lat -> builder.latitude(lat.toString()));
-				ifNotNull(gps.getLongitude(), lon -> builder.longitude(lon.toString()));
-			});
-		});
+            ifNotNull(addressInfo.getGpsLocation(), gps -> {
+                ifNotNull(gps.getLatitude(), lat -> builder.latitude(lat.toString()));
+                ifNotNull(gps.getLongitude(), lon -> builder.longitude(lon.toString()));
+            });
+        });
 
 		ifNotNull(org.getContact(), contact -> {
 			builder
 				.contactName(contact.getName())
 				.contactEmail(contact.getEmail());
 		});
+
+        Owner.FIELD_OPTIONS_ID.getExtension(Ext_Extensions.serialized_name);
 
 		return builder.build();
 	}
@@ -104,6 +108,7 @@ public class OwnerResource extends CrudResource<BaseOrg, Owner> {
 			address.getGpsLocation().setLatitude(new BigDecimal(apiModel.latitude));
 			address.getGpsLocation().setLongitude(new BigDecimal(apiModel.longitude));
 		}
+
 		org.setAddressInfo(address);
 
 		Contact contact = new Contact();

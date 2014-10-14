@@ -1,8 +1,10 @@
 package com.n4systems.fieldid.api.pub.serialization;
 
+import "Extensions.proto";
+
 message Owner {
-	required string id 				= 1;
-    required string name 			= 2;
+	required string id 				= 1 [(serialized_name) = "test"];
+    required string name 			= 2 [(serialized_name) = "NEW_NAME"];
 	optional string parentId		= 3;
 	optional string code 			= 4;
 	optional string notes			= 5;
