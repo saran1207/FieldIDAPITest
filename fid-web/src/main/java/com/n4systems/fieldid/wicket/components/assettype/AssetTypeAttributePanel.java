@@ -33,9 +33,7 @@ import org.odlabs.wiquery.ui.sortable.SortableAjaxBehavior;
 import rfid.ejb.entity.InfoFieldBean;
 import rfid.ejb.entity.InfoOptionBean;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class AssetTypeAttributePanel extends Panel {
 
@@ -330,7 +328,8 @@ public class AssetTypeAttributePanel extends Panel {
 
             List<InfoFieldBean> infoFieldList = new ArrayList<InfoFieldBean>(assetType.getInfoFields());
             for (int index = 0; index < infoFieldList.size(); index++) {
-                for (InfoOptionBean infoOption : infoFieldList.get(index).getInfoOptions()) {
+                List<InfoOptionBean> infoOptions = sortInfoOptions(infoFieldList.get(index).getInfoOptions());
+                for (InfoOptionBean infoOption : infoOptions) {
                     InfoOptionInput infoOptionInput = new InfoOptionInput(infoOption);
                     infoOptionInput.setInfoFieldIndex((long) index);
                     editInfoOptions.add(infoOptionInput);
@@ -366,5 +365,15 @@ public class AssetTypeAttributePanel extends Panel {
             attributeTypes.add(type.getName());
         }
         return attributeTypes;
+    }
+
+    private List<InfoOptionBean> sortInfoOptions(List<InfoOptionBean> infoOptions) {
+        Collections.sort(infoOptions, new Comparator<InfoOptionBean>() {
+            @Override
+            public int compare(InfoOptionBean o1, InfoOptionBean o2) {
+                return o1.getWeight().compareTo(o2.getWeight());
+            }
+        });
+        return infoOptions;
     }
 }
