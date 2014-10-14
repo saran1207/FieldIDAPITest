@@ -1,6 +1,8 @@
-package com.n4systems.fieldid.api.pub.serialization;
+package n4systems.fieldid.api.pub.serialization;
 
 import "google/protobuf/descriptor.proto";
+
+option java_package = "com.n4systems.fieldid.api.pub.serialization";
 
 extend google.protobuf.FieldOptions {
     optional string serialized_name = 50001;

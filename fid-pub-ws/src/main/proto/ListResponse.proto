@@ -1,7 +1,10 @@
-package com.n4systems.fieldid.api.pub.serialization;
+package n4systems.fieldid.api.pub.serialization;
 
 import "Asset.proto";
 import "Owner.proto";
+
+option java_outer_classname = "ListResponseMessage";
+option java_package = "com.n4systems.fieldid.api.pub.serialization";
 
 message ListResponse {
     required int32 page = 1;

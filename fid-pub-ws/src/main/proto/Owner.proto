@@ -1,6 +1,8 @@
-package com.n4systems.fieldid.api.pub.serialization;
+package n4systems.fieldid.api.pub.serialization;
 
 import "Extensions.proto";
+option java_outer_classname = "OwnerMessage";
+option java_package = "com.n4systems.fieldid.api.pub.serialization";
 
 message Owner {
 	required string id 				= 1 [(serialized_name) = "test"];

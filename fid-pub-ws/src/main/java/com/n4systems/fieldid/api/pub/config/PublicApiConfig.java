@@ -1,8 +1,8 @@
 package com.n4systems.fieldid.api.pub.config;
 
 import com.n4systems.fieldid.api.pub.filters.OAuthFilter;
-import com.n4systems.fieldid.api.pub.protocolbuffers.wire.WireProtobufMessageBodyReader;
-import com.n4systems.fieldid.api.pub.protocolbuffers.wire.WireProtobufMessageBodyWriter;
+import com.n4systems.fieldid.api.pub.protocolbuffers.google.GoogleProtobufMessageBodyReader;
+import com.n4systems.fieldid.api.pub.protocolbuffers.google.GoogleProtobufMessageBodyWriter;
 import com.n4systems.fieldid.api.pub.resources.owners.OwnerResource;
 import com.n4systems.fieldid.api.pub.resources.test.TestResource;
 import com.n4systems.fieldid.config.FieldIdCoreConfig;
@@ -33,16 +33,13 @@ public class PublicApiConfig {
 	}
 
     @Bean
-    public WireProtobufMessageBodyReader wireProtobufMessageBodyReader () {
-		return new WireProtobufMessageBodyReader ();
-	}
+    public GoogleProtobufMessageBodyReader googleProtobufMessageBodyReader() { return new GoogleProtobufMessageBodyReader(); }
+
 
     @Bean
-    public WireProtobufMessageBodyWriter wireProtobufMessageBodyWriter () {
-		return new WireProtobufMessageBodyWriter ();
-	}
+    public GoogleProtobufMessageBodyWriter googleProtobufMessageBodyWriter() { return new GoogleProtobufMessageBodyWriter(); }
 
-	@Bean CatchAllExceptionMapper catchAllExceptionMapper() {
+    @Bean CatchAllExceptionMapper catchAllExceptionMapper() {
 		return new CatchAllExceptionMapper();
 	}
 }

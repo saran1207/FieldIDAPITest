@@ -10,30 +10,40 @@
     <artifactId>fid-pub-ws</artifactId>
     <packaging>war</packaging>
     <name>Public Web Service</name>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>protoc-plugin</id>
+            <url>http://sergei-ivanov.github.com/maven-protoc-plugin/repo/releases/</url>
+        </pluginRepository>
+    </pluginRepositories>
     <build>
-    <plugins>
-    <plugin>
-        <groupId>com.squareup.wire</groupId>
-        <artifactId>wire-maven-plugin</artifactId>
-        <executions>
-            <execution>
-                <phase>generate-sources</phase>
-                <goals>
-                    <goal>generate-sources</goal>
-                </goals>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <protoFiles>
-                        <param>ListResponse.proto</param>
-                        <param>Asset.proto</param>
-                        <param>Owner.proto</param>
-                        <param>Extensions.proto</param>
-                    </protoFiles>
-                    <generatedSourceDirectory>src/main/java</generatedSourceDirectory>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
-            </execution>
-        </executions>
-    </plugin>
-    </plugins>
+            </plugin>
+            <plugin>
+                <groupId>com.google.protobuf.tools</groupId>
+                <artifactId>maven-protoc-plugin</artifactId>
+                <version>0.3.2</version>
+                <configuration>
+                    <protocExecutable>/usr/local/bin/protoc</protocExecutable>
+                    <outputDirectory>/Users/kirillternovsky/Documents/web/fid-pub-ws/src/main/java/proto</outputDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>testCompile</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
     <dependencyManagement>
         <dependencies>
@@ -154,6 +164,11 @@
             <groupId>org.glassfish</groupId>
             <artifactId>javax.json</artifactId>
             <version>1.0.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.6.0</version>
         </dependency>
     </dependencies>
     <properties>

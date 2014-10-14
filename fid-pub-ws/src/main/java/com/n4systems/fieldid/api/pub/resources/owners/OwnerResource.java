@@ -1,17 +1,15 @@
 package com.n4systems.fieldid.api.pub.resources.owners;
 
-import com.google.protobuf.FieldOptions;
+import com.google.protobuf.Extension;
 import com.n4systems.fieldid.api.pub.resources.CrudResource;
-import com.n4systems.fieldid.api.pub.serialization.Ext_Extensions;
-import com.n4systems.fieldid.api.pub.serialization.Ext_ListResponse;
-import com.n4systems.fieldid.api.pub.serialization.ListResponse;
-import com.n4systems.fieldid.api.pub.serialization.Owner;
+import com.n4systems.fieldid.api.pub.serialization.ListResponseMessage;
+import com.n4systems.fieldid.api.pub.serialization.OwnerMessage;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.model.AddressInfo;
 import com.n4systems.model.Contact;
 import com.n4systems.model.orgs.*;
-import com.squareup.wire.Extension;
+import com.n4systems.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.ws.rs.BadRequestException;
@@ -20,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 @Path("owner")
-public class OwnerResource extends CrudResource<BaseOrg, Owner> {
+public class OwnerResource extends CrudResource<BaseOrg, OwnerMessage.Owner> {
 
 	@Autowired
 	private OrgService orgService;
@@ -31,56 +29,54 @@ public class OwnerResource extends CrudResource<BaseOrg, Owner> {
 	}
 
 	@Override
-	protected Extension<ListResponse, List<Owner>> listResponseType() {
-        return Ext_ListResponse.owners;
+	protected Extension<ListResponseMessage.ListResponse, List<OwnerMessage.Owner>> listResponseType() {
+        return ListResponseMessage.owners;
 	}
 
 	@Override
-	protected Owner marshal(BaseOrg org) {
-		Owner.Builder builder = new Owner.Builder();
+	protected OwnerMessage.Owner marshal(BaseOrg org) {
+		OwnerMessage.Owner.Builder builder = OwnerMessage.Owner.newBuilder();
 
 		builder
-			.id(org.getPublicId())
-			.name(org.getName())
-			.code(org.getCode())
-			.notes(org.getNotes());
+			.setId(org.getPublicId())
+			.setName(org.getName())
+			.setCode(org.getCode())
+			.setNotes(StringUtils.stringOrEmpty(org.getNotes()));
 
         if(org.getParent() != null)
-            builder.parentId(org.getParent().getPublicId());
+            builder.setParentId(org.getParent().getPublicId());
 
 		ifNotNull(org.getAddressInfo(), addressInfo -> {
             builder
-                    .streetAddress(addressInfo.getStreetAddress())
-                    .city(addressInfo.getCity())
-                    .state(addressInfo.getState())
-                    .country(addressInfo.getCountry())
-                    .zip(addressInfo.getZip())
-                    .phone1(addressInfo.getPhone1())
-                    .phone2(addressInfo.getPhone2())
-                    .fax1(addressInfo.getFax1());
+                    .setStreetAddress(addressInfo.getStreetAddress())
+                    .setCity(StringUtils.stringOrEmpty(addressInfo.getCity()))
+                    .setState(StringUtils.stringOrEmpty(addressInfo.getState()))
+                    .setCountry(StringUtils.stringOrEmpty(addressInfo.getCountry()))
+                    .setZip(StringUtils.stringOrEmpty(addressInfo.getZip()))
+                    .setPhone1(StringUtils.stringOrEmpty(addressInfo.getPhone1()))
+                    .setPhone2(StringUtils.stringOrEmpty(addressInfo.getPhone2()))
+                    .setFax1(StringUtils.stringOrEmpty(addressInfo.getFax1()));
 
             ifNotNull(addressInfo.getGpsLocation(), gps -> {
-                ifNotNull(gps.getLatitude(), lat -> builder.latitude(lat.toString()));
-                ifNotNull(gps.getLongitude(), lon -> builder.longitude(lon.toString()));
+                ifNotNull(gps.getLatitude(), lat -> builder.setLatitude(lat.toString()));
+                ifNotNull(gps.getLongitude(), lon -> builder.setLongitude(lon.toString()));
             });
         });
 
 		ifNotNull(org.getContact(), contact -> {
 			builder
-				.contactName(contact.getName())
-				.contactEmail(contact.getEmail());
+				.setContactName(StringUtils.stringOrEmpty(contact.getName()))
+				.setContactEmail(StringUtils.stringOrEmpty(contact.getEmail()));
 		});
-
-        Owner.FIELD_OPTIONS_ID.getExtension(Ext_Extensions.serialized_name);
 
 		return builder.build();
 	}
 
 	@Override
-	protected BaseOrg unmarshal(Owner apiModel) {
+	protected BaseOrg unmarshal(OwnerMessage.Owner apiModel) {
 		// only customers and divisions can be created through the webservice
 		ExternalOrg org = null;
-		BaseOrg parent = testNotFound(orgService.findByPublicId(apiModel.parentId));
+		BaseOrg parent = testNotFound(orgService.findByPublicId(apiModel.getParentId()));
 		if (parent.isInternal()) {
 			org = new CustomerOrg();
 			((CustomerOrg) org).setParent((InternalOrg) parent);
@@ -91,29 +87,29 @@ public class OwnerResource extends CrudResource<BaseOrg, Owner> {
 			throw new BadRequestException("Owner parent cannot be a division");
 		}
 		org.setTenant(getCurrentTenant());
-		org.setName(apiModel.name);
-		org.setCode(apiModel.code);
-		org.setNotes(apiModel.notes);
+		org.setName(apiModel.getName());
+		org.setCode(apiModel.getCode());
+		org.setNotes(apiModel.getNotes());
 
 		AddressInfo address = new AddressInfo();
-		address.setStreetAddress(apiModel.streetAddress);
-		address.setCity(apiModel.city);
-		address.setState(apiModel.state);
-		address.setCountry(apiModel.country);
-		address.setZip(apiModel.zip);
-		address.setPhone1(apiModel.phone1);
-		address.setPhone2(apiModel.phone2);
-		address.setFax1(apiModel.fax1);
-		if (apiModel.latitude != null && apiModel.longitude != null) {
-			address.getGpsLocation().setLatitude(new BigDecimal(apiModel.latitude));
-			address.getGpsLocation().setLongitude(new BigDecimal(apiModel.longitude));
+		address.setStreetAddress(apiModel.getStreetAddress());
+		address.setCity(apiModel.getCity());
+		address.setState(apiModel.getState());
+		address.setCountry(apiModel.getCountry());
+		address.setZip(apiModel.getZip());
+		address.setPhone1(apiModel.getPhone1());
+		address.setPhone2(apiModel.getPhone2());
+		address.setFax1(apiModel.getFax1());
+		if (apiModel.getLatitude() != null && apiModel.getLongitude()!= null) {
+			address.getGpsLocation().setLatitude(new BigDecimal(apiModel.getLatitude()));
+			address.getGpsLocation().setLongitude(new BigDecimal(apiModel.getLongitude()));
 		}
 
 		org.setAddressInfo(address);
 
 		Contact contact = new Contact();
-		contact.setEmail(apiModel.contactEmail);
-		contact.setName(apiModel.contactName);
+		contact.setEmail(apiModel.getContactEmail());
+		contact.setName(apiModel.getName());
 		org.setContact(contact);
 
 		return org;

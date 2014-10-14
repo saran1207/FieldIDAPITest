@@ -1,11 +1,12 @@
 package com.n4systems.fieldid.api.pub.resources;
 
-import com.n4systems.fieldid.api.pub.serialization.ListResponse;
+
+import com.google.protobuf.Extension;
+import com.n4systems.fieldid.api.pub.serialization.ListResponseMessage;
 import com.n4systems.fieldid.service.CrudService;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.PublicIdEncoder;
 import com.n4systems.model.parents.AbstractEntity;
-import com.squareup.wire.Extension;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.ws.rs.*;
@@ -13,6 +14,8 @@ import javax.ws.rs.core.MediaType;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+
+import static com.n4systems.fieldid.api.pub.serialization.ListResponseMessage.ListResponse;
 
 public abstract class CrudResource<M extends AbstractEntity, A> extends FieldIdPersistenceService {
 
@@ -44,12 +47,12 @@ public abstract class CrudResource<M extends AbstractEntity, A> extends FieldIdP
 				.map(this::marshal)
 				.collect(Collectors.toList());
 
-		return new ListResponse.Builder()
-				.page(page)
-				.pageSize(pageSize)
-				.total(crudService().count())
-				.setExtension(listResponseType(), items)
-				.build();
+        return ListResponse.newBuilder()
+                .setPageSize(pageSize)
+                .setPage(page)
+                .setTotal(crudService().count())
+                .setExtension(listResponseType(), items)
+                .build();
 	}
 
 	@GET
