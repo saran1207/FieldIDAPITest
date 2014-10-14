@@ -179,11 +179,17 @@ public class GoogleProtobufMessageBodyWriter implements MessageBodyWriter<Messag
 
         public NormalizedMessageField(Descriptors.FieldDescriptor fieldDescriptor, Object value) {
             this.value = value;
+
             name = fieldDescriptor.getName();
             type = fieldDescriptor.getJavaType();
             repeated = List.class.isAssignableFrom(value.getClass());
             if(type == Descriptors.FieldDescriptor.JavaType.MESSAGE) {
                 messageDescriptor = fieldDescriptor.getMessageType();
+            }
+
+            for(Map.Entry<Descriptors.FieldDescriptor, Object> opt : fieldDescriptor.getOptions().getAllFields().entrySet()) {
+                if(opt.getKey().getName().equals("serialized_name"))
+                    name = (String)opt.getValue();
             }
 
         }
