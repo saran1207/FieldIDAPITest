@@ -3,6 +3,7 @@ package com.n4systems.model.tenant;
 import com.google.common.collect.Lists;
 import com.n4systems.model.parents.EntityWithTenant;
 import com.n4systems.model.security.AccountPolicy;
+import com.n4systems.model.security.KeyPair;
 import com.n4systems.model.security.PasswordPolicy;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
@@ -57,6 +58,16 @@ public class TenantSettings extends EntityWithTenant {
 
     @Column(name="default_language")
     private Locale defaultLanguage;
+
+	@Column(name="public_api_enabled")
+	private boolean publicApiEnabled;
+
+	@Embedded
+	@AttributeOverrides({
+		@AttributeOverride(name = "key", column = @Column(name = "consumer_key")),
+		@AttributeOverride(name = "secret", column = @Column(name = "consumer_secret"))
+	})
+	private KeyPair authConsumer = new KeyPair();
 
     public boolean isSecondaryOrgsEnabled() {
 		return secondaryOrgsEnabled;
@@ -179,4 +190,32 @@ public class TenantSettings extends EntityWithTenant {
     public void setLotoEnabled(Boolean lotoEnabled) {
         this.lotoEnabled = lotoEnabled;
     }
+
+	public Boolean getGpsCapture() {
+		return gpsCapture;
+	}
+
+	public Boolean getInspectionsEnabled() {
+		return inspectionsEnabled;
+	}
+
+	public Boolean getLotoEnabled() {
+		return lotoEnabled;
+	}
+
+	public boolean isPublicApiEnabled() {
+		return publicApiEnabled;
+	}
+
+	public void setPublicApiEnabled(boolean publicApiEnabled) {
+		this.publicApiEnabled = publicApiEnabled;
+	}
+
+	public KeyPair getAuthConsumer() {
+		return authConsumer;
+	}
+
+	public void setAuthConsumer(KeyPair authConsumer) {
+		this.authConsumer = authConsumer;
+	}
 }

@@ -2,12 +2,6 @@ package com.n4systems.fieldid.service;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.user.UserGroupService;
-import org.springframework.beans.BeansException;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Service;
-
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.security.UserSecurityFilter;
@@ -15,6 +9,11 @@ import com.n4systems.model.user.User;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.util.persistence.QueryBuilder;
 import com.n4systems.util.persistence.WhereClauseFactory;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 
@@ -35,22 +34,27 @@ public class SecurityContextInitializer implements ApplicationContextAware {
 		
 		PersistenceService persistenceService = getPersistenceService();
 		User user = persistenceService.find(builder);
-		
 		if (user == null) {
 			throw new SecurityException("No user for authKey [" + userAuthKey + "]");
-		} else if (user.getTenant().isDisabled()) {
+		}
+
+		initSecurityContext(user);
+	}
+
+	public static void initSecurityContext(User user) {
+		if (user.getTenant().isDisabled()) {
             throw new SecurityException("Tenant [" + user.getTenant().getName() + "] is disabled");
         }
-		
+
 		SecurityContext securityContext = getSecurityContext();
 		securityContext.setTenantSecurityFilter(new TenantOnlySecurityFilter(user.getTenant().getId()));
 		securityContext.setUserSecurityFilter(new UserSecurityFilter(user));
 
-        Collection<User> visibleUsers = applicationContext.getBean(UserGroupService.class).findUsersVisibleTo(user);
-        ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
-        ThreadLocalInteractionContext.getInstance().setVisibleUsers(visibleUsers);
+		Collection<User> visibleUsers = applicationContext.getBean(UserGroupService.class).findUsersVisibleTo(user);
+		ThreadLocalInteractionContext.getInstance().setCurrentUser(user);
+		ThreadLocalInteractionContext.getInstance().setVisibleUsers(visibleUsers);
 	}
-	
+
 	public static void resetSecurityContext() {
 		SecurityContext securityContext = getSecurityContext();
 		securityContext.reset();

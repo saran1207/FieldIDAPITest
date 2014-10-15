@@ -1,0 +1,1 @@
+ALTER TABLE `request_log` CHANGE `consumer_secret` `token_key` CHAR(32) NOT NULL;
