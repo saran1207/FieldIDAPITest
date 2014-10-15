@@ -1,5 +1,6 @@
 package com.n4systems.fieldid.api.pub.resources.test;
 
+import com.n4systems.fieldid.api.pub.serialization.AssetMessage;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,13 @@ public class TestResource extends FieldIdPersistenceService {
 		}
 		return "" + authService.exceededRequestLimit(consumerKey, tokenKey, 3);
 	}
+
+    @POST
+    @Consumes("application/json")
+    @Path("test_object")
+    public String test_object(AssetMessage.Asset asset) {
+        return Integer.toString(asset.getId());
+    }
 
 
 
