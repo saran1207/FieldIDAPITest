@@ -8,10 +8,10 @@ public final class PluginProtos {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface CodeGeneratorRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:google.protobuf.compiler.CodeGeneratorRequest)
-      com.google.protobuf.MessageOrBuilder {
+  public interface CodeGeneratorRequestOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
 
+    // repeated string file_to_generate = 1;
     /**
      * <code>repeated string file_to_generate = 1;</code>
      *
@@ -21,8 +21,8 @@ public final class PluginProtos {
      * descriptor will be included in proto_file, below.
      * </pre>
      */
-    com.google.protobuf.ProtocolStringList
-        getFileToGenerateList();
+    java.util.List<java.lang.String>
+    getFileToGenerateList();
     /**
      * <code>repeated string file_to_generate = 1;</code>
      *
@@ -55,6 +55,7 @@ public final class PluginProtos {
     com.google.protobuf.ByteString
         getFileToGenerateBytes(int index);
 
+    // optional string parameter = 2;
     /**
      * <code>optional string parameter = 2;</code>
      *
@@ -81,6 +82,7 @@ public final class PluginProtos {
     com.google.protobuf.ByteString
         getParameterBytes();
 
+    // repeated .google.protobuf.FileDescriptorProto proto_file = 15;
     /**
      * <code>repeated .google.protobuf.FileDescriptorProto proto_file = 15;</code>
      *
@@ -88,6 +90,7 @@ public final class PluginProtos {
      * FileDescriptorProtos for all files in files_to_generate and everything
      * they import.  The files will appear in topological order, so each file
      * appears before any file that imports it.
+     *
      * protoc guarantees that all proto_files will be written after
      * the fields above, even though this is not technically guaranteed by the
      * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -106,6 +109,7 @@ public final class PluginProtos {
      * FileDescriptorProtos for all files in files_to_generate and everything
      * they import.  The files will appear in topological order, so each file
      * appears before any file that imports it.
+     *
      * protoc guarantees that all proto_files will be written after
      * the fields above, even though this is not technically guaranteed by the
      * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -123,6 +127,7 @@ public final class PluginProtos {
      * FileDescriptorProtos for all files in files_to_generate and everything
      * they import.  The files will appear in topological order, so each file
      * appears before any file that imports it.
+     *
      * protoc guarantees that all proto_files will be written after
      * the fields above, even though this is not technically guaranteed by the
      * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -140,6 +145,7 @@ public final class PluginProtos {
      * FileDescriptorProtos for all files in files_to_generate and everything
      * they import.  The files will appear in topological order, so each file
      * appears before any file that imports it.
+     *
      * protoc guarantees that all proto_files will be written after
      * the fields above, even though this is not technically guaranteed by the
      * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -158,6 +164,7 @@ public final class PluginProtos {
      * FileDescriptorProtos for all files in files_to_generate and everything
      * they import.  The files will appear in topological order, so each file
      * appears before any file that imports it.
+     *
      * protoc guarantees that all proto_files will be written after
      * the fields above, even though this is not technically guaranteed by the
      * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -178,9 +185,8 @@ public final class PluginProtos {
    * </pre>
    */
   public static final class CodeGeneratorRequest extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:google.protobuf.compiler.CodeGeneratorRequest)
-      CodeGeneratorRequestOrBuilder {
+      com.google.protobuf.GeneratedMessage
+      implements CodeGeneratorRequestOrBuilder {
     // Use CodeGeneratorRequest.newBuilder() to construct.
     private CodeGeneratorRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -227,18 +233,16 @@ public final class PluginProtos {
               break;
             }
             case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
                 fileToGenerate_ = new com.google.protobuf.LazyStringArrayList();
                 mutable_bitField0_ |= 0x00000001;
               }
-              fileToGenerate_.add(bs);
+              fileToGenerate_.add(input.readBytes());
               break;
             }
             case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              parameter_ = bs;
+              parameter_ = input.readBytes();
               break;
             }
             case 122: {
@@ -258,7 +262,7 @@ public final class PluginProtos {
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          fileToGenerate_ = fileToGenerate_.getUnmodifiableView();
+          fileToGenerate_ = new com.google.protobuf.UnmodifiableLazyStringList(fileToGenerate_);
         }
         if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
           protoFile_ = java.util.Collections.unmodifiableList(protoFile_);
@@ -295,6 +299,7 @@ public final class PluginProtos {
     }
 
     private int bitField0_;
+    // repeated string file_to_generate = 1;
     public static final int FILE_TO_GENERATE_FIELD_NUMBER = 1;
     private com.google.protobuf.LazyStringList fileToGenerate_;
     /**
@@ -306,7 +311,7 @@ public final class PluginProtos {
      * descriptor will be included in proto_file, below.
      * </pre>
      */
-    public com.google.protobuf.ProtocolStringList
+    public java.util.List<java.lang.String>
         getFileToGenerateList() {
       return fileToGenerate_;
     }
@@ -348,6 +353,7 @@ public final class PluginProtos {
       return fileToGenerate_.getByteString(index);
     }
 
+    // optional string parameter = 2;
     public static final int PARAMETER_FIELD_NUMBER = 2;
     private java.lang.Object parameter_;
     /**
@@ -402,6 +408,7 @@ public final class PluginProtos {
       }
     }
 
+    // repeated .google.protobuf.FileDescriptorProto proto_file = 15;
     public static final int PROTO_FILE_FIELD_NUMBER = 15;
     private java.util.List<com.google.protobuf.DescriptorProtos.FileDescriptorProto> protoFile_;
     /**
@@ -411,6 +418,7 @@ public final class PluginProtos {
      * FileDescriptorProtos for all files in files_to_generate and everything
      * they import.  The files will appear in topological order, so each file
      * appears before any file that imports it.
+     *
      * protoc guarantees that all proto_files will be written after
      * the fields above, even though this is not technically guaranteed by the
      * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -430,6 +438,7 @@ public final class PluginProtos {
      * FileDescriptorProtos for all files in files_to_generate and everything
      * they import.  The files will appear in topological order, so each file
      * appears before any file that imports it.
+     *
      * protoc guarantees that all proto_files will be written after
      * the fields above, even though this is not technically guaranteed by the
      * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -450,6 +459,7 @@ public final class PluginProtos {
      * FileDescriptorProtos for all files in files_to_generate and everything
      * they import.  The files will appear in topological order, so each file
      * appears before any file that imports it.
+     *
      * protoc guarantees that all proto_files will be written after
      * the fields above, even though this is not technically guaranteed by the
      * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -469,6 +479,7 @@ public final class PluginProtos {
      * FileDescriptorProtos for all files in files_to_generate and everything
      * they import.  The files will appear in topological order, so each file
      * appears before any file that imports it.
+     *
      * protoc guarantees that all proto_files will be written after
      * the fields above, even though this is not technically guaranteed by the
      * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -488,6 +499,7 @@ public final class PluginProtos {
      * FileDescriptorProtos for all files in files_to_generate and everything
      * they import.  The files will appear in topological order, so each file
      * appears before any file that imports it.
+     *
      * protoc guarantees that all proto_files will be written after
      * the fields above, even though this is not technically guaranteed by the
      * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -510,8 +522,7 @@ public final class PluginProtos {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       for (int i = 0; i < getProtoFileCount(); i++) {
         if (!getProtoFile(i).isInitialized()) {
@@ -647,9 +658,8 @@ public final class PluginProtos {
      * </pre>
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:google.protobuf.compiler.CodeGeneratorRequest)
-        com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequestOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.google.protobuf.compiler.PluginProtos.CodeGeneratorRequestOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.google.protobuf.compiler.PluginProtos.internal_static_google_protobuf_compiler_CodeGeneratorRequest_descriptor;
@@ -722,7 +732,8 @@ public final class PluginProtos {
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          fileToGenerate_ = fileToGenerate_.getUnmodifiableView();
+          fileToGenerate_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              fileToGenerate_);
           bitField0_ = (bitField0_ & ~0x00000001);
         }
         result.fileToGenerate_ = fileToGenerate_;
@@ -829,6 +840,7 @@ public final class PluginProtos {
       }
       private int bitField0_;
 
+      // repeated string file_to_generate = 1;
       private com.google.protobuf.LazyStringList fileToGenerate_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureFileToGenerateIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
@@ -845,9 +857,9 @@ public final class PluginProtos {
        * descriptor will be included in proto_file, below.
        * </pre>
        */
-      public com.google.protobuf.ProtocolStringList
+      public java.util.List<java.lang.String>
           getFileToGenerateList() {
-        return fileToGenerate_.getUnmodifiableView();
+        return java.util.Collections.unmodifiableList(fileToGenerate_);
       }
       /**
        * <code>repeated string file_to_generate = 1;</code>
@@ -936,8 +948,7 @@ public final class PluginProtos {
       public Builder addAllFileToGenerate(
           java.lang.Iterable<java.lang.String> values) {
         ensureFileToGenerateIsMutable();
-        com.google.protobuf.AbstractMessageLite.Builder.addAll(
-            values, fileToGenerate_);
+        super.addAll(values, fileToGenerate_);
         onChanged();
         return this;
       }
@@ -976,6 +987,7 @@ public final class PluginProtos {
         return this;
       }
 
+      // optional string parameter = 2;
       private java.lang.Object parameter_ = "";
       /**
        * <code>optional string parameter = 2;</code>
@@ -997,12 +1009,9 @@ public final class PluginProtos {
       public java.lang.String getParameter() {
         java.lang.Object ref = parameter_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            parameter_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          parameter_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -1076,6 +1085,7 @@ public final class PluginProtos {
         return this;
       }
 
+      // repeated .google.protobuf.FileDescriptorProto proto_file = 15;
       private java.util.List<com.google.protobuf.DescriptorProtos.FileDescriptorProto> protoFile_ =
         java.util.Collections.emptyList();
       private void ensureProtoFileIsMutable() {
@@ -1095,6 +1105,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1118,6 +1129,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1141,6 +1153,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1164,6 +1177,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1194,6 +1208,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1221,6 +1236,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1250,6 +1266,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1280,6 +1297,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1307,6 +1325,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1334,6 +1353,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1347,8 +1367,7 @@ public final class PluginProtos {
           java.lang.Iterable<? extends com.google.protobuf.DescriptorProtos.FileDescriptorProto> values) {
         if (protoFileBuilder_ == null) {
           ensureProtoFileIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, protoFile_);
+          super.addAll(values, protoFile_);
           onChanged();
         } else {
           protoFileBuilder_.addAllMessages(values);
@@ -1362,6 +1381,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1388,6 +1408,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1414,6 +1435,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1434,6 +1456,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1457,6 +1480,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1481,6 +1505,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1501,6 +1526,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1522,6 +1548,7 @@ public final class PluginProtos {
        * FileDescriptorProtos for all files in files_to_generate and everything
        * they import.  The files will appear in topological order, so each file
        * appears before any file that imports it.
+       *
        * protoc guarantees that all proto_files will be written after
        * the fields above, even though this is not technically guaranteed by the
        * protobuf wire format.  This theoretically could allow a plugin to stream
@@ -1561,16 +1588,17 @@ public final class PluginProtos {
     // @@protoc_insertion_point(class_scope:google.protobuf.compiler.CodeGeneratorRequest)
   }
 
-  public interface CodeGeneratorResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:google.protobuf.compiler.CodeGeneratorResponse)
-      com.google.protobuf.MessageOrBuilder {
+  public interface CodeGeneratorResponseOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
 
+    // optional string error = 1;
     /**
      * <code>optional string error = 1;</code>
      *
      * <pre>
      * Error message.  If non-empty, code generation failed.  The plugin process
      * should exit with status code zero even if it reports an error in this way.
+     *
      * This should be used to indicate errors in .proto files which prevent the
      * code generator from generating correct code.  Errors which indicate a
      * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -1585,6 +1613,7 @@ public final class PluginProtos {
      * <pre>
      * Error message.  If non-empty, code generation failed.  The plugin process
      * should exit with status code zero even if it reports an error in this way.
+     *
      * This should be used to indicate errors in .proto files which prevent the
      * code generator from generating correct code.  Errors which indicate a
      * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -1599,6 +1628,7 @@ public final class PluginProtos {
      * <pre>
      * Error message.  If non-empty, code generation failed.  The plugin process
      * should exit with status code zero even if it reports an error in this way.
+     *
      * This should be used to indicate errors in .proto files which prevent the
      * code generator from generating correct code.  Errors which indicate a
      * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -1609,6 +1639,7 @@ public final class PluginProtos {
     com.google.protobuf.ByteString
         getErrorBytes();
 
+    // repeated .google.protobuf.compiler.CodeGeneratorResponse.File file = 15;
     /**
      * <code>repeated .google.protobuf.compiler.CodeGeneratorResponse.File file = 15;</code>
      */
@@ -1641,9 +1672,8 @@ public final class PluginProtos {
    * </pre>
    */
   public static final class CodeGeneratorResponse extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:google.protobuf.compiler.CodeGeneratorResponse)
-      CodeGeneratorResponseOrBuilder {
+      com.google.protobuf.GeneratedMessage
+      implements CodeGeneratorResponseOrBuilder {
     // Use CodeGeneratorResponse.newBuilder() to construct.
     private CodeGeneratorResponse(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -1690,9 +1720,8 @@ public final class PluginProtos {
               break;
             }
             case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              error_ = bs;
+              error_ = input.readBytes();
               break;
             }
             case 122: {
@@ -1745,10 +1774,10 @@ public final class PluginProtos {
       return PARSER;
     }
 
-    public interface FileOrBuilder extends
-        // @@protoc_insertion_point(interface_extends:google.protobuf.compiler.CodeGeneratorResponse.File)
-        com.google.protobuf.MessageOrBuilder {
+    public interface FileOrBuilder
+        extends com.google.protobuf.MessageOrBuilder {
 
+      // optional string name = 1;
       /**
        * <code>optional string name = 1;</code>
        *
@@ -1757,6 +1786,7 @@ public final class PluginProtos {
        * contain "." or ".." components and must be relative, not be absolute (so,
        * the file cannot lie outside the output directory).  "/" must be used as
        * the path separator, not "&#92;".
+       *
        * If the name is omitted, the content will be appended to the previous
        * file.  This allows the generator to break large files into small chunks,
        * and allows the generated text to be streamed back to protoc so that large
@@ -1774,6 +1804,7 @@ public final class PluginProtos {
        * contain "." or ".." components and must be relative, not be absolute (so,
        * the file cannot lie outside the output directory).  "/" must be used as
        * the path separator, not "&#92;".
+       *
        * If the name is omitted, the content will be appended to the previous
        * file.  This allows the generator to break large files into small chunks,
        * and allows the generated text to be streamed back to protoc so that large
@@ -1791,6 +1822,7 @@ public final class PluginProtos {
        * contain "." or ".." components and must be relative, not be absolute (so,
        * the file cannot lie outside the output directory).  "/" must be used as
        * the path separator, not "&#92;".
+       *
        * If the name is omitted, the content will be appended to the previous
        * file.  This allows the generator to break large files into small chunks,
        * and allows the generated text to be streamed back to protoc so that large
@@ -1802,6 +1834,7 @@ public final class PluginProtos {
       com.google.protobuf.ByteString
           getNameBytes();
 
+      // optional string insertion_point = 2;
       /**
        * <code>optional string insertion_point = 2;</code>
        *
@@ -1812,32 +1845,36 @@ public final class PluginProtos {
        * produced by another code generator.  The original generator may provide
        * insertion points by placing special annotations in the file that look
        * like:
-       *   &#64;&#64;protoc_insertion_point(NAME)
+       *   @@protoc_insertion_point(NAME)
        * The annotation can have arbitrary text before and after it on the line,
        * which allows it to be placed in a comment.  NAME should be replaced with
        * an identifier naming the point -- this is what other generators will use
        * as the insertion_point.  Code inserted at this point will be placed
        * immediately above the line containing the insertion point (thus multiple
        * insertions to the same point will come out in the order they were added).
-       * The double-&#64; is intended to make it unlikely that the generated code
+       * The double-@ is intended to make it unlikely that the generated code
        * could contain things that look like insertion points by accident.
+       *
        * For example, the C++ code generator places the following line in the
        * .pb.h files that it generates:
-       *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+       *   // @@protoc_insertion_point(namespace_scope)
        * This line appears within the scope of the file's package namespace, but
        * outside of any particular class.  Another plugin can then specify the
        * insertion_point "namespace_scope" to generate additional classes or
        * other declarations that should be placed in this scope.
+       *
        * Note that if the line containing the insertion point begins with
        * whitespace, the same whitespace will be added to every line of the
        * inserted text.  This is useful for languages like Python, where
        * indentation matters.  In these languages, the insertion point comment
        * should be indented the same amount as any inserted code will need to be
        * in order to work correctly in that context.
+       *
        * The code generator that generates the initial file and the one which
        * inserts into it must both run as part of a single invocation of protoc.
        * Code generators are executed in the order in which they appear on the
        * command line.
+       *
        * If |insertion_point| is present, |name| must also be present.
        * </pre>
        */
@@ -1852,32 +1889,36 @@ public final class PluginProtos {
        * produced by another code generator.  The original generator may provide
        * insertion points by placing special annotations in the file that look
        * like:
-       *   &#64;&#64;protoc_insertion_point(NAME)
+       *   @@protoc_insertion_point(NAME)
        * The annotation can have arbitrary text before and after it on the line,
        * which allows it to be placed in a comment.  NAME should be replaced with
        * an identifier naming the point -- this is what other generators will use
        * as the insertion_point.  Code inserted at this point will be placed
        * immediately above the line containing the insertion point (thus multiple
        * insertions to the same point will come out in the order they were added).
-       * The double-&#64; is intended to make it unlikely that the generated code
+       * The double-@ is intended to make it unlikely that the generated code
        * could contain things that look like insertion points by accident.
+       *
        * For example, the C++ code generator places the following line in the
        * .pb.h files that it generates:
-       *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+       *   // @@protoc_insertion_point(namespace_scope)
        * This line appears within the scope of the file's package namespace, but
        * outside of any particular class.  Another plugin can then specify the
        * insertion_point "namespace_scope" to generate additional classes or
        * other declarations that should be placed in this scope.
+       *
        * Note that if the line containing the insertion point begins with
        * whitespace, the same whitespace will be added to every line of the
        * inserted text.  This is useful for languages like Python, where
        * indentation matters.  In these languages, the insertion point comment
        * should be indented the same amount as any inserted code will need to be
        * in order to work correctly in that context.
+       *
        * The code generator that generates the initial file and the one which
        * inserts into it must both run as part of a single invocation of protoc.
        * Code generators are executed in the order in which they appear on the
        * command line.
+       *
        * If |insertion_point| is present, |name| must also be present.
        * </pre>
        */
@@ -1892,38 +1933,43 @@ public final class PluginProtos {
        * produced by another code generator.  The original generator may provide
        * insertion points by placing special annotations in the file that look
        * like:
-       *   &#64;&#64;protoc_insertion_point(NAME)
+       *   @@protoc_insertion_point(NAME)
        * The annotation can have arbitrary text before and after it on the line,
        * which allows it to be placed in a comment.  NAME should be replaced with
        * an identifier naming the point -- this is what other generators will use
        * as the insertion_point.  Code inserted at this point will be placed
        * immediately above the line containing the insertion point (thus multiple
        * insertions to the same point will come out in the order they were added).
-       * The double-&#64; is intended to make it unlikely that the generated code
+       * The double-@ is intended to make it unlikely that the generated code
        * could contain things that look like insertion points by accident.
+       *
        * For example, the C++ code generator places the following line in the
        * .pb.h files that it generates:
-       *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+       *   // @@protoc_insertion_point(namespace_scope)
        * This line appears within the scope of the file's package namespace, but
        * outside of any particular class.  Another plugin can then specify the
        * insertion_point "namespace_scope" to generate additional classes or
        * other declarations that should be placed in this scope.
+       *
        * Note that if the line containing the insertion point begins with
        * whitespace, the same whitespace will be added to every line of the
        * inserted text.  This is useful for languages like Python, where
        * indentation matters.  In these languages, the insertion point comment
        * should be indented the same amount as any inserted code will need to be
        * in order to work correctly in that context.
+       *
        * The code generator that generates the initial file and the one which
        * inserts into it must both run as part of a single invocation of protoc.
        * Code generators are executed in the order in which they appear on the
        * command line.
+       *
        * If |insertion_point| is present, |name| must also be present.
        * </pre>
        */
       com.google.protobuf.ByteString
           getInsertionPointBytes();
 
+      // optional string content = 15;
       /**
        * <code>optional string content = 15;</code>
        *
@@ -1958,9 +2004,8 @@ public final class PluginProtos {
      * </pre>
      */
     public static final class File extends
-        com.google.protobuf.GeneratedMessage implements
-        // @@protoc_insertion_point(message_implements:google.protobuf.compiler.CodeGeneratorResponse.File)
-        FileOrBuilder {
+        com.google.protobuf.GeneratedMessage
+        implements FileOrBuilder {
       // Use File.newBuilder() to construct.
       private File(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
         super(builder);
@@ -2007,21 +2052,18 @@ public final class PluginProtos {
                 break;
               }
               case 10: {
-                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000001;
-                name_ = bs;
+                name_ = input.readBytes();
                 break;
               }
               case 18: {
-                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000002;
-                insertionPoint_ = bs;
+                insertionPoint_ = input.readBytes();
                 break;
               }
               case 122: {
-                com.google.protobuf.ByteString bs = input.readBytes();
                 bitField0_ |= 0x00000004;
-                content_ = bs;
+                content_ = input.readBytes();
                 break;
               }
             }
@@ -2064,6 +2106,7 @@ public final class PluginProtos {
       }
 
       private int bitField0_;
+      // optional string name = 1;
       public static final int NAME_FIELD_NUMBER = 1;
       private java.lang.Object name_;
       /**
@@ -2074,6 +2117,7 @@ public final class PluginProtos {
        * contain "." or ".." components and must be relative, not be absolute (so,
        * the file cannot lie outside the output directory).  "/" must be used as
        * the path separator, not "&#92;".
+       *
        * If the name is omitted, the content will be appended to the previous
        * file.  This allows the generator to break large files into small chunks,
        * and allows the generated text to be streamed back to protoc so that large
@@ -2093,6 +2137,7 @@ public final class PluginProtos {
        * contain "." or ".." components and must be relative, not be absolute (so,
        * the file cannot lie outside the output directory).  "/" must be used as
        * the path separator, not "&#92;".
+       *
        * If the name is omitted, the content will be appended to the previous
        * file.  This allows the generator to break large files into small chunks,
        * and allows the generated text to be streamed back to protoc so that large
@@ -2123,6 +2168,7 @@ public final class PluginProtos {
        * contain "." or ".." components and must be relative, not be absolute (so,
        * the file cannot lie outside the output directory).  "/" must be used as
        * the path separator, not "&#92;".
+       *
        * If the name is omitted, the content will be appended to the previous
        * file.  This allows the generator to break large files into small chunks,
        * and allows the generated text to be streamed back to protoc so that large
@@ -2145,6 +2191,7 @@ public final class PluginProtos {
         }
       }
 
+      // optional string insertion_point = 2;
       public static final int INSERTION_POINT_FIELD_NUMBER = 2;
       private java.lang.Object insertionPoint_;
       /**
@@ -2157,32 +2204,36 @@ public final class PluginProtos {
        * produced by another code generator.  The original generator may provide
        * insertion points by placing special annotations in the file that look
        * like:
-       *   &#64;&#64;protoc_insertion_point(NAME)
+       *   @@protoc_insertion_point(NAME)
        * The annotation can have arbitrary text before and after it on the line,
        * which allows it to be placed in a comment.  NAME should be replaced with
        * an identifier naming the point -- this is what other generators will use
        * as the insertion_point.  Code inserted at this point will be placed
        * immediately above the line containing the insertion point (thus multiple
        * insertions to the same point will come out in the order they were added).
-       * The double-&#64; is intended to make it unlikely that the generated code
+       * The double-@ is intended to make it unlikely that the generated code
        * could contain things that look like insertion points by accident.
+       *
        * For example, the C++ code generator places the following line in the
        * .pb.h files that it generates:
-       *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+       *   // @@protoc_insertion_point(namespace_scope)
        * This line appears within the scope of the file's package namespace, but
        * outside of any particular class.  Another plugin can then specify the
        * insertion_point "namespace_scope" to generate additional classes or
        * other declarations that should be placed in this scope.
+       *
        * Note that if the line containing the insertion point begins with
        * whitespace, the same whitespace will be added to every line of the
        * inserted text.  This is useful for languages like Python, where
        * indentation matters.  In these languages, the insertion point comment
        * should be indented the same amount as any inserted code will need to be
        * in order to work correctly in that context.
+       *
        * The code generator that generates the initial file and the one which
        * inserts into it must both run as part of a single invocation of protoc.
        * Code generators are executed in the order in which they appear on the
        * command line.
+       *
        * If |insertion_point| is present, |name| must also be present.
        * </pre>
        */
@@ -2199,32 +2250,36 @@ public final class PluginProtos {
        * produced by another code generator.  The original generator may provide
        * insertion points by placing special annotations in the file that look
        * like:
-       *   &#64;&#64;protoc_insertion_point(NAME)
+       *   @@protoc_insertion_point(NAME)
        * The annotation can have arbitrary text before and after it on the line,
        * which allows it to be placed in a comment.  NAME should be replaced with
        * an identifier naming the point -- this is what other generators will use
        * as the insertion_point.  Code inserted at this point will be placed
        * immediately above the line containing the insertion point (thus multiple
        * insertions to the same point will come out in the order they were added).
-       * The double-&#64; is intended to make it unlikely that the generated code
+       * The double-@ is intended to make it unlikely that the generated code
        * could contain things that look like insertion points by accident.
+       *
        * For example, the C++ code generator places the following line in the
        * .pb.h files that it generates:
-       *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+       *   // @@protoc_insertion_point(namespace_scope)
        * This line appears within the scope of the file's package namespace, but
        * outside of any particular class.  Another plugin can then specify the
        * insertion_point "namespace_scope" to generate additional classes or
        * other declarations that should be placed in this scope.
+       *
        * Note that if the line containing the insertion point begins with
        * whitespace, the same whitespace will be added to every line of the
        * inserted text.  This is useful for languages like Python, where
        * indentation matters.  In these languages, the insertion point comment
        * should be indented the same amount as any inserted code will need to be
        * in order to work correctly in that context.
+       *
        * The code generator that generates the initial file and the one which
        * inserts into it must both run as part of a single invocation of protoc.
        * Code generators are executed in the order in which they appear on the
        * command line.
+       *
        * If |insertion_point| is present, |name| must also be present.
        * </pre>
        */
@@ -2252,32 +2307,36 @@ public final class PluginProtos {
        * produced by another code generator.  The original generator may provide
        * insertion points by placing special annotations in the file that look
        * like:
-       *   &#64;&#64;protoc_insertion_point(NAME)
+       *   @@protoc_insertion_point(NAME)
        * The annotation can have arbitrary text before and after it on the line,
        * which allows it to be placed in a comment.  NAME should be replaced with
        * an identifier naming the point -- this is what other generators will use
        * as the insertion_point.  Code inserted at this point will be placed
        * immediately above the line containing the insertion point (thus multiple
        * insertions to the same point will come out in the order they were added).
-       * The double-&#64; is intended to make it unlikely that the generated code
+       * The double-@ is intended to make it unlikely that the generated code
        * could contain things that look like insertion points by accident.
+       *
        * For example, the C++ code generator places the following line in the
        * .pb.h files that it generates:
-       *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+       *   // @@protoc_insertion_point(namespace_scope)
        * This line appears within the scope of the file's package namespace, but
        * outside of any particular class.  Another plugin can then specify the
        * insertion_point "namespace_scope" to generate additional classes or
        * other declarations that should be placed in this scope.
+       *
        * Note that if the line containing the insertion point begins with
        * whitespace, the same whitespace will be added to every line of the
        * inserted text.  This is useful for languages like Python, where
        * indentation matters.  In these languages, the insertion point comment
        * should be indented the same amount as any inserted code will need to be
        * in order to work correctly in that context.
+       *
        * The code generator that generates the initial file and the one which
        * inserts into it must both run as part of a single invocation of protoc.
        * Code generators are executed in the order in which they appear on the
        * command line.
+       *
        * If |insertion_point| is present, |name| must also be present.
        * </pre>
        */
@@ -2295,6 +2354,7 @@ public final class PluginProtos {
         }
       }
 
+      // optional string content = 15;
       public static final int CONTENT_FIELD_NUMBER = 15;
       private java.lang.Object content_;
       /**
@@ -2357,8 +2417,7 @@ public final class PluginProtos {
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
         byte isInitialized = memoizedIsInitialized;
-        if (isInitialized == 1) return true;
-        if (isInitialized == 0) return false;
+        if (isInitialized != -1) return isInitialized == 1;
 
         memoizedIsInitialized = 1;
         return true;
@@ -2483,9 +2542,8 @@ public final class PluginProtos {
        * </pre>
        */
       public static final class Builder extends
-          com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-          // @@protoc_insertion_point(builder_implements:google.protobuf.compiler.CodeGeneratorResponse.File)
-          com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.FileOrBuilder {
+          com.google.protobuf.GeneratedMessage.Builder<Builder>
+         implements com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.FileOrBuilder {
         public static final com.google.protobuf.Descriptors.Descriptor
             getDescriptor() {
           return com.google.protobuf.compiler.PluginProtos.internal_static_google_protobuf_compiler_CodeGeneratorResponse_File_descriptor;
@@ -2622,6 +2680,7 @@ public final class PluginProtos {
         }
         private int bitField0_;
 
+        // optional string name = 1;
         private java.lang.Object name_ = "";
         /**
          * <code>optional string name = 1;</code>
@@ -2631,6 +2690,7 @@ public final class PluginProtos {
          * contain "." or ".." components and must be relative, not be absolute (so,
          * the file cannot lie outside the output directory).  "/" must be used as
          * the path separator, not "&#92;".
+         *
          * If the name is omitted, the content will be appended to the previous
          * file.  This allows the generator to break large files into small chunks,
          * and allows the generated text to be streamed back to protoc so that large
@@ -2650,6 +2710,7 @@ public final class PluginProtos {
          * contain "." or ".." components and must be relative, not be absolute (so,
          * the file cannot lie outside the output directory).  "/" must be used as
          * the path separator, not "&#92;".
+         *
          * If the name is omitted, the content will be appended to the previous
          * file.  This allows the generator to break large files into small chunks,
          * and allows the generated text to be streamed back to protoc so that large
@@ -2661,12 +2722,9 @@ public final class PluginProtos {
         public java.lang.String getName() {
           java.lang.Object ref = name_;
           if (!(ref instanceof java.lang.String)) {
-            com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
-            java.lang.String s = bs.toStringUtf8();
-            if (bs.isValidUtf8()) {
-              name_ = s;
-            }
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            name_ = s;
             return s;
           } else {
             return (java.lang.String) ref;
@@ -2680,6 +2738,7 @@ public final class PluginProtos {
          * contain "." or ".." components and must be relative, not be absolute (so,
          * the file cannot lie outside the output directory).  "/" must be used as
          * the path separator, not "&#92;".
+         *
          * If the name is omitted, the content will be appended to the previous
          * file.  This allows the generator to break large files into small chunks,
          * and allows the generated text to be streamed back to protoc so that large
@@ -2709,6 +2768,7 @@ public final class PluginProtos {
          * contain "." or ".." components and must be relative, not be absolute (so,
          * the file cannot lie outside the output directory).  "/" must be used as
          * the path separator, not "&#92;".
+         *
          * If the name is omitted, the content will be appended to the previous
          * file.  This allows the generator to break large files into small chunks,
          * and allows the generated text to be streamed back to protoc so that large
@@ -2735,6 +2795,7 @@ public final class PluginProtos {
          * contain "." or ".." components and must be relative, not be absolute (so,
          * the file cannot lie outside the output directory).  "/" must be used as
          * the path separator, not "&#92;".
+         *
          * If the name is omitted, the content will be appended to the previous
          * file.  This allows the generator to break large files into small chunks,
          * and allows the generated text to be streamed back to protoc so that large
@@ -2757,6 +2818,7 @@ public final class PluginProtos {
          * contain "." or ".." components and must be relative, not be absolute (so,
          * the file cannot lie outside the output directory).  "/" must be used as
          * the path separator, not "&#92;".
+         *
          * If the name is omitted, the content will be appended to the previous
          * file.  This allows the generator to break large files into small chunks,
          * and allows the generated text to be streamed back to protoc so that large
@@ -2776,6 +2838,7 @@ public final class PluginProtos {
           return this;
         }
 
+        // optional string insertion_point = 2;
         private java.lang.Object insertionPoint_ = "";
         /**
          * <code>optional string insertion_point = 2;</code>
@@ -2787,32 +2850,36 @@ public final class PluginProtos {
          * produced by another code generator.  The original generator may provide
          * insertion points by placing special annotations in the file that look
          * like:
-         *   &#64;&#64;protoc_insertion_point(NAME)
+         *   @@protoc_insertion_point(NAME)
          * The annotation can have arbitrary text before and after it on the line,
          * which allows it to be placed in a comment.  NAME should be replaced with
          * an identifier naming the point -- this is what other generators will use
          * as the insertion_point.  Code inserted at this point will be placed
          * immediately above the line containing the insertion point (thus multiple
          * insertions to the same point will come out in the order they were added).
-         * The double-&#64; is intended to make it unlikely that the generated code
+         * The double-@ is intended to make it unlikely that the generated code
          * could contain things that look like insertion points by accident.
+         *
          * For example, the C++ code generator places the following line in the
          * .pb.h files that it generates:
-         *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+         *   // @@protoc_insertion_point(namespace_scope)
          * This line appears within the scope of the file's package namespace, but
          * outside of any particular class.  Another plugin can then specify the
          * insertion_point "namespace_scope" to generate additional classes or
          * other declarations that should be placed in this scope.
+         *
          * Note that if the line containing the insertion point begins with
          * whitespace, the same whitespace will be added to every line of the
          * inserted text.  This is useful for languages like Python, where
          * indentation matters.  In these languages, the insertion point comment
          * should be indented the same amount as any inserted code will need to be
          * in order to work correctly in that context.
+         *
          * The code generator that generates the initial file and the one which
          * inserts into it must both run as part of a single invocation of protoc.
          * Code generators are executed in the order in which they appear on the
          * command line.
+         *
          * If |insertion_point| is present, |name| must also be present.
          * </pre>
          */
@@ -2829,44 +2896,45 @@ public final class PluginProtos {
          * produced by another code generator.  The original generator may provide
          * insertion points by placing special annotations in the file that look
          * like:
-         *   &#64;&#64;protoc_insertion_point(NAME)
+         *   @@protoc_insertion_point(NAME)
          * The annotation can have arbitrary text before and after it on the line,
          * which allows it to be placed in a comment.  NAME should be replaced with
          * an identifier naming the point -- this is what other generators will use
          * as the insertion_point.  Code inserted at this point will be placed
          * immediately above the line containing the insertion point (thus multiple
          * insertions to the same point will come out in the order they were added).
-         * The double-&#64; is intended to make it unlikely that the generated code
+         * The double-@ is intended to make it unlikely that the generated code
          * could contain things that look like insertion points by accident.
+         *
          * For example, the C++ code generator places the following line in the
          * .pb.h files that it generates:
-         *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+         *   // @@protoc_insertion_point(namespace_scope)
          * This line appears within the scope of the file's package namespace, but
          * outside of any particular class.  Another plugin can then specify the
          * insertion_point "namespace_scope" to generate additional classes or
          * other declarations that should be placed in this scope.
+         *
          * Note that if the line containing the insertion point begins with
          * whitespace, the same whitespace will be added to every line of the
          * inserted text.  This is useful for languages like Python, where
          * indentation matters.  In these languages, the insertion point comment
          * should be indented the same amount as any inserted code will need to be
          * in order to work correctly in that context.
+         *
          * The code generator that generates the initial file and the one which
          * inserts into it must both run as part of a single invocation of protoc.
          * Code generators are executed in the order in which they appear on the
          * command line.
+         *
          * If |insertion_point| is present, |name| must also be present.
          * </pre>
          */
         public java.lang.String getInsertionPoint() {
           java.lang.Object ref = insertionPoint_;
           if (!(ref instanceof java.lang.String)) {
-            com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
-            java.lang.String s = bs.toStringUtf8();
-            if (bs.isValidUtf8()) {
-              insertionPoint_ = s;
-            }
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            insertionPoint_ = s;
             return s;
           } else {
             return (java.lang.String) ref;
@@ -2882,32 +2950,36 @@ public final class PluginProtos {
          * produced by another code generator.  The original generator may provide
          * insertion points by placing special annotations in the file that look
          * like:
-         *   &#64;&#64;protoc_insertion_point(NAME)
+         *   @@protoc_insertion_point(NAME)
          * The annotation can have arbitrary text before and after it on the line,
          * which allows it to be placed in a comment.  NAME should be replaced with
          * an identifier naming the point -- this is what other generators will use
          * as the insertion_point.  Code inserted at this point will be placed
          * immediately above the line containing the insertion point (thus multiple
          * insertions to the same point will come out in the order they were added).
-         * The double-&#64; is intended to make it unlikely that the generated code
+         * The double-@ is intended to make it unlikely that the generated code
          * could contain things that look like insertion points by accident.
+         *
          * For example, the C++ code generator places the following line in the
          * .pb.h files that it generates:
-         *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+         *   // @@protoc_insertion_point(namespace_scope)
          * This line appears within the scope of the file's package namespace, but
          * outside of any particular class.  Another plugin can then specify the
          * insertion_point "namespace_scope" to generate additional classes or
          * other declarations that should be placed in this scope.
+         *
          * Note that if the line containing the insertion point begins with
          * whitespace, the same whitespace will be added to every line of the
          * inserted text.  This is useful for languages like Python, where
          * indentation matters.  In these languages, the insertion point comment
          * should be indented the same amount as any inserted code will need to be
          * in order to work correctly in that context.
+         *
          * The code generator that generates the initial file and the one which
          * inserts into it must both run as part of a single invocation of protoc.
          * Code generators are executed in the order in which they appear on the
          * command line.
+         *
          * If |insertion_point| is present, |name| must also be present.
          * </pre>
          */
@@ -2934,32 +3006,36 @@ public final class PluginProtos {
          * produced by another code generator.  The original generator may provide
          * insertion points by placing special annotations in the file that look
          * like:
-         *   &#64;&#64;protoc_insertion_point(NAME)
+         *   @@protoc_insertion_point(NAME)
          * The annotation can have arbitrary text before and after it on the line,
          * which allows it to be placed in a comment.  NAME should be replaced with
          * an identifier naming the point -- this is what other generators will use
          * as the insertion_point.  Code inserted at this point will be placed
          * immediately above the line containing the insertion point (thus multiple
          * insertions to the same point will come out in the order they were added).
-         * The double-&#64; is intended to make it unlikely that the generated code
+         * The double-@ is intended to make it unlikely that the generated code
          * could contain things that look like insertion points by accident.
+         *
          * For example, the C++ code generator places the following line in the
          * .pb.h files that it generates:
-         *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+         *   // @@protoc_insertion_point(namespace_scope)
          * This line appears within the scope of the file's package namespace, but
          * outside of any particular class.  Another plugin can then specify the
          * insertion_point "namespace_scope" to generate additional classes or
          * other declarations that should be placed in this scope.
+         *
          * Note that if the line containing the insertion point begins with
          * whitespace, the same whitespace will be added to every line of the
          * inserted text.  This is useful for languages like Python, where
          * indentation matters.  In these languages, the insertion point comment
          * should be indented the same amount as any inserted code will need to be
          * in order to work correctly in that context.
+         *
          * The code generator that generates the initial file and the one which
          * inserts into it must both run as part of a single invocation of protoc.
          * Code generators are executed in the order in which they appear on the
          * command line.
+         *
          * If |insertion_point| is present, |name| must also be present.
          * </pre>
          */
@@ -2983,32 +3059,36 @@ public final class PluginProtos {
          * produced by another code generator.  The original generator may provide
          * insertion points by placing special annotations in the file that look
          * like:
-         *   &#64;&#64;protoc_insertion_point(NAME)
+         *   @@protoc_insertion_point(NAME)
          * The annotation can have arbitrary text before and after it on the line,
          * which allows it to be placed in a comment.  NAME should be replaced with
          * an identifier naming the point -- this is what other generators will use
          * as the insertion_point.  Code inserted at this point will be placed
          * immediately above the line containing the insertion point (thus multiple
          * insertions to the same point will come out in the order they were added).
-         * The double-&#64; is intended to make it unlikely that the generated code
+         * The double-@ is intended to make it unlikely that the generated code
          * could contain things that look like insertion points by accident.
+         *
          * For example, the C++ code generator places the following line in the
          * .pb.h files that it generates:
-         *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+         *   // @@protoc_insertion_point(namespace_scope)
          * This line appears within the scope of the file's package namespace, but
          * outside of any particular class.  Another plugin can then specify the
          * insertion_point "namespace_scope" to generate additional classes or
          * other declarations that should be placed in this scope.
+         *
          * Note that if the line containing the insertion point begins with
          * whitespace, the same whitespace will be added to every line of the
          * inserted text.  This is useful for languages like Python, where
          * indentation matters.  In these languages, the insertion point comment
          * should be indented the same amount as any inserted code will need to be
          * in order to work correctly in that context.
+         *
          * The code generator that generates the initial file and the one which
          * inserts into it must both run as part of a single invocation of protoc.
          * Code generators are executed in the order in which they appear on the
          * command line.
+         *
          * If |insertion_point| is present, |name| must also be present.
          * </pre>
          */
@@ -3028,32 +3108,36 @@ public final class PluginProtos {
          * produced by another code generator.  The original generator may provide
          * insertion points by placing special annotations in the file that look
          * like:
-         *   &#64;&#64;protoc_insertion_point(NAME)
+         *   @@protoc_insertion_point(NAME)
          * The annotation can have arbitrary text before and after it on the line,
          * which allows it to be placed in a comment.  NAME should be replaced with
          * an identifier naming the point -- this is what other generators will use
          * as the insertion_point.  Code inserted at this point will be placed
          * immediately above the line containing the insertion point (thus multiple
          * insertions to the same point will come out in the order they were added).
-         * The double-&#64; is intended to make it unlikely that the generated code
+         * The double-@ is intended to make it unlikely that the generated code
          * could contain things that look like insertion points by accident.
+         *
          * For example, the C++ code generator places the following line in the
          * .pb.h files that it generates:
-         *   // &#64;&#64;protoc_insertion_point(namespace_scope)
+         *   // @@protoc_insertion_point(namespace_scope)
          * This line appears within the scope of the file's package namespace, but
          * outside of any particular class.  Another plugin can then specify the
          * insertion_point "namespace_scope" to generate additional classes or
          * other declarations that should be placed in this scope.
+         *
          * Note that if the line containing the insertion point begins with
          * whitespace, the same whitespace will be added to every line of the
          * inserted text.  This is useful for languages like Python, where
          * indentation matters.  In these languages, the insertion point comment
          * should be indented the same amount as any inserted code will need to be
          * in order to work correctly in that context.
+         *
          * The code generator that generates the initial file and the one which
          * inserts into it must both run as part of a single invocation of protoc.
          * Code generators are executed in the order in which they appear on the
          * command line.
+         *
          * If |insertion_point| is present, |name| must also be present.
          * </pre>
          */
@@ -3068,6 +3152,7 @@ public final class PluginProtos {
           return this;
         }
 
+        // optional string content = 15;
         private java.lang.Object content_ = "";
         /**
          * <code>optional string content = 15;</code>
@@ -3089,12 +3174,9 @@ public final class PluginProtos {
         public java.lang.String getContent() {
           java.lang.Object ref = content_;
           if (!(ref instanceof java.lang.String)) {
-            com.google.protobuf.ByteString bs =
-                (com.google.protobuf.ByteString) ref;
-            java.lang.String s = bs.toStringUtf8();
-            if (bs.isValidUtf8()) {
-              content_ = s;
-            }
+            java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                .toStringUtf8();
+            content_ = s;
             return s;
           } else {
             return (java.lang.String) ref;
@@ -3180,6 +3262,7 @@ public final class PluginProtos {
     }
 
     private int bitField0_;
+    // optional string error = 1;
     public static final int ERROR_FIELD_NUMBER = 1;
     private java.lang.Object error_;
     /**
@@ -3188,6 +3271,7 @@ public final class PluginProtos {
      * <pre>
      * Error message.  If non-empty, code generation failed.  The plugin process
      * should exit with status code zero even if it reports an error in this way.
+     *
      * This should be used to indicate errors in .proto files which prevent the
      * code generator from generating correct code.  Errors which indicate a
      * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -3204,6 +3288,7 @@ public final class PluginProtos {
      * <pre>
      * Error message.  If non-empty, code generation failed.  The plugin process
      * should exit with status code zero even if it reports an error in this way.
+     *
      * This should be used to indicate errors in .proto files which prevent the
      * code generator from generating correct code.  Errors which indicate a
      * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -3231,6 +3316,7 @@ public final class PluginProtos {
      * <pre>
      * Error message.  If non-empty, code generation failed.  The plugin process
      * should exit with status code zero even if it reports an error in this way.
+     *
      * This should be used to indicate errors in .proto files which prevent the
      * code generator from generating correct code.  Errors which indicate a
      * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -3252,6 +3338,7 @@ public final class PluginProtos {
       }
     }
 
+    // repeated .google.protobuf.compiler.CodeGeneratorResponse.File file = 15;
     public static final int FILE_FIELD_NUMBER = 15;
     private java.util.List<com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File> file_;
     /**
@@ -3294,8 +3381,7 @@ public final class PluginProtos {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       memoizedIsInitialized = 1;
       return true;
@@ -3413,9 +3499,8 @@ public final class PluginProtos {
      * </pre>
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:google.protobuf.compiler.CodeGeneratorResponse)
-        com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponseOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.google.protobuf.compiler.PluginProtos.internal_static_google_protobuf_compiler_CodeGeneratorResponse_descriptor;
@@ -3572,6 +3657,7 @@ public final class PluginProtos {
       }
       private int bitField0_;
 
+      // optional string error = 1;
       private java.lang.Object error_ = "";
       /**
        * <code>optional string error = 1;</code>
@@ -3579,6 +3665,7 @@ public final class PluginProtos {
        * <pre>
        * Error message.  If non-empty, code generation failed.  The plugin process
        * should exit with status code zero even if it reports an error in this way.
+       *
        * This should be used to indicate errors in .proto files which prevent the
        * code generator from generating correct code.  Errors which indicate a
        * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -3595,6 +3682,7 @@ public final class PluginProtos {
        * <pre>
        * Error message.  If non-empty, code generation failed.  The plugin process
        * should exit with status code zero even if it reports an error in this way.
+       *
        * This should be used to indicate errors in .proto files which prevent the
        * code generator from generating correct code.  Errors which indicate a
        * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -3605,12 +3693,9 @@ public final class PluginProtos {
       public java.lang.String getError() {
         java.lang.Object ref = error_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            error_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          error_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3622,6 +3707,7 @@ public final class PluginProtos {
        * <pre>
        * Error message.  If non-empty, code generation failed.  The plugin process
        * should exit with status code zero even if it reports an error in this way.
+       *
        * This should be used to indicate errors in .proto files which prevent the
        * code generator from generating correct code.  Errors which indicate a
        * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -3648,6 +3734,7 @@ public final class PluginProtos {
        * <pre>
        * Error message.  If non-empty, code generation failed.  The plugin process
        * should exit with status code zero even if it reports an error in this way.
+       *
        * This should be used to indicate errors in .proto files which prevent the
        * code generator from generating correct code.  Errors which indicate a
        * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -3671,6 +3758,7 @@ public final class PluginProtos {
        * <pre>
        * Error message.  If non-empty, code generation failed.  The plugin process
        * should exit with status code zero even if it reports an error in this way.
+       *
        * This should be used to indicate errors in .proto files which prevent the
        * code generator from generating correct code.  Errors which indicate a
        * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -3690,6 +3778,7 @@ public final class PluginProtos {
        * <pre>
        * Error message.  If non-empty, code generation failed.  The plugin process
        * should exit with status code zero even if it reports an error in this way.
+       *
        * This should be used to indicate errors in .proto files which prevent the
        * code generator from generating correct code.  Errors which indicate a
        * problem in protoc itself -- such as the input CodeGeneratorRequest being
@@ -3708,6 +3797,7 @@ public final class PluginProtos {
         return this;
       }
 
+      // repeated .google.protobuf.compiler.CodeGeneratorResponse.File file = 15;
       private java.util.List<com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File> file_ =
         java.util.Collections.emptyList();
       private void ensureFileIsMutable() {
@@ -3849,8 +3939,7 @@ public final class PluginProtos {
           java.lang.Iterable<? extends com.google.protobuf.compiler.PluginProtos.CodeGeneratorResponse.File> values) {
         if (fileBuilder_ == null) {
           ensureFileIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, file_);
+          super.addAll(values, file_);
           onChanged();
         } else {
           fileBuilder_.addAllMessages(values);
@@ -3959,17 +4048,17 @@ public final class PluginProtos {
     // @@protoc_insertion_point(class_scope:google.protobuf.compiler.CodeGeneratorResponse)
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_google_protobuf_compiler_CodeGeneratorRequest_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_google_protobuf_compiler_CodeGeneratorRequest_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_google_protobuf_compiler_CodeGeneratorResponse_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_google_protobuf_compiler_CodeGeneratorResponse_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_google_protobuf_compiler_CodeGeneratorResponse_File_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -3997,37 +4086,36 @@ public final class PluginProtos {
       "rotos"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
+      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+        public com.google.protobuf.ExtensionRegistry assignDescriptors(
+            com.google.protobuf.Descriptors.FileDescriptor root) {
+          descriptor = root;
+          internal_static_google_protobuf_compiler_CodeGeneratorRequest_descriptor =
+            getDescriptor().getMessageTypes().get(0);
+          internal_static_google_protobuf_compiler_CodeGeneratorRequest_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_google_protobuf_compiler_CodeGeneratorRequest_descriptor,
+              new java.lang.String[] { "FileToGenerate", "Parameter", "ProtoFile", });
+          internal_static_google_protobuf_compiler_CodeGeneratorResponse_descriptor =
+            getDescriptor().getMessageTypes().get(1);
+          internal_static_google_protobuf_compiler_CodeGeneratorResponse_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_google_protobuf_compiler_CodeGeneratorResponse_descriptor,
+              new java.lang.String[] { "Error", "File", });
+          internal_static_google_protobuf_compiler_CodeGeneratorResponse_File_descriptor =
+            internal_static_google_protobuf_compiler_CodeGeneratorResponse_descriptor.getNestedTypes().get(0);
+          internal_static_google_protobuf_compiler_CodeGeneratorResponse_File_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_google_protobuf_compiler_CodeGeneratorResponse_File_descriptor,
+              new java.lang.String[] { "Name", "InsertionPoint", "Content", });
+          return null;
+        }
+      };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.google.protobuf.DescriptorProtos.getDescriptor(),
         }, assigner);
-    internal_static_google_protobuf_compiler_CodeGeneratorRequest_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_google_protobuf_compiler_CodeGeneratorRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_google_protobuf_compiler_CodeGeneratorRequest_descriptor,
-        new java.lang.String[] { "FileToGenerate", "Parameter", "ProtoFile", });
-    internal_static_google_protobuf_compiler_CodeGeneratorResponse_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_google_protobuf_compiler_CodeGeneratorResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_google_protobuf_compiler_CodeGeneratorResponse_descriptor,
-        new java.lang.String[] { "Error", "File", });
-    internal_static_google_protobuf_compiler_CodeGeneratorResponse_File_descriptor =
-      internal_static_google_protobuf_compiler_CodeGeneratorResponse_descriptor.getNestedTypes().get(0);
-    internal_static_google_protobuf_compiler_CodeGeneratorResponse_File_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_google_protobuf_compiler_CodeGeneratorResponse_File_descriptor,
-        new java.lang.String[] { "Name", "InsertionPoint", "Content", });
-    com.google.protobuf.DescriptorProtos.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

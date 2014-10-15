@@ -8,10 +8,10 @@ public final class OwnerMessage {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface OwnerOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:n4systems.fieldid.api.pub.serialization.Owner)
-      com.google.protobuf.MessageOrBuilder {
+  public interface OwnerOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
 
+    // required string id = 1;
     /**
      * <code>required string id = 1;</code>
      */
@@ -26,6 +26,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getIdBytes();
 
+    // required string name = 2;
     /**
      * <code>required string name = 2;</code>
      */
@@ -40,6 +41,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getNameBytes();
 
+    // optional string parentId = 3;
     /**
      * <code>optional string parentId = 3;</code>
      */
@@ -54,6 +56,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getParentIdBytes();
 
+    // optional string code = 4;
     /**
      * <code>optional string code = 4;</code>
      */
@@ -68,6 +71,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getCodeBytes();
 
+    // optional string notes = 5;
     /**
      * <code>optional string notes = 5;</code>
      */
@@ -82,6 +86,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getNotesBytes();
 
+    // optional string streetAddress = 6;
     /**
      * <code>optional string streetAddress = 6;</code>
      */
@@ -96,6 +101,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getStreetAddressBytes();
 
+    // optional string city = 7;
     /**
      * <code>optional string city = 7;</code>
      */
@@ -110,6 +116,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getCityBytes();
 
+    // optional string state = 8;
     /**
      * <code>optional string state = 8;</code>
      */
@@ -124,6 +131,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getStateBytes();
 
+    // optional string country = 9;
     /**
      * <code>optional string country = 9;</code>
      */
@@ -138,6 +146,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getCountryBytes();
 
+    // optional string zip = 10;
     /**
      * <code>optional string zip = 10;</code>
      */
@@ -152,6 +161,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getZipBytes();
 
+    // optional string phone1 = 11;
     /**
      * <code>optional string phone1 = 11;</code>
      */
@@ -166,6 +176,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getPhone1Bytes();
 
+    // optional string phone2 = 12;
     /**
      * <code>optional string phone2 = 12;</code>
      */
@@ -180,6 +191,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getPhone2Bytes();
 
+    // optional string fax1 = 13;
     /**
      * <code>optional string fax1 = 13;</code>
      */
@@ -194,6 +206,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getFax1Bytes();
 
+    // optional string latitude = 14;
     /**
      * <code>optional string latitude = 14;</code>
      */
@@ -208,6 +221,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getLatitudeBytes();
 
+    // optional string longitude = 15;
     /**
      * <code>optional string longitude = 15;</code>
      */
@@ -222,6 +236,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getLongitudeBytes();
 
+    // optional string contactName = 16;
     /**
      * <code>optional string contactName = 16;</code>
      */
@@ -236,6 +251,7 @@ public final class OwnerMessage {
     com.google.protobuf.ByteString
         getContactNameBytes();
 
+    // optional string contactEmail = 17;
     /**
      * <code>optional string contactEmail = 17;</code>
      */
@@ -254,9 +270,8 @@ public final class OwnerMessage {
    * Protobuf type {@code n4systems.fieldid.api.pub.serialization.Owner}
    */
   public static final class Owner extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:n4systems.fieldid.api.pub.serialization.Owner)
-      OwnerOrBuilder {
+      com.google.protobuf.GeneratedMessage
+      implements OwnerOrBuilder {
     // Use Owner.newBuilder() to construct.
     private Owner(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -303,105 +318,88 @@ public final class OwnerMessage {
               break;
             }
             case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              id_ = bs;
+              id_ = input.readBytes();
               break;
             }
             case 18: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000002;
-              name_ = bs;
+              name_ = input.readBytes();
               break;
             }
             case 26: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000004;
-              parentId_ = bs;
+              parentId_ = input.readBytes();
               break;
             }
             case 34: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000008;
-              code_ = bs;
+              code_ = input.readBytes();
               break;
             }
             case 42: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000010;
-              notes_ = bs;
+              notes_ = input.readBytes();
               break;
             }
             case 50: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000020;
-              streetAddress_ = bs;
+              streetAddress_ = input.readBytes();
               break;
             }
             case 58: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000040;
-              city_ = bs;
+              city_ = input.readBytes();
               break;
             }
             case 66: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000080;
-              state_ = bs;
+              state_ = input.readBytes();
               break;
             }
             case 74: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000100;
-              country_ = bs;
+              country_ = input.readBytes();
               break;
             }
             case 82: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000200;
-              zip_ = bs;
+              zip_ = input.readBytes();
               break;
             }
             case 90: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000400;
-              phone1_ = bs;
+              phone1_ = input.readBytes();
               break;
             }
             case 98: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000800;
-              phone2_ = bs;
+              phone2_ = input.readBytes();
               break;
             }
             case 106: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00001000;
-              fax1_ = bs;
+              fax1_ = input.readBytes();
               break;
             }
             case 114: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00002000;
-              latitude_ = bs;
+              latitude_ = input.readBytes();
               break;
             }
             case 122: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00004000;
-              longitude_ = bs;
+              longitude_ = input.readBytes();
               break;
             }
             case 130: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00008000;
-              contactName_ = bs;
+              contactName_ = input.readBytes();
               break;
             }
             case 138: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00010000;
-              contactEmail_ = bs;
+              contactEmail_ = input.readBytes();
               break;
             }
           }
@@ -444,6 +442,7 @@ public final class OwnerMessage {
     }
 
     private int bitField0_;
+    // required string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private java.lang.Object id_;
     /**
@@ -486,6 +485,7 @@ public final class OwnerMessage {
       }
     }
 
+    // required string name = 2;
     public static final int NAME_FIELD_NUMBER = 2;
     private java.lang.Object name_;
     /**
@@ -528,6 +528,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string parentId = 3;
     public static final int PARENTID_FIELD_NUMBER = 3;
     private java.lang.Object parentId_;
     /**
@@ -570,6 +571,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string code = 4;
     public static final int CODE_FIELD_NUMBER = 4;
     private java.lang.Object code_;
     /**
@@ -612,6 +614,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string notes = 5;
     public static final int NOTES_FIELD_NUMBER = 5;
     private java.lang.Object notes_;
     /**
@@ -654,6 +657,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string streetAddress = 6;
     public static final int STREETADDRESS_FIELD_NUMBER = 6;
     private java.lang.Object streetAddress_;
     /**
@@ -696,6 +700,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string city = 7;
     public static final int CITY_FIELD_NUMBER = 7;
     private java.lang.Object city_;
     /**
@@ -738,6 +743,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string state = 8;
     public static final int STATE_FIELD_NUMBER = 8;
     private java.lang.Object state_;
     /**
@@ -780,6 +786,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string country = 9;
     public static final int COUNTRY_FIELD_NUMBER = 9;
     private java.lang.Object country_;
     /**
@@ -822,6 +829,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string zip = 10;
     public static final int ZIP_FIELD_NUMBER = 10;
     private java.lang.Object zip_;
     /**
@@ -864,6 +872,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string phone1 = 11;
     public static final int PHONE1_FIELD_NUMBER = 11;
     private java.lang.Object phone1_;
     /**
@@ -906,6 +915,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string phone2 = 12;
     public static final int PHONE2_FIELD_NUMBER = 12;
     private java.lang.Object phone2_;
     /**
@@ -948,6 +958,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string fax1 = 13;
     public static final int FAX1_FIELD_NUMBER = 13;
     private java.lang.Object fax1_;
     /**
@@ -990,6 +1001,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string latitude = 14;
     public static final int LATITUDE_FIELD_NUMBER = 14;
     private java.lang.Object latitude_;
     /**
@@ -1032,6 +1044,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string longitude = 15;
     public static final int LONGITUDE_FIELD_NUMBER = 15;
     private java.lang.Object longitude_;
     /**
@@ -1074,6 +1087,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string contactName = 16;
     public static final int CONTACTNAME_FIELD_NUMBER = 16;
     private java.lang.Object contactName_;
     /**
@@ -1116,6 +1130,7 @@ public final class OwnerMessage {
       }
     }
 
+    // optional string contactEmail = 17;
     public static final int CONTACTEMAIL_FIELD_NUMBER = 17;
     private java.lang.Object contactEmail_;
     /**
@@ -1180,8 +1195,7 @@ public final class OwnerMessage {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasId()) {
         memoizedIsInitialized = 0;
@@ -1408,9 +1422,8 @@ public final class OwnerMessage {
      * Protobuf type {@code n4systems.fieldid.api.pub.serialization.Owner}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:n4systems.fieldid.api.pub.serialization.Owner)
-        com.n4systems.fieldid.api.pub.serialization.OwnerMessage.OwnerOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.n4systems.fieldid.api.pub.serialization.OwnerMessage.OwnerOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.serialization.OwnerMessage.internal_static_n4systems_fieldid_api_pub_serialization_Owner_descriptor;
@@ -1709,6 +1722,7 @@ public final class OwnerMessage {
       }
       private int bitField0_;
 
+      // required string id = 1;
       private java.lang.Object id_ = "";
       /**
        * <code>required string id = 1;</code>
@@ -1722,12 +1736,9 @@ public final class OwnerMessage {
       public java.lang.String getId() {
         java.lang.Object ref = id_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            id_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          id_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -1785,6 +1796,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // required string name = 2;
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 2;</code>
@@ -1798,12 +1810,9 @@ public final class OwnerMessage {
       public java.lang.String getName() {
         java.lang.Object ref = name_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            name_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          name_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -1861,6 +1870,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string parentId = 3;
       private java.lang.Object parentId_ = "";
       /**
        * <code>optional string parentId = 3;</code>
@@ -1874,12 +1884,9 @@ public final class OwnerMessage {
       public java.lang.String getParentId() {
         java.lang.Object ref = parentId_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            parentId_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          parentId_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -1937,6 +1944,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string code = 4;
       private java.lang.Object code_ = "";
       /**
        * <code>optional string code = 4;</code>
@@ -1950,12 +1958,9 @@ public final class OwnerMessage {
       public java.lang.String getCode() {
         java.lang.Object ref = code_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            code_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          code_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2013,6 +2018,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string notes = 5;
       private java.lang.Object notes_ = "";
       /**
        * <code>optional string notes = 5;</code>
@@ -2026,12 +2032,9 @@ public final class OwnerMessage {
       public java.lang.String getNotes() {
         java.lang.Object ref = notes_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            notes_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          notes_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2089,6 +2092,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string streetAddress = 6;
       private java.lang.Object streetAddress_ = "";
       /**
        * <code>optional string streetAddress = 6;</code>
@@ -2102,12 +2106,9 @@ public final class OwnerMessage {
       public java.lang.String getStreetAddress() {
         java.lang.Object ref = streetAddress_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            streetAddress_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          streetAddress_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2165,6 +2166,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string city = 7;
       private java.lang.Object city_ = "";
       /**
        * <code>optional string city = 7;</code>
@@ -2178,12 +2180,9 @@ public final class OwnerMessage {
       public java.lang.String getCity() {
         java.lang.Object ref = city_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            city_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          city_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2241,6 +2240,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string state = 8;
       private java.lang.Object state_ = "";
       /**
        * <code>optional string state = 8;</code>
@@ -2254,12 +2254,9 @@ public final class OwnerMessage {
       public java.lang.String getState() {
         java.lang.Object ref = state_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            state_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          state_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2317,6 +2314,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string country = 9;
       private java.lang.Object country_ = "";
       /**
        * <code>optional string country = 9;</code>
@@ -2330,12 +2328,9 @@ public final class OwnerMessage {
       public java.lang.String getCountry() {
         java.lang.Object ref = country_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            country_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          country_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2393,6 +2388,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string zip = 10;
       private java.lang.Object zip_ = "";
       /**
        * <code>optional string zip = 10;</code>
@@ -2406,12 +2402,9 @@ public final class OwnerMessage {
       public java.lang.String getZip() {
         java.lang.Object ref = zip_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            zip_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          zip_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2469,6 +2462,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string phone1 = 11;
       private java.lang.Object phone1_ = "";
       /**
        * <code>optional string phone1 = 11;</code>
@@ -2482,12 +2476,9 @@ public final class OwnerMessage {
       public java.lang.String getPhone1() {
         java.lang.Object ref = phone1_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            phone1_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          phone1_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2545,6 +2536,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string phone2 = 12;
       private java.lang.Object phone2_ = "";
       /**
        * <code>optional string phone2 = 12;</code>
@@ -2558,12 +2550,9 @@ public final class OwnerMessage {
       public java.lang.String getPhone2() {
         java.lang.Object ref = phone2_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            phone2_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          phone2_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2621,6 +2610,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string fax1 = 13;
       private java.lang.Object fax1_ = "";
       /**
        * <code>optional string fax1 = 13;</code>
@@ -2634,12 +2624,9 @@ public final class OwnerMessage {
       public java.lang.String getFax1() {
         java.lang.Object ref = fax1_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            fax1_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          fax1_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2697,6 +2684,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string latitude = 14;
       private java.lang.Object latitude_ = "";
       /**
        * <code>optional string latitude = 14;</code>
@@ -2710,12 +2698,9 @@ public final class OwnerMessage {
       public java.lang.String getLatitude() {
         java.lang.Object ref = latitude_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            latitude_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          latitude_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2773,6 +2758,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string longitude = 15;
       private java.lang.Object longitude_ = "";
       /**
        * <code>optional string longitude = 15;</code>
@@ -2786,12 +2772,9 @@ public final class OwnerMessage {
       public java.lang.String getLongitude() {
         java.lang.Object ref = longitude_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            longitude_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          longitude_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2849,6 +2832,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string contactName = 16;
       private java.lang.Object contactName_ = "";
       /**
        * <code>optional string contactName = 16;</code>
@@ -2862,12 +2846,9 @@ public final class OwnerMessage {
       public java.lang.String getContactName() {
         java.lang.Object ref = contactName_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            contactName_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          contactName_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -2925,6 +2906,7 @@ public final class OwnerMessage {
         return this;
       }
 
+      // optional string contactEmail = 17;
       private java.lang.Object contactEmail_ = "";
       /**
        * <code>optional string contactEmail = 17;</code>
@@ -2938,12 +2920,9 @@ public final class OwnerMessage {
       public java.lang.String getContactEmail() {
         java.lang.Object ref = contactEmail_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            contactEmail_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          contactEmail_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -3012,7 +2991,7 @@ public final class OwnerMessage {
     // @@protoc_insertion_point(class_scope:n4systems.fieldid.api.pub.serialization.Owner)
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_n4systems_fieldid_api_pub_serialization_Owner_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -3040,31 +3019,28 @@ public final class OwnerMessage {
       "rMessage"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
+      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+        public com.google.protobuf.ExtensionRegistry assignDescriptors(
+            com.google.protobuf.Descriptors.FileDescriptor root) {
+          descriptor = root;
+          internal_static_n4systems_fieldid_api_pub_serialization_Owner_descriptor =
+            getDescriptor().getMessageTypes().get(0);
+          internal_static_n4systems_fieldid_api_pub_serialization_Owner_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_n4systems_fieldid_api_pub_serialization_Owner_descriptor,
+              new java.lang.String[] { "Id", "Name", "ParentId", "Code", "Notes", "StreetAddress", "City", "State", "Country", "Zip", "Phone1", "Phone2", "Fax1", "Latitude", "Longitude", "ContactName", "ContactEmail", });
+          com.google.protobuf.ExtensionRegistry registry =
+            com.google.protobuf.ExtensionRegistry.newInstance();
+          registry.add(com.n4systems.fieldid.api.pub.serialization.Extensions.serializedName);
+          registry.add(com.n4systems.fieldid.api.pub.serialization.Extensions.serializedName);
+          return registry;
+        }
+      };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.n4systems.fieldid.api.pub.serialization.Extensions.getDescriptor(),
         }, assigner);
-    internal_static_n4systems_fieldid_api_pub_serialization_Owner_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_n4systems_fieldid_api_pub_serialization_Owner_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_n4systems_fieldid_api_pub_serialization_Owner_descriptor,
-        new java.lang.String[] { "Id", "Name", "ParentId", "Code", "Notes", "StreetAddress", "City", "State", "Country", "Zip", "Phone1", "Phone2", "Fax1", "Latitude", "Longitude", "ContactName", "ContactEmail", });
-    com.google.protobuf.ExtensionRegistry registry =
-        com.google.protobuf.ExtensionRegistry.newInstance();
-    registry.add(com.n4systems.fieldid.api.pub.serialization.Extensions.serializedName);
-    registry.add(com.n4systems.fieldid.api.pub.serialization.Extensions.serializedName);
-    com.google.protobuf.Descriptors.FileDescriptor
-        .internalUpdateFileDescriptor(descriptor, registry);
-    com.n4systems.fieldid.api.pub.serialization.Extensions.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

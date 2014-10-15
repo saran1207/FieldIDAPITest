@@ -31,7 +31,7 @@
                 <artifactId>maven-protoc-plugin</artifactId>
                 <version>0.3.2</version>
                 <configuration>
-                    <protocExecutable>/usr/local/bin/protoc</protocExecutable>
+                    <protocExecutable>protoc</protocExecutable>
                     <outputDirectory>${project.basedir}/src/main/java/proto</outputDirectory>
                 </configuration>
                 <executions>

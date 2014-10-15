@@ -11,10 +11,10 @@ public final class ListResponseMessage {
     registry.add(com.n4systems.fieldid.api.pub.serialization.ListResponseMessage.owners);
   }
   public interface ListResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:n4systems.fieldid.api.pub.serialization.ListResponse)
       com.google.protobuf.GeneratedMessage.
           ExtendableMessageOrBuilder<ListResponse> {
 
+    // required int32 page = 1;
     /**
      * <code>required int32 page = 1;</code>
      */
@@ -24,6 +24,7 @@ public final class ListResponseMessage {
      */
     int getPage();
 
+    // required int32 pageSize = 2;
     /**
      * <code>required int32 pageSize = 2;</code>
      */
@@ -33,6 +34,7 @@ public final class ListResponseMessage {
      */
     int getPageSize();
 
+    // required int64 total = 3;
     /**
      * <code>required int64 total = 3;</code>
      */
@@ -47,9 +49,7 @@ public final class ListResponseMessage {
    */
   public static final class ListResponse extends
       com.google.protobuf.GeneratedMessage.ExtendableMessage<
-        ListResponse> implements
-      // @@protoc_insertion_point(message_implements:n4systems.fieldid.api.pub.serialization.ListResponse)
-      ListResponseOrBuilder {
+        ListResponse> implements ListResponseOrBuilder {
     // Use ListResponse.newBuilder() to construct.
     private ListResponse(com.google.protobuf.GeneratedMessage.ExtendableBuilder<com.n4systems.fieldid.api.pub.serialization.ListResponseMessage.ListResponse, ?> builder) {
       super(builder);
@@ -150,6 +150,7 @@ public final class ListResponseMessage {
     }
 
     private int bitField0_;
+    // required int32 page = 1;
     public static final int PAGE_FIELD_NUMBER = 1;
     private int page_;
     /**
@@ -165,6 +166,7 @@ public final class ListResponseMessage {
       return page_;
     }
 
+    // required int32 pageSize = 2;
     public static final int PAGESIZE_FIELD_NUMBER = 2;
     private int pageSize_;
     /**
@@ -180,6 +182,7 @@ public final class ListResponseMessage {
       return pageSize_;
     }
 
+    // required int64 total = 3;
     public static final int TOTAL_FIELD_NUMBER = 3;
     private long total_;
     /**
@@ -203,8 +206,7 @@ public final class ListResponseMessage {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasPage()) {
         memoizedIsInitialized = 0;
@@ -347,9 +349,7 @@ public final class ListResponseMessage {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.ExtendableBuilder<
-          com.n4systems.fieldid.api.pub.serialization.ListResponseMessage.ListResponse, Builder> implements
-        // @@protoc_insertion_point(builder_implements:n4systems.fieldid.api.pub.serialization.ListResponse)
-        com.n4systems.fieldid.api.pub.serialization.ListResponseMessage.ListResponseOrBuilder {
+          com.n4systems.fieldid.api.pub.serialization.ListResponseMessage.ListResponse, Builder> implements com.n4systems.fieldid.api.pub.serialization.ListResponseMessage.ListResponseOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.serialization.ListResponseMessage.internal_static_n4systems_fieldid_api_pub_serialization_ListResponse_descriptor;
@@ -497,6 +497,7 @@ public final class ListResponseMessage {
       }
       private int bitField0_;
 
+      // required int32 page = 1;
       private int page_ ;
       /**
        * <code>required int32 page = 1;</code>
@@ -529,6 +530,7 @@ public final class ListResponseMessage {
         return this;
       }
 
+      // required int32 pageSize = 2;
       private int pageSize_ ;
       /**
        * <code>required int32 pageSize = 2;</code>
@@ -561,6 +563,7 @@ public final class ListResponseMessage {
         return this;
       }
 
+      // required int64 total = 3;
       private long total_ ;
       /**
        * <code>required int64 total = 3;</code>
@@ -626,7 +629,7 @@ public final class ListResponseMessage {
           .newFileScopedGeneratedExtension(
         com.n4systems.fieldid.api.pub.serialization.OwnerMessage.Owner.class,
         com.n4systems.fieldid.api.pub.serialization.OwnerMessage.Owner.getDefaultInstance());
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_n4systems_fieldid_api_pub_serialization_ListResponse_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -654,29 +657,27 @@ public final class ListResponseMessage {
       "ationB\023ListResponseMessage"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
+      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+        public com.google.protobuf.ExtensionRegistry assignDescriptors(
+            com.google.protobuf.Descriptors.FileDescriptor root) {
+          descriptor = root;
+          internal_static_n4systems_fieldid_api_pub_serialization_ListResponse_descriptor =
+            getDescriptor().getMessageTypes().get(0);
+          internal_static_n4systems_fieldid_api_pub_serialization_ListResponse_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_n4systems_fieldid_api_pub_serialization_ListResponse_descriptor,
+              new java.lang.String[] { "Page", "PageSize", "Total", });
+          assets.internalInit(descriptor.getExtensions().get(0));
+          owners.internalInit(descriptor.getExtensions().get(1));
+          return null;
+        }
+      };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.n4systems.fieldid.api.pub.serialization.AssetMessage.getDescriptor(),
           com.n4systems.fieldid.api.pub.serialization.OwnerMessage.getDescriptor(),
         }, assigner);
-    internal_static_n4systems_fieldid_api_pub_serialization_ListResponse_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_n4systems_fieldid_api_pub_serialization_ListResponse_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_n4systems_fieldid_api_pub_serialization_ListResponse_descriptor,
-        new java.lang.String[] { "Page", "PageSize", "Total", });
-    assets.internalInit(descriptor.getExtensions().get(0));
-    owners.internalInit(descriptor.getExtensions().get(1));
-    com.n4systems.fieldid.api.pub.serialization.AssetMessage.getDescriptor();
-    com.n4systems.fieldid.api.pub.serialization.OwnerMessage.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

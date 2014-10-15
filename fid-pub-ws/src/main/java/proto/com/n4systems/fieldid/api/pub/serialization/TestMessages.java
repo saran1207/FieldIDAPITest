@@ -8,10 +8,10 @@ public final class TestMessages {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface TestSimpleMessageOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:n4systems.fieldid.api.pub.serialization.TestSimpleMessage)
-      com.google.protobuf.MessageOrBuilder {
+  public interface TestSimpleMessageOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
 
+    // optional double double_field = 1;
     /**
      * <code>optional double double_field = 1;</code>
      */
@@ -21,6 +21,7 @@ public final class TestMessages {
      */
     double getDoubleField();
 
+    // optional float float_field = 2;
     /**
      * <code>optional float float_field = 2;</code>
      */
@@ -30,6 +31,7 @@ public final class TestMessages {
      */
     float getFloatField();
 
+    // optional int32 int32_field = 3;
     /**
      * <code>optional int32 int32_field = 3;</code>
      */
@@ -39,6 +41,7 @@ public final class TestMessages {
      */
     int getInt32Field();
 
+    // optional int64 int64_field = 4;
     /**
      * <code>optional int64 int64_field = 4;</code>
      */
@@ -48,6 +51,7 @@ public final class TestMessages {
      */
     long getInt64Field();
 
+    // optional uint32 uint32_field = 5;
     /**
      * <code>optional uint32 uint32_field = 5;</code>
      */
@@ -57,6 +61,7 @@ public final class TestMessages {
      */
     int getUint32Field();
 
+    // optional uint64 uint64_field = 6;
     /**
      * <code>optional uint64 uint64_field = 6;</code>
      */
@@ -66,6 +71,7 @@ public final class TestMessages {
      */
     long getUint64Field();
 
+    // optional sint32 sint32_field = 7;
     /**
      * <code>optional sint32 sint32_field = 7;</code>
      */
@@ -75,6 +81,7 @@ public final class TestMessages {
      */
     int getSint32Field();
 
+    // optional sint64 sint64_field = 8;
     /**
      * <code>optional sint64 sint64_field = 8;</code>
      */
@@ -84,6 +91,7 @@ public final class TestMessages {
      */
     long getSint64Field();
 
+    // optional fixed32 fixed32_field = 9;
     /**
      * <code>optional fixed32 fixed32_field = 9;</code>
      */
@@ -93,6 +101,7 @@ public final class TestMessages {
      */
     int getFixed32Field();
 
+    // optional fixed64 fixed64_field = 10;
     /**
      * <code>optional fixed64 fixed64_field = 10;</code>
      */
@@ -102,6 +111,7 @@ public final class TestMessages {
      */
     long getFixed64Field();
 
+    // optional sfixed32 sfixed32_field = 11;
     /**
      * <code>optional sfixed32 sfixed32_field = 11;</code>
      */
@@ -111,6 +121,7 @@ public final class TestMessages {
      */
     int getSfixed32Field();
 
+    // optional sfixed64 sfixed64_field = 12;
     /**
      * <code>optional sfixed64 sfixed64_field = 12;</code>
      */
@@ -120,6 +131,7 @@ public final class TestMessages {
      */
     long getSfixed64Field();
 
+    // optional bool bool_field = 13;
     /**
      * <code>optional bool bool_field = 13;</code>
      */
@@ -129,6 +141,7 @@ public final class TestMessages {
      */
     boolean getBoolField();
 
+    // optional string string_field = 14;
     /**
      * <code>optional string string_field = 14;</code>
      */
@@ -147,9 +160,8 @@ public final class TestMessages {
    * Protobuf type {@code n4systems.fieldid.api.pub.serialization.TestSimpleMessage}
    */
   public static final class TestSimpleMessage extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:n4systems.fieldid.api.pub.serialization.TestSimpleMessage)
-      TestSimpleMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage
+      implements TestSimpleMessageOrBuilder {
     // Use TestSimpleMessage.newBuilder() to construct.
     private TestSimpleMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -261,9 +273,8 @@ public final class TestMessages {
               break;
             }
             case 114: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00002000;
-              stringField_ = bs;
+              stringField_ = input.readBytes();
               break;
             }
           }
@@ -306,6 +317,7 @@ public final class TestMessages {
     }
 
     private int bitField0_;
+    // optional double double_field = 1;
     public static final int DOUBLE_FIELD_FIELD_NUMBER = 1;
     private double doubleField_;
     /**
@@ -321,6 +333,7 @@ public final class TestMessages {
       return doubleField_;
     }
 
+    // optional float float_field = 2;
     public static final int FLOAT_FIELD_FIELD_NUMBER = 2;
     private float floatField_;
     /**
@@ -336,6 +349,7 @@ public final class TestMessages {
       return floatField_;
     }
 
+    // optional int32 int32_field = 3;
     public static final int INT32_FIELD_FIELD_NUMBER = 3;
     private int int32Field_;
     /**
@@ -351,6 +365,7 @@ public final class TestMessages {
       return int32Field_;
     }
 
+    // optional int64 int64_field = 4;
     public static final int INT64_FIELD_FIELD_NUMBER = 4;
     private long int64Field_;
     /**
@@ -366,6 +381,7 @@ public final class TestMessages {
       return int64Field_;
     }
 
+    // optional uint32 uint32_field = 5;
     public static final int UINT32_FIELD_FIELD_NUMBER = 5;
     private int uint32Field_;
     /**
@@ -381,6 +397,7 @@ public final class TestMessages {
       return uint32Field_;
     }
 
+    // optional uint64 uint64_field = 6;
     public static final int UINT64_FIELD_FIELD_NUMBER = 6;
     private long uint64Field_;
     /**
@@ -396,6 +413,7 @@ public final class TestMessages {
       return uint64Field_;
     }
 
+    // optional sint32 sint32_field = 7;
     public static final int SINT32_FIELD_FIELD_NUMBER = 7;
     private int sint32Field_;
     /**
@@ -411,6 +429,7 @@ public final class TestMessages {
       return sint32Field_;
     }
 
+    // optional sint64 sint64_field = 8;
     public static final int SINT64_FIELD_FIELD_NUMBER = 8;
     private long sint64Field_;
     /**
@@ -426,6 +445,7 @@ public final class TestMessages {
       return sint64Field_;
     }
 
+    // optional fixed32 fixed32_field = 9;
     public static final int FIXED32_FIELD_FIELD_NUMBER = 9;
     private int fixed32Field_;
     /**
@@ -441,6 +461,7 @@ public final class TestMessages {
       return fixed32Field_;
     }
 
+    // optional fixed64 fixed64_field = 10;
     public static final int FIXED64_FIELD_FIELD_NUMBER = 10;
     private long fixed64Field_;
     /**
@@ -456,6 +477,7 @@ public final class TestMessages {
       return fixed64Field_;
     }
 
+    // optional sfixed32 sfixed32_field = 11;
     public static final int SFIXED32_FIELD_FIELD_NUMBER = 11;
     private int sfixed32Field_;
     /**
@@ -471,6 +493,7 @@ public final class TestMessages {
       return sfixed32Field_;
     }
 
+    // optional sfixed64 sfixed64_field = 12;
     public static final int SFIXED64_FIELD_FIELD_NUMBER = 12;
     private long sfixed64Field_;
     /**
@@ -486,6 +509,7 @@ public final class TestMessages {
       return sfixed64Field_;
     }
 
+    // optional bool bool_field = 13;
     public static final int BOOL_FIELD_FIELD_NUMBER = 13;
     private boolean boolField_;
     /**
@@ -501,6 +525,7 @@ public final class TestMessages {
       return boolField_;
     }
 
+    // optional string string_field = 14;
     public static final int STRING_FIELD_FIELD_NUMBER = 14;
     private java.lang.Object stringField_;
     /**
@@ -562,8 +587,7 @@ public final class TestMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       memoizedIsInitialized = 1;
       return true;
@@ -761,9 +785,8 @@ public final class TestMessages {
      * Protobuf type {@code n4systems.fieldid.api.pub.serialization.TestSimpleMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:n4systems.fieldid.api.pub.serialization.TestSimpleMessage)
-        com.n4systems.fieldid.api.pub.serialization.TestMessages.TestSimpleMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.n4systems.fieldid.api.pub.serialization.TestMessages.TestSimpleMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.serialization.TestMessages.internal_static_n4systems_fieldid_api_pub_serialization_TestSimpleMessage_descriptor;
@@ -995,6 +1018,7 @@ public final class TestMessages {
       }
       private int bitField0_;
 
+      // optional double double_field = 1;
       private double doubleField_ ;
       /**
        * <code>optional double double_field = 1;</code>
@@ -1027,6 +1051,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional float float_field = 2;
       private float floatField_ ;
       /**
        * <code>optional float float_field = 2;</code>
@@ -1059,6 +1084,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional int32 int32_field = 3;
       private int int32Field_ ;
       /**
        * <code>optional int32 int32_field = 3;</code>
@@ -1091,6 +1117,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional int64 int64_field = 4;
       private long int64Field_ ;
       /**
        * <code>optional int64 int64_field = 4;</code>
@@ -1123,6 +1150,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional uint32 uint32_field = 5;
       private int uint32Field_ ;
       /**
        * <code>optional uint32 uint32_field = 5;</code>
@@ -1155,6 +1183,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional uint64 uint64_field = 6;
       private long uint64Field_ ;
       /**
        * <code>optional uint64 uint64_field = 6;</code>
@@ -1187,6 +1216,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional sint32 sint32_field = 7;
       private int sint32Field_ ;
       /**
        * <code>optional sint32 sint32_field = 7;</code>
@@ -1219,6 +1249,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional sint64 sint64_field = 8;
       private long sint64Field_ ;
       /**
        * <code>optional sint64 sint64_field = 8;</code>
@@ -1251,6 +1282,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional fixed32 fixed32_field = 9;
       private int fixed32Field_ ;
       /**
        * <code>optional fixed32 fixed32_field = 9;</code>
@@ -1283,6 +1315,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional fixed64 fixed64_field = 10;
       private long fixed64Field_ ;
       /**
        * <code>optional fixed64 fixed64_field = 10;</code>
@@ -1315,6 +1348,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional sfixed32 sfixed32_field = 11;
       private int sfixed32Field_ ;
       /**
        * <code>optional sfixed32 sfixed32_field = 11;</code>
@@ -1347,6 +1381,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional sfixed64 sfixed64_field = 12;
       private long sfixed64Field_ ;
       /**
        * <code>optional sfixed64 sfixed64_field = 12;</code>
@@ -1379,6 +1414,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional bool bool_field = 13;
       private boolean boolField_ ;
       /**
        * <code>optional bool bool_field = 13;</code>
@@ -1411,6 +1447,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional string string_field = 14;
       private java.lang.Object stringField_ = "";
       /**
        * <code>optional string string_field = 14;</code>
@@ -1424,12 +1461,9 @@ public final class TestMessages {
       public java.lang.String getStringField() {
         java.lang.Object ref = stringField_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            stringField_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          stringField_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -1498,10 +1532,10 @@ public final class TestMessages {
     // @@protoc_insertion_point(class_scope:n4systems.fieldid.api.pub.serialization.TestSimpleMessage)
   }
 
-  public interface TestNestedMessageOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:n4systems.fieldid.api.pub.serialization.TestNestedMessage)
-      com.google.protobuf.MessageOrBuilder {
+  public interface TestNestedMessageOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
 
+    // required string string_field = 1;
     /**
      * <code>required string string_field = 1;</code>
      */
@@ -1520,9 +1554,8 @@ public final class TestMessages {
    * Protobuf type {@code n4systems.fieldid.api.pub.serialization.TestNestedMessage}
    */
   public static final class TestNestedMessage extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:n4systems.fieldid.api.pub.serialization.TestNestedMessage)
-      TestNestedMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage
+      implements TestNestedMessageOrBuilder {
     // Use TestNestedMessage.newBuilder() to construct.
     private TestNestedMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -1569,9 +1602,8 @@ public final class TestMessages {
               break;
             }
             case 10: {
-              com.google.protobuf.ByteString bs = input.readBytes();
               bitField0_ |= 0x00000001;
-              stringField_ = bs;
+              stringField_ = input.readBytes();
               break;
             }
           }
@@ -1614,6 +1646,7 @@ public final class TestMessages {
     }
 
     private int bitField0_;
+    // required string string_field = 1;
     public static final int STRING_FIELD_FIELD_NUMBER = 1;
     private java.lang.Object stringField_;
     /**
@@ -1662,8 +1695,7 @@ public final class TestMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasStringField()) {
         memoizedIsInitialized = 0;
@@ -1774,9 +1806,8 @@ public final class TestMessages {
      * Protobuf type {@code n4systems.fieldid.api.pub.serialization.TestNestedMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:n4systems.fieldid.api.pub.serialization.TestNestedMessage)
-        com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.serialization.TestMessages.internal_static_n4systems_fieldid_api_pub_serialization_TestNestedMessage_descriptor;
@@ -1895,6 +1926,7 @@ public final class TestMessages {
       }
       private int bitField0_;
 
+      // required string string_field = 1;
       private java.lang.Object stringField_ = "";
       /**
        * <code>required string string_field = 1;</code>
@@ -1908,12 +1940,9 @@ public final class TestMessages {
       public java.lang.String getStringField() {
         java.lang.Object ref = stringField_;
         if (!(ref instanceof java.lang.String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            stringField_ = s;
-          }
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          stringField_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
@@ -1982,10 +2011,10 @@ public final class TestMessages {
     // @@protoc_insertion_point(class_scope:n4systems.fieldid.api.pub.serialization.TestNestedMessage)
   }
 
-  public interface TestContainerMessageOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:n4systems.fieldid.api.pub.serialization.TestContainerMessage)
-      com.google.protobuf.MessageOrBuilder {
+  public interface TestContainerMessageOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
 
+    // required int32 int32_field = 1;
     /**
      * <code>required int32 int32_field = 1;</code>
      */
@@ -1995,6 +2024,7 @@ public final class TestMessages {
      */
     int getInt32Field();
 
+    // optional .n4systems.fieldid.api.pub.serialization.TestNestedMessage nested = 2;
     /**
      * <code>optional .n4systems.fieldid.api.pub.serialization.TestNestedMessage nested = 2;</code>
      */
@@ -2012,9 +2042,8 @@ public final class TestMessages {
    * Protobuf type {@code n4systems.fieldid.api.pub.serialization.TestContainerMessage}
    */
   public static final class TestContainerMessage extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:n4systems.fieldid.api.pub.serialization.TestContainerMessage)
-      TestContainerMessageOrBuilder {
+      com.google.protobuf.GeneratedMessage
+      implements TestContainerMessageOrBuilder {
     // Use TestContainerMessage.newBuilder() to construct.
     private TestContainerMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -2118,6 +2147,7 @@ public final class TestMessages {
     }
 
     private int bitField0_;
+    // required int32 int32_field = 1;
     public static final int INT32_FIELD_FIELD_NUMBER = 1;
     private int int32Field_;
     /**
@@ -2133,6 +2163,7 @@ public final class TestMessages {
       return int32Field_;
     }
 
+    // optional .n4systems.fieldid.api.pub.serialization.TestNestedMessage nested = 2;
     public static final int NESTED_FIELD_NUMBER = 2;
     private com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessage nested_;
     /**
@@ -2161,8 +2192,7 @@ public final class TestMessages {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasInt32Field()) {
         memoizedIsInitialized = 0;
@@ -2286,9 +2316,8 @@ public final class TestMessages {
      * Protobuf type {@code n4systems.fieldid.api.pub.serialization.TestContainerMessage}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:n4systems.fieldid.api.pub.serialization.TestContainerMessage)
-        com.n4systems.fieldid.api.pub.serialization.TestMessages.TestContainerMessageOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.n4systems.fieldid.api.pub.serialization.TestMessages.TestContainerMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.serialization.TestMessages.internal_static_n4systems_fieldid_api_pub_serialization_TestContainerMessage_descriptor;
@@ -2429,6 +2458,7 @@ public final class TestMessages {
       }
       private int bitField0_;
 
+      // required int32 int32_field = 1;
       private int int32Field_ ;
       /**
        * <code>required int32 int32_field = 1;</code>
@@ -2461,6 +2491,7 @@ public final class TestMessages {
         return this;
       }
 
+      // optional .n4systems.fieldid.api.pub.serialization.TestNestedMessage nested = 2;
       private com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessage nested_ = com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessage.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessage, com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessage.Builder, com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessageOrBuilder> nestedBuilder_;
@@ -2569,7 +2600,7 @@ public final class TestMessages {
         if (nestedBuilder_ == null) {
           nestedBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessage, com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessage.Builder, com.n4systems.fieldid.api.pub.serialization.TestMessages.TestNestedMessageOrBuilder>(
-                  getNested(),
+                  nested_,
                   getParentForChildren(),
                   isClean());
           nested_ = null;
@@ -2588,17 +2619,17 @@ public final class TestMessages {
     // @@protoc_insertion_point(class_scope:n4systems.fieldid.api.pub.serialization.TestContainerMessage)
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_n4systems_fieldid_api_pub_serialization_TestSimpleMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_n4systems_fieldid_api_pub_serialization_TestSimpleMessage_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_n4systems_fieldid_api_pub_serialization_TestNestedMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_n4systems_fieldid_api_pub_serialization_TestNestedMessage_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_n4systems_fieldid_api_pub_serialization_TestContainerMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -2630,37 +2661,36 @@ public final class TestMessages {
       "api.pub.serializationB\014TestMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
+      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+        public com.google.protobuf.ExtensionRegistry assignDescriptors(
+            com.google.protobuf.Descriptors.FileDescriptor root) {
+          descriptor = root;
+          internal_static_n4systems_fieldid_api_pub_serialization_TestSimpleMessage_descriptor =
+            getDescriptor().getMessageTypes().get(0);
+          internal_static_n4systems_fieldid_api_pub_serialization_TestSimpleMessage_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_n4systems_fieldid_api_pub_serialization_TestSimpleMessage_descriptor,
+              new java.lang.String[] { "DoubleField", "FloatField", "Int32Field", "Int64Field", "Uint32Field", "Uint64Field", "Sint32Field", "Sint64Field", "Fixed32Field", "Fixed64Field", "Sfixed32Field", "Sfixed64Field", "BoolField", "StringField", });
+          internal_static_n4systems_fieldid_api_pub_serialization_TestNestedMessage_descriptor =
+            getDescriptor().getMessageTypes().get(1);
+          internal_static_n4systems_fieldid_api_pub_serialization_TestNestedMessage_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_n4systems_fieldid_api_pub_serialization_TestNestedMessage_descriptor,
+              new java.lang.String[] { "StringField", });
+          internal_static_n4systems_fieldid_api_pub_serialization_TestContainerMessage_descriptor =
+            getDescriptor().getMessageTypes().get(2);
+          internal_static_n4systems_fieldid_api_pub_serialization_TestContainerMessage_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_n4systems_fieldid_api_pub_serialization_TestContainerMessage_descriptor,
+              new java.lang.String[] { "Int32Field", "Nested", });
+          return null;
+        }
+      };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           com.n4systems.fieldid.api.pub.serialization.Extensions.getDescriptor(),
         }, assigner);
-    internal_static_n4systems_fieldid_api_pub_serialization_TestSimpleMessage_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_n4systems_fieldid_api_pub_serialization_TestSimpleMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_n4systems_fieldid_api_pub_serialization_TestSimpleMessage_descriptor,
-        new java.lang.String[] { "DoubleField", "FloatField", "Int32Field", "Int64Field", "Uint32Field", "Uint64Field", "Sint32Field", "Sint64Field", "Fixed32Field", "Fixed64Field", "Sfixed32Field", "Sfixed64Field", "BoolField", "StringField", });
-    internal_static_n4systems_fieldid_api_pub_serialization_TestNestedMessage_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_n4systems_fieldid_api_pub_serialization_TestNestedMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_n4systems_fieldid_api_pub_serialization_TestNestedMessage_descriptor,
-        new java.lang.String[] { "StringField", });
-    internal_static_n4systems_fieldid_api_pub_serialization_TestContainerMessage_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_n4systems_fieldid_api_pub_serialization_TestContainerMessage_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_n4systems_fieldid_api_pub_serialization_TestContainerMessage_descriptor,
-        new java.lang.String[] { "Int32Field", "Nested", });
-    com.n4systems.fieldid.api.pub.serialization.Extensions.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

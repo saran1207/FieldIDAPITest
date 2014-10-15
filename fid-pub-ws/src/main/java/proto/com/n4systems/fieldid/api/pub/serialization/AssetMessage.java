@@ -8,10 +8,10 @@ public final class AssetMessage {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface AssetOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:n4systems.fieldid.api.pub.serialization.Asset)
-      com.google.protobuf.MessageOrBuilder {
+  public interface AssetOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
 
+    // required int32 id = 1;
     /**
      * <code>required int32 id = 1;</code>
      */
@@ -25,9 +25,8 @@ public final class AssetMessage {
    * Protobuf type {@code n4systems.fieldid.api.pub.serialization.Asset}
    */
   public static final class Asset extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:n4systems.fieldid.api.pub.serialization.Asset)
-      AssetOrBuilder {
+      com.google.protobuf.GeneratedMessage
+      implements AssetOrBuilder {
     // Use Asset.newBuilder() to construct.
     private Asset(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -118,6 +117,7 @@ public final class AssetMessage {
     }
 
     private int bitField0_;
+    // required int32 id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private int id_;
     /**
@@ -139,8 +139,7 @@ public final class AssetMessage {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasId()) {
         memoizedIsInitialized = 0;
@@ -251,9 +250,8 @@ public final class AssetMessage {
      * Protobuf type {@code n4systems.fieldid.api.pub.serialization.Asset}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:n4systems.fieldid.api.pub.serialization.Asset)
-        com.n4systems.fieldid.api.pub.serialization.AssetMessage.AssetOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements com.n4systems.fieldid.api.pub.serialization.AssetMessage.AssetOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return com.n4systems.fieldid.api.pub.serialization.AssetMessage.internal_static_n4systems_fieldid_api_pub_serialization_Asset_descriptor;
@@ -370,6 +368,7 @@ public final class AssetMessage {
       }
       private int bitField0_;
 
+      // required int32 id = 1;
       private int id_ ;
       /**
        * <code>required int32 id = 1;</code>
@@ -413,7 +412,7 @@ public final class AssetMessage {
     // @@protoc_insertion_point(class_scope:n4systems.fieldid.api.pub.serialization.Asset)
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_n4systems_fieldid_api_pub_serialization_Asset_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -433,23 +432,23 @@ public final class AssetMessage {
       "onB\014AssetMessage"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
+      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+        public com.google.protobuf.ExtensionRegistry assignDescriptors(
+            com.google.protobuf.Descriptors.FileDescriptor root) {
+          descriptor = root;
+          internal_static_n4systems_fieldid_api_pub_serialization_Asset_descriptor =
+            getDescriptor().getMessageTypes().get(0);
+          internal_static_n4systems_fieldid_api_pub_serialization_Asset_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_n4systems_fieldid_api_pub_serialization_Asset_descriptor,
+              new java.lang.String[] { "Id", });
+          return null;
+        }
+      };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
-    internal_static_n4systems_fieldid_api_pub_serialization_Asset_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_n4systems_fieldid_api_pub_serialization_Asset_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_n4systems_fieldid_api_pub_serialization_Asset_descriptor,
-        new java.lang.String[] { "Id", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)
