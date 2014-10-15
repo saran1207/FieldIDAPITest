@@ -32,7 +32,7 @@
                 <version>0.3.2</version>
                 <configuration>
                     <protocExecutable>/usr/local/bin/protoc</protocExecutable>
-                    <outputDirectory>/Users/kirillternovsky/Documents/web/fid-pub-ws/src/main/java/proto</outputDirectory>
+                    <outputDirectory>${project.basedir}/src/main/java/proto</outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
