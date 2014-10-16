@@ -161,7 +161,7 @@ public class AddAssetTypePage extends FieldIDFrontEndPage {
                     assetTypeService.getAssetTypeGroupsByOrder(), new ListableChoiceRenderer<AssetTypeGroup>()).setNullValid(true));
             add(imagePanel = new AssetTypeImagePanel("image", model));
             add(attributePanel = new AssetTypeAttributePanel("attributes", model));
-            add(new TextField<String>("descriptionTemplate", new PropertyModel<String>(model, "descriptionTemplate")).add(new StringValidator.MaximumLengthValidator(256)));
+            add(new TextField<String>("descriptionTemplate", new PropertyModel<String>(model, "descriptionTemplate")));
             add(new AjaxLink<Void>("templateExample") {
                 @Override
                 public void onClick(AjaxRequestTarget target) {

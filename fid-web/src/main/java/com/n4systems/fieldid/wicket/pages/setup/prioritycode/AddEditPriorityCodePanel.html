@@ -1,3 +1,4 @@
+<html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
 
     <form wicket:id="form">
@@ -7,7 +8,7 @@
             <div wicket:id="feedbackPanel"/>
 
             <label><wicket:message key="label.name"/></label>
-            <input type="text" wicket:id="name">
+            <input type="text" wicket:id="name" maxlength="256">
 
             <p><wicket:message key="message.when_priority_occurs_auto_schedule"/></p>
 
@@ -24,3 +25,4 @@
     </form>
 
 </wicket:panel>
+</html>
