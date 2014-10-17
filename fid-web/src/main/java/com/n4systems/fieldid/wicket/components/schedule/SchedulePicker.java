@@ -28,19 +28,12 @@ public class SchedulePicker<T extends Event> extends DialogModalWindow {
                 close(target);
                 SchedulePicker.this.onPickComplete(target);
             }
-
-            @Override
-            protected void onDatePicked(AjaxRequestTarget target) {
-                SchedulePicker.this.onDatePicked(target);
-            }
         });
         setInitialWidth(370);
         setInitialHeight(450);
     }
 
     protected void onPickComplete(AjaxRequestTarget target) { }
-
-    protected void onDatePicked(AjaxRequestTarget target) { }
 
     public void setSaveButtonLabel(IModel<String> saveButtonLabel) {
         schedulePickerPanel.setSaveButtonLabel(saveButtonLabel);

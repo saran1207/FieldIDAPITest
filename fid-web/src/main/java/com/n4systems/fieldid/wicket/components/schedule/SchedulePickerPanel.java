@@ -1,6 +1,7 @@
 package com.n4systems.fieldid.wicket.components.schedule;
 
 import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.wicket.behavior.UpdateComponentOnChange;
 import com.n4systems.fieldid.wicket.components.DateTimePicker;
 import com.n4systems.fieldid.wicket.components.FidDropDownChoice;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
@@ -72,11 +73,12 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             add(dateTimePicker = new DateTimePicker("datePicker", new PropertyModel<Date>(eventScheduleModel, "dueDate"), true) {
                 @Override
                 protected void onDatePicked(AjaxRequestTarget target) {
-                    SchedulePickerPanel.this.onDatePicked(target);
+                    eventScheduleModel.getObject().setAssigneeOrDateUpdated();
                 }
             });
             dateTimePicker.getDateTextField().setRequired(true);
             dateTimePicker.setAllDay(dueDate == null || DateUtil.isMidnight(dueDate));
+            dateTimePicker.withoutPerformSetDateOnInitialization();
 
             DropDownChoice<EventType> eventTypeSelect = new FidDropDownChoice<EventType>("eventTypeSelect", new PropertyModel<EventType>(eventScheduleModel, "type"), eventTypeOptions, new ListableChoiceRenderer<EventType>());
             DropDownChoice<Project> jobSelect = new FidDropDownChoice<Project>("jobSelect", new PropertyModel<Project>(eventScheduleModel, "project"), jobsOptions, new ListableChoiceRenderer<Project>());
@@ -120,6 +122,12 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
             if ((null != eventScheduleModel.getObject().getType()) && (eventScheduleModel.getObject().getType().isActionEventType())) {
                 assignedUserOrGroupSelect.setNullVoid(false);
             }
+            assignedUserOrGroupSelect.addBehavior(new UpdateComponentOnChange() {
+                @Override
+                protected void onUpdate(AjaxRequestTarget target) {
+                    eventScheduleModel.getObject().setAssigneeOrDateUpdated();
+                }
+            });
 
             add(assignedUserOrGroupSelect);
 
@@ -180,8 +188,6 @@ public class SchedulePickerPanel<T extends Event> extends Panel {
     }
 
     protected void onPickComplete(AjaxRequestTarget target) { }
-
-    protected void onDatePicked(AjaxRequestTarget target) { }
 
     @Override
     public void renderHead(IHeaderResponse response) {

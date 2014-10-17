@@ -41,7 +41,6 @@ public class OpenActionsCell extends Panel {
 
     private ModalWindow modalWindow;
     private SchedulePicker schedulePicker;
-    private boolean isDateUpdated = false;
 
     public OpenActionsCell(String id, final IModel<ThingEvent> eventModel, final Panel eventDisplayPanel) {
         super(id);
@@ -52,13 +51,8 @@ public class OpenActionsCell extends Panel {
             { setSaveButtonLabel(new FIDLabelModel("label.save")); }
             @Override
             protected void onPickComplete(AjaxRequestTarget target) {
-                eventScheduleService.updateSchedule(eventModel.getObject(), isDateUpdated);
+                eventScheduleService.updateSchedule(eventModel.getObject());
                 target.add(eventDisplayPanel);
-            }
-
-            @Override
-            protected void onDatePicked(AjaxRequestTarget target) {
-                isDateUpdated = true;
             }
         });
 

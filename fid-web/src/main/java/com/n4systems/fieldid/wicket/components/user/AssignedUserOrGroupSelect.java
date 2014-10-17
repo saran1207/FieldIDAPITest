@@ -10,6 +10,7 @@ import com.n4systems.model.user.UnassignedIndicator;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
 import org.apache.wicket.Component;
+import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponent;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -79,6 +80,12 @@ public class AssignedUserOrGroupSelect extends Panel {
     public Component setNullVoid(boolean nullvoid) {
         DropDownChoice assigneeSelect = (DropDownChoice) get("assigneeSelect");
         assigneeSelect.setNullValid(nullvoid);
+        return this;
+    }
+
+    public Component addBehavior(Behavior behavior) {
+        DropDownChoice assigneeSelect = (DropDownChoice) get("assigneeSelect");
+        assigneeSelect.add(behavior);
         return this;
     }
 

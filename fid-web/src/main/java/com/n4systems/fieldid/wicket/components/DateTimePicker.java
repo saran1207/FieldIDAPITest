@@ -87,7 +87,6 @@ public class DateTimePicker extends Panel {
                     }
                 };
 
-
             }
 
         });
