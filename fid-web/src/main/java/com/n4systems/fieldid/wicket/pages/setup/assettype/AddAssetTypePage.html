@@ -14,7 +14,7 @@
         <fieldset>
             <div class="control-group inline">
                 <label><wicket:message key="label.name"/></label>
-                <input type="text" wicket:id="name" class="width-xxlrg"/>
+                <input type="text" wicket:id="name" class="width-xxlrg" maxlength="256"/>
             </div>
 
             <div class="control-group inline">
@@ -58,7 +58,7 @@
                 <div class="control-group checkbox">
                     <input type="checkbox" wicket:id="hasManufacturerCert"/>
                     <label><strong><wicket:message key="label.manufacturer_certificate_generate"/></strong> <wicket:message key="label.manufacturer_certificate_text"/></label>
-                    <textarea wicket:id="manufacturerCertText" class="manufacturer-cert-text"/>
+                    <textarea wicket:id="manufacturerCertText" class="manufacturer-cert-text" maxlength="2000"/>
                 </div>
 
                 <div class="form-horizontal">
@@ -74,15 +74,15 @@
                     <h3><wicket:message key="label.warnings_more_info"/></h3>
                     <div class="control-group">
                         <label><wicket:message key="label.warnings"/></label>
-                        <textarea wicket:id="warnings"/>
+                        <textarea wicket:id="warnings" maxlength="2048"/>
                     </div>
                     <div class="control-group">
                         <label><wicket:message key="label.more_information"/></label>
-                        <textarea  wicket:id="instructions"/>
+                        <textarea wicket:id="instructions" maxlength="2048"/>
                     </div>
                     <div class="control-group">
                         <label><wicket:message key="label.cautionsurl"/></label>
-                        <input type="text" wicket:id="cautionUrl"/>
+                        <input type="text" wicket:id="cautionUrl" maxlength="256"/>
                     </div>
                 </div><!-- /.form-horizontal -->
             </div>

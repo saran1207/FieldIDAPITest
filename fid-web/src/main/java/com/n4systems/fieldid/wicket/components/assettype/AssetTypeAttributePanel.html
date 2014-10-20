@@ -17,12 +17,12 @@
         </li>
         <li wicket:id="existingAttributes" class="clearfix disabled">
             <span class="entypo-icons entypo-list">reorder</span>
-            <span><input type="text" wicket:id="attributeName" class="width-sml" /></span>
+            <span><input type="text" wicket:id="attributeName" class="width-sml" maxlength="256"/></span>
             <span><select wicket:id="attributeType" class="width-xsml" /></span>
             <span class="required"><input type="checkbox" wicket:id="required"/></span>
             <span class="width-lrg">
                 <label wicket:id="textOption">--</label>
-                <input type="text" wicket:id="selectOptions" class="width-lrg"/>
+                <input type="text" wicket:id="selectOptions" class="width-lrg" maxlength="256"/>
                 <input type="checkbox" wicket:id="dateOption"/>
                 <label wicket:enclosure="dateOption" class="date-option"><wicket:message key="label.include_time"/></label>
                 <select class="width-lrg" wicket:id="unitOfMeasureChoice"/>

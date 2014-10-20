@@ -101,17 +101,15 @@ public class  EventScheduleService extends FieldIdPersistenceService {
         return persistenceService.find(builder);
     }
 
-    public Event updateSchedule(ThingEvent schedule) {
-        return updateSchedule(schedule, false);
-    }
-
     @Transactional
-    public Event updateSchedule(ThingEvent schedule, boolean dateUpdated) {
-        if(schedule.isSendEmailOnUpdate() && dateUpdated) {
-           AssigneeNotification assigneeNotification = new AssigneeNotification();
-           assigneeNotification.setEvent(schedule);
-           persistenceService.save(assigneeNotification);
-           schedule.setAssigneeNotification(assigneeNotification);
+    public Event updateSchedule(ThingEvent schedule) {
+        if(schedule.isSendEmailOnUpdate() && schedule.getAssigneeOrDateUpdated()) {
+           if(!notifyEventAssigneeService.notificationExists(schedule)) {
+               AssigneeNotification assigneeNotification = new AssigneeNotification();
+               assigneeNotification.setEvent(schedule);
+               persistenceService.save(assigneeNotification);
+               schedule.setAssigneeNotification(assigneeNotification);
+           }
         }
 
         ThingEvent updatedSchedule = persistenceService.update(schedule);

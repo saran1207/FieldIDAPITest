@@ -143,7 +143,10 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
     private String createdPlatform;
 
     @Column(name="send_email_on_update")
-    private Boolean sendEmailOnUpdate;
+    private Boolean sendEmailOnUpdate = Boolean.TRUE;
+
+    @Transient
+    private Boolean assigneeOrDateUpdated = Boolean.FALSE;
 
 	public Event() {
 	}
@@ -638,10 +641,6 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
         return sendEmailOnUpdate;
     }
 
-    public void setSendEmailOnUpdate() {
-        setSendEmailOnUpdate(true);
-    }
-
     public void setSendEmailOnUpdate(Boolean sendEmailOnUpdate) {
         this.sendEmailOnUpdate = sendEmailOnUpdate;
     }
@@ -671,6 +670,14 @@ public abstract class Event<T extends EventType, V extends Event, R extends Enti
             this.assignee = null;
             this.assignedGroup = null;
         }
+    }
+
+    public Boolean getAssigneeOrDateUpdated() {
+        return assigneeOrDateUpdated;
+    }
+
+    public void setAssigneeOrDateUpdated() {
+        this.assigneeOrDateUpdated = Boolean.TRUE;
     }
 }
 

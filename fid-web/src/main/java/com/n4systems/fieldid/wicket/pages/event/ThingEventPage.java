@@ -44,7 +44,6 @@ public abstract class ThingEventPage extends EventPage<ThingEvent> {
     protected ThingEvent createNewOpenEvent() {
         ThingEvent openEvent = new ThingEvent();
         openEvent.setAsset(event.getObject().getAsset());
-        openEvent.setSendEmailOnUpdate();
         return openEvent;
     }
 

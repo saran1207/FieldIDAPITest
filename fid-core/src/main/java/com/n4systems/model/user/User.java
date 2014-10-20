@@ -114,6 +114,13 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
 	@Column(name = "last_login")
 	private Date lastLogin;
+
+	@Embedded
+	@AttributeOverrides({
+			@AttributeOverride(name = "key", column = @Column(name = "token_key")),
+			@AttributeOverride(name = "secret", column = @Column(name = "token_secret"))
+	})
+	private KeyPair authToken = new KeyPair();
 	
 	@Override
 	protected void onCreate() {
@@ -595,6 +602,14 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 
 	public void setLastLogin(Date lastLogin) {
 		this.lastLogin = lastLogin;
+	}
+
+	public KeyPair getAuthToken() {
+		return authToken;
+	}
+
+	public void setAuthToken(KeyPair authToken) {
+		this.authToken = authToken;
 	}
 
     public boolean isResetEmailSent() {

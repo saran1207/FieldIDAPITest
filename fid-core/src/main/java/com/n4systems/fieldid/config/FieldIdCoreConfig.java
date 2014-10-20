@@ -70,6 +70,7 @@ import com.n4systems.fieldid.service.uuid.AtomicLongService;
 import com.n4systems.fieldid.service.uuid.UUIDService;
 import com.n4systems.persistence.listeners.LocalizationListener;
 import com.n4systems.persistence.listeners.SetupDataUpdateEventListener;
+import com.n4systems.services.AuthService;
 import com.n4systems.services.ConfigService;
 import com.n4systems.services.SecurityContext;
 import com.n4systems.services.asset.AssetSaveServiceSpring;
@@ -847,4 +848,9 @@ public class FieldIdCoreConfig {
     public MassEventService massEventService() {
         return new MassEventService();
     }
+
+	@Bean
+	public AuthService authService() {
+		return new AuthService();
+	}
 }

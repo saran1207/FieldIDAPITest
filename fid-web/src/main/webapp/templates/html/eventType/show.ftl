@@ -37,7 +37,7 @@ ${action.setPageType('event_type', 'show')!}
 	<p>
 		<label><@s.text name="label.group"/></label>
 		<span class="fieldValue">
-			<a href="<@s.url value='/w/eventTypeGroupView' uniqueID="${eventType.group.id}"/>">${eventType.group.name?html}</a>
+			<a href="<@s.url value='/w/setup/eventTypeGroupView' uniqueID="${eventType.group.id}"/>">${eventType.group.name?html}</a>
 		</span>
 	</p>
 
