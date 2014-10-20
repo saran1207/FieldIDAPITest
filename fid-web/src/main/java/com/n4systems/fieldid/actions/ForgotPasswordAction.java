@@ -94,8 +94,10 @@ public class ForgotPasswordAction extends LoginAction {
 					policy.getMinSymbols()+""} ));
 			return INPUT;
 		}
-        
+
         userManager.updatePassword( user.getId(), newPassword, getPasswordPolicy());
+        user.setResetEmailSent(false);
+        userManager.updateUser(user);
         addFlashMessageText("message.passwordresetsuccess");
         return SUCCESS;
 	}

@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.user;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.SendSavedItemSchedule;
+import com.n4systems.model.api.Archivable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.ExternalOrgFilter;
 import com.n4systems.model.orgs.InternalOrgFilter;
@@ -21,6 +22,8 @@ import com.n4systems.util.UserBelongsToFilter;
 import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
+import org.apache.commons.lang.time.DateUtils;
+import org.joda.time.LocalDate;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
@@ -46,10 +49,35 @@ public class UserService extends FieldIdPersistenceService {
         QueryBuilder<User> builder = createUserQueryBuilder(criteria);
 
         if (!getCurrentUser().getGroups().isEmpty()) {
-            return new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
+            return new ArrayList<>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
         }
 
         return persistenceService.findAll(builder);
+    }
+
+    public List<User> getExpiringPasswordUsersByTenant(Long tenantId, int expiringDays) {
+
+        List<User> finalListOfUsers = new ArrayList<>();
+        Date expiringDate = new Date();
+        Date today = new Date();
+        Date userDate = DateUtils.addDays(today, 10);
+
+        QueryBuilder<User> query = new QueryBuilder<>(User.class, new OpenSecurityFilter());
+        query.addSimpleWhere("tenant.id", tenantId);
+        query.addSimpleWhere("state", Archivable.EntityState.ACTIVE);
+        List<User> userList = persistenceService.findAll(query);
+
+        for(User user:userList) {
+            if(user.getPasswordChanged() != null) {
+                expiringDate = DateUtils.addDays(user.getPasswordChanged(), expiringDays);
+
+                if (DateUtils.isSameDay(expiringDate, userDate)) {
+                    finalListOfUsers.add(user);
+                }
+            }
+        }
+
+        return finalListOfUsers;
     }
 
     public Long countUsers(UserListFilterCriteria criteria) {

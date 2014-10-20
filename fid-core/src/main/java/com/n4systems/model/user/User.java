@@ -53,6 +53,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	private Date lockedUntil;
 	private Date passwordChanged;
     private boolean displayLastRunSearches = true;
+    private boolean resetEmailSent = false;
 
 
     private Locale language;
@@ -610,4 +611,12 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 	public void setAuthToken(KeyPair authToken) {
 		this.authToken = authToken;
 	}
+
+    public boolean isResetEmailSent() {
+        return resetEmailSent;
+    }
+
+    public void setResetEmailSent(boolean resetEmailSent) {
+        this.resetEmailSent = resetEmailSent;
+    }
 }

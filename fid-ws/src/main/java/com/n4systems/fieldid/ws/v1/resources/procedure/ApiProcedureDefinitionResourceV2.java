@@ -28,6 +28,8 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Component
 @Path("procedureDefinitionV2")
@@ -79,8 +81,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             log.error("There was an error when attempting to process images in the ProcedureDefinition.  Error: " + ipe.getMessage(), ipe);
 
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("There was an error when attempting to process images in the ProcedureDefinition.  Error: " + ipe.getMessage())
-                           .build();
+                    .entity("There was an error when attempting to process images in the ProcedureDefinition.  Error: " + ipe.getMessage())
+                    .build();
         } catch (PersistenceException pe) {
             log.error("There was an error retrieving data related to the ProcedureDefinition.  Error: " + pe.getMessage(), pe);
 
@@ -91,32 +93,32 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             log.error("There was an error processing an Isolation Point in the provided JSON!  Error: " + ippe.getMessage(), ippe);
 
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("There was an error processing an Isolation Point in the provided JSON!  Error: " + ippe.getMessage())
-                           .build();
+                    .entity("There was an error processing an Isolation Point in the provided JSON!  Error: " + ippe.getMessage())
+                    .build();
         } catch (Exception e) {
             log.error("Unexpected error!!!  Error: " + e.getMessage(), e);
 
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                           .entity("Unexpected error!!!  Error: " + e.getMessage())
-                           .build();
+                    .entity("Unexpected error!!!  Error: " + e.getMessage())
+                    .build();
         }
     }
 
     @GET
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("/")
-	@Transactional(readOnly = true)
-	public ListResponse<ApiProcedureDefinitionV2> findForAsset(
+    @Transactional(readOnly = true)
+    public ListResponse<ApiProcedureDefinitionV2> findForAsset(
             @PathParam("assetId") String assetId,
-			@DefaultValue("0") @QueryParam("page") int page,
-			@DefaultValue("100") @QueryParam("pageSize") int pageSize) {
+            @DefaultValue("0") @QueryParam("page") int page,
+            @DefaultValue("100") @QueryParam("pageSize") int pageSize) {
         QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
         builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.mobileGUID", assetId));
         List<ApiProcedureDefinitionV2> procs = convertAllProcedureDefinitionsToApiModels(persistenceService.findAll(builder, page, pageSize));
 
-        return new ListResponse<ApiProcedureDefinitionV2>(procs, page, pageSize, persistenceService.count(builder));
-	}
+        return new ListResponse<>(procs, page, pageSize, persistenceService.count(builder));
+    }
 
     @GET
     @Path("list")
@@ -131,23 +133,23 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         List<ProcedureDefinition> procs = persistenceService.findAll(builder);
         List<ApiProcedureDefinitionV2> apiProcs = convertAllProcedureDefinitionsToApiModels(procs);
 
-        return new ListResponse<ApiProcedureDefinitionV2>(apiProcs, 0, apiProcs.size(), apiProcs.size());
+        return new ListResponse<>(apiProcs, 0, apiProcs.size(), apiProcs.size());
     }
 
     @GET
     @Path("/asset/{assetId}/procedures/test")
-	@Consumes(MediaType.TEXT_PLAIN)
-	@Produces(MediaType.APPLICATION_JSON)
-	@Transactional(readOnly = true)
-	public String FindForAssetTest(
+    @Consumes(MediaType.TEXT_PLAIN)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Transactional(readOnly = true)
+    public String FindForAssetTest(
             @PathParam("assetId") String assetId,
-			@DefaultValue("0") @QueryParam("page") int page,
-			@DefaultValue("100") @QueryParam("pageSize") int pageSize) {
+            @DefaultValue("0") @QueryParam("page") int page,
+            @DefaultValue("100") @QueryParam("pageSize") int pageSize) {
         QueryBuilder<ProcedureDefinition> builder = createUserSecurityBuilder(ProcedureDefinition.class);
         builder.addWhere(WhereClauseFactory.create(Comparator.EQ, "asset.mobileGUID", "0"));
 
         return builder.getQueryString();
-	}
+    }
 
     /**
      * This method is called to delete ProcedureDefinitions from the database.  It should be noted that a user may only
@@ -179,17 +181,11 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         //If there was no success, we return a 409, meaning that there was a conflict in the request.
         //If there WAS success, we return a 204, meaning that everything is OK, but there is no content being returned.
         return Response.status(responseStatus)
-                       .build();
+                .build();
     }
 
     protected List<ApiProcedureDefinitionV2> convertAllProcedureDefinitionsToApiModels(List<ProcedureDefinition> procedureDefinitions) {
-        List<ApiProcedureDefinitionV2> apiProcedureDefinitions = new ArrayList<ApiProcedureDefinitionV2>();
-
-        for(ProcedureDefinition pd : procedureDefinitions) {
-            apiProcedureDefinitions.add(convertEntityToApiModel(pd));
-        }
-
-        return apiProcedureDefinitions;
+        return procedureDefinitions.stream().map(this::convertEntityToApiModel).collect(Collectors.toList());
     }
 
     /*@Override
@@ -305,8 +301,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                         procDef.removeIsolationPoint(isoPoint);
 
                         isoPoint = updateEntityIsolationPoint(apiIsoPoint,
-                                                              isoPoint,
-                                                              procDef.getImages());
+                                isoPoint,
+                                procDef.getImages());
 
                         procDef.addIsolationPoint(isoPoint);
                     }
@@ -327,7 +323,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         for(ProcedureDefinitionImage image : images) {
             if(mobileGUID != null &&
-               mobileGUID.equals(image.getMobileGUID())) {
+                    mobileGUID.equals(image.getMobileGUID())) {
 
                 theImage = image;
                 break;
@@ -341,8 +337,6 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                                                       IsolationPoint isolationPoint,
                                                       List<ProcedureDefinitionImage> images) {
 
-        //Why are we setting the ID from the Client side when we already know it's right?!
-//        isolationPoint.setId(apiIsolationPoint.getSid());
         isolationPoint.setSourceType(IsolationPointSourceType.valueOf(apiIsolationPoint.getSource()));
         isolationPoint.setSourceText(apiIsolationPoint.getSourceText());
         isolationPoint.setIdentifier(apiIsolationPoint.getIdentifier());
@@ -355,7 +349,8 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         isolationPoint.setDeviceDefinition(convertDefinition(apiIsolationPoint.getDeviceDefinition()));
         isolationPoint.setLockDefinition(convertDefinition(apiIsolationPoint.getLockDefinition()));
         ProcedureDefinitionImage theImage = null;
-        if(images.size() > 0) {
+        //You should probably only try matching an image if an isolation point has an annotation.
+        if(images.size() > 0 && apiIsolationPoint.getAnnotation() != null) {
             theImage = findMatchingImage(images, apiIsolationPoint.getAnnotation().getImageId());
         }
 
@@ -379,47 +374,44 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             }
         } else {
             //2) If the ProcDef is NOT NEW, we need to try and match the images from the old one to the new one.
-            //  a) We need to find all images that match between the two and transfer over any properties to the Entity
-            for(ApiProcedureDefinitionImage apiImage : images) {
-                for(ProcedureDefinitionImage procImage : procDef.getImages()) {
-                    if(apiImage.getSid() != null &&
-                       apiImage.getSid().equals(procImage.getMobileGUID())) {
 
-                        procImage.setMobileGUID(apiImage.getSid());
+            //Step 1: Find all images in the JSON which aren't in the existing PD.
+            //First we get the Mobile ID of all of the images that exist and map them against the image object for easy access.
+            Map<String, ProcedureDefinitionImage> existingImages = procDef.getImages()
+                    .stream()
+                    .collect(Collectors.toMap(ProcedureDefinitionImage::getMobileGUID, image -> image));
 
-                        procImage.setFileName(apiImage.getFileName());
-
-                        procImage.setTenant(getCurrentTenant());
-
-                        procImage.setProcedureDefinition(procDef); //May not be necessary to do this... we're just updating.
-
-                        procImage.setAnnotations(convertToEntityAnnotations(apiImage.getAnnotations(), procImage));
-
-                        imageList.add(procImage);
-                        break;
-                    }
-                }
-            }
+            //Then we break apart the inbound images into two lists:  False (not in the existing PD) and True (in the existing PD)
+            Map<Boolean, List<ApiProcedureDefinitionImage>> existingAndNotExistingInboundImages =
+                    images.stream()
+                            .collect(Collectors.partitioningBy(image -> existingImages.containsKey(image.getSid())));
 
 
-            //  b) We need to find all images that are in the API model, but not the Entity and add them.
-            for(ApiProcedureDefinitionImage apiImage : images) {
-                boolean notFound = true;
+            //Step 2: We want to update all of the fields for the existing images... we don't care about image data here.
+            existingAndNotExistingInboundImages.get(Boolean.TRUE)
+                    .stream().forEach(apiImage -> imageList.add(updateExistingImage(apiImage, existingImages.get(apiImage.getSid()))));
 
-                for(ProcedureDefinitionImage procDefImage : procDef.getImages()) {
-                    if(procDefImage.getMobileGUID().equals(apiImage.getSid())) {
-                        notFound = false;
-                        break;
-                    }
-                }
 
-                if(notFound) {
-                    imageList.add(createNewImage(apiImage, procDef));
-                }
+            //Step 3: If there are images that weren't in the existing PD...
+            //          If image data exists, create new images.
+            //          If image data doesn't exist, kick an exception... bail processing... request is invalid.
+            //We CAN'T use streams here, because the downstream method (createNewImage) kicks off an exception if the
+            //image can't be uploaded to S3.  We COULD use streams for this if we wanted to throw an RTE, but I don't
+            //like using those, because it doesn't feel as elegant.  The code that would have worked if not for the
+            //exceptions is commented below for your reading pleasure.
+//            existingAndNotExistingInboundImages.get(Boolean.FALSE).stream().forEach(apiImage -> imageList.add(createNewImage(apiImage, procDef)));
+            for(ApiProcedureDefinitionImage apiImage : existingAndNotExistingInboundImages.get(Boolean.FALSE)) {
+                imageList.add(createNewImage(apiImage, procDef));
             }
         }
 
         return imageList;
+    }
+
+    private ProcedureDefinitionImage updateExistingImage(ApiProcedureDefinitionImage apiImage, ProcedureDefinitionImage procImage) {
+        procImage.setAnnotations(convertToEntityAnnotations(apiImage.getAnnotations(), procImage));
+
+        return procImage;
     }
 
     private ProcedureDefinitionImage createNewImage(ApiProcedureDefinitionImage image,
@@ -434,6 +426,10 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         convertedImage.setTenant(getCurrentTenant());
 
         convertedImage.setProcedureDefinition(procDef);
+
+        if(image.getData() == null) {
+            throw new ImageProcessingException("There was no image present in what appears to be a new image with ID " + image.getSid());
+        }
 
 
         convertedImage = s3Service.uploadTempProcedureDefImage(convertedImage, "image/jpeg", image.getData());
@@ -456,7 +452,6 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                     convertedAnnotations.add(convertApiAnnotation(imageAnnotation, originalAnnotation, image));
                 }
             }
-//            convertedAnnotations.add(convertAnnotation(imageAnnotation, image));
         }
 
         return convertedAnnotations;
