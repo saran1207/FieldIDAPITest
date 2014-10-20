@@ -47,7 +47,7 @@ public class OrgLocationPicker extends FormComponentPanel<EntityWithTenant> {
     private Boolean locationPicker = false;
 
     public OrgLocationPicker(String id, IModel<BaseOrg> orgModel) {
-        this(id,new OrgLocationModel(orgModel,null));
+        this(id,new OrgLocationModel(orgModel));
     }
 
     public OrgLocationPicker(String id, IModel<BaseOrg> orgModel, IModel<PredefinedLocation> locationModel) {

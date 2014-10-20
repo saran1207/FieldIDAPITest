@@ -92,7 +92,7 @@ public class ReportingFilterPanel extends Panel {
         add(new CollapsiblePanel("ownershipCriteriaPanel", new StringResourceModel("label.ownership", this, null)) {
             @Override
             protected Panel createContainedPanel(String id) {
-                return new OwnershipCriteriaPanel(id, model);
+                return new OwnershipCriteriaPanel<>(id, model);
             }
         });
 
