@@ -70,8 +70,7 @@ public class UserService extends FieldIdPersistenceService {
         for(User user:userList) {
             if(user.getPasswordChanged() != null) {
                 expiringDate = DateUtils.addDays(user.getPasswordChanged(), expiringDays);
-
-                if (DateUtils.isSameDay(expiringDate, userDate)) {
+                if (expiringDate.before(userDate) && expiringDate.after(today)) {
                     finalListOfUsers.add(user);
                 }
             }

@@ -27,7 +27,7 @@
 
 <div class="notificationMessage">
     <p>
-        Your current password for Master Lock FieldiD will be expiring in 10 days.
+        Your current password for Master Lock FieldiD will be expiring within 10 days.
     </p>
     <p>
         Please log into your account and change your password by clicking on your name and then Change Password.
