@@ -77,9 +77,7 @@ public class ChangePasswordCrud extends AbstractCrud {
 		}
 		
 		userManager.updatePassword( user.getId(), newPassword, getPasswordPolicy());
-        user.setResetEmailSent(false);
-        userManager.updateUser(user);
-		
+
 		logger.info( "password updated for " + getSessionUser().getUserID() );
 		addFlashMessageText( "message.passwordupdated" );			
 		getSession().remove( "passwordReset" );

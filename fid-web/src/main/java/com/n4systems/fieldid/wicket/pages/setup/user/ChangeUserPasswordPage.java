@@ -61,8 +61,7 @@ public class ChangeUserPasswordPage extends FieldIDTemplatePage {
             protected void onSubmit() {
                 User user = userModel.getObject();
                 user.updatePassword(newPassword);
-                user.setResetEmailSent(false);
-                userService.update(user);
+
                 FieldIDSession.get().info(new FIDLabelModel("message.users_password_updated").getObject());
             }
         });

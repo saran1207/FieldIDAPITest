@@ -283,6 +283,7 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		addPreviousPassword();
 		assignPassword(plainTextPassword);
 		setPasswordChanged(new Date());
+        setResetEmailSent(false);
 		clearResetPasswordKey();
 		unlock();
 	}
