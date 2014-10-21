@@ -22,7 +22,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 	@Override
 	protected ListResponse<ApiEventType> getApiPage(DateParam after, int page, int pageSize) {
 		//XXX - filtering out PlaceEventTypes, will be removed when place event types are implemented on mobile
-		List<EventType> nonPlaceEventTypes = new ArrayList<EventType>();
+		List<EventType> nonPlaceEventTypes = new ArrayList<>();
 		for (EventType eventType: persistenceService.findAll(createFindAllBuilder(after))) {
 			if (!(eventType instanceof PlaceEventType)) {
 				nonPlaceEventTypes.add(eventType);
@@ -33,7 +33,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		int startIndex = page * pageSize;
 
 		if (startIndex > nonPlaceEventTypes.size()) {
-			apiModels = new ArrayList<ApiEventType>();
+			apiModels = new ArrayList<>();
 		} else {
 			int endIndex = startIndex + pageSize;
 			if (endIndex > nonPlaceEventTypes.size()) {
@@ -41,7 +41,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 			}
 			apiModels = convertAllEntitiesToApiModels(nonPlaceEventTypes.subList(startIndex, endIndex));
 		}
-		return new ListResponse<ApiEventType>(apiModels, page, pageSize, nonPlaceEventTypes.size());
+		return new ListResponse<>(apiModels, page, pageSize, nonPlaceEventTypes.size());
 	}
 
 	@Override
@@ -95,6 +95,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 		apiSection.setActive(!section.isRetired());
 		apiSection.setModified(section.getModified());
 		apiSection.setTitle(section.getTitle());
+        apiSection.setOptional(section.isOptional());
 
 		for (Criteria criteria : section.getCriteria()) {
 			apiSection.getCriteria().add(convertCriteria(criteria));
@@ -146,7 +147,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 	}
 
 	private List<ApiOneClickState> convertStateSet(ButtonGroup buttonGroup) {
-		List<ApiOneClickState> apiStates = new ArrayList<ApiOneClickState>();
+		List<ApiOneClickState> apiStates = new ArrayList<>();
 		for (Button button : buttonGroup.getButtons()) {
 			ApiOneClickState apiState = new ApiOneClickState();
 			apiState.setSid(button.getId());
@@ -161,7 +162,7 @@ public class ApiEventTypeResource extends SetupDataResource<ApiEventType, EventT
 	}
 
 	private List<ApiScore> convertScoreGroup(ScoreGroup group) {
-		List<ApiScore> apiScores = new ArrayList<ApiScore>();
+		List<ApiScore> apiScores = new ArrayList<>();
 		for (Score score: group.getScores()) {
 			ApiScore apiScore = new ApiScore();
 			apiScore.setSid(score.getId());
