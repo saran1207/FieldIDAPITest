@@ -69,6 +69,24 @@ public class TenantSettings extends EntityWithTenant {
 	})
 	private KeyPair authConsumer = new KeyPair();
 
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+		generateOAuthTokens();
+	}
+
+	@Override
+	protected void onCreate() {
+		super.onCreate();
+		generateOAuthTokens();
+	}
+
+	private void generateOAuthTokens() {
+		if (!authConsumer.isSet()) {
+			authConsumer = KeyPair.generate();
+		}
+	}
+
     public boolean isSecondaryOrgsEnabled() {
 		return secondaryOrgsEnabled;
 	}

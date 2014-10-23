@@ -151,7 +151,14 @@ public class User extends ArchivableEntityWithOwner implements Listable<Long>, S
 		generateReferralKeyIfNull();
 		generateGlobalIdIfNull();
 		generateAuthKey();
-	}		
+		generateOAuthTokens();
+	}
+
+	private void generateOAuthTokens() {
+		if (!authToken.isSet()) {
+			authToken = KeyPair.generate();
+		}
+	}
 	
 	private void trimNames() {
 		this.userID = (userID != null) ? userID.trim() : null;
