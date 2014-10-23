@@ -1,0 +1,1 @@
+update masterevents set state='RETIRED' where state='DELETE';
