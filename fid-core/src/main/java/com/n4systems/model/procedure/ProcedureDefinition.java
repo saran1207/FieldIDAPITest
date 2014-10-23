@@ -364,6 +364,15 @@ public class ProcedureDefinition extends ArchivableEntityWithTenant implements L
         reindexUnlockIsolationPoints(getUnlockIsolationPoints());
     }
 
+    public void removeIsolationPointOnly(IsolationPoint isolationPoint) {
+        List<IsolationPoint> isolationPointList = getLockIsolationPoints();
+        isolationPointList.remove(isolationPoint);
+        isolationPoints.remove(isolationPoint);
+
+        reindexLockIsolationPoints(isolationPointList);
+        reindexUnlockIsolationPoints(getUnlockIsolationPoints());
+    }
+
     public void softDeleteImage(ImageAnnotation annotation) {
         if (annotation==null) {
             return;

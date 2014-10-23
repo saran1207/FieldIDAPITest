@@ -8,6 +8,7 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValueResource;
+import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
@@ -249,18 +250,26 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
         //Now we do the hard stuff:
 
 
-        //1) Set the images.
+        //2) Set the images.
         procDef.setImages(convertToEntityImages(apiProcDef.getImages(), procDef));
 
-        //2) Set the isolation points.
-        procDef = convertToEntityIsolationPoints(procDef, apiProcDef.getIsolationPoints());
 
+        //1) Set the isolation points.
+        procDef = convertToEntityIsolationPoints(procDef, apiProcDef.getIsolationPoints());
 
         return procDef;
     }
 
     private ProcedureDefinition convertToEntityIsolationPoints(ProcedureDefinition procDef, List<ApiIsolationPoint> isolationPoints) throws IsolationPointProcessingException {
-        List<IsolationPoint> addUs = Lists.newArrayList();
+        List<Long> inboundIPs = isolationPoints.stream().map(ApiIsolationPoint::getSid).collect(Collectors.toList());
+
+        for(IsolationPoint isolationPoint : procDef.getLockIsolationPoints()) {
+            if(!inboundIPs.contains(isolationPoint.getId())) {
+                procDef.removeIsolationPointOnly(isolationPoint);
+                //We must also remove the IsolationPoint from the DB, otherwise Hibernate gets grumpy.
+                persistenceService.remove(isolationPoint);
+            }
+        }
 
         for(ApiIsolationPoint apiIsoPoint : isolationPoints) {
             //New Isolation Point
@@ -298,7 +307,9 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 //Existing isoPoint, so we update only the fields that changed.
                 for(IsolationPoint isoPoint : procDef.getIsolationPoints()) {
                     if(isoPoint.getId().equals(apiIsoPoint.getSid())) {
-                        procDef.removeIsolationPoint(isoPoint);
+                        //Here, we ONLY remove the isolation point, because we're only taking it out to update it...
+                        //given that this isn't permanent, this should be OK.
+                        procDef.removeIsolationPointOnly(isoPoint);
 
                         isoPoint = updateEntityIsolationPoint(apiIsoPoint,
                                 isoPoint,
@@ -309,11 +320,6 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
                 }
             }
         }
-
-        //While this is deprecated, we pretty much need to do this.  The new entities contain some of the old ones,
-        //but there's no straight forward way to update existing items in the list.  As such, we need to make a NEW
-        //list and use it to overwrite the old.
-//        procDef.setIsolationPoints(addUs);
 
         return procDef;
     }
@@ -399,7 +405,7 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             //image can't be uploaded to S3.  We COULD use streams for this if we wanted to throw an RTE, but I don't
             //like using those, because it doesn't feel as elegant.  The code that would have worked if not for the
             //exceptions is commented below for your reading pleasure.
-//            existingAndNotExistingInboundImages.get(Boolean.FALSE).stream().forEach(apiImage -> imageList.add(createNewImage(apiImage, procDef)));
+//            existingAndNotExistingInboundImages.get(Boolean.FALSE).forEach(apiImage -> imageList.add(createNewImage(apiImage, procDef)));
             for(ApiProcedureDefinitionImage apiImage : existingAndNotExistingInboundImages.get(Boolean.FALSE)) {
                 imageList.add(createNewImage(apiImage, procDef));
             }
@@ -431,14 +437,16 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             throw new ImageProcessingException("There was no image present in what appears to be a new image with ID " + image.getSid());
         }
 
-
         convertedImage = s3Service.uploadTempProcedureDefImage(convertedImage, "image/jpeg", image.getData());
+        //Now we need to save the image for the application of the Annotations at a later stage.
+        persistenceService.save(convertedImage);
+
+        convertedImage.setAnnotations(convertToEntityAnnotations(image.getAnnotations(), convertedImage));
 
         if (convertedImage == null) {
             throw new ImageProcessingException("The image with SID '" + image.getSid() + "' failed to upload to S3!!!");
         }
 
-        convertedImage.setAnnotations(convertToEntityAnnotations(image.getAnnotations(), convertedImage));
 
         return convertedImage;
     }
@@ -446,13 +454,27 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
     private List<ImageAnnotation> convertToEntityAnnotations(List<ApiImageAnnotation> annotations, ProcedureDefinitionImage image) {
         List<ImageAnnotation> convertedAnnotations = Lists.newArrayList();
 
+        //We're not actually adding Annotations when they're new... since they have no SID, we're kinda fucked.
+        //Instead, we need to add all of the ones without SIDs as well... or provide a matching SID for mapping
+        //purposes.
+
+        //Okay... so there are two kinds of annotations.
+        //1) Those that we know of, that existed before.  They have SIDs.  This processes those.
         for(ApiImageAnnotation imageAnnotation : annotations) {
-            for(ImageAnnotation originalAnnotation : image.getAnnotations()) {
-                if(imageAnnotation.getSid().equals(originalAnnotation.getId())) {
-                    convertedAnnotations.add(convertApiAnnotation(imageAnnotation, originalAnnotation, image));
-                }
-            }
+            convertedAnnotations.addAll(image.getAnnotations()
+                                             .stream()
+                                             .filter(originalAnnotation -> imageAnnotation.getSid() != null
+                                                     && imageAnnotation.getSid().equals(originalAnnotation.getId()))
+                                             .map(originalAnnotation -> convertApiAnnotation(imageAnnotation, originalAnnotation, image))
+                                             .collect(Collectors.toList()));
         }
+
+        //2) Those that we don't know of... that never existed.  They don't have SIDs... thus, they need to be saved...
+        annotations.stream().filter(annotation -> annotation.getSid() == null).forEach(annotation -> {
+            ImageAnnotation newAnnotation = createNewAnnotation(annotation, image);
+            persistenceService.save(newAnnotation);
+            convertedAnnotations.add(newAnnotation);
+        });
 
         return convertedAnnotations;
     }
@@ -482,20 +504,27 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             return null;
         }
 
-        ImageAnnotation convertedAnnotation = new ImageAnnotation();
+        final ImageAnnotation[] convertedAnnotation = {new ImageAnnotation()};
 
         //NOTE: We no longer care about this, because this is CLEARLY new and thus doesn't get an ID.
 //        convertedAnnotation.setId(annotation.getSid());
 
-        convertedAnnotation.setType(ImageAnnotationType.valueOf(annotation.getAnnotationType()));
-        convertedAnnotation.setX(annotation.getX());
-        convertedAnnotation.setY(annotation.getY());
+        convertedAnnotation[0].setType(ImageAnnotationType.valueOf(annotation.getAnnotationType()));
+        convertedAnnotation[0].setX(annotation.getX());
+        convertedAnnotation[0].setY(annotation.getY());
 
-        convertedAnnotation.setTenant(getCurrentTenant());
+        convertedAnnotation[0].setTenant(getCurrentTenant());
 
-        convertedAnnotation.setImage(image);
+        convertedAnnotation[0].setImage(image);
 
-        return convertedAnnotation;
+        image.getAnnotations().stream()
+                              .filter(modelAnnotation -> annotation.getImageId().equals(modelAnnotation.getImage().getMobileGUID())
+                                      && annotation.getX() == modelAnnotation.getX()
+                                      && annotation.getY() == modelAnnotation.getY()
+                                      && annotation.getAnnotationType().equals(modelAnnotation.getType().toString()))
+                              .forEach(modelAnnotation -> convertedAnnotation[0] = modelAnnotation);
+
+        return convertedAnnotation[0];
     }
 
     private IsolationDeviceDescription convertDefinition(ApiDeviceDescription deviceDefinition) {
