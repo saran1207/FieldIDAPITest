@@ -1,34 +1,35 @@
 package com.n4systems.fieldid.ws.v1.resources.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.n4systems.model.*;
-import org.apache.commons.lang.NullArgumentException;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.ws.v1.exceptions.InternalErrorException;
 import com.n4systems.fieldid.ws.v1.exceptions.NotFoundException;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventSchedule;
 import com.n4systems.fieldid.ws.v1.resources.eventschedule.ApiEventScheduleResource;
-import com.n4systems.model.Button;
+import com.n4systems.model.*;
+import org.apache.commons.lang.NullArgumentException;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApiEventFormResultResource extends FieldIdPersistenceService{
 	@Autowired private ApiEventScheduleResource apiEventScheduleResource;
 	
 	public List<CriteriaResult> convertApiEventFormResults(ApiEventFormResult eventFormResult, EventForm form, AbstractEvent event) {
-		List<CriteriaResult> results = new ArrayList<CriteriaResult>();
-		
-		for (ApiCriteriaSectionResult sectionResult: eventFormResult.getSections()) {
-			results.addAll(convertSectionResult(form, sectionResult, event));
-		}
+		List<CriteriaResult> results = new ArrayList<>();
+
+        //Only add the results if the form isn't hidden... otherwise, the CriteriaResults - should they exist - must go.
+        //Making the "go" should theoretically be as easy as not including them in the JPA model.
+        eventFormResult.getSections()
+                       .stream()
+                       .filter(sectionResult -> !sectionResult.isHidden())
+                       .forEach(sectionResult -> results.addAll(convertSectionResult(form, sectionResult, event)));
 
 		return results;
 	}
 
 	private List<CriteriaResult> convertSectionResult(EventForm form, ApiCriteriaSectionResult sectionResult, AbstractEvent event) {
-		CriteriaSection section = null;
+        CriteriaSection section = null;
 		for (CriteriaSection sect: form.getSections()) {
 			if (sectionResult.getSectionId().equals(sect.getId())) {
 				section = sect;
