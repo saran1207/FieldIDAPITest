@@ -8,7 +8,6 @@ import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.user.UserService;
 import com.n4systems.fieldid.ws.v1.resources.ApiResource;
 import com.n4systems.fieldid.ws.v1.resources.assettype.attributevalues.ApiAttributeValueResource;
-import com.n4systems.fieldid.ws.v1.resources.model.ApiReadonlyModel;
 import com.n4systems.fieldid.ws.v1.resources.model.ListResponse;
 import com.n4systems.model.Asset;
 import com.n4systems.model.IsolationPointSourceType;
@@ -460,14 +459,18 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
 
         //Okay... so there are two kinds of annotations.
         //1) Those that we know of, that existed before.  They have SIDs.  This processes those.
-        for(ApiImageAnnotation imageAnnotation : annotations) {
-            convertedAnnotations.addAll(image.getAnnotations()
-                                             .stream()
-                                             .filter(originalAnnotation -> imageAnnotation.getSid() != null
-                                                     && imageAnnotation.getSid().equals(originalAnnotation.getId()))
-                                             .map(originalAnnotation -> convertApiAnnotation(imageAnnotation, originalAnnotation, image))
-                                             .collect(Collectors.toList()));
-        }
+        annotations.stream()
+                    //Filter out all of the annotations which are null or have a null SID...
+                   .filter(apiAnnotation -> apiAnnotation != null
+                           && apiAnnotation.getSid() != null)
+                    //For each remaining annotation (these are the ones we care about here)...
+                   .forEach(imageAnnotation ->
+                           //Convert them into JPA Model annotations.
+                           convertedAnnotations.addAll(image.getAnnotations()
+                                   .stream()
+                                   .filter(originalAnnotation -> imageAnnotation.getSid().equals(originalAnnotation.getId()))
+                                   .map(originalAnnotation -> convertApiAnnotation(imageAnnotation, originalAnnotation, image))
+                                   .collect(Collectors.toList())));
 
         //2) Those that we don't know of... that never existed.  They don't have SIDs... thus, they need to be saved...
         annotations.stream().filter(annotation -> annotation.getSid() == null).forEach(annotation -> {
