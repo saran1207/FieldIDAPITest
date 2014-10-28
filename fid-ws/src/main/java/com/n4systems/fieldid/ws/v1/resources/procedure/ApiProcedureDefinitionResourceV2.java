@@ -239,6 +239,10 @@ public class ApiProcedureDefinitionResourceV2 extends ApiResource<ApiProcedureDe
             procDef.setAsset(asset);
         }
 
+        //Stop, drop and dump it to the DB.  Before we continue, we're going to need the ID from the ProcDef... to get
+        //that, we want to save first:
+        procedureDefinitionService.saveProcedureDefinitionDraft(procDef);
+
         //Now we do the hard stuff:
         //1) Set the isolation points.
         procDef = convertToEntityIsolationPoints(procDef, apiProcDef);
