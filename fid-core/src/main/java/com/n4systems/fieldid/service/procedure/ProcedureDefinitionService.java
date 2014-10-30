@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.procedure;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.n4systems.exceptions.loto.AnnotatedImageGenerationException;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.ReportServiceHelper;
 import com.n4systems.fieldid.service.amazon.S3Service;
@@ -33,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import rfid.ejb.entity.InfoOptionBean;
 
+import java.io.File;
 import java.util.*;
 
 
@@ -46,6 +48,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
     @Autowired private DateService dateService;
     @Autowired private AtomicLongService atomicLongService;
     @Autowired private RecurringScheduleService recurringScheduleService;
+    @Autowired private SvgGenerationService svgGenerationService;
 
 
     public Boolean hasPublishedProcedureDefinition(Asset asset) {
@@ -152,7 +155,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
     }
 
-    public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) {
+    public void saveProcedureDefinition(ProcedureDefinition procedureDefinition) throws AnnotatedImageGenerationException {
         saveProcedureDefinitionDraft(procedureDefinition);
 
         if (isProcedureApprovalRequiredForCurrentUser()) {
@@ -697,16 +700,35 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public void publishProcedureDefinition(ProcedureDefinition definition) {
-        ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset(), definition.getFamilyId());
-        if (previousDefinition != null) {
-            previousDefinition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
-            previousDefinition.setRetireDate(dateService.nowUTC().toDate());
-            persistenceService.update(previousDefinition);
+    public void publishProcedureDefinition(ProcedureDefinition definition) throws AnnotatedImageGenerationException {
+        try {
+            generateAndUploadAnnotatedSvgs(definition);
+
+            ProcedureDefinition previousDefinition = getPublishedProcedureDefinition(definition.getAsset(), definition.getFamilyId());
+            if (previousDefinition != null) {
+                previousDefinition.setPublishedState(PublishedState.PREVIOUSLY_PUBLISHED);
+                previousDefinition.setRetireDate(dateService.nowUTC().toDate());
+                persistenceService.update(previousDefinition);
+            }
+            definition.setPublishedState(PublishedState.PUBLISHED);
+            definition.setOriginDate(dateService.nowUTC().toDate());
+            persistenceService.update(definition);
+        } catch (Exception e) {
+            logger.error("Failed to generate annotated svgs for Procedure Definition:" + definition.getId());
+            throw new AnnotatedImageGenerationException(e);
         }
-        definition.setPublishedState(PublishedState.PUBLISHED);
-        definition.setOriginDate(dateService.nowUTC().toDate());
-        persistenceService.update(definition);
+    }
+
+    private void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
+        for(ProcedureDefinitionImage image: definition.getImages()) {
+            File allAnnotations = svgGenerationService.exportToSvg(image);
+            svgGenerationService.uploadSvg(definition, allAnnotations);
+        }
+
+        for (IsolationPoint isolationPoint: definition.getUnlockIsolationPoints()) {
+            File singleAnnotation = svgGenerationService.exportToSvg(isolationPoint.getAnnotation());
+            svgGenerationService.uploadSvg(definition, singleAnnotation);
+        }
     }
 
     /**

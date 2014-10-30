@@ -101,6 +101,8 @@
 
 /* energy sources colors 
 -----------------------------------------------*/
+
+/*** Colors are also defined in ImageAnnotationType.java please update when changing colors!!! ***/
 .chemical {
     color: #808080;
     background: #808080;

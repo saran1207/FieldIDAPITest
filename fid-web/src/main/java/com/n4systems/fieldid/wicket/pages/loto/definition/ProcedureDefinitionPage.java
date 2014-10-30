@@ -2,6 +2,7 @@ package com.n4systems.fieldid.wicket.pages.loto.definition;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
+import com.n4systems.exceptions.loto.AnnotatedImageGenerationException;
 import com.n4systems.fieldid.service.PersistenceService;
 import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
@@ -169,8 +170,12 @@ public class ProcedureDefinitionPage extends FieldIDFrontEndPage {
                 }
 
                 @Override protected void doPublish() {
-                    procedureDefinitionService.saveProcedureDefinition(model.getObject());
-                    gotoProceduresPage();
+                    try {
+                        procedureDefinitionService.saveProcedureDefinition(model.getObject());
+                        gotoProceduresPage();
+                    } catch (AnnotatedImageGenerationException e) {
+                        error("Failed to generate annotated images");
+                    }
                 }
 
                 @Override protected void doSave() {
