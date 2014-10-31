@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;
@@ -11,7 +12,8 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "loto_printouts")
-public class LotoPrintout extends EntityWithTenant {
+public class LotoPrintout extends EntityWithTenant implements Listable<Long> {
+
     @Column(name = "printout_name")
     private String printoutName;
 
@@ -24,6 +26,13 @@ public class LotoPrintout extends EntityWithTenant {
 
     @Column(name = "s3_path")
     private String s3Path;
+
+    public LotoPrintout() {}
+
+    //Test constructor
+    public LotoPrintout(String printoutName) {
+        this.printoutName = printoutName;
+    }
 
     public String getPrintoutName() {
         return printoutName;
@@ -55,5 +64,10 @@ public class LotoPrintout extends EntityWithTenant {
 
     public void setS3Path(String s3Path) {
         this.s3Path = s3Path;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return printoutName;
     }
 }
