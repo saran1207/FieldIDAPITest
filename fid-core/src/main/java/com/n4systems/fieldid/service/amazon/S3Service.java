@@ -454,6 +454,14 @@ public class S3Service extends FieldIdPersistenceService {
 
     }
 
+    public void uploadProcedureDefinitionSvg(ProcedureDefinition procedureDefinition, File svgFile) {
+        uploadResource(svgFile, procedureDefinition.getTenant().getId(),
+                PROCEDURE_DEFINITION_IMAGE_PATH,
+                procedureDefinition.getAsset().getId(),
+                procedureDefinition.getId(),
+                svgFile.getName());
+    }
+
     public String uploadTempCriteriaResultImage(CriteriaResultImage criteriaResultImage, byte[] imageData) {
         String contentType = criteriaResultImage.getContentType();
 
@@ -650,6 +658,14 @@ public class S3Service extends FieldIdPersistenceService {
         );
     }
 
+    public byte[] downloadProcedureDefinitionImage(ProcedureDefinitionImage procedureDefinitionImage) throws IOException {
+        return downloadResource(procedureDefinitionImage.getProcedureDefinition().getTenant().getId(),
+                PROCEDURE_DEFINITION_IMAGE_PATH,
+                procedureDefinitionImage.getProcedureDefinition().getAsset().getId(),
+                procedureDefinitionImage.getProcedureDefinition().getId(),
+                procedureDefinitionImage.getFileName()
+        );
+    }
 
     public URL getPlaceAttachment(BaseOrg org, Attachment attachment) {
         return generateResourceUrl(org.getTenant().getId(), attachment.getFileName(), org.getId());

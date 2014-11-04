@@ -62,6 +62,7 @@ import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusFormPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventstatus.EventStatusListPage;
 import com.n4systems.fieldid.wicket.pages.setup.eventtypegroup.*;
 import com.n4systems.fieldid.wicket.pages.setup.loto.EnableByAssetTypePage;
+import com.n4systems.fieldid.wicket.pages.setup.loto.PrintoutTemplatePage;
 import com.n4systems.fieldid.wicket.pages.setup.loto.ProcedureApproverPage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.ConfirmArchivePage;
 import com.n4systems.fieldid.wicket.pages.setup.prioritycode.PriorityCodePage;
@@ -131,6 +132,7 @@ public class FieldIDWicketApp extends WebApplication {
         mountPage("setup/eventBookTranslations", EventBookTranslationsPage.class);
         mountPage("setup/languageConfiguration", LanguageConfigurationPage.class);
         mountPage("setup/procedureApprover", ProcedureApproverPage.class);
+        mountPage("setup/printoutTemplate", PrintoutTemplatePage.class);
         mountPage("setup/enableByAssetType", EnableByAssetTypePage.class);
         mountPage("setup/assetStatusList", AssetStatusListAllPage.class);
         mountPage("setup/eventBooksList", EventBooksListAllPage.class);

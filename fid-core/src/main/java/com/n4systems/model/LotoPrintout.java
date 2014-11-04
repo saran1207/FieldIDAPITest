@@ -1,5 +1,6 @@
 package com.n4systems.model;
 
+import com.n4systems.model.api.Listable;
 import com.n4systems.model.parents.EntityWithTenant;
 
 import javax.persistence.*;
@@ -11,7 +12,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "loto_printouts")
-public class LotoPrintout extends EntityWithTenant {
+public class LotoPrintout extends EntityWithTenant implements Listable<Long> {
 
     public LotoPrintout() {
         super();
@@ -26,6 +27,11 @@ public class LotoPrintout extends EntityWithTenant {
 
     @Column(name = "selected")
     private boolean selected;
+
+    //Test constructor
+    public LotoPrintout(String printoutName) {
+        this.printoutName = printoutName;
+    }
 
     public String getPrintoutName() {
         return printoutName;
@@ -60,10 +66,15 @@ public class LotoPrintout extends EntityWithTenant {
     }
 
     public void setPrintoutTypeLabel(String label) {
-        if(label.equals(printoutType.SHORT.getLabel())){
+        if (label.equals(printoutType.SHORT.getLabel())) {
             printoutType = printoutType.SHORT;
-        } else if (label.equals(printoutType.LONG.getLabel())){
+        } else if (label.equals(printoutType.LONG.getLabel())) {
             printoutType = printoutType.LONG;
         }
+    }
+
+    @Override
+    public String getDisplayName() {
+        return printoutName;
     }
 }
