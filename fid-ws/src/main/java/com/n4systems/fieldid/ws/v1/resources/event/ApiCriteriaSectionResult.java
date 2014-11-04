@@ -8,6 +8,12 @@ public class ApiCriteriaSectionResult {
     private Boolean hidden;
 	private List<ApiCriteriaResult> criteria = new ArrayList<>();
 
+    public ApiCriteriaSectionResult() {
+        //This forces a default value into the field so that - if it is not set by Jackson - it is set by SOMETHING and
+        //prevents NullPointerExceptions down the road.
+        hidden = Boolean.FALSE;
+    }
+
 	public Long getSectionId() {
 		return sectionId;
 	}
