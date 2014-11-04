@@ -1,10 +1,14 @@
-<html xmlns:wicket="http://wicket.apache.org">
+<html xmlns:wicket="http://wicket.apache.org" xmlns="http://www.w3.org/1999/html">
 <wicket:panel>
     <!-- Create label here -->
     <h3><wicket:message key="label.add_new_template"/></h3>
     <br/>
     <br/>
+    <div wicket:id="feedbackPanel"/>
     <form wicket:id="form" class="crudForm">
+        <div wicket:id="feedback"/>
+        <div wicket:id="name"/>
+
         <div wicket:id="typeSelector"/>
         <div class="infoSet">
             <label class="label"><wicket:message key="label.select_template_to_upload"/></label>
@@ -14,9 +18,9 @@
         </div>
 
         <div class="formAction">
-            <input wicket:id="saveButton" type="submit" wicket:message="value:label.upload" class="btn-primary"/>
+            <a wicket:id="submit" type="submit" class="btn-primary"><wicket:message key="label.save"/></a>
             <wicket:message key="label.or"/>
-            <a wicket:id="cancelLink"><wicket:message key="label.cancel"/></a>
+            <a wicket:id="cancelLink" class="btn-link"><wicket:message key="label.cancel"/></a>
         </div>
     </form>
 </wicket:panel>

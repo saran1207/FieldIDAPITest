@@ -12,6 +12,11 @@ import javax.persistence.*;
 @Entity
 @Table(name = "loto_printouts")
 public class LotoPrintout extends EntityWithTenant {
+
+    public LotoPrintout() {
+        super();
+    }
+
     @Column(name = "printout_name")
     private String printoutName;
 
@@ -21,9 +26,6 @@ public class LotoPrintout extends EntityWithTenant {
 
     @Column(name = "selected")
     private boolean selected;
-
-    @Column(name = "s3_path")
-    private String s3Path;
 
     public String getPrintoutName() {
         return printoutName;
@@ -49,11 +51,19 @@ public class LotoPrintout extends EntityWithTenant {
         this.selected = selected;
     }
 
-    public String getS3Path() {
-        return s3Path;
+    public String getPrintoutTypeLabel() {
+        if(printoutType == null) {
+            return null;
+        } else {
+            return printoutType.getLabel();
+        }
     }
 
-    public void setS3Path(String s3Path) {
-        this.s3Path = s3Path;
+    public void setPrintoutTypeLabel(String label) {
+        if(label.equals(printoutType.SHORT.getLabel())){
+            printoutType = printoutType.SHORT;
+        } else if (label.equals(printoutType.LONG.getLabel())){
+            printoutType = printoutType.LONG;
+        }
     }
 }

@@ -1,15 +1,17 @@
 package com.n4systems.fieldid.wicket.pages.admin.printouts;
 
 import com.google.common.collect.Lists;
-import com.n4systems.fieldid.wicket.FieldIDSession;
+import com.n4systems.fieldid.service.procedure.LotoReportService;
+import com.n4systems.fieldid.service.user.UserService;
+import com.n4systems.fieldid.wicket.components.FlatLabel;
 import com.n4systems.fieldid.wicket.components.feedback.FIDFeedbackPanel;
 import com.n4systems.fieldid.wicket.components.modal.DialogModalWindow;
 import com.n4systems.fieldid.wicket.components.table.SimpleDefaultDataTable;
 import com.n4systems.fieldid.wicket.data.FieldIDDataProvider;
-import com.n4systems.fieldid.wicket.model.DayDisplayModel;
 import com.n4systems.fieldid.wicket.model.FIDLabelModel;
 import com.n4systems.fieldid.wicket.pages.admin.FieldIDAdminPage;
 import com.n4systems.model.LotoPrintout;
+import com.n4systems.reporting.PathHandler;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -18,11 +20,16 @@ import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.PropertyColumn;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.DownloadLink;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.AbstractReadOnlyModel;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -36,15 +43,21 @@ public class LotoPrintoutListPage extends FieldIDAdminPage {
 
     private static final int PRINTOUTS_PER_PAGE = 200;
 
+    private @SpringBean
+    LotoReportService lotoReportService;
+
+    private @SpringBean
+    UserService userService;
+
+    private Long tenantId;
     private FIDFeedbackPanel feedbackPanel;
     private WebMarkupContainer listContainer;
 
     private ModalWindow addTemplateWindow;
 
-    public LotoPrintoutListPage() {
-        //Add all of the page components here...
-
-
+    public LotoPrintoutListPage(PageParameters pageParameters) {
+        super();
+        tenantId = pageParameters.get("id").toLong();
     }
 
     @Override
@@ -65,9 +78,9 @@ public class LotoPrintoutListPage extends FieldIDAdminPage {
                                                                     PRINTOUTS_PER_PAGE));
 
 
-        add(addTemplateWindow = new DialogModalWindow("addTemplateModalWindow").setInitialHeight(400).setInitialWidth(400));
+        add(addTemplateWindow = new DialogModalWindow("addTemplateModalWindow").setInitialHeight(400).setInitialWidth(600));
 
-        addTemplateWindow.setContent(new AddLotoTemplatePanel(addTemplateWindow.getContentId()));
+        addTemplateWindow.setContent(new AddLotoTemplatePanel(addTemplateWindow.getContentId(), tenantId));
 
 //        add(addTemplateWindow = createModalWindow(Model.of(new LotoPrintout()), feedbackPanel));
 
@@ -87,37 +100,67 @@ public class LotoPrintoutListPage extends FieldIDAdminPage {
 
         columns.add(new PropertyColumn<>(new FIDLabelModel("label.type"), "printoutType", "printoutType"));
 
-        columns.add(new PropertyColumn<>(new FIDLabelModel("label.directory"), "s3Path", "s3Path"));
+        columns.add(new PropertyColumn<LotoPrintout>(new FIDLabelModel("label.directory"), "s3Path", "s3Path") {
+            @Override
+            public void populateItem(Item<ICellPopulator<LotoPrintout>> item, String componentId, IModel<LotoPrintout> rowModel) {
+                //String path = PathHandler.getLotoPath(rowModel.getObject());
+                item.add(new Label(componentId, PathHandler.getLotoDisplayString(rowModel.getObject())));
+            }
+        });
 
         columns.add(new PropertyColumn<LotoPrintout>(new FIDLabelModel("label.dateUploaded"), "created", "created") {
             @Override
             public void populateItem(Item<ICellPopulator<LotoPrintout>> item, String componentId, IModel<LotoPrintout> rowModel) {
                 Date created = rowModel.getObject().getCreated();
-                item.add(new Label(componentId, new DayDisplayModel(Model.of(created)).includeTime().withTimeZone(FieldIDSession.get().getSessionUser().getTimeZone())));
+                item.add(new Label(componentId, created.toString()));
             }
         });
 
-        columns.add(new PropertyColumn<LotoPrintout>(new FIDLabelModel("label.download"), "s3Path") {
+        columns.add(new PropertyColumn<LotoPrintout>(new FIDLabelModel("label.download"), "download") {
             @Override
             public void populateItem(Item<ICellPopulator<LotoPrintout>> item, String componentId, IModel<LotoPrintout> rowModel) {
-                item.add(new Link(componentId, rowModel) {
-                    @Override
-                    public void onClick() {
-                        //Do your clickiness to download the thing here...
-                    }
-                });
+                try {
+                    DownloadLink downloadAllLink;
+                    String fileName = rowModel.getObject().getPrintoutName() + ".zip";
+
+                    byte[] fileData = lotoReportService.getZipFile(rowModel.getObject());
+
+                    File file = File.createTempFile("temp-file", ".tmp");
+                    FileOutputStream fileAttachmentFos = new FileOutputStream(file);
+                    fileAttachmentFos.write(fileData);
+
+                    downloadAllLink = new DownloadLink(componentId, file, fileName);
+                    downloadAllLink.setDeleteAfterDownload(true);
+                    //downloadAllLink.add(new FlatLabel(componentId, new FIDLabelModel("label.download")).setVisible(true));
+
+                    FlatLabel label = new FlatLabel(componentId, new FIDLabelModel("label.download"));
+                    label.setEnabled(true);
+                    label.setVisible(true);
+
+                    downloadAllLink.add(label);
+
+                    item.add(downloadAllLink);
+                } catch (IOException e) { }
             }
         });
 
-        columns.add(new PropertyColumn<LotoPrintout>(new FIDLabelModel(""), "") {
+        columns.add(new PropertyColumn<LotoPrintout>(new FIDLabelModel("label.delete"), "delete") {
             @Override
             public void populateItem(Item<ICellPopulator<LotoPrintout>> item, String componentId, IModel<LotoPrintout> rowModel) {
-                item.add(new Link(componentId, rowModel) {
+                AjaxLink link = new AjaxLink(componentId, rowModel) {
                     @Override
-                    public void onClick() {
-                        //get 'er done for deleting here...
+                    public void onClick(AjaxRequestTarget target) {
+                        lotoReportService.deleteLotoPrintout(rowModel.getObject());
+                        target.add(listContainer);
                     }
-                });
+                };
+
+                FlatLabel label = new FlatLabel(componentId, new FIDLabelModel("label.delete"));
+                label.setEnabled(true);
+                label.setVisible(true);
+
+                link.add(label);
+                item.add(link);
             }
         });
 
@@ -128,40 +171,25 @@ public class LotoPrintoutListPage extends FieldIDAdminPage {
         return new FieldIDDataProvider<LotoPrintout>() {
             @Override
             public Iterator<? extends LotoPrintout> iterator(int first, int count) {
-                return null;
+                //return null;
+                return lotoReportService.getLotoReportsByTenantId(tenantId).iterator();
             }
 
             @Override
             public int size() {
-                return 0;
+                return lotoReportService.getLotoReportsByTenantId(tenantId).size();
+                //return 0;
             }
 
             @Override
             public IModel<LotoPrintout> model(LotoPrintout object) {
-                return null;
+                return new AbstractReadOnlyModel<LotoPrintout>() {
+                    @Override
+                    public LotoPrintout getObject() {
+                        return object;
+                    }
+                };
             }
         };
     }
-
-//    private FIDModalWindow createModalWindow(final IModel<LotoPrintout> printoutModel, final Panel callbackPanel) {
-//        FIDModalWindow modalWindow = new FIDModalWindow("modalWindow");
-//        modalWindow.setPageCreator(new ModalWindow.PageCreator() {
-//            @Override
-//            public Page createPage() {
-//                //So here, we want to return a page that we've built to show all of this data.
-//                //The "add template" page, so to speak.  It should extent FieldIDAuthenticatedPage,
-//                //which has no extra crap bolted to it... I think that's right, anyways.
-//                return new AddLotoTemplatePanel(addTemplateWindow.getContentId());
-//            }
-//        });
-//
-//        modalWindow.setWindowClosedCallback(new ModalWindow.WindowClosedCallback() {
-//            @Override
-//            public void onClose(AjaxRequestTarget target) {
-//                target.add(callbackPanel);
-//            }
-//        });
-//
-//        return modalWindow;
-//    }
 }

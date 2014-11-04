@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.user;
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.model.SendSavedItemSchedule;
+import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.api.Archivable;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.ExternalOrgFilter;
@@ -23,7 +24,6 @@ import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.commons.lang.time.DateUtils;
-import org.joda.time.LocalDate;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
@@ -227,6 +227,13 @@ public class UserService extends FieldIdPersistenceService {
             }
         }
         return builder;
+    }
+
+    public AdminUser getAdminUser(Long userId) {
+        QueryBuilder<AdminUser> builder = createUserSecurityBuilder(AdminUser.class, true);
+        builder.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.EQ, "id", userId));
+        AdminUser user = persistenceService.find(builder);
+        return user;
     }
 
     public User getUser(Long userId) {

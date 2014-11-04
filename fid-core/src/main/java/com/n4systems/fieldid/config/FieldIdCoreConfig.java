@@ -46,6 +46,7 @@ import com.n4systems.fieldid.service.mixpanel.MixpanelService;
 import com.n4systems.fieldid.service.offlineprofile.OfflineProfileService;
 import com.n4systems.fieldid.service.org.OrgService;
 import com.n4systems.fieldid.service.org.PlaceService;
+import com.n4systems.fieldid.service.procedure.LotoReportService;
 import com.n4systems.fieldid.service.procedure.NotifyProcedureAuthorizersService;
 import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.fieldid.service.procedure.ProcedureService;
@@ -853,4 +854,9 @@ public class FieldIdCoreConfig {
 	public AuthService authService() {
 		return new AuthService();
 	}
+
+    @Bean
+    public LotoReportService lotoReportService() {
+        return new LotoReportService();
+    }
 }

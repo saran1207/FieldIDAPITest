@@ -55,7 +55,7 @@
 		<a href='<@s.url namespace="/admin" action="rebuildCriteriaTrendsIndex"/>?id=${primaryOrg.tenant.id}'><@s.text name="feature.rebuild_criteria_trends_index"/></a>
 	</div>
     <div>
-        <a href='/fieldid/w/admin/lotoPrintoutSelection'><@s.text name="feature.select_loto_printout_templates"/></a>
+        <a href='/fieldid/w/admin/lotoPrintoutSelection?id=${primaryOrg.tenant.id}'><@s.text name="feature.select_loto_printout_templates"/></a>
     </div>
 	</#if>
 </div>

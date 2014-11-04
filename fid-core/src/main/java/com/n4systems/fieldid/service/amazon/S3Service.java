@@ -1,11 +1,7 @@
 package com.n4systems.fieldid.service.amazon;
 
 import com.amazonaws.AmazonServiceException;
-import com.amazonaws.ClientConfiguration;
 import com.amazonaws.HttpMethod;
-import com.amazonaws.Protocol;
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.google.common.base.Preconditions;
@@ -32,17 +28,20 @@ import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import javax.activation.MimetypesFileTypeMap;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.Base64;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
-import org.springframework.util.Assert;
 //import sun.misc.BASE64Encoder;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 
 @Transactional
 public class S3Service extends FieldIdPersistenceService {
@@ -106,6 +105,8 @@ public class S3Service extends FieldIdPersistenceService {
 
     public static final String THUMBNAIL_EXTENSION = ".thumbnail";
     public static final String MEDIUM_EXTENSION = ".medium";
+
+    public static final String LOTO_BUCKET = "fieldid-loto";
 
     @Autowired private ConfigService configService;
     @Autowired private ImageService imageService;
@@ -310,6 +311,74 @@ public class S3Service extends FieldIdPersistenceService {
         boolean exists = resourceExists(null, FILE_ATTACHMENT_PATH, fileAttachmentUuid, filename);
         return exists;
     }
+
+    //---------------------------------------------------------------------------------
+    public void deleteLotoPrintout(LotoPrintout printout) {
+        deleteLotoObject(PathHandler.getS3BasePath(printout));
+    }
+
+    public byte[] downloadZippedLotoPrintout(LotoPrintout printout) throws  IOException {
+
+        byte[] fileData = downloadLoto(PathHandler.getZipS3Path(printout));
+
+        //String fileName = printout.getPrintoutName() + ".zip";
+        //File file = PathHandler.getUserFile(getCurrentUser(), fileName);
+        //FileOutputStream fileAttachmentFos = new FileOutputStream(file);
+        //fileAttachmentFos.write(fileData);
+
+        return fileData;
+    }
+
+    public File downloadDefaultLotoPrintout(LotoPrintout printout) throws IOException {
+        File printoutFile = null;
+
+        byte[] fileData = downloadLoto(PathHandler.getDefaultCompiledLotoFilePath(printout));
+        FileUtils.writeByteArrayToFile(printoutFile, fileData);
+
+        return printoutFile;
+    }
+
+    public File downloadCustomLotoPrintout(LotoPrintout printout) throws IOException {
+        File printoutFile = null;
+
+        byte[] fileData = downloadLoto(PathHandler.getCompiledLotoFilePath(printout));
+        FileUtils.writeByteArrayToFile(printoutFile, fileData);
+
+        return printoutFile;
+    }
+
+    public void saveLotoPrintout(File file, String path) {
+        //path = path + "/";
+        putObjectInLotoBucket(path, file);
+        //uploadResource(file, null, path);
+    }
+
+    private byte[] downloadLoto(String path) throws IOException {
+        InputStream resourceInput = null;
+        try {
+            S3Object resource = getLotoObject(path);
+            resourceInput = resource.getObjectContent();
+            byte[] resourceContent = IOUtils.toByteArray(resourceInput);
+            return resourceContent;
+        } catch (AmazonS3Exception e) {
+            return handleAmazonS3Exception(e, (byte[]) null);
+        } finally {
+            IOUtils.closeQuietly(resourceInput);
+        }
+    }
+
+    private S3Object getLotoObject(String path) {
+        return getClient().getObject(LOTO_BUCKET, getLotoFolder() + "/" + path);
+    }
+
+    private PutObjectResult putObjectInLotoBucket(String path, File file) {
+        PutObjectResult result = getClient().putObject(LOTO_BUCKET, getLotoFolder() + "/" + path, file);
+        return result;
+    }
+
+    //---------------------------------------------------------------------------------
+
+
 
     public byte[] downloadProcedureDefinitionMediumImage(ProcedureDefinitionImage image) throws IOException {
         byte[] imageData = downloadResource(null, PROCEDURE_DEFINITION_IMAGE_PATH_MEDIUM,
@@ -707,6 +776,20 @@ public class S3Service extends FieldIdPersistenceService {
         return result;
     }
 
+    private void deleteLotoObject(String path) {
+
+        //Delete the items in the folder first
+        List<S3ObjectSummary> objectSummaryList = getClient().listObjects(LOTO_BUCKET, getLotoFolder() + "/" + path).getObjectSummaries();
+        for(S3ObjectSummary summary: objectSummaryList) {
+            if(summary.getSize() > 0) {
+                getClient().deleteObject(LOTO_BUCKET, summary.getKey());
+            }
+        }
+
+        //delete the folder
+        getClient().deleteObject(LOTO_BUCKET, getLotoFolder() + "/" + path);
+    }
+
     private void deleteObject(String path) {
         getClient().deleteObject(getBucket(), path);
     }
@@ -735,6 +818,11 @@ public class S3Service extends FieldIdPersistenceService {
 
     private AmazonS3Client getClient() {
         return s3client;
+    }
+
+    private String getLotoFolder() {
+        String bucket = configService.getString(ConfigEntry.AMAZON_S3_LOTO_REPORTS);
+        return bucket;
     }
 
     private String getBucket() {
