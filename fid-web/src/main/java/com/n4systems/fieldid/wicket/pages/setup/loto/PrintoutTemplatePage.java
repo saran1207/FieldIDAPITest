@@ -36,27 +36,6 @@ public class PrintoutTemplatePage extends FieldIDTemplatePage {
 
         longPrintouts = generateLongFormPrintouts();
         shortPrintouts = generateShortFormPrintouts();
-/*
-        longFormPrintout = lotoReportService.getSelectedLongForm();
-        shortFormPrintout = lotoReportService.getSelectedShortForm();
-
-
-        if(longFormPrintout == null) {
-            longFormPrintout = new LotoPrintout();
-            longFormPrintout.setPrintoutName("Long Form - Default");
-            longFormPrintout.setId(null);
-            longFormPrintout.setSelected(true);
-            longFormPrintout.setPrintoutType(LotoPrintoutType.LONG);
-        }
-
-        if(shortFormPrintout == null) {
-            shortFormPrintout = new LotoPrintout();
-            shortFormPrintout.setPrintoutName("Short Form - Default");
-            shortFormPrintout.setId(null);
-            shortFormPrintout.setSelected(true);
-            shortFormPrintout.setPrintoutType(LotoPrintoutType.SHORT);
-        }
-*/
 
         Form form = new Form("form") {
             @Override
@@ -83,7 +62,6 @@ public class PrintoutTemplatePage extends FieldIDTemplatePage {
             }
         };
 
-        /*FidDropDownChoice<LotoPrintout> */
         longDropDown = new FidDropDownChoice<>("longForm",
                 new PropertyModel<LotoPrintout>(this, "longFormPrintout"),
                 getLongFormPrintouts(),
@@ -94,13 +72,6 @@ public class PrintoutTemplatePage extends FieldIDTemplatePage {
 
         form.add(longDropDown);
 
-        /*form.add(new FidDropDownChoice<LotoPrintout>("longForm",
-                                        new PropertyModel<>(this, "longFormPrintout"),
-                                        getLongFormPrintouts(),
-                                        new ListableChoiceRenderer<LotoPrintout>())
-                );*/
-
-        /*FidDropDownChoice<LotoPrintout> */
         shortDropDown = new FidDropDownChoice<>("shortForm",
                 new PropertyModel<LotoPrintout>(this, "shortFormPrintout"),
                 getShortFormPrintouts(),
@@ -110,12 +81,6 @@ public class PrintoutTemplatePage extends FieldIDTemplatePage {
         shortDropDown.setDefaultModelObject(shortFormPrintout);
 
         form.add(shortDropDown);
-
-        /*form.add(new FidDropDownChoice<LotoPrintout>("shortForm",
-                                        new PropertyModel<>(this, "shortFormPrintout"),
-                                        getShortFormPrintouts(),
-                                        new ListableChoiceRenderer<LotoPrintout>())
-                );*/
 
         form.add(new SubmitLink("saveLink"));
         form.add(new BookmarkablePageLink<SettingsPage>("cancelLink", SettingsPage.class));
@@ -133,22 +98,7 @@ public class PrintoutTemplatePage extends FieldIDTemplatePage {
         return new LoadableDetachableModel<List<LotoPrintout>>() {
             @Override
             protected List<LotoPrintout> load() {
-
                 return longPrintouts;
-                /*List<LotoPrintout> printouts =  lotoReportService.getLongLotoPrintouts();
-                for(LotoPrintout p:printouts) {
-                    if(p.isSelected()) {
-                        longFormPrintout = p;
-                    }
-                }
-
-                if(longFormPrintout == null) {
-                    longFormPrintout = printouts.get(printouts.size()-1);
-                }
-                //printouts.add(new LotoPrintout("Default Long Form"));
-                //printouts.add(new LotoPrintout("Long Form 2"));
-                //printouts.add(new LotoPrintout("Long Form 3"));
-                return printouts;*/
             }
         };
     }
@@ -157,24 +107,7 @@ public class PrintoutTemplatePage extends FieldIDTemplatePage {
         return new LoadableDetachableModel<List<LotoPrintout>>() {
             @Override
             protected List<LotoPrintout> load() {
-
                 return shortPrintouts;
-                /*List<LotoPrintout> printouts =  lotoReportService.getShortLotoPrintouts();
-
-                for(LotoPrintout p:printouts) {
-                    if(p.isSelected()) {
-                        shortFormPrintout = p;
-                    }
-                }
-
-                if(shortFormPrintout == null) {
-                    shortFormPrintout = printouts.get(printouts.size()-1);
-                }
-
-                //printouts.add(new LotoPrintout("Default Short Form"));
-                //printouts.add(new LotoPrintout("Short Form 2"));
-                //printouts.add(new LotoPrintout("Short Form 3"));
-                return printouts;*/
             }
         };
     }
@@ -190,9 +123,6 @@ public class PrintoutTemplatePage extends FieldIDTemplatePage {
         if(longFormPrintout == null) {
             longFormPrintout = printouts.get(printouts.size()-1);
         }
-        //printouts.add(new LotoPrintout("Default Long Form"));
-        //printouts.add(new LotoPrintout("Long Form 2"));
-        //printouts.add(new LotoPrintout("Long Form 3"));
         return printouts;
     }
 
@@ -208,10 +138,6 @@ public class PrintoutTemplatePage extends FieldIDTemplatePage {
         if(shortFormPrintout == null) {
             shortFormPrintout = printouts.get(printouts.size()-1);
         }
-
-        //printouts.add(new LotoPrintout("Default Short Form"));
-        //printouts.add(new LotoPrintout("Short Form 2"));
-        //printouts.add(new LotoPrintout("Short Form 3"));
         return printouts;
     }
 

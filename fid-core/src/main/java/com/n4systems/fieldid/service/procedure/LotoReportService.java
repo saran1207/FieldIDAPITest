@@ -79,7 +79,6 @@ public class LotoReportService extends FieldIdPersistenceService {
         LotoPrintout longFormPrintout = new LotoPrintout();
         longFormPrintout.setPrintoutName("Long Form - Default");
         longFormPrintout.setId(null);
-        //longFormPrintout.setSelected(true);
         longFormPrintout.setPrintoutType(LotoPrintoutType.LONG);
 
         return longFormPrintout;
@@ -98,7 +97,6 @@ public class LotoReportService extends FieldIdPersistenceService {
         LotoPrintout shortFormPrintout = new LotoPrintout();
         shortFormPrintout.setPrintoutName("Short Form - Default");
         shortFormPrintout.setId(null);
-        //shortFormPrintout.setSelected(true);
         shortFormPrintout.setPrintoutType(LotoPrintoutType.SHORT);
 
         return shortFormPrintout;
