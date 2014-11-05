@@ -3,6 +3,7 @@ package com.n4systems.fieldid.service.procedure;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
 import com.n4systems.fieldid.service.amazon.S3Service;
 import com.n4systems.model.LotoPrintout;
+import com.n4systems.model.LotoPrintoutType;
 import com.n4systems.model.Tenant;
 import com.n4systems.model.security.OpenSecurityFilter;
 import com.n4systems.reporting.PathHandler;
@@ -25,6 +26,83 @@ public class LotoReportService extends FieldIdPersistenceService {
 
     private @Autowired
     S3Service s3Service;
+
+    public void updateSelectedLongForm(LotoPrintout printout) {
+        resetSelectedLongForm();
+        persistenceService.update(printout);
+    }
+
+    public void resetSelectedLongForm() {
+        LotoPrintout old = getSelectedLongForm();
+        if(old != null) {
+            old.setSelected(false);
+            persistenceService.update(old);
+        }
+    }
+
+    public void updateSelectedShortForm(LotoPrintout printout) {
+        resetSelectedShortForm();
+        persistenceService.update(printout);
+    }
+    public void resetSelectedShortForm() {
+        LotoPrintout old = getSelectedShortForm();
+        if(old != null) {
+            old.setSelected(false);
+            persistenceService.update(old);
+        }
+    }
+
+    public LotoPrintout getSelectedLongForm() {
+        QueryBuilder<LotoPrintout> query = createUserSecurityBuilder(LotoPrintout.class);
+        query.addSimpleWhere("printoutType", LotoPrintoutType.LONG);
+        query.addSimpleWhere("selected", true);
+        return persistenceService.find(query);
+    }
+
+    public LotoPrintout getSelectedShortForm() {
+        QueryBuilder<LotoPrintout> query = createUserSecurityBuilder(LotoPrintout.class);
+        query.addSimpleWhere("printoutType", LotoPrintoutType.SHORT);
+        query.addSimpleWhere("selected", true);
+        return persistenceService.find(query);
+    }
+
+    public List<LotoPrintout> getLongLotoPrintouts() {
+        QueryBuilder<LotoPrintout> query = createUserSecurityBuilder(LotoPrintout.class);
+        query.addSimpleWhere("printoutType", LotoPrintoutType.LONG);
+        List<LotoPrintout> list = persistenceService.findAll(query);
+        list.add(getDefaultLongForm());
+
+        return list;
+    }
+
+    private LotoPrintout getDefaultLongForm() {
+        LotoPrintout longFormPrintout = new LotoPrintout();
+        longFormPrintout.setPrintoutName("Long Form - Default");
+        longFormPrintout.setId(null);
+        //longFormPrintout.setSelected(true);
+        longFormPrintout.setPrintoutType(LotoPrintoutType.LONG);
+
+        return longFormPrintout;
+    }
+
+    public List<LotoPrintout> getShortLotoPrintouts() {
+        QueryBuilder<LotoPrintout> query = createUserSecurityBuilder(LotoPrintout.class);
+        query.addSimpleWhere("printoutType", LotoPrintoutType.SHORT);
+        List<LotoPrintout> list = persistenceService.findAll(query);
+        list.add(getDefaultShortForm());
+
+        return list;
+    }
+
+    private LotoPrintout getDefaultShortForm() {
+        LotoPrintout shortFormPrintout = new LotoPrintout();
+        shortFormPrintout.setPrintoutName("Short Form - Default");
+        shortFormPrintout.setId(null);
+        //shortFormPrintout.setSelected(true);
+        shortFormPrintout.setPrintoutType(LotoPrintoutType.SHORT);
+
+        return shortFormPrintout;
+    }
 
     @Transactional
     public void saveLotoReport(File zipFile, LotoPrintout printout) {
