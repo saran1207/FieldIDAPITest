@@ -255,6 +255,7 @@
                                                 <li><a href="<@s.url value='/w/setup/procedureApprover'/>"><@s.text name="title.set_procedure_approver"/></a></li>
                                                 <li><a href="<@s.url value='/w/setup/enableByAssetType'/>"><@s.text name="title.enable_by_asset_type"/></a></li>
                                                 <li><a href="<@s.url value='/w/setup/printoutTemplate'/>"><@s.text name="title.printout_template"/></a></li>
+                                                <li><a href="<@s.url value='/w/setup/lotoSetup'/>"><@s.text name="title.loto_setup"/></a></li>
                                             </ul>
                                         </li>
                                     </#if>

@@ -1,0 +1,25 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:extend>
+
+    <div class="display-horizontal columns-two">
+        <h3><wicket:message key="label.energy_type_fields"/></h3>
+        <div class="control-group" wicket:id="device">
+            <label class="label" wicket:id="name"/>
+            <span class="value"><a class="btn-secondary" wicket:id="editLink"><wicket:message key="label.edit"/></a></span>
+        </div>
+        <div class="control-group">
+            <label class="label"><wicket:message key="label.shared_devices"/></label>
+            <span class="value"><a class="btn-secondary" wicket:id="editSharedLink"><wicket:message key="label.edit"/></a></span>
+        </div>
+    </div>
+
+    <div class="display-horizontal columns-two">
+        <h3><wicket:message key="label.loto_detail_fields"/></h3>
+        <div class="control-group">
+            <label class="label" style="width: 69%;"><wicket:message key="message.loto_detail_fields"/></label>
+            <span class="value" style="width: 30%;"><a class="btn-secondary"wicket:id="editDetailsLink"><wicket:message key="label.edit"/></a></span>
+        </div>
+    </div>
+
+</wicket:extend>
+</html>

@@ -19,6 +19,7 @@ import com.n4systems.model.common.ImageAnnotation;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.procedure.*;
 import com.n4systems.model.security.OwnerAndDownFilter;
+import com.n4systems.model.security.TenantOnlySecurityFilter;
 import com.n4systems.model.user.Assignable;
 import com.n4systems.model.user.User;
 import com.n4systems.model.user.UserGroup;
@@ -676,8 +677,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.count(procedureDefinitionCountQuery);
     }
 
-    public List<String> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
-        QueryBuilder<String> query = new QueryBuilder<String>(PreconfiguredDevice.class);
+    public List<String> getPreConfiguredDeviceList(IsolationPointSourceType sourceType) {
+        QueryBuilder<String> query = new QueryBuilder(PreconfiguredDevice.class, new TenantOnlySecurityFilter(getCurrentTenant().getId()));
         query.setSimpleSelect("device");
 
         if(sourceType != null) {
@@ -690,6 +691,22 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
         query.addOrder("device");
         return persistenceService.findAll(query);
+    }
+
+    public List<PreconfiguredDevice> getPreConfiguredDevices(IsolationPointSourceType sourceType) {
+        QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
+        if(sourceType != null) {
+            query.addSimpleWhere("isolationPointSourceType", sourceType);
+        } else
+            query.addWhere(WhereClauseFactory.createIsNull("isolationPointSourceType"));
+        return persistenceService.findAll(query);
+    }
+
+    public String getPreConfiguredDeviceMethod(String device) {
+        QueryBuilder<String> query = new QueryBuilder(PreconfiguredDevice.class, new TenantOnlySecurityFilter(getCurrentTenant().getId()));
+        query.setSimpleSelect("method");
+        query.addSimpleWhere("device", device);
+        return persistenceService.find(query);
     }
 
     public List<String> getPreConfiguredEnergySource(IsolationPointSourceType sourceType) {
@@ -1213,6 +1230,14 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         } else {
             return true;
         }
+   }
+
+   public CustomLotoDetails getCustomLotoDetails() {
+       return persistenceService.find(createTenantSecurityBuilder(CustomLotoDetails.class));
+   }
+
+   public CustomLotoDetails saveOrUpdateCustomLotoDetails(CustomLotoDetails customLotoDetails) {
+       return persistenceService.saveOrUpdate(customLotoDetails);
    }
 
 }
