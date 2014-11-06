@@ -702,10 +702,10 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public String getPreConfiguredDeviceMethod(String device) {
-        QueryBuilder<String> query = new QueryBuilder(PreconfiguredDevice.class, new TenantOnlySecurityFilter(getCurrentTenant().getId()));
-        query.setSimpleSelect("method");
+    public PreconfiguredDevice getPreConfiguredDeviceMethod(String device, IsolationPointSourceType sourceType) {
+        QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
         query.addSimpleWhere("device", device);
+        query.addSimpleWhere("isolationPointSourceType", sourceType);
         return persistenceService.find(query);
     }
 
@@ -1240,4 +1240,8 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
        return persistenceService.saveOrUpdate(customLotoDetails);
    }
 
+    public void deleteCustomLotoDetails(CustomLotoDetails customLotoDetails) {
+        persistenceService.reattach(customLotoDetails);
+        persistenceService.delete(customLotoDetails);
+    }
 }

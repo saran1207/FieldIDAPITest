@@ -29,7 +29,15 @@ public class LotoDetailsSetupPage extends FieldIDTemplatePage {
         Form form = new Form("form") {
             @Override
             protected void onSubmit() {
-                procedureDefinitionService.saveOrUpdateCustomLotoDetails(customLotoDetailsModel.getObject());
+                CustomLotoDetails customLotoDetails = customLotoDetailsModel.getObject();
+
+                if(customLotoDetails.getApplicationProcess() == null &&
+                        customLotoDetails.getRemovalProcess() == null &&
+                        customLotoDetails.getTestingAndVerification() == null ) {
+                    procedureDefinitionService.deleteCustomLotoDetails(customLotoDetails);
+                } else {
+                    procedureDefinitionService.saveOrUpdateCustomLotoDetails(customLotoDetails);
+                }
                 setResponsePage(LotoSetupPage.class);
             }
         };
