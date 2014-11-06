@@ -96,7 +96,7 @@ public class IsolationPointEditor extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 IsolationPoint isolationPoint = (IsolationPoint) getDefaultModel().getObject();
-                PreconfiguredDevice device = procedureDefinitionService.getPreConfiguredDeviceMethod(isolationPoint.getDeviceDefinition().getFreeformDescription(), isolationPoint.getSourceType());
+                PreconfiguredDevice device = procedureDefinitionService.getPreConfiguredDevice(isolationPoint.getDeviceDefinition().getFreeformDescription(), isolationPoint.getSourceType());
                 methodField.setModelValue(device != null ? device.getMethod() : null);
                 target.add(methodField);
             }

@@ -702,11 +702,22 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         return persistenceService.findAll(query);
     }
 
-    public PreconfiguredDevice getPreConfiguredDeviceMethod(String device, IsolationPointSourceType sourceType) {
+    public PreconfiguredDevice getPreConfiguredDevice(String device, IsolationPointSourceType sourceType) {
         QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
         query.addSimpleWhere("device", device);
         query.addSimpleWhere("isolationPointSourceType", sourceType);
         return persistenceService.find(query);
+    }
+
+    public Boolean isPredefinedDeviceNameExists(String device, IsolationPointSourceType sourceType, Long id) {
+        QueryBuilder<PreconfiguredDevice> query = createTenantSecurityBuilder(PreconfiguredDevice.class);
+        query.addSimpleWhere("device", device);
+        query.addSimpleWhere("isolationPointSourceType", sourceType);
+
+        if(id != null) {
+            query.addWhere(WhereClauseFactory.create(WhereParameter.Comparator.NE,  "id", id));
+        }
+        return persistenceService.exists(query);
     }
 
     public List<String> getPreConfiguredEnergySource(IsolationPointSourceType sourceType) {
