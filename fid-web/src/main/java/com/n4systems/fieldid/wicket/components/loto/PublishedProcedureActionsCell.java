@@ -44,20 +44,6 @@ public class PublishedProcedureActionsCell extends Panel {
 
         final ProcedureDefinition procedureDefinition = proDef.getObject();
 
-        Link printLink;
-        printLink = new Link("viewLink") {
-            @Override public void onClick() {
-                setResponsePage(new ProcedureDefinitionPrintPage(PageParametersBuilder.id(procedureDefinition.getId())));
-            }
-        };
-        printLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.view_print"), TipsyBehavior.Gravity.E));
-        printLink.add(new AttributeAppender("class", "tipsy-tooltip").setSeparator(" "));
-        PopupSettings popupSettings = new PopupSettings("popupWindow", PopupSettings.SCROLLBARS).setWidth(1000).setTop(1);
-        printLink.setPopupSettings(popupSettings);
-        add(printLink);
-
-        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
-
         Link reviseLink = new Link("reviseLink") {
             @Override
             public void onClick() {
@@ -85,7 +71,9 @@ public class PublishedProcedureActionsCell extends Panel {
             reviseLink.add(new TipsyBehavior(new FIDLabelModel("message.procedure_definitions.restore"), TipsyBehavior.Gravity.E));
         }
 
-        optionsContainer.add(reviseLink);
+        add(reviseLink);
+
+        WebMarkupContainer optionsContainer = new WebMarkupContainer("optionsContainer");
 
         Link copyLink = new Link("copyLink") {
             @Override
@@ -163,34 +151,6 @@ public class PublishedProcedureActionsCell extends Panel {
 
         optionsContainer.add(previouslyPublishedLink);
 
-
-        BookmarkablePageLink<Void> editLink = new BookmarkablePageLink<Void>("editLink", ProcedureDefinitionPage.class, PageParametersBuilder.id(procedureDefinition.getId())) {
-        };
-        editLink.setVisible(procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));
-
-        optionsContainer.add(editLink);
-
-        AjaxLink<Void> deleteLink = new AjaxLink<Void>("deleteLink") {
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-
-                try {
-                    procedureDefinitionService.deleteProcedureDefinition(procedureDefinition);
-                    info(new FIDLabelModel("message.procedure_definitions.delete").getObject());
-                    target.add(procedureListPanel);
-                    target.add(((FieldIDTemplatePage) getPage()).getTopFeedbackPanel());
-                } catch (Exception e) {
-                    error(new FIDLabelModel("error.delete_procedure_definition").getObject());
-                    target.add(procedureListPanel.getErrorFeedbackPanel());
-                }
-            }
-        };
-
-        deleteLink.setVisible(isAuthor(procedureDefinition) && procedureDefinition.getPublishedState().equals(PublishedState.DRAFT));
-
-        optionsContainer.add(deleteLink);
-
         Link recurringSchedulesLink = new Link("recurringSchedulesLink") {
             @Override
             public void onClick() {
@@ -206,7 +166,31 @@ public class PublishedProcedureActionsCell extends Panel {
         add(optionsContainer);
 
         optionsContainer.setVisible(reviseLink.isVisible() || copyLink.isVisible() || unpublishLink.isVisible()
-                || draftLink.isVisible() || previouslyPublishedLink.isVisible() || editLink.isVisible() || deleteLink.isVisible());
+                || draftLink.isVisible() || previouslyPublishedLink.isVisible());
+
+
+        //Add the print buttons
+        WebMarkupContainer optionsContainer2 = new WebMarkupContainer("optionsContainer2");
+
+        Link shortLink = new Link("shortLink") {
+            @Override
+            public void onClick() {
+
+            }
+        };
+
+        shortLink.add(new Label("label", new FIDLabelModel("label.short_form")));
+        optionsContainer2.add(shortLink);
+
+        Link longLink = new Link("longLink") {
+            @Override
+            public void onClick() {
+
+            }
+        };
+        longLink.add(new Label("label", new FIDLabelModel("label.long_form")));
+        optionsContainer2.add(longLink);
+        add(optionsContainer2);
 
     }
 

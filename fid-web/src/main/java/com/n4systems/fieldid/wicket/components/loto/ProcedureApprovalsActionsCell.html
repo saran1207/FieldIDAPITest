@@ -1,28 +1,40 @@
 <html xmlns:wicket="http://wicket.apache.org">
 <wicket:panel>
-    <div class="split-btn">
-        <a wicket:id="viewLink" class="btn-secondary"><wicket:message key="label.view"/></a>
-        <div wicket:enclosure="actionsList" class="dropdown">
-            <button class="btn-secondary">Toggle Dropdown</button>
-            <ul wicket:id="actionsList" class="pull-right">
-
-                    <li><span wicket:enclosure="editLink">
-                        <a wicket:id="editLink"><wicket:message key="label.edit"/></a>
-                     </span></li>
-
-                    <li> <span wicket:enclosure="startApprovalLink">
-                        <a wicket:id="startApprovalLink"><wicket:message key="label.start_approval"/></a>
-                        </span>
-                    </li>
-
+    <div wicket:enclosure="actionsList" class="dropdown">
+        <button class="btn-secondary">Actions</button>
+        <ul wicket:id="actionsList" class="pull-right">
+            <li class="dropdown-secondary">
+                <a href="#"><wicket:message key="label.print"/></a>
+                <ul>
                     <li>
-                         <span wicket:enclosure="deleteLink">
-                            <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
-                         </span>
+                        <a wicket:id="shortLink">
+                            <wicket:message key="label.short_form"/>
+                        </a>
                     </li>
+                    <li>
+                        <a wicket:id="longLink">
+                            <wicket:message key="label.long_form"/>
+                        </a>
+                    </li>
+                </ul>
+            </li>
 
-            </ul>
-        </div>
+            <li><span wicket:enclosure="editLink">
+                <a wicket:id="editLink"><wicket:message key="label.edit"/></a>
+             </span></li>
+
+            <li> <span wicket:enclosure="startApprovalLink">
+                <a wicket:id="startApprovalLink"><wicket:message key="label.start_approval"/></a>
+                </span>
+            </li>
+
+            <li>
+                 <span wicket:enclosure="deleteLink">
+                    <a wicket:id="deleteLink"><wicket:message key="label.delete"/></a>
+                 </span>
+            </li>
+
+        </ul>
     </div>
 </wicket:panel>
 </html>
