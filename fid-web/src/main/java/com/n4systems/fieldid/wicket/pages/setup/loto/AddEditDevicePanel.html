@@ -1,0 +1,21 @@
+<html xmlns:wicket="http://wicket.apache.org">
+<wicket:panel>
+
+    <form wicket:id="form">
+        <div wicket:id="feedbackPanel"/>
+
+        <fieldset>
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.device"/>:</label>
+                <input type="text" wicket:id="device">
+            </div>
+            <div class="control-group">
+                <label class="label"><wicket:message key="label.isolation_method"/>:</label>
+                <textarea wicket:id="method"/>
+            </div>
+        </fieldset>
+
+        <a class="btn-primary" wicket:id="saveButton"><wicket:message key="label.save"/></a>
+    </form>
+</wicket:panel>
+</html>
