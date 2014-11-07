@@ -12,11 +12,13 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.PropertyModel;
 
+import java.util.ArrayList;
+
 public class LotoSetupPage extends FieldIDTemplatePage {
 
     public LotoSetupPage() {
 
-        add(new ListView<IsolationPointSourceType>("device", Lists.newArrayList(IsolationPointSourceType.values())) {
+        add(new ListView<IsolationPointSourceType>("device", getIsolationPointSourceTypes()) {
 
             @Override
             protected void populateItem(ListItem<IsolationPointSourceType> item) {
@@ -29,6 +31,12 @@ public class LotoSetupPage extends FieldIDTemplatePage {
 
         add(new BookmarkablePageLink<LotoDetailsSetupPage>("editDetailsLink", LotoDetailsSetupPage.class));
 
+    }
+
+    private ArrayList<IsolationPointSourceType> getIsolationPointSourceTypes() {
+        ArrayList<IsolationPointSourceType> isolationPointSourceTypes = Lists.newArrayList(IsolationPointSourceType.values());
+        isolationPointSourceTypes.remove(IsolationPointSourceType.N);
+        return isolationPointSourceTypes;
     }
 
     @Override

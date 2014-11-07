@@ -2,17 +2,14 @@ package com.n4systems.reporting;
 
 import com.google.common.collect.Lists;
 import com.n4systems.fieldid.service.amazon.S3Service;
-import com.n4systems.fieldid.service.procedure.ProcedureDefinitionService;
 import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.PublishedState;
-import com.n4systems.reporting.data.ImageShortPrintoutBaseContainer;
 import com.n4systems.reporting.data.ImageShortPrintoutContainer;
 import com.n4systems.reporting.data.IsolationPointLongPrintoutContainer;
 import com.n4systems.reporting.data.IsolationPointShortPrintoutContainer;
 import com.n4systems.util.DateTimeDefinition;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.util.Date;
@@ -37,9 +34,6 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
     private final ProcedureDefinition procDef;
     private final String reportTitle;
     private final PrintoutType printoutType;
-
-    @Autowired
-    private ProcedureDefinitionService procedureDefinitionService;
 
     private static final Logger logger = Logger.getLogger(ReportMapProducer.class);
 
@@ -99,21 +93,19 @@ public class LotoPrintoutReportMapProducer extends ReportMapProducer {
             //Now, we have to do the images...  Since the report structure is kinda weird, and there's a panel that
             //holds the one that iterates our objects, we need a nested structure like this.  It's possible we can fix
             //this issue by rebuilding more of the report, but that can be looked into later.
-            List<ImageShortPrintoutBaseContainer> allImages = Lists.newArrayList();
+            List<ImageShortPrintoutContainer> allImages = Lists.newArrayList();
             ImageShortPrintoutContainer imageContainer = new ImageShortPrintoutContainer();
             imageContainer.setPath(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg"));
-            ImageShortPrintoutBaseContainer baseContainer = new ImageShortPrintoutBaseContainer();
-            baseContainer.getImages().add(imageContainer);
+            allImages.add(imageContainer);
             imageContainer = new ImageShortPrintoutContainer();
             imageContainer.setPath(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg"));
-            baseContainer.getImages().add(imageContainer);
+            allImages.add(imageContainer);
             imageContainer = new ImageShortPrintoutContainer();
             imageContainer.setPath(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg"));
-            baseContainer.getImages().add(imageContainer);
+            allImages.add(imageContainer);
             imageContainer = new ImageShortPrintoutContainer();
             imageContainer.setPath(new File("/Users/jheath/Pictures/skeptical-smiley-face-g9WKOp-200x200.jpg"));
-            baseContainer.getImages().add(imageContainer);
-            allImages.add(baseContainer);
+            allImages.add(imageContainer);
             add("allImages", allImages);
         }
     }
