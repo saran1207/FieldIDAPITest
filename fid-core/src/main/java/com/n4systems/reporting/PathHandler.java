@@ -359,7 +359,7 @@ public class PathHandler {
     }
 
     public static String getDefaultCompiledLotoFilePath(LotoPrintout lotoPrintout) {
-        String printOutPath = mergePaths(LOTO_PATH_BASE, ALL_TENANT_LOTO_PATH, lotoPrintout.getPrintoutType().getLabel(), lotoPrintout.getPrintoutName(), getCompiledLotoFileName());
+        String printOutPath = mergePaths(LOTO_PATH_BASE, ALL_TENANT_LOTO_PATH, lotoPrintout.getPrintoutType().getLabel(), getCompiledLotoFileName());
         return printOutPath;
     }
 

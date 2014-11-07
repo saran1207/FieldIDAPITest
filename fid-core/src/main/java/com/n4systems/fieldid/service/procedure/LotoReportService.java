@@ -102,6 +102,29 @@ public class LotoReportService extends FieldIdPersistenceService {
         return shortFormPrintout;
     }
 
+    public File getLongJapser() throws IOException {
+        LotoPrintout printout = getSelectedLongForm();
+        if(printout == null) {
+            printout = new LotoPrintout();
+            printout.setPrintoutType(LotoPrintoutType.LONG);
+            return s3Service.downloadDefaultLotoPrintout(printout);
+        } else {
+            return s3Service.downloadCustomLotoPrintout(printout);
+        }
+    }
+
+    public File getShortJasper() throws IOException {
+        LotoPrintout printout = getSelectedShortForm();
+        if(printout == null) {
+            printout = new LotoPrintout();
+            printout.setPrintoutType(LotoPrintoutType.SHORT);
+            return s3Service.downloadDefaultLotoPrintout(printout);
+
+        } else {
+            return s3Service.downloadCustomLotoPrintout(printout);
+        }
+    }
+
     @Transactional
     public void saveLotoReport(File zipFile, LotoPrintout printout) {
         try {
