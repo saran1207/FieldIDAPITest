@@ -747,7 +747,7 @@ public class ProcedureDefinitionService extends FieldIdPersistenceService {
         }
     }
 
-    private void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
+    public void generateAndUploadAnnotatedSvgs(ProcedureDefinition definition) throws Exception {
         for(ProcedureDefinitionImage image: definition.getImages()) {
             File allAnnotations = svgGenerationService.exportToSvg(image);
             svgGenerationService.uploadSvg(definition, allAnnotations);

@@ -14,6 +14,7 @@ import com.n4systems.model.asset.AssetAttachment;
 import com.n4systems.model.criteriaresult.CriteriaResultImage;
 import com.n4systems.model.orgs.BaseOrg;
 import com.n4systems.model.orgs.InternalOrg;
+import com.n4systems.model.procedure.IsolationPoint;
 import com.n4systems.model.procedure.ProcedureDefinition;
 import com.n4systems.model.procedure.ProcedureDefinitionImage;
 import com.n4systems.model.user.User;
@@ -461,6 +462,21 @@ public class S3Service extends FieldIdPersistenceService {
                 procedureDefinition.getId(),
                 svgFile.getName());
     }
+
+    public byte[] downloadProcedureDefinitionImageSvg(ProcedureDefinitionImage image) throws IOException {
+        return downloadResource(null, PROCEDURE_DEFINITION_IMAGE_PATH,
+                image.getProcedureDefinition().getAsset().getId(),
+                image.getProcedureDefinition().getId(),
+                image.getFileName() + ".svg");
+    }
+
+    public byte[] downloadProcedureDefinitionImageSvg(ProcedureDefinitionImage image, IsolationPoint isolationPoint) throws IOException {
+        return downloadResource(null, PROCEDURE_DEFINITION_IMAGE_PATH,
+                image.getProcedureDefinition().getAsset().getId(),
+                image.getProcedureDefinition().getId(),
+                image.getFileName() + "_" + isolationPoint.getId() + ".svg");
+    }
+
 
     public String uploadTempCriteriaResultImage(CriteriaResultImage criteriaResultImage, byte[] imageData) {
         String contentType = criteriaResultImage.getContentType();
