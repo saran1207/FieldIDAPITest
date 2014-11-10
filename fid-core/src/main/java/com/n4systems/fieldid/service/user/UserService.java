@@ -2,6 +2,8 @@ package com.n4systems.fieldid.service.user;
 
 import com.n4systems.fieldid.context.ThreadLocalInteractionContext;
 import com.n4systems.fieldid.service.FieldIdPersistenceService;
+import com.n4systems.fieldid.service.org.OrgService;
+import com.n4systems.model.ExtendedFeature;
 import com.n4systems.model.SendSavedItemSchedule;
 import com.n4systems.model.admin.AdminUser;
 import com.n4systems.model.api.Archivable;
@@ -24,6 +26,7 @@ import com.n4systems.util.collections.PrioritizedList;
 import com.n4systems.util.persistence.*;
 import com.n4systems.util.persistence.WhereParameter.Comparator;
 import org.apache.commons.lang.time.DateUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.Query;
@@ -32,13 +35,15 @@ import java.util.*;
 @Transactional
 public class UserService extends FieldIdPersistenceService {
 
-    private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
+    @Autowired
+    private OrgService orgService;
 
+    private static String [] DEFAULT_ORDER = {"firstName", "lastName"};
 
     public List<User> getUsers(boolean registered, boolean includeSystem) {
         QueryBuilder<User> builder = createUserQueryBuilder(registered, includeSystem);
 
-        if (!getCurrentUser().getGroups().isEmpty()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
             return new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
         }
 
@@ -48,7 +53,7 @@ public class UserService extends FieldIdPersistenceService {
     public List<User> getUsers(UserListFilterCriteria criteria) {
         QueryBuilder<User> builder = createUserQueryBuilder(criteria);
 
-        if (!getCurrentUser().getGroups().isEmpty()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
             return new ArrayList<>(ThreadLocalInteractionContext.getInstance().getVisibleUsers());
         }
 
@@ -82,7 +87,7 @@ public class UserService extends FieldIdPersistenceService {
     public Long countUsers(UserListFilterCriteria criteria) {
         QueryBuilder<User> builder = createUserQueryBuilder(criteria);
 
-        if (!getCurrentUser().getGroups().isEmpty()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
             return Long.valueOf(new ArrayList<User>(ThreadLocalInteractionContext.getInstance().getVisibleUsers()).size());
         }
 
@@ -321,7 +326,7 @@ public class UserService extends FieldIdPersistenceService {
         String queryString = "select DISTINCT ub from " + User.class.getName() + " ub where ub.registered = true and state = 'ACTIVE' and ub.userType != '" + UserType.SYSTEM.toString() + "' and ( "
                 + filter.produceWhereClause(User.class, "ub") + " OR ( " + justTenantFilter.produceWhereClause(User.class, "ub") + " AND ub.owner.customerOrg IS NULL) )";
 
-        if (!getCurrentUser().getGroups().isEmpty()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
             queryString += " AND ub in (:visibleUsers) ";
         }
 
@@ -329,7 +334,7 @@ public class UserService extends FieldIdPersistenceService {
 
         Query query = getEntityManager().createQuery(queryString);
 
-        if (!getCurrentUser().getGroups().isEmpty()) {
+        if (!getCurrentUser().getGroups().isEmpty() && isUserGroupFilteringEnabled()) {
             Collection<User> visibleUsers = ThreadLocalInteractionContext.getInstance().getVisibleUsers();
             query.setParameter("visibleUsers", visibleUsers);
         }
@@ -411,6 +416,10 @@ public class UserService extends FieldIdPersistenceService {
     public void unarchive(User user) {
         user.activateEntity();
         persistenceService.update(user);
+    }
+
+    private boolean isUserGroupFilteringEnabled() {
+        return orgService.getPrimaryOrgForTenant(getCurrentTenant().getId()).hasExtendedFeature(ExtendedFeature.UserGroupFiltering);
     }
 
 }
